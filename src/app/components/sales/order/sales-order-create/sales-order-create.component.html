@@ -23,7 +23,7 @@
                 <div class="form-row body-alignment">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Customer Name
+                            <label style="height: 15px;">Customer Name
                                 <span class="clr-red">*</span>
                                 <span class="ng-star-inserted color-blue">
                                     <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
@@ -83,6 +83,7 @@
                                                         class="clr-red">*</span></label>
                                                 <select name="quoteTypeId" [(ngModel)]="salesQuote.quoteTypeId" required
                                                     id="quoteTypeId" #quoteTypeId="ngModel" [disabled]="isEdit">
+                                                    <option value='-1'>--Select--</option>
                                                     <option *ngFor="let item of soTypeList" [ngValue]="item.value">
                                                         {{ item.label }}</option>
                                                 </select>
@@ -137,7 +138,7 @@
                                                 <label>SO Status</label>
                                                 <select name="status" [(ngModel)]="salesQuote.statusId"
                                                     [disabled]="true" #statusId="ngModel">
-                                                    <option value='-1'>--Select</option>
+                                                    <option value='-1'>--Select--</option>
                                                     <option *ngFor="let item of soStatusList" [ngValue]="item.value">
                                                         {{ item.label }}</option>
                                                 </select>
@@ -173,6 +174,7 @@
                                                 <select name="accountTypeId" required
                                                     [(ngModel)]="salesQuote.accountTypeId" id="accountTypeId"
                                                     #accountTypeId="ngModel" [disabled]="isEdit">
+                                                    <option value='-1'>--Select--</option>
                                                     <option *ngFor="let accountType of accountTypes"
                                                         [ngValue]="accountType.value">
                                                         {{ accountType.label }}
@@ -210,7 +212,7 @@
                                                     (change)="onChangeInput()" [ngModelOptions]="{standalone: true}"
                                                     name="customerContactId" id="customerContactId"
                                                     #customerContactId="ngModel">
-                                                    <option value='-1'>--Select</option>
+                                                    <option value='-1'>--Select--</option>
                                                     <option *ngFor="let contact of customerContactList"
                                                         [ngValue]="contact.contactId">
                                                         {{contact.firstName}} {{contact.lastName}} -
@@ -243,7 +245,7 @@
                                                     <select name="creditLimitTermsId"
                                                         [(ngModel)]="salesQuote.creditLimitTermsId" [disabled]="true"
                                                         required>
-                                                        <option value='-1'>--Select</option>
+                                                        <option value='-1'>--Select--</option>
                                                         <option *ngFor="let ct of creditTerms" [ngValue]="ct.value">
                                                             {{ ct.label }}</option>
                                                     </select>
@@ -317,7 +319,7 @@
                                                 <label>SO Status</label>
                                                 <select name="status" [(ngModel)]="salesQuote.statusId"
                                                     (change)="onChangeInput()" [disabled]="true" #statusIds="ngModel">
-                                                    <option value='-1'>--Select</option>
+                                                    <option value='-1'>--Select--</option>
                                                     <option *ngFor="let item of soStatusList" [ngValue]="item.value">
                                                         {{ item.label }}</option>
                                                 </select>
@@ -473,7 +475,6 @@
                                     </span>
                                 </div>
                             </div>
-                           
                         </div>
                         <div class="col-md-12">
                             <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"
@@ -545,7 +546,7 @@
                                 </app-sales-order-approve>
                             </p-tabPanel>
                             <p-tabPanel header="Approver Process">
-                                <app-sales-order-customer-approval *ngIf="isEdit" [customer-id]="customerId"
+                                <app-sales-order-customer-approval *ngIf="isEdit && isContactsLoaded" [customer-id]="customerId"
                                     [sales-order-id]="id" [status]="status" [customer-contacts]="customerContactList"
                                     [customerContactList]="customerContactList"
                                     (on-part-approved-event)="onPartsApprovedEvent()">

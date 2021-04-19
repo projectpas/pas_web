@@ -1,4 +1,4 @@
-﻿import { SalesQuote } from './../../../../models/sales/SalesQuote.model';
+import { SalesQuote } from './../../../../models/sales/SalesQuote.model';
 import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Params, ActivatedRoute } from '@angular/router';
 import {WorkOrderQuote,multiParts,partsDetail} from '../../../../models/work-order-quote.modal';
@@ -32,6 +32,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() quoteListViewData: any = {};
     @Input() workorderid: number = 0;
     @Input() isView: boolean = false;
+    @Input() hidehistoricalBtns: boolean = false;
+    
     @Input() enableEditBtn: boolean = false;
     @Input() ispop: boolean = false;
     @Input() isQuoteListView: boolean = false;
@@ -489,7 +491,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     getWorkOrderInfo(getWorkOrderInfo) {
         this.isSpinnerVisible = true;
         if(getWorkOrderInfo && getWorkOrderInfo != 0){
-            this.workOrderService.getWorkOrderById(getWorkOrderInfo).subscribe(res => {
+            this.workOrderService.getWorkOrderById(getWorkOrderInfo,this.authService.currentUser.masterCompanyId).subscribe(res => { 
                 if (res) {
                     this.savedWorkOrderData = res;
                     this.customerCode = res.customerDetails.customerCode;
@@ -516,7 +518,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.quoteForm.creditTermsandLimit = res.customerDetails.creditLimit;
                     this.quoteForm['versionNo'] = 'V1';
                     this.salesPerson = res.salesPerson.name;
-                    this.workOrderService.getWorkOrderQuoteDetail(res.workOrderId, res["workFlowWorkOrderId"])
+                    const workorderid =res.workOrderId ==0 ? this.workOrderId :res.workOrderId; 
+                    this.workOrderService.getWorkOrderQuoteDetail(workorderid, res["workFlowWorkOrderId"],this.authService.currentUser.masterCompanyId)
                         .subscribe(
                             (res: any) => {
                                 
@@ -591,7 +594,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         this.getMarkup('');
                     // this.getCreditTerms(res.creditTermsId);
                     this.setEmpAndSalesPersonName(res.employeeId, res.salesPersonId);
-                    this.getMPNList(res.workOrderId);
+                    this.getMPNList(res.workOrderId !=0 ? res.workOrderId :this.workOrderId);
                     this.customerWarnings(this.quoteForm['customerId']);
                 }
                 else{
@@ -652,7 +655,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-            this.commonService.autoSuggestionSmartDropDownList('condition', 'conditionId', 'description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('condition', 'conditionId', 'description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
                     res = res.map(x => { return {'conditionId': x.value, 'description': x.label} })
                     this.conditions = res;        
                 },
@@ -807,7 +810,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 : null;
                     const strText = '';
                     this.isSpinnerVisible = true;
-                    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(employeeList => {
+                    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId,this.authService.currentUser.masterCompanyId).subscribe(employeeList => {
                     this.employeeList = employeeList;
                     this.employeesOriginalData = employeeList;
                     this.getWorkOrderInfo(woId);
@@ -833,9 +836,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    getMPNList(workOrderId) {        
+    getMPNList(workOrderId) {   
+        console.log("workorderId",workOrderId)     
         if(workOrderId && workOrderId != 0){
-            this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId).subscribe(res => {                
+            this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {                
                 this.workOrderWorkFlowOriginalData = res;
                 this.mpnPartNumbersList = res.map(x => {
                     return {
@@ -884,7 +888,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.clearQuoteData();
         let msId = 0;
         if (data) {
-            this.workOrderService.getWOTaskQuote(this.selectedPartNumber['woPartNoId'])
+            this.workOrderService.getWOTaskQuote(this.selectedPartNumber['woPartNoId'],this.authService.currentUser.masterCompanyId)
                 .subscribe(
                     (res) => {
                         this.WOTaskDetails = res; 
@@ -921,7 +925,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     getBuildMethodDetails(){
-        this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId ? this.selectedWorkFlowWorkOrderId : this.workOrderQuoteDetailsId)
+        this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId ? this.selectedWorkFlowWorkOrderId : this.workOrderQuoteDetailsId,this.authService.currentUser.masterCompanyId)
             .subscribe((res) => {
             this.buildMethodDetails = res;
             if (res) {
@@ -968,7 +972,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     )
 }
     getMPNDetails(workOrderId) { 
-        this.workOrderService.getPartsDetail(workOrderId)
+        this.workOrderService.getPartsDetail(workOrderId,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (workOrderParts: partsDetail[]) => {
                     this.workOrderPartsDetail = workOrderParts;
@@ -1084,7 +1088,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         // this.gridActiveTab = '';
         this.formTaskList();
         if (this.selectedBuildMethod == 'use work flow') {
-            this.workOrderService.getWorkFlowDetails(data.workFlowId)
+            this.workOrderService.getWorkFlowDetails(data.workFlowId,this.authService.currentUser.masterCompanyId)
                 .subscribe(
                     res => {
                         this.upDateDisabeldbutton=true;
@@ -1585,7 +1589,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.labor.workOrderLaborList = [];
         this.labor.workOrderLaborList.push({})
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('task', 'taskId', 'description', strText, true, 20, this.setEditArray.join()).subscribe(taskList => {
+        this.commonService.autoSuggestionSmartDropDownList('task', 'taskId', 'description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(taskList => {
                     taskList = taskList.map(x=>{
                     return {
                         id: x.value,
@@ -1892,7 +1896,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveMaterialListForWO(data) {
-        this.disableMat=false;
+        this.disableMat=false; 
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -1946,15 +1950,15 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
         const strText = value ? value : '';
         // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
-        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 200, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 200, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.markupList = res;
+                this.markupList.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))
             }
         },err => {
              this.errorHandling(err);
             })
     }
-
     markupChanged(matData, type) {
         try {
             this.markupList.forEach((markup) => {
@@ -2041,7 +2045,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     deleteMaterialList(mainIndex, subIndex) {
         this.materialListQuotation[mainIndex][subIndex].isDeleted = true;
-        this.disableMat=true;
+        this.disableMat=false;
     }
 
     updateWorkOrderChargesList(data) {
@@ -2340,7 +2344,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 } else if (this.warningID != 0 && this.restrictID != 0) {
                     this.showAlertMessage(warningMessage, this.restrictMessage);
                 } else if (this.warningID == 0 && this.restrictID == 0) {
-                    window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+                    console.log("hello")
+                    // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
                 }
             }
         })
@@ -2475,7 +2480,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     getWOQuoteApprovalList() {
         this.getApproversList();
         this.getApproverStatusList();
-        this.commonService.getCustomerContactsById(this.quotationHeader['CustomerId']).subscribe(res => {      
+        this.commonService.getCustomerContactsById(this.quotationHeader['CustomerId'],this.authService.currentUser.masterCompanyId).subscribe(res => {      
             this.customerContactList = res;
             if(this.customerContactList.length > 0){
 
@@ -2491,7 +2496,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         err => {
             this.errorHandling(err);
         })
-        this.workOrderService.getWOQuoteApprovalList(this.quotationHeader['workOrderQuoteId'])
+        this.workOrderService.getWOQuoteApprovalList(this.quotationHeader['workOrderQuoteId'],this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res) => {
                    
@@ -2556,8 +2561,15 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             )
     }
 
-    getApproverStatusList() {
-        this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
+    getApproverStatusList() { 
+        this.setEditArray = [];
+        const strText = '';
+   
+            this.setEditArray.push(0);
+ 
+        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+           
+        // this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
             this.statusList = res.map(x => {
                 return {
                     ...x,
@@ -2598,7 +2610,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     getWOQuoteAnalysisList() {
-        this.workOrderService.getWOQuoteAnalysisList(this.savedWorkOrderData.workOrderId)
+        this.workOrderService.getWOQuoteAnalysisList(this.savedWorkOrderData.workOrderId,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res) => {
              if(res && res.length !=0){
@@ -2722,7 +2734,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                 isDeleted: false,
                                 contactById: this.emailContactBy.employeeId,
                                 emailType: this.emailType,
-                                customerContactId: this.emailCustomerContact.emailContactId
+                                customerContactId: this.emailCustomerContact.emailContactId,
+                                masterCompanyId:this.authService.currentUser.masterCompanyId
                             }
                         }
 
@@ -2851,8 +2864,19 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     getAllEmailType() {
-        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name')
-        .subscribe((res: any[])=>{
+        this.setEditArray = [];
+        const strText = '';
+     
+            this.setEditArray.push(0);
+
+        this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+           
+
+
+        // this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name')
+        // .subscribe((res: any[])=>{
+
+
                 this.emailTypes = res;
 
                 this.emailTypes.forEach(
@@ -2931,7 +2955,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     updateQuotationHeader(){
-        this.workOrderService.getWorkOrderQuoteDetail(this.workOrderId, this.workFlowWorkOrderId)
+        this.workOrderService.getWorkOrderQuoteDetail(this.workOrderId, this.workFlowWorkOrderId,this.authService.currentUser.masterCompanyId)
         .subscribe(
             (res: any) => {
                 
@@ -2966,7 +2990,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.quoteStatusList = res;
             }
@@ -2985,7 +3009,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.currencyList = res;
             }

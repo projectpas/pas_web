@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConfigurationService } from './configuration.service';
 import { EndpointFactory } from './endpoint-factory.service';
 import { environment } from 'src/environments/environment';
+import { masterCompanyId } from '../common-masterData/mastercompany-details';
 
 @Injectable()
 // module Types : 
@@ -44,7 +45,7 @@ export class CommonService extends EndpointFactory {
 
   autoSuggestionSmartDropDownList(tableName, primaryKeyColumn, labelColumn, searchText, startWith, count?, idList?, masterCompanyId?) {
     //?tableName=Customer&primaryColumn=CustomerId&textColumn=Name&searchText=Av&startWith=false&count=0
-    return this.http.get<any>(`${this.baseUrl}/api/Common/bindautocompletedropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/bindautocompletedropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownList(tableName, primaryKeyColumn, labelColumn, searchText, startWith, count, idList, masterCompanyId));
     });
   }
@@ -106,20 +107,20 @@ export class CommonService extends EndpointFactory {
     });
   }
   autoCompleteDropdownsWorkorderList(searchText, count?, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsWorkorderList?searchText=${searchText}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsWorkorderList?searchText=${searchText}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsWorkorderList(searchText, count, idList, masterCompanyId));
     });
   }
 
   autoCompleteSmartDropDownCustomerList(customerType, searchText, startWith, count?, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownCustomerList?customerType=${customerType}&searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownCustomerList?customerType=${customerType}&searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownCustomerList(searchText, startWith, count, idList, masterCompanyId));
     });
   }
 
-  autoCompleteSmartDropDownAssetList(searchText, startWith, count?, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownAssetList?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownAssetList(searchText, startWith, count, idList));
+  autoCompleteSmartDropDownAssetList(searchText, startWith, count?, idList?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownAssetList?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownAssetList(searchText, startWith, count, idList,masterCompanyId));
     });
   }
 
@@ -128,14 +129,14 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count, idList, managementStructureId));
     });
   }
-  autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count?, idList?, managementStructureId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsEmployeeByJobTitle?searchText=${searchText}&jobTitleId=${jobTitleId}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count, idList, managementStructureId));
+  autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count?, idList?, managementStructureId?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsEmployeeByJobTitle?searchText=${searchText}&jobTitleId=${jobTitleId}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count, idList, managementStructureId,masterCompanyId));
     });
   }
 
   autoCompleteDropdownsEmployeeByMS(searchText, startWith, count?, idList?, managementStructureId?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsEmployeeByMS?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsEmployeeByMS?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsEmployeeByMS(searchText, startWith, count, idList, managementStructureId));
     });
   }
@@ -158,9 +159,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getShipViaDetailsByModule(moduleId, referenceId) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/bindshipviadetails?userType=${moduleId}&referenceId=${referenceId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getShipViaDetailsByModule(moduleId, referenceId));
+  getShipViaDetailsByModule(moduleId, referenceId,masterCompanyId) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/bindshipviadetails?userType=${moduleId}&referenceId=${referenceId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getShipViaDetailsByModule(moduleId, referenceId,masterCompanyId));
     });
   }
   
@@ -170,9 +171,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getShipViaDetailsById(shipViaId, userType) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/shippingviadetails?shippingViaId=${shipViaId}&userType=${userType}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getShipViaDetailsById(shipViaId, userType));
+  getShipViaDetailsById(shipViaId, userType,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/shippingviadetails?shippingViaId=${shipViaId}&userType=${userType}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getShipViaDetailsById(shipViaId, userType,masterCompanyId));
     });
   }
 
@@ -225,9 +226,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getCustomerNameandCode(value, customerType) {
-    return this.http.get(`${this.baseUrl}/api/customer/customernameandcodes?value=${value}&customerType=${customerType}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getCustomerNameandCode(value, customerType));
+  getCustomerNameandCode(value, customerType,masterCompanyId?) {
+    return this.http.get(`${this.baseUrl}/api/customer/customernameandcodes?value=${value}&customerType=${customerType}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getCustomerNameandCode(value, customerType,masterCompanyId));
     });
   }
 
@@ -402,9 +403,9 @@ export class CommonService extends EndpointFactory {
     window.location.assign(url);
   }
 
-  getReceivingCustomers(value) {
-    return this.http.get(`${this.baseUrl}/api/receivingcustomerwork/getreceivingcustomerslist?value=${value}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getReceivingCustomers(value));
+  getReceivingCustomers(value,masterCompanyId?) {
+    return this.http.get(`${this.baseUrl}/api/receivingcustomerwork/getreceivingcustomerslist?value=${value}?masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getReceivingCustomers(value,masterCompanyId));
     });
   }
 
@@ -427,9 +428,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getAllSalesEmployeeListByJobTitle(JobTitleIds) {
-    return this.http.get<any>(`${this.baseUrl}/api/common/GetEmployeesByJobTitles?jobTitleIds=${JobTitleIds}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getAllSalesEmployeeListByJobTitle(JobTitleIds));
+  getAllSalesEmployeeListByJobTitle(JobTitleIds,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/common/GetEmployeesByJobTitles?jobTitleIds=${JobTitleIds}&masterCompanyId=${masterCompanyId !=undefined ?masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getAllSalesEmployeeListByJobTitle(JobTitleIds,masterCompanyId));
     });
   }
 
@@ -439,9 +440,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getExpertiseEmployeesByCategory(value) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/employeesbyexpertise?expertiseId=${value}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getExpertiseEmployeesByCategory(value));
+  getExpertiseEmployeesByCategory(value,masterCompanyId?) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/employeesbyexpertise?expertiseId=${value}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getExpertiseEmployeesByCategory(value,masterCompanyId));
     });
   }
 
@@ -451,9 +452,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getTechnicianStation(technicianId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/getemployeestation?employeeId=${technicianId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getTechnicianStation(technicianId));
+  getTechnicianStation(technicianId,masterCompanyId?) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/getemployeestation?employeeId=${technicianId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getTechnicianStation(technicianId,masterCompanyId));
     });
   }
 
@@ -494,22 +495,22 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getPriceDetailsByCondId(itemMasterId, conditionId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/partpurchasesaledetails?itemMasterId=${itemMasterId}&condition=${conditionId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getPriceDetailsByCondId(itemMasterId, conditionId));
+  getPriceDetailsByCondId(itemMasterId, conditionId,masterCompanyId?) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/partpurchasesaledetails?itemMasterId=${itemMasterId}&condition=${conditionId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getPriceDetailsByCondId(itemMasterId, conditionId,masterCompanyId));
     });
   }
 
   //customer restriction service and warning sercices
-  customerWarnings(customerId, customerWarningListId) {
-    return this.http.get(`${this.configurations.baseUrl}/api/common/customerwarnings?customerId=${customerId}&customerWarningListId=${customerWarningListId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.customerWarnings(customerId, customerWarningListId));
+  customerWarnings(customerId, customerWarningListId,masterCompanyId?) {
+    return this.http.get(`${this.configurations.baseUrl}/api/common/customerwarnings?customerId=${customerId}&customerWarningListId=${customerWarningListId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.customerWarnings(customerId, customerWarningListId,masterCompanyId));
     });
   }
 
-  customerResctrictions(customerId, customerWarningListId) {
-    return this.http.get(`${this.configurations.baseUrl}/api/common/customerrestrictions?customerId=${customerId}&customerWarningListId=${customerWarningListId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.customerResctrictions(customerId, customerWarningListId));
+  customerResctrictions(customerId, customerWarningListId,masterCompanyId?) {
+    return this.http.get(`${this.configurations.baseUrl}/api/common/customerrestrictions?customerId=${customerId}&customerWarningListId=${customerWarningListId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.customerResctrictions(customerId, customerWarningListId,masterCompanyId));
     });
   }
 
@@ -744,9 +745,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getCustomerContactsById(id) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/getcustomercontacts?customerId=${id}&all=true`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getCustomerContactsById(id));
+  getCustomerContactsById(id,masterCompanyId?) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/getcustomercontacts?customerId=${id}&all=true&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getCustomerContactsById(id,masterCompanyId));
     });
     // return this.http.get<any>(`${this.configurations.baseUrl}/api/common/customercontacts?customerId=${id}`)  // old call
   }
@@ -817,9 +818,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  GetDocumentsCommonList(referenceId, moduleId, isDeleted) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/getDocumentDetail?moduleId=${moduleId}&referenceId=${referenceId}&isdeleted=${isDeleted}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.GetDocumentsCommonList(referenceId, moduleId, isDeleted));
+  GetDocumentsCommonList(referenceId, moduleId, isDeleted,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getDocumentDetail?moduleId=${moduleId}&referenceId=${referenceId}&isdeleted=${isDeleted}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.GetDocumentsCommonList(referenceId, moduleId, isDeleted,masterCompanyId));
     });
   }
 
@@ -855,9 +856,9 @@ export class CommonService extends EndpointFactory {
   }
 
   // TO Get Customer COntacts by Customer Id With Active inactive List
-  autoDropListCustomerContacts(customerid, searchText, count?, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/customer/customerContactDataFilter?filterVal=${searchText}&customerid=${customerid}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoDropListCustomerContacts(customerid, searchText, count, idList));
+  autoDropListCustomerContacts(customerid, searchText, count?, idList?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/customer/customerContactDataFilter?filterVal=${searchText}&customerid=${customerid}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : '0'}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoDropListCustomerContacts(customerid, searchText, count, idList,masterCompanyId));
     });
   }
 
@@ -877,9 +878,9 @@ export class CommonService extends EndpointFactory {
   getPOAddressById(poId): any {
   }
 
-  getShipVia() {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/getAllShipVia`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getShipVia());
+  getShipVia(masterCompanyId) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getAllShipVia?Id=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getShipVia(masterCompanyId));
     });
   }
 

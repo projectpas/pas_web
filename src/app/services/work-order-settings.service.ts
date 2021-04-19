@@ -38,9 +38,9 @@ export class WorkOrderSettingsService {
         return Observable.forkJoin(
             this.workorderEndpointService.getworkorderEndpoint<any[]>());
     }
-    getAllWorkFlows() {
+    getAllWorkFlows(mId) {
         return Observable.forkJoin(
-            this.workorderEndpointService.getAllworkorderEndpoint<any[]>());
+            this.workorderEndpointService.getAllworkorderEndpoint<any[]>(mId));
     }
 
 
@@ -50,7 +50,7 @@ export class WorkOrderSettingsService {
     }
 
     getIntegrationsBasic() {
-        return this.workorderEndpointService.getworkorderLiteEndpoint<any[]>();
+        return this.workorderEndpointService.getworkorderLiteEndpoint<any[]>(); 
     }
 
     updateAction(action) {

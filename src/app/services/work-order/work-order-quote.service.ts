@@ -11,6 +11,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import { WorkOrderEndpointService } from '../work-order/work-order-endpoint.service';
 import { QuoteEndpointService } from './work-order-quote.endpoint.service';
+import { masterCompanyId } from 'src/app/common-masterData/mastercompany-details';
 
 @Injectable()
 export class WorkOrderQuoteService {
@@ -25,16 +26,16 @@ export class WorkOrderQuoteService {
         return this.workOrderEndpointService.createOrUpdateQuotation(data);
     }
 
-    getWorkOrderById(workOrderId) {
-        return this.workOrderEndpointService.getWorkOrderById(workOrderId,0);
+    getWorkOrderById(workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderById(workOrderId,masterCompanyId);
     }
 
-    getPartsDetail(workOrderId) {
-        return this.workOrderEndpointService.getPartsDetail(workOrderId);
+    getPartsDetail(workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getPartsDetail(workOrderId,masterCompanyId);
     }
 
-    getWorkOrderWorkFlowNumbers(workOrderId) {
-        return this.workOrderEndpointService.getWorkOrderWorkFlowNumbers(workOrderId);
+    getWorkOrderWorkFlowNumbers(workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderWorkFlowNumbers(workOrderId,masterCompanyId);
     }
 
     getBuildDetailsFromWorkFlow(partId, workScopeId) {
@@ -47,8 +48,8 @@ export class WorkOrderQuoteService {
         return this.workOrderEndpointService.getBuildDetailsFromHistoricalWorkOrderQuote(partId, workScopeId, payLoad);
     }
 
-    getWorkFlowDetails(workFlowId) {
-        return this.workOrderEndpointService.getWorkFlowDetails(workFlowId);
+    getWorkFlowDetails(workFlowId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkFlowDetails(workFlowId,masterCompanyId);
     }
 
     getWorkOrderMaterialListForQuote(wfwoId) {
@@ -90,8 +91,8 @@ export class WorkOrderQuoteService {
     saveExclusionsQuote(data) {
         return this.workOrderEndpointService.saveExclusionsQuote(data);
     }
-    getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId) {
-        return this.quoteEndPointService.getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId);
+    getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId,masterCompanyId) {
+        return this.quoteEndPointService.getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId,masterCompanyId);
     }
     getQuoteExclusionList(workOrderQuoteId, buildMethodId) {
         return this.quoteEndPointService.getQuoteExclusionList(workOrderQuoteId, buildMethodId);
@@ -120,8 +121,8 @@ export class WorkOrderQuoteService {
     getQuoteLaborListBilling(workOrderId) {
         return this.quoteEndPointService.getQuoteLaborListBilling(workOrderId);
     }
-    getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId){
-        return this.quoteEndPointService.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId)
+    getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId,masterCompanyId){
+        return this.quoteEndPointService.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId,masterCompanyId)
     }
     getWorkOrderQuoteList(payload){
         return this.quoteEndPointService.getWorkOrderQuoteList(payload);
@@ -129,17 +130,17 @@ export class WorkOrderQuoteService {
     getWorkOrderQuoteData(workOrderQuoteId) {
         return this.quoteEndPointService.getWorkOrderQuoteData(workOrderQuoteId);
     }
-    getSavedQuoteDetails(wfwoid){
-        return this.quoteEndPointService.getSavedQuoteDetails(wfwoid);
+    getSavedQuoteDetails(wfwoid,masterCompanyId){
+        return this.quoteEndPointService.getSavedQuoteDetails(wfwoid,masterCompanyId);
     }
-    getPartDetails(itemMasterId, conditionId){
-        return this.quoteEndPointService.getPartDetails(itemMasterId, conditionId);
+    getPartDetails(itemMasterId, conditionId,masterCompanyId){
+        return this.quoteEndPointService.getPartDetails(itemMasterId, conditionId,masterCompanyId);
     }
     getPartConditions(itemMasterId){
         return this.quoteEndPointService.getPartConditions(itemMasterId);
     }
-    getWOTaskQuote(workOrderPartNoId){
-        return this.quoteEndPointService.getWOTaskQuote(workOrderPartNoId);
+    getWOTaskQuote(workOrderPartNoId,masterCompanyId){
+        return this.quoteEndPointService.getWOTaskQuote(workOrderPartNoId,masterCompanyId);
     }
     getQuoteSettings(masterCompanyId, woTypeId){
         return this.quoteEndPointService.getQuoteSettings(masterCompanyId, woTypeId);
@@ -147,12 +148,12 @@ export class WorkOrderQuoteService {
     getInternalApproversList(approvalTaskId, moduleAmount){
         return this.quoteEndPointService.getInternalApproversList(approvalTaskId, moduleAmount);
     }
-    getWOQuoteApprovalList(workOrderQuoteId) {
-        return this.quoteEndPointService.getWOQuoteApprovalList(workOrderQuoteId);
+    getWOQuoteApprovalList(workOrderQuoteId,masterCompanyId) {
+        return this.quoteEndPointService.getWOQuoteApprovalList(workOrderQuoteId,masterCompanyId);
     }
 
-    getWOQuoteAnalysisList(workOrderId) {
-        return this.quoteEndPointService.getWOQuoteAnalysisList(workOrderId);
+    getWOQuoteAnalysisList(workOrderId,masterCompanyId) {
+        return this.quoteEndPointService.getWOQuoteAnalysisList(workOrderId,masterCompanyId);
     }
     sentForInternalApproval(data){
         return this.quoteEndPointService.sentForInternalApproval(data);

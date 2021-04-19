@@ -3,4 +3,5 @@ export enum AddressTypeEnum {
     PurchaseOrder = "PO",
     SalesOrder = "SO",
     RepairOrder = "RO",
+    ExchangeQUote = "EQ",
 }

@@ -128,9 +128,9 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
 
         this.isSpinnerVisible = true;
         forkJoin(
-            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [quoteTypeId].join()),
-            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 100, [defaultStatusId, defaultStatus].join()),
-            this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', '', true, 100, [defaultPriorityId].join()),
+            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [quoteTypeId].join(),this.masterCompanyId),
+            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 100, [defaultStatusId, defaultStatus].join(),this.masterCompanyId),
+            this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', '', true, 100, [defaultPriorityId].join(),this.masterCompanyId),
         ).subscribe(result => {
             this.isSpinnerVisible = false;
             this.salesOrderTypes = result[0];

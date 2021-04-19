@@ -187,6 +187,18 @@
                             <p-dropdown  [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allBins" filter="true" [(ngModel)]="receivingForm.defaultBinId" name="defaultBinId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
+                    <div class="col-md-4   task-detail" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
+                       <div class="form-group task-hours-type">
+                            <p-radioButton (ngModelChange)="getmemo($event)"  class="p-radiobutton-label-horizontal p-radiobutton-cstm adj" name="WorkFloworSpecificTaskorWorkOrder"
+                            label="Labor Hours" [value]="1"
+                            [(ngModel)]="receivingForm.laborHoursMedthodId" ></p-radioButton>
+                            <p-radioButton (ngModelChange)="getmemo($event)" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="WorkFloworSpecificTaskorWorkOrder" label="Labor Clock In/Out " [value]="2"
+                              [(ngModel)]="receivingForm.laborHoursMedthodId" ></p-radioButton>
+                            <p-radioButton (ngModelChange)="getmemo($event)" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="Scan" [value]="3"
+                              label="Scan" [(ngModel)]="receivingForm.laborHoursMedthodId" ></p-radioButton>
+                          </div>
+                     </div>
+                  
                     <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
                         <div class="form-group">
                             <p-checkbox name="isApprovalRule" binary="true"

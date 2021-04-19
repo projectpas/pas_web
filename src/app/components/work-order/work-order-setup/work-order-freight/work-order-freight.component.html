@@ -311,7 +311,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body"> 
       <strong>
         Ship Via :
           <span class="new-label">{{restorerecord.shipVia}}</span>
@@ -323,7 +323,8 @@
     </div>
   </ng-template>
   <button class="btn btn-primary pull-right seve" (click)="createFreightsQuote()" *ngIf="!isView && isQuote" [disabled]="disableFrt">
-   {{originalList && originalList[0].workOrderQuoteDetailsId ? 'Update': 'Save'}}  Freights
+   <!-- {{originalList && originalList[0].workOrderQuoteDetailsId ? 'Update': 'Save'}}  Freights -->
+   Save Freights
   </button>
 </div>
 
@@ -517,8 +518,8 @@
   <div class="modal-body">
     <strong>
       Ship Via :
-        <span class="new-label" *ngIf="!isQuote">{{currentRow.shipVia}}</span>
-        <span class="new-label" *ngIf="isQuote">{{currentRow.shipViaName }}</span>
+        <!-- <span class="new-label" *ngIf="!isQuote">{{currentRow.shipVia}}</span> -->
+        <span class="new-label"  >{{currentRow.shipViaName ? currentRow.shipViaName : currentRow.shipVia}}</span>
     </strong>
 </div>
   <div class="modal-footer">

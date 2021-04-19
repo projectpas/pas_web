@@ -15,6 +15,7 @@
         <th><label>{{moduleName}} Description</label></th>
         <th><label>Tool Class</label></th>
         <th style="width:60px !important"><label>Qty<span class="clr-red">*</span></label></th>
+        <th style="z-index: 1;" style="width: 200px;"  *ngIf="isWorkFlow"><label>Memo</label></th>
         <th *ngIf="!isEdit"><label>Actions </label></th>
       </tr>
     </thead>
@@ -32,7 +33,7 @@
           <p-autoComplete (ngModelChange)="getActive()"  class="p-autoComplete-ctsm" field="name" name="AName{{i}}" [dropdown]="true"  [forceSelection]="true"
           errorMessage="Records not found"  emptyMessage="No Records Found"  (completeMethod)="filterpartItems($event)"
            [size]="30" [minLength]="1" appendTo='body' [baseZIndex]="9999" (onSelect)="onPartSelect($event, eqp,i)" [suggestions]="allPartnumbersInfo"
-           [(ngModel)]="eqp.partNumber" (onClear)="clearautoCompleteInput(eqp)"  #prellRevInsp="ngModel" >
+           [(ngModel)]="eqp.partNumber" required (onClear)="clearautoCompleteInput(eqp)"  #prellRevInsp="ngModel" >
       </p-autoComplete> 
         </td>
         <td>
@@ -48,6 +49,14 @@
           <input type="text" (ngModelChange)="getActive()" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
             value="{{ eqp.quantity }}" [(ngModel)]="eqp.quantity" [ngModelOptions]="{standalone: true}" required />
         </td>
+        <td *ngIf="isWorkFlow">
+          <div class="form-group memo-popup-cstm mat_emo">
+            <div [innerHTML]="eqp.memo" matTooltipPosition="above" [matTooltip]="parsedText(eqp.memo)"
+              class="text_editor_box"></div>
+            <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup5" matTooltip="Memo"
+              matTooltipPosition="above" (click)="onAddTextAreaInfo(eqp,i)"></i>
+          </div>
+        </td>
         <td  class="text-center" *ngIf="!isEdit">
           <button class="btn btn-danger nobg" (click)="openDelete(content,eqp,i)">
             <i class="fa fa-trash"></i>
@@ -59,6 +68,26 @@
     </div>
     </div>
   </form>
+  <div class="modal fade" id="textarea-popup5" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+          <h4 class="modal-title">Edit Memo</h4>
+        </div>
+        <div class="modal-body">
+          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
+            name="textAreaInfo" required></p-editor>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" [disabled]="disableEditor"
+            (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+          <button type="button" class="btn btn-danger"
+            (click)="onCloseTextAreaInfo()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div *ngIf="isWorkOrder && !isEdit" class="float-right">
     <button *ngIf="isWorkOrder" type="button" class="btn btn-primary btn-primary" data-dismiss="modal"
       (click)="saveEquipmentWorkOrder()"

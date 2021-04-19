@@ -159,7 +159,7 @@
 
 			<ng-template pTemplate="colgroup" let-columns>
 				<colgroup>
-					<col *ngFor="let col of columns" class="table-column-width">
+					<col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="table-column-width">
 				</colgroup>
 			</ng-template>
 
@@ -406,22 +406,22 @@
 			<div class="modal-body" *ngIf="auditHistory">
 				<div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
+					<table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
 						<thead>
 							<tr>
 								<th>RO ID</th>
 								<th>RO Number</th>
 								<th>Open Date</th>								
 								<th>Vendor Name</th>														
-								<th>Status</th>
+								<th style="width:60px">Status</th>
 								<th>Requested By</th>
 								<th>Approved By</th>
-								<th>IsActive</th>
+								<th style="width:60px">IsActive</th>
 								<th>Created Date</th>
 								<th>Created By</th>
 								<th>Updated Date</th>								
 								<th>Updated By</th>
-								<th>Is Deleted</th>
+								<th style="width:60px">Is Deleted</th>
 							</tr>
 						</thead>
 						<tbody class="audithistory-cstm">

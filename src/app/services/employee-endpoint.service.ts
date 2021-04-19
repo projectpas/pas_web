@@ -137,10 +137,11 @@ export class EmployeeEndpoint extends EndpointFactory {
 		});
 	}
 
-	getEmployeeNamesEndpoint<T>(): Observable<T> {
-		return this.http.get<T>(this.actionsNameUrl, this.getRequestHeaders())
+	getEmployeeNamesEndpoint<T>(mastercompanyId): Observable<T> {
+		let actionsNameUrl= `${this.actionsNameUrl}/${mastercompanyId}`;
+		return this.http.get<T>(actionsNameUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleErrorCommon(error, () => this.getEmployeeNamesEndpoint());
+				return this.handleErrorCommon(error, () => this.getEmployeeNamesEndpoint(mastercompanyId));
 		});
 	}
 

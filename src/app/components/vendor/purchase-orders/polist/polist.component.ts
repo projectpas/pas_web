@@ -44,12 +44,12 @@ export class PolistComponent implements OnInit {
     strVendorName: string;
     strVendorCode: string;
     headers = [
-        { field: 'purchaseOrderNumber', header: 'PO Num' },
-        { field: 'openDate', header: 'Open Date' },
+        { field: 'purchaseOrderNumber', header: 'PO Num',width:"90px" },
+        { field: 'openDate', header: 'Open Date',width:"100px" },
         // { field: 'closedDate', header: 'Closed/Cancelled Date' },
         { field: 'vendorName', header: 'Vendor Name' },
         // { field: 'vendorCode', header: 'Vendor Code' },
-        { field: 'status', header: 'Status' },
+        { field: 'status', header: 'Status', width:"90px" },
         { field: 'requestedBy', header: 'Requested By' },
         { field: 'approvedBy', header: 'Approved By' },        
         { field: 'createdDate', header: 'Created Date' },

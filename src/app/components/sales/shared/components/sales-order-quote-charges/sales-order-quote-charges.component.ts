@@ -115,7 +115,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       this.setEditArray.push(0);
     }
     const strText = value ? value : '';
-    this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+    this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
       this.chargesTypes = res.map(x => {
         return {
           chargeType: x.label,
@@ -479,7 +479,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       });
     }
     this.arrayVendlsit.push(0);
-    this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join()).subscribe(res => {
+    this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
       this.allVendors = res.map(x => {
         return {
           vendorId: x.vendorId,

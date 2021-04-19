@@ -286,7 +286,7 @@ export class ItemMasterNonStockComponent {
     public allWorkFlows: ItemClassificationModel[] = [];
 
     private glList() {
-        this.commonService.getGlAccountList().subscribe(res => {
+        this.commonService.getGlAccountList(this.currentUserMasterCompanyId).subscribe(res => {
             this.allGlInfo = res;
         });
     }
@@ -300,14 +300,19 @@ export class ItemMasterNonStockComponent {
     }
 
     private manufacturerdata() {
-        this.commonService.smartDropDownWithStatusList('Manufacturer', 'manufacturerId', 'name', '', 1, 0).subscribe(res => {
+        //this.commonService.smartDropDownWithStatusList('Manufacturer', 'manufacturerId', 'name', '', 1, 0).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'manufacturerId', 'name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allManufacturerInfo= res;
         })
-    }
+    }    
 
     async getDiscountTableData() {
-        await this.commonService.smartDropDownList('Discount', 'DiscountId', 'DiscontValue').subscribe(res => {
+        //await this.commonService.smartDropDownList('Discount', 'DiscountId', 'DiscontValue').subscribe(res => {
+          await this.commonService.autoSuggestionSmartDropDownList('Discount', 'DiscountId', 'DiscontValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
             this.discDataList = res;
+            this.discDataList.sort(function(a, b) {
+                return parseFloat(a.label) - parseFloat(b.label);
+            });
             for(let i = 0; i< this.discDataList.length; i++){
                 if(this.discDataList[i].label == 0.00){
                     this.discDataList[i].value = 0;
@@ -317,7 +322,8 @@ export class ItemMasterNonStockComponent {
     }
 
     getItemTypeList() {
-        this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description').subscribe(res => {
+        //this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description').subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             res.map(x => {
                 if(x.label == 'Non-Stock') {
                     this.currentItemTypeId = x.value;
@@ -332,7 +338,7 @@ export class ItemMasterNonStockComponent {
     }
 
     private ptnumberlistdata() {
-        this.itemser.getActivePartListByItemType('nonstock').subscribe(res => {
+        this.itemser.getActivePartListByItemType('nonstock',this.currentUserMasterCompanyId).subscribe(res => {
             this.allPartnumbersInfo = res;
         })
     }
@@ -354,10 +360,10 @@ export class ItemMasterNonStockComponent {
     private CurrencyData() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-
-        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(
+        //this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(
+            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(
             results => this.oncurrencySuccessful(results),
-            error => this.onDataLoadFailed(error)
+            error => {this.loadingIndicator=false;}
         );
     }
 
@@ -367,10 +373,11 @@ export class ItemMasterNonStockComponent {
         this.loadingIndicator = false;
         this.allCurrencyInfo = getList;
     }
-
+    
     private itemgroup() {
-        this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', '', 1, 0).subscribe(res => {
-            this.allitemgroupobjInfo = res;
+        //this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', 10, 1, 0).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+                this.allitemgroupobjInfo = res;           
         })
     }
 
@@ -415,7 +422,7 @@ export class ItemMasterNonStockComponent {
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
             this.itemser.updateNonstockClass(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error =>{this.isSpinnerVisible = false});
         }
 
         this.modal.close();
@@ -440,7 +447,7 @@ export class ItemMasterNonStockComponent {
 			this.sourceItem.masterCompanyId = this.currentUserMasterCompanyId;
 			this.itemservice.updateAction(this.sourceItem).subscribe(
 				response => this.saveCompleted(this.sourceItem),
-                error => this.saveFailedHelper(error));
+                error =>{this.isSpinnerVisible = false});
         }
 
         this.modal.close();
@@ -452,8 +459,8 @@ export class ItemMasterNonStockComponent {
 
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
+            error =>{this.isSpinnerVisible = false});
+        
 
     }
 
@@ -797,7 +804,7 @@ export class ItemMasterNonStockComponent {
             this.sourceAction.isActive == false;
             this.workFlowtService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error =>{this.isSpinnerVisible = false});
         }
         else {
             this.sourceAction = rowData;
@@ -806,7 +813,7 @@ export class ItemMasterNonStockComponent {
             this.sourceAction.isActive == true;
             this.workFlowtService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error =>{this.isSpinnerVisible = false});
         }
     }
 
@@ -823,8 +830,8 @@ export class ItemMasterNonStockComponent {
     private unitofmeasure() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-
-        this.commonService.smartDropDownWithStatusList('UnitOfMeasure', 'unitOfMeasureId', 'description', '', 1, 0).subscribe(res => {
+        //this.commonService.smartDropDownWithStatusList('UnitOfMeasure', 'unitOfMeasureId', 'description', '', 1, 0).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allUnitOfMeasureinfo = res;
         })
     }
@@ -857,7 +864,7 @@ export class ItemMasterNonStockComponent {
 			this.sourceUOM.masterCompanyId = this.currentUserMasterCompanyId;
             this.unitService.updateUnitOfMeasure(this.sourceUOM).subscribe(
                 response => this.saveCompleted(this.itemgroup),
-                error => this.saveFailedHelper(error));
+                error =>{this.isSpinnerVisible = false});
         }
 
          this.modal.close();
@@ -910,7 +917,7 @@ export class ItemMasterNonStockComponent {
                         this.alertService.showMessage("Success", `Action was updated successfully`, MessageSeverity.success);
                         this.router.navigate(['/itemmastersmodule/itemmasterpages/app-item-master-list'], { queryParams: { type: '2' } });
                     },
-					error => this.saveFailedHelper(error));
+					error =>{this.isSpinnerVisible = false});
 			}
 		}      
     }
@@ -921,7 +928,7 @@ export class ItemMasterNonStockComponent {
         this.sourceAction.updatedBy = this.userName;
         this.workFlowtService.deleteAcion(this.sourceAction.itemClassificationId).subscribe(
             response => this.saveCompleted(this.sourceAction),
-            error => this.saveFailedHelper(error));
+            error =>{this.isSpinnerVisible = false});
         this.modal.close();
     }
 
@@ -1032,7 +1039,7 @@ export class ItemMasterNonStockComponent {
 			this.sourceAction.description = this.integrationName;
 			this.inteService.updateAction(this.sourcemanufacturer).subscribe(
 				response => this.saveCompleted(this.sourceAction),
-				error => this.saveFailedHelper(error));
+				error =>{this.isSpinnerVisible = false});
 		}
 
 		this.modal.close();
@@ -1074,8 +1081,9 @@ export class ItemMasterNonStockComponent {
 		}
 		this.itemser.getDescriptionbypart(event).subscribe(
 			results => this.onpartnumberloadsuccessfull(results[0]),
-			error => this.onDataLoadFailed(error)
-		);
+            error =>{this.isSpinnerVisible = false}
+            );
+		
 		this.disableSavepartDescription = true;
     }
 

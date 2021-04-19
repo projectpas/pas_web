@@ -556,7 +556,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     }
     private getAllPercentages(): void {
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, this.currentUserMasterCompanyId)
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, 0,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.totalPercent = res.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))
@@ -918,12 +918,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 this.isSpinnerVisible = false;
             });
         }
-        this.workflowActions = [
-            { workflowId: "", taskId: 2, workflowActionAttributeIds: "11,12,13" },
-            { workflowId: "", taskId: 3, workflowActionAttributeIds: "14,15,16" },
-            { workflowId: "", taskId: 4, workflowActionAttributeIds: "16,17,36" }
-        ];
-        this.addedtaskIds = [2, 3, 4];
+        // this.workflowActions = [
+        //     { workflowId: "", taskId: 2, workflowActionAttributeIds: "11,12,13" },
+        //     { workflowId: "", taskId: 3, workflowActionAttributeIds: "14,15,16" },
+        //     { workflowId: "", taskId: 4, workflowActionAttributeIds: "16,17,36" }
+        // ];
+        // this.addedtaskIds = [2, 3, 4];
         // select First Action
         this.displaySelectedAction(this.workflowActions[0]);
     } 

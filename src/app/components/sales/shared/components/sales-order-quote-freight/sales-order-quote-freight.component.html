@@ -289,7 +289,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let f of freightForm; let i = index">
-                    <td>
+                    <td class="text-center">
                       <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel" [options]="shipViaList"
                         (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required
                         appendTo='body' [baseZIndex]="9999">
@@ -333,14 +333,14 @@
                         [(ngModel)]="f.currencyId" filter="true" (input)="onFilterCurrency($event.target.value)">
                       </p-dropdown>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <input type="text" (ngModelChange)="enableUpdate()" InputText pKeyFilter="money"
                         name="amount{{ i }}" #amount="ngModel" [(ngModel)]="f.amount"
-                        class="form-control w50 text_right" (change)="f.amount = formateCurrency(f.amount);" required />
+                        class="form-control w100 text_right" (change)="f.amount = formateCurrency(f.amount);" required />
                     </td>
                     <td>
                       <div class="form-group memo-popup-cstm mat_emo"
-                        style="width: 120px;    display: inline-flex;    margin-bottom: 0;">
+                        style="width: 120px;    display: inline-flex; margin-bottom: 0;">
                         <div [innerHTML]="f.memo" class="text_editor_box"></div>
                         <i class="fa fa-pencil" data-toggle="modal" style="position: relative;top: 6px;"
                           data-target="#textarea-popupFreight" matTooltip="Memo" matTooltipPosition="above"

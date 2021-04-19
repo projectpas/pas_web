@@ -14,6 +14,7 @@ import { formatStringToNumber } from "../../../../../../generic/autocomplete";
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 import { AlertService, MessageSeverity } from "../../../../../../services/alert.service";
 import { Subscription } from 'rxjs';
+import { AuthService } from "../../../../../../services/auth.service";
 
 @Component({
   selector: "app-part-number-filter",
@@ -61,7 +62,8 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     private router: Router,
     private alertService: AlertService,
     public conditionService: ConditionService,
-    private changeDetector: ChangeDetectorRef) {
+    private changeDetector: ChangeDetectorRef,
+    private authService: AuthService) {
     this.partDetails = [];
     this.query = new ItemMasterSearchQuery();
     this.partDetail = {
@@ -201,6 +203,9 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       this.searchDisabled = false;
     } else {
       this.searchDisabled = true;
+      if (this.query.partSearchParamters.conditionIds !== undefined && this.query.partSearchParamters.conditionIds.length == 0 && this.query.partSearchParamters.conditionId !== 0) {
+        this.query.partSearchParamters.conditionIds.push(this.query.partSearchParamters.conditionId);
+      }
     }
     let qr = + formatStringToNumber(this.query.partSearchParamters.quantityRequested);
     if (qr) {
@@ -246,6 +251,12 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
+  }
+
   bindPartsDroppdown(query) {
     this.searchDisabled = true;
     let partSearchParamters = {
@@ -257,7 +268,8 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       "custRestrictPMA": this.salesQuote.restrictPMA,
       "includeAlternatePartNumber": this.query.partSearchParamters.includeAlternatePartNumber,
       "includeEquivalentPartNumber": this.query.partSearchParamters.includeEquivalentPartNumber,
-      "idlist": '0'
+      "idlist": '0',
+      "masterCompanyId": this.masterCompanyId
     };
     this.subscription = this.itemMasterService.searchPartNumberAdvanced(partSearchParamters).subscribe(
       (result: any) => {

@@ -166,7 +166,7 @@
                   {{ rowData[col.field] }}  {{col.field == 'firstName' && rowData['lastName'] ? rowData['lastName'] : ''}}
               </ng-container>
               <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-                  {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
+                  {{rowData[col.field] }}
               </ng-container>  
             </td>
           <td class="action-icons-cstm table-column-width">
@@ -286,7 +286,7 @@
       <div class="modal-body" *ngIf="auditHistory1">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width" *ngIf="auditHistory1.length > 0; else noDatavailable">
+					<table class="table table-bordered" *ngIf="auditHistory1.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <th>Contact</th>
@@ -295,10 +295,10 @@
                 <th>ATA Sub Chapter</th>
                 <th>ATA Sub Code</th>                
                 <th>Created Date</th>
-                <th>Created By</th>
+                <th style="min-width:60px">Created By</th>
                 <th>Updated Date</th>   
-                <th>Updated By</th>                             
-                <th>Is Deleted</th>
+                <th style="min-width:60px">Updated By</th>                             
+                <th style="width:60px">Is Deleted</th>
               </tr>
             </thead>
             <tbody *ngIf="auditHistory1.length > 0">
@@ -315,7 +315,7 @@
                       {{ audit.firstName }} {{ audit.lastName ? audit.lastName : ''}}
                   </td>
 
-                <td [ngStyle]="{
+                <td style="width:100px" [ngStyle]="{
                     color: getColorCodeForHistoryATA(
                       i,
                       'ataChapterCode',
@@ -349,7 +349,7 @@
                   }">
                   {{ audit.ataSubChapterDescription }}
                 </td>
-                <td [ngStyle] ="{
+                <td style="width:100px" [ngStyle] ="{
                     color: getColorCodeForHistoryATA(
                       i,
                       'ataSubChapterCode',
@@ -361,7 +361,7 @@
                     {{audit.ataSubChapterCode}}
                 </td>
                 <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
-                <td [ngStyle] ="{
+                <td style="width:60px;text-align:center" [ngStyle] ="{
                     color: getColorCodeForHistoryATA(
                       i,
                       'createdBy',
@@ -373,7 +373,7 @@
                     {{audit.createdBy}}
                 </td>
                 <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
-                <td [ngStyle] ="{
+                <td style="width:60px;text-align:center" [ngStyle] ="{
                     color: getColorCodeForHistoryATA(
                       i,
                       'updatedBy',
@@ -384,7 +384,7 @@
                   }">
                     {{audit.updatedBy}}
                 </td>
-                <td class="background-white"><p class="text-center width-50"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                <td style="width:60px;text-align:center" class="background-white"><p class="text-center width-50"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
             </tr>
             </tbody>
           </table>

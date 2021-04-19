@@ -97,7 +97,7 @@ export class WorkflowListComponent implements OnInit {
     ];
     gridColumns: any[] = [
         { field: 'workOrderNumber', header: 'Workflow ID' },
-        { field: 'version', header: 'Version Number' },
+        { field: 'version', header: 'Version Number',width:"60px" },
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },
         { field: 'description', header: 'Work Scope' },
@@ -105,9 +105,9 @@ export class WorkflowListComponent implements OnInit {
         { field: 'workflowCreateDate', header: 'WF Created Date' },
         { field: 'workflowExpirationDate', header: 'Expiration Date' },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'CreatedBy' },
+        { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'UpdatedBy' }
+        { field: 'updatedBy', header: 'Updated By' }
     ];
     selectedColumn: any;
     sourceViewforDocumentListColumns = [
@@ -146,9 +146,16 @@ export class WorkflowListComponent implements OnInit {
         if (this.isWorkOrder) { 
             // this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
                 this.onViewWFDetails('','onload');
+                this.toggle_wf_header=true;
                 // this.responseDataForWorkFlow = res;
             // })
         }
+    }
+
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -171,7 +178,7 @@ export class WorkflowListComponent implements OnInit {
         this.lazyLoadEventDataInput = event;
 
         if (this.filterText == '') {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus }
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus,masterCompanyId:this.authService.currentUser.masterCompanyId }
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
         } else {
@@ -181,6 +188,7 @@ export class WorkflowListComponent implements OnInit {
 
     getList(data) {
         this.isSpinnerVisible = true;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;   
         this.workFlowtService.getAllWorkFlowList(data).subscribe(res => {
 
             this.workflowList = res[0]['results'].map(x => {
@@ -209,7 +217,7 @@ export class WorkflowListComponent implements OnInit {
                 this.totalPages = 0;
                 this.isSpinnerVisible = false;
             }
-        }, error => this.onDataLoadFailed(error))
+        }, error => {this.isSpinnerVisible = false;})
     }
 
     globalSearch(value) {
@@ -218,7 +226,7 @@ export class WorkflowListComponent implements OnInit {
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
         this.lazyLoadEventDataInput.globalFilter = value;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus };
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus,masterCompanyId:this.authService.currentUser.masterCompanyId };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.getList(PagingData);
     }
@@ -226,7 +234,7 @@ export class WorkflowListComponent implements OnInit {
     getListByStatus(status) {
         this.lazyLoadEventDataInput.first = 0;
         this.status = status;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status, isDeleted: this.currentDeletedstatus };
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status, isDeleted: this.currentDeletedstatus,masterCompanyId:this.authService.currentUser.masterCompanyId };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.getList(PagingData);
     }
@@ -246,7 +254,7 @@ export class WorkflowListComponent implements OnInit {
             else if (field == 'workflowExpirationDate') {
                 this.dateObject = { 'workflowExpirationDate': date }
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject };
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject,masterCompanyId:this.authService.currentUser.masterCompanyId };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
         } else {
@@ -263,14 +271,15 @@ export class WorkflowListComponent implements OnInit {
             if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.workflowExpirationDate) {
                 delete this.lazyLoadEventDataInput.filters.workflowExpirationDate;
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject };
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject,masterCompanyId:this.authService.currentUser.masterCompanyId };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
         }
     }
 
     getDeleteListByStatus(value) {
-        this.lazyLoadEventDataInput.filters.isDeleted = value
+        this.lazyLoadEventDataInput.filters.isDeleted = value;
+        this.lazyLoadEventDataInput.filters.masterCompanyId=this.authService.currentUser.masterCompanyId;
         this.currentDeletedstatus = value;
         if (value == true) {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
@@ -289,9 +298,9 @@ export class WorkflowListComponent implements OnInit {
         this.workFlowGridSource.filter = filterValue;
     }
 
-    private onDataLoadFailed(error: any) {
-        this.isSpinnerVisible = false;
-    }
+    // private onDataLoadFailed(error: any) {
+    //     this.isSpinnerVisible = false;
+    // }
 
     confirmDelete(confirmDeleteTemplate, rowData) {
         this.currentWorkflow = rowData;
@@ -327,7 +336,7 @@ export class WorkflowListComponent implements OnInit {
             this.modal.close();
             this.getDeleteListByStatus(this.currentDeletedstatus)
             this.alertService.showMessage("Success", `Record was Restored successfully. `, MessageSeverity.success);
-        }, error => this.onDataLoadFailed(error))
+        }, error =>  { this.isSpinnerVisible = false;})
     }
 
     toggleIsActive(workflow: any, event): void {
@@ -858,7 +867,7 @@ if(element.exclusions){
     exportCSV(dt){
 		this.isSpinnerVisible = true;
         const isdelete=this.currentDeletedstatus ? true:false;
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":isdelete},"globalFilter":""}
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId":this.currentUserMasterCompanyId,"status":this.status,"isDeleted":isdelete},"globalFilter":""}
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
@@ -876,7 +885,7 @@ if(element.exclusions){
 			dt.exportCSV();
 			dt.value = this.workflowList;
         	this.isSpinnerVisible = false;
-        },error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false;})
     }
     documentList:any=[]; 
     openView(content,publication){
@@ -888,6 +897,8 @@ if(element.exclusions){
     }
     downloadFile(rowData) {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
-        window.location.assign(url);
+         window.location.assign(url);
     }
+ 
+
 }

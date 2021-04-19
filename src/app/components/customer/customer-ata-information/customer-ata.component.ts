@@ -222,7 +222,13 @@ export class CustomerATAInformationComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.customerService.getATAMappedByCustomerId(this.id).subscribe(res => {
             this.loaderForATA = false;
-            this.ataListDataValues = res;
+            this.ataListDataValues =   res.map(x => {
+                return {
+                    ...x,
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy') : '',
+                }
+            });
             if (res.length > 0) {
                 this.totalRecords = res.length;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -232,6 +238,7 @@ export class CustomerATAInformationComponent implements OnInit {
             this.loaderForATA = false;
         })
     }
+    
 
     // search URL generation 
     searchByFieldUrlCreateforATA() {

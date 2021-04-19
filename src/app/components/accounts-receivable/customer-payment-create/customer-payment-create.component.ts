@@ -10,6 +10,7 @@ import { CurrencyService } from "../../../services/currency.service";
 import { EmployeeService } from "../../../services/employee.service";
 import { AuthService } from "../../../services/auth.service";
 import { Router } from "@angular/router";
+import { Subject } from 'rxjs';
 import {
   getObjectById,
   editValueAssignByCondition,
@@ -24,9 +25,6 @@ import {
 import { CustomerSearchQuery } from "../../sales/quotes/models/customer-search-query";
 import { MarginSummary } from "../../../models/sales/MarginSummaryForSalesorder";
 import { ManagementStructureComponent } from "../../sales/quotes/shared/components/management-structure/management-structure.component";
-import { SalesOrderConfirmationModalComponent } from "../../sales/order/sales-order-confirmation-modal/sales-order-confirmation-modal.compoent";
-import { SalesOrderApproveComponent } from "../../sales/order/shared/components/sales-approve/sales-approve.component";
-import { SalesOrderCustomerApprovalComponent } from "../../sales/order/shared/components/sales-order-customer-approval/sales-order-customer-approval.component";
 import { ICustomerPayments } from "../../../models/sales/ICustomerPayments";
 import { CustomerPayments } from "../../../models/sales/CustomerPayments.model";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
@@ -37,8 +35,8 @@ import { ReviewCustomerPaymentComponent } from "../reivew-customer-payments/revi
   templateUrl: "./customer-payment-create.component.html",
   styleUrls: ["./customer-payment-create.component.scss"]
 })
-
 export class CustomerPaymentCreateComponent implements OnInit {
+  uploadDocs: Subject<boolean> = new Subject();
   query: CustomerSearchQuery;
   customers: Customer[];
   totalRecords: number = 0;
@@ -48,7 +46,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
   customerPayment: any = {};
   salesOrder: ICustomerPayments;
   customerDetails: any;
-  enableUpdateButton = true;
+  enableUpdateButton = false;
+  isDocumentsAdded = false;
   firstCollection: any[];
   allEmployeeinfo: any[] = [];
   customerNames: any[];
@@ -92,9 +91,11 @@ export class CustomerPaymentCreateComponent implements OnInit {
   arrayEmplsit: any[] = [];
   allEmployeeList: any = [];
   currentUserEmployeeName: string;
-  moduleName: any = "SalesOrder";
   statusList: any = [];
   accntPriodList: any = [];
+  modalIsMaintannce: NgbModalRef;
+  maintanancemoduleName = 'CustomerReceipt';
+  selectedIndex: number = 0;
 
   constructor(
     private alertService: AlertService,
@@ -154,7 +155,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
   }
 
   onChangeInput() {
-    this.enableUpdateButton = false;
+    this.enableUpdateButton = true;
   }
 
   getSoInstance(initialCall = false) {
@@ -183,7 +184,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     if (event.query !== undefined && event.query !== null) {
       this.employeedata(event.query, this.customerPayment.managementStructureId);
     }
-    this.enableUpdateButton = false;
+    this.enableUpdateButton = true;
   }
 
   getCustomerDetails() {
@@ -210,12 +211,12 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.acctingPeriod = parseInt(custPayment.acctingPeriod);
     this.customerPayment.amount = custPayment.amount;
     this.customerPayment.amtApplied = custPayment.amtApplied;
-    this.customerPayment.amtRemaining = custPayment.amount;
+    this.customerPayment.amtRemaining = custPayment.amtRemaining;
     this.customerPayment.reference = custPayment.reference;
     this.customerPayment.cntrlNum = custPayment.cntrlNum;
     this.customerPayment.openDate = new Date(custPayment.openDate);
     this.customerPayment.statusId = custPayment.statusId;
-    this.customerPayment.postedDate = new Date(custPayment.postedDate);
+    this.customerPayment.postedDate = custPayment.postedDate ? new Date(custPayment.postedDate) : null;
     this.customerPayment.memo = custPayment.memo;
     this.customerPayment.managementStructureId = custPayment.managementStructureId;
     // this.customerPayment.employeeId = getObjectById(
@@ -228,6 +229,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
   getNewSalesOrderInstance() {
     this.customerPayment.receiptNo = "Creating";
     this.customerPayment.statusId = getObjectByValue('label', 'Open', this.statusList).value; // Open status by default
+    this.customerPayment.depositDate = new Date();
+    this.customerPayment.openDate = new Date();
   }
 
   onAddDescription(value) {
@@ -250,7 +253,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     if (this.tempMemoLabel == "Memo") {
       this.customerPayment.memo = this.tempMemo;
     }
-    this.enableUpdateButton = false;
+    this.enableUpdateButton = true;
   }
 
   closeErrorMessage() {
@@ -260,6 +263,10 @@ export class CustomerPaymentCreateComponent implements OnInit {
   onSubmit() {
     this.errorMessages = [];
     let haveError = false;
+    if (this.customerPayment.amount == undefined || this.customerPayment.amount <= 0) {
+      this.errorMessages.push("Please enter amount");
+      haveError = true;
+    }
 
     if (haveError) {
       let content = this.errorMessagePop;
@@ -271,6 +278,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.isSpinnerVisible = true;
       this.salesOrder = new CustomerPayments();
       this.salesOrder.receiptNo = "Creating";
+      this.salesOrder.receiptId = this.id;
       this.salesOrder.bankName = this.customerPayment.bankName;
       this.salesOrder.bankAcctNum = this.customerPayment.bankAcctNum;
       this.salesOrder.masterCompanyId = this.masterCompanyId;
@@ -299,9 +307,34 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
       if (this.id) {
         this.isCreateModeHeader = false;
+        this.customerPaymentsService.update(this.salesOrder).subscribe(data => {
+          this.isSpinnerVisible = false;
+          this.alertService.showMessage(
+            "Success",
+            `Payment Header Information updated successfully.`,
+            MessageSeverity.success
+          );
+          if (this.isDocumentsAdded) {
+            this.uploadDocs.next(true);
+          }
+          this.getSalesOrderInstance(this.id, true);
+
+          this.toggle_po_header = false;
+          if (this.isEdit) {
+            this.isCreateModeHeader = false;
+          }
+          this.enableUpdateButton = true;
+        }, error => {
+          this.isSpinnerVisible = false;
+          this.toggle_po_header = true;
+        });
       } else {
         this.customerPaymentsService.create(this.salesOrder).subscribe(data => {
           let receiptId = data[0].receiptId;
+          if (this.isDocumentsAdded) {
+            localStorage.setItem('commonId', receiptId.toString());
+            this.uploadDocs.next(true);
+          }
           this.isCreateModeHeader = true;
           this.isHeaderSubmit = true;
           this.isSpinnerVisible = false;
@@ -340,7 +373,11 @@ export class CustomerPaymentCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
+    if (event.index == 0) {
+      this.selectedIndex = 0;
+    }
     if (event.index == 1) {
+      this.selectedIndex = 1;
       this.reviewCustomerPaymentComponent.fetchDataForReview();
     }
   }
@@ -357,7 +394,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   enableHeaderSave() {
     this.enableHeaderSaveBtn = true;
-    this.enableUpdateButton = false;
+    this.enableUpdateButton = true;
   }
 
   checkValidOnChange(condition, value) {
@@ -556,5 +593,23 @@ export class CustomerPaymentCreateComponent implements OnInit {
     }, err => {
       this.isSpinnerVisible = false;
     });
+  }
+
+  changeOfStatus() {
+    this.enableUpdateButton = true;
+    this.isDocumentsAdded = true;
+  }
+
+  viewCRDocumentModal(content) {
+    this.modalIsMaintannce = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+  }
+
+  closeCDDocumentModal() {
+    this.modalIsMaintannce.close();
+  }
+
+  changeToReviewTab(event) {
+    this.selectedIndex = 1;
+    this.reviewCustomerPaymentComponent.fetchDataForReview();
   }
 }

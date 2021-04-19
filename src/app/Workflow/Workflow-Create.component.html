@@ -185,7 +185,7 @@
                                         <h5>BER Determination</h5>
                                     </div>
                                      <div class="col-md-8 ber-padding"> 
-                                        <h5 class="float-right"> BER Thresold :
+                                        <h5 class="float-right"> BER Thershold :
                                             <span   
                                              class="clr-red">{{sourceWorkFlow.berThresholdAmount ? (sourceWorkFlow.berThresholdAmount ) : '0.00'}}</span>
                                         </h5>
@@ -575,7 +575,7 @@
                                     <div id="tab_Tools"
                                         *ngIf="workFlow != undefined && workFlow.equipments != undefined"
                                         class="tab-pane fade pan">
-                                        <grd-equipment [UpdateMode]="UpdateMode" [workFlow]='workFlow'>
+                                        <grd-equipment [UpdateMode]="UpdateMode" [workFlow]='workFlow' isWorkFlow="true">
                                         </grd-equipment>
                                     </div>
                                     <div id="tab_Exclusions"

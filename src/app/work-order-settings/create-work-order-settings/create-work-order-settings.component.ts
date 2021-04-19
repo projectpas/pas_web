@@ -384,7 +384,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         });
     }
     getAllWorkOrderStages(): void {
-        this.workOrderService.getWorkOrderStageAndStatus().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.getWorkOrderStageAndStatus(this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderOriginalStageList = res;
             this.workOrderStagesList = res
             if(!this.isEditMode) {
@@ -469,7 +469,7 @@ this.woTypeId=ev.value
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allConditionInfo = res;
 
             if(!this.isEditMode) {

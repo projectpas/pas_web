@@ -402,6 +402,7 @@ export class SalesOrderService {
     partNumberObj.updatedBy = userName;
     partNumberObj.createdOn = new Date().toDateString();
     partNumberObj.updatedOn = new Date().toDateString();
+    
     partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
     partNumberObj.methodType =
       //selectedPart.method === "Stock Line" ? "S" : "I";
@@ -503,7 +504,9 @@ export class SalesOrderService {
       partNumberObj.quoteDate = selectedPart.quoteDate;
     }
     partNumberObj.qtyReserved = selectedPart.qtyReserved;
+    partNumberObj.quantityOnHand = selectedPart.quantityOnHand
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
+    partNumberObj.qtyToShip = selectedPart.qtyToShip;
     partNumberObj.idNumber = selectedPart.idNumber;
     partNumberObj.isApproved = selectedPart.isApproved;
     partNumberObj.customerRef = salesOrderObj.customerReference;
@@ -530,12 +533,15 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.deleteSoSetting(salesOrdersettingsId, updatedBy)
     );
   }
-  getAllSalesOrderSettings() {
-    return this.salesOrderEndPointSevice.getAllSalesOrderSettings();
+  
+  getAllSalesOrderSettings(masterCompanyId) {
+    return this.salesOrderEndPointSevice.getAllSalesOrderSettings(masterCompanyId);
   }
+
   saveOrUpdateSOSetting(data) {
     return this.salesOrderEndPointSevice.saveOrUpdateSOSettings(data);
   }
+
   getSOSettingHistory(id) {
     return this.salesOrderEndPointSevice.getSOSettingHistory(id);
   }

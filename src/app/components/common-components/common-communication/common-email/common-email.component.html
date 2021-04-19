@@ -175,7 +175,7 @@
             <div class="modal-body">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                    <div class="tableFixHead">
-                    <table class="table table-bordered header-table-width">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Email Type</th>
@@ -586,10 +586,10 @@
     </div>
     <div class="modal-body">
         <h6>
-            Are you sure you want to send this Quote to Customer?
+            Are you sure you want to send this {{CurrentModuleName == 'SalesQuote' ? 'Quote' : 'Sales Order'}} to Customer?
         </h6>
         <a style="padding:0px" class="filelink btn btn-link" (click)="downloadFileUpload(pdfPath)" target="_blank"
-            download>Preview Quote</a>
+            download>Preview {{CurrentModuleName == 'SalesQuote' ? 'Quote' : 'Sales Order'}}</a>
         <!-- <a href="{{pdfPath}}" class="btn btn-link" target="_blank" >Preview Quote</a> -->
     </div>
     <div class="modal-footer">

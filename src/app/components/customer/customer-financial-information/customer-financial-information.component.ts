@@ -42,7 +42,7 @@ import {
 import { Pipe, PipeTransform } from '@angular/core';
 import { DBkeys } from '../../../services/db-Keys';
 import { LocalStoreManager } from '../../../services/local-store-manager.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import * as moment from 'moment';
 import { Params, ActivatedRoute } from '@angular/router';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
@@ -217,6 +217,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
   isBillingInfoAdd:Boolean=true;
   isBillingInfoEdit:Boolean=true;
   constructor(
+    private _decimalPipe: DecimalPipe,
     public taxtypeser: TaxTypeService,
     public creditTermsService: CreditTermsService,
     public currencyService: CurrencyService,
@@ -719,7 +720,12 @@ export class CustomerFinancialInformationComponent implements OnInit {
         res.map((element, index) => {
           element.id = index + 1;
         });
-        this.taxTypeRateMapping = res;
+        this.taxTypeRateMapping = res.map(x=>{
+          return {
+            ...x,
+            taxRate:x.taxRate ? this._decimalPipe.transform(x.taxRate,"1.2-2"):''
+          }
+        });
         this.totalRecords = this.taxTypeRateMapping.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         this.isSpinnerVisible = false;

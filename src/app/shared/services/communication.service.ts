@@ -92,27 +92,27 @@ export class CommunicationService extends EndpointFactory {
     }
 
     //Get phone List
-    getPhoneList(referenceId, moduleId, partNoId): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/Communication/communicationphonelist?referenceId=${referenceId}&moduleId=${moduleId}&workOrderPartNo=${partNoId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getPhoneList(referenceId, moduleId, partNoId));
+    getPhoneList(referenceId, moduleId, partNoId,masterCompanyId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/Communication/communicationphonelist?referenceId=${referenceId}&moduleId=${moduleId}&workOrderPartNo=${partNoId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getPhoneList(referenceId, moduleId, partNoId,masterCompanyId));
         });
     }
     //Get email List
-    getEmailList(referenceId, moduleId, partNoId): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/Communication/emailList?referenceId=${referenceId}&moduleId=${moduleId}&workOrderPartNo=${partNoId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getEmailList(referenceId, moduleId, partNoId));
+    getEmailList(referenceId, moduleId, partNoId,masterCompanyId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/Communication/emailList?referenceId=${referenceId}&moduleId=${moduleId}&workOrderPartNo=${partNoId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getEmailList(referenceId, moduleId, partNoId,masterCompanyId));
         });
     }
     //Get Text List
-    getTextList(referenceId, moduleId, partNoId): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/Communication/communicationtextlist?referenceId=${referenceId}&moduleId=${moduleId}&workOrderPartNo=${partNoId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getTextList(referenceId, moduleId, partNoId));
+    getTextList(referenceId, moduleId, partNoId,masterCompanyId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/Communication/communicationtextlist?referenceId=${referenceId}&moduleId=${moduleId}&workOrderPartNo=${partNoId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getTextList(referenceId, moduleId, partNoId,masterCompanyId));
         });
     }
     //Get memo List
-    getMemoList(referenceId, moduleId, partNoId): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/Communication/memoList?referenceId=${referenceId}&moduleId=${moduleId}&workOrderPartNo=${partNoId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getMemoList(referenceId, moduleId, partNoId));
+    getMemoList(referenceId, moduleId, partNoId,masterCompanyId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/Communication/memoList?referenceId=${referenceId}&moduleId=${moduleId}&workOrderPartNo=${partNoId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId:0 }`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getMemoList(referenceId, moduleId, partNoId,masterCompanyId));
         });
     }
 
@@ -162,9 +162,9 @@ export class CommunicationService extends EndpointFactory {
     //common communication apis
 
     //memo
-    getCommonMemoList(referenceId, moduleId, isDeleted): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/Communication/memoList?referenceId=${referenceId}&moduleId=${moduleId}&isDeleted=${isDeleted}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getCommonMemoList(referenceId, moduleId, isDeleted));
+    getCommonMemoList(referenceId, moduleId, isDeleted,masterCompanyId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/Communication/memoList?referenceId=${referenceId}&moduleId=${moduleId}&isDeleted=${isDeleted}&masterCompanyId=${masterCompanyId !=undefined ?masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getCommonMemoList(referenceId, moduleId, isDeleted,masterCompanyId));
         });
     }
     deleteCommonMemoList(memoId,updatedBy): Observable<any> {
@@ -194,9 +194,9 @@ export class CommunicationService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.deleteCommonTextList(textId,updatedBy));
         });
     }
-    getCOmmonTextList(referenceId, moduleId, isDeleted): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/Communication/communicationtextlist?referenceId=${referenceId}&moduleId=${moduleId}&isDeleted=${isDeleted}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getCOmmonTextList(referenceId, moduleId, isDeleted));
+    getCOmmonTextList(referenceId, moduleId, isDeleted,masterCompanyId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/Communication/communicationtextlist?referenceId=${referenceId}&moduleId=${moduleId}&isDeleted=${isDeleted}&masterCompanyId=${masterCompanyId !=undefined ?masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getCOmmonTextList(referenceId, moduleId, isDeleted,masterCompanyId));
         });
     }
     updateCommonText(data): Observable<any> {
@@ -221,9 +221,9 @@ export class CommunicationService extends EndpointFactory {
         });
     }
     //Phone
-    getCommonPhoneData(referenceId, moduleId, isDeleted,type): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/Communication/communicationphonelist?referenceId=${referenceId}&moduleId=${moduleId}&isDeleted=${isDeleted}&phonetype=${type}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getCommonPhoneData(referenceId, moduleId, isDeleted,type));
+    getCommonPhoneData(referenceId, moduleId, isDeleted,type,masterCompanyId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/Communication/communicationphonelist?referenceId=${referenceId}&moduleId=${moduleId}&isDeleted=${isDeleted}&phonetype=${type}&masterCompanyId=${masterCompanyId !=undefined ?masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getCommonPhoneData(referenceId, moduleId, isDeleted,type,masterCompanyId));
         });
     }
 
@@ -261,9 +261,9 @@ export class CommunicationService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.deleteCommonEmailList(emailId, updatedBy));
         });
     }
-    getCommonEmailList(referenceId, moduleId, isDeleted,type): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/Communication/emailList?referenceId=${referenceId}&moduleId=${moduleId}&isDeleted=${isDeleted}&type=${type}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getCommonEmailList(referenceId, moduleId, isDeleted,type));
+    getCommonEmailList(referenceId, moduleId, isDeleted,type,masterCompanyId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/Communication/emailList?referenceId=${referenceId}&moduleId=${moduleId}&isDeleted=${isDeleted}&type=${type}&masterCompanyId=${masterCompanyId !=undefined ?masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getCommonEmailList(referenceId, moduleId, isDeleted,type,masterCompanyId));
         });
     }
 

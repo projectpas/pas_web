@@ -62,11 +62,11 @@
           </div>
           <div class="row">
               <div class="col">
-                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+                  <button type="button" *ngIf="!isView" class="btn btn-primary exports-button" matTooltip="Download Data"
                       matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
                       data-toggle="modal"
-                      (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
-                  <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download"
+                      (click)="openDownload(downloadConfirmation);  selectedOnly = false; targetData = dt;"></button>
+                  <button type="button" *ngIf="!isView" class="btn btn-primary exports-button" pButton icon="fa-download"
                       iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
                       matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
               </div>
@@ -203,7 +203,7 @@
                                   aria-hidden="true"></i></a>
                       </span>
                       <span data-toggle="modal" data-target="#assetHistory">
-                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"><i
+                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History For Check-In & Check-Out"><i
                             class="fa fa-history"> </i></a></span>
                   </div>
               </td>

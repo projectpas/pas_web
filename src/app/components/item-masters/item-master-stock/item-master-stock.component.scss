@@ -188,8 +188,8 @@ table.table-bordered thead tr th {
   padding: 4px;
 }
 table.table-bordered thead tr th:last-child{
-  position: sticky;
-  background: #4298ff;
+  // position: sticky;
+  // background: #4298ff;
   right: 0;
   width: 80px;
 
@@ -332,9 +332,7 @@ input[type='date']::-webkit-outer-spin-button {
 .form-check-input {
   width: 40px !important;
 }
-td {
-  text-align: center;
-}
+
 .inline-adjust {
   width: 60% !important;
 }

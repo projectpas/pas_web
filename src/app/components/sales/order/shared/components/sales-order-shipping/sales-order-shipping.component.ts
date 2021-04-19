@@ -84,6 +84,7 @@ export class SalesOrderShippingComponent {
     isEditModeAdd: boolean = false;
     modal: NgbModalRef;
     isMultipleSelected: boolean = false;
+    addCustomerInfo: boolean = false;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -138,6 +139,7 @@ export class SalesOrderShippingComponent {
             this.shippingHeader['shipToName'] = this.customerDetails['name'];
             this.shippingHeader['customerId'] = this.customerDetails['customerId'];
         }
+        this.shippingHeader['soShippingNum'] = 'Creating';
     }
 
     userShipingList: any[] = [];
@@ -190,21 +192,15 @@ export class SalesOrderShippingComponent {
         });
     }
 
-    calculateExpiryDate() {
-    }
-
-    getCustomerNameList() {
-        let userShipingIdList = [];
-        userShipingIdList.push(0);
-        this.commonService.autoSuggestionSmartuserDropDownList(this.shipUsertype, '', true, 20, userShipingIdList.join()).subscribe(res => {
-            this.customerNamesList = res;
-        }, err => {
-        });
-    }
-
     getShipCustomerNameList(usertype) {
         let userShipingIdList = [];
-        userShipingIdList.push(0);
+        if (this.shipToAddress.userId != null) {
+            userShipingIdList.push(this.shipToAddress.userId);
+        }
+        else {
+            userShipingIdList.push(0);
+        }
+
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userShipingIdList.join()).subscribe(res => {
             this.customerNamesList = res;
         }, err => {
@@ -213,15 +209,25 @@ export class SalesOrderShippingComponent {
 
     getSoldCustomerNameList(usertype) {
         let userBillinngIdList = [];
-        userBillinngIdList.push(0);
+        if (this.billToAddress.userId != null) {
+            userBillinngIdList.push(this.billToAddress.userId);
+        }
+        else {
+            userBillinngIdList.push(0);
+        }
+
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userBillinngIdList.join()).subscribe(res => {
             this.userBillingList = res;
         }, err => {
         });
     }
 
+    arrayShipVialist: any[] = [];
     getShipVia() {
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe((res) => {
+        if (this.arrayShipVialist.length == 0) {
+            this.arrayShipVialist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', '', true, 20, this.arrayShipVialist.join(), this.currentUserMasterCompanyId).subscribe((res) => {
             this.shipViaList = res;
         }, err => {
         });
@@ -244,15 +250,23 @@ export class SalesOrderShippingComponent {
             });
     }
 
+    arrayCountrieslist: any[] = [];
     getCountriesList() {
-        this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+        if (this.arrayCountrieslist.length == 0) {
+            this.arrayCountrieslist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', '', true, 20, this.arrayCountrieslist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.countryList = res;
         }, err => {
         });
     }
 
+    arrayUOMlist: any[] = [];
     getUnitOfMeasure() {
-        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName').subscribe((res) => {
+        if (this.arrayUOMlist.length == 0) {
+            this.arrayUOMlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUOMlist.join(), this.currentUserMasterCompanyId).subscribe((res) => {
             this.allWeightUnitOfMeasureInfo = res;
         }, err => {
         });
@@ -508,7 +522,7 @@ export class SalesOrderShippingComponent {
         }
 
         this.shippingHeader['salesOrderId'] = this.salesOrderId;
-        this.shippingHeader['masterCompanyId'] = this.salesOrder['masterCompanyId'];
+        this.shippingHeader['masterCompanyId'] = this.currentUserMasterCompanyId;
         this.shippingHeader['createdBy'] = this.userName;
         this.shippingHeader['updatedBy'] = this.userName;
         this.shippingHeader['createdDate'] = new Date().toDateString();
@@ -747,10 +761,14 @@ export class SalesOrderShippingComponent {
             this.shippingHeader.shipToState = this.shipToAddress.stateOrProvince;
             this.shippingHeader.shipToCountryName = this.shipToAddress.country;
             this.shippingHeader.shipToZip = this.shipToAddress.postalCode;
+            this.shippingHeader.shippingAccountNo = this.shipToAddress.shippingAccountNo;
         }
 
         if (this.shipvia !== undefined) {
             this.shippingHeader.shipviaId = this.shipvia.shipviaId;
+        }
+        if (this.sourceSOApproval !== undefined) {
+            this.shippingHeader.shippingAccountNo = this.sourceSOApproval.shippingAccountNo;
         }
         this.isSpinnerVisible = false;
     }
@@ -1269,6 +1287,11 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['salesOrderCustomsInfo']['netMass'] = '';
         this.shippingHeader['salesOrderCustomsInfo']['vatValue'] = '';
         this.shippingHeader['salesOrderCustomsInfo']['salesOrderCustomsInfoId'] = 0;
+        this.addCustomerInfo = false;
+    }
+
+    AddCustomInfo() {
+        this.addCustomerInfo = true;
     }
 }
 

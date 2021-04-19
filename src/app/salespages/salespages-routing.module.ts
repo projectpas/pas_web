@@ -68,7 +68,7 @@ const salesPagesRoutes: Routes = [
         { 
           path: "app-soq-approval-rule", 
           component: SOQApprovalRuleComponent, 
-          data: { title: "Sales Order Quote Approval Rule"} 
+          data: { title: "Sales Order Quote Approval Rule"}
         },
         { 
           path: "app-so-approval-rule", 

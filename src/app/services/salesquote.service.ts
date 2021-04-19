@@ -488,8 +488,8 @@ export class SalesQuoteService {
     return this.salesQuoteEndPointSevice.getAllSalesOrderTypes<WorkOrderType[]>();
   }
 
-  getAllSalesOrderQuoteSettings() {
-    return this.salesQuoteEndPointSevice.getAllSalesOrderQuoteSettings();
+  getAllSalesOrderQuoteSettings(masterCompanyId) {
+    return this.salesQuoteEndPointSevice.getAllSalesOrderQuoteSettings(masterCompanyId);
   }
 
   getAllSalesOrderQuoteAnalysis(id) {
@@ -525,7 +525,7 @@ export class SalesQuoteService {
     partNumberObj.uom = selectedPart.uomName;
     partNumberObj.pmaStatus = selectedPart.stockType;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
-    partNumberObj.qtyOnHand = selectedPart.qtyOnHand;
+    partNumberObj.quantityOnHand = selectedPart.quantityOnHand;
     // if (selectedPart.isOEM) partNumberObj.pmaStatus = "OEM";
     // if (selectedPart.isPMA) partNumberObj.pmaStatus = "PMA";
     // if (selectedPart.isDER) partNumberObj.pmaStatus = "DER";
