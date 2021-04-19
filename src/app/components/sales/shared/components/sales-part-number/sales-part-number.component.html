@@ -14,7 +14,7 @@
                             <ng-container *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                      || summaryColumn.field == 'customerRef'
                                      || summaryColumn.field == 'quantityRequested'">
-                                {{ summaryColumn.header }}<span class="clr-red">*</span>
+                                {{ summaryColumn.header }}
                             </ng-container>
                             <ng-container *ngIf="summaryColumn.field != 'quantityToBeQuoted' 
                                 && summaryColumn.field != 'customerRef'
@@ -46,7 +46,7 @@
                                             && summaryColumn.field != 'quantityToBeQuoted'
                                             && summaryColumn.field != 'quantityAlreadyQuoted'
                                             && summaryColumn.field != 'quantityAvailable'
-                                            && summaryColumn.field != 'quantityOnHand'
+                                            && summaryColumn.field != 'qtyOnHand'
                                             && summaryColumn.field != 'fixRate'
                                             && summaryColumn.field != 'grossSalePrice'
                                             && summaryColumn.field != 'salesDiscountExtended'
@@ -64,7 +64,7 @@
                                             || summaryColumn.field == 'quantityToBeQuoted'
                                             || summaryColumn.field == 'quantityAlreadyQuoted'
                                             || summaryColumn.field == 'quantityAvailable'
-                                            || summaryColumn.field == 'quantityOnHand'">
+                                            || summaryColumn.field == 'qtyOnHand'">
                                             {{summaryPart[summaryColumn.field] | globalNmberFormat}}
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'grossSalePrice'
@@ -113,9 +113,9 @@
                                     <th colspan="2">Stk Line Num</th>
                                     <th>Ser Num</th>
                                     <th>Quote Date</th>
-                                    <th>Qty Avail<span class="clr-red">*</span></th>
-                                    <th>Qty on Hand<span class="clr-red">*</span></th>
-                                    <th>Qty Qted<span class="clr-red">*</span></th>
+                                    <th>Qty Avail</th>
+                                    <th>Qty on Hand</th>
+                                    <th>Qty Qted</th>
                                     <th>Qty Prev Qted</th>
                                     <th>Status</th>
                                     <th>Unit Cost</th>
@@ -231,7 +231,7 @@
                                         {{ part.qtyAvailable | globalNmberFormat}}
                                     </td>
                                     <td class="text-right">
-                                        {{ part.qtyOnHand| globalNmberFormat}}
+                                        {{ part.quantityOnHand| globalNmberFormat}}
                                     </td>
                                     <td class="text-right">
                                         {{ part.quantityToBeQuoted | globalNmberFormat}}

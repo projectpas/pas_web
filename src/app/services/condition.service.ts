@@ -36,9 +36,9 @@ export class ConditionService {
         private authService: AuthService,
         private conditionEndpoint: ConditionEndpoint) { }
 
-    getConditionList() {
+    getConditionList(masterCompanyId: number = 1) {
         return Observable.forkJoin(
-            this.conditionEndpoint.getConditionEndpoint<Condition[]>());
+            this.conditionEndpoint.getConditionEndpoint<Condition[]>(masterCompanyId));
     }
     getAllConditionList() {
         return Observable.forkJoin(

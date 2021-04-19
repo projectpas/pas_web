@@ -100,21 +100,22 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         if (this.generalInformtionData) {
-            this.id = this.referenceId;
+            this.id = this.referenceId;           
             this.generalCode = this.generalInformtionData.companyCode;
             this.generalName = this.generalInformtionData.name;
         }
 
         if (this.uploadDocsToser != undefined || this.uploadDocsToser != null) {
-            this.id = this.referenceId;
+            this.id = this.referenceId;            
             this.uploadDocsToser.subscribe(v => {
                 this.hideUpoladThing = true;
                 setTimeout(() => {
                     console.log("event")
                     this.onUploadDocumentListToServer();
-                }, 1500);
+                }, 2000);
             });
         }
     }
@@ -128,6 +129,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        
         for (let property in changes) {
             if (property == 'generalInformtionData') {
                 if (changes[property].currentValue != {}) {
@@ -147,6 +149,8 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
             }
         }
         this.id = this.referenceId;
+       
+       
         this.getModuleList();
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         this.moduleName = this.moduleName;
@@ -342,23 +346,31 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     removeFile(event) {
         this.formData.delete(event.file.name)
         this.uploadedFileLength--;
-        this.disableSave = true;
         this.selectedFileAttachment = this.selectedFileAttachment.filter(({ fileName }) => fileName !== event.file.name);
+        if(this.selectedFileAttachment.length == 0){
+        this.disableSave = true;
+        }
+       
     }
 
     selectedFileAttachment: any = [];
     index: number;
     formNames: any;
 
-    openHistory(rowData) {
-        this.alertService.startLoadingMessage();
-        this.commonService.GetAttachmentCommonAudit(rowData.commonDocumentDetailId, this.referenceId, this.moduleId).subscribe(
-            results => this.onAuditHistoryLoadSuccessful(results),
-            error => this.saveFailedHelper(error));
+    openHistory(rowData) {       
+        //this.alertService.startLoadingMessage();
+        this.isSpinnerVisible = true;
+        this.commonService.GetAttachmentCommonAudit(rowData.commonDocumentDetailId, this.referenceId, this.moduleId).subscribe((res) => {
+            // results => this.onAuditHistoryLoadSuccessful(results),
+            // error => {this.isSpinnerVisible = false});
+            this.isSpinnerVisible = false;
+            this.documentauditHisory = res           
+        })
     }
 
     private onAuditHistoryLoadSuccessful(auditHistory) {
-        this.alertService.stopLoadingMessage();
+        //this.alertService.stopLoadingMessage();
+        
         this.documentauditHisory = auditHistory;
     }
 
@@ -471,17 +483,22 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     updateCollection: any = [];
 
+    itemmasterIdReferenceId:number
     onUploadDocumentListToServer() {
+        
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
                 this.moduleId = element.value;
             }
         });
-        if (this.moduleName == 'VendorCertified' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
+        
+        if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile' || this.moduleName == 'CustomerReceipt') {
             this.referenceId = this.referenceId ? this.referenceId : localStorage.getItem('commonId');
+            this.itemmasterIdReferenceId = this.referenceId;
         }
+        
         const vdata = {
-            referenceId: this.referenceId,
+            referenceId:  this.referenceId,
             masterCompanyId: this.currentUserMasterCompanyId,
             createdBy: this.userName,
             updatedBy: this.userName,
@@ -500,14 +517,22 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                 this.commonService.uploadDocumentsCommonEndpointUpdate(this.formData, this.updateCollection).subscribe(() => {
                     this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     this.formData = new FormData();
-                    if (this.moduleName == 'VendorCertified' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
+                    if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
                         localStorage.removeItem('commonId');
-                        this.uploadDocsToser.unsubscribe()
+                        if(this.moduleName =='ItemMaster'){
+                            //this.uploadDocsToser.unsubscribe()
+                        }else{
+                            this.uploadDocsToser.unsubscribe()
+                        }
                     }
                     this.isEditButton = false;
                     this.commondocumentsList = [];
                     if (this.uploadDocsToser) {
-                        this.uploadDocsToser.unsubscribe();
+                        if(this.moduleName =='ItemMaster') {
+                            //this.uploadDocsToser.unsubscribe()
+                        } else {
+                             this.uploadDocsToser.unsubscribe()
+                        }
                         this.hideUpoladThing = false;
                     }
                     this.getList();
@@ -515,14 +540,14 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                 }, err => {
                     this.formData = new FormData();
                 });
-            } else {
+            } else {                
                 for (var i = 0; i < this.documentCollection.length; i++) {
                     docList.push(this.documentCollection[i])
                 }
                 this.updateCollection = this.documentCollection;
                 this.formData.append('attachmentdetais', JSON.stringify(docList));
                 this.commonService.uploadDocumentsCommonEndpoint(this.formData, this.updateCollection).subscribe(() => {
-                    if (this.moduleName != 'VendorCertified' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile') {
+                    if (this.moduleName != 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile' || this.moduleName != 'CustomerReceipt') {
                         this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     }
                     this.formData = new FormData();
@@ -530,7 +555,11 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                     this.commondocumentsList = [];
                     this.isEnableUpdateButton = true;
                     if (this.uploadDocsToser) {
-                        this.uploadDocsToser.unsubscribe();
+                        if(this.moduleName =='ItemMaster'){
+                            //this.uploadDocsToser.unsubscribe()
+                        } else {
+                            this.uploadDocsToser.unsubscribe()
+                        }
                         this.hideUpoladThing = false;
                     }
                     this.getList();
@@ -543,14 +572,23 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     documentCollectionOriginal: any = [];
     getList() {
+        
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
                 this.moduleId = element.value;
+
             }
         });
 
-        this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus).subscribe(res => {
+        if (this.moduleName =='ItemMaster' || this.moduleName == 'CustomerReceipt') {
+            if(this.itemmasterIdReferenceId){
+                this.referenceId = this.itemmasterIdReferenceId;
+            }
+        }
+
+        this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus,this.currentUserMasterCompanyId).subscribe(res => {
+            
             this.commondocumentsDestructuredData = [];
             this.documentCollection = [];
             this.commondocumentsDestructuredData = res;
@@ -909,22 +947,31 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     isDocumentrevnumAlreadyExists: boolean = false;
     checkDocumentRevnumExist(value) {
-        this.isDocumentrevnumAlreadyExists = false;
-        this.DocumentTypebutton = true;
-        if (value != undefined && value != null) {
-            if (this.documentType && this.documentType.length != 0) {
-                for (let i = 0; i < this.documentType.length; i++) {
-                    if ((this.addNew.revNum == this.documentType[i].revNum
-                        || value == this.documentType[i].revNum)
-                        //&&  this.addNew.revNum !=  ''
-                    ) {
-                        this.isDocumentrevnumAlreadyExists = true;
-                        this.DocumentTypebutton = false;
-                        return;
+        if(this.validateInt(value)){
+            this.isDocumentrevnumAlreadyExists = false;
+            this.DocumentTypebutton = true;
+            if (value != undefined && value != null) {
+                if (this.documentType && this.documentType.length != 0) {
+                    for (let i = 0; i < this.documentType.length; i++) {
+                        if ((this.addNew.revNum == this.documentType[i].revNum
+                            || value == this.documentType[i].revNum)
+                            //&&  this.addNew.revNum !=  ''
+                        ) {
+                            this.isDocumentrevnumAlreadyExists = true;
+                            this.DocumentTypebutton = false;
+                            return;
+                        }
                     }
                 }
             }
         }
+        else{
+            return;
+        }
+       
+    }
+    validateInt(value) {
+        return /(^-?\d\d*$)/g.test(value);
     }
 
     resetDocumentTypeForm() {

@@ -77,8 +77,8 @@
             </div>
           </div>
           <div class="pull-right buttons-div-align">
-            <div class="col">
-              <div class="col buttons-top-padding">
+            <div class="col" style="padding-left: 2px">
+              <div class="col buttons-top-padding" style="padding-right: 0px;">
                 <div class="form-group">
                 
                   <div class="pull-left radio-buttons-align" *ngFor="let status of statusList">
@@ -114,7 +114,7 @@
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" class="table-column-width" />
+          <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>

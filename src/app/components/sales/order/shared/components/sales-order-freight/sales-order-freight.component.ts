@@ -103,7 +103,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         this.arrayCurrencyList.push(0);
         this.arrayPercentList.push(0);
         forkJoin(this.salesOrdeService.getSalesOrderFreights(this.salesOrderId, 0),
-            this.commonService.getShipVia(),
+            this.commonService.getShipVia(this.currentUserMasterCompanyId),
             this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join()),
             this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join()),
             this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())).subscribe(response => {
@@ -113,7 +113,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                 this.unitOfMeasureList = response[2];
                 this.currencyList = response[3];
                 this.markupList = response[4];
-            }, error => this.onDataLoadError(error));
+            }, error => this.isSpinnerVisible = false);
     }
 
     refreshFreightsOnSaveOrDelete(fromDelete = false) {
@@ -231,7 +231,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         this.isEdit = true;
         rowData.amount = this.formateCurrency(rowData.amount);
         this.freightForm = [rowData];
-        this.isEnableUpdateButton=false;
+        this.isEnableUpdateButton = false;
     }
 
     memoIndex;
@@ -332,16 +332,6 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         })
         this.isSaveChargesDesabled = true;
         this.storedData = [];
-    }
-
-    onDataLoadError(error) {
-        this.isSpinnerVisible = false;
-        let errorMessage = '';
-        if (error.message) {
-            errorMessage = error.message;
-        }
-        this.alertService.resetStickyMessage();
-        this.alertService.showStickyMessage("Sales Order", errorMessage, MessageSeverity.error, error);
     }
 
     markupChanged(matData, type) {
@@ -596,12 +586,12 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
 
     RefreshAfterAddShipVia(ShippingViaId) {
         if (ShippingViaId != undefined || ShippingViaId > 0) {
-            this.commonService.getShipVia().subscribe(response => {
+            this.commonService.getShipVia(this.currentUserMasterCompanyId).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setShipViaList(response);
                 this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
                 this.isEnableUpdateButton = false;
-            }, error => this.onDataLoadError(error));
+            }, error => this.isSpinnerVisible = false);
         }
         this.IsAddShipVia = false;
         $('#AddShipVia').modal('hide');

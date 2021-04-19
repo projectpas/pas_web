@@ -1,7 +1,10 @@
-import { Component, OnInit, Input, OnChanges } from "@angular/core";
+import { Component, OnInit, Input, OnChanges, ViewChild, ElementRef } from "@angular/core";
 import { AuthService } from "../../../services/auth.service";
 import { CustomerService } from "../../../services/customer.service";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
+import { CommonService } from "../../../services/common.service";
+import { AlertService, MessageSeverity } from "../../../services/alert.service";
+import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-review-customer-payment",
@@ -11,16 +14,25 @@ import { CustomerPaymentsService } from "../../../services/customer-payment.serv
 export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   @Input() receiptId;
   objInvoicePayment: any = {};
+  modal: NgbModalRef;
   isSpinnerVisible: boolean = false;
   openInvoices: any[] = [];
   custheaders: any[];
   headers: any[];
   dataForReview: any;
   isEdit: boolean = false;
-  
+  discTypeList: any = [];
+  bankFeesTypeList: any = [];
+  adjustReasonList: any = [];
+  @ViewChild("printPost", { static: false }) public printPostModal: ElementRef;
+  DocId: number;
+
   constructor(public customerService: CustomerService,
     private customerPaymentsService: CustomerPaymentsService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private alertService: AlertService,
+    private commonservice: CommonService,
+    private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -50,19 +62,23 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
       { field: "currencyCode", header: "Curr", width: "180px" },
       { field: "fxRate", header: "FX Rate", width: "100px" },
       { field: "wosoNum", header: "WO/SO Num", width: "130px" },
-      { field: "paymentStatus", header: "Status", width: "130px" },
+      { field: "status", header: "Status", width: "130px" },
       { field: "dsi", header: "DSI", width: "130px" },
       { field: "dso", header: "DSO", width: "180px" },
       { field: "amountPastDue", header: "Amount Past Due", width: "130px" },
       { field: "arBalance", header: "AR Bal", width: "130px" },
       { field: "creditTermName", header: "Credit Term", width: "130px" },
-      { field: "cntrlNum", header: "Cntrl Num", width: "130px" },
-      { field: "employee", header: "Employee", width: "180px" },
+      { field: "ctrlNum", header: "Cntrl Num", width: "130px" },
+      //{ field: "employee", header: "Employee", width: "180px" },
       { field: "level1", header: "CO", width: "130px" },
       { field: "level2", header: "BU", width: "130px" },
       { field: "level3", header: "Div", width: "130px" },
-      { field: "level4", header: "Dept", width: "130px" }      
+      { field: "level4", header: "Dept", width: "130px" }
     ];
+
+    this.loadDiscType();
+    this.loadBankFeesType();
+    this.loadAdjustReason();
   }
 
   ngOnChanges(changes) {
@@ -105,10 +121,80 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   }
 
   onUpdatePayments() {
+    this.dataForReview.paymentsByCustomer
+    let totalInvoicePayments: any[] = [];
 
+    this.dataForReview.paymentsByCustomer.forEach(payment => {
+      let invoices = payment.invoices;
+      invoices.forEach(invoice => {
+        invoice.bankFeeAmount = invoice.bankFeeAmount ? parseFloat(invoice.bankFeeAmount) : 0;
+        invoice.discAmount = invoice.discAmount ? parseFloat(invoice.discAmount) : 0;
+        invoice.paymentAmount = invoice.paymentAmount ? parseFloat(invoice.paymentAmount) : 0;
+        invoice.otherAdjustAmt = invoice.otherAdjustAmt ? parseFloat(invoice.otherAdjustAmt) : 0;
+        invoice.createdBy = this.userName;
+        invoice.updatedBy = this.userName;
+        totalInvoicePayments.push(invoice);
+      });
+    });
+
+    this.isSpinnerVisible = false;
+    this.customerPaymentsService.updatePayments(totalInvoicePayments).subscribe(data => {
+      this.dataForReview = data;
+      this.alertService.showMessage(
+        "Success",
+        `Payment information updated successfully for Customer`,
+        MessageSeverity.success
+      );
+      this.fetchDataForReview();
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
   }
 
   onSavePostPayments() {
-    
+
+  }
+
+  loadDiscType() {
+    this.commonservice.smartDropDownList('MasterDiscountType', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.discTypeList = response;
+        this.discTypeList = this.discTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  loadBankFeesType() {
+    this.commonservice.smartDropDownList('MasterBankFeesType', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.bankFeesTypeList = response;
+        this.bankFeesTypeList = this.bankFeesTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  loadAdjustReason() {
+    this.commonservice.smartDropDownList('MasterAdjustReason', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.adjustReasonList = response;
+        this.adjustReasonList = this.adjustReasonList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  ViewDocument(rowData) {
+    this.DocId = rowData.soBillingInvoicingId;
+    this.modal = this.modalService.open(this.printPostModal, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  closeDocument() {
+    this.modal.close();
   }
 }

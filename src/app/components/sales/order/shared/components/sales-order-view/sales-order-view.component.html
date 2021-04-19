@@ -121,41 +121,6 @@
         </p>
       </div>
       <div class="col-md-3">
-        <!-- <div class="card">
-          <div class="card-header" style="padding:.1rem 2rem">
-            <label style="text-align: center; width:100%">Margin Summary</label>
-          </div>
-          <div style="padding:5px">
-            <p style="padding:0px"><span class="label"><b>Sales</b></span>
-              <span class="value" style="text-align:right">{{marginSummary.sales |twoDecimalGlobalNumberFormatPipe}}
-              </span>
-            </p>
-            <p style="padding:0px"><span class="label"><b>Misc Amt</b></span>
-              <span class="value" style="text-align:right">{{marginSummary.misc |twoDecimalGlobalNumberFormatPipe}}
-              </span>
-            </p>
-            <p style="padding:0px"><span class="label"><b>Net Sales</b></span>
-              <span class="value" style="text-align:right">{{marginSummary.netSales |twoDecimalGlobalNumberFormatPipe}}
-              </span>
-            </p>
-            <p style="padding:0px"><span class="label"><b>Product Cost</b></span>
-              <span class="value"
-                style="text-align:right">{{marginSummary.productCost |twoDecimalGlobalNumberFormatPipe}}
-              </span>
-            </p>
-            <p style="padding:0px"><span class="label"><b>Margin Amt</b></span>
-              <span class="value"
-                style="text-align:right">{{marginSummary.marginAmount |twoDecimalGlobalNumberFormatPipe}}
-              </span>
-            </p>
-            <p style="padding:0px"><span class="label"><b>Margin %</b></span>
-              <span class="value"
-                style="text-align:right">{{marginSummary.marginPercentage |twoDecimalGlobalNumberFormatPipe}}
-              </span>
-            </p>
-          </div>
-        </div>
-        <div style="padding-top: 10px"></div> -->
         <div class="card">
           <div class="card-header" style="padding:.1rem 3rem">
             <label style="text-align: center; width:100%">Management Structure</label>
@@ -280,13 +245,15 @@
         [isQuote]="false">
       </app-sales-order-charges>
     </p-tabPanel>
-    <p-tabPanel header="Billing/Invoicing">
-      <p>Billing/Invoicing under implementation</p>
-    </p-tabPanel>
     <p-tabPanel header="Shipping">
       <app-sales-order-shipping [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId"
         [customerDetails]="customerDetails" [salesOrder]="salesOrder" [managementStructureId]="managementStructureId">
       </app-sales-order-shipping>
+    </p-tabPanel>
+    <p-tabPanel header="Billing/Invoicing">
+      <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId" [customerDetails]="customerDetails"
+        [salesOrder]="salesOrder">
+      </app-sales-order-billing>
     </p-tabPanel>
     <p-tabPanel header="Document">
       <app-sales-order-document [salesOrderId]="salesQuote.salesOrderId" [isEditMode]="false" [viewMode]="true">

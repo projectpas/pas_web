@@ -1024,7 +1024,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     async getPartPublicationByItemMasterId(itemMasterId) {
-        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId).subscribe(res => {
+        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.cmmList = res.map(x => {
                 return {
                     value: x.publicationRecordId,

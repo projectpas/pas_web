@@ -41,11 +41,12 @@
           </div> 
           <div class="col-md-3 col-offset-3 task-detail" [ngClass]="{'col-offset-3' :!isQuote}">
               <div class="form-row ht_ad" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
-                <div class="padtp">   <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+                <div class="padtp">  
+                   <!-- <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
                     matTooltip="Single MPN">
                     <input type="radio"  (change)="headerMaintanance()" (ngModelChange)="checkValid(4)" [value]=1 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
                         class="radio_adjust"
-                        [(ngModel)]="laborForm.hoursorClockorScan">
+                        [(ngModel)]="laborForm.hoursorClockorScan"> 
                         Labor hours
                 </label>
                 <label class="wauto" style="margin-left:10px" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
@@ -63,8 +64,17 @@
                     [(ngModel)]="laborForm.hoursorClockorScan"
                     >
                     Scan
-            </label>
+            </label> -->
               
+            <p-radioButton (ngModelChange)="checkValid(4)" (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}"  class="p-radiobutton-label-horizontal p-radiobutton-cstm adj" name="HoursorClockorScan"
+            label="Labor Hours" [value]="1"
+            [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
+           
+            <p-radioButton (ngModelChange)="checkValid(5)"  (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" label="Labor Clock In/Out " [value]="2"
+              [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
+            <p-radioButton (ngModelChange)="checkValid(6)" [ngClass]="{pointerEvents :isView}"  (change)="headerMaintanance()" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" [value]="3"
+              label="Scan" [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
+ 
                   </div> 
               </div>
                 <div class="col-sm-8" 
@@ -84,12 +94,13 @@
           <div class="col-md-3 col-offset-3 task-detail" *ngIf="!isQuote">
               <!-- <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Task Completed by one Tech/Mech"
                 [(ngModel)]="laborForm.isTaskCompletedByOne" [disabled]="isView" (onChange)="taskComletedByConfirmation($event)"></p-checkbox> -->
-              <div class="form-group task-hours-type">
-                  <p-radioButton (ngModelChange)="checkValid(8)" *ngIf="workFlowId !==0" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder"
+              <div class="form-group task-hours-type1">
+                  <!-- <p-radioButton (ngModelChange)="checkValid(8)" *ngIf="workFlowId !==0" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder"
                   label="Use target hours from workflow" value="workFlow"
-                  [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="savedWorkOrderData.workFlowWorkOrderId == 0 || isView " (click)="calculateOverallTotalHours();getWorkFlowLaborList();"></p-radioButton>
+                  [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="savedWorkOrderData.workFlowWorkOrderId == 0 || isView " (click)="calculateOverallTotalHours();getWorkFlowLaborList();"></p-radioButton> -->
                   <p-radioButton (ngModelChange)="checkValid(9)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" label="Assign hours by specific tasks" value="specificTasks"
                     [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder"  [disabled]="isView " (click)="laborForm.totalWorkHours = 0;refreshCall();"></p-radioButton>
+                    <br>
                   <p-radioButton (ngModelChange)="checkValid(10)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" value="workOrder"
                     label="Assign total hours to workorder" [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="isView " (click)="assignHoursToToalWorkOrder()"></p-radioButton>
                     <!-- || !laborForm.isTaskCompletedByOne -->
@@ -148,8 +159,8 @@
            </tr>
           <tr>
             <th class="text-center padding-td tasks-th" style="width:100px">Tasks</th>
-            <th class="text-center expertise-th" style="width:100px">Expertise</th>
-            <th class="text-center employee-th" style="width:140px" *ngIf="!isQuote">
+            <th class="text-center expertise-th" style="width:100px;min-width: 100px !important;">Expertise</th>
+            <th class="text-center employee-th" style="width:140px;min-width: 140px;" *ngIf="!isQuote">
               Employee
             </th>
             <th class="text-center th-zindex-2" style="width:100px">Billable /NonBillable</th>
@@ -339,9 +350,25 @@
                 </td>
                 <ng-container *ngIf="!isQuote">
                   <td>
-                      <input type="number" class="form-control" (ngModelChange)="checkValid(22)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);" [(ngModel)]="rec.adjustments" [disabled]="isView
-                      "/>
-                  </td>
+                      <!-- <input type="number" class="form-control" (ngModelChange)="checkValid(22)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);" [(ngModel)]="rec.adjustments" [disabled]="isView
+                      "/> -->
+               
+                      <div class="check-flex-div1" >
+                        <input type="number" class="form-control check-flex-input" (blur)="
+                        calculateHoursDifference(rec);
+                        calculateTaskHours(task);
+                        calculateTotalCost(rec);
+                        markupChanged(rec, 'row')
+                        " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px !important;" required/>
+                        <span style="font-size: 17px; margin: 0 5px;">:</span>
+                        <input type="number" class="form-control" (blur)="
+                        calculateHoursDifference(rec);
+                        calculateTaskHours(task);
+                        calculateTotalCost(rec);
+                        markupChanged(rec, 'row')
+                        " [(ngModel)]="rec.ajdtotalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
+                      </div>
+                    </td>
                   <td class="content-to-end" style="width:70px !important;text-align:right !important">
                       {{ rec.adjustedHours }}
                   </td>
@@ -445,23 +472,24 @@
               <td *ngIf="
                   laborForm.hoursorClockorScan &&
                   laborForm.hoursorClockorScan !== 1 &&
-                  laborForm.hoursorClockorScan !== 3
-                "></td>
+                  laborForm.hoursorClockorScan !== 3"></td>
               <td *ngIf="
                   laborForm.hoursorClockorScan &&
-                  laborForm.hoursorClockorScan !== 1
-                "></td>
+                  laborForm.hoursorClockorScan !== 1"></td>
               <td *ngIf="
                   laborForm.hoursorClockorScan &&
-                  laborForm.hoursorClockorScan !== 1
-                "></td>
+                  laborForm.hoursorClockorScan !== 1"></td>
             <td *ngIf="!isQuote">
-               <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled />
+               <!-- <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled /> -->
+               <!-- {{laborForm.totalWorkHours}} -->
             </td>
             <td *ngIf="isQuote" class="content-to-end" style="text-align:right !important">
               {{laborForm.totalWorkHours}}
             </td>
-            <td class="content-to-end" style="text-align:right !important"><b>{{(!isQuote)?calculateTotalAdjustment():''}}</b></td>
+            <td class="content-to-end" style="text-align:right !important">
+              <!-- <b>
+              {{(!isQuote)?calculateTotalAdjustment():''}}</b> -->
+            </td>
             <td class="content-to-end" style="text-align:right !important"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
             <td></td>
             <ng-container *ngIf="isQuote">

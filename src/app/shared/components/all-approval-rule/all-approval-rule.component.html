@@ -1,48 +1,36 @@
 <div class="card new-card">
-        <div class="card-header header">
-            <div class="row">
-                <div class="col">
-                    <h4 class="header-name">{{moduleName}} Approval Rule</h4>
-                </div>
-                <div>
-                    <button type="button" class="btn-sm header-button" data-toggle="modal"
-                        data-target="#addNewPOApproval" (click)="addNewApproval()" *ngIf="!isView">
-                        Create Approval Rule
-                    </button>
-                </div>
-
+    <div class="card-header header">
+        <div class="row">
+            <div class="col">
+                <h4 class="header-name">{{moduleName}} Approval Rule</h4>
             </div>
-        </div> 
-    
-
+            <div>
+                <button type="button" class="btn-sm header-button" data-toggle="modal" data-target="#addNewPOApproval"
+                    (click)="addNewApproval()" *ngIf="!isView">
+                    Create Approval Rule
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="card-body header-body">
-
         <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="poApprovalData" [metaKeySelection]="true"
             [first]="0" [style]="{ width: '100%' }" (onPage)="pageIndexChange($event)" [rows]="pageSize"
             [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
             selectionMode="multiple" [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords"
             [scrollable]="true" scrollHeight="450px">
-
             <ng-template pTemplate="caption" let-columns>
-                <!-- <div style="text-align: right; min-height: 30px;"> -->
                 <div class="row">
                     <div class="col">
-
                         <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
                             [ngModelOptions]="{ standalone: true }" optionLabel="header"
-                            selectedItemsLabel="{0} columns selected"
-                             class="multiselect-field"
+                            selectedItemsLabel="{0} columns selected" class="multiselect-field"
                             defaultLabel="Choose Columns"></p-multiSelect>
                     </div>
                     <div class="col">
-                        <div					
-						class="global-search-field inner-addon right-addon inline-block"
-					  >
+                        <div class="global-search-field inner-addon right-addon inline-block">
                             <i class="fa fa-search"></i>
-                            <input type="text" pInputText size="50"
-                             class="form-control"
-                                (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
-                               />
+                            <input type="text" pInputText size="50" class="form-control"
+                                (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter" />
                         </div>
                     </div>
                 </div>
@@ -54,19 +42,21 @@
                     </div>
                     <div class="pull-right buttons-div-align">
                         <div class="col">
-                          <div class="col buttons-top-padding">
-                            <div class="form-group" [hidden]="isApproverlist">
-                              <div class="pull-left radio-buttons-align">
+                            <div class="col buttons-top-padding">
+                                <div class="form-group" [hidden]="isApproverlist">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="RuleEmpStatus" class="form-control" value="Active"
-                                                (click)="getruleByStatus('Active')" checked [(ngModel)]="currentStatus" />
+                                                (click)="getruleByStatus('Active')" checked
+                                                [(ngModel)]="currentStatus" />
                                             <span class="checkmark"></span>Active
                                         </label>
                                     </div>
                                     <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="RuleEmpStatus" class="form-control" value="InActive"
-                                                (click)="getruleByStatus('InActive')" [(ngModel)]="currentStatus" />
+                                            <input type="radio" name="RuleEmpStatus" class="form-control"
+                                                value="InActive" (click)="getruleByStatus('InActive')"
+                                                [(ngModel)]="currentStatus" />
                                             <span class="checkmark"></span>In-Active
                                         </label>
                                     </div>
@@ -93,12 +83,11 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" class="table-column-width"  [ngStyle]="{'width': col.width}" />
+                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-
                     <ng-container *ngFor="let col of columns">
                         <th class="table-column-width"
                             *ngIf="col.field!='companyName' && col.field!='buName' && col.field!='deptName' && col.field!='divName'"
@@ -117,12 +106,15 @@
                 </tr>
                 <tr>
                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input class="table-header-input-width" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                            pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')" />
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
-                            name="createdDate" (change)="dt.filter($event.target.value, col.field, 'contains')" />
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
-                            name="updatedDate" (change)="dt.filter($event.target.value, col.field, 'contains')" />
+                        <input class="table-header-input-width"
+                            *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')" />
+                        <input type="date" class="hidePlaceHolder table-header-input-width"
+                            *ngIf="col.field == 'createdDate'" name="createdDate"
+                            (change)="dt.filter($event.target.value, col.field, 'contains')" />
+                        <input type="date" class="hidePlaceHolder table-header-input-width"
+                            *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                            (change)="dt.filter($event.target.value, col.field, 'contains')" />
                     </th>
                     <th class="table-actions-column"></th>
                 </tr>
@@ -140,44 +132,29 @@
                               }}
                         </td>
                     </ng-container>
-                    <td class="action-icons-cstm table-column-width"
-                        *ngIf="!isView">
-                        <!-- <button class="btn-edit ptable-wo-btns buton_back_bordernon" mat-icon-button data-target="#addNewMemo" data-toggle="modal"
-                      (click)="edit(rowData, i)" matTooltip="Edit">
-                          <mat-icon>edit</mat-icon>
-                      </button> -->
-                        <!-- <button class="btn btn-danger nobg" (click)="deleteMemo(rowData)">
-                          <i class="fa fa-trash" style="font-size: 14px;"></i>
-                      </button> -->
-                      <p-inputSwitch
-                        [disabled]="currentDeletedstatus"
-                        [(ngModel)]="rowData['isActive']"
-                        name="isActive{{ rowIndex }}"
-                        matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
-                        matTooltipPosition="above"
-                        (onChange)="changeRuleStatus(rowData)"
-                    ></p-inputSwitch>
+                    <td class="action-icons-cstm table-column-width" *ngIf="!isView">
+                        <p-inputSwitch [disabled]="currentDeletedstatus" [(ngModel)]="rowData['isActive']"
+                            name="isActive{{ rowIndex }}"
+                            matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}" matTooltipPosition="above"
+                            (onChange)="changeRuleStatus(rowData)"></p-inputSwitch>
                         <span data-toggle="modal" data-target="#viewPOApproval"><a class="btn nobg btn-edit-cstm"
                                 (click)="view(rowData)" matTooltip="View" matTooltipPosition="above"
                                 data-dismiss="modal"><i class="fa fa-eye"></i></a> </span>
                         <span *ngIf="!currentDeletedstatus" data-toggle="modal" data-target="#addNewPOApproval"><a
                                 class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit"
                                 matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a> </span>
-
                         <span *ngIf="!currentDeletedstatus" data-toggle="modal" data-target="#poApprovalDelete"><a
                                 class="btn nobg btn-delete-cstm" (click)="delete(rowData)" matTooltip="Delete"
                                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                         <span *ngIf="currentDeletedstatus" data-toggle="modal" data-target="#poApprovalRestore"><a
                                 class="btn nobg btn-delete-cstm" (click)="Restore(rowData)" matTooltip="Restore"
                                 matTooltipPosition="above"><i class="fa fa-undo"></i></a> </span>
-
                         <span data-toggle="modal" data-target="#approvalHistory">
                             <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"
                                 matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                         </span>
                     </td>
                 </tr>
-
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="poApprovalData.length == 0">
                 <tr>
@@ -188,38 +165,16 @@
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
                 <label id="footer">Total:</label>
-                <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText
+                    type="text" />
                 &nbsp;&nbsp;
                 <label id="footer">Pages Count:</label>
                 <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
                     pInputText type="text" />
             </ng-template>
         </p-table>
-
     </div>
 </div>
-
-<!-- <ng-template #contentDelete let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-        <button type="button" class="close" aria-label="Close"
-            (click)="dismissModel()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">                               
-        <strong>
-            Employee Name:
-            <span class="new-label">{{tagRowData.employee}}</span>
-        </strong>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-success"
-            (click)="onDeleteTagName()">Yes</button>
-        <button type="button" class="btn btn-danger"
-            (click)="dismissModel()">No</button>
-    </div>
-</ng-template> -->
 <div class="modal fade" id="poApprovalDelete" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -266,11 +221,8 @@
         </div>
     </div>
 </div>
-
 <div id="addNewPOApproval" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-lg">
-
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="isEdit = false;">&times;</button>
@@ -289,10 +241,6 @@
                         </div>
                         <div class="form-group">
                             <span class="label">Memo </span>
-                            <!-- <input type="text" class="form-control text-right" 
-                     (ngModelChange)="onSaveChange()" 
-                      [(ngModel)]="creatingData.memo" />  -->
-
                             <div class="col-sm-11">
                                 <span>
                                     <div class="form-group memo-popup-cstm mat_emo">
@@ -320,17 +268,8 @@
                                 <option *ngFor="let rule of ruleNumList" [value]="rule.value">{{rule.label}}</option>
                             </select>
                         </div>
-                        <!-- <div class="form-group">
-                    <label>Operator *</label>
-                    <select [(ngModel)]="creatingData.operatorId" name="operator" required>
-                        <option value="null">Select</option>
-                        <option value="1">And</option>
-                        <option value="2">Or</option>
-                    </select>
-                </div>  -->
-
                     </div>
-                    <div class="col-3 all-approval-div" >
+                    <div class="col-3 all-approval-div">
                         <div class="form-group">
                             <label style="margin-top: -8px;">Amount <span class="clr-red">*</span></label>
                             <select [(ngModel)]="creatingData.amountId" (ngModelChange)="onSaveChange()" name="amount"
@@ -370,10 +309,6 @@
                                 <button type="button" class="btn btn-primary m-t-10 pull-right but_stl"
                                     (click)="onAddApprover();">Add</button>
                             </div>
-                            <!-- <select [(ngModel)]="creatingData.approverId" name="approver" required>
-                        <option value="null">Select</option>
-                        <option *ngFor="let approver of approverList" [value]="approver.value">{{approver.label}}</option>
-                    </select>    -->
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -384,8 +319,8 @@
                             </div>
                             <div class="card-body structure-card-body">
                                 <div class="form-group">
-                                    <select  class="form-control field-radius-5"
-                                        name="primaryCompany" [(ngModel)]="creatingData.companyId"
+                                    <select class="form-control field-radius-5" name="primaryCompany"
+                                        [(ngModel)]="creatingData.companyId"
                                         (change)="getBUList(creatingData.companyId);" #mCompanyName required>
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of maincompanylist" [ngValue]="name.value">
@@ -399,8 +334,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <select  [(ngModel)]="creatingData.buId"
-                                        name="primaryBU" (change)="getDivisionlist(creatingData.buId)"
+                                    <select [(ngModel)]="creatingData.buId" name="primaryBU"
+                                        (change)="getDivisionlist(creatingData.buId)"
                                         class="form-control field-radius-5">
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of bulist" [ngValue]="name.value">{{name.label}}
@@ -408,18 +343,16 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select  class="form-control field-radius-5"
-                                        [(ngModel)]="creatingData.divisionId" name="primaryDivision"
-                                        (change)="getDepartmentlist(creatingData.divisionId)">
+                                    <select class="form-control field-radius-5" [(ngModel)]="creatingData.divisionId"
+                                        name="primaryDivision" (change)="getDepartmentlist(creatingData.divisionId)">
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of divisionlist" [ngValue]="name.value">{{name.label}}
                                         </option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select  class="form-control field-radius-5"
-                                        [(ngModel)]="creatingData.departmentId" name="primaryDept"
-                                        (change)="getDepartmentId(creatingData.departmentId)">
+                                    <select class="form-control field-radius-5" [(ngModel)]="creatingData.departmentId"
+                                        name="primaryDept" (change)="getDepartmentId(creatingData.departmentId)">
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of departmentList" [ngValue]="name.value">
                                             {{name.label}}</option>
@@ -431,12 +364,9 @@
                     <div class="col-3"></div>
                     <div class="col-12">
                         <p-table #ptabletagName class="rpo-table-cstm rro-table-cstm tab-table-cstm tag_t"
-                            [paginator]="true" [pageLinks]="3"
-                             [rowsPerPageOptions]="[5,10,20,50,100]"
-                            [scrollable]="true" scrollHeight="250px" 
-                            [(value)]="employeeNames" [rows]="pageSizeemp"
-                            [first]="0" (onPage)="changePage($event)" 
-                            [columns]="emplColumns"
+                            [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20,50,100]"
+                            [scrollable]="true" scrollHeight="250px" [(value)]="employeeNames" [rows]="pageSizeemp"
+                            [first]="0" (onPage)="changePage($event)" [columns]="emplColumns"
                             [totalRecords]="totalRecordsemp">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
@@ -456,16 +386,14 @@
                                 <tr>
                                     <td class="table-column-width">
                                     </td>
-                                    <th class="table-column-width" *ngFor="let col of columns"
-                                        [ngSwitch]="col.field">
+                                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                                         <input [disabled]="col.field == 'isPrimary'" style="width:100%;" pInputText
-                                            type="text" (input)="
-                                    ptabletagName.filter($event.target.value, col.field, 'contains')
-                                    " />
+                                            type="text"
+                                            (input)="ptabletagName.filter($event.target.value, col.field, 'contains')" />
                                     </th>
-                                    <th class="table-column-width" >
+                                    <th class="table-column-width">
                                     </th>
-                                    <th class="table-column-width" >
+                                    <th class="table-column-width">
                                     </th>
                                 </tr>
                             </ng-template>
@@ -474,9 +402,8 @@
                                     <td class="table-column-width">
                                         <span class="flag">
                                             <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
-                                            color: rowData.isPrimary == true ? 'green' : 'none'
-                                          }" class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above"
-                                                aria-hidden="true"></i>
+                                            color: rowData.isPrimary == true ? 'green' : 'none'}" class="fa fa-flag"
+                                                matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                                         </span>
                                     </td>
                                     <td class="table-column-width" *ngFor="let col of columns">
@@ -516,14 +443,13 @@
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total: </label>
-                                <input class="footer-input-width" [value]="employeeNames.length" name="totalRecords" disabled
-                                    pInputText type="text" />
-
+                                <input class="footer-input-width" [value]="employeeNames.length" name="totalRecords"
+                                    disabled pInputText type="text" />
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
-
-                                <input class="footer-input-width" [ngModel]="getTaxPageCount(employeeNames.length,pageSizeemp)"
-                                    name="page count tax" disabled pInputText type="text" />
+                                <input class="footer-input-width"
+                                    [ngModel]="getTaxPageCount(employeeNames.length,pageSizeemp)" name="page count tax"
+                                    disabled pInputText type="text" />
                             </ng-template>
                             <ng-template #contentDeleteTag let-c="close" let-d="dismiss">
                                 <div class="modal-header">
@@ -546,21 +472,16 @@
                             </ng-template>
                         </p-table>
                     </div>
-
                 </form>
             </div>
             <div class="modal-footer">
-              
-                    <button class="btn btn-primary" (click)="savePoApproval()"
-                        [disabled]="!poApprovalForm.valid || employeeNames.length == 0 || creatingData.managementStructureId == 0 || creatingData.approvalTaskId == 0 || creatingData.ruleNumberId == 0 || !enableSaveBtn">
-                        {{(isEdit)?'Update':'Save'}}
-                    </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="isEdit = false;">Close</button>
-               
+                <button class="btn btn-primary" (click)="savePoApproval()"
+                    [disabled]="!poApprovalForm.valid || employeeNames.length == 0 || creatingData.managementStructureId == 0 || creatingData.approvalTaskId == 0 || creatingData.ruleNumberId == 0 || !enableSaveBtn">
+                    {{(isEdit)?'Update':'Save'}}
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="isEdit = false;">Close</button>
             </div>
-
-
-
             <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
@@ -571,23 +492,8 @@
                             <h4 class="modal-title">Edit Memo</h4>
                         </div>
                         <div class="modal-body">
-                            <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                                <thead>
-                                    <th style="color: #fff;">Memo</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="white-space: inherit">
-                                            <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
-                                                [style]="{ height: '320px' }" name="memoPopupContent"
-                                                (ngModelChange)="onSaveChange()" required></p-editor>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table> -->
-                            <p-editor  [(ngModel)]="memoPopupContent"
-                            [style]="{ height: '320px' }" name="memoPopupContent"
-                            (ngModelChange)="memoValidate()" required></p-editor>
+                            <p-editor [(ngModel)]="memoPopupContent" [style]="{ height: '320px' }"
+                                name="memoPopupContent" (ngModelChange)="memoValidate()" required></p-editor>
                         </div>
                         <div class="modal-footer">
                             <div class="editor-buttons">
@@ -595,18 +501,15 @@
                                     (click)="onClickPopupSave()">
                                     Save
                                 </button>
-                                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">
+                                <button type="button" class="btn btn-danger editor-buttons-margin"
+                                    (click)="closeMemoModel()">
                                     Close
                                 </button>
                             </div>
                         </div>
-                          
-                     
                     </div>
                 </div>
             </div>
-
-
             <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
                 <div class="loading">
                     <div class="lds-roller">
@@ -624,13 +527,10 @@
             </div>
             <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
         </div>
-
     </div>
 </div>
 <div id="approvalHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl">
-
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
@@ -638,100 +538,93 @@
             </div>
             <div class="modal-body" *ngIf="auditHistory">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">Task Name</th>
-                                <th rowspan="2">Rule No</th>
-                                <th rowspan="2">Amount</th>
-                                <th rowspan="2">Value</th>
-                                <th rowspan="2">Lower Value</th>
-                                <th rowspan="2">Upper Value</th>
-                                <th>Memo</th>
-                                <th colspan="4" rowspan="2">Management Structure</th>
-                                <th rowspan="2">Approver</th>
-                                <th rowspan="2">Created Date</th>
-                                <th rowspan="2">Created By</th>
-                                <th rowspan="2">Updated Date</th>
-                                <th rowspan="2">Updated By</th>
-                                <th rowspan="2">Is Active</th>
-                                <th rowspan="2">Is Deleted</th>
-
-                            </tr>
-                        </thead>
-                        <tbody class="audithistory-cstm">
-                            <!--*ngIf="auditHistory.length> 0"-->
-                            <tr *ngFor="let audit of auditHistory; let i = index;">
-                                <!-- auditHistory[i>0 ? i-1 : i] -->
-                                <td
-                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'taskName', audit.taskName)  ? 'black' : 'red'  }">
-                                    {{audit.taskName}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'ruleNo', audit.ruleNo)  ? 'black' : 'red'  }">
-                                    {{audit.ruleNo}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">
-                                    {{audit.amount}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'value', audit.value)  ? 'black' : 'red'  }">
-                                    {{audit.value}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'lowerValue', audit.lowerValue)  ? 'black' : 'red'  }">
-                                    {{audit.lowerValue}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'upperValue', audit.upperValue)  ? 'black' : 'red'  }">
-                                    {{audit.upperValue}}</td>
-
-                                <td
-                                    [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
-                                    <p class="p_editor" [innerHTML]="audit.memo"></p>
-                                </td>
-
-                                <td class="min-w-100"
-                                    [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">
-                                    {{ audit.companyName }}</td>
-                                <td class="min-w-100"
-                                    [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">
-                                    {{ audit.buName }}</td>
-                                <td class="min-w-100"
-                                    [ngStyle]="{color: getColorCodeForHistory(i, 'divName', audit.divName) ? 'black' : 'red'}">
-                                    {{ audit.divName }}</td>
-                                <td class="min-w-100"
-                                    [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">
-                                    {{ audit.deptName }}</td>
-
-
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'approver', audit.approver)  ? 'black' : 'red'  }">
-                                    {{audit.approver}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
-                                    {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
-                                    {{audit.createdBy}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
-                                    {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
-                                    {{audit.updatedBy}}</td>
-                                <td>
-                                    <p style="background-color: #fff !important;"> <input type="checkbox"
-                                            name="isActive" [(ngModel)]="audit.isActive" disabled></p>
-                                </td>
-                                <td>
-                                    <p style="background-color: #fff !important;"> <input type="checkbox"
-                                            name="isActive" [(ngModel)]="audit.isDeleted" disabled></p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="tableFixHead">
+                        <table class="table table-bordered header-table-width"
+                            *ngIf="auditHistory.length> 0 else noDatavailable">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Task Name</th>
+                                    <th rowspan="2">Rule No</th>
+                                    <th rowspan="2">Amount</th>
+                                    <th rowspan="2">Value</th>
+                                    <th rowspan="2">Lower Value</th>
+                                    <th rowspan="2">Upper Value</th>
+                                    <th>Memo</th>
+                                    <th colspan="4" rowspan="2">Management Structure</th>
+                                    <th rowspan="2">Approver</th>
+                                    <th rowspan="2">Created Date</th>
+                                    <th rowspan="2">Created By</th>
+                                    <th rowspan="2">Updated Date</th>
+                                    <th rowspan="2">Updated By</th>
+                                    <th rowspan="2">Is Active</th>
+                                    <th rowspan="2">Is Deleted</th>
+                                </tr>
+                            </thead>
+                            <tbody class="audithistory-cstm">
+                                <tr *ngFor="let audit of auditHistory; let i = index;">
+                                    <td
+                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'taskName', audit.taskName)  ? 'black' : 'red'  }">
+                                        {{audit.taskName}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'ruleNo', audit.ruleNo)  ? 'black' : 'red'  }">
+                                        {{audit.ruleNo}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">
+                                        {{audit.amount}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'value', audit.value)  ? 'black' : 'red'  }">
+                                        {{audit.value}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'lowerValue', audit.lowerValue)  ? 'black' : 'red'  }">
+                                        {{audit.lowerValue}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'upperValue', audit.upperValue)  ? 'black' : 'red'  }">
+                                        {{audit.upperValue}}</td>
+                                    <td
+                                        [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
+                                        <p class="p_editor" [innerHTML]="audit.memo"></p>
+                                    </td>
+                                    <td class="min-w-100"
+                                        [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">
+                                        {{ audit.companyName }}</td>
+                                    <td class="min-w-100"
+                                        [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">
+                                        {{ audit.buName }}</td>
+                                    <td class="min-w-100"
+                                        [ngStyle]="{color: getColorCodeForHistory(i, 'divName', audit.divName) ? 'black' : 'red'}">
+                                        {{ audit.divName }}</td>
+                                    <td class="min-w-100"
+                                        [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">
+                                        {{ audit.deptName }}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'approver', audit.approver)  ? 'black' : 'red'  }">
+                                        {{audit.approver}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                                        {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                        {{audit.createdBy}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                                        {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                    <td
+                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                        {{audit.updatedBy}}</td>
+                                    <td>
+                                        <p style="background-color: #fff !important;"> <input type="checkbox"
+                                                name="isActive" [(ngModel)]="audit.isActive" disabled></p>
+                                    </td>
+                                    <td>
+                                        <p style="background-color: #fff !important;"> <input type="checkbox"
+                                                name="isActive" [(ngModel)]="audit.isDeleted" disabled></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
-                            <!-- <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;"> -->
                             <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
                     </ng-template>
@@ -757,11 +650,8 @@
                 <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
             </div>
         </div>
-
     </div>
 </div>
-
-
 <div id="viewPOApproval" class="modal fade" style="z-index: 11000;" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -772,120 +662,50 @@
             <div class="modal-body">
                 <form #poApprovalForm1="ngForm">
                     <div class="col-md-4" style="padding-left: 6px; padding-right: 6px;">
-                        <!-- <div class="form-group">
-                            <label style="margin-top: -8px;">Approval Rule<span class="clr-red">*</span></label>
-                            <select disabled="true" [(ngModel)]="creatingData.approvalTaskId"
-                                (ngModelChange)="onSaveChange()" name="taskName" required>
-                                <option value="0">Select</option>
-                                <option *ngFor="let task of taskNameList" [value]="task.value">{{task.label}}</option>
-                            </select>
-                        </div> -->
                         <p><span class="label"><b>Approval Rule <span class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.approvalTaskId ? ApprovalRuleName : '-'}}
                             </span></p>
-                        <!-- <div class="form-group">
-                            <span class="label">Memo </span>
-                           
-                            <div class="col-sm-12">
-                                <span>
-                                    <div class="form-group memo-popup-cstm mat_emo">
-                                        <div (ngModelChange)="onSaveChange()" [innerHTML]="creatingData.memo"
-                                            matTooltipPosition="above"  disabled="true" [matTooltip]="parsedText(creatingData.memo)"
-                                            class="form-control" style="width: 100%;" class="text_editor_box"></div>
-                                    </div>
-                                </span>
-                            </div>                            
-                        </div> -->
                         <p>
                             <span class="label"><b>Memo: </b></span>
                             <span class="value">
                                 <p class="p-0 m-0 p_textEditor" [innerHTML]="creatingData.memo"> </p>
                             </span>
                         </p>
-                        <!-- <div class="form-group">
-                            <label>Rule Number <span class="clr-red">*</span></label>
-                            <select [(ngModel)]="creatingData.ruleNumberId"  disabled="true" (ngModelChange)="onSaveChange()"
-                                name="ruleNum" required>
-                                <option value="0">Select</option>
-                                <option *ngFor="let rule of ruleNumList" [value]="rule.value">{{rule.label}}</option>
-                            </select>
-                        </div> -->
-
                         <p><span class="label"><b>Rule number <span class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.ruleNumberId ? ApprovalRuleName : '-'}}
                             </span></p>
-                        <!-- <div class="form-group">
-                        <label>Operator *</label>
-                        <select [(ngModel)]="creatingData.operatorId" name="operator" required>
-                            <option value="null">Select</option>
-                            <option value="1">And</option>
-                            <option value="2">Or</option>
-                        </select>
-                    </div>  -->
-
-
-                        <!-- <div class="form-group">
-                            <label style="margin-top: -8px;">Amount <span class="clr-red">*</span></label>
-                            <select [(ngModel)]="creatingData.amountId"  disabled="true" (ngModelChange)="onSaveChange()" name="amount"
-                                required>
-                                <option value="null">Select</option>
-                                <option *ngFor="let approvalAmount of approvalAmountList"
-                                    [value]="approvalAmount.value">{{approvalAmount.label}}</option>
-                            </select>
-                        </div> -->
                         <p><span class="label"><b>Amount <span class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.amountId ? AmountName : '-'}}
                             </span></p>
-
-                        <!-- <div class="form-group" *ngIf="creatingData.amountId == 5">
-                            <label>Lower Value <span class="clr-red">*</span></label>
-                            <input type="text" class="form-control text-right"  disabled="true" (ngModelChange)="onSaveChange()"
-                                pKeyFilter="money" [(ngModel)]="creatingData.lowerValue"
-                                (change)="onChangevalue('lowerValue');" name="lowerValue" required />
-                        </div> -->
                         <p *ngIf="creatingData.amountId == 5"><span class="label"><b>Lower Value <span
                                         class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.lowerValue ? creatingData.lowerValue : '-'}}
                             </span></p>
-
-                        <!-- <div class="form-group" *ngIf="creatingData.amountId == 5">
-                            <label>Upper Value <span class="clr-red">*</span></label>
-                            <input type="text" class="form-control text-right"  disabled="true" (ngModelChange)="onSaveChange()"
-                                pKeyFilter="money" [(ngModel)]="creatingData.upperValue"
-                                (change)="onChangevalue('upperValue');" name="upperValue" required />
-                        </div> -->
                         <p *ngIf="creatingData.amountId == 5"><span class="label"><b>Upper Value <span
                                         class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.upperValue ? creatingData.upperValue : '-'}}
                             </span></p>
-                        <!-- <div class="form-group" *ngIf="creatingData.amountId && creatingData.amountId != 5">
-                            <label>Value <span class="clr-red">*</span></label>
-                            <input type="text" class="form-control text-right"  disabled="true" (click)="onAddApprover();"
-                                pKeyFilter="money" [(ngModel)]="creatingData.value" name="value"
-                                (change)="onChangevalue('value');" required />
-                        </div>     -->
                         <p *ngIf="creatingData.amountId && creatingData.amountId != 5">
                             <span class="label"><b>Value <span class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.value ? creatingData.value : '-'}}
                             </span></p>
                     </div>
-
                     <div class="col-md-3">
                         <div class="card management-structure-card">
-                            <div class="card-header management-structure-card-header" >
+                            <div class="card-header management-structure-card-header">
                                 <h5 class="management-structure-header" style="color:#333">Management Structure <span
                                         class="clr-red">*</span></h5>
                             </div>
                             <div class="card-body structure-card-body">
                                 <div class="form-group">
-                                    <select class="form-control field-radius-5"
-                                        name="primaryCompany" [disabled]="true" [(ngModel)]="creatingData.companyId"
+                                    <select class="form-control field-radius-5" name="primaryCompany" [disabled]="true"
+                                        [(ngModel)]="creatingData.companyId"
                                         (change)="getBUList(creatingData.companyId);" #mCompanyName required>
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of maincompanylist" [ngValue]="name.value">
@@ -899,8 +719,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <select  [(ngModel)]="creatingData.buId"
-                                        name="primaryBU" [disabled]="true" (change)="getDivisionlist(creatingData.buId)"
+                                    <select [(ngModel)]="creatingData.buId" name="primaryBU" [disabled]="true"
+                                        (change)="getDivisionlist(creatingData.buId)"
                                         class="form-control field-radius-5">
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of bulist" [ngValue]="name.value">{{name.label}}
@@ -908,8 +728,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control field-radius-5"
-                                        [(ngModel)]="creatingData.divisionId" [disabled]="true" name="primaryDivision"
+                                    <select class="form-control field-radius-5" [(ngModel)]="creatingData.divisionId"
+                                        [disabled]="true" name="primaryDivision"
                                         (change)="getDepartmentlist(creatingData.divisionId)">
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of divisionlist" [ngValue]="name.value">{{name.label}}
@@ -917,8 +737,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control field-radius-5"
-                                        [(ngModel)]="creatingData.departmentId" [disabled]="true" name="primaryDept"
+                                    <select class="form-control field-radius-5" [(ngModel)]="creatingData.departmentId"
+                                        [disabled]="true" name="primaryDept"
                                         (change)="getDepartmentId(creatingData.departmentId)">
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of departmentList" [ngValue]="name.value">
@@ -953,12 +773,10 @@
                                 <tr>
                                     <td class="table-column-width">
                                     </td>
-                                    <th class="table-column-width" *ngFor="let col of columns"
-                                        [ngSwitch]="col.field">
+                                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                                         <input [disabled]="col.field == 'isPrimary'" style="width:100%;" pInputText
-                                            type="text" (input)="
-                                        ptabletagName.filter($event.target.value, col.field, 'contains')
-                                        " />
+                                            type="text"
+                                            (input)="ptabletagName.filter($event.target.value, col.field, 'contains')" />
                                     </th>
                                     <th class="table-column-width">
                                     </th>
@@ -1003,55 +821,22 @@
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total: </label>
-                                <input class="footer-input-width" [value]="employeeNames.length" name="totalRecords" disabled
-                                    pInputText type="text" />
-
+                                <input class="footer-input-width" [value]="employeeNames.length" name="totalRecords"
+                                    disabled pInputText type="text" />
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
-
-                                <input class="footer-input-width" [ngModel]="getTaxPageCount(employeeNames.length,pageSizeemp)"
-                                    name="page count tax" disabled pInputText type="text" />
+                                <input class="footer-input-width"
+                                    [ngModel]="getTaxPageCount(employeeNames.length,pageSizeemp)" name="page count tax"
+                                    disabled pInputText type="text" />
                             </ng-template>
                         </p-table>
                     </div>
-
                 </form>
             </div>
-            <div class="modal-footer">              
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="isEdit = false;">Close</button>
-              
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="isEdit = false;">Close</button>
             </div>
-
-
-
-            <!-- <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">
-                                &times;
-                            </button>
-                            <h4 class="modal-title">Edit Memo</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
-                            [style]="{ height: '320px' }" name="memoPopupContent"
-                            (ngModelChange)="onSaveChange()" required></p-editor>
-                            <div class="editor-buttons">
-                                <button type="button" class="btn btn-primary editor-buttons-margin"
-                                    (click)="onClickPopupSave()">
-                                    Save
-                                </button>
-                                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-
             <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
                 <div class="loading">
                     <div class="lds-roller">
@@ -1069,12 +854,8 @@
             </div>
             <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
         </div>
-
     </div>
 </div>
-
-
-
 <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">

@@ -4,6 +4,7 @@ declare var $ : any;
 import { EmployeeService } from '../../../services/employee.service';
 import { CommunicationService } from '../../services/communication.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
+import { AuthService } from '../../../services/auth.service';
 
 
 
@@ -49,7 +50,7 @@ export class MemoComponent implements OnInit, OnChanges {
     moduleName: any = "Communication";
     isSpinnerVisible: boolean = false;
     deletingRow: any;
-    constructor(private activeModal: NgbActiveModal, private employeeService: EmployeeService, private communicationService: CommunicationService, private alertService: AlertService) {}
+    constructor(private activeModal: NgbActiveModal,private authService: AuthService, private employeeService: EmployeeService, private communicationService: CommunicationService, private alertService: AlertService) {}
     
     ngOnInit(): void {
         // if(this.isSubWorkOrder){
@@ -214,7 +215,7 @@ console.log("this.work order details",this.subWorkOrderDetails);
 if(this.workOrderId ==undefined){
     this.workOrderId=this.subWorkOrderDetails.subWorkOrderId;
 }
-        this.communicationService.getMemoList(this.workOrderId, this.moduleId, this.partNo)
+        this.communicationService.getMemoList(this.workOrderId, this.moduleId, this.partNo,this.authService.currentUser.masterCompanyId)
         .subscribe(
             (res)=>{
                 if(res && res.length>0){

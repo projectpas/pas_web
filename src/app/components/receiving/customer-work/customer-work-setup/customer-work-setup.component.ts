@@ -836,7 +836,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             const mcId= this.authService.currentUser
             ? this.authService.currentUser.masterCompanyId
             : null;
-            this.commonService.autoDropListCustomerContacts(id, strText, 20, this.setEditArray.join()).subscribe(res => {
+            this.commonService.autoDropListCustomerContacts(id, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.customerContactList = res.map(x => {
                     return {
                         ...x,

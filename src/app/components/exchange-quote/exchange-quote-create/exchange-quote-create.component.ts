@@ -32,7 +32,10 @@ import { CustomerViewComponent } from "../../../shared/components/customer/custo
 import { DBkeys } from "../../../services/db-Keys";
 import { IStatus } from "../../../models/sales/IStatus";
 import { forkJoin } from "rxjs/observable/forkJoin";
-
+import { ExchangeQuotePartNumberComponent } from "../shared/components/exchange-quote-part-number/exchange-quote-part-number.component";
+import { ExchangeQuoteApproveComponent } from "../shared/components/exchange-quote-approve/exchange-quote-approve.component";
+//import { ExchangeQuoteCustomerApprovalComponent } from "../shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
+import{ExchangeQUoteMarginSummary} from '../../../models/exchange/ExchangeQUoteMarginSummary';
 @Component({
   selector: 'app-exchange-quote-create',
   templateUrl: './exchange-quote-create.component.html',
@@ -77,6 +80,15 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   errorMessages: any[] = [];
   exchangeQuoteView: IExchangeQuoteView;
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
+  validDaysSettingsList = [];
+  selectedParts: any[] = [];
+  @ViewChild(ExchangeQuotePartNumberComponent, { static: false }) public exchangeQuotePartNumberComponent: ExchangeQuotePartNumberComponent;
+  addressType: any = 'EQ';
+  showAddresstab: boolean = false;
+  managementStructureId: any;
+  @ViewChild(ExchangeQuoteApproveComponent, { static: false }) public exchangeQuoteApproveComponent: ExchangeQuoteApproveComponent;
+  //@ViewChild(ExchangeQuoteCustomerApprovalComponent, { static: false }) public exchangeQuoteCustomerApprovalComponent: ExchangeQuoteCustomerApprovalComponent;
+  marginSummary: ExchangeQUoteMarginSummary = new ExchangeQUoteMarginSummary();
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -98,10 +110,19 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     this.id = +this.route.snapshot.paramMap.get("id");
     this.exchangeQuoteId = this.id;
     this.isSpinnerVisible = false;
-
+    this.exchangequoteService.resetExchangeQuote();
+    this.managementStructureId = this.currentUserManagementStructureId;
+    this.exchangequoteService.getExchangeQuoteInstance().subscribe(data => {
+      this.exchangeQuote = data;
+      this.exchangeQuote.statusChangeDate = new Date();
+    });
     setTimeout(() => {
       this.getExchangeInstance(true);
     },1200);
+
+    if (this.id) {
+      this.getMarginSummary();
+    }
   }
 
   get userName(): string {	
@@ -187,7 +208,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   
   getExchangeInstance(initialCall = false) {
      if (this.id) {
-      //this.getSalesOrderInstance(this.id, initialCall);
+      this.getExchQuoteInstance(this.id, initialCall);
       //this.getSOMarginSummary();
       this.isEdit = true;
       this.toggle_po_header = false;
@@ -228,22 +249,21 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     this.isSpinnerVisible = true;
 
     let creditLimitTermsId = this.exchangeQuote.creditTermId ? this.exchangeQuote.creditTermId : 0;
-
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.exchangeQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.exchangeQuote.customerServiceRepId, this.exchangeQuote.salesPersonId),
-      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join())
-      //this.salesQuoteService.getAllSalesOrderQuoteSettings()
-      ).subscribe(result => {
+      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
+      this.exchangequoteService.getAllExchangeQuoteSettings()).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
         this.setCSRAndSalesPersonOrAgentList(result[1]);
         this.setCreditTerms(result[2]);
-        //this.setValidDays(result[6]);
+        this.setValidDays(result[3]);
         this.getCustomerDetails();
         if (this.id) {
         } else {
+          //this.setAllCustomerContact(result[0]);
           this.getDefaultContact();
         }
         //this.setCSR();
@@ -251,6 +271,12 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       }, error => {
         this.isSpinnerVisible = false;
       });
+  }
+
+  setValidDays(result) {
+    if (result && result.length > 0) {
+      this.validDaysSettingsList = result;
+    }
   }
 
   setAllCustomerContact(result) {
@@ -297,6 +323,8 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     this.exchangeQuote.customerCode = this.customerDetails.customerCode;
     this.exchangeQuote.creditLimit = this.customerDetails.creditLimit;
     this.exchangeQuote.creditTermId = this.customerDetails.creditTermsId;
+    this.exchangeQuote.restrictPMA = this.customerDetails.restrictPMA;
+    this.exchangeQuote.restrictDER = this.customerDetails.restrictDER;
     this.customerInfoFromExchangeQuote = {
       customerName: this.customerDetails.name,
       customerCode: this.customerDetails.customerCode,
@@ -307,16 +335,45 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuote.customerServiceRepId = this.customerDetails.csrId;
     }
 
-    //if (!this.id) {
+    if (!this.id) {
       //this.exchangeQuote.contractReference = this.customerDetails.contractReference;
-      //this.setValidDaysBasedOnSettings(false);
-    //}
-    //else {
-      //this.setValidDaysBasedOnSettings(true);
-    //}
+      this.exchangeQuote.creditLimit = this.customerDetails.creditLimit;
+      this.exchangeQuote.creditTermId = this.customerDetails.creditTermsId;
+      //this.exchangeQuote.contractReferenceName = this.customerDetails.contractReference;
+      this.exchangeQuote.restrictPMA = this.customerDetails.restrictPMA;
+      this.exchangeQuote.restrictDER = this.customerDetails.restrictDER;
+      this.setValidDaysBasedOnSettings(false);
+      //this.onChangeValidForDays();
+    }
+    else {
+      this.setValidDaysBasedOnSettings(true);
+    }
 
     //this.setSalesPerson();
     //this.setCSR();
+  }
+
+  setValidDaysBasedOnSettings(isEdit) {
+    if (this.validDaysSettingsList && this.validDaysSettingsList.length > 0) {
+      let validDaysObject = this.validDaysSettingsList[0];
+      if (validDaysObject) {
+        if (!isEdit) {
+          //this.exchangeQuote.validForDays = validDaysObject.validDays;
+          //this.exchangeQuote.type = validDaysObject.typeId.toString();
+          this.exchangeQuote.statusId = validDaysObject.defaultStatusId;
+          this.exchangeQuote.statusName = validDaysObject.defaultStatusName;
+        }
+        this.exchangeQuote.cogs = validDaysObject.cogs;
+        this.exchangeQuote.daysForCoreReturn = validDaysObject.daysForCoreReturn;
+        //this.defaultSettingPriority = validDaysObject.defaultPriorityId;
+      } 
+      else {
+        this.exchangeQuote.type = "1";
+      }
+    } 
+    else {
+      this.exchangeQuote.type = "1";
+    }
   }
 
   setSalesPerson() {
@@ -392,6 +449,14 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.errorMessages.push("Please select Customer Contact");
       haveError = true;
     }
+    if (this.exchangeQuote.promiseDate < this.exchangeQuote.customerRequestDate) {
+      this.errorMessages.push("Request date cannot be greater than Promised Date.");
+      haveError = true;
+    }
+    if (this.exchangeQuote.estimateShipDate < this.exchangeQuote.customerRequestDate) {
+      this.errorMessages.push("Request date cannot be greater than Est.Ship Date.");
+      haveError = true;
+    }
 
     if (haveError) {
       let content = this.errorMessagePop;
@@ -409,7 +474,9 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangOrdereQuote.quoteExpireDate = this.exchangeQuote.quoteExpireDate;
       this.exchangOrdereQuote.customerRequestDate = this.exchangeQuote.customerRequestDate;
       this.exchangOrdereQuote.promiseDate = this.exchangeQuote.promiseDate;
+      this.exchangOrdereQuote.estimateShipDate = this.exchangeQuote.estimateShipDate;
       this.exchangOrdereQuote.masterCompanyId = this.masterCompanyId;
+      this.exchangOrdereQuote.managementStructureId = this.managementStructureId;
       this.exchangOrdereQuote.customerId = this.exchangeQuote.customerId;
       this.exchangOrdereQuote.customerName = this.exchangeQuote.customerName;
       this.exchangOrdereQuote.customerCode = this.exchangeQuote.customerCode;
@@ -430,7 +497,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangOrdereQuote.creditTermId = this.exchangeQuote.creditTermId;
 
       //this.exchangOrdereQuote.contractReference = this.salesQuote.contractReferenceName;
-
+      this.exchangOrdereQuote.employeeId= this.authService.currentEmployee.employeeId,
       this.exchangOrdereQuote.salesPersonId = editValueAssignByCondition(
         "employeeId",
         this.exchangeQuote.salesPersonName
@@ -496,42 +563,42 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       // this.salesOrderView.parts = partList;
       // this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesOrderView.parts, this.marginSummary);
 
-      // if (this.id) {
-      //   if (invalidParts) {
-      //     this.isSpinnerVisible = false;
-      //     this.alertService.resetStickyMessage();
-      //     this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
-      //   } else if (invalidDate) {
-      //     this.isSpinnerVisible = false;
-      //     this.alertService.resetStickyMessage();
-      //     this.alertService.showStickyMessage('Sales Order', "Please select valid Dates for Sales Order PartsList!", MessageSeverity.error);
-      //   } else {
-      //     this.marginSummary.salesOrderId = this.id;
-      //     this.salesOrderService.createSOMarginSummary(this.marginSummary).subscribe(result => {
-      //       this.marginSummary.soMarginSummaryId = result;
-      //     });
-      //     this.salesOrderService.update(this.salesOrderView).subscribe(data => {
-      //       this.isSpinnerVisible = false;
-      //       this.alertService.showMessage(
-      //         "Success",
-      //         `Sales Order updated successfully.`,
-      //         MessageSeverity.success
-      //       );
-      //       this.getSalesOrderInstance(this.id, true);
-      //       if (createNewVersion) {
-      //         this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
-      //       }
-      //       this.toggle_po_header = false;
-      //       if (this.isEdit) {
-      //         this.isCreateModeHeader = false;
-      //       }
-      //       this.enableUpdateButton = true;
-      //     }, error => {
-      //       this.isSpinnerVisible = false;
-      //       this.toggle_po_header = true;
-      //     });
-      //   }
-      // } else {
+      if (this.id) {
+        // if (invalidParts) {
+        //   this.isSpinnerVisible = false;
+        //   this.alertService.resetStickyMessage();
+        //   this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
+        // } else if (invalidDate) {
+        //   this.isSpinnerVisible = false;
+        //   this.alertService.resetStickyMessage();
+        //   this.alertService.showStickyMessage('Sales Order', "Please select valid Dates for Sales Order PartsList!", MessageSeverity.error);
+        // } else {
+          this.marginSummary.exchangeQuoteId = this.id;
+          this.exchangequoteService.createExchangeQuoteMarginSummary(this.marginSummary).subscribe(result => {
+            this.marginSummary.exchangeQuoteMarginSummaryId = result;
+           });
+          this.exchangequoteService.update(this.exchangeQuoteView).subscribe(data => {
+            this.isSpinnerVisible = false;
+            this.alertService.showMessage(
+              "Success",
+              `Sales Order updated successfully.`,
+              MessageSeverity.success
+            );
+            this.getExchQuoteInstance(this.id, true);
+            if (createNewVersion) {
+              this.router.navigateByUrl(`exchangemodule/exchangepages/exchange-quote-list`);
+            }
+            this.toggle_po_header = false;
+            if (this.isEdit) {
+              this.isCreateModeHeader = false;
+            }
+            this.enableUpdateButton = true;
+          }, error => {
+            this.isSpinnerVisible = false;
+            this.toggle_po_header = true;
+          });
+        //}
+      } else {
         this.exchangequoteService.create(this.exchangeQuoteView).subscribe(data => {
           this.exchangeCreateHeaderOrderId = data[0].exchangeQuoteId;
           this.exchangeQuoteView.exchangeOrderQuote.exchangeQuoteId = this.exchangeCreateHeaderOrderId;
@@ -545,19 +612,19 @@ export class ExchangeQuoteCreateComponent implements OnInit {
           );
           this.toggle_po_header = false;
           this.id = this.exchangeCreateHeaderOrderId;
-          // if (this.exchangeCreateHeaderOrderId) {
-          //   this.router.navigateByUrl(
-          //     `salesmodule/salespages/sales-order-edit/${this.customerId}/${this.exchangeCreateHeaderOrderId}`
-          //   );
-          // }
-          // if (!this.isCreateModeHeader) {
-          //   this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
-          // }
+          if (this.exchangeCreateHeaderOrderId) {
+            this.router.navigateByUrl(
+              `exchangemodule/exchangepages/exchange-quote-edit/${this.customerId}/${this.exchangeCreateHeaderOrderId}`
+            );
+          }
+          if (!this.isCreateModeHeader) {
+            this.router.navigateByUrl(`exchangemodule/exchangepages/exchange-quote-list`);
+          }
         }, error => {
           this.isSpinnerVisible = false;
           this.toggle_po_header = true;
         });
-      //}
+      }
       this.toggle_po_header = false;
     }
   }
@@ -572,5 +639,131 @@ export class ExchangeQuoteCreateComponent implements OnInit {
 
   closeErrorMessage() {
     this.errorModal.close();
+  }
+
+  getExchQuoteInstance(exchangeQuoteId: number, initialCall = false) {
+    this.isSpinnerVisible = true;
+    this.exchangequoteService.getExchangeQuote(exchangeQuoteId).subscribe(data => {
+      this.isSpinnerVisible = false;
+      if (data) {
+        this.exchangeQuoteView = data && data.length ? data[0] : null;
+        this.exchangeQuoteObj = this.exchangeQuoteView.exchangeOrderQuote;
+        //this.bindData(this.exchangeQuoteView, initialCall);
+      }
+      let partList: any[] = this.exchangeQuoteView.parts;
+      this.selectedParts = [];
+      for (let i = 0; i < partList.length; i++) {
+        let selectedPart = partList[i];
+        let partNumberObj = this.exchangequoteService.marshalExchangeQuotePartToView(selectedPart);
+        const selectedPartsTemp = this.selectedParts;
+        selectedPartsTemp.push(partNumberObj)
+        this.exchangequoteService.selectedParts = selectedPartsTemp;
+      }
+      // this.arrayEmplsit.push(this.salesOrderQuoteObj.employeeId);
+      // if (!partsRefresh || !isInitialCall) {
+      //   this.load(this.salesOrderQuoteObj.managementStructureId);
+      // }
+
+      this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(this.exchangequoteService.selectedParts, this.marginSummary);
+      // this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
+      //this.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
+      this.exchangeQuote.type = this.exchangeQuoteObj.type.toString();
+      //this.exchangeQuote.status = this.salesQuoteView.status;
+      //this.exchangeQuote.priorities = this.salesQuoteView.priorities;
+      if (this.exchangeQuotePartNumberComponent) {
+        this.exchangeQuotePartNumberComponent.refresh();
+      }
+      this.exchangeQuote.statusId = this.exchangeQuoteObj.statusId;
+      this.exchangeQuote.statusChangeDate = new Date(
+        this.exchangeQuoteObj.statusChangeDate
+      );
+      this.exchangeQuote.openDate = new Date(this.exchangeQuoteObj.openDate);
+      this.exchangeQuote.customerRequestDate = new Date(this.exchangeQuoteObj.customerRequestDate);
+      this.exchangeQuote.estimateShipDate = new Date(this.exchangeQuoteObj.estimateShipDate);
+      this.exchangeQuote.promiseDate = new Date(this.exchangeQuoteObj.promiseDate);
+      //this.salesQuote.validForDays = this.salesOrderQuoteObj.validForDays;
+      this.exchangeQuote.quoteExpireDate = new Date(
+        this.exchangeQuoteObj.quoteExpireDate
+      );
+
+      this.exchangeQuote.exchangeQuoteNumber = this.exchangeQuoteObj.exchangeQuoteNumber;
+      this.exchangeQuote.versionNumber = this.exchangeQuoteObj.versionNumber;
+      this.exchangeQuote.customerId = this.exchangeQuoteObj.customerId;
+      this.exchangeQuote.customerContactId = this.exchangeQuoteObj.customerContactId;
+      this.exchangeQuote.customerReference = this.exchangeQuoteObj.customerReference;
+      this.exchangeQuote.approvedById = this.exchangeQuoteObj.approvedById
+      //this.salesQuote.employeeId = getObjectById('value', this.salesOrderQuoteObj.employeeId, this.allEmployeeList)//this.salesOrderQuoteObj.employeeId;
+      this.exchangeQuote.exchangeQuoteId = this.exchangeQuoteObj.exchangeQuoteId;
+      this.exchangeQuote.creditLimit = this.exchangeQuoteObj.creditLimit;
+      this.exchangeQuote.creditTermId = this.exchangeQuoteObj.creditTermId;
+      this.exchangeQuote.masterCompanyId = this.exchangeQuoteObj.masterCompanyId;
+      if (this.exchangeQuoteObj.approvedDate)
+        this.exchangeQuote.approvedDate = new Date(
+          this.exchangeQuoteObj.approvedDate
+        );
+      this.exchangeQuote.statusName = this.exchangeQuoteView.exchangeOrderQuote.statusName;
+      //this.salesQuote.isApproved = this.salesQuoteView.salesOrderQuote.isApproved;
+      this.exchangeQuote.customerServiceRepId = this.exchangeQuoteObj.customerServiceRepId;
+      //this.exchangeQuote.salesPersonId = this.exchangeQuoteObj.salesPersonId;
+      //this.exchangeQuote.salesPersonId = getObjectById('value', this.exchangeQuoteObj.salesPersonId, this.allEmployeeList)//this.salesOrderQuoteObj.employeeId;
+      this.isSpinnerVisible = false;
+      if (initialCall) {
+        this.getInitialDataForExchangeQuote();
+      }
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  onPartsSaveEvent(savedParts) {
+    if (savedParts) {
+      this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(savedParts, this.marginSummary);
+      this.updateMarginSummary();
+      console.log("summarydata",this.marginSummary);
+      this.getExchQuoteInstance(this.id, true);
+    }
+  }
+
+  onTabChange(event) {
+    if (event.index == 0) {
+      this.exchangeQuotePartNumberComponent.refresh();
+    }
+    if (event.index == 1) {
+      this.exchangeQuoteApproveComponent.refresh(this.exchangeQuote.exchangeQuoteId);
+    }
+    if (event.index == 2) {
+      this.showAddresstab = true;
+    }
+  }
+
+  getMarginSummary() {
+    this.exchangequoteService.getExchangeQuoteMarginSummary(this.id).subscribe(result => {
+      this.setExchangeQuoteMarginSummary(result);
+    }, error => {
+      const errorLog = error;
+    })
+  }
+
+  updateMarginSummary() {
+    this.isSpinnerVisible = true;
+    this.marginSummary.exchangeQuoteId = this.id;
+    this.exchangequoteService.createExchangeQuoteMarginSummary(this.marginSummary).subscribe(result => {
+      this.marginSummary.exchangeQuoteMarginSummaryId = result;
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    })
+  }
+
+  setExchangeQuoteMarginSummary(data) {
+    if (data) {
+      this.marginSummary = data;
+      // this.totalCharges = this.marginSummary.misc;
+      // this.totalFreights = this.marginSummary.freightAmount;
+      // this.salesQuoteService.setTotalCharges(this.marginSummary.misc);
+      // this.salesQuoteService.setTotalFreights(this.marginSummary.freightAmount);
+    } else {
+      this.marginSummary = new ExchangeQUoteMarginSummary;
+    }
   }
 }

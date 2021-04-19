@@ -450,10 +450,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'Process Customer Receipt', routerLink: '/accountreceivable/accountreceivablepages/app-customer-payment-list' },
                 { label: 'Process Customer Credit', routerLink: '/#' },
                 {
-                  label: 'Open/Close AR Sub-Ledger',
+                  label: 'AR Settings List',
                   routerLink:
-                    '/accountreceivable/accountreceivablepages/app-open-close-ar-subledger',
-                },
+                    '/accountreceivablesettingsmodule/arsettings/app-account-receivable-settings-list',
+                }
               ],
             },
             {
@@ -488,6 +488,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                     '/accountpayble/accountpayble/app-open-close-ap-subledger',
                 },
                 { label: 'Print Checks', routerLink: '/#' },
+                {
+                  label: 'Open/Close AP Subledger',
+                  routerLink:
+                    '/accountpayble/accountpayble/app-open-close-ap-subledger',
+                },
               ],
             },
             {
@@ -584,10 +589,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'SO List',
                   routerLink: '/salesmodule/salespages/sales-order-list',
                 },
-                // {
-                //   label: 'Create SO',
-                //   routerLink: '/salesmodule/salespages/sales-order',
-                // },
+                {
+                  label: 'Create Sales Order',
+                  routerLink: '/salesmodule/salespages/sales-order',
+                },
                 { label: 'SO Shipping', routerLink: '/#' },
                 { label: 'SO Billing', routerLink: '/#' },
                 { label: 'SO Confirmation List', routerLink: '/salesmodule/salespages/sales-order-confirmation-list' },
@@ -605,10 +610,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'SO Quote List',
                   routerLink: '/salesmodule/salespages/sales-quote-list',
                 },
-                // {
-                //   label: 'Create SO Quote',
-                //   routerLink: '/salesmodule/salespages/sales-quote',
-                // },
+                {
+                  label: 'Create Sales Order Quote',
+                  routerLink: '/salesmodule/salespages/sales-quote',
+                },
                 { label: 'Open SO Quotes', routerLink: '/#' },
                 { label: 'Approved SO Quotes', routerLink: '/#' },
                 {
@@ -906,7 +911,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                 {
                   label: 'Exchange Quote List',
                   routerLink: '/exchangemodule/exchangepages/exchange-quote-list',
-                }
+                },
+                {
+                  label: 'Exchange Quote Approval Rule',
+                  routerLink: '/exchangemodule/exchangepages/app-exchange-quote-approval-rule',
+                },
               ]
             }
           ],
@@ -1115,8 +1124,8 @@ export class AppComponent implements OnInit, AfterViewInit {
                 // {
                 //   label: 'Disposal Sale',
                 //   routerLink: '/assetmodule/assetpages/app-asset-disposal-sale',
+                
                 // },
-
               ],
             },
             {

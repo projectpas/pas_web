@@ -144,7 +144,7 @@
           </ng-template>
           <ng-template pTemplate="header" let-columns>
             <tr>
-              <th class="table-column-width">Flag</th>
+              <th class="width-50">Flag</th>
               <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
                 [pSortableColumn]="col.field">
                 {{ col.header }}
@@ -153,7 +153,7 @@
               <th  class="table-actions-column">Actions</th>
             </tr>
             <tr>
-              <th class="table-column-width"></th>
+              <th class="width-50"></th>
               <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                 [ngSwitch]="col.field">
                 <input class="table-header-input-width" pInputText type="text" (input)="
@@ -166,7 +166,7 @@
 
           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="toggledbldisplay(rowData)">
-              <td  class="table-column-width">
+              <td  class="width-50">
                 <span class="flag">
                   <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                       color: rowData.isPrimary == true ? 'green' : 'none'
@@ -698,7 +698,7 @@
   <div class="modal-body">
     <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
       <div class="tableFixHead">  
-      <table class="table table-bordered header-table-width">
+      <table class="table table-bordered">
         <thead>
           <tr>
             <th>Site Name</th>
@@ -712,14 +712,14 @@
             <th>Country</th>
             <th>Is Primary</th>
             <th>Is Active</th>
-            <th>Created Date</th>
+            <th style="min-width:120px">Created Date</th>
             <th>Created By</th>    
-            <th>Updated Date</th>        
+            <th style="min-width:120px">Updated Date</th>        
             <th>Updated By</th>
             <th>Is Deleted</th>        
           </tr>
         </thead>
-
+<tbody>
         <tr *ngFor="let audit of billingauditHisory; let i = index">
           <td [ngStyle]="{
               color: getColorCodeForHistory(i, 'siteName', audit.siteName)
@@ -827,6 +827,7 @@
             </span>
           </td>
         </tr>
+        </tbody>
       </table>
       </div>
     </div>

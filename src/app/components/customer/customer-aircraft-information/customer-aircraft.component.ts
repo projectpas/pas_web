@@ -71,9 +71,9 @@ export class CustomerAircraftComponent implements OnInit {
     ];
     colsaircraftLD = [
         { field: "aircraftType", header: "Aircraft" },
-        { field: "aircraftModel", header: "Model" },
+        { field: "aircraftModel", header: "Model",width:"60px" },
         { field: "dashNumber", header: "Dash Numbers" },
-        { field: "inventory", header: "Inventory" },        
+        { field: "inventory", header: "Inventory" ,width:"70px"},        
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },     
         { field: 'updatedDate', header: 'Updated Date' },
@@ -93,7 +93,7 @@ export class CustomerAircraftComponent implements OnInit {
     isViewMode: boolean = false;
     stopmulticlicks: boolean;
     currentDeletedstatus:boolean=false;
-    restorerecord:any={}
+    restorerecord: any = {};
 
     constructor(private route: ActivatedRoute, private itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
@@ -177,6 +177,8 @@ export class CustomerAircraftComponent implements OnInit {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
+                aircraftModel:x.aircraftModel =='Unknown' ?'':x.aircraftModel,
+                dashNumber:x.dashNumber=='Unknown'?'':x.dashNumber,
                 createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                 updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
             }
@@ -596,7 +598,13 @@ export class CustomerAircraftComponent implements OnInit {
         if(this.id > 0)
         {
             this.customerService.getMappedAirCraftDetails(this.id).subscribe(res => {
-                this.aircraftListDataValues = res;
+                this.aircraftListDataValues = res.map(x => {
+                    return {
+                        ...x,
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy') : '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy') : '',
+                    }
+                });
                 if (this.aircraftListDataValues.length > 0) {
                     this.totalRecords = this.aircraftListDataValues.length;
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);

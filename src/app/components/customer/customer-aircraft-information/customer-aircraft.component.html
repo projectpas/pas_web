@@ -124,7 +124,7 @@
                   <label class="fs12">
                     Aircraft Model
                   </label>
-                  <p-multiSelect [maxSelectedLabels]="2" [options]="search_AircraftModelList"
+                  <p-multiSelect  [maxSelectedLabels]="2" [options]="search_AircraftModelList" [disabled]="!selectAircraftManfacturer"
                     [(ngModel)]="selectedAircraftModel" [ngModelOptions]="{ standalone: true }" class="pub-multi"
                     (onChange)="getDashNumberByManfacturerandModel()" [selectionLimit]="30"></p-multiSelect>
                 </div>
@@ -132,7 +132,7 @@
               <div class="col-md-2">
                 <div class="form-group">
                   <label class="fs12">DashNumber </label>
-                  <p-multiSelect [maxSelectedLabels]="2" [options]="search_AircraftDashNumberList"
+                  <p-multiSelect [maxSelectedLabels]="2" [options]="search_AircraftDashNumberList" [disabled]="selectedAircraftModel.length==0"
                     [(ngModel)]="selectedDashNumbers" [ngModelOptions]="{ standalone: true }" class="pub-multi"
                     [selectionLimit]="30"></p-multiSelect>
                 </div>
@@ -153,7 +153,7 @@
 
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
-        <col *ngFor="let col of columns" class="table-column-width" />
+        <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="table-column-width" />
       </colgroup>
     </ng-template>
 
@@ -179,7 +179,7 @@
             {{rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
           </ng-container>
           <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-              {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
+              {{rowData[col.field] }}
           </ng-container> 
         </td>
         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == false">
@@ -622,7 +622,7 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width">
+					<table class="table table-bordered">
             <thead>
               <tr>
                 <th>Aircraft</th>
@@ -636,6 +636,7 @@
                 <th>Is Deleted</th>
               </tr>
             </thead>
+            <tbody>
 
             <tr *ngFor="let audit of aircraftauditHisory; let i = index">
               <td [ngStyle]="{
@@ -696,6 +697,7 @@
               </td>
               <td class="background-white"><p class="width-50 text-center"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
             </tr>
+            </tbody>
           </table>
           </div>
         </div>

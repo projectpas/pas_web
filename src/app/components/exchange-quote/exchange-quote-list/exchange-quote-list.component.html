@@ -184,16 +184,16 @@
                           <!-- <span>
                               <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
                                   matTooltipPosition="above"><i class="fa fa-eye"></i></a>
-                          </span>
+                          </span> -->
                           <span>
-                              <a (click)="openOrderToEdit(rowData)" matTooltip="Edit" class="btn nobg"
+                              <a (click)="openExchangeQuoteToEdit(rowData)" matTooltip="Edit" class="btn nobg"
                                   [class.disabled]="rowData.status === 'Closed' || rowData.status === 'Expired'"
                                   [ngClass]="{'btn_disabled': rowData.status === 'Closed' || rowData.status === 'Expired'}"
                                   matTooltipPosition="above">
                                   <i class="fa fa-pencil"></i>
                               </a>
                           </span>
-                          <span>
+                          <!-- <span>
                               <a (click)="openDelete(content,rowData)" matTooltip="Delete" class="btn nobg"
                                   [class.disabled]="rowData.status === 'Closed' || rowData.status === 'Expired'"
                                   [ngClass]="{'btn_disabled': rowData.status === 'Closed' || rowData.status === 'Expired'}"
@@ -239,4 +239,18 @@
           </ng-template>
       </p-table>
   </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
 </div>

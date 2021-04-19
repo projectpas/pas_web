@@ -33,5 +33,11 @@ export interface IExchangeQuote {
 	approvedByName: string;
 	approvedDate: Date;
 	masterCompanyId:number;
+	managementStructureId:number;
 	customerServiceRepId: number;
+	restrictPMA: boolean;
+	restrictDER: boolean;
+	cogs:number;
+	daysForCoreReturn:number;
+	employeeId:number;
 }

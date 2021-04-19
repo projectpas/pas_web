@@ -115,23 +115,23 @@ export class SalesOrderListComponent implements OnInit {
 
   initColumns() {
     this.headers = [
-      { field: "salesOrderNumber", header: "SO Num", width: "120px" },
+      { field: "salesOrderNumber", header: "SO Num", width: "110px" },
       { field: "customerName", header: "Customer Name", width: "180px" },
-      { field: "customerReference", header: "Customer Ref", width: "130px" },
-      { field: "salesOrderQuoteNumber", header: "Quote Num", width: "130px" },
-      { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
+      { field: "customerReference", header: "Customer Ref", width: "160px" },
+      { field: "salesOrderQuoteNumber", header: "Quote Num", width: "110px" },
+      { field: "versionNumber", header: "Quote Ver Num", width: "120px" },
       { field: "quoteDate", header: "Quote Date", width: "130px" },
       { field: "partNumberType", header: "PN", width: "130px" },
-      { field: "partDescriptionType", header: "PN Description", width: "180px" },
+      { field: "partDescriptionType", header: "PN Description", width: "200px" },
       { field: "status", header: "Status", width: "100px" },
       { field: "priorityType", header: "Priority", width: "100px" },
-      { field: "openDate", header: "Open Date", width: "130px" },
-      { field: "requestedDateType", header: "Request Date", width: "130px" },
-      { field: "estimatedShipDateType", header: "Est. Ship Date", width: "130px" },
+      { field: "openDate", header: "Open Date", width: "120px" },
+      { field: "requestedDateType", header: "Request Date", width: "120px" },
+      { field: "estimatedShipDateType", header: "Est. Ship Date", width: "120px" },
       { field: "salesPerson", header: "Sales Person", width: "180px" },
-      { field: "createdDate", header: "Created Date", width: "130px" },
+      { field: "createdDate", header: "Created Date", width: "120px" },
       { field: "createdBy", header: "Created By", width: "130px" },
-      { field: "updatedDate", header: "Updated Date", width: "130px" },
+      { field: "updatedDate", header: "Updated Date", width: "120px" },
       { field: "updatedBy", header: "Updated By", width: "130px" }
     ];
     this.selectedColumns = this.headers;
@@ -323,9 +323,14 @@ export class SalesOrderListComponent implements OnInit {
     });
   }
 
+  arrayStatuslist: any[] = [];
   getStatusList() {
-    forkJoin(this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
-      this.salesService.getAllSalesOrderSettings()).subscribe(res => {
+    this.isSpinnerVisible = true;
+    if (this.arrayStatuslist.length == 0) {
+      this.arrayStatuslist.push(0);
+    }
+    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name", '', true, 20, this.arrayStatuslist.join(), this.currentUserMasterCompanyId),
+      this.salesService.getAllSalesOrderSettings(this.currentUserMasterCompanyId)).subscribe(res => {
         this.statusList = res[0];
         this.settingsList = res[1];
         if (this.settingsList.length > 0) {
@@ -343,6 +348,7 @@ export class SalesOrderListComponent implements OnInit {
         }
         this.isSettingsReceived = true;
         this.changeOfStatus(this.currentStatus, this.viewType);
+        this.isSpinnerVisible = false;
       }, error => {
         this.isSettingsReceived = true;
         this.isSpinnerVisible = false;
@@ -511,8 +517,10 @@ export class SalesOrderListComponent implements OnInit {
   restorerecord: any = {}
 
   restoreRecord() {
+    this.isSpinnerVisible = true;
     this.commonservice.updatedeletedrecords('SalesOrder', 'SalesOrderId', this.restorerecord.salesOrderId).subscribe(res => {
-      this.getDeleteListByStatus(true)
+      this.getDeleteListByStatus(true);
+      this.isSpinnerVisible = false;
       this.modal.close();
       this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
     }, err => {

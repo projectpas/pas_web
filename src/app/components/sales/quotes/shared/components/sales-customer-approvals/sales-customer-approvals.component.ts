@@ -151,6 +151,17 @@ export class SalesCustomerApprovalsComponent {
             } else {
                 this.quotesList[i].customerApprovedById = '';
             }
+
+            this.quotesList[i].customerApprovedDate = new Date();
+        }
+        else if (approver.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
+            this.quotesList[i].internalSentDate = new Date();
+        }
+        else if (approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+            this.quotesList[i].internalApprovedDate = new Date();
+        }
+        else if (approver.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+            this.quotesList[i].customerSentDate = new Date();
         }
     }
 
@@ -263,29 +274,30 @@ export class SalesCustomerApprovalsComponent {
             this.quotesList[i].approvedContactId = this.quotesList[i].statusId == (ApprovalStatusEnum.WaitingForApproval || ApprovalStatusEnum.WaitingForApproval.toString()) ? this.quotesList[i].approvedContactId : null;
             if (this.quotesList[i].internalSentDate) {
                 this.quotesList[i].internalSentDate = new Date(this.quotesList[i].internalSentDate);
-                if (!this.quotesList[i].internalApprovedDate) {
-                    this.quotesList[i].internalApprovedDate = new Date();
-                }
+                // if (!this.quotesList[i].internalApprovedDate) {
+                //     this.quotesList[i].internalApprovedDate = new Date();
+                // }
             }
-            else if (!this.quotesList[i].internalSentDate) {
-                this.quotesList[i].internalSentDate = new Date();
-            }
+            // else if (!this.quotesList[i].internalSentDate) {
+            //     this.quotesList[i].internalSentDate = new Date();
+            // }
+
             if (this.quotesList[i].customerSentDate) {
                 this.quotesList[i].customerSentDate = new Date(this.quotesList[i].customerSentDate);
-                if (!this.quotesList[i].customerApprovedDate) {
-                    this.quotesList[i].customerApprovedDate = new Date();
-                }
+                // if (!this.quotesList[i].customerApprovedDate) {
+                //     this.quotesList[i].customerApprovedDate = new Date();
+                // }
             }
-            else {
-                if (this.quotesList[i].approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
-                    this.quotesList[i].customerSentDate = new Date();
-                }
-            }
+            // else {
+            //     if (this.quotesList[i].approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+            //         this.quotesList[i].customerSentDate = new Date();
+            //     }
+            // }
             if (this.quotesList[i].internalApprovedDate) {
                 this.quotesList[i].internalApprovedDate = new Date(this.quotesList[i].internalApprovedDate);
-                if (!this.quotesList[i].customerSentDate) {
-                    this.quotesList[i].customerSentDate = new Date();
-                }
+                // if (!this.quotesList[i].customerSentDate) {
+                //     this.quotesList[i].customerSentDate = new Date();
+                // }
             }
             if (this.quotesList[i].customerApprovedDate) {
                 this.quotesList[i].customerApprovedDate = new Date(this.quotesList[i].customerApprovedDate);
@@ -351,6 +363,25 @@ export class SalesCustomerApprovalsComponent {
                             result = true;
                         } else if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
                             result = true;
+                        }
+                    }
+                }
+            )
+        }
+
+        return result;
+    }
+
+    checkAnyRowSelected() {
+        var result = false;
+        var keepGoing = true;
+        if (this.quotesList && this.quotesList.length > 0) {
+            this.quotesList.forEach(
+                (x) => {
+                    if (keepGoing) {
+                        if (x.isSelected) {
+                            result = true;
+                            keepGoing = false;
                         }
                     }
                 }
@@ -557,6 +588,11 @@ export class SalesCustomerApprovalsComponent {
             }
             if (!x.customerApprovedDate) {
                 str += 'Customer approved date is required<br/>';
+            }
+            if (x.customerStatusId == ApprovalStatusEnum.Approved) {
+                if (!x.customerMemo) {
+                    str += 'Customer memo is required<br/>';
+                }
             }
         }
         return str;

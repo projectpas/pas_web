@@ -215,8 +215,8 @@ getIntangibleList(){
         return this.assetEndpoint.getAssetCapabilityDataEndpoint<any>(assetCapesId);
     }
 
-    getAssetsById(assetsRecordsId){
-        return this.assetEndpoint.getAssetsById(assetsRecordsId);
+    getAssetsById(assetsRecordsId,masterCompanyId){
+        return this.assetEndpoint.getAssetsById(assetsRecordsId,masterCompanyId);
     }
     //Audit method in services
     //getAudit(assetRecordId: number) {

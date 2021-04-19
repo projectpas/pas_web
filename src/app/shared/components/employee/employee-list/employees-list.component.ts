@@ -111,7 +111,7 @@ export class EmployeesListComponent implements OnInit {
     currenDocDeletedstatus: boolean = false;
     selectedOnly: boolean = false;
     targetData: any;
-
+    moduleName='Employee'
     headers = [
         { field: 'firstName', header: 'First Name' },
         { field: 'lastName', header: 'Last Name' },
@@ -125,12 +125,12 @@ export class EmployeesListComponent implements OnInit {
         //{ field: 'jobtype', header: 'Job Type'},
         { field: 'startDate', header: 'Start Date' },
         { field: 'company', header: 'Company' },
-        { field: 'shopEmployee', header: 'Shop Employee' },
+        { field: 'shopEmployee', header: 'Is Certified Emp',width:"70px" },
         { field: 'paytype', header: 'Pay Type' },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'CreatedBy' },
+        { field: 'createdBy', header: 'CreatedBy',width:"90px" },
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'UpdatedBy' },
+        { field: 'updatedBy', header: 'UpdatedBy',width:"130px" },
 
 
     ];
@@ -140,7 +140,7 @@ export class EmployeesListComponent implements OnInit {
         { field: 'docDescription', header: 'Description' },
         { field: 'docMemo', header: 'Memo' },
         { field: 'fileName', header: 'File Name' },
-        { field: 'fileSize', header: 'File Size' },
+        { field: 'fileSize', header: 'File Size' ,width:"65px"},
 
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedBy', header: 'Updated By' },
@@ -735,7 +735,7 @@ export class EmployeesListComponent implements OnInit {
         this.toGetDocumentsListNew(row.employeeId);
         this.viewEmpID = row.employeeId;
         this.loadEmployeeRoles(row.employeeId);
-        this.isSpinnerVisible = false;
+        //this.isSpinnerVisible = false;
         this.empService.getEmployeeListforView(row.employeeId).subscribe(
             results => this.onemployeeDataLoadSuccessful(results[0]),
             error => {this.isSpinnerVisible=false} //this.onDataLoadFailed(error)

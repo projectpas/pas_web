@@ -31,6 +31,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { PanelModule } from 'primeng/panel';
 import { AddCustomerPaymentComponent } from '../components/accounts-receivable/add-customer-payment/add-customer-payment.component';
 import { ReviewCustomerPaymentComponent } from '../components/accounts-receivable/reivew-customer-payments/review-customer-payment.component';
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
+import { SalesOrderPrintInvoiceComponent } from '../components/sales/order/shared/components/sales-order-print-invoice/sales-order-print-invoice.component';
 
 @NgModule({
     imports: [
@@ -53,7 +55,8 @@ import { ReviewCustomerPaymentComponent } from '../components/accounts-receivabl
         AppSharedModule,
         EditorModule,
         PanelModule,
-        TabViewModule
+        TabViewModule,
+        CommonDocumentsModule
     ],
     declarations: [
         OpenCloseArsubledgerComponent,

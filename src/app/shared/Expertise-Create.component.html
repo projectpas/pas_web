@@ -19,7 +19,7 @@
     <tbody>
         <tr class="expertise-tr" [hidden]="expert.isDeleted" *ngFor="let expert of workFlow.expertise;let i = index">
             <td>
-                <select id="ddlExpertiesType" class="form-control wf-pub-id full-width"
+                <select id="ddlExpertiesType" (change)="setIsUpdate($event.target.value,i)" class="form-control wf-pub-id full-width"
                     [(ngModel)]="expert.expertiseTypeId" required>
                     <option value="">--Select--</option>
                     <option *ngFor="let type of expertiseTypes" value="{{type.employeeExpertiseId}}">

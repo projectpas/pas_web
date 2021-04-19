@@ -8,6 +8,7 @@ import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
 import { ConditionService } from "../../../../../services/condition.service";
 import { SummaryPart } from "../../../../../models/sales/SummaryPart";
+import { AuthService } from "../../../../../services/auth.service";
 
 @Component({
   selector: "app-add-sales-part-number",
@@ -32,7 +33,7 @@ export class AddSalesPartNumberComponent implements OnInit {
   allConditionInfo: any[] = [];
   allConditionInfoArray: any[] = [];
 
-  constructor(private itemMasterService: ItemMasterService, private salesQuoteService: SalesQuoteService, private conditionService: ConditionService) {
+  constructor(private authService: AuthService, private salesQuoteService: SalesQuoteService, private conditionService: ConditionService) {
     this.searchType = ItemSearchType.ItemMaster;
     this.showModalMargin = false;
   }
@@ -51,8 +52,14 @@ export class AddSalesPartNumberComponent implements OnInit {
       });
   }
 
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
+  }
+
   getConditions() {
-    this.conditionService.getConditionList().subscribe(
+    this.conditionService.getConditionList(this.masterCompanyId).subscribe(
       results => {
         let activeConditions = results[0].filter(x => x.isActive == true);
         if (activeConditions && activeConditions.length > 0) {
@@ -116,7 +123,7 @@ export class AddSalesPartNumberComponent implements OnInit {
     let qtyAvailable = 0;
     for (let i = 0; i < this.parts.length; i++) {
       qtyAvailable = qtyAvailable + this.parts[i].qtyAvailable;
-      qtyOnHand = qtyOnHand + this.parts[i].qtyOnHand;
+      qtyOnHand = qtyOnHand + this.parts[i].quantityOnHand;
     }
     this.query.partSearchParamters.qtyAvailable = qtyAvailable;
     this.query.partSearchParamters.qtyOnHand = qtyOnHand;

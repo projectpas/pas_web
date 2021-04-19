@@ -159,10 +159,18 @@ export class WorkFlowEndpoint extends EndpointFactory {
 			return this.handleErrorCommon(error, () => this.getWorkFlowDataById(workFlowId));
 		});
 	}
-	getWorkFlowDataByIdForEdit(workFlowId) {
-		return this.http.get<any>(`${environment.baseUrl}/api/workflowAction/GetWorkFlowbyIdforEdit?workFlowId=${workFlowId}`)
+	getWorkFlowDataByIdForEdit(workFlowId,masterCompanyId?) {
+		return this.http.get<any>(`${environment.baseUrl}/api/workflowAction/GetWorkFlowbyIdforEdit?workFlowId=${workFlowId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`)
 		.catch(error => {
-			return this.handleErrorCommon(error, () => this.getWorkFlowDataByIdForEdit(workFlowId));
+			return this.handleErrorCommon(error, () => this.getWorkFlowDataByIdForEdit(workFlowId,masterCompanyId));
 		});
 	}
+
+	getemployeeExpertiseById(id) {
+		return this.http.get<any>(`${environment.baseUrl}/api/workflow/getEmployeeExpertiseById/${id}`)
+		.catch(error => {
+			return this.handleErrorCommon(error, () => this.getemployeeExpertiseById(id));
+		});
+	}
+
 }
