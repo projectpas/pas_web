@@ -280,11 +280,12 @@ export class SalesOrderCreateComponent implements OnInit {
   getInitialDataForSO() {
     let creditLimitTermsId = this.salesQuote.creditLimitTermsId ? this.salesQuote.creditLimitTermsId : 0;
     let accountTypeId = this.salesQuote.accountTypeId ? this.salesQuote.accountTypeId : 0;
+    let warningTypeId = 0;
     this.isSpinnerVisible = true;
 
     forkJoin(this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
-      this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name'),
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 100, [warningTypeId].join(), this.masterCompanyId),
       this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 100, [accountTypeId].join(), this.masterCompanyId),
       this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(), this.masterCompanyId),
       this.salesOrderService.getAllSalesOrderSettings(this.masterCompanyId)).subscribe(result => {
@@ -307,6 +308,7 @@ export class SalesOrderCreateComponent implements OnInit {
   }
 
   getSOMarginSummary() {
+    this.isSpinnerVisible = true;
     this.salesOrderService.getSOMarginSummary(this.id).subscribe(result => {
       if (result) {
         let summary: any = result;
@@ -318,6 +320,9 @@ export class SalesOrderCreateComponent implements OnInit {
       } else {
         this.marginSummary = new MarginSummary();
       }
+      this.isSpinnerVisible = false;
+    }, err => {
+      this.isSpinnerVisible = false;
     })
   }
 
@@ -336,7 +341,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.getSOMarginSummary();
     }
     else {
-      this.getNewSalesOrderInstance(this.customerId, initialCall);
+      this.getNewSalesOrderInstance(this.customerId);
       this.marginSummary = new MarginSummary();
       this.isEdit = false;
     }
@@ -362,8 +367,9 @@ export class SalesOrderCreateComponent implements OnInit {
     }
   }
 
-  async getCustomerWarningsData(customerWarningListId: number) {
-    await this.customerService
+  getCustomerWarningsData(customerWarningListId: number) {
+    this.isSpinnerVisible = true;
+    this.customerService
       .getCustomerWarningsByCustomerIdandCustomerWarningsListID(this.customerId, customerWarningListId)
       .subscribe(res => {
         this.customerWarning = res;
@@ -371,7 +377,9 @@ export class SalesOrderCreateComponent implements OnInit {
           this.salesQuote.warningId = this.customerWarning.customerWarningId
           this.salesQuote.customerWarningId = this.customerWarning.customerWarningId;
         }
+        this.isSpinnerVisible = false;
       }, error => {
+        this.isSpinnerVisible = false;
       });
   }
 
@@ -716,7 +724,7 @@ export class SalesOrderCreateComponent implements OnInit {
     }
   }
 
-  getNewSalesOrderInstance(customerId: number, initialCall = false) {
+  getNewSalesOrderInstance(customerId: number) {
     this.isSpinnerVisible = true;
     this.salesOrderService
       .getNewSalesOrderInstance(customerId)
@@ -1275,7 +1283,7 @@ export class SalesOrderCreateComponent implements OnInit {
     empployid = empployid == 0 ? this.employeeId : empployid;
     editMSID = this.isEditModeHeader ? editMSID = id : 0;
     this.isSpinnerVisible = true;
-    this.commonservice.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+    this.commonservice.getManagmentStrctureData(id, empployid, editMSID, this.masterCompanyId).subscribe(response => {
       this.isSpinnerVisible = false;
       if (response) {
         const result = response;
@@ -1387,9 +1395,11 @@ export class SalesOrderCreateComponent implements OnInit {
     if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
       this.salesQuote.managementStructureId = legalEntityId;
       this.salesQuote.companyId = legalEntityId;
+      this.isSpinnerVisible = true;
       this.commonservice.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
         this.bulist = res;
         this.employeedata('', this.salesQuote.managementStructureId);
+        this.isSpinnerVisible = false;
       }, err => {
         this.isSpinnerVisible = false;
       });
@@ -1409,9 +1419,12 @@ export class SalesOrderCreateComponent implements OnInit {
     if (buId != 0 && buId != null && buId != undefined) {
       this.salesQuote.managementStructureId = buId;
       this.salesQuote.buId = buId;
+      this.isSpinnerVisible = true;
       this.commonservice.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
         this.divisionlist = res;
+        this.isSpinnerVisible = false;
       }, err => {
+        this.isSpinnerVisible = false;
       });
     } else {
       this.salesQuote.managementStructureId = this.salesQuote.companyId;
@@ -1426,9 +1439,12 @@ export class SalesOrderCreateComponent implements OnInit {
     if (divisionId != 0 && divisionId != null && divisionId != undefined) {
       this.salesQuote.divisionId = divisionId;
       this.salesQuote.managementStructureId = divisionId;
+      this.isSpinnerVisible = true;
       this.commonservice.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
         this.departmentList = res;
+        this.isSpinnerVisible = false;
       }, err => {
+        this.isSpinnerVisible = false;
       });
     }
     else {

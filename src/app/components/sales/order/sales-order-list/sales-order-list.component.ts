@@ -323,8 +323,13 @@ export class SalesOrderListComponent implements OnInit {
     });
   }
 
+  arrayStatuslist: any[] = [];
   getStatusList() {
-    forkJoin(this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
+    this.isSpinnerVisible = true;
+    if (this.arrayStatuslist.length == 0) {
+      this.arrayStatuslist.push(0);
+    }
+    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name", '', true, 20, this.arrayStatuslist.join(), this.currentUserMasterCompanyId),
       this.salesService.getAllSalesOrderSettings(this.currentUserMasterCompanyId)).subscribe(res => {
         this.statusList = res[0];
         this.settingsList = res[1];
@@ -343,6 +348,7 @@ export class SalesOrderListComponent implements OnInit {
         }
         this.isSettingsReceived = true;
         this.changeOfStatus(this.currentStatus, this.viewType);
+        this.isSpinnerVisible = false;
       }, error => {
         this.isSettingsReceived = true;
         this.isSpinnerVisible = false;
@@ -511,8 +517,10 @@ export class SalesOrderListComponent implements OnInit {
   restorerecord: any = {}
 
   restoreRecord() {
+    this.isSpinnerVisible = true;
     this.commonservice.updatedeletedrecords('SalesOrder', 'SalesOrderId', this.restorerecord.salesOrderId).subscribe(res => {
-      this.getDeleteListByStatus(true)
+      this.getDeleteListByStatus(true);
+      this.isSpinnerVisible = false;
       this.modal.close();
       this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
     }, err => {

@@ -204,9 +204,13 @@ export class SalesOrderBillingComponent implements OnInit {
         })
     }
 
+    arrayInvoiceTypelist: any[] = [];
     getInvoiceList() {
+        if (this.arrayInvoiceTypelist.length == 0) {
+            this.arrayInvoiceTypelist.push(0);
+        }
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description').subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description', '', true, 100, this.arrayInvoiceTypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.invoiceTypeList = res;
             this.billingorInvoiceForm.invoiceTypeId = res[5].value;
             this.isSpinnerVisible = false;
@@ -215,9 +219,13 @@ export class SalesOrderBillingComponent implements OnInit {
         })
     }
 
+    arrayRevisionTypelist: any[] = [];
     getRevisionTypeList() {
+        if (this.arrayRevisionTypelist.length == 0) {
+            this.arrayRevisionTypelist.push(0);
+        }
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('RevisionType', 'RevisionTypeId', 'Description').subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('RevisionType', 'RevisionTypeId', 'Description', '', true, 100, this.arrayRevisionTypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.revisionTypeList = res;
             this.isSpinnerVisible = false;
         }, err => {
@@ -225,9 +233,13 @@ export class SalesOrderBillingComponent implements OnInit {
         })
     }
 
+    arrayCurrencylist: any[] = [];
     getCurrencyList() {
+        if (this.arrayCurrencylist.length == 0) {
+            this.arrayCurrencylist.push(0);
+        }
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'code', '', '').subscribe(
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', '', true, 200, this.arrayCurrencylist.join(), this.currentUserMasterCompanyId).subscribe(
             results => {
                 this.currencyList = results
                 this.isSpinnerVisible = false;
@@ -238,9 +250,13 @@ export class SalesOrderBillingComponent implements OnInit {
     }
 
     moduleName: any = '';
+    arrayShipVialist: any[] = [];
     getShipViaByCustomerId() {
+        if (this.arrayShipVialist.length == 0) {
+            this.arrayShipVialist.push(0);
+        }
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name')
+        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', '', true, 200, this.arrayShipVialist.join(), this.currentUserMasterCompanyId)
             .subscribe(
                 (res) => {
                     this.isSpinnerVisible = false;
@@ -492,8 +508,18 @@ export class SalesOrderBillingComponent implements OnInit {
 
     updateWorkOrderBilling() { }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
+    arrayCountrieslist: any[] = [];
     getCountriesList() {
-        this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+        if (this.arrayCountrieslist.length == 0) {
+            this.arrayCountrieslist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', '', true, 20, this.arrayCountrieslist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.countryList = res;
         }, err => {
         });
@@ -520,7 +546,7 @@ export class SalesOrderBillingComponent implements OnInit {
         else {
             userBillinngIdList.push(0);
         }
-        
+
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userBillinngIdList.join()).subscribe(res => {
             this.userBillingList = res;
         }, err => { });

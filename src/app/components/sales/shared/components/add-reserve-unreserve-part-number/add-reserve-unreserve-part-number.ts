@@ -286,7 +286,17 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 if (x.isSelected == true) {
                     tempParts.push(x);
                 }
-            })
+
+                x.soReservedAltParts.filter(x => {
+                    x.createdBy = this.userName;
+                    x.updatedBy = this.userName;
+                });
+
+                x.soReservedEquParts.filter(x => {
+                    x.createdBy = this.userName;
+                    x.updatedBy = this.userName;
+                });
+            });
             parts = [];
             parts = [...tempParts];
 

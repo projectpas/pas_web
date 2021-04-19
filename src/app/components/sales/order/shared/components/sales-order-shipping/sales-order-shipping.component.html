@@ -180,9 +180,8 @@
                                                 class="clr-red">*</span> </label>
                                     </div>
                                     <div class="col-md-8">
-                                        <p-calendar [showIcon]="true" (onSelect)="calculateExpiryDate()"
-                                            [(ngModel)]="shippingHeader.openDate" name="openDate" [disabled]="isView"
-                                            required></p-calendar>
+                                        <p-calendar [showIcon]="true" [(ngModel)]="shippingHeader.openDate"
+                                            name="openDate" [disabled]="isView" required></p-calendar>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -190,8 +189,8 @@
                                         <label class="sale-order-shipping-lable">Customer</label>
                                     </div>
                                     <div class="col-md-8" *ngIf="customerDetails">
-                                        <input class="form-control" (change)="calculateExpiryDate()" type="text"
-                                            [(ngModel)]="customerDetails.name" name="customer" disabled />
+                                        <input class="form-control" type="text" [(ngModel)]="customerDetails.name"
+                                            name="customer" disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12" *ngIf="customerDetails">
@@ -249,9 +248,8 @@
                                                 class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <p-calendar [showIcon]="true" (onSelect)="calculateExpiryDate()"
-                                            [(ngModel)]="shippingHeader.shipDate" name="shipDate" [disabled]="isView"
-                                            required></p-calendar>
+                                        <p-calendar [showIcon]="true" [(ngModel)]="shippingHeader.shipDate"
+                                            name="shipDate" [disabled]="isView" required></p-calendar>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
