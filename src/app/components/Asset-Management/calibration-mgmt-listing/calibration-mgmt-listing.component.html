@@ -29,25 +29,25 @@
                                     class="pull-left radio-buttons-align"
                                   >
                                       <label class="radio-cstm wauto">
-                                      <input type="radio" name="Calibrationtype" class="form-control" value="Calibration" (click)="geListByStatus('Active')" [(ngModel)]="Calibrationtype">
+                                      <input type="radio" name="Calibrationtype" class="form-control" value="Calibration" (click)="geListBycertifytype('Calibration')" [(ngModel)]="Calibrationtype">
                                       <span class="checkmark"></span>Calibration
                                       </label>
                                 </div>
                             <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm wauto">
-                                    <input type="radio" name="Calibrationtype" class="form-control" value="Certification" (click)="geListByStatus('InActive')" [(ngModel)]="Calibrationtype">
+                                    <input type="radio" name="Calibrationtype" class="form-control" value="Certification" (click)="geListBycertifytype('Certification')" [(ngModel)]="Calibrationtype">
                                     <span class="checkmark"></span>Certification
                                 </label>
                             </div>
                             <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm wauto">
-                                    <input type="radio" name="Calibrationtype" class="form-control" value="Inspection" (click)="geListByStatus('ALL')" [(ngModel)]="Calibrationtype">
+                                    <input type="radio" name="Calibrationtype" class="form-control" value="Inspection" (click)="geListBycertifytype('Inspection')" [(ngModel)]="Calibrationtype">
                                     <span class="checkmark"></span> Inspection
                                 </label>
                             </div>
                             <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm wauto">
-                                    <input type="radio" name="Calibrationtype" class="form-control" value="Verification" (click)="geListByStatus('ALL')" [(ngModel)]="Calibrationtype">
+                                    <input type="radio" name="Calibrationtype" class="form-control" value="Verification" (click)="geListBycertifytype('Verification')" [(ngModel)]="Calibrationtype">
                                     <span class="checkmark"></span>Verification
                                 </label>
                             </div>
@@ -113,8 +113,8 @@
                               (click)="selectedOnly = true; targetData = dt;" -->
                              
                              </div>
-                              <!-- <div class="col">
-                                  <div class="">
+                     
+                                  <!-- <div class="">
                                     <div
                                       class="col"
                                       style="width: 370px; float: right; padding-top: 3px;"
@@ -151,9 +151,8 @@
                                   </div> 
                               </div> 
                           </div>
-                      </div>
-                    </div> -->
-                    </div>
+                      </div> -->
+                    </div> 
                           </ng-template>
                           <ng-template pTemplate="colgroup" let-columns>
                               <colgroup>
@@ -244,4 +243,108 @@
                       </p-table>
       </div>
   </div>
-  </div>
+</div>
+
+<div class="modal fade" id="editcalibration" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content" style="width: 1000px;margin-left: -210px;">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">{{Certifytype}}</h4>
+			</div>
+			<div class="modal-body">
+                <div id="adminsearchlocationajax" class="table-responsive default-bg clear"> 
+                    <p class="w250"><span class="label"><b>Asset ID: </b></span><span class="value">A125478</span></p>
+                    <p class="w250"><span class="label"><b>Alt Asset ID: </b></span><span class="value">A12346</span></p>
+                    <p class="w250"><span class="label"><b>Asset Name: </b></span><span class="value">Drill Press</span></p>                    
+                    <p class="w250"><span class="label"><b>Location: </b></span><span class="value">Hyderabad</span></p>
+                    <p class="w250"><span class="label"><b>Serial Num: </b></span><span class="value">S486263</span></p>                    
+                    <p class="w250"><span class="label"><b>Control ID: </b></span><span class="value">C451231</span></p>
+                    <p class="w250"><span class="label"><b>Acquisition Type: </b></span><span class="value">Buy</span></p>
+                    <div class="clear"></div>
+                    <hr>
+                    <p class="w400"><span class="label"><b>Last Verification Date: </b></span><span class="value">2/21/2019</span></p>
+                    <p class="w400"><span class="label"><b>Last Verification By: </b></span><span class="value">Shabbir Ahmad</span></p>
+                    <p class="w400"><span class="label"><b>Vendor or Employee: </b></span>
+                        <span class="value">
+                            <label class="w60 text-left"><input type="radio" disabled="" checked=""> Vendor</label>
+                            <label class="w80 text-left"><input type="radio" disabled=""> Employee</label>
+                        </span>
+                    </p>
+                    <p class="w400"><span class="label"><b>Next Verification Date: </b></span><span class="value">4/21/2019</span></p>
+                    <div class="clear"></div>
+                    <hr>
+                    <div *ngIf="isscheduleprocess== false"><a (click)="showscheduleprocess()" class="btn btn-primary add-verification-btn">Schedule a Verification</a></div>
+                    
+                    <div class="add-verification" *ngIf="isscheduleprocess">
+                        <div class="col-sm-12"><h4>Schedule a Verification</h4></div>
+                  <div class="col-sm-6">
+                      <div class="form-group col-sm-12">
+                          <label class="control-label col-sm-4">Vendor or Employee</label>
+                          <div class="col-sm-7">
+                            <label class="w70 text-left"><input type="radio" name="verification-vendor-employee" value="verification-vendor"> Vendor</label>
+                            <label class="w80 text-left"><input type="radio" name="verification-vendor-employee" value="verification-employee"> Employee</label>  
+                          </div>
+                        </div>
+                      <div class="form-group col-sm-12 verification-vendor-employee verification-vendor" style="display: none;">
+                          <label class="control-label col-sm-4">Select Vendor</label>
+                          <div class="col-sm-7">
+                            <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
+                                <input type="text" class="form-control names ui-autocomplete-input" id="" name="" autocomplete="off">
+                              </div>
+                             
+                          </div>
+                        </div>
+                      <div class="form-group col-sm-12 verification-vendor-employee verification-employee" style="display: none;">
+                          <label class="control-label col-sm-4">Select Employee</label>
+                          <div class="col-sm-7">
+                            <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
+                                <input type="text" class="form-control names ui-autocomplete-input" id="" name="" autocomplete="off">
+                              </div>                          
+                          </div>
+                        </div>
+                      <div class="form-group col-sm-12">
+                          <label class="control-label col-sm-4">Cost</label>
+                          <div class="col-sm-7">
+                            <input type="text" class="form-control" id="" name="">                           
+                          </div>
+                        </div>
+                  </div> 
+                     <div class="col-sm-6">
+                      <div class="form-group col-sm-12">
+                          <label class="control-label col-sm-4">Verification Date</label>
+                          <div class="col-sm-7">
+                            <input type="text" class="form-control datepicker hasDatepicker" id="dp1618919998337" name="">   
+                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#calibration-schedules" class="btn btn-link pull-right" style="padding: 0;">View Verification Schedule</a>
+                          </div>
+                        </div>
+                      <div class="form-group col-sm-12">
+                          <label class="control-label col-sm-4">Currency</label>
+                          <div class="col-sm-7">
+                            <select>
+                                <option>-- Select --</option>
+                                <option value="inr">₹</option>
+                                <option value="usd" selected="1">$</option>
+                                <option value="pound">£</option>
+                                <option value="euro">€</option>
+                                <option value="yen">¥</option>
+                              </select>
+                          </div>
+                        </div>
+                      <div class="form-group col-sm-12">
+                          <label class="control-label col-sm-4">Verification Memo</label>
+                          <div class="col-sm-7">
+                            <textarea class="form-control h50"></textarea>
+                          </div>
+                        </div>
+                    <button type="button" class="btn btn-info pull-right verification-process-btn" id="" name="" data-toggle="tooltip" title="This will generate a PO if a vendor is selected to perfrom Calibration OR Send a notification to employee if employee is selected">Process</button>
+                  </div> 
+                        </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
