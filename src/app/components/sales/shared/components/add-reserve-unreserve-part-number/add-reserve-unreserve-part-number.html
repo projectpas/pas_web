@@ -1,5 +1,4 @@
 ﻿<form #partActionsForm="ngForm">
-
     <div class="modal-header">
         <button type="button" class="close" (click)="onClose()">
             &times;
@@ -10,13 +9,11 @@
         <p id="clockdiv" class="clockdiv" *ngIf="counter"> Session Expire in {{counter.min}} <span>m</span> :
             {{counter.sec}} <span>s</span></p>
     </div> -->
-
     <div class="modal-body">
         <!-- <div class="row margin-row">
         </div>
         <div class="row margin-row mt-2">
             <div class="col-md-12 col-sm-12 col-12">
-
                 <div class="col-4 column">
                     <div class="form-group">
                         <p-checkbox name="showAlternates" binary="true" label="Show Alternates" (onChange)="showAlternateParts($event)">
@@ -31,7 +28,6 @@
                 </div>
             </div>
         </div> -->
-
         <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom" [columns]="columns" [scrollable]="true"
             [resizableColumns]="true" selectionMode="single" [responsive]="true" [metaKeySelection]="true"
             [style]="{ width: '100%' }">
@@ -82,14 +78,12 @@
                             <!-- {{rowData[col.field]}}  -->
                             {{part[col.field]}}
                         </ng-container>
-
                         <span
                             *ngIf="col.field =='quantityOnOrder' || col.field =='quantityAvailable' || col.field =='quantityOnHand' || col.field =='quantityIssued' || col.field =='quantityReserved' || col.field =='quantity'"
                             class="float-right" style="text-align: right;">
                             <!-- {{rowData[col.field]}}  -->
                             {{part[col.field]}}
                         </span>
-
                         <!--qtyToReserve-->
                         <ng-container *ngIf="col.field =='qtyToReserve' && selectedPartActionType == 'Reserve'">
                             <input type="number" class="form-control quantityTextBox text-right" pInputText
@@ -97,7 +91,6 @@
                                 required="col.field =='qtyToReserve' && selectedPartActionType == 'Reserve'"
                                 name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}" [(ngModel)]="part.qtyToReserve"
                                 [disabled]="rowData.isSelected == false" />
-
                         </ng-container>
                         <span *ngIf="col.field =='qtyToReserve' && selectedPartActionType != 'Reserve'"
                             class="float-right" style="text-align: right;">

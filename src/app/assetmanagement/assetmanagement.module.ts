@@ -1,4 +1,5 @@
-﻿import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+﻿import { CalibrationMgmtListingComponent } from './../components/Asset-Management/calibration-mgmt-listing/calibration-mgmt-listing.component';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TranslateModule } from "@ngx-translate/core";
@@ -88,7 +89,8 @@ import { CommonDocumentsModule } from "../components/common-components/common-do
         AssetStepsComponent,
         ViewAssetComponent,
         AssetAdjustmentComponent,
-        CreateAssetInventoryComponent
+        CreateAssetInventoryComponent,
+        CalibrationMgmtListingComponent
     ],
     providers: [AssetService,
         AssetEndpoint,

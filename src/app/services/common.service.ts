@@ -18,9 +18,9 @@ export class CommonService extends EndpointFactory {
     super(http, configurations, injector);
   }
 
-  smartDropDownList(tableName, primaryKeyColumn, labelColumn, parentName?, parentId?, count?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&count=${count !== undefined ? count : 0}&textColumn1=${parentName != undefined ? parentName : ''}&textColumn2=${parentId != undefined ? parentId : ''}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.smartDropDownList(tableName, primaryKeyColumn, labelColumn, parentName, parentId, count));
+  smartDropDownList(tableName, primaryKeyColumn, labelColumn, parentName?, parentId?, count?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&count=${count !== undefined ? count : 0}&textColumn1=${parentName != undefined ? parentName : ''}&textColumn2=${parentId != undefined ? parentId : ''}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.smartDropDownList(tableName, primaryKeyColumn, labelColumn, parentName, parentId, count,masterCompanyId));
     });
   }
 
@@ -30,9 +30,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  smartDropDownGetNamaWithCode(tableName, primaryKeyColumn, labelColumn, parentName?, parentId?, count?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&count=${count !== undefined ? count : 0}&textColumn1=Code&textColumn2=${parentId != undefined ? parentId : ''}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.smartDropDownGetNamaWithCode(tableName, primaryKeyColumn, labelColumn, parentName, parentId, count));
+  smartDropDownGetNamaWithCode(tableName, primaryKeyColumn, labelColumn, parentName?, parentId?, count?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&count=${count !== undefined ? count : 0}&textColumn1=Code&textColumn2=${parentId != undefined ? parentId : ''}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.smartDropDownGetNamaWithCode(tableName, primaryKeyColumn, labelColumn, parentName, parentId, count,masterCompanyId));
     });
   }
   // smart call for name with code 
@@ -58,51 +58,51 @@ export class CommonService extends EndpointFactory {
   }
 
   autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList?,masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1} `, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0} `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList,masterCompanyId));
     });
   }
 
   autoSuggestionSmartDropDownSelfContactList(textColumn, searchText, startWith, idList?,masterCompanyId?,customerId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownSelfContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&customerId=${customerId !== undefined ? customerId : 0} `, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownSelfContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}&customerId=${customerId !== undefined ? customerId : 0} `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownSelfContactList(textColumn, searchText, startWith, idList,masterCompanyId,customerId));
     });
   }
 
   autoSuggestionSmartDropDownSelfLEContactList(textColumn, searchText, startWith, idList?,masterCompanyId?,legalentityId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownSelfLEContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&legalentityId=${legalentityId !== undefined ? legalentityId : 0} `, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownSelfLEContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}&legalentityId=${legalentityId !== undefined ? legalentityId : 0} `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownSelfLEContactList(textColumn, searchText, startWith, idList,masterCompanyId,legalentityId));
     });
   }
 
   autoSuggestionSmartDropDownVendorContactList(textColumn, searchText, startWith, idList?,masterCompanyId?,vendorId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownVendorContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&vendorId=${vendorId !== undefined ? vendorId : 0} `, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownVendorContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}&vendorId=${vendorId !== undefined ? vendorId : 0} `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownVendorContactList(textColumn, searchText, startWith, idList,masterCompanyId,vendorId));
     });
   }
 
   autoSuggestionSmartDropDownVendorCheckPaymentList(textColumn, searchText, startWith, idList?,masterCompanyId?,vendorId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownVendorCheckPaymentList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&vendorId=${vendorId !== undefined ? vendorId : 0} `, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownVendorCheckPaymentList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}&vendorId=${vendorId !== undefined ? vendorId : 0} `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownVendorCheckPaymentList(textColumn, searchText, startWith, idList,masterCompanyId,vendorId));
     });
   }
 
 
   autoCompleteSmartDropDownEmployeeList(textColumn, searchText, startWith, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownEmployeeList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'} &masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}  `, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownEmployeeList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'} &masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}  `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownEmployeeList(textColumn, searchText, startWith, idList, masterCompanyId));
     });
   }
 
   autoCompleteSmartDropDownItemMasterList(searchText, startWith, count?, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownItemMasterList?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownItemMasterList?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownItemMasterList(searchText, startWith, count, idList, masterCompanyId));
     });
   }
 
   
   autoCompleteDropdownsItemMasterWithStockLine(searchText, startWith, count?, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsItemMasterWithStockLine?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsItemMasterWithStockLine?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsItemMasterWithStockLine(searchText, startWith, count, idList, masterCompanyId));
     });
   }
@@ -124,8 +124,8 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count?, idList?, managementStructureId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsCertifyEmployeeByMS?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}`, this.getRequestHeaders()).catch(error => {
+  autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count?, idList?, managementStructureId?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsCertifyEmployeeByMS?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count, idList, managementStructureId));
     });
   }
@@ -142,7 +142,7 @@ export class CommonService extends EndpointFactory {
   }
 
   autoCompleteDropdownsExpertiseTypes(searchText, startWith, count?, idList?, managementStructureId?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsExpertiseTypes?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsExpertiseTypes?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsExpertiseTypes(searchText, startWith, count, idList, managementStructureId,masterCompanyId));
     });
   }
@@ -196,14 +196,14 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getManagementStructurelevelWithEmployee(parentId, employeeID?, editparentId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/managementStructurelevelWithEmployee?parentId=${parentId}&employeeID=${employeeID !== undefined ? employeeID : 0}&editparentId=${editparentId !== undefined ? editparentId : 0}`, this.getRequestHeaders()).catch(error => {
+  getManagementStructurelevelWithEmployee(parentId, employeeID?, editparentId?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/managementStructurelevelWithEmployee?parentId=${parentId}&employeeID=${employeeID !== undefined ? employeeID : 0}&editparentId=${editparentId !== undefined ? editparentId : 0}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getManagementStructurelevelWithEmployee(parentId, employeeID, editparentId));
     });
   }
 
   getManagmentStrctureData(id, employeeID?, editMSID?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/getManagmentStrctureData?managementStructureId=${id}&employeeID=${employeeID !== undefined ? employeeID : 0}&editManagementStructureId=${editMSID !== undefined ? editMSID : 0}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getManagmentStrctureData?managementStructureId=${id}&employeeID=${employeeID !== undefined ? employeeID : 0}&editManagementStructureId=${editMSID !== undefined ? editMSID : 0}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getManagmentStrctureData(id, employeeID, editMSID));
     });
   }
@@ -256,9 +256,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getDefaultCurrency(id) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/defaultcurrency?legalEntityId=${id}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getDefaultCurrency(id));
+  getDefaultCurrency(id,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/defaultcurrency?legalEntityId=${id}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getDefaultCurrency(id,masterCompanyId));
     });
   }
 
@@ -410,7 +410,7 @@ export class CommonService extends EndpointFactory {
   }
 
   getJobTitles(masterCompanyId) {
-    // const masterCompany = masterCompanyId > 0 ? masterCompanyId : 1;
+    // const masterCompany = masterCompanyId > 0 ? masterCompanyId : 0;
     return this.http.get<any>(`${this.baseUrl}/api/common/jobtitletypes?masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getJobTitles(masterCompanyId));
     });
@@ -538,9 +538,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getModuleListForObtainOwnerTraceable() {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/modulelistfordropdown`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getModuleListForObtainOwnerTraceable());
+  getModuleListForObtainOwnerTraceable(masterCompanyId) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/modulelistfordropdown/${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getModuleListForObtainOwnerTraceable(masterCompanyId));
     });
   }
 
@@ -580,9 +580,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  smartDropDownGetObjectById(tableName, primaryColumn, description, primaryIdLabel, primaryIdValue) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdownsbyid?tableName=${tableName}&primaryColumn=${primaryColumn}&textColumn=${description}&textColumn1=${primaryIdLabel}&textColumn2=${primaryIdValue}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryIdLabel, primaryIdValue));
+  smartDropDownGetObjectById(tableName, primaryColumn, description, primaryIdLabel, primaryIdValue,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdownsbyid?tableName=${tableName}&primaryColumn=${primaryColumn}&textColumn=${description}&textColumn1=${primaryIdLabel}&textColumn2=${primaryIdValue}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryIdLabel, primaryIdValue,masterCompanyId));
     });
   }
 
@@ -593,25 +593,25 @@ export class CommonService extends EndpointFactory {
   }
 
   getWODataFilter(filterVal, count, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/WODataFilter?filterVal=${filterVal}&count=${count}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/WODataFilter?filterVal=${filterVal}&count=${count}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getWODataFilter(filterVal, count, idList, masterCompanyId));
     });
   }
 
   getsubWODataFilter(filterVal, count, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/subWODataFilter?filterVal=${filterVal}&count=${count}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/subWODataFilter?filterVal=${filterVal}&count=${count}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getsubWODataFilter(filterVal, count, idList, masterCompanyId));
     });
   }
 
   getSODataFilter(filterVal, count, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/SODataFilter?filterVal=${filterVal}&count=${count}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/SODataFilter?filterVal=${filterVal}&count=${count}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getSODataFilter(filterVal, count, idList, masterCompanyId));
     });
   }
 
   getRODataFilter(filterVal, count, idList?, masterCompanyId?) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/RODataFilter?filterVal=${filterVal}&count=${count}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/RODataFilter?filterVal=${filterVal}&count=${count}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getRODataFilter(filterVal, count, idList, masterCompanyId));
     });
   }
@@ -653,7 +653,7 @@ export class CommonService extends EndpointFactory {
   }
 
   getStockpartnumbersAutoComplete(value, all, count, masterCompanyID?) {
-    return this.http.get<any>(`${this.baseUrl}/api/common/stockpartnumbersautocomplete?searchValue=${value}&all=${all}&count=${count}&masterCompanyID=${masterCompanyID !== undefined ? masterCompanyID : 1} `, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/common/stockpartnumbersautocomplete?searchValue=${value}&all=${all}&count=${count}&masterCompanyID=${masterCompanyID !== undefined ? masterCompanyID : 0} `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getStockpartnumbersAutoComplete(value, all, count, masterCompanyID));
     });
   }
@@ -715,9 +715,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  customergenericinformation(customerId) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/customergenericinformation?customerId=${customerId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.customergenericinformation(customerId));
+  customergenericinformation(customerId,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/customergenericinformation?customerId=${customerId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.customergenericinformation(customerId,masterCompanyId));
     });
   }
 
@@ -739,9 +739,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getPartnumList(value) {
-    return this.http.get<any>(`${this.baseUrl}/api/common/stockpartnumbersautocomplete?searchValue=${value}&all=false&count=20`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getPartnumList(value));
+  getPartnumList(value,masterCompanyID?) {
+    return this.http.get<any>(`${this.baseUrl}/api/common/stockpartnumbersautocomplete?searchValue=${value}&all=false&count=20&masterCompanyID=${masterCompanyID !== undefined ? masterCompanyID : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getPartnumList(value,masterCompanyID));
     });
   }
 
@@ -938,3 +938,4 @@ export class CommonService extends EndpointFactory {
   // 
   // localhost:5230/api/Common/Bindautocompletedropdownsbasedontwocolumns?tableName1=AssetLocation&primaryColumn=AssetLocationId&textColumn=Name&searchText=&startWith=true&secondaryColumn=Code&count=20&idList=0
 }
+ 

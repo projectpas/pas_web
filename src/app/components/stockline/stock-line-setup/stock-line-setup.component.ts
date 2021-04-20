@@ -38,7 +38,7 @@ import { timePattern } from '../../../validations/validation-pattern';
 export class StockLineSetupComponent implements OnInit {
 
 	isEditMode: boolean = false;
-	legalEntityList: any;
+	// legalEntityList: any;
 	businessUnitList: any;
 	disableSaveMemo: boolean = true;
 	divisionList: any;
@@ -200,7 +200,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stocklineser.currentUrl = '/stocklinemodule/stocklinepages/app-stock-line-setup';
 		this.stocklineser.bredcrumbObj.next(this.stocklineser.currentUrl);
 
-		this.getLegalEntity();
+		// this.getLegalEntity();
 		this.loadConditionData();
 		this.loadSiteData();
 		this.Purchaseunitofmeasure();
@@ -273,7 +273,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayCustlist.length == 0) {
 			this.arrayCustlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allCustomersList = response;
 			this.customerNames = this.allCustomersList;
 		}, error => this.saveFailedHelper(error));
@@ -283,7 +283,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayVendorlist.length == 0) {
 			this.arrayVendorlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, this.arrayVendorlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allVendorsList = response;
 			this.vendorNames = this.allVendorsList;
 		}, error => this.saveFailedHelper(error));
@@ -293,7 +293,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayCompanylist.length == 0) {
 			this.arrayCompanylist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayCompanylist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allCompanyList = response;
 			this.companyNames = this.allCompanyList;
 		}, error => this.saveFailedHelper(error));
@@ -303,7 +303,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayItemMasterlist.length == 0) {
 			this.arrayItemMasterlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allPartnumbersList = response.map(x => {
 				return {
 					partnumber: x.label, itemMasterId: x.value
@@ -317,7 +317,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayItemMasterlist.length == 0) {
 			this.arrayItemMasterlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allPartnumbersList = response.map(x => {
 				return {
 					partnumber: x.label, itemMasterId: x.value
@@ -344,31 +344,31 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayConditionlist.length == 0) {
 			this.arrayConditionlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, this.arrayConditionlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, this.arrayConditionlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allConditionInfo = response;
 		}, error => this.saveFailedHelper(error));
 	}
 
 	private loadSiteData() {
-		this.commonService.smartDropDownList('Site', 'SiteId', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('Site', 'SiteId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 			this.allSites = res;
 		})
 	}
 
 	private Purchaseunitofmeasure() {
-		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 			this.allPurchaseUnitOfMeasureinfo = res;
 		})
 	}
 
-	loadManufacturerData() {
-		this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+	loadManufacturerData() { 
+		this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 			this.allManufacturerInfo = res;
 		})
 	}
 
 	loadAssetAcquisitionTypeList() {
-		this.commonService.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name').subscribe(response => {
+		this.commonService.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name','','', 0,this.authService.currentUser.masterCompanyId ).subscribe(response => {
 			this.assetAcquisitionTypeList = response;
 		});
 	}
@@ -377,7 +377,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayEmployeelist.length == 0) {
 			this.arrayEmployeelist.push(0);
 		}
-		this.commonService.autoCompleteDropdownsCertifyEmployeeByMS(strText, true, 20, this.arrayEmployeelist.join(), this.currentUserManagementStructureId)
+		this.commonService.autoCompleteDropdownsCertifyEmployeeByMS(strText, true, 20, this.arrayEmployeelist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId)
 			// this.commonService.autoSuggestionSmartDropDownList('Employee', 'employeeId', 'firstName', strText, true, 20, this.arrayEmployeelist.join())
 			.subscribe(response => {
 				this.allEmployeeList = response;
@@ -412,7 +412,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayModulelist.length == 0) {
 			this.arrayModulelist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 200, this.arrayModulelist.join()).subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 200, this.arrayModulelist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
 			this.userTypes = res;
 			this.userTypes.map(x => {
 				if (x.label.toUpperCase() == 'COMPANY') {
@@ -432,13 +432,13 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	private loadTagTypes() {
-		this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name').subscribe(res => {
+		this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).subscribe(res => {
 			this.allTagTypes = res;
 		})
 	}
 
 	loadModulesNamesForObtainOwnerTraceable() {
-		this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
+		this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
 			this.moduleListDropdown = res;
 		})
 	}
@@ -486,7 +486,7 @@ export class StockLineSetupComponent implements OnInit {
 	getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
 		empployid = empployid == 0 ? this.employeeId : empployid;
 		editMSID = this.isEditMode ? editMSID = id : 0;
-		this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+		this.commonService.getManagmentStrctureData(id, empployid, editMSID,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			if (response) {
 				const result = response;
 				if (result[0] && result[0].level == 'Level1') {
@@ -651,7 +651,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.arrayModulelist.push(res.ownerType);
 			this.arrayModulelist.push(res.traceableToType);
 
-			this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', '', true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', '', true, 20, this.arrayItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allPartnumbersList = response.map(x => {
 					return {
 						partnumber: x.label, itemMasterId: x.value
@@ -764,7 +764,7 @@ export class StockLineSetupComponent implements OnInit {
 				}
 			}
 			let obj: any = {};
-			this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+			this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {
 				obj = res[0];
 				if (tableName == 'Condition') {
 					this.allConditionInfo = [...originalData, obj];
@@ -848,7 +848,7 @@ export class StockLineSetupComponent implements OnInit {
 	getVendorSelecionOnEdit(vendorId) {
 		this.arrayVendorlist.push(vendorId);
 		if (vendorId > 0) {
-			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allVendorsList = response;
 				this.vendorNames = this.allVendorsList;
 				this.stockLineForm.vendorId = getObjectById('value', vendorId, this.allVendorsList);
@@ -885,7 +885,7 @@ export class StockLineSetupComponent implements OnInit {
 	getEmployeeSelecionOnEdit(requestorId, inspectionBy) {
 		this.arrayWOlist.push(requestorId);
 		this.arrayWOlist.push(inspectionBy);
-		this.commonService.autoSuggestionSmartDropDownList('Employee', 'employeeId', 'firstName', '', true, 20, this.arrayEmployeelist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('Employee', 'employeeId', 'firstName', '', true, 20, this.arrayEmployeelist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allEmployeeList = response;
 			this.certifyByNames = this.allEmployeeList;
 			this.stockLineForm.requestorId = getObjectById('value', requestorId, this.allEmployeeList);
@@ -913,21 +913,21 @@ export class StockLineSetupComponent implements OnInit {
 
 		//obtain from
 		if (res.obtainFromType == this.customerModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allCustomersList = response;
 				this.customerNames = this.allCustomersList;
 				this.stockLineForm.obtainFrom = getObjectById('value', res.obtainFrom, this.allCustomersList);
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.obtainFromType == this.vendorModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allVendorsList = response;
 				this.vendorNames = this.allVendorsList;
 				this.stockLineForm.obtainFrom = getObjectById('value', res.obtainFrom, this.allVendorsList);
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.obtainFromType == this.companyModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allCompanyList = response;
 				this.companyNames = this.allCompanyList;
 				this.stockLineForm.obtainFrom = getObjectById('value', res.obtainFrom, this.allCompanyList);
@@ -939,21 +939,21 @@ export class StockLineSetupComponent implements OnInit {
 
 		//owner
 		if (res.ownerType == this.customerModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allCustomersList = response;
 				this.customerNames = this.allCustomersList;
 				this.stockLineForm.owner = getObjectById('value', res.owner, this.allCustomersList);
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.ownerType == this.vendorModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allVendorsList = response;
 				this.vendorNames = this.allVendorsList;
 				this.stockLineForm.owner = getObjectById('value', res.owner, this.allVendorsList);
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.ownerType == this.companyModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allCompanyList = response;
 				this.companyNames = this.allCompanyList;
 				this.stockLineForm.owner = getObjectById('value', res.owner, this.allCompanyList);
@@ -965,21 +965,21 @@ export class StockLineSetupComponent implements OnInit {
 
 		//traceable to
 		if (res.traceableToType == this.customerModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allCustomersList = response;
 				this.customerNames = this.allCustomersList;
 				this.stockLineForm.traceableTo = getObjectById('value', res.traceableTo, this.allCustomersList);
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.traceableToType == this.vendorModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allVendorsList = response;
 				this.vendorNames = this.allVendorsList;
 				this.stockLineForm.traceableTo = getObjectById('value', res.traceableTo, this.allVendorsList);
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.traceableToType == this.companyModuleId) {
-			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join()).subscribe(response => {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allCompanyList = response;
 				this.companyNames = this.allCompanyList;
 				this.stockLineForm.traceableTo = getObjectById('value', res.traceableTo, this.allCompanyList);
@@ -1085,7 +1085,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.oem = partDetails.isOEM.toString();
 			if (res.isOemPNId > 0) {
 				this.arrayItemMasterlist.push(res.isOemPNId);
-				this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', '', true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+				this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', '', true, 20, this.arrayItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 					this.allPartnumbersList = response.map(x => {
 						return {
 							partnumber: x.label, itemMasterId: x.value
@@ -1193,11 +1193,11 @@ export class StockLineSetupComponent implements OnInit {
 		}
 	}
 
-	getLegalEntity() {
-		this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-			this.legalEntityList = res;
-		})
-	}
+	// getLegalEntity() {
+	// 	this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+	// 		this.legalEntityList = res;
+	// 	})
+	// }
 
 	onSelectManagementStruc() {
 		if (this.headerInfo.companyId != 0) {
@@ -1280,7 +1280,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.binId = 0;
 
 		if (siteId != 0) {
-			await this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			await this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allWareHouses = res;
 			})
 		}
@@ -1304,7 +1304,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.binId = 0;
 
 		if (warehouseId != 0) {
-			await this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			await this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allLocations = res;
 			})
 		}
@@ -1317,7 +1317,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.binId = 0;
 
 		if (locationId != 0) {
-			await this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			await this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allShelfs = res;
 			})
 		}
@@ -1328,7 +1328,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.binId = 0;
 
 		if (shelfId != 0) {
-			await this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			await this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allBins = res;
 			})
 		}
@@ -1353,7 +1353,7 @@ export class StockLineSetupComponent implements OnInit {
 				this.stockLineForm.repairOrderUnitCost = null;
 				this.stockLineForm.purchaseOrderUnitCost = resp[0].unitCost ? formatNumberAsGlobalSettingsModule(resp[0].unitCost, 2) : '0.00';
 				this.arrayVendorlist.push(resp[0].vendorId);
-				this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join()).subscribe(response => {
+				this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 					this.allVendorsList = response;
 					this.vendorNames = this.allVendorsList;
 					this.stockLineForm.vendorId = getObjectById('value', resp[0].vendorId, this.allVendorsList);
@@ -1364,7 +1364,7 @@ export class StockLineSetupComponent implements OnInit {
 			}
 		});
 
-		this.commonService.smartDropDownList('PurchaseOrder', 'PurchaseOrderId', 'RequestedBy', 'PurchaseOrderId', selected.purchaseOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('PurchaseOrder', 'PurchaseOrderId', 'RequestedBy', 'PurchaseOrderId', selected.purchaseOrderId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 			if (res.length > 0) {
 				const empId = res[0].label;
 				this.stockLineForm.requestorId = getObjectById('value', empId, this.allEmployeeList);

@@ -104,9 +104,9 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         this.arrayPercentList.push(0);
         forkJoin(this.salesOrdeService.getSalesOrderFreights(this.salesOrderId, 0),
             this.commonService.getShipVia(this.currentUserMasterCompanyId),
-            this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join()),
-            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join()),
-            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())).subscribe(response => {
+            this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join(), this.currentUserMasterCompanyId),
+            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join(), this.currentUserMasterCompanyId),
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId)).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setFreightsData(response[0]);
                 this.setShipViaList(response[1]);
@@ -538,7 +538,6 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                     JSON.stringify(element) === JSON.stringify(this.restorerecord)
                 ) {
                     element.isDeleted = false;
-
                 }
             });
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
@@ -555,6 +554,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     validated() {
         this.isSaveChargesDesabled = false;
     }
+
     deleteRow(index, form: NgForm): void {
         this.freightForm.splice(index, 1);
     }
@@ -586,6 +586,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
 
     RefreshAfterAddShipVia(ShippingViaId) {
         if (ShippingViaId != undefined || ShippingViaId > 0) {
+            this.isSpinnerVisible = true;
             this.commonService.getShipVia(this.currentUserMasterCompanyId).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setShipViaList(response);
