@@ -2432,7 +2432,7 @@ setTimeout(() => {
         else{
             this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => { 
                 res.map(x => {
-                  if(x.empExpCode =='TECHNICIAN'){
+                  if(x.empExpCode =='TECHNICIAN' || x.empExpCode=='Technician' || x.description =='TECHNICIAN' || x.description=='Technician'){
                     this.commonService.getExpertiseEmployeesByCategory(x.employeeExpertiseId,this.currentUserMasterCompanyId).subscribe(res => {
                         this.technicianByExpertiseTypeList = res;
                         this.technicianList = this.technicianByExpertiseTypeList;

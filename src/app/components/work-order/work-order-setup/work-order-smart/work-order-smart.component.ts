@@ -128,6 +128,8 @@ export class WorkOrderSmartComponent implements OnInit {
                 this.getAllWorkOrderStages();
                 this.getAllExpertiseType();
                 this.getAllWorkOrderStatus();
+            },err=>{
+                this.isSpinnerEnable = false; 
             })
         } else { 
             this.ishowEditDiv=false;
@@ -150,7 +152,7 @@ export class WorkOrderSmartComponent implements OnInit {
     getAllExpertiseType() {
         this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
             this.expertiseTypeList = res.map(x => {
-                if (x.empExpCode == 'TECHNICIAN') {
+                if (x.empExpCode == 'Technician' || x.empExpCode == 'TECHNICIAN' || x.description =='TECHNICIAN' || x.description=='Technician') {
                     this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
                     return;
                 }
@@ -207,13 +209,13 @@ export class WorkOrderSmartComponent implements OnInit {
         const Salesid = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
         const Agentsid = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
         const Technicianid = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
-        if (CSRid[0].jobTitleId > 0)
+        if (CSRid && CSRid[0] && CSRid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(CSRid[0].jobTitleId);
 
-        if (Salesid[0].jobTitleId > 0)
+        if ( Salesid && Salesid[0] && Salesid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(Salesid[0].jobTitleId);
 
-        if (Agentsid[0].jobTitleId > 0)
+        if (Agentsid && Agentsid[0] && Agentsid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
         this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds,this.currentUserMasterCompanyId).subscribe(res => {
             if (res) {

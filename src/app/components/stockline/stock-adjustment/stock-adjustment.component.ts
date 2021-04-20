@@ -135,7 +135,7 @@ export class StockAdjustmentComponent implements OnInit {
 
 	getDefaultCurrency() {
         this.legalEntityId = 19;
-        this.commonService.getDefaultCurrency(this.legalEntityId).subscribe(res => {
+        this.commonService.getDefaultCurrency(this.legalEntityId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.defaultCurrencyId = res.currencyId;
         })
 	}
@@ -157,13 +157,13 @@ export class StockAdjustmentComponent implements OnInit {
 	}
 
 	loadSiteData() {
-		this.commonService.smartDropDownList('Site', 'SiteId', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('Site', 'SiteId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.allSites = res;
         })
 	}
 
 	getItemTypes() {
-		this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.itemTypesList = res;
         })
 	}
@@ -204,14 +204,14 @@ export class StockAdjustmentComponent implements OnInit {
 	loadPartNumData(strText = '') {
 		if(this.arrayItemMasterlist.length == 0) {			
             this.arrayItemMasterlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allPartnumbersList = response;
 			this.partNumbersCollection = this.allPartnumbersList;
 		}, error => this.saveFailedHelper(error));
 	}
  
 	getCurrencyData() {
-		this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(response => {
+		this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code','','', 0,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allCurrencyInfo = response;
 		});
 	}
@@ -221,13 +221,13 @@ export class StockAdjustmentComponent implements OnInit {
 	}
 
 	getAdjReasonData() {
-		this.commonService.smartDropDownList('StocklineAdjustmentReason', 'AdjustmentReasonId', 'Description').subscribe(response => {
+		this.commonService.smartDropDownList('StocklineAdjustmentReason', 'AdjustmentReasonId', 'Description','','', 0,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allAdjReasonInfo = response;
 		});
 	}	
 
 	getStocklineAdjustmentDataType() {
-		this.commonService.smartDropDownList('StocklineAdjustmentDataType', 'StocklineAdjustmentDataTypeId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('StocklineAdjustmentDataType', 'StocklineAdjustmentDataTypeId', 'Description','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.stocklineAdjustmentData = res.map(x => {
 				return {
 					adjustmentDataTypeId: x.value,
@@ -311,7 +311,7 @@ export class StockAdjustmentComponent implements OnInit {
 	getManagementStructureCodes(id,empployid=0,editMSID=0) {
 		empployid = empployid == 0 ? this.employeeId : empployid ;
 		//editMSID = this.isEditMode ? editMSID = id : 0;
-		this.commonService.getManagmentStrctureData(id,empployid,editMSID).subscribe(response => {
+		this.commonService.getManagmentStrctureData(id,empployid,editMSID,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			if(response) {
 				const result = response;
 				if(result[0] && result[0].level == 'Level1') {
@@ -615,7 +615,7 @@ export class StockAdjustmentComponent implements OnInit {
 		this.allShelfs = [];
 		this.allBins = [];
 		if(this.sourceStockLineSetup.siteId != 0) {
-			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', this.sourceStockLineSetup.siteId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', this.sourceStockLineSetup.siteId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allWareHouses = res;
 			})
 		}
@@ -653,7 +653,7 @@ export class StockAdjustmentComponent implements OnInit {
 		this.allShelfs = [];
 		this.allBins = [];
 		if(this.sourceStockLineSetup.warehouseId != 0) {
-			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', this.sourceStockLineSetup.warehouseId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', this.sourceStockLineSetup.warehouseId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allLocations = res;
 			})
 		}
@@ -687,7 +687,7 @@ export class StockAdjustmentComponent implements OnInit {
 
 		this.allBins = [];
 		if(this.sourceStockLineSetup.locationId != 0) {
-			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', this.sourceStockLineSetup.locationId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', this.sourceStockLineSetup.locationId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allShelfs = res;
 			})
 		}
@@ -705,7 +705,7 @@ export class StockAdjustmentComponent implements OnInit {
 		}
 		item.binId = 0;
 		if(this.sourceStockLineSetup.shelfId != 0) {
-			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', this.sourceStockLineSetup.shelfId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', this.sourceStockLineSetup.shelfId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allBins = res;
 			})
 		}
@@ -789,7 +789,7 @@ export class StockAdjustmentComponent implements OnInit {
 		});
 		
 		if(siteId != 0) {
-			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allWareHouses = res;
 			})
 		}
@@ -812,7 +812,7 @@ export class StockAdjustmentComponent implements OnInit {
 		});
 
 		if(warehouseId != 0) {
-			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allLocations = res;
 			})
 		}
@@ -834,7 +834,7 @@ export class StockAdjustmentComponent implements OnInit {
 		});
 		
 		if(locationId != 0) {
-			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allShelfs = res;
 			})
 		}
@@ -855,7 +855,7 @@ export class StockAdjustmentComponent implements OnInit {
 		});
 
 		if(shelfId != 0) {
-			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allBins = res;
 			})
 		}

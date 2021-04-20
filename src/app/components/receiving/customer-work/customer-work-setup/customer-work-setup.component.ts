@@ -173,7 +173,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     loadModulesNamesForObtainOwnerTraceable() {
-        this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
+        this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.moduleListDropdown = res; 
         })
     }
@@ -231,7 +231,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(res => {
+        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId,this.authService.currentUser.masterCompanyId).subscribe(res => {
            if (res && res.length != 0) {
                 this.allEmployeeList = res;
             }
@@ -326,7 +326,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.arrayEmplsit.push(0,this.authService.currentEmployee.value);
         }
-        await this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId).subscribe(res => {
+        await this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.certifiedEmployeeList = res;            
         })
 	}
@@ -486,7 +486,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 }
             }
             let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 obj = res[0];
                 if (tableName == 'Site') {
                     obj.siteId = obj.value,
@@ -669,7 +669,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
-        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId).subscribe(res => {
+        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allWareHouses = res.map(x => {
                 return {
 
@@ -696,7 +696,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allBins = [];
         if (warehouseId != 0) {
 
-            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId).subscribe(res => {
+            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allLocations = res.map(x => {
                     return {
 
@@ -716,7 +716,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allShelfs = [];
         this.allBins = [];
         if (locationId != 0) {
-            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId).subscribe(res => {
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allShelfs = res.map(x => {
                     return {
 
@@ -735,7 +735,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     shelfValueChange(shelfId) {
         this.allBins = [];
         if (shelfId != 0) {
-            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId).subscribe(res => {
+            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allBins = res.map(x => {
                     return {
                         binId: x.value,
@@ -776,7 +776,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     customergenericinformation(id) {
-        this.commonService.customergenericinformation(id).subscribe(res => {
+        this.commonService.customergenericinformation(id,this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res) {
                 this.receivingForm.customerCode = res[0].customerCode;
             }
@@ -1134,7 +1134,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEditMode ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID,this.authService.currentUser.masterCompanyId).subscribe(response => {
             if (response) {
                 const result = response;
                 if (result[0] && result[0].level == 'Level1') {
@@ -1209,7 +1209,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         if (legalEntityId) {
             this.managementStructure.companyId = legalEntityId;
             this.receivingForm.managementStructureId = legalEntityId;
-            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.businessUnitList = res;
                 this.managementStructure.buId = 0;
                 this.managementStructure.divisionId = 0;
@@ -1228,7 +1228,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         if (businessUnitId) {
             this.managementStructure.buId = businessUnitId;
             this.receivingForm.managementStructureId = businessUnitId;
-            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.divisionList = res;
                 this.managementStructure.divisionId = 0;
                 this.managementStructure.departmentId = 0;
@@ -1240,7 +1240,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         if (divisionId) {
             this.managementStructure.divisionId = divisionId;
             this.receivingForm.managementStructureId = divisionId;
-            this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.departmentList = res;
                 this.managementStructure.departmentId = 0;
             })

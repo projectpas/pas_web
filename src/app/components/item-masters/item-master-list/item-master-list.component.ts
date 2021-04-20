@@ -1544,7 +1544,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	private ptnumberlistdata() {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
-		this.commonService.smartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber').subscribe(
+		this.commonService.smartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber','','', 0,this.authService.currentUser.masterCompanyId).subscribe(
             results => this.onptnmbersSuccessful(results),
             error => {this.loadingIndicator=false} 
         )
