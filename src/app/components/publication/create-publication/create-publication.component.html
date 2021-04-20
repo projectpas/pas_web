@@ -102,7 +102,7 @@
 
                             <div class="form-group">
                                 <label for="Publicationtype">
-                                    Publication Type<span class="clr-red">*</span>
+                                    Publication Type<span class="clr-red"> *</span>
 
                                 </label>
                                 <select name="gPubType" (change)="onChangePublicationType()"
@@ -216,7 +216,7 @@
                                     [(ngModel)]="sourcePublication.verifiedDate"></p-calendar>
                             </div>
                             <div class="form-group">
-                                <label>Location<span class="clr-red">*</span></label>
+                                <label>Location<span class="clr-red"> *</span></label>
                                 <p-autoComplete class="p-autoComplete-ctsm" name="locationId"
                                     [(ngModel)]="sourcePublication.locationId" field="label"
                                     [suggestions]="gLocationsList" [forceSelection]="true" emptyMessage="No Match Found"
