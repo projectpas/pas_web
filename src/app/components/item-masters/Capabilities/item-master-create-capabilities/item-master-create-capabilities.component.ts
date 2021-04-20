@@ -147,7 +147,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     }
 
     getCapabilityTypesList() {
-        this.commonService.smartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc').subscribe(res => {
+        this.commonService.smartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc','','', 0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.capabalityTypeList = res;
         })
     }
@@ -557,7 +557,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     async getAllEmployees() {
 		if(this.arrayEmplsit.length == 0) {			
 		this.arrayEmplsit.push(0,this.authService.currentEmployee.value); }	
-        await this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId).subscribe(res => {
+        await this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.employeeList = res;   
         }, error => error => this.saveFailedHelper(error))
 	}

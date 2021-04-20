@@ -247,7 +247,7 @@ export class ItemMasterNonStockComponent {
                 } 
             }
             let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {
             obj = res[0];
             if(tableName == 'ItemClassification') {
                 this.allitemNonStockclassificationInfo = [...originalData, obj];
@@ -293,7 +293,7 @@ export class ItemMasterNonStockComponent {
 
     getDefaultCurrency() {
         this.legalEntityId = 19;
-        this.commonService.getDefaultCurrency(this.legalEntityId).subscribe(res => {
+        this.commonService.getDefaultCurrency(this.legalEntityId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.defaultCurrencyId = res.currencyId;
             this.sourceItemMaster.currencyId = res.currencyId;
         })

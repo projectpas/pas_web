@@ -582,7 +582,7 @@ export class SubWorkOrderComponent implements OnInit {
 
             this.expertiseTypeList = res.map(x => {
              
-                if (x.empExpCode == 'TECHNICIAN') {
+                if (x.empExpCode == 'Technician' || x.empExpCode == 'TECHNICIAN' || x.description =='TECHNICIAN' || x.description=='Technician') {
                     this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
                     return;
                 }

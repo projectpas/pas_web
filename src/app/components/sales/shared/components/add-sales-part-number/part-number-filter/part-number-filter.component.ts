@@ -348,8 +348,10 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       "customerId": this.salesQuote.customerId
     }
 
+    this.isSpinnerVisible = true;
     this.itemMasterService.searchMultiPartNumbers(partSearchParamters).subscribe((response: any[]) => {
       this.multiSearchResult = response;
+      this.isSpinnerVisible = false;
       if (this.multiSearchResult.length > 0)
         this.searchDisabled = false;
     }, error => {

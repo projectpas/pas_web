@@ -65,6 +65,7 @@ export class EntityBillingComponent {
     totalPages: number;
     formData = new FormData();
     isViewMode: boolean = false;
+    billingInfoListOriginal: any;
     constructor(public legalEntityService: LegalEntityService, private datePipe: DatePipe, private authService: AuthService, private alertService: AlertService, private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal, private commonService: CommonService, public workFlowtService: LegalEntityService,) {
     }
@@ -489,6 +490,7 @@ export class EntityBillingComponent {
                         updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                     }
                 });
+                this.billingInfoListOriginal=this.billingInfoList;
                 if (this.billingInfoList.length > 0) {
                     this.totalRecords = data[0]['totalRecordsCount'];
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -563,31 +565,19 @@ export class EntityBillingComponent {
     allAssetInfoOriginal: any = [];
     dateObject: any = {}
     dateFilterForTable(date, field) {
-        this.dateObject = {}
-        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-            if (field == 'createdDate') {
-                this.dateObject = { 'createdDate': date }
-            } else if (field == 'updatedDate') {
-                this.dateObject = { 'updatedDate': date }
-            }
-
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getList(PagingData);
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.billingInfoList = this.billingInfoListOriginal;
+            const data = [...this.billingInfoList.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.billingInfoList = data;
         } else {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
-                delete this.lazyLoadEventDataInput.filters.createdDate;
-            }
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
-                delete this.lazyLoadEventDataInput.filters.updatedDate;
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getList(PagingData);
+            this.billingInfoList = this.billingInfoListOriginal;
         }
-
     }
 
     onFilterCountry(value) {
