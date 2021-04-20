@@ -238,11 +238,11 @@
                     </div>
 
                     <div class="pull-right">
-                        <button type="submit" *ngIf="!isEditMode" (click)="saveGeneralInfo()"
+                        <button type="submit" *ngIf="isGeneralInfoAdd && !isEditMode" (click)="saveGeneralInfo()"
                             [disabled]="!generalInfoForm.valid" class="btn btn-primary button-save-cstm-cstm">
                             Save
                         </button>
-                        <button type="submit" *ngIf="isEditMode" (click)="saveGeneralInfo()"
+                        <button type="submit" *ngIf="isGeneralInfoUpdate && isEditMode" (click)="saveGeneralInfo()"
                             [disabled]="disableGeneralInfoSave || !generalInfoForm.valid"
                             class="btn btn-primary button-save-cstm-cstm">
                             Update
