@@ -116,7 +116,6 @@ export class SalesOrderPartNumberComponent {
   }
 
   refresh() {
-    debugger;
     this.salesQuoteService.getSelectedParts().subscribe(data => {
       if (data) {
         this.selectedParts = data;
