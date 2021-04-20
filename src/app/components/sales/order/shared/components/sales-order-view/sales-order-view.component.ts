@@ -1,11 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import { SalesQuoteService } from "../../../../../../services/salesquote.service";
-import {
-  AlertService,
-  MessageSeverity
-} from "../../../../../../services/alert.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Router } from "@angular/router";
 import { CurrencyService } from "../../../../../../services/currency.service";
 import { EmployeeService } from "../../../../../../services/employee.service";
 import { CustomerService } from "../../../../../../services/customer.service";
