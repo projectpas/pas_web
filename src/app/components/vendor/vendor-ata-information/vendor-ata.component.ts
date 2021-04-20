@@ -11,6 +11,7 @@ import { CommonService } from '../../../services/common.service';
 declare var $: any;
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 // import { DTCheckbox } from 'primeng/datatable';
 @Component({
@@ -74,6 +75,8 @@ export class VendorATAInformationComponent implements OnInit {
     vendorData: any = {};
     auditHistoryATA: any = [];
     vendorCodeandName: any;
+    ataListDataValuesOriginal: any = [];
+
     isDownload: boolean = true;
     isATAView: boolean = true;
     constructor(
@@ -145,6 +148,21 @@ export class VendorATAInformationComponent implements OnInit {
         return this.authService.currentUser
             ? this.authService.currentUser.masterCompanyId
             : null;
+    }
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.ataListDataValues = this.ataListDataValuesOriginal;
+            const data = [...this.ataListDataValues.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.ataListDataValues = data;
+        } else {
+            this.ataListDataValues = this.ataListDataValuesOriginal;
+        }
     }
 
     getVendorCodeandNameByVendorId() {
@@ -262,6 +280,7 @@ export class VendorATAInformationComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.vendorService.getATAMappedByVendorId(this.vendorId, this.currentDeletedstatus).subscribe(res => {
             this.ataListDataValues = res;
+            this.ataListDataValuesOriginal = res;
             if (res.length > 0) {
                 this.totalRecords = res.length;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);

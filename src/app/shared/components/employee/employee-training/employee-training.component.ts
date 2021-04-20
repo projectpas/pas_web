@@ -1027,6 +1027,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
 
     dateFilterForTableNew(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.sourceViewforDocumentList = this.allDocumentListOriginal;
             const data = [...this.sourceViewforDocumentList.filter(x => {
                 if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
                     return x;
@@ -1080,7 +1081,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.uploadedFileLength--;
         this.selectedFileAttachment = this.selectedFileAttachment.filter(({ fileName }) => fileName !== event.file.name);
         if(this.selectedFileAttachment.length == 0){
-        this.disableSave = true;
+        this.disableFileAttachmentSubmit = false;
         }
        
     }

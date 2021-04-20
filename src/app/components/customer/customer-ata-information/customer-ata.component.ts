@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Params, ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
@@ -78,6 +79,7 @@ export class CustomerATAInformationComponent implements OnInit {
     stopmulticlicks: boolean;
     loaderForATA = true;
     auditHistory1: any;
+    ataListDataValuesOriginal: any;
     isAtaAdd:Boolean=true;
     isAtaEdit:Boolean=true;
     isAtaDelete:Boolean=true;
@@ -222,13 +224,8 @@ export class CustomerATAInformationComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.customerService.getATAMappedByCustomerId(this.id).subscribe(res => {
             this.loaderForATA = false;
-            this.ataListDataValues =   res.map(x => {
-                return {
-                    ...x,
-                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy') : '',
-                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy') : '',
-                }
-            });
+            this.ataListDataValues =   res;
+            this.ataListDataValuesOriginal=res;
             if (res.length > 0) {
                 this.totalRecords = res.length;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -238,6 +235,22 @@ export class CustomerATAInformationComponent implements OnInit {
             this.loaderForATA = false;
         })
     }
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.ataListDataValues = this.ataListDataValuesOriginal;
+            const data = [...this.ataListDataValues.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.ataListDataValues = data;
+        } else {
+            this.ataListDataValues = this.ataListDataValuesOriginal;
+        }
+    }
+	
     
 
     // search URL generation 

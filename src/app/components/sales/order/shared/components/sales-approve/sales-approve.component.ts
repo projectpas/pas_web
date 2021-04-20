@@ -10,15 +10,20 @@ import { ApprovalTaskEnum } from "../../../../quotes/models/approval-task-enum";
 })
 export class SalesOrderApproveComponent {
     approvers: any[];
+    isSpinnerVisible = false;
+
     constructor(public salesOrderService: SalesOrderService) {
     }
 
     refresh(marginSummary: MarginSummary) {
+        this.isSpinnerVisible = true;
         this.salesOrderService.approverslistbyTaskId(ApprovalTaskEnum.SOApproval, marginSummary.salesOrderId)
             .subscribe(
                 (res) => {
                     this.approvers = res;
-                }
-            )
+                    this.isSpinnerVisible = false;
+                }, error => {
+                    this.isSpinnerVisible = false;
+                })
     }
 }

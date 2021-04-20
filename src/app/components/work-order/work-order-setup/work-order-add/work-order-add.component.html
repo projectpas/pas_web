@@ -328,7 +328,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="!workOrderGeneralInformation.isSinglePN && workOrderId">
+                    <div *ngIf="workOrderGeneralInformation && !workOrderGeneralInformation.isSinglePN && workOrderId">
                         <app-common-wo-summarization [workOrderId]="workOrderId"  [savedWorkOrderData]="savedWorkOrderData" [mpnPartNumbersList]="mpnPartNumbersList" [employeesOriginalData]="employeesOriginalData" [taskList]="taskList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [customerContactList]="customerContactList" [defaultTab]="defaultTab" (resetSelectedTab)="resetSelectedTab()"></app-common-wo-summarization>
                     </div>
                     <div *ngIf="!hideWOHeader && !isView">

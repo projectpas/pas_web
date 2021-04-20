@@ -142,7 +142,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.getAllWorkOrderStages();
 
         this.getAllPriority();
-        this.getworblist();
+        // this.getworblist();
         this.getAllTearDownTypes();
         this.receivingCustomerWorkId = this._actRoute.snapshot.params['id'];
         if (!this.receivingCustomerWorkId) {
@@ -163,10 +163,10 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     // api/workOrder/getworblist
-    private getworblist() {
-        this.workOrderService.getworblist().subscribe(res => {
-        });
-    }
+    // private getworblist() {
+    //     this.workOrderService.getworblist().subscribe(res => {
+    //     });
+    // }
 
     get userName(): string {
         return this.authService.currentUser
@@ -174,7 +174,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             : '';
     }
     getAllTearDownTypes(){
-        this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name')
+        this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name','','', 0,this.authService.currentUser.masterCompanyId)
         .subscribe(
             res => {
                 this.tearDownTypes = res;
@@ -187,7 +187,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         )
     }
     getReceivingCustomerDataonEdit(id) {
-        const mastercompanyid = 1;
+        const mastercompanyid = this.authService.currentUser.masterCompanyId;
         this.readonly = false;
         this.isSpinnerVisible=true;
         this.receivingCustomerWorkOrderService.getworkflowbyid(mastercompanyid, id).subscribe(res => {
@@ -259,7 +259,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                 }
             }
             let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 obj = res[0];
                 if (tableName == 'Site') {
                     obj.siteId = obj.value,
@@ -333,7 +333,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             tearDownTypes: this.getTearDownTypes(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: 1
+            masterCompanyId: Number(this.authService.currentUser.masterCompanyId)
         }
     
         if (!this.isEditMode) {
@@ -367,13 +367,13 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
    
 
     private loadReceivingListRB() {
-        this.commonService.smartDropDownList('ReceivingListRB', 'ReceivingListRBId', 'Name').subscribe(response => {
+        this.commonService.smartDropDownList('ReceivingListRB', 'ReceivingListRBId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).subscribe(response => {
             this.ReceivingListRBList = response;
         });
     }
 
     private loadWOListRB() {
-        this.commonService.smartDropDownList('WOListRB', 'WOListRBId', 'Name').subscribe(response => {
+        this.commonService.smartDropDownList('WOListRB', 'WOListRBId','Name','','', 0,this.authService.currentUser.masterCompanyId).subscribe(response => {
             this.WOListRBList  = response.map(x => {
                 return {
                     label: x.label,
@@ -398,7 +398,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     getAllPriority() {
-        this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.priorityList = res;
             if(!this.isEditMode) {
                 this.priorityList.map(x => {
@@ -424,7 +424,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
 
 
     getAllWorkOrderStatus(): void {
-        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }
@@ -445,7 +445,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'Id', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'Id', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workOrderTypes = res;
             this.workOrderTypes.forEach(ev=>{
                 if(ev.label=='Customer'){
@@ -530,7 +530,7 @@ this.woTypeId=ev.value
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
-        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId).subscribe(res => {
+        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId',  siteId, 0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allWareHouses = res.map(x => {
                 return {
 
@@ -557,7 +557,7 @@ this.woTypeId=ev.value
         this.allBins = [];
         if (warehouseId != 0) {
 
-            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId).subscribe(res => {
+            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId',   warehouseId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allLocations = res.map(x => {
                     return {
 
@@ -577,7 +577,7 @@ this.woTypeId=ev.value
         this.allShelfs = [];
         this.allBins = [];
         if (locationId != 0) {
-            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId).subscribe(res => {
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId',locationId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allShelfs = res.map(x => {
                     return {
 
@@ -596,7 +596,7 @@ this.woTypeId=ev.value
     shelfValueChange(shelfId) {
         this.allBins = [];
         if (shelfId != 0) {
-            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId).subscribe(res => {
+            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId',shelfId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allBins = res.map(x => {
                     return {
                         binId: x.value,
@@ -611,145 +611,6 @@ this.woTypeId=ev.value
         }
     }
 
-
- 
-    // private getAllWorkScpoes(value) {
-
-    //     this.setEditArray = [];
-    //     if (this.isEditMode == true) {
-    //         this.setEditArray.push(this.receivingForm.siteId ? this.receivingForm.siteId : 0);
-
-    //     } else {
-    //         this.setEditArray.push(0);
-    //     }
-    //     const mcId= this.authService.currentUser
-    //     ? this.authService.currentUser.masterCompanyId
-    //     : null;
-
-    //     this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'SiteId', 'Name', value ? value :'', true, 20, this.setEditArray.join(),mcId).subscribe(res => {
-    //         if (res && res.length != 0) {
-    //             this.workScopesList = res;
-    //         }
-    //     })
-    // }
-
-
-    // getAllWorkScpoes(): void {
-    //     this.workOrderService.getAllWorkScopes().pipe(takeUntil(this.onDestroy$)).subscribe(
-    //         result => {
-    //             this.workScopesList = result.map(x => {
-    //                 return {
-    //                     label: x.description,
-    //                     value: x.workScopeId
-    //                 }
-    //             })
-    //         },
-    //         err => {
-    //             this.errorHandling(err);
-    //         }
-    //     );
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // private loadSiteData() {
-    //     this.siteService.getSiteList().subscribe(res => {
-    //         this.allSites = res[0];
-    //     });
-    // } 
-
-
-    // siteValueChange(siteId) {
-    //     this.allWareHouses = [];
-    //     this.allLocations = [];
-    //     this.allShelfs = [];
-    //     this.allBins = [];
-    //     this.receivingForm.warehouseId = 0;
-    //     this.receivingForm.locationId = 0;
-    //     this.receivingForm.shelfId = 0;
-    //     this.receivingForm.binId = 0;
-    //     this.binService.getWareHouseDate(siteId).subscribe(res => {
-    //         this.allWareHouses = res;
-    //     });
-    //     this.onChangeSiteName();
-    // }
-
-    // onChangeSiteName() {
-    //     if (this.receivingForm.siteId != 0) {
-    //         this.disableSite = false;
-    //     } else {
-    //         this.disableSite = true;
-    //     }
-    // }
-
-    // wareHouseValueChange(warehouseId) {
-    //     this.allLocations = [];
-    //     this.allShelfs = [];
-    //     this.allBins = [];
-    //     this.receivingForm.locationId = 0;
-    //     this.receivingForm.shelfId = 0;
-    //     this.receivingForm.binId = 0;
-    //     this.binService.getLocationDate(warehouseId).subscribe(res => {
-    //         this.allLocations = res;
-    //     });
-    // }
-
-    // locationValueChange(locationId) {
-    //     this.allShelfs = [];
-    //     this.allBins = [];
-    //     this.receivingForm.shelfId = 0;
-    //     this.receivingForm.binId = 0;
-    //     this.binService.getShelfDate(locationId).subscribe(res => {
-    //         this.allShelfs = res;
-    //     },
-    //     err => {
-    //         this.errorHandling(err);
-    //     });
-    // }
-
-    // shelfValueChange(binId) {
-    //     this.allBins = [];
-    //     this.receivingForm.binId = 0;
-
-    //     this.binService.getBinDataById(binId).subscribe(res => {
-    //         this.allBins = res;
-    //     },
-    //     err => {
-    //         this.errorHandling(err);
-    //     });
-    // }
     getmemo(ev){
         
     }

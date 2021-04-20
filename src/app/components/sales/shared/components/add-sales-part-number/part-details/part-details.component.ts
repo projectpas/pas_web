@@ -10,7 +10,7 @@ import { formatNumberAsGlobalSettingsModule } from "../../../../../../generic/au
 import { StocklineViewComponent } from "../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
 import { StocklineHistoryComponent } from "../../../../../../shared/components/stockline/stockline-history/stockline-history.component";
 import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
-import { AlertService, MessageSeverity } from "../../../../../../services/alert.service";
+import { AlertService } from "../../../../../../services/alert.service";
 
 @Component({
   selector: "app-part-details",
