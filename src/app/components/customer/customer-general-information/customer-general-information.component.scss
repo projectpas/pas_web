@@ -24,6 +24,10 @@ label {
     margin-right: 0;
     font-weight: normal;
 }
+.disablecheckbox{
+    background-color: #a9a9a9;
+    color: white;
+}
 .form-control:disabled {
     background-color: #e9ecef !important;
 }

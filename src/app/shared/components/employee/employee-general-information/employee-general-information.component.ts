@@ -667,11 +667,14 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 }
             }
             this.sourceEmployee.employeeCertifyingStaff = this.sourceEmployee.employeeCertifyingStaff;
-            // this.sourceEmployee.firstName = this.sourceEmployee.firstNameArray[0];
+             this.sourceEmployee.firstName = this.sourceEmployee.firstNameArray[0];
+             this.sourceEmployee.middleName = this.sourceEmployee.middleNameArray[0];
+             this.sourceEmployee.lastName = this.sourceEmployee.lastNameArray[0];
             this.arrayContactlist.push(this.employeeId);
-            this.getAllContactFirstNameSmartDropDown('', this.sourceEmployee.firstNameArray[0].firstName);
-            this.getAllContactMiddleNameSmartDropDown('', this.sourceEmployee.middleNameArray[0].middleName);
-            this.getAllContactLastNameSmartDropDown('', this.sourceEmployee.lastNameArray[0].lastName);
+        //     this.getAllContactFirstNameSmartDropDown('', this.sourceEmployee.firstNameArray[0].firstName);
+        // this.getAllContactMiddleNameSmartDropDown('', this.sourceEmployee.middleNameArray[0].middleName);
+        // this.getAllContactLastNameSmartDropDown('', this.sourceEmployee.lastNameArray[0].lastName);
+        
             // this.sourceEmployee.middleName = this.sourceEmployee.middleNameArray[0];
             // this.sourceEmployee.lastName = this.sourceEmployee.lastNameArray[0];
             this.sourceEmployee.currencyId = this.sourceEmployee.currency[0];
@@ -816,13 +819,24 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         }
     }
     filterSupervisorList(event){
-        this.supervisorList=this.allEmployeeinfo;
-        if (event.query !== undefined && event.query !== null) {
-            const supervisorlist = [...this.allEmployeeinfo.filter(x => {
-                return x.name.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.supervisorList = supervisorlist;
+        if(this.empId){
+            this.supervisorList=this.allEmployeeinfo;
+            if (event.query !== undefined && event.query !== null) {
+                const supervisorlist = [...this.allEmployeeinfo.filter(x => {
+                    return x.name.toLowerCase().includes(event.query.toLowerCase())
+                })]
+                this.supervisorList = supervisorlist;
+            }
+        }else{
+            this.supervisorList=this.allEmployeeinfo;
+            if (event.query !== undefined && event.query !== null) {
+                const supervisorlist = [...this.allEmployeeinfo.filter(x => {
+                    return x.name.toLowerCase().includes(event.query.toLowerCase())
+                })]
+                this.supervisorList = supervisorlist.filter(x=>x.isActive==true);
+            }
         }
+       
     }
 
 
