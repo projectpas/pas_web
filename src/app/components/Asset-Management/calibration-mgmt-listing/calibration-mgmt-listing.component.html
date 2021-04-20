@@ -6,17 +6,55 @@
                               <div class="col">
                                 <h4 class="header-name">Calibration Mgmt List</h4>
                               </div>
+                   
                               <div>
-                                <button
+                                <!-- <button
                                   type="button"
                                   class="btn-sm header-button"
                                   (click)="navigateTogeneralInfo()"                                
                                 >
                                 Add Calibration 
-                                </button>
+                                </button> -->
                               </div>
                             </div>
                           </div>
+                          <div class="col">
+                            <div class="">
+                              <div
+                                class="col"
+                                style="float: left; padding-top: 3px;"
+                              >
+                                <div class="form-group">
+                                <div
+                                    class="pull-left radio-buttons-align"
+                                  >
+                                      <label class="radio-cstm wauto">
+                                      <input type="radio" name="Calibrationtype" class="form-control" value="Calibration" (click)="geListByStatus('Active')" [(ngModel)]="Calibrationtype">
+                                      <span class="checkmark"></span>Calibration
+                                      </label>
+                                </div>
+                            <div class="pull-left radio-buttons-align">
+                                <label class="radio-cstm wauto">
+                                    <input type="radio" name="Calibrationtype" class="form-control" value="Certification" (click)="geListByStatus('InActive')" [(ngModel)]="Calibrationtype">
+                                    <span class="checkmark"></span>Certification
+                                </label>
+                            </div>
+                            <div class="pull-left radio-buttons-align">
+                                <label class="radio-cstm wauto">
+                                    <input type="radio" name="Calibrationtype" class="form-control" value="Inspection" (click)="geListByStatus('ALL')" [(ngModel)]="Calibrationtype">
+                                    <span class="checkmark"></span> Inspection
+                                </label>
+                            </div>
+                            <div class="pull-left radio-buttons-align">
+                                <label class="radio-cstm wauto">
+                                    <input type="radio" name="Calibrationtype" class="form-control" value="Verification" (click)="geListByStatus('ALL')" [(ngModel)]="Calibrationtype">
+                                    <span class="checkmark"></span>Verification
+                                </label>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+              </div>
                           <div class="card-body new-card-body">
                      
                       <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="allcalibrationinfo"
@@ -75,14 +113,13 @@
                               (click)="selectedOnly = true; targetData = dt;" -->
                              
                              </div>
-                              <div class="col">
+                              <!-- <div class="col">
                                   <div class="">
                                     <div
                                       class="col"
                                       style="width: 370px; float: right; padding-top: 3px;"
                                     >
                                       <div class="form-group">
-                                        <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
                                       <div
                                           class="pull-left radio-buttons-align"
                                         >
@@ -115,7 +152,7 @@
                               </div> 
                           </div>
                       </div>
-                    </div>
+                    </div> -->
                     </div>
                           </ng-template>
                           <ng-template pTemplate="colgroup" let-columns>
@@ -174,8 +211,6 @@
                                                          matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
                                                          <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                           <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                          <span><a class="btn nobg btn-adjst-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
-                                          <span><a class="btn nobg btn-adjhist-cstm" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                           <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                           <!-- <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span> -->
 
