@@ -127,10 +127,10 @@
                 <tr>
                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                         <input class="table-header-input-width" type="text" *ngIf="col.field !== 'receivedDate' && col.field != 'createdDate' && col.field != 'updatedDate'" pInputText
-                               (keyup)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'receivedDate'" name="receivedDate" (change)="dt.filter($event.target.value, col.field, 'contains'); enableDateFilter($event.target);">
-                        <input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
-                        <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
+                        (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">       
+                        <input type="date" class="table-header-input-width" *ngIf="col.field == 'receivedDate'" name="receivedDate" (change)="dt.filter($event.target.value, col.field, 'contains'); enableDateFilter($event.target);">
+                        <input type="date"  class="table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
+                        <input type="date"   class="table-header-input-width" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
                     </th>
                     <th class="table-actions-column"></th>
                 </tr>

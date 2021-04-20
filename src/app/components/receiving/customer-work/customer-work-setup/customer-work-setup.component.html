@@ -671,7 +671,6 @@
                         <div class="col-md-4">
                             <div class="form-group margin-bottom-8">
                                 <label>Obtain From </label>
-                                <!-- <label>Obtain From <span class="text-danger">*</span> </label> -->
                                 <select [(ngModel)]="receivingForm.obtainFromTypeId" (ngModelChange)="getActive()"
                                     name="obtainFromTypeId"
                                     (change)="onSelectObrainFrom(receivingForm.obtainFromTypeId)" >
@@ -681,12 +680,11 @@
                                 </select>
                             </div>
                             <div class="form-group margin-bottom-8">
-                                <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 1">
+                                <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == customerModuleId">
                                     <div class="col-sm-12">
                                         <label>
                                             Customer 
                                         </label>
-                                        <!-- [required]="receivingForm.obtainFromTypeId == 1" -->
                                         <p-autoComplete field="name" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()"                                            
                                             (keyup)="getCustomers($event.target.value, 2)"
@@ -696,12 +694,11 @@
                                             errorMessage="Records not found" [forceSelection]="true"></p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 2">
+                                <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == vendorModuleId">
                                     <div class="col-sm-12">
                                         <label>
                                             Vendor 
                                         </label>
-                                        <!-- [required]="receivingForm.obtainFromTypeId == 2" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()"                                           
                                             [(ngModel)]="receivingForm.obtainFrom" name="obtainFromVendor"
@@ -711,10 +708,9 @@
                                         </p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 9">
+                                <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == companyModuleId">
                                     <div class="col-sm-12">
                                         <label>Company </label>
-                                        <!-- [required]="receivingForm.obtainFromTypeId == 9" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" [(ngModel)]="receivingForm.obtainFrom"
                                             name="obtainFromCompany" [suggestions]="companyList"
@@ -724,10 +720,9 @@
                                         </p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 4">
+                                <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == otherModuleId">
                                     <div class="col-sm-12">
                                         <label>Other </label>
-                                        <!-- [required]="receivingForm.obtainFromTypeId == 4" -->
                                         <input class="form-control" type="text" name="obtainFromOther"
                                             (ngModelChange)="getActive()"                                            
                                             [(ngModel)]="receivingForm.obtainFromName">
@@ -745,7 +740,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <div class="form-row" *ngIf="receivingForm.ownerTypeId == 1">
+                                <div class="form-row" *ngIf="receivingForm.ownerTypeId == customerModuleId">
                                     <div class="col-sm-12">
                                         <label>
                                             Customer 
@@ -759,12 +754,11 @@
                                         </p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.ownerTypeId == 2">
+                                <div class="form-row" *ngIf="receivingForm.ownerTypeId == vendorModuleId">
                                     <div class="col-sm-12">
                                         <label>
                                             Vendor 
                                         </label>
-                                        <!-- [required]="receivingForm.ownerTypeId == 2" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" 
                                             [(ngModel)]="receivingForm.owner" name="ownerVendor"
@@ -774,10 +768,9 @@
                                         </p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.ownerTypeId == 9">
+                                <div class="form-row" *ngIf="receivingForm.ownerTypeId == companyModuleId">
                                     <div class="col-sm-12">
                                         <label>Company </label>
-                                        <!-- [required]="receivingForm.ownerTypeId == 9"  -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" [(ngModel)]="receivingForm.owner"
                                             name="ownerCompany" [suggestions]="companyList"
@@ -787,10 +780,9 @@
                                         </p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.ownerTypeId == 4">
+                                <div class="form-row" *ngIf="receivingForm.ownerTypeId == otherModuleId">
                                     <div class="col-sm-12">
                                         <label>Other </label>
-                                        <!-- [required]="receivingForm.ownerTypeId == 4" -->
                                         <input class="form-control" type="text" name="ownerOther"
                                             (ngModelChange)="getActive()" 
                                             [(ngModel)]="receivingForm.ownerName">
@@ -808,12 +800,11 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 1">
+                                <div class="form-row" *ngIf="receivingForm.traceableToTypeId == customerModuleId">
                                     <div class="col-sm-12">
                                         <label>
                                             Add Customer 
                                         </label>
-                                        <!-- [required]="receivingForm.traceableToTypeId == 1" -->
                                         <p-autoComplete field="name" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()"                                            
                                             (keyup)="getCustomers($event.target.value, 2)"
@@ -823,12 +814,11 @@
                                             errorMessage="Records not found" [forceSelection]="true"></p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 2">
+                                <div class="form-row" *ngIf="receivingForm.traceableToTypeId == vendorModuleId">
                                     <div class="col-sm-12">
                                         <label>
                                             Add Vendor 
                                         </label>
-                                        <!-- [required]="receivingForm.traceableToTypeId == 2" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()"                                            
                                             [(ngModel)]="receivingForm.traceableTo" name="traceableToVendor"
@@ -838,10 +828,9 @@
                                         </p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 9">
+                                <div class="form-row" *ngIf="receivingForm.traceableToTypeId == companyModuleId">
                                     <div class="col-sm-12">
                                         <label> Add Company </label>
-                                        <!-- [required]="receivingForm.traceableToTypeId == 9" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" [(ngModel)]="receivingForm.traceableTo"
                                             name="traceableToCompany" [suggestions]="companyList"
@@ -850,10 +839,9 @@
                                         </p-autoComplete>
                                     </div>
                                 </div>
-                                <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 4">
+                                <div class="form-row" *ngIf="receivingForm.traceableToTypeId == otherModuleId">
                                     <div class="col-sm-12">
                                         <label> Add Other </label>
-                                        <!-- [required]="receivingForm.traceableToTypeId == 4" -->
                                         <input class="form-control" type="text" name="traceableToOther"
                                             (ngModelChange)="getActive()"
                                             [(ngModel)]="receivingForm.tracableToName">
@@ -973,20 +961,6 @@
              <h4 class="modal-title">Edit Memo</h4>
          </div>
          <div class="modal-body">
-             <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                 <thead>
-                     <th style="color: #fff;">Memo</th>
-                 </thead>
-                 <tbody>
-                     <tr>
-                         <td style="white-space: inherit">
-                             <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
-                                 (ngModelChange)="enableSaveMemo()" [style]="{ height: '320px' }"
-                                 name="memoPopupContent" required></p-editor>
-                         </td>
-                     </tr>
-                 </tbody>
-             </table> -->
              <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
              (ngModelChange)="enableSaveMemo()" [style]="{ height: '320px' }"
              name="memoPopupContent" required></p-editor>
