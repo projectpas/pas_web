@@ -202,6 +202,9 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     isDelete:boolean=true;
     isView:boolean=true;
     isDownload:boolean=true;
+    isPNMapping:boolean=true;
+    isAirCraft:boolean=true;
+    isATA:boolean=true;
     permissionAddCheck=[ModuleConstants.Publications+'.'+PermissionConstants.Add,
         ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.Add,
         ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Add,
@@ -225,6 +228,9 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.isDelete=this.authService.checkPermission([ModuleConstants.Publications+'.'+PermissionConstants.Delete]);
         
         this.isDownload=this.authService.checkPermission([ModuleConstants.PublicationsList+'.'+PermissionConstants.Download])
+        this.isPNMapping=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.View]);
+        this.isAirCraft=this.authService.checkPermission([ModuleConstants.Publications_ViewAircraftInformation+'.'+PermissionConstants.View]);
+        this.isATA=this.authService.checkPermission([ModuleConstants.Publications_ViewATAChapter+'.'+PermissionConstants.View]);
     }
 
     ngOnInit(): void {

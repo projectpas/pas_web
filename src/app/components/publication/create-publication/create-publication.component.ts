@@ -234,6 +234,8 @@ export class CreatePublicationComponent implements OnInit {
   isPNUpdate:boolean=true;
   isAircraftDownload:boolean=true;
   isATADownload:boolean=true;
+  isGeneralInfoAdd:boolean=true;
+  isGeneralInfoUpdate:boolean=true;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -262,6 +264,9 @@ export class CreatePublicationComponent implements OnInit {
     this.isPNDelete=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Delete]);
    this.isAircraftDownload=this.authService.checkPermission([ModuleConstants.Publications_ViewAircraftInformation+'.'+PermissionConstants.Download]);
    this.isATADownload=this.authService.checkPermission([ModuleConstants.Publications_ViewATAChapter+'.'+PermissionConstants.Download]);
+
+   this.isGeneralInfoAdd=this.authService.checkPermission([ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.Add]);
+   this.isGeneralInfoUpdate=this.authService.checkPermission([ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.Update]);
   }
 
   isShowTab(value){
