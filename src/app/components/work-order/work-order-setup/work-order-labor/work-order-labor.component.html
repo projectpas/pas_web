@@ -163,8 +163,8 @@
             <th class="text-center employee-th" style="width:140px;min-width: 140px;" *ngIf="!isQuote">
               Employee
             </th>
-            <th class="text-center th-zindex-2" style="width:100px">Billable /NonBillable</th>
-            <th class="text-center" style="width:70px !important" *ngIf="
+            <th class="text-center th-zindex-2 width-70">Billable /NonBillable</th>
+            <th class="text-center width-70" *ngIf="
                 laborForm.hoursorClockorScan &&
                 laborForm.hoursorClockorScan !== 1 &&
                 laborForm.hoursorClockorScan !== 3
@@ -213,10 +213,10 @@
               Billing Amount
             </th>
           </ng-container>
-          <th class="text-center memo-th" style="width:335px !important" *ngIf="!isQuote">
+          <th class="text-center memo-th memo-width" *ngIf="!isQuote">
             Memo
           </th>
-          <th style="width:130px !important" *ngIf="!isView">Actions</th>
+          <th class="width-70" *ngIf="!isView">Actions</th>
         </tr>
       </thead>
       <tbody>
