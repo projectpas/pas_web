@@ -116,6 +116,7 @@ export class SalesOrderPartNumberComponent {
   }
 
   refresh() {
+    debugger;
     this.salesQuoteService.getSelectedParts().subscribe(data => {
       if (data) {
         this.selectedParts = data;
@@ -197,7 +198,7 @@ export class SalesOrderPartNumberComponent {
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
       { field: 'quantityRequested', header: 'Qty Ord', width: "60px" },
-      { field: 'quantityToBeQuoted', header: 'Qty Resvd', width: "70px" },
+      { field: 'qtyReserved', header: 'Qty Resvd', width: "70px" },
       { field: 'quantityAlreadyQuoted', header: 'Qty Prev Shipped', width: "98px" },
       { field: 'qtyBackOrder', header: 'Qty Back Ord', width: "98px" },
       { field: 'qtyAvailable', header: 'Qty Avail', width: "98px" },
@@ -244,14 +245,24 @@ export class SalesOrderPartNumberComponent {
 
   refreshParts() {
     this.salesOrderService.GetSalesOrderPartsViewById(this.salesOrderId).subscribe(res => {
-      for (let i = 0; i < this.summaryParts.length; i++) {
+      // for (let i = 0; i < this.summaryParts.length; i++) {
+      //   for (let j = 0; j < res.parts.length; j++) {
+      //     if (this.summaryParts[i].childParts[0].salesOrderPartId == res.parts[j].salesOrderPartId) {
+      //       this.summaryParts[i].childParts[0].qtyAvailable = res.parts[j].qtyAvailable;
+      //       this.summaryParts[i].childParts[0].qtyReserved = res.parts[j].qtyReserved;
+      //     }
+      //   }
+      // }
+
+      for (let i = 0; i < this.salesQuoteService.selectedParts.length; i++) {
         for (let j = 0; j < res.parts.length; j++) {
-          if (this.summaryParts[i].childParts[0].salesOrderPartId == res.parts[j].salesOrderPartId) {
-            this.summaryParts[i].childParts[0].qtyAvailable = res.parts[j].qtyAvailable;
-            this.summaryParts[i].childParts[0].qtyReserved = res.parts[j].qtyReserved;
+          if (this.salesQuoteService.selectedParts[i].salesOrderPartId == res.parts[j].salesOrderPartId) {
+            this.salesQuoteService.selectedParts[i].qtyAvailable = res.parts[j].qtyAvailable;
+            this.salesQuoteService.selectedParts[i].qtyReserved = res.parts[j].qtyReserved;
           }
         }
       }
+      //this.salesQuoteService.selectedParts = res.parts[0];
     })
   }
 
@@ -732,6 +743,7 @@ export class SalesOrderPartNumberComponent {
     parts.forEach(part => {
       uniquePart.quantityToBeQuoted = this.getSum(uniquePart.quantityToBeQuoted, part.quantityFromThis);
       uniquePart.quantityAlreadyQuoted = uniquePart.quantityToBeQuoted;
+      uniquePart.qtyReserved = this.getSum(uniquePart.qtyReserved, part.qtyReserved);
       uniquePart.qtyAvailable = this.getSum(uniquePart.qtyAvailable, part.qtyAvailable);
       uniquePart.qtyOnHand = this.getSum(uniquePart.qtyOnHand ? uniquePart.qtyOnHand : 0, part.quantityOnHand);
       uniquePart.grossSalePrice = this.getSum(uniquePart.grossSalePrice, part.grossSalePrice);

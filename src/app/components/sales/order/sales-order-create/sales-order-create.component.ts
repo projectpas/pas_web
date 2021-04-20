@@ -1158,6 +1158,7 @@ export class SalesOrderCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
+    debugger;
     if (event.index == 0) {
       this.salesOrderPartNumberComponent.refresh();
     }
