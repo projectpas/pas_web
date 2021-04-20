@@ -25,7 +25,7 @@ export class CustomerSalesPersonComponent implements OnInit {
     @Input() editGeneralInformationData;
     @Input() editMode;
     //@Input() employeeListOriginal: any = [];
-    @Input() jobTitles;
+    @Input() expertiseTitles;
     @Input() selectedCustomerTab: string = '';
     @Output() tab = new EventEmitter();
     isSpinnerVisible: Boolean = false;
@@ -103,7 +103,7 @@ export class CustomerSalesPersonComponent implements OnInit {
         for (let property in changes) {
           if (property == 'selectedCustomerTab') {
             if (changes[property].currentValue != {} && changes[property].currentValue == 'Sales') {
-                this.getJobTitles();
+                this.getExpertiseTypes();
                 this.getGlobalSettings();                
 
                 if (this.editMode) {
@@ -235,7 +235,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                 data = this.salesPersonOriginalList;
             }
         } 
-        this.PSPinfo = [{employeeId: 0, jobTitleId: 0, employeeCode: "", name: "-- Select --"}]
+        this.PSPinfo = [{employeeId: 0, employeeExpertiseId: 0, employeeCode: "", name: "-- Select --"}]
        //this.primarySPList = data;
         // const primarySPData = [...data.filter(x => {
         //     return x.name.toLowerCase().includes(event.query.toLowerCase())
@@ -267,7 +267,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                 data = this.salesPersonOriginalList;
             }
         }       
-        this.SSPinfo = [{employeeId: 0, jobTitleId: 0, employeeCode: "", name: "-- Select --"}]
+        this.SSPinfo = [{employeeId: 0, employeeExpertiseId: 0, employeeCode: "", name: "-- Select --"}]
         // this.secondarySPList = data;
         // const secondarySPData = [...data.filter(x => {
         //     return x.name.toLowerCase().includes(event.query.toLowerCase())
@@ -281,7 +281,7 @@ export class CustomerSalesPersonComponent implements OnInit {
     
     filterCSR(event) {
         this.csrList = this.csrOriginalList;
-        this.CSRinfo = [{employeeId: 0, jobTitleId: 0, employeeCode: "", name: "-- Select --"}]
+        this.CSRinfo = [{employeeId: 0, employeeExpertiseId: 0, employeeCode: "", name: "-- Select --"}]
 
         // const CSRData = [...this.csrOriginalList.filter(x => {
         //     return x.name.toLowerCase().includes(event.query.toLowerCase())
@@ -294,7 +294,7 @@ export class CustomerSalesPersonComponent implements OnInit {
     
     filterAgents(event) {
         this.agentList = this.agentsOriginalList;
-        this.Agentinfo = [{employeeId: 0, jobTitleId: 0, employeeCode: "", name: "-- Select --"}]
+        this.Agentinfo = [{employeeId: 0, employeeExpertiseId: 0, employeeCode: "", name: "-- Select --"}]
 
         // const agentData = [...this.agentsOriginalList.filter(x => {
         //     return x.name.toLowerCase().includes(event.query.toLowerCase())
@@ -461,13 +461,13 @@ export class CustomerSalesPersonComponent implements OnInit {
             this.alertService.showStickyMessage(error, null, MessageSeverity.error);
             setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
     }
-    getJobTitles() {
+    getExpertiseTypes() {
         this.isSpinnerVisible = true;
-	    this.commonService.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
+	    this.commonService.getSalesExpertise(this.currentUserMasterCompanyId).subscribe(res => {
             if(res)
             {
-                this.jobTitles = res;
-                this.getAllSalesEmployeeListByJobTitle(this.jobTitles)
+                this.expertiseTitles = res;
+                this.getAllSalesEmployeeListByJobTitle(this.expertiseTitles)
             }
 			this.isSpinnerVisible = false;
 		},error => {this.isSpinnerVisible = false;});
@@ -481,43 +481,43 @@ export class CustomerSalesPersonComponent implements OnInit {
              
 
         this.isSpinnerVisible = true;
-        const CSRid = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
-        const Salesid = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
-        const Agentsid = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
+        const CSRid = getValueByFieldFromArrayofObject('empExpCode', 'CSR', this.expertiseTitles);
+        const Salesid = getValueByFieldFromArrayofObject('empExpCode', 'SALES', this.expertiseTitles);
+       const Agentsid = getValueByFieldFromArrayofObject('empExpCode', 'AGENT', this.expertiseTitles);
         
-        if(CSRid[0] && CSRid[0].jobTitleId && CSRid[0].jobTitleId > 0)
-            this.arayJobTitleIds.push(CSRid[0].jobTitleId);
+        if(CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
+            this.arayJobTitleIds.push(CSRid[0].employeeExpertiseId);
         
-        if(Salesid[0] && Salesid[0].jobTitleId && Salesid[0].jobTitleId > 0)
-            this.arayJobTitleIds.push(Salesid[0].jobTitleId);
+        if(Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
+            this.arayJobTitleIds.push(Salesid[0].employeeExpertiseId);
 
-        if(Agentsid[0] && Salesid[0].jobTitleId && Salesid[0].jobTitleId > 0)
-            this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
+        if(Agentsid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
+            this.arayJobTitleIds.push(Agentsid[0].employeeExpertiseId);
 
         this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds).subscribe(res => {
             if(res)
             {
-                if( CSRid[0] && CSRid[0].jobTitleId && CSRid[0].jobTitleId > 0)
+                if( CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
                 {
                 this.csrOriginalList = res.filter(x => {
-                    if (CSRid[0].jobTitleId == x.jobTitleId) {
+                    if (CSRid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
                         return x;
                     }
                 })}
                 
-                if( Agentsid[0] && Agentsid[0].jobTitleId && Agentsid[0].jobTitleId > 0)
+                if( Agentsid[0] && Agentsid[0].employeeExpertiseId && Agentsid[0].employeeExpertiseId > 0)
                 {
                 this.agentsOriginalList = res.filter(x => {
-                    if (Agentsid[0].jobTitleId == x.jobTitleId) {
+                    if (Agentsid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
                         return x;
                     }
                 })
                 }
 
-                if( Salesid[0] && Salesid[0].jobTitleId && Salesid[0].jobTitleId > 0)
+                if( Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
                 {
                 this.salesPersonOriginalList = res.filter(x => {
-                    if (Salesid[0].jobTitleId == x.jobTitleId) {
+                    if (Salesid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
                         return x;
                     }
                 })
