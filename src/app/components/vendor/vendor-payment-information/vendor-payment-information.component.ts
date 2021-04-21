@@ -27,6 +27,7 @@ import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../
 import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-steps-prime-ng.component';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
+import * as moment from 'moment';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare const google: any;
 
@@ -160,21 +161,22 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	disableSavePaymentCountry: boolean = true;
 	vendorCodeandName: any;
 	contact: any;
-	editSiteName: any
+	editSiteName: any;
+	allActionsOriginal: any[];
 	isAdd: boolean = true;
 	isEdit: boolean = true;
 	isDelete: boolean = true;
 	isPaymentView: boolean = true;
-	constructor(private http: HttpClient, private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
-		if (window.localStorage.getItem('vendorService')) {
-			var obj = JSON.parse(window.localStorage.getItem('vendorService'));
-			if (obj.listCollection && this.router.snapshot.params['id']) {
-				this.vendorService.checkVendorEditmode(true);
-				this.vendorService.isEditMode = true;
-				this.vendorService.listCollection = obj.listCollection;
-				this.vendorService.indexObj.next(obj.activeIndex);
-				this.vendorService.enableExternal = true;
-				this.vendorId = this.router.snapshot.params['id'];
+	constructor(private http: HttpClient,private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
+		if(window.localStorage.getItem('vendorService')){
+            var obj = JSON.parse(window.localStorage.getItem('vendorService'));
+            if(obj.listCollection && this.router.snapshot.params['id']){
+                this.vendorService.checkVendorEditmode(true);
+                this.vendorService.isEditMode = true;
+                this.vendorService.listCollection = obj.listCollection;
+                this.vendorService.indexObj.next(obj.activeIndex);
+                this.vendorService.enableExternal = true;
+                this.vendorId = this.router.snapshot.params['id'];
 				this.vendorService.vendorId = this.vendorId;
 				this.vendorService.listCollection.vendorId = this.vendorId;
 				if (this.vendorId > 0) {
@@ -549,28 +551,43 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		}
 		this.geListByStatus(this.status ? this.status : this.currentstatus)
 	}
-
-	geListByStatus(status) {
-		const newarry = [];
-		if (status == 'Active') {
-			this.status = status;
-			if (this.currentDeletedstatus == false) {
-				this.originalTableData.forEach(element => {
-					if (element.isActive == true && element.isDeleted == false) {
-						newarry.push(element);
-					}
-				});
-			} else {
-				this.originalTableData.forEach(element => {
-					if (element.isActive == true && element.isDeleted == true) {
-						newarry.push(element);
-					}
-				});
-			}
-			this.allActions = newarry;
-		} else if (status == 'InActive') {
-			this.status = status;
-			if (this.currentDeletedstatus == false) {
+	dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.allActions = this.allActionsOriginal;
+            const data = [...this.allActions.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.allActions = data;
+        } else {
+            this.allActions = this.allActionsOriginal;
+        }
+    }
+	
+    geListByStatus(status) {
+        const newarry=[];
+        if(status=='Active'){ 
+            this.status=status;
+			if(this.currentDeletedstatus==false){
+			   this.originalTableData.forEach(element => {
+				if(element.isActive ==true && element.isDeleted ==false){
+				newarry.push(element);
+				}
+			   });
+	       }else{
+		        this.originalTableData.forEach(element => {
+				if(element.isActive ==true && element.isDeleted ==true){
+			     newarry.push(element);
+				}
+			   });
+	   }
+         this.allActions=newarry;
+        }else if(status=='InActive' ){
+            this.status=status;
+			if(this.currentDeletedstatus==false){
 				this.originalTableData.forEach(element => {
 					if (element.isActive == false && element.isDeleted == false) {
 						newarry.push(element);
@@ -602,9 +619,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.allActions = newarry;
 			}
 		}
-		this.totalRecords = this.allActions.length;
-		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-	}
+		this.allActionsOriginal=this.allActions;
+         this.totalRecords = this.allActions.length ;
+         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+		}
 
 	restore(content, rowData) {
 		this.restorerecord = rowData;
@@ -993,10 +1011,11 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.internationalSaveObj.createdBy = this.userName;
 				this.internationalSaveObj.updatedBy = this.userName;
 				this.internationalSaveObj.masterCompanyId = this.currentUserMasterCompanyId;
+				this.internationalSaveObj.beneficiaryCustomer=editValueAssignByCondition('vendorName', this.internationalSaveObj.vendorName),
 				this.vendorService.addInternationalinfo({
 					...this.internationalSaveObj,
-					//vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),
-					beneficiaryCustomerId: editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),
+					
+					beneficiaryCustomerId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),		
 					countryId: editValueAssignByCondition('countries_id', this.internationalSaveObj.countryId),
 				}).subscribe(data => {
 					this.localCollection = {
@@ -1018,7 +1037,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.internationalSaveObj.masterCompanyId = this.currentUserMasterCompanyId;
 				this.internationalSaveObj.createdBy = this.userName;
 				this.internationalSaveObj.updatedBy = this.userName;
-
+				this.internationalSaveObj.beneficiaryCustomer=editValueAssignByCondition('vendorName', this.internationalSaveObj.vendorName),
 				this.vendorService.vendorInternationalUpdate({
 					...this.internationalSaveObj,
 					//vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),	

@@ -1431,7 +1431,7 @@ export class PurchaseSetupComponent implements OnInit {
 	// }
 
 	loadModuleListForVendorComp() {
-		this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
+		this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
 			this.userTypes = res;
 			this.userTypes.map(x => {
 				if(x.moduleName.toUpperCase() == 'COMPANY') {

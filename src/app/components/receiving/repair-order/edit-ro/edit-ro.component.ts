@@ -643,7 +643,7 @@ export class EditRoComponent implements OnInit {
     }
 
     loadModulesNamesForObtainOwnerTraceable() {
-        this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
+        this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.moduleListDropdown = res;
         })
     }

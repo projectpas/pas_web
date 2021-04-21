@@ -527,7 +527,7 @@ export class CreatePublicationComponent implements OnInit {
 
     this.isSpinnerVisible = true;
     let verifiedBy = this.sourcePublication.verifiedBy ? this.sourcePublication.verifiedBy : 0;
-    this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('', true, 0, [verifiedBy].join(), this.currentUserManagementStructureId)
+    this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('', true, 0, [verifiedBy].join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId)
       .subscribe(res => {
         this.employeeList = res;
 

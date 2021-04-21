@@ -169,8 +169,13 @@
       </tr>
       <tr>
         <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-          <input class="table-header-input-width" pInputText type="text"
-            (input)="dt.filter($event.target.value, col.field, 'contains')" />
+          <input type="text" class="incorn_border ui-widget table-header-input-width"
+               *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+              (input)="dt.filter($event.target.value,col.field,'contains')" pInputText>
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+              name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+              name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
         </th>
         <th class="table-actions-column"></th>
       </tr>
@@ -182,7 +187,7 @@
             {{rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
           </ng-container>
           <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-              {{rowData[col.field] }}
+              {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
           </ng-container> 
         </td>
         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == false">

@@ -631,28 +631,21 @@ export class VendorsListComponent implements OnInit {
     openView(content, row) {
         this.vendorId = row.vendorId;
         this.isSpinnerVisible = true;
-        this.CertifiedModuleName = "VendorCertified";
-        this.AuditModuleName = "VendorAudit";
-        this.moduleNameVendor = "Vendor"
+        this.CertifiedModuleName="VendorCertified";
+        this.AuditModuleName="VendorAudit";
+        this.moduleNameVendor="Vendor"
+        
         this.vendorService.getVendorDataById(row.vendorId).subscribe(res => {
-            this.vendorData = res;
-            this.isSpinnerVisible = false;
-        }, error => this.isSpinnerVisible = false); //this.onDataLoadFailed(error)); 
-
-        if (this.isDocumentInfo) {
-            this.toGetVendorGeneralDocumentsList(row.vendorId);
-            this.toGetVendorCertifiedDocumentsList(row.vendorId);
-            this.toGetVendorAuditDocumentsList(row.vendorId);
-        }
-
-
-        if (this.isPaymentInfo) {
-            this.getVendorProcess1099FromTransaction(row.vendorId);
-            this.getDomesticWithVendorId(row.vendorId);
-            this.InternatioalWithVendorId(row.vendorId);
-        }
-
-
+            
+            this.vendorData = res;    
+            this.isSpinnerVisible = false;        
+        },error => this.isSpinnerVisible = false); 
+        this.toGetVendorGeneralDocumentsList(row.vendorId);
+        this.toGetVendorCertifiedDocumentsList(row.vendorId);
+        this.toGetVendorAuditDocumentsList(row.vendorId);
+        this.getVendorProcess1099FromTransaction(row.vendorId);
+        this.getDomesticWithVendorId(row.vendorId);
+        this.InternatioalWithVendorId(row.vendorId);
         this.DefaultWithVendorId(row.vendorId);
 
         if (this.isPaymentInfo) {

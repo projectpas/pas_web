@@ -15,6 +15,8 @@ import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { StocklineService } from '../../../../services/stockline.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { timePattern } from '../../../../validations/validation-pattern';
+
 @Component({
     selector: 'app-customer-work-setup',
     templateUrl: './customer-work-setup.component.html',
@@ -30,6 +32,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     isEditMode: boolean = false;
     private onDestroy$: Subject<void> = new Subject<void>();
     uploadDocs: Subject<boolean> = new Subject();
+    timePattern = timePattern();
     breadcrumbs: MenuItem[] = [
         { label: 'Receiving' },
         { label: 'Customer Work List' },
@@ -170,7 +173,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     loadModulesNamesForObtainOwnerTraceable() {
-        this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
+        this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.moduleListDropdown = res; 
         })
     }
@@ -183,10 +186,12 @@ export class CustomerWorkSetupComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+	}
+
     get currentUserManagementStructureId(): number {
-        return this.authService.currentUser
-          ? this.authService.currentUser.managementStructureId
-          : null;
+        return this.authService.currentUser ? this.authService.currentUser.managementStructureId : null;
       }
 
     filterPartNumbers(event) {
@@ -205,10 +210,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.setEditArray.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoCompleteSmartDropDownItemMasterList(strText, true, 20, this.setEditArray.join(), mcId).subscribe(res => {
+        this.commonService.autoCompleteSmartDropDownItemMasterList(strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allPartnumbersList = res;
             this.partNumbersInfo = this.allPartnumbersList;
         })
@@ -229,7 +231,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(res => {
+        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId,this.authService.currentUser.masterCompanyId).subscribe(res => {
            if (res && res.length != 0) {
                 this.allEmployeeList = res;
             }
@@ -263,13 +265,9 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.receivingForm.owner?  this.receivingForm.owner.value :0,
                 this.receivingForm.obtainFrom? this.receivingForm.obtainFrom.value :0); 
         }else{
-
             this.arrayVendlsit.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, this.arrayVendlsit.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allVendorsList = res;
             this.vendorsList = this.allVendorsList;
         })
@@ -290,13 +288,9 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.receivingForm.owner?this.receivingForm.owner.value :0,
                 this.receivingForm.obtainFrom? this.receivingForm.obtainFrom.value :0); 
         }else{
-
             this.arrayVendlsit.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-      this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayVendlsit.join(),mcId).subscribe(res => {
+      this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allCompanyList = res;
             this.companyList = this.allCompanyList;
         })
@@ -311,10 +305,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allConditionInfo = res.map(x => {
                     return {
@@ -323,10 +314,6 @@ export class CustomerWorkSetupComponent implements OnInit {
                         description: x.label
                     }
                 });
-                // if (!this.receivingCustomerWorkId) {
-                //     this.receivingForm.conditionId = this.allConditionInfo[0].conditionId
-                //     this.onSelectCondition()
-                // }
             }
         })
     }
@@ -339,7 +326,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.arrayEmplsit.push(0,this.authService.currentEmployee.value);
         }
-        await this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId).subscribe(res => {
+        await this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.certifiedEmployeeList = res;            
         })
 	}
@@ -360,11 +347,8 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.setEditArray.push(0);
         }
-        const strText = value ? value : '';
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        const strText = value ? value : '';        
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allTagTypes = res;
             }
@@ -502,7 +486,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 }
             }
             let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 obj = res[0];
                 if (tableName == 'Site') {
                     obj.siteId = obj.value,
@@ -587,10 +571,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else { 
             this.arrayCustlist.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allCustomersInfo = res.map(x => {
                 return {
                     ...x,
@@ -617,11 +598,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.arrayCustlist.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(),mcId).subscribe(res => {
-
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.workScopeList = res;
         });
     }
@@ -674,14 +651,10 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = '';
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allSites = res.map(x => {
                     return {
-
                         siteId: x.value,
                         name: x.label,
                         ...x
@@ -696,7 +669,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
-        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId).subscribe(res => {
+        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allWareHouses = res.map(x => {
                 return {
 
@@ -723,7 +696,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allBins = [];
         if (warehouseId != 0) {
 
-            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId).subscribe(res => {
+            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allLocations = res.map(x => {
                     return {
 
@@ -743,7 +716,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allShelfs = [];
         this.allBins = [];
         if (locationId != 0) {
-            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId).subscribe(res => {
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allShelfs = res.map(x => {
                     return {
 
@@ -762,7 +735,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     shelfValueChange(shelfId) {
         this.allBins = [];
         if (shelfId != 0) {
-            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId).subscribe(res => {
+            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.allBins = res.map(x => {
                     return {
                         binId: x.value,
@@ -803,7 +776,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     customergenericinformation(id) {
-        this.commonService.customergenericinformation(id).subscribe(res => {
+        this.commonService.customergenericinformation(id,this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res) {
                 this.receivingForm.customerCode = res[0].customerCode;
             }
@@ -833,9 +806,6 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.setEditArray.push(0);
             }
             const strText = '';
-            const mcId= this.authService.currentUser
-            ? this.authService.currentUser.masterCompanyId
-            : null;
             this.commonService.autoDropListCustomerContacts(id, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.customerContactList = res.map(x => {
                     return {
@@ -901,31 +871,16 @@ export class CustomerWorkSetupComponent implements OnInit {
     onSelectObrainFrom(value) {     
         this.receivingForm.obtainFrom = undefined;
         this.receivingForm.obtainFromTypeId = value;
-        // if(value==1){
-        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
-        //     this.receivingForm.owner =  this.receivingForm.customerId;;
-        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
-        // }
     }
 
     onSelectOwner(value) {
         this.receivingForm.owner = undefined;
         this.receivingForm.ownerTypeId = value;
-        // if(value==1){
-        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
-        //     this.receivingForm.owner =  this.receivingForm.customerId;;
-        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
-        // }
     }
 
     onSelectTraceableTo(value) {
         this.receivingForm.traceableTo = undefined;
         this.receivingForm.traceableToTypeId = value;
-        // if(value==1){
-        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
-        //     this.receivingForm.owner =  this.receivingForm.customerId;;
-        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
-        // }
     }
 
     onSelectCondition() {
@@ -1029,49 +984,25 @@ export class CustomerWorkSetupComponent implements OnInit {
         }
         else {
         
-            // if (receivingInfo.obtainFromTypeId == 1 && receivingInfo.obtainFrom !=null) {
-            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.customerId;
-            // } else if (receivingInfo.obtainFromTypeId = 2 && receivingInfo.obtainFrom !=null) {
-            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.value;
-            // } else if (receivingInfo.obtainFromTypeId == 9 && receivingInfo.obtainFrom !=null) {
-            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.value;
-            // }
-            // if (receivingInfo.ownerTypeId == 1 && receivingInfo.owner !=null) {
-            //     receivingInfo.owner = receivingInfo.owner.customerId;
-            // } else if (receivingInfo.ownerTypeId = 2 && receivingInfo.owner !=null) {
-            //     receivingInfo.owner = receivingInfo.owner.value;
-            // } else if (receivingInfo.ownerTypeId == 9 && receivingInfo.owner !=null) {
-            //     receivingInfo.owner = receivingInfo.owner.value;
-            // }
-            // if (receivingInfo.traceableToTypeId == 1 && receivingInfo.traceableTo !=null) {
-            //     receivingInfo.traceableTo = receivingInfo.traceableTo.customerId;
-            // } else if (receivingInfo.traceableToTypeId = 2 && receivingInfo.traceableTo !=null) {
-            //     receivingInfo.traceableTo = receivingInfo.traceableTo.value;
-            // } else if (receivingInfo.traceableToTypeId == 9 && receivingInfo.traceableTo !=null) {
-            //     receivingInfo.traceableTo = receivingInfo.traceableTo.value;
-            // }
             receivingInfo.ownerTypeId=(receivingInfo.ownerTypeId==0 || receivingInfo.ownerTypeId==false)? null :receivingInfo.ownerTypeId;
             receivingInfo.obtainFromTypeId=(receivingInfo.obtainFromTypeId==0 || receivingInfo.obtainFromTypeId==false)? null :receivingInfo.obtainFromTypeId;
             receivingInfo.traceableToTypeId=(receivingInfo.traceableToTypeId==0 || receivingInfo.traceableToTypeId==0)? null :receivingInfo.traceableToTypeId;
 
-if(receivingInfo.obtainFromTypeId !=null && receivingInfo.obtainFrom !=null){
-    receivingInfo.obtainFrom = (typeof receivingInfo.obtainFrom=='object' )? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
-}else{
-    receivingInfo.obtainFrom=null;
-}
-if(receivingInfo.ownerTypeId !=null && receivingInfo.owner !=null){
-    receivingInfo.owner =  (typeof  receivingInfo.owner=='object')? receivingInfo.owner.value : receivingInfo.owner;
-}else{
-    receivingInfo.owner =null
-}
-
-if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
-    receivingInfo.traceableTo = (typeof receivingInfo.traceableTo=='object')? receivingInfo.traceableTo.value: receivingInfo.traceableTo;
-}else{
-    receivingInfo.traceableTo=null;  
-}
-
-
+            if(receivingInfo.obtainFromTypeId !=null && receivingInfo.obtainFrom !=null){
+                receivingInfo.obtainFrom = (typeof receivingInfo.obtainFrom=='object' )? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
+            }else{
+                receivingInfo.obtainFrom=null;
+            }
+            if(receivingInfo.ownerTypeId !=null && receivingInfo.owner !=null){
+                receivingInfo.owner =  (typeof  receivingInfo.owner=='object')? receivingInfo.owner.value : receivingInfo.owner;
+            }else{
+                receivingInfo.owner =null
+            }
+            if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
+                receivingInfo.traceableTo = (typeof receivingInfo.traceableTo=='object')? receivingInfo.traceableTo.value: receivingInfo.traceableTo;
+            }else{
+                receivingInfo.traceableTo=null;  
+            }
             if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
                 this.allTagTypes.forEach(element1 => {
                     receivingInfo.tagType.forEach(element2 => {
@@ -1116,10 +1047,7 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
     getCustomerWarningsList(): void {
         const strText='Receive MPN';
         this.setEditArray.push(0);
-    const mcId= this.authService.currentUser
-    ? this.authService.currentUser.masterCompanyId
-    : null;
-        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
          res.forEach(element => {
                 if (element.label == 'Receive MPN') {
                     this.customerWarningListId = element.value;
@@ -1206,7 +1134,7 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
     getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEditMode ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID,this.authService.currentUser.masterCompanyId).subscribe(response => {
             if (response) {
                 const result = response;
                 if (result[0] && result[0].level == 'Level1') {
@@ -1281,14 +1209,11 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
         if (legalEntityId) {
             this.managementStructure.companyId = legalEntityId;
             this.receivingForm.managementStructureId = legalEntityId;
-            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.businessUnitList = res;
                 this.managementStructure.buId = 0;
                 this.managementStructure.divisionId = 0;
                 this.managementStructure.departmentId = 0;
-                // if(from=='html'){
-                //     this.receivingForm.employeeId=null;
-                // }
             })
             this.disableMagmtStruct = false;
         } else {
@@ -1303,13 +1228,10 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
         if (businessUnitId) {
             this.managementStructure.buId = businessUnitId;
             this.receivingForm.managementStructureId = businessUnitId;
-            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.divisionList = res;
                 this.managementStructure.divisionId = 0;
                 this.managementStructure.departmentId = 0;
-                // if(from=='html'){
-                //     this.receivingForm.employeeId=null;
-                // }
             })
         }
     }
@@ -1318,12 +1240,9 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
         if (divisionId) {
             this.managementStructure.divisionId = divisionId;
             this.receivingForm.managementStructureId = divisionId;
-            this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.departmentList = res;
                 this.managementStructure.departmentId = 0;
-                // if(from=='html'){
-                //     this.receivingForm.employeeId=null;
-                // }
             })
         }
     }
@@ -1333,9 +1252,6 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
             this.managementStructure.departmentId = departmentId;
             this.receivingForm.managementStructureId = departmentId;
         }
-        // if(from=='html'){
-        //     this.receivingForm.employeeId=null;
-        // }
     }
 
     onClickMemo() {
@@ -1374,11 +1290,7 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
     }
 
     getWorkOrderDefaultSetting() {
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-          this.commonService.workOrderDefaultSettings(mcId, 1).subscribe(res => {
-         
+          this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, 1).subscribe(res => {         
             this.receivingForm.siteId=res[0].defaultSiteId;
             this.receivingForm.warehouseId=res[0].defaultWearhouseId;
             this.receivingForm.locationId=res[0].defaultLocationId;

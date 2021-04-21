@@ -195,20 +195,6 @@ export class SalesReserveUnreserveComponent implements OnInit {
     }
 
     onChangeOfPartSelection(event) {
-        // this.isSpinnerVisible = true;
-        // this.salesOrderService.getholdstocklinereservedparts(this.part.salesOrderId, this.part.salesOrderPartId, this.part.stockLineId, this.part.quantityRequested)
-        // .subscribe(data => {
-        //     this.isSpinnerVisible = false;
-        //     //this.parts = data[0];
-        //     this.alertService.showMessage(
-        //         "Success",
-        //         data,
-        //         MessageSeverity.success
-        //       );
-        // },error => {
-        //     this.isSpinnerVisible = false;
-        // });
-
         let selectedPartsLength = 0;
         for (let i = 0; i < this.parts.length; i++) {
             if (event == true) {
@@ -321,7 +307,6 @@ export class SalesReserveUnreserveComponent implements OnInit {
     minutes: any;
     seconds: any;
     setTimer() {
-        var minutes;
         this.seconds;
         var timer2 = "1:01";
         this.interval = setInterval(function () {

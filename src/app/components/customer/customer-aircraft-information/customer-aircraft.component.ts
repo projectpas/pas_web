@@ -12,6 +12,7 @@ import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-
 
 declare var $ : any;
 import { Table } from 'primeng/table';
+import * as moment from 'moment';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-customer-aircraft',
@@ -94,7 +95,8 @@ export class CustomerAircraftComponent implements OnInit {
     isViewMode: boolean = false;
     stopmulticlicks: boolean;
     currentDeletedstatus:boolean=false;
-    restorerecord:any={}
+    restorerecord: any = {};
+    aircraftListDataValuesOriginal: any;
     isAdd:boolean=true;
     isEdit:boolean=true;
     isDelete:boolean=true;
@@ -388,6 +390,7 @@ export class CustomerAircraftComponent implements OnInit {
         }        
         this.customerService.searchAirMappedByMultiTypeIDModelIDDashIDByCustomerId(this.id, this.searchAircraftParams).subscribe(res => {
             this.aircraftListDataValues = res;
+            this.aircraftListDataValuesOriginal=res;
             if (this.aircraftListDataValues.length > 0) {
                 this.totalRecords = this.aircraftListDataValues.length;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -615,13 +618,8 @@ export class CustomerAircraftComponent implements OnInit {
         if(this.id > 0)
         {
             this.customerService.getMappedAirCraftDetails(this.id).subscribe(res => {
-                this.aircraftListDataValues = res.map(x => {
-                    return {
-                        ...x,
-                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy') : '',
-                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy') : '',
-                    }
-                });
+                this.aircraftListDataValues = res;
+                this.aircraftListDataValuesOriginal=this.aircraftListDataValues
                 if (this.aircraftListDataValues.length > 0) {
                     this.totalRecords = this.aircraftListDataValues.length;
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -630,6 +628,22 @@ export class CustomerAircraftComponent implements OnInit {
             }, error => {this.isSpinnerVisible = false;})
         }
     }
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.aircraftListDataValues = this.aircraftListDataValuesOriginal;
+            const data = [...this.aircraftListDataValues.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.aircraftListDataValues = data;
+        } else {
+            this.aircraftListDataValues = this.aircraftListDataValuesOriginal;
+        }
+    }
+	
     
     getCustomerAircraftHistory(row) {
         this.isSpinnerVisible = true;
@@ -733,6 +747,7 @@ export class CustomerAircraftComponent implements OnInit {
         if (this.id > 0) {
             this.customerService.getMappedAirCraftDetailsByIdAndStatus(this.id, value).subscribe(res => {
                 this.aircraftListDataValues = res;
+                this.aircraftListDataValuesOriginal=res;
                 if (this.aircraftListDataValues.length > 0) {
                     this.totalRecords = this.aircraftListDataValues.length;
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);

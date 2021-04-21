@@ -177,10 +177,10 @@
                                 <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
                                     <input class="table-header-input-width" name="domesticShip" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="domestictable.filter($event.target.value, col.field, 'contains')">
            
-                                    <input type="date" name="domesticShip"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
-                                    name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-                               <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
-                               (change)="dateFilterForTable($event.target.value,col.field)" />
+                                    <input type="date"  *ngIf="col.field == 'createdDate'"
+                                    name="createdDate" (change)="dateFilterForDomesticTable($event.target.value, col.field)" />
+                                  <input type="date"  *ngIf="col.field == 'updatedDate'"
+                                    name="updatedDate" (change)="dateFilterForDomesticTable($event.target.value,col.field)" />
                                 </th>
                                 <th class="table-actions-column" style="width:150px !important"></th>
                             </tr>
@@ -1372,9 +1372,9 @@
                             <th style="width: auto;" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
                                 <input style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="domesShipVia.filter($event.target.value, col.field, 'contains')">
        
-                                <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                <input type="date"   style="width:100%" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                                 name="createdDate"  (change)="dateFilterForTableDomesticShipVia($event.target.value, col.field)" />
-                           <input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+                           <input type="date" style="width:100%"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
                            (change)="dateFilterForTableDomesticShipVia($event.target.value,col.field)" />
                             </th>
                             <th style="width:140px;position:sticky"></th>
@@ -1845,10 +1845,7 @@
                             <col *ngFor="let col of columns" style="width:auto">
                         </colgroup>
                     </ng-template>
-                    <!-- <ng-template pTemplate="caption">
-                        <div style="text-align: right">
-                        </div>
-                    </ng-template> -->
+                   
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th style="width: 40px;">Flag</th>
@@ -1860,16 +1857,15 @@
                         </tr>
                         <tr>
                             <th style="width: 40px;"></th>
-                            <!-- <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
-                                <input style="width:100%;" pInputText type="text" (input)="internationShipVia.filter($event.target.value, col.field, 'contains')">
-                            </th> -->
+                            
                             <th style="width: 120px;" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
-                                <input style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="internationShipVia.filter($event.target.value, col.field, 'contains')">
-       
-                                <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
-                                name="createdDate"  (change)="dateFilterForTableinternationalShipVia($event.target.value, col.field)" />
-                           <input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
-                           (change)="dateFilterForTableinternationalShipVia($event.target.value,col.field)" />
+                                <input type="text" class="incorn_border ui-widget table-header-input-width"
+               *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+              (input)="internationShipVia.filter($event.target.value,col.field,'contains')" pInputText>
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+              name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+              name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
                             </th>
                             <th ></th>
                         </tr>
@@ -1944,25 +1940,7 @@
                             </td>
                         </tr>
                     </ng-template>
-                    <!-- <ng-template pTemplate="summary" id="footer">
-                        <label id="footer" class="footer">Total:</label>
-                        <input style="width: 5%;"
-                               [(ngModel)]="interTotalRecords"
-                               [disabled]="true"
-                               name="interTotalRecords"
-                               pInputText
-                               type="text" />
-                        &nbsp;&nbsp;
-                        <label id="footer" class="footer1">Pages Count:</label>
-                        <input style="width: 5%;"
-                               [(ngModel)]="interTotalPages"
-                               [disabled]="true"
-                               name="interTotalPages"
-                               pInputText
-                               type="text" />
-
-                               
-                    </ng-template> -->
+                   
                     <ng-template pTemplate="summary" id="footer">
                         <label id="footer" class="footer">Total:</label>
                         <input class="footer-input-width" [(ngModel)]="internationShipVia._totalRecords" name="totalRecords2" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
