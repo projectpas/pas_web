@@ -106,6 +106,7 @@ import { SalesOrderPickTicketsComponent } from "../components/sales/order/sales-
 import { SalesShippingLabelComponent } from "../components/sales/order/sales-order-shipping-label/sales-order-shipping-label.component";
 import { SalesOrderPrintInvoiceComponent } from "../components/sales/order/shared/components/sales-order-print-invoice/sales-order-print-invoice.component";
 import { AddPaymentComponent } from "../components/sales/shared/components/payment/invoice-payment.component";
+import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sales-order-Packaging-Label/sales-order-packaging-label.component";
 //Sales Order Components - End
 
 @NgModule({
@@ -202,9 +203,10 @@ import { AddPaymentComponent } from "../components/sales/shared/components/payme
     SalesOrderPickTicketsComponent,
     SalesShippingLabelComponent,
     SalesOrderPrintInvoiceComponent,
-    AddPaymentComponent
+    AddPaymentComponent,
+    SalesOrderPackagingLabelComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
-  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, AddPaymentComponent]
+  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, AddPaymentComponent, SalesOrderPackagingLabelComponent]
 })
 export class SalesPagesModule { }
