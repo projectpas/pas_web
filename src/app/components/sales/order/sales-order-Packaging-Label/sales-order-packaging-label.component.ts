@@ -8,72 +8,115 @@ import { SalesOrderShippingLabelView } from "../../../../models/sales/SalesOrder
 import { ISalesOrderCopyParameters } from "../models/isalesorder-copy-parameters";
 
 @Component({
-    selector: "app-sales-order-packaging-label",
-    templateUrl: "./sales-order-packaging-label.component.html",
-    styleUrls: ["./sales-order-packaging-label.component.scss"]
+  selector: "app-sales-order-packaging-label",
+  templateUrl: "./sales-order-packaging-label.component.html",
+  styleUrls: ["./sales-order-packaging-label.component.scss"]
 })
 export class SalesOrderPackagingLabelComponent implements OnInit {
-    @Input('modal-reference') modalReference: NgbModalRef;
-    @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
-    @Input() salesOrderView: SalesOrderShippingLabelView;
-    salesOrderCopyParameters: ISalesOrderCopyParameters;
-    salesOrderShipping: any = [];
-    todayDate: Date = new Date();
-    salesOrderpartConditionDescription: any;
-    salesOrderId: number;
-    salesOrderPartId: number;
-    soShippingId: number;
-    endPointURL: any;
-    isPrint: boolean = false;
+  @Input('modal-reference') modalReference: NgbModalRef;
+  @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
+  @Input() salesOrderView: SalesOrderShippingLabelView;
+  salesOrderCopyParameters: ISalesOrderCopyParameters;
+  salesOrderShipping: any = [];
+  todayDate: Date = new Date();
+  salesOrderpartConditionDescription: any;
+  salesOrderId: number;
+  salesOrderPartId: number;
+  soPickTicketId: number;
+  endPointURL: any;
+  isPrint: boolean = false;
+  salesOrder: any = [];
+  parts: any = [];
+  management: any = {};
+  isSpinnerVisible: boolean = false;
 
-    constructor(private salesOrderService: SalesOrderService) {
-        this.salesOrderCopyParameters = new SalesOrderCopyParameters();
+  constructor(private salesOrderService: SalesOrderService) {
+    this.salesOrderCopyParameters = new SalesOrderCopyParameters();
+  }
+
+  ngOnInit() {
+    this.endPointURL = environment.baseUrl;
+    this.getSalesPickTicketView();
+  }
+
+  getSalesPickTicketView() {
+    this.isSpinnerVisible = true;
+    this.salesOrderService.getPackagingSlipPrint(this.salesOrderId, this.salesOrderPartId, this.soPickTicketId).subscribe(res => {
+      this.salesOrder = res[0].packagingLabelViewModel;
+      this.parts = res[0].packagingLabelPartViewModel;
+      this.management = res[0].managementStructureHeaderData;
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    })
+  }
+
+  close() {
+    if (this.modalReference) {
+      this.modalReference.close();
     }
+  }
 
-    ngOnInit() {
-        this.endPointURL = environment.baseUrl;
-        //this.getSalesPickTicketView();
-    }
-
-    getSalesPickTicketView() {
-        this.salesOrderService.getShippingLabelPrint(this.salesOrderId, this.salesOrderPartId, this.soShippingId).subscribe(res => {
-            this.salesOrderShipping = res[0].soShippingLabelViewModel;
-        })
-    }
-
-    close() {
-        if (this.modalReference) {
-            this.modalReference.close();
-        }
-    }
-
-    updateServiceClass() {
-        this.salesOrderService.updateShipping(this.salesOrderShipping.serviceClass, this.soShippingId).subscribe(res => {
-            this.printContent();
-        })
-    }
-
-    print(): void {
-        this.isPrint = true;
-        setTimeout(() => {
-            this.updateServiceClass();    
-        }, 100);
-    }
-
-    printContent() {
-        let printContents, popupWin;
-        printContents = document.getElementById('soShippingLabel').innerHTML;
-        popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-        popupWin.document.open();
-        popupWin.document.write(`
+  printContent() {
+    let printContents, popupWin;
+    printContents = document.getElementById('PackagingSlip').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
           <html>
             <head>
               <title>Print tab</title>
               <style>
-              input {
-                width: 56%;
+              table {
+                width: 1000px;
+                overflow: auto !important;
+              }
+              
+              table thead {
+                background: #808080;
+              }
+              
+              table thead tr {
+                background: #0d57b0 !important;
+              }
+              
+              table,
+              thead,
+              td {
+                border: white;
+                border-collapse: collapse;
+              }
+              
+              table,
+              thead,
+              th {
+                border: 1px solid black;
+                border-collapse: collapse;
+              }
+              
+              table thead tr th {
+                background: #0d57b0 !important;
+                padding: 5px !important;
+                color: #fff !important;
+                letter-spacing: 0.3px;
+                font-size: 10px;
+                text-transform: capitalize;
+                z-index: 1;
+              }
+              
+              table tbody {
+                overflow-y: auto;
+                max-height: 500px;
+              }
+              
+              table tbody tr td {
                 background: #fff;
-                border: 1px Solid
+                padding: 2px;
+                line-height: 22px;
+                height: 22px;
+                color: #333;
+                font-size: 11.5px !important;
+                letter-spacing: 0.1px;
               }
               
               h4 {
@@ -86,17 +129,10 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               }
               
               h5 {
-                font-family: inherit;
-                font-weight: 500;
-                line-height: 1.1;
-                color: inherit;
-                background: #fff;
-                padding: 5px;
-                font-size: 14px;
-                margin-bottom: 15px;
-                margin: 0 !important;
-                padding: 5px;
-                text-align: center
+                text-align: center;
+                background: #0d57b0 !important;
+                color: #fff !important;
+                margin-left: 14%
               }
               
               hr {
@@ -110,25 +146,12 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               
               .first-block {
                 position: relative;
+                border: 1px solid black;
                 min-height: 1px;
                 float: left;
                 padding-right: 2px;
                 padding-left: 2px;
                 width: 66.66666667%;
-              }
-              .input-width{width:60px !important}
-              .sold-block-div{margin: 0px 0;position: relative;display:flex;min-height: 1px;width: 100%;}
-              
-              .first-block-label {
-                position: relative;
-                min-height: 1px;
-                float: left;
-                padding-right: 2px;
-                padding-left: 2px;
-                 width: 38.33333333%;
-                text-transform: capitalize;
-                margin-bottom: 0;
-                text-align: left;
               }
               
               .first-block-4 {
@@ -139,22 +162,67 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 padding-left: 2px;
               }
               
-              
-              
-              .first-block-address {
-                margin-right: 20px;
-                text-align: left
-              }
-              
-              
-              .first-block-quotation {
-                margin-right: 20px;
-                text-align: left;
-                margin-top: 10px;
+              .border-transparent {
+                border-block-color: white;
               }
               
               .first-block-name {
                 margin-right: 20px
+              }
+              
+              .first-block-sold-to {
+                position: relative;
+                min-height: 200px;
+                float: left;
+                padding-right: 2px;
+                border: 1px solid black;
+                background: #fff;
+                width: 100%;
+                padding-left: 2px;
+              }
+              
+              .first-block-ship-to {
+                position: relative;
+                min-height: 200px;
+                padding-right: 2px;
+                border: 1px solid black;
+                background: #fff;
+                width: 100%;
+                padding-left: 2px;
+              }
+              
+              .first-block-sold {
+                position: relative;
+                min-height: 1px;
+                float: left;
+                padding-right: 2px;
+                padding-left: 2px;
+                width: 50%;
+                margin-top: 10px;
+              }
+              
+              .first-block-ship {
+                position: relative;
+                min-height: 1px;
+                float: right;
+                padding-right: 2px;
+                padding-left: 2px;
+                width: 48%;
+                margin-top: 10px
+              }
+              
+              .address-block {
+                position: relative;
+                min-height: 1px;
+                float: left;
+                padding-right: 2px;
+                border: 1px solid black;
+                width: 100%;
+                padding-left: 2px;
+              }
+              
+              .text-right {
+                text-align: right
               }
               
               .second-block {
@@ -162,24 +230,19 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 min-height: 1px;
                 float: left;
                 padding-right: 2px;
-                width: 32.33333333%;
+                width: 49.33333333%;
                 padding-left: 2px;
                 box-sizing: border-box;
               }
-              .second-block-div{margin: 2px 0;
-                position: relative;display:flex;
+              
+              .second-block-div {
+                margin: 2px 0;
+                position: relative;
+                display: flex;
                 min-height: 1px;
-                width: 100%;}
-              // .second-block-div {
-              //   margin: 2px 0;
-              //   position: relative;
-              //   min-height: 1px;
-              //   display:flex;
-              //   float: left;
-              //   padding-right: 2px;
-              //   padding-left: 2px;
-              //   width: 100%;
-              // }
+                padding-left: 50px;
+                width: 100%;
+              }
               
               .second-block-label {
                 position: relative;
@@ -190,17 +253,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 width: 38.33333333%;
                 text-transform: capitalize;
                 margin-bottom: 0;
-                margin-top: 5px;
-              }
-              
-              .second-block-value {
-                position: relative;
-                min-height: 1px;
-                width: 58.33333333%;
-                float: left;
-                padding-right: 2px;
-                padding-left: 2px;
-                margin-top: 4px;
+                text-align: left;
               }
               
               .clear {
@@ -217,12 +270,6 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               .image {
                 border: 1px solid #ccc;
                 padding: 5px;
-                margin-top:20px;
-                margin-bottom:10px;
-              }
-              
-              .mtop20 {
-                margin-top: 20px;
               }
               
               .logo-block {
@@ -237,48 +284,38 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 padding: 25px 15px;
               }
               
-              .table-text {
-                border: 1px solid #ccc;
-                padding: 5px;
-                height: 150px;
-              }
-              
-              .barcode-name {
-                margin: 0 0 10px;
-              }
-              
-              
-              .input-field-border {
-                width: 88px;
-                border-radius: 0px !important;
-                background: #fff;
-                border: none;
-                border-bottom: 1px solid black;
-              }
               
               .pick-ticket-header {
                 border: 1px solid black;
-                text-align: left;
+                text-align: center;
                 background: #0d57b0 !important;
                 color: #fff !important;
-                -webkit-print-color-adjust: exact;
-              }
-             
               }
               
-              .div-height {
-                min-height: 500px;
-                height: auto
+              .very-first-block {
+                position: relative;
+                min-height: 1px;
+                float: left;
+                padding-right: 2px;
+                padding-left: 2px;
+                width: 50%;
+              }
+              
+              .first-block-label {
+                position: relative;
+                min-height: 1px;
+                float: left;
+                padding-right: 2px;
+                padding-left: 2px;
+                text-transform: capitalize;
+                margin-bottom: 0;
+                text-align: left;
               }
               </style>
             </head>
         <body onload="window.print();window.close()">${printContents}</body>
           </html>`
-        );
-        popupWin.document.close();
-
-        setTimeout(() => {
-            this.isPrint = false;  
-        }, 2000);
-    }
+    );
+    popupWin.document.close();
+  }
 }
