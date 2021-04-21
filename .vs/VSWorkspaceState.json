@@ -1,16 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\src",
-    "\\src\\app",
-    "\\src\\app\\components",
-    "\\src\\app\\components\\customer",
-    "\\src\\app\\components\\customer\\customer-general-information",
-    "\\src\\app\\components\\customer\\customer-steps-primeng",
-    "\\src\\app\\components\\user-role",
-    "\\src\\app\\components\\vendor",
-    "\\src\\app\\components\\vendor\\vendor-contacts"
+    ""
   ],
-  "SelectedNode": "\\src\\app\\components\\customer\\customer-steps-primeng\\customer-steps-primeng.component.ts",
   "PreviewInSolutionExplorer": false
 }
