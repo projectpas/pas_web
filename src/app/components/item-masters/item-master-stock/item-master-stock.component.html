@@ -291,12 +291,16 @@
                                     </div>
                                     <div class="inline-block display-flex spacing-label">
                                         <label class="control-label">
-                                            Item Group <strong class="clr-red" *ngIf="selectedItemClassificationName == 'Rotable'">*</strong>
+                                            Item Group <strong class="clr-red">*</strong>
                                         </label>
-
                                     </div>
                                     <div>
-                                        <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allitemgroupobjInfo" filter="true" [(ngModel)]="sourceItemMaster.itemGroupId" name="itemGroupId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required="{{selectedItemClassificationName == 'Rotable'}}"></p-dropdown>
+                                        <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" 
+                                        [options]="allitemgroupobjInfo" filter="true" 
+                                        [(ngModel)]="sourceItemMaster.itemGroupId" 
+                                        name="itemGroupId" [resetFilterOnHide]="true" 
+                                        placeholder="-- Select --" [showClear]="true" 
+                                        required></p-dropdown>
                                        
                                     </div>
                                     <div class="inline-block display-flex spacing-label">
