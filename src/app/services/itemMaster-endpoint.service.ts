@@ -1119,8 +1119,8 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getalterqquparts<T>(itemMasterId: number): Observable<T> {
-        let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}`;
+    getalterqquparts<T>(itemMasterId: number,masterCompanyId?): Observable<T> {
+        let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}&&masterCompanyId=${masterCompanyId!==undefined ? masterCompanyId : 1}`;
         return this.http
             .get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {

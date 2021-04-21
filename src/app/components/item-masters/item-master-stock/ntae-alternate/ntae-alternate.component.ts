@@ -199,7 +199,7 @@ export class NTAEAlternateComponent implements OnInit {
     getalterqquparts(){
         this.partsData = [];
         this.pnData = [];
-        this.itemser.getalterqquparts(this.itemMasterId).subscribe(res => {
+        this.itemser.getalterqquparts(this.itemMasterId,this.currentUserMasterCompanyId).subscribe(res => {
             this.partsData = res[0];
             this.pnData = this.partsData;
         })
