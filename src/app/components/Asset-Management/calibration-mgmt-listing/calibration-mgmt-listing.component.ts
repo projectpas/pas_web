@@ -78,6 +78,7 @@ activeIndex: number;
 assetViewList: any = {};
 currentAsset: any = {};
 modal: NgbModalRef;
+isscheduleprocess:boolean=false;
 historyModal: NgbModalRef;
 private isDeleteMode: boolean = false;
 private isEditMode: boolean = false;
@@ -100,6 +101,7 @@ pageIndex1: number = 0;
 pageSize1: number = 10;
 totalPages1: number;
 updateMode: boolean = false;
+Certifytype:string='Calibration';
 allManagemtninfo: any[] = [];
 bulist: any[] = [];
 departmentList: any[] = [];
@@ -170,6 +172,7 @@ targetData: any;
     const isdelete=this.currentDeletedstatus ? true:false;
     data.filters.isDeleted=isdelete
         data.filters['status'] = this.status ? this.status : 'Active';
+        data.filters['certifytype'] = this.Certifytype ? this.Certifytype : 'calibration';
         data.globalFilter= data.globalFilter ? data.globalFilter : '';
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
       this.isSpinnerVisible=true;
@@ -241,6 +244,9 @@ if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.up
 viewSelectedRowdbl(rowData) {
   this.openView(rowData);
   $('#invView').modal('show');
+}
+closeDeleteModal() {
+    $("#editcalibration").modal("hide");
 }
 assetInventoryId:any;
 openView(row) {
@@ -334,10 +340,14 @@ get userName(): string {
   openAssetToEdit(row) {
     this.assetService.isEditMode = true;
     this.isSaving = true;
+    $("#editcalibration").modal("show");
     // this.assetService.currentAssetId = row.assetRecordId;
     this.assetService.listCollection = row;
     const { assetId } = row;
-    this._route.navigateByUrl(`assetmodule/assetpages/app-edit-asset-inventory/${row.assetInventoryId}`);
+}
+showscheduleprocess()
+{
+    this.isscheduleprocess=true;
 }
 openAssetToAdjustment(row) {
 
@@ -434,6 +444,17 @@ geListByStatus(status) {
   // const PagingData = { ...this.lazyLoadEventDataInput, filters:{status: status,pageIndex: 1} }
   this.loadData(this.lazyLoadEventDataInput);
 }
+
+geListBycertifytype(Certifytype) {
+    this.Certifytype = Certifytype;
+    this.selectedRows=[];
+   this.pageNumber = 0;
+    this.pageIndex = 0;
+    this.lazyLoadEventDataInput.first = this.pageIndex;
+    this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, Certifytype: Certifytype, pageIndex: 1 }; 
+    // const PagingData = { ...this.lazyLoadEventDataInput, filters:{status: status,pageIndex: 1} }
+    this.loadData(this.lazyLoadEventDataInput);
+  }
 getDeleteListByStatus(value){
   this.selectedRows=[];
   this.currentDeletedstatus=true;
