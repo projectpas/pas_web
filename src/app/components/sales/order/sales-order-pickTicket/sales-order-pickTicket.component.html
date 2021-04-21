@@ -2,7 +2,7 @@
     <h4 class="modal-title" id="modal-basic-title"></h4>
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 </div>
-<div class="modal-content pdf-block " style="width:90%" id="soPickTicket">
+<div class="modal-content" id="soPickTicket">
     <div class="modal-body">
         <div class="clear"></div>
         <form id="" name="" action="#" method="post" onsubmit="return false;">
@@ -46,7 +46,7 @@
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <!-- <label class="col-sm-3 first-block-label"><b>Postal Code :</b></label> -->
-                                        <label class="col-sm-12 first-block-label" 
+                                        <label class="col-sm-12 first-block-label"
                                             disabled>{{this.management.postalCode}}</label>
                                     </div>
                                 </div>
@@ -247,39 +247,39 @@
                             <div class="clear"></div>
                             <div class="col-sm-12">
 
-                            <div class="picked-by col-sm-6">
-                                <p>
-                                    <span class="label">
-                                        <b>Picked By:</b>
-                                    </span><span class="value">
-                                        {{this.salesOrder.pickedByName}}
-                                    </span>
-                                </p>
-                                <p>
-                                    <span class="label">
-                                        <b>Date: </b>
-                                    </span><span class="value">
-                                        {{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="confirmed-by col-sm-6">
-                                <p>
-                                    <span class="label">
-                                        <b>Confirmed By: </b>
-                                    </span><span class="value">
-                                        {{this.salesOrder.confirmedByName}}
-                                    </span>
-                                </p>
-                                <p>
-                                    <span class="label">
-                                        <b>Date: </b>
-                                    </span><span class="value">
-                                        {{this.salesOrder.confirmedDate | date : "MM/dd/yyyy"}}
-                                    </span>
-                                </p>
-                            </div>
-                            
+                                <div class="picked-by col-sm-6">
+                                    <p>
+                                        <span class="label">
+                                            <b>Picked By:</b>
+                                        </span><span class="value">
+                                            {{this.salesOrder.pickedByName}}
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span class="label">
+                                            <b>Date: </b>
+                                        </span><span class="value">
+                                            {{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="confirmed-by col-sm-6">
+                                    <p>
+                                        <span class="label">
+                                            <b>Confirmed By: </b>
+                                        </span><span class="value">
+                                            {{this.salesOrder.confirmedByName}}
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span class="label">
+                                            <b>Date: </b>
+                                        </span><span class="value">
+                                            {{this.salesOrder.confirmedDate | date : "MM/dd/yyyy"}}
+                                        </span>
+                                    </p>
+                                </div>
+
                             </div>
                             <div class="clear"></div>
                             <hr />
@@ -293,6 +293,6 @@
     <div style="height:100px"> &nbsp;</div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">No</button>
-    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
 </div>

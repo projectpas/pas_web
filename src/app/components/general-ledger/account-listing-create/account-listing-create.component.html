@@ -64,7 +64,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="">Account Type<span class="clr-red">*</span></label>
+                                    <label class="">Account Type<span class="clr-red"> *</span></label>
                                     <div class="">
                                         <p-dropdown class="p-dropdown-100" (ngModelChange)="getmemo($event)"
                                             [options]="accountTypeObject" filter="true"
@@ -72,10 +72,7 @@
                                             [resetFilterOnHide]="true" placeholder="Select" [showClear]="true">
                                         </p-dropdown>
                                     </div>
-
-
                                 </div>
-
                                 <div class="form-group">
                                     <label class="">Account Description</label>
                                     <input name="accountDescription" (ngModelChange)="getmemo($event)"
@@ -83,9 +80,6 @@
                                         [(ngModel)]="glAccountObj.accountDescription">
 
                                 </div>
-
-
-
                                 <div class="form-group">
                                     <label class="">Leaf Node Name</label>
                                     <div class="">
@@ -95,8 +89,6 @@
                                             [resetFilterOnHide]="true" placeholder="Select" [showClear]="true">
                                         </p-dropdown>
                                     </div>
-
-
                                 </div>
                                 <div class="form-group">
                                     <input name="interCompany" (ngModelChange)="getmemo($event)" type="checkbox"

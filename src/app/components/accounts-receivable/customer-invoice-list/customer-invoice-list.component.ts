@@ -61,10 +61,10 @@ export class CustomerInvoiceListComponent {
             { field: "arBalance", header: "AR Bal", width: "130px" },
             { field: "creditLimit", header: "Credit Limit", width: "130px" },
             { field: "creditTermName", header: "Credit Term", width: "130px" },
-            { field: "co", header: "CO", width: "130px" },
-            { field: "bu", header: "BU", width: "130px" },
-            { field: "div", header: "Div", width: "130px" },
-            { field: "dept", header: "Dept", width: "130px" }
+            { field: "level1", header: "CO", width: "130px" },
+            { field: "level2", header: "BU", width: "130px" },
+            { field: "level3", header: "Div", width: "130px" },
+            { field: "level4", header: "Dept", width: "130px" }
         ];
         this.selectedColumns = this.headers;
     }

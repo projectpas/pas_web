@@ -524,17 +524,32 @@ export class CustomerWorksListComponent implements OnInit {
 		window.location.assign(url);       
     }
 
+    // getCustomerWarningsList(): void {
+    //     this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').subscribe(res => {
+    //         res.forEach(element => {
+    //         if(element.label=='Create WO for MPN'){
+    //             this.customerWarningListId=element.value;
+    //             return;
+    //         }
+    //         });
+    //     })
+    // } 
+    setEditArray:any=[]
     getCustomerWarningsList(): void {
-        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').subscribe(res => {
-            res.forEach(element => {
-            if(element.label=='Create WO for MPN'){
-                this.customerWarningListId=element.value;
-                return;
-            }
+        const strText='Receive MPN';
+        this.setEditArray.push(0);
+    const mcId= this.authService.currentUser
+    ? this.authService.currentUser.masterCompanyId
+    : null;
+        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+         res.forEach(element => {
+                if (element.label == 'Create WO for MPN') {
+                    this.customerWarningListId = element.value;
+                    return;
+                }
             });
         })
-    } 
-
+    }
     openEdits(row) {
         this.editData=row;
         this.isEditCustomer=true;

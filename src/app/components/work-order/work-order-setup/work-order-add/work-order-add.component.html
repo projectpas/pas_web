@@ -328,7 +328,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="!workOrderGeneralInformation.isSinglePN && workOrderId">
+                    <div *ngIf="workOrderGeneralInformation && !workOrderGeneralInformation.isSinglePN && workOrderId">
                         <app-common-wo-summarization [workOrderId]="workOrderId"  [savedWorkOrderData]="savedWorkOrderData" [mpnPartNumbersList]="mpnPartNumbersList" [employeesOriginalData]="employeesOriginalData" [taskList]="taskList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [customerContactList]="customerContactList" [defaultTab]="defaultTab" (resetSelectedTab)="resetSelectedTab()"></app-common-wo-summarization>
                     </div>
                     <div *ngIf="!hideWOHeader && !isView">
@@ -583,12 +583,12 @@
 
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w50" name="tatDaysCurrent{{i}}"
+                                        <input type="number" class="form-control width-70" name="tatDaysCurrent{{i}}"
                                                #tatDaysCurrent="ngModel" [(ngModel)]="workOrderPartNumber.tatDaysCurrent"
                                                disabled>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w50" name="tatDaysStandard{{i}}"
+                                        <input type="number" class="form-control width-70" name="tatDaysStandard{{i}}"
                                                #tatDaysStandard="ngModel" [(ngModel)]="workOrderPartNumber.tatDaysStandard"
                                                disabled>
                                     </td>

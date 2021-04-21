@@ -36,12 +36,11 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    getAllAircraftManufacturer<T>(): Observable<T> {
-        let endpointUrl = this.getAll;
-
+    getAllAircraftManufacturer<T>(masterCompanyId?): Observable<T> {        
+        let endpointUrl = `${this.getAll}/${masterCompanyId == undefined ? 1 : masterCompanyId }`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllAircraftManufacturer());
+                return this.handleErrorCommon(error, () => this.getAllAircraftManufacturer());
             });
     }
 
@@ -50,7 +49,7 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAircraftManufacturerById(aircraftTypeId));
+                return this.handleErrorCommon(error, () => this.getAircraftManufacturerById(aircraftTypeId));
             });
     }
 
@@ -59,7 +58,7 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(aircraftType), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addAircraftManufacturer(aircraftType));
+                return this.handleErrorCommon(error, () => this.addAircraftManufacturer(aircraftType));
             });
     }
 
@@ -68,7 +67,7 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(aircraftType), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateAircraftManufacturer(aircraftType));
+                return this.handleErrorCommon(error, () => this.updateAircraftManufacturer(aircraftType));
             });
     }
 
@@ -77,7 +76,7 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removeAircraftManufacturerById(aircraftTypeId));
+                return this.handleErrorCommon(error, () => this.removeAircraftManufacturerById(aircraftTypeId));
             });
     }
 
@@ -86,7 +85,7 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateForActive(roleObject, id));
+                return this.handleErrorCommon(error, () => this.getUpdateForActive(roleObject, id));
             });
     }
 
@@ -95,7 +94,7 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAudit(aircraftManufacturerId));
+                return this.handleErrorCommon(error, () => this.getAudit(aircraftManufacturerId));
             });
     }
     getAircraftManufacturerRecords<T>(paginationOption: any): Observable<T> {
@@ -103,7 +102,7 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
         //let endpointUrl = `${this.getPaginationData}/${data}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAircraftManufacturerRecords(paginationOption));
+                return this.handleErrorCommon(error, () => this.getAircraftManufacturerRecords(paginationOption));
             });
     }
 
@@ -112,7 +111,7 @@ export class AircraftManufacturerEndpointService extends EndpointFactory {
         //let endpointUrl = `${this.getPaginationData}/${data}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAircraftManufacturerRecords(pageSearch));
+                return this.handleErrorCommon(error, () => this.getAircraftManufacturerRecords(pageSearch));
             });
     }
 }

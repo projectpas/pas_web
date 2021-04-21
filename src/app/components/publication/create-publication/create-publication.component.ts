@@ -501,7 +501,7 @@ export class CreatePublicationComponent implements OnInit {
 
     this.isSpinnerVisible = true;
     let verifiedBy = this.sourcePublication.verifiedBy ? this.sourcePublication.verifiedBy : 0;
-    this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('', true, 0, [verifiedBy].join(), this.currentUserManagementStructureId)
+    this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('', true, 0, [verifiedBy].join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId)
       .subscribe(res => {
         this.employeeList = res;
 
@@ -527,19 +527,7 @@ export class CreatePublicationComponent implements OnInit {
       MessageSeverity.success
     );
 
-  }
-  // private saveFailedHelper(error: any) {
-  //   this.isSaving = false;
-  //   this.formData = new FormData();
-
-  //   this.alertService.showStickyMessage('Already exist', error.error, MessageSeverity.error);
-  // }
-
-  // get masterCompanyId(): number {
-  //   return this.authService.currentUser
-  //     ? this.authService.currentUser.masterCompanyId
-  //     : 1;
-  // }
+  } 
 
   saveGeneralInfo() {
     this.data = this.sourcePublication;
@@ -762,10 +750,7 @@ export class CreatePublicationComponent implements OnInit {
       IsActive: true,
       IsDeleted: false,
       CreatedDate: new Date(),
-      UpdatedDate: new Date(),
-      // MasterCompanyId
-      // };
-      // });
+      UpdatedDate: new Date(),     
     }
     // this.selectedPartNumbers = [];
     if (mapData) {
@@ -821,9 +806,7 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   getAllAircraftManufacturer() {
-    this.aircraftManufacturerService
-      .getAll()
-      .subscribe(aircraftManufacturer => {
+    this.aircraftManufacturerService.getAll(this.masterCompanyId).subscribe(aircraftManufacturer => {
         this.showModelAircraftModel = false;
         const responseData = aircraftManufacturer[0];
         this.airCraftTypesList = responseData.map(x => {
@@ -834,9 +817,10 @@ export class CreatePublicationComponent implements OnInit {
         });
       });
   }
+
   getAllAircraftModels() {
     this.isSpinnerVisible = true;
-    this.aircraftModelService.getAll().subscribe(models => {
+    this.aircraftModelService.getAll(this.masterCompanyId).subscribe(models => {
       const responseValue = models[0];
 
       this.isSpinnerVisible = false;
@@ -854,7 +838,7 @@ export class CreatePublicationComponent implements OnInit {
 
   getAllDashNumbers() {
     this.isSpinnerVisible = false;
-    this.Dashnumservice.getAll().subscribe(dashnumbers => {
+    this.Dashnumservice.getAll(this.masterCompanyId).subscribe(dashnumbers => {
       this.isSpinnerVisible = false;
       const responseData = dashnumbers[0];
       this.dashNumberList = responseData.map(dashnumbers => {
@@ -1064,7 +1048,7 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   getAllATAChapter() {
-    this.ataMainSer.getAtaMainList().subscribe(Atachapter => {
+    this.ataMainSer.getAtaMainList(this.masterCompanyId).subscribe(Atachapter => {
       const response = Atachapter[0];
       this.ataChapterList = response.map(x => {
         return {
@@ -1074,10 +1058,9 @@ export class CreatePublicationComponent implements OnInit {
       });
     });
   }
+
   getAllSubChapters() {
-    this.atasubchapter1service
-      .getAtaSubChapter1List()
-      .subscribe(atasubchapter => {
+    this.atasubchapter1service.getAtaSubChapter1List(this.masterCompanyId).subscribe(atasubchapter => {
         const responseData = atasubchapter[0];
         this.ataSubChapterList = responseData.map(x => {
           return {
