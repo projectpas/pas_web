@@ -740,8 +740,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
     
     getItemTypeList() {
-        //this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description').subscribe(res => {
-         this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+         this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0', 0).subscribe(res => {
             res.map(x => {
                 if(x.label == 'Stock') {
                     this.currentItemTypeId = x.value;
