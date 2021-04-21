@@ -534,7 +534,7 @@ export class AccountListingCreateComponent implements OnInit {
 
             this.sourceglcashflowclassification.createdBy = this.userName;
             this.sourceglcashflowclassification.updatedBy = this.userName;
-            this.sourceglcashflowclassification.masterCompanyId = 1;
+            this.sourceglcashflowclassification.masterCompanyId = this.currentUserMasterCompanyId;
             this.glcashFlowClassifcationService.newGlCashFlowClassification(this.sourceglcashflowclassification).subscribe(cashFlow => {
                 this.loadGLCashFlowClassification('');
                 this.currentGLAccount.glClassFlowClassificationId = cashFlow.glClassFlowClassificationId;
@@ -544,7 +544,7 @@ export class AccountListingCreateComponent implements OnInit {
         else {
 
             this.sourceglcashflowclassification.updatedBy = this.userName;
-            this.sourceglcashflowclassification.masterCompanyId = 1;
+            this.sourceglcashflowclassification.masterCompanyId = this.currentUserMasterCompanyId;
             this.glcashFlowClassifcationService.updateCashFlowClassification(this.sourceglcashflowclassification).subscribe(cashFlow => {
                 this.alertService.showMessage('C-Flow Updated successfully.');
             }, err => { });
