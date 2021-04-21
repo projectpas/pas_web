@@ -957,8 +957,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     getInactiveObjectsOnEdit() {
         this.sourceItemMaster = {
             ...this.sourceItemMaster,
-            itemClassificationId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.itemClassificationId, this.allitemclassificationInfo, 'ItemClassification', 'ItemClassificationId', 'Description'),
-            itemGroupId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.itemGroupId, this.allitemgroupobjInfo, 'ItemGroup', 'ItemGroupId', 'Description'),
+            itemClassificationId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.itemClassificationId, this.allitemclassificationInfo, 'ItemClassification', 'ItemClassificationId', 'ItemClassificationCode'),
+            itemGroupId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.itemGroupId, this.allitemgroupobjInfo, 'ItemGroup', 'ItemGroupId', 'ItemGroupCode'),
             assetAcquistionTypeId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.assetAcquistionTypeId, this.AssetAcquisitionTypeList, 'AssetAcquisitionType', 'assetAcquisitionTypeId', 'name'),
             manufacturerId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.manufacturerId, this.allManufacturerInfo, 'Manufacturer', 'manufacturerId', 'name'),
             purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
@@ -1729,7 +1729,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
      itemgroup(type) {
         //this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', 10, 1, 0).subscribe(res => {
-            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'ItemGroupCode','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allitemgroupobjInfo = res;            
         })
     }
@@ -3678,7 +3678,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     getAllATAChapter() {
         this.isSpinnerVisible = true;
-        this.ataMainSer.getATAMainDropdownList().subscribe(res => {
+        this.ataMainSer.getATAMainDropdownList(this.currentUserMasterCompanyId).subscribe(res => {
             this.LoadAtachapter = res;
             this.ataMainchapter = this.LoadAtachapter;
             this.isSpinnerVisible = false;
@@ -3687,7 +3687,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     getAllATASubChapter() {
-        this.atasubchapter1service.getAtaSubChapter1List().subscribe(res => {
+        this.atasubchapter1service.getAtaSubChapter1List(this.currentUserMasterCompanyId).subscribe(res => {
             this.atasubchapter = res[0].map(x => {
                 return {
                     label:  x.ataSubChapterCode + ' - ' + x.description,
@@ -4336,7 +4336,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 this.sourceItemMaster.createdBy = this.userName;
                 this.sourceItemMaster.updatedBy = this.userName;
                 this.sourceItemMaster.masterCompanyId = this.currentUserMasterCompanyId;
-                this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                //this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                this.sourceItemMaster.itemTypeId = 1;
 
                 if (this.selectedIntegrationTypes != null) {
 
@@ -4416,7 +4417,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 this.sourceItemMaster.updatedBy = this.userName;
                 this.sourceItemMaster.createdBy = this.userName;
                 this.sourceItemMaster.masterCompanyId = this.currentUserMasterCompanyId;
-                this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                //this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                this.sourceItemMaster.itemTypeId = 1;
 
                 if (this.sourceItemMaster.isOEM == 'false') {
                     // checks whether the Change of Data is Happened or not if not and its is in edit mode binds the old data id if not edit and no change it will get the old create oemPnID

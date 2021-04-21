@@ -284,10 +284,14 @@
                                         <label class="control-label">
                                             Item Classification <strong class="clr-red">*</strong>
                                         </label>
-
                                     </div>
                                     <div>
-                                        <p-dropdown class="p-dropdown-100" [options]="allitemclassificationInfo"  (ngModelChange)="getmemo()" filter="true" [(ngModel)]="sourceItemMaster.itemClassificationId" name="itemClassificationId" [resetFilterOnHide]="true" (onChange)="onItemClassificationChange()" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                        <p-dropdown class="p-dropdown-100" [options]="allitemclassificationInfo"  
+                                        (ngModelChange)="getmemo()" filter="true" 
+                                        [(ngModel)]="sourceItemMaster.itemClassificationId" 
+                                        name="itemClassificationId" [resetFilterOnHide]="true" 
+                                        (onChange)="onItemClassificationChange()" 
+                                        placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                                     </div>
                                     <div class="inline-block display-flex spacing-label">
                                         <label class="control-label">
@@ -1428,7 +1432,7 @@
                                 *ngIf="showAdvancedSearchCardAtaChapter == true">
                                     <div class="col">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                            <h4 class="f-s-14" style="margin-top: 26px;">Searchs :</h4>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group ">
@@ -2316,7 +2320,8 @@
                                 Capability Types: <span class="clr-red"></span>
                             </div>
                             <div class="col-sm-3">
-                                <p-multiSelect [options]="capabilityTypeList" [panelStyle]="{minWidth:'12em'}" [(ngModel)]="selectedCapabilityTypes"
+                                <p-multiSelect [options]="capabilityTypeList" [panelStyle]="{minWidth:'12em'}" 
+                                                [(ngModel)]="selectedCapabilityTypes"
                                                class="imstock-pmselect" name="clist"></p-multiSelect>
                             </div>
                             <div class="col-sm-3">
