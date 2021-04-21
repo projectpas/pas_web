@@ -564,10 +564,12 @@ export class VendorsListComponent implements OnInit {
         this.CertifiedModuleName="VendorCertified";
         this.AuditModuleName="VendorAudit";
         this.moduleNameVendor="Vendor"
+        
         this.vendorService.getVendorDataById(row.vendorId).subscribe(res => {
+            
             this.vendorData = res;    
             this.isSpinnerVisible = false;        
-        },error => this.isSpinnerVisible = false); //this.onDataLoadFailed(error)); 
+        },error => this.isSpinnerVisible = false); 
         this.toGetVendorGeneralDocumentsList(row.vendorId);
         this.toGetVendorCertifiedDocumentsList(row.vendorId);
         this.toGetVendorAuditDocumentsList(row.vendorId);

@@ -1114,7 +1114,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'Create Asset',
                   routerLink: '/assetmodule/assetpages/app-create-asset',
                 },
-                { label: 'Calibration Mgmt', routerLink: '/#' },
+                {
+                  label: 'Calibration Mgmt',
+                  routerLink: '/assetmodule/assetpages/app-calibration-mgmt-listing',
+                },
+                //{ label: 'Calibration Mgmt', routerLink: '/#' },
                 { label: 'Asset Maintenance', routerLink: '/#' },
                 { label: 'Leases and Insurance', routerLink: '/#' },
                 // {

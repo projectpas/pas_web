@@ -1,4 +1,4 @@
-<div style="float: right; margin: 3px 0 19px 0px;">
+<div class="freight-detail-view">
     <button type="button" class="btn btn-primary" (click)="detailView()">
         {{(isOpenedAll)?'Summary':'Detail View'}}
     </button>
@@ -7,17 +7,17 @@
 <p-treeTable [value]="gridData" (onNodeExpand)="getShippingData($event.node)">
     <ng-template pTemplate="header">
         <tr>
-            <th style="background-color: #337ab7; color: white;">PartNumber</th>
-            <th style="background-color: #337ab7; color: white">Part Description</th>
-            <th style="background-color: #337ab7; color: white">Revised PartNo</th>
-            <th style="background-color: #337ab7; color: white">Ship Via</th>
-            <th style="background-color: #337ab7; color: white">Task</th>
-            <th style="background-color: #337ab7; color: white">UOM</th>
-            <th style="background-color: #337ab7; color: white">Dimention</th>
-            <th style="background-color: #337ab7; color: white">Weight</th>
-            <th style="background-color: #337ab7; color: white">Dimensions UOM</th>
-            <th style="background-color: #337ab7; color: white">Currency</th>
-            <th style="background-color: #337ab7; color: white">Amount</th>
+            <th class="freight-detail-header">PartNumber</th>
+            <th class="freight-detail-header">Part Description</th>
+            <th class="freight-detail-header">Revised PartNo</th>
+            <th class="freight-detail-header">Ship Via</th>
+            <th class="freight-detail-header">Task</th>
+            <th class="freight-detail-header">UOM</th>
+            <th class="freight-detail-header">Dimention</th>
+            <th class="freight-detail-header">Weight</th>
+            <th class="freight-detail-header">Dimensions UOM</th>
+            <th class="freight-detail-header">Currency</th>
+            <th class="freight-detail-header">Amount</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
@@ -37,6 +37,13 @@
             <td>{{rowData.currency}}</td>
             <td>
                 <div style="float: right;">{{globalizeAmount(rowData.amount)}}</div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td colspan="11" class="no-records-cstm no-records-msg">
+            No records found
             </td>
         </tr>
     </ng-template>

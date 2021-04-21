@@ -740,8 +740,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
     
     getItemTypeList() {
-        //this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description').subscribe(res => {
-         this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+         this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0', 0).subscribe(res => {
             res.map(x => {
                 if(x.label == 'Stock') {
                     this.currentItemTypeId = x.value;
@@ -985,7 +984,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 } 
             }
             let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {
             obj = res[0];
             if(tableName == 'ItemClassification') {
                 this.allitemclassificationInfo = [...originalData, obj];
@@ -1181,7 +1180,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     CurrencyData(strText = '') {
         if(this.arrayCurrancylist.length == 0) {			
             this.arrayCurrancylist.push(0); }
-          this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, false, 200, this.arrayCurrancylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+          this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, false, 0, this.arrayCurrancylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.allCurrencyInfo = res;
             this.purchaseCurrencyInfo = this.allCurrencyInfo;
             this.salesCurrencyInfo = this.allCurrencyInfo;
@@ -1252,7 +1251,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
 
         if(this.sourceItemMaster.siteId) {
-			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', this.sourceItemMaster.siteId).subscribe(res => {
+			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', this.sourceItemMaster.siteId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
 				this.wareHouseData = res;
 			})
 		}
@@ -1269,7 +1268,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }        
 
         if(this.sourceItemMaster.warehouseId) {
-			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', this.sourceItemMaster.warehouseId).subscribe(res => {
+			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', this.sourceItemMaster.warehouseId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
 				this.locationData = res;
 			})
 		}
@@ -1284,7 +1283,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }        
 
         if(this.sourceItemMaster.locationId) {
-			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', this.sourceItemMaster.locationId).subscribe(res => {
+			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', this.sourceItemMaster.locationId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
 				this.shelfData = res;
 			})
 		}
@@ -1296,7 +1295,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceItemMaster.binId = null;
         }
         if(this.sourceItemMaster.shelfId) {
-			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', this.sourceItemMaster.shelfId).subscribe(res => {
+			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', this.sourceItemMaster.shelfId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
 				this.binData = res;
 			})
 		}
@@ -3935,14 +3934,14 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         //     this.itemTypesList = res;
         // });
         //await this.commonService.smartDropDownWithStatusList('ItemType', 'ItemTypeId', 'Description',20, 1, 0).subscribe(res => {
-         await this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 200,'0',this.currentUserMasterCompanyId).subscribe(res => {   
+         await this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {   
             this.itemTypesList = res;
         });
     }
 
     getCapabilityType() {
         //this.commonService.smartDropDownList("CapabilityType", "CapabilityTypeId", "Description",20,1,0).subscribe(data => {
-         this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description','', false, 200,'0',this.currentUserMasterCompanyId).subscribe(res => {  
+         this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {  
             this.capabilityTypeList = res;
         });
     }
@@ -5662,7 +5661,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
     getDefaultCurrency() {
         this.legalEntityId = this.currentUserLegalEntityId;
-        this.commonService.getDefaultCurrency(this.legalEntityId).subscribe(res => {
+        this.commonService.getDefaultCurrency(this.legalEntityId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.exportInfo.exportCurrencyId = res.currencyId;
         })
     }

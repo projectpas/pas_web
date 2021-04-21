@@ -246,7 +246,7 @@
                </div> -->
             </div>
             <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
-                <button class="btn btn-primary pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
+                <button class="btn btn-primary wo-quote-btn-margin pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
             </div>
         </div>
         <div class="form-row" [hidden]="!isDetailedView">
@@ -271,7 +271,7 @@
                 </div>
                 </div>
         </div>
-        <div class="form-row pull-right m-t-10" *ngIf="enableEditBtn && selectedDisplayType == ''">
+        <div class="form-row pull-right back-to-wo" *ngIf="enableEditBtn && selectedDisplayType == ''">
             <button class="btn btn-primary" (click)="createQuote()" *ngIf="!isView || (isWoTab && !isListView)">
                 Edit Quote
             </button>
@@ -496,6 +496,7 @@
                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
                             </tr>
+                            
                         </tbody>
                     </table>
                 </div>

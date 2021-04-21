@@ -21,6 +21,7 @@ declare var $ : any;
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { AtaMainService } from '../../../services/atamain.service';
 import { CommonService } from '../../../services/common.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-vendor-contacts',
@@ -193,6 +194,7 @@ export class VendorContactsComponent implements OnInit {
     status:any="Active";
     restorerecord:any={};
     vendorCodeandName: any;
+    allActionsOriginal: any = [];
 
     constructor(private router: ActivatedRoute,
         private atamain: AtaMainService,
@@ -286,6 +288,21 @@ export class VendorContactsComponent implements OnInit {
         } else {
             this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-vendor-contacts';
             this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+        }
+    }
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.allActions = this.allActionsOriginal;
+            const data = [...this.allActions.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.allActions = data;
+        } else {
+            this.allActions = this.allActionsOriginal;
         }
     }
     closeDeleteModal() {
@@ -1146,6 +1163,7 @@ export class VendorContactsComponent implements OnInit {
 				this.allActions= newarry;
 			}
         }
+        this.allActionsOriginal=this.allActions;
         this.totalRecords = this.allActions.length ;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }

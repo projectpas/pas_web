@@ -28,14 +28,12 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getrelesereservepartUrl: string = environment.baseUrl + "/api/salesorder/releasestocklinereservedparts"
   private readonly getSalesOrderViewDetails: string = environment.baseUrl + "/api/SalesOrder/getview";
   private readonly getSalesOrdePickTicketDetails: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticket";
-  //private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketlist";
   private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketapprovelist";
   private readonly generateSalesOrdePickTicket: string = environment.baseUrl + "/api/SalesOrder/generatepickticket";
   private readonly savepickticketiteminterfaceUrl: string = environment.baseUrl + "/api/salesorder/savepickticketiteminterface"
   private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticketforprint";
   private readonly getShippingDataListURL: string = environment.baseUrl + "/api/SalesOrder/getsalesordershippinglist";
   private readonly getBillingInvoiceListUrl: string = environment.baseUrl + "/api/SalesOrder/salesorderBillingInvoicelist";
-  // private readonly searchSalesOrder: string = "/api/salesorder/search";
   private readonly searchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesordersearch";
   private readonly globalSearchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesorderglobalsearch";
   private readonly getSalesOrderDetails: string = environment.baseUrl + "/api/salesorder/get";
@@ -127,9 +125,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
     return this.http
       .get<ISalesOrderView>(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () =>
-          this.getNewSalesOrderInstance(customerId)
-        );
+        return this.handleErrorCommon(error, () => this.getNewSalesOrderInstance(customerId));
       });
   }
 
@@ -497,15 +493,21 @@ export class SalesOrderEndpointService extends EndpointFactory {
   //start SalesOrderQuoteDocument--nitin
   getDocumentUploadEndpoint<T>(file: any): Observable<T> {
     const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-    return this.http.post<T>(`${this._addDocumentDetails}`, file);
+    return this.http.post<T>(`${this._addDocumentDetails}`, file).catch(error => {
+      return this.handleErrorCommon(error, () => this.getDocumentUploadEndpoint(file));
+    });
   }
 
   getDocumentList(salesQuoteId) {
-    return this.http.get<any>(`${this._getsalesquoteDocslist}/${salesQuoteId}`, this.getRequestHeaders())
+    return this.http.get<any>(`${this._getsalesquoteDocslist}/${salesQuoteId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getDocumentList(salesQuoteId));
+    })
   }
 
   GetUploadDocumentsList(attachmentId, salesquoteId, moduleId) {
-    return this.http.get<any>(`${this._getsalesquoteDocumentAttachmentslist}?attachmentId=${attachmentId}&referenceId=${salesquoteId}&moduleId=${moduleId}`, this.getRequestHeaders())
+    return this.http.get<any>(`${this._getsalesquoteDocumentAttachmentslist}?attachmentId=${attachmentId}&referenceId=${salesquoteId}&moduleId=${moduleId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.GetUploadDocumentsList(attachmentId, salesquoteId, moduleId));
+    })
   }
 
   getSalesQuoteDocumentAuditHistory(id) {
@@ -541,16 +543,16 @@ export class SalesOrderEndpointService extends EndpointFactory {
 
   getSalesOrderFreights(id, isDeleted) {
     return this.http.get<any>(`${this._getFreights}?SalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
-    .catch(error => {
-      return this.handleErrorCommon(error, () => this.getSalesOrderFreights(id, isDeleted));
-    });
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderFreights(id, isDeleted));
+      });
   }
 
   getSalesOrderCharges(id, isDeleted) {
     return this.http.get<any>(`${this._getCharges}?SalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
-    .catch(error => {
-      return this.handleErrorCommon(error, () => this.getSalesOrderCharges(id, isDeleted));
-    });
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderCharges(id, isDeleted));
+      });
   }
 
   getSalesOrderChargesById(id, isDeleted) {
@@ -612,9 +614,9 @@ export class SalesOrderEndpointService extends EndpointFactory {
 
   getSOSettingHistory(id) {
     return this.http.get<any>(`${this.getSalesOrderSettingsAuditHistory}/${id}`, this.getRequestHeaders())
-    .catch(error => {
-      return this.handleErrorCommon(error, () => this.getSOSettingHistory(id));
-    });
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOSettingHistory(id));
+      });
   }
 
   getSOFreightsHistory(id) {
@@ -758,7 +760,9 @@ export class SalesOrderEndpointService extends EndpointFactory {
   downloadPDF(url) {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');
-    return this.http.get(url, { headers: headers, responseType: 'blob' });
+    return this.http.get(url, { headers: headers, responseType: 'blob' }).catch(error => {
+      return this.handleErrorCommon(error, () => this.downloadPDF(url));
+    });
   }
 
   getSalesOrderBillingInvoicingPdf(sobillingInvoicingId: number): Observable<any> {

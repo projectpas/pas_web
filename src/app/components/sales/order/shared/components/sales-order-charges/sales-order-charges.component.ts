@@ -68,7 +68,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         private alertService: AlertService,
         private commonService: CommonService,
         private actionService: ActionService,
-        private cdRef: ChangeDetectorRef,
         private vendorService: VendorService,
         private modalService: NgbModal) {
     }
@@ -119,7 +118,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             this.markupList = res[2];
             this.setVendors();
             this.vendorList('');
-        }, error => this.onDataLoadError(error));
+        }, error => this.isSpinnerVisible = false);
     }
 
     private vendorList(value) {
@@ -130,6 +129,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             });
         }
         this.arrayVendlsit.push(0);
+        this.isSpinnerVisible = true;
         this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allVendors = res.map(x => {
                 return {
@@ -138,6 +138,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
                 }
             });
             this.vendorCollection = this.allVendors;
+            this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
         })
@@ -337,7 +338,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             );
             this.refreshOnDataSaveOrEditORDelete();
             this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
-        }, error => this.onDataLoadError(error))
+        }, error => this.isSpinnerVisible = false)
         this.isSaveChargesDesabled = true;
         this.storedData = [];
     }
@@ -384,16 +385,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         $('#addNewCharges').modal('hide');
         this.isEdit = false;
         this.isSaveChargesDesabled = false;
-    }
-
-    onDataLoadError(error) {
-        this.isSpinnerVisible = false;
-        let errorMessage = '';
-        if (error.message) {
-            errorMessage = error.message;
-        }
-        this.alertService.resetStickyMessage();
-        this.alertService.showStickyMessage("Sales Order", errorMessage, MessageSeverity.error, error);
     }
 
     markupChanged(matData, type) {
@@ -523,8 +514,12 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
 
     openInterShipViaHistory(content, rowData) {
         if (rowData && rowData.salesOrderChargesId) {
+            this.isSpinnerVisible = true;
             this.salesOrderService.getSOChargesHistory(rowData.salesOrderChargesId).subscribe(
-                results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content), error => {
+                results => {
+                    this.onAuditInterShipViaHistoryLoadSuccessful(results, content);
+                    this.isSpinnerVisible = false;
+                }, error => {
                     this.isSpinnerVisible = false;
                 });
         }
@@ -584,12 +579,14 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
 
     restoreRecord() {
         if (this.restorerecord && this.restorerecord.salesOrderChargesId > 0) {
+            this.isSpinnerVisible = true;
             this.commonService.updatedeletedrecords('SalesOrderCharges', 'SalesOrderChargesId', this.restorerecord.salesOrderChargesId).subscribe(res => {
+                this.isSpinnerVisible = false;
                 this.refreshOnDataSaveOrEditORDelete();
                 this.modal.close();
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             }, err => {
-                const errorLog = err;
+                this.isSpinnerVisible = false;
             });
         } else {
             this.restorerecord.isDeleted = false;
@@ -599,7 +596,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
                     JSON.stringify(element) === JSON.stringify(this.restorerecord)
                 ) {
                     element.isDeleted = false;
-
                 }
             });
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
