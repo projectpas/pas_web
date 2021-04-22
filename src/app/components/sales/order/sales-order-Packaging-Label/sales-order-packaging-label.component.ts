@@ -91,14 +91,13 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               thead,
               th {
                 border: 1px solid black;
-                background-color: #0d57b0 !important;
                 border-collapse: collapse;
               }
               
               table thead tr th {
                 background-color: #0d57b0 !important;
                 padding: 5px !important;
-                color: #fff !important;
+                color: #fff;
                 letter-spacing: 0.3px;
                 font-size: 10px;
                 text-transform: capitalize;

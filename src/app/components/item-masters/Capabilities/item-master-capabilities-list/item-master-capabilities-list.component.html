@@ -160,8 +160,22 @@
                                     }}
                     </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
-                        <input type="checkbox" disabled [checked]="rowData[col.field] == true"
+                        <input type="checkbox" [checked]="rowData[col.field] == true"
                                class="input-check" />
+                               <!-- <div class="form-group">
+                                <div class="checkbox-cstm">
+                                  <label> 
+                                    <span *ngIf="rowData[col.field] == true" class="cr margin-left-50 disablecheckbox"
+                                      ><i class="cr-icon pi pi-check" ></i
+                                    ></span>
+                                    <span *ngIf="rowData[col.field] !== true" class="cr margin-left-50 disablecheckbox"
+                                    ><i class="cr-icon" ></i
+                                  ></span>
+                                     
+                                    </label>
+                                </div>
+                              </div> -->
+                              
                     </ng-container>
                     <ng-container *ngIf="col.field =='verifiedDate'">
                         {{rowData[col.field] | date: 'MM/dd/yyyy'}}

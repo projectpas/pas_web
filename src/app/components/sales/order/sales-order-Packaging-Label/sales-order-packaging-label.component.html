@@ -9,10 +9,10 @@
                 <div style="padding: 0; margin: 0;">
                     <div>
                         <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
-                            <div class="logo-block">
+                            <!-- <div class="logo-block">
                                 <img src="{{this.endPointURL + this.management.logo}}" width="130" /> </div>
                             <div class="clear"></div>
-                            <hr />
+                            <hr /> -->
                             <div class="very-first-block">
                                 <div class="col-sm-12 address-block">
                                     <div class="col-sm-12 first-block-name">
@@ -61,7 +61,7 @@
                                 </div>
                             </div>
                             <div class="second-block">
-                                <h5><b>Packing Slip</b></h5>
+                                <h5 style="line-height: 25px; margin-left: 42%;"><b>Packing Slip</b></h5>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Packaging Slip Id</label>
                                     <input type="text" value="{{this.salesOrder.packagingSlipNo}}"
@@ -74,8 +74,8 @@
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Invoice Date & Time</label>
-                                    <label class="col-sm-4 second-block-label" style="width:30%"
-                                        disabled>{{this.salesOrder.invoiceDate | date:'medium'}}</label>
+                                    <input type="text" value="{{this.salesOrder.invoiceDate | date:'medium'}}"
+                                        disabled />
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
@@ -199,7 +199,7 @@
                                 <table style="width:99%;margin-left:5px;">
                                     <thead>
                                         <tr>
-                                            <th style="background: #0d57b0 !important;">PO/RO NUM</th>
+                                            <th>PO/RO NUM</th>
                                             <th>Salesperson</th>
                                             <th>Buyer</th>
                                             <th>Credit Terms</th>
@@ -233,7 +233,7 @@
                                         <tr>
                                             <th>Item Num</th>
                                             <th style="border-right:none">PN</th>
-                                            <th style="border-left:none">Stk Line Num</th>
+                                            <th style="border-left:none;text-align:center">Stk Line Num</th>
                                             <th>PN Description</th>
                                             <th>Serial Num</th>
                                             <th>UOM</th>
