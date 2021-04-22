@@ -113,6 +113,12 @@ export class SalesOrderService {
     );
   }
 
+  generatePackagingSlip(packagingSlip: any): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.generatePackagingSlip(packagingSlip)
+    );
+  }
+
   update(salesquote: ISalesOrderView): Observable<ISalesOrder[]> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.update(salesquote)
@@ -619,6 +625,12 @@ export class SalesOrderService {
   getShippingLabelPrint(salesOrderId: number, salesOrderPartId: number, soShippingId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId)
+    );
+  }
+
+  getPackagingSlipPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getPackagingSlipPrint(salesOrderId, salesOrderPartId, soPickTicketId)
     );
   }
 

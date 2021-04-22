@@ -184,6 +184,7 @@ hr {
   width: 38.33333333%;
   text-transform: capitalize;
   margin-bottom: 0;
+  text-align: left;
 }
 
 .clear {
@@ -229,4 +230,15 @@ hr {
   padding-right: 2px;
   padding-left: 2px;
   width: 50%;
+}
+
+.first-block-label {
+  position: relative;
+  min-height: 1px;
+  float: left;
+  padding-right: 2px;
+  padding-left: 2px;
+  text-transform: capitalize;
+  margin-bottom: 0;
+  text-align: left;
 }
