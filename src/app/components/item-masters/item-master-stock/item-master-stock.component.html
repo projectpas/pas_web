@@ -1702,8 +1702,7 @@
                                             </td>
                                             <!-- FX Rate -->
                                             <td>
-                                                <input type="text" 
-                                                 class="input-field-value text-right input-width-100-percent" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | fiveDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | fiveDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="setcurrentdate(field.PP_FXRatePerc=$event,field)" />
 
                                             </td>
                                             <!-- Vendor List Price -->
@@ -4323,7 +4322,7 @@
     <div class="modal-footer">
   
       <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>  <!--[disabled]="!salesPersonForm.valid" -->
+      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab(addItemMasterStockForm)">Yes</button>  <!--[disabled]="!salesPersonForm.valid" -->
     </div>
   </ng-template>
   <div id="purchaseSaleDelete" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
