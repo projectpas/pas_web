@@ -175,11 +175,18 @@
                               <tr>
                                   <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                                       <!--  -->
-                                      <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
-                                      <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
-                                      name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-<input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
-                   (change)="dateFilterForTable($event.target.value,col.field)" />
+                                      <input  *ngIf="col.field != 'lastCalibrationDate' && col.field != 'nextCalibrationDate' && col.field != 'calibrationDate' && col.field != 'lastcheckedindate' && col.field != 'lastcheckedoutdate'" class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
+                                      <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'nextCalibrationDate'"
+                                      name="nextCalibrationDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+                                     <input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'lastCalibrationDate'"   name="lastCalibrationDate"
+                                              (change)="dateFilterForTable($event.target.value,col.field)" />
+                                              <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'calibrationDate'"
+                                              name="calibrationDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+                                             <input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'lastcheckedindate'"   name="lastcheckedindate"
+                                                      (change)="dateFilterForTable($event.target.value,col.field)" />
+
+                                                      <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'lastcheckedoutdate'"
+                                              name="lastcheckedoutdate"  (change)="dateFilterForTable($event.target.value, col.field)" />
                                   </th>
                                   <th style="width:150px;position: sticky;"></th>
                               </tr>
@@ -205,20 +212,20 @@
                                       </ng-container>
                                   </td>
                                   <td class="action-icons-cstm" style="width:150px;position:sticky" *ngIf="selectedColumns.length> 0">
-                                      <div *ngIf="currentDeletedstatus==false">
+                                      <div *ngIf="rowData['calibrationId'] !=0">
                                       <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                          matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
-                                                         <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                                         <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#viewcalibration" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                           <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                           <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                           <!-- <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span> -->
 
                                       </div>
-                                      <div *ngIf="currentDeletedstatus==true">
+                                      <div  *ngIf="rowData['calibrationId'] ==0">
                                           <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                           matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
-                                          <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                          <!-- <span ><a class="btn nobg btn-restore-cstm" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span> -->
+                                          <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#viewcalibration"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                          <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                           <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                       </div>
                                </td> 
@@ -254,52 +261,60 @@
 			</div>
 			<div class="modal-body">
                 <div id="adminsearchlocationajax" class="table-responsive default-bg clear"> 
-                    <p class="w250"><span class="label"><b>Asset ID: </b></span><span class="value">A125478</span></p>
-                    <p class="w250"><span class="label"><b>Alt Asset ID: </b></span><span class="value">A12346</span></p>
-                    <p class="w250"><span class="label"><b>Asset Name: </b></span><span class="value">Drill Press</span></p>                    
-                    <p class="w250"><span class="label"><b>Location: </b></span><span class="value">Hyderabad</span></p>
-                    <p class="w250"><span class="label"><b>Serial Num: </b></span><span class="value">S486263</span></p>                    
-                    <p class="w250"><span class="label"><b>Control ID: </b></span><span class="value">C451231</span></p>
-                    <p class="w250"><span class="label"><b>Acquisition Type: </b></span><span class="value">Buy</span></p>
+                    <p class="w250"><span class="label"><b>Asset ID: </b></span><span class="value" name ="AssetId">{{calibrationForm.AssetId}}</span></p>
+                    <p class="w250"><span class="label"><b>Alt Asset ID: </b></span><span class="value">{{calibrationForm.AltAssetId}}</span></p>
+                    <p class="w250"><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>                    
+                    <p class="w250"><span class="label"><b>Location: </b></span><span class="value">{{calibrationForm.Location}}</span></p>
+                    <p class="w250"><span class="label"><b>Serial Num: </b></span><span class="value">{{calibrationForm.SerialNum}}</span></p>                    
+                    <p class="w250"><span class="label"><b>Control ID: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
+                    <p class="w250"><span class="label"><b>Acquisition Type: </b></span><span class="value">{{calibrationForm.AcquisitionType}}</span></p>
                     <div class="clear"></div>
                     <hr>
-                    <p class="w400"><span class="label"><b>Last Verification Date: </b></span><span class="value">2/21/2019</span></p>
-                    <p class="w400"><span class="label"><b>Last Verification By: </b></span><span class="value">Shabbir Ahmad</span></p>
+                    <p class="w400"><span class="label"><b>Last {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.LastCalibrationDate}}</span></p>
+                    <p class="w400"><span class="label"><b>Last {{Certifytype}} By: </b></span><span class="value">{{calibrationForm.LastCalibrationBy}}</span></p>
                     <p class="w400"><span class="label"><b>Vendor or Employee: </b></span>
                         <span class="value">
                             <label class="w60 text-left"><input type="radio" disabled="" checked=""> Vendor</label>
                             <label class="w80 text-left"><input type="radio" disabled=""> Employee</label>
                         </span>
                     </p>
-                    <p class="w400"><span class="label"><b>Next Verification Date: </b></span><span class="value">4/21/2019</span></p>
+                    <p class="w400"><span class="label"><b>Next {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.NextCalibrationDate}}</span></p>
                     <div class="clear"></div>
                     <hr>
-                    <div *ngIf="isscheduleprocess== false"><a (click)="showscheduleprocess()" class="btn btn-primary add-verification-btn">Schedule a Verification</a></div>
+                    <div *ngIf="isscheduleprocess== false"><a (click)="showscheduleprocess()" class="btn btn-primary add-verification-btn">Schedule a {{Certifytype}}</a></div>
                     
                     <div class="add-verification" *ngIf="isscheduleprocess">
-                        <div class="col-sm-12"><h4>Schedule a Verification</h4></div>
+                        <div class="col-sm-12"><h4>Schedule a {{Certifytype}}</h4></div>
                   <div class="col-sm-6">
                       <div class="form-group col-sm-12">
                           <label class="control-label col-sm-4">Vendor or Employee</label>
                           <div class="col-sm-7">
-                            <label class="w70 text-left"><input type="radio" name="verification-vendor-employee" value="verification-vendor"> Vendor</label>
-                            <label class="w80 text-left"><input type="radio" name="verification-vendor-employee" value="verification-employee"> Employee</label>  
+                            <label class="w70 text-left"><input type="radio" name="verification-vendor-employee" value="vendor" (click)="checkedvendor(calibrationForm.ScheduleIsVendor)" [(ngModel)]="calibrationForm.ScheduleIsVendor"> Vendor</label>
+                            <label class="w80 text-left"><input type="radio" name="verification-vendor-employee" value="employee" (click)="checkedemployee(calibrationForm.ScheduleIsEmployee)" [(ngModel)]="calibrationForm.ScheduleIsEmployee"> Employee</label>  
                           </div>
                         </div>
-                      <div class="form-group col-sm-12 verification-vendor-employee verification-vendor" style="display: none;">
+                      <div class="form-group col-sm-12 verification-vendor-employee verification-vendor" *ngIf="isvendor">
                           <label class="control-label col-sm-4">Select Vendor</label>
                           <div class="col-sm-7">
                             <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
-                                <input type="text" class="form-control names ui-autocomplete-input" id="" name="" autocomplete="off">
+                              <p-autoComplete  class="p-autoComplete-ctsm" field="name" name="vendorName" [dropdown]="true"
+                              errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
+                              (completeMethod)="filterWarentyVendor($event)"  [size]="30" [minLength]="1"
+                              [(ngModel)]="calibrationForm.VendorId"  #prellRevInsp="ngModel" >
+                          </p-autoComplete>
                               </div>
                              
                           </div>
                         </div>
-                      <div class="form-group col-sm-12 verification-vendor-employee verification-employee" style="display: none;">
+                      <div class="form-group col-sm-12 verification-vendor-employee verification-employee" *ngIf="isemployee">
                           <label class="control-label col-sm-4">Select Employee</label>
                           <div class="col-sm-7">
                             <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
-                                <input type="text" class="form-control names ui-autocomplete-input" id="" name="" autocomplete="off">
+                              <p-autoComplete class="p-autoComplete-ctsm employee-autocomplete"  field="label" name="employee" [dropdown]="true"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="employeeList"
+                              (completeMethod)="filterEmployee($event); " [size]="30" [minLength]="1" [(ngModel)]="calibrationForm.EmployeeId"
+                              emptyMessage="No Match Found">
+                            </p-autoComplete>      
                               </div>                          
                           </div>
                         </div>
@@ -312,39 +327,120 @@
                   </div> 
                      <div class="col-sm-6">
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Verification Date</label>
+                          <label class="control-label col-sm-4">{{Certifytype}} Date</label>
                           <div class="col-sm-7">
-                            <input type="text" class="form-control datepicker hasDatepicker" id="dp1618919998337" name="">   
+                            <p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                [maxDate]="currentDate" (ngModelChange)="editorgetmemo($event)"
+                                [(ngModel)]="calibrationForm.CalibrationDate"></p-calendar> 
                             <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#calibration-schedules" class="btn btn-link pull-right" style="padding: 0;">View Verification Schedule</a>
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
                           <label class="control-label col-sm-4">Currency</label>
                           <div class="col-sm-7">
-                            <select>
-                                <option>-- Select --</option>
-                                <option value="inr">₹</option>
-                                <option value="usd" selected="1">$</option>
-                                <option value="pound">£</option>
-                                <option value="euro">€</option>
-                                <option value="yen">¥</option>
-                              </select>
+                            <p-dropdown placeholder="Select Currency"  appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterAction($event.target.value)" filter="true" name="currencyId" [options]="currencyList"
+                            class="p-dropdown-custom-md" [(ngModel)]="calibrationForm.currencyId">
+                           </p-dropdown>
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Verification Memo</label>
+                          <label class="control-label col-sm-4">{{Certifytype}} Memo</label>
                           <div class="col-sm-7">
-                            <textarea class="form-control h50"></textarea>
+                            <div class="align_adh">
+                              <div [innerHTML]="calibrationForm.memo" class="text_editor_box"  [matTooltip]="parsedText(calibrationForm.memo)"
+                                  style="width: 100% !important;"></div>
+                              <i class="fa  fa fa-pencil contoel_v" data-toggle="modal"   matTooltipPosition="above"
+                                  data-target="#textarea-popup" matTooltip="Memo"
+                                  matTooltipPosition="above"
+                                  (click)="onAddTextAreaInfo(currentAsset)"></i> 
+                          </div>
                           </div>
                         </div>
-                    <button type="button" class="btn btn-info pull-right verification-process-btn" id="" name="" data-toggle="tooltip" title="This will generate a PO if a vendor is selected to perfrom Calibration OR Send a notification to employee if employee is selected">Process</button>
+                    <button type="button" class="btn btn-info pull-right verification-process-btn" (click)="savecalibrationprocess()" id="" name="" data-toggle="tooltip" title="This will generate a PO if a vendor is selected to perfrom Calibration OR Send a notification to employee if employee is selected">Process</button>
                   </div> 
                         </div>
                 </div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+
+        <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="modal fade" id="viewcalibration" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content" style="width: 1000px;margin-left: -210px;">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeviewModal()">&times;</button>
+				<h4 class="modal-title"> Details of Asset "{{viewcalibrationForm.AssetId}}"</h4>
+			</div>
+			<div class="modal-body editform">
+        <div id="adminsearchlocationajax" class="table-responsive default-bg clear"> 
+            <div class="col-sm-4 w350">
+                <p><span class="label"><b>Asset ID: </b></span><span class="value">{{viewcalibrationForm.AssetId}}</span></p>
+                <p><span class="label"><b>Asset Name: </b></span><span class="value">{{viewcalibrationForm.AssetName}}</span></p>
+                <p><span class="label"><b>Alt Asset ID: </b></span><span class="value">{{viewcalibrationForm.AltAssetId}}</span></p>
+                <p><span class="label"><b>Serial Num: </b></span><span class="value">{{viewcalibrationForm.SerialNum}}</span></p>
+                <p><span class="label"><b>Control Num: </b></span><span class="value">{{viewcalibrationForm.ControlName}}</span></p>
+                <p><span class="label"><b>Item Type: </b></span><span class="value">{{viewcalibrationForm.Itemtype}}</span></p>
+                <p><span class="label"><b>CO: </b></span><span class="value">{{viewcalibrationForm.CompanyName}}</span></p>
+                <p><span class="label"><b>BU: </b></span><span class="value">{{viewcalibrationForm.BuName}}</span></p>
+                <p><span class="label"><b>Division: </b></span><span class="value">{{viewcalibrationForm.DeptName}}</span></p>
+                <p><span class="label"><b>Dept: </b></span><span class="value">{{viewcalibrationForm.DivName}}</span></p>
+            </div>
+            <div class="col-sm-4 w350">
+                <p><span class="label"><b>Asset Type: </b></span><span class="value">{{viewcalibrationForm.AssetType}}</span></p>
+                <p><span class="label"><b>Certify Type: </b></span><span class="value">{{viewcalibrationForm.CertifyType}}</span></p>
+                <p><span class="label"><b>UOM: </b></span><span class="value">{{viewcalibrationForm.UOM}}</span></p>
+                <p><span class="label"><b>Qty: </b></span><span class="value">{{viewcalibrationForm.Qty}}</span></p>
+                <p><span class="label"><b>Currency: </b></span><span class="value">{{viewcalibrationForm.CurrencyName}}</span></p>
+                <p><span class="label"><b>Updated Cost: </b></span><span class="value">{{viewcalibrationForm.UpdatedCost}}</span></p>
+                <p><span class="label"><b>In Service Date: </b></span><span class="value">{{viewcalibrationForm.Inservicedate}}</span></p>
+                <p><span class="label"><b>Asset Status: </b></span><span class="value">{{viewcalibrationForm.AssetStatus}}</span></p>
+                <p><span class="label"><b>Last Calibration Date: </b></span><span class="value"> {{viewcalibrationForm.LastCalibrationDate}}</span></p>
+            </div>
+            <div class="col-sm-4 w400">
+                <p><span class="w180"><b>Last Calibrated by: </b></span><span class="w180">{{viewcalibrationForm.LastCalibrationBy}}</span></p>
+                <p><span class="w180"><b>Last Calibration Notes: </b></span><span class="w180">{{viewcalibrationForm.Memo}}</span></p>
+                <p><span class="w180"><b>Next Calibration Date: </b></span><span class="w180">{{viewcalibrationForm.NextCalibrationDate}}</span></p>
+                <p><span class="w180"><b>Last Checked IN By: </b></span><span class="w180">{{viewcalibrationForm.lastcheckedinby}}</span></p>
+                <p><span class="w180"><b>Last Checked IN Date: </b></span><span class="w180">{{viewcalibrationForm.lastcheckedindate}}</span></p>
+                <p><span class="w180"><b>Last Checked IN Memo: </b></span><span class="w180">{{viewcalibrationForm.lastcalibrationmemo}}</span></p>
+                <p><span class="w180"><b>Last Checked OUT Date: </b></span><span class="w180">{{viewcalibrationForm.lastcheckedoutdate}}</span></p>
+                <p><span class="w180"><b>Last Checked OUT By: </b></span><span class="w180">{{viewcalibrationForm.lastcheckedoutby}}</span></p>
+                <p><span class="w180"><b>Last Checked OUT Memo: </b></span><span class="w180">{{viewcalibrationForm.lastcheckedinmemo}}</span></p>
+                <p><span class="w180"><b>Locaton: </b></span><span class="w180">{{viewcalibrationForm.Location}}</span></p>
+            </div>                
+            <div class="clear"></div>                
+        </div>
+      </div>
+			<div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" (click)="closeviewModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+     
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+              <h4 class="modal-title">Edit Memo</h4>
+          </div>
+          <div class="modal-body">
+              <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)"
+                               [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+              <div class="editor-buttons">
+                  <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+                  <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
+             </div> 
+          </div>
+      </div>        
+  </div>
 </div>

@@ -1,0 +1,106 @@
+export class CalibrationMgmt 
+{
+	 CalibrationId: number;
+	 AssetRecordId : number;
+	 AssetId: string;
+	 AssetName: string;
+	 AltAssetId: string;
+	 AltAssetName: string;
+	 SerialNum: string;
+	 AcquisitionTypeId: number;
+     AcquisitionType: string;
+	 Location: string;
+	 ControlId: number;
+	 ControlName: string;
+	 LastCalibrationDate: Date;
+	 NextCalibrationDate: Date;
+	 LastCalibrationBy: string;
+	 IsVendor: boolean;
+	 IsEmployee: boolean;
+	 ScheduleIsVendor: boolean;
+	 ScheduleIsEmployee: boolean;
+	 VendorId: number;
+	 VendorName: string;
+	 EmployeeId: number;
+	 EmployeeName: string;
+	 CalibrationDate: Date;
+	 CalibrationDate1: string;
+	 CurrencyId: number;
+	 CurrencyName: string;
+	 UnitOfMeasureId: number;
+	 UnitCost: number;
+	 Memo: string;
+	 CertifyId: number;
+	 CertifyType: string;
+	 ManagementStructureId: number;
+	 MasterCompanyId: number;
+	 IsDeleted: boolean;
+	 IsActive: boolean;
+	 CreatedBy: string;
+	 UpdatedBy: string;
+	 CreatedDate: Date;
+	 UpdatedDate: Date;
+	 Qty:number;
+	 UpdatedCost:number;
+	 Inservicedate:Date;
+	 AssetStatus:string;
+	 Itemtype:string;
+	 AssetType:string;
+	 AssetClass:string;
+	 UOM:string;
+	 Inservicesdate:Date;
+	 lastcalibrationmemo:string;
+	 lastcheckedinby:string;
+	 lastcheckedindate:Date;
+	 lastcheckedinmemo:string;
+	 lastcheckedoutby:string;
+	 lastcheckedoutdate:Date;
+	 lastcheckedoutmemo:string;
+	 CompanyName:string;
+	 BuName:string;
+	 DeptName:string;
+	 DivName:string;
+	
+
+
+	constructor ()
+	{
+		// this.CalibrationId = CalibrationId_;
+		// this.AssetId = AssetId_;
+		// this.AssetName = AssetName_;
+		// this.AltAssetId = AltAssetId_;
+		// this.AltAssetName = AltAssetName_;
+		// this.SerialNum = SerialNum_;
+		// this.AcquisitionTypeId = AcquisitionTypeId_;
+		// this.Location = Location_;
+		// this.ControlId = ControlId_;
+		// this.ControlName = ControlName_;
+		// this.LastCalibrationDate = LastCalibrationDate_;
+		// this.NextCalibrationDate = NextCalibrationDate_;
+		// this.LastCalibrationBy = LastCalibrationBy_;
+		// this.IsVendor = IsVendor_;
+		// this.IsEmployee = IsEmployee_;
+		// this.ScheduleIsVendor = ScheduleIsVendor_;
+		// this.ScheduleIsEmployee = ScheduleIsEmployee_;
+		// this.VendorId = VendorId_;
+		// this.VendorName = VendorName_;
+		// this.EmployeeId = EmployeeId_;
+		// this.EmployeeName = EmployeeName_;
+		// this.CalibrationDate = CalibrationDate_;
+		// this.CurrencyId = CurrencyId_;
+		// this.CurrencyName = CurrencyName_;
+		// this.UnitOfMeasureId = UnitOfMeasureId_;
+		// this.UnitCost = UnitCost_;
+		// this.Memo = Memo_;
+		// this.CertifyId = CertifyId_;
+		// this.CertifyType = CertifyType_;
+		// this.ManagementStructureId = ManagementStructureId_;
+		// this.MasterCompanyId = MasterCompanyId_;
+		// this.IsDeleted = IsDeleted_;
+		// this.IsActive = IsActive_;
+		// this.CreatedBy = CreatedBy_;
+		// this.UpdatedBy = UpdatedBy_;
+		// this.CreatedDate = CreatedDate_;
+		// this.UpdatedDate = UpdatedDate_;
+	}
+}

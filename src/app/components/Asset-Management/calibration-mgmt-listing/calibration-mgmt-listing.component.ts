@@ -1,3 +1,4 @@
+import { FinancialStatementMappingComponent } from './../../financial-statement-mapping/financial-statement-mapping.component';
 import { AuthService } from './../../../services/auth.service';
 import { Component, OnInit, Input, NgModule } from '@angular/core';
 //import { AlertService } from '../../../services/alert.service';
@@ -25,6 +26,7 @@ import { GlAccountService } from './../../../services/glAccount/glAccount.servic
 import { UnitOfMeasureService } from 'src/app/services/unitofmeasure.service';
 import * as moment from 'moment';
 import { MenuItem } from 'primeng/api';
+import { CalibrationMgmt } from '../../../models/calibration-mgmt.model'
 
 @Component({
   selector: 'app-calibration-mgmt-listing',
@@ -48,7 +50,7 @@ export class CalibrationMgmtListingComponent implements OnInit {
     { field: 'buName', header: 'Level 02', colspan: '1' },
     { field: 'deptName', header: 'Level 03', colspan: '1' },
     { field: 'divName', header: 'Level 04', colspan: '1' },
-    { field: 'assetType', header: 'Asset Type', colspan: '1' },
+    { field: 'assetClass', header: 'Asset Type', colspan: '1' },
     { field: 'certifyType', header: 'Certify Type', colspan: '1' },
     { field: 'uOM', header: 'UOM', colspan: '1' },
     { field: 'qty', header: 'Qty', colspan: '1' },
@@ -131,7 +133,12 @@ status: string = 'active';
 currentDeletedstatus:boolean=false;
 currentstatus: string = 'Active';
 selectedOnly: boolean = false;
+disableUpdate:boolean=true;
 targetData: any;
+allVendorInfo:any=[];
+allemployeeInfo:any=[];
+employeeList: any;
+currentDate = new Date();
     /** Asset-listing ctor */
     loadingIndicator: boolean;
     allcalibrationinfo: any[] = [];
@@ -144,6 +151,8 @@ targetData: any;
     data: any;
     managementStructure: any = {};
     isSpinnerVisible: boolean = true;
+    calibrationForm : any = {};
+    viewcalibrationForm : any = {};
 
   constructor(
     private alertService: AlertService, public assetService: AssetService, private _route: Router,
@@ -151,7 +160,7 @@ targetData: any;
         public assetattrService1: AssetAcquisitionTypeService, private vendorService: VendorService,
         private vendorEndpointService: VendorEndpointService, private depriciationMethodService: DepriciationMethodService, private commonservice: CommonService,
         private datePipe: DatePipe,
-        private assetLocationService: AssetLocationService, private authService: AuthService, public unitService: UnitOfMeasureService
+        private assetLocationService: AssetLocationService, private authService: AuthService, public unitService: UnitOfMeasureService, private commonService: CommonService,
   ) { }
 
   ngOnInit() {
@@ -165,6 +174,9 @@ targetData: any;
   this.assetService.alertObj.next(this.assetService.ShowPtab); //steps
   this.assetService.indexObj.next(this.activeIndex);
   this.selectedColumns = this.cols;
+  this.getCurrencyList('');
+  this.vendorList('');
+  this.getAllEmployees('');
   }
 
   private loadData(data) {
@@ -195,7 +207,15 @@ private onDataLoadSuccessful(allWorkFlows) {
     this.allcalibrationinfo.forEach(x=>{
 
            x.createdDate=x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '';
-                       x.updatedDate=x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '';
+           x.updatedDate=x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '';
+           
+           x.lastCalibrationDate=x.lastCalibrationDate ?  this.datePipe.transform(x.lastCalibrationDate, 'MM/dd/yyyy h:mm a'): '';
+           x.nextCalibrationDate=x.nextCalibrationDate ?  this.datePipe.transform(x.nextCalibrationDate, 'MM/dd/yyyy h:mm a'): '';
+           
+           x.calibrationDate=x.calibrationDate ?  this.datePipe.transform(x.calibrationDate, 'MM/dd/yyyy h:mm a'): '';
+           x.lastcheckedindate=x.lastcheckedindate ?  this.datePipe.transform(x.lastcheckedindate, 'MM/dd/yyyy h:mm a'): '';
+       
+           x.lastcheckedoutdate=x.lastcheckedoutdate ?  this.datePipe.transform(x.lastcheckedoutdate, 'MM/dd/yyyy h:mm a'): '';
        
                              })
     this.allCalibrationinfoOriginal=this.allcalibrationinfo;
@@ -241,6 +261,38 @@ if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.up
 }
   
 }
+setEditArray:any=[];
+isEdit: boolean = false;
+unitOfMeasureList: any = [];
+currencyList: any = [];
+private getCurrencyList(value) {
+ 
+    this.setEditArray=[];
+    this.setEditArray.push(0);
+    // if(this.isEdit==true){
+    //     this.freightForm.forEach(element => {
+    //     if(element.currencyId){
+    //         this.setEditArray.push(element.currencyId); 
+    //     }
+    //     });
+    // }else{
+    //     this.setEditArray.push(0);
+    // }
+        const strText= value ? value:'';
+    this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.currencyList = res;
+    },err => {			
+})
+}
+onFilterAction(value){
+    this.getCurrencyList(value)
+}
+getActive(){
+    this.disableUpdate=false;
+}
+editorgetmemo(ev) {
+   // this.disableEditor = false;
+}
 viewSelectedRowdbl(rowData) {
   this.openView(rowData);
   $('#invView').modal('show');
@@ -248,113 +300,321 @@ viewSelectedRowdbl(rowData) {
 closeDeleteModal() {
     $("#editcalibration").modal("hide");
 }
-assetInventoryId:any;
-openView(row) {
-    
-    this.isSpinnerVisibleHistory = true;
-    if(row && row.assetInventoryId !=undefined){
-    this.assetService.getByInventoryId(row.assetInventoryId).subscribe(res => {
-       if(res){
-        this.currentAsset = {
-            ...res,
-            isTangible: !res.isIntangible,
-            entryDate: res.entryDate ? new Date(res.entryDate) : null,
-            manufacturedDate: res.manufacturedDate ? new Date(res.manufacturedDate) : null,
-            expirationDate: res.expirationDate ? new Date(res.expirationDate) : null,
-            unitCost: res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '',
-            installationCost: res.installationCost ? formatNumberAsGlobalSettingsModule(res.installationCost, 2) : '',
-            freight: res.freight ? formatNumberAsGlobalSettingsModule(res.freight, 2) : '',
-            insurance: res.insurance ? formatNumberAsGlobalSettingsModule(res.insurance, 2) : '',
-            taxes: res.taxes ? formatNumberAsGlobalSettingsModule(res.taxes, 2) : '',
-            totalCost: res.totalCost ? formatNumberAsGlobalSettingsModule(res.totalCost, 2) : '',
-            calibrationDefaultCost: res.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(res.calibrationDefaultCost, 2) : '',
-            certificationDefaultCost: res.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.certificationDefaultCost, 2) : '',
-            inspectionDefaultCost: res.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(res.inspectionDefaultCost, 2) : '',
-            verificationDefaultCost: res.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.verificationDefaultCost, 2) : '',
-            warrantyStartDate: res.warrantyStartDate ? new Date(res.warrantyStartDate) : null,
-            warrantyEndDate: res.warrantyEndDate ? new Date(res.warrantyEndDate) : null,
-        };
-       }
+closeviewModal() {
+    $("#viewcalibration").modal("hide");
+}
 
-      
-        
-        this.assetInventoryId=row.assetInventoryId
-        setTimeout(()=>{
-            this.isSpinnerVisibleHistory = false;
-        },1000)
-    },err=>{
-        this.isSpinnerVisibleHistory = false;
+  filterEmployee(event): void {
+    if (event.query !== undefined && event.query !== null) {
+        this.getAllEmployees(event.query);
+    } else {
+        this.getAllEmployees('');
+    }
+}
+  arrayContactlist: any = []
+  getAllEmployees(strText = '') {
+      this.arrayContactlist.push(0);
+      this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
+          this.employeeList = res.map(x => {
+              return {
+                  ...x,
+                  employeeId: x.value,
+                  name: x.label
+              }
+          });
+
+      }, err => {
+         // this.errorMessageHandler();
+      })
+  }
+
+  savecalibrationprocess()
+  {
+      this.calibrationForm.createdBy = this.userName;
+      this.calibrationForm.updatedBy = this.userName;
+      if(this.calibrationForm.ScheduleIsVendor =="vendor")
+      {
+        this.calibrationForm.ScheduleIsVendor=true;
+      }
+      else
+      {
+        this.calibrationForm.ScheduleIsVendor=false;
+      }
+
+      if(this.calibrationForm.ScheduleIsEmployee =="employee")
+      {
+        this.calibrationForm.ScheduleIsEmployee=true;
+      }
+      else
+      {
+        this.calibrationForm.ScheduleIsEmployee=false;
+      }
+
+      //this.calibrationForm.LastCalibrationDate=this.calibrationForm.CalibrationDate
+      //this.calibrationForm.NextCalibrationDate=this.calibrationForm.CalibrationDate
+      //this.calibrationForm.LastCalibrationBy=this.userName;
+      this.calibrationForm.masterCompanyId = this.authService.currentUser.masterCompanyId;
+      this.calibrationForm.EmployeeId=this.calibrationForm.EmployeeId ? this.calibrationForm.EmployeeId.EmployeeId : null;
+      this.calibrationForm.VendorId=this.calibrationForm.VendorId ? this.calibrationForm.VendorId.vendorId : null;
+    this.isSpinnerVisible = true;
+    this.assetService.addcalibrationManagment(this.calibrationForm).subscribe(data => {
+        this.isSpinnerVisible = false;
+        this.isEditMode = true;
+        this.alertService.showMessage("Success", `Calibration Process successfully.`, MessageSeverity.success);
+        $("#editcalibration").modal("hide");
+    }, err => {
+        this.currentAsset.manufacturedDate = this.currentAsset.manufacturedDate ? this.currentAsset.manufacturedDate : null;
+        this.currentAsset.expirationDate = this.currentAsset.expirationDate ? this.currentAsset.expirationDate : null;
         const errorLog = err;
         this.errorMessageHandler(errorLog);
-    });
-}
-}
+    })
+
+  }
+assetInventoryId:any;
+
 get userName(): string {
   return this.authService.currentUser ? this.authService.currentUser.userName : "";
 }
-  toggleIsActive(asset: any, e) {
+  toggleIsActive(calibration: any, e) {
       this.pageNumber = 0;
       if (e.checked == false) {
-          this.assetTypeToUpdate = asset;
           this.Active = "In Active";
-          this.assetTypeToUpdate.isActive == false;
-          if(asset && asset.assetInventoryId !=undefined){
-          this.assetService.updateAssetInventoryListing(asset.assetInventoryId, this.Active,this.userName).subscribe(asset => {
-              this.alertService.showMessage("Success", `Asset Inventory Type updated successfully.`, MessageSeverity.success);
-              this.status=this.status;
-              this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters };
-              const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-              this.loadData(PagingData);
-          },err=>{
+          let newcalibration = new CalibrationMgmt();
+          newcalibration=calibration;
+          newcalibration.IsActive == false;
+          newcalibration.CalibrationId == calibration.calibrationId;
+          this.isSpinnerVisible = true;
+          this.assetService.addcalibrationManagment(newcalibration).subscribe(data => {
               this.isSpinnerVisible = false;
+              this.isEditMode = true;
+              this.alertService.showMessage("Success", `Calibration updated successfully.`, MessageSeverity.success);
+          }, err => {
               const errorLog = err;
               this.errorMessageHandler(errorLog);
           })
-      }
   }
       else {
-          this.assetTypeToUpdate = asset;
           this.Active = "Active";
+         
           this.assetTypeToUpdate.isActive == true;
-          if(asset && asset.assetInventoryId !=undefined){
-          this.assetService.updateAssetInventoryListing(asset.assetInventoryId, this.Active,this.userName).subscribe(asset => {
-              this.alertService.showMessage("Success", `Asset Inventory Type updated successfully.`, MessageSeverity.success);
-              // this.assetService.getAssetInventoryList().subscribe(assets => {
-              //     this.allAssetInfo = assets[0];
-              //     //this.loadManagementdata();
-              //     //this.loadData();
-              // });
-              this.status=this.status;
-              this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters };
-              const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-              this.loadData(PagingData);
-          },err=>{
+          let newcalibration = new CalibrationMgmt();
+          newcalibration=calibration;
+          newcalibration.IsActive == true;
+          newcalibration.CalibrationId == calibration.calibrationId;
+          this.isSpinnerVisible = true;
+          this.assetService.addcalibrationManagment(newcalibration).subscribe(data => {
               this.isSpinnerVisible = false;
+              this.isEditMode = true;
+              this.alertService.showMessage("Success", `Calibration updated successfully.`, MessageSeverity.success);
+          }, err => {
               const errorLog = err;
               this.errorMessageHandler(errorLog);
           })
-      }
   }
   }
+  openView(row) {
+ // this.assetService.isEditMode = true;
+  
+     let newcalibration = new CalibrationMgmt();
+     newcalibration.IsDeleted=false;
+     newcalibration.AssetRecordId=row.assetRecordId
+     newcalibration.IsActive=true;
+     newcalibration.CalibrationId=row.calibrationId;
+     newcalibration.AssetId=row.assetId;
+     newcalibration.AssetName=row.assetName;
+     newcalibration.AltAssetId=row.altAssetId;
+     newcalibration.SerialNum=row.serialNum;
+     newcalibration.Location=row.location;
+     newcalibration.AcquisitionType=row.acquisitionType;
+     newcalibration.ControlName=row.controlName;
+     newcalibration.LastCalibrationDate=row.lastCalibrationDate;
+     newcalibration.NextCalibrationDate=row.nextCalibrationDate;
+     newcalibration.LastCalibrationBy=row.lastCalibrationBy;
+     newcalibration.CertifyType=row.certifyType;
+     newcalibration.IsVendor=row.isVendor;
+     newcalibration.IsEmployee=row.isEmployee
+     newcalibration.ScheduleIsVendor=true;
+     newcalibration.ScheduleIsEmployee=false;
+     newcalibration.VendorId=row.vendorId;
+     newcalibration.EmployeeId=row.employeeId
+
+     newcalibration.LastCalibrationBy=row.lastCalibrationBy;
+     newcalibration.CertifyType=row.certifyType;
+     newcalibration.IsVendor=row.isVendor;
+     newcalibration.IsEmployee=row.isEmployee
+     newcalibration.ScheduleIsVendor=true;
+     newcalibration.ScheduleIsEmployee=false;
+     newcalibration.VendorId=row.vendorId;
+     newcalibration.EmployeeId=row.employeeId;
+
+     newcalibration.Qty=row.qty;
+	 newcalibration.UpdatedCost =row.updatedCost;
+	 newcalibration.Inservicedate=row.inservicedate;;
+	 newcalibration.AssetStatus=row.assetStatus;;
+	 newcalibration.Itemtype =row.itemtype;;
+	 newcalibration.AssetType =row.assetType;;
+	 newcalibration.AssetClass =row.assetClass;;
+	 newcalibration.UOM =row.uOM;;
+	 newcalibration.Inservicesdate =row.inservicesdate;;
+	 newcalibration.lastcalibrationmemo =row.lastcalibrationmemo;;
+	 newcalibration.lastcheckedinby =row.lastcheckedinby;;
+	 newcalibration.lastcheckedindate =row.lastcheckedindate;;
+	 newcalibration.lastcheckedinmemo =row.lastcheckedinmemo;;
+	 newcalibration.lastcheckedoutby =row.lastcheckedoutby;;
+	 newcalibration.lastcheckedoutdate =row.lastcheckedoutdate;;
+	 newcalibration.lastcheckedoutmemo =row.lastcheckedoutmemo;;
+	 newcalibration.CompanyName =row.companyName;;
+	 newcalibration.BuName =row.buName;;
+	 newcalibration.DeptName =row.deptName;;
+	 newcalibration.DivName =row.divName;;
+
+  //    if (row.calibrationDate) 
+  //    {
+  //     newcalibration.CalibrationDate1 = new Date(row.calibrationDate).toLocaleDateString();
+  // }
+  // else {
+  //     newcalibration.CalibrationDate1 = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).toLocaleDateString();
+  // }
+     //newcalibration.CalibrationDate='';
+     newcalibration.CurrencyId=0;
+     newcalibration.Memo=row.memo;
+     //newcalibration.UnitCost = this.formateCurrency(newcalibration.UnitCost);
+
+      newcalibration = { ...newcalibration }
+      this.viewcalibrationForm = newcalibration;
+  $("#viewcalibration").modal("show");
+  // this.assetService.currentAssetId = row.assetRecordId;
+  this.assetService.listCollection = row;
+  const { assetId } = row;
+}
 
   openAssetToEdit(row) {
-    this.assetService.isEditMode = true;
-    this.isSaving = true;
+   // this.assetService.isEditMode = true;
+    
+       let newcalibration = new CalibrationMgmt();
+       newcalibration.IsDeleted=false;
+       newcalibration.AssetRecordId=row.assetRecordId
+       newcalibration.IsActive=true;
+       //newcalibration.CalibrationId=row.calibrationId;
+       newcalibration.AssetId=row.assetId;
+       newcalibration.AssetName=row.assetName;
+       newcalibration.AltAssetId=row.altAssetId;
+       newcalibration.SerialNum=row.serialNum;
+       newcalibration.Location=row.location;
+       newcalibration.AcquisitionType=row.acquisitionType;
+       newcalibration.ControlName=row.controlName;
+       newcalibration.LastCalibrationDate=row.lastCalibrationDate;
+       newcalibration.NextCalibrationDate=row.nextCalibrationDate;
+       newcalibration.LastCalibrationBy=row.lastCalibrationBy;
+       newcalibration.CertifyType=row.certifyType;
+       newcalibration.IsVendor=row.isVendor;
+       newcalibration.IsEmployee=row.isEmployee
+       newcalibration.ScheduleIsVendor=true;
+       newcalibration.ScheduleIsEmployee=false;
+       newcalibration.VendorId=row.vendorId;
+       newcalibration.EmployeeId=row.employeeId
+
+    //    if (row.calibrationDate) 
+    //    {
+    //     newcalibration.CalibrationDate1 = new Date(row.calibrationDate).toLocaleDateString();
+    // }
+    // else {
+    //     newcalibration.CalibrationDate1 = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).toLocaleDateString();
+    // }
+       //newcalibration.CalibrationDate='';
+       newcalibration.CurrencyId=0;
+       newcalibration.Memo='';
+       //newcalibration.UnitCost = this.formateCurrency(newcalibration.UnitCost);
+
+        newcalibration = { ...newcalibration }
+        this.calibrationForm = newcalibration;
     $("#editcalibration").modal("show");
     // this.assetService.currentAssetId = row.assetRecordId;
     this.assetService.listCollection = row;
     const { assetId } = row;
 }
+parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+}
+textAreaInfo: any;
+disableEditor: any = true;
+onAddTextAreaInfo(material) {
+    this.disableEditor = true;
+    this.textAreaInfo = material.memo;
+}
+onCloseTextAreaInfo() {
+    $("#textarea-popup").modal("hide"); 
+}
+onSaveTextAreaInfo(memo) {
+    if (memo) {
+        this.textAreaInfo = memo;
+        this.calibrationForm.memo = memo;
+    }
+    $("#textarea-popup").modal("hide");
+}
+getmemo($event) {
+    this.disableEditor= false;
+}
+isvendor:boolean=false;
+isemployee:boolean=false;
+checkedvendor(ScheduleIsVendor)
+{
+    this.isvendor=true;
+    this.isemployee=false;
+    this.calibrationForm.ScheduleIsVendor=true
+    this.calibrationForm.ScheduleIsEmployee=false
+}
+checkedemployee(ScheduleIsEmployee)
+{
+    this.isvendor=false;
+    this.isemployee=true;
+    this.calibrationForm.ScheduleIsVendor=false
+    this.calibrationForm.ScheduleIsEmployee=true
+
+
+}
+formateCurrency(amount){
+    return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
+}
 showscheduleprocess()
 {
     this.isscheduleprocess=true;
 }
-openAssetToAdjustment(row) {
 
-    // this.assetService.currentAssetId = row.assetRecordId;
-    this.assetService.listCollection = row;
-    const { assetId } = row;
-    this._route.navigateByUrl(`assetmodule/assetpages/app-asset-adjustment/${row.assetInventoryId}`);
+allVendorInfoFilter:any=[];
+filterWarentyVendor(event) {
+    this.allVendorInfoFilter = this.allVendorInfo;
+    if (event.query !== undefined && event.query !== null) {
+        this.vendorList(event.query)
+    }else{
+        this.vendorList('');
+    }
+        const vendors = [...this.allVendorInfo.filter(x => {
+            return x.name.toLowerCase().includes(event.query.toLowerCase())
+        })]
+        this.allVendorInfoFilter = vendors;
+
+}
+arrayVendlsit:any=[];
+private vendorList(value) {
+    this.arrayVendlsit.push(0); 
+this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join()).subscribe(res => {
+    this.allVendorInfo = res.map(x => {
+        return {
+            vendorId: x.vendorId,
+            name: x.vendorName
+        }
+    }); 
+    this.allVendorInfoFilter = this.allVendorInfo;
+},err => {			
+    const errorLog = err;
+    this.errorMessageHandler(errorLog);})
 }
 
 restorerecord:any={};

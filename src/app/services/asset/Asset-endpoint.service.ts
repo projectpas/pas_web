@@ -15,6 +15,7 @@ export class AssetEndpoint extends EndpointFactory {
     private readonly _calibrationlistUrl: string = this.baseUrl +"/api/AssetModule/getcalibrationmgmtlist";
     private readonly _allAssetlistUrl: string = this.baseUrl +"/api/AssetModule/GetAll";
     private readonly _addAssetUrlNew: string =this.baseUrl + "/api/AssetModule/AddAsset";
+    private readonly _addaddcalibrationManagment: string =this.baseUrl + "/api/AssetModule/addcalibrationManagment";
     private readonly _addAssetIntangibleUrl: string = this.baseUrl +"/api/AssetModule/AddIntangibleAsset";
     private readonly _addAssetCalibrationUrl: string =this.baseUrl + "/api/AssetModule/AddAssetCalibration";
     private readonly _addAssetMaintenanceUrl: string =this.baseUrl + "/api/AssetModule/AddAssetMaintenance";
@@ -79,6 +80,12 @@ export class AssetEndpoint extends EndpointFactory {
                 return this.handleErrorCommon(error, () => this.getNewAsset(userObject));
             });
     }
+    addcalibrationManagment<T>(userObject: any): Observable<T> {
+        return this.http.post<T>(this._addaddcalibrationManagment, JSON.stringify(userObject), this.getRequestHeaders())
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.addcalibrationManagment(userObject));
+        });
+   }
     addAssetIntangible<T>(userObject: any): Observable<T> {
          return this.http.post<T>(this._addAssetIntangibleUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {

@@ -71,6 +71,9 @@ export class AssetService {
     addAsset(asset: any) {
         return this.assetEndpoint.getNewAsset<any>(asset);
     }
+    addcalibrationManagment(asset: any) {
+        return this.assetEndpoint.addcalibrationManagment<any>(asset);
+    }
     addAssetIntangible(asset: any) {
         return this.assetEndpoint.addAssetIntangible<any>(asset);
     }
