@@ -280,9 +280,13 @@ export class SalesQuoteListComponent implements OnInit {
             this.isSpinnerVisible = false;
         });
     }
-
+    arrayStatuslist: any[] = [];
     getStatusList() {
-        forkJoin(this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
+        this.isSpinnerVisible = true;
+        if (this.arrayStatuslist.length == 0) {
+            this.arrayStatuslist.push(0);
+        }
+        forkJoin(this.commonservice.autoSuggestionSmartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name", '', true, 20, this.arrayStatuslist.join(), this.currentUserMasterCompanyId),
             this.salesQuoteService.getAllSalesOrderQuoteSettings(this.currentUserMasterCompanyId)).subscribe(res => {
                 this.statusList = res[0];
                 this.settingsList = res[1];
@@ -301,6 +305,7 @@ export class SalesQuoteListComponent implements OnInit {
                 }
                 this.isSettingsReceived = true;
                 this.changeOfStatus(this.currentStatus, this.viewType);
+                this.isSpinnerVisible = false;
             }, error => {
                 this.isSettingsReceived = true;
                 this.isSpinnerVisible = false;

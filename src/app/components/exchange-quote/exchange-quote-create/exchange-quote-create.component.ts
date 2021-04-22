@@ -36,6 +36,7 @@ import { ExchangeQuotePartNumberComponent } from "../shared/components/exchange-
 import { ExchangeQuoteApproveComponent } from "../shared/components/exchange-quote-approve/exchange-quote-approve.component";
 //import { ExchangeQuoteCustomerApprovalComponent } from "../shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
 import{ExchangeQUoteMarginSummary} from '../../../models/exchange/ExchangeQUoteMarginSummary';
+import{ExchangeQuoteAnalysisComponent} from '../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
 @Component({
   selector: 'app-exchange-quote-create',
   templateUrl: './exchange-quote-create.component.html',
@@ -89,6 +90,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   @ViewChild(ExchangeQuoteApproveComponent, { static: false }) public exchangeQuoteApproveComponent: ExchangeQuoteApproveComponent;
   //@ViewChild(ExchangeQuoteCustomerApprovalComponent, { static: false }) public exchangeQuoteCustomerApprovalComponent: ExchangeQuoteCustomerApprovalComponent;
   marginSummary: ExchangeQUoteMarginSummary = new ExchangeQUoteMarginSummary();
+  @ViewChild(ExchangeQuoteAnalysisComponent, { static: false }) public exchangeQuoteAnalysisComponent: ExchangeQuoteAnalysisComponent;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -733,6 +735,9 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     }
     if (event.index == 2) {
       this.showAddresstab = true;
+    }
+    if (event.index == 3) {
+      this.exchangeQuoteAnalysisComponent.refresh(this.id);
     }
   }
 

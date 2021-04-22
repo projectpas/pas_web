@@ -122,7 +122,7 @@ export class SalesCustomerApprovalsComponent {
             ? this.authService.currentUser.masterCompanyId
             : null;
     }
-
+    arrayApprovalStatuslst: any[] = [];
     refresh(marginSummary: SOQuoteMarginSummary, salesQuoteId, isViewMode = false, customerContactList = []) {
         this.isSpinnerVisible = true;
         this.isView = isViewMode;
@@ -132,7 +132,10 @@ export class SalesCustomerApprovalsComponent {
             this.setDefaultContact();
 
         }
-        forkJoin(this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name'),
+        if (this.arrayApprovalStatuslst.length == 0) {
+            this.arrayApprovalStatuslst.push(0);
+        }
+        forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.currentUserMasterCompanyId),
             this.salesQuoteService.approverslistbyTaskId(ApprovalTaskEnum.SalesQuoteApproval, this.salesQuoteId),
             this.salesQuoteService.getCustomerQuotesList(this.salesQuoteId)).subscribe(response => {
                 this.isSpinnerVisible = false;
@@ -190,7 +193,10 @@ export class SalesCustomerApprovalsComponent {
     }
 
     getApproverStatusList() {
-        this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
+        if (this.arrayApprovalStatuslst.length == 0) {
+            this.arrayApprovalStatuslst.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.statusList = res.map(x => {
                 return {
                     ...x,
