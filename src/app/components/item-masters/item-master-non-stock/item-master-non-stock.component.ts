@@ -222,8 +222,8 @@ export class ItemMasterNonStockComponent {
                 partdescription: res.partDescription,
                 unitCost: res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00',
                 listPrice: res.listPrice ? formatNumberAsGlobalSettingsModule(res.listPrice, 2) : '0.00',
-                itemNonStockClassificationId: this.getInactiveObjectOnEdit('value', res.itemNonStockClassificationId, this.allitemNonStockclassificationInfo, 'ItemClassification', 'ItemClassificationId', 'Description'),
-                itemGroupId: this.getInactiveObjectOnEdit('value', res.itemGroupId, this.allitemgroupobjInfo, 'ItemGroup', 'itemGroupId', 'description'),
+                itemNonStockClassificationId: this.getInactiveObjectOnEdit('value', res.itemNonStockClassificationId, this.allitemNonStockclassificationInfo, 'ItemClassification', 'ItemClassificationId', 'ItemClassificationCode'),
+                itemGroupId: this.getInactiveObjectOnEdit('value', res.itemGroupId, this.allitemgroupobjInfo, 'ItemGroup', 'itemGroupId', 'ItemGroupCode'),
                 manufacturerId: this.getInactiveObjectOnEdit('value', res.manufacturerId, this.allManufacturerInfo, 'Manufacturer', 'manufacturerId', 'name'),
                 discountPurchasePercent: this.getInactiveObjectOnEdit('value', res.discountPurchasePercent, this.discDataList, 'Discount', 'DiscountId', 'DiscontValue'),
                 glAccountId: this.getInactiveObjectOnEdit('value', res.glAccountId, this.allGlInfo, 'GLAccount', 'GLAccountId', 'AccountCode'),
@@ -308,7 +308,7 @@ export class ItemMasterNonStockComponent {
 
     async getDiscountTableData() {
         //await this.commonService.smartDropDownList('Discount', 'DiscountId', 'DiscontValue').subscribe(res => {
-          await this.commonService.autoSuggestionSmartDropDownList('Discount', 'DiscountId', 'DiscontValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
+          await this.commonService.autoSuggestionSmartDropDownList('Discount', 'DiscountId', 'DiscontValue', '', '', 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
             this.discDataList = res;
             this.discDataList.sort(function(a, b) {
                 return parseFloat(a.label) - parseFloat(b.label);
@@ -376,7 +376,7 @@ export class ItemMasterNonStockComponent {
     
     private itemgroup() {
         //this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', 10, 1, 0).subscribe(res => {
-            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'ItemGroupCode','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
                 this.allitemgroupobjInfo = res;           
         })
     }
@@ -898,7 +898,8 @@ export class ItemMasterNonStockComponent {
 			if (!this.isEdit) {
 				this.sourceItemMaster.isActive = true;				
 				this.sourceItemMaster.itemNonStockClassificationCode = this.itemName;				
-				this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                //this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                this.sourceItemMaster.itemTypeId = 2;
                 this.itemser.saveItemMasterNonStock(this.sourceItemMaster).subscribe(data => {
 					this.collectionofItemMaster = data;
 					this.itemser.listStock = true;
@@ -910,7 +911,8 @@ export class ItemMasterNonStockComponent {
 			}
 			else {
 
-                this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                //this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                this.sourceItemMaster.itemTypeId = 2
 				this.sourceItemMaster.itemNonStockClassificationCode = this.itemName;                        
 				this.itemser.updateNonStockItemMaster(this.sourceItemMaster).subscribe(
 					response => {
@@ -1097,7 +1099,6 @@ export class ItemMasterNonStockComponent {
     }
 
     filterpartItems(event) {
-
         this.partCollection = [];
 		this.itemclaColl = [];
 		if (this.allPartnumbersInfo) {
@@ -1116,6 +1117,20 @@ export class ItemMasterNonStockComponent {
 			}
         }
     }
+
+    // arrayItemMasterlist:any[] = [];
+    // filterpartItems(event) {
+    //     if(this.arrayItemMasterlist.length == 0) {			
+    //         this.arrayItemMasterlist.push(0); }
+    //     this.commonService.autoSuggestionSmartDropDownList('MasterParts', 'MasterPartId', 'PartNumber', event.query, false, 20, this.arrayItemMasterlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+    //         this.itemclaColl = [];
+    //         this.partCollection = [];
+    //         for (let i = 0; i < res.length; i++) {
+    //             this.partCollection.push(res[i].label);
+    //             this.itemclaColl.push(res[i].label);
+    //         };
+    //     });
+    // }
 
 
 	classificationId(event) {
