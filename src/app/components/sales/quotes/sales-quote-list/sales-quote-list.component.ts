@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-declare var $ : any;
+declare var $: any;
 import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
@@ -32,7 +32,7 @@ import { AuditHistory } from "../../../../models/audithistory.model";
     styleUrls: ["./sales-quote-list.component.css"]
 })
 export class SalesQuoteListComponent implements OnInit {
-    @ViewChild("dt",{static:false})
+    @ViewChild("dt", { static: false })
     isEnablePOList: any;
     searchParameters: ISalesSearchParameters;
     sales: any[] = [];
@@ -77,10 +77,10 @@ export class SalesQuoteListComponent implements OnInit {
     selectedOnly: boolean = false;
     targetData: any;
     isSettingsReceived = false;
-    @ViewChild("filterStatusInput",{static:false}) public filterText: ElementRef;
+    @ViewChild("filterStatusInput", { static: false }) public filterText: ElementRef;
     clearStatusText: boolean = false;
     salesOrderQuoteId: any;
-    
+
     constructor(
         private salesQuoteService: SalesQuoteService,
         private alertService: AlertService,
@@ -150,7 +150,7 @@ export class SalesQuoteListComponent implements OnInit {
         this.pageIndex = this.searchParameters.rows > 10 ? this.searchParameters.first / this.searchParameters.rows : 0;
         this.pageSize = this.searchParameters.rows;
         this.searchParameters.first = this.pageIndex;
-        
+
         if (this.currentDeletedstatus == true) {
             this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
             this.isSpinnerVisible = true;
@@ -164,9 +164,9 @@ export class SalesQuoteListComponent implements OnInit {
 
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser
-          ? this.authService.currentUser.masterCompanyId
-          : null;
-      }
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
 
     loadData(event, globalFilter = "") {
         event.filters.statusId = this.currentStatus;
@@ -183,7 +183,7 @@ export class SalesQuoteListComponent implements OnInit {
             this.searchParameters.filters.status = '';
             this.clearStatusText = false;
         }
-        
+
         this.searchParameters.filters.masterCompanyId = this.currentUserMasterCompanyId;
 
         this.searchParameters.filters = {
@@ -238,7 +238,7 @@ export class SalesQuoteListComponent implements OnInit {
     dismissModel() {
         this.modal.close();
     }
-    
+
     openDelete(content, rowData) {
         this.selected = rowData.salesOrderQuoteId;
         this.selectedQuoteToDelete = rowData.salesOrderQuoteNumber;
@@ -383,7 +383,7 @@ export class SalesQuoteListComponent implements OnInit {
         const isdelete = this.currentDeletedstatus ? true : false;
         let PagingData;
         //PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "globalFilter": "" };
-        PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"StatusId":this.currentStatus,"isDeleted":isdelete,"ViewType": this.viewType},"globalFilter":""}
+        PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "StatusId": this.currentStatus, "isDeleted": isdelete, "ViewType": this.viewType, "masterCompanyId": this.currentUserMasterCompanyId }, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
