@@ -461,11 +461,11 @@
                             </div>
                         </div>
                         <div class="form-row pull-right mr-10">
-                            <button type="submit" class="btn btn-primary submit-btn new-footer-btn" *ngIf="!isEditMode"
+                            <button type="submit" class="btn btn-primary submit-btn new-footer-btn" *ngIf="isAdd && !isEditMode"
                                 [disabled]="!generalInfoForm.valid || isEntityNameAlreadyExists" (click)="saveGeneralInformation()">
                                 Save
                             </button>
-                            <button type="submit" *ngIf="isEditMode" class="btn btn-primary submit-btn new-footer-btn"
+                            <button type="submit" *ngIf="isEdit && isEditMode" class="btn btn-primary submit-btn new-footer-btn"
                                 [disabled]="!generalInfoForm.valid || disableUpdatebutton || isEntityNameAlreadyExists" (click)="saveGeneralInformation()">
                                 Update
                             </button>

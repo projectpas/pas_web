@@ -20,6 +20,7 @@ export class UserRoleEndPointService extends EndpointFactory {
     private readonly getSavedEmployeeDataURL: string = environment.baseUrl + "/api/common/loginuserdetails"
     private readonly getAllPermissionURL: string = environment.baseUrl + "/api/userrolepermission/getPermission";
     private readonly getUserMenuByRoleIdURL: string = environment.baseUrl + "/api/userrolepermission/geMenuListByRoleID";
+    private readonly getUserTabPermissionByRoleIdURL: string = environment.baseUrl + "/api/userrolepermission/getUserTabPermissionByRoleId";
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
     }
@@ -90,6 +91,13 @@ export class UserRoleEndPointService extends EndpointFactory {
         let endpointUrl = `${this.getUserMenuByRoleIdURL}/${roleID}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getUserMenuByRoleId(roleID));
+        });
+    }
+
+    getUserTabPermissionByRoleId<T>(roleID: string): Observable<T> {
+        let endpointUrl = `${this.getUserTabPermissionByRoleIdURL}/${roleID}`;
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getUserTabPermissionByRoleId(roleID));
         });
     }
 //     getEmployeeData(masterCompanyId:any,employeeId:any) {

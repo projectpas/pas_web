@@ -63,16 +63,16 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <button type="button" *ngIf="isViewMode==false "
+                                    <button type="button" *ngIf="isDownload && isViewMode==false "
                                         class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                                         label="Export All Data" matTooltip="Download  Data" matTooltipPosition="above"
                                         (click)="openTag(export)"></button>
-                                    <button type="button" *ngIf="isViewMode==false "
+                                    <button type="button" *ngIf="isDownload && isViewMode==false "
                                         class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                                         label="Export Selected Data" matTooltip="Download Selected Data"
                                         matTooltipPosition="above"
                                         (click)="dt.exportCSV({selectionOnly:true})"></button>
-                                    <div class="excel-upload  excel-upload-cstm" *ngIf="isViewMode==false ">
+                                    <div class="excel-upload  excel-upload-cstm" *ngIf="isDownload && isViewMode==false ">
                                         <button name="download" id="download" type="button"
                                             class="btn btn-primary exports-button" matTooltip="Download Sample File"
                                             matTooltipPosition="above" (click)="sampleExcelDownloadForContact()">

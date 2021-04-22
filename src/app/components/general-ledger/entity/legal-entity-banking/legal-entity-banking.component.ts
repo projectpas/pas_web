@@ -16,6 +16,7 @@ import { CustomerService } from '../../../../services/customer.service';
 import { CommonService } from '../../../../services/common.service';
 import { editValueAssignByCondition,getObjectById } from '../../../../generic/autocomplete';
 import { titlePattern } from '../../../../validations/validation-pattern';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 // declare var $ : any;
 declare var $ : any;
 @Component({
@@ -96,6 +97,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	tabscreen: any;
 	titlePattern = titlePattern()
 	isSpinnerVisible: boolean = false;
+	isAdd:boolean=true;
+	isEditData:boolean=true;
 	@ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
 	constructor(
 		private authService: AuthService, private commonService: CommonService, private _fb: FormBuilder, private alertService: AlertService,
@@ -103,7 +106,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		private modalService: NgbModal, private activeModal: NgbActiveModal, private dialog: MatDialog, private masterComapnyService: MasterComapnyService,
 		private customerService: CustomerService) {
 		this.sourceLegalEntity.tagNames = [];
-
+			this.isAdd=this.authService.checkPermission([ModuleConstants.LegalEntity_BankingInformation+"."+PermissionConstants.Add]);
+			this.isEditData=this.authService.checkPermission([ModuleConstants.LegalEntity_BankingInformation+"."+PermissionConstants.Update]);
 	}
 	ngOnInit(): void {
 		if (this.editMode) {
