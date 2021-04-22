@@ -74,8 +74,8 @@
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Invoice Date & Time</label>
-                                    <input type="text" value="{{this.salesOrder.InvoiceDate}}"
-                                        disabled />
+                                    <label class="col-sm-4 second-block-label" style="width:30%"
+                                        disabled>{{this.salesOrder.invoiceDate | date:'medium'}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
