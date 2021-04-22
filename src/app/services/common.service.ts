@@ -433,6 +433,11 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.getAllSalesEmployeeListByJobTitle(JobTitleIds,masterCompanyId));
     });
   }
+  getAllSalesEmployeeListByExpertiseIds(ExpTitleIds,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/common/GetEmployeesByExpertiseIds?expTitleIds=${ExpTitleIds}&masterCompanyId=${masterCompanyId !=undefined ?masterCompanyId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getAllSalesEmployeeListByJobTitle(ExpTitleIds,masterCompanyId));
+    });
+  }
 
   getExpertise(masterCompanyId) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/common/expertisetypes?masterCompanyId=${masterCompanyId} `, this.getRequestHeaders()).catch(error => {

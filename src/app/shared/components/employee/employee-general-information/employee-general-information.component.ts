@@ -214,6 +214,9 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     @ViewChild("empform",{static:false}) formdata;
     @Output() tab = new EventEmitter<any>();
     private onDestroy$: Subject<void> = new Subject<void>();
+    
+    Supervisorinfo: { employeeId: number; firstName: string; isActive: boolean; lastName: string; middleName: string; name: string; }[];
+    Currencyinfo: { currencyId:number;code:string }[];
     constructor(private fb: FormBuilder, private Actroute: ActivatedRoute, private translationService: AppTranslationService, private router: Router, public jobTypeService: JobTypeService, public jobTitleService: JobTitleService, private empservice: EmployeeExpertiseService, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private route: Router, private alertService: AlertService, public employeeService: EmployeeService, public jobTitleService1: LegalEntityService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private localStorage: LocalStoreManager, private companyService: CompanyService, public currencyService: CurrencyService, public commonService: CommonService) {
         this.displayedColumns.push('action');
         this.radioItems = ['Hourly', 'Monthly'];
@@ -811,8 +814,9 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
 
     filterCurrencyList(event) {
         this.currencyList = this.allCurrencyData;
+        this.Currencyinfo = [{currencyId:0 , code: "-- Select --"}]
         if (event.query !== undefined && event.query !== null) {
-            const currlist = [...this.allCurrencyData.filter(x => {
+            const currlist = [...this.Currencyinfo, ...this.allCurrencyData.filter(x => {
                 return x.code.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.currencyList = currlist;
@@ -821,16 +825,18 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     filterSupervisorList(event){
         if(this.empId){
             this.supervisorList=this.allEmployeeinfo;
+            this.Supervisorinfo = [{employeeId: 0, firstName: "", isActive: false, lastName: "", middleName: "",  name: "-- Select --"}]
             if (event.query !== undefined && event.query !== null) {
-                const supervisorlist = [...this.allEmployeeinfo.filter(x => {
+                const supervisorlist = [...this.Supervisorinfo, ...this.allEmployeeinfo.filter(x => {
                     return x.name.toLowerCase().includes(event.query.toLowerCase())
                 })]
                 this.supervisorList = supervisorlist;
             }
         }else{
             this.supervisorList=this.allEmployeeinfo;
+            this.Supervisorinfo = [{employeeId: 0, firstName: "", isActive: false, lastName: "", middleName: "",  name: "-- Select --"}]
             if (event.query !== undefined && event.query !== null) {
-                const supervisorlist = [...this.allEmployeeinfo.filter(x => {
+                const supervisorlist = [this.Supervisorinfo, ...this.allEmployeeinfo.filter(x => {
                     return x.name.toLowerCase().includes(event.query.toLowerCase())
                 })]
                 this.supervisorList = supervisorlist.filter(x=>x.isActive==true);
@@ -932,7 +938,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             let d=new Date(this.sourceEmployee.dateOfBirth);
             this.sourceEmployee.dateOfBirth = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
         }
-        this.sourceEmployee.SupervisorId = this.supervisorId.employeeId;
+        
+        this.sourceEmployee.SupervisorId = this.supervisorId?this.supervisorId.employeeId:null;
         this.sourceEmployee.stationId = this.sourceEmployee.stationId == 0 ? null : this.sourceEmployee.stationId;
         if (this.sourceEmployee.inMultipleShifts == true) {
             this.sourceEmployee.shiftId = '';
