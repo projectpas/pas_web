@@ -4,7 +4,7 @@
 }
 
 table thead {
-  background: #808080;
+  background: #0d57b0 !important;
 }
 
 table thead tr {
@@ -23,6 +23,7 @@ thead,
 th {
   border: 1px solid black;
   border-collapse: collapse;
+  background: #0d57b0 !important;
 }
 
 table thead tr th {
@@ -149,6 +150,7 @@ hr {
   padding-right: 2px;
   border: 1px solid black;
   width: 100%;
+  min-height:300px;
   padding-left: 2px;
 }
 
@@ -171,7 +173,7 @@ hr {
   position: relative;
   display: flex;
   min-height: 1px;
-  padding-left: 50px;
+  padding-left: 35%;
   width: 100%;
 }
 
@@ -184,7 +186,6 @@ hr {
   width: 38.33333333%;
   text-transform: capitalize;
   margin-bottom: 0;
-  text-align: left;
 }
 
 .clear {
@@ -238,6 +239,7 @@ hr {
   float: left;
   padding-right: 2px;
   padding-left: 2px;
+  // width: 38.33333333%;
   text-transform: capitalize;
   margin-bottom: 0;
   text-align: left;

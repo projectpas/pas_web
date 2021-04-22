@@ -73,11 +73,11 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               }
               
               table thead {
-                background: #808080;
+                background: #0d57b0 !important;
               }
               
               table thead tr {
-                background: #0d57b0 !important;
+                background-color: #0d57b0 !important;
               }
               
               table,
@@ -91,11 +91,12 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               thead,
               th {
                 border: 1px solid black;
+                background-color: #0d57b0 !important;
                 border-collapse: collapse;
               }
               
               table thead tr th {
-                background: #0d57b0 !important;
+                background-color: #0d57b0 !important;
                 padding: 5px !important;
                 color: #fff !important;
                 letter-spacing: 0.3px;
@@ -127,11 +128,10 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 width: 100%;
                 margin: 0;
               }
-              
               h5 {
                 text-align: center;
-                background: #0d57b0 !important;
-                color: #fff !important;
+                background-color: #0d57b0 !important;
+                color: #fff;
                 margin-left: 14%
               }
               
@@ -218,6 +218,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 padding-right: 2px;
                 border: 1px solid black;
                 width: 100%;
+                min-height:300px;
                 padding-left: 2px;
               }
               
@@ -284,14 +285,6 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 padding: 25px 15px;
               }
               
-              
-              .pick-ticket-header {
-                border: 1px solid black;
-                text-align: center;
-                background: #0d57b0 !important;
-                color: #fff !important;
-              }
-              
               .very-first-block {
                 position: relative;
                 min-height: 1px;
@@ -300,17 +293,18 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 padding-left: 2px;
                 width: 50%;
               }
-              
-              .first-block-label {
+              first-block-label {
                 position: relative;
                 min-height: 1px;
                 float: left;
                 padding-right: 2px;
                 padding-left: 2px;
+                // width: 38.33333333%;
                 text-transform: capitalize;
                 margin-bottom: 0;
                 text-align: left;
               }
+              
               </style>
             </head>
         <body onload="window.print();window.close()">${printContents}</body>
