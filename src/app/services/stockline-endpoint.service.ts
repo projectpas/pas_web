@@ -7,7 +7,7 @@ import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { StocklineListSalesFilter } from '../models/sales/StocklineListSalesFilter';
 import { CustomPaginate } from '../models/custom-paginate';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../src/environments/environment';
 
 @Injectable()
 export class StocklineEndpoint extends EndpointFactory {
@@ -390,7 +390,7 @@ export class StocklineEndpoint extends EndpointFactory {
 	searchstocklinefromsoqpop<T>(searchParameters: any): Observable<T> {
 		return this.http.post<T>(this.getsearchstocklinefromsoqpopUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
 			.catch(err => {
-				return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
+				return this.handleErrorCommon(err, () => this.searchstocklinefromsoqpop(searchParameters));
 			})
 	}
 
