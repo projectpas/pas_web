@@ -557,7 +557,7 @@
                                             </label>
                                         </div>
                                         <div>
-                                            <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="purchaseCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseCurrencyId" name="purchaseCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                            <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="purchaseCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseCurrencyId" name="purchaseCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required (onChange)="SetSalesCurrency()"></p-dropdown>
                                         </div>
                                         <!--/Purchase Currency-->
                                         <div class="clear"></div>
@@ -613,13 +613,13 @@
                                         <!--Min Order Qty-->
                                         <label class="control-label spacing-label">Min Order Qty</label>
                                         <div>
-                                            <input class="form-control input-value"  (ngModelChange)="getmemo()" type="number" pKeyFilter="int" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==10) return false;" [ngModelOptions]="{standalone: true}"
-                                                   [(ngModel)]="sourceItemMaster.minimumOrderQuantity">
+                                            <input class="form-control input-value"  (ngModelChange)="getmemo()" type="number" pKeyFilter="int" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==10) return false;" [ngModelOptions]="{standalone: true}" 
+                                            [(ngModel)]="sourceItemMaster.minimumOrderQuantity" (keyup)="rqeventHandler($event)">
                                         </div>
                                         <label class="control-label spacing-label">Reorder Qty</label>
                                         <div>
                                             <input class="form-control input-value"  (ngModelChange)="getmemo()" type="number" pKeyFilter="int" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==10) return false;" [ngModelOptions]="{standalone: true}"
-                                            (keyup)=rqeventHandler($event)  [(ngModel)]="sourceItemMaster.reorderQuantiy">
+                                                (keyup)="rqeventHandler($event)"  [(ngModel)]="sourceItemMaster.reorderQuantiy">
                                         </div>
                                         <div *ngIf="disableReorderQuantiy" class="clr-red">Reorder Qty must be greater than Min Order Qty</div>
                                         <!--/Min Order Qty-->
@@ -1715,11 +1715,11 @@
                                             </td>
                                             <!-- Purchase Disc % -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-50px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.PP_PurchaseDiscPerc" name="PP_PurchaseDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="getPercentValuePP(field)" appendTo="body" [disabled]="field.isEditable == false"></p-dropdown>
+                                                <p-dropdown class="p-dropdown-50px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.PP_PurchaseDiscPerc" name="PP_PurchaseDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="getPercentValuePP(field);setcurrentdate('',field)" appendTo="body" [disabled]="field.isEditable == false"></p-dropdown>
                                             </td>
                                             <!-- Purchase Disc Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="num" maxlength="15" name="PP_PurchaseDiscAmount{{i}}" [(ngModel)]="field.PP_PurchaseDiscAmount" disabled />
+                                                <input type="text" style="background-color: #ccc ! important;" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="num" maxlength="15" name="PP_PurchaseDiscAmount{{i}}" [(ngModel)]="field.PP_PurchaseDiscAmount" disabled />
                                             </td>
                                             <!-- Last Purchase Disc Date -->
                                             <td>
@@ -1727,7 +1727,7 @@
                                             </td>
                                             <!-- Unit Purchase Price -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
+                                                <input type="text" style="background-color: #ccc ! important;" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
                                             </td>
                                             <!-- Sale Price -->
                                             <td>
@@ -1738,7 +1738,7 @@
                                                     name="SalePriceSelectId{{i}}" 
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
-                                                    (onChange)="onChangeSalePriceSelectId(field)" 
+                                                    (onChange)="onChangeSalePriceSelectId(field);setcurrentdate('',field)" 
                                                     appendTo="body" 
                                                     [disabled]="field.isEditable == false" 
                                                     required></p-dropdown>
@@ -1755,6 +1755,7 @@
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
                                                     appendTo="body" 
+                                                    (onChange)="setcurrentdate('',field)"
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     *ngIf="field.isNewItem == false" required>
                                                 </p-dropdown>
@@ -1768,6 +1769,7 @@
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
                                                     appendTo="body" 
+                                                    (onChange)="setcurrentdate('',field)"
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     *ngIf="field.isNewItem == true" required>
                                                 </p-dropdown>
@@ -1784,6 +1786,7 @@
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
                                                     appendTo="body" 
+                                                    (onChange)="setcurrentdate('',field)"
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     *ngIf="field.isNewItem == false" required>
                                                 </p-dropdown>
@@ -1797,6 +1800,7 @@
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
                                                     appendTo="body" 
+                                                    (onChange)="setcurrentdate('',field)"
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     *ngIf="field.isNewItem == true" required>
                                                 </p-dropdown>
@@ -1809,7 +1813,7 @@
                                                         [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                         maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required 
                                                         [ngModel]="field.SP_FSP_FXRatePerc | fiveDecimalGlobalNumberFormatPipe"                                                                                                                 
-                                                        (ngModelChange)="onChangeFXRate(field.SP_FSP_FXRatePerc=$event,field)"
+                                                        (ngModelChange)="onChangeFXRate(field.SP_FSP_FXRatePerc=$event,field);setcurrentdate('',field)"
                                                         [ngModelOptions]="{updateOn:'blur'}" />
                                                         <!-- (ngModelChange)="field.SP_FSP_FXRatePerc=$event;" -->
                                             </td>
@@ -1821,7 +1825,7 @@
                                                         [disabled]="field.isEditable == false || field.SalePriceSelectId != 1"
                                                         name="SP_FSP_FlatPriceAmount{{i}}" 
                                                         [(ngModel)]="field.SP_FSP_FlatPriceAmount" 
-                                                        (change)="onChangeFlatPriceAmt(field)" />
+                                                        (change)="onChangeFlatPriceAmt(field);setcurrentdate('',field)" />
                                             </td>
                                             <!-- Last Flat Price Date -->
                                             <td>
@@ -1829,7 +1833,7 @@
                                                     class="input-field-value input-width-100-percent" 
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     [ngModel]="field.SP_FSP_LastFlatPriceDate | date:'yyyy-MM-dd'" 
-                                                    (ngModelChange)="field.SP_FSP_LastFlatPriceDate = $event" 
+                                                    (ngModelChange)="setcurrentdate(field.SP_FSP_LastFlatPriceDate = $event,field)" 
                                                     [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Mark % on List Price -->
@@ -1845,7 +1849,7 @@
                                                     [showClear]="true" 
                                                     appendTo="body" 
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" 
-                                                    (onChange)="getPercentValueSPUsingPP(field);"></p-dropdown>
+                                                    (onChange)="getPercentValueSPUsingPP(field);setcurrentdate('',field)"></p-dropdown>
                                             </td>
                                             <!-- Mark Up Amount -->
                                             <td>
@@ -1857,7 +1861,7 @@
                                             <!-- Last Mark Up Date -->
                                             <td>
                                                 <input type="date" class="input-field-value input-width-100-percent" 
-                                                [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
+                                                [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="setcurrentdate(field.SP_CalSPByPP_LastMarkUpDate = $event,field)" [ngModelOptions]="{standalone: true}" />
                                             </td>
                                             <!-- Base Sale Price -->
                                             <td>
@@ -1867,19 +1871,19 @@
                                             </td>
                                             <!-- Sale Disc % -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-100px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.SP_CalSPByPP_SaleDiscPerc" name="SP_CalSPByPP_SaleDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" (onChange)="getPercentValueSPUsingPP(field);"></p-dropdown>
+                                                <p-dropdown class="p-dropdown-100px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.SP_CalSPByPP_SaleDiscPerc" name="SP_CalSPByPP_SaleDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" (onChange)="getPercentValueSPUsingPP(field);setcurrentdate('',field)"></p-dropdown>
                                             </td>
                                             <!-- Sale Disc Amount -->
                                             <td>
                                                 <input type="text" class="input-field-value text-right input-width-100-percent"
                                                 [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
-                                                 pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
+                                                 pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount"  disabled />
                                             </td>
                                             <!-- Last Sales Disc Date -->
                                             <td>
                                                 <input type="date" class="input-field-value input-width-100-percent"
-                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
-                                                 [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
+                                                 [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
+                                                 [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="setcurrentdate(field.SP_CalSPByPP_LastSalesDiscDate = $event,field)" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Unit Sale Price -->
                                             <td>
@@ -2001,7 +2005,7 @@
                                         </label>
 
                                         <input type="text" class="input-field-value" maxlength="5" required pInputText
-                                               [pattern]="'^[a-zA-Z0-9 \'\-]+$'" [(ngModel)]="exportInfo.exportECCN" name="ExportECCN" (keyup)="btnChange()" />
+                                               [(ngModel)]="exportInfo.exportECCN" name="ExportECCN" (keyup)="btnChange()" />
 
                                         <label class="control-label">
                                             ITAR Num

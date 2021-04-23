@@ -1869,12 +1869,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         if (event.target.value != "") {
             let rqValue = Number(event.target.value);
             let mqValue = this.sourceItemMaster.minimumOrderQuantity;
-            if(rqValue < mqValue)
+            //if(rqValue < mqValue)
+            if(this.sourceItemMaster.reorderQuantiy < this.sourceItemMaster.minimumOrderQuantity )
             {
-                this.disableReorderQuantiy = true;    
+                this.disableReorderQuantiy = true;                
             }
             else{
-                this.disableReorderQuantiy = false;    
+                this.disableReorderQuantiy = false;                 
             }
         }
     }
@@ -6109,4 +6110,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         field.PP_LastListPriceDate = new Date();       
         field.PP_LastPurchaseDiscDate = new Date();
     }
+
+    SetSalesCurrency() {
+        this.sourceItemMaster.salesCurrencyId = this.sourceItemMaster.purchaseCurrencyId;
+    }
+    
 }
