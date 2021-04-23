@@ -810,7 +810,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
+                            <a *ngIf="isContactView" class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
                         </h4>
                     </div>
                     <div id="step2" class="panel-collapse  collapse">
@@ -825,7 +825,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" href="#step3">Banking</a>
+                            <a *ngIf="isBankingView" class="collapsed" data-toggle="collapse" href="#step3">Banking</a>
                         </h4>
                     </div>
                     <div id="step3" class="panel-collapse  collapse">
@@ -970,7 +970,7 @@
                 <div class="panel panel-default"> 
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
+                            <a *ngIf="isBillingView" class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
                         </h4>
                     </div>
                     <div id="step6" class="panel-collapse  collapse">
@@ -983,7 +983,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
+                            <a *ngIf="isShippingView" class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
                         </h4>
                     </div>
                     <div id="step7" class="panel-collapse  collapse">
@@ -998,7 +998,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
+                            <a *ngIf="isDocumentView" class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
                         </h4>
                     </div>
                     <div id="step10" class="panel-collapse  collapse" >

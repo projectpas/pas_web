@@ -207,6 +207,8 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.newVendorClick();
         } : label == "Create Employee" ? (event?: any) => {
           this.newEmployeeClick();
+        }:label == "Create Legal Entity" ? (event?: any) => {
+          this.newLegalEntityClick();
         }:null
       })
     );
@@ -1766,9 +1768,12 @@ export class AppComponent implements OnInit, AfterViewInit {
         if(this.authService.currentUser.roleID!=undefined){
           if(this.authService .currentUser.userName!="admin"){
         this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
-          console.log(data[0]);
           this.menuArray = data[0];
-          this.authService.SetMenuInfo(data[0]);
+
+          this.userRoleService.getUserTabByRoleId(this.authService.currentUser.roleID).subscribe(data=>{
+            this.authService.SetMenuInfo(data[0]);
+          });
+          //this.authService
           this.dynamicMenu();
         });
           //  this.moduleHierarchy = this.authService.getModuleByUserRole();

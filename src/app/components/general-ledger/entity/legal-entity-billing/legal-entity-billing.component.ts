@@ -71,6 +71,7 @@ export class EntityBillingComponent {
     isEdit: boolean= true;
     isDelete: boolean= true;
     isDownload: boolean= true;
+    isView:boolean=true;
     constructor(public legalEntityService: LegalEntityService, private datePipe: DatePipe, private authService: AuthService, private alertService: AlertService, private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal, private commonService: CommonService, public workFlowtService: LegalEntityService,) {
 
@@ -78,7 +79,7 @@ export class EntityBillingComponent {
 			this.isEdit=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Update]);
 			this.isDelete=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Delete]);
 			this.isDownload=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Download]);
-
+            this.isView=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.View]);
     }
 
     ngOnInit(): void {
@@ -144,8 +145,9 @@ export class EntityBillingComponent {
                         this.currentStatusEmp = 'Active';
                         this.billingStatus = 'Active';
                         // if(!this.isViewMode){
-
+                        if(this.isView){
                         this.geListByStatusForBillingList(this.billingStatus);
+                        }
                         // }
                     }, 1200);
                 }
