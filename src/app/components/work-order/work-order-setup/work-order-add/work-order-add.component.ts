@@ -559,38 +559,40 @@ setTimeout(() => {
         }
 
 
-setTimeout(() => {
-    this.workOrderGeneralInformation.partNumbers.map((x, index) => {
-        if(x.publicatonExpirationDate){ 
-            // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
-           if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
-            setTimeout(() => {
-                x.cMMId=0;
-                this.disableSaveForPart=false;
-            }, 2000);
-            // this.removePublication(x,index);
-           
-            // this.expriryarray.push(x);
-     
-            $('#warningForCmmPublication').modal('show');
-           }
-        }
-        if(x.workflowExpirationDate){ 
-            // console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
-           if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
-           
-            // this.removeWorkflow(x,index);
-            setTimeout(() => {
-                x.workflowId=0;
-                this.disableSaveForPart=false;
-            }, 2000);
-            $('#warningForCmmWorkflow').modal('show');
-            // this.expriryarray.push(x);
-    
-           }
-        }
-       }); 
-}, 5000);
+if(!this.isView){
+    setTimeout(() => {
+        this.workOrderGeneralInformation.partNumbers.map((x, index) => {
+            if(x.publicatonExpirationDate){ 
+                // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+               if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                setTimeout(() => {
+                    x.cMMId=0;
+                    this.disableSaveForPart=false;
+                }, 2000);
+                // this.removePublication(x,index);
+               
+                // this.expriryarray.push(x);
+         
+                $('#warningForCmmPublication').modal('show');
+               }
+            }
+            if(x.workflowExpirationDate){ 
+                // console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+               if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+               
+                // this.removeWorkflow(x,index);
+                setTimeout(() => {
+                    x.workflowId=0;
+                    this.disableSaveForPart=false;
+                }, 2000);
+                $('#warningForCmmWorkflow').modal('show');
+                // this.expriryarray.push(x);
+        
+               }
+            }
+           }); 
+    }, 5000);
+}
     }
     removePublication(currentRecord,index){
 setTimeout(() => {
@@ -731,10 +733,10 @@ setTimeout(() => {
             this.getPartNosByCustomer(object.customerId, 0);
         }
         else
-            this.getMultiplePartsNumbers();
+            this.getPartNosByCustomer(object.customerId, 0);
         this.getAllCustomerContact(object.customerId, 'select');
     }
-
+  // this.getMultiplePartsNumbers();
     selectEmployee(data, currentRecord) {
     }
 
@@ -888,7 +890,7 @@ setTimeout(() => {
             }
             this.workOrderGeneralInformation.partNumbers.push(workOrderSettingsAdded);
             if (this.salesOrderReferenceData) {
-                this.onSelectedPartNumber(workOrderSettingsAdded.masterPartId, this.workOrderGeneralInformation.partNumbers[0], 0)
+                this.onSelectedPartNumber(workOrderSettingsAdded.masterPartId, this.workOrderGeneralInformation.partNumbers[0], 0,'onload')
             }
         }
     }
@@ -1132,9 +1134,17 @@ setTimeout(() => {
         }
     }
 
-    onSelectedPartNumber(object, currentRecord, index) {
-        currentRecord.workOrderScopeId=(currentRecord.workOrderScopeId !=null || currentRecord.workOrderScopeId !=undefined || currentRecord.workOrderScopeId !=0) ? currentRecord.workOrderScopeId :object.workOderScopeId;
- 
+    onSelectedPartNumber(object, currentRecord, index,from) {
+        if(from=='html'){ 
+            currentRecord.workOrderScopeId=object.workOderScopeId;
+            if (this.workorderSettings) {
+                currentRecord.conditionId = (this.workorderSettings.defaultConditionId !=0 &&  this.workorderSettings.defaultConditionId !=null) ? this.workorderSettings.defaultConditionId: object.conditionId; 
+            }
+        }
+        // console.log("hell object",object)
+        // console.log("hell",currentRecord)
+        currentRecord.workOrderScopeId= currentRecord.workOrderScopeId ? currentRecord.workOrderScopeId :object.workOderScopeId;
+//  console.log("hell2",currentRecord.workOrderScopeId)
         if (!this.workOrderGeneralInformation.isSinglePN) {
             this.checkPartExist(object, this.isEdit, index)
         }
@@ -1156,7 +1166,7 @@ setTimeout(() => {
         const { itemMasterId } = object;
         this.getPartPublicationByItemMasterId(currentRecord, itemMasterId);
         // currentRecord.masterPartId=object.itemMasterId;
-       
+        // getWorkFlowByPNandScope(workOrderPartNumber);
         this.getWorkFlowByPNandScope(null,currentRecord,'onload',index);
         currentRecord.description = object.partDescription
         currentRecord.isPMA = object.pma == null ? false : object.pma;
@@ -1165,7 +1175,7 @@ setTimeout(() => {
         currentRecord.revisedPartNo = object.revisedPartNo;
         currentRecord.serialNumber = object.serialNumber;
         currentRecord.stockLineId = object.stockLineId;
-        currentRecord.conditionId = object.conditionId;
+        // currentRecord.conditionId = object.conditionId;
         currentRecord.condition = object.condition;
         currentRecord.stockLineNumber = object.stockLineNumber;
         currentRecord.itemGroup = object.itemGroup;
@@ -1298,11 +1308,11 @@ setTimeout(() => {
     getWorkFlowByPNandScope(value,workOrderPart,form,index) {
         if(value !=null && form=='html'){
             workOrderPart.workOrderScopeId=value;
-        }
- 
+        } 
+//  console.log("hello Changed",workOrderPart.workOrderScopeId)
     workOrderPart.workOrderScopeId=(workOrderPart.workOrderScopeId !=undefined || workOrderPart.workOrderScopeId !=null)?workOrderPart.workOrderScopeId :0;
-
-    const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId)
+    // console.log("hello Changed",workOrderPart.workOrderScopeId)
+    const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId);
     const { workOrderScopeId } = workOrderPart;
     if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
         this.isSpinnerVisible = true;
@@ -2707,7 +2717,7 @@ setTimeout(() => {
                 for (let i = 0; i < this.partNumberOriginalData.length; i++) {
                     if (this.salesOrderReferenceData && this.partNumberOriginalData[i].itemMasterId == this.salesOrderReferenceData.itemMasterId) {
                         this.masterParterIdForSalesOrderReference = this.partNumberOriginalData[i];
-                        this.onSelectedPartNumber(this.masterParterIdForSalesOrderReference, this.workOrderGeneralInformation.partNumbers[0], 0)
+                        this.onSelectedPartNumber(this.masterParterIdForSalesOrderReference, this.workOrderGeneralInformation.partNumbers[0], 0,'onload')
                     }
                 }
             }

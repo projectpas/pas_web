@@ -241,10 +241,12 @@ export class ItemMasterNonStockComponent {
     
     getInactiveObjectOnEdit(string, id, originalData, tableName, primaryColumn, description) {
         if(id) {
-            for(let i=0; i < originalData.length; i++) {
-                if(originalData[i][string] == id) {
-                    return id;
-                } 
+            if (originalData) {
+                for (let i = 0; i < originalData.length; i++) {
+                    if (originalData[i][string] == id) {
+                        return id;
+                    }
+                }
             }
             let obj: any = {};
             this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {

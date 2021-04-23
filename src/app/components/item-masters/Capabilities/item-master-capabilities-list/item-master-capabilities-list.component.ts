@@ -31,6 +31,7 @@ declare var $ : any;
 import { ItemMasterCreateCapabilitiesComponent } from '../item-master-create-capabilities/item-master-create-capabilities.component';
 import { DBkeys } from '../../../../services/db-Keys';
 import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-item-master-capabilities-list',
@@ -137,6 +138,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     arrayEmplsit:any[] = [];
     disableIsVerified: boolean = false;
     disableMagmtStruct: boolean = true;
+    allItemMasterCapsListOriginal: any[];
 
     /** item-master-capabilities-list ctor */
     constructor(private itemMasterService: ItemMasterService,
@@ -261,6 +263,27 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
         this.selectedColumns = this.cols;
     }
+    addeddateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+            const data = [...this.allItemMasterCapsList.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+                else if (moment(x.addedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'addedDate'){
+                    return x;
+                }
+                else if(moment(x.verifiedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'verifiedDate'){
+                    return x;
+                }
+            })]
+            this.allItemMasterCapsList = data;
+        } else {
+            this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+        }
+    }
 
     private onDataLoadSuccessful(allWorkFlows: any[]) {
         this.alertService.stopLoadingMessage();
@@ -272,13 +295,13 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 ...x,
                 isVerified: x.isVerified == 1 ? true : false,
                 memo: x.memo.replace(/<[^>]*>/g, ''),
-                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MMM-dd-yyyy hh:mm a'): '',
-                verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
-                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MM/dd/yyyy hh:mm a'): '',
+                verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MM/dd/yyyy hh:mm a'): '',
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
             }
         });
-
+        this.allItemMasterCapsListOriginal=this.allItemMasterCapsList;
         this.employeeList.filter(x => {
 
             for(let i = 0; i< this.employeeList.length; i++){

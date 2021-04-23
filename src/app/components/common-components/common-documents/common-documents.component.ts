@@ -818,7 +818,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     documentType: any = [];
     getDocumentTypeList() {
-        this.commonService.getDocumentType().subscribe(res => {
+        this.commonService.getDocumentType(this.currentUserMasterCompanyId).subscribe(res => {
             this.documentType = res;
         }, err => {
             this.isSpinnerVisible = false;

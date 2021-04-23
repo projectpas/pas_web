@@ -395,11 +395,12 @@
                                 <tr class="mpn-row" style="display: table-row;"
                                     *ngFor="let workOrderPartNumber of workOrderGeneralInformation.partNumbers; let i=index;">
                                     <td>
+                                        <!-- getWorkFlowByPNandScope(workOrderPartNumber); -->
                                          <p-autoComplete field="partNumber"
                                                         [(ngModel)]="workOrderPartNumber.masterPartId" name="mpn{{i}}" 
                                                         #mpn="ngModel" errorMessage="Records not found" [forceSelection]="true"
                                                         [dropdown]="true" [suggestions]="partNumberList" (ngModelChange)="getValid()"
-                                                        (onSelect)="onSelectedPartNumber($event, workOrderPartNumber, i); getWorkFlowByPNandScope(workOrderPartNumber); getStockLineByItemMasterIdOnChangePN(workOrderPartNumber,i);"
+                                                        (onSelect)="onSelectedPartNumber($event, workOrderPartNumber, i,'html');  getStockLineByItemMasterIdOnChangePN(workOrderPartNumber,i);"
                                                         (completeMethod)="filterPartNumber($event)" emptyMessage=" "
                                                         (onClear)="clearautoCompleteInput(workOrderPartNumber, 'masterPartId' )"
                                                         [size]="30" [minLength]="1"
@@ -536,7 +537,7 @@
                                             </a>
                                         </span>  
 
-                                        <span>
+                                        <span [ngClass]="{pointerEvents : isView}">
                                             <input type="checkbox" name="tranferwflw{{i}}" #tranferwflw="ngModel"  (ngModelChange)="getValid()" 
                                             class="form-control w60  mr10" [(ngModel)]="isworkflowTranfer" (click)="tranferCheckbox($event)" matTooltip="Transfer Workflow To Work Order"
                                             matTooltipPosition="above"> 
@@ -557,7 +558,7 @@
                                     <input type="checkbox" name="contract {{i}}" #contract="ngModel"  (ngModelChange)="getValid()" 
                                            class="form-control w60 width-100" [(ngModel)]="workOrderPartNumber.isMPNContract" disabled>
                                   </td>
-                                <td>
+                                <td *ngIf="this.workOrderGeneralInformation.workOrderTypeId==1">
                                       <input type="text" name="contract1{{i}}" class="form-control w100 width-100"
                                            [(ngModel)]="workOrderPartNumber.contractNo"  (ngModelChange)="getValid()"
                                            [required]="workOrderPartNumber.isMPNContract"
@@ -608,7 +609,7 @@
                                         <p class="managemnt_Wdt" matTooltipPosition="above"
                                         [matTooltip]="parsedText(workOrderPartNumber.level4)">{{workOrderPartNumber.level4}}</p>
                                     </td>
-                                    <td *ngIf="!isView" class="table-column-icon-width"> 
+                                    <td *ngIf="!isView" class="table-column-icon-width width100"> 
                                         <span><a class="btn nobg btn-plusro-cstm" (click)="createNewRoWorkOrder(workOrderPartNumber)"
                                             matTooltip="Create RO" matTooltipPosition="above"><i class="fa fa-plus"
                                                 style="color: #259e08;"></i></a> </span>
@@ -906,7 +907,7 @@
                             [ngClass]="{active : gridActiveTab === 'documents'}"
                             (click)="gridTabChange('documents'); getDocumentsByWorkOrderId();">Documents</a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workComplete'}"
                             (click)="gridTabChange('workComplete')">Work Complete</a>
@@ -914,7 +915,7 @@
                             <a class="dropdown-item">Move to Finished Goods</a>
                             <a class="dropdown-item">No Work Performed -Return to Customer</a>
                </div>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" id="pills-contact-tab" role="tab"
                     [ngClass]="{active : gridActiveTab === 'woanalysis'}" (click)="gridTabChange('woanalysis')">WO
