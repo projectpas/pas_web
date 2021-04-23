@@ -26,8 +26,8 @@ export class WorkOrderQuoteService {
         return this.workOrderEndpointService.createOrUpdateQuotation(data);
     }
 
-    getWorkOrderById(workOrderId,masterCompanyId) {
-        return this.workOrderEndpointService.getWorkOrderById(workOrderId,masterCompanyId);
+    getWorkOrderById(workOrderId) {
+        return this.workOrderEndpointService.getWorkOrderById(workOrderId);
     }
 
     getPartsDetail(workOrderId,masterCompanyId) {
