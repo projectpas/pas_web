@@ -889,7 +889,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                         this.isSpinnerVisible = false;
                         if (partDetail) {
                             const unitCost = parseFloat(part.unitCost.toString().replace(/\,/g, ''));
-                           part.unitCost = unitCost != 0 ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2);
+                           part.unitCost = unitCost != 0 ? formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2) : formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2);
                             part.billingRate = partDetail["sP_FSP_FlatPriceAmount"];
                             part.markupPercentageId = partDetail["sP_CalSPByPP_MarkUpPercOnListPrice"];
                             part.stockType = part.stockType ? part.stockType : partDetail["stockType"];

@@ -491,7 +491,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     getWorkOrderInfo(getWorkOrderInfo) {
         this.isSpinnerVisible = true;
         if(getWorkOrderInfo && getWorkOrderInfo != 0){
-            this.workOrderService.getWorkOrderById(getWorkOrderInfo,this.authService.currentUser.masterCompanyId).subscribe(res => { 
+            this.workOrderService.getWorkOrderById(getWorkOrderInfo).subscribe(res => { 
                 if (res) {
                     this.savedWorkOrderData = res;
                     this.customerCode = res.customerDetails.customerCode;
