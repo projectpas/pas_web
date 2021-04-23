@@ -198,7 +198,7 @@
             </td>
             <!-- Action -->
             <td *ngIf="!isViewMode" class="purSaleLastCol">
-              <p style="width:80px">
+              <p>
                 <ng-container *ngIf="!currentDeletedStatus">
                   <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="editCapes(i)" matTooltip="Edit"
                       matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
@@ -225,7 +225,7 @@
               </p>
             </td>
             <td *ngIf="isViewMode" class="purSaleLastCol">
-              <p style="width:80px">
+              <p>
                 <span *ngIf="field.isNewItem == false"><a class="btn nobg"
                     (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History"
                     matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
