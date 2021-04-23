@@ -131,13 +131,13 @@
                         *ngIf="col.field != 'addedDate' && col.field != 'verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'"
                             (input)="capabilityListTable.filter($event.target.value, col.field, 'contains')">
                             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'addedDate'"
-                            name="addedDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            name="addedDate" (change)="addeddateFilterForTable($event.target.value, col.field)" />
                             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'verifiedDate'"
-                            name="verifiedDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            name="verifiedDate" (change)="addeddateFilterForTable($event.target.value, col.field)" />
                             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
-                            name="createdDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            name="createdDate" (change)="addeddateFilterForTable($event.target.value, col.field)" />
                           <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
-                            name="updatedDate" (change)="capabilityListTable.filter($event.target.value,col.field)" />
+                            name="updatedDate" (change)="addeddateFilterForTable($event.target.value,col.field)" />
                         </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
                     </ng-container>
@@ -153,21 +153,35 @@
                     <ng-container *ngIf="col.field !='isVerified' && col.field !='memo' && col.field !='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                     {{
                                         col.field == 'entryDate'
-                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                        ? (rowData[col.field] )
                                         : rowData[col.field] && col.field == 'addedDate'
-                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                        ? (rowData[col.field] )
                                         : rowData[col.field]
                                     }}
                     </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
-                        <input type="checkbox" disabled [checked]="rowData[col.field] == true"
+                        <input type="checkbox" [checked]="rowData[col.field] == true"
                                class="input-check" />
+                               <!-- <div class="form-group">
+                                <div class="checkbox-cstm">
+                                  <label> 
+                                    <span *ngIf="rowData[col.field] == true" class="cr margin-left-50 disablecheckbox"
+                                      ><i class="cr-icon pi pi-check" ></i
+                                    ></span>
+                                    <span *ngIf="rowData[col.field] !== true" class="cr margin-left-50 disablecheckbox"
+                                    ><i class="cr-icon" ></i
+                                  ></span>
+                                     
+                                    </label>
+                                </div>
+                              </div> -->
+                              
                     </ng-container>
                     <ng-container *ngIf="col.field =='verifiedDate'">
-                        {{rowData[col.field] | date: 'MM/dd/yyyy'}}
+                        {{rowData[col.field] }}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-                        {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
+                        {{rowData[col.field] }}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'memo'">
                         <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="rowData[col.field]"></p>

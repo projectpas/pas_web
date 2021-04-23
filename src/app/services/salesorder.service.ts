@@ -628,9 +628,9 @@ export class SalesOrderService {
     );
   }
 
-  getPackagingSlipPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number): Observable<any> {
+  getPackagingSlipPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number, packagingSlipId: number): Observable<any> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.getPackagingSlipPrint(salesOrderId, salesOrderPartId, soPickTicketId)
+      this.salesOrderEndPointSevice.getPackagingSlipPrint(salesOrderId, salesOrderPartId, soPickTicketId, packagingSlipId)
     );
   }
 

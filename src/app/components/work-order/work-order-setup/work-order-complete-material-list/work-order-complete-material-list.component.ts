@@ -647,11 +647,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                         //    this.savebutonDisabled = true;
                            if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                                this.isShowAlternatePN = true;
-                               x.isParentSelected = true;
+                               x.isParentSelected = false;
                                x.showAlternateParts = true;
                            } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
                                this.isShowEqPN = true;
-                               x.isParentSelected = true;
+                               x.isParentSelected = false;
                                x.showEqParts = true;
                            } else {
                                x.isParentSelected = false;

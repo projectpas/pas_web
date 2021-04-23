@@ -27,7 +27,13 @@
         </tr>
         <tr>
           <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-            <input  pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+            <input  pInputText type="text"  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'  && col.field != 'openDate'" (input)="dt.filter($event.target.value, col.field, 'contains')">
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'openDate'"
+            name="openDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+            name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+          <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+            name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
           </th>
           <th class="table-column-width" *ngIf="!isView"></th>
         </tr>

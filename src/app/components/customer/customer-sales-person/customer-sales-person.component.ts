@@ -52,7 +52,7 @@ export class CustomerSalesPersonComponent implements OnInit {
     isAgentSameAsPSalesPeson: Boolean = false;
     disableSave: boolean = true;
     isFirstSave: boolean = true;
-    arayJobTitleIds:any[] = [];
+    arayExpTitleIds:any[] = [];
     editGeneralInformationDataOriginal: any;
     savedGeneralInformationDataOriginal: any;
     modal: NgbModalRef;
@@ -467,7 +467,7 @@ export class CustomerSalesPersonComponent implements OnInit {
             if(res)
             {
                 this.expertiseTitles = res;
-                this.getAllSalesEmployeeListByJobTitle(this.expertiseTitles)
+                this.getAllSalesEmployeeListByExpertiseTitle(this.expertiseTitles)
             }
 			this.isSpinnerVisible = false;
 		},error => {this.isSpinnerVisible = false;});
@@ -477,7 +477,7 @@ export class CustomerSalesPersonComponent implements OnInit {
 		this.disableSave = false;
 	}
     
-    getAllSalesEmployeeListByJobTitle(jobTitles) {  
+    getAllSalesEmployeeListByExpertiseTitle(jobTitles) {  
              
 
         this.isSpinnerVisible = true;
@@ -486,15 +486,15 @@ export class CustomerSalesPersonComponent implements OnInit {
        const Agentsid = getValueByFieldFromArrayofObject('empExpCode', 'AGENT', this.expertiseTitles);
         
         if(CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
-            this.arayJobTitleIds.push(CSRid[0].employeeExpertiseId);
+            this.arayExpTitleIds.push(CSRid[0].employeeExpertiseId);
         
         if(Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
-            this.arayJobTitleIds.push(Salesid[0].employeeExpertiseId);
+            this.arayExpTitleIds.push(Salesid[0].employeeExpertiseId);
 
         if(Agentsid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
-            this.arayJobTitleIds.push(Agentsid[0].employeeExpertiseId);
+            this.arayExpTitleIds.push(Agentsid[0].employeeExpertiseId);
 
-        this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds).subscribe(res => {
+        this.commonService.getAllSalesEmployeeListByExpertiseIds(this.arayExpTitleIds).subscribe(res => {
             if(res)
             {
                 if( CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
@@ -527,7 +527,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                     this.getSalesInfoByCustomerId(this.id)
                 }
 
-                this.arayJobTitleIds = [];
+                this.arayExpTitleIds = [];
             }
             this.isSpinnerVisible = false;
         },error => {this.isSpinnerVisible = false})
