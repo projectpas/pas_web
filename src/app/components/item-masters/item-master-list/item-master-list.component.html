@@ -356,10 +356,10 @@
                             </tr>
                             <tr>
                                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header != 'PN' && col.header != 'PN Description'" class="table-header-input-width" pInputText type="text"
+                                    <input *ngIf="col.field !== 'createdDate' && col.field !== 'isSerialized' && col.field !== 'isTimeLife' && col.field !== 'updatedDate' && col.header != 'PN' && col.header != 'PN Description'" class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, 'contains')">
                                     
-                                    <input *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header == 'PN' || col.header == 'PN Description'" class="table-header-input-width" pInputText type="text"
+                                    <input *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.field !== 'isSerialized' && col.field !== 'isTimeLife' && col.header == 'PN' || col.header == 'PN Description'" class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, 'contains')" [disabled]="isOpenAdvancedSearch">
 
                                     <input type="date" class="hidePlaceHolder table-header-input-width"
@@ -369,6 +369,10 @@
                                     <input type="date" class="hidePlaceHolder table-header-input-width"
                                            *ngIf="col.field == 'updatedDate'" name="updatedDate"
                                            (change)="dateFilterForItemMasterList($event.target.value, col.field ,$event.target)"> 
+                                           <input   *ngIf="col.field == 'isSerialized' " class="table-header-input-width" pInputText type="text"
+                                           (input)="filterdata($event.target.value, col.field)" >
+                                           <input   *ngIf="col.field == 'isTimeLife'" class="table-header-input-width" pInputText type="text"
+                                           (input)="filterdata($event.target.value, col.field)" >
                                
                                         </th>
                                 <th class="table-actions-column"></th>
@@ -430,11 +434,11 @@
                 </div>
 
                 <div class="right_col" role="main" *ngIf="nonStockTable">
-                    <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="allNonstockInfo"
+                    <p-table [exportFilename]="ItemMasterList" #dt class="rpo-table-cstm rro-table-cstm" [value]="allNonstockInfo"
                             [(first)]="pageNumber" [rows]="nonStockPageSize" [paginator]="true" [pageLinks]="3"
                              [rowsPerPageOptions]="[10,20,50,100]" [columns]="nonStockTableColumns" selectionMode="multiple"
                              [resizableColumns]="true" [reorderableColumns]="true" [lazy]="true"
-                             [totalRecords]="totalRecordsNonStock" (onLazyLoad)="loadNonStockData($event)"
+                             [totalRecords]="totalRecordsNonStock" (onLazyLoad)="loadNonStockData($event)" 
                              [scrollable]="true" scrollHeight="450px">
                         <ng-template pTemplate="caption">
                             <div class="row">
