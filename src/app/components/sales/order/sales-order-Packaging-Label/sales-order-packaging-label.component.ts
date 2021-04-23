@@ -82,10 +82,12 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               
               table thead {
                 background: #0d57b0 !important;
+                -webkit-print-color-adjust: exact;
               }
               
               table thead tr {
                 background-color: #0d57b0 !important;
+                -webkit-print-color-adjust: exact;
               }
               
               table,
@@ -110,6 +112,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 font-size: 10px;
                 text-transform: capitalize;
                 z-index: 1;
+                -webkit-print-color-adjust: exact;
               }
               
               table tbody {
@@ -125,6 +128,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 color: #333;
                 font-size: 11.5px !important;
                 letter-spacing: 0.1px;
+                -webkit-print-color-adjust: exact;
               }
               
               h4 {
@@ -140,6 +144,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 background-color: #0d57b0 !important;
                 color: #fff;
                 margin-left: 14%
+                -webkit-print-color-adjust: exact;
               }
               
               hr {
@@ -149,6 +154,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 border-top: 1px solid #e0e0e0;
                 height: 0;
                 box-sizing: content-box;
+                -webkit-print-color-adjust: exact;
               }
               
               .first-block {
@@ -171,6 +177,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               
               .border-transparent {
                 border-block-color: white;
+                -webkit-print-color-adjust: exact;
               }
               
               .first-block-name {
@@ -196,6 +203,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 background: #fff;
                 width: 100%;
                 padding-left: 2px;
+                -webkit-print-color-adjust: exact;
               }
               
               .first-block-sold {
@@ -225,7 +233,6 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 padding-right: 2px;
                 border: 1px solid black;
                 width: 100%;
-                min-height:300px;
                 padding-left: 2px;
               }
               
@@ -261,7 +268,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 width: 38.33333333%;
                 text-transform: capitalize;
                 margin-bottom: 0;
-                text-align: left;
+                -webkit-print-color-adjust: exact;
               }
               
               .clear {
@@ -278,6 +285,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
               .image {
                 border: 1px solid #ccc;
                 padding: 5px;
+                -webkit-print-color-adjust: exact;
               }
               
               .logo-block {
@@ -310,8 +318,13 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 text-transform: capitalize;
                 margin-bottom: 0;
                 text-align: left;
+                -webkit-print-color-adjust: exact;
               }
-              
+              .packaging-slip-header {
+                line-height: 25px;
+                margin-left: 42%;
+                -webkit-print-color-adjust: exact;
+              }
               </style>
             </head>
         <body onload="window.print();window.close()">${printContents}</body>
