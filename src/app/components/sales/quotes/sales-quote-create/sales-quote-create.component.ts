@@ -617,7 +617,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       let accountTypeId = result.customerTypeId ? result.customerTypeId : 0;
 
       this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '',
-        true, 100, [accountTypeId].join(),this.masterCompanyId).subscribe(accountTypes => {
+        true, 100, [accountTypeId].join(), this.masterCompanyId).subscribe(accountTypes => {
           this.accountTypes = accountTypes;
         })
     }
@@ -627,7 +627,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     empployid = empployid == 0 ? this.employeeId : empployid;
     editMSID = this.isEdit ? editMSID = id : 0;
     this.isSpinnerVisible = true;
-    this.commonService.getManagmentStrctureData(id, empployid, editMSID,this.masterCompanyId).subscribe(response => {
+    this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.masterCompanyId).subscribe(response => {
       this.isSpinnerVisible = false;
       if (response) {
         const result = response;
@@ -721,7 +721,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     //   currentEmployeeId = this.employeeId;
     // }
     this.isSpinnerVisible = true;
-    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID,this.masterCompanyId).subscribe(res => {
+    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID, this.masterCompanyId).subscribe(res => {
       this.isSpinnerVisible = false;
       this.allEmployeeList = res;
       this.firstCollection = res;
@@ -1251,30 +1251,40 @@ export class SalesQuoteCreateComponent implements OnInit {
         }
 
         if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-          if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
-            selectedPart.estimatedShipDate < this.salesQuote.openDate ||
-            selectedPart.promisedDate < this.salesQuote.openDate ||
-            selectedPart.customerRequestDate > this.salesQuote.openDate ||
-            selectedPart.promisedDate > this.salesQuote.openDate) {
+          let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+          let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+          let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+          let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+
+          if (crdate < opendate || esdate < opendate || pdate < opendate) {
             invalidDate = true;
-          }
-          if (selectedPart.promisedDate < selectedPart.customerRequestDate) {
-            this.isSpinnerVisible = false;
-            invalidParts = true;
-            if (!partNameAdded) {
-              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-              partNameAdded = true;
+            if (crdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              if (!partNameAdded) {
+                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+                partNameAdded = true;
+              }
+              errmessage = errmessage + '<br />' + "Request Date cannot be greater than opem date."
             }
-            errmessage = errmessage + '<br />' + "Request date cannot be greater than Promised Date."
-          }
-          if (selectedPart.estimatedShipDate < selectedPart.customerRequestDate) {
-            this.isSpinnerVisible = false;
-            invalidParts = true;
-            if (!partNameAdded) {
-              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-              partNameAdded = true;
+            if (esdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              if (!partNameAdded) {
+                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+                partNameAdded = true;
+              }
+              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be greater than opem date."
             }
-            errmessage = errmessage + '<br />' + "Request date cannot be greater than Est.Ship Date."
+            if (pdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              if (!partNameAdded) {
+                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+                partNameAdded = true;
+              }
+              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be greater than opem date."
+            }
           }
         }
         if (!invalidParts && !invalidDate) {
@@ -1356,10 +1366,10 @@ export class SalesQuoteCreateComponent implements OnInit {
             this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
           }
         }
-        , error => {
-          this.isSpinnerVisible = false;
-          this.toggle_po_header = true;
-        })
+          , error => {
+            this.isSpinnerVisible = false;
+            this.toggle_po_header = true;
+          })
       }
       this.toggle_po_header = false;
     }

@@ -95,19 +95,19 @@ export class SalesOrderActionsComponent implements OnInit {
     this.printItems = [
       {
         label: 'Print SO', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.PrintSalesOrder, SalesOrderConfirmationType.None));
-        }
-      },
-      {
-        label: 'Print Pick Ticket', command: () => {
-          this.PrintTicket();
-        }
-      },
-      {
-        label: 'Print Labels', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.PrintLabels, SalesOrderConfirmationType.None));
+          //this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.PrintSalesOrder, SalesOrderConfirmationType.None));
         }
       }
+      // {
+      //   label: 'Print Pick Ticket', command: () => {
+      //     this.PrintTicket();
+      //   }
+      // },
+      // {
+      //   label: 'Print Labels', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.PrintLabels, SalesOrderConfirmationType.None));
+      //   }
+      // }
     ];
   }
 

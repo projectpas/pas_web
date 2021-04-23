@@ -94,17 +94,17 @@
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Prepared By</label>
-                                    <input type="text" value="" disabled />
+                                    <input type="text" value="{{ userName }}" disabled />
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Date Printed</label>
                                     <input type="text" value="{{todayDate | date:'medium' }}"
                                         disabled />
                                 </div>
-                                <div class="second-block-div">
+                                <!-- <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Page</label>
-                                    <input type="text" value="" disabled />
-                                </div>
+                                    <label class="col-sm-4 second-block-label" style="width:30%" disabled></label>
+                                </div> -->
                             </div>
                             <div class="col-sm-12">
                                 <div class="first-block-sold col-sm-6">
@@ -212,13 +212,15 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td style="border:1px solid black"></td>
-                                            <td style="border:1px solid black"></td>
-                                            <td style="border:1px solid black"></td>
+                                            <td style="border:1px solid black">{{this.salesOrder.poroNum}}</td>
+                                            <td style="border:1px solid black">{{this.salesOrder.salesPersonName}}</td>
+                                            <td style="border:1px solid black">{{this.salesOrder.customerContactName}}
+                                            </td>
                                             <td style="border:1px solid black">{{this.salesOrder.creditTerm}}</td>
                                             <td style="border:1px solid black"></td>
                                             <td style="border:1px solid black">{{this.salesOrder.shipViaName}}</td>
-                                            <td style="border:1px solid black"></td>
+                                            <td style="border:1px solid black">
+                                                {{this.salesOrder.shipDate | date : "MM/dd/yyyy"}}</td>
                                             <td style="border:1px solid black">{{this.salesOrder.awb}}</td>
                                             <td>{{this.salesOrder.shippingOrderNo}}</td>
                                         </tr>
@@ -311,7 +313,8 @@
                             </div>
                             <br />
                             <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" class="image" /> -->
-                            <img src="{{this.salesOrder.packagingLabelBarcode}}" alt="barcode" style="padding-left: 7px; padding-top: 5px;" />
+                            <img src="{{this.salesOrder.packagingLabelBarcode}}" alt="barcode"
+                                style="padding-left: 7px; padding-top: 5px;" />
                             <p class="barcode-name"></p>
                             <div class="clear"></div>
                             <hr />

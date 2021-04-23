@@ -6,6 +6,7 @@ import { SalesOrderCopyParameters } from "../models/salesorder-copy-parameters";
 import { environment } from "../../../../../environments/environment";
 import { SalesOrderShippingLabelView } from "../../../../models/sales/SalesOrderShippingLabelView";
 import { ISalesOrderCopyParameters } from "../models/isalesorder-copy-parameters";
+import { AuthService } from "../../../../services/auth.service";
 
 @Component({
   selector: "app-sales-order-packaging-label",
@@ -23,6 +24,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
   salesOrderId: number;
   salesOrderPartId: number;
   soPickTicketId: number;
+  packagingSlipId: number;
   endPointURL: any;
   isPrint: boolean = false;
   salesOrder: any = [];
@@ -30,7 +32,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
   management: any = {};
   isSpinnerVisible: boolean = false;
 
-  constructor(private salesOrderService: SalesOrderService) {
+  constructor(private salesOrderService: SalesOrderService, private authService: AuthService) {
     this.salesOrderCopyParameters = new SalesOrderCopyParameters();
   }
 
@@ -41,7 +43,7 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
 
   getSalesPickTicketView() {
     this.isSpinnerVisible = true;
-    this.salesOrderService.getPackagingSlipPrint(this.salesOrderId, this.salesOrderPartId, this.soPickTicketId).subscribe(res => {
+    this.salesOrderService.getPackagingSlipPrint(this.salesOrderId, this.salesOrderPartId, this.soPickTicketId, this.packagingSlipId).subscribe(res => {
       this.salesOrder = res[0].packagingLabelViewModel;
       this.parts = res[0].packagingLabelPartViewModel;
       this.management = res[0].managementStructureHeaderData;
@@ -55,6 +57,12 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
     if (this.modalReference) {
       this.modalReference.close();
     }
+  }
+
+  get userName(): string {
+    return this.authService.currentUser
+      ? this.authService.currentUser.userName
+      : "";
   }
 
   printContent() {
