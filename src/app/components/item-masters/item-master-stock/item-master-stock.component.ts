@@ -5158,7 +5158,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             field.SP_CalSPByPP_SaleDiscAmount = saleDiscAmount ? formatNumberAsGlobalSettingsModule(saleDiscAmount, 2) : '0.00';
             field.SP_CalSPByPP_UnitSalePrice = unitSalePrice ? formatNumberAsGlobalSettingsModule(unitSalePrice, 2) : '0.00';
             
-        }        
+        }
+        field.PP_LastListPriceDate = new Date();       
+        field.PP_LastPurchaseDiscDate = new Date();
     }
     
     atasubchapterValues = [];
@@ -6005,7 +6007,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     nextOrPreviousClick(nextOrPrevious) {
         this.nextOrPreviousTab = nextOrPrevious;
-        if (this.formdataexportinfo.form.dirty) {
+        //if (this.formdataexportinfo.form.dirty) {
+        if (!this.disableSaveForEdit) {            
             let content = this.tabRedirectConfirmationModal;
             this.modal = this.modalService.open(content, { size: 'sm' });
         }
@@ -6026,8 +6029,14 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
 
     }
-    redirectToTab(){
+    redirectToTab(addItemMasterStockForm){
         this.dismissModel();
+        debugger
+        if (!this.disableSaveForEdit) {   
+            if(this.activeMenuItem == 1) {       
+                this.saveItemMasterGeneralInformation(addItemMasterStockForm)
+            }
+        }
         if(this.nextOrPreviousTab == "Next"){
             if(this.activeMenuItem == 1) this.changeOfTab('AircraftInfo');
             if(this.activeMenuItem == 5) this.changeOfTab('NhaTlaAlternateTab');
@@ -6094,5 +6103,10 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     changeOfStatus(status){
         this.disableSaveForEdit=false;
-    }    
+    }     
+    
+    setcurrentdate(PP_FXRatePerc,field) {       
+        field.PP_LastListPriceDate = new Date();       
+        field.PP_LastPurchaseDiscDate = new Date();
+    }
 }

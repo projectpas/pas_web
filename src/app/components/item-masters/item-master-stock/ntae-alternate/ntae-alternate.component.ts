@@ -203,7 +203,7 @@ export class NTAEAlternateComponent implements OnInit {
             this.partsData = res[0];
             this.pnData = this.partsData;
         })
-    }
+    }    
     getNtaeData(status: boolean){
         this.isSpinnerVisible = true;
         this.filterManufacturerData = [];

@@ -909,9 +909,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getDocumentType() {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/getDocumentType`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getDocumentType());
+  getDocumentType(masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getDocumentType?masterCompanyId=${masterCompanyId !==undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getDocumentType(masterCompanyId));
     });
   }
 
