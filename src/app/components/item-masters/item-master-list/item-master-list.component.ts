@@ -28,6 +28,7 @@ import * as moment from 'moment';
 })
 /** item-master-list component*/
 export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterContentChecked {
+	ItemMasterList:string="Item Master List";
 	public isCollapsed = false;
 	private table: Table;
 	isSpinnerVisible: Boolean = false;
@@ -263,6 +264,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	nonstockselectedOnly: boolean = false;
 	targetData: any;
 	nonstocktargetData : any;
+	allStockInfoOriginal: any[];
 
 	/** item-master-list ctor */
 	constructor(private authService: AuthService, private cdRef : ChangeDetectorRef,private atasubchapter1service: AtaSubChapter1Service,private datePipe: DatePipe, private route: Router, private alertService: AlertService, private router: Router, public itemMasterService: ItemMasterService, private modalService: NgbModal, private masterComapnyService: MasterComapnyService, public commonService: CommonService, private currencyService: CurrencyService, private _actRoute: ActivatedRoute ) {
@@ -488,6 +490,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	}
 
 	getItemsListStock(PagingData){
+		let Stock=[];
 		this.isSpinnerVisible = true;
 		PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
 		this.itemMasterService.getItemMasterStockListData(PagingData).subscribe(
@@ -496,20 +499,37 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				this.nonStockTable = false;
 				this.stockTableColumns = this.cols;
 				this.loadingIndicator = false;
-				this.allStockInfo = results[0]['results'].map(x => {
+				 this.allStockInfo= results[0]['results'].map(x => {
 					return {
 						...x,
 						isTimeLife: x.isTimeLife == "1" ? 'true' : 'false',
 						isSerialized: x.isSerialized == "1" ? 'true' : 'false'
 					}
 				});
-				
+				this.allStockInfoOriginal=this.allStockInfo
 				this.totalRecords = results[0]['totalRecordsCount']
 				this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 				this.isSpinnerVisible = false;
 			},
 			error => {this.isSpinnerVisible = false}
 		);
+	}
+	filterdata(value,field){
+		if(value!=''){
+			this.allStockInfo = this.allStockInfoOriginal;
+			const data = [...this.allStockInfo.filter(x => {
+				if (x.isTimeLife==value && field === 'isTimeLife') {
+					return x;
+				} else if (x.isSerialized==value && field === 'isSerialized') {
+					return x;
+				}
+			})]
+			this.allStockInfo=data;
+		}
+		else{
+			this.allStockInfo=this.allStockInfoOriginal;
+		}
+		
 	}
 
 	getItemsListNonStock(PagingData){
@@ -1850,10 +1870,13 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			error => {this.loadingIndicator=false}
 		);
 	}
+	
 
 	edit(rowData) {}
 
-	getAuditHistoryById(rowData) {}
+	getAuditHistoryById(rowData) {
+
+	}
 
 	changeStatus(rowData) {}
 

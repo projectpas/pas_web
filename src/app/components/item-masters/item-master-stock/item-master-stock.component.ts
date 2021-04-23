@@ -543,6 +543,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     salesCurrencyInfo: any = [];
     arrayCurrancylist:any[] = [];
     itemMasterReferenceId: number;
+    uploadedFileLength: any;
 
     constructor(private fb: FormBuilder, public priorityService: PriorityService, public countryservice: CustomerService, private Dashnumservice: DashNumberService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Publicationservice: PublicationService, public integrationService: IntegrationService, private formBuilder: FormBuilder, public workFlowtService1: LegalEntityService, private changeDetectorRef: ChangeDetectorRef, private router: Router,
         private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, private glAccountService: GlAccountService, public vendorser: VendorService,
@@ -888,7 +889,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     getItemMasterPurchaseSaleMaster() {
         this.isSpinnerVisible = true;
         //this.commonService.smartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name').subscribe(response => {
-          this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',0).subscribe(response => {
+          this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(response => {
             this.allPurchaseAndSaleMasterList = response;
             this.allPurchaseAndSaleMasterList = this.allPurchaseAndSaleMasterList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
             if(!this.isEdit) {
@@ -4156,7 +4157,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     savePurchaseandSales() {
-        
         const ItemMasterID = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
 
         const data = this.fieldArray.map(obj => {
@@ -5982,7 +5982,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
     }
     removeFileNew(event) {
-        //this.formData.delete(event.file.name)
+        this.formData.delete(event.file.name)
+        this.uploadedFileLength--;
+        this.selectedFileAttachment = this.selectedFileAttachment.filter(({ fileName }) => fileName !== event.file.name);
+        if(this.selectedFileAttachment.length == 0){
+        this.disableDocSave = true;
+        }
     }
     private getConditionListAll() {
         //this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(response => {
