@@ -92,7 +92,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
 
     getBasicDetails(){
  
-            this.getMultiplePartsNumbers();
+            // this.getMultiplePartsNumbers();
         if (this.workOrderId || this.recCustomerId) {
 
             this.recCustomerId = 0;
@@ -177,7 +177,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     getAllWorkOrderStatus(): void { 
         this.setEditArray.push(0);
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 0, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }
@@ -243,7 +243,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
  
 
 
-    getConditionsList() {
+    getConditionsList() { 
         this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.conditionList = res;
 
