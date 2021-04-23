@@ -977,6 +977,24 @@ export class SalesOrderCreateComponent implements OnInit {
 
           if (crdate < opendate || esdate < opendate || pdate < opendate) {
             invalidDate = true;
+            if (crdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              errmessage = errmessage + '<br />' + "Request Date cannot be greater than opem date."
+            }
+            if (esdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be greater than opem date."
+            }
+            if (pdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be greater than opem date."
+            }
           }
         }
         if (!invalidDate && !invalidParts) {
