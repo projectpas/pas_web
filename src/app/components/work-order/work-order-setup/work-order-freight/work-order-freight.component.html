@@ -407,7 +407,7 @@
                         class="form-control w50" required />H
                     </td> -->
                     <td>
-                      <input type="number" name="weight{{ i }}"  (ngModelChange)="getActive()" #weight="ngModel" [(ngModel)]="f.weight"
+                      <input type="number" name="weight{{ i }}" (keypress)="allowNumberOnly($event)"  (ngModelChange)="getActive()" #weight="ngModel" [(ngModel)]="f.weight"
                         class="form-control w50" />
                     </td>
                     <td>
@@ -415,11 +415,11 @@
                         class="p-dropdown-custom-md" [(ngModel)]="f.uomId">
                       </p-dropdown>
                     </td>
-                    <td><input type="number" name="length{{ i }}"  (ngModelChange)="getActive()" [(ngModel)]="f.length" #length="ngModel"
+                    <td><input type="number" name="length{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" [(ngModel)]="f.length" #length="ngModel"
                         class="form-control w50" /></td>
-                    <td><input type="number" name="height{{ i }}"   (ngModelChange)="getActive()" #height="ngModel" [(ngModel)]="f.height"
+                    <td><input type="number" name="height{{ i }}"  (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #height="ngModel" [(ngModel)]="f.height"
                         class="form-control w50" /></td>
-                    <td><input type="number" name="width{{ i }}"  (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
+                    <td><input type="number" name="width{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
                         class="form-control w50" /></td>
                     <td>
                       <p-dropdown placeholder="Select UOM"  [required]="f.width" appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterUomAction($event.target.value)" filter="true" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
