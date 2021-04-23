@@ -557,7 +557,7 @@
                                     <input type="checkbox" name="contract {{i}}" #contract="ngModel"  (ngModelChange)="getValid()" 
                                            class="form-control w60 width-100" [(ngModel)]="workOrderPartNumber.isMPNContract" disabled>
                                   </td>
-                                <td>
+                                <td *ngIf="this.workOrderGeneralInformation.workOrderTypeId==1">
                                       <input type="text" name="contract1{{i}}" class="form-control w100 width-100"
                                            [(ngModel)]="workOrderPartNumber.contractNo"  (ngModelChange)="getValid()"
                                            [required]="workOrderPartNumber.isMPNContract"
