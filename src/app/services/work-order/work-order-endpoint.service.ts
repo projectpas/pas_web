@@ -490,10 +490,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
  
 
-    getWorkOrderById(workOrderId, receivingCustomerId,masterCompanyId?) {
+    getWorkOrderById(workOrderId, receivingCustomerId?) {
         // &masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderbyid?workOrderId=${workOrderId}&receivingCustomerId=${receivingCustomerId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getWorkOrderById(workOrderId, receivingCustomerId,masterCompanyId));
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderbyid?workOrderId=${workOrderId}&receivingCustomerId=${receivingCustomerId !=undefined ? receivingCustomerId :0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getWorkOrderById(workOrderId, receivingCustomerId));
     });
     }
 
