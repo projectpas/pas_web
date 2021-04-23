@@ -96,7 +96,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         if (this.workOrderId || this.recCustomerId) {
 
             this.recCustomerId = 0;
-            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerEnable = true; 
                 this.isEdit = true;
 

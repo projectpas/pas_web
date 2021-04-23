@@ -98,7 +98,7 @@ export class WorkOrderSmartComponent implements OnInit {
                 this.recCustomerId = 0;
             }
             this.isSpinnerEnable = true;
-            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 setTimeout(() => {
                     this.isSpinnerEnable = false;
                 }, 3000)
