@@ -3585,6 +3585,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         const id = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
         this.itemser.getMappedAirCraftDetails(id).subscribe(data => {
             const responseData = data;
+            this.selectedAircraftLDColumns=this.colsaircraftLD
             this.aircraftListDataValues = responseData.map(x => { //aircraftListData
                 return {
                     ...x,
