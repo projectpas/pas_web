@@ -204,7 +204,7 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 	totalRecordsNonStock: any;
 	totalPagesNonStock: number;
 	nonStockPageSize: number = 10;
-
+	moduleName: any = 'ItemMaster';
 	searchData = {
 		partNo: '',
 		description: '',
