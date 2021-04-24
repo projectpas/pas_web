@@ -36,9 +36,8 @@ import { timePattern } from '../../../validations/validation-pattern';
 })
 /** stock-line-setup component*/
 export class StockLineSetupComponent implements OnInit {
-
 	isEditMode: boolean = false;
-	// legalEntityList: any;
+	moduleName: any = 'StockLine';
 	businessUnitList: any;
 	disableSaveMemo: boolean = true;
 	divisionList: any;
@@ -118,6 +117,8 @@ export class StockLineSetupComponent implements OnInit {
 	isEditButton: boolean = false;
 	deletedDocumentList: any[] = [];
 	isShowDeletedList: boolean = false;
+	
+	isDocumentsToShow: boolean = false;
 	attachDocumentsColumns = [
 		{ field: 'docName', header: 'Name' },
 		{ field: 'docDescription', header: 'Description' },
@@ -620,6 +621,7 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	getStockLineDetailsById(stockLineId) {
+		this.isDocumentsToShow=true;
 		this.stocklineser.getStockLineDetailsById(stockLineId).subscribe(res => {			
 			this.loadPOData(res.itemMasterId);
 			this.loadROData(res.itemMasterId);
@@ -1900,6 +1902,10 @@ export class StockLineSetupComponent implements OnInit {
 	dismissModel() {
 		this.modal.close();
 	}
+
+	changeOfStatus(status){
+        this.disableSaveForEdit=false;
+    }
 
 	getPageCount(totalNoofRecords, viewPageSize) {
 		return Math.ceil(totalNoofRecords / viewPageSize)

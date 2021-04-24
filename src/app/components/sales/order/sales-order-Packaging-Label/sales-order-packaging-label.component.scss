@@ -149,6 +149,7 @@ hr {
   padding-right: 2px;
   border: 1px solid black;
   width: 100%;
+  // min-height: 190px;
   padding-left: 2px;
 }
 
@@ -171,7 +172,7 @@ hr {
   position: relative;
   display: flex;
   min-height: 1px;
-  padding-left: 50px;
+  padding-left: 35%;
   width: 100%;
 }
 
@@ -184,7 +185,6 @@ hr {
   width: 38.33333333%;
   text-transform: capitalize;
   margin-bottom: 0;
-  text-align: left;
 }
 
 .clear {
@@ -238,7 +238,14 @@ hr {
   float: left;
   padding-right: 2px;
   padding-left: 2px;
+  // width: 38.33333333%;
   text-transform: capitalize;
   margin-bottom: 0;
   text-align: left;
+}
+
+.packaging-slip-header {
+  line-height: 25px;
+  margin-left: 42%;
+  -webkit-print-color-adjust: exact;
 }

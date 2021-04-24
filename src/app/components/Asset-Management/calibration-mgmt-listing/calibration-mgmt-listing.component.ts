@@ -111,6 +111,7 @@ divisionlist: any[] = [];
 maincompanylist: any[] = [];
 allManufacturerInfo: any[] = [];
 managementStructureData: any = [];
+globalFilterValue: any;
 //depriciationMethodList: DepriciationMethod[] = [];
 depreciationFrequencyList: any[] = [];
 assetAcquisitionTypeList: any[] = [];
@@ -153,6 +154,7 @@ currentDate = new Date();
     isSpinnerVisible: boolean = true;
     calibrationForm : any = {};
     viewcalibrationForm : any = {};
+    CalibrationProcessHisory: any[];
 
   constructor(
     private alertService: AlertService, public assetService: AssetService, private _route: Router,
@@ -299,6 +301,9 @@ viewSelectedRowdbl(rowData) {
 }
 closeDeleteModal() {
     $("#editcalibration").modal("hide");
+}
+closedownloadConfirmationModal() {
+    $("#downloadConfirmation").modal("hide");
 }
 closeviewModal() {
     $("#viewcalibration").modal("hide");
@@ -467,15 +472,6 @@ get userName(): string {
 	 newcalibration.BuName =row.buName;;
 	 newcalibration.DeptName =row.deptName;;
 	 newcalibration.DivName =row.divName;;
-
-  //    if (row.calibrationDate) 
-  //    {
-  //     newcalibration.CalibrationDate1 = new Date(row.calibrationDate).toLocaleDateString();
-  // }
-  // else {
-  //     newcalibration.CalibrationDate1 = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).toLocaleDateString();
-  // }
-     //newcalibration.CalibrationDate='';
      newcalibration.CurrencyId=0;
      newcalibration.Memo=row.memo;
      //newcalibration.UnitCost = this.formateCurrency(newcalibration.UnitCost);
@@ -483,10 +479,11 @@ get userName(): string {
       newcalibration = { ...newcalibration }
       this.viewcalibrationForm = newcalibration;
   $("#viewcalibration").modal("show");
-  // this.assetService.currentAssetId = row.assetRecordId;
   this.assetService.listCollection = row;
   const { assetId } = row;
 }
+
+
 
   openAssetToEdit(row) {
    // this.assetService.isEditMode = true;
@@ -643,30 +640,30 @@ dismissModel() {
   isSpinnerVisibleHistory:boolean=false;
   showhistorylist:boolean=false
   openHistory(row) {
-      this.isIntangible = null;
-      if(row && row.assetInventoryId !=undefined){
+    this.auditHistory = [];
+      if(row && row.assetRecordId !=undefined){
           this.isSpinnerVisibleHistory=true;
-      this.assetService.getAuditDataByInventoryId(row.assetInventoryId).subscribe(res => {
+      this.assetService.getAuditDataBycalibrationId(row.assetRecordId).subscribe(res => {
 
       if(res && res.length !=0){
           this.showhistorylist=true;
           this.auditHistory = res.map(x => {
               return {
                   ...x,
-              unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
-              residualPercentage: x.residualPercentage ? formatNumberAsGlobalSettingsModule(x.residualPercentage, 2) : '',
-              installationCost: x.installationCost ? formatNumberAsGlobalSettingsModule(x.installationCost, 2) : '',
-              freight: x.freight ? formatNumberAsGlobalSettingsModule(x.freight, 2) : '',
-              insurance: x.insurance ? formatNumberAsGlobalSettingsModule(x.insurance, 2) : '',
-              taxes: x.taxes ? formatNumberAsGlobalSettingsModule(x.taxes, 2) : '',
-              totalCost: x.totalCost ? formatNumberAsGlobalSettingsModule(x.totalCost, 2) : '',
-              calibrationDefaultCost: x.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(x.calibrationDefaultCost, 2) : '',
-              certificationDefaultCost: x.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.certificationDefaultCost, 2) : '',
-              inspectionDefaultCost: x.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(x.inspectionDefaultCost, 2) : '',
-              verificationDefaultCost: x.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.verificationDefaultCost, 2) : '',
+               unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
+            //   residualPercentage: x.residualPercentage ? formatNumberAsGlobalSettingsModule(x.residualPercentage, 2) : '',
+            //   installationCost: x.installationCost ? formatNumberAsGlobalSettingsModule(x.installationCost, 2) : '',
+            //   freight: x.freight ? formatNumberAsGlobalSettingsModule(x.freight, 2) : '',
+            //   insurance: x.insurance ? formatNumberAsGlobalSettingsModule(x.insurance, 2) : '',
+            //   taxes: x.taxes ? formatNumberAsGlobalSettingsModule(x.taxes, 2) : '',
+            //   totalCost: x.totalCost ? formatNumberAsGlobalSettingsModule(x.totalCost, 2) : '',
+            //   calibrationDefaultCost: x.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(x.calibrationDefaultCost, 2) : '',
+            //   certificationDefaultCost: x.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.certificationDefaultCost, 2) : '',
+            //   inspectionDefaultCost: x.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(x.inspectionDefaultCost, 2) : '',
+            //   verificationDefaultCost: x.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.verificationDefaultCost, 2) : '',
               }
           });
-          this.isIntangible = this.auditHistory[0].isIntangible;
+          //this.isIntangible = this.auditHistory[0].isIntangible;
       }else{
           this.showhistorylist=false;
       }
@@ -693,6 +690,46 @@ dismissModel() {
           }
       }
   }
+
+  exportCSV(dt) {
+    this.isSpinnerVisible = true;
+    const isdelete = this.currentDeletedstatus ? true : false;
+    let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
+    PagingData.globalFilter = this.globalFilterValue ? this.globalFilterValue : '';
+    let filters = Object.keys(dt.filters);
+    filters['certifytype'] = this.Certifytype ? this.Certifytype : 'calibration';
+    filters.forEach(x => {
+        PagingData.filters[x] = dt.filters[x].value;
+    })
+    PagingData.filters['certifytype'] = this.Certifytype ? this.Certifytype : 'calibration';
+    this.assetService.downloadAllCalibrationList(PagingData).subscribe(
+        results => {
+            this.loadingIndicator = false;
+            dt._value = results['results'].map(x => {
+                return {
+                    ...x,
+                    createdDate:x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '',
+                    updatedDate:x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '',
+            
+                    lastCalibrationDate:x.lastCalibrationDate ?  this.datePipe.transform(x.lastCalibrationDate, 'MM/dd/yyyy h:mm a'): '',
+                    nextCalibrationDate:x.nextCalibrationDate ?  this.datePipe.transform(x.nextCalibrationDate, 'MM/dd/yyyy h:mm a'): '',
+            
+                    calibrationDate:x.calibrationDate ?  this.datePipe.transform(x.calibrationDate, 'MM/dd/yyyy h:mm a'): '',
+                    lastcheckedindate:x.lastcheckedindate ?  this.datePipe.transform(x.lastcheckedindate, 'MM/dd/yyyy h:mm a'): '',
+        
+                    lastcheckedoutdate:x.lastcheckedoutdate ?  this.datePipe.transform(x.lastcheckedoutdate, 'MM/dd/yyyy h:mm a'): '',
+                
+                }
+            });
+            dt.exportCSV();
+            dt.value = this.allcalibrationinfo;
+            this.isSpinnerVisible = false;
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        }
+    );
+}
 
 geListByStatus(status) {
   this.status = status;

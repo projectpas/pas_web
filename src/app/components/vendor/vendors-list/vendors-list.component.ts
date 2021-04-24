@@ -583,7 +583,7 @@ export class VendorsListComponent implements OnInit {
 
         this.isSpinnerVisible = false;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-        //$('#step1').collapse('show');  
+        $('#step1').collapse('show');  
        
     }
 

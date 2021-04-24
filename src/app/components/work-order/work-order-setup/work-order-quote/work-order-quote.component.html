@@ -313,7 +313,7 @@
 <br>
 
 <div class="card" *ngIf="quoteForm.quoteNumber && quoteForm.quoteNumber != '' && !isQuoteListView">
-    <div class="card-body">
+    <div class="card-body tabs-padding-5">
 
         <div class="card col-md-12 list_caps" id="approvalTabs">
             <div class="form-group margin-0">
@@ -496,7 +496,11 @@
                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
                             </tr>
-                            
+                            <tr style="height: 25px;" *ngIf="workOrderPartsDetail.length == 0 ">
+                                <td colspan="10" class="no-records-cstm no-records-msg text-upper">
+                                  No records found
+                                </td>
+                              </tr>
                         </tbody>
                     </table>
                 </div>
@@ -550,6 +554,11 @@
                                     <label [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</label>
                                 </td>
                             </tr>
+                            <tr style="height: 25px;" *ngIf="internalApproversList.length == 0 ">
+                                <td colspan="7" class="no-records-cstm no-records-msg text-upper">
+                                  No records found
+                                </td>
+                              </tr>
                         </tbody>
                     </table>
                 </div>
@@ -721,6 +730,11 @@
                                     </td>
                                 </ng-container>
                             </tr>
+                            <tr style="height: 25px;" *ngIf="woQuoteApprovalList.length == 0 ">
+                                <td colspan="29" class="no-records-cstm no-records-msg text-upper">
+                                  No records found
+                                </td>
+                              </tr>
                         </tbody>
                     </table>
                 </div>
@@ -752,7 +766,13 @@
                                     
                                 </ng-container>
                             </tr>
+                            <tr style="height: 25px;" *ngIf="woQuoteAnalysisHeader.length == 0 ">
+                                <td colspan="10" class="no-records-cstm no-records-msg text-upper">
+                                  No records found
+                                </td>
+                              </tr>
                         </tbody>
+                     
                     </table>
                 </div>
             </div>

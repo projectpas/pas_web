@@ -371,7 +371,7 @@ export class VendorCapesComponent implements OnInit {
 
     onChangeCapabilityTypeId(field)
     {
-        var ObjCapabilityType = getObjectById('value', field.capabilityTypeId, this.CapesTypelistCollection);
+        var ObjCapabilityType = getObjectById('value', field.capabilityTypeId, this.CapesTypelistCollection);        
         if(ObjCapabilityType != undefined && ObjCapabilityType !=  null)
             field.capabilityTypeDescription = ObjCapabilityType.label;
     }

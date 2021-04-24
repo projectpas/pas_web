@@ -424,13 +424,14 @@
                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                 </span>
   
-                                <a class="btn btn-danger nobg" (click)="deleteTaxTypeRate(deleteContent1,rowData,rowIndex)" 
+                              <span data-toggle="modal">  <a class="btn btn-danger nobg" (click)="deleteTaxTypeRate(deleteContent1,rowData,rowIndex)" 
                                     matTooltip="Delete" matTooltipPosition="above" >
                                       <i class="fa fa-trash"></i>
                                     </a>
+                                  </span>
                                   
                                 <button [disabled]="rowData.isDisable"
-                                    class="btn-edit set_proper_align set_position" mat-icon-button (click)="
+                                    class="btn-edit" mat-icon-button (click)="
                                     getAuditHistoryById(contentAuditHist, rowData)
                                     " matTooltip="History" matTooltipPosition="above">
                                     <i class="fa fa-history" [ngClass]="{

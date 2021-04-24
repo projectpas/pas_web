@@ -429,6 +429,12 @@ if(type=='add'){
         });
     }
 
+    getAuditDataBycalibrationId(id) {
+        return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getauditdatabycalibartionid/${id}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getAuditDataBycalibrationId(id));
+        });
+    }
+
     //Audit method in end pont services
 
     //getAudit<T>(assetRecordId: number): Observable<T> {
@@ -473,6 +479,14 @@ if(type=='add'){
         return this.http.post<T>(url, data, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.downloadAllAssetCapsList(data,assetRecordId));
+            });
+    }
+
+    downloadAllCalibrationList<T>(data): Observable<T> {
+        let url = `${this.baseUrl}/api/AssetModule/ExportCalibrationList`;
+        return this.http.post<T>(url, data, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.downloadAllCalibrationList(data));
             });
     }
 } 

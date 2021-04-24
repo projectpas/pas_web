@@ -97,7 +97,7 @@
                                     label="Export Selected Data"
                                     (click)="dt.exportCSV({selectionOnly:true})"
                                   ></button>
-                                  <button class="btn btn-primary exports-button" (click)="toggleShowOpenAdvancedSearch(dt)">
+                                  <button  type="button" class="btn btn-primary exports-button advanced-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
                                     Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
                                   </button>
                                 
@@ -322,11 +322,11 @@
                                         <div >
                                             <div class="form-group adv-search-icons">
                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)"
-                                                 class="btn btn-primary  height40 black-search-button btmargin search-clar-button">
+                                                 class="btn btn-primary m-t-10 height40 black-search-button btmargin search-clar-button">
                                                     Search 
                                                  </button> 
                                                  <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()"
-                                                  class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                  class="btn btn-danger m-t-10 height40 black-search-button btmargin sarch-clear-button">
                                                     Clear
                                                  </button> 
                                             </div>
@@ -618,11 +618,11 @@
                                             <div class="form-group adv-search-icons">
                                                  <button type="button" matTooltip="Search" matTooltipPosition="above" 
                                                  (click)="advancedSearchData(searchData)"
-                                                  class="btn btn-primary  height40 black-search-button btmargin search-clar-button">
+                                                  class="btn btn-primary m-t-10 height40 black-search-button btmargin search-clar-button">
                                                     Search
                                                  </button> 
                                                  <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" 
-                                                 class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                 class="btn btn-danger height40 m-t-10 black-search-button btmargin sarch-clear-button">
                                                     Clear
                                                  </button> 
                                             </div>

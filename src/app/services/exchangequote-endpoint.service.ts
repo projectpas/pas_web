@@ -20,6 +20,7 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getExchngeQuoteeSetting: string = environment.baseUrl + "/api/exchangequote/getExchangeQuoteSettinglist";
     private readonly getExchangeQuoteMarginSummarydetails: string = environment.baseUrl + "/api/exchangequote/get-exchange-quote-margin-data";
     private readonly exchangeQuoteqMarginSummary: string = environment.baseUrl + "/api/exchangequote/create-exchange-quote-margin-data";
+    private readonly getExchangeQuoteAnalysis: string = environment.baseUrl + "/api/exchangequote/togetexchangequoteanalysis";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -112,6 +113,15 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
         )
         .catch(error => {
           return this.handleErrorCommon(error, () => this.createExchangeQuoteMarginSummary(marginSummary));
+        });
+    }
+
+    getAllExchangeQuoteAnalysis<T>(id): Observable<T> {
+      let endPointUrl = `${this.getExchangeQuoteAnalysis}/${id}`;;
+  
+      return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllExchangeQuoteAnalysis(id));
         });
     }
 }  

@@ -604,6 +604,7 @@ export class SalesOrderShippingComponent {
                     );
                     this.partSelected = false;
                     this.getShippingList();
+                    this.disableGeneratePackagingBtn = true;
                 }, err => {
                     this.isSpinnerVisible = false;
                 });
@@ -657,13 +658,18 @@ export class SalesOrderShippingComponent {
     }
 
     checkIsCheckedToGenerate() {
+        var keepGoing = true;
         this.shippingList.forEach(a => {
-            a.soshippingchildviewlist.forEach(ele => {
-                if (ele.selectedToGeneratePackaging)
-                    this.disableGeneratePackagingBtn = false;
-                else
-                    this.disableGeneratePackagingBtn = true;
-            });
+            if (keepGoing) {
+                a.soshippingchildviewlist.forEach(ele => {
+                    if (ele.selectedToGeneratePackaging) {
+                        this.disableGeneratePackagingBtn = false;
+                        keepGoing = false;
+                    }
+                    else
+                        this.disableGeneratePackagingBtn = true;
+                });
+            }
         });
     }
 
@@ -1380,6 +1386,7 @@ export class SalesOrderShippingComponent {
         instance.salesOrderId = this.salesOrderId;
         instance.salesOrderPartId = rowData.salesOrderPartId;
         instance.soPickTicketId = rowData.soPickTicketId;
+        instance.packagingSlipId = rowData.packagingSlipId;
     }
 }
 

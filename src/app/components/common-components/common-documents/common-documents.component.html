@@ -332,7 +332,7 @@
                 sourceViewforDocument.name
               }}</span>
           </p>
-          <p style="vertical-align: top;">
+          <p style="vertical-align: top;" class="memo-margin-bottom">
             <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
             <span class="value">
               <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforDocument.docMemo">
@@ -489,7 +489,7 @@
                 <textarea class="form-control" name="descriptionDocs" [(ngModel)]="documentInformation.docDescription"
                   type="text" (ngModelChange)="enableSave()"></textarea>
               </div>
-              <div class="form-group" style="margin-top:0px">
+              <div class="form-group" style="margin-top:-6px">
                 <span class="label">Memo </span>
                 <div class="col-sm-11" style="margin-left:-3px">
                   <span>
@@ -817,7 +817,7 @@
                 Document Type Already Exists
               </div>
             </div>
-            <div class="form-group col-md-12">
+            <!-- <div class="form-group col-md-12">
               <div class="col-md-4"><label class="col-md-6">Rev Num <span class="clr-red"></span> :</label></div>
               <p-autoComplete class="autocomp-customer-cstm col-md-6" name="revNum" [(ngModel)]="addNew.revNum"
                 [suggestions]="lstfilterDocumentTypeRevNum" emptyMessage="No Match Found" field="revNum"
@@ -830,12 +830,12 @@
               <div *ngIf="isDocumentrevnumAlreadyExists" class="clr-red">
                 Rev Num Already Exists
               </div>
-            </div>
-            <div class="form-group col-md-12">
+            </div> -->
+            <!-- <div class="form-group col-md-12">
               <div class="col-md-4"><label class="col-md-6">Description <span class="clr-red">*</span> :</label></div>
               <input type="text" class="form-control col-md-6" name="description" [(ngModel)]="addNew.description"
                 required>
-            </div>
+            </div> -->
             <div class="form-group col-md-12">
               <div class="col-md-4"><label class="col-md-6" style="vertical-align: top;">Memo:</label></div>
               <div class="col-md-6">

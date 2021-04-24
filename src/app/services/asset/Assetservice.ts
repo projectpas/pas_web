@@ -237,6 +237,9 @@ getIntangibleList(){
     getAuditDataByInventoryId(id: number) {
         return this.assetEndpoint.getAuditDataByInventoryId(id);
     }
+    getAuditDataBycalibrationId(id: number) {
+        return this.assetEndpoint.getAuditDataBycalibrationId(id);
+    }
     //asset inventory adjustment
     getAdjustmentByAssetInventoryId(id){
         return this.assetEndpoint.getAdjustmentByAssetInventoryId(id);
@@ -247,11 +250,16 @@ getIntangibleList(){
     downloadAllAssetList(data){
         return this.assetEndpoint.downloadAllAssetList(data);
     }
+
     downloadAllAssetInventoryList(data){
         return this.assetEndpoint.downloadAllAssetInventoryList(data);
     }
     downloadAllAssetCapsList(data,assetRecordId){
         return this.assetEndpoint.downloadAllAssetCapsList(data,assetRecordId);
+    }
+
+    downloadAllCalibrationList(data){
+        return this.assetEndpoint.downloadAllCalibrationList(data);
     }
 
 
