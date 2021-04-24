@@ -5774,6 +5774,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     enableSaveMemo() {
         this.disableSaveMemo = false;
+        this.disableSaveForEdit=false;
     }
 
     addDocumentInformation(type, documentInformation) {
@@ -6048,9 +6049,24 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceItemMaster.isOemPNId = undefined;
         }
     }
+    leadtime(){
+        this.sourceItemMaster.leadTimeDays = this.sourceItemMaster.leadTimeDays ? formatNumberAsGlobalSettingsModule(this.sourceItemMaster.exportValue, 2) : '0'; 
+    }
 
     onChangeExportVal() {
         this.exportInfo.exportValue = this.exportInfo.exportValue ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportValue, 2) : '0.00';
+    }
+    onChangeWeight() {
+        this.exportInfo.exportWeight = this.exportInfo.exportWeight ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportWeight, 2) : '0';
+    }
+    onChangeExportSizeLength(){
+        this.exportInfo.exportSizeLength = this.exportInfo.exportSizeLength ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeLength, 2) : '0';
+    }
+    onChangeExportSizeWidth(){
+        this.exportInfo.exportSizeWidth = this.exportInfo.exportSizeWidth ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeWidth, 2) : '0';
+    }
+    onChangeExportSizeHeight(){
+        this.exportInfo.exportSizeHeight = this.exportInfo.exportSizeHeight ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeHeight, 2) : '0';
     }
     getItemMasterExportInfoById(id) {
         this.isSpinnerVisible = true;    
