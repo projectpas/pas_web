@@ -344,6 +344,11 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
                     (res) => {
                         this.disableUpdateButton = true;
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Phone Updated Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllPhoneList();
                         this.isEdit = false;
                     }, err => {
@@ -358,6 +363,11 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Phone Created Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllPhoneList();
                     }, err => {
                         this.errorMessageHandler();

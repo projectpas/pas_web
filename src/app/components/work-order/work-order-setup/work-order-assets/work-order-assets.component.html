@@ -136,7 +136,7 @@
           && col.field !== 'updatedDate'  &&  col.field !== 'quantity'"  pInputText type="text"
                       (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
                     
-                      <input type="number" *ngIf="col.field == 'quantity'" name="createdDate" class="table-header-input-width"
+                      <input type="number" *ngIf="col.field == 'quantity'" name="quantity1" class="table-header-input-width"
                       (change)="dt.filter($event.target.value, col.field, 'contains')">
                   <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" class="table-header-input-width"
                       (change)="dt.filter($event.target.value, col.field, 'contains')">

@@ -178,6 +178,11 @@ export class MemoCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Memo Updated Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllMemoList();
                     }, err => {
                         this.errorMessageHandler();
@@ -192,6 +197,11 @@ export class MemoCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Memo Created Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllMemoList();
                     }, err => {
                         this.errorMessageHandler();
