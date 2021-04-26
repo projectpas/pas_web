@@ -345,7 +345,10 @@ viewAsstesInventory(rowData){
     closeAddNew() {
         this.addNewEquipment = false;
     }
-
+    closerefreshview(){
+        this.addNewEquipment = false;
+        $('#addNewEquipments').modal('hide');
+    }
 
     createNew() {
         this.isEdit = false;

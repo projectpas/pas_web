@@ -26,7 +26,7 @@
 
         <div *ngIf="!isEdit && addNewEquipment">
           <grd-equipment [workFlowObject]="workFlowObject" [moduleName]="moduleName" [isWorkOrder]="isWorkOrder"
-            (saveEquipmentListForWO)="saveEquipmentList($event)"></grd-equipment>
+            (saveEquipmentListForWO)="saveEquipmentList($event)" (closeEvent)="closerefreshview()"></grd-equipment>
         </div>
         <div *ngIf="isEdit && editData && addNewEquipment">
           <grd-equipment [isEdit]="isEdit" [editData]="editData" [moduleName]="moduleName"
@@ -134,10 +134,10 @@
                   <input class="table-header-input-width" *ngIf="
           col.field !== 'createdDate'
           && col.field !== 'updatedDate'  &&  col.field !== 'quantity'"  pInputText type="text"
-                      (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
+                      (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">  
                     
-                      <input type="number" *ngIf="col.field == 'quantity'" name="quantity1" class="table-header-input-width"
-                      (change)="dt.filter($event.target.value, col.field, 'contains')">
+                      <input type="number" *ngIf="col.field == 'quantity'" pInputNumber name="quantity1" class="table-header-input-width ui-inputtext ui-corner-all ui-state-default ui-widget ng-star-inserted"
+                      (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
                   <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" class="table-header-input-width"
                       (change)="dt.filter($event.target.value, col.field, 'contains')">
                   <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" class="table-header-input-width"
@@ -193,7 +193,7 @@
                   <span><a class="btn nobg btn-delete-cstm" *ngIf="!isView" (click)="openDelete(content,rowData)" matTooltip="Delete"
                       matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                       <span data-toggle="modal" data-target="#assetHistory">
-                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"><i
+                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"  matTooltipPosition="above" matTooltip="Check-in & Check-out History"><i
                             class="fa fa-history"> </i></a></span>
                   </div>
                   <div *ngIf="currentDeletedstatus == true">

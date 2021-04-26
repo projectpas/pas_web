@@ -47,7 +47,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         //{ field: 'customerContact', header: 'Customer Contact'  },
         { field: 'phoneNo', header: 'Phone' },
         { field: 'contactBy', header: 'Contacted By' },
-        { field: 'notes', header: 'Notes' },
+        { field: 'notesData', header: 'Notes' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },

@@ -36,7 +36,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     modal: NgbModalRef;
     headers = [
         { field: 'SERIAL_NO', header: 'Serial No' },
-        { field: 'description', header: 'Memo' },
+        { field: 'descriptionData', header: 'Memo' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },

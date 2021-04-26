@@ -338,7 +338,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
     // calculate row wise extended cost
     calculateExtendedCost(charge): void {
-        charge.unitCost = charge.unitCost ? formatNumberAsGlobalSettingsModule(charge.unitCost, 2) : '';
+        charge.unitCost = charge.unitCost ? formatNumberAsGlobalSettingsModule(charge.unitCost, 2) : '0.00';
         var value = (parseFloat(charge.quantity.toString().replace(/\,/g, '')) * parseFloat(charge.unitCost.toString().replace(/\,/g, '')));
         if (value > 0) {
             charge.extendedCost = formatNumberAsGlobalSettingsModule(value, 2);
