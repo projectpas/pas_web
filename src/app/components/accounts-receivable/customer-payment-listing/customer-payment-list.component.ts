@@ -27,7 +27,7 @@ export class CustomerPaymentListComponent {
     showPaginator: boolean = false;
     lazyLoadEventData: any;
     isSpinnerVisible: boolean = false;
-    currentStatus: any;
+    currentStatus: any = "0";
 
     constructor(private customerService: CustomerService,
         private router: Router) {
@@ -41,7 +41,7 @@ export class CustomerPaymentListComponent {
 
         this.searchParameters = new CustomerInvoiceSearchParameters();
         this.initColumns();
-        this.currentStatus = 1;
+        this.currentStatus = "1";
     }
 
     initColumns() {
@@ -73,6 +73,7 @@ export class CustomerPaymentListComponent {
     }
 
     loadData(event, globalFilter = "") {
+        event.filters.statusId = this.currentStatus;
         this.searchParameters.first = parseInt(event.first) / event.rows;
         this.searchParameters.rows = event.rows;
         this.searchParameters.sortOrder = event.sortOrder;
@@ -116,6 +117,8 @@ export class CustomerPaymentListComponent {
     }
 
     changeOfStatus(status) {
+        debugger;
+        const lazyEvent = this.lazyLoadEventData;
         this.currentStatus = status.toString() === '' ? this.currentStatus : status.toString();
         this.loadData(this.lazyLoadEventData);
     }
