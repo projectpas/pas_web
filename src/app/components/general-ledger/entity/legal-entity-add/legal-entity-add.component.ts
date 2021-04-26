@@ -14,6 +14,7 @@ import { GlAccount } from '../../../../models/GlAccount.model';
 import { phonePattern } from '../../../../validations/validation-pattern';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-legal-entity-add',
     templateUrl: './legal-entity-add.component.html',
@@ -76,6 +77,8 @@ export class EntityAddComponent implements OnInit {
     countryExistsNow: boolean;
     allCurrencyInfo: any = [];
     countryListOriginal: any = [];
+    isAdd:boolean=true;
+    isEdit:boolean=true;
     constructor(
         private authService: AuthService,
         private commonService: CommonService,
@@ -86,6 +89,8 @@ export class EntityAddComponent implements OnInit {
         private _actRoute: ActivatedRoute,
         private configurations: ConfigurationService,
         private route: Router,) {
+            this.isAdd=this.authService.checkPermission([ModuleConstants.LegalEntity_GeneralInformation+"."+PermissionConstants.Add]);
+            this.isEdit=this.authService.checkPermission([ModuleConstants.LegalEntity_GeneralInformation+"."+PermissionConstants.Update]);
     }
 
     ngOnInit() {

@@ -67,4 +67,9 @@ export class UserRoleService {
         return Observable.forkJoin(
             this.userRoleEndpoint.getUserMenuByRoleId<ModuleHierarchyMaster[]>(roleID));
     }
+
+    getUserTabByRoleId(roleID:string) {
+        return Observable.forkJoin(
+            this.userRoleEndpoint.getUserTabPermissionByRoleId<ModuleHierarchyMaster[]>(roleID));
+    }
 }

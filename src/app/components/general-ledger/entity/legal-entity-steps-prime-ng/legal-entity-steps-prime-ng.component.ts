@@ -3,6 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { Message } from 'primeng/components/common/message';
 import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
 import { LegalEntityService } from '../../../../services/legalentity.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
 	selector: 'app-legal-entity-steps-prime-ng',
@@ -27,7 +28,7 @@ export class LegalEntityStepsPrimeNgComponent implements OnInit {
 
 	constructor(private router: ActivatedRoute,
 		private _changeDetectionRef: ChangeDetectorRef,
-		private route: Router, private entityService: LegalEntityService) {
+		private route: Router, private entityService: LegalEntityService,private authService:AuthService) {
 		this.entityService.activeStep.subscribe(activeIndex => {
 			this.changeStep(activeIndex);
 		})
@@ -36,6 +37,13 @@ export class LegalEntityStepsPrimeNgComponent implements OnInit {
 		if (this.entityService.isEditMode) {
 			this.isDisabledSteps = true;
 		}
+	}
+
+	isShowTab(value){
+		
+		var isShow=this.authService.ShowTab('Create Legal Entity',value);
+		return isShow;
+	
 	}
 
 	changeStep(value) {

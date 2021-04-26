@@ -494,12 +494,12 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 
 	getEntityDataById(entityId) {
-		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/getEntitydatabyid/${entityId}`).catch(error => {
+		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/getEntitydatabyid/${entityId}`,this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityDataById(entityId));
 		});
 	}
 	getBankingApisData(entityId) {
-		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/Getentitybybanking?legalEntityId=${entityId}`).catch(error => {
+		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/Getentitybybanking?legalEntityId=${entityId}`,this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getBankingApisData(entityId));
 		});
 	}
