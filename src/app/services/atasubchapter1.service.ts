@@ -37,9 +37,9 @@ export class AtaSubChapter1Service {
 		private authService: AuthService,
 		private ataSubChapter1Endpoint: ATASubChapter1Endpoint) { }
 
-	getAtaSubChapter1List(id?) {
+	getAtaSubChapter1List(masterCompanyId?) {
 		return Observable.forkJoin(
-			this.ataSubChapter1Endpoint.getATASubChapter1Endpoint<ATASubChapter[]>(id));
+			this.ataSubChapter1Endpoint.getATASubChapter1Endpoint<ATASubChapter[]>(masterCompanyId));
 	}
 
 	newATASubChapter1(ataSubChapter) {

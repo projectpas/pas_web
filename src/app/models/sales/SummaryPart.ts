@@ -27,5 +27,6 @@ export class SummaryPart {
     partId: number;
     conditionId: number;
     qtyAvailable: number = 0;
+    qtyReserved: number = 0;
     quantityOnHand: number = 0;
 }

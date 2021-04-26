@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { StocklineService } from '../../../../services/stockline.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { timePattern } from '../../../../validations/validation-pattern';
+import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 
 @Component({
     selector: 'app-customer-work-setup',
@@ -25,8 +26,7 @@ import { timePattern } from '../../../../validations/validation-pattern';
     providers: [DatePipe]
 })
 // 
-export class CustomerWorkSetupComponent implements OnInit {
-    
+export class CustomerWorkSetupComponent implements OnInit {    
     modal: NgbModalRef;
     receivingForm: any = {};
     isEditMode: boolean = false;
@@ -118,6 +118,11 @@ export class CustomerWorkSetupComponent implements OnInit {
     arrayEmplsit:any[] = [];
     certifiedEmployeeList: any = [];
     workorderSettings:any;
+    companyModuleId: number = 0;   
+    vendorModuleId: number = 0;   
+    customerModuleId: number = 0;   
+    otherModuleId: number = 0; 
+
     constructor(private commonService: CommonService,
         private datePipe: DatePipe,
         private _actRoute: ActivatedRoute,
@@ -140,6 +145,10 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.quantity = 1;
         this.receivingForm.isCustomerStock = true;
         this.receivingForm.receivedDate = new Date();
+        this.companyModuleId = AppModuleEnum.Company;                 
+        this.vendorModuleId = AppModuleEnum.Vendor;
+        this.customerModuleId = AppModuleEnum.Customer;
+        this.otherModuleId = AppModuleEnum.Others; 
     }
 
     ngOnInit() {
@@ -220,18 +229,14 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.setEditArray = [];
         if (this.isEditMode == true) {
             this.setEditArray.push(this.receivingForm.employeeId ? this.receivingForm.employeeId.value : 0);
-            this.msId = this.receivingForm.managementStructureId;
         } else {
             this.setEditArray.push(0);
-            this.msId = this.authService.currentUser
-                ? this.authService.currentUser.managementStructureId
-                : null;
         }
         if (this.setEditArray.length == 0) {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.currentUserManagementStructureId, this.currentUserMasterCompanyId).subscribe(res => {
            if (res && res.length != 0) {
                 this.allEmployeeList = res;
             }
@@ -440,40 +445,40 @@ export class CustomerWorkSetupComponent implements OnInit {
 
     }
     getObtainOwnerTraceOnEdit(res) {
-        if (res.obtainFromTypeId == 1) {
+        if (res.obtainFromTypeId == this.customerModuleId) {
             this.receivingForm.obtainFrom = { 'customerId': res.obtainFrom, 'name': res.obtainFromName ,'label': res.obtainFromName, 'value': res.obtainFrom };
         }
-        else if (res.obtainFromTypeId == 2) {
+        else if (res.obtainFromTypeId == this.vendorModuleId) {
             this.receivingForm.obtainFrom = { 'label': res.obtainFromName, 'value': res.obtainFrom };
         }
-        else if (res.obtainFromTypeId == 9) {
+        else if (res.obtainFromTypeId == this.companyModuleId) {
             this.receivingForm.obtainFrom = { 'label': res.obtainFromName, 'value': res.obtainFrom };
         }
-        else if (res.obtainFromTypeId == 4) {
+        else if (res.obtainFromTypeId == this.otherModuleId ) {
             this.receivingForm.obtainFrom = res.obtainFrom;
         }
-        if (res.ownerTypeId == 1) {
+        if (res.ownerTypeId == this.customerModuleId) {
             this.receivingForm.owner = { 'customerId': res.owner, 'name': res.ownerName,'label': res.ownerName, 'value': res.owner  };
         }
-        else if (res.ownerTypeId == 2) {
+        else if (res.ownerTypeId == this.vendorModuleId) {
             this.receivingForm.owner = { 'label': res.ownerName, 'value': res.owner };
         }
-        else if (res.ownerTypeId == 9) {
+        else if (res.ownerTypeId == this.companyModuleId) {
             this.receivingForm.owner = { 'label': res.ownerName, 'value': res.owner };
         }
-        else if (res.ownerTypeId == 4) {
+        else if (res.ownerTypeId == this.otherModuleId ) {
             this.receivingForm.owner = res.owner;
         }
-        if (res.traceableToTypeId == 1) {
+        if (res.traceableToTypeId == this.customerModuleId) {
             this.receivingForm.traceableTo = { 'customerId': res.traceableTo, 'name': res.tracableToName,'label': res.tracableToName, 'value': res.traceableTo };
         }
-        else if (res.traceableToTypeId == 2) {
+        else if (res.traceableToTypeId == this.vendorModuleId) {
             this.receivingForm.traceableTo = { 'label': res.tracableToName, 'value': res.traceableTo };
         }
-        else if (res.traceableToTypeId == 9) {
+        else if (res.traceableToTypeId == this.companyModuleId) {
             this.receivingForm.traceableTo = { 'label': res.tracableToName, 'value': res.traceableTo };
         }
-        else if (res.traceableToTypeId == 4) {
+        else if (res.traceableToTypeId == this.otherModuleId) {
             this.receivingForm.traceableTo = res.traceableTo;
         }
     }

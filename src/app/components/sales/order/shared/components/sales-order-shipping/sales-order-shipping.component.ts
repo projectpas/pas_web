@@ -15,6 +15,7 @@ import { AppModuleEnum } from '../../../../../../enum/appmodule.enum';
 import { CustomerShippingModel } from '../../../../../../models/customer-shipping.model';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SalesShippingLabelComponent } from '../../../sales-order-shipping-label/sales-order-shipping-label.component'
+import { SalesOrderPackagingLabelComponent } from '../../../sales-order-Packaging-Label/sales-order-packaging-label.component';
 
 @Component({
     selector: 'app-sales-order-shipping',
@@ -1292,6 +1293,20 @@ export class SalesOrderShippingComponent {
 
     AddCustomInfo() {
         this.addCustomerInfo = true;
+    }
+
+    printPackagingLabel(rowData: any) {
+        this.modal = this.modalService.open(SalesOrderPackagingLabelComponent, { size: "lg" });
+        let instance: SalesOrderPackagingLabelComponent = (<SalesOrderPackagingLabelComponent>this.modal.componentInstance)
+        instance.modalReference = this.modal;
+
+        instance.onConfirm.subscribe($event => {
+            if (this.modal) {
+                this.modal.close();
+            }
+        });
+        instance.salesOrderId = rowData.salesOrderId;
+        instance.salesOrderPartId = rowData.salesOrderPartId;
     }
 }
 

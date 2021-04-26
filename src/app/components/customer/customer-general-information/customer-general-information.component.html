@@ -451,7 +451,7 @@
                           </div>
                           <div class="form-group m-t-15">
                             <div class="checkbox-cstm margin-left-0">
-                              <label>
+                              <label> 
                                 <input
                                   type="checkbox"
                                   name="isAddressForBilling"
@@ -459,12 +459,13 @@
                                   [(ngModel)]="
                                     generalInformation.isAddressForBilling 
                                   "
+                                  [disabled]="  isEdit"
                                 />
-                                <span class="cr"
+                                <span [ngClass]=" isEdit  ? 'disablecheckbox' : ''"  class="cr"
                                   ><i class="cr-icon pi pi-check"></i
                                 ></span>
-                                Is this Address For Billing
-                              </label>
+                               Is this Address For Billing
+                                </label>
                             </div>
                           </div>
                           <div class="form-group m-t-15">
@@ -477,8 +478,10 @@
                                   [(ngModel)]="
                                     generalInformation.isAddressForShipping
                                   "
+                                  [disabled]="  isEdit"
+                                  
                                 />
-                                <span class="cr"
+                                <span [ngClass]=" isEdit ? 'disablecheckbox' : ''"  class="cr"
                                   ><i class="cr-icon pi pi-check"></i
                                 ></span>
                                 Is this Address For Shipping
@@ -489,13 +492,13 @@
                             <div class="checkbox-cstm margin-left-0">
                               <label>
                                 <input
-                                  type="checkbox"
-                                  [disabled]="editMode"     
+                                  type="checkbox"  
                                   name="isCustomerAlsoVendor"
                                   (ngModelChange)="enableSave()"
-                                  [(ngModel)]=" generalInformation.isCustomerAlsoVendor"/>
-                                <!-- [disabled]=" generalInformation.isCustomerAlsoVendor && isEdit" -->
-                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                  [(ngModel)]=" generalInformation.isCustomerAlsoVendor"
+                                  [disabled]="isEdit" />
+                                 
+                                <span [ngClass]=" isEdit  ? 'disablecheckbox' : ''"  class="cr"><i class="cr-icon pi pi-check"></i></span>
                                 Is this Customer also a Vendor
                               </label>
                             </div>

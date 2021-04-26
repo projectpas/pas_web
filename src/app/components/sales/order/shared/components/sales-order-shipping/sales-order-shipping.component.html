@@ -4,6 +4,10 @@
             <div class="col-md-12 shipping-div">
                 <label class="input-width-100-percent"></label>
                 <div class="form-group perform-shipping-div">
+                    <button type="submit" class="btn  submit-btn btn btn-primary"
+                        [disabled]="disableCreateShippingBtn">Print Packaging Label</button>&nbsp;
+                    <button type="submit" class="btn  submit-btn btn btn-primary"
+                        [disabled]="disableCreateShippingBtn">Print Shipping Label</button>&nbsp;
                     <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
                         (click)="PerformShipping()">Perform Shipping</button>
                 </div>
@@ -99,6 +103,11 @@
                                         {{ ship.commodityCode }}
                                     </td>
                                     <td class="zui-sticky-col" style="width:107px !important">
+                                        <span *ngIf="ship.qtyShipped > 0">
+                                            <a class="btn nobg" matTooltip="Print Packaging Slip"
+                                                matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i
+                                                    class="fa fa-print"></i></a>
+                                        </span>
                                         <span *ngIf="ship.qtyShipped > 0">
                                             <a class="btn nobg" matTooltip="Print Shipping Label"
                                                 matTooltipPosition="above" (click)="printShippingLabel(ship);"><i

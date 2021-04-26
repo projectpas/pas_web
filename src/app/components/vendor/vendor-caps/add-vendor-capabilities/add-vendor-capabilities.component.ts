@@ -245,7 +245,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 
 	// get all Aircraft Models
 	getAllAircraftModels() {
-		this.aircraftModelService.getAll().subscribe(models => {
+		this.aircraftModelService.getAll(this.currentUserMasterCompanyId).subscribe(models => {
 			const responseValue = models[0];
 			this.aircraftModelList = responseValue.map(models => {
 				return {
@@ -258,7 +258,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 
 	// get all dashnumber
 	getAllDashNumbers() {
-		this.dashNumService.getAll().subscribe(dashnumbers => {
+		this.dashNumService.getAll(this.currentUserMasterCompanyId).subscribe(dashnumbers => {
 			const responseData = dashnumbers[0];
 			this.dashNumberList = responseData.map(dashnumbers => {
 				return {
@@ -281,6 +281,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 		}
 	}
 
+	// not in use
 	private manufacturerdata() {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
@@ -299,7 +300,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 	}
 
 	private onDataLoadFailed(error: any) {
-		this.alertService.stopLoadingMessage();
+		//this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
 		this.isSpinnerVisible = false;
 	}
@@ -307,7 +308,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 	capabilityTypeListData(strText = ''){
 		if(this.arrayCapabilityTypelist.length == 0) {
 			this.arrayCapabilityTypelist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description',strText,true,200,this.arrayCapabilityTypelist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc',strText,true,200,this.arrayCapabilityTypelist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.capabilityTypeList = response;
 		},err => {
 			this.onDataLoadFailed(err);
@@ -366,7 +367,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 	getItemMasterSmartDropDown(strText = '', itemMasterId){
 		if(this.arraylistItemMasterId.length == 0) {
 			this.arraylistItemMasterId.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber',strText,true,20,this.arraylistItemMasterId.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber',strText,true,20,this.arraylistItemMasterId.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.itemMasterlistCollectionOriginal = response;
 			if(itemMasterId > 0)
 			{
@@ -395,14 +396,13 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 		if(this.arrayVendorlist.length == 0) {			
             this.arrayVendorlist.push(0); }
         
-        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.allVendors = response.map(x => {
                 return {
                     vendorName: x.label, vendorId: x.value 
                 }
             })                    
 			this.vendorNames = this.allVendors;
-
 			if(VendorId > 0)
 			{
 				this.sourceVendorCap = {
@@ -416,8 +416,6 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 		}
             
 		},err => {
-			const errorLog = err;
-            this.onDataLoadFailed(errorLog);		
             this.isSpinnerVisible = false;
 		});
 	}
@@ -432,9 +430,8 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 						this.vendorName = res[0].vendorName;
 						this.vendorCode = res[0].vendorCode;
 						this.sourceVendorCap.vendorCode = res[0].vendorCode;
-				},err => {
-					const errorLog = err;
-					this.onDataLoadFailed(errorLog);
+				},err => {					
+					this.isSpinnerVisible = false;
 				});
 		}        
     }
@@ -887,7 +884,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 				MessageSeverity.success
 			);
 			this._route.navigateByUrl('/vendorsmodule/vendorpages/app-vendor-capabilities-list')
-		}, error => this.onDataLoadFailed(error))
+		}, error => {this.isSpinnerVisible = false;})
 	}
 
 	// get aircraft model by type 
@@ -1042,7 +1039,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 		else if (this.memoUrl !== '') {
 			this.searchAircraftParams = `memo=${this.memoUrl}`;
 		}
-if(this.isShowCaret==false)this.searchAircraftParams = '';
+		if(this.isShowCaret==false)this.searchAircraftParams = '';
 		this.vendorCapesService.searchAirMappedByMultiTypeIdModelIDDashID(this.vendorCapabilityId ? this.vendorCapabilityId :this.sourceVendorCap.vendorCapabilityId, this.searchAircraftParams).subscribe(res => {
 			this.aircraftListDataValues = res.map(x => {
 				return {
@@ -1206,9 +1203,7 @@ if(this.isShowCaret==false)this.searchAircraftParams = '';
 			this.getAircraftMappedDataByItemMasterId();
 
 		}, err => {
-			const errorLog = err;
-
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 			// reset poupup aircraft information
 			this.aircraftData = undefined;
 			this.selectedAircraftId = undefined;
@@ -1220,13 +1215,13 @@ if(this.isShowCaret==false)this.searchAircraftParams = '';
 		$("#ModalDashNumber").modal("hide");
 	}
 
-	errorMessageHandler(log) {
-		this.alertService.showMessage(
-			'Error',
-			log.error,
-			MessageSeverity.error
-		);
-	}
+	// errorMessageHandler(log) {
+	// 	this.alertService.showMessage(
+	// 		'Error',
+	// 		log.error,
+	// 		MessageSeverity.error
+	// 	);
+	// }
 
 	onAddAircraftInfo() {
 		this.aircraftData = undefined;

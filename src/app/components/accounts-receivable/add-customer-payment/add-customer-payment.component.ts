@@ -179,7 +179,7 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.arrayCurrencyList.push(0);
     this.isSpinnerVisible = true;
     forkJoin(
-      this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join()),
+      this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join(), this.masterCompanyId),
       this.legalEntityService.getManagemententity(this.masterCompanyId)
     ).subscribe(result => {
       this.currencyList = result[0];

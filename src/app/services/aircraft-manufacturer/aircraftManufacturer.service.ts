@@ -17,9 +17,9 @@ export class AircraftManufacturerService {
     constructor(private aircraftManufacturerEndpoint: AircraftManufacturerEndpointService) {
     }
 
-    getAll() {
+    getAll(masterCompanyId?) {
         return Observable.forkJoin(
-            this.aircraftManufacturerEndpoint.getAllAircraftManufacturer<AircraftType[]>());
+            this.aircraftManufacturerEndpoint.getAllAircraftManufacturer<AircraftType[]>(masterCompanyId));
     }
 
     getById(aircraftManufacturerId: number) {

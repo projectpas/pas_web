@@ -91,9 +91,8 @@
                <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                 label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                 (click)="contact.exportCSV({ selectionOnly: true })"></button>
-               <div class="excel-upload  excel-upload-cstm" *ngIf="isDownload">
-
-                <button *ngIf="isAdd" name="download" id="download" type="button" class="btn btn-primary exports-button"
+              <!-- <div class="excel-upload  excel-upload-cstm">
+                <button name="download" id="download" type="button" class="btn btn-primary exports-button"
                   matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForContact()"
                   >
                   Sample File Download
@@ -107,7 +106,7 @@
                   </span>
                 </label>
                 &nbsp; &nbsp;
-              </div>
+              </div> -->
               </div>
               <div class="pull-right buttons-div-align">
                 <div class="col">
@@ -621,7 +620,7 @@
           {{ isEditButton ? 'Edit' : 'Add' }} Contact Details
         </h4>
       </div>
-      <form #ccForm="ngForm" #addContactForm="ngForm" class="form-horizontal" id="">
+      <form  #addContactForm="ngForm" class="form-horizontal" id="">
         <div class="modal-body">
           <div class="form-row">
             <div class="col-md-6">

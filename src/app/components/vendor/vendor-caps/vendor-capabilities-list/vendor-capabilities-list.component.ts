@@ -146,7 +146,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
         this.lazyLoadEventDataInput.globalFilter = value;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus };
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, masterCompanyId : this.authService.currentUser.masterCompanyId, status: this.status, isDeleted: this.currentDeletedstatus };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.getList(PagingData);
     }
@@ -159,7 +159,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
         event.first = pageIndex;
         this.lazyLoadEventDataInput = event;
         if (this.filterText == '') {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus }
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, masterCompanyId : this.authService.currentUser.masterCompanyId, status: this.status, isDeleted: this.currentDeletedstatus }
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
         } else {
@@ -189,7 +189,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
             }else if(field=='updatedDate'){
                 this.dateObject={'updatedDate':date}
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status ,...this.dateObject};
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, masterCompanyId : this.authService.currentUser.masterCompanyId, status: this.status ,...this.dateObject};
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData); 
         }else{
@@ -200,7 +200,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
             if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
                 delete this.lazyLoadEventDataInput.filters.updatedDate;
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status,...this.dateObject};
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,masterCompanyId : this.authService.currentUser.masterCompanyId, status: this.status,...this.dateObject};
                 const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
                 this.getList(PagingData); 
         }              
@@ -212,7 +212,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
 
     exportCSV(dt) {
         this.isSpinnerVisible = true;
-        let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
+        let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId" : this.authService.currentUser.masterCompanyId,"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
         let filters = Object.keys(dt.filters);
         filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
@@ -273,7 +273,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
     getVenCapesListByStatus(status) {
         this.lazyLoadEventDataInput.first = 0;
         this.status = status;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status, isDeleted: this.currentDeletedstatus };
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,masterCompanyId : this.authService.currentUser.masterCompanyId, status: status, isDeleted: this.currentDeletedstatus };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.getList(PagingData);
     }
@@ -368,9 +368,9 @@ export class VendorCapabilitiesListComponent implements OnInit {
     private saveFailedHelper(error: any) {
         this.isSpinnerVisible = false;
         this.isSaving = false;
-        this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
-        this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+        // this.alertService.stopLoadingMessage();
+        // this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
+        // this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
 
     public navigateTogeneralInfo() {
@@ -393,11 +393,11 @@ export class VendorCapabilitiesListComponent implements OnInit {
                     if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
                         delete this.lazyLoadEventDataInput.filters.updatedDate;
                     }
-                    this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, isDeleted: this.currentDeletedstatus, status: this.status,...this.dateObject};
+                    this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,masterCompanyId : this.authService.currentUser.masterCompanyId, isDeleted: this.currentDeletedstatus, status: this.status,...this.dateObject};
                         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
                         this.getList(PagingData); 
                 },
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false});
         }
         else {
             this.sourceAction = rowData;
@@ -414,10 +414,10 @@ export class VendorCapabilitiesListComponent implements OnInit {
                     if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
                         delete this.lazyLoadEventDataInput.filters.updatedDate;
                     }
-                    this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, isDeleted: this.currentDeletedstatus, status: this.status,...this.dateObject};
+                    this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,masterCompanyId : this.authService.currentUser.masterCompanyId, isDeleted: this.currentDeletedstatus, status: this.status,...this.dateObject};
                         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
                         this.getList(PagingData); 
-                },error => this.saveFailedHelper(error));
+                },error => {this.isSpinnerVisible = false});
         }
 
     }
@@ -439,7 +439,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
                     delete this.lazyLoadEventDataInput.filters.updatedDate;
                 }
 
-                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, isDeleted: this.currentDeletedstatus, status: this.status,...this.dateObject};
+                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,masterCompanyId : this.authService.currentUser.masterCompanyId, isDeleted: this.currentDeletedstatus, status: this.status,...this.dateObject};
                 
                 const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
                     
@@ -547,7 +547,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
         } 
         else
         {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, itemMasterId: this.selectedPartNumberModel.toString(), capabilityTypeId: this.selectedCapesTypeModel.toString(), status: this.status,...this.dateObject};
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,masterCompanyId : this.authService.currentUser.masterCompanyId, itemMasterId: this.selectedPartNumberModel.toString(), capabilityTypeId: this.selectedCapesTypeModel.toString(), status: this.status,...this.dateObject};
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData); 
         }
@@ -556,7 +556,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
     getItemMasterSmartDropDown(strText = ''){
 		if(this.arraylistItemMasterId.length == 0) {
 			this.arraylistItemMasterId.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber','',true,50000,this.arraylistItemMasterId.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber','',true,50000,this.arraylistItemMasterId.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
             if(response)
             {
                 this.search_PartNumberList = response;
@@ -569,7 +569,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
 
     advanSearchCapesInformation()
     {
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, itemMasterId: this.selectedPartNumberModel.toString(), capabilityTypeId: this.selectedCapesTypeModel.toString(), status: this.status,...this.dateObject};
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,masterCompanyId : this.authService.currentUser.masterCompanyId, itemMasterId: this.selectedPartNumberModel.toString(), capabilityTypeId: this.selectedCapesTypeModel.toString(), status: this.status,...this.dateObject};
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.getList(PagingData); 
     }
@@ -577,7 +577,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
     capabilityTypeListData(strText = ''){
 		if(this.arrayCapabilityTypelist.length == 0) {
 			this.arrayCapabilityTypelist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description','',true,50000,this.arrayCapabilityTypelist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc','',true,50000,this.arrayCapabilityTypelist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
             if(response)
             {
                 this.search_CapesTypeList = response;
