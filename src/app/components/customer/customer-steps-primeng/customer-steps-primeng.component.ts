@@ -39,7 +39,7 @@ export class CustomerStepsPrimengComponent {
 	ataListDataValues: any[] = [];
 	contactList: any;
 	breadcrumbs: MenuItem[];
-	jobTitles: Object; 
+	expertiseTitles: Object; 
 	customerIdList: any[] = [];
 	arrayCustlist:any[] = [];
 	isView:boolean=true;
@@ -97,11 +97,11 @@ export class CustomerStepsPrimengComponent {
 			this.currentTab = 'Contacts';
 			this.activeMenuItem = 2;
 
-		} else if (value === 'AircraftInfo') {
-			this.currentTab = 'AircraftInfo';
-			this.activeMenuItem = 3;
 		} else if (value === 'Atachapter') {
 			this.currentTab = 'Atachapter';
+			this.activeMenuItem = 3;
+		} else if (value === 'AircraftInfo') {
+			this.currentTab = 'AircraftInfo';
 			this.activeMenuItem = 4;
 			this.getAllATAChapter();
 			if (this.customerId > 0) { 
@@ -188,8 +188,8 @@ export class CustomerStepsPrimengComponent {
 		  : null;
 	}
 	async getJobTitles() {
-		await this.commonservice.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
-			this.jobTitles = res;
+		await this.commonservice.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
+			this.expertiseTitles = res;
 		})
 	}
 

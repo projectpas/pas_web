@@ -682,10 +682,8 @@ export class CustomerContactsComponent implements OnInit {
 		this.selectedFirstName = rowData.firstName
 		this.selectedMiddleName = rowData.middleName
 		this.selectedLastName = rowData.lastName
-		
 		this.ediData = { ...rowData };
-		this.isEditButton = true;
-		this.disableSave = false;		
+		this.isEditButton = true;		
 		this.sourceViewforContact = '';
 	}
 

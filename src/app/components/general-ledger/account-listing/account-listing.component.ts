@@ -100,18 +100,28 @@ export class AccountListingComponent implements OnInit {
             { label: 'GL Account List' },
         ];
     }
+
     ngOnDestroy(): void {
         this.onDestroy$.next();
+    }
+
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
     closeDeleteModal() {
         $("#downloadConfirmation").modal("hide");
     }
 
+    GlaccountListdataOriginal: any = [];
+
     getList(data) {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;  
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.glAccountService.getglAccountList(PagingData).subscribe(
             results => {
@@ -122,6 +132,7 @@ export class AccountListingComponent implements OnInit {
                         updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
+                this.GlaccountListdataOriginal = results['results'];
                 this.GlaccountListdata = gList
                 this.totalRecords = results['totalRecordsCount']
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -136,19 +147,24 @@ export class AccountListingComponent implements OnInit {
 
     dateObject: any = {}
     dateFilterForTable(date, field) {
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');;
         this.dateObject = {}
         date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
         if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-            if (field == 'createdDate') {
-                this.dateObject = { 'createdDate': date }
-            } else if (field == 'updatedDate') {
-                this.dateObject = { 'updatedDate': date }
-            } else if (field == 'startDate') {
-                this.dateObject = { 'startDate': date }
+            if(dateyear > minyear)
+            {
+                if (field == 'createdDate') {
+                    this.dateObject = { 'createdDate': date }
+                } else if (field == 'updatedDate') {
+                    this.dateObject = { 'updatedDate': date }
+                } else if (field == 'startDate') {
+                    this.dateObject = { 'startDate': date }
+                }
+                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
+                const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+                this.getList(PagingData);
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getList(PagingData);
         } else {
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
             if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
@@ -166,10 +182,35 @@ export class AccountListingComponent implements OnInit {
         }
     }
 
+    dateFilterForTable2(date, field) {
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');
+        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+            if( dateyear > minyear)
+            {
+              //if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+                this.GlaccountListdata = this.GlaccountListdataOriginal;
+                const data = [...this.GlaccountListdata.filter(x => {
+                    if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                        return x;
+                    } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                        return x;
+                    }else if (moment(x.startDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'startDate') {
+                        return x;
+                    }
+                })]
+                this.GlaccountListdata = data;
+            }
+        } else {
+            this.GlaccountListdata = this.GlaccountListdataOriginal;
+        }
+    }
+
     exportCSV(dt) {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
-        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.status ? this.status : 'Active', "isDeleted": isdelete }, "globalFilter": "" }
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": {"masterCompanyId": this.currentUserMasterCompanyId , "status": this.status ? this.status : 'Active', "isDeleted": isdelete }, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
@@ -218,7 +259,7 @@ export class AccountListingComponent implements OnInit {
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status ? this.status : 'Active' };
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,masterCompanyId : this.currentUserMasterCompanyId, status: this.status ? this.status : 'Active' };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters), globalFilter: value }
         this.glAccountService.getglAccountList(PagingData).subscribe(
             results => {

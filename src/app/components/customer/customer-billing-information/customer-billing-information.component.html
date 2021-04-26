@@ -88,9 +88,8 @@
                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only"
                 (click)="dt.exportCSV({ selectionOnly: true })" 
                 ></button>
-
-              <div class="excel-upload  excel-upload-cstm" *ngIf="isDownload">
-                <button type="button" *ngIf="isAdd" class="btn btn-primary exports-button" matTooltip="Download Sample File"
+              <!-- <div class="excel-upload  excel-upload-cstm">
+                <button type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File"
                   matTooltipPosition="above" (click)="sampleExcelDownload()" 
                   >
                   Sample File Download
@@ -103,7 +102,7 @@
                     <i class="fa fa-upload"></i>
                   </span>
                 </label>
-              </div>
+              </div> -->
               </div>
               <div class="pull-right buttons-div-align">
                 <div class="col">

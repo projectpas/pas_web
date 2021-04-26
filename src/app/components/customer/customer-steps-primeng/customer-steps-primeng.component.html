@@ -55,11 +55,12 @@
             active: activeMenuItem >= 3,
             editable: activeMenuItem === 3
           }"
-          (click)="changeOfTab('AircraftInfo')"
+          
+          (click)="changeOfTab('Atachapter')"
           [class.isDisabled]="!isDisabledSteps"
         >
           <div class="md-step-circle"><span>3</span></div>
-          <div class="md-step-title">Aircraft Info</div>
+          <div class="md-step-title">View ATA Chapter</div>
           <div class="md-step-bar-left"></div>
           <div class="md-step-bar-right"></div>
         </div>
@@ -69,11 +70,11 @@
             active: activeMenuItem >= 4,
             editable: activeMenuItem === 4
           }"
-          (click)="changeOfTab('Atachapter')"
+          (click)="changeOfTab('AircraftInfo')"
           [class.isDisabled]="!isDisabledSteps"
         >
           <div class="md-step-circle"><span>4</span></div>
-          <div class="md-step-title">ATA Chapter</div>
+          <div class="md-step-title">Aircraft Info</div>
           <div class="md-step-bar-left"></div>
           <div class="md-step-bar-right"></div>
         </div>
@@ -273,7 +274,7 @@
               [editMode]="editMode"
               [editGeneralInformationData]="editGeneralInformationData"
               [savedGeneralInformationData]="savedGeneralInformationData"              
-              [jobTitles]="jobTitles"
+              [expertiseTitles]="expertiseTitles"
               (tab)="changeOfTab($event)"
               [selectedCustomerTab]="currentTab"
             ></app-customer-sales-person>

@@ -1,4 +1,4 @@
-<div style="float: right; margin: 3px 0 19px 0px;">
+<div class="document-detail-view">
     <button type="button" class="btn btn-primary" (click)="detailView()">
         {{(isOpenedAll)?'Summary':'Detail View'}}
     </button>
@@ -7,12 +7,12 @@
 <p-treeTable [value]="gridData" (onNodeExpand)="getShippingData($event.node)">
     <ng-template pTemplate="header">
         <tr>
-            <th style="background-color: #337ab7; color: white;">PartNumber</th>
-            <th style="background-color: #337ab7; color: white">Part Description</th>
-            <th style="background-color: #337ab7; color: white">Revised PartNo</th>
-            <th style="background-color: #337ab7; color: white">Description</th>
-            <th style="background-color: #337ab7; color: white">DocumentCode</th>
-            <th style="background-color: #337ab7; color: white">Document Link</th>
+            <th class="document-detail-header">PartNumber</th>
+            <th class="document-detail-header">Part Description</th>
+            <th class="document-detail-header">Revised PartNo</th>
+            <th class="document-detail-header">Description</th>
+            <th class="document-detail-header">DocumentCode</th>
+            <th class="document-detail-header">Document Link</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
@@ -26,6 +26,13 @@
             <td>{{rowData.description}}</td>
             <td>{{rowData.documentCode}}</td>
             <td>{{rowData.documentLink}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td colspan="6" class="no-records-cstm no-records-msg">
+            No records found
+            </td>
         </tr>
     </ng-template>
 </p-treeTable>
