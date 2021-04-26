@@ -889,7 +889,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     getItemMasterPurchaseSaleMaster() {
         this.isSpinnerVisible = true;
         //this.commonService.smartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name').subscribe(response => {
-          this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(response => {
+          this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',0).subscribe(response => {
             this.allPurchaseAndSaleMasterList = response;
             this.allPurchaseAndSaleMasterList = this.allPurchaseAndSaleMasterList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
             if(!this.isEdit) {
@@ -1870,12 +1870,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         if (event.target.value != "") {
             let rqValue = Number(event.target.value);
             let mqValue = this.sourceItemMaster.minimumOrderQuantity;
-            if(rqValue < mqValue)
+            //if(rqValue < mqValue)
+            if(this.sourceItemMaster.reorderQuantiy < this.sourceItemMaster.minimumOrderQuantity )
             {
-                this.disableReorderQuantiy = true;    
+                this.disableReorderQuantiy = true;                
             }
             else{
-                this.disableReorderQuantiy = false;    
+                this.disableReorderQuantiy = false;                 
             }
         }
     }
@@ -3585,6 +3586,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         const id = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
         this.itemser.getMappedAirCraftDetails(id).subscribe(data => {
             const responseData = data;
+            this.selectedAircraftLDColumns=this.colsaircraftLD
             this.aircraftListDataValues = responseData.map(x => { //aircraftListData
                 return {
                     ...x,
@@ -5776,6 +5778,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     enableSaveMemo() {
         this.disableSaveMemo = false;
+        this.disableSaveForEdit=false;
     }
 
     addDocumentInformation(type, documentInformation) {
@@ -6057,9 +6060,24 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceItemMaster.isOemPNId = undefined;
         }
     }
+    leadtime(){
+        this.sourceItemMaster.leadTimeDays = this.sourceItemMaster.leadTimeDays ? formatNumberAsGlobalSettingsModule(this.sourceItemMaster.exportValue, 2) : '0'; 
+    }
 
     onChangeExportVal() {
         this.exportInfo.exportValue = this.exportInfo.exportValue ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportValue, 2) : '0.00';
+    }
+    onChangeWeight() {
+        this.exportInfo.exportWeight = this.exportInfo.exportWeight ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportWeight, 2) : '0';
+    }
+    onChangeExportSizeLength(){
+        this.exportInfo.exportSizeLength = this.exportInfo.exportSizeLength ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeLength, 2) : '0';
+    }
+    onChangeExportSizeWidth(){
+        this.exportInfo.exportSizeWidth = this.exportInfo.exportSizeWidth ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeWidth, 2) : '0';
+    }
+    onChangeExportSizeHeight(){
+        this.exportInfo.exportSizeHeight = this.exportInfo.exportSizeHeight ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeHeight, 2) : '0';
     }
     getItemMasterExportInfoById(id) {
         this.isSpinnerVisible = true;    
@@ -6114,4 +6132,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         field.PP_LastListPriceDate = new Date();       
         field.PP_LastPurchaseDiscDate = new Date();
     }
+
+    SetSalesCurrency() {
+        this.sourceItemMaster.salesCurrencyId = this.sourceItemMaster.purchaseCurrencyId;
+    }
+    
 }

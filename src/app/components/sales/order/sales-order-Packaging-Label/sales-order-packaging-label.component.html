@@ -15,6 +15,9 @@
                             <hr /> -->
                             <div class="very-first-block">
                                 <div class="col-sm-12 address-block">
+                                    <div class="col-sm-12 first-block-name"><img class="logo"
+                                            src="{{this.endPointURL + this.management.logo}}" height="30px"
+                                            width="100px" /></div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-12 first-block-label"
                                             disabled>{{this.management.companyName}}</label>
@@ -61,45 +64,45 @@
                                 </div>
                             </div>
                             <div class="second-block">
-                                <h5 style="line-height: 25px; margin-left: 42%;"><b>Packing Slip</b></h5>
+                                <h5 class="packaging-slip-header"><b>Packing Slip</b></h5>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Packaging Slip Id</label>
-                                    <input type="text" value="{{this.salesOrder.packagingSlipNo}}"
-                                        disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.packagingSlipNo}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label"> Invoice Num</label>
-                                    <input type="text" value="{{this.salesOrder.invoiceNo}}"
-                                        disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.invoiceNo}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Invoice Date & Time</label>
-                                    <input type="text" value="{{this.salesOrder.invoiceDate | date:'medium'}}"
-                                        disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.invoiceDate | date:'medium'}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
-                                    <input type="text" value="{{this.salesOrder.salesOrderNumber}}"
-                                        disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.salesOrderNumber}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Num of Items</label>
-                                    <input type="text" value="{{this.salesOrder.numberOfItems}}"
-                                        disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.numberOfItems}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Num of Containers</label>
-                                    <input type="text" value="{{this.salesOrder.noOfContainer}}"
-                                        disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.noOfContainer}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Prepared By</label>
-                                    <input type="text" value="{{ userName }}" disabled />
+                                    <label style="width: 100%; text-align: left;" disabled>{{ userName }}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Date Printed</label>
-                                    <input type="text" value="{{todayDate | date:'medium' }}"
-                                        disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{todayDate | date:'medium' }}</label>
                                 </div>
                                 <!-- <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Page</label>
@@ -111,29 +114,35 @@
                                     <div class="first-block-sold-to">
                                         <label><b>Sold To:</b></label>
                                         <div class="sold-block-div" style="margin-top:10px">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.customerName}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.custToAddress1}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.custToAddress2}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.custToCity}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.custToState}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-6 first-block-label" disabled>Zip
                                             </label> -->
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.custToCountry}}</label>
                                         </div>
                                         <div class="sold-block-div">
@@ -154,31 +163,38 @@
                                     <div class="first-block-ship-to">
                                         <label><b> Ship To:</b></label>
                                         <div class="ship-block-div" style="margin-top:10px">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.shipToContactName}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.shipToAddress1}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.shipToAddress2}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.shipToCity}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.shipToState}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.shipToPostalCode}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
                                                 {{this.salesOrder.shipToCountry}}</label>
                                         </div>
                                         <div class="ship-block-div">

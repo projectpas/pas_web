@@ -149,7 +149,7 @@ hr {
   padding-right: 2px;
   border: 1px solid black;
   width: 100%;
-  min-height:300px;
+  // min-height: 190px;
   padding-left: 2px;
 }
 
@@ -242,4 +242,10 @@ hr {
   text-transform: capitalize;
   margin-bottom: 0;
   text-align: left;
+}
+
+.packaging-slip-header {
+  line-height: 25px;
+  margin-left: 42%;
+  -webkit-print-color-adjust: exact;
 }
