@@ -114,7 +114,7 @@
         </ng-template> 
         <ng-template pTemplate="emptymessage" let-columns>
             <tr>
-                <td colspan="48" class="no-records-cstm no-records-msg" style="margin-left:-36%">
+                <td colspan="49" class="no-records-cstm no-records-msg" style="margin-left:-36%">
                     No records found
                 </td>
             </tr>
@@ -674,7 +674,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                         <th rowspan="2">Bin</th>
                         <th rowspan="2">Is Active</th>
                         <th rowspan="2">Is Deleted</th>
-                        <th rowspan="2">Memo</th>
+                        <th rowspan="2" class="min-width-250">Memo</th>
                         <th rowspan="2">Created Date</th>
                         <th rowspan="2">Created By</th>
                         <th rowspan="2">Updated Date</th>
@@ -730,7 +730,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                             <input type="checkbox" disabled [checked]="audit.isDeferred == true"
                                    style="margin: 0px auto; display: block;" />
                         </td>
-                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
+                        <td class="min-width-250" [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
                             <p class="p_editor" [innerHTML]="audit.memo"></p>
                         </td>
                         <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>

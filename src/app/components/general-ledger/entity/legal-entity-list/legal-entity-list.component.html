@@ -374,30 +374,50 @@
                                 <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'faaLicense', audit.faaLicense)  ? 'black' : 'red'  }">{{audit.faaLicense}}</td>
                                 <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'taxId', audit.taxId)  ? 'black' : 'red'  }">{{audit.taxId}}</td>
                                 <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'attachmentname', audit.attachmentname)  ? 'black' : 'red'  }">{{audit.attachmentname}}</td>
-                                <td class="text-center">
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
                                     <input type="checkbox" disabled [checked]="audit.isAddressForBilling === true"
                                     />
+                                </label>
+                            </span>
                                   </td>
-                              <td class="text-center">
+                                  <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
                                 <input type="checkbox" disabled [checked]="audit.isAddressForShipping === true"
                                 />
+                            </label>
+                        </span>
                               </td>
-                              <td class="text-center">
+                              <td class="text-center width-60">
+                                <span class="value">
+                                  <label class="wauto">
                                 <input type="checkbox" disabled [checked]="audit.isBalancingEntity === true"
                                 />
+                            </label>
+                        </span>
                               </td>
                               <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'tagname', audit.tagname)  ? 'black' : 'red'  }">{{audit.tagname}}</td>
-                              <td class="text-center">
+                              <td class="text-center width-60">
+                                <span class="value">
+                                  <label class="wauto">
                                 <input type="checkbox" disabled [checked]="audit.isActive === true"
                                 />
+                            </label>
+                        </span>
                               </td>
                                 <td>{{audit.createdDate | date: 'MM/dd/yyyy  h:mm a'}}</td>
                                 <td>{{audit.createdBy}}</td>
                                 <td>{{audit.updatedDate | date: 'MM/dd/yyyy  h:mm a'}}</td>
                                 <td>{{audit.updatedBy}}</td>
-                                <td class="text-center">
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
                                     <input type="checkbox" disabled [checked]="audit.isDeleted === true"
                                     />
+                                </label>
+                            </span>
                                   </td>
                             </tr>
                         </tbody>
