@@ -27,6 +27,8 @@ import { UnitOfMeasureService } from 'src/app/services/unitofmeasure.service';
 import * as moment from 'moment';
 import { MenuItem } from 'primeng/api';
 import { CalibrationMgmt } from '../../../models/calibration-mgmt.model'
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-calibration-mgmt-listing',
@@ -75,6 +77,7 @@ export class CalibrationMgmtListingComponent implements OnInit {
     // { field: 'updatedBy', header: 'Updated By' },
     // { field: 'updatedBy', header: 'Locaton' },
 ]; 
+private onDestroy$: Subject<void> = new Subject<void>();
 isSaving: boolean;
 activeIndex: number;
 assetViewList: any = {};
@@ -85,6 +88,7 @@ historyModal: NgbModalRef;
 private isDeleteMode: boolean = false;
 private isEditMode: boolean = false;
 selectedRows:any=[];
+allcalibrationbyidInfo: any = [];
 manufacturerId: any;
 currencyId: any;
 Calibrationtype:string = 'Calibration';
@@ -309,6 +313,24 @@ closeviewModal() {
     $("#viewcalibration").modal("hide");
 }
 
+closecalibartionviewModal() {
+    $("#CalibartionmgmtList").modal("hide");
+}
+
+Updatetcalibartion()
+{
+        this.assetService.UpdatecalibartionMgmt(this.allcalibrationbyidInfo).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+
+            this.alertService.showMessage("Success", `Calibration Process Update successfully.`, MessageSeverity.success);
+            $("#CalibartionmgmtList").modal("hide");
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        })
+ 
+
+}
+
   filterEmployee(event): void {
     if (event.query !== undefined && event.query !== null) {
         this.getAllEmployees(event.query);
@@ -368,8 +390,6 @@ closeviewModal() {
         this.alertService.showMessage("Success", `Calibration Process successfully.`, MessageSeverity.success);
         $("#editcalibration").modal("hide");
     }, err => {
-        this.currentAsset.manufacturedDate = this.currentAsset.manufacturedDate ? this.currentAsset.manufacturedDate : null;
-        this.currentAsset.expirationDate = this.currentAsset.expirationDate ? this.currentAsset.expirationDate : null;
         const errorLog = err;
         this.errorMessageHandler(errorLog);
     })
@@ -678,6 +698,51 @@ dismissModel() {
       })
   }
   }
+  OpemCalibartionMgmtList(AssetRecordId)
+  {
+    this.GetCalibartionListByID(AssetRecordId)
+  }
+
+//   private onCapesLoaded(allCapes: CalibrationMgmt[]) {
+//     this.allCapesInfo = allCapes;
+// }
+
+  GetCalibartionListByID(AssetRecordId) {
+    if (AssetRecordId !=0) {
+        this.assetService.getCalibartionListByID(AssetRecordId).subscribe(
+            results => { 
+                this.allcalibrationbyidInfo= results[0]
+
+                this.allcalibrationbyidInfo = results[0].map(x => {
+                    return {
+                        ...x,
+                     unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
+                     createdDate:  new Date(x.createdDate),
+                     calibrationDate:  new Date(x.calibrationDate),
+                  //   residualPercentage: x.residualPercentage ? formatNumberAsGlobalSettingsModule(x.residualPercentage, 2) : '',
+                  //   installationCost: x.installationCost ? formatNumberAsGlobalSettingsModule(x.installationCost, 2) : '',
+                  //   freight: x.freight ? formatNumberAsGlobalSettingsModule(x.freight, 2) : '',
+                  //   insurance: x.insurance ? formatNumberAsGlobalSettingsModule(x.insurance, 2) : '',
+                  //   taxes: x.taxes ? formatNumberAsGlobalSettingsModule(x.taxes, 2) : '',
+                  //   totalCost: x.totalCost ? formatNumberAsGlobalSettingsModule(x.totalCost, 2) : '',
+                  //   calibrationDefaultCost: x.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(x.calibrationDefaultCost, 2) : '',
+                  //   certificationDefaultCost: x.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.certificationDefaultCost, 2) : '',
+                  //   inspectionDefaultCost: x.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(x.inspectionDefaultCost, 2) : '',
+                  //   verificationDefaultCost: x.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.verificationDefaultCost, 2) : '',
+                    }
+                });
+
+              
+                //this.onCapesLoaded(results[0]) 
+            
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            }
+        );
+
+    }
+}
 
   getColorCodeForHistory(i, field, value) {
       const data = this.auditHistory;

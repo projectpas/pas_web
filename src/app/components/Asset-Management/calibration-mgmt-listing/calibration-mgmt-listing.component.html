@@ -398,7 +398,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="editcalibration" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="editcalibration" role="dialog" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content" style="width: 1000px;margin-left: -210px;">
 			<div class="modal-header">
@@ -467,7 +467,7 @@
                       <div class="form-group col-sm-12">
                           <label class="control-label col-sm-4">Cost</label>
                           <div class="col-sm-7">
-                            <input type="text" class="form-control" id="" name="">                           
+                            <input  [(ngModel)]="calibrationForm.UnitCost" type="number" class="form-control" id="" name="">                           
                           </div>
                         </div>
                   </div> 
@@ -475,11 +475,11 @@
                       <div class="form-group col-sm-12">
                           <label class="control-label col-sm-4">{{Certifytype}} Date</label>
                           <div class="col-sm-7">
-                            <p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}"
+                            <p-calendar [showIcon]="true" name ="CalibrationDate" [ngModelOptions]="{standalone: true}"
                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                 [maxDate]="currentDate" (ngModelChange)="editorgetmemo($event)"
                                 [(ngModel)]="calibrationForm.CalibrationDate"></p-calendar> 
-                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#calibration-schedules" class="btn btn-link pull-right" style="padding: 0;">View Verification Schedule</a>
+                            <a   data-toggle="modal" data-target="#CalibartionmgmtList" (click)="OpemCalibartionMgmtList(calibrationForm.AssetRecordId)" class="btn btn-link pull-right" style="padding: 0;">View {{Certifytype}} Schedule</a>
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
@@ -568,6 +568,81 @@
         <button type="button" class="btn btn-danger" (click)="closeviewModal()">Cancel</button>
 			</div>
 		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="CalibartionmgmtList" role="dialog" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width: 1000px;margin-left: -210px;">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closecalibartionviewModal()">&times;</button>
+				<h4 class="modal-title"> Details of Asset "{{calibrationForm.AssetId}}"</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-3">
+                      <p><span class="label"><b>Asset ID: </b></span><span class="value">{{calibrationForm.AssetId}}</span></p>                    
+                  </div>
+                  <div class="col-sm-3">
+                      <p><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>
+                  </div>
+                  <div class="col-sm-3">
+                      <p><span class="label"><b>Control Num: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
+                  </div>
+                  <div class="col-sm-3">
+                      <p><span class="label"><b>In service Date: </b></span><span class="value">{{calibrationForm.Inservicedate}}</span></p>
+                  </div> 
+                <div class="clear"></div>
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Asset Existing Cost</th>
+                      <th>Calibration Schedule</th>
+                      <th>Calibrated Date</th>
+                      <th>Calibrated By</th>
+                      <th>Last Calibrated Memo</th>
+                      <th>Calibrated Cost</th>
+                      <th>PO Num</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="hrow" *ngFor="let caldata of allcalibrationbyidInfo; let i=index; ">
+                      <td>{{caldata.assetUnitCost}}</td>
+                      <td>
+                        <p-calendar  class="calender-cstm woAdd" [showIcon]="true"  name="CreatedDate{{i}}"  [ngModelOptions]="{standalone: true}"
+                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                             (ngModelChange)="editorgetmemo($event)"
+                            [(ngModel)]="caldata.createdDate" appendTo="body"></p-calendar> 
+                       </td>
+                       <td>
+                        <p-calendar  class="calender-cstm woAdd"[showIcon]="true" name="calibrationDate{{i}}" [ngModelOptions]="{standalone: true}"
+                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                             (ngModelChange)="editorgetmemo($event)"
+                            
+                            [(ngModel)]="caldata.calibrationDate" appendTo="body"></p-calendar> 
+                       </td>
+                      <td class="dis-btns">
+                          <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
+                              <input type="text" class="form-control names text ui-autocomplete-input" id="" name="" [(ngModel)]="caldata.lastCalibrationBy" autocomplete="off">
+                          </div>
+                        </td>
+                      <td>
+                          <p [innerHTML]="caldata.memo"  class="h50 text"></p>
+                        </td>
+                        <td><input [(ngModel)]="caldata.unitCost" type="text" class="text"></td>
+                      <td>NA</td>
+                      <td><span class="edt-btn"> <a href="#" class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a> </span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-info" (click)="Updatetcalibartion()">Update</button>
+                <button type="button" class="btn btn-danger"(click)="closecalibartionviewModal()">Close</button>
+            </div>
+          </div>
 	</div>
 </div>
 
