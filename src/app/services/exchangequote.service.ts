@@ -361,5 +361,13 @@ export class ExchangequoteService {
   getAllExchangeQuoteAnalysis(id) {
     return this.exchangeQuoteEndpointService.getAllExchangeQuoteAnalysis(id);
   }
+  getCustomerQuotesList(exchangeQuoteId) {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.getCustomerQuotesList(exchangeQuoteId)
+    );
+  }
+  sentForInternalApproval(data) {
+    return this.exchangeQuoteEndpointService.sentForInternalApproval(data);
+  }
 
 }
