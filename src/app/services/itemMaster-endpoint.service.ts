@@ -1342,14 +1342,14 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getActivePartListByItemType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type,masterCompanyId));
             });
     }
 
     getItemMasterClassificationByType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterClassificationByType(type));
             });
