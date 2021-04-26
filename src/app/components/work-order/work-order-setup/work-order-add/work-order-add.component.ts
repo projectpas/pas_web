@@ -2115,6 +2115,7 @@ setTimeout(() => {
                 }
             },
                 err => {
+                    this.workOrderLaborList=[];
                     this.handleError(err);
                 })
         }

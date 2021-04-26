@@ -311,7 +311,8 @@
 </div>
 
 <br>
-
+ 
+<div *ngIf="quoteCreated">
 <div class="card" *ngIf="quoteForm.quoteNumber && quoteForm.quoteNumber != '' && !isQuoteListView">
     <div class="card-body">
 
@@ -368,7 +369,7 @@
                             <th rowspan="2" class="table-actions-column1">Actions</th>
                            
 
-                            </tr>
+                            </tr> 
                         </thead>
                         <tbody>
                             <tr class="mpn-row" style="display: table-row;"
@@ -496,7 +497,14 @@
                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
                             </tr>
-                            
+                            <tr *ngIf="workOrderPartsDetail && workOrderPartsDetail.length ==0">
+                                <td
+                                  [attr.colspan]="35"
+                                  class="no-records-msg no-records-cstm"
+                                >
+                                  No records found
+                                </td>
+                              </tr>
                         </tbody>
                     </table>
                 </div>
@@ -550,7 +558,15 @@
                                     <label [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</label>
                                 </td>
                             </tr>
-                        </tbody>
+                            <tr *ngIf="internalApproversList && internalApproversList.length ==0">
+                                <td
+                                  [attr.colspan]="7"
+                                  class="no-records-msg no-records-cstm"
+                                >
+                                  No records found
+                                </td>
+                              </tr>
+                        </tbody> 
                     </table>
                 </div>
             </div>
@@ -721,6 +737,14 @@
                                     </td>
                                 </ng-container>
                             </tr>
+                            <tr *ngIf="woQuoteApprovalList && woQuoteApprovalList.length ==0">
+                                <td
+                                  [attr.colspan]="30"
+                                  class="no-records-msg no-records-cstm"
+                                >
+                                  No records found
+                                </td>
+                              </tr>
                         </tbody>
                     </table>
                 </div>
@@ -752,6 +776,14 @@
                                     
                                 </ng-container>
                             </tr>
+                            <tr *ngIf="woQuoteAnalysisList && woQuoteAnalysisList.length ==0">
+                                <td
+                                  [attr.colspan]="20"
+                                  class="no-records-msg no-records-cstm"
+                                >
+                                  No records found
+                                </td>
+                              </tr>
                         </tbody>
                     </table>
                 </div>
@@ -990,6 +1022,12 @@
                             <!-- <td *ngIf="!isView"></td> -->
                         </tr>
                     </ng-container>
+                    
+                    <tr *ngIf="materialListQuotation && materialListQuotation.length==0">
+                        <td  colspan="15" class="no-records-msg no-records-cstm">
+                            No records found
+                        </td> 
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr class="footer">
@@ -2023,6 +2061,7 @@
         </div>
     </div> -->
 
+</div>
 </div>
 <div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xsm">
