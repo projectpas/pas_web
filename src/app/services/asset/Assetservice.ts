@@ -262,5 +262,15 @@ getIntangibleList(){
         return this.assetEndpoint.downloadAllCalibrationList(data);
     }
 
+    getCalibartionListByID(assetRecordId) {
+        return Observable.forkJoin(
+            this.assetEndpoint.getCalibartionListByID<any[]>(assetRecordId));
+    }
+
+    UpdatecalibartionMgmt(CalibrationManagment) {
+        return this.assetEndpoint.UpdatecalibartionMgmt(CalibrationManagment)
+    }
+
+
 
 }
