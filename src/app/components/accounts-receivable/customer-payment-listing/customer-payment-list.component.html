@@ -45,25 +45,22 @@
                                 <div class="form-group">
                                     <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="currentStatusSo" class="form-control" [value]="1"
-                                                [(ngModel)]="currentStatus" checked="{{currentStatus == 1}}"
-                                                (change)="changeOfStatus(1)">
+                                            <input type="radio" name="currentStatusSo" class="form-control" value="1"
+                                                [(ngModel)]="currentStatus" (change)="changeOfStatus(1)">
                                             <span class="checkmark"></span>Open
                                         </label>
                                     </div>
                                     <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="currentStatusSo" class="form-control" [value]="2"
-                                                [(ngModel)]="currentStatus" checked="{{currentStatus == 2}}"
-                                                (change)="changeOfStatus(2)">
+                                            <input type="radio" name="currentStatusSo" class="form-control" value="2"
+                                                [(ngModel)]="currentStatus" (change)="changeOfStatus(2)">
                                             <span class="checkmark"></span>Posted
                                         </label>
                                     </div>
                                     <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="currentStatusSo" class="form-control" [value]="0"
-                                                [(ngModel)]="currentStatus" checked="{{currentStatus == 0}}"
-                                                (change)="changeOfStatus(0)">
+                                            <input type="radio" name="currentStatusSo" class="form-control" value="0"
+                                                [(ngModel)]="currentStatus" (change)="changeOfStatus(0)">
                                             <span class="checkmark"></span>All
                                         </label>
                                     </div>
@@ -87,8 +84,9 @@
                 <tr>
                     <th class="table-column-width" [ngStyle]="{'width': col.width}" *ngFor="let col of columns"
                         [ngSwitch]="col.field">
-                        <input *ngIf="col.field !== 'openDate' && col.field !== 'depositDate'" style="width:100%;"
-                            pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input *ngIf="col.field !== 'openDate' && col.field !== 'depositDate'"
+                            [disabled]="col.field == 'status' &&  currentStatus !='0'" style="width:100%;" pInputText
+                            type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
                         <input type="date" *ngIf="col.field == 'openDate' || col.field == 'depositDate'" name="openDate"
                             class="table-header-input-width"
                             (change)="dt.filter($event.target.value, col.field, 'contains')">
