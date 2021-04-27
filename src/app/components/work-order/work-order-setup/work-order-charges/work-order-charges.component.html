@@ -33,7 +33,7 @@
           </grd-charges>
         </div>
         <!-- && addNewCharges -->
-        <div *ngIf="isEdit && editData ">
+        <div *ngIf="isEdit && editData "> 
           <grd-charges [isEdit]="isEdit" [editData]="editData" [workFlow]="workFlowObject" [isWorkOrder]="isWorkOrder"
             [markupList]="markupList" [isQuote]="isQuote" [taskList]="taskList"
             (updateChargesListForWO)="updateChargesList($event)"></grd-charges> 

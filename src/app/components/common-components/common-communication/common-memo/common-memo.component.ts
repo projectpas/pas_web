@@ -36,7 +36,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     modal: NgbModalRef;
     headers = [
         { field: 'SERIAL_NO', header: 'Serial No' },
-        { field: 'description', header: 'Memo' },
+        { field: 'descriptionData', header: 'Memo' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
@@ -178,6 +178,11 @@ export class MemoCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Memo Updated Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllMemoList();
                     }, err => {
                         this.errorMessageHandler();
@@ -192,6 +197,11 @@ export class MemoCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Memo Created Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllMemoList();
                     }, err => {
                         this.errorMessageHandler();
