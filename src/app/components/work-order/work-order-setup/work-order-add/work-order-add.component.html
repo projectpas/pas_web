@@ -93,7 +93,7 @@
                                                    class="wauto" [ngClass]="{pointerEvents : workOrderGeneralInformation.isRecCustomer || isEdit}">
                                                     <input type="radio" class="radio_adjust" name="work-type"
                                                         [value]="workOrderType.id"
-                                                        (click)="woDealerChange($event.target.value)"
+                                                        (click)="woDealerChange($event.target.value)" [disabled]="workOrderType.description !='Customer'"
                                                         [checked]="workOrderGeneralInformation.workOrderTypeId == workOrderType.id"
                                                         (change)="selectedCustomerType()"
                                                         
@@ -275,7 +275,7 @@
                                                 </label>
                                                 <p-autoComplete field="name"
                                                     [(ngModel)]="workOrderGeneralInformation.csr" name="csr"
-                                                    #csr="ngModel" errorMessage="Records not found" (ngModelChange)="getmemo($event)"
+                                                    #csr="ngModel" errorMessage="Records not found" (ngModelChange)="getmemo($event)" 
                                                     [forceSelection]="true" [dropdown]="true" [suggestions]="csrList"
                                                     (completeMethod)="filterCsr($event)"
                                                     (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'csr' )"
@@ -284,7 +284,7 @@
                                             </div>
 
                                             <div class="form-group ">
-                                                <label for="employee">
+                                                <label for="employee"> 
                                                     Employee
                                                 </label>
                                                <input type="text" class="form-control wo-input"

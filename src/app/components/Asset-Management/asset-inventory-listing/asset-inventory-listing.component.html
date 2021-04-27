@@ -1633,10 +1633,14 @@
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'acquisitionType', audit.acquisitionType) ? 'black' : 'red'}">{{ audit.acquisitionType }}</td>
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'model', audit.model) ? 'black' : 'red'}">{{ audit.model }}</td>
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'isSerialized', audit.isSerialized) ? 'black' : 'red'}">{{ audit.isSerialized }}</td> -->
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.isSerialized == true"
                                style="margin: 0px auto; display: block;" />
-                    </td> 
+                            </label>
+                        </span>
+                            </td> 
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'serialNo', audit.serialNo) ? 'black' : 'red'}">{{ audit.serialNo }}</td>
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetStatus', audit.assetStatus) ? 'black' : 'red'}">{{ audit.assetStatus }}</td>
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'inventoryStaus', audit.inventoryStaus) ? 'black' : 'red'}">{{ audit.inventoryStaus }}</td>
@@ -1666,10 +1670,14 @@
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetWriteOff', audit.assetWriteOff) ? 'black' : 'red'}">{{ audit.assetWriteOff }}</td>
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetWriteDown', audit.assetWriteDown) ? 'black' : 'red'}">{{ audit.assetWriteDown }}</td>
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationRequired', audit.calibrationRequired) ? 'black' : 'red'}">{{ audit.calibrationRequired }}</td> -->
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.calibrationRequired == true"
                                style="margin: 0px auto; display: block;" />
-                    </td>
+                            </label>
+                        </span>
+                            </td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationFrequencyMonths', audit.calibrationFrequencyMonths) ? 'black' : 'red'}">{{ audit.calibrationFrequencyMonths }}</td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationFrequencyDays', audit.calibrationFrequencyDays) ? 'black' : 'red'}">{{ audit.calibrationFrequencyDays }}</td>
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationDefaultVendorName', audit.calibrationDefaultVendorName) ? 'black' : 'red'}">{{ audit.calibrationDefaultVendorName }}</td>
@@ -1686,9 +1694,13 @@
                         <p class="p_editor" [innerHTML]="audit.calibrationMemo"></p>
                     </td>
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'certificationRequired', audit.certificationRequired) ? 'black' : 'red'}">{{ audit.certificationRequired }}</td> -->
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.certificationRequired == true"
                                style="margin: 0px auto; display: block;" />
+                            </label>
+                        </span>
                     </td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'certificationFrequencyMonths', audit.certificationFrequencyMonths) ? 'black' : 'red'}">{{ audit.certificationFrequencyMonths }}</td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'certificationFrequencyDays', audit.certificationFrequencyDays) ? 'black' : 'red'}">{{ audit.certificationFrequencyDays }}</td>
@@ -1700,9 +1712,13 @@
                         <p class="p_editor" [innerHTML]="audit.certificationMemo"></p>
                     </td>
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionRequired', audit.inspectionRequired) ? 'black' : 'red'}">{{ audit.inspectionRequired }}</td> -->
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.inspectionRequired == true"
                                style="margin: 0px auto; display: block;" />
+                            </label>
+                        </span>
                     </td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionFrequencyMonths', audit.inspectionFrequencyMonths) ? 'black' : 'red'}">{{ audit.inspectionFrequencyMonths }}</td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionFrequencyDays', audit.inspectionFrequencyDays) ? 'black' : 'red'}">{{ audit.inspectionFrequencyDays }}</td>
@@ -1714,9 +1730,13 @@
                         <p class="p_editor" [innerHTML]="audit.inspectionMemo"></p>
                     </td>
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'verificationRequired', audit.verificationRequired) ? 'black' : 'red'}">{{ audit.verificationRequired }}</td> -->
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.verificationRequired == true"
                                style="margin: 0px auto; display: block;" />
+                            </label>
+                        </span>
                     </td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'verificationFrequencyMonths', audit.verificationFrequencyMonths) ? 'black' : 'red'}">{{ audit.verificationFrequencyMonths }}</td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'verificationFrequencyDays', audit.verificationFrequencyDays) ? 'black' : 'red'}">{{ audit.verificationFrequencyDays }}</td>
@@ -1728,9 +1748,13 @@
                         <p class="p_editor" [innerHTML]="audit.verificationMemo"></p>
                     </td>
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetIsMaintenanceReqd', audit.assetIsMaintenanceReqd) ? 'black' : 'red'}">{{ audit.assetIsMaintenanceReqd }}</td> -->
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.assetIsMaintenanceReqd == true"
                                style="margin: 0px auto; display: block;" />
+                            </label>
+                        </span>
                     </td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'maintenanceFrequencyMonths', audit.maintenanceFrequencyMonths) ? 'black' : 'red'}">{{ audit.maintenanceFrequencyMonths }}</td>
                     <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'maintenanceFrequencyDays', audit.maintenanceFrequencyDays) ? 'black' : 'red'}">{{ audit.maintenanceFrequencyDays }}</td>
@@ -1740,9 +1764,13 @@
                         <p class="p_editor" [innerHTML]="audit.maintenanceMemo"></p>
                     </td>
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'isWarrantyRequired', audit.isWarrantyRequired) ? 'black' : 'red'}">{{ audit.isWarrantyRequired }}</td> -->
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.isWarrantyRequired == true"
                                style="margin: 0px auto; display: block;" />
+                            </label>
+                        </span>
                     </td>
                     
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyCompanySelectName', audit.warrantyCompanySelectName) ? 'black' : 'red'}">{{ audit.warrantyCompanySelectName }}</td> -->
@@ -1764,13 +1792,21 @@
                         <p class="p_editor" [innerHTML]="audit.memo"></p>
                     </td>
                     <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'isActive', audit.isActive) ? 'black' : 'red'}">{{ audit.isActive }}</td> -->
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.isActive == true"
                                style="margin: 0px auto; display: block;" />
+                            </label>
+                        </span>
                     </td>
-                    <td >
+                    <td class="text-center width-60">
+                        <span class="value">
+                          <label class="wauto">
                         <input type="checkbox" disabled [checked]="audit.isDeleted == true"
                                style="margin: 0px auto; display: block;" />
+                            </label>
+                        </span>
                     </td>
                     <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>
                     <td>{{ audit.createdBy }}</td>

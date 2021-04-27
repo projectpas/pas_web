@@ -259,6 +259,8 @@
     </div>
 </div>
 <br>
+ 
+<div *ngIf="quoteCreated">
 <div class="card" *ngIf="quoteForm.quoteNumber && quoteForm.quoteNumber != '' && !isQuoteListView">
     <div class="card-body tabs-padding-5">
         <div class="card col-md-12 list_caps" id="approvalTabs">
@@ -306,7 +308,9 @@
                                 <th rowspan="2">TAT Days Standard</th>
                                 <th colspan="4" rowspan="2">Management Structure</th>
                             <th rowspan="2" class="table-actions-column1">Actions</th>
-                            </tr>
+                           
+
+                            </tr> 
                         </thead>
                         <tbody>
                             <tr class="mpn-row" style="display: table-row;"
@@ -424,8 +428,11 @@
                                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
                             </tr>
-                            <tr style="height: 25px;" *ngIf="workOrderPartsDetail.length == 0">
-                                <td colspan="10" class="no-records-cstm no-records-msg text-upper">
+                            <tr *ngIf="workOrderPartsDetail && workOrderPartsDetail.length ==0">
+                                <td
+                                  [attr.colspan]="35"
+                                  class="no-records-msg no-records-cstm"
+                                >
                                   No records found
                                 </td>
                               </tr>
@@ -474,12 +481,15 @@
                                     <label [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</label>
                                 </td>
                             </tr>
-                            <tr style="height: 25px;" *ngIf="internalApproversList.length == 0 ">
-                                <td colspan="7" class="no-records-cstm no-records-msg text-upper">
+                            <tr *ngIf="internalApproversList && internalApproversList.length ==0">
+                                <td
+                                  [attr.colspan]="7"
+                                  class="no-records-msg no-records-cstm"
+                                >
                                   No records found
                                 </td>
                               </tr>
-                        </tbody>
+                        </tbody> 
                     </table>
                 </div>
             </div>
@@ -634,8 +644,11 @@
                                     </td>
                                 </ng-container>
                             </tr>
-                            <tr style="height: 25px;" *ngIf="woQuoteApprovalList.length == 0 ">
-                                <td colspan="29" class="no-records-cstm no-records-msg text-upper">
+                            <tr *ngIf="woQuoteApprovalList && woQuoteApprovalList.length ==0">
+                                <td
+                                  [attr.colspan]="30"
+                                  class="no-records-msg no-records-cstm"
+                                >
                                   No records found
                                 </td>
                               </tr>
@@ -664,8 +677,11 @@
                                     </td>                                    
                                 </ng-container>
                             </tr>
-                            <tr style="height: 25px;" *ngIf="woQuoteAnalysisList.length == 0 ">
-                                <td colspan="19" class="no-records-cstm no-records-msg text-upper">
+                            <tr *ngIf="woQuoteAnalysisList && woQuoteAnalysisList.length ==0">
+                                <td
+                                  [attr.colspan]="20"
+                                  class="no-records-msg no-records-cstm"
+                                >
                                   No records found
                                 </td>
                               </tr>
@@ -767,7 +783,7 @@
                         <th class="width-130" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody> 
                     <ng-container *ngFor="let mData of materialListQuotation; let mainIndex=index;">
                         <ng-container *ngFor="let matQuotation of mData; let subIndex=index">
                             <tr class="mpn-row" *ngIf="!matQuotation['isDeleted']">
@@ -847,6 +863,12 @@
                             <td *ngIf="!isView && !isViewForApprovedPart"></td>
                         </tr>
                     </ng-container>
+                    
+                    <tr *ngIf="materialListQuotation && materialListQuotation.length==0">
+                        <td  colspan="15" class="no-records-msg no-records-cstm">
+                            No records found
+                        </td> 
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr class="footer">
@@ -1788,6 +1810,7 @@
         </div>
     </div>
    
+</div>
 </div>
 <div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xsm">

@@ -261,9 +261,12 @@
     </ng-template>
     <ng-template pTemplate="emptymessage" let-columns>
       <tr>
-          <td colspan="12" class="no-records-msg no-records-cstm">
+          <td colspan="12" *ngIf="!isQuote" class="no-records-msg no-records-cstm">
               No records found
           </td>
+          <td *ngIf="isQuote" colspan="15" class="no-records-msg no-records-cstm">
+            No records found
+        </td>
       </tr>
   </ng-template>
     <ng-template pTemplate="footer" *ngIf="isQuote">

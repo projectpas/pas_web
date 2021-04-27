@@ -63,7 +63,7 @@
                 </div>
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
-                <colgroup>
+                <colgroup> 
                     <ng-container *ngFor="let col of headers">
                         <col *ngIf="col.field == 'mobile' || col.field == 'contactBy'" class="table-column-width">
                         <col *ngIf="col.field != 'mobile' && col.field != 'contactBy'" class="table-column-width">

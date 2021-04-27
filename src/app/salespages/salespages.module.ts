@@ -104,7 +104,6 @@ import { SOApprovalRuleComponent } from "../components/sales/order/shared/compon
 import { SalesOrderPickTicketsComponent } from "../components/sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 import { SalesShippingLabelComponent } from "../components/sales/order/sales-order-shipping-label/sales-order-shipping-label.component";
 import { SalesOrderPrintInvoiceComponent } from "../components/sales/order/shared/components/sales-order-print-invoice/sales-order-print-invoice.component";
-import { AddPaymentComponent } from "../components/sales/shared/components/payment/invoice-payment.component";
 import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sales-order-Packaging-Label/sales-order-packaging-label.component";
 //Sales Order Components - End
 
@@ -201,10 +200,9 @@ import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sal
     SalesOrderPickTicketsComponent,
     SalesShippingLabelComponent,
     SalesOrderPrintInvoiceComponent,
-    AddPaymentComponent,
     SalesOrderPackagingLabelComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
-  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, AddPaymentComponent, SalesOrderPackagingLabelComponent]
+  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent]
 })
 export class SalesPagesModule { }

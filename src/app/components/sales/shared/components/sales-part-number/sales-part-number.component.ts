@@ -654,19 +654,28 @@ export class SalesPartNumberComponent {
           if (crdate < opendate) {
             this.isSpinnerVisible = false;
             invalidParts = true;
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
             errmessage = errmessage + '<br />' + "Request Date cannot be greater than opem date."
           }
           if (esdate < opendate) {
             this.isSpinnerVisible = false;
             invalidParts = true;
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
             errmessage = errmessage + '<br />' + "Est. Ship Date cannot be greater than opem date."
           }
           if (pdate < opendate) {
             this.isSpinnerVisible = false;
             invalidParts = true;
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
             errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be greater than opem date."
           }
         }

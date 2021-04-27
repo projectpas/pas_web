@@ -706,6 +706,10 @@ dismissModel() {
 //   private onCapesLoaded(allCapes: CalibrationMgmt[]) {
 //     this.allCapesInfo = allCapes;
 // }
+updaterowcalibartion(caldata)
+{
+    caldata.isedit=true;
+}
 
   GetCalibartionListByID(AssetRecordId) {
     if (AssetRecordId !=0) {
@@ -719,6 +723,9 @@ dismissModel() {
                      unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
                      createdDate:  new Date(x.createdDate),
                      calibrationDate:  new Date(x.calibrationDate),
+                     isedit:false,
+                     createdDate1 :x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '',
+                     calibrationDate1 :x.calibrationDate ?  this.datePipe.transform(x.calibrationDate, 'MM/dd/yyyy h:mm a'): '',
                   //   residualPercentage: x.residualPercentage ? formatNumberAsGlobalSettingsModule(x.residualPercentage, 2) : '',
                   //   installationCost: x.installationCost ? formatNumberAsGlobalSettingsModule(x.installationCost, 2) : '',
                   //   freight: x.freight ? formatNumberAsGlobalSettingsModule(x.freight, 2) : '',

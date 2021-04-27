@@ -332,13 +332,13 @@
                 sourceViewforDocument.name
               }}</span>
           </p>
-          <p style="vertical-align: top;" class="memo-margin-bottom">
+          <p style="vertical-align: top;">
             <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
             <span class="value">
               <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforDocument.docMemo">
               </p>
             </span></p>
-          <p><span class="label"><b>Created Date: </b></span><span
+          <p style="margin-top:-10px"><span class="label"><b>Created Date: </b></span><span
               class="value">{{sourceViewforDocument.createdDate | date: 'MM/dd/yyyy h:mm a '}}</span></p>
           <p><span class="label"><b>Created By: </b></span><span
               class="value">{{sourceViewforDocument.createdBy}}</span></p>
@@ -489,7 +489,7 @@
                 <textarea class="form-control" name="descriptionDocs" [(ngModel)]="documentInformation.docDescription"
                   type="text" (ngModelChange)="enableSave()"></textarea>
               </div>
-              <div class="form-group" style="margin-top:-6px">
+              <div class="form-group" style="margin-top:0px">
                 <span class="label">Memo </span>
                 <div class="col-sm-11" style="margin-left:-3px">
                   <span>
