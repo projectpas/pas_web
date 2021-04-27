@@ -700,7 +700,14 @@
                 }">
                 {{ audit.updatedBy }}
               </td>
-              <td class="background-white"><p class="width-50 text-center"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+              <td class="text-center width-60">
+                <span class="value">
+                  <label class="wauto">
+                  <input type="checkbox" name="isDeleted" 
+                  [(ngModel)]="audit.isDeleted" disabled>
+                </label>
+              </span>
+            </td>
             </tr>
             </tbody>
           </table>
