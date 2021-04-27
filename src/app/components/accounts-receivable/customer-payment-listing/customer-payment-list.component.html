@@ -70,13 +70,25 @@
                     </div>
                 </div>
             </ng-template>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
+                </colgroup>
+            </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                        [pSortableColumn]="col.field">
-                        {{ col.header }}
-                        <p-sortIcon [field]="col.field"></p-sortIcon>
-                    </th>
+                    <ng-container *ngFor="let col of columns">
+                        <th class="table-column-width"
+                            *ngIf="col.field != 'level1' && col.field != 'level2' && col.field != 'level3' && col.field != 'level4'"
+                            pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                        <th class="table-column-width" *ngIf="col.field=='level1'" colspan="4" pResizableColumn
+                            pReorderableColumn [pSortableColumn]="col.field">
+                            Management Structure
+                        </th>
+                    </ng-container>
                     <th class="table-actions-column">
                         Actions
                     </th>
