@@ -53,14 +53,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="description">Workflow Description</label>
-                                    <input type="text" class="form-control" id="description"
-                                        [(ngModel)]="sourceWorkFlow.workflowDescription" (change)="checkEnableUpdate()">
+                                    <input type="text" class="form-control" id="description" (ngModelChange)="checkEnableUpdate()"
+                                        [(ngModel)]="sourceWorkFlow.workflowDescription">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="PN Description">PN Description </label>
-                                    <input type="text" class="form-control" id="pnDescription"
+                                    <input type="text" class="form-control" id="pnDescription" 
                                         [(ngModel)]="sourceWorkFlow.partNumberDescription" [disabled]="true">
                                 </div>
                             </div>

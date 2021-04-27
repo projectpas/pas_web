@@ -114,6 +114,10 @@ export class WorkflowListComponent implements OnInit {
         { field: 'fileName', header: 'File Name' },
     ]
     totalExpertiseCostsum: any;
+    materialPercentValue:any;
+    expertisePercentValue:any;
+    chargesPercentValue:any;
+    othersPercentValue:any;
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
         private route: Router,
@@ -150,6 +154,7 @@ export class WorkflowListComponent implements OnInit {
                 // this.responseDataForWorkFlow = res;
             // })
         }
+        
     }
 
     get currentUserMasterCompanyId(): number {
@@ -419,6 +424,7 @@ export class WorkflowListComponent implements OnInit {
 if(from=='html'){
     this.workFlowId=rowData.workflowId;
 }
+this.getAllPercentages();
         this.sourceWorkFlow = undefined;
         this.isSpinnerVisible = true;
         this.actionService.getWorkFlow(this.workFlowId).subscribe(
@@ -441,10 +447,12 @@ if(from=='html'){
                 // this.sourceWorkFlow.changedPartNumber = part != undefined ? part.partNumber : '';
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate).toLocaleDateString();
                 this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate != null && this.sourceWorkFlow.workflowExpirationDate != '' ? new Date(this.sourceWorkFlow.workflowExpirationDate).toLocaleDateString() : '';
-
+          
                 this.calculatePercentOfNew(workflow[0].costOfNew, workflow[0].percentageOfNew);
                 this.calculatePercentOfReplacement(workflow[0].costOfReplacement, workflow[0].percentageOfReplacement);
+            //   setTimeout(() => {
                 this.calculateTotalWorkFlowCost();
+            //   }, 1000);
                 this.getAllTasks();
                 this.isSpinnerVisible = false;
             },
@@ -457,6 +465,7 @@ if(from=='html'){
         this.actionService.getWorkFlowWithMaterialList(rowData.workflowId).subscribe(
             workflow => {
                 this.sourceWorkFlow = workflow[0];
+              
                 this.calculateWorkFlowTotalMaterialCost();
                 this.getAllTasks();
                 this.isSpinnerVisible = false;
@@ -511,7 +520,25 @@ if(from=='html'){
 
         }
     }
-
+    arrayItemlist:any=[]
+    totalPercent:any=[];
+    getAllPercentages(): void {
+        this.arrayItemlist=[];
+        // this.arrayItemlist.push(this.sourceWorkFlow.percentageOfCharges,
+        //     this.sourceWorkFlow.percentageOfExpertise,
+        //     this.sourceWorkFlow.percentageOfMaterial,
+        //     this.sourceWorkFlow.percentageOfOthers);
+        if (this.arrayItemlist && this.arrayItemlist.length == 0) {
+            this.arrayItemlist.push(0);
+        }
+        this.isSpinnerVisible = true;
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, this.arrayItemlist.join(),this.currentUserMasterCompanyId)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.totalPercent = res; 
+                // this.calculateTotalWorkFlowCost();
+            });
+    }
 
     private calculateTotalWorkFlowCost(): void {
         this.MaterialCost = 0.00;
@@ -531,6 +558,9 @@ if(from=='html'){
         for (let material of mdata.materialList) {
             this.MaterialCost +=  material.extendedCost;
         }
+        for (let expertise of this.sourceWorkFlow.expertise) {
+            this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
+       }
         //     const percentValue = parseFloat(this.sourceWorkFlow.percentageOfMaterial.toString().replace(/\,/g, ''));
 
         //     if(percentValue > 0)
@@ -539,11 +569,30 @@ if(from=='html'){
         //         const val = ((MaterialCost / 100) * percentValue) + MaterialCost;
         //         this.MaterialCost = formatNumberAsGlobalSettingsModule(MaterialCost, 2);
         //     }
-        
-        for (let expertise of this.sourceWorkFlow.expertise) {
-            this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
-       }
-        this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 || this.sourceWorkFlow.percentageOfMaterial == "-1" ? 0 : this.sourceWorkFlow.percentageOfMaterial;
+        if( this.totalPercent &&  this.totalPercent.length !=0){
+            this.totalPercent.forEach(element => {
+                if(element.value == this.sourceWorkFlow.percentageOfMaterial){
+                    return this.materialPercentValue=Number(element.label);
+                }   
+                if(element.value == this.sourceWorkFlow.percentageOfExpertise){
+                    return this.expertisePercentValue=Number(element.label);
+                }  
+                if(element.value == this.sourceWorkFlow.percentageOfCharges){
+                    return this.chargesPercentValue=Number(element.label);
+                }  
+                if(element.value == this.sourceWorkFlow.percentageOfOthers){
+                    return this.othersPercentValue=Number(element.label);
+                }  
+            });
+        }
+ 
+        this.materialPercentValue =this.materialPercentValue ? this.materialPercentValue :0;
+        this.expertisePercentValue =this.expertisePercentValue ? this.expertisePercentValue :0;
+        this.chargesPercentValue =this.chargesPercentValue ? this.chargesPercentValue :0;
+        this.othersPercentValue =this.othersPercentValue ? this.othersPercentValue :0;
+     
+        this.sourceWorkFlow.percentageOfMaterial =  this.materialPercentValue;
+        // this.sourceWorkFlow.percentageOfMaterial == -1 || this.sourceWorkFlow.percentageOfMaterial == "-1" ? 0 : this.sourceWorkFlow.percentageOfMaterial;
         const MaterialCost = this.MaterialCost;
         // parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const val0 = ((MaterialCost / 100) *  this.sourceWorkFlow.percentageOfMaterial) + MaterialCost;
@@ -551,20 +600,22 @@ if(from=='html'){
 
 
 
-        this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise == -1 || this.sourceWorkFlow.percentageOfExpertise == "-1" ? 0 : this.sourceWorkFlow.percentageOfExpertise;
+        this.sourceWorkFlow.percentageOfExpertise = this.expertisePercentValue;
+        // this.sourceWorkFlow.percentageOfExpertise == -1 || this.sourceWorkFlow.percentageOfExpertise == "-1" ? 0 : this.sourceWorkFlow.percentageOfExpertise;
         const TotalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
         const val1 = ((TotalExpertiseCost / 100) * this.sourceWorkFlow.percentageOfExpertise) + TotalExpertiseCost;
         this.TotalExpertiseCost = formatNumberAsGlobalSettingsModule(val1, 2);
 
-
-        this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges == -1 || this.sourceWorkFlow.percentageOfCharges == "-1" ? 0 : this.sourceWorkFlow.percentageOfCharges;
+        this.sourceWorkFlow.percentageOfCharges =this.chargesPercentValue;
+        //  this.sourceWorkFlow.percentageOfCharges == -1 || this.sourceWorkFlow.percentageOfCharges == "-1" ? 0 : this.sourceWorkFlow.percentageOfCharges;
         const TotalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
         const val2= ((TotalCharges / 100) * this.sourceWorkFlow.percentageOfCharges) + TotalCharges;
         this.TotalCharges = formatNumberAsGlobalSettingsModule(val2, 2);
 
         // this.sourceWorkFlow.percentageOfOthers
 
-        this.sourceWorkFlow.percentageOfOthers = this.sourceWorkFlow.percentageOfOthers == -1 || this.sourceWorkFlow.percentageOfOthers == "-1" ? 0 : this.sourceWorkFlow.percentageOfOthers;
+        this.sourceWorkFlow.percentageOfOthers =this.othersPercentValue;
+        //  this.sourceWorkFlow.percentageOfOthers == -1 || this.sourceWorkFlow.percentageOfOthers == "-1" ? 0 : this.sourceWorkFlow.percentageOfOthers;
         this.sourceWorkFlow.otherCost=this.sourceWorkFlow.otherCost? this.sourceWorkFlow.otherCost :0.00;
         const otherCost1 = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
         const val3 = ((otherCost1 / 100) * this.sourceWorkFlow.percentageOfOthers) + otherCost1;
@@ -889,7 +940,7 @@ if(element.exclusions){
     }
     documentList:any=[]; 
     openView(content,publication){
-        this.documentList=publication.attachmentDetails
+        this.documentList=publication.attachmentDetails;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
     dismissModelView() {

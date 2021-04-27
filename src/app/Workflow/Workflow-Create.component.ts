@@ -2103,8 +2103,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     dataCancel() {
         $('#confir').modal("hide");
     }
-    modifyForSaveUpdateApis(): void {
-        console.log("this.workFlowList",this.workFlowList)
+    modifyForSaveUpdateApis(): void { 
         if (this.workFlowList != undefined && this.workFlowList.length > 0) {
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
@@ -2316,8 +2315,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             }
         }
     }
-    validateMethod(){
-        console.log("all tasks ist",this.workFlowList)
+    validateMethod(){ 
         this.errorValidate=[];
         for (let workflow of this.workFlowList) {
             if (workflow.charges != undefined) {
@@ -2407,8 +2405,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.validateTask=false;
             this.alertService.showMessage("Workflow", msg, MessageSeverity.warn);
             return;
-        }else{
-            console.log("he;;;")
+        }else{ 
             this.validateTask=true;
             this.modifyForSaveUpdateApis();
         }
@@ -2419,8 +2416,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     upDateDataCancel() {
         $('#UpdateConfirm').modal("hide");
     }
-    updateConfirmation() {
-        console.log("hello update")
+    updateConfirmation() { 
         if (this.isHeaderUpdate) {
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
@@ -2495,8 +2491,7 @@ if(this.validateTask==true){
             element.partNumber = element.partNumber.name
         });
     }
-    delete souceData.customerName
-    console.log("workfloe updstessssss")
+    delete souceData.customerName 
     this.actionService.getNewWorkFlow(souceData).subscribe(
         result => {
             this.isSpinnerVisible = false;
