@@ -493,14 +493,16 @@
                       <div class="form-group col-sm-12">
                           <label class="control-label col-sm-4">{{Certifytype}} Memo</label>
                           <div class="col-sm-7">
-                            <div class="align_adh">
+
+                            <textarea  [(ngModel)]="calibrationForm.memo" class="h50 text" style="margin: 0px; height: 53px; width: 135px;">Sample Memo</textarea>
+                            <!-- <div class="align_adh">
                               <div [innerHTML]="calibrationForm.memo" class="text_editor_box"  [matTooltip]="parsedText(calibrationForm.memo)"
                                   style="width: 100% !important;"></div>
                               <i class="fa  fa fa-pencil contoel_v" data-toggle="modal"   matTooltipPosition="above"
                                   data-target="#textarea-popup" matTooltip="Memo"
                                   matTooltipPosition="above"
                                   (click)="onAddTextAreaInfo(currentAsset)"></i> 
-                          </div>
+                          </div> -->
                           </div>
                         </div>
                     <button type="button" class="btn btn-info pull-right verification-process-btn" (click)="savecalibrationprocess()" id="" name="" data-toggle="tooltip" title="This will generate a PO if a vendor is selected to perfrom Calibration OR Send a notification to employee if employee is selected">Process</button>
@@ -609,30 +611,38 @@
                   <tbody>
                     <tr class="hrow" *ngFor="let caldata of allcalibrationbyidInfo; let i=index; ">
                       <td>{{caldata.assetUnitCost}}</td>
-                      <td>
+                      <td *ngIf="caldata.isedit==false">{{caldata.createdDate1}}</td>
+                      <td *ngIf="caldata.isedit">
                         <p-calendar  class="calender-cstm woAdd" [showIcon]="true"  name="CreatedDate{{i}}"  [ngModelOptions]="{standalone: true}"
                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                              (ngModelChange)="editorgetmemo($event)"
                             [(ngModel)]="caldata.createdDate" appendTo="body"></p-calendar> 
                        </td>
-                       <td>
-                        <p-calendar  class="calender-cstm woAdd"[showIcon]="true" name="calibrationDate{{i}}" [ngModelOptions]="{standalone: true}"
+                       <td *ngIf="caldata.isedit==false">{{caldata.calibrationDate1}}</td>
+                       <td  *ngIf="caldata.isedit">
+                        <p-calendar  class="calender-cstm woAdd" [showIcon]="true" name="calibrationDate{{i}}" [ngModelOptions]="{standalone: true}"
                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                              (ngModelChange)="editorgetmemo($event)"
-                            
+                             #calibrationDate="ngModel" 
                             [(ngModel)]="caldata.calibrationDate" appendTo="body"></p-calendar> 
                        </td>
-                      <td class="dis-btns">
+                       <td>{{caldata.lastCalibrationBy}}</td>
+                      <!-- <td *ngIf="caldata.isedit" class="dis-btns">
                           <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
                               <input type="text" class="form-control names text ui-autocomplete-input" id="" name="" [(ngModel)]="caldata.lastCalibrationBy" autocomplete="off">
                           </div>
-                        </td>
-                      <td>
+                        </td> -->
+                      <td *ngIf="caldata.isedit==false">
                           <p [innerHTML]="caldata.memo"  class="h50 text"></p>
-                        </td>
-                        <td><input [(ngModel)]="caldata.unitCost" type="text" class="text"></td>
+                     </td>
+                     <td *ngIf="caldata.isedit">
+                         <textarea  [(ngModel)]="caldata.memo" class="h50 text" style="margin: 0px; height: 53px; width: 135px;">{{caldata.memo}}</textarea>
+                   </td>
+                   <td *ngIf="caldata.isedit==false">{{caldata.unitCost}}
+                   </td>
+                    <td *ngIf="caldata.isedit"><input [(ngModel)]="caldata.unitCost" type="text" class="text"></td>
                       <td>NA</td>
-                      <td><span class="edt-btn"> <a href="#" class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a> </span></td>
+                      <td><span class="edt-btn"> <a  (click)="updaterowcalibartion(caldata)" class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a> </span></td>
                     </tr>
                   </tbody>
                 </table>
