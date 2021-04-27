@@ -27,6 +27,7 @@ export class AddCustomerPaymentComponent implements OnInit {
   @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
   @Input() customerId;
   @Input() customerPayment;
+  @Input() bankNameId;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() triggerTabChange = new EventEmitter();
   @ViewChild("addCheckMemo", { static: false }) addCheckMemo: ElementRef;
@@ -89,6 +90,8 @@ export class AddCustomerPaymentComponent implements OnInit {
   isDeposite: boolean = false;
   cnt: number = 0;
   arSettingsData: any;
+  allBankNames: any[] = [];
+  filteredBankNames: any[] = [];
 
   constructor(public customerService: CustomerService, private commonService: CommonService,
     private invoicePaymentService: InvoicePaymentService,
@@ -150,9 +153,26 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.loadDiscType();
     this.loadBankFeesType();
     this.loadAdjustReason();
+    this.bankNameList();
 
     this.getARSettings();
     this.employeedata('', this.currentUserManagementStructureId);
+    debugger;
+    this.objInvoicePayment.checkPayments.bankAccount = this.bankNameId;
+    this.objInvoicePayment.invoiceWireTransferPayment.bankName = this.bankNameId;
+  }
+
+  private bankNameList() {
+    this.customerPaymentsService.getAllBankNames(this.masterCompanyId).subscribe(res => {
+      this.allBankNames = res;
+      let bankNameResponse = res.map(function (x) {
+        return {
+          label: x.bankName, value: x.legalEntityBankingLockBoxId
+        }
+      });
+
+      this.filteredBankNames = bankNameResponse;
+    })
   }
 
   bindDefaults() {
