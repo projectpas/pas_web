@@ -209,7 +209,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.bankAcctNum = custPayment.bankAcctNum;
     this.customerPayment.depositDate = new Date(custPayment.depositDate);
     this.customerPayment.acctingPeriod = parseInt(custPayment.acctingPeriod);
-    this.customerPayment.amount = custPayment.amount;
+    this.customerPayment.amount = custPayment.amount ? formatNumberAsGlobalSettingsModule(custPayment.amount, 2) : 0.00;
     this.customerPayment.amtApplied = custPayment.amtApplied;
     this.customerPayment.amtRemaining = custPayment.amtRemaining;
     this.customerPayment.reference = custPayment.reference;
@@ -219,11 +219,6 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.postedDate = custPayment.postedDate ? new Date(custPayment.postedDate) : null;
     this.customerPayment.memo = custPayment.memo;
     this.customerPayment.managementStructureId = custPayment.managementStructureId;
-    // this.customerPayment.employeeId = getObjectById(
-    //   "value",
-    //   custPayment.employeeId,
-    //   this.allEmployeeList
-    // );
   }
 
   getNewSalesOrderInstance() {
@@ -231,6 +226,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.statusId = getObjectByValue('label', 'Open', this.statusList).value; // Open status by default
     this.customerPayment.depositDate = new Date();
     this.customerPayment.openDate = new Date();
+    this.customerPayment.amount = formatNumberAsGlobalSettingsModule(0, 2);
   }
 
   onAddDescription(value) {
