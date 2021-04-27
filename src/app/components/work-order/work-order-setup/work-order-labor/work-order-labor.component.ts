@@ -1157,7 +1157,7 @@ this.commonfunctionHandler();
       if (task['totalAdjustments'])
         total += task['totalAdjustments'];
     }
-    return total;
+    return total.toFixed(2);;
   }
   calculateTotalAdjustedHours() {
     let total = 0;
@@ -1165,7 +1165,7 @@ this.commonfunctionHandler();
       if (task['totalAdjustedHours'])
         total += task['totalAdjustedHours'];
     }
-    return total;
+    return total.toFixed(2);;
   }
 
 

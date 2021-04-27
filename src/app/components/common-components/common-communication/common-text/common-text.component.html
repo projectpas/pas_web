@@ -298,7 +298,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close button-font" data-dismiss="modal">&times;</button>
+                <button type="button" class="close button-font" (click)="closePopupmodel('viewText')">&times;</button>
                 <h4 class="modal-title"> Text Details</h4>
             </div>
             <div class="modal-body">
@@ -327,7 +327,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" (click)="closePopupmodel('viewText')">Close</button>
             </div>
         </div>
     </div>

@@ -435,8 +435,8 @@
                       <div class="form-group col-sm-12">
                           <label class="control-label col-sm-4">Vendor or Employee</label>
                           <div class="col-sm-7">
-                            <label class="w70 text-left"><input type="radio" name="verification-vendor-employee" value="vendor" (click)="checkedvendor(calibrationForm.ScheduleIsVendor)" [(ngModel)]="calibrationForm.ScheduleIsVendor"> Vendor</label>
-                            <label class="w80 text-left"><input type="radio" name="verification-vendor-employee" value="employee" (click)="checkedemployee(calibrationForm.ScheduleIsEmployee)" [(ngModel)]="calibrationForm.ScheduleIsEmployee"> Employee</label>  
+                            <label class="w70 text-left"><input type="radio" name="Schedule" value="vendor" (click)="checkedvendor(calibrationForm.ScheduleIsVendor)" [(ngModel)]="calibrationForm.ScheduleIsVendor"> Vendor</label>
+                            <label class="w80 text-left"><input type="radio" name="Schedule" value="employee" (click)="checkedemployee(calibrationForm.ScheduleIsEmployee)" [(ngModel)]="calibrationForm.ScheduleIsEmployee"> Employee</label>  
                           </div>
                         </div>
                       <div class="form-group col-sm-12 verification-vendor-employee verification-vendor" *ngIf="isvendor">
@@ -478,6 +478,7 @@
                             <p-calendar [showIcon]="true" name ="CalibrationDate" [ngModelOptions]="{standalone: true}"
                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                 [maxDate]="currentDate" (ngModelChange)="editorgetmemo($event)"
+                              
                                 [(ngModel)]="calibrationForm.CalibrationDate"></p-calendar> 
                             <a   data-toggle="modal" data-target="#CalibartionmgmtList" (click)="OpemCalibartionMgmtList(calibrationForm.AssetRecordId)" class="btn btn-link pull-right" style="padding: 0;">View {{Certifytype}} Schedule</a>
                           </div>
@@ -609,18 +610,19 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="hrow" *ngFor="let caldata of allcalibrationbyidInfo; let i=index; ">
+                    <tr class="hrow" *ngFor="let caldata of allcalibrationbyidInfo; let k=index; ">
                       <td>{{caldata.assetUnitCost}}</td>
                       <td *ngIf="caldata.isedit==false">{{caldata.createdDate1}}</td>
                       <td *ngIf="caldata.isedit">
-                        <p-calendar  class="calender-cstm woAdd" [showIcon]="true"  name="CreatedDate{{i}}"  [ngModelOptions]="{standalone: true}"
+                        <p-calendar  class="calender-cstm woAdd" [showIcon]="true"  name="CreatedDate{{k}}"  [ngModelOptions]="{standalone: true}"
                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                              (ngModelChange)="editorgetmemo($event)"
+                             #createdDate="ngModel"
                             [(ngModel)]="caldata.createdDate" appendTo="body"></p-calendar> 
                        </td>
                        <td *ngIf="caldata.isedit==false">{{caldata.calibrationDate1}}</td>
                        <td  *ngIf="caldata.isedit">
-                        <p-calendar  class="calender-cstm woAdd" [showIcon]="true" name="calibrationDate{{i}}" [ngModelOptions]="{standalone: true}"
+                        <p-calendar  class="calender-cstm woAdd" [showIcon]="true" name="calibrationDate{{k}}" [ngModelOptions]="{standalone: true}"
                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                              (ngModelChange)="editorgetmemo($event)"
                              #calibrationDate="ngModel" 

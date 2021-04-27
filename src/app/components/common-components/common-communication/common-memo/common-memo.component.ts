@@ -113,6 +113,10 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     closeDeleteModal() {
 		$("#memodownloadConfirmation").modal("hide");
 	}
+
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
     addMemo() {
         this.enableSaveMemo();
         this.disableSaveMemo = true;
