@@ -21,6 +21,7 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getExchangeQuoteMarginSummarydetails: string = environment.baseUrl + "/api/exchangequote/get-exchange-quote-margin-data";
     private readonly exchangeQuoteqMarginSummary: string = environment.baseUrl + "/api/exchangequote/create-exchange-quote-margin-data";
     private readonly getExchangeQuoteAnalysis: string = environment.baseUrl + "/api/exchangequote/togetexchangequoteanalysis";
+    private readonly getCustomerQuotesListUrl: string = environment.baseUrl + "/api/exchangequote/exchangequoteapprovallist"
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -122,6 +123,20 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
       return this.http.get<T>(endPointUrl, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getAllExchangeQuoteAnalysis(id));
+        });
+    }
+    getCustomerQuotesList(exchangeQuoteId: number): Observable<any> {
+      const URL = `${this.getCustomerQuotesListUrl}/${exchangeQuoteId}`;
+      return this.http
+        .get<IExchangeQuote>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getCustomerQuotesList(exchangeQuoteId));
+        });
+    }
+    sentForInternalApproval(data) {
+      return this.http.post<any>(`${this.configurations.baseUrl}/api/exchangequote/exchangequoteapproval`, JSON.stringify(data), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.sentForInternalApproval(data));
         });
     }
 }  

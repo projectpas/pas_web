@@ -45,4 +45,5 @@ export class DBkeys {
     public static readonly SALES_ORDER__MODULE_ID = 57;
     public static readonly WORK_ORDER_MODULE_ID = 38;
     public static readonly FROM_EMAIL_FOR_SENDING_MAIL = "janadhan@silverxis.com";
+    public static readonly DEFAULT_EXCHANGE_QUOTE_APPROVAL_ID: number = 4;
 }

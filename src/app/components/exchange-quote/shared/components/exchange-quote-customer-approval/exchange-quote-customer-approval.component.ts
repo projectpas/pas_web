@@ -14,10 +14,10 @@ import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CustomerService } from "../../../../../services/customer.service";
 import { StocklineViewComponent } from "../../../../../shared/components/stockline/stockline-view/stockline-view.component";
 declare var $: any;
-//import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
+import { MarginSummary } from "../../../../../models/exchange/MarginSummaryForExchangeOrder";
 import { CommonService } from "../../../../../services/common.service";
 import { forkJoin } from "rxjs/observable/forkJoin";
-//import { SOQuoteMarginSummary } from "../../../../../../models/sales/SoQuoteMarginSummary";
+import { ExchangeQUoteMarginSummary } from "../../../../../models/exchange/ExchangeQUoteMarginSummary";
 import { ApprovalProcessEnum } from "../../../../sales/quotes/models/approval-process-enum";
 import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../../sales/quotes/models/approval-status-enum";
 import { ApprovalTaskEnum } from "../../../../sales/quotes/models/approval-task-enum";
@@ -35,7 +35,7 @@ export class ExchangeQuoteCustomerApprovalComponent {
   @Input() salesQuoteReference: any;
   @Input() customerIdFromQuoteList: Number;
   @Input() salesQuoteIdFromQuoteList: Number;
-  //@Input() marginSummary: MarginSummary;
+  @Input() marginSummary: MarginSummary;
   @Output('on-quote-parts-approved-event') onPartsApprovedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   quotesList: any = [];
   @Input() approvers;
@@ -45,7 +45,7 @@ export class ExchangeQuoteCustomerApprovalComponent {
   moduleName: string;
   isSpinnerVisible = false;
   quotesListPageSize: number = 10;
-  defaultApprovalId = DBkeys.DEFAULT_SALES_QUOTE_APPROVAL_ID;
+  defaultApprovalId = DBkeys.DEFAULT_EXCHANGE_QUOTE_APPROVAL_ID;
   fields: any;
   columns: any = [
     { field: 'actionStatus', header: 'Action', width: "150px" },
@@ -59,15 +59,15 @@ export class ExchangeQuoteCustomerApprovalComponent {
     { field: 'customerMemo', header: 'Customer Memo', width: "150px" },
     { field: 'customerApprovedDate', header: 'Customer Approved Date', width: "100px" },
     { field: 'customerApprovedBy', header: 'Customer Approved By', width: "100px" },
-    { field: 'partNumber', header: 'PN', width: "100px" },
-    { field: 'partDescription', header: 'PN Desc', width: "110px" },
-    { field: 'qtyQuoted', header: 'Qty', width: "90px" },
-    { field: 'markupExtended', header: 'Mark Up Amt.', width: "90px" },
-    { field: 'discountAmount', header: 'Disc Amt.', width: "90px" },
-    { field: 'netSales', header: 'Net Sales', width: "90px" },
-    { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
-    { field: 'marginAmountExtended', header: 'Margin Amt.', width: "90px" },
-    { field: 'marginPercentage', header: 'Margin %', width: "60px" },
+    { field: 'partNumber', header: 'PN', width: "190px" },
+    { field: 'partDescription', header: 'PN Desc', width: "150px" },
+    // { field: 'qtyQuoted', header: 'Qty', width: "90px" },
+    // { field: 'markupExtended', header: 'Mark Up Amt.', width: "90px" },
+    // { field: 'discountAmount', header: 'Disc Amt.', width: "90px" },
+    // { field: 'netSales', header: 'Net Sales', width: "90px" },
+    // { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
+    // { field: 'marginAmountExtended', header: 'Margin Amt.', width: "90px" },
+    // { field: 'marginPercentage', header: 'Margin %', width: "60px" },
   ];
   selectedColumns = this.columns;
   approveAllQuotes: Boolean = false;
@@ -118,24 +118,25 @@ export class ExchangeQuoteCustomerApprovalComponent {
       ? this.authService.currentUser.masterCompanyId
       : null;
   }
-  //refresh(marginSummary: SOQuoteMarginSummary, salesQuoteId, isViewMode = false, customerContactList = []) {
-    refresh(salesQuoteId, isViewMode = false, customerContactList = []) {
+  arrayApprovalStatuslst: any[] = [];
+  refresh(marginSummary: ExchangeQUoteMarginSummary, exchangeQuoteId, isViewMode = false, customerContactList = []) {
+    //refresh(exchangeQuoteId, isViewMode = false, customerContactList = []) {
         this.isSpinnerVisible = true;
         this.isView = isViewMode;
-        this.exchangeQuoteId = salesQuoteId;
+        this.exchangeQuoteId = exchangeQuoteId;
         if (customerContactList && customerContactList.length > 0) {
             this.customerContactList = customerContactList;
             this.setDefaultContact();
 
         }
-        forkJoin(this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name'),
+        forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.currentUserMasterCompanyId),
             this.exchangequoteService.approverslistbyTaskId(ApprovalTaskEnum.ExchangeQuoteApproval, this.exchangeQuoteId),
-            //this.salesQuoteService.getCustomerQuotesList(this.exchangeQuoteId)
+            this.exchangequoteService.getCustomerQuotesList(this.exchangeQuoteId)
             ).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.approvers = response[1];
                 this.setApprovers(response[0])
-                //this.setApproverProcessdata(response[2]);
+                this.setApproverProcessdata(response[2]);
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -175,7 +176,10 @@ export class ExchangeQuoteCustomerApprovalComponent {
   }
 
   getApproverStatusList() {
-      this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
+    if (this.arrayApprovalStatuslst.length == 0) {
+      this.arrayApprovalStatuslst.push(0);
+    }
+    this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.currentUserMasterCompanyId).subscribe(res => {
           this.statusList = res.map(x => {
               return {
                   ...x,
@@ -229,17 +233,17 @@ export class ExchangeQuoteCustomerApprovalComponent {
       this.statusListForApproval = tempList;
   }
 
-  // getCustomerQuotesList() {
-  //     this.isSpinnerVisible = true;
-  //     this.salesQuoteService
-  //         .getCustomerQuotesList(this.salesQuoteId)
-  //         .subscribe(data => {
-  //             this.isSpinnerVisible = false;
-  //             this.setApproverProcessdata(data);
-  //         }, error => {
-  //             this.isSpinnerVisible = false;
-  //         });
-  // }
+  getCustomerQuotesList() {
+      this.isSpinnerVisible = true;
+      this.exchangequoteService
+          .getCustomerQuotesList(this.exchangeQuoteId)
+          .subscribe(data => {
+              this.isSpinnerVisible = false;
+              this.setApproverProcessdata(data);
+          }, error => {
+              this.isSpinnerVisible = false;
+          });
+  }
 
   setApproverProcessdata(data) {
       this.quotesList = data[0];
@@ -429,101 +433,101 @@ export class ExchangeQuoteCustomerApprovalComponent {
           $('#quoteVersion').modal('show');
       }
       else {
-          //this.saveApprovalData();
+          this.saveApprovalData();
       }
   }
 
-  // saveApprovalData() {
-  //     let payLoad = [];
-  //     let currentEmployee = this.employeeId;
-  //     let mastercompanyid = this.currentUserMasterCompanyId;
-  //     let approvedParts = 0;
-  //     let hasError = false;
-  //     let validmessages = '';
-  //     this.quotesList.forEach(
-  //         x => {
-  //             if (x.isSelected) {
-  //                 let validmessage = this.validateApprovalData(x);
-  //                 if (validmessage.length > 0) {
-  //                     hasError = true;
-  //                     validmessages += validmessage;
-  //                     return;
-  //                 }
-  //                 if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
-  //                     approvedParts = + 1;
-  //                 }
-  //                 let obj = {
-  //                     "SalesOrderQuoteId": x.salesOrderQuoteId,
-  //                     "SalesOrderQuotePartId": x.salesOrderQuotePartId,
-  //                     "CustomerId": x.customerId,
-  //                     "ApprovedContactId": x.approvedContactId,
-  //                     "InternalSentDate": x.internalSentDate,
-  //                     "InternalApprovedDate": x.internalApprovedDate,
-  //                     "CustomerSentDate": x.customerSentDate,
-  //                     "CustomerApprovedDate": x.customerApprovedDate,
-  //                     "CustomerApprovedById": x.customerApprovedById,
-  //                     "InternalStatusId": x.internalStatusId,
-  //                     "CustomerStatusId": x.customerStatusId,
-  //                     "InternalMemo": x.internalMemo,
-  //                     "CustomerMemo": x.customerMemo,
-  //                     "UpdatedBy": this.userName,
-  //                     "salesOrderQuoteApprovalId": x.salesOrderQuoteApprovalId,
-  //                     "ApprovalActionId": x.approvalActionId,
-  //                     "IsInternalApprove": x.isInternalApprove,
-  //                     "createdBy": this.userName,
-  //                     "createdDate": new Date().toDateString(),
-  //                     "updatedDate": new Date().toDateString(),
-  //                     "isActive": true,
-  //                     "isDeleted": false
-  //                 }
-  //                 obj['masterCompanyId'] = mastercompanyid;
-  //                 if (x.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) { // Sent for Internal Approvals
-  //                     obj['InternalEmails'] = this.getApproversEmails();
-  //                     obj['approvers'] = this.getApproversNames();
-  //                 }
-  //                 else {
-  //                     obj['InternalEmails'] = "";
-  //                     obj['approvers'] = "";
-  //                 }
-  //                 if (x.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
-  //                     obj['InternalApprovedById'] = this.employeeId;
-  //                 }
-  //                 else {
-  //                     obj['InternalApprovedById'] = x.internalApprovedById;
-  //                 }
-  //                 payLoad.push(obj);
-  //             }
-  //         }
-  //     )
-  //     if (hasError) {
-  //         this.alertService.showMessage(
-  //             this.moduleName,
-  //             validmessages,
-  //             MessageSeverity.error
-  //         );
-  //         return;
-  //     }
-  //     this.isSpinnerVisible = true;
-  //     this.salesQuoteService.sentForInternalApproval(payLoad)
-  //         .subscribe(
-  //             res => {
-  //                 $('#quoteVersion').modal('hide');
-  //                 this.alertService.showMessage(
-  //                     "Success",
-  //                     `Saved Approver Process Successfully`,
-  //                     MessageSeverity.success
-  //                 );
-  //                 this.isSpinnerVisible = false;
-  //                 if (approvedParts > 0) {
-  //                     this.onPartsApprovedEvent.emit(true);
-  //                 }
-  //                 this.getCustomerQuotesList();
-  //             },
-  //             err => {
-  //                 this.isSpinnerVisible = false;
-  //             }
-  //         )
-  // }
+  saveApprovalData() {
+      let payLoad = [];
+      let currentEmployee = this.employeeId;
+      let mastercompanyid = this.currentUserMasterCompanyId;
+      let approvedParts = 0;
+      let hasError = false;
+      let validmessages = '';
+      this.quotesList.forEach(
+          x => {
+              if (x.isSelected) {
+                  let validmessage = this.validateApprovalData(x);
+                  if (validmessage.length > 0) {
+                      hasError = true;
+                      validmessages += validmessage;
+                      return;
+                  }
+                  if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+                      approvedParts = + 1;
+                  }
+                  let obj = {
+                      "ExchangeQuoteId": x.exchangeQuoteId,
+                      "ExchangeQuotePartId": x.exchangeQuotePartId,
+                      "CustomerId": x.customerId,
+                      "ApprovedContactId": x.approvedContactId,
+                      "InternalSentDate": x.internalSentDate,
+                      "InternalApprovedDate": x.internalApprovedDate,
+                      "CustomerSentDate": x.customerSentDate,
+                      "CustomerApprovedDate": x.customerApprovedDate,
+                      "CustomerApprovedById": x.customerApprovedById,
+                      "InternalStatusId": x.internalStatusId,
+                      "CustomerStatusId": x.customerStatusId,
+                      "InternalMemo": x.internalMemo,
+                      "CustomerMemo": x.customerMemo,
+                      "UpdatedBy": this.userName,
+                      "exchangeQuoteApprovalId": x.exchangeQuoteApprovalId,
+                      "ApprovalActionId": x.approvalActionId,
+                      "IsInternalApprove": x.isInternalApprove,
+                      "createdBy": this.userName,
+                      "createdDate": new Date().toDateString(),
+                      "updatedDate": new Date().toDateString(),
+                      "isActive": true,
+                      "isDeleted": false
+                  }
+                  obj['masterCompanyId'] = mastercompanyid;
+                  if (x.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) { // Sent for Internal Approvals
+                      obj['InternalEmails'] = this.getApproversEmails();
+                      obj['approvers'] = this.getApproversNames();
+                  }
+                  else {
+                      obj['InternalEmails'] = "";
+                      obj['approvers'] = "";
+                  }
+                  if (x.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+                      obj['InternalApprovedById'] = this.employeeId;
+                  }
+                  else {
+                      obj['InternalApprovedById'] = x.internalApprovedById;
+                  }
+                  payLoad.push(obj);
+              }
+          }
+      )
+      if (hasError) {
+          this.alertService.showMessage(
+              this.moduleName,
+              validmessages,
+              MessageSeverity.error
+          );
+          return;
+      }
+      this.isSpinnerVisible = true;
+      this.exchangequoteService.sentForInternalApproval(payLoad)
+          .subscribe(
+              res => {
+                  $('#quoteVersion').modal('hide');
+                  this.alertService.showMessage(
+                      "Success",
+                      `Saved Approver Process Successfully`,
+                      MessageSeverity.success
+                  );
+                  this.isSpinnerVisible = false;
+                  if (approvedParts > 0) {
+                      this.onPartsApprovedEvent.emit(true);
+                  }
+                  this.getCustomerQuotesList();
+              },
+              err => {
+                  this.isSpinnerVisible = false;
+              }
+          )
+  }
 
   validateApprovalData(x) {
       var str = '';
@@ -632,6 +636,24 @@ export class ExchangeQuoteCustomerApprovalComponent {
 
   getcustomerStatusIdEnableStatus(approver) {
       return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
+  }
+
+  checkAnyRowSelected() {
+    var result = false;
+    var keepGoing = true;
+    if (this.quotesList && this.quotesList.length > 0) {
+        this.quotesList.forEach(
+            (x) => {
+                if (keepGoing) {
+                    if (x.isSelected) {
+                        result = true;
+                        keepGoing = false;
+                    }
+                }
+            }
+        )
+    }
+    return result;
   }
 
 }
