@@ -81,6 +81,8 @@ export class CustomerSalesPersonComponent implements OnInit {
     isUpdateDomestic:boolean=true;
     isWarningAdd:boolean=true;
     isWarningUpdate:boolean=true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
 
     constructor(public vendorservice: VendorService, public customerService: CustomerService, 
         public employeeService: EmployeeService,
@@ -101,6 +103,9 @@ export class CustomerSalesPersonComponent implements OnInit {
         //Previous
         this.isAddDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add])
 		this.isUpdateDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update])
+
+        this.isNextVisible=this.authService.ShowTab("Create Customer","Warnings");
+        this.isPrevVisible=this.authService.ShowTab("Create Customer","Shipping Information");
     }
 
     ngOnInit() {

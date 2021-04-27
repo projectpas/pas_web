@@ -179,6 +179,8 @@ export class CustomerContactsComponent implements OnInit {
 	isAircrafEdit:Boolean=true;
 	isDownload:Boolean=true;
 	isAtaDelete:Boolean=true;
+
+	isNextVisible:Boolean=true;
 	constructor(private router: ActivatedRoute,
 		private route: Router,
 		private authService: AuthService,
@@ -212,6 +214,8 @@ export class CustomerContactsComponent implements OnInit {
 		
 		this.isCustGenrlAdd = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Add])
 		this.isCustGenrlUpdate = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Update])
+
+		this.isNextVisible=this.authService.ShowTab("Create Customer","ATA Chapter");
 	}
 
 	ngOnInit() {		

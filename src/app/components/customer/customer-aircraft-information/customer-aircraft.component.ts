@@ -105,6 +105,8 @@ export class CustomerAircraftComponent implements OnInit {
     isContactAdd:Boolean=true;
     isContactEdit:Boolean=true;
     isDownload:Boolean=true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(private route: ActivatedRoute, private itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
         private Dashnumservice: DashNumberService,
@@ -128,6 +130,9 @@ export class CustomerAircraftComponent implements OnInit {
         // previous
         this.isContactAdd=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Add])
 		this.isContactEdit=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Update])
+
+        this.isNextVisible=this.authService.ShowTab("Create Customer","Financial Information");
+        this.isPrevVisible=this.authService.ShowTab("Create Customer","ATA Chapter");
     }
     ngOnInit() {
         if (this.editMode) {

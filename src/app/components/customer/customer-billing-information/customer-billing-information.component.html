@@ -248,10 +248,10 @@
           </ng-template>
         </p-table>
         <div class="m-t-10" *ngIf="isViewMode == false">
-          <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
+          <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
             Next
           </button>
-          <button type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
+          <button *ngIf="isPrevVisible" type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
             Previous
           </button>
         </div>

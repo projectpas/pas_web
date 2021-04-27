@@ -94,11 +94,14 @@ export class CustomerDocumentsComponent implements OnInit {
     isAdd:boolean=true;
     isEdit:boolean=true;
     isDelete:boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
         private dialog: MatDialog,private datePipe: DatePipe, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
             this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_Documents+'.'+PermissionConstants.Add])
 		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_Documents+'.'+PermissionConstants.Update])
 		this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_Documents+'.'+PermissionConstants.Delete])
+
+        this.isPrevVisible=this.authService.ShowTab("Create Customer","Warnings");
     }
 
     ngOnInit() {

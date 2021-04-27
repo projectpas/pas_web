@@ -559,6 +559,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     isPurchaseDownload:boolean=true;
     isPurchaseDelete:boolean=true;
     isView:boolean=true ;
+
+    isGeneralInfoAdd:boolean=true;
+    isGeneralInfoEdit:boolean=true;
     constructor(private fb: FormBuilder, public priorityService: PriorityService, public countryservice: CustomerService, private Dashnumservice: DashNumberService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Publicationservice: PublicationService, public integrationService: IntegrationService, private formBuilder: FormBuilder, public workFlowtService1: LegalEntityService, private changeDetectorRef: ChangeDetectorRef, private router: Router,
         private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, private glAccountService: GlAccountService, public vendorser: VendorService,
         public itemser: ItemMasterService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public ataMainSer: AtaMainService,
@@ -602,6 +605,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.isPurchaseEdit=this.authService.checkPermission([ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Update]);
         this.isPurchaseDelete=this.authService.checkPermission([ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Delete]);
         this.isPurchaseDownload=this.authService.checkPermission([ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Download]);
+
+        this.isGeneralInfoAdd=this.authService.checkPermission([ModuleConstants.Item_GeneralInformation+'.'+PermissionConstants.Add]);
+        this.isGeneralInfoEdit=this.authService.checkPermission([ModuleConstants.Item_GeneralInformation+'.'+PermissionConstants.Update]);
  
         // checks the params id with the url 
     }

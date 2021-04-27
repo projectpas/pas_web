@@ -96,6 +96,8 @@ export class CustomerBillingInformationComponent {
     isFinancialInfoEdit:boolean=true;
     isShippingInfoAdd:boolean=true;
     isShippingInfoEdit:boolean=true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     
     constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, 
         private modalService: NgbModal, private configurations: ConfigurationService,
@@ -115,6 +117,9 @@ export class CustomerBillingInformationComponent {
             //Previous
             this.isFinancialInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Add])
             this.isFinancialInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Update])
+
+            this.isNextVisible=this.authService.ShowTab("Create Customer","Shipping Information");
+            this.isPrevVisible=this.authService.ShowTab("Create Customer","Financial Information");
         }
 
     ngOnInit(): void {

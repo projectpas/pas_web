@@ -1176,7 +1176,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
     // createequivalencypart
     createNTAEFileUploadForEquivalency(file) {
-        return this.http.post(`${this.createequivalencypartUrl}`, file)
+        return this.http.post(`${this.createequivalencypartUrl}`, file,this.getFormReqHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.createNTAEFileUploadForEquivalency(file));
             });
@@ -1184,7 +1184,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
     // updateequivalencypart
     updateNTAEFileUploadForEquivalency(file) {
-        return this.http.post(`${this.updateequivalencypartUrl}`, file)
+        return this.http.post(`${this.updateequivalencypartUrl}`, file,this.getFormReqHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.updateNTAEFileUploadForEquivalency(file));
             });
@@ -1335,7 +1335,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getItemMasterDataById(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getitemmasterdatabyid/${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getitemmasterdatabyid/${id}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterDataById(id));
             });
