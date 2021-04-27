@@ -8,24 +8,7 @@
             <li class="breadcrumb-item active" aria-current="page" *ngIf="!isView">{{ isEdit ? 'Edit' : 'Create' }}  Work Order Quote</li>
         </ol>
     </nav>
- 
     <div class="card new-card">
-        <!-- <div class="card-header bg-primary">
-            <div class="row">
-              <div class="col">
-                <h4 class="new-card-heading">
-                  {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</h4>
-              </div>
-              <div> 
-                <button
-                  type="button"
-                  class="btn-sm new-btn-primary"
-              [routerLink]="['/workordersmodule/workorderspages/app-work-order-quote-list']" >
-                  Work Order Quote List
-                </button>
-              </div>
-            </div>
-          </div> -->
           <div class="card-header header ">
             <div class="row">
                 <div class="col">
@@ -97,13 +80,6 @@
                     [yearNavigator]="true" [monthNavigator]="true" yearRange="2000:2100"
                                 [disabled]="isView"></p-calendar>
                 </div>
-
-                <!-- <div class="form-group">
-                    <label> Quote Status <span class="clr-red">*</span></label>
-                    <select [(ngModel)]="quoteForm.expirationDateStatus" required name="ExpDateStatus" [disabled]="isView">
-                        <option *ngFor="let status of quoteStatusList" [value]="status.value">{{status.label}}</option>
-                    </select>
-                </div> -->
                 <div class="form-group">
                     <label> Quote Status <span class="clr-red">*</span></label>
         
@@ -114,23 +90,15 @@
                         Currency
                         <span class="clr-red">*</span>
                     </label>
-                    <!-- <select [(ngModel)]="currency" name="Currency" required [disabled]="isView" *ngIf="!isQuoteListView">
-                        <option value="">Select Currency</option>
-                        <option *ngFor="let cur of currencyList" [value]="cur.value">{{cur.label}}</option>
-                    </select> -->
-
                     <p-dropdown  [showClear]="true"  (ngModelChange)="getValid()" *ngIf="!isQuoteListView" [disabled]="isView" class="p-dropdown-100" (input)="onFilterCurrency($event)"  required [options]="currencyList" filter="true" [(ngModel)]="currency"  name="Currency" [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                     <input class="form-control" type="text" [(ngModel)]="currency" name="Currency" *ngIf="isQuoteListView" [disabled]="isView" />
                 </div>
-
                 <div class="form-group ">
                     <label for="accountsReceivableBalance">
                         AR Balance
                     </label>
                     <input class="form-control" type="number"  (ngModelChange)="getValid()" [(ngModel)]="accountsReceivableBalance" name="accountsReceivableBalance" [disabled]="isView" />
                 </div>
-
-
                 <div class="form-group ">
                     <label> DSO </label>
                     <input class="form-control" type="text"  (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
@@ -188,11 +156,8 @@
                     </label>
                     <input class="form-control" type="number" [(ngModel)]="customerPhone" name="customerPhone" readonly />
                 </div>
-
-
             </div>
             <div class="col-md-3">
-
                 <div class="form-group ">
                     <label for="customerRef">
                         Customer Ref
@@ -230,20 +195,6 @@
                     </label>
                     <input class="form-control" type="text" [(ngModel)]="employeeName" name="csr" readonly />
                 </div>
-                <!-- <div class="form-group ">
-                    <label for="Employee">
-                        Employee
-                    </label>
-                    <p-autoComplete field="label"  (ngModelChange)="getValid()" 
-                                    [(ngModel)]="quoteForm.employeeId"
-                                    name="employees" #employees="ngModel"
-                                    errorMessage="Records not found" [forceSelection]="true"
-                                    [dropdown]="true" [suggestions]="employeeList"
-                                    (completeMethod)="filterEmployee($event)"
-                                    [size]="30" [minLength]="1" [dropdown]="true"
-                                    class="p-autoComplete-ctsm" [disabled]="true">
-                    </p-autoComplete>
-               </div> -->
             </div>
             <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
                 <button class="btn btn-primary wo-quote-btn-margin pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
@@ -279,7 +230,6 @@
                 Back To Work Order
             </button>
         </div>
-
     </div>
 </div>
 
@@ -305,25 +255,17 @@
                         Close
                     </button>
                 </div>
-            
         </div>
     </div>
 </div>
-
 <br>
-
 <div class="card" *ngIf="quoteForm.quoteNumber && quoteForm.quoteNumber != '' && !isQuoteListView">
     <div class="card-body tabs-padding-5">
-
         <div class="card col-md-12 list_caps" id="approvalTabs">
             <div class="form-group margin-0">
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'mpns'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('mpns');">MPNs</button>
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'internalApprovers'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('internalApprovers');">Internal Approvers</button>
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'approvalProcess'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('approvalProcess');selectall = false;">Approval Process</button>
-                <!--<button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'setForInternalApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('setForInternalApproval');selectall = false;">Sent for Internal Approval</button>
-                <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'submittedInternalApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('submittedInternalApproval');selectall = false;">Submitted Internal Approval</button>
-                <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'sentForCustomerApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('sentForCustomerApproval');selectall = false;">Sent for Customer Approval</button>
-                <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'submittedCustomerApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('submittedCustomerApproval');selectall = false;">Submitted Customer Approval</button>-->
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteAnalysis'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteAnalysis');">Work Order Quote Analysis</button>
             </div>
         </div>
@@ -352,22 +294,18 @@
                                 <th rowspan="2">Condition <span class="clr-red">*</span></th>
                                 <th rowspan="2">CMM/Pub Ref</th>
                                 <th rowspan="2">Workflow ID </th>
-                                <th rowspan="2">Item Group</th>
-                      
+                                <th rowspan="2">Item Group</th>                      
                                 <th rowspan="2">Cust Ref</th>
                                 <th rowspan="2">Contract</th>
                                 <th rowspan="2">Contract No</th>
                                 <th rowspan="2">Stk Line</th>
                                 <th rowspan="2">NTE</th>
                                 <th rowspan="2">PMA</th>
-                                <th rowspan="2">DER</th>
-                               
+                                <th rowspan="2">DER</th>                               
                                 <th rowspan="2">TAT Days Current</th>
                                 <th rowspan="2">TAT Days Standard</th>
                                 <th colspan="4" rowspan="2">Management Structure</th>
                             <th rowspan="2" class="table-actions-column1">Actions</th>
-                           
-
                             </tr>
                         </thead>
                         <tbody>
@@ -433,8 +371,6 @@
                            <td>
                                     <label>{{workOrderPart['itemGroup']}}</label>
                                 </td>
-                             
-                               
                                 <td>
                                     <label class=" w60">   {{workOrderPart['refNo']}}  </label>
                                 </td>
@@ -448,22 +384,17 @@
                                  <td>
                                     <label>{{workOrderPart['stockLine']}}</label>
                                 </td>
-
                                 <td>
                                     <label class="text-right w60">{{workOrderPart['nte']}}</label>
                                 </td>
                                 <td>
-                                   
                                     <input type="checkbox" class="form-control w60 pointer_event_none" name="isPMA{{i}}"
                                      #isPMA="ngModel" [(ngModel)]="workOrderPart.isPMA" >
                                  </td>
-                            
                                 <td>
                                     <input type="checkbox" class="form-control w60 pointer_event_none" name="isDER{{i}}"
                                     #isDER="ngModel" [(ngModel)]="workOrderPart.isDER" >
                                </td>
-                               
-                              
                               <td>
                                     <label class="text-right w60">{{workOrderPart['tatDaysCurrent']}}</label>
                                 </td>
@@ -475,28 +406,25 @@
                                 </td>
                                 <td class="min-width-80">
                                     <label>
-
                                         {{workOrderPart['levelCode2'] }}
                                     </label>
                                 </td>
                                 <td class="min-width-80">
                                     <label>
-
                                         {{workOrderPart['levelCode3'] }}
                                     </label>
                                 </td>
                                 <td class="min-width-80">
                                     <label>
-
                                         {{workOrderPart['levelCode4'] }}
                                     </label>
                                 </td>
                                 <td class="flex_d table-actions-column1 mpn-table-buttons">
                                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
-                    <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
+                                    <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
                             </tr>
-                            <tr style="height: 25px;" *ngIf="workOrderPartsDetail.length == 0 ">
+                            <tr style="height: 25px;" *ngIf="workOrderPartsDetail.length == 0">
                                 <td colspan="10" class="no-records-cstm no-records-msg text-upper">
                                   No records found
                                 </td>
@@ -518,8 +446,6 @@
                                 <th>Total Cost</th>
                                 <th>Approver Rule</th>
                                 <th>Memo</th>
-                                <!-- <th>Min Amount</th>
-                                <th>Max Amount</th> -->
                                 <th>Message</th>
                             </tr>
                         </thead>
@@ -544,12 +470,6 @@
                                 <td>
                                     <p class="m-0 p-0 p_textEditor memo-left" [innerHTML]="approver['memo']"></p>
                                 </td>
-                                <!-- <td>
-                                    <label>{{approver.lowerValue}}</label>
-                                </td>
-                                <td>
-                                    <label>{{approver.upperValue}}</label>
-                                </td> -->
                                 <td>
                                     <label [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</label>
                                 </td>
@@ -631,9 +551,6 @@
                                       </td>
                                     <td *ngIf="field.field == 'internalMemo'" class="col-sm-12 width-200">
                                         <div class="col-sm-11">
-                                        <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
-                                               [disabled]="!approver.isSelected || approver['approvalActionId'] != 2"
-                                               [readonly]="!approver.isSelected || approver['approvalActionId'] != 2"/> -->
                                                <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['internalMemo']"></p>
                                                </div>
 
@@ -643,17 +560,6 @@
                                                  matTooltipPosition="above" matTooltip="Add Memo"
                                                  (click)="selectedApprovalIndex = i;memoType = 'internalMemo';"></i>
                                                  </div>
-                                        <!--<div class="form-group memo-popup-cstm" style="margin-top: 12px;">
-                                            <div [innerHTML]="approver.internalMemo" class="text_editor_box"></div>
-                                            <i class="fa fa-info-circle fa-lg" data-toggle="modal"
-                                               data-target="#textarea-popupintmemo"
-                                               matTooltip="memo"
-                                               matTooltipPosition="above"
-                                               (click)="onAddTextAreaInfo(approver,i)"></i>
-                                        </div>-->
-
-
-
                                     </td>
                                     <td *ngIf="field.field == 'internalApprovedDate'">
                                         <p-calendar [showIcon]="true" class="calender-cstm"
@@ -698,8 +604,6 @@
                                       </td>
                                     <td *ngIf="field.field == 'customerMemo'" class="col-sm-12 width-200">
                                         <div class="col-sm-11">
-                                        <!-- <input type="text" [(ngModel)]="approver['customerMemo']" class="calender-cstm" style="width:200px;"
-                                               [disabled]="!approver.isSelected || approver['approvalActionId'] != 4" /> -->
                                             <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['customerMemo']"></p>
                                             </div>
                                                <div class="col-sm-1 m-t-4" *ngIf="getApprovalActionCustomerStatus(approver)">
@@ -741,12 +645,7 @@
                 </div>
             <button *ngIf="!isViewMode" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"  [disabled]="!getAllPartsToDisableOrNot()"
              style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
-
             </div>
-
-            
-
-
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'workOrderQuoteAnalysis'">
                 <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
                     <table class="table table-bordered"
@@ -762,8 +661,7 @@
                                 <ng-container *ngFor="let field of woQuoteAnalysisHeader">
                                     <td >
                                         <label [ngClass]="(field.field == 'revenue' || field.field == 'materialCost' || field.field == 'totalLaborCost' || field.field == 'laborCost' || field.field == 'overHeadCost' || field.field == 'otherCost' || field.field == 'directCost' || field.field == 'materialRevenuePercentage' || field.field == 'laborRevenuePercentage' || field.field == 'overHeadCostRevenuePercentage' || field.field == 'directCostRevenuePercentage'|| field.field =='status' || field.field == 'marginPercentage' || field.field == 'margin')?'text-align-right width-60':''">{{approver[field.field]}}</label>
-                                    </td>
-                                    
+                                    </td>                                    
                                 </ng-container>
                             </tr>
                             <tr style="height: 25px;" *ngIf="woQuoteAnalysisList.length == 0 ">
@@ -771,56 +669,23 @@
                                   No records found
                                 </td>
                               </tr>
-                        </tbody>
-                     
+                        </tbody>                     
                     </table>
                 </div>
             </div>
-        <!-- </div> --> 
         <div>
-
             <div class="col-md-12">
                 <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==false">
-                    <!-- <div class="form-group "> -->
                         <label class="fs12">
                             MPN
                         </label>
-                        <!-- (change)="partNumberSelected()" -->
-                        <!-- <select (onChange)="partNumberSelected($event.value)" class="mpn-select" style="width: 100px;" [(ngModel)]="selectedPartNumber">
-                          <option value="">Select</option>
-                          <option *ngFor="let mpn of mpnPartNumbersList" [value]="mpn.label">{{mpn.label}}</option>
-                        </select> -->
                         <p-dropdown [options]="mpnPartNumbersList" name="partNumber"
                                     #partNumber="ngModel" placeholder="Select Part Number" (onChange)="partNumberSelected($event.value)"
                                     class="p-dropdown-custom-md"
                                     [(ngModel)]="selectedPartNumber">
                         </p-dropdown>
-                    <!-- </div> -->
                 </div>
-                <!-- <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==true">
-                    <label class="fs12">
-                        <strong> Part Number:</strong>
-                    </label>
-                    <label>{{selectedquotePn}}</label>
-                </div>
-                <div class="col-md-3">
-                    <label class="fs12">
-                        <strong>Part Description:</strong>
-                    </label>
-                    <label>{{selectedPartDescription}}</label>
-                </div>
-                <div class="col-md-3">
-                    <label class="fs12">
-                        <strong>   Stock Line Number:</strong>
-                    </label>
-                    <label>{{selectedStockLineNumber}}</label>
-                </div> -->
             </div> 
-                <!-- <div class="form-group " *ngIf="selectedPartNumber != ''">
-                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
-                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
-                </div> -->
-            
         </div>
     </div>
     <div class="card col-md-12 list_caps" *ngIf="selectedPartNumber != ''" id="quote-grid-tabs">
@@ -829,7 +694,6 @@
             <button type="button" class="btn" [ngClass]="gridActiveTab == 'labor'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('labor');">Labor</button>
             <button type="button" class="btn" [ngClass]="gridActiveTab == 'charges'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('charges');">Charges</button>
             <button type="button" class="btn" [ngClass]="gridActiveTab == 'freight'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('freight');">Freight</button>
-            <!-- <button type="button" class="btn" [ngClass]="gridActiveTab === 'exclusions'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('exclusions');">Exclusions</button> -->
         </div>
     </div>
     <div class="table-responsive" *ngIf="gridActiveTab === 'materialList'">
@@ -839,16 +703,10 @@
                     <h4 class="header-name">{{isQuote? 'Work Order Quote' :'Work Order'}} Material list</h4>
                 </div>
                 <div *ngIf="!isView &&  !isViewForApprovedPart">
-                    <!-- <button type="button" class="btn-sm header-button " data-target="#addNewCharges" data-toggle="modal" (click)="createNew()">
-                        Create Charge
-                    </button> -->
                     <button data-target="#addNewMaterials" data-toggle="modal"class="btn-sm header-button" >Add Part No</button>
                 </div>
             </div>
           </div>
-        <!-- <div *ngIf="!isView && !isViewForApprovedPart ">
-            <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary" style="margin-left: 10px;">Add Part No</button>
-        </div> -->
         <div class="table-responsive table-overflow headertable-width m-t-0">
             <div class="tableFixHead">
             <table class="table table-bordered lastcol-fix">
@@ -890,8 +748,6 @@
                                 </div>
                             </div>
                         </th>
-                        <!-- <th></th> -->
-                     
                     </tr>
                     <tr>
                         <th>Task</th>
@@ -906,14 +762,9 @@
                         <th>Total Part Cost</th>
                         <th>Billing Method</th>
                         <th>Mark Up</th>
-                        <th>
-                            Billing Rate
-                        </th>
-                        <th>
-                            Billing Amount
-                        </th>
+                        <th>Billing Rate</th>
+                        <th>Billing Amount</th>
                         <th class="width-130" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
-                        <!-- <th *ngIf="!isView"></th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -941,10 +792,6 @@
                                 <td class="content-to-end text-right">{{matQuotation.quantity}}</td>
                                 <td>
                                     {{matQuotation.uom}}
-                                    <!-- <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.unitOfMeasureId" disabled>
-                                        <option value="">Select</option>
-                                        <option *ngFor="let uom of unitOfMeasuresList" [value]="uom.unitOfMeasureId">{{uom.description}}</option>
-                                    </select> -->
                                 </td>
                                 <td>
                                     <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.conditionCodeId" disabled>
@@ -970,7 +817,6 @@
                                 </td>
                                 <td class="text-right">{{ formateCurrency(matQuotation.billingRate) }}</td>
                                 <td>
-                                    <!-- <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" /> -->
                                     <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
                                      value="{{matQuotation.billingAmount}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="calculatebCost($event.target.value,matQuotation)"/>
                     
@@ -978,12 +824,6 @@
                                 <td >
                                     <span *ngIf="!isView" data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                     <span *ngIf="!isView"><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                    <!-- <span>
-                                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(matQuotation)"
-                                            matTooltip="History" matTooltipPosition="above"><i
-                                                class="fa fa-history"></i></a>
-                                    </span> -->
-                               
                                 </td>  
                             </tr>
                         </ng-container>
@@ -993,8 +833,6 @@
                             </td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <!-- <td>&nbsp;</td>
-                            <td>&nbsp;</td> -->
                             <td>&nbsp;</td>
                             <td class="content-to-end">{{getTotalTaskQuantity(mData)}}</td>
                             <td>&nbsp;</td>
@@ -1007,7 +845,6 @@
                             <td>&nbsp;</td>
                             <td class="content-to-end">{{ formateCurrency(totalTaskMaterialBillingAmount(mData))}}</td>
                             <td *ngIf="!isView && !isViewForApprovedPart"></td>
-                            <!-- <td *ngIf="!isView"></td> -->
                         </tr>
                     </ng-container>
                 </tbody>
@@ -1018,8 +855,6 @@
                         </td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <!-- <td>&nbsp;</td>
-                        <td>&nbsp;</td> -->
                         <td>&nbsp;</td>
                         <td class="content-to-end"><b>{{getTotalQuantity()}}</b></td>
                         <td>&nbsp;</td>
@@ -1039,13 +874,11 @@
                             </td>
                         </ng-container>
                         <td *ngIf="!isView && !isViewForApprovedPart"></td>
-                        <!-- <td *ngIf="!isView"></td> -->
                     </tr>
                 </tfoot>
             </table>
             </div>
         </div>
-
     </div>
     <div>
         <ng-container *ngIf="gridActiveTab === 'materialList'">
@@ -1097,17 +930,7 @@
                               [selectedPartNumber]="selectedPartNumber"></app-work-order-labor>
 
     </div>
-
     <div class="table-responsive" *ngIf="gridActiveTab === 'charges' && workOrderChargesList">
-        <!-- <div *ngIf="!isView">
-            <button data-target="#addNewCharges"
-                    data-toggle="modal"
-                    (click)="createNew('add')"
-                    class="btn-primary"
-                    style="margin-left: 6px; margin-bottom: -8px;">
-                Add Charges
-            </button> 
-        </div> -->
         <div class="header">
             <div class="row">
                 <div class="col">
@@ -1241,45 +1064,6 @@
                                                         <th>Dash Numbers</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Airbus</td>
-                                                        <td>A767</td>
-                                                        <td>333</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Airbus</td>
-                                                        <td>A767</td>
-                                                        <td>444</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>Airbus</td>
-                                                        <td>A767</td>
-                                                        <td>555</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>4</td>
-                                                        <td>Airbus</td>
-                                                        <td>A767</td>
-                                                        <td>666</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>5</td>
-                                                        <td>Airbus</td>
-                                                        <td>A768</td>
-                                                        <td>333</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>6</td>
-                                                        <td>Airbus</td>
-                                                        <td>A768</td>
-                                                        <td>777</td>
-                                                    </tr>
-
-                                                </tbody>
                                             </table>
                                         </div>
                                         <div class="table-responsive">
@@ -1292,18 +1076,6 @@
                                                         <th>ATA Sub-Chapter</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>MAINTENANCE POLICY</td>
-                                                        <td>Sub SUPPORT</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>SUPPORT</td>
-                                                        <td>Sub SUPPORT</td>
-                                                    </tr>
-                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -1319,7 +1091,6 @@
                                             <p><span class="label"><b>MarkUp %: </b></span><span class="value">10 %</span></p>
                                             <p><span class="label"><b>Credit Limit:: </b></span><span class="value">10</span></p>
                                             <p><span class="label"><b>Credit Terms: </b></span><span class="value">Net 30</span></p>
-                                           <!-- <p><span class="label"><b>Allow Netting of AP/AR: </b></span><span class="value">Yes</span></p>-->
                                             <p><span class="label"><b>Taxable Exempt: </b></span><span class="value">Yes</span></p>
                                             <p><span class="label"><b>Tax Rate - State/Prov: </b></span><span class="value">8%</span></p>
                                             <p><span class="label"><b>Tax Rate - Other: </b></span><span class="value">25</span></p>
@@ -1969,12 +1740,8 @@
             </div>
         </div>
     </div>
-
-
-
     <div id="deleteRowConfirmation" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog modal-sm">
-    
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -2011,8 +1778,6 @@
                     </button>
                 </div> 
                 <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView) && selectedHistoricalWorkOrder">
-                    <!-- <grd-quote-view [workorderid]="selectedHistoricalWorkOrder" isView="true"></grd-quote-view> -->
-
                    <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" [isView]="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
                 </div>
                 <div >
@@ -2022,27 +1787,7 @@
             </div>
         </div>
     </div>
-    <!-- <div id="versionNoModel" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog modal-xsm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Do you want to increase the Quote Version?</h4>
-                    <p id="clockdiv" class="clockdiv"></p>
-                </div>
-                <div class="modal-footer" style="padding:10px;">
-                    <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="increaseVerConfirmation()"
-                            style="padding: 6px 12px !important;">
-                        YES
-                    </button>
-                    <button class="btn btn-primary btn-primary" data-dismiss="modal"
-                            style="padding: 6px 12px !important;" (click)="saveQuoteAPI()">
-                        NO
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
+   
 </div>
 <div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xsm">
@@ -2057,7 +1802,6 @@
                     <strong>Warning Message</strong>
                     :{{warningMessage}}
                 </p>
-                <!-- <p *ngIf="warningMessage != undefined">Not able to create customer work because cuatomer having restrcitions</p> -->
                 <p *ngIf="restrictID != 0 " class="mar_o warning_color">
                     <strong>Restrcition Message</strong>
                     :{{restrictMessage}}
