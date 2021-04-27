@@ -132,7 +132,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     if (this.arrayApprovalStatuslst.length == 0) {
       this.arrayApprovalStatuslst.push(0);
     }
-    forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.masterCompanyId),
+    forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0),
       this.salesOrderService.approverslistbyTaskId(ApprovalTaskEnum.SOApproval, this.salesOrderId),
       this.salesOrderService.getCustomerApprovalList(this.salesOrderId)
     ).subscribe(response => {
@@ -163,21 +163,21 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     this.setStatusListForApproval(this.statusList);
   }
 
-  getApproverStatusList() {
-    if (this.arrayApprovalStatuslst.length == 0) {
-      this.arrayApprovalStatuslst.push(0);
-    }
-    this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.masterCompanyId).subscribe(res => {
-      this.statusList = res.map(x => {
-        return {
-          ...x,
-          statusId: x.value,
-          name: x.label
-        };
-      });
-      this.setStatusListForApproval(this.statusList);
-    })
-  }
+  // getApproverStatusList() {
+  //   if (this.arrayApprovalStatuslst.length == 0) {
+  //     this.arrayApprovalStatuslst.push(0);
+  //   }
+  //   this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join()).subscribe(res => {
+  //     this.statusList = res.map(x => {
+  //       return {
+  //         ...x,
+  //         statusId: x.value,
+  //         name: x.label
+  //       };
+  //     });
+  //     this.setStatusListForApproval(this.statusList);
+  //   })
+  // }
 
   setStatusListForApproval(statusList) {
     let tempList = [];

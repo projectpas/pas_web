@@ -462,7 +462,8 @@
 								<thead>
 									<tr>
 										<th colspan="15" class="text-center stock-adjust">
-											<input type="checkbox stock-adjust-check"  name="isTimeLifeEnable" [(ngModel)]="timeLifeAllow" (change)="onCheckTimeLife(item)">
+											<input class="checkbox stock-adjust-check" type="checkbox" [ngModelOptions]="{standalone: true}" (change)="onCheckTimeLife(item)" [(ngModel)]="timeLifeAllow">
+											<!-- <input type="checkbox stock-adjust-check"  name="isTimeLifeEnable" [(ngModel)]="timeLifeAllow" (change)="onCheckTimeLife(item)"> -->
 											<strong class="stock-adjust-check-header"> {{item.stocklineAdjustmentDataType}} (Hours Per Minute)</strong></th>
 									</tr>
 								</thead>

@@ -93,7 +93,7 @@
                                                    class="wauto" [ngClass]="{pointerEvents : workOrderGeneralInformation.isRecCustomer || isEdit}">
                                                     <input type="radio" class="radio_adjust" name="work-type"
                                                         [value]="workOrderType.id"
-                                                        (click)="woDealerChange($event.target.value)"
+                                                        (click)="woDealerChange($event.target.value)" [disabled]="workOrderType.description !='Customer'"
                                                         [checked]="workOrderGeneralInformation.workOrderTypeId == workOrderType.id"
                                                         (change)="selectedCustomerType()"
                                                         
