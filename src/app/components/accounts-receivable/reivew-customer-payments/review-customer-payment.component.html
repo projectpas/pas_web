@@ -15,7 +15,7 @@
               <div class="form-group">
                 <label>Receipt Date</label>
                 <input type="text" class="form-control" name="depositDate"
-                  [(ngModel)]="dataForReview.customerPayments.depositDate" [disabled]="true" />
+                  [ngModel]="dataForReview.customerPayments.depositDate | date:'MM/dd/yyyy'" [disabled]="true" />
               </div>
             </div>
             <div class="col-1 column">

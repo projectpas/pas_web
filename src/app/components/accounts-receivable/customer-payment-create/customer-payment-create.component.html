@@ -77,7 +77,7 @@
                                             <div class="form-group">
                                                 <label for="amount">Amount <span class="clr-red">*</span></label>
                                                 <input type="text" class="form-control text-right"
-                                                    [ngModel]="customerPayment.amount | twoDecimalGlobalNumberFormatPipe"
+                                                    [ngModel]="customerPayment.amount"
                                                     name="amount" #amount="ngModel" pKeyFilter="money"
                                                     (change)="onChangeAmount()" required
                                                     (ngModelChange)="customerPayment.amount=$event; enableHeaderSave();" />
