@@ -100,6 +100,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
   filteredBankNames: any[] = [];
   filteredBankAcctNum: any[] = [];
   enableBankAcct: boolean = false;
+  glAccntId: any;
 
   constructor(
     private alertService: AlertService,
@@ -214,9 +215,10 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   bindData(custPayment: ICustomerPayments, initialCall = false) {
     this.customerPayment.receiptNo = custPayment.receiptNo;
-    // let currentUserBankName = this.allBankNames.filter(a => a.legalEntityId == this.currentUserLegalEntityId);
+    let currentUserBankName = this.allBankNames.filter(a => a.legalEntityId == this.currentUserLegalEntityId);
     // this.customerPayment.bankName = currentUserBankName[0].legalEntityBankingLockBoxId;
     // this.customerPayment.bankAcctNum = currentUserBankName[0].legalEntityBankingLockBoxId;//custPayment.bankAcctNum;
+    this.glAccntId = currentUserBankName[0].glAccountId;
     this.customerPayment.bankName = custPayment.bankName;
     this.customerPayment.bankAcctNum = custPayment.bankAcctNum;
     this.enableBankAcct = true;
@@ -247,6 +249,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
       let currentUserBankName = this.allBankNames.filter(a => a.legalEntityId == this.currentUserLegalEntityId);
       this.customerPayment.bankName = currentUserBankName[0].legalEntityBankingLockBoxId;
       this.customerPayment.bankAcctNum = currentUserBankName[0].legalEntityBankingLockBoxId;
+      this.glAccntId = currentUserBankName[0].glAccountId;
       this.enableBankAcct = true;
     }
   }

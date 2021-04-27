@@ -28,6 +28,7 @@ export class AddCustomerPaymentComponent implements OnInit {
   @Input() customerId;
   @Input() customerPayment;
   @Input() bankNameId;
+  @Input() glAccntId;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() triggerTabChange = new EventEmitter();
   @ViewChild("addCheckMemo", { static: false }) addCheckMemo: ElementRef;
@@ -153,13 +154,13 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.loadDiscType();
     this.loadBankFeesType();
     this.loadAdjustReason();
-    this.bankNameList();
+    
+    setTimeout(() => {
+      this.bankNameList();
+    }, 2200);
 
     this.getARSettings();
     this.employeedata('', this.currentUserManagementStructureId);
-    debugger;
-    this.objInvoicePayment.checkPayments.bankAccount = this.bankNameId;
-    this.objInvoicePayment.invoiceWireTransferPayment.bankName = this.bankNameId;
   }
 
   private bankNameList() {
@@ -172,6 +173,12 @@ export class AddCustomerPaymentComponent implements OnInit {
       });
 
       this.filteredBankNames = bankNameResponse;
+
+      this.objInvoicePayment.checkPayments.bankAccount = this.bankNameId;
+      this.objInvoicePayment.invoiceWireTransferPayment.bankName = this.bankNameId;
+      this.objInvoicePayment.checkPayments.glAccountNumber = this.glAccntId;
+      this.objInvoicePayment.invoiceWireTransferPayment.glAccountNumber = this.glAccntId;
+      this.objInvoicePayment.invoiceCreditDebitCardPayment.glAccountNumber = this.glAccntId;
     })
   }
 

@@ -306,7 +306,7 @@
                         <p-tabView class="pas-tabview" (onChange)="onTabChange($event)" [activeIndex]="selectedIndex">
                             <p-tabPanel header="Customer Payment">
                                 <app-add-customer-payment [customerPayment]="custPaymentData"
-                                    (triggerTabChange)="changeToReviewTab($event)" [bankNameId]="customerPayment.bankName">
+                                    (triggerTabChange)="changeToReviewTab($event)" [bankNameId]="customerPayment.bankName" [glAccntId]="glAccntId">
                                 </app-add-customer-payment>
                             </p-tabPanel>
                             <p-tabPanel header="Review Payments">
