@@ -18,18 +18,18 @@
         <div class="col-md-8">
         </div>
         <hr />
-         <div class="col-md-4">
+        <div class="col-md-4">
             <div class="checkbox-cstm pull-right checkbox-align">
                 <label class="checkbox-label-align">
-                  <input type="checkbox" [(ngModel)]="showDeletedList" name="showDeleted" (change)="getNtaeData($event.target.checked)" />
-                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                Show Deleted List 
+                    <input type="checkbox" [(ngModel)]="showDeletedList" name="showDeleted" (change)="getNtaeData($event.target.checked)" />
+                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                    Show Deleted List
                 </label>
             </div>
-        </div> 
+        </div>
     </div>
     <p-table #ntaeDataTable class="rpo-table-cstm rro-table-cstm " [value]="ntaeData" [rows]="ntaeDataTableTablePageSize"
-        [columns]="ntaeTableColumns" [scrollable]="true" [style]="{width:'100%'}" [paginator]="true">
+             [columns]="ntaeTableColumns" [scrollable]="true" [style]="{width:'100%'}" [paginator]="true">
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
                 <col *ngFor="let col of columns" class="table-column-width">
@@ -38,7 +38,7 @@
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns" class="table-column-width" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
-                        {{col.header}}
+                    {{col.header}}
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
                 <th class="table-actions-column" *ngIf="selectedTab == 'Equivalency'">Document</th>
@@ -47,11 +47,11 @@
             <tr>
                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <input class="table-header-input-width" pInputText type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                        (input)="ntaeDataTable.filter($event.target.value, col.field, col.filterMatchMode)">
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
-                        name="createdDate" (change)="ntaeDataTable.filter($event.target.value, col.field)" />
-                      <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
-                        name="updatedDate" (change)="ntaeDataTable.filter($event.target.value,col.field)" />
+                           (input)="ntaeDataTable.filter($event.target.value, col.field, col.filterMatchMode)">
+                    <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                           name="createdDate" (change)="ntaeDataTable.filter($event.target.value, col.field)" />
+                    <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+                           name="updatedDate" (change)="ntaeDataTable.filter($event.target.value,col.field)" />
                 </th>
                 <th class="table-column-width" *ngIf="selectedTab == 'Equivalency'"></th>
                 <th class="table-actions-column"></th>
@@ -69,8 +69,8 @@
                 </td>
                 <td class="table-column-width" *ngIf="selectedTab == 'Equivalency'">
                     <a *ngFor="let fileItem of rowData?.attachmentDetails" class="filelink"
-                        (click)="downloadFileUpload(fileItem?.ad)" target="_blank"
-                        download>{{fileItem?.ad.fileName}}</a>
+                       (click)="downloadFileUpload(fileItem?.ad)" target="_blank"
+                       download>{{fileItem?.ad.fileName}}</a>
                 </td>
                 <td class="action-icons-cstm table-column-width">
                     <div *ngIf="!rowData.isDeleted">
@@ -86,8 +86,10 @@
                                 (click)="getAuditHistory(viewHistory,rowData)"><i class="fa fa-history"></i></a></span>
                     </div>
                     <div *ngIf="rowData.isDeleted">
-                        <span><a class="btn nobg" matTooltip="History" matTooltipPosition="above"
-                            (click)="getAuditHistory(viewHistory,rowData)"><i class="fa fa-history"></i></a></span>
+                        <span>
+                            <a class="btn nobg" matTooltip="History" matTooltipPosition="above"
+                               (click)="getAuditHistory(viewHistory,rowData)"><i class="fa fa-history"></i></a>
+                        </span>
 
                          <span data-toggle="modal" data-target="#ntaeRestore" >
                              <a class="btn nobg"  *ngIf="isNHAEdit"
@@ -108,24 +110,24 @@
         <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>
             <input class="footer-input-width" [ngModelOptions]="{standalone: true}" [(ngModel)]="ntaeDataTable._totalRecords"
-                [disabled]="true" pInputText type="text" />
+                   [disabled]="true" pInputText type="text" />
             &nbsp;&nbsp;
             <label id="footer" class="footer1">Pages Count:</label>
             <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
-                [ngModel]="getPageCount(ntaeDataTable._totalRecords, ntaeDataTableTablePageSize)" [disabled]="true"
-                pInputText type="text" />
+                   [ngModel]="getPageCount(ntaeDataTable._totalRecords, ntaeDataTableTablePageSize)" [disabled]="true"
+                   pInputText type="text" />
         </ng-template>
     </p-table>
 </div>
 
 <!--New code for dialogue-->
 <div id="alternateModalPopup" class="modal fade custom-popup" role="dialog" data-backdrop="static"
-    data-keyboard="false">
+     data-keyboard="false">
     <div class="modal-dialog modal-sm max-w-800">
         <!-- Modal content-->
         <div class="modal-content">
             <form #saveNtaeTabForm="ngForm" (submit)="saveAlternate(saveNtaeTabForm)" id="add-customerwork" name=""
-                class="form-horizontal add-custustomer">
+                  class="form-horizontal add-custustomer">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">×</button>
                     <h4 class="modal-title">{{isEditMode == true ? 'Edit' : 'Add'}} {{selectedTab}}</h4>
@@ -138,10 +140,10 @@
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">PN <strong class="clr-red">*</strong> </label>
                                 <p-dropdown class="imstock-pddowm item-equiv-pddowm" [options]="pnData" filter="true"
-                                    [(ngModel)]="alternateData.MappingItemMasterId" name="MappingItemMasterId"
-                                    id="MappingItemMasterId" title="Part Number" required [resetFilterOnHide]="true"
-                                    (onChange)="bindPartDataInPopup($event)" placeholder="Select"
-                                    [showClear]="true" (ngModelChange)="enableSave()"></p-dropdown>
+                                            [(ngModel)]="alternateData.MappingItemMasterId" name="MappingItemMasterId"
+                                            id="MappingItemMasterId" title="Part Number" required [resetFilterOnHide]="true"
+                                            (onChange)="bindPartDataInPopup($event)" placeholder="Select"
+                                            [showClear]="true" (ngModelChange)="enableSave()"></p-dropdown>
                             </div>
                         </div>
                     </div>
@@ -149,9 +151,10 @@
                         <div class="col-md-10 max-w-400">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
-                                    Description</label>
+                                    Description
+                                </label>
                                 <input type="text" (keyup)="valuechange1()" class="form-control" disabled name="description"
-                                    [(ngModel)]="alternateData.Description">
+                                       [(ngModel)]="alternateData.Description">
                             </div>
                         </div>
                     </div>
@@ -159,9 +162,10 @@
                         <div class="col-md-10 max-w-400">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
-                                    Manufacturer </label>
+                                    Manufacturer
+                                </label>
                                 <input type="text" (keyup)="valuechange2()" class="form-control" disabled name="manufacturer"
-                                    [(ngModel)]="alternateData.manufacturer">
+                                       [(ngModel)]="alternateData.manufacturer">
 
                             </div>
                         </div>
@@ -170,82 +174,89 @@
                         <div class="col-md-10 max-w-400">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
-                                    Item Classification </label>
+                                    Item Classification
+                                </label>
                                 <input type="text" class="form-control" disabled name="itemClassification"
-                                    [(ngModel)]="alternateData.itemClassification">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
-                        <div class="col-md-12" >
-                            <div class="form-group">
-                                <label class="popup-plusicon-cstm">
-                                    Document </label>
-                                    <p-fileUpload #fileUploadInput name="gFileupload[]" multiple="multiple"
-                                    [showCancelButton]="false" [showUploadButton]="false"
-                                    customUpload="true" (ngModelChange)="enableSave()" (onSelect)="fileUploadNtae($event)"
-                                    (onRemove)="removeFile($event)"></p-fileUpload>
+                                       [(ngModel)]="alternateData.itemClassification">
 
                             </div>
                         </div>
                     </div>
                     <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
                         <div class="col-md-12">
-                                <div class="col-md-12 table-responsive table-overflow"
-                                    *ngIf="alternateData.attachmentDetails?.length > 0">
-                                    <h4 class="panel-title attachment-padding">
-                                        Attachment Details:
-                                    </h4>
-                                    <p-table class="table-responsive ptable-cus-pma"
-                                        [paginator]="alternateData?.attachmentDetails?.length > 0"
-                                        [value]="alternateData?.attachmentDetails" [rows]="3">
-                                        <ng-template pTemplate="header">
-                                            <tr>
-                                                <th class="table-column-width">
-                                                    File Name
-                                                </th>
-                                                <th class="table-column-width">
-                                                    Download
-                                                </th>
-                                            </tr>
-                                        </ng-template>
-                                        <ng-template pTemplate="body" let-part let-rowData let-columns="columns"
-                                            let-i="rowIndex">
-                                            <tr>
-                                                <td class="table-column-width">
-    
-                                                    {{ part?.ad?.fileName}}
-                                                </td>
-                                                <td class="table-column-width">
-                                                    <a (click)="downloadFileUpload(part?.ad)" matTooltip="Download"
-                                                        matTooltipPosition="above" class="btn nobg btn-cstm"><span><i
-                                                                class="fa fa-download"></i></span></a>
-                                                    <span data-toggle="modal" data-target="#alternatePopupDocDel"><a class="btn nobg" 
-                                                        (click)="deleteNTAEDocument(part?.ad)" matTooltip="Delete" 
-                                                            matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                                </td>
-                                            </tr>
-                                        </ng-template>
-                                        <ng-template pTemplate="emptymessage" let-columns
-                                            *ngIf="alternateData.attachmentDetails.length == 0">
-                                            <tr>
-                                                <td [attr.colspan]="2"
-                                                class="no-records-cstm no-records-msg">
-                                                    No records found
-                                                </td>
-                                            </tr>
-                                        </ng-template>
-                                    </p-table>
-                                </div>
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm">
+                                    Document
+                                </label>
+                                <p-fileUpload #fileUploadInput name="gFileupload[]" multiple="multiple"
+                                              [showCancelButton]="false" [showUploadButton]="false"
+                                              customUpload="true" (ngModelChange)="enableSave()" (onSelect)="fileUploadNtae($event)"
+                                              (onRemove)="removeFile($event)"></p-fileUpload>
+                                <span class="no-records-cstm no-records-msg" *ngIf="uploadedFileTempCount.length==0">No Files attached</span>
                             </div>
+                        </div>
                     </div>
-                </div>                
-            <div class="modal-footer">
-                <button *ngIf="isEditMode == false" type="button" class="btn btn-primary" [disabled]="!saveNtaeTabForm.valid" (click)="saveAlternate(saveNtaeTabForm)">Save </button>
-                <button *ngIf="isEditMode == true" type="button" class="btn btn-primary" [disabled]="updateBtn" (click)="updateAlternate(saveNtaeTabForm)">Update</button>
-                <button #closeAddPopup type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
-            </div>
+                    <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
+                        <div class="col-md-12">
+                            <div class="col-md-12 table-responsive table-overflow"
+                                 *ngIf="alternateData.attachmentDetails?.length > 0">
+                                <h4 class="panel-title attachment-padding">
+                                    Attachment Details:
+                                </h4>
+                                <p-table class="table-responsive ptable-cus-pma"
+                                         [paginator]="alternateData?.attachmentDetails?.length > 0"
+                                         [value]="alternateData?.attachmentDetails" [rows]="3">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="table-column-width">
+                                                File Name
+                                            </th>
+                                            <th class="table-column-width">
+                                                Download
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-part let-rowData let-columns="columns"
+                                                 let-i="rowIndex">
+                                        <tr>
+                                            <td class="table-column-width">
+
+                                                {{ part?.ad?.fileName}}
+                                            </td>
+                                            <td class="table-column-width">
+                                                <a (click)="downloadFileUpload(part?.ad)" matTooltip="Download"
+                                                   matTooltipPosition="above" class="btn nobg btn-cstm">
+                                                    <span>
+                                                        <i class="fa fa-download"></i>
+                                                    </span>
+                                                </a>
+                                                <span data-toggle="modal" data-target="#alternatePopupDocDel">
+                                                    <a class="btn nobg"
+                                                       (click)="deleteNTAEDocument(part?.ad)" matTooltip="Delete"
+                                                       matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns
+                                                 *ngIf="alternateData.attachmentDetails.length == 0">
+                                        <tr>
+                                            <td [attr.colspan]="2"
+                                                class="no-records-cstm no-records-msg">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button *ngIf="isEditMode == false" type="button" class="btn btn-primary" [disabled]="!saveNtaeTabForm.valid" (click)="saveAlternate(saveNtaeTabForm)">Save </button>
+                    <button *ngIf="isEditMode == true" type="button" class="btn btn-primary" [disabled]="updateBtn" (click)="updateAlternate(saveNtaeTabForm)">Update</button>
+                    <button #closeAddPopup type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+                </div>
             </form>
         </div>
     </div>
@@ -261,30 +272,30 @@
     <div class="modal-body">
         <app-pn-header [partData]="partData"></app-pn-header>
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-            <div class="tableFixHead">  
-            <table class="table table-bordered header-table-width" *ngIf="nhaTlaHistory.length> 0 else noDatavailable">
-                <thead>
-                    <tr>
+            <div class="tableFixHead">
+                <table class="table table-bordered header-table-width" *ngIf="nhaTlaHistory.length> 0 else noDatavailable">
+                    <thead>
+                        <tr>
 
-                        <th>PN <span class="clr-red">*</span></th>
-                        <th>PN Description</th>
-                        <th>Manufacturer</th>
-                        <th *ngIf="selectedTab == 'Equivalency'">Classification</th>
-                        <th *ngIf="selectedTab == 'Equivalency'">Document</th>
-                       
-                        <th>Created Date</th>
-                        <th>Created By</th>
-                       
-                        <th>Updated Date</th>
-                        <th>Updated By</th>
-                        <th>Is Deleted</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let ntae of nhaTlaHistory; let i = index;">
-                        <!-- auditHistory[i>0 ? i-1 : i] -->
+                            <th>PN <span class="clr-red">*</span></th>
+                            <th>PN Description</th>
+                            <th>Manufacturer</th>
+                            <th *ngIf="selectedTab == 'Equivalency'">Classification</th>
+                            <th *ngIf="selectedTab == 'Equivalency'">Document</th>
 
-                        <td [ngStyle]="{
+                            <th>Created Date</th>
+                            <th>Created By</th>
+
+                            <th>Updated Date</th>
+                            <th>Updated By</th>
+                            <th>Is Deleted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ntae of nhaTlaHistory; let i = index;">
+                            <!-- auditHistory[i>0 ? i-1 : i] -->
+
+                            <td [ngStyle]="{
                                             color: getColorCodeForHistory(
                                               i,
                                               'altPartNo',
@@ -292,8 +303,10 @@
                                             )
                                               ? 'black'
                                               : 'red'
-                                          }">{{ntae.altPartNo}}</td>
-                        <td [ngStyle]="{
+                                          }">
+                                {{ntae.altPartNo}}
+                            </td>
+                            <td [ngStyle]="{
                                             color: getColorCodeForHistory(
                                               i,
                                               'altPartDescription',
@@ -301,8 +314,10 @@
                                             )
                                               ? 'black'
                                               : 'red'
-                                          }">{{ntae.altPartDescription}}</td>
-                        <td [ngStyle]="{
+                                          }">
+                                {{ntae.altPartDescription}}
+                            </td>
+                            <td [ngStyle]="{
                                             color: getColorCodeForHistory(
                                               i,
                                               'manufacturer',
@@ -310,8 +325,10 @@
                                             )
                                               ? 'black'
                                               : 'red'
-                                          }">{{ntae.manufacturer}}</td>
-                        <td *ngIf="selectedTab == 'Equivalency'" [ngStyle]="{
+                                          }">
+                                {{ntae.manufacturer}}
+                            </td>
+                            <td *ngIf="selectedTab == 'Equivalency'" [ngStyle]="{
                                             color: getColorCodeForHistory(
                                               i,
                                               'itemClassification',
@@ -319,21 +336,29 @@
                                             )
                                               ? 'black'
                                               : 'red'
-                                          }">{{ntae.itemClassification}}</td>
-                        <td *ngIf="selectedTab == 'Equivalency'">
-                            <a *ngFor="let fileItem of ntae?.attachmentDetails" class="filelink"
-                                (click)="downloadFileUpload(fileItem?.ad)" target="_blank"
-                                download>{{fileItem?.ad.fileName}}</a></td>
-                        <!-- <td>{{ntae.isActive}}</td> -->
-                        <td>{{ntae.createdDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
-                        <td>{{ntae.createdBy}}</td>
-                        <td>{{ntae.updatedDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
-                        <td>{{ntae.updatedBy}}</td>
-                       
-                        <td class="background-white"><p class="background-white"><input type="checkbox" name="isDeleted" [(ngModel)]="ntae.isDeleted" disabled></p></td>
-                    </tr>
-                </tbody>
-            </table>
+                                          }">
+                                {{ntae.itemClassification}}
+                            </td>
+                            <td *ngIf="selectedTab == 'Equivalency'">
+                                <a *ngFor="let fileItem of ntae?.attachmentDetails" class="filelink"
+                                   (click)="downloadFileUpload(fileItem?.ad)" target="_blank"
+                                   download>{{fileItem?.ad.fileName}}</a>
+                            </td>
+                            <!-- <td>{{ntae.isActive}}</td> -->
+                            <td>{{ntae.createdDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
+                            <td>{{ntae.createdBy}}</td>
+                            <td>{{ntae.updatedDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
+                            <td>{{ntae.updatedBy}}</td>
+
+                            <td class="text-center width-60">
+                                <span class="value">
+                                  <label class="wauto">
+                                      <input type="checkbox" name="isDeleted" [(ngModel)]="ntae.isDeleted" disabled>
+                                    </label>
+                                </span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <ng-template #noDatavailable>
                 <div class="text-center">
@@ -374,9 +399,9 @@
             </div>
         </div>
     </div>
-  </div>
+</div>
 
-  <div class="modal fade" id="ntaeRestore" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="ntaeRestore" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -386,21 +411,22 @@
             <div class="modal-body">
                 <strong>
                     Part Number:
-                    <span class="new-label">{{delNTAERow.altPartNo}}
-                        </span>
+                    <span class="new-label">
+                        {{delNTAERow.altPartNo}}
+                    </span>
                 </strong>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary"
-                    (click)="restoreNTAERow(); closeRestore();">Yes</button>
+                        (click)="restoreNTAERow(); closeRestore();">
+                    Yes
+                </button>
                 <button type="button" class="btn btn-danger" (click)="closeRestore()">No</button>
             </div>
         </div>
     </div>
 </div>
-
-
-  <div id="alternatePopupDocDel" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+<div id="alternatePopupDocDel" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -419,9 +445,8 @@
             </div>
         </div>
     </div>
-  </div>
-
-  <div id="alternatePopupView" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+</div>
+<div id="alternatePopupView" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -435,10 +460,10 @@
             </div>
         </div>
     </div>
-  </div>
+</div>
 
 <p-dialog header="Alert" [(visible)]="displayNtae" [modal]="true" [dismissableMask]="true" maximizedLeft="140px"
-    maximizedTop="140px" [width]="350" [minWidth]="200" [responsive]="true" [minY]="1050" [baseZIndex]="1100000">
+          maximizedTop="140px" [width]="350" [minWidth]="200" [responsive]="true" [minY]="1050" [baseZIndex]="1100000">
 
     <h5 [ngStyle]="{'color':'red'}">
         Please Enter (*) Mandatory Fields

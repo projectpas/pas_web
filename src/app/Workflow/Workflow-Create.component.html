@@ -53,14 +53,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="description">Workflow Description</label>
-                                    <input type="text" class="form-control" id="description"
-                                        [(ngModel)]="sourceWorkFlow.workflowDescription" (change)="checkEnableUpdate()">
+                                    <input type="text" class="form-control" id="description" (ngModelChange)="checkEnableUpdate()"
+                                        [(ngModel)]="sourceWorkFlow.workflowDescription">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="PN Description">PN Description </label>
-                                    <input type="text" class="form-control" id="pnDescription"
+                                    <input type="text" class="form-control" id="pnDescription" 
                                         [(ngModel)]="sourceWorkFlow.partNumberDescription" [disabled]="true">
                                 </div>
                             </div>
@@ -261,7 +261,7 @@
                                             <div class="col-sm-4">
                                                 <label class="w60">Amount:</label>
                                                 <input type="text" class="form-control w70 text-right" pInputText
-                                                    pKeyFilter="money" value="{{sourceWorkFlow.percentOfNew}}"
+                                                    pKeyFilter="money" value="{{sourceWorkFlow.percentOfNew ==NaN ? ' ' :sourceWorkFlow.percentOfNew}}"
                                                     disabled />
                                              </div>
                                         </div>
@@ -307,7 +307,7 @@
                                                     <label class="w60">Amount: </label>
                                                     <input type="text" class="form-control w70 text-right" pInputText
                                                         pKeyFilter="money"
-                                                        value="{{sourceWorkFlow.percentOfReplacement}}" disabled />
+                                                        value="{{sourceWorkFlow.percentOfReplacement ==NaN ? ' ' : sourceWorkFlow.percentOfReplacement}}" disabled />
                                             </div>
                                         </div>
                                     </div>
@@ -367,7 +367,7 @@
                                         <select (ngModelChange)="checkEnableUpdate()"
                                             [(ngModel)]="sourceWorkFlow.percentageOfMaterial" class="form-control select_align_right"
                                             (change)="onMaterialCostChange(sourceWorkFlow.percentageOfMaterial,'html');">
-                                            <option value="-1">--Select--</option>
+                                            <option value="0">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
                                                 {{percent.label}}%</option>
                                         </select>
@@ -378,7 +378,7 @@
                                         <select (ngModelChange)="checkEnableUpdate()"
                                             [(ngModel)]="sourceWorkFlow.percentageOfExpertise" class="form-control select_align_right"
                                             (change)="onExpertiseCostChange(sourceWorkFlow.percentageOfExpertise,'html');">
-                                            <option value="-1">--Select--</option>
+                                            <option value="0">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
                                                 {{percent.label}}%</option>
                                         </select>
@@ -389,7 +389,7 @@
                                         <select (ngModelChange)="checkEnableUpdate()"
                                             [(ngModel)]="sourceWorkFlow.percentageOfCharges" class="form-control select_align_right"
                                             (change)="onChargesChange(sourceWorkFlow.percentageOfCharges,'html');">
-                                            <option value="-1">--Select--</option>
+                                            <option value="0">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
                                                 {{percent.label}}%</option>
                                         </select>
@@ -400,7 +400,7 @@
                                         <select (ngModelChange)="checkEnableUpdate()" [disabled]="sourceWorkFlow.otherCost==0"
                                             [(ngModel)]="sourceWorkFlow.percentageOfOthers" class="form-control select_align_right"
                                             (change)="onOtherChange(sourceWorkFlow.percentageOfOthers,'html');">
-                                            <option value="-1">--Select--</option>
+                                            <option value="0">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
                                                 {{percent.label}}%</option>
                                         </select>

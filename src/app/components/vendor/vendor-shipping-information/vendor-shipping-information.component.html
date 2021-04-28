@@ -808,7 +808,7 @@
                                                               </td>
                                                               </ng-container>
 
-                                                            <td class="action-icons-cstm table-column-width">
+                                                            <td class="action-icons-cstm text-center table-column-width">
                                                                 <div *ngIf="currentDeletedstatusShipVia == false">
                                                                     <ng-container *ngIf="!isViewMode">
                                                                         <p-inputSwitch *ngIf="rowData['isActive'] == true && isEdit"
@@ -1214,6 +1214,7 @@
                                                             <th>Is Deleted</th>
                                                         </tr>
                                                     </thead>
+                                                    <tbody>
                                                     <tr *ngFor="let audit of auditHisory; let i = index;">
                                                         <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'shipViaName', audit.shipViaName)  ? 'black' : 'red'  }">
                                                             {{audit.shipViaName}}
@@ -1254,6 +1255,7 @@
                                                             </span>
                                                         </td>
                                                     </tr>
+                                                    </tbody>
                                                 </table>
                                                 </div>
                                             </div>
@@ -2463,7 +2465,7 @@
                                   </td>
                                   </ng-container>
 
-                                <td class="action-icons-cstm table-column-width">                                    
+                                <td class="action-icons-cstm text-center table-column-width">                                    
                                     <div *ngIf="!currentDeletedstatusInternationalShipVia">
                                         <ng-container *ngIf="!isViewMode">
                                             <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
@@ -2483,7 +2485,7 @@
                                             </a>
                                         </span>
                                         <span requirePermission="canDelete" *ngIf="!isViewMode">
-                                            <button *ngIf="isDelete" class="btn nobg"
+                                            <button *ngIf="isDelete" class="btn nobg padding-0"
                                                     (click)="delShipViaInter(rowData)" [disabled]="rowData.isPrimary == true"
                                                     matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
@@ -2699,6 +2701,7 @@
                                 <th>Is Deleted</th>
                             </tr>
                         </thead>
+                        <tbody>
                         <tr *ngFor="let audit of auditHistoryInterShipvia; let i = index;">
                             <td [ngStyle]="{'color':  getColorCodeForInternnationalShipViaHistory(i, 'shipViaName', audit.shipViaName)  ? 'black' : 'red'  }">
                                 {{audit.shipViaName}}
@@ -2744,6 +2747,7 @@
                                 </span>
                             </td>
                         </tr>
+                        </tbody>
                     </table>
                     </div>
                 </div>

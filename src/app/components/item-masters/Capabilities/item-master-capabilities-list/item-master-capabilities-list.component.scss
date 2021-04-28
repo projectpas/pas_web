@@ -6,7 +6,13 @@
 .pandsHistoryTable th {
     text-align: center;
 }
-
+.disablecheckbox{
+  background-color: #a9a9a9;
+  color: white;
+}
+.margin-left-50{
+  margin-left:50px !important;
+}
 ::-webkit-scrollbar {
     width: 0px !important;
   }

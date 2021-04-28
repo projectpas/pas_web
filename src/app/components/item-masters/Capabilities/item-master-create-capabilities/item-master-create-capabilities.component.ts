@@ -147,7 +147,8 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     }
 
     getCapabilityTypesList() {
-        this.commonService.smartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc','','', 0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        //this.commonService.smartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc','','', 0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+          this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc','','', 0,'0',this.currentUserMasterCompanyId).subscribe(res => {  
             this.capabalityTypeList = res;
         })
     }

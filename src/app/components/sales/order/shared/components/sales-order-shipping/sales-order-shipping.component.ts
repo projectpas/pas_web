@@ -86,6 +86,7 @@ export class SalesOrderShippingComponent {
     modal: NgbModalRef;
     isMultipleSelected: boolean = false;
     addCustomerInfo: boolean = false;
+    disableGeneratePackagingBtn: boolean = true;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -552,6 +553,63 @@ export class SalesOrderShippingComponent {
                 });
     }
 
+    generatePackagingSlip() {
+        let packagingSlipItems: PackagingSlipItems[] = [];
+
+        //if (this.isMultipleSelected) {
+        this.shippingList.filter(a => {
+            for (let i = 0; i < a.soshippingchildviewlist.length; i++) {
+                if (a.soshippingchildviewlist[i].selectedToGeneratePackaging == true) {
+                    var p = new PackagingSlipItems;
+                    p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
+                    p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
+                    p.salesOrderPartId = a.soshippingchildviewlist[i].salesOrderPartId;
+                    p.salesOrderId = this.salesOrderId;
+                    p.masterCompanyId = this.currentUserMasterCompanyId;
+                    p.createdBy = this.userName;
+                    p.updatedBy = this.userName;
+                    p.createdDate = new Date().toDateString();
+                    p.updatedDate = new Date().toDateString();
+
+                    packagingSlipItems.push(p);
+                }
+            }
+        });
+        // }
+        // else {
+        //     var p = new PackagingSlipItems;
+        //     p.SOPickTicketId = this.currSOPickTicketId;
+        //     p.currQtyToShip = this.currQtyToShip;
+        //     p.salesOrderPartId = this.salesOrderPartId;
+        //     p.salesOrderId = this.salesOrderId;
+        //     p.masterCompanyId = this.currentUserMasterCompanyId;
+        //     p.createdBy = this.userName;
+        //     p.updatedBy = this.userName;
+        //     p.createdDate = new Date().toDateString();
+        //     p.updatedDate = new Date().toDateString();
+        //     packagingSlipItems.push(p);
+        // }
+        this.isSpinnerVisible = true;
+
+        this.salesOrderService.generatePackagingSlip(packagingSlipItems)
+            .subscribe(
+                (res: any) => {
+                    this.isSpinnerVisible = false;
+                    this.isEditModeAdd = false;
+
+                    this.alertService.showMessage(
+                        'Sales Order',
+                        'Packaging Slip created Succesfully',
+                        MessageSeverity.success
+                    );
+                    this.partSelected = false;
+                    this.getShippingList();
+                    this.disableGeneratePackagingBtn = true;
+                }, err => {
+                    this.isSpinnerVisible = false;
+                });
+    }
+
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
@@ -582,8 +640,12 @@ export class SalesOrderShippingComponent {
         this.checkIsChecked();
     }
 
-    disableCreateShippingBtn: boolean = true;
+    checkedToGenerate(evt, ship) {
+        ship.selectedToGeneratePackaging = evt.target.checked;
+        this.checkIsCheckedToGenerate();
+    }
 
+    disableCreateShippingBtn: boolean = true;
     checkIsChecked() {
         this.shippingList.forEach(a => {
             a.soshippingchildviewlist.forEach(ele => {
@@ -592,6 +654,22 @@ export class SalesOrderShippingComponent {
                 else
                     this.disableCreateShippingBtn = true;
             });
+        });
+    }
+
+    checkIsCheckedToGenerate() {
+        var keepGoing = true;
+        this.shippingList.forEach(a => {
+            if (keepGoing) {
+                a.soshippingchildviewlist.forEach(ele => {
+                    if (ele.selectedToGeneratePackaging) {
+                        this.disableGeneratePackagingBtn = false;
+                        keepGoing = false;
+                    }
+                    else
+                        this.disableGeneratePackagingBtn = true;
+                });
+            }
         });
     }
 
@@ -1305,8 +1383,10 @@ export class SalesOrderShippingComponent {
                 this.modal.close();
             }
         });
-        instance.salesOrderId = rowData.salesOrderId;
+        instance.salesOrderId = this.salesOrderId;
         instance.salesOrderPartId = rowData.salesOrderPartId;
+        instance.soPickTicketId = rowData.soPickTicketId;
+        instance.packagingSlipId = rowData.packagingSlipId;
     }
 }
 
@@ -1314,4 +1394,16 @@ export class ShippingItems {
     SOPickTicketId: number;
     currQtyToShip: number;
     salesOrderPartId: number;
+}
+
+export class PackagingSlipItems {
+    SOPickTicketId: number;
+    currQtyToShip: number;
+    salesOrderPartId: number;
+    salesOrderId: number;
+    masterCompanyId: number;
+    createdBy: string;
+    updatedBy: string;
+    createdDate: string;
+    updatedDate: string;
 }

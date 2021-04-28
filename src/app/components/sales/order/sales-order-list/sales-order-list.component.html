@@ -57,7 +57,7 @@
                             <label class="radio-cstm wauto">
                                 <input type="radio" name="viewType" class="form-control" value="soview"
                                     [(ngModel)]="viewType" (click)="changeOfStatus('','soview')">
-                                <span class="checkmark"></span>SOQ View
+                                <span class="checkmark"></span>SO View
                             </label>
                         </div>
                     </div>
@@ -387,9 +387,13 @@
                             <td
                                 [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                                 {{audit.updatedBy}}</td>
-                            <td>
-                                <p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted"
-                                        [(ngModel)]="audit.isDeleted" disabled></p>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
+                                    <input type="checkbox" name="isDeleted"
+                                        [(ngModel)]="audit.isDeleted" disabled>
+                                    </label>
+                                </span>
                             </td>
                         </tr>
                     </tbody>

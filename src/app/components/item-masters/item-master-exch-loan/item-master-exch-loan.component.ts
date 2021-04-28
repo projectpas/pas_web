@@ -236,6 +236,18 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
             this.saveAndMove();
         }
     }
+    onNoClick(){
+        if(this.nextOrPreviousTab == "Next"){            
+            this.modal.close()
+            this.moveTab('ExportInfo')
+            
+        }
+        if(this.nextOrPreviousTab == "Previous"){
+            this.modal.close()
+            this.moveTab('NhaTlaAlternateTab')
+           
+        }
+    }
 
     private saveFailedHelper(error: any) {
         this.isSpinnerVisible = false;

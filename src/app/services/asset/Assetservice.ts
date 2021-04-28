@@ -71,6 +71,9 @@ export class AssetService {
     addAsset(asset: any) {
         return this.assetEndpoint.getNewAsset<any>(asset);
     }
+    addcalibrationManagment(asset: any) {
+        return this.assetEndpoint.addcalibrationManagment<any>(asset);
+    }
     addAssetIntangible(asset: any) {
         return this.assetEndpoint.addAssetIntangible<any>(asset);
     }
@@ -234,6 +237,9 @@ getIntangibleList(){
     getAuditDataByInventoryId(id: number) {
         return this.assetEndpoint.getAuditDataByInventoryId(id);
     }
+    getAuditDataBycalibrationId(id: number) {
+        return this.assetEndpoint.getAuditDataBycalibrationId(id);
+    }
     //asset inventory adjustment
     getAdjustmentByAssetInventoryId(id){
         return this.assetEndpoint.getAdjustmentByAssetInventoryId(id);
@@ -244,12 +250,27 @@ getIntangibleList(){
     downloadAllAssetList(data){
         return this.assetEndpoint.downloadAllAssetList(data);
     }
+
     downloadAllAssetInventoryList(data){
         return this.assetEndpoint.downloadAllAssetInventoryList(data);
     }
     downloadAllAssetCapsList(data,assetRecordId){
         return this.assetEndpoint.downloadAllAssetCapsList(data,assetRecordId);
     }
+
+    downloadAllCalibrationList(data){
+        return this.assetEndpoint.downloadAllCalibrationList(data);
+    }
+
+    getCalibartionListByID(assetRecordId) {
+        return Observable.forkJoin(
+            this.assetEndpoint.getCalibartionListByID<any[]>(assetRecordId));
+    }
+
+    UpdatecalibartionMgmt(CalibrationManagment) {
+        return this.assetEndpoint.UpdatecalibartionMgmt(CalibrationManagment)
+    }
+
 
 
 }

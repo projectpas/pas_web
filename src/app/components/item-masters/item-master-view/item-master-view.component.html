@@ -388,7 +388,12 @@
 
                             <div class="col-sm-12">
 
-                                <p-table #table3 class="rpo-table-cstm rro-table-cstm"
+                                <app-common-documents [moduleName]="moduleName"   
+                                             [referenceId]="itemMasterRowData.itemMasterId"
+                                             [isViewMode]="true" [offLineUpload]="true">
+                                </app-common-documents>
+
+                                <!-- <p-table #table3 class="rpo-table-cstm rro-table-cstm"
                                          [paginator]="allDocumentsList.length > 0"
                                          [value]="allDocumentsList" [rows]="5" [pageLinks]="3"
                                          [rowsPerPageOptions]="[10,20,50,100]" [columns]="documentTableColumns" [scrollable]="true" scrollHeight="500px"
@@ -481,7 +486,7 @@
                                             </td>
                                         </tr>
                                     </ng-template>
-                                </p-table>
+                                </p-table> -->
 
                             </div>
 
@@ -627,7 +632,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step2"
+                    <a *ngIf="isAircraftView" class="collapsed" data-toggle="collapse" href="#step2"
                        aria-expanded="false">Aircraft Info</a>
                 </h4>
             </div>            
@@ -741,7 +746,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step3">
+                    <a *ngIf="isATAView" class="collapsed" data-toggle="collapse" href="#step3">
                         ATA
                         Chapter
                     </a>
@@ -849,7 +854,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse"
+                    <a *ngIf="isCaps" class="collapsed" data-toggle="collapse"
                        href="#step4">Capes</a>
                 </h4>
             </div>
@@ -867,7 +872,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse"
+                    <a *ngIf="isPurchase" class="collapsed" data-toggle="collapse"
                        href="#step5">Purchase and Sales</a>
                 </h4>
             </div>
@@ -991,7 +996,7 @@
                                         <td class="text-right"> <p> 
                                             {{field.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <a class="btn nobg"
                                             (click)="openHistoryOfPurchaseAndSales(contentPurchaseAndSalesHist, field)"
                                             matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
@@ -1011,7 +1016,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse"
+                    <a *ngIf="isNHA" class="collapsed" data-toggle="collapse"
                        href="#step6">NHA,TLA, Alternate, Equivalency</a>
                 </h4>
             </div>
@@ -1048,7 +1053,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse"
+                    <a *ngIf="isExchangLoan" class="collapsed" data-toggle="collapse"
                        href="#step7">Exchange and Loans</a>
                 </h4>
             </div>
@@ -1116,7 +1121,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse"
+                    <a *ngIf="isExpoinfo" class="collapsed" data-toggle="collapse"
                        href="#step8">Export Information</a>
                 </h4>
             </div>
@@ -1408,7 +1413,7 @@
                                 <th>Created Date</th>
                                 <th>Updated By</th>
                                 <th>Updated Date</th>
-                                <th>Is Deleted</th>
+                                <th>Is Delete</th>
                             </tr>
                         </thead>
 

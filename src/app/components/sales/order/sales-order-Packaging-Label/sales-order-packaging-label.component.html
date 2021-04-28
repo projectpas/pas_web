@@ -2,25 +2,28 @@
     <h4 class="modal-title" id="modal-basic-title"></h4>
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 </div>
-<div class="modal-content" id="soShippingLabel">
+<div class="modal-content" id="PackagingSlip">
     <div class="modal-body">
         <form id="" name="" action="#" method="post" onsubmit="return false;">
             <div class="image">
                 <div style="padding: 0; margin: 0;">
                     <div>
                         <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
-                            <div class="logo-block">
-                                <img src="http://design.poweraerosuites.com/image/logo.png" width="130" /> </div>
+                            <!-- <div class="logo-block">
+                                <img src="{{this.endPointURL + this.management.logo}}" width="130" /> </div>
                             <div class="clear"></div>
-                            <hr />
+                            <hr /> -->
                             <div class="very-first-block">
                                 <div class="col-sm-12 address-block">
+                                    <div class="col-sm-12 first-block-name"><img class="logo"
+                                            src="{{this.endPointURL + this.management.logo}}" height="30px"
+                                            width="100px" /></div>
                                     <div class="col-sm-12 first-block-name">
-                                        <label class="col-sm-3 first-block-label">Company :</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-12 first-block-label"
+                                            disabled>{{this.management.companyName}}</label>
                                     </div>
                                     <br />
-                                    <div class="col-sm-12 first-block-name">
+                                    <!-- <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Logo/Slogan :</label>
                                         <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
                                     </div>
@@ -29,116 +32,130 @@
                                         <label class="col-sm-3 first-block-label">Tagline :</label>
                                         <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
                                     </div>
-                                    <br /><br />
+                                    <br /><br /> -->
                                     <div class="col-sm-12 first-block-name">
-                                        <label class="col-sm-3 first-block-label">Address1 :</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-12 first-block-label"
+                                            disabled>{{this.management.address1}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
-                                        <label class="col-sm-3 first-block-label">Address2 :</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-12 first-block-label"
+                                            disabled>{{this.management.address2}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
-                                        <label class="col-sm-3 first-block-label">City :</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-12 first-block-label"
+                                            disabled>{{this.management.city}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
-                                        <label class="col-sm-3 first-block-label">State/Prov :</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-12 first-block-label"
+                                            disabled>{{this.management.stateOrProvince}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
-                                        <label class="col-sm-3 first-block-label">Zip :</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-12 first-block-label"
+                                            disabled>{{this.management.postalCode}}</label>
                                     </div>
-                                    <div class="col-sm-12 first-block-name">
+                                    <!-- <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Country :</label>
                                         <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Phone :</label>
                                         <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="second-block">
-                                <h5><b>Packing Slip</b></h5>
+                                <h5 class="packaging-slip-header"><b>Packing Slip</b></h5>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Packaging Slip Id</label>
-                                    <input type="text" value="" disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.packagingSlipNo}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label"> Invoice Num</label>
-                                    <input type="text" placeholder="" value="" disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.invoiceNo}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Invoice Date & Time</label>
-                                    <input type="text" value="" disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.invoiceDate | date:'medium'}}</label>
                                 </div>
-
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
-                                    <input type="text" value="" disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.salesOrderNumber}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Num of Items</label>
-                                    <input type="text" value="" disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.numberOfItems}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Num of Containers</label>
-                                    <input type="text" value="" disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{this.salesOrder.noOfContainer}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Prepared By</label>
-                                    <input type="text" value="" disabled />
+                                    <label style="width: 100%; text-align: left;" disabled>{{ userName }}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Date Printed</label>
-                                    <input type="text" value="" disabled />
+                                    <label style="width: 100%; text-align: left;"
+                                        disabled>{{todayDate | date:'medium' }}</label>
                                 </div>
-                                <div class="second-block-div">
+                                <!-- <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Page</label>
-                                    <input type="text" placeholder="1 of 1" value="" disabled />
-                                </div>
+                                    <label class="col-sm-4 second-block-label" style="width:30%" disabled></label>
+                                </div> -->
                             </div>
                             <div class="col-sm-12">
                                 <div class="first-block-sold col-sm-6">
                                     <div class="first-block-sold-to">
                                         <label><b>Sold To:</b></label>
                                         <div class="sold-block-div" style="margin-top:10px">
-                                            <label class="col-sm-6 first-block-label" disabled>Customer
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.customerName}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Address1
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.custToAddress1}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Address2
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.custToAddress2}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>City
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.custToCity}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>State/Prov
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.custToState}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Zip
-                                            </label>
+                                            <!-- <label class="col-sm-6 first-block-label" disabled>Zip
+                                            </label> -->
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.custToCountry}}</label>
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Country
-                                            </label>
+                                            <!-- <label class="col-sm-6 first-block-label" disabled>Country
+                                            </label> -->
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Email
-                                            </label>
+                                            <!-- <label class="col-sm-6 first-block-label" disabled>Email
+                                            </label> -->
                                         </div>
                                         <div class="sold-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Attn
-                                            </label>
+                                            <!-- <label class="col-sm-6 first-block-label" disabled>Attn
+                                            </label> -->
                                         </div>
                                     </div>
                                 </div>
@@ -146,40 +163,47 @@
                                     <div class="first-block-ship-to">
                                         <label><b> Ship To:</b></label>
                                         <div class="ship-block-div" style="margin-top:10px">
-                                            <label class="col-sm-6 first-block-label" disabled>Site
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.shipToContactName}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Address1
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.shipToAddress1}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Address2
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.shipToAddress2}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>City
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.shipToCity}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>State/Prov
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.shipToState}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Zip
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.shipToPostalCode}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Country
-                                            </label>
+                                            <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                                disabled>
+                                                {{this.salesOrder.shipToCountry}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Email
-                                            </label>
+                                            <!-- <label class="col-sm-6 first-block-label" disabled>Email
+                                            </label> -->
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-6 first-block-label" disabled>Attn
-                                            </label>
+                                            <!-- <label class="col-sm-6 first-block-label" disabled>Attn
+                                            </label> -->
                                         </div>
                                     </div>
                                 </div>
@@ -204,15 +228,17 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td style="border:1px solid black">PO-124578</td>
-                                            <td style="border:1px solid black">Owen Baker</td>
-                                            <td style="border:1px solid black">Johnie Walker</td>
+                                            <td style="border:1px solid black">{{this.salesOrder.poroNum}}</td>
+                                            <td style="border:1px solid black">{{this.salesOrder.salesPersonName}}</td>
+                                            <td style="border:1px solid black">{{this.salesOrder.customerContactName}}
+                                            </td>
+                                            <td style="border:1px solid black">{{this.salesOrder.creditTerm}}</td>
                                             <td style="border:1px solid black"></td>
-                                            <td style="border:1px solid black"></td>
-                                            <td style="border:1px solid black"></td>
-                                            <td style="border:1px solid black"></td>
-                                            <td style="border:1px solid black"></td>
-                                            <td></td>
+                                            <td style="border:1px solid black">{{this.salesOrder.shipViaName}}</td>
+                                            <td style="border:1px solid black">
+                                                {{this.salesOrder.shipDate | date : "MM/dd/yyyy"}}</td>
+                                            <td style="border:1px solid black">{{this.salesOrder.awb}}</td>
+                                            <td>{{this.salesOrder.shippingOrderNo}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -220,12 +246,12 @@
                             <div class="clear"></div>
                             <hr />
                             <div class="col-sm-12">
-                                <table style="width:99%;margin-left:5px;" class="table-no-border">
+                                <table style="width:99%;margin-left:5px;">
                                     <thead>
                                         <tr>
                                             <th>Item Num</th>
                                             <th style="border-right:none">PN</th>
-                                            <th style="border-left:none">Stk Line Num</th>
+                                            <th style="border-left:none;text-align:center">Stk Line Num</th>
                                             <th>PN Description</th>
                                             <th>Serial Num</th>
                                             <th>UOM</th>
@@ -234,90 +260,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>PN-145577</td>
-                                            <td>SL-1547</td>
-                                            <td>Actuator</td>
-                                            <td>SN 457855147</td>
-                                            <td>Ea</td>
-                                            <td>AR</td>
-                                            <td class="text-right"> 1.00 </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border:1px solid black"><img
-                                                    src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
-                                                    class="image" /></td>
-                                            <td colspan="7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="background:#f4f4f4">
-                                            </td>
-                                            <td style="background:#f4f4f4" colspan="7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>PN-145577</td>
-                                            <td>SL-4514</td>
-                                            <td>Actuator</td>
-                                            <td>SN 457855147</td>
-                                            <td>Ea</td>
-                                            <td>AR</td>
-                                            <td class="text-right"> 1.00 </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border:1px solid black"><img
-                                                    src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
-                                                    class="image" /></td>
-                                            <td colspan="7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="background:#f4f4f4">
-                                            </td>
-                                            <td style="background:#f4f4f4" colspan="7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>PN-145577</td>
-                                            <td>SL-3514</td>
-                                            <td>Actuator</td>
-                                            <td>SN 457855147</td>
-                                            <td>Ea</td>
-                                            <td>AR</td>
-                                            <td class="text-right"> 1.00 </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border:1px solid black"><img
-                                                    src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
-                                                    class="image" /></td>
-                                            <td colspan="7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="background:#f4f4f4">
-                                            </td>
-                                            <td style="background:#f4f4f4" colspan="7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>PN-145577</td>
-                                            <td>SL-5514</td>
-                                            <td>Actuator</td>
-                                            <td>SN 457855147</td>
-                                            <td>Ea</td>
-                                            <td>AR</td>
-                                            <td class="text-right"> 1.00 </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border:1px solid black"><img
-                                                    src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
-                                                    class="image" /></td>
-                                            <td colspan="7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="background:#f4f4f4">
-                                            </td>
-                                            <td style="background:#f4f4f4" colspan="7"></td>
-                                        </tr>
+                                        <ng-container *ngFor="let part of this.parts let i=index">
+                                            <tr>
+                                                <td>{{i+1}}</td>
+                                                <td>{{part.partNumber}}</td>
+                                                <td>{{part.stockLineNumber}}</td>
+                                                <td>{{part.partDescription}}</td>
+                                                <td>{{part.serialNumber}}</td>
+                                                <td>{{part.uom}}</td>
+                                                <td>{{part.conditionDescription}}</td>
+                                                <td class="text-right"> {{part.qtyPicked}} </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:1px solid black; max-width: 60px">
+                                                    <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
+                                                        class="image" /> -->
+                                                    <img src="{{part.partBarcode}}" alt="barcode" width="100%" />
+                                                </td>
+                                                <td colspan="7"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="background:#f4f4f4">
+                                                </td>
+                                                <td style="background:#f4f4f4" colspan="7"></td>
+                                            </tr>
+                                        </ng-container>
                                         <tr>
                                             <td colspan="8"></td>
                                         </tr>
@@ -361,8 +328,10 @@
                                 </table>
                             </div>
                             <br />
-                            <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" class="image" />
-                            <p class="barcode-name"><b>145875</b></p>
+                            <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" class="image" /> -->
+                            <img src="{{this.salesOrder.packagingLabelBarcode}}" alt="barcode"
+                                style="padding-left: 7px; padding-top: 5px;" />
+                            <p class="barcode-name"></p>
                             <div class="clear"></div>
                             <hr />
                             <div class="clear"></div>
@@ -374,6 +343,20 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="printContent()">Print</button>
     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
 </div>

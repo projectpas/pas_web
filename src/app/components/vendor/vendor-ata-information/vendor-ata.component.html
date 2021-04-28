@@ -316,7 +316,7 @@
             <div class="modal-body" *ngIf="auditHistoryATA">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width" *ngIf="auditHistoryATA.length > 0; else noDatavailable">
+					<table class="table table-bordered" *ngIf="auditHistoryATA.length > 0; else noDatavailable">
                         <thead>
                             <tr>
                                 <th>ATA Chapter Code</th>
@@ -397,7 +397,14 @@
                                     ? 'black'
                                     : 'red'
                                 }">{{audit.updatedBy}}</td>
-                                <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto"> 
+                                     <input type="checkbox" name="isDeleted" 
+                                     [(ngModel)]="audit.isDeleted" disabled>
+                                    </label>
+                                </span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

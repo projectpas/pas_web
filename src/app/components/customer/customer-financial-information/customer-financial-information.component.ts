@@ -216,6 +216,8 @@ export class CustomerFinancialInformationComponent implements OnInit {
   isAtaEdit:Boolean=true;
   isBillingInfoAdd:Boolean=true;
   isBillingInfoEdit:Boolean=true;
+  isNextVisible: Boolean=true;
+  isPrevVisible: Boolean=true;
   constructor(
     private _decimalPipe: DecimalPipe,
     public taxtypeser: TaxTypeService,
@@ -247,6 +249,9 @@ export class CustomerFinancialInformationComponent implements OnInit {
     //Previous
     this.isAtaAdd=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add])
     this.isAtaEdit=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update])
+
+    this.isNextVisible=this.authService.ShowTab("Create Customer","Billing Information");
+    this.isPrevVisible=this.authService.ShowTab("Create Customer","Aircraft Information");
   }
 
   taxtypesList = [];

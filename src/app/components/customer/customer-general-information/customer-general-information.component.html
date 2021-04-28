@@ -58,7 +58,7 @@
                                     type="radio"
                                     value="2"
                                     checked="checked"
-                                    [disabled]="editMode"
+                                    
                                     (ngModelChange)="enableSave()"
                                     name="optradio"
                                     [(ngModel)]="
@@ -75,7 +75,7 @@
                                     type="radio"
                                     value="1"
                                     name="optradio2" 
-                                    [disabled]="editMode"                                  
+                                                                
                                     (ngModelChange)="enableSave()"
                                     [(ngModel)]="
                                       generalInformation.customerAffiliationId
@@ -91,7 +91,7 @@
                                   <input
                                     type="radio"
                                     value="3"   
-                                    [disabled]="editMode"                                
+                                                            
                                     name="optradio3"
                                     (ngModelChange)="enableSave()"
                                     [(ngModel)]="
@@ -886,7 +886,7 @@
                         >                        
                         {{editMode ? 'Update' : 'Save' }}
                         </button>                        
-                        <button 
+                        <button *ngIf="isNextVisible"
                           type="button"
                           [disabled]="!allowNextView"
                           class="btn btn-primary submit-btn new-footer-btn"
@@ -1518,7 +1518,8 @@
         <h4 class="modal-title">Confirmation</h4>
       </div>
       <div class="modal-body">
-        <p>Are you Sure want to Save Customer also Vendor</p>
+        <!-- <p>Are you Sure want to Save Customer also Vendor</p> -->
+        <p>This Customer is also a vendor, Please remember to complete set up process for this Vendor.</p>
       </div>
       <div class="modal-footer">
         <button

@@ -427,6 +427,7 @@
             <th>Is Deleted</th>
           </tr>
         </thead>
+        <tbody>
         <tr *ngFor="let audit of chargesAudiHistory; let i = index;">
           <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'chargeType', audit.chargeType)  ? 'black' : 'red'  }">
             {{audit.chargeType}}</td>
@@ -470,6 +471,7 @@
             </span>
           </td>
         </tr>
+        </tbody>
       </table>
     </div>
   </div>

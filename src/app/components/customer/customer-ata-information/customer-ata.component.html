@@ -200,11 +200,11 @@
     </p-table>
 
     <div class="col-md-12">
-      <button type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
+      <button *ngIf="isNextVisible" type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
         [disabled]="stopmulticlicks">
         Next
       </button>
-      <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
+      <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
         Previous
       </button>
     </div>
@@ -389,7 +389,14 @@
                   }">
                     {{audit.updatedBy}}
                 </td>
-                <td style="width:60px;text-align:center" class="background-white"><p class="text-center width-50"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto">
+                  <input type="checkbox" name="isDeleted" 
+                  [(ngModel)]="audit.isDeleted" disabled>
+                </label>
+              </span>
+              </td>
             </tr>
             </tbody>
           </table>

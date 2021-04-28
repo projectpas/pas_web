@@ -9,7 +9,7 @@ import { WorkOrderPartNumberService } from '../../../../services/work-order/work
 import { StocklineService } from '../../../../services/stockline.service';
 import { CommonService } from '../../../../services/common.service';
 import { AuthService } from '../../../../services/auth.service';
-import { ActivatedRoute } from '@angular/router'; 
+import { ActivatedRoute } from '@angular/router';
 import { workOrderGeneralInfo } from '../../../../models/work-order-generalInformation.model';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
@@ -25,7 +25,7 @@ import { SalesOrderReference } from '../../../../models/sales/salesOrderReferenc
 export class WorkOrderViewComponent implements OnInit, OnChanges {
     @Input() workOrderId = 0;
     creditTerms: any;
-    techStationList: any; 
+    techStationList: any;
     workOrderStagesList: any;
     priorityList: any;
     workOrderTypes: any;
@@ -73,8 +73,8 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         });
         this.salesOrderService.salesOrderReferenceSubj$.subscribe(data => {
             this.salesOrderReferenceData = data;
-          });
-     }
+        });
+    }
 
 
     ngOnInit() {
@@ -90,14 +90,14 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         this.onDestroy$.next();
     }
 
-    getBasicDetails(){
- 
-            this.getMultiplePartsNumbers();
+    getBasicDetails() {
+
+        // this.getMultiplePartsNumbers();
         if (this.workOrderId || this.recCustomerId) {
 
             this.recCustomerId = 0;
-            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerEnable = true; 
+            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerEnable = true;
                 this.isEdit = true;
 
 
@@ -121,30 +121,30 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
                 }
                 this.editWorkOrderGeneralInformation = data;
             })
-        // }
+            // }
         }
         else {
             this.getWorkOrderDefaultSetting();
         }
     }
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
- 
+
     getWorkOrderDefaultSetting(value?) {
-      const  value1 = value ? value : this.workOrderGeneralInformation.workOrderTypeId;
+        const value1 = value ? value : this.workOrderGeneralInformation.workOrderTypeId;
         this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            
+
             if (res.length > 0) {
                 const data = res[0];
-                this.workorderSettings=res[0];
+                this.workorderSettings = res[0];
                 this.workOrderGeneralInformation = {
                     ...this.workOrderGeneralInformation,
                     partNumbers: this.workOrderGeneralInformation.partNumbers.map(x => {
                         return {
-                            ...x, 
+                            ...x,
                             workOrderStageId: data.defaultStageCodeId,
                             workOrderPriorityId: data.defaultPriorityId, // true 
                         }
@@ -173,11 +173,11 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     }
 
 
-    setEditArray:any=[];
-    getAllWorkOrderStatus(): void { 
+    setEditArray: any = [];
+    getAllWorkOrderStatus(): void {
         this.setEditArray.push(0);
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 0, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 0, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }
@@ -192,12 +192,12 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     getJobTitles() {
         this.commonService.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
             this.jobTitles = res;
-  
+
         })
     }
- 
-    employeesOriginalData:any=[];
- 
+
+    employeesOriginalData: any = [];
+
 
     // async getAllTecStations() {
     //     await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -210,12 +210,12 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     //         });
     //     })
     // }
- 
+
 
 
     getAllWorkOrderStages(): void {
         this.workOrderService.getWorkOrderStageAndStatus(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-   
+
             this.workOrderStagesList = res.map(x => {
                 return {
                     ...x,
@@ -225,7 +225,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
             });
         })
     }
- 
+
 
     getMultiplePartsNumbers() {
         this.workOrderService.getMultipleParts(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -235,12 +235,12 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
 
 
     async getPartNosByCustomer(customerId, workOrderId) {
-       await this.workOrderService.getPartNosByCustomer(customerId, workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 
             this.partNumberOriginalData = res;
         });
     }
- 
+
 
 
     getConditionsList() {

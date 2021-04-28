@@ -89,6 +89,8 @@ export class CustomerATAInformationComponent implements OnInit {
     isFinancialInfoAdd:Boolean=true;
     isFinancialInfoEdit:Boolean=true;
    
+    isNextVisible:Boolean=true;
+    isPrevVisible:Boolean=true;
     constructor(
         private atasubchapter1service: AtaSubChapter1Service,
         private atamain: AtaMainService,
@@ -114,6 +116,8 @@ export class CustomerATAInformationComponent implements OnInit {
         this.isAircraftAdd=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add])
         this.isAircraftEdit=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update])
         
+        this.isNextVisible=this.authService.ShowTab("Create Customer","Aircraft Information");
+        this.isPrevVisible=this.authService.ShowTab("Create Customer","Contacts");
     }
 
     ngOnInit() {

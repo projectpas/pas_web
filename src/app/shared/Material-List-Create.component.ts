@@ -267,8 +267,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.editData.extendedCost = this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
             this.workFlow.materialList = this.editData;
         }
-        if (this.workFlow) {
-            // this.getConditionsList();
+        if (this.workFlow) { 
             if (this.workFlow.materialList.length > 0) {
                 this.workFlow.materialList = this.workFlow.materialList.map(x => {
                     return {
@@ -342,11 +341,16 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
     getMaterailMandatories() {
         let materialMandatoriesIds = [];
-        if (!this.isWorkOrder || !this.isQuote) {
-            materialMandatoriesIds = this.workFlow.materialList.reduce((acc, x) => {
-                return materialMandatoriesIds.push(acc.MaterialMandatoriesId);
-            }, 0)
+        // if (!this.isWorkOrder || !this.isQuote) {
+            if(this.workFlow.materialList && this.workFlow.materialList.length !=0){
+              this.workFlow.materialList.forEach(element => {
+                return materialMandatoriesIds.push(element.materialMandatoriesId);  
+              }) 
+        }else{
+            materialMandatoriesIds.push(0)
         }
+        // }
+        console.log("hello",materialMandatoriesIds)
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 0, materialMandatoriesIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
@@ -384,11 +388,12 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getConditionsList() {
         this.isSpinnerVisible = true;
         let conditionIds = [];
-        conditionIds.push(0)
-        if (this.UpdateMode) {
+        if ( this.workFlow.materialList &&  this.workFlow.materialList.length !=0) {
             this.workFlow.materialList.forEach(acc => {
                 conditionIds.push(acc.conditionCodeId);
             })
+        }else{
+            conditionIds.push(0)
         }
         this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true,  0, conditionIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
@@ -563,9 +568,15 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     provisionList() {
         this.isSpinnerVisible = true;
         let provisionIds = [];
-        provisionIds = this.workFlow.materialList.reduce((acc, x) => {
-            return provisionIds.push(acc.provisionId);
-        }, 0)
+        console.log("this.workFlow.materialList",this.workFlow.materialList) 
+    if(this.workFlow.materialList && this.workFlow.materialList.length !=0){
+             this.workFlow.materialList.forEach(element => {
+            return provisionIds.push(element.provisionId);
+        })
+    }else{
+        provisionIds.push(0)
+    }
+        console.log("this.workFlow.materialList",provisionIds)
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 0, provisionIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
@@ -878,7 +889,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                         this.isSpinnerVisible = false;
                         if (partDetail) {
                             const unitCost = parseFloat(part.unitCost.toString().replace(/\,/g, ''));
-                           part.unitCost = unitCost != 0 ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2);
+                           part.unitCost = unitCost != 0 ? formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2) : formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2);
                             part.billingRate = partDetail["sP_FSP_FlatPriceAmount"];
                             part.markupPercentageId = partDetail["sP_CalSPByPP_MarkUpPercOnListPrice"];
                             part.stockType = part.stockType ? part.stockType : partDetail["stockType"];

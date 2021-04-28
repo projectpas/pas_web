@@ -152,6 +152,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
     isGeneralInfoDelete:boolean=true;
     isGeneralInfoAdd:boolean=true;
 
+    isNextVisible:Boolean=true;
+
     constructor(public integrationService: IntegrationService, private modalService: NgbModal, public customerClassificationService: CustomerClassificationService, public ataservice: AtaMainService, private authService: AuthService, private alertService: AlertService,
         public customerService: CustomerService, public itemService: ItemMasterService, public vendorser: VendorService, private currencyService: CurrencyService, private commonService: CommonService, private router: Router) {
         this.stopmulticlicks = false;
@@ -163,6 +165,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         this.isGeneralInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Update])
         this.isGeneralInfoDelete=this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Delete])		
         this.isGeneralInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Add]);
+        this.isNextVisible=this.authService.ShowTab("Create Customer","Contacts");
     }
 
     ngOnInit() {

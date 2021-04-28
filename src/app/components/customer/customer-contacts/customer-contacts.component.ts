@@ -87,7 +87,7 @@ export class CustomerContactsComponent implements OnInit {
 		{ field: 'email', header: 'Email' },
 		{ field: 'workPhone', header: 'Work Phone',width:"100px" },
 		{ field: 'mobilePhone', header: 'Mobile Phone',width:"100px" },
-		{ field: 'notes', header: 'Memo' },
+		{ field: 'notes', header: 'Memo',width:"250px" },
 		{ field: 'fax', header: 'Fax' },
 		{ field: 'createdDate', header: 'Created Date' },
 		{ field: 'createdBy', header: 'Created By' },
@@ -179,6 +179,8 @@ export class CustomerContactsComponent implements OnInit {
 	isAircrafEdit:Boolean=true;
 	isDownload:Boolean=true;
 	isAtaDelete:Boolean=true;
+
+	isNextVisible:Boolean=true;
 	constructor(private router: ActivatedRoute,
 		private route: Router,
 		private authService: AuthService,
@@ -212,6 +214,8 @@ export class CustomerContactsComponent implements OnInit {
 		
 		this.isCustGenrlAdd = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Add])
 		this.isCustGenrlUpdate = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Update])
+
+		this.isNextVisible=this.authService.ShowTab("Create Customer","ATA Chapter");
 	}
 
 	ngOnInit() {		

@@ -174,6 +174,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     get advancedSearchstockListUrl() { return this.configurations.baseUrl + this._advanceSearchstockListUrl; }
     get advancedSearchNonStockListUrl() { return this.configurations.baseUrl + this._advanceSearchNonstockListUrl; }
     get getSearchItemMasterfromExchangeQuotepopUrl() { return this.configurations.baseUrl + this._searchItemMasterfromExchangequotepop };
+    get getAuditHistoryurl() { return this.configurations.baseUrl + this.getAuditHistoryById }
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
@@ -832,7 +833,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getAuditHistory<T>(ItemMasterId: number): Observable<T> {
-        let endpointUrl = `${this.getAuditHistoryById}/${ItemMasterId}`;
+        let endpointUrl = `${this.getAuditHistoryurl}/${ItemMasterId}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAuditHistory(ItemMasterId));
@@ -1119,8 +1120,8 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getalterqquparts<T>(itemMasterId: number): Observable<T> {
-        let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}`;
+    getalterqquparts<T>(itemMasterId: number,masterCompanyId?): Observable<T> {
+        let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}&&masterCompanyId=${masterCompanyId!==undefined ? masterCompanyId : 1}`;
         return this.http
             .get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
@@ -1176,7 +1177,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
     // createequivalencypart
     createNTAEFileUploadForEquivalency(file) {
-        return this.http.post(`${this.createequivalencypartUrl}`, file)
+        return this.http.post(`${this.createequivalencypartUrl}`, file,this.getFormReqHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.createNTAEFileUploadForEquivalency(file));
             });
@@ -1184,7 +1185,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
     // updateequivalencypart
     updateNTAEFileUploadForEquivalency(file) {
-        return this.http.post(`${this.updateequivalencypartUrl}`, file)
+        return this.http.post(`${this.updateequivalencypartUrl}`, file,this.getFormReqHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.updateNTAEFileUploadForEquivalency(file));
             });
@@ -1335,21 +1336,21 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getItemMasterDataById(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getitemmasterdatabyid/${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getitemmasterdatabyid/${id}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterDataById(id));
             });
     }
 
     getActivePartListByItemType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type,masterCompanyId));
             });
     }
 
     getItemMasterClassificationByType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterClassificationByType(type));
             });

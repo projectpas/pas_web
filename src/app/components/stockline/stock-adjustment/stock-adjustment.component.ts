@@ -27,7 +27,6 @@ export class StockAdjustmentComponent implements OnInit {
 	legalEntityList: any;	
 	businessUnitList: any;
 	timePattern = timePattern();
-	//divisionList: any;
 	departmentList: any;
 	existingMgmentStuc: any = {
 		level1: '',
@@ -310,7 +309,6 @@ export class StockAdjustmentComponent implements OnInit {
 
 	getManagementStructureCodes(id,empployid=0,editMSID=0) {
 		empployid = empployid == 0 ? this.employeeId : empployid ;
-		//editMSID = this.isEditMode ? editMSID = id : 0;
 		this.commonService.getManagmentStrctureData(id,empployid,editMSID,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			if(response) {
 				const result = response;
@@ -424,7 +422,6 @@ export class StockAdjustmentComponent implements OnInit {
 
 	isCompanyEnable(item) {				
 		if(this.companyAllow) {
-			//this.getLegalEntity();
 			this.legalEntityList = this.maincompanylist ;
 			this.showCompany = true;
 			this.showBusiness = true;

@@ -140,7 +140,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.AcquisitionloadData('');
         this.getAllWorkOrderStatus();
         this.getAllWorkOrderStages();
-
+        this.loadConditionData('');
         this.getAllPriority();
         // this.getworblist();
         this.getAllTearDownTypes();
@@ -149,6 +149,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             this.loadSiteData('');
             this.loadConditionData('');
         }
+      
         if (!this.receivingCustomerWorkId) {
             this.breadcrumbs = [
                 { label: 'Work Order Settings' },
@@ -195,6 +196,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
              this.receivingForm = {
                  ...res[0]
             };
+
             this.isSpinnerVisible=false;
             let teardowns = res[0].tearDownTypes.split(',');
             this.tearDownTypes.forEach(
@@ -207,8 +209,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                         }
                     )
                 }
-            )
-        
+            ) 
             this.loadSiteData('');
             this.loadConditionData('');
             if (this.receivingForm.defaultSiteId) {
@@ -230,19 +231,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             this.isSpinnerVisible=false;
         });
     }    
-
-    // getSiteDetailsOnEdit(res) {
-        // this.siteValueChange(res.defaultSiteId);
-        // this.wareHouseValueChange(res.defaultWearhouseId);
-        // this.locationValueChange(res.defaultLocationId);
-        // this.shelfValueChange(res.defaultShelfId);
-        // this.receivingForm.warehouseId = res.defaultWearhouseId;
-        // this.receivingForm.locationId = res.defaultLocationId;
-        // this.receivingForm.shelfId = res.defaultShelfId;
-        // this.receivingForm.binId = res.defaultBinId;
-    // }
-
-    
     getSiteDetailsOnEdit(res) {
         // this.getInactiveObjectOnEdit('value', res.defaultSiteId, this.allSites, 'Site', 'SiteId', 'Name');
         this.getInactiveObjectOnEdit('value', res.defaultWearhouseId, this.allWareHouses, 'Warehouse', 'WarehouseId', 'Name');

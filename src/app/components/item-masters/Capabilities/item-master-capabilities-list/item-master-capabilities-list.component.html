@@ -131,13 +131,13 @@
                         *ngIf="col.field != 'addedDate' && col.field != 'verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'"
                             (input)="capabilityListTable.filter($event.target.value, col.field, 'contains')">
                             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'addedDate'"
-                            name="addedDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            name="addedDate" (change)="addeddateFilterForTable($event.target.value, col.field)" />
                             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'verifiedDate'"
-                            name="verifiedDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            name="verifiedDate" (change)="addeddateFilterForTable($event.target.value, col.field)" />
                             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
-                            name="createdDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            name="createdDate" (change)="addeddateFilterForTable($event.target.value, col.field)" />
                           <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
-                            name="updatedDate" (change)="capabilityListTable.filter($event.target.value,col.field)" />
+                            name="updatedDate" (change)="addeddateFilterForTable($event.target.value,col.field)" />
                         </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
                     </ng-container>
@@ -153,21 +153,35 @@
                     <ng-container *ngIf="col.field !='isVerified' && col.field !='memo' && col.field !='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                     {{
                                         col.field == 'entryDate'
-                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                        ? (rowData[col.field] )
                                         : rowData[col.field] && col.field == 'addedDate'
-                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                        ? (rowData[col.field] )
                                         : rowData[col.field]
                                     }}
                     </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
-                        <input type="checkbox" disabled [checked]="rowData[col.field] == true"
+                        <input type="checkbox" [checked]="rowData[col.field] == true"
                                class="input-check" />
+                               <!-- <div class="form-group">
+                                <div class="checkbox-cstm">
+                                  <label> 
+                                    <span *ngIf="rowData[col.field] == true" class="cr margin-left-50 disablecheckbox"
+                                      ><i class="cr-icon pi pi-check" ></i
+                                    ></span>
+                                    <span *ngIf="rowData[col.field] !== true" class="cr margin-left-50 disablecheckbox"
+                                    ><i class="cr-icon" ></i
+                                  ></span>
+                                     
+                                    </label>
+                                </div>
+                              </div> -->
+                              
                     </ng-container>
                     <ng-container *ngIf="col.field =='verifiedDate'">
-                        {{rowData[col.field] | date: 'MM/dd/yyyy'}}
+                        {{rowData[col.field] }}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-                        {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
+                        {{rowData[col.field] }}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'memo'">
                         <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="rowData[col.field]"></p>
@@ -354,7 +368,7 @@
                                 <th>PN Description<strong class="clr-red">*</strong></th>
                                 <th class="mgmt-table-header" colspan="4">Management Structure <strong class="clr-red">*</strong></th>
                                 <th>Added Date</th>
-                                <th>Is Verified</th>
+                                <th>Verified</th>
                                 <th>Verified By</th>
                                 <th>Verified Date</th>
                                 <th>Memo</th>
@@ -376,21 +390,30 @@
                                 <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
                                 <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
                                 <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
-                                <td><p >{{audit.addedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
-                                <td class="text-center"><p > <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified" disabled></p></td>
+                                <td>{{audit.addedDate | date: 'MM-dd-yyyy, h:mm a'}}</td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
+                                           <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified"
+                                            disabled></label></span></td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
                                 
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }"><p style="width: 80px;">{{audit.verifiedDate | date: 'MM-dd-yyyy'}}</p></td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red' }">
                                     <p [innerHTML]="audit.memo"></p>
                                 </td>
-                                <td><p >{{audit.createdDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
+                                <td>{{audit.createdDate | date: 'MM-dd-yyyy, h:mm a'}}</td>
 
                                 <td >{{audit.createdBy}}</td>
-                                <td><p >{{audit.updatedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
+                                <td>{{audit.updatedDate | date: 'MM-dd-yyyy, h:mm a'}}</td>
 
                                 <td >{{audit.updatedBy}}</td>
-                                <td class="text-center"><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
+                                           <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                        </label>
+                                    </span></td>
                             </tr>
                         </tbody>
                     </table>

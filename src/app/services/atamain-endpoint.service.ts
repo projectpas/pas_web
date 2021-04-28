@@ -123,10 +123,11 @@ export class ATAMainEndpoint extends EndpointFactory {
         });
     }
     
-    getATAMainDropdownList(){
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ATAMain/getdropdownlist`)
+    getATAMainDropdownList(masterCompanyId?){
+        let endpointUrl = `${this.configurations.baseUrl}/api/ATAMain/getdropdownlist/${masterCompanyId !== undefined ? masterCompanyId : 1}`;
+        return this.http.get<any>(endpointUrl)
         .catch(error => {
-            return this.handleErrorCommon(error, () => this.getATAMainDropdownList());
+            return this.handleErrorCommon(error, () => this.getATAMainDropdownList(masterCompanyId));
         });
     }
    

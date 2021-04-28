@@ -47,7 +47,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         private alertService: AlertService) {
     }
 
-    ngOnInit(): void {
+    ngOnInit(): void {  
         if (this.isWorkOrder) {
             this.workFlow = this.workFlowObject;
             this.row = this.workFlow.equipments[0];
@@ -92,7 +92,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(): void {
-        if (this.isWorkOrder) {
+        if (this.isWorkOrder) { 
             this.workFlow = this.workFlowObject;
             this.workFlow.equipments = [];
             this.row = this.workFlow.equipments[0]; 
@@ -122,6 +122,8 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         newRow.workflowChargeTypeId = "";
         newRow.partNumber = "";
         newRow.isDeleted = false;
+        newRow.assetIdName="";
+        newRow.assetRecordId=0;
         this.workFlow.equipments.push(newRow);
     }
     clearautoCompleteInput(currentRecord) {
@@ -296,7 +298,12 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
   editorgetmemo(ev) {
       this.disableEditor = false;
   }
-
+  close() {
+    this.isEdit = false;
+    this.editData = undefined;
+    this.workFlow.equipments = []; 
+    this.closeEvent.emit(true)
+}
 }
 
 

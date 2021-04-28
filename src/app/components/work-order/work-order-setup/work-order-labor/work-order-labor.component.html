@@ -463,6 +463,12 @@
             </div>
             </ng-container>
   </ng-container>
+
+  <tr *ngIf="laborForm && laborForm.workOrderLaborList.length==0">
+    <td colspan="12"  class="no-records-msg no-records-cstm">
+        No records found
+    </td> 
+</tr>
           <ng-container *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder'">
             <tr class="footer">
               <td><b>Total Labor Hours</b></td>

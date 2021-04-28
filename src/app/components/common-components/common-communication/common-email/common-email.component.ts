@@ -455,6 +455,9 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             this.getAllEmployees('');
         }
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
     filterEmployee1(event): void {
         this.employeeList = this.employeesOriginalData;
         if (event.query !== undefined && event.query !== null) {

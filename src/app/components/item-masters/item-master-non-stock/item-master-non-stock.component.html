@@ -47,7 +47,8 @@
                         <label for="customerName" class="control-label">
                             PN <strong class="clr-red">*</strong>
                         </label>
-                        <p-autoComplete [(ngModel)]="sourceItemMaster.partNumber" (onKeyUp)=eventHandler($event) (onSelect)="partnmId($event)" name="partNumber" [suggestions]="partCollection" (completeMethod)="filterpartItems($event)" [size]="30" [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" (onClear)="onClearPN()" required>
+                        <p-autoComplete [(ngModel)]="sourceItemMaster.partNumber" (onKeyUp)=eventHandler($event) (onSelect)="partnmId($event)" name="partNumber" [suggestions]="partCollection" 
+                        (completeMethod)="filterpartItems($event)" [size]="30" [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" (onClear)="onClearPN()" required>
                             <ng-template let-partName pTemplate="part">
                                 <div class="ui-helper-clearfix">{{partName}}</div>
                             </ng-template>
@@ -65,15 +66,24 @@
                             </label>
                         </div>
                         <div>
-                            <p-dropdown class="p-dropdown-100" [options]="allitemNonStockclassificationInfo" filter="true" [(ngModel)]="sourceItemMaster.itemNonStockClassificationId" name="itemNonStockClassificationId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
+                            <p-dropdown class="p-dropdown-100" 
+                            [options]="allitemNonStockclassificationInfo" 
+                            filter="true" 
+                            [(ngModel)]="sourceItemMaster.itemNonStockClassificationId" 
+                            name="itemNonStockClassificationId" 
+                            [resetFilterOnHide]="true" 
+                            placeholder="Select" [showClear]="true" required></p-dropdown>
                         </div>
                         <div class="inline-block display-flex">
                             <label class="control-label">
-                                Item Group
+                                Item Group <strong class="clr-red">*</strong>
                             </label>
                         </div>
                         <div>
-                            <p-dropdown class="p-dropdown-100" [options]="allitemgroupobjInfo" filter="true" [(ngModel)]="sourceItemMaster.itemGroupId" name="itemGroupId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
+                            <p-dropdown class="p-dropdown-100" [options]="allitemgroupobjInfo" 
+                            filter="true" [(ngModel)]="sourceItemMaster.itemGroupId" name="itemGroupId"
+                            [resetFilterOnHide]="true" 
+                            placeholder="Select" [showClear]="true" required></p-dropdown>
                         </div>
                         <div class="inline-block display-flex spacing-label m-t-5">
                             <label class="control-label">Acquired?</label>

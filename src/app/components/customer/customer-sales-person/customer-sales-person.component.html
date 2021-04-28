@@ -102,7 +102,7 @@
           </div>
           
           <div class="margin-top: 10px">
-            <button   (click)="nextClick('Next')" type="button" class="btn btn-primary pull-right submit-btn">
+            <button *ngIf="isNextVisible"   (click)="nextClick('Next')" type="button" class="btn btn-primary pull-right submit-btn">
               Next
             </button>
             <button type="submit" *ngIf="isSalesPersonInfoAdd && isFirstSave" class="btn btn-primary pull-right" [disabled]="!salesPersonForm.valid || disableSave"
@@ -119,7 +119,7 @@
               (click)="saveSalesInformation()">
               {{isFirstSave ? 'Save' : 'Update'}} 
             </button> -->
-            <button  type="button" class="btn btn-primary pull-right submit-btn">
+            <button *ngIf="isPrevVisible"  type="button" class="btn btn-primary pull-right submit-btn">
               Previous
             </button>
           </div>

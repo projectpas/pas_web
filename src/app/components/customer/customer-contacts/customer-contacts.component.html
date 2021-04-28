@@ -295,7 +295,7 @@
           </ng-template>
           <ng-template pTemplate="emptymessage" let-columns *ngIf="customerContacts.length == 0">
             <tr>
-              <td colspan="15" class="no-records-cstm no-records-msg">
+              <td colspan="16" class="no-records-cstm no-records-msg">
                 No records found
               </td>
             </tr>
@@ -311,7 +311,7 @@
           </ng-template>
         </p-table>
         <div class="m-t-10" *ngIf="isViewMode == false">
-          <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
+          <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
             [disabled]="stopmulticlicks">
             Next
           </button>
@@ -376,7 +376,7 @@
 
                 <th>Website URL</th>
                 <th class="width-60">Primary Contact</th>
-                <th class="width-130">Memo</th>
+                <th class="min-width-250">Memo</th>
                 <th class="width-60">Is Active</th>                
                 <th style="min-width:120px">Created Date</th>
                 <th>Created By</th>
@@ -519,8 +519,12 @@
                   {{ audit.websiteURL }}
                 </td>
 
-                <td class="default-contact-check"><p class="width-50"> 
-                  <input type="checkbox" name="isDefaultContact" [(ngModel)]="audit.isDefaultContact" disabled></p></td>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto">
+                  <input type="checkbox" name="isDefaultContact" 
+                  [(ngModel)]="audit.isDefaultContact" disabled>  </label>
+                </span></td>
 
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'notes', audit.notes)
@@ -529,7 +533,11 @@
                   }">
                   <p [innerHTML]="audit.notes"></p>
                 </td>
-                <td class="text-center"><p class="width-50"> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled></p></td>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto">
+                       <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
+                      </label></span></td>
                 <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'createdBy', audit.createdBy)
@@ -546,7 +554,14 @@
                   }">
                   {{ audit.updatedBy }}
                 </td>
-                <td class="default-contact-check"><p class="width-50"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto">
+                     <input type="checkbox" name="isDeleted" 
+                     [(ngModel)]="audit.isDeleted" disabled>
+                    </label>
+                  </span>
+                  </td>
               </tr>
             </tbody>
           </table>

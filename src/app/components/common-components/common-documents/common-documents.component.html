@@ -338,7 +338,7 @@
               <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforDocument.docMemo">
               </p>
             </span></p>
-          <p><span class="label"><b>Created Date: </b></span><span
+          <p style="margin-top:-10px"><span class="label"><b>Created Date: </b></span><span
               class="value">{{sourceViewforDocument.createdDate | date: 'MM/dd/yyyy h:mm a '}}</span></p>
           <p><span class="label"><b>Created By: </b></span><span
               class="value">{{sourceViewforDocument.createdBy}}</span></p>
@@ -817,7 +817,7 @@
                 Document Type Already Exists
               </div>
             </div>
-            <div class="form-group col-md-12">
+            <!-- <div class="form-group col-md-12">
               <div class="col-md-4"><label class="col-md-6">Rev Num <span class="clr-red"></span> :</label></div>
               <p-autoComplete class="autocomp-customer-cstm col-md-6" name="revNum" [(ngModel)]="addNew.revNum"
                 [suggestions]="lstfilterDocumentTypeRevNum" emptyMessage="No Match Found" field="revNum"
@@ -830,12 +830,12 @@
               <div *ngIf="isDocumentrevnumAlreadyExists" class="clr-red">
                 Rev Num Already Exists
               </div>
-            </div>
-            <div class="form-group col-md-12">
+            </div> -->
+            <!-- <div class="form-group col-md-12">
               <div class="col-md-4"><label class="col-md-6">Description <span class="clr-red">*</span> :</label></div>
               <input type="text" class="form-control col-md-6" name="description" [(ngModel)]="addNew.description"
                 required>
-            </div>
+            </div> -->
             <div class="form-group col-md-12">
               <div class="col-md-4"><label class="col-md-6" style="vertical-align: top;">Memo:</label></div>
               <div class="col-md-6">
