@@ -313,7 +313,7 @@ export class WorkflowListComponent implements OnInit {
     }
 
     removeWorkFlow(): void {
-        this.actionService.RemoveWorkFlow(this.currentWorkflow.workflowId).subscribe(
+        this.actionService.RemoveWorkFlow(this.currentWorkflow.workflowId, this.userName).subscribe(
             result => {
                 this.alertService.showMessage(this.title, "ACC" + this.currentWorkflow.workflowId + ' deleted successfully.', MessageSeverity.success);
                 this.getDeleteListByStatus(this.currentDeletedstatus)
@@ -345,7 +345,7 @@ export class WorkflowListComponent implements OnInit {
     }
 
     toggleIsActive(workflow: any, event): void {
-        this.actionService.toggleState(workflow.workflowId).subscribe(
+        this.actionService.toggleState(workflow.workflowId, this.userName).subscribe(
             result => {
                 this.getDeleteListByStatus(this.currentDeletedstatus);
                 if (event.checked) {

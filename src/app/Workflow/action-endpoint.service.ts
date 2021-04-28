@@ -13,9 +13,6 @@ import { Charge } from '../models/charge.model';
 import { environment } from 'src/environments/environment';
 @Injectable()
 export class ActionEndpoint extends EndpointFactory {
-
-
-
     private readonly _actionsUrl: string = environment.baseUrl+"/api/Action/Get";
     private readonly _actionsUrlNew: string =environment.baseUrl+ "/api/Action/actions";
     private readonly _actionsUrlAuditHistory: string =environment.baseUrl+ "/api/Action/auditHistoryById";
@@ -63,7 +60,7 @@ export class ActionEndpoint extends EndpointFactory {
     private UpdateMaterialListURL: string = environment.baseUrl + "/api/workflow/updateMaterial";
     private UpdateMeasurementURL: string = environment.baseUrl + "/api/workflow/updateMeasurement";
     private UpdatePublicationURL: string = environment.baseUrl + "/api/workflow/updatePublication";
-    private RemoveWorkFlowURL: string = environment.baseUrl + "/api/workflow/remove";
+    private RemoveWorkFlowURL: string = environment.baseUrl + "/api/workflow/updatedeletedstatus";
 
     get actionsUrl() { return  this._actionsUrl; }
 
@@ -71,11 +68,19 @@ export class ActionEndpoint extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    toggleState<T>(workflowId: number): Observable<T> {
-        let endpointUrl = `${this.toggleStateURL}/${workflowId}`;
-        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+    // toggleState<T>(workflowId: number, userName: string): Observable<T> {
+    //     let endpointUrl = `${this.toggleStateURL}/${workflowId}`;
+    //     return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+    //         .catch(error => {
+    //             return this.handleErrorCommon(error, () => this.toggleState(workflowId, userName));
+    //         });
+    // }
+    toggleState<T>(workflowId: number, userName): Observable<T> {
+        let endpointUrl = `${this.toggleStateURL}?workflowId=${workflowId}&updatedBy=${userName}`    
+        return this.http
+            .get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.toggleState(workflowId));
+                return this.handleErrorCommon(error, () => this.toggleState(workflowId, userName));
             });
     }
 
@@ -95,13 +100,22 @@ export class ActionEndpoint extends EndpointFactory {
             });
     }
 
-    removeWorkFlow<T>(workFlowId: number): Observable<T> {
-        let endpointUrl = `${this.RemoveWorkFlowURL}/${workFlowId}`;
-        return this.http.delete(endpointUrl, this.getRequestHeaders())
-            .catch(
-                error => {
-                    return this.handleErrorCommon(error, () => this.removeWorkFlow(workFlowId));
-                });
+    // removeWorkFlow<T>(workFlowId: number): Observable<T> {
+    //     let endpointUrl = `${this.RemoveWorkFlowURL}/${workFlowId}`;
+    //     return this.http.delete(endpointUrl, this.getRequestHeaders())
+    //         .catch(
+    //             error => {
+    //                 return this.handleErrorCommon(error, () => this.removeWorkFlow(workFlowId));
+    //             });
+    // }
+
+    removeWorkFlow<T>(workflowId: number, userName): Observable<T> {
+        let endpointUrl = `${this.RemoveWorkFlowURL}?workflowId=${workflowId}&updatedBy=${userName}`    
+        return this.http
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.removeWorkFlow(workflowId, userName));
+            });
     }
 
     addWorkFlowHeader<T>(workflowData: any): Observable<T> {
