@@ -26,7 +26,7 @@
 
         <div *ngIf="!isEdit && addNewEquipment">
           <grd-equipment [workFlowObject]="workFlowObject" [moduleName]="moduleName" [isWorkOrder]="isWorkOrder"
-            (saveEquipmentListForWO)="saveEquipmentList($event)"></grd-equipment>
+            (saveEquipmentListForWO)="saveEquipmentList($event)" (closeEvent)="closerefreshview()"></grd-equipment>
         </div>
         <div *ngIf="isEdit && editData && addNewEquipment">
           <grd-equipment [isEdit]="isEdit" [editData]="editData" [moduleName]="moduleName"
@@ -133,9 +133,11 @@
               <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                   <input class="table-header-input-width" *ngIf="
           col.field !== 'createdDate'
-          && col.field !== 'updatedDate'"  pInputText type="text"
+          && col.field !== 'updatedDate'  &&  col.field !== 'quantity'"  pInputText type="text"
+                      (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">  
+                    
+                      <input type="number" *ngIf="col.field == 'quantity'" pInputNumber name="quantity1" class="table-header-input-width ui-inputtext ui-corner-all ui-state-default ui-widget ng-star-inserted"
                       (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
-
                   <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" class="table-header-input-width"
                       (change)="dt.filter($event.target.value, col.field, 'contains')">
                   <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" class="table-header-input-width"
@@ -191,7 +193,7 @@
                   <span><a class="btn nobg btn-delete-cstm" *ngIf="!isView" (click)="openDelete(content,rowData)" matTooltip="Delete"
                       matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                       <span data-toggle="modal" data-target="#assetHistory">
-                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"><i
+                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"  matTooltipPosition="above" matTooltip="Check-in & Check-out History"><i
                             class="fa fa-history"> </i></a></span>
                   </div>
                   <div *ngIf="currentDeletedstatus == true">
@@ -301,7 +303,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="close" (click)="closePopupmodel('view')">
           &times;
         </button>
         <h4 class="modal-title">Asstes View</h4>
@@ -311,7 +313,7 @@
         </app-asset-listing>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" (click)="closePopupmodel('view')">
           Close
         </button>
       </div>
@@ -579,7 +581,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="close" (click)="closePopupmodel('assetHistory')">
           &times;
         </button>
         <h4 class="modal-title">Work Order Tools History</h4>
@@ -739,7 +741,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
+        <button type="button" class="btn btn-danger" (click)="closePopupmodel('assetHistory')">
           Close
         </button>
       </div>

@@ -544,6 +544,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     salesCurrencyInfo: any = [];
     arrayCurrancylist:any[] = [];
     itemMasterReferenceId: number;
+    uploadedFileLength: any;
     isAircraftAdd:boolean=true;
     isAircraftEdit:boolean=true;
     isAircraftDownload:boolean=true;
@@ -934,7 +935,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     getItemMasterPurchaseSaleMaster() {
         this.isSpinnerVisible = true;
         //this.commonService.smartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name').subscribe(response => {
-          this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(response => {
+          this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',0).subscribe(response => {
             this.allPurchaseAndSaleMasterList = response;
             this.allPurchaseAndSaleMasterList = this.allPurchaseAndSaleMasterList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
             if(!this.isEdit) {
@@ -1003,8 +1004,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     getInactiveObjectsOnEdit() {
         this.sourceItemMaster = {
             ...this.sourceItemMaster,
-            itemClassificationId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.itemClassificationId, this.allitemclassificationInfo, 'ItemClassification', 'ItemClassificationId', 'Description'),
-            itemGroupId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.itemGroupId, this.allitemgroupobjInfo, 'ItemGroup', 'ItemGroupId', 'Description'),
+            itemClassificationId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.itemClassificationId, this.allitemclassificationInfo, 'ItemClassification', 'ItemClassificationId', 'ItemClassificationCode'),
+            itemGroupId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.itemGroupId, this.allitemgroupobjInfo, 'ItemGroup', 'ItemGroupId', 'ItemGroupCode'),
             assetAcquistionTypeId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.assetAcquistionTypeId, this.AssetAcquisitionTypeList, 'AssetAcquisitionType', 'assetAcquisitionTypeId', 'name'),
             manufacturerId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.manufacturerId, this.allManufacturerInfo, 'Manufacturer', 'manufacturerId', 'name'),
             purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
@@ -1775,7 +1776,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
      itemgroup(type) {
         //this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', 10, 1, 0).subscribe(res => {
-            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'ItemGroupCode','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allitemgroupobjInfo = res;            
         })
     }
@@ -1915,12 +1916,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         if (event.target.value != "") {
             let rqValue = Number(event.target.value);
             let mqValue = this.sourceItemMaster.minimumOrderQuantity;
-            if(rqValue < mqValue)
+            //if(rqValue < mqValue)
+            if(this.sourceItemMaster.reorderQuantiy < this.sourceItemMaster.minimumOrderQuantity )
             {
-                this.disableReorderQuantiy = true;    
+                this.disableReorderQuantiy = true;                
             }
             else{
-                this.disableReorderQuantiy = false;    
+                this.disableReorderQuantiy = false;                 
             }
         }
     }
@@ -3630,6 +3632,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         const id = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
         this.itemser.getMappedAirCraftDetails(id).subscribe(data => {
             const responseData = data;
+            this.selectedAircraftLDColumns=this.colsaircraftLD
             this.aircraftListDataValues = responseData.map(x => { //aircraftListData
                 return {
                     ...x,
@@ -3724,7 +3727,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     getAllATAChapter() {
         this.isSpinnerVisible = true;
-        this.ataMainSer.getATAMainDropdownList().subscribe(res => {
+        this.ataMainSer.getATAMainDropdownList(this.currentUserMasterCompanyId).subscribe(res => {
             this.LoadAtachapter = res;
             this.ataMainchapter = this.LoadAtachapter;
             this.isSpinnerVisible = false;
@@ -3733,7 +3736,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     getAllATASubChapter() {
-        this.atasubchapter1service.getAtaSubChapter1List().subscribe(res => {
+        this.atasubchapter1service.getAtaSubChapter1List(this.currentUserMasterCompanyId).subscribe(res => {
             this.atasubchapter = res[0].map(x => {
                 return {
                     label:  x.ataSubChapterCode + ' - ' + x.description,
@@ -3987,7 +3990,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     getCapabilityType() {
         //this.commonService.smartDropDownList("CapabilityType", "CapabilityTypeId", "Description",20,1,0).subscribe(data => {
-         this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {  
+         this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {  
             this.capabilityTypeList = res;
         });
     }
@@ -4202,7 +4205,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     savePurchaseandSales() {
-        
         const ItemMasterID = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
 
         const data = this.fieldArray.map(obj => {
@@ -4382,7 +4384,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 this.sourceItemMaster.createdBy = this.userName;
                 this.sourceItemMaster.updatedBy = this.userName;
                 this.sourceItemMaster.masterCompanyId = this.currentUserMasterCompanyId;
-                this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                //this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                this.sourceItemMaster.itemTypeId = 1;
 
                 if (this.selectedIntegrationTypes != null) {
 
@@ -4462,7 +4465,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 this.sourceItemMaster.updatedBy = this.userName;
                 this.sourceItemMaster.createdBy = this.userName;
                 this.sourceItemMaster.masterCompanyId = this.currentUserMasterCompanyId;
-                this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                //this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
+                this.sourceItemMaster.itemTypeId = 1;
 
                 if (this.sourceItemMaster.isOEM == 'false') {
                     // checks whether the Change of Data is Happened or not if not and its is in edit mode binds the old data id if not edit and no change it will get the old create oemPnID
@@ -5202,7 +5206,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             field.SP_CalSPByPP_SaleDiscAmount = saleDiscAmount ? formatNumberAsGlobalSettingsModule(saleDiscAmount, 2) : '0.00';
             field.SP_CalSPByPP_UnitSalePrice = unitSalePrice ? formatNumberAsGlobalSettingsModule(unitSalePrice, 2) : '0.00';
             
-        }        
+        }
+        field.PP_LastListPriceDate = new Date();       
+        field.PP_LastPurchaseDiscDate = new Date();
     }
     
     atasubchapterValues = [];
@@ -5818,6 +5824,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     enableSaveMemo() {
         this.disableSaveMemo = false;
+        this.disableSaveForEdit=false;
     }
 
     addDocumentInformation(type, documentInformation) {
@@ -6024,7 +6031,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
     }
     removeFileNew(event) {
-        //this.formData.delete(event.file.name)
+        this.formData.delete(event.file.name)
+        this.uploadedFileLength--;
+        this.selectedFileAttachment = this.selectedFileAttachment.filter(({ fileName }) => fileName !== event.file.name);
+        if(this.selectedFileAttachment.length == 0){
+        this.disableDocSave = true;
+        }
     }
     private getConditionListAll() {
         //this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(response => {
@@ -6049,7 +6061,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     nextOrPreviousClick(nextOrPrevious) {
         this.nextOrPreviousTab = nextOrPrevious;
-        if (this.formdataexportinfo.form.dirty) {
+        //if (this.formdataexportinfo.form.dirty) {
+        if (!this.disableSaveForEdit) {            
             let content = this.tabRedirectConfirmationModal;
             this.modal = this.modalService.open(content, { size: 'sm' });
         }
@@ -6070,8 +6083,14 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
 
     }
-    redirectToTab(){
+    redirectToTab(addItemMasterStockForm){
         this.dismissModel();
+        debugger
+        if (!this.disableSaveForEdit) {   
+            if(this.activeMenuItem == 1) {       
+                this.saveItemMasterGeneralInformation(addItemMasterStockForm)
+            }
+        }
         if(this.nextOrPreviousTab == "Next"){
             if(this.activeMenuItem == 1) this.changeOfTab('AircraftInfo');
             if(this.activeMenuItem == 5) this.changeOfTab('NhaTlaAlternateTab');
@@ -6087,9 +6106,24 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceItemMaster.isOemPNId = undefined;
         }
     }
+    leadtime(){
+        this.sourceItemMaster.leadTimeDays = this.sourceItemMaster.leadTimeDays ? formatNumberAsGlobalSettingsModule(this.sourceItemMaster.exportValue, 2) : '0'; 
+    }
 
     onChangeExportVal() {
         this.exportInfo.exportValue = this.exportInfo.exportValue ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportValue, 2) : '0.00';
+    }
+    onChangeWeight() {
+        this.exportInfo.exportWeight = this.exportInfo.exportWeight ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportWeight, 2) : '0';
+    }
+    onChangeExportSizeLength(){
+        this.exportInfo.exportSizeLength = this.exportInfo.exportSizeLength ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeLength, 2) : '0';
+    }
+    onChangeExportSizeWidth(){
+        this.exportInfo.exportSizeWidth = this.exportInfo.exportSizeWidth ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeWidth, 2) : '0';
+    }
+    onChangeExportSizeHeight(){
+        this.exportInfo.exportSizeHeight = this.exportInfo.exportSizeHeight ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeHeight, 2) : '0';
     }
     getItemMasterExportInfoById(id) {
         this.isSpinnerVisible = true;    
@@ -6138,5 +6172,15 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     changeOfStatus(status){
         this.disableSaveForEdit=false;
-    }    
+    }     
+    
+    setcurrentdate(PP_FXRatePerc,field) {       
+        field.PP_LastListPriceDate = new Date();       
+        field.PP_LastPurchaseDiscDate = new Date();
+    }
+
+    SetSalesCurrency() {
+        this.sourceItemMaster.salesCurrencyId = this.sourceItemMaster.purchaseCurrencyId;
+    }
+    
 }

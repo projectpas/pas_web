@@ -223,7 +223,7 @@ export class SalesPartNumberComponent {
     this.summaryColumns = [
       // { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
       { field: 'itemNo', header: 'Line #', width: '42px', textalign: 'center' },
-      { field: 'partNumber', header: 'PN',  width: "140px" },
+      { field: 'partNumber', header: 'PN', width: "140px" },
       { field: 'partDescription', header: 'PN Description', width: '200px' },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
@@ -644,28 +644,40 @@ export class SalesPartNumberComponent {
         errmessage = errmessage + '<br />' + "Please enter priority ID."
       }
       if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-        if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
-          selectedPart.estimatedShipDate < this.salesQuote.openDate ||
-          selectedPart.promisedDate < this.salesQuote.openDate) {
+        let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+        let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+        let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+        let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+
+        if (crdate < opendate || esdate < opendate || pdate < opendate) {
           invalidDate = true;
-        }
-        if (selectedPart.promisedDate < selectedPart.customerRequestDate) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
+          if (crdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Request Date cannot be greater than opem date."
           }
-          errmessage = errmessage + '<br />' + "Request date cannot be greater than Promised Date."
-        }
-        if (selectedPart.estimatedShipDate < selectedPart.customerRequestDate) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
+          if (esdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Est. Ship Date cannot be greater than opem date."
           }
-          errmessage = errmessage + '<br />' + "Request date cannot be greater than Est.Ship Date."
+          if (pdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be greater than opem date."
+          }
         }
       }
       if (!invalidParts && !invalidDate) {

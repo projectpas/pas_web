@@ -5,9 +5,12 @@
                 <label class="input-width-100-percent"></label>
                 <div class="form-group perform-shipping-div">
                     <button type="submit" class="btn  submit-btn btn btn-primary"
-                        [disabled]="disableCreateShippingBtn">Print Packaging Label</button>&nbsp;
+                        [disabled]="disableGeneratePackagingBtn" (click)="generatePackagingSlip()">Generate Packaging
+                        Label</button>&nbsp;
                     <button type="submit" class="btn  submit-btn btn btn-primary"
-                        [disabled]="disableCreateShippingBtn">Print Shipping Label</button>&nbsp;
+                        [disabled]="true">Print Packaging Label</button>&nbsp;
+                    <button type="submit" class="btn  submit-btn btn btn-primary"
+                        [disabled]="true">Print Shipping Label</button>&nbsp;
                     <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
                         (click)="PerformShipping()">Perform Shipping</button>
                 </div>
@@ -58,7 +61,11 @@
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
-                                    <td></td>
+                                    <td>
+                                        <input id="{{poIndex}}" *ngIf="ship.packagingSlipNo === undefined || ship.packagingSlipNo == ''" name="ship.selectedToGeneratePackaging{{poIndex}}"
+                                            type="checkbox" (change)="checkedToGenerate($event, ship);"
+                                            [(ngModel)]="ship.selectedToGeneratePackaging" />
+                                    </td>
                                     <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
                                         <label style="color: #0F9D58">Shipped</label>
                                     </td>
@@ -103,7 +110,7 @@
                                         {{ ship.commodityCode }}
                                     </td>
                                     <td class="zui-sticky-col" style="width:107px !important">
-                                        <span *ngIf="ship.qtyShipped > 0">
+                                        <span *ngIf="ship.packagingSlipNo !== undefined && ship.packagingSlipNo != ''">
                                             <a class="btn nobg" matTooltip="Print Packaging Slip"
                                                 matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i
                                                     class="fa fa-print"></i></a>

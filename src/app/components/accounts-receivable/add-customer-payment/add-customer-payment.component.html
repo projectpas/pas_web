@@ -44,7 +44,8 @@
         <div class="col-2 column">
           <div class="form-group">
             <label class="control-label" style="width: 150px; text-align: left;">
-              <input type="checkbox" id="cparent" name="deposite" (click)="onDepositeClick()" [(ngModel)]="isDeposite" />
+              <input type="checkbox" id="cparent" name="deposite" (click)="onDepositeClick()"
+                [(ngModel)]="isDeposite" />
               Check if this is a Deposit
             </label>
           </div>
@@ -151,9 +152,9 @@
               <div class="form-group col-sm-12">
                 <label>Amount<span class="clr-red">*</span></label>
                 <input type="text" class="form-control" style="text-align:right;" name="checkAmount"
-                  [ngModel]="objInvoicePayment.checkPayments.amount | twoDecimalGlobalNumberFormatPipe"
-                  (ngModelChange)="objInvoicePayment.checkPayments.amount=$event"
-                  (change)="onChangeAmount($event, objInvoicePayment);" required />
+                  [ngModel]="objInvoicePayment.checkPayments.amount"
+                  (ngModelChange)="objInvoicePayment.checkPayments.amount=$event" pKeyFilter="money"
+                  (change)="onChangeAmount($event, objInvoicePayment); formatCheckAmount()" required />
               </div>
               <div class="form-group col-sm-12">
                 <label for="currencyId">Currency <span class="clr-red">*</span></label>
@@ -176,9 +177,14 @@
               </div>
               <div class="form-group col-sm-12">
                 <label>Bank Account <span class="clr-red">*</span></label>
-                <input type="text" class="form-control" name="bankAccount"
+                <!-- <input type="text" class="form-control" name="bankAccount"
                   [(ngModel)]="objInvoicePayment.checkPayments.bankAccount" #bankAccount="ngModel" id="bankAccount"
-                  required />
+                  required /> -->
+                <p-dropdown class="p-dropdown-100" [options]="filteredBankNames" filter="true"
+                  [(ngModel)]="objInvoicePayment.checkPayments.bankAccount" name="bankAccount"
+                  [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" #bankAccount="ngModel"
+                  required>
+                </p-dropdown>
                 <div *ngIf="bankAccount.invalid && (bankAccount.dirty || bankAccount.touched)"
                   class="alert alert-danger alert-danger-cstm">
                   <div *ngIf="bankAccount.errors.required">
@@ -189,7 +195,7 @@
               <div class="form-group col-sm-12">
                 <label for="glAccountId">GL Cash Account <span class="clr-red">*</span></label>
                 <select name="glAccountId" [(ngModel)]="objInvoicePayment.checkPayments.glAccountNumber" required
-                  id="glAccount" #glAccount="ngModel">
+                  id="glAccount" #glAccount="ngModel" [disabled]="true">
                   <option *ngFor="let item of allGlInfo" [ngValue]="item.value">
                     {{ item.label }}</option>
                 </select>
@@ -248,9 +254,9 @@
               <div class="form-group col-sm-12">
                 <label>Amount<span class="clr-red">*</span></label>
                 <input type="text" class="form-control" style="text-align:right;" name="wireAmount"
-                  [ngModel]="objInvoicePayment.invoiceWireTransferPayment.amount | twoDecimalGlobalNumberFormatPipe"
+                  [ngModel]="objInvoicePayment.invoiceWireTransferPayment.amount" pKeyFilter="money"
                   (ngModelChange)="objInvoicePayment.invoiceWireTransferPayment.amount=$event"
-                  (change)="onChangeAmount($event, objInvoicePayment);" required />
+                  (change)="onChangeAmount($event, objInvoicePayment); formatWireAmount();" required />
               </div>
               <div class="form-group col-sm-12">
                 <label for="wireCurrencyId">Currency <span class="clr-red">*</span></label>
@@ -268,15 +274,19 @@
               </div>
               <div class="form-group col-sm-12">
                 <label>Bank Acct Name</label>
-                <input type="text" class="form-control" name="bankName"
+                <!-- <input type="text" class="form-control" name="bankName"
                   [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.bankName" #bankName="ngModel"
-                  id="bankName" />
+                  id="bankName" /> -->
+                <p-dropdown class="p-dropdown-100" [options]="filteredBankNames" filter="true"
+                  [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.bankName" name="bankName"
+                  [resetFilterOnHide]="true" placeholder="-- Select --" #bankName="ngModel" [showClear]="true" required>
+                </p-dropdown>
               </div>
               <div class="form-group col-sm-12">
                 <label for="wireGlAccountId">GL Cash Account <span class="clr-red">*</span></label>
                 <select name="wireGlAccountId"
-                  [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.glAccountNumber" required id="wireGlAccount"
-                  #wireGlAccount="ngModel">
+                  [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.glAccountNumber" required [disabled]="true"
+                  id="wireGlAccount" #wireGlAccount="ngModel">
                   <option *ngFor="let item of allGlInfo" [ngValue]="item.value">
                     {{ item.label }}</option>
                 </select>
@@ -335,9 +345,9 @@
               <div class="form-group col-sm-12">
                 <label>Amount<span class="clr-red">*</span></label>
                 <input type="text" class="form-control" style="text-align:right;" name="ccAmount"
-                  [ngModel]="objInvoicePayment.invoiceCreditDebitCardPayment.amount | twoDecimalGlobalNumberFormatPipe"
+                  [ngModel]="objInvoicePayment.invoiceCreditDebitCardPayment.amount" pKeyFilter="money"
                   (ngModelChange)="objInvoicePayment.invoiceCreditDebitCardPayment.amount=$event"
-                  (change)="onChangeAmount($event, objInvoicePayment);" required />
+                  (change)="onChangeAmount($event, objInvoicePayment); formatCCAmount();" required />
               </div>
               <div class="form-group col-sm-12">
                 <label for="ccCurrencyId">Currency <span class="clr-red">*</span></label>
@@ -513,12 +523,6 @@
     Select Customer
   </div>
   <div class="card-body" style="padding: 10px;">
-    <div class="form-group" style="width: 100%; text-align: left;">
-      <button type="button" class="btn btn-primary editor-buttons-margin" (click)="clearCustSearch()"
-        style="width: 100px;">
-        Clear
-      </button>
-    </div>
     <div class="form-group">
       <div class="row" style="padding: 0;">
         <div class="col-md-12 col-sm-12 col-12">
@@ -534,6 +538,15 @@
                   value="" autocomplete="off">
                 </p-autoComplete>
               </div>
+            </div>
+          </div>
+          <div class="col-2 column">
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <button type="button" class="btn btn-primary" (click)="clearCustSearch()"
+                  style="width: 100px;">
+                  Clear
+                </button>
             </div>
           </div>
           <div class="col-2 column" *ngIf="customerDetails">

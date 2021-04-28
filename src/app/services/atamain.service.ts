@@ -81,7 +81,7 @@ export class AtaMainService {
   ataChapterCustomUpload(file) {
       return this.ataMainEndpoint.ataChapterCustomUpload(file);
   }
-  getATAMainDropdownList() {
-    return this.ataMainEndpoint.getATAMainDropdownList();
+  getATAMainDropdownList(masterCompanyId?) {
+    return this.ataMainEndpoint.getATAMainDropdownList(masterCompanyId);
 }
 }

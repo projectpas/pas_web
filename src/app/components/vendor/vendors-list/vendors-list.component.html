@@ -658,9 +658,7 @@
               <a *ngIf="isGeneralInforView"
                 data-toggle="collapse"
                 href="#step1"
-                aria-expanded="false"
-                aria-controls="receive"
-                class="collapsed">
+               >
                 General Info
               </a>
             </h4>
@@ -718,15 +716,15 @@
                           Parent :
                         </label>
                       </div>
-                      <p *ngIf="vendorData.parent">
-                        <span class="vendor_Name">{{
+                    
+                        <span *ngIf="vendorData.parent" class="vendor_Name value">{{
                           vendorData.vendorParentName
                             ? vendorData.vendorParentName
                             : '-'
                         }}</span>
-                      </p>
+                     
                     </div>
-                    <br />
+                    <!-- <br /> -->
                     <p>
                       <span class="label">
                         <b>

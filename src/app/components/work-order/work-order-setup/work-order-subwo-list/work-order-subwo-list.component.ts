@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 declare var $: any;
+import * as moment from 'moment';
 @Component({
     selector: 'app-sub-work-orderlist',
     templateUrl: './work-order-subwo-list.component.html',
@@ -42,6 +43,7 @@ export class SubWorkOrderListComponent implements OnInit {
     isWorkOrder: any;
     otherOptionShow: any;
     isSpinnerVisible: boolean = false;
+    subWorkOrderDataOriginal:any=[]
     constructor(public _router: Router, private workOrderService: WorkOrderService, private authService: AuthService,) { }
     ngOnInit() {
         this.getSubWorkOrderByWorkOrderId();
@@ -49,6 +51,7 @@ export class SubWorkOrderListComponent implements OnInit {
     getSubWorkOrderByWorkOrderId() {
         console.log(this.workOrderId);
         this.workOrderService.getSubWorkOrderListByWorkOrderId(this.workOrderId).subscribe(res => {
+          this.subWorkOrderDataOriginal=res;
             this.subWorkOrderData = res;
         })
     }
@@ -83,4 +86,24 @@ export class SubWorkOrderListComponent implements OnInit {
     }
     showOtherOptions() { }
     otherOptionSelected(option) { }
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.subWorkOrderData = this.subWorkOrderDataOriginal;
+            const data = [...this.subWorkOrderData.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                } else if (moment(x.openDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'openDate') {
+                    return x;
+                }
+            })]
+            this.subWorkOrderData = data;
+        } else {
+            this.subWorkOrderData = this.subWorkOrderDataOriginal;
+        }
+    }
+    closeView(){
+        this.isView=false;
+    }
 }

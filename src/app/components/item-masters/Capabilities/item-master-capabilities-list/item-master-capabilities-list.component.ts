@@ -1,73 +1,40 @@
-﻿import {
-  Component,
-  ViewChild,
-  OnInit,
-  AfterViewInit,
-  Input,
-  ChangeDetectorRef,
-  ElementRef,
-  SimpleChanges,
-} from "@angular/core";
+﻿import { Component, ViewChild, OnInit, AfterViewInit, Input, ChangeDetectorRef, ElementRef, SimpleChanges } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
+import { NgForm, FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { fadeInOut } from '../../../../services/animations';
+import { MasterCompany } from '../../../../models/mastercompany.model';
+import { AuditHistory } from '../../../../models/audithistory.model';
+import { AuthService } from '../../../../services/auth.service';
+import { MessageSeverity, AlertService } from '../../../../services/alert.service';
+import { MasterComapnyService } from '../../../../services/mastercompany.service';
+import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
+import { ItemMasterService } from '../../../../services/itemMaster.service';
+import { ATAMain } from '../../../../models/atamain.model';
+import { ATAChapter } from '../../../../models/atachapter.model';
+import { ItemMasterCapabilitiesModel } from '../../../../models/itemMasterCapabilities.model';
+import { DashNumberService } from '../../../../services/dash-number/dash-number.service';
+import { LegalEntityService } from '../../../../services/legalentity.service';
+import { IntegrationService } from '../../../../services/integration-service';
+import { AtaMainService } from '../../../../services/atamain.service';
+import { AtaSubChapter1Service } from '../../../../services/atasubchapter1.service';
+import { WorkOrderService } from '../../../../services/work-order/work-order.service';
+import { CommonService } from '../../../../services/common.service';
+declare var $ : any;
+import { ItemMasterCreateCapabilitiesComponent } from '../item-master-create-capabilities/item-master-create-capabilities.component';
+import { DBkeys } from '../../../../services/db-Keys';
+import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 import {
-  MatPaginator,
-  MatSort,
-  MatTableDataSource,
-  MatSnackBar,
-  MatDialog,
-} from "@angular/material";
-import {
-  NgForm,
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormControl,
-  FormArray,
-} from "@angular/forms";
-import {
-  NgbModal,
-  ModalDismissReasons,
-  NgbActiveModal,
-} from "@ng-bootstrap/ng-bootstrap";
-import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap/modal/modal-ref";
-import { TableModule } from "primeng/table";
-import { ButtonModule } from "primeng/button";
-import { SelectButtonModule } from "primeng/selectbutton";
-import { InputTextModule } from "primeng/inputtext";
-import { MultiSelectModule } from "primeng/multiselect";
-import { AutoCompleteModule } from "primeng/autocomplete";
-import { fadeInOut } from "../../../../services/animations";
-import { MasterCompany } from "../../../../models/mastercompany.model";
-import { AuditHistory } from "../../../../models/audithistory.model";
-import { AuthService } from "../../../../services/auth.service";
-import {
-  MessageSeverity,
-  AlertService,
-} from "../../../../services/alert.service";
-import { MasterComapnyService } from "../../../../services/mastercompany.service";
-import {
-  Router,
-  ActivatedRoute,
-  Params,
-  NavigationExtras,
-} from "@angular/router";
-import { ItemMasterService } from "../../../../services/itemMaster.service";
-import { ATAMain } from "../../../../models/atamain.model";
-import { ATAChapter } from "../../../../models/atachapter.model";
-import { ItemMasterCapabilitiesModel } from "../../../../models/itemMasterCapabilities.model";
-import { DashNumberService } from "../../../../services/dash-number/dash-number.service";
-import { LegalEntityService } from "../../../../services/legalentity.service";
-import { IntegrationService } from "../../../../services/integration-service";
-import { AtaMainService } from "../../../../services/atamain.service";
-import { AtaSubChapter1Service } from "../../../../services/atasubchapter1.service";
-import { WorkOrderService } from "../../../../services/work-order/work-order.service";
-import { CommonService } from "../../../../services/common.service";
-declare var $: any;
-import { ItemMasterCreateCapabilitiesComponent } from "../item-master-create-capabilities/item-master-create-capabilities.component";
-import { DBkeys } from "../../../../services/db-Keys";
-import { DatePipe } from "@angular/common";
-import {
-  ModuleConstants,
-  PermissionConstants,
+    ModuleConstants,
+    PermissionConstants,
 } from "src/app/generic/ModuleConstant";
 
 @Component({
@@ -180,6 +147,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
   isDownload: boolean = true;
   isDelete: boolean = true;
   isView: boolean = true;
+  allItemMasterCapsListOriginal: any[];
 
   /** item-master-capabilities-list ctor */
   constructor(
@@ -396,49 +364,58 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
       this.cols = this.pnCols;
     }
 
-    this.selectedColumns = this.cols;
-  }
-
-  private onDataLoadSuccessful(allWorkFlows: any[]) {
-    this.alertService.stopLoadingMessage();
-    this.loadingIndicator = false;
-    this.isSpinnerVisible = false;
-    this.dataSource.data = allWorkFlows;
-    this.allItemMasterCapsList = allWorkFlows.map((x) => {
-      return {
-        ...x,
-        isVerified: x.isVerified == 1 ? true : false,
-        memo: x.memo.replace(/<[^>]*>/g, ""),
-        addedDate: x.addedDate
-          ? this.datePipe.transform(x.addedDate, "MMM-dd-yyyy hh:mm a")
-          : "",
-        verifiedDate: x.verifiedDate
-          ? this.datePipe.transform(x.verifiedDate, "MMM-dd-yyyy")
-          : "",
-        createdDate: x.createdDate
-          ? this.datePipe.transform(x.createdDate, "MMM-dd-yyyy hh:mm a")
-          : "",
-        updatedDate: x.updatedDate
-          ? this.datePipe.transform(x.updatedDate, "MMM-dd-yyyy hh:mm a")
-          : "",
-      };
-    });
-
-    this.employeeList.filter((x) => {
-      for (let i = 0; i < this.employeeList.length; i++) {
-        for (let j = 0; j < this.allItemMasterCapsList.length; j++) {
-          if (
-            this.allItemMasterCapsList[j].verifiedById ==
-            this.employeeList[i].value
-          ) {
-            this.allItemMasterCapsList[j].verifiedBy = this.employeeList[
-              i
-            ].label;
-          }
+        this.selectedColumns = this.cols;
+    }
+    addeddateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+            const data = [...this.allItemMasterCapsList.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+                else if (moment(x.addedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'addedDate'){
+                    return x;
+                }
+                else if(moment(x.verifiedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'verifiedDate'){
+                    return x;
+                }
+            })]
+            this.allItemMasterCapsList = data;
+        } else {
+            this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
         }
-      }
-    });
-  }
+    }
+
+    private onDataLoadSuccessful(allWorkFlows: any[]) {
+        this.alertService.stopLoadingMessage();
+        this.loadingIndicator = false;
+        this.isSpinnerVisible = false;
+        this.dataSource.data = allWorkFlows;
+        this.allItemMasterCapsList = allWorkFlows.map(x => {
+            return {
+                ...x,
+                isVerified: x.isVerified == 1 ? true : false,
+                memo: x.memo.replace(/<[^>]*>/g, ''),
+                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MM/dd/yyyy hh:mm a'): '',
+                verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MM/dd/yyyy hh:mm a'): '',
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+            }
+        });
+        this.allItemMasterCapsListOriginal=this.allItemMasterCapsList;
+        this.employeeList.filter(x => {
+
+            for(let i = 0; i< this.employeeList.length; i++){
+                for(let j=0; j < this.allItemMasterCapsList.length; j++){
+                    if(this.allItemMasterCapsList[j].verifiedById == this.employeeList[i].value){
+                        this.allItemMasterCapsList[j].verifiedBy = this.employeeList[i].label
+                    }
+                }
+            }
+        })
+    }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

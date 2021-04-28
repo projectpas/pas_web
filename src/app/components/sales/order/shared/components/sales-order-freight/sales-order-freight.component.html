@@ -488,6 +488,7 @@
                         <th>UOM</th>
                     </tr>
                 </thead>
+                <tbody>
                 <tr *ngFor="let audit of freightAudiHistory; let i = index;">
                     <td
                         [ngStyle]="{'color':  getColorCodeForHistory(i, 'shipVia', audit.shipVia)  ? 'black' : 'red'  }">
@@ -541,6 +542,7 @@
                         </span>
                     </td>
                 </tr>
+                </tbody>
             </table>
         </div>
     </div>

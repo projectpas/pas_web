@@ -201,19 +201,6 @@
                                 <input class="form-control text-right" type="text" name="openDays"
                                     [(ngModel)]="stockLineForm.openDays" (ngModelChange)="enableSave()" disabled>
                             </div>
-                            <!-- <div class="form-group">
-                                    <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
-                                        <label>
-                                            <input type="checkbox" name="shelfLife" [(ngModel)]="stockLineForm.shelfLife" (ngModelChange)="enableSave()" disabled>
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            Shelf Life
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group" *ngIf="stockLineForm.shelfLife">
-                                    <label>Shelf Life Exp Date</label>
-                                    <p-calendar class="workflow-clder" name="shelfLifeExpirationDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" [minDate]="minDateValue" [(ngModel)]="stockLineForm.shelfLifeExpirationDate" (ngModelChange)="enableSave()"></p-calendar>
-                                </div>  -->
                         </div>
                     </div>
 
@@ -354,23 +341,9 @@
                             </div>
                             <div class="form-group">
                                 <label>Receiver Num <span class="clr-red">*</span></label>
-                                <!-- <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
-                                    [(ngModel)]="stockLineForm.receiverNumber" name="receiverNumber"
-                                    [suggestions]="receicerlistInfo" (completeMethod)="filterReceiverNumber($event)" [size]="30"
-                                    [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                    (onSelect)="onChangeReceivedNum(stockLineForm.receiverNumber)"
-                                    [forceSelection]="false" (ngModelChange)="enableSave()" #receiverNumber="ngModel"
-                                    required>
-                                </p-autoComplete> -->
                                 <p-autoComplete class="pautocomp-cstm" name="receiverNumber" [suggestions]="receicerlistInfo" 
                                 (completeMethod)="filterReceiverNumber($event)" placeholder="Select" [dropdown]="true" 
                                 (ngModelChange)="enableSave()" errorMessage="Records not found" [(ngModel)]="receiverNumber" required></p-autoComplete>
-                                <!-- <div *ngIf="receiverNumber.invalid && (receiverNumber.dirty || receiverNumber.touched)"
-                                    class="alert alert-danger alert-danger-cstm">
-                                    <div *ngIf="receiverNumber.errors.required">
-                                        <small> Received Num is required </small>
-                                    </div>
-                                </div> -->
                             </div>
                             <div class="form-group">
                                 <label>Received Date <span class="clr-red">*</span></label>
@@ -827,7 +800,6 @@
                             <h5>Management Structure <span class="clr-red">*</span></h5>
                         </div>
                         <div class="card-body structure-card-body">
-                            <!-- [ngClass]="managementValidCheck ? 'select-validate-cstm' : ''" -->
                             <div class="form-group">
                                 <select class="form-control" name="primaryCompany" [(ngModel)]="headerInfo.companyId"
                                     (change)="getBUList(headerInfo.companyId);" #mCompanyName
@@ -1396,19 +1368,6 @@
                     <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                        <thead>
-                            <th style="color: #fff;">{{textAreaLabel}}</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()"
-                                        [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> -->
                     <p-editor [(ngModel)]="textAreaInfo"  (ngModelChange)="enableSaveMemo()"
                     [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
                     <div class="editor-buttons">
@@ -1537,19 +1496,6 @@
                     <h4 class="modal-title">Edit Memo</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                        <thead>
-                            <th style="color: #fff;">Memo</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p-editor [(ngModel)]="documentInformation.docMemo" [style]="{'height':'320px'}"
-                                        (ngModelChange)="enableSaveMemo()" name="textAreaInfo" required></p-editor>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> -->
                     <p-editor [(ngModel)]="documentInformation.docMemo"
                     [style]="{'height':'320px'}"  (ngModelChange)="enableSaveMemo()" name="textAreaInfo" required></p-editor>
                     <div class="editor-buttons">

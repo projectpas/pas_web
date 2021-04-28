@@ -63,7 +63,7 @@
                 </div>
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
-                <colgroup>
+                <colgroup> 
                     <ng-container *ngFor="let col of headers">
                         <col *ngIf="col.field == 'mobile' || col.field == 'contactBy'" class="table-column-width">
                         <col *ngIf="col.field != 'mobile' && col.field != 'contactBy'" class="table-column-width">
@@ -224,7 +224,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Phone <span class="clr-red">*</span></label>
-                                <input class="form-control" type="number" [(ngModel)]="addList[0].mobile"
+                                <input class="form-control" type="text" [(ngModel)]="addList[0].mobile"
                                     (ngModelChange)="setvaliDate()" maxlength="20" name="phoneNo" required disabled />
                             </div>
                         </div>
@@ -298,7 +298,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close button-font" data-dismiss="modal">&times;</button>
+                <button type="button" class="close button-font" (click)="closePopupmodel('viewText')">&times;</button>
                 <h4 class="modal-title"> Text Details</h4>
             </div>
             <div class="modal-body">
@@ -309,7 +309,7 @@
                             class="value">{{viewdata.mobile}}</span></p>
                     <p><span class="label"><b>Contacted by<span class="clr-red">*</span> : </b></span><span
                             class="value">{{viewdata.contactBy}}</span></p>
-                    <p>
+                    <p class="memo-margin-bottom">
                         <span class="label"><strong> Notes: </strong></span><span class="value">
                             <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.notes></p>
                         </span>
@@ -327,7 +327,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" (click)="closePopupmodel('viewText')">Close</button>
             </div>
         </div>
     </div>

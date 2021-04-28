@@ -397,9 +397,13 @@
                 {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
               <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                 {{audit.updatedBy}}</td>
-              <td>
-                <p class="background-white"> <input type="checkbox" name="isDeleted"
-                    [(ngModel)]="audit.isDeleted" disabled></p>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto"> 
+                      <input type="checkbox" name="isDeleted"
+                    [(ngModel)]="audit.isDeleted" disabled>
+                  </label>
+                </span>
               </td>
             </tr>
           </tbody>

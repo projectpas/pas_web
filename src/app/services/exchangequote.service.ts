@@ -255,6 +255,13 @@ export class ExchangequoteService {
     partNumberObj.currency=selectedPart.currency;
     partNumberObj.depositeAmount=selectedPart.depositeAmount;
     partNumberObj.coreDueDate=selectedPart.coreDueDate;
+    if(selectedPart.exchangeQuoteScheduleBilling.length>0)
+    {
+      for(let i=0;i<selectedPart.exchangeQuoteScheduleBilling.length;i++)
+      {
+        partNumberObj.exchangeQuoteScheduleBilling.push(selectedPart.exchangeQuoteScheduleBilling[i]);
+      }
+    }
     return partNumberObj;
   }
 
@@ -299,7 +306,12 @@ export class ExchangequoteService {
         overhaulprice=parseFloat(part.exchangeOverhaulPrice);
         othercharges=0;
         //const totalestrevenue = parseFloat(parseFloat(exchangefees) + parseFloat(overhaulprice))
-        cogsfees=parseFloat(part.exchangeQuoteScheduleBilling[0].cogsAmount);
+        if(part.exchangeQuoteScheduleBilling.length>0){
+          cogsfees=parseFloat(part.exchangeQuoteScheduleBilling[0].cogsAmount);
+        }
+        else{
+          cogsfees=0;
+        }
         overhaulcost=parseFloat(part.exchangeOverhaulCost);
         othercost=0;
         //const marginamount=(parseFloat(totalestrevenue)-parseFloat(totalestcost));
@@ -332,7 +344,7 @@ export class ExchangequoteService {
 
   getMarginPercentage(marginSummary) {
     let marginPercentage: number = 0;
-    marginPercentage = marginSummary.marginAmount / marginSummary.totalEstRevenue;
+    marginPercentage = (marginSummary.marginAmount / marginSummary.totalEstRevenue) * 100;
     return marginPercentage;
   }
 
@@ -344,6 +356,18 @@ export class ExchangequoteService {
 
   createExchangeQuoteMarginSummary(marginSummary: ExchangeQUoteMarginSummary) {
     return this.exchangeQuoteEndpointService.createExchangeQuoteMarginSummary(marginSummary);
+  }
+
+  getAllExchangeQuoteAnalysis(id) {
+    return this.exchangeQuoteEndpointService.getAllExchangeQuoteAnalysis(id);
+  }
+  getCustomerQuotesList(exchangeQuoteId) {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.getCustomerQuotesList(exchangeQuoteId)
+    );
+  }
+  sentForInternalApproval(data) {
+    return this.exchangeQuoteEndpointService.sentForInternalApproval(data);
   }
 
 }

@@ -42,66 +42,66 @@ import { Permission } from "src/app/models/permission.model";
   providers: [DatePipe],
 })
 /** item-master-list component*/
-export class ItemMasterListComponent
-  implements OnInit, AfterViewInit, AfterContentChecked {
-  public isCollapsed = false;
-  private table: Table;
-  isSpinnerVisible: Boolean = false;
-  viewItemMaster: any = {};
-  EquipmentDelete: boolean = false;
-  isDeleteMode: boolean = false;
-  allitemstockinfo: any[] = [];
-  Active: string;
-  partNumber: any = "";
-  partDescription: any = "";
-  isAlternatePartChecked: any = "";
-  isSerialized: any = "";
-  isTimeLife: any = "";
-  nha: any = "";
-  nationalStockNumber: any = "";
-  itemClassificationId: any = "";
-  itemGroupId: any = "";
-  isAcquiredMethodBuy: any = "";
-  expirationDate: any = "";
-  isReceivedDateAvailable: any = "";
-  isManufacturingDateAvailable: any = "";
-  isTagDateAvailable: any = "";
-  isOpenDateAvailable: any = "";
-  isShippedDateAvailable: any = "";
-  isOtherDateAvailable: any = "";
-  provisionId: any = "";
-  manufacturerId: any = "";
-  isHazardousMaterial: any = "";
-  selectedAircraftTypes: any = "";
-  isEnabeCapes: any = "";
-  pma: any = "";
-  der: any = "";
-  ataMainId: any = "";
-  isSchematic: any = "";
-  overhaulHours: any = "";
-  rpHours: any = "";
-  testHours: any = "";
-  turnTimeOverhaulHours: any = "";
-  turnTimeRepairHours: any = "";
-  rfqTracking: any = "";
-  glAccountId: any = "";
-  purchaseUnitOfMeasureId: any = "";
-  stockUnitOfMeasureId: any = "";
-  consumeUnitOfMeasureId: any = "";
-  soldUnitOfMeasureId: any = "";
-  leadTimeDays: any = "";
-  leadTimeHours: any = "";
-  stockLevel: any = "";
-  reorderPoint: any = "";
-  reorderQuantiy: any = "";
-  minimumOrderQuantity: any = "";
-  isExchangeInfoAvailable: any = "";
-  createdBy: any = "";
-  updatedBy: any = "";
-  viewRowData: any;
-  createddate: any = "";
-  updatedDate: any = "";
-  deletePartDesc: any = "";
+export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterContentChecked {
+	ItemMasterList:string="Item Master List";
+	public isCollapsed = false;
+	private table: Table;
+	isSpinnerVisible: Boolean = false;
+	viewItemMaster: any = {};
+	EquipmentDelete: boolean = false;
+	isDeleteMode: boolean = false;
+	allitemstockinfo: any[] = [];
+	Active: string;
+	partNumber: any = "";
+	partDescription: any = "";
+	isAlternatePartChecked: any = "";
+	isSerialized: any = "";
+	isTimeLife: any = "";
+	nha: any = "";
+	nationalStockNumber: any = "";
+	itemClassificationId: any = "";
+	itemGroupId: any = "";
+	isAcquiredMethodBuy: any = "";
+	expirationDate: any = "";
+	isReceivedDateAvailable: any = "";
+	isManufacturingDateAvailable: any = "";
+	isTagDateAvailable: any = "";
+	isOpenDateAvailable: any = "";
+	isShippedDateAvailable: any = "";
+	isOtherDateAvailable: any = "";
+	provisionId: any = "";
+	manufacturerId: any = "";
+	isHazardousMaterial: any = "";
+	selectedAircraftTypes: any = "";
+	isEnabeCapes: any = "";
+	pma: any = "";
+	der: any = "";
+	ataMainId: any = "";
+	isSchematic: any = "";
+	overhaulHours: any = "";
+	rpHours: any = "";
+	testHours: any = "";
+	turnTimeOverhaulHours: any = "";
+	turnTimeRepairHours: any = "";
+	rfqTracking: any = "";
+	glAccountId: any = "";
+	purchaseUnitOfMeasureId: any = "";
+	stockUnitOfMeasureId: any = "";
+	consumeUnitOfMeasureId: any = "";
+	soldUnitOfMeasureId: any = "";
+	leadTimeDays: any = "";
+	leadTimeHours: any = "";
+	stockLevel: any = "";
+	reorderPoint: any = "";
+	reorderQuantiy: any = "";
+	minimumOrderQuantity: any = "";
+	isExchangeInfoAvailable: any = "";
+	createdBy: any = "";
+	updatedBy: any = "";
+	viewRowData: any;
+	createddate: any = "";
+	updatedDate: any = "";
+	deletePartDesc: any = "";
 
   EquipmentView: boolean = false;
   partdescription: any = "";
@@ -279,7 +279,9 @@ export class ItemMasterListComponent
   selectedOnly: boolean = false;
   nonstockselectedOnly: boolean = false;
   targetData: any;
-  nonstocktargetData: any;
+    nonstocktargetData: any;
+    allStockInfoOriginal: any[];
+    auditHistory: any = [];
   isAdd: boolean = true;
   isEdit: boolean = true;
   isDownload: boolean = true;
@@ -387,46 +389,66 @@ export class ItemMasterListComponent
     }
     this.ptnumberlistdata();
 
-    this.cols = [
-      { field: "partNumber", header: "PN" },
-      { field: "partDescription", header: "PN Description" },
-      { field: "manufacturerdesc", header: "Manufacturer" },
-      { field: "itemType", header: "Item Type" },
-      { field: "stockType", header: "Stock Type" },
-      { field: "classificationdesc", header: "Classification" },
-      { field: "itemGroup", header: "Group Name" },
-      { field: "isSerialized", header: "S/N" },
-      { field: "isTimeLife", header: "Time Life" },
-      { field: "nationalStockNumber", header: "NSN" },
-      { field: "createdDate", header: "Created Date" },
-      { field: "createdBy", header: "Created By" },
-      { field: "updatedDate", header: "Updated Date" },
-      { field: "updatedBy", header: "Updated By" },
-    ];
-    this.cols1 = [
-      { field: "partNumber", header: "PN" },
-      { field: "partDescription", header: "Description" },
-      { field: "isHazardousMaterial", header: "Is Hazardous Material" },
-      { field: "manufacturerdesc", header: "Manufacturer" },
-      { field: "unitCost", header: "Unit Cost" },
-      { field: "listPrice", header: "List Price" },
-      { field: "createdDate", header: "Created Date" },
-      { field: "createdBy", header: "Created By" },
-      { field: "updatedDate", header: "Updated Date" },
-      { field: "updatedBy", header: "Updated By" },
-    ];
-  }
+		this.cols = [
+			{ field: 'partNumber', header: 'PN' },
+			{ field: 'partDescription', header: 'PN Description' },
+			{ field: 'manufacturerdesc', header: 'Manufacturer' },
+			{ field: 'itemType', header: 'Item Type'},
+			{ field: 'stockType', header: 'Stock Type' },
+			{ field: 'classificationdesc', header: 'Classification' },
+			{ field: 'itemGroup', header: 'Group Name' },
+			{ field: 'isSerialized', header: 'Serialized' },
+			{ field: 'isTimeLife', header: 'Time Life' },
+			{ field: 'nationalStockNumber', header: 'NSN' },
+			{ field: 'createdDate', header: 'Created Date' },
+			{ field: 'createdBy', header: 'Created By' },
+			{ field: 'updatedDate', header: 'Updated Date' },
+			{ field: 'updatedBy', header: 'Updated By' },
+			
+		];
+		this.cols1 = [
+			{ field: 'partNumber', header: 'PN' },
+			{ field: 'partDescription', header: 'Description' },
+			{ field: 'isHazardousMaterial', header: 'Is Hazardous Material' },
+			{ field: 'manufacturerdesc', header: 'Manufacturer' },
+			{ field: 'unitCost', header: 'Unit Cost' },
+			{ field: 'listPrice', header: 'List Price' },
+			{ field: 'createdDate', header: 'Created Date' },
+			{ field: 'createdBy', header: 'Created By' },
+			{ field: 'updatedDate', header: 'Updated Date' },
+			{ field: 'updatedBy', header: 'Updated By' },
+		];
+	}
 
-  openHist() {}
+	openHist(rowData) {	
+		this.isSpinnerVisible = true;
+		this.itemMasterService.getAuditHistory(rowData.itemMasterId).subscribe(data => {
+			this.auditHistory = data;
+			this.isSpinnerVisible = false;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+	}
 
-  openEdit(row) {
-    const { itemMasterId } = row;
-    this.activeIndex = 0;
-    this.router.navigateByUrl(
-      `/itemmastersmodule/itemmasterpages/app-item-master-stock/edit/${itemMasterId}`
-    );
-    localStorage.removeItem("currentTab");
-  }
+    getColorCodeForHistoryItemMaster(i, field, value) {
+        const data = this.auditHistory;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
+    }
+	
+	openEdit(row) {
+		const { itemMasterId } = row;
+		this.activeIndex = 0;
+		this.router.navigateByUrl(`/itemmastersmodule/itemmasterpages/app-item-master-stock/edit/${itemMasterId}`);
+		localStorage.removeItem('currentTab')
+
+	}
 
   toggledbldisplay(content, row) {
     this.isEditMode = true;
@@ -586,32 +608,48 @@ export class ItemMasterListComponent
     }
   }
 
-  getItemsListStock(PagingData) {
-    this.isSpinnerVisible = true;
-    PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
-    this.itemMasterService.getItemMasterStockListData(PagingData).subscribe(
-      (results) => {
-        this.stockTable = true;
-        this.nonStockTable = false;
-        this.stockTableColumns = this.cols;
-        this.loadingIndicator = false;
-        this.allStockInfo = results[0]["results"].map((x) => {
-          return {
-            ...x,
-            isTimeLife: x.isTimeLife == "1" ? "true" : "false",
-            isSerialized: x.isSerialized == "1" ? "true" : "false",
-          };
-        });
-
-        this.totalRecords = results[0]["totalRecordsCount"];
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        this.isSpinnerVisible = false;
-      },
-      (error) => {
-        this.isSpinnerVisible = false;
-      }
-    );
-  }
+	getItemsListStock(PagingData){
+		let Stock=[];
+		this.isSpinnerVisible = true;
+		PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
+		this.itemMasterService.getItemMasterStockListData(PagingData).subscribe(
+			results => {
+				this.stockTable = true;
+				this.nonStockTable = false;
+				this.stockTableColumns = this.cols;
+				this.loadingIndicator = false;
+				 this.allStockInfo= results[0]['results'].map(x => {
+					return {
+						...x,
+						isTimeLife: x.isTimeLife == "1" ? 'true' : 'false',
+						isSerialized: x.isSerialized == "1" ? 'true' : 'false'
+					}
+				});
+				this.allStockInfoOriginal=this.allStockInfo
+				this.totalRecords = results[0]['totalRecordsCount']
+				this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+				this.isSpinnerVisible = false;
+			},
+			error => {this.isSpinnerVisible = false}
+		);
+	}
+	filterdata(value,field){
+		if(value!=''){
+			this.allStockInfo = this.allStockInfoOriginal;
+			const data = [...this.allStockInfo.filter(x => {
+				if (x.isTimeLife==value && field === 'isTimeLife') {
+					return x;
+				} else if (x.isSerialized==value && field === 'isSerialized') {
+					return x;
+				}
+			})]
+			this.allStockInfo=data;
+		}
+		else{
+			this.allStockInfo=this.allStockInfoOriginal;
+		}
+		
+	}
 
   getItemsListNonStock(PagingData) {
     this.isSpinnerVisible = true;
@@ -2231,51 +2269,37 @@ export class ItemMasterListComponent
     );
   }
 
-  getAllNonStockDataforDownload(dt) {
-    this.isSpinnerVisible = true;
-    //Need to Set global filters
-    let PagingData = {
-      first: 0,
-      rows: dt.totalRecords,
-      sortOrder: 1,
-      filters: {
-        masterCompanyId: this.currentUserMasterCompanyId,
-        status: this.currentstatus,
-        isDeleted: false,
-      },
-      globalFilter: "",
-    };
-    let filters = Object.keys(dt.filters);
-    filters.forEach((x) => {
-      PagingData.filters[x] = dt.filters[x].value;
-    });
-    //this.itemMasterService.advancedSearchNonStockListData(PagingData).subscribe(
-    this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
-      (results) => {
-        this.loadingIndicator = false;
-        dt._value = results[0]["results"].map((x) => {
-          return {
-            ...x,
-            createdDate: x.createdDate
-              ? this.datePipe.transform(x.createdDate, "MMM-dd-yyyy hh:mm a")
-              : "",
-            updatedDate: x.updatedDate
-              ? this.datePipe.transform(x.updatedDate, "MMM-dd-yyyy hh:mm a")
-              : "",
-          };
-        });
-        dt._value.itemType = "Non-Stock";
-        dt.exportCSV();
-        dt.value = this.allNonstockInfo;
-        this.isSpinnerVisible = false;
-      },
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+	getAllNonStockDataforDownload(dt){
+		this.isSpinnerVisible = true;
+		//Need to Set global filters
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId" : this.currentUserMasterCompanyId,"status":this.currentstatus,"isDeleted":false},"globalFilter":""}
+		let filters = Object.keys(dt.filters);
+		filters.forEach(x=>{
+			PagingData.filters[x] = dt.filters[x].value;
+		})
+		//this.itemMasterService.advancedSearchNonStockListData(PagingData).subscribe(
+		  this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
+			results => {
+				this.loadingIndicator = false;
+				dt._value = results[0]['results'].map(x=>{
+					return{
+						...x,
+						createdDate:x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+						updatedDate:x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
 
-  edit(rowData) {}
+					}
+				});
+				dt._value.itemType = 'Non-Stock';
+				dt.exportCSV();
+				dt.value = this.allNonstockInfo;
+				this.isSpinnerVisible = false;
+			},
+			error => {this.loadingIndicator=false}
+		);
+	}
+	
+
+	edit(rowData) {}
 
   getAuditHistoryById(rowData) {}
 

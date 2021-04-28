@@ -139,7 +139,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   }
 
   getWorkOrderInfo(getWorkOrderInfo) {
-    this.workOrderService.getWorkOrderById(getWorkOrderInfo,this.authService.currentUser.masterCompanyId).subscribe(res => {
+    this.workOrderService.getWorkOrderById(getWorkOrderInfo).subscribe(res => {
       if (res) {
         this.savedWorkOrderData = res;
         this.customerCode = res.customerDetails.customerId;

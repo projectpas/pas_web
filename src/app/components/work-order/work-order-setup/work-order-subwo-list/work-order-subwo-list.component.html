@@ -27,7 +27,13 @@
         </tr>
         <tr>
           <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-            <input  pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+            <input  pInputText type="text"  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'  && col.field != 'openDate'" (input)="dt.filter($event.target.value, col.field, 'contains')">
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'openDate'"
+            name="openDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+            name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+          <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+            name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
           </th>
           <th class="table-column-width" *ngIf="!isView"></th>
         </tr>
@@ -82,7 +88,7 @@
   <div class="modal-dialog modal-xlg"> 
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeView()">
           &times;
         </button>
         <h4 class="modal-title">Sub WorkOrder View</h4>
@@ -96,7 +102,7 @@
       </div>
 <app-sub-work-order [isView]="isView" [subWorkOrderIdForView]="subWorkOrderId" [workOrderIdForView]="workOrderId" [mpnIdForView]="mpnId"></app-sub-work-order>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeView()">
             Close
           </button>
         </div>

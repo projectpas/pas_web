@@ -84,6 +84,12 @@ export class CustomerPaymentsEndpointService extends EndpointFactory {
       });
   }
 
+  getAllBankNames<T>(masterCompanyId?: number): Observable<T> {
+    return this.http.get<any>(`${environment.baseUrl}/api/CustomerPayments/getBankNameForPayment/${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getAllBankNames(masterCompanyId));
+    });
+  }
+
   saveOrUpdateARSettings(data) {
     return this.http
       .post(

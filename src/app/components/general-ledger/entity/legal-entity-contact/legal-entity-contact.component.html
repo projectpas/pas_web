@@ -517,7 +517,7 @@ col.field == 'createdDate'?
                 </div> -->
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
-                        <table class="table table-bordered header-table-width"
+                        <table class="table table-bordered"
                             *ngIf="auditHistory.length> 0 else noDatavailable">
                             <thead>
                                 <tr>
@@ -599,28 +599,36 @@ col.field == 'createdDate'?
                                     <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td> -->
                                     <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isDefaultContact', audit.isDefaultContact)  ? 'black' : 'red'  }">{{audit.isDefaultContact}}</td> -->
 
-                                    <td class="text-center">
-                                        <p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto">
                                             <!-- {{viewData.isActive === true ? 'Yes' : 'No'}} -->
                                             <input type="checkbox" disabled [checked]="audit.isActive === true" />
-                                        </p>
+                                        </label>
+                                    </span>
                                     </td>
 
-                                    <td class="text-center">
-                                        <p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto">
                                             <input type="checkbox" disabled
-                                                [checked]="audit.isDefaultContact === true" /></p>
-                                    </td>
+                                                [checked]="audit.isDefaultContact === true" />
+                                            
+                                            </label>
+                                        </span>
+                                            </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a'}}</td>
 
                                     <td>{{audit.createdBy}}</td>
                                     <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
 
                                     <td>{{audit.updatedBy}}</td>
-                                    <td class="text-center">
-                                        <p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto">
                                             <input type="checkbox" disabled [checked]="audit.isDeleted === true" />
-                                        </p>
+                                        </label>
+                                    </span>
                                     </td>
                                 </tr>
                             </tbody>

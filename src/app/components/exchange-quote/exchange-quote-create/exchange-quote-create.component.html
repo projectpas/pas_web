@@ -342,12 +342,23 @@
                   <app-exchange-quote-approve>
                   </app-exchange-quote-approve>
                 </p-tabPanel>
+                <p-tabPanel header="Approver Process" *ngIf="enforceApproval">
+                  <app-exchange-quote-customer-approval *ngIf="isEdit == true" [exchangeQuoteView]="exchangeQuoteView"
+                      [isViewMode]="false" [customerContactList]="customerContactList"
+                      [marginSummary]="marginSummary"
+                      (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
+                  </app-exchange-quote-customer-approval>
+                </p-tabPanel>
                 <p-tabPanel header="Address">
                   <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="exchangeQuoteId">
                   </app-address-component>
                   <!-- <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
                       [salesQuote]="salesQuote" [salesOrderQuote]="salesOrderQuote"></app-sales-address> -->
               </p-tabPanel>
+              <p-tabPanel header="Hypothethical Analysis">
+                <app-exchange-quote-analysis>
+                </app-exchange-quote-analysis>
+            </p-tabPanel>
             </p-tabView>
         </ng-container>
         </form>

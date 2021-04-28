@@ -276,8 +276,6 @@ export class StockLineListComponent implements OnInit {
             this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
-            //const errorLog = err;
-            //this.saveFailedHelper(errorLog)
             })
     }
 
@@ -290,9 +288,6 @@ export class StockLineListComponent implements OnInit {
     }
 
     geStocklineByStock(value) {
-        // this.globalSearchText = '';
-        // this.filterText = '';
-        // this.columnInputText = null;
         this.isSpinnerVisible = true;
         this.currentStock = value;
         this.lazyLoadFilterData.filters.stocktype = value;
@@ -304,7 +299,6 @@ export class StockLineListComponent implements OnInit {
         this.getList(data);
     }
     
-
     columnsChanges() {
         this.refreshList();
     }
@@ -339,7 +333,6 @@ export class StockLineListComponent implements OnInit {
         })
     }
 
-
     public applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue;
     }
@@ -368,7 +361,6 @@ export class StockLineListComponent implements OnInit {
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
         });
-        //this.workFlowtService.downloadAllStockLineList(PagingData).subscribe(
           this.workFlowtService.getStockLineListing(PagingData).subscribe(    
             results => {
                 this.loadingIndicator = false;
@@ -385,7 +377,6 @@ export class StockLineListComponent implements OnInit {
                 this.isSpinnerVisible = false;
             }, err => {
                 this.isSpinnerVisible = false;
-                //this.saveFailedHelper(errorLog);
             }
         );
     } 

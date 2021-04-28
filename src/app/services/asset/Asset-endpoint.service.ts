@@ -15,6 +15,7 @@ export class AssetEndpoint extends EndpointFactory {
     private readonly _calibrationlistUrl: string = this.baseUrl +"/api/AssetModule/getcalibrationmgmtlist";
     private readonly _allAssetlistUrl: string = this.baseUrl +"/api/AssetModule/GetAll";
     private readonly _addAssetUrlNew: string =this.baseUrl + "/api/AssetModule/AddAsset";
+    private readonly _addaddcalibrationManagment: string =this.baseUrl + "/api/AssetModule/addcalibrationManagment";
     private readonly _addAssetIntangibleUrl: string = this.baseUrl +"/api/AssetModule/AddIntangibleAsset";
     private readonly _addAssetCalibrationUrl: string =this.baseUrl + "/api/AssetModule/AddAssetCalibration";
     private readonly _addAssetMaintenanceUrl: string =this.baseUrl + "/api/AssetModule/AddAssetMaintenance";
@@ -34,6 +35,7 @@ export class AssetEndpoint extends EndpointFactory {
     private readonly _updateAssetListingUrl: string =this.baseUrl + "/api/AssetModule/updateAssetListing";
     private readonly _updateAssetInventoryListingUrl: string =this.baseUrl + "/api/AssetModule/updateAssetInventoryListing";
     private readonly _capabilityListUrl: string = this.baseUrl +"/api/AssetModule/GetCapes";
+    private readonly GetAssetmgmtlistbyID: string = this.baseUrl +"/api/AssetModule/GetAssetmgmtlistbyID";
     private readonly _getCapabilityUrl: string =this.baseUrl + "/api/AssetModule/capabilityGet";
     private readonly _getAssetCapabilityUrl: string =this.baseUrl + "/api/AssetModule/AssetcapabilityGet";
     private readonly getAuditById: string = this.baseUrl +"/api/AssetModule/audits";
@@ -79,6 +81,12 @@ export class AssetEndpoint extends EndpointFactory {
                 return this.handleErrorCommon(error, () => this.getNewAsset(userObject));
             });
     }
+    addcalibrationManagment<T>(userObject: any): Observable<T> {
+        return this.http.post<T>(this._addaddcalibrationManagment, JSON.stringify(userObject), this.getRequestHeaders())
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.addcalibrationManagment(userObject));
+        });
+   }
     addAssetIntangible<T>(userObject: any): Observable<T> {
          return this.http.post<T>(this._addAssetIntangibleUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
@@ -422,6 +430,12 @@ if(type=='add'){
         });
     }
 
+    getAuditDataBycalibrationId(id) {
+        return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getauditdatabycalibartionid/${id}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getAuditDataBycalibrationId(id));
+        });
+    }
+
     //Audit method in end pont services
 
     //getAudit<T>(assetRecordId: number): Observable<T> {
@@ -467,5 +481,28 @@ if(type=='add'){
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.downloadAllAssetCapsList(data,assetRecordId));
             });
+    }
+
+    downloadAllCalibrationList<T>(data): Observable<T> {
+        let url = `${this.baseUrl}/api/AssetModule/ExportCalibrationList`;
+        return this.http.post<T>(url, data, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.downloadAllCalibrationList(data));
+            });
+    }
+
+    getCalibartionListByID<T>(assetRecordId): Observable<T> {
+        let endpointUrl = `${this.GetAssetmgmtlistbyID}/${assetRecordId}`;
+
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCalibartionListByID(assetRecordId));
+            });
+    }
+
+    UpdatecalibartionMgmt(CalibrationManagment) {
+        return this.http.post<any>(`${this.baseUrl}/api/AssetModule/UpdatecalibartionMgmt`, JSON.stringify(CalibrationManagment), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.UpdatecalibartionMgmt(CalibrationManagment));
+        });
     }
 } 

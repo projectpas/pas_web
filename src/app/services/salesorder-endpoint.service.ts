@@ -71,6 +71,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly _getMarginSummary: string = environment.baseUrl + "/api/SalesOrder/get-sales-margin-data";
   private readonly salesorderBillingSave: string = environment.baseUrl + "/api/SalesOrder/createbillinginvoicing";
   private readonly salesorderShippingSave: string = environment.baseUrl + "/api/SalesOrder/createsalesordershipping";
+  private readonly salesorderSavePackingSlip: string = environment.baseUrl + "/api/SalesOrder/SavePackingSlip";
   private readonly salesorderBillingGet: string = environment.baseUrl + "/api/SalesOrder/billinginvoicingdetailsbysopartId";
   private readonly salesorderBillingByShipping: string = environment.baseUrl + "/api/SalesOrder/billinginvoicingdetailsbyshippingId";
   private readonly salesorderShippingGet: string = environment.baseUrl + "/api/SalesOrder/salesordershippingdetails";
@@ -89,6 +90,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/salesorder/getpickticketedit"
   private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
   private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
+  private readonly getPackagingSlipForPrint: string = environment.baseUrl + "/api/SalesOrder/printPackagingSlip";
   private readonly updateServiceClass: string = environment.baseUrl + "/api/SalesOrder/updateServiceClass";
   private readonly getSalesOrderBillingInvoicingPdfURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingPdf";
   private readonly getSalesOrderBillingInvoicingDataURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingData";
@@ -159,6 +161,14 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .post(this.salesorderShippingSave, JSON.stringify(shippingInfo), this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.createShipping(shippingInfo));
+      });
+  }
+
+  generatePackagingSlip(packagingSlip: any): Observable<any> {
+    return this.http
+      .post(this.salesorderSavePackingSlip, JSON.stringify(packagingSlip), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.generatePackagingSlip(packagingSlip));
       });
   }
 
@@ -754,6 +764,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId));
+      });
+  }
+
+  getPackagingSlipPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number, packagingSlipId: number): Observable<any> {
+    const URL = `${this.getPackagingSlipForPrint}?salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}&soPickTicketId=${soPickTicketId}&packagingSlipId=${packagingSlipId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getPackagingSlipPrint(salesOrderId, salesOrderPartId, soPickTicketId, packagingSlipId));
       });
   }
 
