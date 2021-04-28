@@ -349,8 +349,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         }else{
             materialMandatoriesIds.push(0)
         }
-        // }
-        console.log("hello",materialMandatoriesIds)
+        // } 
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 0, materialMandatoriesIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
@@ -430,14 +429,14 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getPartnumbers(value) {
         this.isSpinnerVisible = true;
         let exclusionsIds = [];
-        if (this.UpdateMode) {
-            exclusionsIds = this.workFlow.materialList.reduce((acc, x) => {
-                return exclusionsIds.push(acc.itemMasterId);
-            }, 0)
-        }
+        if (this.isEdit) {
+  
+            exclusionsIds.push( this.editData?this.editData.itemMasterId:0);
+       
+        } 
       if(this.isWorkOrder || this.isSubWorkOrder){
         let partSearchParamters = {
-            "customerId": 411,
+            "customerId": 0,
             'partNumber': "",
             "includeAlternatePartNumber": true,
             "includeEquivalentPartNumber": true,
@@ -567,16 +566,14 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
     provisionList() {
         this.isSpinnerVisible = true;
-        let provisionIds = [];
-        console.log("this.workFlow.materialList",this.workFlow.materialList) 
+        let provisionIds = []; 
     if(this.workFlow.materialList && this.workFlow.materialList.length !=0){
              this.workFlow.materialList.forEach(element => {
             return provisionIds.push(element.provisionId);
         })
     }else{
         provisionIds.push(0)
-    }
-        console.log("this.workFlow.materialList",provisionIds)
+    } 
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 0, provisionIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
@@ -905,8 +902,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return this[variable + index];
     }
     openView(row) {
+        this.showItemmasterView = false;
         this.itemMasterRowData = row;
         this.showItemmasterView = true;
+        this.itemMasterId=undefined;
         this.itemMasterId = row.itemMasterId;
         $('#itemMasterView').modal('show');
     }
@@ -927,6 +926,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     dismissItemMasterModel() {
         $('#itemMasterView').modal('hide');
         this.itemMasterId = undefined;
+        this.showItemmasterView = false;
     }
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)

@@ -1124,7 +1124,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         }
     }
     setTotalCharges() { 
-        debugger;
         const EstMaterialCost = parseFloat(this.EstMaterialCost.toString().replace(/\,/g, ''));
         const EstTotalExpertiseCost = parseFloat(this.EstTotalExpertiseCost.toString().replace(/\,/g, ''));
         const EstTotalCharges = parseFloat(this.EstTotalCharges.toString().replace(/\,/g, ''));
@@ -1214,7 +1213,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.sourceWorkFlow.percentOfNew = '';
         if (myValue) {
             myValue = parseFloat(myValue.toString().replace(/\,/g, ''));
-            const val =myValue + ((myValue / 100) * this.newCostPercentValue)
+            const val = ((myValue / 100) * this.newCostPercentValue)
             this.sourceWorkFlow.percentOfNew = formatNumberAsGlobalSettingsModule(val, 2);
         } else {
             this.sourceWorkFlow.percentOfNew = 0;
@@ -1238,7 +1237,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.sourceWorkFlow.percentOfReplacement = '';
         if (myValue) {
             myValue = parseFloat(myValue.toString().replace(/\,/g, ''));
-            let afterpercent = myValue+ ((myValue / 100) * this.replacePercentValue)
+            let afterpercent = ((myValue / 100) * this.replacePercentValue)
             this.sourceWorkFlow.percentOfReplacement = formatNumberAsGlobalSettingsModule(afterpercent, 2);
 
         } else {
