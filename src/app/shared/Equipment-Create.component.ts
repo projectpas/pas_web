@@ -122,6 +122,8 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         newRow.workflowChargeTypeId = "";
         newRow.partNumber = "";
         newRow.isDeleted = false;
+        newRow.assetIdName="";
+        newRow.assetRecordId=0;
         this.workFlow.equipments.push(newRow);
     }
     clearautoCompleteInput(currentRecord) {
