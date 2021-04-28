@@ -345,7 +345,8 @@
                                     <td class="right">{{part?.quantityOrdered}}</td>
                                     <td class="right">{{part?.stockLineCount}}</td>
                                     <td class="right">{{part?.quantityRejected}}</td>
-                                    <td class="right">{{part.quantityOrdered - part.stockLineCount}}</td>
+                                    <!-- <td class="right">{{part?.quantityBackOrdered}}</td> -->
+                                    <td class="right">{{part.quantityOrdered - part.stockLineCount}}</td>                                    
                                     <td>
                                         {{part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered ? 'Fulfilling' : 'Received'}}
                                     </td>
