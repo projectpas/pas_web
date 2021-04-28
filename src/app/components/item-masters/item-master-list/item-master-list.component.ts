@@ -265,6 +265,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	targetData: any;
 	nonstocktargetData : any;
 	allStockInfoOriginal: any[];
+	auditHistory: any = [];
 
 	/** item-master-list ctor */
 	constructor(private authService: AuthService, private cdRef : ChangeDetectorRef,private atasubchapter1service: AtaSubChapter1Service,private datePipe: DatePipe, private route: Router, private alertService: AlertService, private router: Router, public itemMasterService: ItemMasterService, private modalService: NgbModal, private masterComapnyService: MasterComapnyService, public commonService: CommonService, private currencyService: CurrencyService, private _actRoute: ActivatedRoute ) {
@@ -331,8 +332,27 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		];
 	}
 
-	openHist() {		
+	openHist(rowData) {	
+		this.isSpinnerVisible = true;
+		this.itemMasterService.getAuditHistory(rowData.itemMasterId).subscribe(data => {
+			this.auditHistory = data;
+			this.isSpinnerVisible = false;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
 	}
+
+    getColorCodeForHistoryItemMaster(i, field, value) {
+        const data = this.auditHistory;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
+    }
 	
 	openEdit(row) {
 		const { itemMasterId } = row;
