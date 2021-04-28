@@ -72,6 +72,8 @@ export class EntityBillingComponent {
     isDelete: boolean= true;
     isDownload: boolean= true;
     isView:boolean=true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(public legalEntityService: LegalEntityService, private datePipe: DatePipe, private authService: AuthService, private alertService: AlertService, private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal, private commonService: CommonService, public workFlowtService: LegalEntityService,) {
 
@@ -80,6 +82,8 @@ export class EntityBillingComponent {
 			this.isDelete=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Delete]);
 			this.isDownload=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Download]);
             this.isView=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.View]);
+            this.isNextVisible=this.authService.ShowTab('Create Legal Entity','Shipping Information');
+			this.isPrevVisible=this.authService.ShowTab('Create Legal Entity','Banking Information');
     }
 
     ngOnInit(): void {

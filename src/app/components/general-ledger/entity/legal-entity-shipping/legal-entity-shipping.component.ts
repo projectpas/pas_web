@@ -175,6 +175,8 @@ export class EntityShippingComponent implements OnInit {
   isDelete: boolean = true;
   isDownload: boolean = true;
   isView: boolean = true;
+  isNextVisible: Boolean=true;
+  isPrevVisible: Boolean=true;
   constructor(
     private legalEntityService: LegalEntityService,
     private authService: AuthService,
@@ -210,6 +212,15 @@ export class EntityShippingComponent implements OnInit {
         "." +
         PermissionConstants.View,
     ]);
+
+    this.isNextVisible = this.authService.ShowTab(
+      "Create Legal Entity",
+      "Documents"
+    );
+    this.isPrevVisible = this.authService.ShowTab(
+      "Create Legal Entity",
+      "Billing Information"
+    );
   }
 
   ngOnInit() {
@@ -1465,7 +1476,6 @@ export class EntityShippingComponent implements OnInit {
   currentDeletedstatus: boolean = false;
   isSpinnerVisible: boolean = false;
   loadDataForDomestic(event) {
-    
     if (this.isView) {
       this.lazyLoadEventData = event;
       const pageIndex = parseInt(event.first) / event.rows;

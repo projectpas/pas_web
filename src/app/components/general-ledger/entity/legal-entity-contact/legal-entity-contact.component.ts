@@ -153,6 +153,7 @@ export class EntityContactComponent implements OnInit {
   isDelete: boolean = true;
   isDownload: boolean = true;
   isView: boolean = true;
+  isNextVisible: Boolean=true;
   constructor(
     private router: ActivatedRoute,
     public legalEntityService: LegalEntityService,
@@ -185,6 +186,7 @@ export class EntityContactComponent implements OnInit {
     this.isView = this.authService.checkPermission([
       ModuleConstants.LegalEntity_Contacts + "." + PermissionConstants.View,
     ]);
+    this.isNextVisible=this.authService.ShowTab('Create Legal Entity','Banking Information');
   }
 
   ngOnInit() {

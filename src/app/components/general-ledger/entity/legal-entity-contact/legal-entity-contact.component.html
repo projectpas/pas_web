@@ -394,7 +394,7 @@ col.field == 'createdDate'?
                 </div>
                 <br />
                 <div style="margin: 10px;" *ngIf="isViewMode == false">
-                    <button type="button" class="btn btn-primary pull-right submit-btn"
+                    <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn"
                         (click)="nextClick()">Next</button>
                     <button type="button" class="btn btn-primary pull-right submit-btn"
                         (click)="backClick()">Previous</button>

@@ -236,6 +236,12 @@ export class CreatePublicationComponent implements OnInit {
   isATADownload:boolean=true;
   isGeneralInfoAdd:boolean=true;
   isGeneralInfoUpdate:boolean=true;
+
+  isNextVisible:Boolean=true;
+  isPNNextVisible: Boolean=true;
+  isAirCraftNext: Boolean=true;
+  isAirCraftPrev: Boolean=true;
+  isATAPrev: Boolean=true;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -267,6 +273,15 @@ export class CreatePublicationComponent implements OnInit {
 
    this.isGeneralInfoAdd=this.authService.checkPermission([ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.Add]);
    this.isGeneralInfoUpdate=this.authService.checkPermission([ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.Update]);
+
+   this.isNextVisible=this.authService.ShowTab('Create Publications','PN Mapping');
+
+   this.isPNNextVisible=this.authService.ShowTab('Create Publications','View Aircraft Information');
+
+   this.isAirCraftNext=this.authService.ShowTab('Create Publications','View ATA Chapter');
+   this.isAirCraftPrev=this.authService.ShowTab('Create Publications','PN Mapping');
+
+   this.isATAPrev=this.authService.ShowTab('Create Publications','View Aircraft Information');
   }
 
   isShowTab(value){

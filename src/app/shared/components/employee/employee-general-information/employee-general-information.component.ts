@@ -216,6 +216,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     private onDestroy$: Subject<void> = new Subject<void>();
     isAdd: boolean=true;
     isEdit: boolean=true;
+    isNextVisible:Boolean=true;
     constructor(private fb: FormBuilder, private Actroute: ActivatedRoute, private translationService: AppTranslationService, private router: Router, public jobTypeService: JobTypeService, public jobTitleService: JobTitleService, private empservice: EmployeeExpertiseService, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private route: Router, private alertService: AlertService, public employeeService: EmployeeService, public jobTitleService1: LegalEntityService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private localStorage: LocalStoreManager, private companyService: CompanyService, public currencyService: CurrencyService, public commonService: CommonService) {
         this.displayedColumns.push('action');
         this.radioItems = ['Hourly', 'Monthly'];
@@ -255,6 +256,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             });
         this.isAdd = this.authService.checkPermission([ModuleConstants.Employees_GeneralInformation + '.' + PermissionConstants.Add]);
         this.isEdit = this.authService.checkPermission([ModuleConstants.Employees_GeneralInformation + '.' + PermissionConstants.Update]);
+        this.isNextVisible=this.authService.ShowTab('Create Employee','Certification')
     }
     ngOnInit(): void {
         this.isSpinnerVisible = true;

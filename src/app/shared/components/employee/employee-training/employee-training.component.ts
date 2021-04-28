@@ -142,6 +142,8 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     isAdd: boolean=true;
     isEdit: boolean=true;
     moduleName='Employee'
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(private route: ActivatedRoute,
         private aircraftModelService: AircraftModelService,
         private itemser: ItemMasterService, private translationService: AppTranslationService,
@@ -164,6 +166,8 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.translationService.closeCmpny = false;
         this.isAdd = this.authService.checkPermission([ModuleConstants.Employees_Training + '.' + PermissionConstants.Add]);
         this.isEdit = this.authService.checkPermission([ModuleConstants.Employees_Training + '.' + PermissionConstants.Update]);
+        this.isNextVisible=this.authService.ShowTab("Create Employee",'Management Structure');
+        this.isPrevVisible=this.authService.ShowTab("Create Employee",'Certification');
     }
     ngOnInit(): void {
         this.isSpinnerVisible = true;

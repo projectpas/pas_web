@@ -99,7 +99,7 @@
                           </div>
                       </div>
                       <div class=" form-group" style=" margin-top:1%;">
-                      <button type="button" class="btn btn-primary pull-right" (click)="nextClick('Next')">Next </button>
+                      <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right" (click)="nextClick('Next')">Next </button>
                       <button *ngIf="isAdd  && !isEditContent" 
                        type="button" class="btn btn-primary pull-right" (click)="saveCertificateData()">Save  </button>
                       <button *ngIf="isEdit && isEditContent" 

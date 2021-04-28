@@ -100,6 +100,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	isAdd:boolean=true;
 	isEditData:boolean=true;
 	@ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
+	isNextVisible: Boolean=true;
+	isPrevVisible: Boolean=true;
 	constructor(
 		private authService: AuthService, private commonService: CommonService, private _fb: FormBuilder, private alertService: AlertService,
 		public currency: CurrencyService, public workFlowtService: LegalEntityService,
@@ -108,6 +110,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.sourceLegalEntity.tagNames = [];
 			this.isAdd=this.authService.checkPermission([ModuleConstants.LegalEntity_BankingInformation+"."+PermissionConstants.Add]);
 			this.isEditData=this.authService.checkPermission([ModuleConstants.LegalEntity_BankingInformation+"."+PermissionConstants.Update]);
+			this.isNextVisible=this.authService.ShowTab('Create Legal Entity','Billing Information');
+			this.isPrevVisible=this.authService.ShowTab('Create Legal Entity','Contacts');
 	}
 	ngOnInit(): void {
 		if (this.editMode) {

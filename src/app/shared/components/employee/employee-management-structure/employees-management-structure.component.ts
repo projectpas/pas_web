@@ -51,7 +51,7 @@ export class EmployeesManagementStructureComponent implements OnInit, AfterViewI
     memoPopupContent: any;
     isAdd: boolean=true;
     isEdit: boolean=true;
-
+    isPrevVisible:Boolean=true;
 
     constructor(private router: Router, private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -71,6 +71,7 @@ export class EmployeesManagementStructureComponent implements OnInit, AfterViewI
         }
         this.isAdd = this.authService.checkPermission([ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.Add]);
         this.isEdit = this.authService.checkPermission([ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.Update]);
+        this.isPrevVisible=this.authService.ShowTab("Create Employee",'Training');
     }
 
     ngOnInit() {

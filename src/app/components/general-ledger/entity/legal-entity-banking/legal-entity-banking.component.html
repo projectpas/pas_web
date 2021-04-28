@@ -537,8 +537,8 @@
                         </div>
                         <hr class="hr-light-grey">
                         <div class="form-group col-sm-12">
-                            <button type="submit" class="btn btn-primary pull-right" (click)="next()">Next</button>
-                            <button type="button" class="btn btn-primary pull-right submit-btn"(click)="backClick()">Previous</button>
+                            <button *ngIf="isNextVisible" type="submit" class="btn btn-primary pull-right" (click)="next()">Next</button>
+                            <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn"(click)="backClick()">Previous</button>
 
                         </div> 
                     </form>

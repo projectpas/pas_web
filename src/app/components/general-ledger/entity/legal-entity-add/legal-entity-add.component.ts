@@ -79,6 +79,7 @@ export class EntityAddComponent implements OnInit {
     countryListOriginal: any = [];
     isAdd:boolean=true;
     isEdit:boolean=true;
+    isNextVisible: Boolean=true;
     constructor(
         private authService: AuthService,
         private commonService: CommonService,
@@ -91,6 +92,7 @@ export class EntityAddComponent implements OnInit {
         private route: Router,) {
             this.isAdd=this.authService.checkPermission([ModuleConstants.LegalEntity_GeneralInformation+"."+PermissionConstants.Add]);
             this.isEdit=this.authService.checkPermission([ModuleConstants.LegalEntity_GeneralInformation+"."+PermissionConstants.Update]);
+            this.isNextVisible=this.authService.ShowTab('Create Legal Entity','Contacts');
     }
 
     ngOnInit() {

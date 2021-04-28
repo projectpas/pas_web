@@ -119,7 +119,7 @@
 
           <button *ngIf ="isAdd && !isEditContent" [disabled]="!employeeService.enableUpdateButton" type="button" class="btn btn-primary pull-right" (click)="saveManagementStructure()">Save</button>
           <button *ngIf ="isEdit && isEditContent"  [disabled]="!employeeService.enableUpdateButton"  type="button" class="btn btn-primary pull-right" (click)="saveManagementStructure()">Update</button>
-          <button type="button" class="btn btn-primary pull-right" (click)="nextClick('Previous')">Previous</button>
+          <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right" (click)="nextClick('Previous')">Previous</button>
       </div>
 </div>
 </div>

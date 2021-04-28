@@ -252,7 +252,7 @@
                             (click)="saveGeneralInfo(); ">
                             {{isEditMode ? 'Update' : 'Save' }}
                         </button> -->
-                        <button class="btn btn-primary button-save-cstm-cstm" [disabled]="!isEnableNext" type="submit"
+                        <button *ngIf="isNextVisible" class="btn btn-primary button-save-cstm-cstm" [disabled]="!isEnableNext" type="submit"
                             (click)="nextClick('Next')">
                             Next
                         </button>
@@ -452,7 +452,7 @@
                    
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                    <button *ngIf="isPNNextVisible" class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('Aircraft'); saveTab('PN Mapping')">
                         Next
                     </button>
@@ -666,11 +666,11 @@
                    
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                    <button *ngIf="isAirCraftNext" class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('Atachapter');  saveTab('Aircraft')">
                         Next
                     </button>
-                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                    <button *ngIf="isAirCraftPrev" class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('PnMap')">
                         Previous
                     </button>
@@ -850,7 +850,7 @@
                     <button class="btn btn-primary pull-right button-save-cstm" type="button" (click)="addNewRecord()">
                         Add New
                     </button>
-                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                    <button *ngIf="isATAPrev" class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('Aircraft')">
                         Previous
                     </button>
