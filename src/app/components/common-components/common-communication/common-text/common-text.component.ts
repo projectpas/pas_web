@@ -182,6 +182,9 @@ export class TextCommonComponent implements OnInit, OnChanges {
     dismissModel() {
         this.modal.close();
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
 
     loadData(event) {
 

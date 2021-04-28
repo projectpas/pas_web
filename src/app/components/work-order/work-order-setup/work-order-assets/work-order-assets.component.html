@@ -303,7 +303,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="close" (click)="closePopupmodel('view')">
           &times;
         </button>
         <h4 class="modal-title">Asstes View</h4>
@@ -313,7 +313,7 @@
         </app-asset-listing>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" (click)="closePopupmodel('view')">
           Close
         </button>
       </div>
@@ -581,7 +581,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="close" (click)="closePopupmodel('assetHistory')">
           &times;
         </button>
         <h4 class="modal-title">Work Order Tools History</h4>
@@ -741,7 +741,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
+        <button type="button" class="btn btn-danger" (click)="closePopupmodel('assetHistory')">
           Close
         </button>
       </div>

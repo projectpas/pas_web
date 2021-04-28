@@ -174,6 +174,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     get advancedSearchstockListUrl() { return this.configurations.baseUrl + this._advanceSearchstockListUrl; }
     get advancedSearchNonStockListUrl() { return this.configurations.baseUrl + this._advanceSearchNonstockListUrl; }
     get getSearchItemMasterfromExchangeQuotepopUrl() { return this.configurations.baseUrl + this._searchItemMasterfromExchangequotepop };
+    get getAuditHistoryurl() { return this.configurations.baseUrl + this.getAuditHistoryById }
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
@@ -832,7 +833,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getAuditHistory<T>(ItemMasterId: number): Observable<T> {
-        let endpointUrl = `${this.getAuditHistoryById}/${ItemMasterId}`;
+        let endpointUrl = `${this.getAuditHistoryurl}/${ItemMasterId}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAuditHistory(ItemMasterId));

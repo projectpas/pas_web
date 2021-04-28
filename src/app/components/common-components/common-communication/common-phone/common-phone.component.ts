@@ -125,6 +125,9 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         }, err => {
         });
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
     vendorContacts(value) {
         this.setEditArray = [];
         if (this.isEdit == true) {
