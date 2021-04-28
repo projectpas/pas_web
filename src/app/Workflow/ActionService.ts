@@ -59,8 +59,8 @@ export class ActionService {
         return this.actionEndpoint.GetDashNumberByModelIdURL<any[]>(modelId);
     }
 
-    RemoveWorkFlow(workFlowId: number) {
-        return this.actionEndpoint.removeWorkFlow<any[]>(workFlowId);
+    RemoveWorkFlow(workFlowId: number, userName: string) {
+        return this.actionEndpoint.removeWorkFlow<any[]>(workFlowId, userName);
     }
 
     getLocations() {
@@ -140,8 +140,8 @@ export class ActionService {
             this.actionEndpoint.getWorkFlowWithMaterialList<any>(workflowid));
     }
 
-    toggleState(workflowId: number) {
+    toggleState(workflowId: number, userName: string) {
         return Observable.forkJoin(
-            this.actionEndpoint.toggleState<any>(workflowId));
+            this.actionEndpoint.toggleState<any>(workflowId, userName));
     }
 }
