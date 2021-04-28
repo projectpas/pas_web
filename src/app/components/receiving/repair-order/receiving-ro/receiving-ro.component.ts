@@ -1321,12 +1321,12 @@ export class ReceivingRoComponent implements OnInit {
                         }
                     }
                 }
-            }
+            }           
 
-            if (item.timeLifeList != undefined && item.timeLifeList.length > 0) {
+            if(item.itemMaster.isTimeLife == true && item.timeLifeList != undefined && item.timeLifeList.length > 0) {                
                 for (var i = 0; i < item.timeLifeList.length; i++) {
                     var timeLife = item.timeLifeList[i];
-                    if (item.detailsNotProvided != true) {
+                    if (timeLife.detailsNotProvided != true) {
                         //var timeLife = item.timeLifeList[i];
                         if (timeLife.cyclesRemainingHrs == null && timeLife.cyclesRemainingMin == null
                             && timeLife.cyclesSinceNewHrs == null

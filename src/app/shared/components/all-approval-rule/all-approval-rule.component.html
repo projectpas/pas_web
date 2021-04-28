@@ -298,13 +298,13 @@
                                 name="value" (change)="onChangevalue('value');" required />
                         </div>
                         <div class="form-group">
-                            <label>Approver</label>
+                            <label>Approver <span class="clr-red">*</span></label>
                             <div class="inner-addon right-addon inline-block">
                                 <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="employeelist"
                                     title="Add Approver" name="approverId" [suggestions]="approverList"
                                     (completeMethod)="filterapprover($event)" [size]="30" [minLength]="1"
                                     [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
-                                    #approverId="ngModel">
+                                    #approverId="ngModel" required>
                                 </p-autoComplete>
                                 <button type="button" class="btn btn-primary m-t-10 pull-right but_stl"
                                     (click)="onAddApprover();">Add</button>
