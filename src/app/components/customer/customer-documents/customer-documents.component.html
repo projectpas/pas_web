@@ -336,11 +336,10 @@
             *ngIf="isViewMode == false">
             Add New
           </button>
-          <button *ngIf="isPrevVisible"
+          <button *ngIf="isPrevVisible && isViewMode == false"
             type="button"
             class="btn btn-primary pull-right submit-btn"
-            (click)="backClick()"
-            *ngIf="isViewMode == false">
+            (click)="backClick()">
             Previous
           </button>          
         </div>
