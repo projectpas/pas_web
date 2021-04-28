@@ -383,16 +383,68 @@ Updatetcalibartion()
       this.calibrationForm.masterCompanyId = this.authService.currentUser.masterCompanyId;
       this.calibrationForm.EmployeeId=this.calibrationForm.EmployeeId ? this.calibrationForm.EmployeeId.EmployeeId : null;
       this.calibrationForm.VendorId=this.calibrationForm.VendorId ? this.calibrationForm.VendorId.vendorId : null;
-    this.isSpinnerVisible = true;
-    this.assetService.addcalibrationManagment(this.calibrationForm).subscribe(data => {
-        this.isSpinnerVisible = false;
-        this.isEditMode = true;
-        this.alertService.showMessage("Success", `Calibration Process successfully.`, MessageSeverity.success);
-        $("#editcalibration").modal("hide");
-    }, err => {
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);
-    })
+    
+      this.isSaving =true;
+    if(this.calibrationForm.ScheduleIsVendor =="" && this.calibrationForm.ScheduleIsEmployee== "")
+    {
+        this.alertService.showMessage("", `Please Select Vendor or Employee Type.`, MessageSeverity.warn);
+        this.isSaving =false;
+        //return;
+
+    }
+
+    if(this.calibrationForm.ScheduleIsVendor == true && (this.calibrationForm.VendorId == "" || this.calibrationForm.VendorId == undefined ||  this.calibrationForm.VendorId == null))
+    {
+        this.alertService.showMessage("", `Please Select Vendor.`, MessageSeverity.warn);
+        this.isSaving =false;
+       // return;
+
+    }
+
+    if(this.calibrationForm.ScheduleIsEmployee == true && (this.calibrationForm.EmployeeId == "" || this.calibrationForm.EmployeeId == undefined || this.calibrationForm.EmployeeId == null))
+    {
+        this.alertService.showMessage("", `Please Select Employee.`, MessageSeverity.warn);
+        this.isSaving =false;
+       // return;
+
+    }
+
+    if(this.calibrationForm.CalibrationDate == "" || this.calibrationForm.CalibrationDate == undefined  || this.calibrationForm.CalibrationDate == null)
+    {
+        this.alertService.showMessage("", `Please Select CalibrationDate.`, MessageSeverity.warn);
+        this.isSaving =false;
+        //return;
+
+    }
+
+    if(this.calibrationForm.UnitCost == "" || this.calibrationForm.UnitCost == undefined  || this.calibrationForm.UnitCost == null)
+    {
+        this.alertService.showMessage("", `Please Enter UnitCost.`, MessageSeverity.warn);
+        this.isSaving =false;
+        //return;
+    }
+
+    if(this.calibrationForm.currencyId == "" || this.calibrationForm.currencyId == undefined  || this.calibrationForm.currencyId == null)
+    {
+        this.alertService.showMessage("", `Please Select currencyId.`, MessageSeverity.warn);
+        this.isSaving =false;
+       // return;
+    }
+
+    if( this.isSaving)
+    {
+        this.isSpinnerVisible = true;
+        this.assetService.addcalibrationManagment(this.calibrationForm).subscribe(data => {
+            this.isSpinnerVisible = false;
+            this.isEditMode = true;
+            this.alertService.showMessage("Success", `Calibration Process successfully.`, MessageSeverity.success);
+            $("#editcalibration").modal("hide");
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        })
+    }
+    
 
   }
 assetInventoryId:any;
@@ -584,15 +636,15 @@ checkedvendor(ScheduleIsVendor)
 {
     this.isvendor=true;
     this.isemployee=false;
-    this.calibrationForm.ScheduleIsVendor=true
-    this.calibrationForm.ScheduleIsEmployee=false
+    //this.calibrationForm.ScheduleIsVendor=true
+    //this.calibrationForm.ScheduleIsEmployee=false
 }
 checkedemployee(ScheduleIsEmployee)
 {
     this.isvendor=false;
     this.isemployee=true;
-    this.calibrationForm.ScheduleIsVendor=false
-    this.calibrationForm.ScheduleIsEmployee=true
+    //this.calibrationForm.ScheduleIsVendor=false
+    //this.calibrationForm.ScheduleIsEmployee=true
 
 
 }

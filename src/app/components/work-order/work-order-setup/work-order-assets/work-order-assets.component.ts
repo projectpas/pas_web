@@ -65,7 +65,7 @@ export class WorkOrderAssetsComponent implements OnInit {
         { field: 'name', header: 'Tool Name' ,width:"130px"},
         { field: 'assetId', header: 'Tool Id',width:"130px" },
         { field: 'description', header: 'Tool Description',width:"130px" },
-        { field: 'assetTypeName', header: 'Tool Class' ,width:"130px"},
+        { field: 'assetClass', header: 'Tool Class' ,width:"130px"},
         { field: 'quantity', header: 'Qty',width:"60px" },
         { field: "createdDate", header: "Created Date", width: "130px" },
         { field: "createdBy", header: "CreatedBy", width: "130px" },
@@ -349,6 +349,9 @@ viewAsstesInventory(rowData){
         this.addNewEquipment = false;
         $('#addNewEquipments').modal('hide');
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
 
     createNew() {
         this.isEdit = false;
@@ -356,6 +359,7 @@ viewAsstesInventory(rowData){
         this.addNewEquipment = true;
     }
     edit(rowData) {
+        debugger;
         this.createNew();
         this.cdRef.detectChanges();
         this.isEdit = true;
@@ -672,9 +676,10 @@ viewAsstesInventory(rowData){
     }
     equipmentArr: any = [];
     updateWorkOrderEquipmentList(data) {
+        debugger;
         this.equipmentArr = [];
         if (this.isSubWorkOrder) {
-            this.equipmentArr = data.equipments.map(x => {
+             const equipmentArr = data.equipments.map(x => {
                 return {
                     ...x,
                     masterCompanyId: this.authService.currentUser.masterCompanyId,
@@ -684,11 +689,14 @@ viewAsstesInventory(rowData){
                     workFlowWorkOrderId: this.workFlowWorkOrderId,
                     subWOPartNoId: this.subWOPartNoId,
                     workOrderId: this.subWorkOrderDetails.workOrderId,
+                    assetTypeId: x.assetTypeId ="undefined"? null:  x.assetTypeId,
+                    assetTypeName: x.assetTypeName ="undefined"? null:  x.assetTypeName,
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
                 }
             })
+
             this.isSpinnerVisible = true;
-            this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).subscribe(res => {
+            this.workOrderService.createWorkOrderEquipmentList(equipmentArr, this.isSubWorkOrder).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workFlowObject.equipments = [];
                 this.alertService.showMessage(
