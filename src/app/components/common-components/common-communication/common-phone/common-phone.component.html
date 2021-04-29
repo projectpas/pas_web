@@ -64,12 +64,12 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of headers" class="table-column-width">
+                    <col *ngFor="let col of columns" class="table-column-width">
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <ng-container *ngFor="let col of headers">
+                    <ng-container *ngFor="let col of columns">
                         <th class="table-column-width" *ngIf="col.field == 'phoneNo' || col.field == 'contactBy'"
                             pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                             {{ col.header }}
@@ -86,7 +86,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <ng-container *ngFor="let col of headers">
+                    <ng-container *ngFor="let col of columns">
                         <th class="table-column-width" *ngIf="col.field == 'phoneNo' || col.field == 'contactBy'"
                             [ngSwitch]="col.field">
                             <input pInputText type="text" class="incorn_border table-header-input-width" (input)="

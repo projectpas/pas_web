@@ -3674,9 +3674,9 @@
                 }">
                                 <span *ngIf="audit.dashNumber != 'Unknown'">{{ audit.dashNumber }}</span>
                             </td>
-                            <td><p class="width-120 text-center">{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
+                            <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                             <td>{{ audit.createdBy }}</td>
-                            <td><p class="width-120 text-center">{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
+                            <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                             <td>{{ audit.updatedBy }}</td>
                             
                             <td class="text-center width-60">

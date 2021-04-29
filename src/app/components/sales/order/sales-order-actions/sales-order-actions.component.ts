@@ -68,7 +68,8 @@ export class SalesOrderActionsComponent implements OnInit {
       this.openConfirmationModal(actionType, this.confirmationModal.header, this.confirmationModal.body.cancel);
     } else if (actionType == SalesOrderActionType.CloseSalesOrder) {
       this.openConfirmationModal(actionType, this.confirmationModal.header, this.confirmationModal.body.close);
-    } else {
+    }
+    else {
       this.onActionClick.emit(new SalesOrderEventArgs(actionType, SalesOrderConfirmationType.None));
     }
   }

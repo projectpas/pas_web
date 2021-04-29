@@ -6,6 +6,13 @@
 	position: absolute;
 	color: white;
 }
+.workflow-ber-grid{
+	font-size: 15px;
+    margin: 0px !important;
+}
+.workflow-ber-header{
+	padding: 0.35rem 1.25rem 0.15rem 1.25rem;
+}
 
 .margin-bottom-0{
 	margin-bottom: 0px !important;

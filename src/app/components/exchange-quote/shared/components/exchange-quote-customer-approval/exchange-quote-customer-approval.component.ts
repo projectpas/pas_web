@@ -249,7 +249,7 @@ export class ExchangeQuoteCustomerApprovalComponent {
       this.quotesList = data[0];
 
       for (let i = 0; i < this.quotesList.length; i++) {
-          this.quotesList[i]['soqSettingApprovalRule'] = false;
+          this.quotesList[i]['exchangeQuoteSettingApprovalRule'] = false;
           this.quotesList[i]['createdBy'] = DBkeys.UPDATED_BY;
           this.quotesList[i]['updatedBy'] = DBkeys.UPDATED_BY;
           this.quotesList[i]['isSelected'] = this.quotesList[i].statusId == (ApprovalStatusEnum.WaitingForApproval || ApprovalStatusEnum.WaitingForApproval.toString()) ? true : false;
@@ -446,6 +446,7 @@ export class ExchangeQuoteCustomerApprovalComponent {
       let validmessages = '';
       this.quotesList.forEach(
           x => {
+              debugger;
               if (x.isSelected) {
                   let validmessage = this.validateApprovalData(x);
                   if (validmessage.length > 0) {
