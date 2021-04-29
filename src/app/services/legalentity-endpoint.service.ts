@@ -1004,7 +1004,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 	getLegalEntityHistoryById(legalEntityId) {
 		//return this.http.get<any>(`${this.configurations.baseUrl}/${this._legalEntityHistory}?legalEntityId=${legalEntityId}`)
-		return this.http.get<any>(`${this._legalEntityHistory}/${legalEntityId}`)
+		return this.http.get<any>(`${this._legalEntityHistory}/${legalEntityId}`,this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityHistoryById(legalEntityId));
 			});
