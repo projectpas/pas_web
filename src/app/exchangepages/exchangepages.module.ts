@@ -47,6 +47,7 @@ import { ExchangeQuoteApprovalRuleComponent } from "../components/exchange-quote
 import { ExchangeQuoteApproveComponent } from "../components/exchange-quote/shared/components/exchange-quote-approve/exchange-quote-approve.component";
 import { ExchangeQuoteCustomerApprovalComponent } from "../components/exchange-quote/shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
 import { ExchangeQuoteAnalysisComponent } from "../components/exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component";
+import { ExchangeQuoteChargesComponent } from "../components/exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -98,7 +99,8 @@ import { ExchangeQuoteAnalysisComponent } from "../components/exchange-quote/exc
     ExchangeQuoteApprovalRuleComponent,
     ExchangeQuoteApproveComponent,
     ExchangeQuoteCustomerApprovalComponent,
-    ExchangeQuoteAnalysisComponent
+    ExchangeQuoteAnalysisComponent,
+    ExchangeQuoteChargesComponent
   ],
   providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService],
   entryComponents: []

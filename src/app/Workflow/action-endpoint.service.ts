@@ -7,15 +7,10 @@ import { EndpointFactory } from '../services/endpoint-factory.service';
 import { ConfigurationService } from '../services/configuration.service';
 import { Dir } from '@angular/cdk/bidi';
 import { Charge } from '../models/charge.model';
-
-//import { EndpointFactory } from './endpoint-factory.service';
-//import { ConfigurationService } from './configuration.service';
 import { environment } from 'src/environments/environment';
+
 @Injectable()
 export class ActionEndpoint extends EndpointFactory {
-
-
-
     private readonly _actionsUrl: string = environment.baseUrl+"/api/Action/Get";
     private readonly _actionsUrlNew: string =environment.baseUrl+ "/api/Action/actions";
     private readonly _actionsUrlAuditHistory: string =environment.baseUrl+ "/api/Action/auditHistoryById";
@@ -63,7 +58,7 @@ export class ActionEndpoint extends EndpointFactory {
     private UpdateMaterialListURL: string = environment.baseUrl + "/api/workflow/updateMaterial";
     private UpdateMeasurementURL: string = environment.baseUrl + "/api/workflow/updateMeasurement";
     private UpdatePublicationURL: string = environment.baseUrl + "/api/workflow/updatePublication";
-    private RemoveWorkFlowURL: string = environment.baseUrl + "/api/workflow/remove";
+    private RemoveWorkFlowURL: string = environment.baseUrl + "/api/workflow/updatedeletedstatus";
 
     get actionsUrl() { return  this._actionsUrl; }
 
@@ -71,11 +66,12 @@ export class ActionEndpoint extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    toggleState<T>(workflowId: number): Observable<T> {
-        let endpointUrl = `${this.toggleStateURL}/${workflowId}`;
-        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+    toggleState<T>(workflowId: number, userName): Observable<T> {
+        let endpointUrl = `${this.toggleStateURL}?workflowId=${workflowId}&updatedBy=${userName}`    
+        return this.http
+            .get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.toggleState(workflowId));
+                return this.handleErrorCommon(error, () => this.toggleState(workflowId, userName));
             });
     }
 
@@ -95,13 +91,13 @@ export class ActionEndpoint extends EndpointFactory {
             });
     }
 
-    removeWorkFlow<T>(workFlowId: number): Observable<T> {
-        let endpointUrl = `${this.RemoveWorkFlowURL}/${workFlowId}`;
-        return this.http.delete(endpointUrl, this.getRequestHeaders())
-            .catch(
-                error => {
-                    return this.handleErrorCommon(error, () => this.removeWorkFlow(workFlowId));
-                });
+    removeWorkFlow<T>(workflowId: number, userName): Observable<T> {
+        let endpointUrl = `${this.RemoveWorkFlowURL}?workflowId=${workflowId}&updatedBy=${userName}`    
+        return this.http
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.removeWorkFlow(workflowId, userName));
+            });
     }
 
     addWorkFlowHeader<T>(workflowData: any): Observable<T> {
@@ -113,7 +109,6 @@ export class ActionEndpoint extends EndpointFactory {
             'partNumber': workflowData.partNumber,
             'partNumberDescription': workflowData.partNumberDescription,
             'revisedPartNumber':workflowData.revisedPartNumber,
-            // 'changedPartNumberId': workflowData.changedPartNumberId,
             'currencyId': workflowData.currencyId,
             'customerId': workflowData.customerId,
             'workflowExpirationDate': workflowData.workflowExpirationDate,
@@ -128,7 +123,6 @@ export class ActionEndpoint extends EndpointFactory {
             'percentageOfReplacement': workflowData.percentageOfReplacement,
             'berThresholdAmount': workflowData.berThresholdAmount,
             'memo': workflowData.memo,
-            // 'customerName': workflowData.customerName,
             'masterCompanyId': workflowData.masterCompanyId,
             'createdBy': workflowData.createdBy,
             'updatedBy': workflowData.updatedBy,
@@ -212,7 +206,6 @@ export class ActionEndpoint extends EndpointFactory {
         let obj = {
             'taskId': charges.taskId,
             'workflowId': charges.workflowId,
-            //'vendorPriceOrUnit': charges.vendorPriceOrUnit,
             'currencyId': charges.currencyId,
             'description': charges.description,
             'extendedCost': charges.extendedCost,
@@ -222,12 +215,9 @@ export class ActionEndpoint extends EndpointFactory {
             'quantity': charges.quantity,
             'unitCost': charges.unitCost,
             'unitPrice': charges.unitPrice,
-            //'vendorId': charges.vendorId,
             'vendorUnitPrice': charges.vendorUnitPrice,
             'workflowChargeTypeId': charges.workflowChargeTypeId,
-            //'memo': charges.memo,
             'isDelete': charges.isDelete,
-
         }
 
         return this.http.post<T>(this.AddChargesURL, JSON.parse(JSON.stringify(charges)), this.getRequestHeaders())

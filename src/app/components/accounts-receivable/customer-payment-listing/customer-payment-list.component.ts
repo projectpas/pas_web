@@ -117,7 +117,6 @@ export class CustomerPaymentListComponent {
     }
 
     changeOfStatus(status) {
-        debugger;
         const lazyEvent = this.lazyLoadEventData;
         this.currentStatus = status.toString() === '' ? this.currentStatus : status.toString();
         this.loadData(this.lazyLoadEventData);

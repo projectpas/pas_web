@@ -21,6 +21,7 @@ import { PartDetail } from "../components/exchange-quote/shared/components/model
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { ExchangeQuotePart } from '../models/exchange/ExchangeQuotePart';
 import { ExchangeQUoteMarginSummary } from '../models/exchange/ExchangeQUoteMarginSummary';
+import { IExchangeQuoteCharge } from '../models/exchange/IExchangeQuoteCharge';
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
   operation: RolesChangedOperation;
@@ -368,6 +369,15 @@ export class ExchangequoteService {
   }
   sentForInternalApproval(data) {
     return this.exchangeQuoteEndpointService.sentForInternalApproval(data);
+  }
+  getExchangeQuoteCharges(id, isDeleted) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteCharges(id, isDeleted);
+  }
+
+  createExchangeQuoteCharge(chargesList: IExchangeQuoteCharge[]): Observable<IExchangeQuote[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.createExchangeQuoteCharge(chargesList)
+    );
   }
 
 }
