@@ -320,7 +320,7 @@ export class ReceivngPoComponent implements OnInit {
             this.arrayPostatuslist.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('POStatus', 'POStatusId', 'Description', '',
-            true, 0, this.arrayPostatuslist.join(), this.currentUserMasterCompanyId)
+            true, 0, this.arrayPostatuslist.join(), 0)
             .subscribe(res => {
                 this.poStatus = res;
                 this.poStatus = this.poStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));        
