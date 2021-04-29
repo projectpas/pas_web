@@ -25,7 +25,7 @@
                            </div>
                         </div>
                          <div class="clear"></div> 
-                        <div class="card card-border" *ngIf="!hideWOHeader">
+                        <div class="card card-border" >
                             <div class="card-body new-card-body">
                                 <div class="col-sm-12 link-block">
                                     <h4 class="pull-right style_h4" >
@@ -339,9 +339,9 @@
                     </div>
                     <div>
                     </div>
-                    <div class=" wid_cal card"  *ngIf="!isSubWorkOrder">
-                        <div >
-                    <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="!hideWOHeader">
+                    <div class=" wid_cal card" *ngIf="!hideWOHeader" >
+                        <div *ngIf="!isSubWorkOrder">
+                    <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" >
                         <div class="tableFixHead">
                         <table class="table table-bordered lastcol-fix mpn-list-table header-table-width"
                             id="mpn-list-table">

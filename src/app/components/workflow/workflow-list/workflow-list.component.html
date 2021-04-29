@@ -515,7 +515,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group memo-popup-cstm padding-notes">
                                         <label>
-                                            Notes
+                                            Memo
                                         </label>
                                         <span>
                                             <div class="form-group memo-popup-cstm mat_emo">
@@ -553,7 +553,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Other:
-                                                        </label> {{sourceWorkFlow.otherCost > 0 ? sourceWorkFlow.otherCost : '0.00'}}
+                                                        </label> {{sourceWorkFlow.otherCost ? sourceWorkFlow.otherCost : '0.00'}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -567,7 +567,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="width-130">% of BER Threshold: </label>
-                                                        {{PercentBERThreshold ? PercentBERThreshold : '0.00'}}
+                                                        {{PercentBERThreshold ? PercentBERThreshold : '0.00'}} %
                                                     </div>
                                                 </div>
                                             </div>
@@ -1389,7 +1389,7 @@
                     <div class="col-md-6">
                         <div class="form-group memo-popup-cstm" style="padding-left: 4px;">
                             <label>
-                                Notes
+                                Memo
                             </label>
                             <span>
                                 <div class="form-group memo-popup-cstm mat_emo" *ngIf="sourceWorkFlow">
@@ -1428,7 +1428,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Other:
-                                            </label> {{sourceWorkFlow.otherCost > 0 ? sourceWorkFlow.otherCost : '0.00'}}
+                                            </label> {{sourceWorkFlow.otherCost ? sourceWorkFlow.otherCost : '0.00'}}
                                         </div>
                                     </div>
                                 </div>
