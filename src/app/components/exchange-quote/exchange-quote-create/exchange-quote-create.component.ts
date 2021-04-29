@@ -37,6 +37,7 @@ import { ExchangeQuoteApproveComponent } from "../shared/components/exchange-quo
 import { ExchangeQuoteCustomerApprovalComponent } from "../shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
 import{ExchangeQUoteMarginSummary} from '../../../models/exchange/ExchangeQUoteMarginSummary';
 import{ExchangeQuoteAnalysisComponent} from '../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
+import {ExchangeQuoteChargesComponent} from "../../exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
 @Component({
   selector: 'app-exchange-quote-create',
   templateUrl: './exchange-quote-create.component.html',
@@ -92,6 +93,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   marginSummary: ExchangeQUoteMarginSummary = new ExchangeQUoteMarginSummary();
   @ViewChild(ExchangeQuoteAnalysisComponent, { static: false }) public exchangeQuoteAnalysisComponent: ExchangeQuoteAnalysisComponent;
   enforceApproval: boolean=true;
+  @ViewChild(ExchangeQuoteChargesComponent, { static: false }) public exchangeQuoteChargesComponent: ExchangeQuoteChargesComponent;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -746,6 +748,13 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     }
     if (event.index == 3) {
       this.showAddresstab = true;
+    }
+    if (event.index == 5) {
+      if (this.exchangeQuote.statusName == "Open" || this.exchangeQuote.statusName == "Partially Approved") {
+        this.exchangeQuoteChargesComponent.refresh(false);
+      } else {
+        this.exchangeQuoteChargesComponent.refresh(true);
+      }
     }
     if (event.index == 4) {
       this.exchangeQuoteAnalysisComponent.refresh(this.id);
