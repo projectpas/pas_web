@@ -156,9 +156,9 @@ hr {
 .second-block {
     position: relative;
     min-height: 1px;
-    float: left;
+    float: right;
     padding-right: 2px;
-    width: 50%;
+    width: 48%;
     padding-left: 2px;
     box-sizing: border-box;
 }
@@ -262,4 +262,23 @@ hr {
 
 .border-transparent {
     border-block-color: white;
+}
+
+.sales-order-header {
+    line-height: 25px;
+    margin-left: 42%;
+    -webkit-print-color-adjust: exact;
+}
+
+.box-input {
+    color: #333 !important;
+    width: 62%;
+    text-align: left;
+    border: 1px solid #333;
+    border-radius: 2px;
+    height: 23px;
+    vertical-align: middle;
+    display: inline-block;
+    line-height: 20px;
+    margin-right: 0px !important;
 }
