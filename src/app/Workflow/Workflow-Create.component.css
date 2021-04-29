@@ -23,6 +23,9 @@
 .ber-padding{
 	padding-right: 65px !important;
 }
+.fix_fnt{
+	font-size: 12px !important;
+}
 .ber-card-body{
 	padding: 10px 3px !important;
 }
