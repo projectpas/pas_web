@@ -7,15 +7,12 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class WorkFlowEndpoint extends EndpointFactory {
-
-
 	private readonly _workflowActionsUrl: string =environment.baseUrl+ "/api/WorkflowAction/Get";
 	private readonly _workflowUrl: string =environment.baseUrl+ "/api/WorkflowAction/GetWorkFlows";
 	private readonly _workflowListUrl: string =environment.baseUrl+ "/api/WorkflowAction/GetAllWorkFlows";
