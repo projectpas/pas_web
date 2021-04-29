@@ -127,6 +127,7 @@ export class SalesOrderCreateComponent implements OnInit {
   @ViewChild("newSalesOrderForm", { static: false }) public newSalesOrderForm: NgForm;
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
   @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
+  @ViewChild("salesOrderPrintPopup", { static: false }) public salesOrderPrintPopup: ElementRef;
   @ViewChild(SalesOrderFreightComponent, { static: false }) public salesOrderFreightComponent: SalesOrderFreightComponent;
   @ViewChild(SalesOrderChargesComponent, { static: false }) public salesOrderChargesComponent: SalesOrderChargesComponent;
   @ViewChild(SalesOrderPartNumberComponent, { static: false }) public salesOrderPartNumberComponent: SalesOrderPartNumberComponent;
@@ -1144,7 +1145,8 @@ export class SalesOrderCreateComponent implements OnInit {
         this.selectedCommunicationTab = "Quotemail";
         break;
       case SalesOrderActionType.PrintSalesOrder:
-        this.selectedCommunicationTab = "Quotemail";
+        this.isEmailTabEnabled = false;
+        this.initiateSOPrintProcess();
         break;
     }
   }
@@ -1514,6 +1516,17 @@ export class SalesOrderCreateComponent implements OnInit {
     }, error => {
       this.isSpinnerVisible = false;
     });
+  }
+
+  initiateSOPrintProcess() {
+    let content = this.salesOrderPrintPopup;
+    this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  print() {}
+
+  closeModal() {
+    this.modal.close();
   }
 
   getChargesList() { }

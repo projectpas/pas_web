@@ -96,6 +96,11 @@ export class CustomerPaymentCreateComponent implements OnInit {
   modalIsMaintannce: NgbModalRef;
   maintanancemoduleName = 'CustomerReceipt';
   selectedIndex: number = 0;
+  allBankNames: any[] = [];
+  filteredBankNames: any[] = [];
+  filteredBankAcctNum: any[] = [];
+  enableBankAcct: boolean = false;
+  glAccntId: any;
 
   constructor(
     private alertService: AlertService,
@@ -113,9 +118,9 @@ export class CustomerPaymentCreateComponent implements OnInit {
   ngOnInit() {
     this.loadStatus();
     this.loadAcctPeriods();
-
     this.id = +this.route.snapshot.paramMap.get("id");
     this.managementStructureId = this.currentUserManagementStructureId;
+    this.bankNameList();
 
     if (!this.isEdit) {
       this.load(this.managementStructureId);
@@ -140,6 +145,12 @@ export class CustomerPaymentCreateComponent implements OnInit {
       : 1;
   }
 
+  get currentUserLegalEntityId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.legalEntityId
+      : 1;
+  }
+
   get userId() {
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
@@ -161,7 +172,6 @@ export class CustomerPaymentCreateComponent implements OnInit {
   getSoInstance(initialCall = false) {
     if (this.id) {
       this.getSalesOrderInstance(this.id, initialCall);
-      this.isEdit = true;
       this.toggle_po_header = false;
     }
     else {
@@ -205,8 +215,13 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   bindData(custPayment: ICustomerPayments, initialCall = false) {
     this.customerPayment.receiptNo = custPayment.receiptNo;
+    let currentUserBankName = this.allBankNames.filter(a => a.legalEntityId == this.currentUserLegalEntityId);
+    // this.customerPayment.bankName = currentUserBankName[0].legalEntityBankingLockBoxId;
+    // this.customerPayment.bankAcctNum = currentUserBankName[0].legalEntityBankingLockBoxId;//custPayment.bankAcctNum;
+    this.glAccntId = currentUserBankName[0].glAccountId;
     this.customerPayment.bankName = custPayment.bankName;
     this.customerPayment.bankAcctNum = custPayment.bankAcctNum;
+    this.enableBankAcct = true;
     this.customerPayment.depositDate = new Date(custPayment.depositDate);
     this.customerPayment.acctingPeriod = parseInt(custPayment.acctingPeriod);
     this.customerPayment.amount = custPayment.amount ? formatNumberAsGlobalSettingsModule(custPayment.amount, 2) : 0.00;
@@ -219,6 +234,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.postedDate = custPayment.postedDate ? new Date(custPayment.postedDate) : null;
     this.customerPayment.memo = custPayment.memo;
     this.customerPayment.managementStructureId = custPayment.managementStructureId;
+
+    this.isEdit = true;
   }
 
   getNewSalesOrderInstance() {
@@ -227,6 +244,14 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.depositDate = new Date();
     this.customerPayment.openDate = new Date();
     this.customerPayment.amount = formatNumberAsGlobalSettingsModule(0, 2);
+
+    if (this.allBankNames) {
+      let currentUserBankName = this.allBankNames.filter(a => a.legalEntityId == this.currentUserLegalEntityId);
+      this.customerPayment.bankName = currentUserBankName[0].legalEntityBankingLockBoxId;
+      this.customerPayment.bankAcctNum = currentUserBankName[0].legalEntityBankingLockBoxId;
+      this.glAccntId = currentUserBankName[0].glAccountId;
+      this.enableBankAcct = true;
+    }
   }
 
   onAddDescription(value) {
@@ -270,6 +295,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.display = true;
     }
     else {
+      debugger;
       this.display = false;
       this.isSpinnerVisible = true;
       this.salesOrder = new CustomerPayments();
@@ -280,9 +306,15 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.salesOrder.masterCompanyId = this.masterCompanyId;
       this.salesOrder.depositDate = this.customerPayment.depositDate;
       this.salesOrder.acctingPeriod = this.customerPayment.acctingPeriod;
-      this.salesOrder.amount = this.customerPayment.amount;
-      this.salesOrder.amtApplied = this.customerPayment.amtApplied;
-      this.salesOrder.amtRemaining = this.customerPayment.amount;
+      if (this.customerPayment.amount != "" && this.customerPayment.amount != null && this.customerPayment.amount != undefined) {
+        this.salesOrder.amount = this.customerPayment.amount.replace(/,/g, '');
+      }
+      else {
+        this.salesOrder.amount = 0;
+      }
+      //this.salesOrder.amount = Number(this.customerPayment.amount);
+      this.salesOrder.amtApplied = Number(this.customerPayment.amtApplied);
+      this.salesOrder.amtRemaining = Number(this.salesOrder.amount) - Number(this.salesOrder.amtApplied);
       this.salesOrder.reference = this.customerPayment.reference;
       this.salesOrder.cntrlNum = "cntrl";
       this.salesOrder.openDate = this.customerPayment.openDate;
@@ -589,6 +621,34 @@ export class CustomerPaymentCreateComponent implements OnInit {
     }, err => {
       this.isSpinnerVisible = false;
     });
+  }
+
+  private bankNameList() {
+    this.customerPaymentsService.getAllBankNames(this.masterCompanyId).subscribe(res => {
+      this.allBankNames = res;
+      let bankNameResponse = res.map(function (x) {
+        return {
+          label: x.bankName, value: x.legalEntityBankingLockBoxId
+        }
+      });
+
+      this.filteredBankNames = bankNameResponse;
+
+      let bankAcctNumResponse = res.map(function (x) {
+        return {
+          label: x.bankAccountNumber, value: x.legalEntityBankingLockBoxId
+        }
+      });
+
+      this.filteredBankAcctNum = bankAcctNumResponse;
+    })
+  }
+
+  OnSelectBankName(event) {
+    if (event) {
+      this.enableBankAcct = true;
+      this.customerPayment.bankAcctNum = event;
+    }
   }
 
   changeOfStatus() {

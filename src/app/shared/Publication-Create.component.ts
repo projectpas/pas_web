@@ -93,6 +93,10 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     aircraftModelListByPubId: any = [];
     dashNumber: any;
     isEditModeBinding: boolean = false;
+    showAlert: boolean = false;
+    setAircraftArray: any = [];
+    setModelArray: any = [];
+    setDashNumberArray: any = [];
 
     constructor(private actionService: ActionService,
         private authService: AuthService,
@@ -125,7 +129,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         if (this.UpdateMode == true && this.workFlow.publication.length >= 0) {
             this.publications = [];
             if (this.workFlow.publication.length > 0) {
-
                 this.bindEditModeData(this.workFlow.publication);
             }
         }
@@ -134,8 +137,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.row.publicationRecordId = "0";
         }
         this.loadPublicationTypes();
-
-
     }
 
     loadPublicationTypes() {
@@ -212,30 +213,27 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-
-
     getPublicationByItemMasterId(itemMasterId) {
         this.isSpinnerVisible = true;
         this._workflowService.getPublicationsByItemMasterId(itemMasterId).subscribe(res => {
             this.publicationDropdown = res;
-if(this.publicationDropdown && this.publicationDropdown.length==1){
-    // this.onPublicationChange(event, this.workFlow.publication[0], 0);
-    this.workFlow.publication[0].publicationId=this.publicationDropdown?this.publicationDropdown[0].publicationRecordId: '';
-    this.loadPublicationById(this.workFlow.publication[0], true);
-    const pubData = this.publicationDropdown;
-    for (var i = 0; i < pubData.length; i++) {
-        if (parseInt(pubData[i].publicationRecordId) === parseInt(this.workFlow.publication[0].publicationId)) {
-            this.workFlow.publication[0].attachmentDetails = pubData[i].attachmentDetails;
-            break
-        }
-    }
-}
+            if(this.publicationDropdown && this.publicationDropdown.length==1){
+                this.workFlow.publication[0].publicationId=this.publicationDropdown?this.publicationDropdown[0].publicationRecordId: '';
+                this.loadPublicationById(this.workFlow.publication[0], true);
+                const pubData = this.publicationDropdown;
+                for (var i = 0; i < pubData.length; i++) {
+                    if (parseInt(pubData[i].publicationRecordId) === parseInt(this.workFlow.publication[0].publicationId)) {
+                        this.workFlow.publication[0].attachmentDetails = pubData[i].attachmentDetails;
+                        break
+                    }
+                }
+            }
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;
         });
     }
-    showAlert: boolean = false;
+    
      onPublicationChange(event, wfPublication, index) {
         var isEpnExist = this.workFlow.publication.filter(x => x.publicationId == wfPublication.publicationId && x.taskId == this.workFlow.taskId);
         if (isEpnExist.length > 1) {
@@ -281,9 +279,7 @@ if(this.publicationDropdown && this.publicationDropdown.length==1){
             this.loadPublicationById(wfPublication, true);
         }
     }
-    setAircraftArray: any = [];
-    setModelArray: any = [];
-    setDashNumberArray: any = [];
+    
     getAircraftByPublicationId(data, index) {
         this.setAircraftArray = [];
         this.isSpinnerVisible = true;

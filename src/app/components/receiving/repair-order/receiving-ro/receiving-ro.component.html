@@ -399,7 +399,7 @@
                                                         [value]="part.itemMaster?.partDescription" />
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 <div class="form-group">
                                                     <label>Cond <span class="clr-red">*</span></label>
                                                     <select class="form-control" required [(ngModel)]="part.conditionId"
@@ -418,7 +418,7 @@
                                                         [value]="part.quantityToRepair" maxlength="12" />
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 <div class="form-group">
                                                     <label>Qty Actually Received</label>
                                                     <input type="text"
@@ -428,7 +428,7 @@
                                                         required />
                                                 </div>
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-1 qty-margin-left">
                                                 <div class="form-group">
                                                     <label>Qty Rejected <span class="clr-red">*</span></label>
                                                     <input type="text" [(ngModel)]="part.quantityRejected"
