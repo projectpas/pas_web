@@ -53,9 +53,9 @@ export class PolistComponent implements OnInit {
         { field: 'requestedBy', header: 'Requested By' },
         { field: 'approvedBy', header: 'Approved By' },        
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'CreatedBy' },        
+        { field: 'createdBy', header: 'Created By' },        
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'UpdatedBy' },
+        { field: 'updatedBy', header: 'Updated By' },
     ]
     selectedColumns = this.headers;
     data: any;

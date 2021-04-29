@@ -560,7 +560,7 @@
                                         </select>
                                       </td>
                                     <td *ngIf="field.field == 'internalMemo'" class="col-sm-12 width-200">
-                                        <div class="col-sm-11">
+                                        <!-- <div class="col-sm-11">
                                                <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['internalMemo']"></p>
                                                </div>
 
@@ -569,7 +569,25 @@
                                                data-target="#memo-popup"
                                                  matTooltipPosition="above" matTooltip="Add Memo"
                                                  (click)="selectedApprovalIndex = i;memoType = 'internalMemo';"></i>
-                                                 </div>
+                                                 </div> -->
+
+
+                                                 <div [innerHTML]="approver['internalMemo']"
+                                                 [matTooltip]="parsedText(approver['internalMemo'])"
+                                                         matTooltipPosition="above" class="form-control"
+                                                      class="text_editor_box approval-memo"></div>
+                                                
+         
+                                                   <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"                                        
+                                                      data-toggle="modal"
+                                                      data-target="#memo-popup" matTooltip="Memo"
+                                                      matTooltipPosition="above" *ngIf="getApprovalActionInternalStatus(approver)"
+                                                      (click)="selectedApprovalIndex = i;memoType = 'internalMemo';" ></i>
+
+                                                    <!-- *ngIf="getApprovalActionInternalStatus(approver)" -->
+         
+                                                   
+         
                                     </td>
                                     <td *ngIf="field.field == 'internalApprovedDate'">
                                         <p-calendar [showIcon]="true" class="calender-cstm"
@@ -613,7 +631,7 @@
                                         </select>
                                       </td>
                                     <td *ngIf="field.field == 'customerMemo'" class="col-sm-12 width-200">
-                                        <div class="col-sm-11">
+                                        <!-- <div class="col-sm-11">
                                             <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['customerMemo']"></p>
                                             </div>
                                                <div class="col-sm-1 m-t-4" *ngIf="getApprovalActionCustomerStatus(approver)">
@@ -621,7 +639,18 @@
                                                 data-target="#memo-popup"
                                                   matTooltipPosition="above" matTooltip="Add Memo"
                                                   (click)="memoType = 'customerMemo';selectedApprovalIndex = i;"></i>
-                                                  </div>
+                                                  </div> -->
+                                                  <div [innerHTML]="approver['customerMemo']"
+                                                  [matTooltip]="parsedText(approver['customerMemo'])"
+                                                          matTooltipPosition="above" class="form-control"
+                                                       class="text_editor_box approval-memo"></div>
+                                                 
+          
+                                                    <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"                                        
+                                                       data-toggle="modal"
+                                                       data-target="#memo-popup" matTooltip="Add Memo"
+                                                       matTooltipPosition="above" *ngIf="getApprovalActionCustomerStatus(approver)"
+                                                       (click)="memoType = 'customerMemo';selectedApprovalIndex = i;"></i>
                                             </td>
                                     <td *ngIf="field.field == 'customerApprovedDate'">
                                         <p-calendar [showIcon]="true" class="calender-cstm"
