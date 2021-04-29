@@ -19,6 +19,7 @@ import { MenuItem } from 'primeng/api';
 import { ReceivingService } from '../../../../services/receiving/receiving.service';
 import { AllViewComponent } from '../../../../shared/components/all-view/all-view.component';
 import * as moment from 'moment';
+import { StatusEnum } from '../../../../enum/status.enum';
 
 @Component({
     selector: 'app-polist',
@@ -178,6 +179,15 @@ export class PolistComponent implements OnInit {
     ];
     approvalProcessList: any = [];
     moduleName: any = "PurchaseOrder";
+
+    openStatusId: number  = 0
+    pendingStatusId: number  = 0
+    fulfillingStatusId: number  = 0
+    closedStatusId: number  = 0
+    canceledStatusId: number  = 0
+    descriptionStatusId: number  = 0
+    closingStatusId: number  = 0
+
     constructor(private _route: Router,
         private authService: AuthService,
         private modalService: NgbModal,
@@ -192,6 +202,13 @@ export class PolistComponent implements OnInit {
         private datePipe: DatePipe,
         private receivingService: ReceivingService) {
         this.vendorService.ShowPtab = false;
+        this.openStatusId = StatusEnum.Open;    
+        this.pendingStatusId = StatusEnum.Pending;    
+        this.fulfillingStatusId = StatusEnum.Fulfilling;    
+        this.closedStatusId = StatusEnum.Closed;    
+        this.canceledStatusId = StatusEnum.Canceled;    
+        this.descriptionStatusId = StatusEnum.Description;    
+        this.closingStatusId = StatusEnum.Closing;    
     }
     ngOnInit() {
         this.loadPOStatus();
@@ -245,13 +262,13 @@ export class PolistComponent implements OnInit {
             this.isSpinnerVisible = false;
         });
     }
-    errorMessageHandler(log) {
-        this.alertService.showMessage(
-            'Error',
-            log.error,
-            MessageSeverity.error
-        );
-    }
+    // errorMessageHandler(log) {
+    //     this.alertService.showMessage(
+    //         'Error',
+    //         log.error,
+    //         MessageSeverity.error
+    //     );
+    // }
 
     getPOListByStatus(status) {
         this.filterSearchText = "";
