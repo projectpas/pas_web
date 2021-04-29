@@ -215,11 +215,11 @@
                                     </ng-template>
                                 </p-table>
                                 <div>
-                                    <button
+                                    <button *ngIf="isNextVisible"
                                         type="button"
                                         class="btn btn-primary pull-right submit-btn"
                                         (click)="NextClick()">Next</button>
-                                    <button
+                                    <button *ngIf="isPrevVisible"
                                         type="button"
                                         class="btn btn-primary pull-right submit-btn"
                                         (click)="backClick()">Previous</button>

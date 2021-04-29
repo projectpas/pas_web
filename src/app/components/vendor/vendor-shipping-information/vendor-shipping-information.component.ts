@@ -236,6 +236,8 @@ export class VendorShippingInformationComponent {
     isDelete: boolean = true;
     isDownload: boolean = true;
     isShippingView: boolean = true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(private http: HttpClient, private router: Router,
         private authService: AuthService, private modalService: NgbModal, private activeRoute: ActivatedRoute, private commonService: CommonService, private configurations: ConfigurationService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private datePipe: DatePipe) {
         //this.vendorId = this.activeRoute.snapshot.params['id'];
@@ -301,6 +303,9 @@ export class VendorShippingInformationComponent {
         this.isDelete = this.authService.checkPermission([ModuleConstants.Vendors_ShippingInformation + '.' + PermissionConstants.Delete])
         this.isDownload = this.authService.checkPermission([ModuleConstants.Vendors_ShippingInformation + '.' + PermissionConstants.Download])
         this.isShippingView = this.authService.checkPermission([ModuleConstants.Vendors_ShippingInformation + '.' + PermissionConstants.View])
+
+        this.isNextVisible=this.authService.ShowTab('Create Vendor','Warnings');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Payment Information');
     }
 
     ngOnInit() {

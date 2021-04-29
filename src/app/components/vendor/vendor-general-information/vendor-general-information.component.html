@@ -381,7 +381,7 @@
                     </div>
                     <!-- disableSaveVendorCountry -->
                     <div style="padding-bottom: 7px;">
-                        <button type="button" *ngIf="isvendorEditMode" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')" [disabled]="!allowNextView">Next</button>
+                        <button type="button" *ngIf="isNextVisible && isvendorEditMode" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')" [disabled]="!allowNextView">Next</button>
                         <button *ngIf ="isAdd && !enableUpdate" type="button" class="btn btn-primary pull-right " (click)="saveConformation('goNext')"
                                 [disabled]="!generalForm.valid || disableSaveVenderName || disableSaveVendorPhone || disableSaveVendorEmail ">
                             Save

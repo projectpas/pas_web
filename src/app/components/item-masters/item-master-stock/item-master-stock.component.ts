@@ -563,6 +563,16 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     isGeneralInfoAdd:boolean=true;
     isGeneralInfoEdit:boolean=true;
+    isNextVisible: Boolean=true;
+    isNextAirVisible: Boolean=true;
+    isPrevATAVisible: Boolean=true;
+    isNextCapVisible: Boolean=true;
+    isPrevCapVisible: Boolean=true;
+    isNextPurVisible: Boolean=true;
+    isPrevPurVisible: Boolean=true;
+    isNextNHAVisible: Boolean=true;
+    isPrevNHAVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(private fb: FormBuilder, public priorityService: PriorityService, public countryservice: CustomerService, private Dashnumservice: DashNumberService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Publicationservice: PublicationService, public integrationService: IntegrationService, private formBuilder: FormBuilder, public workFlowtService1: LegalEntityService, private changeDetectorRef: ChangeDetectorRef, private router: Router,
         private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, private glAccountService: GlAccountService, public vendorser: VendorService,
         public itemser: ItemMasterService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public ataMainSer: AtaMainService,
@@ -609,8 +619,25 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
         this.isGeneralInfoAdd=this.authService.checkPermission([ModuleConstants.Item_GeneralInformation+'.'+PermissionConstants.Add]);
         this.isGeneralInfoEdit=this.authService.checkPermission([ModuleConstants.Item_GeneralInformation+'.'+PermissionConstants.Update]);
- 
+        
+        this.isNextVisible=this.authService.ShowTab('Create Item Master','Aircraft Information');
         // checks the params id with the url 
+
+        this.isNextAirVisible=this.authService.ShowTab('Create Item Master','ATA Chapter');
+        
+        this.isNextAirVisible=this.authService.ShowTab('Create Item Master','Capes');
+        this.isPrevATAVisible=this.authService.ShowTab('Create Item Master','Aircraft Information');
+
+        this.isNextCapVisible=this.authService.ShowTab('Create Item Master','Purchase and Sales');
+        this.isPrevCapVisible=this.authService.ShowTab('Create Item Master','ATA Chapter');
+
+        this.isNextPurVisible=this.authService.ShowTab('Create Item Master','NHA,TLA,AlterNate,Equivalency');
+        this.isPrevPurVisible=this.authService.ShowTab('Create Item Master','Capes');
+
+        this.isNextNHAVisible=this.authService.ShowTab('Create Item Master','Exchange and Loans');
+        this.isPrevNHAVisible=this.authService.ShowTab('Create Item Master','Purchase and Sales');
+
+        this.isPrevVisible=this.authService.ShowTab('Create Item Master','Exchange and Loans');
     }
 
     isShowTab(value){

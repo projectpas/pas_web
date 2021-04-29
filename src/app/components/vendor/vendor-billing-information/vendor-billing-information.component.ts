@@ -145,6 +145,8 @@ export class VendorBillingInformationComponent {
     isDownload: boolean = true;
     isUpload: boolean = true;
     isBillingView: boolean = true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(private http: HttpClient, private router: Router, private activeRoute: ActivatedRoute,
         private authService: AuthService, private modalService: NgbModal,
         private activeModal: NgbActiveModal, private _fb: FormBuilder, private commonService: CommonService,
@@ -217,6 +219,9 @@ export class VendorBillingInformationComponent {
         this.isDownload = this.authService.checkPermission([ModuleConstants.Vendors_BillingInformation + '.' + PermissionConstants.Download])
         this.isUpload = this.authService.checkPermission([ModuleConstants.Vendors_BillingInformation + '.' + PermissionConstants.Upload])
         this.isBillingView = this.authService.checkPermission([ModuleConstants.Vendors_BillingInformation + '.' + PermissionConstants.View])
+
+        this.isNextVisible=this.authService.ShowTab('Create Vendor','Payment Information');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Financial Information');
     }
 
     ngOnInit() {

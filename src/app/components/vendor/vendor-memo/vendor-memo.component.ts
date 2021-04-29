@@ -39,6 +39,8 @@ export class VendorMemoComponent implements OnInit {
 	selectedColumns = this.memoCols;
 	memoPopupContent: any;
 	isDownload:boolean=true;
+	isNextVisible: Boolean=true;
+	isPrevVisible: Boolean=true;
 	/** VendorMemo ctor */
 	constructor(public vendorService: VendorService,private activeRoute: ActivatedRoute, private router: Router, private alertService: AlertService, private authService: AuthService, ) {
 		if(window.localStorage.getItem('vendorService')){
@@ -72,6 +74,9 @@ export class VendorMemoComponent implements OnInit {
 			this.local = this.vendorService.listCollection;
 		}
 		this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Memos+'.'+PermissionConstants.Download])
+
+		this.isNextVisible=this.authService.ShowTab('Create Vendor','Documents');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Warnings');
 	}
 
 	ngOnInit(): void {

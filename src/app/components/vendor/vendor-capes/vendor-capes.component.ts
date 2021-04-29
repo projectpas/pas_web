@@ -101,6 +101,8 @@ export class VendorCapesComponent implements OnInit {
     isDownload:boolean=true;
     isUpload:boolean=true;
     isVendorCapView:boolean=true;
+    isNextVisible:Boolean=true;
+    isPrevVisible:Boolean=true;
 
     constructor(public vendorService: VendorService, private datePipe: DatePipe, private configurations: ConfigurationService, private modalService: NgbModal, private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private alertService: AlertService) {
         if(window.localStorage.getItem('vendorService')){
@@ -141,6 +143,8 @@ export class VendorCapesComponent implements OnInit {
         this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Download])
         this.isUpload=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Upload])
         this.isVendorCapView=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.View]);
+        this.isNextVisible=this.authService.ShowTab('Create Vendor','Contacts');
+        
     }
 
     ngOnInit() {

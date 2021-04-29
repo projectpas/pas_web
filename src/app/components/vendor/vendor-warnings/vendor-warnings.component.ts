@@ -79,6 +79,8 @@ export class VendorWarningsComponent implements OnInit {
     isView: boolean = true;
     isAdd:boolean=true;
     isEdit:boolean=true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(private authService: AuthService, private activeRoute: ActivatedRoute, private router: Router, private vendorService: VendorService, private alertService: AlertService, private commonService: CommonService, private modalService: NgbModal) {
         if (window.localStorage.getItem('vendorService')) {
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -112,7 +114,10 @@ export class VendorWarningsComponent implements OnInit {
         }
         this.dataSource = new MatTableDataSource();
         this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_Warnings+'.'+PermissionConstants.Add]);
-this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_Warnings+'.'+PermissionConstants.Update]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_Warnings+'.'+PermissionConstants.Update]);
+
+        this.isNextVisible=this.authService.ShowTab('Create Vendor','Memos');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Shipping Information');
     }
 
     ngOnInit() {

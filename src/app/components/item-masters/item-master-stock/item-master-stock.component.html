@@ -1042,7 +1042,7 @@
                     </div>
                    
                     <div class="next-button-align">
-                        <button type="button" *ngIf="isItemMasterCreateGeneralInfoEditMode" class="btn btn-primary submit-btn pull-right" (click)="nextOrPreviousClick('Next')">
+                        <button type="button" *ngIf="isNextVisible && isItemMasterCreateGeneralInfoEditMode" class="btn btn-primary submit-btn pull-right" (click)="nextOrPreviousClick('Next')">
                             Next
                         </button>
                         <button *ngIf="isGeneralInfoAdd" class="btn btn-primary pull-right"
@@ -1328,7 +1328,7 @@
                         </p-table>
                         <br />
                         <div class="m-t-b-10">
-                            <button class="btn btn-primary pull-right" (click)="moveAtachapter()" type="button">Next</button> &nbsp;
+                            <button *ngIf="isNextAirVisible" class="btn btn-primary pull-right" (click)="moveAtachapter()" type="button">Next</button> &nbsp;
                             <button class="btn btn-primary pull-right" type="button" (click)="moveGeneralInfromation(); changeOfTab('General')">Previous</button>
                         </div>
 
@@ -1598,9 +1598,9 @@
                             </ng-template>
                         </p-table>
                         <div class="m-t-10">
-                            <button class="btn btn-primary pull-right" (click)="movePurchaseInformation(); changeOfTab('Capes');" type="button">Next</button> &nbsp;
+                            <button *ngIf="isNextATAVisible" class="btn btn-primary pull-right" (click)="movePurchaseInformation(); changeOfTab('Capes');" type="button">Next</button> &nbsp;
 
-                            <button class="btn btn-primary pull-right" type="button" (click)="moveAircraftInformation(); changeOfTab('AircraftInfo');">Previous</button>
+                            <button *ngIf="isPrevATAVisible" class="btn btn-primary pull-right" type="button" (click)="moveAircraftInformation(); changeOfTab('AircraftInfo');">Previous</button>
                         </div>
                     </div>
                 </div>
@@ -1609,8 +1609,8 @@
                 <div class="stock-padding-5">
                     <app-item-master-capabilities-list [isEnableItemMaster]="isEnableItemMaster" [itemMasterId]="ItemMasterId" [selectedTab]="currentTab" [partData]="sourceItemMaster"></app-item-master-capabilities-list>
                     <div class="capabilities-div-buttons">
-                        <button class="btn btn-primary pull-right" (click)="changeOfTab('PurchaseSales');saveCapesInfo();" type="button"> Next</button> &nbsp;
-                        <button class="btn btn-primary pull-right" type="button" (click)="changeOfTab('Atachapter');">Previous</button>
+                        <button *ngIf="isNextCapVisible" class="btn btn-primary pull-right" (click)="changeOfTab('PurchaseSales');saveCapesInfo();" type="button"> Next</button> &nbsp;
+                        <button *ngIf="isPrevCapVisible" class="btn btn-primary pull-right" type="button" (click)="changeOfTab('Atachapter');">Previous</button>
                     </div>
                 </div>
             </div>
@@ -1937,10 +1937,10 @@
 
                             </div>
                             <div class="m-t-10">
-                                <button class="btn btn-primary pull-right" (click)="nextOrPreviousClick('Next')" type="button">Next</button> &nbsp;
+                                <button *ngIf="isNextPurVisible" class="btn btn-primary pull-right" (click)="nextOrPreviousClick('Next')" type="button">Next</button> &nbsp;
                                 <button class="btn btn-primary pull-right" (click)="savePurchaseandSales()" [disabled]="!purchaseSales.valid && !purchaseSales.disabled" [disabled]="disablepurchaseSales" type="submit">Save </button> &nbsp;
 
-                                <button class="btn btn-primary pull-right" type="button" (click)="nextOrPreviousClick('Previous')">Previous</button>
+                                <button *ngIf="isPrevPurVisible" class="btn btn-primary pull-right" type="button" (click)="nextOrPreviousClick('Previous')">Previous</button>
                             </div>
                         </form>
                     </div>
@@ -1992,8 +1992,8 @@
                 </div>
 
                 <div class="capabilities-div-buttons">
-                    <button class="btn btn-primary pull-right" (click)="moveToExchangeTab()" type="button">Next</button> &nbsp;
-                    <button class="btn btn-primary pull-right" type="button" (click)="movePurchaseSales()">Previous</button>
+                    <button *ngIf="isNextNHAVisible" class="btn btn-primary pull-right" (click)="moveToExchangeTab()" type="button">Next</button> &nbsp;
+                    <button *ngIf="isPrevNHAVisible" class="btn btn-primary pull-right" type="button" (click)="movePurchaseSales()">Previous</button>
                 </div>
 
             </div>
@@ -2151,7 +2151,7 @@
                                 &nbsp;
                                 <button class="btn btn-primary pull-right" type="submit" [disabled]="updateBtnExp" (click)="saveExportInformation()">Save</button>
                                 &nbsp;
-                                <button class="btn btn-primary pull-right" type="button" (click)="nextOrPreviousClick('Previous')">Previous</button>
+                                <button *ngIf="isPrevVisible" class="btn btn-primary pull-right" type="button" (click)="nextOrPreviousClick('Previous')">Previous</button>
 
                             </div>
                         </form>

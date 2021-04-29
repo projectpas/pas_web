@@ -241,7 +241,7 @@
       </table>
     </div>
     <div style="margin-top: 10px;" *ngIf="!isViewMode">
-      <button class="btn btn-primary pull-right" (click)="previousOrNextTab('Next')" type="button">Next</button> &nbsp;
+      <button *ngIf="isNextVisible" class="btn btn-primary pull-right" (click)="previousOrNextTab('Next')" type="button">Next</button> &nbsp;
       <button class="btn btn-primary pull-right" (click)="saveVendorCapes()"
         [disabled]="!vendorCapes.valid || disableCapes" type="submit">Save </button>
       &nbsp;

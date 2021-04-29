@@ -228,11 +228,11 @@
             </p-table>
 
             <div class="col-md-12"  *ngIf="isViewMode == false">
-                <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
+                <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
                         [disabled]="stopmulticlicks">
                     Next
                 </button>
-                <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
+                <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
                     Previous
                 </button>
             </div>
