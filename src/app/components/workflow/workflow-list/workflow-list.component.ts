@@ -388,13 +388,13 @@ export class WorkflowListComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-    onOpenAll() {
+    onOpenAllView() {
         for (let task of this.addedTasks) {
             task.selected = true;
         }
     }
 
-    onCloseAll() {
+    onCloseAllView() {
         for (let task of this.addedTasks) {
             task.selected = false;
         }

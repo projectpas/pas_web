@@ -137,10 +137,10 @@
                       </div>
                     </div>
                     <div class="col-md-6" style="padding:10px">
-                        <div class="form-group" *ngIf="isEdit">
-                          <label>Version Num</label>
-                          <input type="text" [(ngModel)]="exchangeQuote.versionNumber" name="versionNumber"
-                            class="form-control" id="versionNumber" [disabled]="true" #versionNumber="ngModel" />
+                      <div class="form-group" *ngIf="isEdit">
+                        <label>Version Num</label>
+                        <input type="text" [(ngModel)]="exchangeQuote.versionNumber" name="versionNumber"
+                          class="form-control" id="versionNumber" [disabled]="true" #versionNumber="ngModel" />
                       </div>
                       <!-- <div class="form-group">
                         <label>Ver Date<span class="clr-red">*</span></label>
@@ -234,8 +234,8 @@
                             (ngModelChange)="salesQuote.creditLimit=$event" required [disabled]="true" />
                         </div>
                         <div class="col-md-7">
-                          <select name="creditTermId" [(ngModel)]="exchangeQuote.creditTermId"
-                            [disabled]="true" required>
+                          <select name="creditTermId" [(ngModel)]="exchangeQuote.creditTermId" [disabled]="true"
+                            required>
                             <option value='-1'>--Select</option>
                             <option *ngFor="let ct of creditTerms" [ngValue]="ct.value">
                               {{ ct.label }}</option>
@@ -250,73 +250,70 @@
                           (ngModelChange)="exchangeQuote.balanceDue=$event" [disabled]="true" />
                       </div>
                     </div>
-                        <div class="col-md-6" style="padding:10px;">
-                          <div class="form-group">
-                            <label>Cust Req Date</label>
-                            <p-calendar name="customerRequestDate" [yearNavigator]="true" [monthNavigator]="true"
-                              yearRange="1900:2100" [(ngModel)]="exchangeQuote.customerRequestDate" [showIcon]="true"
-                              id="customerRequestDate" [minDate]="exchangeQuote.openDate" #customerRequestDate="ngModel">
-                            </p-calendar>
-                            <!-- <div *ngIf="customerRequestDate.invalid && (customerRequestDate.dirty || customerRequestDate.touched)"
+                    <div class="col-md-6" style="padding:10px;">
+                      <div class="form-group">
+                        <label>Cust Req Date</label>
+                        <p-calendar name="customerRequestDate" [yearNavigator]="true" [monthNavigator]="true"
+                          yearRange="1900:2100" [(ngModel)]="exchangeQuote.customerRequestDate" [showIcon]="true"
+                          id="customerRequestDate" [minDate]="exchangeQuote.openDate" #customerRequestDate="ngModel">
+                        </p-calendar>
+                        <!-- <div *ngIf="customerRequestDate.invalid && (customerRequestDate.dirty || customerRequestDate.touched)"
                               class="alert alert-danger alert-danger-cstm">
                               <div *ngIf="customerRequestDate.errors.required">
                                 <small> Cust Req Date is required </small>
                               </div>
                             </div> -->
+                      </div>
+                      <div class="form-group">
+                        <label>Promise Date<span class="clr-red">*</span></label>
+                        <p-calendar name="promiseDate" [yearNavigator]="true" [monthNavigator]="true"
+                          yearRange="1900:2100" [(ngModel)]="exchangeQuote.promiseDate" [showIcon]="true"
+                          id="promiseDate" [minDate]="exchangeQuote.openDate" #promiseDate="ngModel" required>
+                        </p-calendar>
+                        <div *ngIf="promiseDate.invalid && (promiseDate.dirty || promiseDate.touched)"
+                          class="alert alert-danger alert-danger-cstm">
+                          <div *ngIf="promiseDate.errors.required">
+                            <small> Promise Date is required </small>
                           </div>
-                          <div class="form-group">
-                            <label>Promise Date<span class="clr-red">*</span></label>
-                            <p-calendar name="promiseDate" [yearNavigator]="true" [monthNavigator]="true"
-                              yearRange="1900:2100" [(ngModel)]="exchangeQuote.promiseDate" [showIcon]="true"
-                              id="promiseDate" [minDate]="exchangeQuote.openDate" #promiseDate="ngModel" required>
-                            </p-calendar>
-                            <div *ngIf="promiseDate.invalid && (promiseDate.dirty || promiseDate.touched)"
-                              class="alert alert-danger alert-danger-cstm">
-                              <div *ngIf="promiseDate.errors.required">
-                                <small> Promise Date is required </small>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label>Est Ship Date</label>
-                            <p-calendar name="estimateShipDate" [yearNavigator]="true" [monthNavigator]="true"
-                              yearRange="1900:2100" [(ngModel)]="exchangeQuote.estimateShipDate" [showIcon]="true"
-                              id="estimateShipDate" [minDate]="exchangeQuote.openDate" #estimateShipDate="ngModel">
-                            </p-calendar>
-                            <!-- <div *ngIf="estimateShipDate.invalid && (estimateShipDate.dirty || estimateShipDate.touched)"
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Est Ship Date</label>
+                        <p-calendar name="estimateShipDate" [yearNavigator]="true" [monthNavigator]="true"
+                          yearRange="1900:2100" [(ngModel)]="exchangeQuote.estimateShipDate" [showIcon]="true"
+                          id="estimateShipDate" [minDate]="exchangeQuote.openDate" #estimateShipDate="ngModel">
+                        </p-calendar>
+                        <!-- <div *ngIf="estimateShipDate.invalid && (estimateShipDate.dirty || estimateShipDate.touched)"
                               class="alert alert-danger alert-danger-cstm">
                               <div *ngIf="estimateShipDate.errors.required">
                                 <small> Est Ship Date is required </small>
                               </div>
                             </div> -->
-                          </div>
-                          <div class="form-group">
-                            <label>Sales Person</label>
-                            <p-autoComplete class="autocomp-customer-cstm" name="salesPersonName"
-                                [(ngModel)]="exchangeQuote.salesPersonName"
-                                [suggestions]="salesFirstCollection" [forceSelection]="true"
-                                emptyMessage="No Match Found" field="name"
-                                (completeMethod)="filterSalesFirstName($event)" [size]="30"
-                                [minLength]="1" [dropdown]="true">
-                            </p-autoComplete>
-                          </div>
-                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Sales Person</label>
+                        <p-autoComplete class="autocomp-customer-cstm" name="salesPersonName"
+                          [(ngModel)]="exchangeQuote.salesPersonName" [suggestions]="salesFirstCollection"
+                          [forceSelection]="true" emptyMessage="No Match Found" field="name"
+                          (completeMethod)="filterSalesFirstName($event)" [size]="30" [minLength]="1" [dropdown]="true">
+                        </p-autoComplete>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-md-12">
               <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"
-                  [disabled]="!newExchangeQuoteForm.form.valid"
-                  class="btn pull-right submit-btn btn btn-primary">
-                  Submit
+                [disabled]="!newExchangeQuoteForm.form.valid" class="btn pull-right submit-btn btn btn-primary">
+                Submit
               </button>
               <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
-                  [disabled]="enableUpdateButton" (click)="onSubmit(true)"
-                  class="btn pull-right submit-btn btn btn-primary">
-                  Update
+                [disabled]="enableUpdateButton" (click)="onSubmit(true)"
+                class="btn pull-right submit-btn btn btn-primary">
+                Update
               </button>
-          </div>
+            </div>
           </div>
           <!-- <ng-container *ngIf="((isCreateModeHeader||isEdit))">
             <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
@@ -330,37 +327,45 @@
                 </p-tabPanel>
             </p-tabView>
         </ng-container> -->
-        <ng-container *ngIf="((isCreateModeHeader||isEdit))">
+          <ng-container *ngIf="((isCreateModeHeader||isEdit))">
             <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
-                <p-tabPanel header="Parts List" [selected]="true">
-                    <app-exchange-quote-part-number [exchangeQuote]="exchangeQuote" [exchangeQuoteId]="id"
-                        [isViewMode]="false" [customer]="customerDetails"
-                        [exchangeQuoteView]="exchangeQuoteView" (on-parts-save)="onPartsSaveEvent($event)">
-                    </app-exchange-quote-part-number>
-                </p-tabPanel>
-                <p-tabPanel header="Internal Approvers">
-                  <app-exchange-quote-approve>
-                  </app-exchange-quote-approve>
-                </p-tabPanel>
-                <p-tabPanel header="Approver Process" *ngIf="enforceApproval">
-                  <app-exchange-quote-customer-approval *ngIf="isEdit == true" [exchangeQuoteView]="exchangeQuoteView"
-                      [isViewMode]="false" [customerContactList]="customerContactList"
-                      [marginSummary]="marginSummary"
-                      (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
-                  </app-exchange-quote-customer-approval>
-                </p-tabPanel>
-                <p-tabPanel header="Address">
-                  <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="exchangeQuoteId">
-                  </app-address-component>
-                  <!-- <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
+              <p-tabPanel header="Parts List" [selected]="true">
+                <app-exchange-quote-part-number [exchangeQuote]="exchangeQuote" [exchangeQuoteId]="id"
+                  [isViewMode]="false" [customer]="customerDetails" [exchangeQuoteView]="exchangeQuoteView"
+                  (on-parts-save)="onPartsSaveEvent($event)">
+                </app-exchange-quote-part-number>
+              </p-tabPanel>
+              <p-tabPanel header="Internal Approvers">
+                <app-exchange-quote-approve>
+                </app-exchange-quote-approve>
+              </p-tabPanel>
+              <p-tabPanel header="Approver Process" *ngIf="enforceApproval">
+                <app-exchange-quote-customer-approval *ngIf="isEdit == true" [exchangeQuoteView]="exchangeQuoteView"
+                  [isViewMode]="false" [customerContactList]="customerContactList" [marginSummary]="marginSummary"
+                  (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
+                </app-exchange-quote-customer-approval>
+              </p-tabPanel>
+              <p-tabPanel header="Address">
+                <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="exchangeQuoteId">
+                </app-address-component>
+                <!-- <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
                       [salesQuote]="salesQuote" [salesOrderQuote]="salesOrderQuote"></app-sales-address> -->
               </p-tabPanel>
+              <!-- <p-tabPanel header="Charges">
+                <app-exchange-quote-charges [chargeForm]="charge" [customerId]="customerId"
+                    [exchangeQuoteId]="exchangeQuote.exchangeQuoteId"
+                    (saveChargesListForSO)="saveSalesOrderChargesList($event)"
+                    (updateChargesListForSO)="updateSalesOrderChargesList($event)"
+                    [markupList]="markupList" [isView]="false"
+                    [isQuote]="true">
+                </app-exchange-quote-charges>
+              </p-tabPanel> -->
               <p-tabPanel header="Hypothethical Analysis">
                 <app-exchange-quote-analysis>
                 </app-exchange-quote-analysis>
-            </p-tabPanel>
+              </p-tabPanel>
             </p-tabView>
-        </ng-container>
+          </ng-container>
         </form>
       </div>
     </div>
@@ -368,27 +373,27 @@
 </div>
 <ng-template #errorMessagePop let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
-      <h4 class="modal-title"> Please Enter (*) Mandatory Fields</h4>
+    <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
+    <h4 class="modal-title"> Please Enter (*) Mandatory Fields</h4>
   </div>
   <div class="modal-body">
-      <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
+    <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeErrorMessage()">Close</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeErrorMessage()">Close</button>
   </div>
 </ng-template>
 <div class="preloader" *ngIf="isSpinnerVisible">
   <div class="loading">
-      <div class="lds-roller">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-      </div>
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </div>

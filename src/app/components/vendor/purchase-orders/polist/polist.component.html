@@ -164,11 +164,11 @@
 									matTooltipPosition="above"><i class="fa fa-eye"></i></a>
 							</span>
 							<span>
-								<a *ngIf="(rowData['statusId'] == 1 || rowData['statusId'] == 2) && isReceivingPolist == false"
+								<a *ngIf="(rowData['statusId'] == openStatusId || rowData['statusId'] == pendingStatusId) && isReceivingPolist == false"
 									class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit"
 									matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a>
 
-								<a *ngIf="rowData['statusId'] > 2 && isReceivingPolist == false"
+								<a *ngIf="rowData['statusId'] > pendingStatusId && isReceivingPolist == false"
 									class="btn nobg btn-edit-cstm" data-dismiss="modal"><i class="fa fa-pencil"
 										style="color:gray !important;"></i></a>
 							</span>
@@ -181,13 +181,13 @@
 									matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
 							</span>
 
-							<span *ngIf="rowData['statusId'] == 3 && isReceivingPolist == true"
+							<span *ngIf="rowData['statusId'] == fulfillingStatusId && isReceivingPolist == true"
 								(click)="getSelectedRow(rowData)">
 								<a matTooltip="Receive PO" matTooltipPosition="above" class="btn  nobg btn-users-cstm">
 									<i class=" fa fa-chevron-down"></i>
 								</a>
 							</span>
-							<span *ngIf="rowData['statusId'] == 3  && isReceivingPolist == true"
+							<span *ngIf="rowData['statusId'] == fulfillingStatusId  && isReceivingPolist == true"
 								(click)="editStockLine(rowData)">
 								<a class="btn nobg" matTooltip="Edit Received Parts" matTooltip="Edit"
 									matTooltipPosition="above">

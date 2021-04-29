@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { IExchangeQuoteView } from "../models/exchange/IExchangeQuoteView";
 import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
 import{ExchangeQUoteMarginSummary} from '../models/exchange/ExchangeQUoteMarginSummary';
+import { IExchangeQuoteCharge } from '../models/exchange/IExchangeQuoteCharge';
 @Injectable()
 export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getNewExchangeQuoteInstanceUrl: string = environment.baseUrl + "/api/exchangequote/new";
@@ -22,6 +23,8 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly exchangeQuoteqMarginSummary: string = environment.baseUrl + "/api/exchangequote/create-exchange-quote-margin-data";
     private readonly getExchangeQuoteAnalysis: string = environment.baseUrl + "/api/exchangequote/togetexchangequoteanalysis";
     private readonly getCustomerQuotesListUrl: string = environment.baseUrl + "/api/exchangequote/exchangequoteapprovallist"
+    private readonly _getExchangeQuoteCharges: string = environment.baseUrl + "/api/exchangequote/getexchangequotechargeslist";
+    private readonly exchangeQuoteChargesSave: string = environment.baseUrl + "/api/exchangequote/createexchangequotecharges";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -137,6 +140,23 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
       return this.http.post<any>(`${this.configurations.baseUrl}/api/exchangequote/exchangequoteapproval`, JSON.stringify(data), this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.sentForInternalApproval(data));
+        });
+    }
+    getExchangeQuoteCharges(id, isDeleted) {
+      return this.http.get<any>(`${this._getExchangeQuoteCharges}?ExchangeQuoteId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuoteCharges(id, isDeleted));
+        });
+    }
+    createExchangeQuoteCharge(exchangeQuoteCharges: IExchangeQuoteCharge[]): Observable<any> {
+      return this.http
+        .post(
+          this.exchangeQuoteChargesSave,
+          JSON.stringify(exchangeQuoteCharges),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createExchangeQuoteCharge(exchangeQuoteCharges));
         });
     }
 }  

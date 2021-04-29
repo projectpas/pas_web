@@ -963,7 +963,7 @@
                                     <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
                                            [disabled]="!approver.isSelected || approver['actionId'] != 2"
                                            [readonly]="!approver.isSelected || approver['actionId'] != 2"/> -->
-                                    <p class="m-0 p-0 p_textEditor" class="memo-left" [innerHTML]="approver['memo']"></p>
+                                    <p class="m-0 p-0 p_textEditor"  matTooltipPosition="above" matTooltip="approver['memo']" class="memo-left" [innerHTML]="approver['memo']"></p>
                                     <!-- </div> -->
                                     <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
                                         <!-- <i class="fa fa-info-circle fa-lg" data-toggle="modal"
