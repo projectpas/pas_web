@@ -22,7 +22,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	private readonly _CountriesUrl: string = "/api/Employee/CountriesGet";
 	private readonly _EmployeeLeaveTypeUrl: string = "/api/Employee/EmployeeLeaveTypeGet";
 	private readonly _EmployeeTrainingTypeUrl: string = "/api/Employee/GetEmployeeTrainingType";
-	private readonly _actionsUrlNew: string = "/api/Employee/employeepost";
+	private readonly _actionsUrlNew: string =  "/api/Employee/employeepost";
 	private readonly _actionsUrlNewUpdate: string = "/api/Employee/employeelistgpost";
 
 
@@ -68,7 +68,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	private readonly _actionsUrlEmployeeMemoUpdate: string = "/api/Employee/employeeupdatememo";
 	private readonly _addEmployeeTrainingFileUpload: string = "/api/Employee/employeeDocumentUpload";
 
-	private readonly _getEmployeeDetailsByEmpId: string = "/api/Employee/employeeDetailsById";
+	private readonly _getEmployeeDetailsByEmpId: string =  "/api/Employee/employeeDetailsById";
 
 	private readonly _employeeListsUrl: string = "/api/Employee/employeelist";
 
@@ -79,8 +79,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	private readonly _employeeGlobalSrchUrl: string = "/api/Employee/employeeglobalsearch";
 	get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 	get getEmployeeCommonDataUrl() { return this.configurations.baseUrl + this._employeeCommonDatatUrl; }
-	//get actionsNameUrl() { return environment.baseUrl + this._actionsNameUrl; }
-	get actionsNameUrl() { return this.configurations.baseUrl + this._actionsNameUrl; }
+	get actionsNameUrl() { return environment.baseUrl + this._actionsNameUrl; }
 	get getView() { return this.configurations.baseUrl + this._getView; }
 	get rolesUrl() { return this.configurations.baseUrl + this._rolesUrl; }
 	get userrolevelList() { return this.configurations.baseUrl + this._userRolelevelList; }
@@ -110,7 +109,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	get employeeGlobalSearchUrl() { return this.configurations.baseUrl + this._employeeGlobalSrchUrl; }
 
 	get deleteemployee() { return this.configurations.baseUrl + this._actionsUrlNew; }
-	get createnewemployee(){return this.configurations.baseUrl + this._actionsUrlNew;}
+	get createnewemployee(){return environment.baseUrl  + this._actionsUrlNew;}
 	get createnewemployeeCerti(){return this.configurations.baseUrl + this._certifiUrlNew;}
 	get createnewemployeetrining(){return this.configurations.baseUrl + this._trainingUrlNew;}
 	
@@ -491,11 +490,13 @@ export class EmployeeEndpoint extends EndpointFactory {
 	}
 
 	getEmployeeUpdateMemoEndpoint<T>(employeeId: number, memo: any): Observable<T> {
-		let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlEmployeeMemoUpdate}?employyeId=${employeeId}&memo=${memo}`;
-		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+		//let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlEmployeeMemoUpdate}?employyeId=${employeeId}&memo=${memo}`;
+		let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlEmployeeMemoUpdate}?employyeId=${employeeId}`;
+		return this.http.put<T>(endpointUrl,JSON.stringify(memo), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getEmployeeUpdateMemoEndpoint(employeeId, memo));
-		});
+			});
+
 	}
 
 	// uploadEmployeeTrainingDocEndpoint<T>(file: any): Observable<T> {
@@ -514,9 +515,9 @@ export class EmployeeEndpoint extends EndpointFactory {
 		let url =  this.configurations.baseUrl + this._employeeTotallistUrl;		
 		return this.http.post<T>(url, employeeId, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleErrorCommon(error, () => this.downloadAllEmployeeList(employeeId));
-		});
-	}	
+				return this.handleError(error, () => this.downloadAllEmployeeList(employeeId));
+			});
+	}
 
 	getUpdateEmployeePasswordEndpoint<T>(password,employeeId): Observable<T> {
 		let url = this._employeeUpdatePasswordUrl;

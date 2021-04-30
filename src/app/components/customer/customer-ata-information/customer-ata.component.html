@@ -71,23 +71,27 @@
         </div>
         <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
+              <button type="button" *ngIf="isAtaDownload" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                 label="Export All Data" matTooltip="Download  Data" matTooltipPosition="above"  data-toggle="modal" 
                 (click)="selectedOnly = false; targetData = dt;"
                  data-target="#downloadExportPopup"
                 ></button>
-              <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
+
+              <button type="button" *ngIf="isAtaDownload" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                 label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                 (click)="dt.exportCSV({ selectionOnly: true })" 
                 ></button>
+
               <button class="btn btn-primary exports-button "
                 *ngIf="showAdvancedSearchCard == false" type="button" (click)="enableDisableAdvancedSearch(true)">
                 Advanced Search <i class="fa fa-caret-down"></i>
               </button>
+
               <button class="btn btn-primary exports-button" 
                 *ngIf="showAdvancedSearchCard == true" type="button" (click)="enableDisableAdvancedSearch(false)">
                 Advanced Search <i class="fa fa-caret-up"></i>
               </button>
+              
             </div>
         </div>
         <div class="row">
@@ -196,11 +200,11 @@
     </p-table>
 
     <div class="col-md-12">
-      <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
+      <button *ngIf="isNextVisible" type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
         [disabled]="stopmulticlicks">
         Next
       </button>
-      <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
+      <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
         Previous
       </button>
     </div>

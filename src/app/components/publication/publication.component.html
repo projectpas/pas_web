@@ -5,7 +5,7 @@
         <h4 class="header-name">Publications List</h4>
       </div>
       <div>
-        <button type="button" class="btn-sm header-button"
+        <button type="button" class="btn-sm header-button" *ngIf="isAdd"
           [routerLink]="['/singlepages/singlepages/app-create-publication']">
           Add Publication
         </button>
@@ -38,11 +38,11 @@
         </div>
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+            <button *ngIf="isDownload" type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export All Data"
               data-toggle="modal" (click)="selectedOnly = false; targetData = dt;" data-target="#downloadConfirmation">
             </button>
-            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
+            <button *ngIf="isDownload" type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
               (click)="dt.exportCSV({selectionOnly:true})">
             </button>
@@ -193,7 +193,7 @@
 
           <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0">
             <div *ngIf="currentDeletedstatus == false">
-              <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" matTooltip="{{
+              <p-inputSwitch *ngIf="isActive" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" matTooltip="{{
                           rowData['isActive'] ? 'Active' : 'In Active'
                         }}" matTooltipPosition="above" (onChange)="handleChange(rowData,$event)"></p-inputSwitch>
               <span>
@@ -206,10 +206,10 @@
                   matTooltipPosition="above"><i class="fa fa fa-file-pdf-o"></i></a>
               </span>
 
-              <span><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
+              <span *ngIf="isEdit"><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                     class="fa fa-pencil"> </i></a>
               </span>
-              <span>
+              <span *ngIf="isDelete">
                 <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
                   matTooltipPosition="above">
                   <i class="fa fa-trash"></i></a>
@@ -219,7 +219,7 @@
                   <i class="fa fa-history"></i></a></span>
             </div>
             <div *ngIf="currentDeletedstatus == true">
-              <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
+              <p-inputSwitch *ngIf="isActive" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
                 matTooltip="{{
                           rowData['isActive'] ? 'Active' : 'In Active'
                         }}" matTooltipPosition="above" (onChange)="handleChange(rowData, $event)"></p-inputSwitch>
@@ -231,7 +231,7 @@
               <span data-target="#publicationHistory" data-toggle="modal"><a class="btn nobg"
                   (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above">
                   <i class="fa fa-history"></i></a></span>
-              <span><a class="btn nobg btn-users-cstm" (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
+              <span *ngIf="isEdit"><a class="btn nobg" (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
                   matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
               </span>
             </div>
@@ -881,7 +881,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step2">PN Mapping</a>
+                    <a *ngIf="isPNMapping" class="collapsed" data-toggle="collapse" href="#step2">PN Mapping</a>
                   </h4>
                 </div>
                 <div id="step2" class="panel-collapse collapse">
@@ -967,7 +967,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step3">Aircraft Info</a>
+                    <a *ngIf="isAirCraft" class="collapsed" data-toggle="collapse" href="#step3">Aircraft Info</a>
                   </h4>
                 </div>
                 <div id="step3" class="panel-collapse collapse">
@@ -1057,7 +1057,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step4">ATA Chapter</a>
+                    <a *ngIf="isATA" class="collapsed" data-toggle="collapse" href="#step4">ATA Chapter</a>
                   </h4>
                 </div>
                 <div id="step4" class="panel-collapse collapse">

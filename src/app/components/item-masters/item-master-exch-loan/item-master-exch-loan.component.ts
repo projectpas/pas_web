@@ -26,9 +26,15 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
     isSpinnerVisible: Boolean = false;
     exchCurrencyInfo: any = [];
     loanCurrencyInfo: any = [];
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
 
     constructor(private currencyService: CurrencyService, private authService: AuthService, private _actRoute: ActivatedRoute,
-        private itemMasterService: ItemMasterService, private modalService: NgbModal, private alertService: AlertService, public commonService: CommonService,) { }
+        private itemMasterService: ItemMasterService, private modalService: NgbModal, private alertService: AlertService, public commonService: CommonService,) {
+
+            this.isNextVisible=this.authService.ShowTab('Create Item Master','Export Information');
+            this.isPrevVisible=this.authService.ShowTab('Create Item Master','NHA,TLA,AlterNate,Equivalency');
+         }
     showExchange: boolean = false;
     showLoan: boolean = false;
     currentItem: ItemMasterLoanExchange;

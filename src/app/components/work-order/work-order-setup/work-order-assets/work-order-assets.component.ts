@@ -101,7 +101,7 @@ export class WorkOrderAssetsComponent implements OnInit {
     //customerName:any;
 
     ngOnInit(): void {
-      // this.customerName="A Pusapkraj";
+       // this.customerName="A Pusapkraj";
     }
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, private datePipe: DatePipe, private commonService: CommonService,
         private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef) {
@@ -159,7 +159,7 @@ viewAsstesInventory(rowData){
                 }
             })
         } else if (this.status == 'checkOut') {
-            this.workOrderService.checkOutAseetInventoryList(this.isSubWorkOrder ? this.currentRecord.subWorkOrderAssetId :this.currentRecord.workOrderAssetId,this.workOrderId,this.isSubWorkOrder ? this.currentRecord.subWOPartNoId : this.workOrderPartNumberId, this.currentRecord.assetRecordId, this.authService.currentUser.userName, this.currentUserMasterCompanyId,this.isSubWorkOrder ? this.currentRecord.subWorkOrderId : this.workOrderId,this.isSubWorkOrder).subscribe(res => {
+            this.workOrderService.checkOutAseetInventoryList(this.isSubWorkOrder ? this.currentRecord.subWorkOrderAssetId :this.currentRecord.workOrderAssetId,this.workOrderId,this.isSubWorkOrder ? this.currentRecord.subWOPartNoId : this.workOrderPartNumberId, this.currentRecord.assetRecordId, this.authService.currentUser.userName, 1,this.isSubWorkOrder ? this.currentRecord.subWorkOrderId : this.workOrderId,this.isSubWorkOrder).subscribe(res => {
                 this.workOrderCheckInCheckOutList = res;
                 if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
                     this.workOrderCheckInCheckOutList.map(element => {

@@ -28,7 +28,7 @@
               <div class="col">
                 <h4 class="header-name"> Billing Information</h4>
               </div>
-              <div>
+              <div *ngIf="isAdd">
                 <a *ngIf="isViewMode == false" 
                  data-toggle="modal" data-target="#addBillingInfo">
                   <button type="button" class="btn-sm header-button"  matTooltip="Add Billing Information" matTooltipPosition="above" (click)="addBillingIfo();">
@@ -77,12 +77,14 @@
             </div>
             <div class="row">
               <div class="col">
-              <button type="button" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above"
+
+              <button type="button" *ngIf="isDownload" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above"
                 pButton icon="fa-download" iconPos="left" label="Export  Data"
                 data-toggle="modal" 
                 (click)="selectedOnly = false; targetData = dt;"
                  data-target="#downloadBilling"></button>
-              <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+
+              <button type="button" *ngIf="isDownload" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only"
                 (click)="dt.exportCSV({ selectionOnly: true })" 
                 ></button>
@@ -92,7 +94,8 @@
                   >
                   Sample File Download
                 </button>
-                <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)"
+
+                <input type="file" *ngIf="isAdd" name="upload[]" id="upload" (change)="customExcelUpload($event)"
                   class="uploaddoc upload-file" accept=".xlsx, .xls, .csv" />
                 <label for="upload">
                   <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
@@ -187,7 +190,7 @@
 
               <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false">
                 <div *ngIf="currentDeletedstatus==false">
-                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true"
+                  <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true"
                    
                     name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForBilling(rowData)"></p-inputSwitch> 
@@ -196,17 +199,17 @@
                     matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                 </span>
 
-                <span data-target="#addBillingInfo" data-toggle="modal"><a class="btn nobg" (click)="openEdit(rowData)"
+                <span *ngIf="isEdit" data-target="#addBillingInfo" data-toggle="modal"><a class="btn nobg" (click)="openEdit(rowData)"
                     matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
 
-                <span><a class="btn nobg" (click)="deleteBillingInfo(deleteContent, rowData); dt.reset()"
+                <span *ngIf="isDelete"><a class="btn nobg" (click)="deleteBillingInfo(deleteContent, rowData); dt.reset()"
                     matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
 
                 <span><a class="btn nobg" (click)="getCustomerBillingHistory(contentAuditHist, rowData)"
                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                 </div>
                 <div *ngIf="currentDeletedstatus==true">
-                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                  <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForBilling(rowData)"></p-inputSwitch> 
                   <span data-toggle="modal" data-target="#viewBilling">
                     <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openBillingView(rowData)"
@@ -245,10 +248,10 @@
           </ng-template>
         </p-table>
         <div class="m-t-10" *ngIf="isViewMode == false">
-          <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
+          <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
             Next
           </button>
-          <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
+          <button *ngIf="isPrevVisible" type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
             Previous
           </button>
         </div>

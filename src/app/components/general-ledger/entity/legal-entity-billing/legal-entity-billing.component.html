@@ -24,7 +24,7 @@
                             <div class="col">
                                 <h4 class="header-name"> Billing Information</h4>
                             </div>
-                            <div>
+                            <div *ngIf="isAdd">
                                 <a href="#" *ngIf="!isViewMode" data-toggle="modal" data-target="#addBillingInfo">
                                     <button type="button" class="btn-sm header-button" matTooltipPosition="above"
                                         matTooltip="Add Billing Information" (click)="addBillingIfo()">
@@ -63,10 +63,10 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <button type="button" *ngIf="isViewMode==false" class="btn btn-primary  exports-button"
+                                <button type="button" *ngIf="isDownload && isViewMode==false" class="btn btn-primary  exports-button"
                                     matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download"
                                     iconPos="left" label="Export All Data" (click)="openTag(export)"></button>
-                                <button *ngIf="isViewMode==false" type="button " class="btn btn-primary  exports-button"
+                                <button *ngIf="isDownload && isViewMode==false" type="button " class="btn btn-primary  exports-button"
                                     matTooltip="Download Selected Data" matTooltipPosition="above" pButton
                                     icon="fa-download" iconPos="left" label="Export Selection Only"
                                     (click)="dt.exportCSV({selectionOnly:true})"></button>
@@ -91,7 +91,7 @@
                                             (click)="dismissModel()">Cancel</button>
                                     </div>
                                 </ng-template>
-                                <div class="excel-upload  excel-upload-cstm" *ngIf="isViewMode==false">
+                                <div class="excel-upload  excel-upload-cstm" *ngIf="isDownload && isViewMode==false">
 
                                     <button type="button" class="btn btn-primary exports-button"
                                         matTooltip="Download Sample File" matTooltipPosition="above"
@@ -207,7 +207,7 @@
 
                             <td class="action-icons-cstm table-column-width">
                                 <div *ngIf="currentDeletedstatusBilling==false">
-                                    <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"
+                                    <p-inputSwitch  *ngIf="isEdit" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"
                                         matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                         matTooltipPosition="above"
                                         (onChange)="updateActiveorInActiveForBilling(rowData)"
@@ -217,13 +217,13 @@
                                             (click)="openBillingView(rowData)" matTooltipPosition="above"
                                             matTooltip="View"><i class="fa fa-eye"></i></a>
                                     </span>
-                                    <span data-toggle="modal" data-target="#addBillingInfo" *ngIf="isViewMode==false">
-                                        <a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit"
+                                    <span  data-toggle="modal" data-target="#addBillingInfo" *ngIf="isViewMode==false">
+                                        <a *ngIf="isEdit" class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit"
                                             matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                     </span>
 
                                     <span *ngIf="isViewMode==false">
-                                        <a class="btn nobg" (click)="deleteBillingInfo(deleteContent,rowData)"
+                                        <a *ngIf="isDelete" class="btn nobg" (click)="deleteBillingInfo(deleteContent,rowData)"
                                             matTooltip="Delete" matTooltipPosition="above"><i
                                                 class="fa fa-trash"></i></a>
                                     </span>
@@ -235,7 +235,7 @@
                                     </span>
                                 </div>
                                 <div *ngIf="currentDeletedstatusBilling==true">
-                                    <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true"
+                                    <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true"
                                         name="isActive{{ rowIndex }}"
                                         matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                         matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch>
@@ -244,7 +244,7 @@
                                             (click)="openBillingView(rowData)" matTooltipPosition="above"
                                             matTooltip="View"><i class="fa fa-eye"></i></a>
                                     </span>
-                                    <span *ngIf="isViewMode==false"><a class="btn nobg"
+                                    <span *ngIf="isViewMode==false"><a *ngIf="isEdit" class="btn nobg"
                                             (click)="restore(restoreId,rowData);" matTooltip="Restore Record"
                                             matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
                                     </span>
@@ -278,8 +278,8 @@
                     </ng-template>
                 </p-table>
                 <div class="m-t-10" *ngIf="isViewMode == false">
-                    <button type="button" class="btn btn-primary pull-right" (click)="nextClick()">Next</button>
-                    <button type="button" class="btn btn-primary pull-right submit-btn"
+                    <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right" (click)="nextClick()">Next</button>
+                    <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn"
                         (click)="backClick()">Previous</button>
                 </div>
             </div>
