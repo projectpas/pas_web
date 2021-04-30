@@ -13,7 +13,6 @@ import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-
 declare var $ : any;
 import { Table } from 'primeng/table';
 import * as moment from 'moment';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-customer-aircraft',
     templateUrl: './customer-aircraft.component.html',
@@ -97,16 +96,7 @@ export class CustomerAircraftComponent implements OnInit {
     currentDeletedstatus:boolean=false;
     restorerecord: any = {};
     aircraftListDataValuesOriginal: any;
-    isAdd:boolean=true;
-    isEdit:boolean=true;
-    isDelete:boolean=true;
-    isAtaAdd:Boolean=true;
-    isAtaEdit:Boolean=true;
-    isContactAdd:Boolean=true;
-    isContactEdit:Boolean=true;
-    isDownload:Boolean=true;
-    isNextVisible: Boolean=true;
-    isPrevVisible: Boolean=true;
+
     constructor(private route: ActivatedRoute, private itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
         private Dashnumservice: DashNumberService,
@@ -120,21 +110,9 @@ export class CustomerAircraftComponent implements OnInit {
     ) {
         this.stopmulticlicks = false;
         this.id = this.route.snapshot.params['id'];
-        this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update])
-        this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Delete])
-        this.isDownload=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Download])	
-        // next
-        this.isAtaAdd=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add])
-        this.isAtaEdit=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update])	
-        // previous
-        this.isContactAdd=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Add])
-		this.isContactEdit=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Update])
-
-        this.isNextVisible=this.authService.ShowTab("Create Customer","Financial Information");
-        this.isPrevVisible=this.authService.ShowTab("Create Customer","ATA Chapter");
     }
     ngOnInit() {
+
         if (this.editMode) {
             //this.id = this.editGeneralInformationData.customerId;
             this.customerCode = this.editGeneralInformationData.customerCode;

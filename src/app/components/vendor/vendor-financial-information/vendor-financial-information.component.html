@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <div>
-                            <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')">Next</button>
+                            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')">Next</button>
                             <button *ngIf ="!enableUpdate" type="button" class="btn btn-primary pull-right"
                                     [disabled]="!finInfoForm.valid || disableCreditTerms || disableCurrency"
                                     (click)="editItemAndCloseModel(true)">
@@ -140,7 +140,7 @@
                                     (click)="editItemAndCloseModel(true)">
                                 Update
                             </button>
-                            <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Previous')">Previous</button>
+                            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Previous')">Previous</button>
                         </div>
                     </form>
                     </div>

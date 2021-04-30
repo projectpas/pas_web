@@ -134,8 +134,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            
-                                                            <button *ngIf="isAdd && isLockBox" type="submit" class="btn btn-primary" [disabled]="!locksave 
+                                                            <button type="submit" class="btn btn-primary" [disabled]="!locksave 
                                                             || !sourceLegalEntity.bankName 
                                                             || !sourceLegalEntity.bankAccountNumber
                                                             || !sourceLegalEntity.bankStreetaddress1
@@ -144,17 +143,7 @@
                                                             || !sourceLegalEntity.bankcountryId
                                                             || !sourceLegalEntity.bankpostalCode"
                                                              (click)="savebanklockingbox()">
-                                                             Save</button>
-                                                             <button *ngIf="isEditData && !isLockBox" type="submit" class="btn btn-primary" [disabled]="!locksave 
-                                                            || !sourceLegalEntity.bankName 
-                                                            || !sourceLegalEntity.bankAccountNumber
-                                                            || !sourceLegalEntity.bankStreetaddress1
-                                                            || !sourceLegalEntity.bankCity
-                                                            || !sourceLegalEntity.bankProvince
-                                                            || !sourceLegalEntity.bankcountryId
-                                                            || !sourceLegalEntity.bankpostalCode"
-                                                             (click)="savebanklockingbox()">
-                                                             Update</button>
+                                                             {{ !isLockBox ? 'Update' : 'Save' }}</button>
                                                         </div>
                                                     </div> 
                                                 </div>
@@ -224,13 +213,9 @@
                                                 <div class="form-group">
                                                     <span ></span>
                                                     
-                                                        <button *ngIf="isAdd && isDomesticWire" type="submit" class="btn btn-primary" [disabled]="!domesticvalid"
+                                                        <button type="submit" class="btn btn-primary" [disabled]="!domesticvalid"
                                                          (click)="savebankdomesticwire()">
-                                                         Save
-                                                        </button>
-                                                        <button *ngIf="isEditData && !isDomesticWire" type="submit" class="btn btn-primary" [disabled]="!domesticvalid"
-                                                         (click)="savebankdomesticwire()">
-                                                         Update
+                                                         {{ !isDomesticWire ? 'Update' : 'Save' }}
                                                         </button>
                                                    
                                                 </div>
@@ -346,13 +331,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button *ngIf="isAdd && isInternationalWire" type="submit" class="btn btn-primary" [disabled]="!internationalvalid" 
+                                                    <button type="submit" class="btn btn-primary" [disabled]="!internationalvalid" 
                                                     (click)="savebankinternationalwire()">
-                                                    Save
-                                                    </button>  
-                                                    <button *ngIf="isEditData && !isInternationalWire" type="submit" class="btn btn-primary" [disabled]="!internationalvalid" 
-                                                    (click)="savebankinternationalwire()">
-                                                    Update
+                                                    {{ !isInternationalWire ? 'Update' : 'Save' }}
                                                     </button>                                                     
                                                 </div>
                                                 </div>
@@ -537,8 +518,8 @@
                         </div>
                         <hr class="hr-light-grey">
                         <div class="form-group col-sm-12">
-                            <button *ngIf="isNextVisible" type="submit" class="btn btn-primary pull-right" (click)="next()">Next</button>
-                            <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn"(click)="backClick()">Previous</button>
+                            <button type="submit" class="btn btn-primary pull-right" (click)="next()">Next</button>
+                            <button type="button" class="btn btn-primary pull-right submit-btn"(click)="backClick()">Previous</button>
 
                         </div> 
                     </form>

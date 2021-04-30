@@ -7,7 +7,7 @@
         <h4 class="header-name">Customers List</h4>
       </div>
       <div>
-        <button *ngIf="isAdd"
+        <button
           type="button"
           class="btn-sm header-button"
           [routerLink]="['/customersmodule/customerpages/app-customer-create']"
@@ -66,8 +66,8 @@
           </div>
         </div>
         <div class="row">
-          <div class="col" >
-            <button *ngIf="isDownload"
+          <div class="col">
+            <button
               type="button"
               class="btn btn-primary exports-button"
               matTooltip="Download Data"
@@ -80,7 +80,7 @@
               (click)="selectedOnly = false; targetData = dt;" 
               data-target="#downloadConfirmation"
             ></button>
-            <button *ngIf="isDownload"
+            <button
               type="button"
               class="btn btn-primary exports-button"
               matTooltip="Download Selected Data"
@@ -228,7 +228,7 @@
             *ngIf="selectedColumns.length > 0"
           >
             <div *ngIf="onDeletedActionState == false">
-              <p-inputSwitch *ngIf="isActive"
+              <p-inputSwitch
                 [(ngModel)]="rowData['isActive']"
                 name="isActive{{ rowIndex }}"
                 matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
@@ -244,7 +244,7 @@
                   ><i class="fa fa-eye"></i
                 ></a>
               </span>
-              <span *ngIf="isEdit"
+              <span
                 ><a
                   class="btn nobg"
                   (click)="edit(rowData)"
@@ -271,7 +271,7 @@
                   ><i class="fa fa-map" style="color: red;"></i
                 ></a>
               </span> -->
-              <span *ngIf="isDocumentview"
+              <span
                 ><a
                   class="btn nobg"
                   (click)="openDocumentsList(documentsContent, rowData)"
@@ -280,7 +280,7 @@
                   ><i class="fa fa fa-file-pdf-o"></i
                 ></a>
               </span>
-              <span data-toggle="modal" data-target="#delete" *ngIf="isDelete"
+              <span data-toggle="modal" data-target="#delete"
                 ><a
                   class="btn nobg"
                   (click)="delete(content1, rowData);"
@@ -291,7 +291,7 @@
               </span>
             </div>
             <div *ngIf="onDeletedActionState == true">
-              <p-inputSwitch *ngIf="isEdit"
+              <p-inputSwitch
                 [(ngModel)]="rowData['isActive']"
                 [disabled]="true"
                 name="isActive{{ rowIndex }}"
@@ -299,7 +299,7 @@
                 matTooltipPosition="above"
                 (onChange)="changeStatus(rowData)"
               ></p-inputSwitch>
-              <span 
+              <span
                 ><a
                   class="btn nobg"
                   (click)="viewSelectedRow(rowData)"
@@ -308,7 +308,7 @@
                   ><i class="fa fa-eye"></i
                 ></a>
               </span>
-              <span *ngIf="isEdit"
+              <span
                 ><a
                   class="btn nobg btn-users-cstm"
                   (click)="restore(restorePopupId, rowData)"

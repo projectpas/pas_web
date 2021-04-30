@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <button  *ngIf="isDownload"
+                                        <button
                                             type="button"
                                             class="btn btn-primary exports-button"
                                             matTooltip="Download Data"
@@ -76,7 +76,7 @@
                                             data-toggle="modal" 
                                             (click)="selectedOnly = false; targetData = dt;"
                                             data-target="#downloadConfirmation"></button>
-                                        <button *ngIf="isDownload"
+                                        <button
                                             type="button"
                                             class="btn btn-primary exports-button"
                                             matTooltip="Download Selected Data"
@@ -215,11 +215,11 @@
                                     </ng-template>
                                 </p-table>
                                 <div>
-                                    <button *ngIf="isNextVisible"
+                                    <button
                                         type="button"
                                         class="btn btn-primary pull-right submit-btn"
                                         (click)="NextClick()">Next</button>
-                                    <button *ngIf="isPrevVisible"
+                                    <button
                                         type="button"
                                         class="btn btn-primary pull-right submit-btn"
                                         (click)="backClick()">Previous</button>

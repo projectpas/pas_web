@@ -17,7 +17,6 @@ import { CertificationtypeService } from '../../../../services/certificationtype
 import { DatePipe } from '@angular/common';
 import { editValueAssignByCondition } from '../../../../generic/autocomplete';
 import { CommonService } from '../../../../services/common.service';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-employee-certification',
@@ -83,9 +82,6 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
     employeeId: any;
     nextOrPreviousTab: any;
     isEditContent: boolean = false;
-    isAdd: boolean=true;
-    isEdit: boolean=true;
-    isNextVisible:Boolean=true;
     constructor(private route: ActivatedRoute,
         private translationService: AppTranslationService,
         private datePipe: DatePipe,
@@ -99,9 +95,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         public commonService: CommonService) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
-        this.isAdd = this.authService.checkPermission([ModuleConstants.Employees_Certification + '.' + PermissionConstants.Add]);
-        this.isEdit = this.authService.checkPermission([ModuleConstants.Employees_Certification + '.' + PermissionConstants.Update]);
-        this.isNextVisible=this.authService.ShowTab("Create Employee",'Training');
+      
     }
     ngOnInit(): void { 
         this.loadDataforCertification('');        

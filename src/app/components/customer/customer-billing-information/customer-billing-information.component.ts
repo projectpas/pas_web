@@ -12,7 +12,6 @@ import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { Params, ActivatedRoute } from '@angular/router';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-customer-billing-information',
@@ -88,17 +87,7 @@ export class CustomerBillingInformationComponent {
     isSiteNameAlreadyExists: boolean = false;
     disableSaveSiteName: boolean;
     selectedSitename : any
-    isAdd:boolean=true;
-    isEdit:boolean=true;
-    isDelete:boolean=true;
-    isDownload:boolean=true;
-    isFinancialInfoAdd:boolean=true;
-    isFinancialInfoEdit:boolean=true;
-    isShippingInfoAdd:boolean=true;
-    isShippingInfoEdit:boolean=true;
-    isNextVisible: Boolean=true;
-    isPrevVisible: Boolean=true;
-    
+
     constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, 
         private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal,
@@ -107,19 +96,6 @@ export class CustomerBillingInformationComponent {
         private router: ActivatedRoute ) 
         {
             this.id = this.router.snapshot.params['id'];
-            this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
-		    this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update])
-            this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Delete])
-            this.isDownload=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Download])
-            // Next
-            this.isShippingInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add])
-            this.isShippingInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update])           
-            //Previous
-            this.isFinancialInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Add])
-            this.isFinancialInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Update])
-
-            this.isNextVisible=this.authService.ShowTab("Create Customer","Shipping Information");
-            this.isPrevVisible=this.authService.ShowTab("Create Customer","Financial Information");
         }
 
     ngOnInit(): void {

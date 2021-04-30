@@ -99,10 +99,10 @@
                           </div>
                       </div>
                       <div class=" form-group" style=" margin-top:1%;">
-                      <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right" (click)="nextClick('Next')">Next </button>
-                      <button *ngIf="isAdd  && !isEditContent" 
+                      <button type="button" class="btn btn-primary pull-right" (click)="nextClick('Next')">Next </button>
+                      <button *ngIf="!isEditContent" 
                        type="button" class="btn btn-primary pull-right" (click)="saveCertificateData()">Save  </button>
-                      <button *ngIf="isEdit && isEditContent" 
+                      <button *ngIf="isEditContent" 
                        [disabled]="!empform.valid || !enableSaveBtn " type="button" class="btn btn-primary pull-right" (click)="saveCertificateData()"> {{!sourceEmployee.employeeCertificationId ? 'Save' : 'Update' }}</button>
                       <button type="button" class="btn btn-primary pull-right" (click)="nextClick('Previous')">Previous</button>
                       </div>

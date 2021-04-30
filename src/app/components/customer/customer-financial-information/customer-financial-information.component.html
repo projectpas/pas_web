@@ -360,7 +360,7 @@
                                   </select>
                                 </div>
                               </div>
-                              <div class="col-md-3" *ngIf="isAdd">
+                              <div class="col-md-3">
                                 <div class="form-group">
                                   <button class="btn btn-primary m-t-10" [disabled]="currentDeletedstatus" [disabled]="disableTaxSave"   (ngModelChange)="enableSave()" (click)="mapTaxTypeandRate()">
                                     Add 
@@ -419,17 +419,16 @@
 
                             <td class="action-icons-cstm table-column-width">
                               <div *ngIf="!currentDeletedstatus">
-                                <span data-toggle="modal" data-target="#editTarget" *ngIf="isEdit">
+                                <span data-toggle="modal" data-target="#editTarget">
                                   <a class="btn nobg" (click)="editTaxtRate(rowData)" matTooltip="Edit" 
                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                 </span>
   
-                                <span *ngIf="isDelete">
-                                    <a class="btn btn-danger nobg" (click)="deleteTaxTypeRate(deleteContent1,rowData,rowIndex)" 
-                                        matTooltip="Delete" matTooltipPosition="above" >
+                              <span data-toggle="modal">  <a class="btn btn-danger nobg" (click)="deleteTaxTypeRate(deleteContent1,rowData,rowIndex)" 
+                                    matTooltip="Delete" matTooltipPosition="above" >
                                       <i class="fa fa-trash"></i>
                                     </a>
-                                </span>
+                                  </span>
                                   
                                 <button [disabled]="rowData.isDisable"
                                     class="btn-edit" mat-icon-button (click)="
@@ -484,18 +483,14 @@
                 </div>
               </div>
             </div>
-            <button *ngIf="isNextVisible" type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
+            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
               Next
             </button>
-            <button type="button" *ngIf="isAdd && !editModeFinance"  class="btn btn-primary pull-right submit-btn" [disabled]="!financialInfoForm.valid || disableSave"
+            <button type="button" class="btn btn-primary pull-right submit-btn" [disabled]="!financialInfoForm.valid || disableSave"
               (click)="saveFinancialInformation()">
               {{editModeFinance ? 'Update' : 'Save' }}
             </button>
-            <button type="button" *ngIf="isEdit && editModeFinance"  class="btn btn-primary pull-right submit-btn" [disabled]="!financialInfoForm.valid || disableSave"
-              (click)="saveFinancialInformation()">
-              {{editModeFinance ? 'Update' : 'Save' }}
-            </button>
-            <button *ngIf="isPrevVisible" type="button"   class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
+            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
               Previous
             </button>
           </div>
@@ -568,7 +563,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-3" *ngIf="isEdit">
+            <div class="col-md-3">
               <div class="form-group">
                 <button class="btn btn-primary mrt_18" [disabled]="taxAndRateUpdateFlag"
                   (click)="updateTaxTypeandRate()" data-dismiss="modal">

@@ -126,8 +126,7 @@ export class PublicationEndpointService extends EndpointFactory {
 
   getNewpublicationEndpoint<T>(file: any): Observable<T> {
     const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-    
-    return this.http.post<T>(`${this._publicationUrlNew}`, file,this.getFormReqHeaders())
+    return this.http.post<T>(`${this._publicationUrlNew}`, file)
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getNewpublicationEndpoint(file));
     });

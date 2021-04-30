@@ -4,11 +4,9 @@ import { AlertService, MessageSeverity } from "../../services/alert.service";
 import { OnInit, Component } from "@angular/core";
 import { fadeInOut } from "../../services/animations";
 import { UserRoleService } from "./user-role-service";
-import { ModuleHierarchyMaster, UserRole, RolePermission, User, PermissionMaster } from "./ModuleHierarchyMaster.model";
+import { ModuleHierarchyMaster, UserRole, RolePermission, User } from "./ModuleHierarchyMaster.model";
 import { single } from "rxjs/operators";
 import { Role } from "../../models/role.model";
-import { roleModulesEnum } from '../../enum/rolemodules.enum';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'edit-app-roles',
@@ -25,34 +23,18 @@ export class EditUserRolesComponent implements OnInit {
     public pages: ModuleHierarchyMaster[];
     public pagesToHide: ModuleHierarchyMaster[];
     public userRoles: UserRole[] = [];
-    public permissionMaster: PermissionMaster[];
-    isSpinnerVisible: Boolean = true;
-    id: number;
-    constructor(private router: ActivatedRoute,private messageService: MessageService, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
-        this.id = this.router.snapshot.params['id'];
+
+    constructor(private messageService: MessageService, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
+
     }
 
     ngOnInit(): void {
         this.getAllModuleHierarchies();
         this.getAllUserRoles();
-        this.getAllPermission();
         this.currentUserRole = new UserRole();
         this.currentUserRole.rolePermissions = [];
         this.pages = [];
         this.currentUserRole.id = 0;
-        this.isSpinnerVisible = false;
-        if (this.id > 0) {
-            this.currentUserRole.id = this.id;
-            setTimeout(() => {
-                this.userRoleChanged();
-            },1500);
-        }
-    }
-
-    get currentUserMasterCompanyId(): number {
-        return this.authService.currentUser
-            ? this.authService.currentUser.masterCompanyId
-            : null;
     }
 
     getAllModuleHierarchies(): void {
@@ -60,12 +42,6 @@ export class EditUserRolesComponent implements OnInit {
             this.moduleHierarchy = data[0];
             this.sortModules();
         });
-    }
-
-    getAllPermission() {
-        this.userRoleService.getAllPermission().subscribe(data => {
-            this.permissionMaster = data[0];            
-        })
     }
 
     sortModules(): void {
@@ -116,7 +92,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     showChildModules(currentModule: ModuleHierarchyMaster, event): void {
-        if (currentModule.hasChildren) {
+        if (!currentModule.isPage) {
             var visible = false;
             var target = event.target.localName == 'td' ? event.target.children[0] : event.target;
             if (target.classList.contains('fa-caret-down')) {
@@ -141,34 +117,26 @@ export class EditUserRolesComponent implements OnInit {
                 this.loadAllChildModule(currentModule.id);
                 this.pagesToHide.forEach(function (module) {
                     module.visible = visible;
-                    var k=document.getElementsByClassName('cls'+currentModule.id);
-                    for (let index = 0; index < k.length; index++) {
-                        const element = k[index];
-                        element.classList.remove('fa-caret-right');
-                        element.classList.add('fa-caret-down');
-                        
-                    }
                 });
             }
         }
     }
 
     getAllUserRoles() {
-        return this.userRoleService.getAllUserRole(this.currentUserMasterCompanyId).subscribe(result => {
+        return this.userRoleService.getAllUserRole().subscribe(result => {
             this.userRoles = result[0];
         });
     }
 
-    userRoleChanged(): void {        
-        this.isSpinnerVisible=true;
-        this.sortModules();        
+    userRoleChanged(event): void {
+        this.sortModules();
         this.currentUserRole.rolePermissions = [];
 
-        if ( this.currentUserRole.id != undefined && this.currentUserRole.id != 0 ) {
+        if (this.currentUserRole.id != 0) {
             let userRoleId: number = this.currentUserRole.id;
             let selectedUserRole: UserRole = this.userRoles.filter(function (userRole: UserRole) {
                 return userRole.id == userRoleId;
-            })[0];           
+            })[0];
 
             this.currentUserRole.name = selectedUserRole.name;
             for (let modules of this.sortedHierarchy) {
@@ -178,55 +146,13 @@ export class EditUserRolesComponent implements OnInit {
                 });
 
                 if (rolePermission != undefined && rolePermission.length > 0) {
-                    for(let role of rolePermission){ 
-                    modules.rolePermission.permissionID=role.permissionID;
-                    switch (role.permissionID) {
-                        case 1:
-                            modules.rolePermission.canAdd = true;
-                            break;
-                        case 2:
-                            modules.rolePermission.canView= true;
-                            break;
-                        case 3:
-                             modules.rolePermission.canUpdate= true;
-                            break;
-                        case 4:
-                             modules.rolePermission.canDelete= true;
-                            break;
-                        case 5:
-                             modules.rolePermission.canAssign= true;
-                            break;
-                        case 6:
-                             modules.rolePermission.canApprove= true;
-                            break;
-                        case 7:
-                             modules.rolePermission.canUpload= true;
-                            break;
-                        case 8:
-                             modules.rolePermission.canDownload= true;
-                            break;
-                        case 9:
-                             modules.rolePermission.canReport= true;
-                            break;
-                        case 10:
-                             modules.rolePermission.canRun= true;
-                            break;
-                        case 11:
-                             modules.rolePermission.canReportView= true;
-                            break;
-                        case 12:
-                             modules.rolePermission.canReportDelete= true;
-                            break;
-                        case 13:
-                             modules.rolePermission.canPrint= true;
-                            break;
-                        default:
-                            break;
-                    }
-                    role.id = 0;
-                    this.currentUserRole.rolePermissions.push(Object.assign({}, role));
-                    this.setCorrospondingValue(modules,role.permissionID, true);
-                    }
+                    modules.rolePermission.canAdd = rolePermission[0].canAdd;
+                    modules.rolePermission.canUpdate = rolePermission[0].canUpdate;
+                    modules.rolePermission.canDelete = rolePermission[0].canDelete;
+                    modules.rolePermission.canView = rolePermission[0].canView;
+                    rolePermission[0].id = 0;
+                    
+                    this.currentUserRole.rolePermissions.push(Object.assign({}, rolePermission[0]));
                 }
                 else {
                     modules.rolePermission.canAdd = false;
@@ -235,72 +161,23 @@ export class EditUserRolesComponent implements OnInit {
                     modules.rolePermission.canView = false;
                 }
             }
-            this.isSpinnerVisible=false;
-        }
-        else{
-            this.isSpinnerVisible=false;
         }
     }
     
     setPermissionByType(currentModule: ModuleHierarchyMaster, type: string, value: boolean) {
-        if (value == true) {
-            currentModule.rolePermission.permissionID = +type;
-        }
-        else {
-           // currentModule.rolePermission.permissionId = 0;
-        }
-        this.setCorrospondingValue(currentModule,+type, value);
-    }
-
-    setCorrospondingValue(val,type, value) {
-        switch (type) {
-            case 1:
-                val.rolePermission.canAdd = value;
-                break;
-            case 2:                
-                val.rolePermission.canView = value;
-                break;
-            case 3:
-                val.rolePermission.canUpdate = value;
-                break;
-            case 4:
-                val.rolePermission.canDelete = value;
-                break;
-            case 5:
-                val.rolePermission.canAssign = value;
-                break;
-            case 6:
-                val.rolePermission.canApprove = value;
-                break;
-            case 7:
-                val.rolePermission.canUpload = value;
-                break;
-            case 8:
-                val.rolePermission.canDownload = value;
-                break;
-            case 9:
-                val.rolePermission.canReport = value;
-                break;
-            case 10:
-                val.rolePermission.canRun = value;
-                break;
-            case 11:
-                val.rolePermission.canReportView = value;
-                break;
-            case 12:
-                val.rolePermission.canReportDelete = value;
-                break;
-            case 13:
-                val.rolePermission.canPrint = value;
-                break;
-            default:
-                break;
-        }
+        if (type == 'canView')
+            currentModule.rolePermission.canView = value;
+        if (type == 'canAdd')
+            currentModule.rolePermission.canAdd = value;
+        if (type == 'canUpdate')
+            currentModule.rolePermission.canUpdate = value;
+        if (type == 'canDelete')
+            currentModule.rolePermission.canDelete = value;
     }
 
     uncheckAllParentModule(parentId, type: string): void {
         var parentModule = this.sortedHierarchy.filter(function (module) {
-            return (module.id == parentId && module.hasChildren == true);
+            return (module.id == parentId && module.isPage == false);
         })[0];
 
         this.setPermissionByType(parentModule, type, false);
@@ -315,80 +192,47 @@ export class EditUserRolesComponent implements OnInit {
         });
         for (let module of parentModules) {
             this.pagesToHide.push(module);
-            if (module.parentId != null && module.hasChildren) {
+            if (module.parentId != null && !module.isPage) {
                 this.loadAllChildModule(module.id);
             }
         }
     }
 
     permissionChecked(event, currentModule: ModuleHierarchyMaster, type: string): void {
-        var value = event.target.checked;        
+        var value = event.target.checked;
+
         if (value == false) {
             this.setPermissionByType(currentModule, type, value);
             if (currentModule.parentId != null)
                 this.uncheckAllParentModule(currentModule.parentId, type);
         }
 
-        if (currentModule.hasChildren) {
+        if (!currentModule.isPage) {
             this.setPermissionByType(currentModule, type, value);
             this.pages = [];
             this.hasPages(currentModule, type, value);
             for (let page of this.pages) {
-                this.setModuleHierarchyPermission(page,type,value);
-            }
-            if(value==true && (currentModule.parentId==null || currentModule.hasChildren)){
-                var currentRolePermission = Object.assign({}, currentModule.rolePermission);
-                currentRolePermission.moduleHierarchyMasterId = currentModule.id;
-                this.currentUserRole.rolePermissions.push(currentRolePermission);
-
-                var viewPermission= this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
-                    return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == 2;
-                })[0];
-    
-                if(viewPermission==undefined){
-                if(currentModule.rolePermission.permissionID==1 || currentModule.rolePermission.permissionID==3||currentModule.rolePermission.permissionID==4){
-                    var rolePermissionData=Object.assign({}, currentModule.rolePermission);
-                    rolePermissionData.permissionID=2;
-                    rolePermissionData.moduleHierarchyMasterId = currentModule.id;
-                    this.currentUserRole.rolePermissions.push(rolePermissionData);
-                    this.setCorrospondingValue(currentModule,rolePermissionData.permissionID,value);
-                }
-            }
-            }
-            else{
-                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.id);
-                if(currentModule.parentId!=null){
-                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.parentId);
-                }
+                this.setModuleHierarchyPermission(page);
             }
         }
         else {
             this.setPermissionByType(currentModule, type, value);
-            this.setModuleHierarchyPermission(currentModule,type,value);
-            if (currentModule.parentId != null)
-                this.checkParentModule(currentModule,currentModule.parentId,type,value);
+            this.setModuleHierarchyPermission(currentModule);
         }
-        //console.log(this.currentUserRole.rolePermissions);
+        console.log(this.currentUserRole.rolePermissions);
     }
 
-    setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,type,value:boolean=true): void {
+    setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster): void {
 
-        // var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
-        //     return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == currentModule.rolePermission.permissionID;
-        // })[0];
         var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
-            return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == type;
+            return permission.moduleHierarchyMasterId == currentModule.id;
         })[0];
 
         if (permission != undefined) {
             var currentRolePermission = Object.assign({}, currentModule.rolePermission);
             currentRolePermission.moduleHierarchyMasterId = currentModule.id;
             var permissionIndex = this.currentUserRole.rolePermissions.indexOf(permission)
-            if(value==false){
-                this.currentUserRole.rolePermissions[permissionIndex].permissionID=0;
-                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.permissionID!=0);
-                }
-            //this.updatePermission(this.currentUserRole.rolePermissions[permissionIndex], currentModule.rolePermission);
+            this.updatePermission(this.currentUserRole.rolePermissions[permissionIndex], currentModule.rolePermission);
         }
         else {
             var currentRolePermission = Object.assign({}, currentModule.rolePermission);
@@ -396,20 +240,6 @@ export class EditUserRolesComponent implements OnInit {
             currentRolePermission.moduleHierarchyMasterId = currentModule.id;
             currentRolePermission.id = 0;
             this.currentUserRole.rolePermissions.push(currentRolePermission);
-           
-            var viewPermission= this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
-                return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == 2;
-            })[0];
-
-            if(viewPermission==undefined){
-            if(currentModule.rolePermission.permissionID==1 || currentModule.rolePermission.permissionID==3||currentModule.rolePermission.permissionID==4){
-                var rolePermissionData=Object.assign({}, currentModule.rolePermission);
-                rolePermissionData.permissionID=2;
-                rolePermissionData.moduleHierarchyMasterId = currentModule.id;
-                this.currentUserRole.rolePermissions.push(rolePermissionData);
-                this.setCorrospondingValue(currentModule,rolePermissionData.permissionID,value);
-            }
-        }
         }
 
     }
@@ -428,251 +258,40 @@ export class EditUserRolesComponent implements OnInit {
         if (modules != undefined && modules.length > 0) {
             for (let module of modules) {
                 this.setPermissionByType(module, type, checkedValue);
-                //if (module.isPage) {
+                if (module.isPage) {
                     this.pages.push(module);
-                //}
+                }
                 this.hasPages(module, type, checkedValue);
             }
         }
     }
 
-    getChecked(module, permissionId) {
-        let valToReturn: Boolean;
-        switch (permissionId) {
-            case 1:
-                valToReturn = module.rolePermission.canAdd;
-                break;
-            case 2:
-                valToReturn = module.rolePermission.canView;
-                break;
-            case 3:
-                valToReturn = module.rolePermission.canUpdate;
-                break;
-            case 4:
-                valToReturn = module.rolePermission.canDelete;
-                break;
-            case 5:
-                valToReturn = module.rolePermission.canAssign;
-                break;
-            case 6:
-                valToReturn = module.rolePermission.canApprove;
-                break;
-            case 7:
-                valToReturn = module.rolePermission.canUpload;
-                break;
-            case 8:
-                valToReturn = module.rolePermission.canDownload;
-                break;
-            case 9:
-                valToReturn = module.rolePermission.canReport;
-                break;
-            case 10:
-                valToReturn = module.rolePermission.canRun;
-                break;
-            case 11:
-                valToReturn = module.rolePermission.canReportView;
-                break;
-            case 12:
-                valToReturn = module.rolePermission.canReportDelete;
-                break;
-            case 13:
-                valToReturn = module.rolePermission.canPrint;
-                break;
-            default:
-                break;
-        }
-        return valToReturn;
-    }
-
     UpdateUserRole(): void {
-        this.isSpinnerVisible=true;
-        this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.map(x=>{
-            x.userRoleId = this.currentUserRole.id;
-            return x;
-        })        
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);
-                //console.log(result)
                 for (let module of this.sortedHierarchy) {
                     this.resetRolePermission(module.rolePermission);
                 }
-                var roleId = this.currentUserRole.id;
                 this.currentUserRole = new UserRole();
-                this.currentUserRole.id = roleId;
+                this.currentUserRole.id = 0;
                 this.currentUserRole.rolePermissions = [];
                 this.pages = [];
-                this.userRoleService.getAllUserRole(this.currentUserMasterCompanyId).subscribe(result => {
+                this.userRoleService.getAllUserRole().subscribe(result => {
                     this.userRoles = result[0];
-                    this.userRoleChanged();
                 });
-                this.isSpinnerVisible=false;
             },
             error => {
-                // var message = '';
-                // if (error.error.constructor == Array) {
-                //     message = error.error[0].errorMessage;
-                // }
-                // else {
-                //     message = error.error.Message;
-                // } 
-                this.isSpinnerVisible=false;
-               // this.alertService.showMessage('User Role', message, MessageSeverity.error);
+                var message = '';
+                if (error.error.constructor == Array) {
+                    message = error.error[0].errorMessage;
+                }
+                else {
+                    message = error.error.Message;
+                } 
+                this.alertService.showMessage('User Role', message, MessageSeverity.error);
             }
         );
 
     }
-
-    checkparent(currentModule,parentId,type){        
-        var parentModule = this.sortedHierarchy.filter(function (module) {
-            return (module.id == parentId && module.hasChildren == true);
-        })[0];        
-        this.setPermissionByType(parentModule, type, true);                        
-        if(currentModule.rolePermission.permissionID == 1 || currentModule.rolePermission.permissionID == 2 || currentModule.rolePermission.permissionID == 3 || currentModule.rolePermission.permissionID == 4){           
-            this.setCorrospondingValue(parentModule,2,true);  
-        }
-    }
-
-    addcount : number
-    viewcount : number
-    updatecount : number
-    deletecount : number
-    canAssign : number
-    canApprove : number
-    canUpload:number
-    canDownload:number
-    canReport : number
-    canRun : number
-    canReportView : number
-    canReportDelete : number
-    canPrint : number   
-    checkParentModule(currentModule: ModuleHierarchyMaster,parentId:any, type: string, checkedValue: boolean) {
-        this.addcount = 0;
-        this.viewcount = 0;
-        this.updatecount = 0;
-        this.deletecount = 0;
-        this.canAssign = 0;
-        this.canApprove = 0;
-        this.canUpload = 0;
-        this.canDownload = 0;
-        this.canReport = 0;
-        this.canRun = 0;
-        this.canReportView = 0;
-        this.canReportDelete = 0;
-        this.canPrint = 0;
-        var childlist = this.sortedHierarchy.filter(function (module) {
-            return module.parentId == parentId
-        });              
-        if (childlist != undefined && childlist.length > 0) {
-            for (let i=0;i<childlist.length;i++) {
-                if(type == roleModulesEnum.canAdd){
-                    if(childlist[i].rolePermission.canAdd === true){
-                        this.addcount+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canView){
-                    if(childlist[i].rolePermission.canView === true){
-                        this.viewcount+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canUpdate){
-                    if(childlist[i].rolePermission.canUpdate === true){
-                        this.updatecount+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canDelete){
-                    if(childlist[i].rolePermission.canDelete === true){
-                        this.deletecount+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canAssign){
-                    if(childlist[i].rolePermission.canAssign === true){
-                        this.canAssign+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canApprove){
-                    if(childlist[i].rolePermission.canApprove === true){
-                        this.canApprove+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canUpload){
-                    if(childlist[i].rolePermission.canUpload === true){
-                        this.canUpload+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canDownload){
-                    if(childlist[i].rolePermission.canDownload === true){
-                        this.canDownload+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canReport){
-                    if(childlist[i].rolePermission.canReport === true){
-                        this.canReport+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canRun){
-                    if(childlist[i].rolePermission.canRun === true){
-                        this.canRun+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canReportView){
-                    if(childlist[i].rolePermission.canReportView === true){
-                        this.canReportView+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canReportDelete){
-                    if(childlist[i].rolePermission.canReportDelete === true){
-                        this.canReportDelete+=1; 
-                    }                                
-                }
-                if(type == roleModulesEnum.canPrint){
-                    if(childlist[i].rolePermission.canPrint === true){
-                        this.canPrint+=1; 
-                    }                                
-                }
-            }           
-            if(this.addcount == childlist.length){  
-                this.checkparent(currentModule,parentId,type);                                                                                          
-            }
-            if(this.viewcount == childlist.length){                
-                this.checkparent(currentModule,parentId,type);               
-            }
-            if(this.updatecount == childlist.length){                
-                this.checkparent(currentModule,parentId,type);                
-            }
-            if(this.deletecount == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canAssign == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canApprove == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canUpload == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canDownload == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canReport == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canRun == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canReportView == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canReportDelete == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-            if(this.canPrint == childlist.length){                
-                this.checkparent(currentModule,parentId,type);              
-            }
-        }
-    }
-
-    
 }
-

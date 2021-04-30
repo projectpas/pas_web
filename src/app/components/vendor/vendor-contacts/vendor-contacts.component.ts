@@ -22,7 +22,6 @@ import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service'
 import { AtaMainService } from '../../../services/atamain.service';
 import { CommonService } from '../../../services/common.service';
 import * as moment from 'moment';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-vendor-contacts',
@@ -196,14 +195,6 @@ export class VendorContactsComponent implements OnInit {
     restorerecord:any={};
     vendorCodeandName: any;
     allActionsOriginal: any = [];
-    isAdd:boolean=true;
-    isEdit:boolean=true;
-    isDelete:boolean=true;
-    isDownload:boolean=true;
-    isATA:Boolean=true;
-    isContactView:boolean=true;
-    isNextVisible:Boolean=true;
-    isPrevVisible:Boolean=true;
 
     constructor(private router: ActivatedRoute,
         private atamain: AtaMainService,
@@ -271,16 +262,7 @@ export class VendorContactsComponent implements OnInit {
         if (this.vendorService.listCollection && this.vendorService.listCollection != undefined && this.vendorService.isEditMode == true) {
             this.local = this.vendorService.listCollection;
         }
-
-        this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Update])
-        this.isDelete=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Delete])
-        this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Download])
-        this.isATA=this.authService.ShowTab('Create Vendor','ATA Chapter');
-        this.isContactView=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.View]);
         this.alertService.stopLoadingMessage();
-        this.isNextVisible=this.authService.ShowTab('Create Vendor','ATA Chapter');
-        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Capabilities');
     }
     ngOnInit(): void {
         this.vendorService.currentEditModeStatus.subscribe(message => {
@@ -358,13 +340,10 @@ export class VendorContactsComponent implements OnInit {
     private loadData() {
         this.isSpinnerVisible = true;
         const vendorId = this.vendorId != 0 ? this.vendorId : this.local.vendorId;
-
-        if(this.isContactView){
         this.vendorService.getContacts(vendorId).subscribe(
             results => this.onDataLoadSuccessful(results[0]),           
             error => {this.isSpinnerVisible = false } //this.onDataLoadFailed(error))
         );
-        }
     }
     enableSaveMemo() {
         this.disableSaveMemo = false;

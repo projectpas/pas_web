@@ -146,7 +146,6 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
     parentLegalEntity: any = {};
     newentityId;
     private parentId: number;
-    isNextVisible:Boolean=true;
 
     constructor(
         private http: HttpClient,

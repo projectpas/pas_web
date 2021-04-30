@@ -1,4 +1,4 @@
-﻿﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+﻿﻿﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 <div class="card new-card">
     <div class="card-header header">
         <div class="row">
@@ -6,7 +6,7 @@
                 <h4 class="header-name">Legal Entity List</h4>
             </div>
             <div>
-                <button type="button" *ngIf="isAdd"
+                <button type="button"
                         class="btn-sm header-button"
                         (click)="navigateTogeneralInfo()">
                     Add Legal Entity
@@ -58,7 +58,7 @@
                 </div>
                 <div class="row row-margin"> 
                     <div class="col">
-                        <button type="button" *ngIf="isDownload"
+                        <button type="button"
                                 class="btn btn-primary exports-button"
                                 pButton
                                 icon="fa-download"
@@ -73,7 +73,7 @@
 
                                 <!--data-target="#downloadConfirmation"></button> -->
 
-                        <button type="button" class="btn btn-primary exports-button" *ngIf="isDownload"
+                        <button type="button" class="btn btn-primary exports-button"
                                 pButton icon="fa-download" iconPos="left"
                                 label="Export Selected Data"
                                 matTooltip="Download Selected Data"
@@ -210,15 +210,15 @@
                     </td>
                     <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0">
                         <div *ngIf="currentDeletedstatus==false">
-                         <p-inputSwitch *ngIf="isActive" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                         <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above"  (onChange)="toggleIsActive(rowData,$event)" [disabled]="rowData.isPrimary || isViewMode==true"></p-inputSwitch> 
                             <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                            <span *ngIf="isEdit"> 
+                            <span> 
                                 <a class="btn nobg"
                                    (click)="openContentEdit(rowData)" matTooltip="Edit"
                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                             </span>
-                            <span *ngIf="isDelete">
+                            <span>
                                 <a class="btn nobg"
                                    (click)="openDelete(content,rowData)"
                                    matTooltip="Delete" matTooltipPosition="above">
@@ -231,14 +231,14 @@
                             </span>
                         </div>
                         <div *ngIf="currentDeletedstatus==true">
-                            <p-inputSwitch *ngIf="isActive" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above"   [disabled]="true"></p-inputSwitch> 
                             <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span >
                                 <a class="btn nobg btn-hist-cstm" 
                                    (click)="getLegalEntityHistoryById(contentAuditHist,rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                             </span>
-                            <span *ngIf="isActive"><a class="btn nobg" (click)="restore(restoreIdLegalEntity,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                            <span><a class="btn nobg btn-users-cstm" (click)="restore(restoreIdLegalEntity,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                         </div>
                     </td>
                 </tr>
@@ -830,7 +830,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isContactView" class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
                         </h4>
                     </div>
                     <div id="step2" class="panel-collapse  collapse">
@@ -845,7 +845,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isBankingView" class="collapsed" data-toggle="collapse" href="#step3">Banking</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step3">Banking</a>
                         </h4>
                     </div>
                     <div id="step3" class="panel-collapse  collapse">
@@ -990,7 +990,7 @@
                 <div class="panel panel-default"> 
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isBillingView" class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
                         </h4>
                     </div>
                     <div id="step6" class="panel-collapse  collapse">
@@ -1003,7 +1003,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isShippingView" class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
                         </h4>
                     </div>
                     <div id="step7" class="panel-collapse  collapse">
@@ -1018,7 +1018,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isDocumentView" class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
                         </h4>
                     </div>
                     <div id="step10" class="panel-collapse  collapse" >

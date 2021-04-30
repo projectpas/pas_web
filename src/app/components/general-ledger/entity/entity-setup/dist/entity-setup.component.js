@@ -19,19 +19,14 @@ var animations_1 = require("../../../../services/animations");
 var alert_service_1 = require("../../../../services/alert.service");
 var material_1 = require("@angular/material");
 var currency_model_1 = require("../../../../models/currency.model");
-var ModuleConstant_1 = require("src/app/generic/ModuleConstant");
-//import { TreeTableModule } from 'primeng/treetable';
 var ManagementStructureComponent = /** @class */ (function () {
-    function ManagementStructureComponent(messageService, authService, _fb, alertService, currency, msService, modalService, activeModal, dialog, masterComapnyService, commonService) {
+    function ManagementStructureComponent(messageService, authService, alertService, currency, msService, modalService, masterComapnyService, commonService) {
         this.messageService = messageService;
         this.authService = authService;
-        this._fb = _fb;
         this.alertService = alertService;
         this.currency = currency;
         this.msService = msService;
         this.modalService = modalService;
-        this.activeModal = activeModal;
-        this.dialog = dialog;
         this.masterComapnyService = masterComapnyService;
         this.commonService = commonService;
         this.tagNameCollection = [];
@@ -62,15 +57,9 @@ var ManagementStructureComponent = /** @class */ (function () {
         this.domesticWireStyle = false;
         this.internationalStyle = false;
         this.managementViewData = {};
-        this.isAdd = true;
-        this.isEdit = true;
-        this.isDelete = true;
         this.allWorkFlows = [];
         this.disableonchild = false;
         this.dataSource = new material_1.MatTableDataSource();
-        this.isAdd = this.authService.checkPermission([ModuleConstant_1.ModuleConstants.ManagementStructure + "." + ModuleConstant_1.PermissionConstants.Add]);
-        this.isEdit = this.authService.checkPermission([ModuleConstant_1.ModuleConstants.ManagementStructure + "." + ModuleConstant_1.PermissionConstants.Update]);
-        this.isDelete = this.authService.checkPermission([ModuleConstant_1.ModuleConstants.ManagementStructure + "." + ModuleConstant_1.PermissionConstants.Delete]);
     }
     ManagementStructureComponent.prototype.ngOnInit = function () {
         this.loadManagementdata();

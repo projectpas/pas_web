@@ -9,9 +9,7 @@
                             <h4 class="header-name">Management Structure</h4>
                         </div>
                         <div>
-                            <button type="button" *ngIf="isAdd"
-                                    class="btn-sm header-button"
-                                    (click)="open(contentEdit)">
+                            <button type="button" class="btn-sm header-button" (click)="open(contentEdit)">
                                 Add Root Management Structure
                             </button>
                         </div>
@@ -62,14 +60,14 @@
                             </td>
 
                             <td class="action-icons-cstm table-column-width">
-                                <a  *ngIf="!currentDeletedstatus" (click)="openEdit(contentEdit,rowNode)"
-                                   matTooltip="Add Child" matTooltipPosition="above"
-                                   class="btn btn-pluspo-cstm viewBtn nobg"><span  *ngIf="isAdd"><i class="fa fa-plus"></i></span></a>
+                                <a *ngIf="!currentDeletedstatus" (click)="openEdit(contentEdit,rowNode)"
+                                    matTooltip="Add Child" matTooltipPosition="above"
+                                    class="btn btn-pluspo-cstm viewBtn nobg"><span><i class="fa fa-plus"></i></span></a>
 
                                 <span *ngIf="!currentDeletedstatus">
-                                    <a class="btn viewBtn nobg" (click)="openContentEdit(contentEdit,rowData)"
-                                       matTooltip="Edit Management Structure" style="color:#0252b1"
-                                       matTooltipPosition="above"><i  *ngIf="isEdit" class="fa fa-pencil"></i></a>
+                                    <a class="btn viewBtn nobg" (click)="openContentEdit(contentEdit,rowData,rowNode)"
+                                        matTooltip="Edit Management Structure" style="color:#0252b1"
+                                        matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                 </span>
                                 <span data-toggle="modal" data-target="#view">
                                     <a class="btn viewBtn boxed-float-btn nobg" data-toggle="tooltip" title=""
@@ -80,9 +78,8 @@
                                 </span>
 
                                 <span *ngIf="!currentDeletedstatus">
-                                    <a class="btn viewBtn nobg" *ngIf="isDelete"
-                                       (click)="openDelete(content,rowData)"
-                                       matTooltip="Delete" matTooltipPosition="above">
+                                    <a class="btn viewBtn nobg" (click)="openDelete(content,rowData)"
+                                        matTooltip="Delete" matTooltipPosition="above">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </span>
@@ -123,20 +120,19 @@
                                     <a class="btn viewBtn boxed-float-btn nobg" data-toggle="tooltip" title=""
                                         data-original-title="View" matTooltip="View" matTooltipPosition="above"
                                         (click)="showViewData(contentView,rowData)">
-                                         <i class="fa fa-eye"></i>
-                                     </a>
-                                 </span> 
-                                
-                                 <span>
-                                     <a class="btn viewBtn nobg" data-target="#poHistory"
-                                        matTooltip="History" (click)="getAuditHistoryById(rowData)" matTooltipPosition="above">
-                                         <i class="fa fa-history"></i>
-                                     </a>
-                                 </span>
-                                 <span>
-                                    <a class="btn viewBtn nobg" *ngIf="isEdit"
-                                       (click)="openRestore(contentRestore,rowData)"
-                                       matTooltip="Restore" matTooltipPosition="above">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </span>
+
+                                <span>
+                                    <a class="btn viewBtn nobg" data-target="#poHistory" matTooltip="History"
+                                        (click)="getAuditHistoryById(rowData)" matTooltipPosition="above">
+                                        <i class="fa fa-history"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn viewBtn nobg" (click)="openRestore(contentRestore,rowData)"
+                                        matTooltip="Restore" matTooltipPosition="above">
                                         <i class="fa fa-undo"></i>
                                     </a>
                                 </span>

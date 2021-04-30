@@ -28,11 +28,11 @@ import { CurrencyService } from '../../../../services/currency.service';
 import { editValueAssignByCondition, formatNumberAsGlobalSettingsModule, getObjectByValue } from '../../../../generic/autocomplete';
 import { CommonService } from '../../../../services/common.service';
 import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators';
-declare var $: any;
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { emailPattern, urlPattern, phonePattern } from '../../../../validations/validation-pattern';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+
+declare var $ : any;
+
+import { phonePattern } from '../../../../validations/validation-pattern';
+
 
 @Component({
     selector: 'app-employee-general-information',
@@ -41,15 +41,15 @@ import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleCons
     animations: [fadeInOut]
 })
 export class EmployeeGeneralInformationComponent implements OnInit, AfterViewInit {
-    @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
+    @ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
     local: any;
     dateTime = new Date();
     activeIndex: number;
     allLeaves: EmployeeLeaveType[];
     phonePattern = phonePattern();
     allCountries: any[];
-    yearly: boolean = false;
-    hourly: boolean = false;
+    yearly: boolean=false;
+    hourly: boolean=false;
     showsingle: boolean;
     showMultiple: boolean;
     shiftValues: any[] = [];
@@ -104,8 +104,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     public jobTypeName: any;
     public jobTypeDescription: any;
     employeeIdTemp = "Creating"
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: false }) sort: MatSort;
+    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
+    @ViewChild(MatSort,{static:false}) sort: MatSort;
     displayedColumns = ['employeeId', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
     dataSource: MatTableDataSource<any>;
     allEmployeeinfo: any[] = [];
@@ -143,10 +143,10 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     divisionlist: any[] = [];
     Active: string = "Active";
     allAircraftManufacturer: any[] = [];
-    arrayExpertiselist: any = [];
-    arrayAllStationlist: any = [];
-    arraycurrencylist: any = [];
-    arraymultileavelist: any = [];
+    arrayExpertiselist : any = [];
+    arrayAllStationlist : any =[];
+    arraycurrencylist :any =[];
+    arraymultileavelist :any = [];
     sourceEmployee: any = {};
     updateMode: boolean = false;
     showMsg: boolean = false;
@@ -183,8 +183,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         companyId: new FormControl('companyId', [(Validators.required, Validators.minLength(1))]),
         startDate: new FormControl('startDate', Validators.minLength(1)),
         hourlyPay: new FormControl('hourlyPay', Validators.required),
-        email: new FormControl('email', Validators.required),
-        userName: new FormControl('userName', Validators.required),
+        email:new FormControl('email',Validators.required),
+        userName:new FormControl('userName',Validators.required),
     });
     employeeId: any;
     selectedLeaveValuesAssigned: any = [];
@@ -196,7 +196,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         departmentId: 0,
     }
     businessUnitList: any[];
-    arrayjobtitlelist: any = [];
+    arrayjobtitlelist : any = []  ;
     divisionList: any[];
     disableMagmtStruct: boolean = true;
     legalEntityList: any = [];
@@ -211,15 +211,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     descriptiontype: any;
     stopmulticlicks: boolean;
     isEditContent: boolean = false;
-    @ViewChild("empform", { static: false }) formdata;
+    @ViewChild("empform",{static:false}) formdata;
     @Output() tab = new EventEmitter<any>();
     private onDestroy$: Subject<void> = new Subject<void>();
     
     Supervisorinfo: { employeeId: number; firstName: string; isActive: boolean; lastName: string; middleName: string; name: string; }[];
     Currencyinfo: { currencyId:number;code:string }[];
-    isAdd: boolean=true;
-    isEdit: boolean=true;
-    isNextVisible:Boolean=true;
     constructor(private fb: FormBuilder, private Actroute: ActivatedRoute, private translationService: AppTranslationService, private router: Router, public jobTypeService: JobTypeService, public jobTitleService: JobTitleService, private empservice: EmployeeExpertiseService, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private route: Router, private alertService: AlertService, public employeeService: EmployeeService, public jobTitleService1: LegalEntityService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private localStorage: LocalStoreManager, private companyService: CompanyService, public currencyService: CurrencyService, public commonService: CommonService) {
         this.displayedColumns.push('action');
         this.radioItems = ['Hourly', 'Monthly'];
@@ -235,9 +232,9 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             'hourlyPay': [0, Validators.compose([Validators.required])],
             'BusinessUnitId': [0],
             'divisionId': [0],
-            'departmentId': [0],
-            'email': [null, Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9.-]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{3,}')])],
-            'userName': [null, Validators.compose([Validators.required, Validators.pattern('/^[a-z\d]{5,12}$/i')])],
+            'departmentId': [0],            
+            'email': [null, Validators.compose([Validators.required,Validators.pattern('[a-zA-Z0-9.-]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{3,}')])],
+            'userName':[null, Validators.compose([Validators.required,Validators.pattern('/^[a-z\d]{5,12}$/i')])],
         });
         if (this.employeeService.listCollection != null && this.employeeService.isEditMode == true) {
             this.employeeDisplayView = 'Edit Employee';
@@ -257,9 +254,6 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 if (this.empId != undefined || this.empId != null) {
                 }
             });
-        this.isAdd = this.authService.checkPermission([ModuleConstants.Employees_GeneralInformation + '.' + PermissionConstants.Add]);
-        this.isEdit = this.authService.checkPermission([ModuleConstants.Employees_GeneralInformation + '.' + PermissionConstants.Update]);
-        this.isNextVisible=this.authService.ShowTab('Create Employee','Certification')
     }
     ngOnInit(): void {
         this.isSpinnerVisible = true;
@@ -407,7 +401,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
 
     }
 
-    enableSave() {
+    enableSave() {    
         this.enableSaveBtn = true;
     }
 
@@ -475,7 +469,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 
             var endResult = [];
             for (let resInd = 0; resInd < response.length; resInd++) {
@@ -495,15 +489,15 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 this.sourceEmployee.firstName = getObjectByValue('firstName', contactName, this.firstCollection);
             }
 
-            // }, error => this.saveFailedHelper(error));
-        }, error => this.isSpinnerVisible = false);
+       // }, error => this.saveFailedHelper(error));
+          }, error => this.isSpinnerVisible = false);
     }
 
     getAllContactMiddleNameSmartDropDown(strText = '', contactName = '') {
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('middlename', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('middlename', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             var endResult = [];
             for (let resInd = 0; resInd < response.length; resInd++) {
                 let alreadyExist = false;
@@ -520,15 +514,15 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             if (contactName != '') {
                 this.sourceEmployee.middleName = getObjectByValue('middleName', contactName, this.middleNameCollection);
             }
-            //}, error => this.saveFailedHelper(error));
-        }, error => this.isSpinnerVisible = false);
+        //}, error => this.saveFailedHelper(error));
+          }, error => this.isSpinnerVisible = false);
     }
 
     getAllContactLastNameSmartDropDown(strText = '', contactName = '') {
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('lastname', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('lastname', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             var endResult = [];
             for (let resInd = 0; resInd < response.length; resInd++) {
                 let alreadyExist = false;
@@ -688,31 +682,31 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             // this.sourceEmployee.lastName = this.sourceEmployee.lastNameArray[0];
             this.sourceEmployee.currencyId = this.sourceEmployee.currency[0];
             this.loadingIndicator = false;
-            if (this.sourceEmployee.jobTitleId && this.sourceEmployee.jobTitleId > 0) {
-                this.arrayjobtitlelist.push(this.sourceEmployee.jobTitleId);
+            if(this.sourceEmployee.jobTitleId  && this.sourceEmployee.jobTitleId > 0) {
+             this.arrayjobtitlelist.push(this.sourceEmployee.jobTitleId);
             }
             this.loadJobtitlesData('');
 
-            if (this.sourceEmployee.employeeExpertiseId && this.sourceEmployee.employeeExpertiseId > 0) {
+            if(this.sourceEmployee.employeeExpertiseId  && this.sourceEmployee.employeeExpertiseId > 0) {
                 this.arrayExpertiselist.push(this.sourceEmployee.employeeExpertiseId);
             }
             this.loademployeesexperties('');
 
-            if (this.sourceEmployee.stationId && this.sourceEmployee.stationId > 0) {
+            if(this.sourceEmployee.stationId  && this.sourceEmployee.stationId > 0) {
                 this.arrayAllStationlist.push(this.sourceEmployee.stationId);
             }
-            this.getAllStationData('');
-
-            if (this.sourceEmployee.currencyId && this.sourceEmployee.currencyId > 0) {
+            this.getAllStationData(''); 
+            
+            if(this.sourceEmployee.currencyId  && this.sourceEmployee.currencyId > 0) {
                 this.arraycurrencylist.push(this.sourceEmployee.currencyId);
             }
             this.loadCurrencyData('');
-
-            if (this.sourceEmployee.leaveTypeIds) {
+            
+            if(this.sourceEmployee.leaveTypeIds) {
                 this.arraymultileavelist.push(this.sourceEmployee.leaveTypeIds);
             }
             this.multiLeavelist('');
-
+            
             // setTimeout(() => {
             //     this.getDetailsInactive(res);
             // },
@@ -800,230 +794,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             1200);
         this.isSpinnerVisible = false;
     }
-    // getManagementStructureOnEdit(managementStructureId) {
-    //     this.commonService.getManagementStructureDetails(managementStructureId).subscribe(res => {
-    //         this.selectedLegalEntity(res.Level1);
-    //         this.selectedBusinessUnit(res.Level2);
-    //         this.selectedDivision(res.Level3);
-    //         this.selectedDepartment(res.Level4);
-    //         // this.managementStructure = {
-    //         //     companyId: res.Level1 !== undefined ? res.Level1 : 0,
-    //         //     buId: res.Level2 !== undefined ? res.Level2 : 0,
-    //         //     divisionId: res.Level3 !== undefined ? res.Level3 : 0,
-    //         //     departmentId: res.Level4 !== undefined ? res.Level4 : 0,
-    //         // }
-    //     }, err => {
-
-    //         const errorLog = err;
-    //         this.errorMessageHandler(errorLog);
-    //     });
-    // }
-
-    // getEmployeeData() {
-    //     this.selectedLegalEntity(this.authService.currentManagementStructure.levelId1);
-    //     this.selectedBusinessUnit(this.authService.currentManagementStructure.levelId2);
-    //     this.selectedDivision(this.authService.currentManagementStructure.levelId3);
-    //     this.selectedDepartment(this.authService.currentManagementStructure.levelId4);
-    //     //  this.sourceEmployee.compmanagmentLegalEntityId = this.authService.currentManagementStructure.levelId1;
-    //     //  this.sourceEmployee.biumanagmentLegalEntityId = this.authService.currentManagementStructure.levelId2;
-    //     //  this.sourceEmployee.divmanagmentLegalEntityId = this.authService.currentManagementStructure.levelId3;
-    //     //  this.sourceEmployee.managmentLegalEntityId = this.authService.currentManagementStructure.levelId4;
-    //     this.managementStructure.companyId = this.authService.currentManagementStructure.levelId1;
-    //     this.managementStructure.buId = this.authService.currentManagementStructure.levelId2;
-    //     this.managementStructure.divisionId = this.authService.currentManagementStructure.levelId3;
-    //     this.managementStructure.departmentId = this.authService.currentManagementStructure.levelId4;
-    // }
-
-    // getLegalEntity() {
-    //     this.commonService.getLegalEntityList().subscribe(res => {
-    //         this.legalEntityList = res;
-    //     },err => {
-
-    //         const errorLog = err;
-    //         this.errorMessageHandler(errorLog);
-    //     });
-    // }
-
-    /*
-
-    selectedLegalEntity(legalEntityId) {
-        this.businessUnitList = [];
-        this.divisionList = [];
-        this.departmentList = [];
-        this.managementStructure.buId = 0;
-        this.managementStructure.divisionId = 0;
-        this.managementStructure.departmentId = 0;
-        // this.sourceEmployee.biumanagmentLegalEntityId = 0;
-        // this.sourceEmployee.divmanagmentLegalEntityId = 0;
-        // this.sourceEmployee.managmentLegalEntityId = 0;
-        if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
-            this.sourceEmployee.managementStructureId = legalEntityId;
-            this.commonService.getBusinessUnitListByLegalEntityId(legalEntityId).subscribe(res => {
-                this.businessUnitList = res;
-            }, err => {
-
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
-            this.disableMagmtStruct = false;
-        } else {
-            this.disableMagmtStruct = true;
-        }
-    }
-
-    selectedBusinessUnit(businessUnitId) {
-        this.divisionList = [];
-        this.departmentList = [];
-        this.managementStructure.divisionId = 0;
-        this.managementStructure.departmentId = 0;
-
-        // this.sourceEmployee.divmanagmentLegalEntityId =0;
-        // this.sourceEmployee.managmentLegalEntityId = 0;
-        if (businessUnitId != 0 && businessUnitId != null && businessUnitId != undefined) {
-            this.sourceEmployee.managementStructureId = businessUnitId;
-            this.commonService.getDivisionListByBU(businessUnitId).subscribe(res => {
-                this.divisionList = res;
-            }, err => {
-
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
-        }
-    }
-    selectedDivision(divisionUnitId) {
-        this.departmentList = [];
-        this.managementStructure.departmentId = 0;
-            // this.sourceEmployee.managmentLegalEntityId = 0;
-        if (divisionUnitId != 0 && divisionUnitId != null && divisionUnitId != undefined) {
-            this.sourceEmployee.managementStructureId = divisionUnitId;
-            this.commonService.getDepartmentListByDivisionId(divisionUnitId).subscribe(res => {
-                this.departmentList = res;
-            }, err => {
-
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
-        }
-    }
-    selectedDepartment(departmentId) {
-        if (departmentId != 0 && departmentId != null && departmentId != undefined) {
-            this.sourceEmployee.managementStructureId = departmentId;
-        }
-    }*/
-
-    /*
-    loadLegalEntityData() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.jobTitleService1.getManagemtentLengalEntityData().subscribe(
-            results => this.onManagemtntlegaldataLoad(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
-    }*/
-
-    /*
-    private onManagemtntlegaldataLoad(getAtaMainList: any[]) {
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.alllegalEntityInfo = getAtaMainList;
-        for (let i = 0; i < this.alllegalEntityInfo.length; i++) {
-
-            if (this.alllegalEntityInfo[i].parentId == null) {
-                this.maincompanylist.push(this.alllegalEntityInfo[i]);
-
-            }
-        }
-        if (this.maincompanylist) {
-            this.maincompanylist = this.maincompanylist.reduce((unique, o) => {
-                if (!unique.some(obj => obj.name === o.name)) {
-                    unique.push(o);
-                }
-                return unique;
-            }, []);
-        }
-    }
-    */
-
-    /*
-     private loadManagementdata() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.jobTitleService1.getManagemententity().subscribe(
-            results => this.onManagemtntdataLoad(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
-    }
-    private onManagemtntdataLoad(getAtaMainList: any[]) {
-        // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.dataSource.data = getAtaMainList;
-        this.allManagemtninfo = getAtaMainList;
-        for (let i = 0; i < this.allManagemtninfo.length; i++) {
-            if (this.allManagemtninfo[i].parentId == null) {
-                this.maincompanylist.push(this.allManagemtninfo[i]);
-            }
-        }
-        if (this.sourceEmployee.managmentLegalEntity != null && this.sourceEmployee.divmanagmentLegalEntity != null && this.sourceEmployee.biumanagmentLegalEntity != null && this.sourceEmployee.compmanagmentLegalEntity != null) {
-            this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.compmanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.biumanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.divmanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['departmentId'].setValue(this.sourceEmployee.managementStructeInfo.managementStructureId);
-        }
-        else if (this.sourceEmployee.biumanagmentLegalEntity != null && this.sourceEmployee.divmanagmentLegalEntity != null && this.sourceEmployee.managmentLegalEntity != null) {
-            this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.biumanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.divmanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.managmentLegalEntity.managementStructureId);
-        }
-        else if (this.sourceEmployee.divmanagmentLegalEntity != null && this.sourceEmployee.managmentLegalEntity != null) {
-
-            this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.divmanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.managmentLegalEntity.managementStructureId);
-
-        }
-        else if (this.sourceEmployee.managementStructeInfo != null) {
-
-            this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.managmentLegalEntity.managementStructureId);
-        }
-        else {
-        }
-
-        this.setManagementStrucureData(this.sourceEmployee);
-    }*/
-    /*
-
-    loadCompanyData() {
-        this.companyService.getallCompanyData().subscribe(
-            results => this.assigninCOmpanyData(results),
-
-            error => this.onDataLoadFailed(error)
-        );
-    }
-    assigninCOmpanyData(results: any) {
-
-        this.companylist = results[0];
-    }*/
-
-    // private loadCurrencyData() {
-    //     this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(res => {
-    //         this.allCurrencyData = res.map(x => {
-    //             return {
-    //                 ...x,
-    //                 currencyId: x.value,
-    //                 code: x.label
-    //             }
-    //         });
-    //     }, err => {
-
-    //         const errorLog = err;
-    //         this.errorMessageHandler(errorLog);
-    //     });
-    // }
+   
     
     private loadCurrencyData(strText = '') {
 		if(this.arraycurrencylist.length == 0) {			
 			this.arraycurrencylist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,0,this.arraycurrencylist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20000,this.arraycurrencylist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.allCurrencyData = response.map(x => {
                             return {                                
                                 currencyId: x.value,
@@ -1124,7 +900,6 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.sourceEmpLast.lastName = res[0][0].lastName;
     }
     onSubmit2() {
-        console.log("On Submit date");
         this.isSpinnerVisible = true;
         this.enableSaveBtn = false;
         this.supervisorId;
@@ -1209,7 +984,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                     }
                 },
                 err => {
-                    this.isSpinnerVisible = false;
+                    this.isSpinnerVisible = false;                   
                 }
             );
         }
@@ -1236,7 +1011,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                     }
                 },
                 err => {
-                    this.isSpinnerVisible = false;
+                    this.isSpinnerVisible = false;                   
                 });
         }
     }
@@ -1265,7 +1040,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                         results => {
                         },
                         //error => this.onDataLoadFailed(error))
-                        error => { this.isSpinnerVisible = false });
+                          error => {this.isSpinnerVisible = false});
                 });
         }
     }
@@ -1275,7 +1050,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.employeeService.employeeshifttypeRemove(this.sourceEmployee).subscribe(
             results => {
             },
-            error => { this.isSpinnerVisible = false });
+            error => {this.isSpinnerVisible = false});        
     }
 
     removeEmployeeShiftValues() {
@@ -1311,7 +1086,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.employeeService.employeeShifttypeAdd(this.sourceEmployee).subscribe(
                 results => {
                 },
-                error => { this.isSpinnerVisible = false });
+                 error => {this.isSpinnerVisible = false});           
         }
     }
 
@@ -1337,7 +1112,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.employeeService.employeeLeavetypeAdd(this.sourceEmployee).subscribe(
             results => {
             },
-            error => { this.isSpinnerVisible = false });
+            error => {this.isSpinnerVisible = false});
     }
 
     employeeShifttypeAdd(employeeId) {
@@ -1349,7 +1124,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 this.employeeService.employeeShifttypeAdd(this.sourceEmployee).subscribe(
                     results => {
                     },
-                    error => { this.isSpinnerVisible = false });
+                    error => {this.isSpinnerVisible = false});                
             }
         }
     }
@@ -1364,7 +1139,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.employeeService.employeeLeavetypeAdd(this.sourceEmployee).subscribe(
                 results => {
                 },
-                error => { this.isSpinnerVisible = false });
+                error => {this.isSpinnerVisible = false});
         }
     }
     // onSubmit() {
@@ -1434,7 +1209,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.loadingIndicator = true;
         this.employeeService.getEmployeeNamesList(this.currentUserMasterCompanyId).subscribe(
             results => this.onDataLoadSuccessful(results[0]),
-            error => { this.isSpinnerVisible = false }
+            error =>  {this.isSpinnerVisible = false}
         );
         this.selectedColumns = this.cols;
 
@@ -1445,7 +1220,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.loadingIndicator = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => { this.isSpinnerVisible = false }
+            error => {this.isSpinnerVisible = false}
         );
     }
 
@@ -1458,7 +1233,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         // );
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 1000, '0', this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 1000, '0',this.currentUserMasterCompanyId).subscribe(res => {
             this.shiftValues = res;
             // this.legalEntityList_Forgrid = res;
             // this.legalEntityList_ForShipping = res;
@@ -1475,7 +1250,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.loadingIndicator = true;
         this.employeeService.getEmployeeTrainingType().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
-            error => { this.isSpinnerVisible = false }
+            error => {this.isSpinnerVisible = false}
         );
     }
     private EmployeeLeaveType() {
@@ -1483,7 +1258,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.loadingIndicator = true;
         this.employeeService.getEmployeeLeaveType().subscribe(
             results => this.onLeavedata(results[0]),
-            error => { this.isSpinnerVisible = false }
+            error => {this.isSpinnerVisible = false}
         );
     }
     // private multiLeavelist() {
@@ -1495,13 +1270,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     //         error => this.onDataLoadFailed(error)
     //     );
     // }   
-
+    
     private multiLeavelist(strText = '') {
-        if (this.arraymultileavelist.length == 0) {
-            this.arraymultileavelist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType', strText, true, 2000, this.arraymultileavelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
-            this.leavemultiValues = response;
+		if(this.arraymultileavelist.length == 0) {			
+            this.arraymultileavelist.push(0); }            
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType',strText,true,2000,this.arraymultileavelist.join(),this.currentUserMasterCompanyId).subscribe(response => {           
+            this.leavemultiValues = response;          
             this.leavemultiValues = this.leavemultiValues.reduce((unique, o) => {
                 if (!unique.some(obj => obj.label === o.label)) {
                     unique.push(o);
@@ -1509,12 +1283,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 return unique;
             }, []);
             let valAirCraft = [];
-        }, err => {
-            // const errorLog = err;
+		},err => {			
+			// const errorLog = err;
             // this.errorMessageHandler(errorLog);	
-            this.isSpinnerVisible = false;
-        });
-    }
+            this.isSpinnerVisible = false;	
+		});
+	}
 
     public applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue;
@@ -1609,22 +1383,21 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     //     });
     // }
 
-
+    
     private loadJobtitlesData(strText = '') {
         //this.alertService.startLoadingMessage();
         //this.loadingIndicator = true;
-        if (this.arrayjobtitlelist.length == 0) {
-            this.arrayjobtitlelist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownList('JobTitle', 'JobTitleId', 'Description', strText, true, 2000, this.arrayjobtitlelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
-            this.allJobTitlesinfo = response;
-        }, err => {
-            this.isSpinnerVisible = false;
-            //const errorLog = err;
-            //this.errorMessageHandler(errorLog);		
-        });
+		if(this.arrayjobtitlelist.length == 0) {			
+			this.arrayjobtitlelist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('JobTitle', 'JobTitleId', 'Description',strText,true,2000,this.arrayjobtitlelist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+            this.allJobTitlesinfo = response;			
+		},err => {
+			this.isSpinnerVisible = false;
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);		
+		});
     }
-
+    
     private loadjobtypesData() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
@@ -1696,20 +1469,19 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     //         this.allEmployeeExpertiseInfo = res;
     //     });
     // }
-
+   
     private loademployeesexperties(strText = '') {
-        if (this.arrayExpertiselist.length == 0) {
-            this.arrayExpertiselist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', strText, true, 2000, this.arrayExpertiselist.join(), this.currentUserMasterCompanyId).subscribe(response => {
-            this.allEmployeeExpertiseInfo = response;
-        }, err => {
-            this.isSpinnerVisible = false;
-            //const errorLog = err;
-            //this.errorMessageHandler(errorLog);		
-        });
+		if(this.arrayExpertiselist.length == 0) {			
+			this.arrayExpertiselist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description',strText,true,2000,this.arrayExpertiselist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+			this.allEmployeeExpertiseInfo =  response;			
+		},err => {
+			this.isSpinnerVisible = false;
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);		
+		});
     }
-
+    
     private onEmpDataLoadSuccessful(allWorkFlows: EmployeeExpertise[]) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
@@ -1922,7 +1694,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 this.activeIndex = 0;
                 this.employeeService.indexObj.next(this.activeIndex);
             }
-        }
+        }        
         this.multiLeavelist('')
         //this.modal.close();
     }
@@ -2466,7 +2238,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     getAllStationData(strText = '') {
 		if(this.arrayAllStationlist.length == 0) {			
 			this.arrayAllStationlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName',strText,true,0,this.arrayAllStationlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName',strText,true,20000,this.arrayAllStationlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.getAllAllStationInfodrpData =  response;
 		},err => {
 			this.isSpinnerVisible = false;

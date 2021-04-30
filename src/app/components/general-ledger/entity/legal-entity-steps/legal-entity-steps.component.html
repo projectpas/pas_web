@@ -7,7 +7,7 @@
           {{ editMode ? 'Edit' : 'Create' }} Legal Entity</h4>
       </div>
       <div>
-        <button type="button" class="btn-sm header-button" *ngIf="isView"
+        <button type="button" class="btn-sm header-button"
           [routerLink]="['/generalledgermodule/generalledgerpage/app-legal-entity-list']">
           Legal Entity List
         </button>
@@ -25,7 +25,7 @@
           <div class="md-step-bar-left"></div>
           <div class="md-step-bar-right"></div>
         </div>
-        <div  *ngIf="isShowTab('Contacts')" class="md-step" [ngClass]="{
+        <div class="md-step" [ngClass]="{
         active: activeMenuItem >= 2,
         editable: activeMenuItem === 2
       }" (click)="changeOfTab('Contacts')" [class.isDisabled]="!isDisabledSteps">
@@ -34,7 +34,7 @@
           <div class="md-step-bar-left"></div>
           <div class="md-step-bar-right"></div>
         </div>
-        <div *ngIf="isShowTab('Banking Information')" class="md-step" [ngClass]="{
+        <div class="md-step" [ngClass]="{
          active: activeMenuItem >= 3,
          editable: activeMenuItem === 3
         }" (click)="changeOfTab('Banking')" [class.isDisabled]="!isDisabledSteps">
@@ -43,7 +43,7 @@
           <div class="md-step-bar-left"></div>
           <div class="md-step-bar-right"></div>
         </div>
-        <div *ngIf="isShowTab('Billing Information')"  class="md-step" [ngClass]="{
+        <div class="md-step" [ngClass]="{
         active: activeMenuItem >= 4,
         editable: activeMenuItem === 4
       }" (click)="changeOfTab('Billing')" [class.isDisabled]="!isDisabledSteps">
@@ -52,7 +52,7 @@
           <div class="md-step-bar-left"></div>
           <div class="md-step-bar-right"></div>
         </div>
-        <div *ngIf="isShowTab('Shipping Information')"   class="md-step" [ngClass]="{
+        <div class="md-step" [ngClass]="{
         active: activeMenuItem >= 5,
         editable: activeMenuItem === 5
       }" (click)="changeOfTab('Shipping')" [class.isDisabled]="!isDisabledSteps">
@@ -61,7 +61,7 @@
           <div class="md-step-bar-left"></div>
           <div class="md-step-bar-right"></div>
         </div>
-        <div *ngIf="isShowTab('Documents')"   class="md-step" [ngClass]="{
+        <div class="md-step" [ngClass]="{
         active: activeMenuItem >= 6,
         editable: activeMenuItem === 6
       }" (click)="changeOfTab('Documents')" [class.isDisabled]="!isDisabledSteps">

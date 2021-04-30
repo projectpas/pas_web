@@ -7,7 +7,6 @@ import { EmployeeService } from '../../../../services/employee.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { AuthService } from '../../../../services/auth.service';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-employees-management-structure',
@@ -49,9 +48,7 @@ export class EmployeesManagementStructureComponent implements OnInit, AfterViewI
     empDetailsData: any;
     isEditContent: boolean = false;
     memoPopupContent: any;
-    isAdd: boolean=true;
-    isEdit: boolean=true;
-    isPrevVisible:Boolean=true;
+
 
     constructor(private router: Router, private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -69,9 +66,6 @@ export class EmployeesManagementStructureComponent implements OnInit, AfterViewI
             this.lastName = this.employeeService.listCollection.lastName;
             this.local = this.employeeService.listCollection;
         }
-        this.isAdd = this.authService.checkPermission([ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.Add]);
-        this.isEdit = this.authService.checkPermission([ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.Update]);
-        this.isPrevVisible=this.authService.ShowTab("Create Employee",'Training');
     }
 
     ngOnInit() {
