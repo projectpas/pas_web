@@ -309,12 +309,12 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     dateFilterForTable(date, field) {
-        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+        if (date !== '' && moment(date).format('MM DD YYYY')) {
             this.documentCollection = this.documentCollectionOriginal;
             const data = [...this.documentCollection.filter(x => {
-                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                if (moment(x.createdDate).format('MM DD YYYY') === moment(date).format('MM DD YYYY') && field === 'createdDate') {
                     return x;
-                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                } else if (moment(x.updatedDate).format('MM DD YYYY') === moment(date).format('MM DD YYYY') && field === 'updatedDate') {
                     return x;
                 }
             })]

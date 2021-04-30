@@ -410,13 +410,13 @@
                             *ngIf="col.field != 'amount'" pReorderableRowHandle>
                             {{
                                   col.field == 'createdDate'
-                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                    ? (rowData[col.field] )
                                     : rowData[col.field] && col.field == 'updatedDate'
-                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                    ? (rowData[col.field] )
                                     : rowData[col.field] && col.field == 'expirationDate'
-                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                    ? (rowData[col.field] )
                                     : rowData[col.field] && col.field == 'startDate'
-                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                    ? (rowData[col.field] )
                                     : rowData[col.field]
                                 }}
                               </td>
@@ -2769,7 +2769,7 @@
                   ? 'black'
                   : 'red'
               }">
-                {{ audit.startDate }}
+                {{ audit.startDate| date: 'MM/dd/yyyy h:mm a ' }}
               </td>
               <td [ngStyle]="{
                 color: getColorCodeForInterHistory(
@@ -2780,7 +2780,7 @@
                   ? 'black'
                   : 'red'
               }">
-                {{ audit.expirationDate }}
+                {{ audit.expirationDate | date: 'MM/dd/yyyy h:mm a '}}
               </td>
               <td [ngStyle]="{
                 color: getColorCodeForInterHistory(i, 'amount', audit.amount)
