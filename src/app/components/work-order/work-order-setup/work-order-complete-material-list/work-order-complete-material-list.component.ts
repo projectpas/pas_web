@@ -586,7 +586,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             });
 
             this.isAllow = value;
-            this.savebutonDisabled = true;
+            // this.savebutonDisabled = true;
+            if(this.reservedList &&  this.reservedList.length !=0){
+                this.reservedList.forEach(element => {
+                 if (element.isParentSelected) {
+                    this.savebutonDisabled = true;
+                 }
+             });
+           }
         } else {
             this.reservedList = this.reservedList.map(x => {
                 if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
@@ -1144,5 +1151,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 			}
 		}
     }
+    // checkIsSeclected(){
+    //     if(this.reservedList &&  this.reservedList.length !=0){
+    //        this.reservedList.forEach(element => {
+    //         if (element.isParentSelected) {
+    //             return false;
+    //         }
+    //     });
+    //   }
+    // }   
 }
-

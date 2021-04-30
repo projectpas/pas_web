@@ -28,7 +28,7 @@ export class ShippingEndpoint extends EndpointFactory {
 
         return this.http.get<T>(this.ShippingRefenceURL, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllShippingReference<T>());
+                return this.handleErrorCommon(error, () => this.getAllShippingReference<T>());
             });
     }
 
@@ -36,7 +36,7 @@ export class ShippingEndpoint extends EndpointFactory {
 
         return this.http.get<T>(this.ShippingViaURL, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllShippingVia<T>());
+                return this.handleErrorCommon(error, () => this.getAllShippingVia<T>());
             });
     }
 
@@ -44,7 +44,7 @@ export class ShippingEndpoint extends EndpointFactory {
 
         return this.http.get<T>(this.ShippingAccountURL, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllShippingAccount<T>());
+                return this.handleErrorCommon(error, () => this.getAllShippingAccount<T>());
             });
     }
 

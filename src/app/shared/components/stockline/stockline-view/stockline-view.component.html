@@ -486,7 +486,9 @@
                             </div>
                             <div class="form-group">
                                 <label>Tag Type</label>
-                                <input class="form-control" type="text" name="tagTypeName" [(ngModel)]="viewSLInfo.tagType" disabled>
+                                <input class="form-control" type="text" name="tagTypeName"
+                                 [(ngModel)]="viewSLInfo.tagType" [matTooltip]="viewSLInfo.tagType"
+                                 matTooltipPosition="above" disabled>
                             </div>
                             <div class="form-group">
                                 <label>Tag Num</label>
@@ -525,7 +527,7 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Memo</label>
+                                <label class="margin-right-10">Memo</label>
                                  <div [innerHTML]="viewSLInfo.memo" class="form-control stock-reason"
                                  class="text_editor_box" disabled></div>
                             </div>   

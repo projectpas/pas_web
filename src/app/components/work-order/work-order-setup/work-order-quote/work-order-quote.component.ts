@@ -51,7 +51,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     customerContact: string;
     customerRef: any;
     quoteDueDate: Date = new Date();
-    isDetailedView: boolean;
+    isDetailedViewQuote: boolean;
     validFor: number;
     expirationDate: Date;
     sentDate: Date;
@@ -1056,9 +1056,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 // this.currenttaskId = 0;
             }
             if (this.workOrderQuoteDetailsId == 0) {
-                this.isDetailedView = false;
+                this.isDetailedViewQuote = false;
             } else {
-                this.isDetailedView = true;
+                this.isDetailedViewQuote = true;
             }
         },
         err => {
@@ -3666,7 +3666,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     }
 
     toggleDisplayMode(): void {
-        this.isDetailedView = !this.isDetailedView;
+        this.isDetailedViewQuote = !this.isDetailedViewQuote;
     }
   
     getAuditHistoryById(rowData) { 

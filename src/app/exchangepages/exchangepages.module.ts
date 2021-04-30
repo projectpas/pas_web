@@ -48,6 +48,9 @@ import { ExchangeQuoteApproveComponent } from "../components/exchange-quote/shar
 import { ExchangeQuoteCustomerApprovalComponent } from "../components/exchange-quote/shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
 import { ExchangeQuoteAnalysisComponent } from "../components/exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component";
 import { ExchangeQuoteChargesComponent } from "../components/exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
+import { ActionService } from '../Workflow/ActionService';
+import { ActionEndpoint } from '../Workflow/action-endpoint.service';
+import { ExchangeQuoteFreightComponent } from "../components/exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -100,9 +103,10 @@ import { ExchangeQuoteChargesComponent } from "../components/exchange-quote/shar
     ExchangeQuoteApproveComponent,
     ExchangeQuoteCustomerApprovalComponent,
     ExchangeQuoteAnalysisComponent,
-    ExchangeQuoteChargesComponent
+    ExchangeQuoteChargesComponent,
+    ExchangeQuoteFreightComponent
   ],
-  providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService],
+  providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService,ActionService,ActionEndpoint],
   entryComponents: []
 })
 export class ExchangepagesModule { }
