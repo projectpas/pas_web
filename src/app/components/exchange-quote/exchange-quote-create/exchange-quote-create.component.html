@@ -351,15 +351,24 @@
                 <!-- <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
                       [salesQuote]="salesQuote" [salesOrderQuote]="salesOrderQuote"></app-sales-address> -->
               </p-tabPanel>
-              <!-- <p-tabPanel header="Charges">
+              <p-tabPanel header="Freight">
+                <app-exchange-quote-freight [freightForm]="freight" [customerId]="customerId"
+                    [exchangeQuoteId]="exchangeQuote.exchangeQuoteId"
+                    (saveFreightListForSO)="saveSalesOrderFreightsList($event)"
+                    (updateFreightListForSO)="updateSalesOrderFreightsList($event)"
+                    (refreshData)="getFreightList()" [markupList]="markupList" [isView]="false"
+                    [isQuote]="true" [buildMethodDetails]="buildMethodDetails">
+                </app-exchange-quote-freight>
+              </p-tabPanel>
+              <p-tabPanel header="Charges">
                 <app-exchange-quote-charges [chargeForm]="charge" [customerId]="customerId"
                     [exchangeQuoteId]="exchangeQuote.exchangeQuoteId"
-                    (saveChargesListForSO)="saveSalesOrderChargesList($event)"
-                    (updateChargesListForSO)="updateSalesOrderChargesList($event)"
+                    (saveChargesListForSO)="saveExchangeQuoteChargesList($event)"
+                    (updateChargesListForSO)="updateExchangeQuoteChargesList($event)"
                     [markupList]="markupList" [isView]="false"
                     [isQuote]="true">
                 </app-exchange-quote-charges>
-              </p-tabPanel> -->
+              </p-tabPanel>
               <p-tabPanel header="Hypothethical Analysis">
                 <app-exchange-quote-analysis>
                 </app-exchange-quote-analysis>

@@ -22,6 +22,7 @@ import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-ma
 import { ExchangeQuotePart } from '../models/exchange/ExchangeQuotePart';
 import { ExchangeQUoteMarginSummary } from '../models/exchange/ExchangeQUoteMarginSummary';
 import { IExchangeQuoteCharge } from '../models/exchange/IExchangeQuoteCharge';
+import { IExchangeQuoteFreight } from '../models/exchange/IExchangeQuoteFreight';
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
   operation: RolesChangedOperation;
@@ -37,7 +38,8 @@ export class ExchangequoteService {
   selectedParts: PartDetail[];
   activeStep = new Subject();
   query: ItemMasterSearchQuery;
-
+  totalFreights = 0;
+  totalCharges = 0;
   constructor(private exchangeQuoteEndpointService: ExchangeQuoteEndpointService) { }
 
   getNewExchangeQuoteInstance(customerId: number) {
@@ -379,5 +381,17 @@ export class ExchangequoteService {
       this.exchangeQuoteEndpointService.createExchangeQuoteCharge(chargesList)
     );
   }
+  setTotalCharges(amount) {
+    this.totalCharges = amount;
+  }
 
+  getExchangeQuoteFreights(id, isDeleted) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteFreights(id, isDeleted);
+  }
+
+  createFreight(freightsList: IExchangeQuoteFreight[]): Observable<IExchangeQuote[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.createFreight(freightsList)
+    );
+  }
 }
