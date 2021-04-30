@@ -31,7 +31,7 @@
       </div>
       <div>
         <a class="plusicon-cstm" *ngIf="!isViewMode" data-toggle="modal">
-          <button type="button" id="btnAddcapes" class="btn-sm header-button" [disabled]="currentDeletedStatus"
+          <button *ngIf="isAdd" type="button" id="btnAddcapes" class="btn-sm header-button" [disabled]="currentDeletedStatus"
             (click)="addFieldValue()">
             Add Capabilities
           </button>
@@ -52,18 +52,18 @@
                                           (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
                                         pButton icon="fa-download" iconPos="left" label="Export Data"  -->
                 <div class="excel-upload  excel-upload-cstm">
-                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+                  <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                     matTooltipPosition="above" data-toggle="modal" (click)="exportCSV()">
                     Export Data
                   </button>
 
-                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File"
+                  <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File"
                     matTooltipPosition="above" (click)="sampleExcelDownload()">
                     Sample File Download
                   </button>
                   <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event,contentVendorCapesExist)"
                     class="uploaddoc upload-file" accept=".xlsx, .xls, .csv">
-                  <label for="upload">
+                  <label *ngIf="isUpload" for="upload">
                     <span style="margin-bottom:-10px" matTooltip="Upload Data (Excel)" matTooltipPosition="above">
                       <i class="fa fa-upload"></i>
                     </span>
@@ -200,9 +200,9 @@
             <td *ngIf="!isViewMode" class="purSaleLastCol">
               <p>
                 <ng-container *ngIf="!currentDeletedStatus">
-                  <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="editCapes(i)" matTooltip="Edit"
+                  <span *ngIf="field.isNewItem == false"><a *ngIf="isEdit" class="btn nobg" (click)="editCapes(i)" matTooltip="Edit"
                       matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                  <span data-toggle="modal" data-target="#capesDelete"><a class="btn nobg"
+                  <span *ngIf="isDelete" data-toggle="modal" data-target="#capesDelete"><a class="btn nobg"
                       (click)="deleteCapesRow(i, field)" matTooltip="Delete" matTooltipPosition="above">
                       <i class="fa fa-trash"></i></a></span>
                   <span *ngIf="field.isNewItem == false"><a class="btn nobg"
@@ -210,7 +210,7 @@
                       matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                 </ng-container>
                 <ng-container *ngIf="currentDeletedStatus">
-                  <span data-toggle="modal" data-target="#capesRestore"><a class="btn nobg btn-users-cstm"
+                  <span *ngIf="isEdit" data-toggle="modal" data-target="#capesRestore"><a class="btn nobg btn-users-cstm"
                       (click)="restoreCapesRow(i, field);" matTooltip="Restore Record" matTooltipPosition="above"><i
                         class="fa fa-undo" aria-hidden="true"></i></a> </span>
                   <span *ngIf="field.isNewItem == false"><a class="btn nobg"
@@ -241,7 +241,7 @@
       </table>
     </div>
     <div style="margin-top: 10px;" *ngIf="!isViewMode">
-      <button class="btn btn-primary pull-right" (click)="previousOrNextTab('Next')" type="button">Next</button> &nbsp;
+      <button *ngIf="isNextVisible" class="btn btn-primary pull-right" (click)="previousOrNextTab('Next')" type="button">Next</button> &nbsp;
       <button class="btn btn-primary pull-right" (click)="saveVendorCapes()"
         [disabled]="!vendorCapes.valid || disableCapes" type="submit">Save </button>
       &nbsp;

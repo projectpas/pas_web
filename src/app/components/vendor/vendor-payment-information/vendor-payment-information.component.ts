@@ -21,13 +21,14 @@ import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/route
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { GMapModule } from 'primeng/gmap';
-declare var $ : any;
+declare var $: any;
 import { DatePipe } from '@angular/common';
 import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-steps-prime-ng.component';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import * as moment from 'moment';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare const google: any;
 
 @Component({
@@ -43,7 +44,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	modelValue: boolean;
 	display: boolean;
 	selectedOnly: boolean = false;
-    targetData: any;
+	targetData: any;
 	defaultPaymentStyle: boolean = true;
 	defaultPaymentValue: boolean = true;
 	activeIndex: number = 7;
@@ -94,11 +95,11 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	defaultPaymentMethod: number;
 	disablesaveforCountry: boolean;
 	disablesavefoInternalrCountry: boolean;
-	isSpinnerVisible: boolean = false;	
+	isSpinnerVisible: boolean = false;
 	disablesaveforBeneficiary: boolean;
 	selectedRowforDelete: any;
-	@ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-	@ViewChild(MatSort,{static:false}) sort: MatSort;
+	@ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+	@ViewChild(MatSort, { static: false }) sort: MatSort;
 	filteredBrands: any[];
 	displayedColumns = ['actionId', 'companyName', 'description', 'memo', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
 	dataSource: MatTableDataSource<any>;
@@ -134,7 +135,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	private isDeleteMode: boolean = false;
 	isEditPaymentInfo: boolean = false;
 	pageSize: number = 10;
-	totalRecords : number = 0;
+	totalRecords: number = 0;
 	totalPages: number = 0;
 	@Input() vendorId: number = 0;
 	@Input() isViewMode: boolean = false;
@@ -144,25 +145,30 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	disableSave: boolean = true;
 	//loaderForPaymentCheck: boolean;
 	vendorData: any = {};
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-	status:any="Active";
+	originalTableData: any = [];
+	currentDeletedstatus: boolean = false;
+	status: any = "Active";
 	currentstatus: string = 'Active';
 	public allWorkFlows: any[] = [];
-	restorerecord:any={};
-	arraySiteIdlist:any[] = [];
+	restorerecord: any = {};
+	arraySiteIdlist: any[] = [];
 	sitelistCollection: any[];
-    sitelistCollectionOriginal: any[];
-    changeName: boolean = false;
-	isSiteNameAlreadyExists: boolean = false;	
+	sitelistCollectionOriginal: any[];
+	changeName: boolean = false;
+	isSiteNameAlreadyExists: boolean = false;
 	disableSaveSiteName: boolean;
-	arrayCountrylist:any[] = [];
+	arrayCountrylist: any[] = [];
 	disableSavePaymentCountry: boolean = true;
 	vendorCodeandName: any;
 	contact: any;
-	editSiteName: any
+	editSiteName: any;
 	allActionsOriginal: any[];
-
+	isAdd: boolean = true;
+	isEdit: boolean = true;
+	isDelete: boolean = true;
+	isPaymentView: boolean = true;
+	isNextVisible: Boolean=true;
+	isPrevVisible: Boolean=true;
 	constructor(private http: HttpClient,private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
 		if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -175,30 +181,28 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
                 this.vendorId = this.router.snapshot.params['id'];
 				this.vendorService.vendorId = this.vendorId;
 				this.vendorService.listCollection.vendorId = this.vendorId;
-				if(this.vendorId > 0)
-				{
+				if (this.vendorId > 0) {
 					this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
 						res => {
-								this.local = res[0];
-								this.vendorCodeandName = res[0];
-								this.selectedParentId = res[0];
-								if (this.local.vendorName !== undefined) {
-									this.domesticSaveObj.vendorName = { vendorId: res[0].vendorId, vendorName: res[0].vendorName }
-								}
-								if (this.local.vendorName !== undefined) {
-									this.internationalSaveObj.vendorName = { vendorId: res[0].vendorId, vendorName: res[0].vendorName }
-								}
-								
-						},err => {
+							this.local = res[0];
+							this.vendorCodeandName = res[0];
+							this.selectedParentId = res[0];
+							if (this.local.vendorName !== undefined) {
+								this.domesticSaveObj.vendorName = { vendorId: res[0].vendorId, vendorName: res[0].vendorName }
+							}
+							if (this.local.vendorName !== undefined) {
+								this.internationalSaveObj.vendorName = { vendorId: res[0].vendorId, vendorName: res[0].vendorName }
+							}
+
+						}, err => {
 							this.isSpinnerVisible = false;
-					});
+						});
 				}
-            }
+			}
 		}
-		else
-        {
-            this.getVendorCodeandNameByVendorId();
-        }
+		else {
+			this.getVendorCodeandNameByVendorId();
+		}
 		if (this.vendorService.listCollection !== undefined) {
 			this.vendorService.isEditMode = true;
 		}
@@ -214,20 +218,20 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		}
 
 		this.cols = [
-			{ field: 'tagName', header: 'Tag' },
-			{ field: 'attention', header: 'Attention' },
-			{ field: 'siteName', header: 'Site Name'},
-			{ field: 'address1', header: 'Address1' },
-			{ field: 'address2', header: 'Address2'},
-			{ field: 'city', header: 'City'},
-			{ field: 'stateOrProvince', header: 'State/Prov' },
-			{ field: 'postalCode', header: 'Postal Code'},
-			{ field: 'countryName', header: 'Country' },
-			{ field: 'createdDate', header: 'Created Date' },
-			{ field: 'createdBy', header: 'Created By'},
-			{ field: 'updatedDate', header: 'Updated Date' },
-			{ field: 'updatedBy', header: 'Updated By' ,  },
-			{ field: 'isPrimayPayment', header: 'IsPrimary' ,}
+			{ field: 'tagName', header: 'Tag', width: '150px' },
+			{ field: 'attention', header: 'Attention', width: '150px' },
+			{ field: 'siteName', header: 'Site Name', width: '150px' },
+			{ field: 'address1', header: 'Address1', width: '150px' },
+			{ field: 'address2', header: 'Address2', width: '150px' },
+			{ field: 'city', header: 'City', width: '120px' },
+			{ field: 'stateOrProvince', header: 'State/Prov', width: '100px' },
+			{ field: 'postalCode', header: 'Postal Code', width: '100px' },
+			{ field: 'countryName', header: 'Country', width: '120px' },
+			{ field: 'createdDate', header: 'Created Date', width: '150px' },
+			{ field: 'createdBy', header: 'Created By', width: '100px' },
+			{ field: 'updatedDate', header: 'Updated Date', width: '150px' },
+			{ field: 'updatedBy', header: 'Updated By', width: '100px' },
+			{ field: 'isPrimayPayment', header: 'IsPrimary', width: '40px' }
 		];
 		this.selectedColumns = this.cols;
 
@@ -264,67 +268,75 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.local = this.vendorService.listCollection;
 			//this.loadData();
 		}
+
+		this.isAdd = this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation + '.' + PermissionConstants.Add])
+		this.isEdit = this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation + '.' + PermissionConstants.Update])
+		this.isDelete = this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation + '.' + PermissionConstants.Delete])
+		this.isPaymentView = this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation + '.' + PermissionConstants.View])
+
+		this.isNextVisible=this.authService.ShowTab('Create Vendor','Shipping Information');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Billing Information');
 	}
 
-	GetVendorGeneralAddress(event){
-		if(event){			
+	GetVendorGeneralAddress(event) {
+		if (event) {
 			this.isSpinnerVisible = true;
 			this.vendorService.getVendorDataById(this.vendorId).subscribe(res => {
-				this.local = res;	
+				this.local = res;
 				this.sourceVendor.address1 = this.local.address1;
 				this.sourceVendor.address2 = this.local.address2;
 				this.sourceVendor.address3 = this.local.address3;
-				this.sourceVendor.city = this.local.city;				
+				this.sourceVendor.city = this.local.city;
 				if (this.local.countryId !== undefined) {
 					this.sourceVendor.countryId = { countries_id: this.local.countryId, nice_name: this.local.country }
 				}
 				this.sourceVendor.stateOrProvince = this.local.stateOrProvince;
-				this.sourceVendor.postalCode = this.local.postalCode;	
-				this.isSpinnerVisible = false;		
-			})
-		}else{
-				this.sourceVendor.address1 = "";
-				this.sourceVendor.address2 = "";
-				this.sourceVendor.address3 = "";
-				this.sourceVendor.city = "";
-				this.sourceVendor.countryId = "";
-				this.sourceVendor.stateOrProvince = "";
-				this.sourceVendor.postalCode = "";
+				this.sourceVendor.postalCode = this.local.postalCode;
 				this.isSpinnerVisible = false;
-		}		
+			})
+		} else {
+			this.sourceVendor.address1 = "";
+			this.sourceVendor.address2 = "";
+			this.sourceVendor.address3 = "";
+			this.sourceVendor.city = "";
+			this.sourceVendor.countryId = "";
+			this.sourceVendor.stateOrProvince = "";
+			this.sourceVendor.postalCode = "";
+			this.isSpinnerVisible = false;
+		}
 	}
 
-	ngOnInit() {		
+	ngOnInit() {
 		this.vendorService.currentEditModeStatus.subscribe(message => {
 			this.isvendorEditMode = message;
 		});
 		this.defaultSaveObj.defaultPaymentMethod = 1;
 
-		if(this.isViewMode)
-        {
-            this.getVendorCodeandNameByVendorId();
+		if (this.isViewMode) {
+			this.getVendorCodeandNameByVendorId();
 		}
-		else
-		{
+		else {
 			this.vendorId = this.router.snapshot.params['id'];
 			this.vendorService.vendorId = this.vendorId;
 			this.vendorService.listCollection.vendorId = this.vendorId;
 			this.countrylist();
 		}
-		
-		if (this.local) {
-			this.loadData();
-			this.defaultPaymentValue = true;
-			this.getDomesticWithVendorId();
-			this.InternatioalWithVendorId();
-			this.DefaultWithVendorId();
-			this.showDefault();
-		}
-		else if (this.vendorId != 0) {
-			this.loadData();
-		} else {
-			this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-vendor-payment-information';
-			this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+
+		if (this.isPaymentView) {
+			if (this.local) {
+				this.loadData();
+				this.defaultPaymentValue = true;
+				this.getDomesticWithVendorId();
+				this.InternatioalWithVendorId();
+				this.DefaultWithVendorId();
+				this.showDefault();
+			}
+			else if (this.vendorId != 0) {
+				this.loadData();
+			} else {
+				this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-vendor-payment-information';
+				this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+			}
 		}
 	}
 
@@ -334,56 +346,54 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		$("#downloadConfirmation").modal("hide");
 	}
 	// exportCSV(dt) {
-    //     this.isSpinnerVisible = true;
-    //     let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
-    //     let filters = Object.keys(dt.filters);
-    //     filters.forEach(x=>{
+	//     this.isSpinnerVisible = true;
+	//     let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
+	//     let filters = Object.keys(dt.filters);
+	//     filters.forEach(x=>{
 	// 		PagingData.filters[x] = dt.filters[x].value;
-    //     })
-    
-    //     this.vendorService.getCheckPaymentobj(PagingData).subscribe(res => {
-    //         dt._value = res[0]['results'].map(x => {
+	//     })
+
+	//     this.vendorService.getCheckPaymentobj(PagingData).subscribe(res => {
+	//         dt._value = res[0]['results'].map(x => {
 	// 			return {
-    //             ...x,
-    //             createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-    //             updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
-    //             }
-    //         });
-    //         dt.exportCSV();
-    //         dt.value = this.vendorData;
-    //         this.isSpinnerVisible = false;
-    //     },error => {
-    //             this.saveFailedHelper(error)
-    //         },
-    //     );
+	//             ...x,
+	//             createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+	//             updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+	//             }
+	//         });
+	//         dt.exportCSV();
+	//         dt.value = this.vendorData;
+	//         this.isSpinnerVisible = false;
+	//     },error => {
+	//             this.saveFailedHelper(error)
+	//         },
+	//     );
 	//   }
-	
-	exportCSV(dt){
-        dt._value = dt._value.map(x => {
-            return {
-                ...x,
-                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
-            }
-        });
-        dt.exportCSV();
+
+	exportCSV(dt) {
+		dt._value = dt._value.map(x => {
+			return {
+				...x,
+				createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+				updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+			}
+		});
+		dt.exportCSV();
 	}
-	
-	getVendorCodeandNameByVendorId()
-    {
-        if(this.vendorId > 0)
-        {
-            this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-                res => {
-                        this.vendorCodeandName = res[0];
-                },err => {
+
+	getVendorCodeandNameByVendorId() {
+		if (this.vendorId > 0) {
+			this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+				res => {
+					this.vendorCodeandName = res[0];
+				}, err => {
 					this.isSpinnerVisible = false;
-                    //const errorLog = err;
-                    //this.saveFailedHelper(errorLog);
-            });
-        }        
-    }
-	
+					//const errorLog = err;
+					//this.saveFailedHelper(errorLog);
+				});
+		}
+	}
+
 	check() {
 		this.checkValue = true;
 		this.domasticWireValue = false;
@@ -447,35 +457,36 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 	private getDomesticWithVendorId() {
 		this.isSpinnerVisible = true;
-		this.id = this.local.vendorId ? this.local.vendorId :this.router.snapshot.params['id'];
+		this.id = this.local.vendorId ? this.local.vendorId : this.router.snapshot.params['id'];
 		this.vendorService.getDomesticvedor(this.id).subscribe(
 			results => this.onDomestciLoad(results[0]),
-			error => {this.isSpinnerVisible = false} //this.onDataLoadFailed(error)
+			error => { this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
 		);
 	}
 
 	private InternatioalWithVendorId() {
 		this.isSpinnerVisible = true;
-		this.id = this.local.vendorId ? this.local.vendorId :this.router.snapshot.params['id'];
+		this.id = this.local.vendorId ? this.local.vendorId : this.router.snapshot.params['id'];
 		this.vendorService.getInternationalWire(this.id).subscribe(
 			results => this.onInternatioalLoad(results[0]),
-			error => {this.isSpinnerVisible = false}//this.onDataLoadFailed(error)
+			error => { this.isSpinnerVisible = false }//this.onDataLoadFailed(error)
 		);
 	}
 
 	private DefaultWithVendorId() {
 		this.isSpinnerVisible = true;
-		this.id = this.local.vendorId ? this.local.vendorId :this.router.snapshot.params['id'];
+		this.id = this.local.vendorId ? this.local.vendorId : this.router.snapshot.params['id'];
 		this.vendorService.getDefaultlist(this.id).subscribe(
 			results => this.onDefaultLoad(results[0]),
-			error => {this.isSpinnerVisible = false}//this.onDataLoadFailed(error)
+			error => { this.isSpinnerVisible = false }//this.onDataLoadFailed(error)
 		);
 	}
 
 	countrylist() {
 		var strText = '';
-        if(this.arrayCountrylist.length == 0) {			
-            this.arrayCountrylist.push(0); }
+		if (this.arrayCountrylist.length == 0) {
+			this.arrayCountrylist.push(0);
+		}
 
 		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,0,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.allCountryinfo = res.map(x => {
@@ -493,10 +504,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	private loadData() {
 		this.isSpinnerVisible = true;
 		const vendorId = this.vendorId != 0 ? this.vendorId : this.local.vendorId;
-		const newvendorId = vendorId ? vendorId :this.router.snapshot.params['id'];
+		const newvendorId = vendorId ? vendorId : this.router.snapshot.params['id'];
 		this.vendorService.getCheckPaymentobj(newvendorId).subscribe(
 			results => this.onDataLoadSuccessful(results[0]),
-			error => {this.isSpinnerVisible = false} //this.onDataLoadFailed(error)
+			error => { this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
 		);
 	}
 
@@ -504,7 +515,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.isSpinnerVisible = false;
 		this.masterComapnyService.getMasterCompanies().subscribe(
 			results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-			error => {this.isSpinnerVisible = false} //this.onDataLoadFailed(error)
+			error => { this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
 		);
 	}
 
@@ -521,7 +532,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.sourceVendor.isActive == false;
 			this.vendorService.updateActiveforpayment(this.sourceVendor).subscribe(
 				response => this.saveCompleted(this.sourceVendor),
-				error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error));
+				error => { this.isSpinnerVisible = false }) //this.saveFailedHelper(error));
 			this.sourceVendor = "";
 		}
 		else {
@@ -532,18 +543,18 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.sourceVendor.isActive == true;
 			this.vendorService.updateActiveforpayment(this.sourceVendor).subscribe(
 				response => this.saveCompleted(this.sourceVendor),
-				error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error));
+				error => { this.isSpinnerVisible = false }) //this.saveFailedHelper(error));
 			this.sourceVendor = "";
 		}
 	}
 
-	getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
-        }
-        this.geListByStatus(this.status ? this.status : this.currentstatus)
+	getDeleteListByStatus(value) {
+		if (value) {
+			this.currentDeletedstatus = true;
+		} else {
+			this.currentDeletedstatus = false;
+		}
+		this.geListByStatus(this.status ? this.status : this.currentstatus)
 	}
 	dateFilterForTable(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
@@ -583,34 +594,34 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
             this.status=status;
 			if(this.currentDeletedstatus==false){
 				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.allActions = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
+					if (element.isActive == false && element.isDeleted == false) {
 						newarry.push(element);
 					}
 				});
-				this.allActions= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == true) {
 						newarry.push(element);
 					}
 				});
-				this.allActions= newarry;
+			}
+			this.allActions = newarry;
+		} else if (status == 'ALL') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+				this.allActions = newarry;
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+				this.allActions = newarry;
 			}
 		}
 		this.allActionsOriginal=this.allActions;
@@ -620,7 +631,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 	restore(content, rowData) {
 		this.restorerecord = rowData;
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 	}
 
 	restoreRecord(value) {
@@ -634,19 +645,19 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					MessageSeverity.success
 				);
 				this.isSpinnerVisible = false;
-			}, error => {this.isSpinnerVisible = false})// this.saveFailedHelper(error))
+			}, error => { this.isSpinnerVisible = false })// this.saveFailedHelper(error))
 		} else {
 			this.restorerecord = undefined;
 		}
 		this.modal.close();
 	}
-	
+
 	private onDataLoadSuccessful(allWorkFlows: any[]) {
 		this.dataSource.data = allWorkFlows;
-		this.originalTableData=allWorkFlows;
+		this.originalTableData = allWorkFlows;
 		//let obtainedVendorId = this.originalTableData[0].vc.vendorId;
 		//this.getVendorBasicData(obtainedVendorId);
-		this.geListByStatus(this.status ? this.status :this.currentstatus)
+		this.geListByStatus(this.status ? this.status : this.currentstatus)
 		this.isSpinnerVisible = false;
 	}
 
@@ -666,17 +677,17 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 	private onDomestciLoad(allWorkFlows: any) {
 		this.dataSource.data = allWorkFlows;
-		this.domesticWithVedor = allWorkFlows;		
+		this.domesticWithVedor = allWorkFlows;
 		this.isSpinnerVisible = false;
 		if (this.domesticWithVedor.length > 0) {
-			this.domesticSaveObj = allWorkFlows[0];			
+			this.domesticSaveObj = allWorkFlows[0];
 			if (this.domesticSaveObj.countryId) {
-				this.domesticSaveObj.countryId = {nice_name: this.domesticSaveObj.countryName, countries_id: this.domesticSaveObj.countryId}
+				this.domesticSaveObj.countryId = { nice_name: this.domesticSaveObj.countryName, countries_id: this.domesticSaveObj.countryId }
 				//this.domesticSaveObj.countryId = getObjectById('countries_id', this.domesticSaveObj.countryId, this.allCountryinfo);
 			}
-			if (this.domesticSaveObj.vendorId !=null) {
+			if (this.domesticSaveObj.vendorId != null) {
 				this.domesticSaveObj.vendorName = { vendorId: this.domesticSaveObj.accountNameId, vendorName: this.domesticSaveObj.vendorName }
-			}			
+			}
 		}
 	}
 
@@ -689,7 +700,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			if (this.internationalSaveObj.countryId != null) {
 				this.internationalSaveObj.countryId = getObjectById('countries_id', this.internationalSaveObj.countryId, this.allCountryinfo);
 			}
-			if (this.internationalSaveObj.vendorId !=null) {
+			if (this.internationalSaveObj.vendorId != null) {
 				this.internationalSaveObj.vendorName = { vendorId: this.internationalSaveObj.beneficiaryCustomerId, vendorName: this.internationalSaveObj.vendorName }
 			}
 		}
@@ -717,7 +728,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		}
 	}
 
-	
+
 	filterActions(event) {
 		this.localCollection = [];
 		for (let i = 0; i < this.allActions.length; i++) {
@@ -780,40 +791,38 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	openEdit(row) {
 		this.isEditMode = true;
 		this.isSaving = true;
-		this.disableSave=true;
+		this.disableSave = true;
 		this.sourceVendor = { ...row, countryId: getObjectById('countries_id', row.countryId, this.allCountryinfo) };
 
-		if(row.contactTagId > 0)
-        {
-            this.arrayTagNamelist.push(row.contactTagId);
-            this.getAllTagNameSmartDropDown('', row.contactTagId);
-        }
+		if (row.contactTagId > 0) {
+			this.arrayTagNamelist.push(row.contactTagId);
+			this.getAllTagNameSmartDropDown('', row.contactTagId);
+		}
 
-		this.arraySiteIdlist.push(row.checkPaymentId); 
-        //this.commonService.autoSuggestionSmartDropDownList('CheckPayment', 'CheckPaymentId', 'SiteName','',true,20,this.arraySiteIdlist.join()).subscribe(response => {
-		this.commonService.autoSuggestionSmartDropDownVendorCheckPaymentList('siteName', '', true, this.arraySiteIdlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => { 
+		this.arraySiteIdlist.push(row.checkPaymentId);
+		//this.commonService.autoSuggestionSmartDropDownList('CheckPayment', 'CheckPaymentId', 'SiteName','',true,20,this.arraySiteIdlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownVendorCheckPaymentList('siteName', '', true, this.arraySiteIdlist.join(), this.currentUserMasterCompanyId, this.id).subscribe(response => {
 			this.sitelistCollectionOriginal = response.map(x => {
-                return {
-                    siteName: x.label, value: x.value
-                }
-            })
-            this.sitelistCollection = [...this.sitelistCollectionOriginal];
-            this.arraySiteIdlist = [];
-            this.isSpinnerVisible = false;
-            
-            this.sourceVendor = {
-                 ...this.sourceVendor,
-                siteName:  getObjectByValue('siteName', row.siteName, this.sitelistCollectionOriginal)
-            };
-			if(row.contactTagId > 0)
-            {
-                this.arrayTagNamelist.push(row.contactTagId);
-                this.getAllTagNameSmartDropDown('', row.contactTagId);
+				return {
+					siteName: x.label, value: x.value
+				}
+			})
+			this.sitelistCollection = [...this.sitelistCollectionOriginal];
+			this.arraySiteIdlist = [];
+			this.isSpinnerVisible = false;
+
+			this.sourceVendor = {
+				...this.sourceVendor,
+				siteName: getObjectByValue('siteName', row.siteName, this.sitelistCollectionOriginal)
+			};
+			if (row.contactTagId > 0) {
+				this.arrayTagNamelist.push(row.contactTagId);
+				this.getAllTagNameSmartDropDown('', row.contactTagId);
 			}
 			this.editSiteName = row.siteName;
-            },err => {
-                this.isSpinnerVisible = false;
-            });
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
 
 		this.sourceVendor['tempIsPrimary'] = this.sourceVendor.isPrimayPayment;
 		this.loadMasterCompanies();
@@ -849,9 +858,9 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.isSpinnerVisible = true;
 		this.vendorService.paymentHist(this.sourceVendor.checkPaymentId).subscribe(
 			results => this.onHistoryLoadSuccessful(results[0], content),
-			error => {this.isSpinnerVisible = false})// this.saveFailedHelper(error));
+			error => { this.isSpinnerVisible = false })// this.saveFailedHelper(error));
 	}
-	
+
 	onBlurMethod(data) {
 		if (data == 'siteName') {
 			this.showSiteName = false;
@@ -905,7 +914,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.sourceVendor.isActive = true;
 				this.sourceVendor.vendorId = this.local.vendorId;
 				this.sourceVendor.siteName = editValueAssignByCondition('siteName', this.sourceVendor.siteName),
-				this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
+					this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
 				this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
 				this.vendorService.addCheckinfo(this.sourceVendor).subscribe(data => {
 					this.loadData();
@@ -915,7 +924,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					this.updateVendorCheckPayment(this.localCollection);
 					this.sourceVendor = {};
 					this.isSpinnerVisible = false;
-				}, error => {this.isSpinnerVisible = false})// this.saveFailedHelper(error))
+				}, error => { this.isSpinnerVisible = false })// this.saveFailedHelper(error))
 			}
 			else {
 				this.sourceVendor.createdBy = this.userName;
@@ -924,41 +933,41 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.sourceVendor.masterCompanyId = this.currentUserMasterCompanyId;
 				this.sourceVendor.vendorId = this.local.vendorId;
 				this.sourceVendor.siteName = editValueAssignByCondition('siteName', this.sourceVendor.siteName),
-				this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
+					this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
 				this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
 				this.vendorService.updateCheckPaymentInfo(this.sourceVendor).subscribe(data => {
 					if (data) { this.sourceVendor = new Object(); }
 					this.updatedCollection = data;
 					this.loadData();
 					this.isSpinnerVisible = false;
-				}, error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error))
+				}, error => { this.isSpinnerVisible = false }) //this.saveFailedHelper(error))
 				this.saveCompleted(this.sourceVendor);
 				this.sourceVendor = {};
-				this.disableSave=true;
+				this.disableSave = true;
 			}
-			this.disableSave=true;	
+			this.disableSave = true;
 		}
 		else {
 		}
-		
+
 		$('#addPaymentInfo').modal('hide');
 	}
 
-	saveDomesticPaymentInfo() {		
-		this.isSaving = true;		
+	saveDomesticPaymentInfo() {
+		this.isSaving = true;
 		this.sourceVendor.masterCompanyId = this.currentUserMasterCompanyId;
 		this.sourceVendor.isActive = true;
 		this.domesticSaveObj.createdBy = this.userName;
 		this.domesticSaveObj.updatedBy = this.userName;
 		this.domesticSaveObj.masterCompanyId = this.currentUserMasterCompanyId;
 		this.domesticSaveObj.countryId = editValueAssignByCondition('countries_id', this.domesticSaveObj.countryId);
-		this.domesticSaveObj.vendorId = this.local.vendorId ? this.local.vendorId : this.sourceVendor.vendorId ;
-		this.domesticSaveObj.accountNameId = editValueAssignByCondition('vendorId', this.domesticSaveObj.vendorName);		
+		this.domesticSaveObj.vendorId = this.local.vendorId ? this.local.vendorId : this.sourceVendor.vendorId;
+		this.domesticSaveObj.accountNameId = editValueAssignByCondition('vendorId', this.domesticSaveObj.vendorName);
 		if (!(this.domesticSaveObj.aba && this.domesticSaveObj.accountNumber && this.domesticSaveObj.bankName
 		)) {
 			this.display = true;
 			this.modelValue = true;
-		}	
+		}
 		if (this.domesticSaveObj.aba && this.domesticSaveObj.accountNumber && this.domesticSaveObj.bankName) {
 			if (!this.domesticSaveObj.domesticWirePaymentId && !this.sourceVendor.vendorId) {
 				this.domesticSaveObj.updatedBy = this.userName;
@@ -973,7 +982,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					this.sourceVendor = new Object();
 					this.updateVendorDomesticWirePayment(this.localCollection);
 					this.isSpinnerVisible = false;
-				}, error => {this.isSpinnerVisible = false})
+				}, error => { this.isSpinnerVisible = false })
 			}
 			else {
 				this.isSpinnerVisible = true;
@@ -984,7 +993,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 						this.getDomesticWithVendorId();
 						this.isSpinnerVisible = false;
 					},
-					error => {this.isSpinnerVisible = false})
+					error => { this.isSpinnerVisible = false })
 			}
 			this.showDomesticWire();
 			this.domasticWireValue = true;
@@ -1023,7 +1032,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					this.updateVendorInternationalWirePayment(this.localCollection);
 					this.isSpinnerVisible = false;
 					this.disableSave = true;
-				}, error => {this.isSpinnerVisible = false;})
+				}, error => { this.isSpinnerVisible = false; })
 			}
 			else {
 				this.sourceVendor.createdBy = this.userName;
@@ -1037,7 +1046,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.vendorService.vendorInternationalUpdate({
 					...this.internationalSaveObj,
 					//vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),	
-					beneficiaryCustomerId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),	
+					beneficiaryCustomerId: editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),
 					countryId: editValueAssignByCondition('countries_id', this.internationalSaveObj.countryId),
 				}).subscribe(
 					data => {
@@ -1045,7 +1054,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 						this.disableSave = true;
 						this.saveCompleted(this.sourceVendor);
 						this.isSpinnerVisible = false;
-					}, error => {this.isSpinnerVisible = false;})
+					}, error => { this.isSpinnerVisible = false; })
 			}
 			this.showInternational();
 			this.internationalValue = true;
@@ -1059,7 +1068,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.defaultPaymentObj.vendorId = this.defaultSaveObj.vendorId;
 			this.defaultPaymentObj.updatedBy = this.userName;
 			this.defaultPaymentObj.createdBy = this.userName;
-			this.defaultPaymentObj.masterCompanyId =this.currentUserMasterCompanyId;
+			this.defaultPaymentObj.masterCompanyId = this.currentUserMasterCompanyId;
 			this.defaultPaymentObj.isActive = true;
 			this.defaultPaymentObj.defaultPaymentMethod = this.defaultSaveObj.defaultPaymentMethod;
 			this.isSpinnerVisible = true;
@@ -1067,7 +1076,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				data => {
 					this.vendorService.paymentCollection = this.local;
 					this.saveCompleted(this.sourceVendor);
-				}, error => {this.isSpinnerVisible = false;})
+				}, error => { this.isSpinnerVisible = false; })
 		}
 		else {
 			this.isSpinnerVisible = true;
@@ -1080,7 +1089,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 			this.vendorService.addDefaultinfo(this.defaultPaymentObj).subscribe(data => {
 				this.savesuccessCompleted(this.sourceVendor);
-			}, error => {this.isSpinnerVisible = false;})
+			}, error => { this.isSpinnerVisible = false; })
 		}
 		this.disableSave = true;
 	}
@@ -1094,7 +1103,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					`Record was deleted successfully`,
 					MessageSeverity.success
 				);
-			}, error => {this.isSpinnerVisible = false;})
+			}, error => { this.isSpinnerVisible = false; })
 		} else {
 			this.selectedRowforDelete = undefined;
 		}
@@ -1104,25 +1113,25 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	updateVendorCheckPayment(updateObj: any) {
 		this.vendorService.updateVendorCheckpayment(updateObj, this.local.vendorId).subscribe(data => {
 			this.loadData();
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	updateVendorDomesticWirePayment(updateObj: any) {
 		this.vendorService.updateVendorDomesticWirePayment(updateObj, this.local.vendorId).subscribe(data => {
 			this.getDomesticWithVendorId();
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	updateVendorInternationalWirePayment(updateObj: any) {
 		this.vendorService.updateVendorInternationalWirePayment(updateObj, this.local.vendorId).subscribe(data => {
 			this.loadData();
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	previousClick() {
 		this.activeIndex = 6;
 		this.vendorService.changeofTab(this.activeIndex);
-		const id=this.vendorService.listCollection ? this.vendorService.listCollection.vendorId :this.vendorId;
+		const id = this.vendorService.listCollection ? this.vendorService.listCollection.vendorId : this.vendorId;
 		this.route.navigateByUrl('/vendorsmodule/vendorpages/app-vendor-billing-information/' + id);
 	}
 
@@ -1130,12 +1139,12 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.vendorService.contactCollection = this.local;
 		this.activeIndex = 8;
 		this.vendorService.changeofTab(this.activeIndex);
-		const id=this.vendorService.listCollection ? this.vendorService.listCollection.vendorId :this.vendorId;
+		const id = this.vendorService.listCollection ? this.vendorService.listCollection.vendorId : this.vendorId;
 		this.route.navigateByUrl('/vendorsmodule/vendorpages/app-vendor-shipping-information/' + id);
 	}
 
 	private saveCompleted(user?: any) {
-		this.isSaving = false;		
+		this.isSaving = false;
 		if (this.isDeleteMode == true) {
 			this.alertService.showMessage("Success", `Record was deleted successfully`, MessageSeverity.success);
 			this.isDeleteMode = false;
@@ -1183,10 +1192,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 	get currentUserMasterCompanyId(): number {
 		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
-    }
-	
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
+
 	get userName(): string {
 		return this.authService.currentUser ? this.authService.currentUser.userName : "";
 	}
@@ -1209,11 +1218,11 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.sourceVendor.isActive = false;
 			this.vendorService.updateActiveforpayment(this.sourceVendor).subscribe(
 				response => {
-                    this.isSpinnerVisible = false;
+					this.isSpinnerVisible = false;
 					this.alertService.showMessage("Success", `Records In-Acivated successfully`, MessageSeverity.success);
 					this.loadData();
-                },
-				error => {this.isSpinnerVisible = false;})
+				},
+				error => { this.isSpinnerVisible = false; })
 		}
 		else {
 			this.sourceVendor.checkPaymentId = rowData.checkPaymentId;
@@ -1222,11 +1231,11 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.sourceVendor.isActive = true;
 			this.vendorService.updateActiveforpayment(this.sourceVendor).subscribe(
 				response => {
-                    this.isSpinnerVisible = false;
+					this.isSpinnerVisible = false;
 					this.alertService.showMessage("Success", `Records Acivated successfully`, MessageSeverity.success);
 					this.loadData();
-                },
-				error => {this.isSpinnerVisible = false;})
+				},
+				error => { this.isSpinnerVisible = false; })
 		}
 	}
 
@@ -1244,22 +1253,22 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	}
 
 	eventCountryHandler(event) {
-        if (event.target.value != "") {
-            let value = event.target.value.toLowerCase();
-            if (this.selectedCountries) {
-                if (value == this.selectedCountries.toLowerCase()) {
-                    this.disableSave = false;
-                }
-                else {
-                    this.disableSave = true;
-                }
-            } else {
-                this.disableSavePaymentCountry = true;
-            }
-        } else {
-            this.disableSavePaymentCountry = true;
-        }
-    }
+		if (event.target.value != "") {
+			let value = event.target.value.toLowerCase();
+			if (this.selectedCountries) {
+				if (value == this.selectedCountries.toLowerCase()) {
+					this.disableSave = false;
+				}
+				else {
+					this.disableSave = true;
+				}
+			} else {
+				this.disableSavePaymentCountry = true;
+			}
+		} else {
+			this.disableSavePaymentCountry = true;
+		}
+	}
 
 	filtercountry(event) {
 		this.countrycollection = this.allCountryinfo;
@@ -1327,7 +1336,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 	onAddPaymentInfo() {
 		this.sourceVendor = {};
-		this.editSiteName = '' ;
+		this.editSiteName = '';
 		this.isSiteNameAlreadyExists = false;
 		this.isEditPaymentInfo = false;
 	}
@@ -1381,7 +1390,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					`Successfully Uploaded  `,
 					MessageSeverity.success
 				);
-			}, error => {this.isSpinnerVisible = false;})
+			}, error => { this.isSpinnerVisible = false; })
 		}
 	}
 	enableSave() {
@@ -1390,55 +1399,54 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	}
 
 	checkSiteNameExist(value) {
-        this.changeName = true;
-        this.isSiteNameAlreadyExists = false;
-        this.disableSaveSiteName = false;
-        if (value != this.editSiteName) {
-            for (let i = 0; i < this.sitelistCollectionOriginal.length; i++) {
-                if (this.sourceVendor.siteName == this.sitelistCollectionOriginal[i].siteName || value == this.sitelistCollectionOriginal[i].siteName) {
-                    this.isSiteNameAlreadyExists = true;
-                    this.disableSaveSiteName = true;
-                    return;
-                }
-            }
-        }
-    }
+		this.changeName = true;
+		this.isSiteNameAlreadyExists = false;
+		this.disableSaveSiteName = false;
+		if (value != this.editSiteName) {
+			for (let i = 0; i < this.sitelistCollectionOriginal.length; i++) {
+				if (this.sourceVendor.siteName == this.sitelistCollectionOriginal[i].siteName || value == this.sitelistCollectionOriginal[i].siteName) {
+					this.isSiteNameAlreadyExists = true;
+					this.disableSaveSiteName = true;
+					return;
+				}
+			}
+		}
+	}
 
-	getAllSiteSmartDropDown(strText = ''){
-		if(this.arraySiteIdlist.length == 0) {
-			this.arraySiteIdlist.push(0); }
-        //this.commonService.autoSuggestionSmartDropDownList('CheckPayment', 'CheckPaymentId', 'SiteName',strText,true,20,this.arraySiteIdlist.join()).subscribe(response => {
-		this.commonService.autoSuggestionSmartDropDownVendorCheckPaymentList('siteName', strText, true, this.arraySiteIdlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
-		this.sitelistCollectionOriginal = response.map(x => {
-                return {
-                    siteName: x.label, value: x.value
-                }
-            })
-            this.sitelistCollection = [...this.sitelistCollectionOriginal];
-            this.arraySiteIdlist = [];
-		},err => {
+	getAllSiteSmartDropDown(strText = '') {
+		if (this.arraySiteIdlist.length == 0) {
+			this.arraySiteIdlist.push(0);
+		}
+		//this.commonService.autoSuggestionSmartDropDownList('CheckPayment', 'CheckPaymentId', 'SiteName',strText,true,20,this.arraySiteIdlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownVendorCheckPaymentList('siteName', strText, true, this.arraySiteIdlist.join(), this.currentUserMasterCompanyId, this.id).subscribe(response => {
+			this.sitelistCollectionOriginal = response.map(x => {
+				return {
+					siteName: x.label, value: x.value
+				}
+			})
+			this.sitelistCollection = [...this.sitelistCollectionOriginal];
+			this.arraySiteIdlist = [];
+		}, err => {
 			this.isSpinnerVisible = false;
 		});
-    }
+	}
 
 	filterSite(event) {
-        if (event.query !== undefined && event.query !== null) {
-            this.getAllSiteSmartDropDown(event.query); 
-        }
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllSiteSmartDropDown(event.query);
+		}
 	}
-	
-	checkBillingSiteNameSelect() {    
-        if(this.editSiteName  != editValueAssignByCondition('siteName', this.sourceVendor.siteName))
-        {
-            this.isSiteNameAlreadyExists = true;
-            this.disableSaveSiteName = true;
-        }
-        else
-        {
-            this.isSiteNameAlreadyExists = false;
-            this.disableSaveSiteName = false;
-        }
-    }
+
+	checkBillingSiteNameSelect() {
+		if (this.editSiteName != editValueAssignByCondition('siteName', this.sourceVendor.siteName)) {
+			this.isSiteNameAlreadyExists = true;
+			this.disableSaveSiteName = true;
+		}
+		else {
+			this.isSiteNameAlreadyExists = false;
+			this.disableSaveSiteName = false;
+		}
+	}
 
 	//Not In Use
 	// private getgeneralInnfo() {
@@ -1453,10 +1461,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 	// restoreRecord(){  
 	// 	this.isSpinnerVisible = true;
-    //     this.commonService.updatedeletedrecords('CheckPayment','CheckPaymentId',this.restorerecord.checkPaymentId ).subscribe(res => {
-    //         this.currentDeletedstatus=true;
-    //         this.modal.close();
-    //         this.loadData();
+	//     this.commonService.updatedeletedrecords('CheckPayment','CheckPaymentId',this.restorerecord.checkPaymentId ).subscribe(res => {
+	//         this.currentDeletedstatus=true;
+	//         this.modal.close();
+	//         this.loadData();
 	// 		this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
 	// 		this.isSpinnerVisible = false;
 	// 	}, error => this.saveFailedHelper(error))
@@ -1489,7 +1497,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	// private refresh() {
 	// 	this.applyFilter(this.dataSource.filter);
 	// }
-	
+
 	// private loadPaymentObject() {
 	// 	this.alertService.startLoadingMessage();
 	// 	this.loadingIndicator = true;
@@ -1531,60 +1539,63 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	// }
 
 	filterTagNames(event) {
-        if (event.query !== undefined && event.query !== null) {
-            this.getAllTagNameSmartDropDown(event.query); }
-    }
-    arrayTagNamelist:any=[];
-    tagNamesList:any=[];
-    getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
-        if(this.arrayTagNamelist.length == 0) {			
-            this.arrayTagNamelist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-            this.tagNamesList = res.map(x => {
-                return {
-                    tagName: x.label, contactTagId: x.value 
-                }
-            })
-
-            if(contactTagId > 0)
-            {
-                this.sourceVendor = {
-                    ...this.sourceVendor,
-                    tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
-                }
-            }
-        })
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllTagNameSmartDropDown(event.query);
+		}
 	}
-	
-	arrayVendorlist:any[] = [];
+	arrayTagNamelist: any = [];
+	tagNamesList: any = [];
+	getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+		if (this.arrayTagNamelist.length == 0) {
+			this.arrayTagNamelist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName', strText, true, 20, this.arrayTagNamelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.tagNamesList = res.map(x => {
+				return {
+					tagName: x.label, contactTagId: x.value
+				}
+			})
+
+			if (contactTagId > 0) {
+				this.sourceVendor = {
+					...this.sourceVendor,
+					tagName: getObjectById('contactTagId', contactTagId, this.tagNamesList)
+				}
+			}
+		})
+	}
+
+	arrayVendorlist: any[] = [];
 	venderListOriginal = [];
 	vendorNames: any[];
-	
+
 	bindvendordropdownData(strText = '') {
-        if(this.vendorId > 0)
+		if (this.vendorId > 0)
 			this.arrayVendorlist.push(this.vendorId);
-		if(this.arrayVendorlist.length == 0) {			
-            this.arrayVendorlist.push(0); }
-        
-        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
-            this.venderListOriginal = response.map(x => {
-                return {
-                    vendorName: x.label, vendorId: x.value 
-                }
-            })
-            this.vendorNames = response;
-            this.vendorNames = this.venderListOriginal.reduce((acc, obj) => {
-                return acc.filter(x => x.vendorId !== this.selectedParentId)
-            }, this.venderListOriginal)            
-            // this.checVendorName();
-		},err => {
-			const errorLog = err;           
+		if (this.arrayVendorlist.length == 0) {
+			this.arrayVendorlist.push(0);
+		}
+
+		this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, this.arrayVendorlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+			this.venderListOriginal = response.map(x => {
+				return {
+					vendorName: x.label, vendorId: x.value
+				}
+			})
+			this.vendorNames = response;
+			this.vendorNames = this.venderListOriginal.reduce((acc, obj) => {
+				return acc.filter(x => x.vendorId !== this.selectedParentId)
+			}, this.venderListOriginal)
+			// this.checVendorName();
+		}, err => {
+			const errorLog = err;
 		});
 	}
-	
+
 	filterVendorNames(event) {
 		if (event.query !== undefined && event.query !== null) {
-			this.bindvendordropdownData(event.query); }
-    }
-	
+			this.bindvendordropdownData(event.query);
+		}
+	}
+
 }

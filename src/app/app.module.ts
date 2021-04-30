@@ -551,6 +551,7 @@ import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoi
     InvoicePaymentEndpointService
   ],
   entryComponents: [
+    LoginComponent,
     LoginDialogComponent,
     AddTaskDialogComponent,
     CustomerViewComponent,

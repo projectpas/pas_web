@@ -8,7 +8,7 @@
         <h4 class="header-name">Vendor List</h4>
       </div>
       <div>
-        <button
+        <button *ngIf="isAdd"
           type="button"
           class="btn-sm header-button"
           (click)="navigateTogeneralInfo()"
@@ -71,7 +71,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <button
+            <button *ngIf="isDownload"
               type="button"
               class="btn btn-primary exports-button"
               matTooltip="Download Data"
@@ -83,7 +83,7 @@
               (click)="selectedOnly = false; targetData = dt;" 
               data-toggle="modal" data-target="#downloadConfirmation"
             ></button>
-            <button
+            <button *ngIf="isDownload"
               type="button"
               class="btn btn-primary exports-button"
               matTooltip="Download Selected Data"
@@ -220,64 +220,72 @@
           <td class="action-icons-cstm table-column-width" style="width:200px !important">
               <div *ngIf="currentDeletedstatus == false">
                   <ng-container *ngIf="!isCreatePO && !isCreateRO">
-                      <p-inputSwitch [(ngModel)]="rowData['isActive']"
+                      <p-inputSwitch [(ngModel)]="rowData['isActive']"  *ngIf="isActive"
                                      name="isActive{{ rowIndex }}"
                                      matTooltip="{{
                     rowData['isActive'] ? 'Active' : 'In Active'
                   }}"
-                                     matTooltipPosition="above"
-                                     (onChange)="handleChanges(rowData, $event)"></p-inputSwitch>
-                  </ng-container>
-                  <span data-toggle="modal" data-target="#view">
-                      <a class="btn nobg btn-view-cstm"
-                         (click)="openView(view, rowData)"
-                         matTooltip="View"
-                         matTooltipPosition="above">
-                          <i class="fa fa-eye"></i>
-                      </a>
-                  </span>
-                  <span *ngIf="!isCreatePO && !isCreateRO">
-                      <a class="btn nobg btn-edit-cstm"
-                         (click)="openEdit(rowData)"
-                         matTooltip="Edit"
-                         matTooltipPosition="above">
-                          <i class="fa fa-pencil"></i>
-                      </a>
-                  </span>
-                  <span>
-                      <a class="btn nobg btn-users-cstm"
-                         (click)="openVendorCapesList(contentvendorcapes, rowData)"
-                         matTooltip="Show Capes "
-                         matTooltipPosition="above">
-                          <i class="fa fa-users"></i>
-                      </a>
-                  </span>
-                  <!-- <span
-      ><a
-        class="btn nobg btn-users-cstm"
-        (click)="openContactList(contentcontact, rowData)"
-        matTooltip="Contacts"
-        matTooltipPosition="above"
-        ><i class="fa fa-users"></i
-      ></a>
-    </span> -->
-                  <span *ngIf="!isCreatePO && !isCreateRO">
-                      <a class="btn nobg btn-delete-cstm"
-                         (click)="openDelete(content1, rowData);"
-                         matTooltip="Delete"
-                         matTooltipPosition="above">
-                          <i class="fa fa-trash"></i>
-                      </a>
-                  </span>
-                  <span data-toggle="modal" data-target="#contentAuditHist">
-                      <a class="btn nobg btn-hist-cstm"
-                         (click)="openHist(contentHist, rowData)"
-                         matTooltip="History"
-                         matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                  </span>
-                  <span data-toggle="modal"
-                        data-target="#purchaseOrderList"
-                        *ngIf="
+                  matTooltipPosition="above"
+                  (onChange)="handleChanges(rowData, $event)"
+                ></p-inputSwitch>
+              </ng-container>
+              <span data-toggle="modal" data-target="#view"
+                ><a
+                  class="btn nobg btn-view-cstm"
+                  (click)="openView(view, rowData)"
+                  matTooltip="View"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-eye"></i
+                ></a>
+              </span>
+              <span *ngIf="!isCreatePO && !isCreateRO"
+                ><a *ngIf="isEdit"
+                  class="btn nobg btn-edit-cstm"
+                  (click)="openEdit(rowData)"
+                  matTooltip="Edit"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-pencil"></i
+                ></a>
+              </span>              
+              <span *ngIf="isShowCap"
+                ><a
+                  class="btn nobg btn-users-cstm"
+                  (click)="openVendorCapesList(contentvendorcapes, rowData)"
+                  matTooltip="Show Capes "
+                  matTooltipPosition="above"
+                  ><i class="fa fa-users"></i
+                ></a>
+              </span>
+              <!-- <span
+                ><a
+                  class="btn nobg btn-users-cstm"
+                  (click)="openContactList(contentcontact, rowData)"
+                  matTooltip="Contacts"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-users"></i
+                ></a>
+              </span> -->
+              <span *ngIf="!isCreatePO && !isCreateRO"
+                ><a *ngIf="isDelete"
+                  class="btn nobg btn-delete-cstm"
+                  (click)="openDelete(content1, rowData);"
+                  matTooltip="Delete"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-trash"></i
+                ></a>
+              </span>
+              <span data-toggle="modal" data-target="#contentAuditHist"
+                ><a
+                  class="btn nobg btn-hist-cstm"
+                  (click)="openHist(contentHist, rowData)"
+                  matTooltip="History"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-history"></i></a
+              ></span>
+              <span
+                data-toggle="modal"
+                data-target="#purchaseOrderList"
+                *ngIf="
                   (isVendorList && isCreatePO) || (!isCreatePO && !isCreateRO)
                 ">
                       <a class="btn nobg btn-po-cstm"
@@ -313,7 +321,7 @@
                   </span>
               </div>
             <div *ngIf="currentDeletedstatus == true">
-              <p-inputSwitch
+              <p-inputSwitch  *ngIf="isActive"
                 [(ngModel)]="rowData['isActive']"
                 name="isActive{{ rowIndex }}"
                 matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
@@ -331,7 +339,7 @@
                 ></a>
               </span>
               <span
-                ><a
+                ><a  *ngIf="isActive"
                   class="btn nobg btn-users-cstm"
                   (click)="restore(restoreId, rowData)"
                   matTooltip="Restore Record"
@@ -647,7 +655,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a
+              <a *ngIf="isGeneralInforView"
                 data-toggle="collapse"
                 href="#step1"
                >
@@ -959,7 +967,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a
+              <a *ngIf="isVendorCapabilityView"
                 class="collapsed"
                 data-toggle="collapse"
                 href="#step11"
@@ -988,7 +996,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a
+              <a  *ngIf="isContactView"
                 data-toggle="collapse"
                 href="#step2"
                 aria-expanded="false"
@@ -1016,7 +1024,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a
+              <a *ngIf="isATAInfo"
                 data-toggle="collapse"
                 href="#step12"
                 aria-expanded="false"
@@ -1042,7 +1050,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a
+              <a *ngIf="isFinancialInfo"
                 class="collapsed"
                 data-toggle="collapse"
                 href="#step3"
@@ -1192,7 +1200,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" href="#step6">
+              <a *ngIf="isBillingInformation" class="collapsed" data-toggle="collapse" href="#step6">
                 Billing Info
               </a>
             </h4>
@@ -1211,7 +1219,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a
+              <a *ngIf="isPaymentInfo"
                 class="collapsed"
                 data-toggle="collapse"
                 href="#step4"
@@ -1378,7 +1386,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a
+              <a *ngIf="isShippingInformation"
                 class="collapsed"
                 data-toggle="collapse"
                 href="#step5"
@@ -1407,7 +1415,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" href="#step7">
+              <a *ngIf="isWarningInfo" class="collapsed" data-toggle="collapse" href="#step7">
                 Warnings</a
               >
             </h4>
@@ -1428,7 +1436,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" href="#step9">
+              <a *ngIf="isMemoView" class="collapsed" data-toggle="collapse" href="#step9">
                 Memos</a
               >
             </h4>
@@ -1551,7 +1559,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" href="#step10">
+              <a *ngIf="isDocumentInfo" class="collapsed" data-toggle="collapse" href="#step10">
                 Documents
               </a>
             </h4>

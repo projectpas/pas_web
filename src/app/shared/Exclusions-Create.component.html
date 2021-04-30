@@ -1,11 +1,13 @@
 <div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
-  style="max-height:380px;">
-  <div *ngIf="!isEdit">
-    <span class="cat-heading cat4 header-div">Add Exclusions <i (click)="addRow()"
+style="overflow: hidden;">
+  <div class="exclusions-margin">
+    <span class="cat-heading cat4" *ngIf="!isEdit">Add Exclusions <i (click)="addRow()"
         class="fa fa-plus"></i></span>
   </div>
   <form #exclusionsCreateForm="ngForm">
-    <table class="table table-bordered table-fixed workflow-table-exclusion workflowTable-class">
+    <div class="table-responsive pas-table-cstm poro-table-cstm" style="max-height: 380px;">
+      <div class="tableFixHead">
+    <table class="table table-bordered table-fixed">
      <thead>
       <tr>
         <th *ngIf="!isWorkFlow"><label>Task*</label></th>
@@ -42,7 +44,7 @@
         <td>
           {{exclusion.partDescription}}
        </td>
-        <td>
+        <td class="width-180">
           <select class="form-control wf-pub-id full-width" id="ddlMaterialCondition"
             [(ngModel)]="exclusion.conditionId" name="cond_{{ i }}" (change)="getPNDetails(exclusion)" required>
             <option value="" selected>--Select--</option>
@@ -113,6 +115,8 @@
       </tr>
       </tbody>
     </table>
+    </div>
+    </div>
   </form>
   <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">

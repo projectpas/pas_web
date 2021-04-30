@@ -474,25 +474,26 @@ export class SubWorkOrderComponent implements OnInit {
         }
         //need to change after functionality change
         this.getPartPublicationByItemMasterId(workOrderPart, workOrderPart.itemMasterId);
+        this.getNTEandSTDByItemMasterId(workOrderPart.itemMasterId, workOrderPart)
     }
-    // getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
-    //     if (currentRecord.workOrderScopeId !== null && currentRecord.workOrderScopeId !== '' && currentRecord.workOrderScopeId > 0) {
-    //         const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
-    //         if (itemMasterId !== undefined && currentRecord.workOrderScopeId !== undefined) {
-    //             this.isSpinnerVisible = true
-    //             this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.workOrderScopeId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //                 this.isSpinnerVisible = false;
-    //                 if (res !== null) {
-    //                     currentRecord.nte = res.nteHours;
-    //                     currentRecord.tatDaysStandard = res.stdHours;
-    //                 }
-    //             },
-    //                 err => {
-    //                     this.handleError(err);
-    //                 })
-    //         }
-    //     }
-    // }
+    getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
+        if (currentRecord.subWorkOrderScopeId !== null && currentRecord.subWorkOrderScopeId !== '' && currentRecord.subWorkOrderScopeId > 0) {
+            // const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
+            if (itemMasterId !== undefined && currentRecord.subWorkOrderScopeId !== undefined) {
+                this.isSpinnerVisible = true
+                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.subWorkOrderScopeId,this.currentUserMasterCompanyId).subscribe(res => {
+                    this.isSpinnerVisible = false;
+                    if (res !== null) {
+                        currentRecord.nte = res.nteHours;
+                        currentRecord.tatDaysStandard = res.stdHours;
+                    }
+                },
+                    err => {
+                        // this.handleError(err);
+                    })
+            }
+        }
+    }
     getConditionsList() {
         this.setEditArray = [];
         if (this.isEdit == true) {

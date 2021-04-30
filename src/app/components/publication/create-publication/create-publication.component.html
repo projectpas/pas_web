@@ -8,7 +8,7 @@
             </div>
 
             <div>
-                <button type="button" class="btn-sm header-button pull-right"
+                <button type="button" class="btn-sm header-button pull-right" *ngIf="isView"
                     [routerLink]="['/singlepages/singlepages/app-publication']">
                     Publication List
                 </button>
@@ -25,7 +25,7 @@
                     <div class="md-step-bar-left"></div>
                     <div class="md-step-bar-right"></div>
                 </div>
-                <div class="md-step" [ngClass]="{ active: activeMenuItem >= 2 ,  editable : activeMenuItem === 2 }"
+                <div  *ngIf="isShowTab('PN Mapping')" class="md-step" [ngClass]="{ active: activeMenuItem >= 2 ,  editable : activeMenuItem === 2 }"
                     id="step2" [class.isDisabled]="!isDisabledSteps" (click)="changeOfTab('PnMap')">
                     <div class="md-step-circle"><span>2</span></div>
                     <div class="md-step-title">PN Mapping</div>
@@ -33,7 +33,7 @@
                     <div class="md-step-bar-left"></div>
                     <div class="md-step-bar-right"></div>
                 </div>
-                <div class="md-step" [ngClass]="{ active: activeMenuItem >= 3 ,   editable : activeMenuItem === 3 }"
+                <div  *ngIf="isShowTab('View Aircraft Information')" class="md-step" [ngClass]="{ active: activeMenuItem >= 3 ,   editable : activeMenuItem === 3 }"
                     (click)="changeOfTab('Aircraft')" [class.isDisabled]="!isDisabledSteps">
                     <div class="md-step-circle"><span>3</span></div>
                     <div class="md-step-title">View Aircraft Info</div>
@@ -41,7 +41,7 @@
                     <div class="md-step-bar-left"></div>
                     <div class="md-step-bar-right"></div>
                 </div>
-                <div class="md-step " [ngClass]="{ active: activeMenuItem >= 4 ,  editable : activeMenuItem === 4 }"
+                <div  *ngIf="isShowTab('View ATA Chapter')" class="md-step " [ngClass]="{ active: activeMenuItem >= 4 ,  editable : activeMenuItem === 4 }"
                     (click)="changeOfTab('Atachapter')" [class.isDisabled]="!isDisabledSteps">
                     <div class="md-step-circle"><span>4</span></div>
                     <div class="md-step-title">View ATA Chapter</div>
@@ -238,11 +238,11 @@
                     </div>
 
                     <div class="pull-right">
-                        <button type="submit" *ngIf="!isEditMode" (click)="saveGeneralInfo()"
+                        <button type="submit" *ngIf="isGeneralInfoAdd && !isEditMode" (click)="saveGeneralInfo()"
                             [disabled]="!generalInfoForm.valid" class="btn btn-primary button-save-cstm-cstm">
                             Save
                         </button>
-                        <button type="submit" *ngIf="isEditMode" (click)="saveGeneralInfo()"
+                        <button type="submit" *ngIf="isGeneralInfoUpdate && isEditMode" (click)="saveGeneralInfo()"
                             [disabled]="disableGeneralInfoSave || !generalInfoForm.valid"
                             class="btn btn-primary button-save-cstm-cstm">
                             Update
@@ -252,7 +252,7 @@
                             (click)="saveGeneralInfo(); ">
                             {{isEditMode ? 'Update' : 'Save' }}
                         </button> -->
-                        <button class="btn btn-primary button-save-cstm-cstm" [disabled]="!isEnableNext" type="submit"
+                        <button *ngIf="isNextVisible" class="btn btn-primary button-save-cstm-cstm" [disabled]="!isEnableNext" type="submit"
                             (click)="nextClick('Next')">
                             Next
                         </button>
@@ -298,7 +298,7 @@
             
 
             <div>
-                <div class="col-md-12">
+                <div class="col-md-12" *ngIf="isPNAdd">
                    
                         <div class="col-md-3">
                             <div class="form-group ">
@@ -357,13 +357,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <button type="button" class="btn btn-primary exports-button" pButton
+                                        <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" pButton
                                             icon="fa-download" iconPos="left" label="Export  Data"
                                             matTooltip="Download  Data" matTooltipPosition="above" data-toggle="modal"
                                             (click)="selectedOnly = false; targetData = pnMappingTable;"
                                             data-target="#downloadPublicationConfirmation"
                                             ></button>
-                                        <button type="button" class="btn btn-primary exports-button" pButton
+                                        <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" pButton
                                             icon="fa-download" iconPos="left" label="Export Selected Data"
                                             matTooltip="Download Selected Data" matTooltipPosition="above"
                                             (click)="pnMappingTable.exportCSV({ selectionOnly: true })"
@@ -414,7 +414,7 @@
                                         <div  *ngIf="currentDeletedstatus == false">
 
                                             <span>
-                                                <a class="btn btn-danger nobg" (click)="onDeletePNMappingRow(rowData)"
+                                                <a *ngIf="isPNDelete" class="btn btn-danger nobg" (click)="onDeletePNMappingRow(rowData)"
                                                     matTooltip="Delete" matTooltipPosition="above" data-target="#delete"
                                                     data-toggle="modal">
                                                     <i class="fa fa-trash"></i>
@@ -422,7 +422,7 @@
                                             </span>
                                         </div>
                                         <div *ngIf="currentDeletedstatus == true">
-                                            <span data-toggle="modal"><a class="btn nobg"
+                                            <span data-toggle="modal"><a class="btn nobg" *ngIf="isPNUpdate"
                                                     (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
                                                     matTooltipPosition="above">
                                                     <i class="fa fa-undo"></i></a></span>
@@ -452,7 +452,7 @@
                    
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                    <button *ngIf="isPNNextVisible" class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('Aircraft'); saveTab('PN Mapping')">
                         Next
                     </button>
@@ -570,12 +570,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <button type="button" class="btn btn-primary exports-button" pButton
+                                        <button *ngIf="isAircraftDownload" type="button" class="btn btn-primary exports-button" pButton
                                             icon="fa-download" iconPos="left" label="Export  Data"
                                             matTooltip="Download  Data" matTooltipPosition="above" data-toggle="modal"
                                             (click)="selectedOnly = false; targetData = aircraftTable;"
                                             data-target="#downloadAircraftConfirmation"></button>
-                                        <button type="button" class="btn btn-primary exports-button" pButton
+                                        <button *ngIf="isAircraftDownload" type="button" class="btn btn-primary exports-button" pButton
                                             icon="fa-download" iconPos="left" label="Export Selected Data"
                                             matTooltip="Download Selected Data" matTooltipPosition="above"
                                             (click)="aircraftTable.exportCSV({ selectionOnly: true })"
@@ -666,11 +666,11 @@
                    
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                    <button *ngIf="isAirCraftNext" class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('Atachapter');  saveTab('Aircraft')">
                         Next
                     </button>
-                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                    <button *ngIf="isAirCraftPrev" class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('PnMap')">
                         Previous
                     </button>
@@ -767,12 +767,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <button type="button" class="btn btn-primary exports-button" pButton
+                                        <button *ngIf="isATADownload" type="button" class="btn btn-primary exports-button" pButton
                                             icon="fa-download" iconPos="left" label="Export  Data"
                                             matTooltip="Download  Data" matTooltipPosition="above" data-toggle="modal"
                                             (click)="selectedOnly = false; targetData = ataTable;"
                                             data-target="#downloadAtaConfirmation"></button>
-                                        <button type="button" class="btn btn-primary exports-button" pButton
+                                        <button *ngIf="isATADownload" type="button" class="btn btn-primary exports-button" pButton
                                             icon="fa-download" iconPos="left" label="Export Selected Data"
                                             matTooltip="Download Selected Data" matTooltipPosition="above"
                                             (click)="ataTable.exportCSV({ selectionOnly: true })"></button>
@@ -850,7 +850,7 @@
                     <button class="btn btn-primary pull-right button-save-cstm" type="button" (click)="addNewRecord()">
                         Add New
                     </button>
-                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                    <button *ngIf="isATAPrev" class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('Aircraft')">
                         Previous
                     </button>

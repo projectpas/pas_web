@@ -1177,7 +1177,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
     // createequivalencypart
     createNTAEFileUploadForEquivalency(file) {
-        return this.http.post(`${this.createequivalencypartUrl}`, file)
+        return this.http.post(`${this.createequivalencypartUrl}`, file,this.getFormReqHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.createNTAEFileUploadForEquivalency(file));
             });
@@ -1185,7 +1185,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
     // updateequivalencypart
     updateNTAEFileUploadForEquivalency(file) {
-        return this.http.post(`${this.updateequivalencypartUrl}`, file)
+        return this.http.post(`${this.updateequivalencypartUrl}`, file,this.getFormReqHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.updateNTAEFileUploadForEquivalency(file));
             });
@@ -1336,21 +1336,21 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getItemMasterDataById(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getitemmasterdatabyid/${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getitemmasterdatabyid/${id}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterDataById(id));
             });
     }
 
     getActivePartListByItemType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type,masterCompanyId));
             });
     }
 
     getItemMasterClassificationByType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterClassificationByType(type));
             });
