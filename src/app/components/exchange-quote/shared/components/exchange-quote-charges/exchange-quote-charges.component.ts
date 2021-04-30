@@ -6,7 +6,7 @@ import { CommonService } from '../../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition, formatStringToNumber } from '../../../../../generic/autocomplete';
 import { ExchangequoteService } from "../../../../../services/exchangequote.service";
 import { ExchangeQuoteCharge } from '../../../../../models/exchange/ExchangeQuoteCharge';
-//import { ActionService } from '../../../../../Workflow/ActionService';
+import { ActionService } from '../../../../../Workflow/ActionService';
 import { VendorService } from '../../../../../services/vendor.service';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -58,7 +58,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private commonService: CommonService,
-    //private actionService: ActionService,
+    private actionService: ActionService,
     private modalService: NgbModal,
     private vendorService: VendorService) { }
 
@@ -90,7 +90,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   refresh(isView) {
     this.isSpinnerVisible = true;
     forkJoin(this.exchangequoteService.getExchangeQuoteCharges(this.exchangeQuoteId, this.deletedStatusInfo),
-      //this.actionService.getCharges()
+      this.actionService.getCharges()
     ).subscribe(res => {
       this.isSpinnerVisible = false;
       this.setChargesData(res[0]);
@@ -125,7 +125,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   deletedStatusInfo: any = false;
   getDeleteListByStatus(value) {
     this.deletedStatusInfo = value ? value : false;
-    //this.refreshOnDataSaveOrEditORDelete();
+    this.refreshOnDataSaveOrEditORDelete();
   }
 
   restorerecord: any = {}
@@ -277,10 +277,10 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
       this.isSpinnerVisible = false;
       this.alertService.showMessage(
         '',
-        'Created Sales Order Charge Successfully',
+        'Created Exchange Quote Charge Successfully',
         MessageSeverity.success
       );
-      //this.refreshOnDataSaveOrEditORDelete();
+      this.refreshOnDataSaveOrEditORDelete();
       this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
     }, error => {
       this.isSpinnerVisible = false;
@@ -505,5 +505,42 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   formatStringToNumberGlobal(val) {
     let tempValue = Number(val.toString().replace(/\,/g, ''));
     return formatStringToNumber(tempValue)
+  }
+
+  refreshOnDataSaveOrEditORDelete(fromDelete = false) {
+    this.isSpinnerVisible = true;
+    this.exchangeQuoteChargesList = [];
+    this.exchangequoteService.getExchangeQuoteCharges(this.exchangeQuoteId, this.deletedStatusInfo).subscribe(res => {
+      this.isSpinnerVisible = false;
+      //Handeling offline Records also
+      if (this.storedData && this.storedData.length != 0) {
+        if (this.deletedStatusInfo == true) {
+          this.deletedStatusInfo = true;
+          this.storedData.forEach(element => {
+            if (element.isDeleted == true && element.exchangeQuoteChargesId == 0) {
+              res.push(element);
+            }
+          });
+        }
+        else {
+          this.deletedStatusInfo = false;
+          this.storedData.forEach(element => {
+            if (element.isDeleted == false && element.exchangeQuoteChargesId == 0) {
+              res.push(element)
+            }
+          });
+        }
+        this.setChargesData(res);
+      }
+      else {
+        this.setChargesData(res);
+      }
+      if (fromDelete) {
+        this.getTotalBillingAmount();
+        this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+      }
+    }, error => {
+      this.isSpinnerVisible = false;
+    })
   }
 }

@@ -377,6 +377,7 @@ export class PurchaseSetupComponent implements OnInit {
 	adddefaultpart : boolean = true;
 	salesOrderId:number;
 	home: any;
+	msgflag:number=0;
 	
 	modal: NgbModalRef;
 	alertText:string
@@ -1340,7 +1341,7 @@ export class PurchaseSetupComponent implements OnInit {
 		if (this.arrayPostatuslist.length == 0) {
             this.arrayPostatuslist.push(0); }
 			this.commonService.autoSuggestionSmartDropDownList('POStatus','POStatusId','Description','',
-								  true, 0,this.arrayPostatuslist.join(),this.currentUserMasterCompanyId)
+								  true, 0,this.arrayPostatuslist.join(),0)
 				.subscribe(res => {
 				this.poStatusList = res;
 				this.poStatusList = this.poStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));	
@@ -2536,6 +2537,7 @@ export class PurchaseSetupComponent implements OnInit {
 		this.isSpinnerVisible = true;
 		this.parentObjectArray = [];
 		var errmessage = '';
+		this.msgflag = 0;
 		for (let i = 0; i < this.partListData.length; i++) {
 			this.alertService.resetStickyMessage();			
 			// if(this.partListData[i].quantityOrdered == 0) {	
@@ -2548,40 +2550,44 @@ export class PurchaseSetupComponent implements OnInit {
 				this.alertText= 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  +'<br/>'+"Please Enter Qty."
 				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
 				return;
-			}
-  
-			if(this.partListData[i].workOrderId.value != 0){
-				if (this.partListData[i].repairOrderId.value != 0){
-					this.isSpinnerVisible = false;
-					errmessage = errmessage + '<br />' + "Work Order already selected please unselect Repair Order."					
+			}  
+            if(this.partListData[i].workOrderId) {
+				if(this.partListData[i].workOrderId.value != 0) {
+					if(this.partListData[i].repairOrderId) {
+						if (this.partListData[i].repairOrderId.value != 0) {
+							this.isSpinnerVisible = false;
+							errmessage = errmessage + '<br />' + "Work Order already selected please unselect Repair Order."
+							this.msgflag = 1;					
+						}
+					}
+					if (this.partListData[i].salesOrderId) {
+						if (this.partListData[i].salesOrderId.value != 0) {
+							this.isSpinnerVisible = false;
+							errmessage = errmessage + '<br />' + "Work Order already selected please unselect Sales Order."
+							this.msgflag = 1;
+						}
+					}				
 				}
-				if (this.partListData[i].salesOrderId.value != 0){
-					this.isSpinnerVisible = false;
-					errmessage = errmessage + '<br />' + "Work Order already selected please unselect Sales Order."
-				}				
 			}
-
-			if(this.partListData[i].repairOrderId.value != 0){
-				if (this.partListData[i].workOrderId.value != 0){
-					this.isSpinnerVisible = false;
-					errmessage = errmessage + '<br />' +"Repair Order already selected please unselect Work Order."					
+			if(this.msgflag == 0) {
+				if(this.partListData[i].repairOrderId) {
+					if(this.partListData[i].repairOrderId.value != 0) {
+						if(this.partListData[i].workOrderId) {
+							if (this.partListData[i].workOrderId.value != 0) {
+								this.isSpinnerVisible = false;
+								errmessage = errmessage + '<br />' +"Repair Order already selected please unselect Work Order."					
+							}
+						}				
+						if (this.partListData[i].salesOrderId) {
+							if (this.partListData[i].salesOrderId.value != 0) {
+								this.isSpinnerVisible = false;
+								errmessage = errmessage + '<br />' + "Repair Order already selected please unselect Sales Order."
+							}	
+						}
+			 		}						    
 				}
-				if (this.partListData[i].salesOrderId.value != 0){
-					this.isSpinnerVisible = false;
-					errmessage = errmessage + '<br />' + "Repair Order already selected please unselect Sales Order."
-				}				
-			}
-
-			if(this.partListData[i].salesOrderId.value != 0){
-				if (this.partListData[i].workOrderId.value != 0){
-					this.isSpinnerVisible = false;
-					errmessage = errmessage + '<br />' +"Sales Order already selected please unselect Work Order."					
-				}
-				if (this.partListData[i].repairOrderId.value != 0){
-					this.isSpinnerVisible = false;
-					errmessage = errmessage + '<br />' + "Sales Order already selected please unselect Repair Order."
-				}				
-			}
+			 }
+			
 			
 			if(this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
