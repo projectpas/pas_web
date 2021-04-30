@@ -35,7 +35,6 @@ import { DealsListComponent } from "../components/crm/deals-list/deals-list.comp
 import { LeadsListComponent } from "../components/crm/leads-list/leads-list.component";
 
 import { OpportunityListComponent } from "../components/crm/opportunity-list/opportunity-list.component";
-import { RolesGuardService } from '../services/roles-guard.service';
 
 
 const customerPagesRoutes: Routes = [
@@ -43,7 +42,7 @@ const customerPagesRoutes: Routes = [
         path: 'customerpages',
         component: CustomerPagesComponent,
         children: [
-            { path: 'app-customer-create', component: CustomerStepsPrimengComponent,canActivate:[RolesGuardService] },
+            { path: 'app-customer-create', component: CustomerStepsPrimengComponent },
             { path: 'app-customer-edit/:id', component: CustomerStepsPrimengComponent },
             { path: "app-customers-list", component: CustomersListComponent, data: { title: "Customer's List" } },
             { path: 'app-crm-create', component: CrmCreateComponent },

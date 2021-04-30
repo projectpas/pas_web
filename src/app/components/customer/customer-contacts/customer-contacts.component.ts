@@ -24,8 +24,6 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { AtaMainService } from '../../../services/atamain.service';
 import * as moment from 'moment';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
-import { PermissionMaster } from '../../user-role/ModuleHierarchyMaster.model';
 
 @Component({
 	selector: 'app-customer-contacts',
@@ -167,20 +165,6 @@ export class CustomerContactsComponent implements OnInit {
 	resetinputmodel: any;
 	customerContactsOriginal: any;
 
-	isAdd:boolean=true;
-	isEdit:boolean=true;
-	isDelete:boolean=true;
-	isATA:Boolean=true;
-	isAtaAdd:Boolean=true;
-	isAtaEdit:Boolean=true;
-	isCustGenrlAdd:Boolean=true;
-	isCustGenrlUpdate:Boolean=true;
-	isAircrafAdd:Boolean=true;
-	isAircrafEdit:Boolean=true;
-	isDownload:Boolean=true;
-	isAtaDelete:Boolean=true;
-
-	isNextVisible:Boolean=true;
 	constructor(private router: ActivatedRoute,
 		private route: Router,
 		private authService: AuthService,
@@ -199,23 +183,6 @@ export class CustomerContactsComponent implements OnInit {
 	) {
 		this.stopmulticlicks = false;
 		this.id = this.router.snapshot.params['id'];
-		this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Update])
-		this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Delete])	
-		this.isDownload=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Download])			
-		
-		//this.isATA=this.authService.ShowTab('Create Customer','ATA Chapters');
-		this.isAtaAdd=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add])
-		this.isAtaEdit=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update])
-		this.isAtaDelete=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Delete])
-
-		this.isAircrafAdd=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add])
-		this.isAircrafEdit=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update])
-		
-		this.isCustGenrlAdd = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Add])
-		this.isCustGenrlUpdate = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Update])
-
-		this.isNextVisible=this.authService.ShowTab("Create Customer","ATA Chapter");
 	}
 
 	ngOnInit() {		

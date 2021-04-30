@@ -120,8 +120,6 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     arrayListCurrancyId:any[] = [];
     arrayListPercentageId:any[] = [];
     showAllowNettingOfAPAR: boolean = false;
-    isNextVisible: Boolean=true;
-    isPrevVisible: Boolean=true;
 
     constructor(private cdRef: ChangeDetectorRef, public CreditTermsService: CreditTermsService, public currencyService: CurrencyService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private commonservice: CommonService) {
         if(window.localStorage.getItem('vendorService')){
@@ -182,9 +180,6 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             this.sourceVendor.creditTermsId = 0;
             this.sourceVendor.currencyId = 0;
         }
-
-        this.isNextVisible=this.authService.ShowTab('Create Vendor','ATA Chapter');
-        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Billing Information');
     }
 
     ngOnInit(): void {

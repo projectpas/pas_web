@@ -24,7 +24,7 @@
                             <div class="col">
                                 <h4 class="header-name"> Contacts</h4>
                             </div>
-                            <div *ngIf="isAdd">
+                            <div>
                                 <a *ngIf="isViewMode == false" data-toggle="modal" data-target="#addContactDetails">
                                     <button type="button" class="btn-sm header-button" matTooltip="Add Contact"
                                         matTooltipPosition="above" (click)="onAddContactInfo()">
@@ -63,16 +63,16 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <button type="button" *ngIf="isDownload && isViewMode==false "
+                                    <button type="button" *ngIf="isViewMode==false "
                                         class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                                         label="Export All Data" matTooltip="Download  Data" matTooltipPosition="above"
                                         (click)="openTag(export)"></button>
-                                    <button type="button" *ngIf="isDownload && isViewMode==false "
+                                    <button type="button" *ngIf="isViewMode==false "
                                         class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                                         label="Export Selected Data" matTooltip="Download Selected Data"
                                         matTooltipPosition="above"
                                         (click)="dt.exportCSV({selectionOnly:true})"></button>
-                                    <div class="excel-upload  excel-upload-cstm" *ngIf="isDownload && isViewMode==false ">
+                                    <div class="excel-upload  excel-upload-cstm" *ngIf="isViewMode==false ">
                                         <button name="download" id="download" type="button"
                                             class="btn btn-primary exports-button" matTooltip="Download Sample File"
                                             matTooltipPosition="above" (click)="sampleExcelDownloadForContact()">
@@ -224,27 +224,23 @@ col.field == 'createdDate'?
 
                                 <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 ">
                                     <div *ngIf="currentDeletedstatusCOntact==false">
-                                        <span  *ngIf="isEdit">
                                         <p-inputSwitch *ngIf="isViewMode==false " [(ngModel)]="rowData['isActive']"
                                             name="isActive{{ rowIndex }}"
                                             matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                             matTooltipPosition="above" (onChange)="handleChange(rowData)"
                                             [disabled]="rowData.isDefaultContact"></p-inputSwitch>
-                                        </span>
-                                        <span *ngIf="isEdit">
                                         <p-inputSwitch *ngIf="isViewMode==true " [(ngModel)]="rowData['isActive']"
                                             name="isActive{{ rowIndex }}"
                                             matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                             matTooltipPosition="above" disabled></p-inputSwitch>
-                                        </span>
                                         <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                                 (click)="viewSelectedRowdbl(viewdbl,rowData)" matTooltipPosition="above"
                                                 matTooltip="View"><i class="fa fa-eye"></i></a> </span>
                                         <span data-toggle="modal" *ngIf="isViewMode==false "
-                                            data-target="#addContactDetails"><a  *ngIf="isEdit" class="btn nobg"
+                                            data-target="#addContactDetails"><a class="btn nobg"
                                                 (click)="editCustomerContact(rowData)" matTooltipPosition="above"
                                                 matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
-                                        <span *ngIf="isViewMode==false "><a  *ngIf="isDelete" class="btn nobg"
+                                        <span *ngIf="isViewMode==false "><a class="btn nobg"
                                                 (click)="openDelete(deleteContentModel,rowData)"
                                                 matTooltipPosition="above" matTooltip="Delete"><i
                                                     class="fa fa-trash"></i></a> </span>
@@ -256,13 +252,13 @@ col.field == 'createdDate'?
                                         </span>
                                     </div>
                                     <div *ngIf="currentDeletedstatusCOntact==true">
-                                        <p-inputSwitch  *ngIf="isEdit" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"
+                                        <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"
                                             matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                             matTooltipPosition="above" disabled></p-inputSwitch>
                                         <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                                 (click)="viewSelectedRowdbl(viewdbl,rowData)" matTooltipPosition="above"
                                                 matTooltip="View"><i class="fa fa-eye"></i></a> </span>
-                                        <span *ngIf="!isViewMode"><a   *ngIf="isEdit" class="btn nobg"
+                                        <span *ngIf="!isViewMode"><a class="btn nobg"
                                                 (click)="restore(restoreId,rowData);" matTooltip="Restore Record"
                                                 matTooltipPosition="above"><i class="fa fa-undo"
                                                     aria-hidden="true"></i></a> </span>
@@ -394,7 +390,7 @@ col.field == 'createdDate'?
                 </div>
                 <br />
                 <div style="margin: 10px;" *ngIf="isViewMode == false">
-                    <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn"
+                    <button type="button" class="btn btn-primary pull-right submit-btn"
                         (click)="nextClick()">Next</button>
                     <button type="button" class="btn btn-primary pull-right submit-btn"
                         (click)="backClick()">Previous</button>

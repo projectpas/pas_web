@@ -94,8 +94,8 @@
                             </div>
                             <div >
                                 <button type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')">Next</button>
-                                <button *ngIf ="!enableUpdate && isAdd" type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableSave" (click)="saveDetails()">Save</button>
-                                <button *ngIf ="enableUpdate && isEdit" type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableUpdate" (click)="saveDetails()">Update</button>
+                                <button *ngIf ="!enableUpdate" type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableSave" (click)="saveDetails()">Save</button>
+                                <button *ngIf ="enableUpdate" type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableUpdate" (click)="saveDetails()">Update</button>
                                 <button type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Previous')">Previous</button>
                             </div>
                             <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">

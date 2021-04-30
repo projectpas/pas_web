@@ -28,7 +28,7 @@
                                             <div class="col">
                                                 <h4 class="header-name"> Payment Information</h4>
                                             </div>
-                                            <div *ngIf="isAdd">
+                                            <div>
                                                 <a class="plusicon-cstm" data-toggle="modal" data-target="#addPaymentInfo">
                                                     <button type="button" class="btn-sm header-button" matTooltip="Create Payment Information" matTooltipPosition="above" (click)="onAddPaymentInfo()">
                                                         Add Payment Information
@@ -164,7 +164,6 @@
                                                     </td>
                                                     <td class="action-icons-cstm table-column-width">
                                                         <div *ngIf="currentDeletedstatus==false">
-                                                            <span *ngIf="isEdit">
                                                             <p-inputSwitch *ngIf="rowData['isActive']==true"
                                                                            matTooltip="Active" matTooltipPosition="above" onLabel="on"
                                                                            offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
@@ -179,13 +178,13 @@
                                                                            offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
                                                                            [(ngModel)]="rowData['isActive']">
                                                             </p-inputSwitch>
-                                                        </span>
+
                                                             <span data-toggle="modal" data-target="#view">
                                                                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                                                    (click)="openView(view,rowData)" matTooltip="View"
                                                                    matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                                             </span>
-                                                            <span *ngIf="isEdit">
+                                                            <span>
                                                                 <a class="btn nobg btn-edit-cstm" data-target="#addPaymentInfo"
                                                                    data-toggle="modal" (click)="openEdit(rowData)"
                                                                    matTooltip="Edit"
@@ -193,7 +192,7 @@
                                                                     <i class="fa fa-pencil"></i>
                                                                 </a>
                                                             </span>
-                                                            <span *ngIf="isDelete">
+                                                            <span>
                                                                 <a class="btn nobg" (click)="openDelete(deletePaymentInfo,rowData);dt.reset();"
                                                                    matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                                             </span>
@@ -205,7 +204,7 @@
                                                             </span>
                                                         </div>
                                                         <div *ngIf="currentDeletedstatus==true">
-                                                            <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                                            matTooltipPosition="above"></p-inputSwitch>
                                                             <span data-toggle="modal" data-target="#view">
                                                                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
@@ -218,7 +217,7 @@
                                                                     <i class="fa fa-history"></i>
                                                                 </a>
                                                             </span>
-                                                            <span><a *ngIf="isEdit" class="btn nobg btn-users-cstm " (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                            <span><a class="btn nobg btn-users-cstm " (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -632,8 +631,8 @@
                 </div>
             </div>
             <div class="m-t-60" *ngIf="!isViewMode">
-                <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right" (click)="nextClick()">Next</button>
-                <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right" (click)="previousClick()">Previous</button>
+                <button type="button" class="btn btn-primary pull-right" (click)="nextClick()">Next</button>
+                <button type="button" class="btn btn-primary pull-right" (click)="previousClick()">Previous</button>
             </div>
         </div>
 

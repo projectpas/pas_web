@@ -6,7 +6,7 @@
                   <div class="col">
                     <h4 class="header-name">Item Master List</h4>
                   </div>
-                  <div *ngIf="isAdd">
+                  <div>
                     <button
                       type="button" *ngIf="stockTable"
                       class="btn-sm header-button"
@@ -73,7 +73,7 @@
 
                               <div class="row">
                                 <div class="col">
-                                    <button *ngIf="isDownload"
+                                    <button
                                     type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
@@ -86,7 +86,7 @@
                                     (click)="selectedOnly = false; targetData = dt;"
                                      data-target="#downloadConfirmation"
                                   ></button> 
-                                  <button *ngIf="isDownload"
+                                  <button
                                     type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Selected Data"
@@ -206,7 +206,6 @@
                     </td>
                     <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0">
                         <div *ngIf="currentDeletedstatus==false">
-                            <span *ngIf="isActiveButton">
                             <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active"
                                 matTooltipPosition="above" onLabel="on" offLabel="off"
                                 (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
@@ -216,29 +215,29 @@
                             <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active"
                                 matTooltipPosition="above" onLabel="on" offLabel="off"
                                 (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                            </span>
+                           
                             <span>
                                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                     (click)="viewSelectedRow(rowData)" matTooltip="View" matTooltipPosition="above"
                                     data-toggle="modal" data-target="#view"><i class="fa fa-eye"></i></a>
                             </span>
 
-                            <span><a  *ngIf="isEdit" class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"
+                            <span><a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"
                                     matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                    <span data-toggle="modal" data-target="#contentHist">
                                 <a class="btn nobg" (click)="getAuditHistoryById(rowData)" matTooltip="History"
                                     matTooltipPosition="above"><i class="fa fa-history"></i></a>
                             </span>
-                            <span *ngIf="isDelete" data-toggle="modal" data-target="#delete">
+                            <span data-toggle="modal" data-target="#delete">
                                 <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
                                     matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                             </span>
                         </div>
                         <div *ngIf="currentDeletedstatus">
-                            <p-inputSwitch *ngIf="isActiveButton"    [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
                            <span data-toggle="modal" data-target="#view"><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                           <span *ngIf="isEdit" >
+                           <span >
                               <a class="btn nobg btn-users-cstm"                               
                               (click)="restoreStockItem(rowData)"
                                matTooltip="Restore Record" 
@@ -396,19 +395,19 @@
                                 </td>
                                 <td class="action-icons-cstm table-column-width">
                                     <div>
-                                        <span *ngIf="isActiveButton">
                                         <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']" [disabled]="currentDeletedstatus"></p-inputSwitch>
                                         <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                         <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                                    </span>
+
                                         <span data-toggle="modal" data-target="#itemMasterView">
                                             <a class="btn nobg btn-view-cstm"
                                                (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                         </span>
-                                        <span *ngIf="!currentDeletedstatus"><a *ngIf="isEdit" class="btn nobg btn-edit-cstm" (click)="openEdit(car)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                        <span *ngIf="!currentDeletedstatus"><a *ngIf="isDelete" class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                        <span data-toggle="modal" data-target="#stockHistory"><a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                        <span *ngIf="currentDeletedstatus" data-toggle="modal" (click)="restoreStockItem(rowData)" data-target="#itemRestore"><a *ngIf="isActiveButton" class="btn nobg btn-users-cstm" 
+                                        <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-edit-cstm" (click)="openEdit(car)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                        <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                        <span data-toggle="modal" data-target="#stockHistory">
+                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                        <span *ngIf="currentDeletedstatus" data-toggle="modal" (click)="restoreStockItem(rowData)" data-target="#itemRestore"><a class="btn nobg btn-users-cstm" 
                                              matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                     </div>
                                 </td>
@@ -483,7 +482,7 @@
                                     label="Export Data"
                                     (click)="dt.exportCSV()"
                                   ></button> -->
-                                  <button *ngIf="isDownload"
+                                  <button
                                     type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
@@ -496,8 +495,7 @@
                                     (click)="nonstockselectedOnly = false; nonstocktargetData = dt;"
                                      data-target="#downloadnonstockConfirmation"
                                   ></button>                                  
-                                  <button *ngIf="isDownload"
-                                  
+                                  <button
                                     type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Selected Data"
@@ -691,7 +689,6 @@
                                 
                                 <td class="action-icons-cstm table-column-width">
                                     <div *ngIf="currentDeletedstatus==false">
-                                        <span *ngIf="isActiveButton">
                                         <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above"
                                                        onLabel="on" offLabel="off"
                                                        (onChange)="handleChangeforstock(rowData,$event)"
@@ -704,19 +701,18 @@
                                                        onLabel="on" offLabel="off"
                                                        (onChange)="handleChangeforstock(rowData,$event)"
                                                        [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                                                    </span>                                                       
                                         <span>
-                                            <a  class="btn nobg btn-view-cstm"
+                                            <a class="btn nobg btn-view-cstm"
                                                (click)="openViewforNonstock(view1,rowData)" matTooltip="View" matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </span>
                                         <span>
-                                            <a  *ngIf="isEdit" class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)"
+                                            <a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)"
                                                matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                         </span>
                                         <span>
-                                            <a  *ngIf="isDelete" class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)"
+                                            <a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)"
                                                matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                         </span>
                                         <span data-toggle="modal" data-target="#nonStockHistory">
@@ -725,7 +721,6 @@
                                         </span>
                                     </div>
                                     <div *ngIf="currentDeletedstatus==true">
-                                        <span *ngIf="isActiveButton">
                                         <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above"
                                                        onLabel="on" offLabel="off" [disabled]="currentDeletedstatus"
                                                        [(ngModel)]="rowData['isActive']"></p-inputSwitch>
@@ -735,17 +730,16 @@
                                         <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above"
                                                        onLabel="on" offLabel="off" [disabled]="currentDeletedstatus"
                                                        [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                                        </span>
                                         <span>
                                             <a class="btn nobg btn-view-cstm" (click)="openViewforNonstock(view1,rowData)" matTooltip="View" matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </span>
                                         <span>
-                                            <a  *ngIf="isEdit" class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                                            <a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                         </span>
                                         <span *ngIf="currentDeletedstatus" data-toggle="modal" data-target="#nonStockRestore">
-                                            <a  *ngIf="isActiveButton" class="btn nobg btn-users-cstm" 
+                                            <a class="btn nobg btn-users-cstm" 
                                             (click)="restoreNonStockItem(rowData)" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                         <span data-toggle="modal" data-target="#nonStockHistory">
                                             <a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>

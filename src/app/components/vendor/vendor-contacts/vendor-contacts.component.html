@@ -30,7 +30,7 @@
                       <div class="col">
                           <h4 class="header-name">Contacts</h4>
                       </div>
-                      <div *ngIf="isAdd">
+                      <div>
                           <a *ngIf="isViewMode == false" data-toggle="modal" data-target="#addContactInfo">
                               <button type="button" class="btn-sm header-button" matTooltip="Add Contacts" matTooltipPosition="above" (click)="onAddContactInfo();">
                                   Add Contacts
@@ -71,12 +71,12 @@
                           </div>
                           <div class="row">
                               <div class="col">
-                                  <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
+                                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
                                           pButton icon="fa-download" iconPos="left" label="Export Data"
                                           data-toggle="modal" 
                                           (click)="selectedOnly = false; targetData = dt;"
                                            data-target="#downloadConfirmation"></button>
-                                  <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+                                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
                                           matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                                           (click)="dt.exportCSV({ selectionOnly: true })" 
                                           ></button>
@@ -250,12 +250,10 @@
                               </td>
                               <td class="action-icons-cstm table-column-width">
                                   <div *ngIf="currentDeletedstatus==false">
-                                    <span *ngIf="isEdit">
                                       <p-inputSwitch *ngIf="!isViewMode" name="isActive{{ rowIndex }}" matTooltip="Active" [disabled]="rowData.isDefaultContact == true"
                                                   matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChanges(rowData, $event)"
                                                      [(ngModel)]="rowData['isActive']">
                                       </p-inputSwitch>
-                                    </span>
                                       <span data-toggle="modal" data-target="#view">
                                           <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                              (click)="opencontactView(view, rowData)" matTooltip="View" matTooltipPosition="above">
@@ -263,16 +261,16 @@
                                           </a>
                                       </span>
                                       <span *ngIf="!isViewMode" data-target="#addContactInfo" data-toggle="modal">
-                                          <a class="btn nobg" *ngIf="isEdit" 
+                                          <a class="btn nobg"
                                              (click)="openEdit(rowData)" matTooltip="Edit"
                                              matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                       </span>
                                       <span *ngIf="!isViewMode" requirePermission="canDelete" >
-                                          <a  class="btn nobg" matTooltip="Delete" *ngIf="isDelete" 
+                                          <a class="btn nobg" matTooltip="Delete"
                                           (click)="openDelete(deleteContent, rowData);dt.reset();" 
                                           matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                       </span>
-                                      <span data-target="#ATAADD" data-toggle="modal" *ngIf="isATA">
+                                      <span data-target="#ATAADD" data-toggle="modal">
                                           <a class="btn nobg btn-users-cstm"
                                              matTooltip="ATA Chapters"
                                              matTooltipPosition="above"
@@ -289,12 +287,10 @@
                                   </div>
                                   <div *ngIf="currentDeletedstatus==true">
                                     <ng-container *ngIf="!isViewMode">
-                                      <span *ngIf="isEdit">
                                           <p-inputSwitch *ngIf="!isViewMode" name="isActive{{ rowIndex }}" matTooltip="Active" 
                                           matTooltipPosition="above" onLabel="on" [disabled]="true" offLabel="off" 
                                           [(ngModel)]="rowData['isActive']">
                                           </p-inputSwitch>
-                                      </span>                                          
                                     </ng-container>
                                       <span data-toggle="modal" data-target="#view">
                                           <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
@@ -307,7 +303,7 @@
                                            (click)="openHist(contentAuditHist, rowData)"
                                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                       </span>
-                                      <span *ngIf="!isViewMode"><a *ngIf="isEdit" class="btn nobg btn-users-cstm" (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                      <span *ngIf="!isViewMode"><a class="btn nobg btn-users-cstm" (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                   </div>
                               </td>
                           </tr>
@@ -331,10 +327,10 @@
                   </p-table>
               </div>
               <div *ngIf="!isViewMode">
-                  <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()">
+                  <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()">
                       Next
                   </button>
-                  <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="previousClick()">
+                  <button type="button" class="btn btn-primary pull-right submit-btn" (click)="previousClick()">
                       Previous
                   </button>
               </div>

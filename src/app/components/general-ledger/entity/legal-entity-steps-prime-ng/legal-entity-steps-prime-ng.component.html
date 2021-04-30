@@ -14,7 +14,6 @@
     <div class="md-step-bar-right"></div>
   </div>
   <div
-    *ngIf="isShowTab('Contacts')"
     class="md-step"
     [ngClass]="{
       active: activeMenuItem >= 2,
@@ -29,7 +28,6 @@
     <div class="md-step-bar-right"></div>
   </div>
   <div
-    *ngIf="isShowTab('Banking Information')"
     class="md-step"
     [ngClass]="{
       active: activeMenuItem >= 3,
@@ -43,9 +41,8 @@
     <div class="md-step-bar-left"></div>
     <div class="md-step-bar-right"></div>
   </div>
-
+  
   <div
-    *ngIf="isShowTab('Billing Information')"
     class="md-step"
     [ngClass]="{
       active: activeMenuItem >= 4,
@@ -60,7 +57,6 @@
     <div class="md-step-bar-right"></div>
   </div>
   <div
-    *ngIf="isShowTab('Shipping Information')"
     class="md-step"
     [ngClass]="{
       active: activeMenuItem >= 5,
@@ -74,9 +70,9 @@
     <div class="md-step-bar-left"></div>
     <div class="md-step-bar-right"></div>
   </div>
-
+  
+  
   <div
-    *ngIf="isShowTab('Documents')"
     class="md-step"
     [ngClass]="{
       active: activeMenuItem >= 6,

@@ -91,32 +91,13 @@ export class EndpointFactory {
             'Authorization': 'Bearer ' + this.authService.accessToken,
             'Content-Type': 'application/json',
             'Accept': `application/vnd.iman.v${EndpointFactory.apiVersion}+json, application/json, text/plain, */*`,
-            'App-Version': ConfigurationService.appVersion,
-            'Access-Control-Allow-Origin':'*'
-        });
-
-        return { headers: headers };
-    }
-
-    getFormReqHeaders(): { headers: HttpHeaders | { [header: string]: string | string[]; } } {
-        let headers = new HttpHeaders({
-            'Authorization': 'Bearer ' + this.authService.accessToken,
-            // 'Content-Type': 'multipart/form-data;',
-            // 'Content-Disposition':'form-data',
-            'Accept': `*/*`,
-            'App-Version': ConfigurationService.appVersion,
-            'Access-Control-Allow-Origin':'*'
+            'App-Version': ConfigurationService.appVersion
         });
 
         return { headers: headers };
     }
 
     handleError(error, continuation: () => Observable<any>) {
-        if(error.status==404){
-            error.error="Not Authorize User";
-            this.showErrorMessage(error, "Unauthorize Error");
-            return Observable.throw(error);
-        }
         if (error.status == 401) {
             if (this.isRefreshingLogin) {
                 return this.pauseTask(continuation);

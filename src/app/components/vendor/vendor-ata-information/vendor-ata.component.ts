@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit,  Input } from '@angular/core';
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { AtaMainService } from '../../../services/atamain.service';
 import { editValueAssignByCondition } from '../../../generic/autocomplete';
@@ -8,11 +8,10 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { VendorService } from '../../../services/vendor.service';
 import { CommonService } from '../../../services/common.service';
-declare var $: any;
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 // import { DTCheckbox } from 'primeng/datatable';
 @Component({
     selector: 'app-vendor-ata',
@@ -71,16 +70,12 @@ export class VendorATAInformationComponent implements OnInit {
     local: any;
     activeIndex: any = 4;
     isvendorEditMode: any;
-    currentDeletedstatus: boolean = false;
+    currentDeletedstatus:boolean=false;
     vendorData: any = {};
-    auditHistoryATA: any = [];
+    auditHistoryATA:any=[];
     vendorCodeandName: any;
     ataListDataValuesOriginal: any = [];
 
-    isDownload: boolean = true;
-    isATAView: boolean = true;
-    isNextVisible: Boolean=true;
-    isPrevVisible: Boolean=true;
     constructor(
         private atasubchapter1service: AtaSubChapter1Service,
         private atamain: AtaMainService,
@@ -93,9 +88,9 @@ export class VendorATAInformationComponent implements OnInit {
         private router: ActivatedRoute,
         private datePipe: DatePipe
     ) {
-        if (window.localStorage.getItem('vendorService')) {
+        if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
-            if (obj.listCollection && this.router.snapshot.params['id']) {
+            if(obj.listCollection && this.router.snapshot.params['id']){
                 this.vendorService.checkVendorEditmode(true);
                 this.vendorService.isEditMode = true;
                 this.vendorService.listCollection = obj.listCollection;
@@ -103,26 +98,22 @@ export class VendorATAInformationComponent implements OnInit {
                 this.vendorService.enableExternal = true;
                 this.vendorId = this.router.snapshot.params['id'];
                 this.vendorService.vendorId = this.vendorId;
-                this.vendorService.listCollection.vendorId = this.vendorId;
+                this.vendorService.listCollection.vendorId = this.vendorId; 
                 this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
                     res => {
-                        this.local = res[0];
-                        this.vendorCodeandName = res[0];
-                    }, err => {
+                            this.local = res[0];
+                            this.vendorCodeandName = res[0];
+                    },err => {
                         this.isSpinnerVisible = false
                         //const errorLog = err;
                         //this.saveFailedHelper(errorLog);
                     });
             }
         }
-        else {
+        else{
             this.getVendorCodeandNameByVendorId();
         }
         this.stopmulticlicks = false;
-        this.isDownload = this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter + "." + PermissionConstants.Download])
-        this.isATAView = this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter + "." + PermissionConstants.View]);
-        this.isNextVisible=this.authService.ShowTab('Create Vendor','Financial Information');
-        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Contacts');
     }
 
     ngOnInit() {
@@ -130,28 +121,27 @@ export class VendorATAInformationComponent implements OnInit {
             this.isvendorEditMode = message;
         });
         this.local = this.vendorService.listCollection;
-        if (!this.vendorId) {
+        if(!this.vendorId){
             this.vendorId = this.local.vendorId;
         }
-        this.vendorId = this.vendorId ? this.vendorId : this.router.snapshot.params['id'];
-
-        if (this.isATAView) {
-            this.getMappedATAByVendorId();
-        }
-        if (this.isViewMode) {
+        this.vendorId = this.vendorId ? this.vendorId :this.router.snapshot.params['id'];
+       
+        this.getMappedATAByVendorId();
+        if(this.isViewMode)
+        {
             this.getVendorCodeandNameByVendorId();
         }
-        else {
+        else{
             this.getAllATAChapter();
             this.getAllATASubChapter();
             this.getContactsByVendorId();
         }
     }
-
+    
     get currentUserMasterCompanyId(): number {
-        return this.authService.currentUser
-            ? this.authService.currentUser.masterCompanyId
-            : null;
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
     }
     dateFilterForTable(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
@@ -169,17 +159,19 @@ export class VendorATAInformationComponent implements OnInit {
         }
     }
 
-    getVendorCodeandNameByVendorId() {
-        if (this.vendorId > 0) {
+    getVendorCodeandNameByVendorId()
+    {
+        if(this.vendorId > 0)
+        {
             this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
                 res => {
-                    this.vendorCodeandName = res[0];
-                }, err => {
+                        this.vendorCodeandName = res[0];
+                },err => {
                     this.isSpinnerVisible = false
                     //const errorLog = err;
                     //this.saveFailedHelper(errorLog);
-                });
-        }
+            });
+        }        
     }
 
     get userName(): string {
@@ -191,19 +183,19 @@ export class VendorATAInformationComponent implements OnInit {
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
     closeDeleteModal() {
-        $("#downloadConfirmation").modal("hide");
+		$("#downloadConfirmation").modal("hide");
     }
     // exportCSV(dt) {
     //     this.isSpinnerVisible = true;
     //     let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.currentstatus,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
     //     let filters = Object.keys(dt.filters);
     //     filters.forEach(x=>{
-    // 		PagingData.filters[x] = dt.filters[x].value;
+	// 		PagingData.filters[x] = dt.filters[x].value;
     //     })
-
+    
     //     this.vendorService.getATASubchapterData(this.vendorId).subscribe(res => {
     //         dt._value = res[0]['results'].map(x => {
-    // 			return {
+	// 			return {
     //             ...x,
     //             createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
     //             updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
@@ -218,12 +210,12 @@ export class VendorATAInformationComponent implements OnInit {
     //     );
     //   }
 
-    exportCSV(dt) {
+    exportCSV(dt){
         dt._value = dt._value.map(x => {
             return {
                 ...x,
-                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
             }
         });
         dt.exportCSV();
@@ -242,7 +234,7 @@ export class VendorATAInformationComponent implements OnInit {
             // making copy for the subchapters in both add and seach 
             this.search_ataSubChapterList = ataSubChapter;
             this.isSpinnerVisible = false;
-        }, error => { this.isSpinnerVisible = false; }) //this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error))
     }
 
     getAllATAChapter() {
@@ -256,7 +248,7 @@ export class VendorATAInformationComponent implements OnInit {
                 }
             })
             this.isSpinnerVisible = false;
-        }, error => { this.isSpinnerVisible = false; }) //this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error))
     }
 
     // get sub chapter by multiple ids in the search
@@ -265,15 +257,15 @@ export class VendorATAInformationComponent implements OnInit {
         if (this.ataChapterIdUrl !== '') {
             this.isSpinnerVisible = true;
             this.atamain.getMultiATASubDesc(this.ataChapterIdUrl).subscribe(atasubchapter => {
-                const responseData = atasubchapter;
-                this.search_ataSubChapterList = responseData.map(x => {
-                    return {
-                        label: `${x.ataSubChapterCode}-${x.description}`,
-                        value: x.ataSubChapterId
-                    };
+                    const responseData = atasubchapter;
+                    this.search_ataSubChapterList = responseData.map(x => {
+                        return {
+                            label: `${x.ataSubChapterCode}-${x.description}`,
+                            value: x.ataSubChapterId
+                        };
+                    });
+                    this.isSpinnerVisible = false;
                 });
-                this.isSpinnerVisible = false;
-            });
 
         } else {
             this.getAllATASubChapter();
@@ -295,14 +287,14 @@ export class VendorATAInformationComponent implements OnInit {
         })
     }
 
-    getATADeleteListByStatus(value) {
-        if (value) {
-            this.currentDeletedstatus = true;
-        } else {
-            this.currentDeletedstatus = false;
+    getATADeleteListByStatus(value){
+        if(value){
+            this.currentDeletedstatus=true;
+        }else{
+            this.currentDeletedstatus=false;
         }
         this.getMappedATAByVendorId();
-    }
+    } 
 
     // search URL generation 
     searchByFieldUrlCreateforATA() {
@@ -342,11 +334,11 @@ export class VendorATAInformationComponent implements OnInit {
                 }
             })
             this.isSpinnerVisible = false;
-        }, error => this.isSpinnerVisible = false) //this.onDataLoadFailed(error))
-
+        },error => this.isSpinnerVisible = false) //this.onDataLoadFailed(error))
+        
     }
 
-    async searchATA() {
+    async searchATA() {        
         await this.searchByFieldUrlCreateforATA();
         this.searchATAParams = '';
         // checks where multi select is empty or not and calls the service
@@ -380,7 +372,7 @@ export class VendorATAInformationComponent implements OnInit {
         }
         this.isSpinnerVisible = true;
         this.vendorService
-            .searchATAMappedByMultiATAIDATASUBIDByVendorId(this.vendorId, this.searchATAParams)
+            .searchATAMappedByMultiATAIDATASUBIDByVendorId(this.vendorId,this.searchATAParams)
             .subscribe(res => {
                 this.ataListDataValues = res;
                 if (res.length > 0) {
@@ -392,7 +384,7 @@ export class VendorATAInformationComponent implements OnInit {
                 this.ataSubchapterIdUrl = '';
                 this.ataChapterIdUrl = '';
                 this.isSpinnerVisible = false;
-            }, error => { this.isSpinnerVisible = false; })  //this.onDataLoadFailed(error));
+            },error => {this.isSpinnerVisible = false;})  //this.onDataLoadFailed(error));
     }
 
     pageIndexChange(event) {
@@ -451,9 +443,9 @@ export class VendorATAInformationComponent implements OnInit {
         this.getMappedATAByVendorId();
     }
 
-    getVendorName() {
-        if (this.isViewMode == false) {
-            if (this.local !== undefined && this.local !== null) {
+    getVendorName() {       
+        if(this.isViewMode == false){
+            if (this.local !== undefined && this.local !== null ) {
                 return editValueAssignByCondition('vendorName', this.local.vendorName) === undefined ? '' : editValueAssignByCondition('vendorName', this.local.vendorName);
             } else {
                 return '';
@@ -461,7 +453,7 @@ export class VendorATAInformationComponent implements OnInit {
         }
     }
 
-    getATAAuditHistoryById(content, rowData) {
+    getATAAuditHistoryById(content,rowData) {
         this.isSpinnerVisible = true;
         this.vendorService.getVendorContactATAAuditDetails(rowData.vendorContactATAMappingId).subscribe(res => {
             this.auditHistoryATA = res;
@@ -469,9 +461,9 @@ export class VendorATAInformationComponent implements OnInit {
                 var obtainedVendorId = this.auditHistoryATA[i].vendorId;
                 this.getVendorBasicData(obtainedVendorId);
             }
-            this.isSpinnerVisible = false;
-            this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-        }, error => { this.isSpinnerVisible = false; }) //this.onDataLoadFailed(error))    
+        this.isSpinnerVisible = false;
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+       },error => {this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error))    
     }
 
     getVendorBasicData(vendorId) {
@@ -479,7 +471,7 @@ export class VendorATAInformationComponent implements OnInit {
         this.vendorService.getVendorDataById(vendorId).subscribe(res => {
             this.vendorData = res;
             this.isSpinnerVisible = false;
-        }, error => { this.isSpinnerVisible = false; }) //this.onDataLoadFailed(error));
+        },error =>{this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error));
     }
 
     getColorCodeForHistoryATA(i, field, value) {

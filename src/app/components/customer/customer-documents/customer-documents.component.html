@@ -35,7 +35,7 @@
             <div class="col">
               <h4 class="header-name">  Documents List</h4>
             </div>
-            <div *ngIf="isAdd">
+            <div>
               <a *ngIf="isViewMode == false" 
                data-toggle="modal" data-target="#addDocumentDetails">
                 <button type="button" class="btn-sm header-button"
@@ -234,7 +234,7 @@
                         (click)="openHistory(contentAuditHist, rowData)"
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                       </span>
-                      <span *ngIf="isDelete"><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                      <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                   </div>
                   <div  *ngIf="currentDeletedstatus==false" >
                     <span>
@@ -249,13 +249,13 @@
                       </a>
                     </span>
   
-                    <span *ngIf="isEdit" data-toggle="modal"
+                    <span data-toggle="modal"
                     data-target="#addDocumentDetails">
                       <a class="btn nobg" 
                       (click)="editCustomerDocument(rowData)" matTooltip="Edit" 
                       matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
   
-                    <span *ngIf="isDelete"><a class="btn nobg"
+                    <span><a class="btn nobg"
                       (click)="openDelete(deleteContent, rowData); documents.reset()"
                       matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
   
@@ -336,10 +336,11 @@
             *ngIf="isViewMode == false">
             Add New
           </button>
-          <button *ngIf="isPrevVisible && isViewMode == false"
+          <button
             type="button"
             class="btn btn-primary pull-right submit-btn"
-            (click)="backClick()">
+            (click)="backClick()"
+            *ngIf="isViewMode == false">
             Previous
           </button>          
         </div>
