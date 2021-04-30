@@ -912,7 +912,7 @@
                                                 <th>Pub Desc</th>
                                                 <th>Pub Type</th>
                                                 <th>Revision Date</th>                                                
-                                                <th>Sequence</th>
+                                                <!-- <th>Sequence</th> -->
                                                 <th>Source</th>
                                                 <!-- <th>Aircraft</th> -->
                                                 <!-- <th>Model</th> -->
@@ -932,7 +932,7 @@
                                                 <td>{{publication.publicationDescription}}</td>
                                                 <td>{{publication.publicationTypeName}}</td>
                                                 <td>{{publication.revisionDate}}</td>
-                                                <td class="text-right">{{publication.sequence}}</td>
+                                                <!-- <td class="text-right">{{publication.sequence}}</td> -->
                                                 <td>{{publication.source}}</td>
                                                 <!-- <td>{{publication.aircraftManufacturerName}}</td> -->
                                                 <!-- <td>{{publication.modelName}}</td> -->
@@ -1214,17 +1214,6 @@
 <div *ngIf="isWorkOrder  ">
     <div class="card">
         <div class="card-header header">
-            <!-- <nav class="pull-left" aria-label="breadcrumb">
-                <ol class="breadcrumb workflow-breadcrumb">
-                    <li class="breadcrumb-item active workflow-li" aria-current="page" >
-                        <h4 class="header-name">Work
-                        Flow Details </h4></li>
-                </ol>
-            </nav>
-            <button class="btn-sm header-button pull-right" (click)="toggle_wf_header=!toggle_wf_header">
-                {{toggle_wf_header ? 'Collapse' : 'Expand'}}
-            </button> -->
-
             <div class="row">
                 <div class="col">
                     <h4 class="header-name">Work Flow Details
@@ -1233,9 +1222,7 @@
                             {{toggle_wf_header ? 'Collapse' : 'Expand'}}
                         </button>   
                     </h4>                     
-                  
                 </div>  
-               
             </div>
         </div>
         <div class="card-body scroll_set" >
@@ -1779,13 +1766,13 @@
                                         <th>Pub Desc</th>
                                         <th>Pub Type</th>
                                         <th>Revision Date</th>
-                                        <th>Sequence</th>
+                                        <!-- <th>Sequence</th> -->
                                         <th>Source</th>
                                         <th>Location</th>
                                         <th>Verified By</th>
                                         <th>Verified Date</th>
                                         <th>Status</th>
-                                        <th>Files</th>
+                                        <th>File name</th>
                                         <th>Memo</th>
                                     </tr>
                                 </thead>
@@ -1796,7 +1783,7 @@
                                         <td>{{publication.publicationDescription}}</td>
                                         <td>{{publication.publicationTypeName}}</td>
                                         <td>{{publication.revisionDate}}</td>
-                                        <td class="text-right">{{publication.sequence}}</td>
+                                        <!-- <td class="text-right">{{publication.sequence}}</td> -->
                                         <td>{{publication.source}}</td>
                                         <td>{{publication.location}}</td>
                                         <td>{{publication.verifiedBy}}</td>
