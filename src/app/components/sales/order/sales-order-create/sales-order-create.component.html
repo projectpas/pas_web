@@ -252,10 +252,10 @@
                                                 </div>
                                             </div>
                                             <div class="form-group padding-top-24">
-                                                <label class="ar-balance-label-width">AR Balance </label><i class="fa fa-info-circle fa-lg"
-                                                    matTooltipPosition="above" matTooltip="AR Bal before this Sales Order"></i>
-                                                <input type="text" class="form-control text-right"
-                                                    name="balanceDue"
+                                                <label class="ar-balance-label-width">AR Balance </label><i
+                                                    class="fa fa-info-circle fa-lg" matTooltipPosition="above"
+                                                    matTooltip="AR Bal before this Sales Order"></i>
+                                                <input type="text" class="form-control text-right" name="balanceDue"
                                                     [ngModel]="salesQuote.balanceDue | twoDecimalGlobalNumberFormatPipe"
                                                     (ngModelChange)="salesQuote.balanceDue=$event" [disabled]="true" />
                                             </div>
@@ -395,15 +395,17 @@
                                             <div class=" main_ar" style="padding-top:10px">
                                                 <div class="form-group memo-popup-cstm">
                                                     <label>
-                                                        Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                                            matTooltipPosition="above" matTooltip="Add Memo"
+                                                        Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                            data-target="#add-description" matTooltipPosition="above"
+                                                            matTooltip="Add Memo"
                                                             (click)="onAddDescription('memo')"></i>
                                                     </label>
                                                     <span>
                                                         <div class="form-group memo-popup-cstm mat_emo">
                                                             <div [innerHTML]="salesQuote.memo"
-                                                                [matTooltip]="parsedText(salesQuote.memo)" matTooltipPosition="above"
-                                                                class="form-control" style="height: 100px !important;width:100%"
+                                                                [matTooltip]="parsedText(salesQuote.memo)"
+                                                                matTooltipPosition="above" class="form-control"
+                                                                style="height: 100px !important;width:100%"
                                                                 class="text_editor_box">
                                                             </div>
                                                         </div>
@@ -441,7 +443,7 @@
                                                 </div>
                                             </div> -->
                                             <!-- <div style="padding-top: 10px"></div> -->
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -451,8 +453,7 @@
                             <div class="col-md-4 main_ar">
                                 <div class="form-group" style="padding-left: 5px;">
                                     <label>Customer Warning</label>
-                                    <textarea name="warningId" class="form-control customer-warning-msg"
-                                        disabled
+                                    <textarea name="warningId" class="form-control customer-warning-msg" disabled
                                         value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
                                 </div>
                             </div>
@@ -546,8 +547,9 @@
                                 </app-sales-order-approve>
                             </p-tabPanel>
                             <p-tabPanel header="Approver Process">
-                                <app-sales-order-customer-approval *ngIf="isEdit && isContactsLoaded" [customer-id]="customerId"
-                                    [sales-order-id]="id" [status]="status" [customer-contacts]="customerContactList"
+                                <app-sales-order-customer-approval *ngIf="isEdit && isContactsLoaded"
+                                    [customer-id]="customerId" [sales-order-id]="id" [status]="status"
+                                    [customer-contacts]="customerContactList"
                                     [customerContactList]="customerContactList"
                                     (on-part-approved-event)="onPartsApprovedEvent()">
                                 </app-sales-order-customer-approval>
@@ -584,7 +586,7 @@
                             </p-tabPanel>
                             <p-tabPanel header="Billing/Invoicing">
                                 <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="id"
-                                [customerDetails]="customerDetails" [salesOrder]="salesQuote">
+                                    [customerDetails]="customerDetails" [salesOrder]="salesQuote">
                                 </app-sales-order-billing>
                             </p-tabPanel>
                             <p-tabPanel header="Document">
@@ -697,15 +699,15 @@
 <ng-template #salesOrderPrintPopup let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
-        <h4 class="modal-title">Print Sales Order Form</h4>
+        <h4 class="modal-title">Print Sales Order</h4>
     </div>
     <div class="modal-body">
-        <div class="x_panel" id="quote_print_content">
-            <app-sales-order-print-template [salesQuoteView]="salesQuoteView"></app-sales-order-print-template>
+        <div class="x_panel" id="sales_order_print_content">
+            <app-sales-order-print-template [salesOrderView]="salesOrderView"></app-sales-order-print-template>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
