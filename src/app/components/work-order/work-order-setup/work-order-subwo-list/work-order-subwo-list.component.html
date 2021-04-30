@@ -88,7 +88,7 @@
   <div class="modal-dialog modal-xlg"> 
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeView()">
           &times;
         </button>
         <h4 class="modal-title">Sub WorkOrder View</h4>
@@ -102,7 +102,7 @@
       </div>
 <app-sub-work-order [isView]="isView" [subWorkOrderIdForView]="subWorkOrderId" [workOrderIdForView]="workOrderId" [mpnIdForView]="mpnId"></app-sub-work-order>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeView()">
             Close
           </button>
         </div>

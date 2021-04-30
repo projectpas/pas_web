@@ -445,8 +445,8 @@
                                     (click)="deleteInternationalShipping(deleteContent1, rowData);intlShippingTable.reset()"
                                     matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
             
-                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via "
-                                  matTooltipPosition="above" data-original-title="View Shipping Via Info" style="padding: 0;">
+                                <button class="btn btn-danger nobg padding-0" data-toggle="tooltip" matTooltip="Add Ship Via "
+                                  matTooltipPosition="above" data-original-title="View Shipping Via Info">
                                   <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal"
                                     (click)="selectedInternationalShipForShipVia(rowData)"></i>
                                 </button>
@@ -476,7 +476,7 @@
                                       class="fa fa-eye"></i></a>
                                 </span>
                                 <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via "
-                                  matTooltipPosition="above" data-original-title="View Shipping Via Info">
+                                  matTooltipPosition="above" data-original-title="View Shipping Via Info" style="padding: 0;">
                                   <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal"
                                     (click)="selectedInternationalShipForShipVia(rowData)"></i>
                                 </button>
@@ -2548,7 +2548,7 @@
     <div class="modal-body">
       <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
         <div class="tableFixHead">
-          <table class="table table-bordered table-width">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th>Tag</th>
@@ -2769,7 +2769,7 @@
                   ? 'black'
                   : 'red'
               }">
-                {{ audit.startDate| date: 'MM/dd/yyyy h:mm a ' }}
+                {{ audit.startDate | date: 'MM/dd/yyyy h:mm a '}}
               </td>
               <td [ngStyle]="{
                 color: getColorCodeForInterHistory(

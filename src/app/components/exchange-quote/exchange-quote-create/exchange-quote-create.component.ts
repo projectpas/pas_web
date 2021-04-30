@@ -34,9 +34,11 @@ import { IStatus } from "../../../models/sales/IStatus";
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { ExchangeQuotePartNumberComponent } from "../shared/components/exchange-quote-part-number/exchange-quote-part-number.component";
 import { ExchangeQuoteApproveComponent } from "../shared/components/exchange-quote-approve/exchange-quote-approve.component";
-//import { ExchangeQuoteCustomerApprovalComponent } from "../shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
+import { ExchangeQuoteCustomerApprovalComponent } from "../shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
 import{ExchangeQUoteMarginSummary} from '../../../models/exchange/ExchangeQUoteMarginSummary';
 import{ExchangeQuoteAnalysisComponent} from '../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
+import {ExchangeQuoteChargesComponent} from "../../exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
+import {ExchangeQuoteFreightComponent} from "../../exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
 @Component({
   selector: 'app-exchange-quote-create',
   templateUrl: './exchange-quote-create.component.html',
@@ -88,9 +90,13 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   showAddresstab: boolean = false;
   managementStructureId: any;
   @ViewChild(ExchangeQuoteApproveComponent, { static: false }) public exchangeQuoteApproveComponent: ExchangeQuoteApproveComponent;
-  //@ViewChild(ExchangeQuoteCustomerApprovalComponent, { static: false }) public exchangeQuoteCustomerApprovalComponent: ExchangeQuoteCustomerApprovalComponent;
+  @ViewChild(ExchangeQuoteCustomerApprovalComponent, { static: false }) public exchangeQuoteCustomerApprovalComponent: ExchangeQuoteCustomerApprovalComponent;
   marginSummary: ExchangeQUoteMarginSummary = new ExchangeQUoteMarginSummary();
   @ViewChild(ExchangeQuoteAnalysisComponent, { static: false }) public exchangeQuoteAnalysisComponent: ExchangeQuoteAnalysisComponent;
+  enforceApproval: boolean=true;
+  @ViewChild(ExchangeQuoteChargesComponent, { static: false }) public exchangeQuoteChargesComponent: ExchangeQuoteChargesComponent;
+  @ViewChild(ExchangeQuoteFreightComponent, { static: false }) public exchangeQuoteFreightComponent: ExchangeQuoteFreightComponent;
+  totalCharges = 0;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -726,6 +732,13 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     }
   }
 
+  onPartsApprovedEvent(approved: boolean) {
+    if (approved) {
+      this.selectedParts = [];
+      this.getExchQuoteInstance(this.id, true);
+    }
+  }
+
   onTabChange(event) {
     if (event.index == 0) {
       this.exchangeQuotePartNumberComponent.refresh();
@@ -734,9 +747,26 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuoteApproveComponent.refresh(this.exchangeQuote.exchangeQuoteId);
     }
     if (event.index == 2) {
-      this.showAddresstab = true;
+      this.exchangeQuoteCustomerApprovalComponent.refresh(this.marginSummary, this.exchangeQuote.exchangeQuoteId);
     }
     if (event.index == 3) {
+      this.showAddresstab = true;
+    }
+    if (event.index == 4) {
+      if (this.exchangeQuote.statusName == "Open" || this.exchangeQuote.statusName == "Partially Approved") {
+        this.exchangeQuoteFreightComponent.refresh(false);
+      } else {
+        this.exchangeQuoteFreightComponent.refresh(true);
+      }
+    }
+    if (event.index == 5) {
+      if (this.exchangeQuote.statusName == "Open" || this.exchangeQuote.statusName == "Partially Approved") {
+        this.exchangeQuoteChargesComponent.refresh(false);
+      } else {
+        this.exchangeQuoteChargesComponent.refresh(true);
+      }
+    }
+    if (event.index == 6) {
       this.exchangeQuoteAnalysisComponent.refresh(this.id);
     }
   }
@@ -763,12 +793,38 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   setExchangeQuoteMarginSummary(data) {
     if (data) {
       this.marginSummary = data;
-      // this.totalCharges = this.marginSummary.misc;
+       this.totalCharges = this.marginSummary.otherCharges;
       // this.totalFreights = this.marginSummary.freightAmount;
-      // this.salesQuoteService.setTotalCharges(this.marginSummary.misc);
+       this.exchangequoteService.setTotalCharges(this.marginSummary.otherCharges);
       // this.salesQuoteService.setTotalFreights(this.marginSummary.freightAmount);
     } else {
       this.marginSummary = new ExchangeQUoteMarginSummary;
     }
+  }
+
+  saveExchangeQuoteChargesList(e) {
+    this.totalCharges = e;
+    this.marginSummary.otherCharges = this.totalCharges;
+    this.exchangequoteService.setTotalCharges(e);
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
+  }
+
+  updateExchangeQuoteChargesList(e) {
+    this.totalCharges = e;
+    this.exchangequoteService.setTotalCharges(e);
+    this.marginSummary.otherCharges = this.totalCharges;
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
+  }
+
+  setFreightsOrCharges() {
+    if (this.exchangequoteService.selectedParts && this.exchangequoteService.selectedParts.length > 0) {
+      this.exchangequoteService.selectedParts.forEach((part, i) => {
+        //this.exchangequoteService.selectedParts[i].freight = this.totalFreights;
+        this.exchangequoteService.selectedParts[i].misc = this.totalCharges;
+      });
+    }
+    this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(this.exchangequoteService.selectedParts, this.marginSummary);
   }
 }

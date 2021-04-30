@@ -320,7 +320,7 @@ export class ReceivngPoComponent implements OnInit {
             this.arrayPostatuslist.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('POStatus', 'POStatusId', 'Description', '',
-            true, 0, this.arrayPostatuslist.join(), this.currentUserMasterCompanyId)
+            true, 0, this.arrayPostatuslist.join(), 0)
             .subscribe(res => {
                 this.poStatus = res;
                 this.poStatus = this.poStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));        
@@ -1380,7 +1380,7 @@ export class ReceivngPoComponent implements OnInit {
             }
 
             if (item.itemMaster.isTimeLife == true && item.timeLifeList != undefined && item.timeLifeList.length > 0) {
-                // need to have some check to make sure atleast one field is entered.
+                // need to have some check to make sure atleast one field is entered.                
                 for (var i = 0; i < item.timeLifeList.length; i++) {
                     var timeLife = item.timeLifeList[i];
                     if (timeLife.detailsNotProvided != true) {

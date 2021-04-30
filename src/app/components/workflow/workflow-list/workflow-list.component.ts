@@ -28,6 +28,7 @@ import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { ConfigurationService } from '../../../services/configuration.service';
 declare var $ : any;
+
 @Component({
     selector: 'app-workflow-list',
     templateUrl: './workflow-list.component.html',
@@ -35,7 +36,6 @@ declare var $ : any;
     animations: [fadeInOut],
     providers: [DatePipe],
 })
-
 
 export class WorkflowListComponent implements OnInit {
     @Input() isWorkOrder;
@@ -91,6 +91,8 @@ export class WorkflowListComponent implements OnInit {
     dateObject: any = {};
     targetData: any;
     selectedOnly : boolean = false;
+    arrayItemlist:any=[]
+    totalPercent:any=[];
     breadcrumbs: MenuItem[] = [
         { label: 'Work Flow' },
         { label: 'Work Flow List' }
@@ -114,6 +116,11 @@ export class WorkflowListComponent implements OnInit {
         { field: 'fileName', header: 'File Name' },
     ]
     totalExpertiseCostsum: any;
+    materialPercentValue:any;
+    expertisePercentValue:any;
+    chargesPercentValue:any;
+    othersPercentValue:any;
+
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
         private route: Router,
@@ -144,12 +151,9 @@ export class WorkflowListComponent implements OnInit {
     ngOnInit() { 
         this.selectedGridColumns = this.gridColumns;
         if (this.isWorkOrder) { 
-            // this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
                 this.onViewWFDetails('','onload');
                 this.toggle_wf_header=true;
-                // this.responseDataForWorkFlow = res;
-            // })
-        }
+        }        
     }
 
     get currentUserMasterCompanyId(): number {
@@ -159,13 +163,6 @@ export class WorkflowListComponent implements OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        // if (changes.workFlowId) {
-        //     console.log("hello res ng ononChanges")
-        //     // this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
-        //         this.onViewWFDetails( );
-        //         // this.responseDataForWorkFlow = res;
-        //     // })
-        // }
     }
 
     //Load Data for work Flow List
@@ -298,17 +295,13 @@ export class WorkflowListComponent implements OnInit {
         this.workFlowGridSource.filter = filterValue;
     }
 
-    // private onDataLoadFailed(error: any) {
-    //     this.isSpinnerVisible = false;
-    // }
-
     confirmDelete(confirmDeleteTemplate, rowData) {
         this.currentWorkflow = rowData;
         this.modal = this.modalService.open(confirmDeleteTemplate, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
     removeWorkFlow(): void {
-        this.actionService.RemoveWorkFlow(this.currentWorkflow.workflowId).subscribe(
+        this.actionService.RemoveWorkFlow(this.currentWorkflow.workflowId, this.userName).subscribe(
             result => {
                 this.alertService.showMessage(this.title, "ACC" + this.currentWorkflow.workflowId + ' deleted successfully.', MessageSeverity.success);
                 this.getDeleteListByStatus(this.currentDeletedstatus)
@@ -340,7 +333,7 @@ export class WorkflowListComponent implements OnInit {
     }
 
     toggleIsActive(workflow: any, event): void {
-        this.actionService.toggleState(workflow.workflowId).subscribe(
+        this.actionService.toggleState(workflow.workflowId, this.userName).subscribe(
             result => {
                 this.getDeleteListByStatus(this.currentDeletedstatus);
                 if (event.checked) {
@@ -379,8 +372,6 @@ export class WorkflowListComponent implements OnInit {
         this.workFlowtService.listCollection = row;
         this.workFlowtService.enableUpdateMode = true;
         this.workFlowtService.currentWorkFlowId = row.workflowId;
-        // this.route.navigateByUrl('/workflowmodule/workflowpages/wf-edit/${this.workFlowtService.currentWorkFlowId');
-
         this.route.navigateByUrl(`/workflowmodule/workflowpages/wf-edit/${this.workFlowtService.currentWorkFlowId}`);
     }
 
@@ -397,18 +388,17 @@ export class WorkflowListComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-    onOpenAll() {
+    onOpenAllView() {
         for (let task of this.addedTasks) {
             task.selected = true;
         }
     }
 
-    onCloseAll() {
+    onCloseAllView() {
         for (let task of this.addedTasks) {
             task.selected = false;
         }
     }
-
 
     onAccordTabClick1(task: any) {
         task.selected = !task.selected;
@@ -416,9 +406,11 @@ export class WorkflowListComponent implements OnInit {
     }
 
     onViewWFDetails(rowData,from): void {
-if(from=='html'){
-    this.workFlowId=rowData.workflowId;
-}
+        if(from=='html'){
+            this.workFlowId=rowData.workflowId;
+        }
+
+        this.getAllPercentages();
         this.sourceWorkFlow = undefined;
         this.isSpinnerVisible = true;
         this.actionService.getWorkFlow(this.workFlowId).subscribe(
@@ -437,11 +429,9 @@ if(from=='html'){
                     berThresholdAmount: sourceWF.berThresholdAmount ? formatNumberAsGlobalSettingsModule(sourceWF.berThresholdAmount, 2) : null,
 
                 };
-                // var part = this.allParts.filter(x => x.itemMasterId == rowData.changedPartNumberId)[0];
-                // this.sourceWorkFlow.changedPartNumber = part != undefined ? part.partNumber : '';
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate).toLocaleDateString();
                 this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate != null && this.sourceWorkFlow.workflowExpirationDate != '' ? new Date(this.sourceWorkFlow.workflowExpirationDate).toLocaleDateString() : '';
-
+          
                 this.calculatePercentOfNew(workflow[0].costOfNew, workflow[0].percentageOfNew);
                 this.calculatePercentOfReplacement(workflow[0].costOfReplacement, workflow[0].percentageOfReplacement);
                 this.calculateTotalWorkFlowCost();
@@ -457,6 +447,7 @@ if(from=='html'){
         this.actionService.getWorkFlowWithMaterialList(rowData.workflowId).subscribe(
             workflow => {
                 this.sourceWorkFlow = workflow[0];
+              
                 this.calculateWorkFlowTotalMaterialCost();
                 this.getAllTasks();
                 this.isSpinnerVisible = false;
@@ -465,7 +456,6 @@ if(from=='html'){
                 this.isSpinnerVisible = false;
             });
     }
-
 
     private setPublicationData(selectedPublication: any, row: any) {
         if (selectedPublication != null) {
@@ -512,6 +502,18 @@ if(from=='html'){
         }
     }
 
+    getAllPercentages(): void {
+        this.arrayItemlist=[];
+        if (this.arrayItemlist && this.arrayItemlist.length == 0) {
+            this.arrayItemlist.push(0);
+        }
+        this.isSpinnerVisible = true;
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, this.arrayItemlist.join(),this.currentUserMasterCompanyId)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.totalPercent = res; 
+            });
+    }
 
     private calculateTotalWorkFlowCost(): void {
         this.MaterialCost = 0.00;
@@ -531,58 +533,74 @@ if(from=='html'){
         for (let material of mdata.materialList) {
             this.MaterialCost +=  material.extendedCost;
         }
-        //     const percentValue = parseFloat(this.sourceWorkFlow.percentageOfMaterial.toString().replace(/\,/g, ''));
-
-        //     if(percentValue > 0)
-        //     {
-        //         const MaterialCost = this.MaterialCost;
-        //         const val = ((MaterialCost / 100) * percentValue) + MaterialCost;
-        //         this.MaterialCost = formatNumberAsGlobalSettingsModule(MaterialCost, 2);
-        //     }
-        
         for (let expertise of this.sourceWorkFlow.expertise) {
             this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
        }
-        this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 || this.sourceWorkFlow.percentageOfMaterial == "-1" ? 0 : this.sourceWorkFlow.percentageOfMaterial;
+        if( this.totalPercent &&  this.totalPercent.length !=0){
+            this.totalPercent.forEach(element => {
+                if(element.value == this.sourceWorkFlow.percentageOfMaterial){
+                    return this.materialPercentValue=Number(element.label);
+                }   
+                if(element.value == this.sourceWorkFlow.percentageOfExpertise){
+                    return this.expertisePercentValue=Number(element.label);
+                }  
+                if(element.value == this.sourceWorkFlow.percentageOfCharges){
+                    return this.chargesPercentValue=Number(element.label);
+                }  
+                if(element.value == this.sourceWorkFlow.percentageOfOthers){
+                    return this.othersPercentValue=Number(element.label);
+                }  
+            });
+        }
+ 
+        this.materialPercentValue =this.materialPercentValue ? this.materialPercentValue :0;
+        this.expertisePercentValue =this.expertisePercentValue ? this.expertisePercentValue :0;
+        this.chargesPercentValue =this.chargesPercentValue ? this.chargesPercentValue :0;
+        this.othersPercentValue =this.othersPercentValue ? this.othersPercentValue :0;
+     
+        this.sourceWorkFlow.percentageOfMaterial =  this.materialPercentValue;
         const MaterialCost = this.MaterialCost;
-        // parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const val0 = ((MaterialCost / 100) *  this.sourceWorkFlow.percentageOfMaterial) + MaterialCost;
         this.MaterialCost = formatNumberAsGlobalSettingsModule(val0, 2);
 
-
-
-        this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise == -1 || this.sourceWorkFlow.percentageOfExpertise == "-1" ? 0 : this.sourceWorkFlow.percentageOfExpertise;
+        this.sourceWorkFlow.percentageOfExpertise = this.expertisePercentValue;
         const TotalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
         const val1 = ((TotalExpertiseCost / 100) * this.sourceWorkFlow.percentageOfExpertise) + TotalExpertiseCost;
         this.TotalExpertiseCost = formatNumberAsGlobalSettingsModule(val1, 2);
 
-
-        this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges == -1 || this.sourceWorkFlow.percentageOfCharges == "-1" ? 0 : this.sourceWorkFlow.percentageOfCharges;
+        this.sourceWorkFlow.percentageOfCharges =this.chargesPercentValue;
         const TotalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
         const val2= ((TotalCharges / 100) * this.sourceWorkFlow.percentageOfCharges) + TotalCharges;
         this.TotalCharges = formatNumberAsGlobalSettingsModule(val2, 2);
 
         // this.sourceWorkFlow.percentageOfOthers
 
-        this.sourceWorkFlow.percentageOfOthers = this.sourceWorkFlow.percentageOfOthers == -1 || this.sourceWorkFlow.percentageOfOthers == "-1" ? 0 : this.sourceWorkFlow.percentageOfOthers;
+        this.sourceWorkFlow.percentageOfOthers =this.othersPercentValue;
+
         this.sourceWorkFlow.otherCost=this.sourceWorkFlow.otherCost? this.sourceWorkFlow.otherCost :0.00;
         const otherCost1 = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
         const val3 = ((otherCost1 / 100) * this.sourceWorkFlow.percentageOfOthers) + otherCost1;
         this.sourceWorkFlow.otherCost = formatNumberAsGlobalSettingsModule(val3, 2);
-  const total = val0 + val1 + val2 + val3;
-  this.Total = total ? formatNumberAsGlobalSettingsModule(total, 2) : 0.00;
+        const total = val0 + val1 + val2 + val3;
+        this.Total = total ? formatNumberAsGlobalSettingsModule(total, 2) : 0.00;
 
         if (this.sourceWorkFlow.berThresholdAmount != 0 && this.Total) {
+
            const BRTH = this.sourceWorkFlow.berThresholdAmount ? parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, '')) : 0;
            const Tot = parseFloat(this.Total.toString().replace(/\,/g, ''));
-            const maxValue = Math.max(0, BRTH, Tot);
-            const minValue = Math.min(BRTH, Tot) !== -Infinity ? Math.min(BRTH, Tot) : 0;
-            let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
-            this.PercentBERThreshold = percentageofBerThreshold ? formatNumberAsGlobalSettingsModule(percentageofBerThreshold, 2) : 0.00;
+           let percentageofBerThreshold: any = (Tot / BRTH )* 100;
+                this.PercentBERThreshold = percentageofBerThreshold ? formatNumberAsGlobalSettingsModule(percentageofBerThreshold, 2) : 0.00;
 
+        //    const BRTH = this.sourceWorkFlow.berThresholdAmount ? parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, '')) : 0;
+        //    const Tot = parseFloat(this.Total.toString().replace(/\,/g, ''));
+        //     const maxValue = Math.max(0, BRTH, Tot);
+        //     const minValue = Math.min(BRTH, Tot) !== -Infinity ? Math.min(BRTH, Tot) : 0;
+        //     let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
+        //     this.PercentBERThreshold = percentageofBerThreshold ? formatNumberAsGlobalSettingsModule(percentageofBerThreshold, 2) : 0.00;
         }
+       this.TotalOtherCost=this.sourceWorkFlow.otherCost;
     }
-
+    TotalOtherCost:any;
     private calculateWorkFlowTotalMaterialCost(): void {
         this.MaterialCost = 0;
 
@@ -889,7 +907,7 @@ if(element.exclusions){
     }
     documentList:any=[]; 
     openView(content,publication){
-        this.documentList=publication.attachmentDetails
+        this.documentList=publication.attachmentDetails;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
     dismissModelView() {

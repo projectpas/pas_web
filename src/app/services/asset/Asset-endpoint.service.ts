@@ -35,6 +35,7 @@ export class AssetEndpoint extends EndpointFactory {
     private readonly _updateAssetListingUrl: string =this.baseUrl + "/api/AssetModule/updateAssetListing";
     private readonly _updateAssetInventoryListingUrl: string =this.baseUrl + "/api/AssetModule/updateAssetInventoryListing";
     private readonly _capabilityListUrl: string = this.baseUrl +"/api/AssetModule/GetCapes";
+    private readonly GetAssetmgmtlistbyID: string = this.baseUrl +"/api/AssetModule/GetAssetmgmtlistbyID";
     private readonly _getCapabilityUrl: string =this.baseUrl + "/api/AssetModule/capabilityGet";
     private readonly _getAssetCapabilityUrl: string =this.baseUrl + "/api/AssetModule/AssetcapabilityGet";
     private readonly getAuditById: string = this.baseUrl +"/api/AssetModule/audits";
@@ -488,5 +489,20 @@ if(type=='add'){
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.downloadAllCalibrationList(data));
             });
+    }
+
+    getCalibartionListByID<T>(assetRecordId): Observable<T> {
+        let endpointUrl = `${this.GetAssetmgmtlistbyID}/${assetRecordId}`;
+
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCalibartionListByID(assetRecordId));
+            });
+    }
+
+    UpdatecalibartionMgmt(CalibrationManagment) {
+        return this.http.post<any>(`${this.baseUrl}/api/AssetModule/UpdatecalibartionMgmt`, JSON.stringify(CalibrationManagment), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.UpdatecalibartionMgmt(CalibrationManagment));
+        });
     }
 } 

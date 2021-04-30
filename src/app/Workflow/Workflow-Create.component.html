@@ -19,6 +19,25 @@
                 </div>
             </div>
         </div>
+        <div class="card-body pad_10" *ngIf="!toggle_wf_header">
+            <div class="form-row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="workflowid">Workflow ID <span class="clr-red">*</span></label>
+                        <input type="text" class="form-control" id="workflowid"
+                            value="{{ sourceWorkFlow.workflowId != undefined ? sourceWorkFlow.workOrderNumber : 'Creating' }}"
+                            [disabled]="true">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="description">Workflow Description</label>
+                        <input type="text" class="form-control" id="description" (ngModelChange)="checkEnableUpdate()"
+                            [(ngModel)]="sourceWorkFlow.workflowDescription">
+                    </div>
+                </div>
+                </div>
+            </div>
         <div class="card-body" *ngIf="toggle_wf_header">
             <div>
                 <div class="form-row">
@@ -53,14 +72,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="description">Workflow Description</label>
-                                    <input type="text" class="form-control" id="description"
-                                        [(ngModel)]="sourceWorkFlow.workflowDescription" (change)="checkEnableUpdate()">
+                                    <input type="text" class="form-control" id="description" (ngModelChange)="checkEnableUpdate()"
+                                        [(ngModel)]="sourceWorkFlow.workflowDescription">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="PN Description">PN Description </label>
-                                    <input type="text" class="form-control" id="pnDescription"
+                                    <input type="text" class="form-control" id="pnDescription" 
                                         [(ngModel)]="sourceWorkFlow.partNumberDescription" [disabled]="true">
                                 </div>
                             </div>
@@ -179,12 +198,12 @@
                     </div>
                     <div class="col-md-6">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header workflow-ber-header">
                                 <div class="form-row">
                                     <div class="col-md-4">
-                                        <h5>BER Determination</h5>
+                                        <h5 class="workflow-ber-grid">BER Determination</h5>
                                     </div>
-                                     <div class="col-md-8 ber-padding"> 
+                                     <div class="col-md-8 ber-padding workflow-ber-grid"> 
                                         <h5 class="float-right"> BER Thershold :
                                             <span   
                                              class="clr-red">{{sourceWorkFlow.berThresholdAmount ? (sourceWorkFlow.berThresholdAmount ) : '0.00'}}</span>
@@ -216,7 +235,7 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <label class="w60">Amount:</label>
-                                                <input  class="form-control w70 text-right" type="text"
+                                                <input  class="form-control w70 text-right fix_fnt" type="text"
                                                     name="fixedAmount" [(ngModel)]="sourceWorkFlow.fixedAmount"                                        
                                                     (input)="berDetermination($event.target.value,'html')" />
                                             </div>
@@ -261,7 +280,7 @@
                                             <div class="col-sm-4">
                                                 <label class="w60">Amount:</label>
                                                 <input type="text" class="form-control w70 text-right" pInputText
-                                                    pKeyFilter="money" value="{{sourceWorkFlow.percentOfNew}}"
+                                                    pKeyFilter="money" value="{{sourceWorkFlow.percentOfNew ==NaN ? ' ' :sourceWorkFlow.percentOfNew}}"
                                                     disabled />
                                              </div>
                                         </div>
@@ -307,7 +326,7 @@
                                                     <label class="w60">Amount: </label>
                                                     <input type="text" class="form-control w70 text-right" pInputText
                                                         pKeyFilter="money"
-                                                        value="{{sourceWorkFlow.percentOfReplacement}}" disabled />
+                                                        value="{{sourceWorkFlow.percentOfReplacement ==NaN ? ' ' : sourceWorkFlow.percentOfReplacement}}" disabled />
                                             </div>
                                         </div>
                                     </div>
@@ -367,7 +386,7 @@
                                         <select (ngModelChange)="checkEnableUpdate()"
                                             [(ngModel)]="sourceWorkFlow.percentageOfMaterial" class="form-control select_align_right"
                                             (change)="onMaterialCostChange(sourceWorkFlow.percentageOfMaterial,'html');">
-                                            <option value="-1">--Select--</option>
+                                            <option value="0">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
                                                 {{percent.label}}%</option>
                                         </select>
@@ -378,7 +397,7 @@
                                         <select (ngModelChange)="checkEnableUpdate()"
                                             [(ngModel)]="sourceWorkFlow.percentageOfExpertise" class="form-control select_align_right"
                                             (change)="onExpertiseCostChange(sourceWorkFlow.percentageOfExpertise,'html');">
-                                            <option value="-1">--Select--</option>
+                                            <option value="0">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
                                                 {{percent.label}}%</option>
                                         </select>
@@ -389,7 +408,7 @@
                                         <select (ngModelChange)="checkEnableUpdate()"
                                             [(ngModel)]="sourceWorkFlow.percentageOfCharges" class="form-control select_align_right"
                                             (change)="onChargesChange(sourceWorkFlow.percentageOfCharges,'html');">
-                                            <option value="-1">--Select--</option>
+                                            <option value="0">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
                                                 {{percent.label}}%</option>
                                         </select>
@@ -400,7 +419,7 @@
                                         <select (ngModelChange)="checkEnableUpdate()" [disabled]="sourceWorkFlow.otherCost==0"
                                             [(ngModel)]="sourceWorkFlow.percentageOfOthers" class="form-control select_align_right"
                                             (change)="onOtherChange(sourceWorkFlow.percentageOfOthers,'html');">
-                                            <option value="-1">--Select--</option>
+                                            <option value="0">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
                                                 {{percent.label}}%</option>
                                         </select>
@@ -486,13 +505,13 @@
         <div class="card-layout">
             <div>
                  <div class="card" *ngIf="sourceWorkFlow.workflowId">
-                    <div class="card-body">
-                        <div class="form-group col-sm-6">
+                    <div class="card-body pad_10">
+                        <div class="form-group col-sm-3 mr_0">
                             <div class="col-sm-1 class-task">
                                 <strong> <label class="fot-label"> Tasks </label></strong>
                             </div>
                             <div class="form-row">
-                                <div class="col-sm-5">
+                                <div class="col-sm-12">
                                     <div class="inner-addon inline-block display-flex">
                                         <select class="form-control custom-select" [(ngModel)]="currenttaskId"
                                             (change)="onActionChange()">
@@ -505,7 +524,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-sm-6" style="margin-left:-25%;" [hidden]="!showActionAttribute">
+                        <div class="form-group col-sm-6 mr_0"  [hidden]="!showActionAttribute">
                             <div class="col-sm-1 class-Attribue">
                                 <strong><label class="fot-label">Task Attribute</label></strong>
                             </div>

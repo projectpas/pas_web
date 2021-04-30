@@ -112,7 +112,7 @@
           {{ col.header }} <span style="color: #ff0000;" *ngIf="col.isRequired == true">*</span>
         </th>
         <th class="table-column-width" colspan="3">Dimensions</th>
-        <th class="table-column-width" rowspan="2">UOM</th>
+        <th class="table-column-width" rowspan="2">Dimension UOM</th>
         <th class="table-column-width" rowspan="2">Currency</th>
         <th rowspan="2" style="min-width:60px !important">Amount  <span style="color: #ff0000;">*</span></th>
         <th class="table-column-width" rowspan="2">Memo</th>
@@ -261,9 +261,12 @@
     </ng-template>
     <ng-template pTemplate="emptymessage" let-columns>
       <tr>
-          <td colspan="12" class="no-records-msg no-records-cstm">
+          <td colspan="12" *ngIf="!isQuote" class="no-records-msg no-records-cstm">
               No records found
           </td>
+          <td *ngIf="isQuote" colspan="15" class="no-records-msg no-records-cstm">
+            No records found
+        </td>
       </tr>
   </ng-template>
     <ng-template pTemplate="footer" *ngIf="isQuote">
@@ -380,7 +383,7 @@
                 <tbody>
                   <tr *ngFor="let f of freightForm; let i = index"> 
                     <td>
-                      <select class="form-control width-100" appendTo="body" (ngModelChange)="getActive()" [(ngModel)]="f.taskId" [disabled]="isView" name="task_{{i}}"
+                      <select class="form-control width-100" appendTo="body" (ngModelChange)="getActive()" [(ngModel)]="f.taskId" [disabled]="isView" name="task_{{i}}" required
                        >
                         <option value="">Select</option> 
                         <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>

@@ -64,12 +64,12 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of headers" class="table-column-width">
+                    <col *ngFor="let col of columns" class="table-column-width">
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <ng-container *ngFor="let col of headers">
+                    <ng-container *ngFor="let col of columns">
                         <th class="table-column-width" *ngIf="col.field == 'phoneNo' || col.field == 'contactBy'"
                             pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                             {{ col.header }}
@@ -86,7 +86,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <ng-container *ngFor="let col of headers">
+                    <ng-container *ngFor="let col of columns">
                         <th class="table-column-width" *ngIf="col.field == 'phoneNo' || col.field == 'contactBy'"
                             [ngSwitch]="col.field">
                             <input pInputText type="text" class="incorn_border table-header-input-width" (input)="
@@ -268,7 +268,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" (click)="closePopupmodel('viewPhone')">&times;</button>
                 <h4 class="modal-title"> Phone Details</h4>
             </div>
             <div class="modal-body">
@@ -296,7 +296,7 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" (click)="closePopupmodel('viewPhone')">Close</button>
             </div>
         </div>
     </div>

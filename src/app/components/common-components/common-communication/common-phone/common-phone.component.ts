@@ -47,7 +47,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         //{ field: 'customerContact', header: 'Customer Contact'  },
         { field: 'phoneNo', header: 'Phone' },
         { field: 'contactBy', header: 'Contacted By' },
-        { field: 'notes', header: 'Notes' },
+        { field: 'notesData', header: 'Notes' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
@@ -125,6 +125,9 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         }, err => {
         });
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
     vendorContacts(value) {
         this.setEditArray = [];
         if (this.isEdit == true) {
@@ -344,6 +347,11 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
                     (res) => {
                         this.disableUpdateButton = true;
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Phone Updated Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllPhoneList();
                         this.isEdit = false;
                     }, err => {
@@ -358,6 +366,11 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Phone Created Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllPhoneList();
                     }, err => {
                         this.errorMessageHandler();

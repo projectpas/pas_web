@@ -11,6 +11,8 @@ import { environment } from 'src/environments/environment';
 import { IExchangeQuoteView } from "../models/exchange/IExchangeQuoteView";
 import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
 import{ExchangeQUoteMarginSummary} from '../models/exchange/ExchangeQUoteMarginSummary';
+import { IExchangeQuoteCharge } from '../models/exchange/IExchangeQuoteCharge';
+import { IExchangeQuoteFreight } from '../models/exchange/IExchangeQuoteFreight';
 @Injectable()
 export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getNewExchangeQuoteInstanceUrl: string = environment.baseUrl + "/api/exchangequote/new";
@@ -21,6 +23,11 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getExchangeQuoteMarginSummarydetails: string = environment.baseUrl + "/api/exchangequote/get-exchange-quote-margin-data";
     private readonly exchangeQuoteqMarginSummary: string = environment.baseUrl + "/api/exchangequote/create-exchange-quote-margin-data";
     private readonly getExchangeQuoteAnalysis: string = environment.baseUrl + "/api/exchangequote/togetexchangequoteanalysis";
+    private readonly getCustomerQuotesListUrl: string = environment.baseUrl + "/api/exchangequote/exchangequoteapprovallist"
+    private readonly _getExchangeQuoteCharges: string = environment.baseUrl + "/api/exchangequote/getexchangequotechargeslist";
+    private readonly exchangeQuoteChargesSave: string = environment.baseUrl + "/api/exchangequote/createexchangequotecharges";
+    private readonly _geExchangeQuoteFreights: string = environment.baseUrl + "/api/exchangequote/exchangequotefreightlist";
+    private readonly exchangeQuoteFreightsSave: string = environment.baseUrl + "/api/exchangequote/createexchangequotefreight";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -122,6 +129,55 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
       return this.http.get<T>(endPointUrl, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getAllExchangeQuoteAnalysis(id));
+        });
+    }
+    getCustomerQuotesList(exchangeQuoteId: number): Observable<any> {
+      const URL = `${this.getCustomerQuotesListUrl}/${exchangeQuoteId}`;
+      return this.http
+        .get<IExchangeQuote>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getCustomerQuotesList(exchangeQuoteId));
+        });
+    }
+    sentForInternalApproval(data) {
+      return this.http.post<any>(`${this.configurations.baseUrl}/api/exchangequote/exchangequoteapproval`, JSON.stringify(data), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.sentForInternalApproval(data));
+        });
+    }
+    getExchangeQuoteCharges(id, isDeleted) {
+      return this.http.get<any>(`${this._getExchangeQuoteCharges}?ExchangeQuoteId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuoteCharges(id, isDeleted));
+        });
+    }
+    createExchangeQuoteCharge(exchangeQuoteCharges: IExchangeQuoteCharge[]): Observable<any> {
+      return this.http
+        .post(
+          this.exchangeQuoteChargesSave,
+          JSON.stringify(exchangeQuoteCharges),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createExchangeQuoteCharge(exchangeQuoteCharges));
+        });
+    }
+
+    getExchangeQuoteFreights(id, isDeleted) {
+      return this.http.get<any>(`${this._geExchangeQuoteFreights}?ExchangeQuoteId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuoteFreights(id, isDeleted));
+        });
+    }
+    createFreight(sexchangeQuoteFreights: IExchangeQuoteFreight[]): Observable<any> {
+      return this.http
+        .post(
+          this.exchangeQuoteFreightsSave,
+          JSON.stringify(sexchangeQuoteFreights),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createFreight(sexchangeQuoteFreights));
         });
     }
 }  

@@ -33,7 +33,7 @@
           </grd-charges>
         </div>
         <!-- && addNewCharges -->
-        <div *ngIf="isEdit && editData ">
+        <div *ngIf="isEdit && editData "> 
           <grd-charges [isEdit]="isEdit" [editData]="editData" [workFlow]="workFlowObject" [isWorkOrder]="isWorkOrder"
             [markupList]="markupList" [isQuote]="isQuote" [taskList]="taskList"
             (updateChargesListForWO)="updateChargesList($event)"></grd-charges> 
@@ -280,9 +280,12 @@
     </ng-template>
     <ng-template pTemplate="emptymessage" let-columns>
       <tr>
-          <td colspan="10" class="no-records-msg no-records-cstm">
+          <td *ngIf="!isQuote"colspan="10" class="no-records-msg no-records-cstm">
               No records found
           </td>
+          <td *ngIf="isQuote" colspan="14" class="no-records-msg no-records-cstm">
+            No records found
+        </td>
       </tr>
   </ng-template>
     <ng-template pTemplate="footer" *ngIf="isQuote">

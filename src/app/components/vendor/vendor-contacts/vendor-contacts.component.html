@@ -464,7 +464,14 @@
         <tbody class="audithistory-cstm">
           <!--*ngIf="auditHistory.length> 0"-->
           <tr *ngFor="let audit of contactauditHisory; let i = index">
-            <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isDefaultContact" [(ngModel)]="audit.isDefaultContact" disabled></p></td>
+            <td class="text-center width-60">
+              <span class="value">
+                <label class="wauto">
+              <input type="checkbox" name="isDefaultContact"
+               [(ngModel)]="audit.isDefaultContact" disabled>
+              </label>
+            </span>
+            </td>
             <td [ngStyle]="{
                 color: getColorCodeForHistory(i, 'prefix', audit.prefix)
                   ? 'black'
@@ -586,7 +593,14 @@
               {{ audit.fax }}
             </td>
             <td [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }" [innerHTML]="audit.notes"></td>
-            <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled></p></td>
+            <td class="text-center width-60">
+              <span class="value">
+                <label class="wauto"> 
+                <input type="checkbox" name="isActive" 
+                [(ngModel)]="audit.isActive" disabled>
+              </label>
+            </span>
+            </td>
             <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
             <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'createdBy', audit.createdBy)
@@ -603,7 +617,14 @@
                   }">
                   {{ audit.updatedBy }}
             </td>
-            <td style="width:60px;background-color: #fff !important; text-align: center;"><p style="width: 60px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+            <td class="text-center width-60">
+              <span class="value">
+                <label class="wauto">
+                <input type="checkbox" name="isDeleted"
+                 [(ngModel)]="audit.isDeleted" disabled>
+                </label>
+              </span>
+              </td>
           </tr>
         </tbody>
       </table>

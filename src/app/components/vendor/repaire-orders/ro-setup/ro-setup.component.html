@@ -79,7 +79,7 @@
                                     <div class="form-group">
                                         <label>Open Date <span class="clr-red">*</span></label>
                                         <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
-                                         name="openDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="headerInfo.openDate" (ngModelChange)="enableHeaderSave()" #openDate="ngModel" 
+                                         name="openDate" [yearNavigator]="true" [minDate]="headerInfo.openDate" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="headerInfo.openDate" (ngModelChange)="enableHeaderSave()" #openDate="ngModel" 
                                          required></p-calendar>
                                         <div *ngIf="openDate.invalid && (openDate.dirty || openDate.touched)" class="alert alert-danger alert-danger-cstm">
                                             <div *ngIf="openDate.errors.required">
@@ -595,8 +595,7 @@
                                     </td>
                                 </tr>
                                 <ng-container *ngIf="!partList.isDeleted">
-                                    <tr class="child-header splitship-head child-header-back" *ngIf="partList.ifSplitShip">
-                                        
+                                    <tr class="child-header splitship-head child-header-back" *ngIf="partList.ifSplitShip">                                        
                                         <th></th>
                                         <th><i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add Split Shipment" matTooltipPosition="above" style="padding: 4px 8px !important;" (click)="addRow(partList)" *ngIf="!partList.isApproved"></i></th>
                                         <th>PN</th>
@@ -611,6 +610,7 @@
                                         <th colspan="4">Management Structure <span class="clr-red">*</span></th>
                                         <th colspan="18"></th>
                                     </tr>
+                                    <ng-container *ngIf="partList.ifSplitShip">
                                     <tr class="child-data splitship-child child-data-back" *ngFor="let partChildList of partList.childList; let row_no = index" [hidden]="partChildList.isDeleted">
                                         
                                         <td></td>
@@ -765,6 +765,7 @@
                                         </td>
                                         <td colspan="18"></td>
                                     </tr>
+                                    </ng-container>
                                     <tr class="child-header splitship-head child-header-back" *ngIf="partList.ifSplitShip">
                                         <td  class="child-td-align"></td>
                                         
@@ -962,20 +963,47 @@
                                     <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
                                            [disabled]="!approver.isSelected || approver['actionId'] != 2"
                                            [readonly]="!approver.isSelected || approver['actionId'] != 2"/> -->
-                                    <p class="m-0 p-0 p_textEditor" class="memo-left" [innerHTML]="approver['memo']"></p>
+
+                                    <!-- <p class="m-0 p-0 p_textEditor"
+                                    class="memo-left" [innerHTML]="approver['memo']"></p> -->
+                                   
                                     <!-- </div> -->
-                                    <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
+                                   
+                                    <!-- <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3"> -->
+                                       
                                         <!-- <i class="fa fa-info-circle fa-lg" data-toggle="modal"
                                            data-target="#approvers-memo-popup"
                                            matTooltipPosition="above" matTooltip="Add Memo"
                                            (click)="onClickApproversMemo(approver)" *ngIf="approver.isSelected"></i> -->
 
-                                          <i class="fa fa-pencil btn nobg" data-toggle="modal"
+                                          <!-- <i class="fa fa-pencil btn nobg" data-toggle="modal"
                                            data-target="#approvers-memo-popup"
                                            matTooltipPosition="above" matTooltip="Add Memo"
                                            (click)="onClickApproversMemo(approver)" *ngIf="approver.isSelected"></i
                                          >
-                                    </div>
+                                    </div> -->
+
+
+                                    <div [innerHTML]="approver['memo']" 
+                                    [matTooltip]="parsedText(approver['memo'])"
+                                            matTooltipPosition="above" class="form-control"
+                                         class="text_editor_box parts-memo"></div>
+                                    <!-- <i class="fa fa-info-circle fa-lg pull-right" style="margin-top:-16px"
+                                       data-toggle="modal"
+                                       data-target="#parts-memo-popup" matTooltip="Notes"
+                                       matTooltipPosition="above"
+                                       (click)="onClickPartsMemo(partList)" *ngIf="!partList.isApproved"></i> -->
+                                      
+                                       <div *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
+
+                                      <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"                                      
+                                         data-toggle="modal" style="margin-right:20px"
+                                         data-target="#approvers-memo-popup" matTooltip="Add Memo"
+                                         matTooltipPosition="above"
+                                         (click)="onClickApproversMemo(approver)" *ngIf="approver.isSelected"></i
+                                       >
+                                       <!-- *ngIf="approver.isSelected" -->
+                                       </div>
 
                                 </td>
                                 <td style="min-width:80px" *ngIf="field.field == 'approvedDate' && approver['actionId'] != 5" >

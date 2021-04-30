@@ -271,7 +271,7 @@
                     </div>
                     <div class="col-3 all-approval-div">
                         <div class="form-group">
-                            <label style="margin-top: -8px;">Amount <span class="clr-red">*</span></label>
+                            <label>Amount <span class="clr-red">*</span></label>
                             <select [(ngModel)]="creatingData.amountId" (ngModelChange)="onSaveChange()" name="amount"
                                 required>
                                 <option value="null">Select</option>
@@ -298,13 +298,13 @@
                                 name="value" (change)="onChangevalue('value');" required />
                         </div>
                         <div class="form-group">
-                            <label>Approver</label>
+                            <label>Approver <span class="clr-red">*</span></label>
                             <div class="inner-addon right-addon inline-block">
                                 <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="employeelist"
                                     title="Add Approver" name="approverId" [suggestions]="approverList"
                                     (completeMethod)="filterapprover($event)" [size]="30" [minLength]="1"
                                     [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
-                                    #approverId="ngModel">
+                                    #approverId="ngModel" required>
                                 </p-autoComplete>
                                 <button type="button" class="btn btn-primary m-t-10 pull-right but_stl"
                                     (click)="onAddApprover();">Add</button>
@@ -539,7 +539,7 @@
             <div class="modal-body" *ngIf="auditHistory">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
-                        <table class="table table-bordered header-table-width"
+                        <table class="table table-bordered"
                             *ngIf="auditHistory.length> 0 else noDatavailable">
                             <thead>
                                 <tr>
@@ -611,13 +611,20 @@
                                     <td
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                                         {{audit.updatedBy}}</td>
-                                    <td>
-                                        <p style="background-color: #fff !important;"> <input type="checkbox"
-                                                name="isActive" [(ngModel)]="audit.isActive" disabled></p>
+                                        <td class="text-center width-60">
+                                            <span class="value">
+                                              <label class="wauto">
+                                                   <input type="checkbox"
+                                                name="isActive" [(ngModel)]="audit.isActive" disabled>
+                                            </label>
+                                            </span>
                                     </td>
-                                    <td>
-                                        <p style="background-color: #fff !important;"> <input type="checkbox"
-                                                name="isActive" [(ngModel)]="audit.isDeleted" disabled></p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto"> <input type="checkbox"
+                                                name="isActive" [(ngModel)]="audit.isDeleted" disabled>
+                                          </label>
+                                          </span>
                                     </td>
                                 </tr>
                             </tbody>

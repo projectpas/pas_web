@@ -103,4 +103,7 @@ export class SubWorkOrderListComponent implements OnInit {
             this.subWorkOrderData = this.subWorkOrderDataOriginal;
         }
     }
+    closeView(){
+        this.isView=false;
+    }
 }

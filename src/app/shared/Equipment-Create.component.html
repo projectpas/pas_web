@@ -15,7 +15,7 @@
         <th><label>{{moduleName}} Description</label></th>
         <th><label>Tool Class</label></th>
         <th style="width:60px !important"><label>Qty<span class="clr-red">*</span></label></th>
-        <th style="z-index: 1;" style="width: 200px;"  *ngIf="isWorkFlow"><label>Memo</label></th>
+        <th style="width: 200px;z-index:1"  *ngIf="isWorkFlow"><label>Memo</label></th>
         <th *ngIf="!isEdit"><label>Actions </label></th>
       </tr>
     </thead>
@@ -94,7 +94,7 @@
       [disabled]="!toolsCreateForm.valid|| checkQuantityAvailability()">
       Save
     </button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal"
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()"
      >
       Close
     </button>

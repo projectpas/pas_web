@@ -372,49 +372,49 @@
                                         <div class="form-row m-t-20">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Workflow ID:<span class="clr-red">*</span> </label> {{sourceWorkFlow.workOrderNumber}}
+                                                    <label class="margin-bottom-10">Workflow ID:<span class="clr-red">*</span> </label> {{sourceWorkFlow.workOrderNumber}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Workflow Description:
+                                                    <label class="margin-bottom-10">Workflow Description:
                                                     </label>{{sourceWorkFlow.workflowDescription}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Version: <span class="clr-red">*</span></label>{{sourceWorkFlow.version}}
+                                                    <label class="margin-bottom-10">Version: <span class="clr-red">*</span></label>{{sourceWorkFlow.version}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Create Date: <span class="clr-red">*</span></label>{{sourceWorkFlow.workflowCreateDate}}
+                                                    <label class="margin-bottom-10">Create Date: <span class="clr-red">*</span></label>{{sourceWorkFlow.workflowCreateDate}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Expiration Date:
+                                                    <label class="margin-bottom-10">Expiration Date:
                                                     </label>{{sourceWorkFlow.workflowExpirationDate}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Currency: <span class="clr-red">*</span></label>
+                                                    <label class="margin-bottom-10">Currency: <span class="clr-red">*</span></label>
                                                     <!-- sourceWorkFlow.currencySymbol + ' (' + -->
                                                     {{ sourceWorkFlow.currencyText }}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>PN:<span class="clr-red">*</span> </label>{{sourceWorkFlow.itemMaster.partNumber}}
+                                                    <label class="margin-bottom-10">PN:<span class="clr-red">*</span> </label>{{sourceWorkFlow.itemMaster.partNumber}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>PN Description:
+                                                    <label class="margin-bottom-10">PN Description:
                                                     </label>{{sourceWorkFlow.itemMaster.partDescription}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Revised PN: </label>{{sourceWorkFlow.revisedPartNumber}}
+                                                    <label class="margin-bottom-10">Revised PN: </label>{{sourceWorkFlow.revisedPartNumber}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Work Scope: <span class="clr-red">*</span> </label>{{sourceWorkFlow.workScope.workScopeCode}}
+                                                    <label class="margin-bottom-10">Work Scope: <span class="clr-red">*</span> </label>{{sourceWorkFlow.workScope.workScopeCode}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Item Group: <span class="clr-red">*</span> </label>{{sourceWorkFlow.itemGroup}}
+                                                    <label class="margin-bottom-10">Item Group: <span class="clr-red">*</span> </label>{{sourceWorkFlow.itemGroup}}
                                                 </div>
 
                                                 
                                                 <div class="form-group">
-                                                    <label>Customer Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
+                                                    <label class="margin-bottom-10">Customer Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
                                                 </div>
                                             </div>
                                         </div>
@@ -515,7 +515,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group memo-popup-cstm padding-notes">
                                         <label>
-                                            Notes
+                                            Memo
                                         </label>
                                         <span>
                                             <div class="form-group memo-popup-cstm mat_emo">
@@ -553,7 +553,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Other:
-                                                        </label> {{sourceWorkFlow.otherCost > 0 ? sourceWorkFlow.otherCost : '0.00'}}
+                                                        </label> {{sourceWorkFlow.otherCost ? sourceWorkFlow.otherCost : '0.00'}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -567,7 +567,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="width-130">% of BER Threshold: </label>
-                                                        {{PercentBERThreshold ? PercentBERThreshold : '0.00'}}
+                                                        {{PercentBERThreshold ? PercentBERThreshold : '0.00'}} %
                                                     </div>
                                                 </div>
                                             </div>
@@ -912,7 +912,7 @@
                                                 <th>Pub Desc</th>
                                                 <th>Pub Type</th>
                                                 <th>Revision Date</th>                                                
-                                                <th>Sequence</th>
+                                                <!-- <th>Sequence</th> -->
                                                 <th>Source</th>
                                                 <!-- <th>Aircraft</th> -->
                                                 <!-- <th>Model</th> -->
@@ -932,7 +932,7 @@
                                                 <td>{{publication.publicationDescription}}</td>
                                                 <td>{{publication.publicationTypeName}}</td>
                                                 <td>{{publication.revisionDate}}</td>
-                                                <td class="text-right">{{publication.sequence}}</td>
+                                                <!-- <td class="text-right">{{publication.sequence}}</td> -->
                                                 <td>{{publication.source}}</td>
                                                 <!-- <td>{{publication.aircraftManufacturerName}}</td> -->
                                                 <!-- <td>{{publication.modelName}}</td> -->
@@ -1214,17 +1214,6 @@
 <div *ngIf="isWorkOrder  ">
     <div class="card">
         <div class="card-header header">
-            <!-- <nav class="pull-left" aria-label="breadcrumb">
-                <ol class="breadcrumb workflow-breadcrumb">
-                    <li class="breadcrumb-item active workflow-li" aria-current="page" >
-                        <h4 class="header-name">Work
-                        Flow Details </h4></li>
-                </ol>
-            </nav>
-            <button class="btn-sm header-button pull-right" (click)="toggle_wf_header=!toggle_wf_header">
-                {{toggle_wf_header ? 'Collapse' : 'Expand'}}
-            </button> -->
-
             <div class="row">
                 <div class="col">
                     <h4 class="header-name">Work Flow Details
@@ -1233,9 +1222,7 @@
                             {{toggle_wf_header ? 'Collapse' : 'Expand'}}
                         </button>   
                     </h4>                     
-                  
                 </div>  
-               
             </div>
         </div>
         <div class="card-body scroll_set" >
@@ -1389,7 +1376,7 @@
                     <div class="col-md-6">
                         <div class="form-group memo-popup-cstm" style="padding-left: 4px;">
                             <label>
-                                Notes
+                                Memo
                             </label>
                             <span>
                                 <div class="form-group memo-popup-cstm mat_emo">
@@ -1428,7 +1415,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Other:
-                                            </label> {{sourceWorkFlow.otherCost > 0 ? sourceWorkFlow.otherCost : '0.00'}}
+                                            </label> {{sourceWorkFlow.otherCost ? sourceWorkFlow.otherCost : '0.00'}}
                                         </div>
                                     </div>
                                 </div>
@@ -1779,13 +1766,13 @@
                                         <th>Pub Desc</th>
                                         <th>Pub Type</th>
                                         <th>Revision Date</th>
-                                        <th>Sequence</th>
+                                        <!-- <th>Sequence</th> -->
                                         <th>Source</th>
                                         <th>Location</th>
                                         <th>Verified By</th>
                                         <th>Verified Date</th>
                                         <th>Status</th>
-                                        <th>Files</th>
+                                        <th>File name</th>
                                         <th>Memo</th>
                                     </tr>
                                 </thead>
@@ -1796,7 +1783,7 @@
                                         <td>{{publication.publicationDescription}}</td>
                                         <td>{{publication.publicationTypeName}}</td>
                                         <td>{{publication.revisionDate}}</td>
-                                        <td class="text-right">{{publication.sequence}}</td>
+                                        <!-- <td class="text-right">{{publication.sequence}}</td> -->
                                         <td>{{publication.source}}</td>
                                         <td>{{publication.location}}</td>
                                         <td>{{publication.verifiedBy}}</td>

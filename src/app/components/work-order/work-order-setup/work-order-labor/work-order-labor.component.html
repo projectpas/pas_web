@@ -17,9 +17,10 @@
           <div class="col-md-2" *ngIf="!isQuote"> 
             <form #labourHeader="ngForm">
               <div class="form-group" *ngIf="!isQuote">
-                <label for="expertise">Expertise <span *ngIf="laborForm.isTaskCompletedByOne">*</span></label>
-                <p-dropdown placeholder="Select Expertise Type" (ngModelChange)="checkValid(1)" [options]="expertiseTypeList" class="p-dropdown-custom-md-Header" [(ngModel)]="laborForm.expertiseId"  [disabled]="isView || laborForm.isTaskCompletedByOne" (onChange)="
-                  getExpertiseEmployeeByExpertiseIdForHeader(laborForm.expertiseId); assignLabourExpertise(laborForm.expertiseId)" name="expertise" [required]="laborForm.isTaskCompletedByOne"></p-dropdown>
+                <!-- *ngIf="laborForm.isTaskCompletedByOne" -->
+                <label for="expertise">Expertise <span class="clr-red">*</span></label>
+                <p-dropdown placeholder="Select Expertise Type" required (ngModelChange)="checkValid(1)" [options]="expertiseTypeList" class="p-dropdown-custom-md-Header" [(ngModel)]="laborForm.expertiseId"  [disabled]="isView || laborForm.isTaskCompletedByOne" (onChange)="
+                  getExpertiseEmployeeByExpertiseIdForHeader(laborForm.expertiseId); assignLabourExpertise(laborForm.expertiseId)" name="expertise"  ></p-dropdown>
               </div>
               <div class="form-group" *ngIf="!isQuote"> 
                 <label for="employee">Employee <span class="clr-red">*</span></label>
@@ -463,6 +464,12 @@
             </div>
             </ng-container>
   </ng-container>
+
+  <tr *ngIf="laborForm && laborForm.workOrderLaborList.length==0">
+    <td colspan="12"  class="no-records-msg no-records-cstm">
+        No records found
+    </td> 
+</tr>
           <ng-container *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder'">
             <tr class="footer">
               <td><b>Total Labor Hours</b></td>
@@ -591,3 +598,5 @@
  [disabled]="(labourHeader && !labourHeader.valid) || checkHoursAndDirectLabour() || disabledUpdatebtn">
    {{isEdit ? 'Update Labor' : 'Save Labor'}}
 </button>
+
+<!-- text_sen ng-touched ng-dirty ng-valid -->
