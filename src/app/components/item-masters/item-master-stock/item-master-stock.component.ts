@@ -573,6 +573,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     isNextNHAVisible: Boolean=true;
     isPrevNHAVisible: Boolean=true;
     isPrevVisible: Boolean=true;
+    isNextATAVisible: Boolean=true;
     constructor(private fb: FormBuilder, public priorityService: PriorityService, public countryservice: CustomerService, private Dashnumservice: DashNumberService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Publicationservice: PublicationService, public integrationService: IntegrationService, private formBuilder: FormBuilder, public workFlowtService1: LegalEntityService, private changeDetectorRef: ChangeDetectorRef, private router: Router,
         private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, private glAccountService: GlAccountService, public vendorser: VendorService,
         public itemser: ItemMasterService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public ataMainSer: AtaMainService,
@@ -625,7 +626,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
         this.isNextAirVisible=this.authService.ShowTab('Create Item Master','ATA Chapter');
         
-        this.isNextAirVisible=this.authService.ShowTab('Create Item Master','Capes');
+        this.isNextATAVisible=this.authService.ShowTab('Create Item Master','Capes');
         this.isPrevATAVisible=this.authService.ShowTab('Create Item Master','Aircraft Information');
 
         this.isNextCapVisible=this.authService.ShowTab('Create Item Master','Purchase and Sales');

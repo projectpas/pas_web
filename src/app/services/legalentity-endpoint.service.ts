@@ -146,8 +146,12 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 
 	updateStatusShippinginfo<T>(roleObject: any, legalEntityId: any): Observable<T> {
-		let endpointUrl = `${this._updateStatuslegalEntityShipping}?id=${roleObject.legalEntityShippingAddressId}&updatedby=${roleObject.updatedBy}`;
-		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+		var id=roleObject.legalEntityShippingAddressId;
+		let endpointUrl = `${this._updateStatuslegalEntityShipping}/${id}`;
+		var modelData={
+            updatedBy:roleObject.updatedBy
+        };
+		return this.http.put<T>(endpointUrl, JSON.stringify(modelData), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateStatusShippinginfo(roleObject, legalEntityId));
 			});
@@ -289,8 +293,11 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 
 	deleteInternationalShipping<T>(id, updatedBy) {
-			let endpointUrl = `${this._internationalShippingDelete}?id=${id}&updatedBy=${updatedBy}`;
-			return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			let endpointUrl = `${this._internationalShippingDelete}?${id}`;
+			var modelData={
+				updatedBy:updatedBy
+			};
+			return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
 				.catch(error => {
 					return this.handleErrorCommon(error, () => this.deleteInternationalShipping(id, updatedBy));
 				});
@@ -329,8 +336,11 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	deleteInternationalShipViaId<T>(id, updatedBy) {
 
-		let endpointUrl = `${this._deleteInternationalShippingViaMapUrl}?id=${id}&updatedBy=${updatedBy}`;
-		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+		let endpointUrl = `${this._deleteInternationalShippingViaMapUrl}/${id}`;
+		var modelData={
+            updatedBy:updatedBy
+        };
+		return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () =>this.deleteInternationalShipViaId(id, updatedBy));
 			});
@@ -344,8 +354,11 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	deleteShipViaDetails<T>(id, updatedBy) {
 	
-			let endpointUrl = `${this._deleteShipVia}?id=${id}&updatedBy=${updatedBy}`;
-			return this.http.put<T>(endpointUrl,this.getRequestHeaders())
+			let endpointUrl = `${this._deleteShipVia}?${id}`;
+			var modelData={
+				updatedBy:updatedBy
+			};
+			return this.http.put<T>(endpointUrl,JSON.stringify(modelData),this.getRequestHeaders())
 				.catch(error => {
 					return this.handleErrorCommon(error, () => this.deleteShipViaDetails(id, updatedBy));
 				});
@@ -421,7 +434,10 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	//}
 
 	deleteBillingAddress(legalEntityId, moduleId) {
-		return this.http.put<any>(`${this._deleteBillingEntityDettilas}?billingAddressId=${legalEntityId}&updatedBy=${moduleId}`, this.getRequestHeaders())
+		var modelData={
+			updatedBy:moduleId
+		}
+		return this.http.put<any>(`${this._deleteBillingEntityDettilas}?${legalEntityId}`,JSON.stringify(modelData), this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.updateBillingViainfo(legalEntityId, moduleId));
 		});
@@ -1041,9 +1057,11 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 	
 	deleteLegalEntityContact<T>(conatctId: number,updatedBy): Observable<T> {
-		let endpointUrl = `${this._deleteLegalEntityContact}/${conatctId}?updatedBy=${updatedBy}`;
-
-		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+		let endpointUrl = `${this._deleteLegalEntityContact}/${conatctId}`;
+		var modelData={
+			updatedBy:updatedBy
+		};	
+		return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.deleteLegalEntityContact(conatctId,updatedBy));
 			});

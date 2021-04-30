@@ -228,7 +228,7 @@
                                    <span data-toggle="modal" data-target="#contentHist">
                                 <a class="btn nobg" (click)="getAuditHistoryById(rowData)" matTooltip="History"
                                     matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                            </span>
+                            </span> 
                             <span *ngIf="isDelete" data-toggle="modal" data-target="#delete">
                                 <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
                                     matTooltipPosition="above"><i class="fa fa-trash"></i></a>
@@ -407,7 +407,7 @@
                                         </span>
                                         <span *ngIf="!currentDeletedstatus"><a *ngIf="isEdit" class="btn nobg btn-edit-cstm" (click)="openEdit(car)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                         <span *ngIf="!currentDeletedstatus"><a *ngIf="isDelete" class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                        <span data-toggle="modal" data-target="#stockHistory"><a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                        <span data-toggle="modal" data-target="#stockHistory"><a class="btn nobg btn-hist-cstm" (click)="openHist(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                         <span *ngIf="currentDeletedstatus" data-toggle="modal" (click)="restoreStockItem(rowData)" data-target="#itemRestore"><a *ngIf="isActiveButton" class="btn nobg btn-users-cstm" 
                                              matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                     </div>
