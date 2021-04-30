@@ -295,6 +295,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.display = true;
     }
     else {
+      debugger;
       this.display = false;
       this.isSpinnerVisible = true;
       this.salesOrder = new CustomerPayments();
@@ -305,9 +306,15 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.salesOrder.masterCompanyId = this.masterCompanyId;
       this.salesOrder.depositDate = this.customerPayment.depositDate;
       this.salesOrder.acctingPeriod = this.customerPayment.acctingPeriod;
-      this.salesOrder.amount = this.customerPayment.amount;
-      this.salesOrder.amtApplied = this.customerPayment.amtApplied;
-      this.salesOrder.amtRemaining = this.customerPayment.amount;
+      if (this.customerPayment.amount != "" && this.customerPayment.amount != null && this.customerPayment.amount != undefined) {
+        this.salesOrder.amount = this.customerPayment.amount.replace(/,/g, '');
+      }
+      else {
+        this.salesOrder.amount = 0;
+      }
+      //this.salesOrder.amount = Number(this.customerPayment.amount);
+      this.salesOrder.amtApplied = Number(this.customerPayment.amtApplied);
+      this.salesOrder.amtRemaining = Number(this.salesOrder.amount) - Number(this.salesOrder.amtApplied);
       this.salesOrder.reference = this.customerPayment.reference;
       this.salesOrder.cntrlNum = "cntrl";
       this.salesOrder.openDate = this.customerPayment.openDate;

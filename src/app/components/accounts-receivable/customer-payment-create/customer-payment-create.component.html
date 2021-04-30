@@ -45,11 +45,12 @@
                                                 <!-- <input type="text" class="form-control" name="bankName"
                                                     [(ngModel)]="customerPayment.bankName" #bankName="ngModel"
                                                     id="bankName" (ngModelChange)="enableHeaderSave()" /> -->
-                                                <p-dropdown class="p-dropdown-100" (ngModelChange)="OnSelectBankName($event)"
+                                                <p-dropdown class="p-dropdown-100"
+                                                    (ngModelChange)="OnSelectBankName($event)"
                                                     [options]="filteredBankNames" filter="true"
                                                     [(ngModel)]="customerPayment.bankName" name="bankName"
                                                     [resetFilterOnHide]="true" placeholder="-- Select --"
-                                                    [showClear]="true">
+                                                    [showClear]="true" (ngModelChange)="enableHeaderSave()">
                                                 </p-dropdown>
                                             </div>
                                             <div class="form-group">
@@ -57,11 +58,11 @@
                                                 <!-- <input type="text" class="form-control"
                                                     [(ngModel)]="customerPayment.bankAcctNum" name="bankAcctNum"
                                                     (ngModelChange)="enableHeaderSave()" /> -->
-                                                <p-dropdown class="p-dropdown-100" (ngModelChange)="getmemo()"
-                                                    [options]="filteredBankAcctNum" filter="true"
-                                                    [(ngModel)]="customerPayment.bankAcctNum" name="bankAcctNum"
-                                                    [resetFilterOnHide]="true" placeholder="-- Select --"
-                                                    [showClear]="true" [disabled]="!enableBankAcct" >
+                                                <p-dropdown class="p-dropdown-100" [options]="filteredBankAcctNum"
+                                                    filter="true" [(ngModel)]="customerPayment.bankAcctNum"
+                                                    name="bankAcctNum" [resetFilterOnHide]="true"
+                                                    placeholder="-- Select --" [showClear]="true"
+                                                    [disabled]="!enableBankAcct" (ngModelChange)="enableHeaderSave()">
                                                 </p-dropdown>
                                             </div>
                                             <div class="form-group">
@@ -108,7 +109,7 @@
                                                 <input type="text" class="form-control text-right"
                                                     [ngModel]="customerPayment.amtApplied | twoDecimalGlobalNumberFormatPipe"
                                                     name="amtApplied" pKeyFilter="money" #amtApplied="ngModel"
-                                                    [disabled]="true" />
+                                                    [disabled]="true" (ngModelChange)="enableHeaderSave()" />
                                             </div>
                                             <div class="form-group">
                                                 <label>Amt Remaining</label>
@@ -120,7 +121,7 @@
                                             <div class="form-group">
                                                 <label>Status</label>
                                                 <select [(ngModel)]="customerPayment.statusId" name="statusId"
-                                                    (ngModelChange)="enableHeaderSave()" [disabled]="true">
+                                                    [disabled]="true">
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let name of statusList" [ngValue]="name.value">
                                                         {{name.label}}</option>
@@ -306,7 +307,8 @@
                         <p-tabView class="pas-tabview" (onChange)="onTabChange($event)" [activeIndex]="selectedIndex">
                             <p-tabPanel header="Customer Payment">
                                 <app-add-customer-payment [customerPayment]="custPaymentData"
-                                    (triggerTabChange)="changeToReviewTab($event)" [bankNameId]="customerPayment.bankName" [glAccntId]="glAccntId">
+                                    (triggerTabChange)="changeToReviewTab($event)"
+                                    [bankNameId]="customerPayment.bankName" [glAccntId]="glAccntId">
                                 </app-add-customer-payment>
                             </p-tabPanel>
                             <p-tabPanel header="Review Payments">

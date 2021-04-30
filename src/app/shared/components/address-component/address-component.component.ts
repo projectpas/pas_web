@@ -205,13 +205,11 @@ export class AddressComponentComponent implements OnInit {
 					this.isSpinnerVisible = false;
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					
 				});
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				
 			});
 
 		}
@@ -401,8 +399,8 @@ export class AddressComponentComponent implements OnInit {
 			this.allShipViaInfo = res;
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			// const errorLog = err;
+			// this.errorMessageHandler(errorLog);
 		});
 	}
 
@@ -411,8 +409,8 @@ export class AddressComponentComponent implements OnInit {
 			this.allCountriesList = res;
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			// const errorLog = err;
+			// this.errorMessageHandler(errorLog);
 		})
 	}
 
@@ -442,36 +440,36 @@ export class AddressComponentComponent implements OnInit {
 				}
 			});
 		}
-			, err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
-			});
+		, err => {
+			this.isSpinnerVisible = false;
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
+		});
 	}
 
-	errorMessageHandler(log) {
-		const errorLog = log;
-		var msg = '';
-		if (errorLog.message) {
-			if (errorLog.error && errorLog.error.errors && errorLog.error.errors.length > 0) {
-				for (let i = 0; i < errorLog.error.errors.length; i++) {
-					msg = msg + errorLog.error.errors[i].message + '<br/>'
-				}
-			}
-			this.alertService.showMessage(
-				errorLog.error.message,
-				msg,
-				MessageSeverity.error
-			);
-		}
-		else {
-			this.alertService.showMessage(
-				'Error',
-				log.error,
-				MessageSeverity.error
-			);
-		}
-	}
+	// errorMessageHandler(log) {
+	// 	const errorLog = log;
+	// 	var msg = '';
+	// 	if (errorLog.message) {
+	// 		if (errorLog.error && errorLog.error.errors && errorLog.error.errors.length > 0) {
+	// 			for (let i = 0; i < errorLog.error.errors.length; i++) {
+	// 				msg = msg + errorLog.error.errors[i].message + '<br/>'
+	// 			}
+	// 		}
+	// 		this.alertService.showMessage(
+	// 			errorLog.error.message,
+	// 			msg,
+	// 			MessageSeverity.error
+	// 		);
+	// 	}
+	// 	else {
+	// 		this.alertService.showMessage(
+	// 			'Error',
+	// 			log.error,
+	// 			MessageSeverity.error
+	// 		);
+	// 	}
+	// }
 
 	onModuleTypeChange() {
 		if (this.sourcePoApproval.shipToUserTypeId == 9) {
@@ -610,8 +608,8 @@ export class AddressComponentComponent implements OnInit {
 				);
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			await this.commonService.createShipVia(customerData).subscribe(response => {
@@ -624,8 +622,8 @@ export class AddressComponentComponent implements OnInit {
 				);
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			})
 		}
 
@@ -659,8 +657,8 @@ export class AddressComponentComponent implements OnInit {
 		},
 			err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				///const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			})
 	}
 
@@ -678,8 +676,8 @@ export class AddressComponentComponent implements OnInit {
 
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			})
 		}
 	}
@@ -744,8 +742,8 @@ export class AddressComponentComponent implements OnInit {
 
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
 				});
 		}
 	}
@@ -784,8 +782,8 @@ export class AddressComponentComponent implements OnInit {
 					}
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
 				});
 		}
 	}
@@ -874,8 +872,8 @@ export class AddressComponentComponent implements OnInit {
 
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
 				});
 		}
 	}
@@ -947,8 +945,8 @@ export class AddressComponentComponent implements OnInit {
 
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
 				});
 		}
 	}
@@ -1046,8 +1044,8 @@ export class AddressComponentComponent implements OnInit {
 			this.userShipingList = res;
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		});
 	}
 
@@ -1067,8 +1065,8 @@ export class AddressComponentComponent implements OnInit {
 			this.userBillingList = res;
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		});
 	}
 
@@ -1209,8 +1207,8 @@ export class AddressComponentComponent implements OnInit {
 
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		})
 
 	}
@@ -1351,8 +1349,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			this.commonService.createAllAddres(addressData).subscribe(response => {
@@ -1372,8 +1370,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
@@ -1416,8 +1414,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			this.commonService.createAllAddres(addressData).subscribe(response => {
@@ -1437,8 +1435,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
@@ -1478,8 +1476,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			this.commonService.createAllAddres(addressData).subscribe(response => {
@@ -1499,8 +1497,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
@@ -1542,8 +1540,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			this.commonService.createAllAddres(addressData).subscribe(response => {
@@ -1563,8 +1561,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
@@ -1833,8 +1831,8 @@ export class AddressComponentComponent implements OnInit {
 			);
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		});
 	}
 

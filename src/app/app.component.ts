@@ -789,16 +789,12 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
                 { label: 'WO Shipping', routerLink: '/#' },
                 { label: 'WO Billing', routerLink: '/#' },
-                {
-                  label: 'Work Order Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/workordersmodule/workorderspages/app-wo-approval-rule',
-                },
-                {
-                  label: 'Work Order Quote Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
-                }
+                // {
+                //   label: 'Work Order Approval Rule',
+                //   command: () => this.clearStocklineAndSOStorageReference(),
+                //   routerLink: '/workordersmodule/workorderspages/app-wo-approval-rule',
+                // },
+              
               ],
             },
             {
@@ -900,22 +896,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 }
               ],
             },
-            {
-              label: 'Work-order Quote',
-              items: [
-                {
-                  label: 'WO Quote List',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-quote-list',
-                },
-                {
-                  label: 'Create  WO Quote',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-quote',
-                },
-                { label: 'WO Quote Approvals', routerLink: '/#' },
-              ],
-            },
+
             {
               label: 'Reports and Forms',
               items: [
@@ -942,6 +923,26 @@ export class AppComponent implements OnInit, AfterViewInit {
             },
           ],
           [
+            {
+              label: 'Work-order Quote',
+              items: [
+                {
+                  label: 'WO Quote List',
+                  routerLink:
+                    '/workordersmodule/workorderspages/app-work-order-quote-list',
+                },
+                {
+                  label: 'Create  WO Quote',
+                  routerLink:
+                    '/workordersmodule/workorderspages/app-work-order-quote',
+                },
+                {
+                  label: 'Work Order Quote Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
+                }
+              ],
+            },
             {
               label: 'Repair Order',
               items: [

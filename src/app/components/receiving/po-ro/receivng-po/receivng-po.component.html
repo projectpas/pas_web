@@ -345,7 +345,8 @@
                                     <td class="right">{{part?.quantityOrdered}}</td>
                                     <td class="right">{{part?.stockLineCount}}</td>
                                     <td class="right">{{part?.quantityRejected}}</td>
-                                    <td class="right">{{part.quantityOrdered - part.stockLineCount}}</td>
+                                    <!-- <td class="right">{{part?.quantityBackOrdered}}</td> -->
+                                    <td class="right">{{part.quantityOrdered - part.stockLineCount}}</td>                                    
                                     <td>
                                         {{part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered ? 'Fulfilling' : 'Received'}}
                                     </td>
@@ -393,7 +394,7 @@
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>Cond <span class="clr-red">*</span></label>
-                                                    <select class="form-control" required [(ngModel)]="part.conditionId"
+                                                    <select class="form-control width-100" required [(ngModel)]="part.conditionId"
                                                             #selects="ngModel" [ngModelOptions]="{standalone: true}">
                                                         <option value="0">Select</option>
                                                         <option *ngFor="let condition of ConditionList"
@@ -403,7 +404,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-1 receiving-margin-left">
                                                 <div class="form-group">
                                                     <label>Qty To Receive</label>
                                                     <input type="text" maxlength="12" pInputText pKeyFilter="pnum"
@@ -417,11 +418,11 @@
                                                     <input type="text" maxlength="12"
                                                            *ngIf="part.stockLineCount < part.quantityOrdered"
                                                            value="{{part.quantityActuallyReceived}}" pInputText
-                                                           pKeyFilter="pnum" class="form-control text-right" required />
+                                                           pKeyFilter="pnum" class="form-control width-100 text-right" required />
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-1" style="left:0px">
+                                            <div class="col-md-1 receiving-margin-left" style="left:0px">
                                                 <div class="form-group">
                                                     <label>Qty Rejected <span class="clr-red">*</span></label>
                                                     <input type="text" maxlength="12"

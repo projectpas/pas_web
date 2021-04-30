@@ -377,6 +377,7 @@ export class PurchaseSetupComponent implements OnInit {
 	adddefaultpart : boolean = true;
 	salesOrderId:number;
 	home: any;
+	msgflag:number=0;
 	
 	modal: NgbModalRef;
 	alertText:string
@@ -516,8 +517,8 @@ export class PurchaseSetupComponent implements OnInit {
 				this.getManagementStructureDetails(this.currentUserManagementStructureId,this.employeeId);			
 				this.isSpinnerVisible = false;
 				if (this.vendorIdByParams) {
-						this.arrayVendlsit.push(this.vendorIdByParams);
-						this.loadvendorDataById(this.vendorIdByParams);               
+					this.arrayVendlsit.push(this.vendorIdByParams);
+					this.loadvendorDataById(this.vendorIdByParams);               
 				}else {
 					this.loadVendorList(''); 
 				}
@@ -1340,7 +1341,7 @@ export class PurchaseSetupComponent implements OnInit {
 		if (this.arrayPostatuslist.length == 0) {
             this.arrayPostatuslist.push(0); }
 			this.commonService.autoSuggestionSmartDropDownList('POStatus','POStatusId','Description','',
-								  true, 0,this.arrayPostatuslist.join(),this.currentUserMasterCompanyId)
+								  true, 0,this.arrayPostatuslist.join(),0)
 				.subscribe(res => {
 				this.poStatusList = res;
 				this.poStatusList = this.poStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));	
@@ -1762,7 +1763,7 @@ export class PurchaseSetupComponent implements OnInit {
 						}
 					});
 					this.allsubWorkOrderInfo = [
-						{ value: 0, label: 'Select' }
+						{ value: 0, label: '-- Select --' }
 					];
 					parentdata.subWorkOrderlist = [...this.allsubWorkOrderInfo, ...data];					
 					parentdata.subWorkOrderId = getObjectByValue('value',parentdata.subWorkOrderId  == null ? 0 : parentdata.subWorkOrderId, parentdata.subWorkOrderlist);
@@ -2309,7 +2310,7 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			});
 			this.allWorkOrderInfo = [
-				{value: 0, label: 'Select'}
+				{value: 0, label: '-- Select --'}
 			];
 			this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...data];
 			this.allWorkOrderDetails = [...this.allWorkOrderInfo, ...data];
@@ -2333,7 +2334,7 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			});
 			this.allsubWorkOrderInfo = [
-				{ value: 0, label: 'Select' }
+				{ value: 0, label: '-- Select --' }
 			];
 			//this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
 			this.allsubWorkOrderDetails = [...this.allsubWorkOrderInfo, ...data];
@@ -2356,7 +2357,7 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			});
 			this.allRepairOrderInfo = [
-				{value: 0, label: 'Select'}
+				{value: 0, label: '-- Select --'}
 			];
 			this.allRepairOrderInfo = [...this.allRepairOrderInfo, ...data];
 			this.allRepairOrderDetails = [...this.allRepairOrderInfo, ...data];
@@ -2381,7 +2382,7 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			});
 			this.allSalesOrderInfo = [
-				{value: 0, label: 'Select'}
+				{value: 0, label: '-- Select --'}
 			];
 			this.allSalesOrderInfo = [...this.allSalesOrderInfo, ...data];
 			this.allSalesOrderDetails = [...this.allSalesOrderInfo, ...data];
@@ -2472,14 +2473,12 @@ export class PurchaseSetupComponent implements OnInit {
 				poMemo: this.headerInfo.poMemo ? this.headerInfo.poMemo : '',
                 notes: this.headerInfo.notes ? this.headerInfo.notes : '',				
 				managementStructureId: this.headerInfo.managementStructureId ? this.headerInfo.managementStructureId : 0,
-				   masterCompanyId: this.currentUserMasterCompanyId,
+				masterCompanyId: this.currentUserMasterCompanyId,
 			    createdDate: this.headerInfo.createdDate, 	
 				createdBy: this.headerInfo.createdBy ? this.headerInfo.createdBy : this.userName,	
 				updatedBy:  this.headerInfo.updatedBy ? this.headerInfo.updatedBy : this.userName
 			}
-
-			if (!this.isEditModeHeader) {
-				
+			if (!this.isEditModeHeader) {				
 				this.purchaseOrderService.savePurchaseOrderHeader({ ...headerInfoObj }).subscribe(saveddata => {
 					this.purchaseOrderId = saveddata.purchaseOrderId;
 					this.poId = saveddata.purchaseOrderId;
@@ -2501,7 +2500,6 @@ export class PurchaseSetupComponent implements OnInit {
 					this.isSpinnerVisible = false;					
 					this.toggle_po_header = true;
 					this.enableHeaderSaveBtn = true;
-
 				});
 			} else {
 				headerInfoObj.updatedBy = this.userName;
@@ -2539,6 +2537,7 @@ export class PurchaseSetupComponent implements OnInit {
 		this.isSpinnerVisible = true;
 		this.parentObjectArray = [];
 		var errmessage = '';
+		this.msgflag = 0;
 		for (let i = 0; i < this.partListData.length; i++) {
 			this.alertService.resetStickyMessage();			
 			// if(this.partListData[i].quantityOrdered == 0) {	
@@ -2551,7 +2550,45 @@ export class PurchaseSetupComponent implements OnInit {
 				this.alertText= 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  +'<br/>'+"Please Enter Qty."
 				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
 				return;
-		    }
+			}  
+            if(this.partListData[i].workOrderId) {
+				if(this.partListData[i].workOrderId.value != 0) {
+					if(this.partListData[i].repairOrderId) {
+						if (this.partListData[i].repairOrderId.value != 0) {
+							this.isSpinnerVisible = false;
+							errmessage = errmessage + '<br />' + "Work Order already selected please unselect Repair Order."
+							this.msgflag = 1;					
+						}
+					}
+					if (this.partListData[i].salesOrderId) {
+						if (this.partListData[i].salesOrderId.value != 0) {
+							this.isSpinnerVisible = false;
+							errmessage = errmessage + '<br />' + "Work Order already selected please unselect Sales Order."
+							this.msgflag = 1;
+						}
+					}				
+				}
+			}
+			if(this.msgflag == 0) {
+				if(this.partListData[i].repairOrderId) {
+					if(this.partListData[i].repairOrderId.value != 0) {
+						if(this.partListData[i].workOrderId) {
+							if (this.partListData[i].workOrderId.value != 0) {
+								this.isSpinnerVisible = false;
+								errmessage = errmessage + '<br />' +"Repair Order already selected please unselect Work Order."					
+							}
+						}				
+						if (this.partListData[i].salesOrderId) {
+							if (this.partListData[i].salesOrderId.value != 0) {
+								this.isSpinnerVisible = false;
+								errmessage = errmessage + '<br />' + "Repair Order already selected please unselect Sales Order."
+							}	
+						}
+			 		}						    
+				}
+			 }
+			
+			
 			if(this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
 				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
@@ -2633,8 +2670,7 @@ export class PurchaseSetupComponent implements OnInit {
 					if(!this.partListData[i].childList[j].needByDate) {	
 						this.isSpinnerVisible = false;	
 						errmessage = errmessage + '<br />' + "Split Shipment Need By is required."
-					}
-					
+					}					
 				}
 			}
 			if(errmessage != '') {
@@ -2642,7 +2678,6 @@ export class PurchaseSetupComponent implements OnInit {
 				this.alertService.showStickyMessage("Validation failed", message, MessageSeverity.error, 'Please enter Qty');
 				return;
 		    }
-
 			if(this.partListData[i].vendorListPrice == 0 && this.displayWarningModal == false) {	
 				this.isSpinnerVisible = false;	
 				this.displayWarningModal = true;		    								
@@ -2662,7 +2697,6 @@ export class PurchaseSetupComponent implements OnInit {
 					}
 				}
 			}
-
 			if (this.partListData[i].ifSplitShip) {
 				if (childDataList.length > 0) {
 					this.childObjectArray = [];
@@ -2793,12 +2827,10 @@ export class PurchaseSetupComponent implements OnInit {
 					purchaseOrderPartRecordId: this.partListData[i].purchaseOrderPartRecordId ? this.partListData[i].purchaseOrderPartRecordId : 0
 				})
 			}
-		}	
-		
-		
+		}
 		this.purchaseOrderService.savePurchaseOrderParts(this.parentObjectArray).subscribe(res => {
 			if(res) {				
-					this.BindAllParts(res);
+				this.BindAllParts(res);
 			}
 			this.isSpinnerVisible = false;
 			this.enablePartSaveBtn = false;
@@ -3423,7 +3455,7 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			});
 			this.allPercentData = [
-				{percentId: 0, percentValue: 'Select'}
+				{percentId: 0, percentValue: '-- Select --'}
 			];
 			this.allPercentData = [...this.allPercentData, ...data];
 		},err => {

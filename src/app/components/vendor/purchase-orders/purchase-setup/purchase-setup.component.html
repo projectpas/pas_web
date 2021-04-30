@@ -507,7 +507,11 @@
 
                                     </td>
                                     <td>
-                                        <p-autoComplete field="label" class="pautocomp-cstm" appendTo="body" [(ngModel)]="partList.repairOrderId" name="repairOrderId{{row_index}}" [suggestions]="allRepairOrderDetails" (onSelect)="onROSelect($event.value)" (completeMethod)="filterRepairOrderList($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
+                                        <p-autoComplete field="label" class="pautocomp-cstm" appendTo="body" [(ngModel)]="partList.repairOrderId" 
+                                        name="repairOrderId{{row_index}}" [suggestions]="allRepairOrderDetails" (onSelect)="onROSelect($event.value)" 
+                                        (completeMethod)="filterRepairOrderList($event)" [size]="30" [minLength]="1" [dropdown]="true" 
+                                        errorMessage="Records not found" [forceSelection]="true" 
+                                        (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
                                         </p-autoComplete>
                                         <!-- <input type="number" class="form-control" [(ngModel)]="partList.repairOrderId" name="repairOrderId{{row_index}}"> -->
 

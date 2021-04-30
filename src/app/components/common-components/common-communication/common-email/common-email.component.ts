@@ -11,6 +11,7 @@ import { emailPattern } from '../../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { SalesQuoteService } from '../../../../services/salesquote.service';
+import { SalesOrderService } from '../../../../services/salesorder.service';
 
 @Component({
     selector: 'app-common-email',
@@ -78,7 +79,8 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         private commonService: CommonService, private datePipe: DatePipe,
         private authService: AuthService, private modalService: NgbModal, 
         private alertService: AlertService, private configurations: ConfigurationService,
-        private salesOrderQuoteService: SalesQuoteService) { }
+        private salesOrderQuoteService: SalesQuoteService,
+        private salesOrderService: SalesOrderService) { }
 
     ngOnInit(): void {
         if (this.type == 1) {
@@ -188,6 +190,14 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                 if (data) {
                     let quote = data && data.length ? data[0] : null;
                     this.subject = quote.salesOrderQuote.customerName + ', Sales Quote Number: ' + quote.salesOrderQuote.salesOrderQuoteNumber;
+                }
+            });
+        }
+        else if (this.CurrentModuleName == "SalesOrder") {
+            this.salesOrderService.getSalesOrder(this.referenceId).subscribe(data => {
+                if (data) {
+                    let salesOrder = data && data.length ? data[0] : null;
+                    this.subject = salesOrder.salesOrder.customerName + ', Sales Order Number: ' + salesOrder.salesOrder.salesOrderNumber;
                 }
             });
         }

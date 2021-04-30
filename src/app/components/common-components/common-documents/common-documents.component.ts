@@ -229,9 +229,11 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     openEdit(rowdata) {
         this.selectedFileAttachment = [];
         this.isEditButton = true;
+        this.editMode=true
         this.documentInformation = rowdata;
         this.sourceViewforDocumentList = rowdata.attachmentDetails;
         this.disableSave = true;
+        this.getDocumentTypeList();
     }
 
     addDocumentDetails() {
@@ -309,12 +311,12 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     dateFilterForTable(date, field) {
-        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+        if (date !== '' && moment(date).format('MM DD YYYY')) {
             this.documentCollection = this.documentCollectionOriginal;
             const data = [...this.documentCollection.filter(x => {
-                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                if (moment(x.createdDate).format('MM DD YYYY') === moment(date).format('MM DD YYYY') && field === 'createdDate') {
                     return x;
-                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                } else if (moment(x.updatedDate).format('MM DD YYYY') === moment(date).format('MM DD YYYY') && field === 'updatedDate') {
                     return x;
                 }
             })]
@@ -817,19 +819,43 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     commondocumentsList: any = []
 
     documentType: any = [];
-    getDocumentTypeList() {
-        this.commonService.getDocumentType(this.currentUserMasterCompanyId).subscribe(res => {
-            this.documentType = res;
+    // getDocumentTypeList() {
+    //     this.commonService.getDocumentType(this.currentUserMasterCompanyId).subscribe(res => {
+    //         this.documentType = res;
+    //     }, err => {
+    //         this.isSpinnerVisible = false;
+    //     });
+    // }
+    setEditArray:any=[];
+    getDocumentTypeList(): void {
+        this.setEditArray = [];
+        if (this.editMode == true) {
+    
+                    this.setEditArray.push(this.documentInformation.documentTypeId? this.documentInformation.documentTypeId :0)
+                } else {
+                    this.setEditArray.push(0);
+                }
+            
+            if (this.setEditArray && this.setEditArray.length == 0) {
+                this.setEditArray.push(0);
+            }
+        
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('DocumentType', 'DocumentTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+         if(res && res.length !=0){
+            this.documentType = res.map(x => {
+                return {
+                    ...x,
+                    documentTypeId: x.value,
+                    name: x.label
+                }
+            });
+         }
         }, err => {
             this.isSpinnerVisible = false;
         });
-        // this.commonService.smartDropDownList('DocumentType', 'DocumentTypeId', 'Name')
-        //     .subscribe(
-        //         (res)=>{
-        //             this.documentType = res;
-        //         }
-        //     )
     }
+
 
     lstfilterDocumentType = [];
     filterDocumentType(event) {

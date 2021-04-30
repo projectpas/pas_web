@@ -704,7 +704,7 @@ if(this.laborForm && this.laborForm.laborList && this.laborForm.laborList.length
       }
 
     }
-    this.laborForm.workOrderLaborList[0][taskName].unshift(taskData);
+    this.laborForm.workOrderLaborList[0][taskName].push(taskData);
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
     if(this.laborForm.workOrderLaborList[0][task] && this.laborForm.workOrderLaborList[0][task].length !=0){
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
@@ -753,8 +753,8 @@ if(this.laborForm && this.laborForm.laborList && this.laborForm.laborList.length
 
       currentRecord.totalMinutes = moment.utc(ms).format("mm");
       currentRecord.totalHours = Math.floor(days.asHours());
-      currentRecord.ajdtotalMinutes = moment.utc(ms).format("mm");
-      currentRecord.adjtotalHours = Math.floor(days.asHours());
+      // currentRecord.ajdtotalMinutes = moment.utc(ms).format("mm");
+      // currentRecord.adjtotalHours = Math.floor(days.asHours());
       this.calculateHoursDifference(currentRecord);
     }
   }

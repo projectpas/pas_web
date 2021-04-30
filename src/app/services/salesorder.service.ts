@@ -258,6 +258,13 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.getview(salesOrderId)
     );
   }
+
+  getPrintview(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getPrintview(salesOrderId)
+    );
+  }
+
   getPickTicket(salesOrderId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getPickTicket(salesOrderId)

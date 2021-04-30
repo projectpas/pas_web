@@ -127,6 +127,7 @@ export class SalesOrderCreateComponent implements OnInit {
   @ViewChild("newSalesOrderForm", { static: false }) public newSalesOrderForm: NgForm;
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
   @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
+  @ViewChild("salesOrderPrintPopup", { static: false }) public salesOrderPrintPopup: ElementRef;
   @ViewChild(SalesOrderFreightComponent, { static: false }) public salesOrderFreightComponent: SalesOrderFreightComponent;
   @ViewChild(SalesOrderChargesComponent, { static: false }) public salesOrderChargesComponent: SalesOrderChargesComponent;
   @ViewChild(SalesOrderPartNumberComponent, { static: false }) public salesOrderPartNumberComponent: SalesOrderPartNumberComponent;
@@ -1144,7 +1145,8 @@ export class SalesOrderCreateComponent implements OnInit {
         this.selectedCommunicationTab = "Quotemail";
         break;
       case SalesOrderActionType.PrintSalesOrder:
-        this.selectedCommunicationTab = "Quotemail";
+        this.isEmailTabEnabled = false;
+        this.initiateSOPrintProcess();
         break;
     }
   }
@@ -1514,6 +1516,333 @@ export class SalesOrderCreateComponent implements OnInit {
     }, error => {
       this.isSpinnerVisible = false;
     });
+  }
+
+  initiateSOPrintProcess() {
+    let content = this.salesOrderPrintPopup;
+    this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  print(): void {
+    let printContents, popupWin;
+    printContents = document.getElementById('sales_order_print_content').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title>Sales Order</title>
+          <style>
+          table {
+            width: 1000px;
+            overflow: auto !important;
+        }
+        
+        table thead {
+            background: #808080;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        table thead tr {
+            background: #0d57b0 !important;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        table,
+        thead,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        
+        table,
+        thead,
+        th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        
+        table thead tr th {
+            background: #0d57b0 !important;
+            padding: 5px !important;
+            color: #fff !important;
+            letter-spacing: 0.3px;
+            font-size: 10px;
+            text-transform: capitalize;
+            z-index: 1;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        table tbody {
+            overflow-y: auto;
+            max-height: 500px;
+        }
+        
+        table tbody tr td {
+            background: #fff;
+            padding: 2px;
+            line-height: 22px;
+            height: 22px;
+            color: #333;
+            font-size: 11.5px !important;
+            letter-spacing: 0.1px;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        h4 {
+            padding: 5px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin: 0;
+        }
+        
+        h5 {
+            text-align: center;
+            background: #0d57b0 !important;
+            color: #fff !important;
+            margin-left: 48%;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        hr {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 0;
+            border-top: 1px solid #e0e0e0;
+            height: 0;
+            box-sizing: content-box;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .first-block {
+            position: relative;
+            border: 1px solid black;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            padding-left: 2px;
+            width: 66.66666667%;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .first-block-4 {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            padding-left: 2px;
+        }
+        
+        .first-block-name {
+            margin-right: 20px
+        }
+        
+        .first-block-sold-to {
+            position: relative;
+            min-height: 200px;
+            float: left;
+            padding-right: 2px;
+            border: 1px solid black;
+            background: #fff;
+            width: 100%;
+            padding-left: 2px;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .first-block-ship-to {
+            position: relative;
+            min-height: 200px;
+            padding-right: 2px;
+            border: 1px solid black;
+            background: #fff;
+            width: 100%;
+            padding-left: 2px;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .first-block-sold {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            padding-left: 2px;
+            width: 50%;
+            margin-top: 10px;
+        }
+        
+        .first-block-ship {
+            position: relative;
+            min-height: 1px;
+            float: right;
+            padding-right: 2px;
+            padding-left: 2px;
+            width: 48%;
+            margin-top: 10px
+        }
+        
+        .address-block {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            border: 1px solid black;
+            width: 100%;
+            padding-left: 2px;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .first-block-address {
+            margin-right: 20px;
+            text-align: left
+        }
+        
+        .second-block {
+            position: relative;
+            min-height: 1px;
+            float: right;
+            padding-right: 2px;
+            width: 48%;
+            padding-left: 2px;
+            box-sizing: border-box;
+        }
+        
+        .second-block-div {
+            margin: 2px 0;
+            position: relative;
+            display: flex;
+            min-height: 1px;
+            padding-left: 0px;
+            width: 100%;
+        }
+        
+        .second-block-label {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            padding-left: 2px;
+            width: 38.33333333%;
+            text-transform: capitalize;
+            margin-bottom: 0;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .clear {
+            clear: both;
+        }
+        
+        .form-div {
+            top: 6px;
+            position: relative;
+            font-weight: normal;
+            margin-top: 10px;
+        }
+        
+        .image {
+            border: 1px solid #ccc;
+            padding: 5px;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .logo-block {
+            margin: auto;
+            text-align: center
+        }
+        
+        .pdf-block {
+            width: 800px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 25px 15px;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .picked-by {
+            position: relative;
+            float: left;
+            width: 48%
+        }
+        
+        .confirmed-by {
+            position: relative;
+            float: right;
+            width: 48%
+        }
+        
+        .first-part {
+            position: relative;
+            display: flex;
+            float: left;
+            width: 50%
+        }
+        
+        .seond-part {
+            position: relative;
+            display: flex;
+            float: right;
+            width: 24%
+        }
+        
+        .input-field-border {
+            width: 88px;
+            border-radius: 0px !important;
+            border: none;
+            border-bottom: 1px solid black;
+        }
+        
+        .pick-ticket-header {
+            border: 1px solid black;
+            text-align: center;
+            background: #0d57b0 !important;
+            color: #fff !important;
+            -webkit-print-color-adjust: exact;
+        }
+        
+        .very-first-block {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            padding-left: 2px;
+            width: 50%;
+        }
+        
+        .border-transparent {
+            border-block-color: white;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .sales-order-header {
+          line-height: 25px;
+          margin-left: 42%;
+          -webkit-print-color-adjust: exact;
+        }
+
+        .box-input {
+          color: #333 !important;
+          width: 62%;
+          text-align: left;
+          border: 1px solid #333;
+          border-radius: 2px;
+          height: 23px;
+          vertical-align: middle;
+          display: inline-block;
+          line-height: 20px;
+          margin-right: 0px !important;
+          -webkit-print-color-adjust: exact;
+        }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
+
+  closeModal() {
+    this.modal.close();
   }
 
   getChargesList() { }
