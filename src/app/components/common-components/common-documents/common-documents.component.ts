@@ -632,7 +632,6 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                     });
                 }
             }
-            this.documentCollectionOriginal = this.documentCollection;
             this.documentCollection = this.documentCollection.map(x => {
                 return {
                     ...x,
@@ -642,6 +641,8 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                     updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
                 }
             });
+            this.documentCollectionOriginal = this.documentCollection;
+
             this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
@@ -787,6 +788,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
         this.commondocumentsDestructuredData = [...this.commondocumentsDestructuredData];
         this.documentCollection = this.commondocumentsDestructuredData;
+        this.documentCollectionOriginal=this.commondocumentsDestructuredData;
         this.commondocumentsList = [...this.documentCollection];
         this.index = 0;
         this.disableSave == false;
