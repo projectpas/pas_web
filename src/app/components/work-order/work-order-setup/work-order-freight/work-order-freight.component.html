@@ -383,7 +383,7 @@
                 <tbody>
                   <tr *ngFor="let f of freightForm; let i = index"> 
                     <td>
-                      <select class="form-control width-100" appendTo="body" (ngModelChange)="getActive()" [(ngModel)]="f.taskId" [disabled]="isView" name="task_{{i}}"
+                      <select class="form-control width-100" appendTo="body" (ngModelChange)="getActive()" [(ngModel)]="f.taskId" [disabled]="isView" name="task_{{i}}" required
                        >
                         <option value="">Select</option> 
                         <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>

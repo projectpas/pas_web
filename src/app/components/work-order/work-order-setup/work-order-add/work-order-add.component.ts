@@ -307,7 +307,7 @@ export class WorkOrderAddComponent implements OnInit {
                     }
                 }
             },
-                err => {
+                err => { 
                     this.handleError(err);
                 }) 
         }
@@ -1337,11 +1337,11 @@ setTimeout(() => {
                 this.handleError(err);
             })
     }
-    this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart);
+    this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart,index);
  
     }
 
-    getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
+    getNTEandSTDByItemMasterId(itemMasterId, currentRecord,index) {
         if (currentRecord.workOrderScopeId !== null && currentRecord.workOrderScopeId !== '' && currentRecord.workOrderScopeId > 0) {
             const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
             if (itemMasterId !== undefined && currentRecord.workOrderScopeId !== undefined) {
@@ -1349,8 +1349,10 @@ setTimeout(() => {
                 this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.workOrderScopeId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                     this.isSpinnerVisible = false;
                     if (res !== null) {
-                        currentRecord.nte = res.nteHours;
-                        currentRecord.tatDaysStandard = res.stdHours;
+                        this.workOrderGeneralInformation.partNumbers[index].nte = res.nteHours;
+                        this.workOrderGeneralInformation.partNumbers[index].tatDaysStandard = res.stdHours;
+                        // currentRecord.nte = res.nteHours;
+                        // currentRecord.tatDaysStandard = res.stdHours;
                     }
                 },
                     err => {
