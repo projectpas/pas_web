@@ -12,11 +12,13 @@ declare var $ : any;
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-customer-shipping-information',
     templateUrl: './customer-shipping-information.component.html',
     styleUrls: ['./customer-shipping-information.component.scss'],
+    providers: [DatePipe]
 })
 /** anys component*/
 export class CustomerShippingInformationComponent implements OnInit {
@@ -74,6 +76,8 @@ export class CustomerShippingInformationComponent implements OnInit {
         { field: 'exportLicense', header: 'Export License' },
         { field: 'description', header: 'Description' },
         { field: 'startDate', header: 'Start Date' },
+        { field: 'createdDate', header: 'Created Date' },
+        { field: 'updatedDate', header: 'Updated Date' },
         { field: 'expirationDate', header: 'Expiration Date' },
         { field: 'amount', header: 'Amount',width:"70px" },
         { field: 'shipToCountry', header: 'Country' },
@@ -169,7 +173,8 @@ export class CustomerShippingInformationComponent implements OnInit {
     constructor(private customerService: CustomerService, private authService: AuthService,
         private alertService: AlertService, private activeModal: NgbActiveModal, private modalService: NgbModal, private configurations: ConfigurationService,
         private commonService: CommonService,
-        private router: ActivatedRoute
+        private router: ActivatedRoute,
+        private datePipe: DatePipe
     ) { 
         this.id = this.router.snapshot.params['id'];
     }
@@ -404,7 +409,15 @@ export class CustomerShippingInformationComponent implements OnInit {
                     }
                    });
            }
-             this.internationalShippingData=newarry;
+             this.internationalShippingData=newarry.map(x=>{
+                return {
+                 ...x,
+                 createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                 updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                startDate:x.startDate ?  this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a'): '',
+                expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a'): '',
+                }
+             });
             }else if(status=='InActive' ){
                 this.status2=status;
                 if(this.currentDeletedstatus2==false){
@@ -422,7 +435,15 @@ export class CustomerShippingInformationComponent implements OnInit {
                      }
                     });
             }
-                  this.internationalShippingData = newarry;
+            this.internationalShippingData=newarry.map(x=>{
+                return {
+                 ...x,
+                 createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                 updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                startDate:x.startDate ?  this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a'): '',
+                expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a'): '',
+                }
+             });
             }else if(status== 'ALL'){
                 this.status2=status;
                 if(this.currentDeletedstatus2==false){
@@ -441,7 +462,15 @@ export class CustomerShippingInformationComponent implements OnInit {
                     });
 
                 }
-                this.internationalShippingData= newarry;
+                this.internationalShippingData=newarry.map(x=>{
+                    return {
+                     ...x,
+                    startDate:x.startDate ?  this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a'): '',
+                    expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a'): '',
+                    createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                    updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): ''
+                    }
+                 });
             }
             this.totalRecords = this.internationalShippingData.length ;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -917,6 +946,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 return {
                     ...x,
                     amount: x.amount ? formatNumberAsGlobalSettingsModule(x.amount, 2) : '0.00'
+                   
                 }
             });
             this.geListByStatusInternational(this.status2 ? this.status2 :this.currentstatus2);
