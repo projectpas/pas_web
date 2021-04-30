@@ -615,6 +615,7 @@ this.getAllPercentages();
         // this.sourceWorkFlow.percentageOfOthers
 
         this.sourceWorkFlow.percentageOfOthers =this.othersPercentValue;
+
         //  this.sourceWorkFlow.percentageOfOthers == -1 || this.sourceWorkFlow.percentageOfOthers == "-1" ? 0 : this.sourceWorkFlow.percentageOfOthers;
         this.sourceWorkFlow.otherCost=this.sourceWorkFlow.otherCost? this.sourceWorkFlow.otherCost :0.00;
         const otherCost1 = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
@@ -624,16 +625,23 @@ this.getAllPercentages();
   this.Total = total ? formatNumberAsGlobalSettingsModule(total, 2) : 0.00;
 
         if (this.sourceWorkFlow.berThresholdAmount != 0 && this.Total) {
+
            const BRTH = this.sourceWorkFlow.berThresholdAmount ? parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, '')) : 0;
            const Tot = parseFloat(this.Total.toString().replace(/\,/g, ''));
-            const maxValue = Math.max(0, BRTH, Tot);
-            const minValue = Math.min(BRTH, Tot) !== -Infinity ? Math.min(BRTH, Tot) : 0;
-            let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
-            this.PercentBERThreshold = percentageofBerThreshold ? formatNumberAsGlobalSettingsModule(percentageofBerThreshold, 2) : 0.00;
+            let percentageofBerThreshold: any = (Tot / BRTH )* 100;
+                this.PercentBERThreshold = percentageofBerThreshold ? formatNumberAsGlobalSettingsModule(percentageofBerThreshold, 2) : 0.00;
+
+        //    const BRTH = this.sourceWorkFlow.berThresholdAmount ? parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, '')) : 0;
+        //    const Tot = parseFloat(this.Total.toString().replace(/\,/g, ''));
+        //     const maxValue = Math.max(0, BRTH, Tot);
+        //     const minValue = Math.min(BRTH, Tot) !== -Infinity ? Math.min(BRTH, Tot) : 0;
+        //     let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
+        //     this.PercentBERThreshold = percentageofBerThreshold ? formatNumberAsGlobalSettingsModule(percentageofBerThreshold, 2) : 0.00;
 
         }
+       this.TotalOtherCost=this.sourceWorkFlow.otherCost;
     }
-
+    TotalOtherCost:any;
     private calculateWorkFlowTotalMaterialCost(): void {
         this.MaterialCost = 0;
 

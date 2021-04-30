@@ -33,7 +33,7 @@
                   <span  *ngIf="!isView">   {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</span>
                   <span  *ngIf="isView">  Work Order Quote</span>
                      <button class="btn-sm header-button header-button-alignment"  (click)="toggleDisplayMode()">
-                         {{!isDetailedView ? 'Collapse' : 'Expand'}}</button>
+                         {{!isDetailedViewQuote ? 'Collapse' : 'Expand'}}</button>
                  </h4>
              </div>
              <div *ngIf="!isView">
@@ -46,7 +46,7 @@
             </div>
          </div>
      <div class="card-body header-body">
-         <div class="form-row" [hidden]="isDetailedView">
+         <div class="form-row" [hidden]="isDetailedViewQuote">
              <div class="col-md-3"> 
                  <div class="form-group ">
                      <label>Quote Number <span class="clr-red">*</span></label>
@@ -249,7 +249,7 @@
                  <button class="btn btn-primary wo-quote-btn-margin pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
              </div>
          </div>
-         <div class="form-row" [hidden]="!isDetailedView">
+         <div class="form-row" [hidden]="!isDetailedViewQuote">
              <div class="col-md-3"> 
                  <div class="form-group ">
                      <label>Quote Number <span class="clr-red">*</span></label>
