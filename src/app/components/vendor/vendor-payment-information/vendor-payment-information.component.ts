@@ -167,6 +167,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	isEdit: boolean = true;
 	isDelete: boolean = true;
 	isPaymentView: boolean = true;
+	isNextVisible: Boolean=true;
+	isPrevVisible: Boolean=true;
 	constructor(private http: HttpClient,private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
 		if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -271,6 +273,9 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.isEdit = this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation + '.' + PermissionConstants.Update])
 		this.isDelete = this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation + '.' + PermissionConstants.Delete])
 		this.isPaymentView = this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation + '.' + PermissionConstants.View])
+
+		this.isNextVisible=this.authService.ShowTab('Create Vendor','Shipping Information');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Billing Information');
 	}
 
 	GetVendorGeneralAddress(event) {

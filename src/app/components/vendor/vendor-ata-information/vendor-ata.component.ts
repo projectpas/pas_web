@@ -79,6 +79,8 @@ export class VendorATAInformationComponent implements OnInit {
 
     isDownload: boolean = true;
     isATAView: boolean = true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(
         private atasubchapter1service: AtaSubChapter1Service,
         private atamain: AtaMainService,
@@ -119,6 +121,8 @@ export class VendorATAInformationComponent implements OnInit {
         this.stopmulticlicks = false;
         this.isDownload = this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter + "." + PermissionConstants.Download])
         this.isATAView = this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter + "." + PermissionConstants.View]);
+        this.isNextVisible=this.authService.ShowTab('Create Vendor','Financial Information');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Contacts');
     }
 
     ngOnInit() {

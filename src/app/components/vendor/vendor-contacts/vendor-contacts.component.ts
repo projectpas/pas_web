@@ -202,6 +202,8 @@ export class VendorContactsComponent implements OnInit {
     isDownload:boolean=true;
     isATA:Boolean=true;
     isContactView:boolean=true;
+    isNextVisible:Boolean=true;
+    isPrevVisible:Boolean=true;
 
     constructor(private router: ActivatedRoute,
         private atamain: AtaMainService,
@@ -277,6 +279,8 @@ export class VendorContactsComponent implements OnInit {
         this.isATA=this.authService.ShowTab('Create Vendor','ATA Chapter');
         this.isContactView=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.View]);
         this.alertService.stopLoadingMessage();
+        this.isNextVisible=this.authService.ShowTab('Create Vendor','ATA Chapter');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Capabilities');
     }
     ngOnInit(): void {
         this.vendorService.currentEditModeStatus.subscribe(message => {

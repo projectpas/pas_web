@@ -632,8 +632,8 @@
                 </div>
             </div>
             <div class="m-t-60" *ngIf="!isViewMode">
-                <button type="button" class="btn btn-primary pull-right" (click)="nextClick()">Next</button>
-                <button type="button" class="btn btn-primary pull-right" (click)="previousClick()">Previous</button>
+                <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right" (click)="nextClick()">Next</button>
+                <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right" (click)="previousClick()">Previous</button>
             </div>
         </div>
 

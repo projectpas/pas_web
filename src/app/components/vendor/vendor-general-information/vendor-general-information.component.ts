@@ -253,6 +253,7 @@ export class VendorGeneralInformationComponent implements OnInit {
     isView:boolean=true;
     isAdd:boolean=true;
     isEdit:boolean=true;
+    isNextVisible:Boolean=true;
     constructor(public vendorclassificationService: VendorClassificationService,
         private http: HttpClient,
         private changeDetectorRef: ChangeDetectorRef,
@@ -321,6 +322,7 @@ export class VendorGeneralInformationComponent implements OnInit {
         }
         this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_GeneralInformation+'.'+PermissionConstants.Add]);
         this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_GeneralInformation+'.'+PermissionConstants.Update]);
+        this.isNextVisible=this.authService.ShowTab('Create Vendor','Capabilities');
     }
 
     ngOnInit(): void {
