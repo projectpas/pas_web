@@ -1137,11 +1137,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         const totlapercent=totlapercentOriginal ? totlapercentOriginal :0;
         this.sourceWorkFlow.percentageOfTotal = totlapercent;
         this.sourceWorkFlow.totPer = (totlapercent > 0 ? formatNumberAsGlobalSettingsModule(totlapercent, 2) : '0.00') + '%';
-        const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
-            let percentageofBerThreshold: any = (parseFloat(this.TotalEst.toString().replace(/\,/g, '')) / berThAmt) * 100;
-            this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
-            this.percentBERTh = (this.PercentBERThreshold ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
+   if(this.sourceWorkFlow.berThresholdAmount){
+    const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
+    let percentageofBerThreshold: any = (parseFloat(this.TotalEst.toString().replace(/\,/g, '')) / berThAmt) * 100;
+    this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
+    this.percentBERTh = (this.PercentBERThreshold ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
 
+   }
         }, 1000);
     }
     calculateTotalWorkFlowCost(isDisplayErrorMesage: boolean): any {
@@ -2070,9 +2072,9 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         if (!this.calculateTotalWorkFlowCost(false)) {
             $('#confir').modal("show");
         }
-        if (this.finalCost == 0) {
+        // if (this.finalCost == 0) {
             this.confirmation();
-        }
+        // }
     }
     updateWorkFlow(): void {
         this.originalworkFLow = this.workFlow
@@ -2448,6 +2450,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             delete    workflowData.customerName
             this.actionService.addWorkFlowHeader(workflowData).subscribe(result => {
                 this.isSpinnerVisible = false;
+                this.sourceWorkFlow.version=result.version;
                 this.alertService.showMessage(this.title, "Work Flow header updated successfully.", MessageSeverity.success);
                 this.sourceWorkFlow.workflowId = result.workflowId;
                 this.UpdateMode = true;
@@ -2683,6 +2686,7 @@ if(this.validateTask==true){
             this.isSpinnerVisible = true;
             this.actionService.addWorkFlowHeader(createDataset).subscribe(result => {
                 this.isSpinnerVisible = false;
+                this.sourceWorkFlow.version=result.version;
                 this.alertService.showMessage(this.title, "Work Flow header added successfully.", MessageSeverity.success);
                 this.isUpdateAfterCreate = true;
                 this._workflowService.enableUpdateMode = true;

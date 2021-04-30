@@ -1,0 +1,29 @@
+export interface IExchangeQuoteFreight {
+    shipViaId: number;
+    length: number;
+    width: number;
+    height: number;
+    weight: number;
+    memo: string;
+    amount: number;
+    uomId: number;
+    dimensionUOMId: number;
+    currencyId: number;
+    exchangeQuoteFreightId: number;
+    exchangeQuoteId: number;
+    exchangeQuoteePartId: string;
+    markupPercentageId: number;
+    markupFixedPrice: number;
+    masterCompanyId: number;
+    headerMarkupId: number;
+    billingMethodId: number;
+    billingRate: number;
+    billingAmount: number;
+    isActive: boolean;
+    isDeleted: boolean;
+    createdBy: string;
+    updatedBy: string;
+    updatedDate?: Date;
+    createdDate?: Date;
+    headerMarkupPercentageId: number;
+}
