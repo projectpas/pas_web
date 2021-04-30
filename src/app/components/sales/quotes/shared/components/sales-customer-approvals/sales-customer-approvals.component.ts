@@ -135,7 +135,7 @@ export class SalesCustomerApprovalsComponent {
         if (this.arrayApprovalStatuslst.length == 0) {
             this.arrayApprovalStatuslst.push(0);
         }
-        forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.currentUserMasterCompanyId),
+        forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0),
             this.salesQuoteService.approverslistbyTaskId(ApprovalTaskEnum.SalesQuoteApproval, this.salesQuoteId),
             this.salesQuoteService.getCustomerQuotesList(this.salesQuoteId)).subscribe(response => {
                 this.isSpinnerVisible = false;
@@ -196,7 +196,7 @@ export class SalesCustomerApprovalsComponent {
         if (this.arrayApprovalStatuslst.length == 0) {
             this.arrayApprovalStatuslst.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0).subscribe(res => {
             this.statusList = res.map(x => {
                 return {
                     ...x,

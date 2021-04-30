@@ -1,0 +1,120 @@
+<div class="form-group">
+  <div class="card new-card">
+    <div class="card-header header" *ngIf="!isView">
+      <div class="row">
+        <div class="col">
+          <h4 class="header-name"> Charges</h4>
+        </div>
+        <div>
+          <button type="button" class="btn-sm header-button" data-target="#addNewCharges" data-toggle="modal"
+            (click)="createNew()">
+            Add Charges
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="addNewCharges" class="modal fade" role="dialog" *ngIf="!view" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-xlg">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title"> {{isEdit ? 'Edit' : 'Add'}} Charges</h4>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="!isEdit">
+          <span class="cat-heading cat4 ng-star-inserted">
+            Add Charges
+            <i class="fa fa-plus" (click)="addNewRow()"></i>
+          </span>
+        </div>
+        <div class="tab-content">
+          <div class="table-responsive table-overflow" style="height: 300px;">
+            <form #chargesCreateForm="ngForm">
+              <table class="table table-bordered ">
+                <thead>
+                  <tr>
+                    <th rowspan="2">Type<span class="clr-red">*</span></th>
+                    <th rowspan="2">Description</th>
+                    <th rowspan="2">Qty<span class="clr-red">*</span></th>
+                    <th rowspan="2">Unit Cost<span class="clr-red">*</span></th>
+                    <th rowspan="2">Extended Cost<span class="clr-red">*</span></th>
+                    <th rowspan="2">Ref</th>
+                    <th rowspan="2">Vendor Name</th>
+                    <th rowspan="2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let charge of chargeForm; let i = index">
+                    <td>
+                      <select class="form-control custom-select1 wf-pub-id table-column-width" id="dllChargesType"
+                        [(ngModel)]="charge.chargesTypeId" (ngModelChange)="enableUpdate()" 
+                        name="type_{{i}}" required>
+                        <option [value]="">Select</option>
+                        <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
+                          ctype.chargeType
+                        }}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input type="text" pInputText value="{{ charge.description }}" [(ngModel)]="charge.description"
+                        class="form-control" name="desc_{{i}}" (ngModelChange)="enableUpdate()" />
+                    </td>
+                    <td>
+                      <input type="text" pInputText pKeyFilter="pnum" maxlength="15" class="form-control text-right"
+                        value="{{ charge.quantity }}" (change)="calculateExtendedCost(charge)"
+                        [(ngModel)]="charge.quantity" (ngModelChange)="enableUpdate()" name="qty_{{i}}" required />
+                    </td>
+                    <td>
+                      <input type="text" pInputText pKeyFilter="money" class="form-control text-right"
+                        value="{{ charge.unitCost }}" (change)="calculateExtendedCost(charge)"
+                        [(ngModel)]="charge.unitCost" (ngModelChange)="enableUpdate()" name="unitCost_{{i}}" required
+                        maxlength="15" />
+                    </td>
+                    <td>
+                      <input type="text" pInputText pKeyFilter="money" class="form-control text-right" [disabled]="true"
+                        value="{{ charge.extendedCost }}" [(ngModel)]="charge.extendedCost"
+                        (ngModelChange)="enableUpdate()" (change)="calculateExtendedCostSummation()" name="exd_{{i}}"
+                        required disabled maxlength="15" />
+                    </td>
+                    <td>
+                      <input type="text" pInputText maxlength="15" class="form-control" value="{{ charge.refNum }}"
+                        [(ngModel)]="charge.refNum" (ngModelChange)="enableUpdate()" name="refNum_{{i}}" />
+                    </td>
+                    <td>
+                      <p-autoComplete class="autocomp-customer-cstm" name="vendorName" [(ngModel)]="charge.vendor"
+                        (ngModelChange)="enableUpdate()" [ngModelOptions]="{standalone: true}"
+                        [suggestions]="vendorCollection" [forceSelection]="true" emptyMessage="No Match Found"
+                        field="vendorName" (completeMethod)="filterVendor($event)" [size]="30" [minLength]="1"
+                        [dropdown]="true">
+                      </p-autoComplete>
+                    </td>
+                    <td>
+                      <button class="btn btn-danger nobg" [disabled]="isEdit==true"
+                        (click)="deleteRow(i, frieghtsCreateForm)">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary pull-right " (click)="saveFreightList()"
+          [disabled]="!chargesCreateForm.valid || isEnableUpdateButton">
+          {{ isEdit ? 'Update' : (isQuote)?'Save':'Save' }}
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -56,6 +56,8 @@ export class WorkOrderQuoteListComponent implements OnInit {
   isGlobalFilter: boolean = false;
   filterText: any = '';
   filteredText: any = '';
+  currentStatus = 'open';
+
   constructor(private router: ActivatedRoute,      private authService: AuthService, private modalService: NgbModal, private datePipe: DatePipe,private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService:AlertService, private workorderMainService: WorkOrderService, private currencyService:CurrencyService, private cdRef: ChangeDetectorRef,  private route: Router) {}
   ngOnInit() {
     this.breadcrumbs = [
@@ -93,7 +95,6 @@ openDownload(content) {
 }
 
 closeModal() {
-  //$("#downloadConfirmation").modal("hide");
   this.modal.close();
 }
 
@@ -130,7 +131,6 @@ refreshList() {
         return data['stage']
     } else if (key === 'estimatedCompletionDateType') {
         return this.convertmultipleDates(data['estimatedCompletionDate']);
-        // return data['estimatedCompletionDateType'] !== 'Multiple' ? moment(data['estimatedCompletionDate']).format('MM-DD-YYYY') : data['estimatedCompletionDate'];
     } else {
         return data[key]
     }
@@ -173,12 +173,23 @@ loadData(event) {
 }
 }
 
+changeOfStatus(status) {        
+  const lazyEvent = this.lazyLoadEventData;
+  this.currentStatus = status === '' ? this.currentStatus : status;
+  this.isSpinnerVisible = true;
+  this.getAllWorkOrderQuoteList({
+      ...lazyEvent,
+      filters: {
+          ...lazyEvent.filters,
+          quoteStatus: this.currentStatus,
+      }
+  })
+}
+
 fieldSearch(field) {
   this.isGlobalFilter = false;
-  // if (field === 'workOrderStatus') {
-  //     this.currentStatus = 'open';
-  // }
 }
+
 globalSearch(value) {
   this.pageIndex = 0;
   this.filteredText = value;
@@ -228,8 +239,6 @@ get currentUserMasterCompanyId(): number {
             this.totalRecords = 0;
             this.totalPages = 0;
         }
-
-
       },err=>{
         this.isSpinnerVisible = false;
       })

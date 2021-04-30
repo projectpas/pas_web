@@ -65,4 +65,8 @@ export class CustomerPaymentsService {
   getARSettingHistory(id) {
     return this.customerPaymentsEndpointService.getARSettingHistory(id);
   }
+
+  getAllBankNames(masterCompanyId?: number): any {
+    return this.customerPaymentsEndpointService.getAllBankNames();
+  }
 }

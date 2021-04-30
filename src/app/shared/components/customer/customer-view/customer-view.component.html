@@ -193,9 +193,12 @@
                                         {{ viewDataGeneralInformation.contractReference }}
                                     </span>
                                 </p>                                                           
-                                <p class="pbh-customer-p">
-                                    <span class="label"><b>PBH Customer: </b></span>
-                                    <span class="value pbh-customer-span" [innerHTML]="viewDataGeneralInformation.pbhCustomerMemo">
+                                <p class="view-text-editor" style="margin-bottom:7px">
+                                    <span class="label view-text-editor"><b>PBH Customer: </b></span>
+                                    <span class="value">
+                                     <p class="p-0 m-0 p_textEditor" 
+                                     [innerHTML]="viewDataGeneralInformation.pbhCustomerMemo">
+                                    </p>
                                     </span>
                                 </p>
                                 <p>

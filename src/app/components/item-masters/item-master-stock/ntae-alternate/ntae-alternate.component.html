@@ -355,7 +355,12 @@
                             <td>{{ntae.updatedDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
                             <td>{{ntae.updatedBy}}</td>
 
-                            <td class="background-white"><p class="background-white"><input type="checkbox" name="isDeleted" [(ngModel)]="ntae.isDeleted" disabled></p></td>
+                            <td class="text-center width-60">
+                                <span class="value">
+                                  <label class="wauto">
+                                      <input type="checkbox" name="isDeleted" [(ngModel)]="ntae.isDeleted" disabled>
+                                    </label>
+                                </span></td>
                         </tr>
                     </tbody>
                 </table>

@@ -93,7 +93,7 @@
                                                    class="wauto" [ngClass]="{pointerEvents : workOrderGeneralInformation.isRecCustomer || isEdit}">
                                                     <input type="radio" class="radio_adjust" name="work-type"
                                                         [value]="workOrderType.id"
-                                                        (click)="woDealerChange($event.target.value)"
+                                                        (click)="woDealerChange($event.target.value)" [disabled]="workOrderType.description !='Customer'"
                                                         [checked]="workOrderGeneralInformation.workOrderTypeId == workOrderType.id"
                                                         (change)="selectedCustomerType()"
                                                         
@@ -275,7 +275,7 @@
                                                 </label>
                                                 <p-autoComplete field="name"
                                                     [(ngModel)]="workOrderGeneralInformation.csr" name="csr"
-                                                    #csr="ngModel" errorMessage="Records not found" (ngModelChange)="getmemo($event)"
+                                                    #csr="ngModel" errorMessage="Records not found" (ngModelChange)="getmemo($event)" 
                                                     [forceSelection]="true" [dropdown]="true" [suggestions]="csrList"
                                                     (completeMethod)="filterCsr($event)"
                                                     (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'csr' )"
@@ -284,7 +284,7 @@
                                             </div>
 
                                             <div class="form-group ">
-                                                <label for="employee">
+                                                <label for="employee"> 
                                                     Employee
                                                 </label>
                                                <input type="text" class="form-control wo-input"
@@ -382,7 +382,7 @@
                                   
                                      <th colspan="2">TAT (Days)</th> -->
                                     <th rowspan="2" colspan="4">Management Structure </th>
-                                    <th rowspan="2" class="table-column-icon-width"  *ngIf="!isView">Action</th>
+                                    <th rowspan="2" class="table-column-icon-width"  *ngIf="!isView">Actions</th>
                                 </tr>
                                 <!-- <tr>
                                     <th rowspan="2" style="min-width:60px !important">PMA</th>
@@ -575,7 +575,7 @@
                                               >
                                     </td>
                                        <td class="text_center">
-                                        <input type="checkbox" class="form-control 6w0 pointer_event_none" name="isPMA{{i}}"
+                                        <input type="checkbox" class="form-control w60 pointer_event_none" name="isPMA{{i}}"
                                                #isPMA="ngModel" [(ngModel)]="workOrderPartNumber.isPMA" >
                                     </td>
                                     <td class="text_center">

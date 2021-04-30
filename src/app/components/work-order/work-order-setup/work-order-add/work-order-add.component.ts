@@ -725,8 +725,10 @@ setTimeout(() => {
         currentRecord.customerPhoneNo = object.customerPhoneNo;
         currentRecord.csrId = object.csrId;
         currentRecord.salesPersonId = object.salesPersonId;
-        currentRecord.csr = getObjectById('employeeId', object.csrId, this.csrOriginalList);
-        currentRecord.salesPerson = getObjectById('employeeId', object.salesPersonId, this.salesAgentsOriginalList);
+        currentRecord.csr=object.csrId? {'employeeId':object.csrId, 'name': object.csrName}:"";
+        currentRecord.salesPerson=object.salesPersonId? {'employeeId':object.salesPersonId, 'name': object.salesPerson}:"";
+        // currentRecord.csr = getObjectById('employeeId', object.csrId, this.csrOriginalList);
+        // currentRecord.salesPerson = getObjectById('employeeId', object.salesPersonId, this.salesAgentsOriginalList);
 
         if (this.workOrderGeneralInformation.workOrderTypeId == 1) // Customer
         {
@@ -2115,6 +2117,7 @@ setTimeout(() => {
                 }
             },
                 err => {
+                    this.workOrderLaborList=[];
                     this.handleError(err);
                 })
         }

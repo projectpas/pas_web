@@ -1,4 +1,4 @@
-import { SalesQuote } from './../../../../models/sales/SalesQuote.model';
+﻿import { SalesQuote } from './../../../../models/sales/SalesQuote.model';
 import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Params, ActivatedRoute } from '@angular/router';
 import {WorkOrderQuote,multiParts,partsDetail} from '../../../../models/work-order-quote.modal';
@@ -20,6 +20,7 @@ import { DBkeys } from '../../../../services/db-Keys';
 import { ApprovalProcessEnum } from "../../../sales/quotes/models/approval-process-enum";
 import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../sales/quotes/models/approval-status-enum";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 @Component({
     selector: 'app-work-order-quote',
@@ -56,6 +57,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     sentDate: Date;
     approvedDate: Date;
     isEditMode:boolean =false;
+    isapprove:boolean =true;
+    isrejected:boolean =true;
     quoteStatus: string;
     woNum: string;
     creditTerm: any;
@@ -119,6 +122,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         'labor': false
     }
     editData: any;
+    quoteCreated:any=false;
     editingIndex: number;
     selectedWorkFlowWorkOrderId: number;
     workOrderQuoteDetailsId: any;
@@ -168,13 +172,22 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }, {
             header: 'Internal Memo',
             field: 'internalMemo'
-        }, {
+        }, 
+        {
             header: ' Internal Approved Date',
             field: 'internalApprovedDate'
         }, {
             header: 'Internal Approved By',
             field: 'internalApprovedBy'
+        }, 
+        {
+            header: ' Internal Rejected Date',
+            field: 'internalRejectedDate'
         }, {
+            header: 'Internal Rejected By',
+            field: 'internalRejectedby'
+        },
+        {
             header: 'Customer Sent Date',
             field: 'customerSentDate'
         }, {
@@ -183,13 +196,22 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }, {
             header: 'Customer Memo',
             field: 'customerMemo'
-        },{
+        },
+        {
             header: ' Customer Approved Date',
             field: 'customerApprovedDate'
         }, {
             header: 'Customer Approved By',
             field: 'customerApprovedBy'
+        },
+        {
+            header: ' Customer Rejected Date',
+            field: 'customerRejectedDate'
         }, {
+            header: 'Customer Rejected By',
+            field: 'customerRejectedby'
+        },  
+        {
             header: 'MPN',
             field: 'partNumber'
         }, {
@@ -469,7 +491,74 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     getcustomerStatusIdEnableStatus(approver) {
-        return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
+        if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) 
+        {
+            return false;
+        } 
+        else {
+            return true;
+        }
+        //return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
+    }
+
+    getcustomerStatusIdByEnableStatus(approver) {
+        if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) 
+        {
+            if(approver.customerStatusId !=3)
+            {
+                approver.customerRejectedDate="";
+                approver.customerRejectedbyID="";
+                if(approver.customerApprovedDate){
+                    approver.customerApprovedDate=  moment(new Date()).format('MM/DD/YYYY');
+                }
+                else
+                {
+                    approver.customerApprovedDate=  moment(new Date()).format('MM/DD/YYYY');
+                }
+
+               
+
+                return false;
+            }else
+            {
+                return true;
+            }
+            
+        } 
+        else {
+            return true;
+        }
+        //return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
+    }
+
+    getcustomerStatusRejectedIdEnableStatus(approver) {
+
+        if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) 
+        {
+            if(approver.customerStatusId !=3)
+            {
+                return true;
+            }else
+            {
+
+                approver.customerApprovedDate= "";
+                approver.customerApprovedById="";
+                if(approver.customerRejectedDate)
+                {
+                    approver.customerRejectedDate=  moment(new Date()).format('MM/DD/YYYY');
+                }
+                else
+                {
+                    approver.customerRejectedDate=  moment(new Date()).format('MM/DD/YYYY');
+                }
+                return false;
+            }
+            
+        } 
+        else {
+            return true;
+        }
+        //return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
     }
 
     getApprovalActionInternalStatus(approver) {
@@ -522,12 +611,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.workOrderService.getWorkOrderQuoteDetail(workorderid, res["workFlowWorkOrderId"],this.authService.currentUser.masterCompanyId)
                         .subscribe(
                             (res: any) => {
-                                
+                                this.isSpinnerVisible = false;
                                 if (res) {
                                     this.upDateDisabeldbutton=true;
                                     this.currentCustomerId = res.customerId
                                     this.isEdit = true;
                                     this.setWorkOrderQuoteId(res['workOrderQuote']['workOrderQuoteId']);
+                                    this.quoteCreated=true;
                                     this.quotationHeader = this.formQuoteInfo(res.workOrderQuote);
                                     this.quotationHeader['workOrderQuoteId'] = res.workOrderQuote.workOrderQuoteId;
                                     this.dso = res.workOrderQuote.dso;
@@ -587,6 +677,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                 }
                             },
                             err => {
+                                // console.log("hello crecords")
+                                this.quoteCreated=false;
+                                // this.quotationHeader['workOrderQuoteId']=0
                                 this.isSpinnerVisible = false;
                             }
                         )
@@ -674,6 +767,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     saveQuoteDetails() {
         if(this.quotationHeader && this.quotationHeader.workOrderQuoteId){
             $('#quoteVer').modal("show");
+            this.quoteCreated=true;
         }
         else{
             this.saveQuoteAPI()
@@ -689,6 +783,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 res => {
                     this.isSpinnerVisible = false;
                     this.quotationHeader = res;
+                    this.quoteCreated=true;
                     this.quoteForm.quoteNumber = res['quoteNumber'];
                     this.setWorkOrderQuoteId(res['workOrderQuoteId']);
                     this.laborPayload.StatusId = this.exclusionPayload.StatusId = this.chargesPayload.StatusId = this.materialListPayload.StatusId = this.quoteFreightListPayload.StatusId = res['quoteStatusId']
@@ -970,7 +1065,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.errorHandling(err);
         }
     )
-}
+} 
     getMPNDetails(workOrderId) { 
         this.workOrderService.getPartsDetail(workOrderId,this.authService.currentUser.masterCompanyId)
             .subscribe(
@@ -2391,7 +2486,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             currentUser = JSON.parse(window.localStorage.getItem('current_user'));
         }
         this.isCurrentUserApprovalLimitExceeded = true;
-
+if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.isSpinnerVisible = true;
 		this.purchaseOrderService.approverslistbyTaskId(2, this.quotationHeader['workOrderQuoteId']).subscribe(res => {
                          this.internalApproversList = res;
@@ -2429,6 +2524,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         //         this.errorHandling(err);
         //     }
         // )
+                        }
     }
 
     resetApprovalGridData() {
@@ -2440,6 +2536,15 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         if (approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
             if (this.defaultContactId) {
                 this.woQuoteApprovalList[i].customerApprovedById = this.defaultContactId;
+            } else {
+                this.woQuoteApprovalList[i].customerApprovedById = '';
+            }
+        }
+    }
+    onRejectedSelected(approver, i) {
+        if (approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+            if (this.defaultContactId) {
+                this.woQuoteApprovalList[i].customerRejectedbyID = this.defaultContactId;
             } else {
                 this.woQuoteApprovalList[i].customerApprovedById = '';
             }
@@ -2480,6 +2585,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     getWOQuoteApprovalList() {
         this.getApproversList();
         this.getApproverStatusList();
+        if(this.quotationHeader && this.quotationHeader['CustomerId']){
         this.commonService.getCustomerContactsById(this.quotationHeader['CustomerId'],this.authService.currentUser.masterCompanyId).subscribe(res => {      
             this.customerContactList = res;
             if(this.customerContactList.length > 0){
@@ -2496,6 +2602,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         err => {
             this.errorHandling(err);
         })
+    }
+    if(this.quotationHeader && this.quotationHeader['workOrderQuoteId']){
         this.workOrderService.getWOQuoteApprovalList(this.quotationHeader['workOrderQuoteId'],this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res) => {
@@ -2523,7 +2631,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                 x.internalSentDate = new Date(x.internalSentDate);
                                 if(!x.internalApprovedDate){
                                     x.internalApprovedDate = new Date();
+                                    x.internalApprovedDate=  moment(new Date()).format('MM/DD/YYYY');
                                 }
+                                // else{
+                                //     x.internalApprovedDate=  moment(x.internalApprovedDate).format('MM/DD/YYYY');
+                                // }
                             }
                             else if(!x.internalSentDate){
                                 x.internalSentDate = new Date();
@@ -2531,18 +2643,73 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                             if(x.customerSentDate){
                                 x.customerSentDate = new Date(x.customerSentDate);
                                 if(!x.customerApprovedDate){
-                                    x.customerApprovedDate = new Date();
+                                   // x.customerApprovedDate = new Date();
+                                    x.customerApprovedDate=  moment(new Date()).format('MM/DD/YYYY');
                                 }
+                            
                             }
                             if(x.internalApprovedDate){
-                                x.internalApprovedDate = new Date(x.internalApprovedDate);
+                               // x.internalApprovedDate = new Date(x.internalApprovedDate);
+                               x.internalApprovedDate=  moment(x.internalApprovedDate).format('MM/DD/YYYY');
                                 if(!x.customerSentDate){
                                     x.customerSentDate = new Date();
                                 }
                             }
                             if(x.customerApprovedDate){
-                                x.customerApprovedDate = new Date(x.customerApprovedDate);
+                                //x.customerApprovedDate = new Date(x.customerApprovedDate);
+                                x.customerApprovedDate=  moment(x.customerApprovedDate).format('MM/DD/YYYY');
                             }
+                            if(x.internalStatusId != 3)
+                            {
+                                if(x.internalApprovedDate){
+                                    x.internalApprovedDate=  moment(x.internalApprovedDate).format('MM/DD/YYYY');
+                                }
+                                else
+                                {
+                                    x.internalApprovedDate=  moment(new Date()).format('MM/DD/YYYY');
+                                }
+                                x.internalRejectedDate=null;
+
+                            }else
+                            {
+                                if(x.internalRejectedDate){
+                                    x.internalRejectedDate=  moment(x.internalRejectedDate).format('MM/DD/YYYY');
+                                }
+                                else
+                                {
+                                    x.internalRejectedDate=  moment(new Date()).format('MM/DD/YYYY');
+                                }
+                                x.internalApprovedDate=null;
+                            }
+
+                            if(x.customerStatusId != 3)
+                            {
+                                if(x.customerApprovedDate){
+                                    x.customerApprovedDate=  moment(x.customerApprovedDate).format('MM/DD/YYYY');
+                                }
+                                else
+                                {
+                                    x.customerApprovedDate=  moment(new Date()).format('MM/DD/YYYY');
+                                }
+                                x.internalRejectedDate=null;
+
+                            }else
+                            {
+                                if(x.customerRejectedDate){
+                                    x.customerRejectedDate=  moment(x.customerRejectedDate).format('MM/DD/YYYY');
+                                }
+                                else
+                                {
+                                    x.customerRejectedDate=  moment(new Date()).format('MM/DD/YYYY');
+                                }
+                                x.customerApprovedDate=null;
+                            }
+                           
+
+                            // if(x.customerRejectedDate){
+                            //     if(x.customerRejectedDate)
+                            //     x.customerRejectedDate=  moment(x.customerRejectedDate).format('MM/DD/YYYY');
+                            // }
                             //this.fields.forEach(
                             //    field =>{
                             //        if(x[field]){
@@ -2560,16 +2727,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
             )
     }
+    }
 
     getApproverStatusList() { 
         this.setEditArray = [];
-        const strText = '';
-   
-            this.setEditArray.push(0);
- 
-        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-           
-        // this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
+        const strText = '';   
+            this.setEditArray.push(0); 
+        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.statusList = res.map(x => {
                 return {
                     ...x,
@@ -2682,12 +2846,44 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveApprovalData() {
+
+
        // if (this.approvalGridActiveTab == 'setForInternalApproval' || this.approvalGridActiveTab == 'sentForCustomerApproval') {
         let payLoad = [];
         let currentEmployee = JSON.parse(localStorage.getItem('employee'));
             this.woQuoteApprovalList.forEach(
                 x => {
                     if (x.isSelected) {
+
+                     if(x.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval)
+                     {
+                         if(x.internalStatusId !=3)
+                         {
+                            x.internalApprovedDate= new Date().toDateString();
+                         }
+                         else
+                         {
+                            x.internalRejectedDate= new Date().toDateString();
+                         }
+                      
+                     }
+                     if( x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval)
+                     {
+                        x.customerApprovedDate= new Date().toDateString();
+
+                        if(x.customerStatusId !=3)
+                        {
+                           x.customerApprovedDate= new Date().toDateString();
+                           x.customerRejectedDate=null;
+                           x.customerRejectedbyID= null;
+                        }
+                        else
+                        {
+                           x.customerRejectedDate= new Date().toDateString();
+                           x.customerApprovedDate=null;
+                           x.customerApprovedById= null;
+                        }
+                     }
                         let obj = {
                             "workOrderId": x.workOrderId,
                             "workOrderQuoteId": x.workOrderQuoteId,
@@ -2697,21 +2893,25 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                             "workOrderApprovalId": x.workOrderApprovalId,
                             "InternalSentDate": x.internalSentDate,
                             "InternalApprovedDate": x.internalApprovedDate,
+                            "InternalRejectedDate": x.internalRejectedDate,
+                            //"InternalRejectedby": x.internalRejectedby,
                             //"InternalApprovedById": currentEmployee.employeeId,
                             "CustomerSentDate": x.customerSentDate,
                             "customerApprovedDate": x.customerApprovedDate,
+                            "CustomerRejectedDate": x.customerRejectedDate,
                             "customerApprovedById": x.customerApprovedById,
+                            "CustomerRejectedbyID": x.customerRejectedbyID,
                             "internalStatusId": x.internalStatusId,
                             "customerStatusId": x.customerStatusId,
                             "internalMemo": x.internalMemo,
                             "customerMemo": x.customerMemo,
-                            "UpdatedBy": "admin",
+                            "UpdatedBy": this.authService.currentUser.userName,
                             "MasterCompanyId": x.masterCompanyId,
                             "ApprovalActionId": x.approvalActionId,
                             "IsInternalApprove": x.isInternalApprove,
                             "masterCompanyId": x.masterCompanyId,
-                            "createdBy": "admin",
-                            "updatedBy": "admin",
+                            "createdBy": this.authService.currentUser.userName,
+                            "updatedBy": this.authService.currentUser.userName,
                             "createdDate": new Date().toDateString(),
                             "updatedDate": new Date().toDateString(),
                             "isActive": true,
@@ -2747,12 +2947,27 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                             obj['InternalEmails'] = "";
                             obj['approvers'] = "";
                         }
-                        if (x.approvalActionId == 2) {
+                        if (x.approvalActionId == 2) 
+                        {
 
-                            obj['InternalApprovedById'] = currentEmployee.employeeId;
+                            if(x.internalStatusId !=3)
+                            {
+                                obj['InternalApprovedById'] = currentEmployee.employeeId;
+                                obj['InternalRejectedID'] = x.internalRejectedID;
+                               //x.CustomerRejectedbyID=x.customerRejectedbyID;
+                            }
+                            else
+                            {
+                                obj['InternalRejectedID'] = currentEmployee.employeeId;
+                                obj['InternalApprovedById'] = x.internalApprovedById;
+                               //x.CustomerRejectedbyID=x.customerRejectedbyID;
+                            }
+
+                            
                         }
                         else {
                             obj['InternalApprovedById'] = x.internalApprovedById;
+                            obj['InternalRejectedID'] = x.internalRejectedID;
                         }
                         payLoad.push(obj);
                     }
@@ -2869,7 +3084,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
      
             this.setEditArray.push(0);
 
-        this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
            
 
 
@@ -2990,7 +3205,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.quoteStatusList = res;
             }

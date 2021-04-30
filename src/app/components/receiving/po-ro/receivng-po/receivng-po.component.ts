@@ -1380,7 +1380,7 @@ export class ReceivngPoComponent implements OnInit {
             }
 
             if (item.itemMaster.isTimeLife == true && item.timeLifeList != undefined && item.timeLifeList.length > 0) {
-                // need to have some check to make sure atleast one field is entered.
+                // need to have some check to make sure atleast one field is entered.                
                 for (var i = 0; i < item.timeLifeList.length; i++) {
                     var timeLife = item.timeLifeList[i];
                     if (timeLife.detailsNotProvided != true) {

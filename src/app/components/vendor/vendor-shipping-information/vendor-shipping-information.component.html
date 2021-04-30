@@ -840,7 +840,7 @@
                                                                         </a>
                                                                     </span>
                                                                     <span requirePermission="canDelete" *ngIf="!isViewMode">
-                                                                        <button class="btn nobg"
+                                                                        <button class="btn nobg padding-0"
                                                                                 (click)=" openDelete(deleteContentDomesticShipVia, rowData)" [disabled]="rowData.isPrimary == true"
                                                                                 matTooltip="Delete" matTooltipPosition="above">
                                                                             <i class="fa fa-trash"></i>
@@ -1214,6 +1214,7 @@
                                                             <th>Is Deleted</th>
                                                         </tr>
                                                     </thead>
+                                                    <tbody>
                                                     <tr *ngFor="let audit of auditHisory; let i = index;">
                                                         <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'shipViaName', audit.shipViaName)  ? 'black' : 'red'  }">
                                                             {{audit.shipViaName}}
@@ -1254,6 +1255,7 @@
                                                             </span>
                                                         </td>
                                                     </tr>
+                                                    </tbody>
                                                 </table>
                                                 </div>
                                             </div>
@@ -2483,7 +2485,7 @@
                                             </a>
                                         </span>
                                         <span requirePermission="canDelete" *ngIf="!isViewMode">
-                                            <button class="btn nobg"
+                                            <button class="btn nobg padding-0"
                                                     (click)="delShipViaInter(rowData)" [disabled]="rowData.isPrimary == true"
                                                     matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
@@ -2699,6 +2701,7 @@
                                 <th>Is Deleted</th>
                             </tr>
                         </thead>
+                        <tbody>
                         <tr *ngFor="let audit of auditHistoryInterShipvia; let i = index;">
                             <td [ngStyle]="{'color':  getColorCodeForInternnationalShipViaHistory(i, 'shipViaName', audit.shipViaName)  ? 'black' : 'red'  }">
                                 {{audit.shipViaName}}
@@ -2744,6 +2747,7 @@
                                 </span>
                             </td>
                         </tr>
+                        </tbody>
                     </table>
                     </div>
                 </div>

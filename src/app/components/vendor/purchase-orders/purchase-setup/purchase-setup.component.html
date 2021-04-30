@@ -83,7 +83,7 @@
                                     <div class="form-group">
                                         <label>Open Date <span class="clr-red">*</span></label>
                                         <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
-                                         name="openDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="headerInfo.openDate" (ngModelChange)="enableHeaderSave()" #openDate="ngModel" 
+                                         name="openDate" [yearNavigator]="true" [minDate]="headerInfo.openDate"  [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="headerInfo.openDate" (ngModelChange)="enableHeaderSave()" #openDate="ngModel" 
                                          required></p-calendar>
                                         <div *ngIf="openDate.invalid && (openDate.dirty || openDate.touched)" class="alert alert-danger alert-danger-cstm">
                                             <div *ngIf="openDate.errors.required">
@@ -507,7 +507,11 @@
 
                                     </td>
                                     <td>
-                                        <p-autoComplete field="label" class="pautocomp-cstm" appendTo="body" [(ngModel)]="partList.repairOrderId" name="repairOrderId{{row_index}}" [suggestions]="allRepairOrderDetails" (onSelect)="onROSelect($event.value)" (completeMethod)="filterRepairOrderList($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
+                                        <p-autoComplete field="label" class="pautocomp-cstm" appendTo="body" [(ngModel)]="partList.repairOrderId" 
+                                        name="repairOrderId{{row_index}}" [suggestions]="allRepairOrderDetails" (onSelect)="onROSelect($event.value)" 
+                                        (completeMethod)="filterRepairOrderList($event)" [size]="30" [minLength]="1" [dropdown]="true" 
+                                        errorMessage="Records not found" [forceSelection]="true" 
+                                        (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
                                         </p-autoComplete>
                                         <!-- <input type="number" class="form-control" [(ngModel)]="partList.repairOrderId" name="repairOrderId{{row_index}}"> -->
 
@@ -611,6 +615,7 @@
                                         <th colspan="4">Management Structure <span class="clr-red">*</span></th>
                                         <th colspan="15"></th>
                                     </tr>
+                                    <ng-container *ngIf="partList.ifSplitShip">
                                     <tr class="child-data splitship-child child-data-back" *ngFor="let partChildList of partList.childList; let row_no = index" [hidden]="partChildList.isDeleted">
                                         
                                         <td></td>
@@ -776,6 +781,7 @@
                                         </td>
                                         <td colspan="16"></td>
                                     </tr>
+                                    </ng-container>
                                     <tr class="child-header splitship-head child-header-back" *ngIf="partList.ifSplitShip">
                                         <td  class="child-td-align"></td>
                                         

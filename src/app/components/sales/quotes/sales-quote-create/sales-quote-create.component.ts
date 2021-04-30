@@ -1375,116 +1375,116 @@ export class SalesQuoteCreateComponent implements OnInit {
     }
   }
 
-  saveSalesQuoteHeader() {
-    if (this.headerInfo.companyId == "null") {
-      let haveError = false;
-      if (this.salesQuote.quoteTypeId <= 0) {
-        this.errorMessages.push("Please select Quote Type");
-        haveError = true;
-      }
-      if (!this.salesQuote.openDate) {
-        this.errorMessages.push("Please select Open Date");
-        haveError = true;
-      }
-      if (this.salesQuote.validForDays < 1) {
-        this.errorMessages.push("Please enter Valid For (Days)");
-        haveError = true;
-      }
-      if (!this.salesQuote.quoteExpiryDate) {
-        this.errorMessages.push("Please select Quote Expiry Date");
-        haveError = true;
-      }
-      if (this.salesQuote.accountTypeId <= 0) {
-        this.errorMessages.push("Please select Account Type");
-        haveError = true;
-      }
-      if (this.salesQuote.customerContactId < 0) {
-        this.errorMessages.push("Please select Customer Contact");
-        haveError = true;
-      }
-      if (!this.salesQuote.customerReferenceName) {
-        this.errorMessages.push("Please enter Customer Reference Name");
-        haveError = true;
-      }
-      if (!this.salesQuote.employeeId) {
-        this.errorMessages.push("Please select employee");
-        haveError = true;
-      }
-      if (this.salesQuote.managementStructureId <= 0) {
-        this.errorMessages.push("Please select Management Structure");
-        haveError = true;
-      }
+  // saveSalesQuoteHeader() {
+  //   if (this.headerInfo.companyId == "null") {
+  //     let haveError = false;
+  //     if (this.salesQuote.quoteTypeId <= 0) {
+  //       this.errorMessages.push("Please select Quote Type");
+  //       haveError = true;
+  //     }
+  //     if (!this.salesQuote.openDate) {
+  //       this.errorMessages.push("Please select Open Date");
+  //       haveError = true;
+  //     }
+  //     if (this.salesQuote.validForDays < 1) {
+  //       this.errorMessages.push("Please enter Valid For (Days)");
+  //       haveError = true;
+  //     }
+  //     if (!this.salesQuote.quoteExpiryDate) {
+  //       this.errorMessages.push("Please select Quote Expiry Date");
+  //       haveError = true;
+  //     }
+  //     if (this.salesQuote.accountTypeId <= 0) {
+  //       this.errorMessages.push("Please select Account Type");
+  //       haveError = true;
+  //     }
+  //     if (this.salesQuote.customerContactId < 0) {
+  //       this.errorMessages.push("Please select Customer Contact");
+  //       haveError = true;
+  //     }
+  //     if (!this.salesQuote.customerReferenceName) {
+  //       this.errorMessages.push("Please enter Customer Reference Name");
+  //       haveError = true;
+  //     }
+  //     if (!this.salesQuote.employeeId) {
+  //       this.errorMessages.push("Please select employee");
+  //       haveError = true;
+  //     }
+  //     if (this.salesQuote.managementStructureId <= 0) {
+  //       this.errorMessages.push("Please select Management Structure");
+  //       haveError = true;
+  //     }
 
-      if (haveError) {
-        let content = this.errorMessagePop;
-        this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-        this.display = true;
-      } else {
-        this.display = false;
-        this.isSpinnerVisible = true;
-      }
-    }
-    else {
-      const headerInfoObj = {
-        quoteTypeId: this.salesQuote.quoteTypeId,
-        openDate: this.salesQuote.openDate.toDateString(),
-        validForDays: this.salesQuote.validForDays,
-        quoteExpireDate: this.salesQuote.quoteExpiryDate.toDateString(),
-        accountTypeId: this.salesQuote.accountTypeId,
-        customerId: this.salesQuote.customerId,
-        customerContactId: this.salesQuote.customerContactId,
-        customerReference: this.salesQuote.customerReferenceName,
-        contractReference: this.salesQuote.contractReferenceName,
-        managementStructureId: this.salesQuote.managementStructureId,
-        salesOrderQuoteNumber: this.salesQuote.salesOrderQuoteNumber,
-        versionNumber: this.salesQuote.versionNumber,
-        salesPersonId: editValueAssignByCondition("employeeId", this.salesQuote.salesPersonName),
-        agentId: editValueAssignByCondition("employeeId", this.salesQuote.agentId),
-        agentName: editValueAssignByCondition("name", this.salesQuote.agentId),
-        customerSeviceRepId: editValueAssignByCondition("employeeId", this.salesQuote.customerServiceRepName),
-        probabilityId: this.salesQuote.probabilityId,
-        employeeId: editValueAssignByCondition("employeeId", this.salesQuote.employeeId),//editValueAssignByCondition("value", this.salesQuote.employeeName),
-        leadSourceId: this.salesQuote.leadSourceId,
-        creditLimit: this.salesQuote.creditLimit,
-        creditTermId: this.salesQuote.creditLimitTermsId,
-        restrictPMA: this.salesQuote.restrictPMA,
-        restrictDER: this.salesQuote.restrictDER,
-        currencyId: this.salesQuote.currencyId,
-        customerWarningId: this.salesQuote.warningId[0],
-        memo: this.salesQuote.memo,
-        notes: this.salesQuote.notes,
-        createdBy: this.userName,
-        updatedBy: this.userName,
-        createdOn: new Date().toDateString(),
-        updatedOn: new Date().toDateString()
-      }
+  //     if (haveError) {
+  //       let content = this.errorMessagePop;
+  //       this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+  //       this.display = true;
+  //     } else {
+  //       this.display = false;
+  //       this.isSpinnerVisible = true;
+  //     }
+  //   }
+  //   else {
+  //     const headerInfoObj = {
+  //       quoteTypeId: this.salesQuote.quoteTypeId,
+  //       openDate: this.salesQuote.openDate.toDateString(),
+  //       validForDays: this.salesQuote.validForDays,
+  //       quoteExpireDate: this.salesQuote.quoteExpiryDate.toDateString(),
+  //       accountTypeId: this.salesQuote.accountTypeId,
+  //       customerId: this.salesQuote.customerId,
+  //       customerContactId: this.salesQuote.customerContactId,
+  //       customerReference: this.salesQuote.customerReferenceName,
+  //       contractReference: this.salesQuote.contractReferenceName,
+  //       managementStructureId: this.salesQuote.managementStructureId,
+  //       salesOrderQuoteNumber: this.salesQuote.salesOrderQuoteNumber,
+  //       versionNumber: this.salesQuote.versionNumber,
+  //       salesPersonId: editValueAssignByCondition("employeeId", this.salesQuote.salesPersonName),
+  //       agentId: editValueAssignByCondition("employeeId", this.salesQuote.agentId),
+  //       agentName: editValueAssignByCondition("name", this.salesQuote.agentId),
+  //       customerSeviceRepId: editValueAssignByCondition("employeeId", this.salesQuote.customerServiceRepName),
+  //       probabilityId: this.salesQuote.probabilityId,
+  //       employeeId: editValueAssignByCondition("employeeId", this.salesQuote.employeeId),//editValueAssignByCondition("value", this.salesQuote.employeeName),
+  //       leadSourceId: this.salesQuote.leadSourceId,
+  //       creditLimit: this.salesQuote.creditLimit,
+  //       creditTermId: this.salesQuote.creditLimitTermsId,
+  //       restrictPMA: this.salesQuote.restrictPMA,
+  //       restrictDER: this.salesQuote.restrictDER,
+  //       currencyId: this.salesQuote.currencyId,
+  //       customerWarningId: this.salesQuote.warningId[0],
+  //       memo: this.salesQuote.memo,
+  //       notes: this.salesQuote.notes,
+  //       createdBy: this.userName,
+  //       updatedBy: this.userName,
+  //       createdOn: new Date().toDateString(),
+  //       updatedOn: new Date().toDateString()
+  //     }
 
-      if (!this.isCreateModeHeader) {
-        this.salesQuoteService.saveSalesQuoteHeader({ ...headerInfoObj }).subscribe(saveddata => {
-          this.SalesOrderQuoteId = saveddata.salesOrderQuoteId;
-          this.qoId = saveddata.salesOrderQuoteId;
-          this.headerInfo.salesOrderQuoteNumber = saveddata.salesOrderQuoteNumber;
+  //     if (!this.isCreateModeHeader) {
+  //       this.salesQuoteService.saveSalesQuoteHeader({ ...headerInfoObj }).subscribe(saveddata => {
+  //         this.SalesOrderQuoteId = saveddata.salesOrderQuoteId;
+  //         this.qoId = saveddata.salesOrderQuoteId;
+  //         this.headerInfo.salesOrderQuoteNumber = saveddata.salesOrderQuoteNumber;
 
-          if (this.qoId) {
-            this.isCreateModeHeader = true;
-          }
-        }, error => {
-          this.isSpinnerVisible = false;
-        })
-      } else {
-        const poHeaderEdit = { ...headerInfoObj, SalesOrderQuoteId: parseInt(this.qoId) };
-        this.salesQuoteService.saveSalesQuoteHeader({ ...poHeaderEdit }).subscribe(saveddata => {
-          this.SalesOrderQuoteId = saveddata.salesOrderQuoteId;
+  //         if (this.qoId) {
+  //           this.isCreateModeHeader = true;
+  //         }
+  //       }, error => {
+  //         this.isSpinnerVisible = false;
+  //       })
+  //     } else {
+  //       const poHeaderEdit = { ...headerInfoObj, SalesOrderQuoteId: parseInt(this.qoId) };
+  //       this.salesQuoteService.saveSalesQuoteHeader({ ...poHeaderEdit }).subscribe(saveddata => {
+  //         this.SalesOrderQuoteId = saveddata.salesOrderQuoteId;
 
-          this.headerInfo.salesOrderQuoteNumber = saveddata.salesOrderQuoteNumber;
+  //         this.headerInfo.salesOrderQuoteNumber = saveddata.salesOrderQuoteNumber;
 
-        }, error => {
-          this.isSpinnerVisible = false;
-        });
-      }
-      this.toggle_po_header = true;
-    }
-  }
+  //       }, error => {
+  //         this.isSpinnerVisible = false;
+  //       });
+  //     }
+  //     this.toggle_po_header = true;
+  //   }
+  // }
 
   quote: any = {
     quoteTypeId: null,

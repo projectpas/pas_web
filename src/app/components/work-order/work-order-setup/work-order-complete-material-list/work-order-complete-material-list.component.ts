@@ -64,8 +64,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     isSpinnerVisibleReserve:boolean=false;
     cols = [
         { field: 'taskName', header: 'Task' ,align: 0}, 
-        { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0,width:"60px"},
-        { field: 'line', header: 'Line Num' ,align: 0,width:"60px"},
+        { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0,width:"110px"},
+        { field: 'line', header: 'Line Num' ,align: 0,width:"64px"},
         { field: 'partNumber', header: 'PN' ,align: 0},
         { field: 'partDescription', header: 'PN Description' ,align: 0},
         { field: 'serialNumber', header: 'Serial Num',align: 0 },
@@ -76,7 +76,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'quantity', header: 'Qty Req', align: 1 ,width:"60px"},
         { field: 'quantityReserved', header: 'Qty Res', align: 1 ,width:"60px"},
         { field: 'quantityIssued', header: 'Qty Iss', align: 1,width:"60px" },
-        { field: 'qunatityTurnIn', header: 'Qty Turned In' ,align: 1,width:"60px"},
+        { field: 'qunatityTurnIn', header: 'Qty Turned In' ,align: 1,width:"83px"},
         { field: 'partQuantityOnHand', header: 'Qty OH', align: 1 ,width:"60px"},
         { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1 ,width:"60px"},
         { field: 'qunatityRemaining', header: 'Qty Rem', align: 1,width:"60px" },
@@ -84,14 +84,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'stockType', header: 'Stk Type',align: 0 ,width:"70px"}, //oem
         { field: 'altEquiv', header: 'Alt/Equiv',align: 0 },
         { field: 'itemClassification', header: 'Classification',align: 0 },
-        { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1,width:"60px" },
-        { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1,width:"60px" },
+        { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1,width:"82px" },
+        { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1,width:"100px" },
         { field: 'needDate', header: 'Need Date',align: 0 },
         { field: 'controlNo', header: 'Cntl Num' ,align: 0},
         { field: 'controlId', header: 'Cntl ID',align: 0 },
         { field: 'currency', header: 'Cur' ,align: 1,width:"60px"},
-        { field: 'unitCost', header: 'Unit Cost', align: 1 ,width:"60px"},
-        { field: 'extendedCost', header: 'Extended Cost', align: 1 ,width:"60px"},
+        { field: 'unitCost', header: 'Unit Cost', align: 1 ,width:"61px"},
+        { field: 'extendedCost', header: 'Extended Cost', align: 1 ,width:"90px"},
         { field: 'costDate', header: 'Cost Date',align: 0 },
         { field: 'purchaseOrderNumber', header: 'PO Num' ,align: 0,width:"60px"},
         { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date',align: 0 },
@@ -99,7 +99,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' ,align: 0},
         { field: 'receiver', header: 'Rec Num',align: 0 ,width:"60px"},
         { field: 'workOrderNumber', header: 'WO Num',align: 0 ,width:"60px"},
-        { field: 'subWorkOrder', header: 'Sub-WO Num',align: 0 ,width:"60px"},
+        { field: 'subWorkOrder', header: 'Sub-WO Num',align: 0 ,width:"83px"},
         { field: 'salesOrder', header: 'SO Num',align: 0 ,width:"60px"},
         { field: 'figure', header: 'Figure',align: 0 },
         { field: 'site', header: 'Site' ,align: 0},
@@ -109,7 +109,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'bin', header: 'Bin',align: 0 },
         { field: 'employeename', header: 'Employee ',align: 0 },
         { field: 'defered', header: 'Deferred',align: 0,width:"60px" },
-        { field: 'memo', header: 'Memo',align: 0 }
+        { field: 'memo', header: 'Memo',align: 0,width:"250px" }
     ]
 
     auditHistory = [
@@ -1089,7 +1089,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         openMaterialAudit(row){
             this.auditHistoryList=[];
             this.isSpinnerVisibleHistory=true;
-            this.workOrderService.getMaterialHistory(row.workOrderMaterialsId,this.isSubWorkOrder).subscribe(res=>{
+            this.workOrderService.getMaterialHistory(this.isSubWorkOrder ? row.subWorkOrderMaterialsId: row.workOrderMaterialsId,this.isSubWorkOrder).subscribe(res=>{
                 this.isSpinnerVisibleHistory=false;
  this.auditHistoryList=res.reverse();
 

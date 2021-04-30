@@ -27,6 +27,8 @@ import { UnitOfMeasureService } from 'src/app/services/unitofmeasure.service';
 import * as moment from 'moment';
 import { MenuItem } from 'primeng/api';
 import { CalibrationMgmt } from '../../../models/calibration-mgmt.model'
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-calibration-mgmt-listing',
@@ -75,6 +77,7 @@ export class CalibrationMgmtListingComponent implements OnInit {
     // { field: 'updatedBy', header: 'Updated By' },
     // { field: 'updatedBy', header: 'Locaton' },
 ]; 
+private onDestroy$: Subject<void> = new Subject<void>();
 isSaving: boolean;
 activeIndex: number;
 assetViewList: any = {};
@@ -85,6 +88,7 @@ historyModal: NgbModalRef;
 private isDeleteMode: boolean = false;
 private isEditMode: boolean = false;
 selectedRows:any=[];
+allcalibrationbyidInfo: any = [];
 manufacturerId: any;
 currencyId: any;
 Calibrationtype:string = 'Calibration';
@@ -309,6 +313,24 @@ closeviewModal() {
     $("#viewcalibration").modal("hide");
 }
 
+closecalibartionviewModal() {
+    $("#CalibartionmgmtList").modal("hide");
+}
+
+Updatetcalibartion()
+{
+        this.assetService.UpdatecalibartionMgmt(this.allcalibrationbyidInfo).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+
+            this.alertService.showMessage("Success", `Calibration Process Update successfully.`, MessageSeverity.success);
+            $("#CalibartionmgmtList").modal("hide");
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        })
+ 
+
+}
+
   filterEmployee(event): void {
     if (event.query !== undefined && event.query !== null) {
         this.getAllEmployees(event.query);
@@ -361,18 +383,68 @@ closeviewModal() {
       this.calibrationForm.masterCompanyId = this.authService.currentUser.masterCompanyId;
       this.calibrationForm.EmployeeId=this.calibrationForm.EmployeeId ? this.calibrationForm.EmployeeId.EmployeeId : null;
       this.calibrationForm.VendorId=this.calibrationForm.VendorId ? this.calibrationForm.VendorId.vendorId : null;
-    this.isSpinnerVisible = true;
-    this.assetService.addcalibrationManagment(this.calibrationForm).subscribe(data => {
-        this.isSpinnerVisible = false;
-        this.isEditMode = true;
-        this.alertService.showMessage("Success", `Calibration Process successfully.`, MessageSeverity.success);
-        $("#editcalibration").modal("hide");
-    }, err => {
-        this.currentAsset.manufacturedDate = this.currentAsset.manufacturedDate ? this.currentAsset.manufacturedDate : null;
-        this.currentAsset.expirationDate = this.currentAsset.expirationDate ? this.currentAsset.expirationDate : null;
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);
-    })
+    
+      this.isSaving =true;
+    if(this.calibrationForm.ScheduleIsVendor =="" && this.calibrationForm.ScheduleIsEmployee== "")
+    {
+        this.alertService.showMessage("", `Please Select Vendor or Employee Type.`, MessageSeverity.warn);
+        this.isSaving =false;
+        //return;
+
+    }
+
+    if(this.calibrationForm.ScheduleIsVendor == true && (this.calibrationForm.VendorId == "" || this.calibrationForm.VendorId == undefined ||  this.calibrationForm.VendorId == null))
+    {
+        this.alertService.showMessage("", `Please Select Vendor.`, MessageSeverity.warn);
+        this.isSaving =false;
+       // return;
+
+    }
+
+    if(this.calibrationForm.ScheduleIsEmployee == true && (this.calibrationForm.EmployeeId == "" || this.calibrationForm.EmployeeId == undefined || this.calibrationForm.EmployeeId == null))
+    {
+        this.alertService.showMessage("", `Please Select Employee.`, MessageSeverity.warn);
+        this.isSaving =false;
+       // return;
+
+    }
+
+    if(this.calibrationForm.CalibrationDate == "" || this.calibrationForm.CalibrationDate == undefined  || this.calibrationForm.CalibrationDate == null)
+    {
+        this.alertService.showMessage("", `Please Select CalibrationDate.`, MessageSeverity.warn);
+        this.isSaving =false;
+        //return;
+
+    }
+
+    if(this.calibrationForm.UnitCost == "" || this.calibrationForm.UnitCost == undefined  || this.calibrationForm.UnitCost == null)
+    {
+        this.alertService.showMessage("", `Please Enter UnitCost.`, MessageSeverity.warn);
+        this.isSaving =false;
+        //return;
+    }
+
+    if(this.calibrationForm.currencyId == "" || this.calibrationForm.currencyId == undefined  || this.calibrationForm.currencyId == null)
+    {
+        this.alertService.showMessage("", `Please Select currencyId.`, MessageSeverity.warn);
+        this.isSaving =false;
+       // return;
+    }
+
+    if( this.isSaving)
+    {
+        this.isSpinnerVisible = true;
+        this.assetService.addcalibrationManagment(this.calibrationForm).subscribe(data => {
+            this.isSpinnerVisible = false;
+            this.isEditMode = true;
+            this.alertService.showMessage("Success", `Calibration Process successfully.`, MessageSeverity.success);
+            $("#editcalibration").modal("hide");
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        })
+    }
+    
 
   }
 assetInventoryId:any;
@@ -564,15 +636,15 @@ checkedvendor(ScheduleIsVendor)
 {
     this.isvendor=true;
     this.isemployee=false;
-    this.calibrationForm.ScheduleIsVendor=true
-    this.calibrationForm.ScheduleIsEmployee=false
+    //this.calibrationForm.ScheduleIsVendor=true
+    //this.calibrationForm.ScheduleIsEmployee=false
 }
 checkedemployee(ScheduleIsEmployee)
 {
     this.isvendor=false;
     this.isemployee=true;
-    this.calibrationForm.ScheduleIsVendor=false
-    this.calibrationForm.ScheduleIsEmployee=true
+    //this.calibrationForm.ScheduleIsVendor=false
+    //this.calibrationForm.ScheduleIsEmployee=true
 
 
 }
@@ -678,6 +750,58 @@ dismissModel() {
       })
   }
   }
+  OpemCalibartionMgmtList(AssetRecordId)
+  {
+    this.GetCalibartionListByID(AssetRecordId)
+  }
+
+//   private onCapesLoaded(allCapes: CalibrationMgmt[]) {
+//     this.allCapesInfo = allCapes;
+// }
+updaterowcalibartion(caldata)
+{
+    caldata.isedit=true;
+}
+
+  GetCalibartionListByID(AssetRecordId) {
+    if (AssetRecordId !=0) {
+        this.assetService.getCalibartionListByID(AssetRecordId).subscribe(
+            results => { 
+                this.allcalibrationbyidInfo= results[0]
+
+                this.allcalibrationbyidInfo = results[0].map(x => {
+                    return {
+                        ...x,
+                     unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
+                     createdDate:  new Date(x.createdDate),
+                     calibrationDate:  new Date(x.calibrationDate),
+                     isedit:false,
+                     createdDate1 :x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '',
+                     calibrationDate1 :x.calibrationDate ?  this.datePipe.transform(x.calibrationDate, 'MM/dd/yyyy h:mm a'): '',
+                  //   residualPercentage: x.residualPercentage ? formatNumberAsGlobalSettingsModule(x.residualPercentage, 2) : '',
+                  //   installationCost: x.installationCost ? formatNumberAsGlobalSettingsModule(x.installationCost, 2) : '',
+                  //   freight: x.freight ? formatNumberAsGlobalSettingsModule(x.freight, 2) : '',
+                  //   insurance: x.insurance ? formatNumberAsGlobalSettingsModule(x.insurance, 2) : '',
+                  //   taxes: x.taxes ? formatNumberAsGlobalSettingsModule(x.taxes, 2) : '',
+                  //   totalCost: x.totalCost ? formatNumberAsGlobalSettingsModule(x.totalCost, 2) : '',
+                  //   calibrationDefaultCost: x.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(x.calibrationDefaultCost, 2) : '',
+                  //   certificationDefaultCost: x.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.certificationDefaultCost, 2) : '',
+                  //   inspectionDefaultCost: x.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(x.inspectionDefaultCost, 2) : '',
+                  //   verificationDefaultCost: x.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.verificationDefaultCost, 2) : '',
+                    }
+                });
+
+              
+                //this.onCapesLoaded(results[0]) 
+            
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            }
+        );
+
+    }
+}
 
   getColorCodeForHistory(i, field, value) {
       const data = this.auditHistory;

@@ -46,7 +46,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
     headers = [
         { field: 'mobile', header: 'Mobile' },
         { field: 'contactBy', header: 'Contacted By' },
-        { field: 'notes', header: 'Notes' },
+        { field: 'notesData', header: 'Notes' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
@@ -182,6 +182,9 @@ export class TextCommonComponent implements OnInit, OnChanges {
     dismissModel() {
         this.modal.close();
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
 
     loadData(event) {
 
@@ -323,6 +326,11 @@ export class TextCommonComponent implements OnInit, OnChanges {
                     (res) => {
                         this.updateDisabledText = true;
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Text Updated Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllTextList();
                         this.isEdit = false;
                     }, err => {
@@ -337,6 +345,11 @@ export class TextCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Text Created Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllTextList();
                     }, err => {
                         this.errorMessageHandler();

@@ -12,7 +12,7 @@ import { CustomerService } from "../../../services/customer.service";
 import { InvoicePaymentService } from "../../../services/invoice-payment-service";
 import { InvoiceCheckPayment } from "../../../models/invoicePayment/InvoiceCheckPayment";
 import { LegalEntityService } from "../../../services/legalentity.service";
-import { editValueAssignByCondition, getObjectById } from "../../../generic/autocomplete";
+import { editValueAssignByCondition, getObjectById, formatNumberAsGlobalSettingsModule } from "../../../generic/autocomplete";
 import { NgForm } from "@angular/forms";
 import { CustomerReceiptInfo } from "../../../models/invoicePayment/CustomerReceiptInfo";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
@@ -27,6 +27,8 @@ export class AddCustomerPaymentComponent implements OnInit {
   @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
   @Input() customerId;
   @Input() customerPayment;
+  @Input() bankNameId;
+  @Input() glAccntId;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() triggerTabChange = new EventEmitter();
   @ViewChild("addCheckMemo", { static: false }) addCheckMemo: ElementRef;
@@ -89,6 +91,8 @@ export class AddCustomerPaymentComponent implements OnInit {
   isDeposite: boolean = false;
   cnt: number = 0;
   arSettingsData: any;
+  allBankNames: any[] = [];
+  filteredBankNames: any[] = [];
 
   constructor(public customerService: CustomerService, private commonService: CommonService,
     private invoicePaymentService: InvoicePaymentService,
@@ -150,9 +154,32 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.loadDiscType();
     this.loadBankFeesType();
     this.loadAdjustReason();
+    
+    setTimeout(() => {
+      this.bankNameList();
+    }, 2200);
 
     this.getARSettings();
     this.employeedata('', this.currentUserManagementStructureId);
+  }
+
+  private bankNameList() {
+    this.customerPaymentsService.getAllBankNames(this.masterCompanyId).subscribe(res => {
+      this.allBankNames = res;
+      let bankNameResponse = res.map(function (x) {
+        return {
+          label: x.bankName, value: x.legalEntityBankingLockBoxId
+        }
+      });
+
+      this.filteredBankNames = bankNameResponse;
+
+      this.objInvoicePayment.checkPayments.bankAccount = this.bankNameId;
+      this.objInvoicePayment.invoiceWireTransferPayment.bankName = this.bankNameId;
+      this.objInvoicePayment.checkPayments.glAccountNumber = this.glAccntId;
+      this.objInvoicePayment.invoiceWireTransferPayment.glAccountNumber = this.glAccntId;
+      this.objInvoicePayment.invoiceCreditDebitCardPayment.glAccountNumber = this.glAccntId;
+    })
   }
 
   bindDefaults() {
@@ -573,6 +600,18 @@ export class AddCustomerPaymentComponent implements OnInit {
 
     if (this.customerDetails) { this.customerDetails.amount = totalAmount; }
     this.UpdateRemAmount();
+  }
+
+  formatCheckAmount() {
+    this.objInvoicePayment.checkPayments.amount = this.objInvoicePayment.checkPayments.amount ? formatNumberAsGlobalSettingsModule(this.objInvoicePayment.checkPayments.amount, 2) : '0.00';
+  }
+
+  formatWireAmount() {
+    this.objInvoicePayment.invoiceWireTransferPayment.amount = this.objInvoicePayment.invoiceWireTransferPayment.amount ? formatNumberAsGlobalSettingsModule(this.objInvoicePayment.invoiceWireTransferPayment.amount, 2) : '0.00';
+  }
+
+  formatCCAmount() {
+    this.objInvoicePayment.invoiceCreditDebitCardPayment.amount = this.objInvoicePayment.invoiceCreditDebitCardPayment.amount ? formatNumberAsGlobalSettingsModule(this.objInvoicePayment.invoiceCreditDebitCardPayment.amount, 2) : '0.00';
   }
 
   UpdateRemAmount() {
