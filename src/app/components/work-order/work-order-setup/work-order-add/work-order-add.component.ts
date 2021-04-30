@@ -607,10 +607,7 @@ setTimeout(() => {
         this.disableSaveForPart=false;
     }, 2000);
     }
-    tranferCheckbox(ev){
-        // console.log("ev",ev)
-        $('#workFlowTransfer').modal('show'); 
-    }
+  
     getEmployeeData() {
         this.workOrderGeneralInformation.woEmployee = this.authService.currentEmployee.name;
     }
@@ -1849,7 +1846,7 @@ setTimeout(() => {
                     this.errorHandling(err)
                 })
         }
-    }
+    } 
 
     formWorkerOrderLaborJson(data) {
         if (this.isSubWorkOrder == true) {
@@ -3263,8 +3260,43 @@ this.woPartId=rowData.id;
     viewWorkflow(workOrderPartNumber){
         this.currentWorkflowId=workOrderPartNumber.workflowId;
     }
-
+    workflowTransfer:any={}
+    tranferCheckbox(ev,currentRecord){
+        this.workFlowId=currentRecord.workflowId;
+        this.workOrderId=this.workOrderId ? this.workOrderId :currentRecord.workOrderId;
+        console.log("ev",ev,currentRecord)
+        $('#workFlowTransfer').modal('show'); 
+    }
+    taskComletedByConfirmation(ev){
+        
+    }
     transferWorkflow(){
         $('#workFlowTransfer').modal('hide');
+        const newArray:any=[];
+        
+        if(this.workflowTransfer.Material){
+            newArray.push('Material')
+        } if(this.workflowTransfer.Labor){
+            newArray.push('Labor')
+        } if(this.workflowTransfer.Tools){
+            newArray.push('Tools')
+        } if(this.workflowTransfer.Charges){
+            newArray.push('Charges')
+        }
+    //    newArray.toString()
+        const data:any={};
+        data.list=newArray.toString()
+        data.workOrderId=this.workOrderId;
+        data.WorkflowId=this.workFlowId;
+
+        console.log("workORderId")
+        this.workOrderService.transferWorkflow(data).subscribe(res => {
+            this.alertService.showMessage(
+                this.moduleName,
+                'Transfered WorkflowData to Work Order',
+                MessageSeverity.warn
+            ); 
+        });
+        
     }
 }   

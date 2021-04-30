@@ -1363,5 +1363,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
             });
         }
     }
-
+    
+    transferWorkflow(data) {
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/transferWorkflow`, data, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.transferWorkflow(data));
+        });
+    }
 }
