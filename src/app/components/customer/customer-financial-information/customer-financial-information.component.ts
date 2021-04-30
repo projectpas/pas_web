@@ -45,6 +45,7 @@ import { LocalStoreManager } from '../../../services/local-store-manager.service
 import { DatePipe, DecimalPipe } from '@angular/common';
 import * as moment from 'moment';
 import { Params, ActivatedRoute } from '@angular/router';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare var $: any;
 @Component({
   selector: 'app-customer-financial-information',
@@ -207,6 +208,16 @@ export class CustomerFinancialInformationComponent implements OnInit {
   disableTaxSave: boolean = true;
   moduleName: any = "CustomerFinance";
   referenceId: any;
+  isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
+  isATA:Boolean=true;
+  isAtaAdd:Boolean=true;
+  isAtaEdit:Boolean=true;
+  isBillingInfoAdd:Boolean=true;
+  isBillingInfoEdit:Boolean=true;
+  isNextVisible: Boolean=true;
+  isPrevVisible: Boolean=true;
   constructor(
     private _decimalPipe: DecimalPipe,
     public taxtypeser: TaxTypeService,
@@ -228,10 +239,22 @@ export class CustomerFinancialInformationComponent implements OnInit {
     private localStorage: LocalStoreManager,
     private router: ActivatedRoute
   ) {
-    this.id = this.router.snapshot.params['id'];
-  }
-  taxtypesList = [];
+    this.id = this.router.snapshot.params['id'];    
+		this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Update])
+    this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Delete]) 
+    //Next
+    this.isBillingInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
+    this.isBillingInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update])
+    //Previous
+    this.isAtaAdd=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add])
+    this.isAtaEdit=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update])
 
+    this.isNextVisible=this.authService.ShowTab("Create Customer","Billing Information");
+    this.isPrevVisible=this.authService.ShowTab("Create Customer","Aircraft Information");
+  }
+
+  taxtypesList = [];
   ngOnInit(): void {
     this.savedGeneralInformationData = this.savedGeneralInformationData || {};
     this.savedGeneralInformationData.discountId = 0;
@@ -399,7 +422,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
   getAllPercentage() {
     //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
-      this.percentageList = res;
+      this.percentageList = res;      
       this.percentageList.sort(function(a, b) {
         return parseFloat(a.label) - parseFloat(b.label);
       });
@@ -556,7 +579,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   getAllDiscountList1() {
     //this.commonservice.smartDropDownList('[Discount]', 'DiscountId', 'DiscontValue').subscribe((res) => {
-    this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.discountList1 = res;
       this.discountList1.sort(function(a, b) {
         return parseFloat(a.label) - parseFloat(b.label);

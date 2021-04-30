@@ -5,7 +5,7 @@
 			<h4 class="header-name">Capabilities List</h4>
 		  </div>
 		  <div>
-			<button
+			<button *ngIf="isAdd"
 			type="button" (click)="onAddCapes()"
 			class="btn-sm header-button" data-toggle="modal" data-target="#capes1">
 			Add New Capability
@@ -49,7 +49,7 @@
               </div>
               <div class="row margin-bottom-10">
                 <div class="col">
-                  <button
+                  <button  *ngIf="isDownload"
                     type="button"
                     class="btn btn-primary exports-button"
                     matTooltip="Download Data"
@@ -62,7 +62,7 @@
                     (click)="selectedOnly = false; targetData = capabilityListTable;"
                      data-target="#downloadConfirmation"
                   ></button>
-                  <button
+                  <button  *ngIf="isDownload"
                     type="button"
                     class="btn btn-primary exports-button"
                     matTooltip="Download Selected Data"
@@ -193,11 +193,11 @@
                          matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
 
                          <span *ngIf="!isEnableItemMasterView" data-toggle="modal" data-target="#editCap">
-                           <a class="btn nobg" 
+                           <a  *ngIf="isEdit" class="btn nobg" 
                            (click)="openEdits(rowData)" matTooltip="Edit" 
                            matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                    
-                    <span *ngIf="!isEnableItemMasterView"><a class="btn nobg"
+                    <span *ngIf="!isEnableItemMasterView"><a  *ngIf="isDelete" class="btn nobg"
                         (click)="deleteCapability(deleteCapabilityContent, rowData.itemMasterCapesId, rowData.capabilityType)"
                          matTooltip="Delete"
                           matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
@@ -209,7 +209,7 @@
                     <ng-container *ngIf="rowData.isDeleted">
                                 <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewCap" (click)="onViewCapes(rowData)"
                                 matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                <span *ngIf="!isEnableItemMasterView"><a class="btn nobg btn-users-cstm"
+                                <span *ngIf="!isEnableItemMasterView"><a  *ngIf="isEdit" class="btn nobg btn-users-cstm"
                                     (click)="restore(restoreCapabilityContent, rowData)"
                                      matTooltip="Restore Record"
                                       matTooltipPosition="above"><i class="fa fa-undo"></i></a> </span>

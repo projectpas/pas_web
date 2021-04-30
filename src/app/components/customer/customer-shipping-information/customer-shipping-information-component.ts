@@ -13,6 +13,7 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { PermissionConstants, ModuleConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-customer-shipping-information',
@@ -170,6 +171,16 @@ export class CustomerShippingInformationComponent implements OnInit {
     currentDeletedstatusShipVia:boolean=false;
     currentDeletedstatusIntShipVia:boolean=false;
     shipviaInfo = [];
+    isAddDomestic:boolean=true;
+    isUpdateDomestic:boolean=true;
+    isDeleteDomestic:boolean=true;
+    isDownloadDomestic:boolean=true;
+    isBillingInfoAdd:boolean=true;
+    isBillingInfoEdit:boolean=true;
+    isSalesPersonInfoAdd:boolean=true;
+    isSalesPersonInfoEdit:boolean=true;
+    isNextVisible: Boolean=true;
+    isPrevVisible: Boolean=true;
     constructor(private customerService: CustomerService, private authService: AuthService,
         private alertService: AlertService, private activeModal: NgbActiveModal, private modalService: NgbModal, private configurations: ConfigurationService,
         private commonService: CommonService,
@@ -177,7 +188,21 @@ export class CustomerShippingInformationComponent implements OnInit {
         private datePipe: DatePipe
     ) { 
         this.id = this.router.snapshot.params['id'];
+        this.isAddDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add])
+		this.isUpdateDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update])
+        this.isDeleteDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Delete])
+        this.isDownloadDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Download])
+        // Next
+        this.isSalesPersonInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Add])
+        this.isSalesPersonInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Update])       
+        //Previous
+        this.isBillingInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
+        this.isBillingInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update]) 
+
+        this.isNextVisible=this.authService.ShowTab("Create Customer","Sales Person Information");
+        this.isPrevVisible=this.authService.ShowTab("Create Customer","Billing Information");
     }
+
     ngOnInit() {
         if (this.editMode) {
             //this.id = this.editGeneralInformationData.customerId;

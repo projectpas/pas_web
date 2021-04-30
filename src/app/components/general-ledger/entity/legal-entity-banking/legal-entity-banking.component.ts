@@ -16,6 +16,7 @@ import { CustomerService } from '../../../../services/customer.service';
 import { CommonService } from '../../../../services/common.service';
 import { editValueAssignByCondition,getObjectById } from '../../../../generic/autocomplete';
 import { titlePattern } from '../../../../validations/validation-pattern';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 // declare var $ : any;
 declare var $ : any;
 @Component({
@@ -96,14 +97,21 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	tabscreen: any;
 	titlePattern = titlePattern()
 	isSpinnerVisible: boolean = false;
+	isAdd:boolean=true;
+	isEditData:boolean=true;
 	@ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
+	isNextVisible: Boolean=true;
+	isPrevVisible: Boolean=true;
 	constructor(
 		private authService: AuthService, private commonService: CommonService, private _fb: FormBuilder, private alertService: AlertService,
 		public currency: CurrencyService, public workFlowtService: LegalEntityService,
 		private modalService: NgbModal, private activeModal: NgbActiveModal, private dialog: MatDialog, private masterComapnyService: MasterComapnyService,
 		private customerService: CustomerService) {
 		this.sourceLegalEntity.tagNames = [];
-
+			this.isAdd=this.authService.checkPermission([ModuleConstants.LegalEntity_BankingInformation+"."+PermissionConstants.Add]);
+			this.isEditData=this.authService.checkPermission([ModuleConstants.LegalEntity_BankingInformation+"."+PermissionConstants.Update]);
+			this.isNextVisible=this.authService.ShowTab('Create Legal Entity','Billing Information');
+			this.isPrevVisible=this.authService.ShowTab('Create Legal Entity','Contacts');
 	}
 	ngOnInit(): void {
 		if (this.editMode) {
@@ -260,7 +268,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					bankCity: res[0].city,
 					bankProvince: res[0].stateOrProvince,
 					bankpostalCode: res[0].postalCode,
-					bankcountryId: res[0].countryId,					
+					bankcountryId: res[0].countryId,
+					//glAccountId: res[0].gLAccountId
 					glAccountId: res[0].glAccountId ? this.getInactiveObjectOnEdit('value', res[0].glAccountId, this.allGlInfo, 'GLAccount', 'GLAccountId', 'AccountCode'):null,
 				};
 				setTimeout(() => {

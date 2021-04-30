@@ -17,6 +17,7 @@ import { CommonService } from '../../../services/common.service';
 import { emailPattern, urlPattern, phonePattern } from '../../../validations/validation-pattern';
 import { Router, ActivatedRoute } from '@angular/router';
 declare var $ : any;
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-customer-general-information',
@@ -84,10 +85,10 @@ export class CustomerGeneralInformationComponent implements OnInit {
     partListForDER: any;
     partListOriginal: any;
     selectedActionName: any;
-    disableSaveCustomerName: boolean;
+    disableSaveCustomerName: boolean=false;
     disableSaveParentName: boolean = false;
     countryExists: boolean;
-    countryExistsNow: boolean;
+    countryExistsNow: boolean = false;
     customerPhoneLengthValid: boolean = false;
     disableRestrictedDER: boolean = false;
     disableRestrictedPMA: boolean = false;
@@ -140,10 +141,31 @@ export class CustomerGeneralInformationComponent implements OnInit {
     integrationName: any;
     sourceAction: any;
     allAircraftinfo: any;
+    isAdd:boolean=true;
+	isUpdate:boolean=true;
+    isDelete:boolean=true;
+    
+    isContactAdd:boolean=true;
+    isContactEdit:boolean=true;
+
+    isGeneralInfoEdit:boolean=true;
+    isGeneralInfoDelete:boolean=true;
+    isGeneralInfoAdd:boolean=true;
+
+    isNextVisible:Boolean=true;
 
     constructor(public integrationService: IntegrationService, private modalService: NgbModal, public customerClassificationService: CustomerClassificationService, public ataservice: AtaMainService, private authService: AuthService, private alertService: AlertService,
         public customerService: CustomerService, public itemService: ItemMasterService, public vendorser: VendorService, private currencyService: CurrencyService, private commonService: CommonService, private router: Router) {
         this.stopmulticlicks = false;
+        this.isAdd = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Add])
+		this.isUpdate = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Update])
+        this.isDelete = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Delete])
+        this.isContactAdd=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Add])
+        this.isContactEdit=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Update])		
+        this.isGeneralInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Update])
+        this.isGeneralInfoDelete=this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Delete])		
+        this.isGeneralInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Add]);
+        this.isNextVisible=this.authService.ShowTab("Create Customer","Contacts");
     }
 
     ngOnInit() {

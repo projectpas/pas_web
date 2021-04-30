@@ -28,7 +28,7 @@
       <div class="col">
         <h4 class="header-name"> Inventory</h4>
       </div>
-      <div>
+      <div *ngIf="isAdd">
         <a *ngIf="isViewMode == false" href="javascript:void(0)">
           <button type="button" class="btn-sm header-button"  matTooltip="Add Inventory" matTooltipPosition="above" (click)="openAddInventoryPopup(addInventory);">
             Add Inventory
@@ -76,23 +76,26 @@
         </div>
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export All Data"
+            <button type="button" *ngIf="isDownload" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export All Data"
               matTooltip="Download  Data" matTooltipPosition="above"  data-toggle="modal" 
               (click)="selectedOnly = false; targetData = dt;"
                data-target="#downloadPopup"></button>
-            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
+
+            <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
               label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
               (click)="dt.exportCSV({ selectionOnly: true })"
               ></button>
+
             <button class="btn btn-primary exports-button "
               *ngIf="showAdvancedSearchCard == false" type="button" (click)="enableDisableAdvancedSearch(true)">
               Advanced Search <i class="fa fa-caret-down"></i>
             </button>
-            <button class="btn btn-primary exports-button" 
-            
+
+            <button class="btn btn-primary exports-button"
               *ngIf="showAdvancedSearchCard == true" type="button" (click)="enableDisableAdvancedSearch(false)">
               Advanced Search <i class="fa fa-caret-up"></i>
             </button>
+            
           </div>
           <div class="col-md-4">
             <div class="checkbox-cstm pull-right checkbox-align">
@@ -189,16 +192,16 @@
         </td>
         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == false">
           <div *ngIf="currentDeletedstatus==false">
-            <span data-toggle="modal" data-target="#viewAircraft">
+            <span  data-toggle="modal" data-target="#viewAircraft">
               <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openAircraftView(rowData)"
                 matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
             </span>
   
-            <span data-toggle="modal" data-target="#editAirCraftDetails"><a class="btn nobg"
+            <span *ngIf="isEdit" data-toggle="modal" data-target="#editAirCraftDetails"><a class="btn nobg"
                 (click)="editAirCraft(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                   class="fa fa-pencil"></i></a>
             </span>
-            <span data-toggle="modal" data-target="#delete"><a class="btn nobg"
+            <span *ngIf="isDelete" data-toggle="modal" data-target="#delete"><a class="btn nobg"
                 (click)="deleteAircraftMappedInventory(deleteContent, rowData);dt.reset()" matTooltip="Delete"
                 matTooltipPosition="above"><i class="fa fa-trash"></i></a>
             </span>
@@ -214,7 +217,7 @@
             <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg"
                 (click)="getCustomerAircraftHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i
                   class="fa fa-history"></i></a></span>
-                  <span ><a class="btn nobg btn-users-cstm " (click)="restore(restoreId,rowData);dt.reset()" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                  <span *ngIf="isEdit"><a class="btn nobg btn-users-cstm " (click)="restore(restoreId,rowData);dt.reset()" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
           </div>          
         </td>
         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == true">
@@ -247,11 +250,11 @@
   </p-table>
 
   <div class="m-t-10" *ngIf="isViewMode == false">
-    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
+    <button *ngIf="isNextVisible" type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
       [disabled]="stopmulticlicks">
       Next
     </button>
-    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
+    <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
       Previous
     </button>
   </div>

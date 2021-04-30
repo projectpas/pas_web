@@ -258,7 +258,7 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	getReceivingPOListing() {
-		return this.http.get(`${this.configurations.baseUrl}/api/vendor/recevingpolist`)
+		return this.http.get(`${this.configurations.baseUrl}/api/vendor/recevingpolist`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getReceivingPOListing());
 		});
@@ -1517,14 +1517,14 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	getVendorbillingsitenames(vendorId) {
-		return this.http.get(`${this.configurations.baseUrl}/api/Vendor/vendorbillingsitenames?vendorId=${vendorId}`)
+		return this.http.get(`${this.configurations.baseUrl}/api/Vendor/vendorbillingsitenames?vendorId=${vendorId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getVendorbillingsitenames(vendorId));
 		});
 	}
 
 	getVendorAddressById(vendorId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/vendorbillingaddressbyid?billingAddressId=${vendorId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/vendorbillingaddressbyid?billingAddressId=${vendorId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getVendorAddressById(vendorId));
 		});
@@ -1574,14 +1574,14 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	deleteRO(repairOrderId, updatedBy) {
-		return this.http.delete<any>(`${this.configurations.baseUrl}/api/repairorder/deleteRo?repairOrderId=${repairOrderId}&updatedBy=${updatedBy}`)
+		return this.http.delete<any>(`${this.configurations.baseUrl}/api/repairorder/deleteRo?repairOrderId=${repairOrderId}&updatedBy=${updatedBy}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.deleteRO(repairOrderId, updatedBy));
 		});
 	}
 
 	getROHistory(repairOrderId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/roHistory?repairOrderId=${repairOrderId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/roHistory?repairOrderId=${repairOrderId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getROHistory(repairOrderId));
 		});
@@ -1596,14 +1596,14 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	getVendorROHeaderById(repairOrderId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/roheaderdetails?repairOrderId=${repairOrderId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/roheaderdetails?repairOrderId=${repairOrderId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getVendorROHeaderById(repairOrderId));
 		});
 	}
 
 	getVendorROAddressById(repairOrderId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/roaddressdetails?repairOrderId=${repairOrderId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/roaddressdetails?repairOrderId=${repairOrderId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getVendorROAddressById(repairOrderId));
 		});
@@ -1637,14 +1637,14 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	getROViewById(repairOrderId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/roViewById?repairOrderId=${repairOrderId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/roViewById?repairOrderId=${repairOrderId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getROViewById(repairOrderId));
 		});
 	}
 
 	getROPartsViewById(repairOrderId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/roPartsViewById?repairOrderId=${repairOrderId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/roPartsViewById?repairOrderId=${repairOrderId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getROPartsViewById(repairOrderId));
 		});
@@ -1682,35 +1682,35 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	getROApproverList(repairOrderId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/roApproversList?repairOrderId=${repairOrderId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/roApproversList?repairOrderId=${repairOrderId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getROApproverList(repairOrderId));
 		});
 	}
 
 	getReceivingROList() {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/recevingRoList`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/recevingRoList`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getReceivingROList());
 		});
 	}
 
 	getROTotalCostById(repairOrderId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/getrototalcost?repairOrderId=${repairOrderId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/getrototalcost?repairOrderId=${repairOrderId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getROTotalCostById(repairOrderId));
 		});
 	}
 	
 	getApproversListByTaskIdModuleAmt(taskId, moduleAmount) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslist?approvalTaskId=${taskId}&moduleAmount=${moduleAmount}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslist?approvalTaskId=${taskId}&moduleAmount=${moduleAmount}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getApproversListByTaskIdModuleAmt(taskId, moduleAmount));
 		});
 	}
 	
 	getROApprovalListById(repairOrderId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/getroapprovallist?repairOrderId=${repairOrderId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/repairorder/getroapprovallist?repairOrderId=${repairOrderId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getROApprovalListById(repairOrderId));
 		});
@@ -1848,7 +1848,7 @@ export class VendorEndpointService extends EndpointFactory {
 
 	vendorGeneralDocumentUploadEndpoint<T>(file: any, vendorId, moduleId, moduleName, uploadedBy, masterCompanyId): Observable<T> {
 		const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-		return this.http.post<T>(`${this._addVendorDocumentDetails}?referenceId=${vendorId}&moduleId=${moduleId}&moduleName=${moduleName}&uploadedBy=${uploadedBy}&masterCompanyId=${masterCompanyId}`, file)
+		return this.http.post<T>(`${this._addVendorDocumentDetails}?referenceId=${vendorId}&moduleId=${moduleId}&moduleName=${moduleName}&uploadedBy=${uploadedBy}&masterCompanyId=${masterCompanyId}`, file,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.vendorGeneralDocumentUploadEndpoint(file, vendorId, moduleId, moduleName, uploadedBy, masterCompanyId));
 		});
@@ -1856,7 +1856,7 @@ export class VendorEndpointService extends EndpointFactory {
 
 	vendorGeneralFileUploadEndpoint<T>(file: any): Observable<T> {
 		const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-		return this.http.post<T>(`${this._addVendorFileUpload}`, file)
+		return this.http.post<T>(`${this._addVendorFileUpload}`, file,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.vendorGeneralFileUploadEndpoint(file));
 		});
@@ -1895,7 +1895,7 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	repairOrderGlobalSearch(filterText, pageNumber, pageSize, vendorId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/roglobalsearch?filterText=${filterText}&pageNumber=${pageNumber}&pageSize=${pageSize}&vendorId=${vendorId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/roglobalsearch?filterText=${filterText}&pageNumber=${pageNumber}&pageSize=${pageSize}&vendorId=${vendorId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.repairOrderGlobalSearch(filterText, pageNumber, pageSize, vendorId));
 		});
@@ -1924,27 +1924,29 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	getHistoryForVendor(vendorId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/GetVendorAuditHistory/${vendorId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/GetVendorAuditHistory/${vendorId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getHistoryForVendor(vendorId));
 		});
 	}
 
 	getVendorCapabilityByVendorId(vendorId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/getVendorCapabilityByVendorId?vendorId=${vendorId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/getVendorCapabilityByVendorId?vendorId=${vendorId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getVendorCapabilityByVendorId(vendorId));
 		});
 	}
 
 	getVendorDataById(vendorId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/getvendordatabyid/${vendorId}`)
+		let endpointurl = `${this.configurations.baseUrl}/api/Vendor/getvendordatabyid/${vendorId}`;
+		return this.http.get<any>(endpointurl,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getVendorDataById(vendorId));
 		});
 	}
 
 	getAllVendorList(data) {
+		console.log("test");
 		return this.http.post(this.vendorListUrl, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getAllVendorList(data));
@@ -1952,49 +1954,49 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	vendorListGlobalSearch(filterText, pageNumber, pageSize, isActive) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/vendorglobalsearch?filterText=${filterText}&pageNumber=${pageNumber}&pageSize=${pageSize}&isActive=${isActive}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/vendorglobalsearch?filterText=${filterText}&pageNumber=${pageNumber}&pageSize=${pageSize}&isActive=${isActive}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.vendorListGlobalSearch(filterText, pageNumber, pageSize, isActive));
 		});
 	}
 
 	VendorBillingFileUpload(file, vendorId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadBilling}?vendorId=${vendorId}`, file)
+		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadBilling}?vendorId=${vendorId}`, file,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.VendorBillingFileUpload(file, vendorId));
 		});
 	}
 
 	VendorShippingFileUpload(file, vendorId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadShipping}?vendorId=${vendorId}`, file)
+		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadShipping}?vendorId=${vendorId}`, file,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.VendorShippingFileUpload(file, vendorId));
 		});
 	}
 
 	VendorInternationalShippingFileUpload(file, vendorId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadInternationalShipping}?vendorId=${vendorId}`, file)
+		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadInternationalShipping}?vendorId=${vendorId}`, file,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.VendorInternationalShippingFileUpload(file, vendorId));
 		});
 	}
 
 	VendorContactFileUpload(file, vendorId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadContact}?vendorId=${vendorId}`, file)
+		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadContact}?vendorId=${vendorId}`, file,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.VendorContactFileUpload(file, vendorId));
 		});
 	}
 
 	VendorCheckPaymentFileUpload(file, vendorId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadPayment}?vendorId=${vendorId}`, file)
+		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadPayment}?vendorId=${vendorId}`, file,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.VendorCheckPaymentFileUpload(file, vendorId));
 		});
 	}
 
 	getInternationalShippingByVendorId(vendorId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/internationalshippingdetaillist?VendorId=${vendorId}`)
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/internationalshippingdetaillist?VendorId=${vendorId}`,this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getVendorDataById(vendorId));
 		});

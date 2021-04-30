@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\services"
   ],
+  "SelectedNode": "\\src\\app\\services\\legalentity-endpoint.service.ts",
   "PreviewInSolutionExplorer": false
 }

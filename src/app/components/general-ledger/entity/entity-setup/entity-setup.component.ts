@@ -22,7 +22,15 @@ import { CurrencyService } from "../../../../services/currency.service";
 import { Currency } from "../../../../models/currency.model";
 import { AuditHistory } from "../../../../models/audithistory.model";
 import { TreeNode, MenuItem, MessageService } from "primeng/api";
-import { CommonService } from "../../../../services/common.service";
+
+import { CommonService } from '../../../../services/common.service';
+import { validateRecordExistsOrNotForInput } from '../../../../generic/autocomplete';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+
+
+//import { TreeTableModule } from 'primeng/treetable';
+
+
 
 @Component({
   selector: "app-managemententity-structure",
@@ -71,36 +79,36 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
   toggle: boolean = true;
   toggle_ms_header: boolean = true;
 
-  public sourceAction: any = [];
-  public GeneralInformationValue: boolean = true;
-  public LockboxValue: boolean = false;
-  public domesticWireValue: boolean = false;
-  public internationalValue: boolean = false;
-  public GeneralInformationStyle: boolean = true;
-  public LockboxStyle: boolean = false;
-  public domesticWireStyle: boolean = false;
-  public internationalStyle: boolean = false;
-  ACHStyle: boolean;
-  ACHValue: boolean;
-  entityName: string;
-  selectedFile3: TreeNode;
-  items: MenuItem[];
-  selectedNode: TreeNode;
-  managementViewData: any = {};
-  dropDownLegalEntityList: any[];
+	
+	public sourceAction: any = [];
+	public GeneralInformationValue: boolean = true;
+	public LockboxValue: boolean = false;
+	public domesticWireValue: boolean = false;
+	public internationalValue: boolean = false;
+	public GeneralInformationStyle: boolean = true;
+	public LockboxStyle: boolean = false;
+	public domesticWireStyle: boolean = false;
+	public internationalStyle: boolean = false;
+	ACHStyle: boolean;
+	ACHValue: boolean;
+	entityName: string;
+	selectedFile3: TreeNode;
+	items: MenuItem[];
+	selectedNode: TreeNode;
+	managementViewData: any = {};
+	dropDownLegalEntityList: any[];
+	isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
 
-  constructor(
-    private messageService: MessageService,
-    private authService: AuthService,    
-    private alertService: AlertService,
-    public currency: CurrencyService,
-    public msService: LegalEntityService,
-    private modalService: NgbModal,   
-    private masterComapnyService: MasterComapnyService,
-    public commonService: CommonService
-  ) {
-    this.dataSource = new MatTableDataSource();
-  }
+	constructor(private messageService: MessageService,private authService: AuthService, private _fb: FormBuilder, private alertService: AlertService, public currency: CurrencyService, public msService: LegalEntityService, private modalService: NgbModal, private activeModal: NgbActiveModal, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, public commonService: CommonService) {
+
+		this.dataSource = new MatTableDataSource();
+
+		this.isAdd=this.authService.checkPermission([ModuleConstants.ManagementStructure+"."+PermissionConstants.Add]);
+		this.isEdit=this.authService.checkPermission([ModuleConstants.ManagementStructure+"."+PermissionConstants.Update]);
+		this.isDelete=this.authService.checkPermission([ModuleConstants.ManagementStructure+"."+PermissionConstants.Delete]);
+	}
 
   ngOnInit(): void {    
     this.loadManagementdata();

@@ -8,7 +8,7 @@
                     Vendor</h4>
             </div>
             <div>
-                <button
+                <button *ngIf="isView"
                     type="button"
                     class="btn-sm header-button"
                     [routerLink]="['/vendorsmodule/vendorpages/app-vendors-list']">
@@ -35,7 +35,7 @@
                 <div class="md-step-bar-right"></div>
             </div>
 
-            <div
+            <div  *ngIf="isShowTab('Capabilities')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 2,
@@ -50,7 +50,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div
+            <div  *ngIf="isShowTab('Contacts')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 3,
@@ -65,7 +65,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div
+            <div  *ngIf="isShowTab('ATA Chapter')"
                 class="md-step"
                 [ngClass]="{
                 active: activeMenuItem >= 4,
@@ -80,7 +80,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div
+            <div  *ngIf="isShowTab('Financial Information')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 5,
@@ -95,7 +95,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>            
-            <div
+            <div  *ngIf="isShowTab('Billing Information')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 6,
@@ -110,7 +110,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div
+            <div  *ngIf="isShowTab('Payment Information')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 7,
@@ -125,7 +125,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div
+            <div  *ngIf="isShowTab('Shipping Information')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 8,
@@ -140,7 +140,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div
+            <div  *ngIf="isShowTab('Warnings')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 9,
@@ -155,7 +155,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div
+            <div  *ngIf="isShowTab('Memos')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 10,
@@ -170,7 +170,7 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div
+            <div  *ngIf="isShowTab('Documents')"
                 class="md-step"
                 [ngClass]="{
                   active: activeMenuItem >= 11,

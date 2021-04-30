@@ -12279,14 +12279,16 @@ h6 {
 }
 
 .mat-expansion-panel .mat-expansion-panel-header.mat-expanded {
-  background: #0d57b0 !important;
+  background: #337ab7 !important;
   color: #fff !important;
+  height:35px !important;
 }
 
 .mat-expansion-panel-header {
   font-size: 11px !important;
   font-family: sans-serif;
   font-weight: bold;
+  height:35px !important;
 }
 
 .mat-expanded .mat-expansion-panel-header-title {
@@ -12341,11 +12343,12 @@ mat-expansion-panel.mat-expansion-panel {
 }
 
 .mat-expansion-panel-content .mat-expansion-panel-body {
-  background: #636363 !important;
+  background: #fff !important;
 }
 
 .mat-expansion-panel-content .mat-expansion-panel-content .mat-expansion-panel-body {
-  background: #9c9c9c !important;
+  // background: #9c9c9c !important;
+  background: #fff !important;
 }
 
 .mat-expansion-panel-body a.active {
@@ -12354,7 +12357,7 @@ mat-expansion-panel.mat-expansion-panel {
 
 .mat-expansion-panel-content .mat-expansion-panel-content .mat-expansion-panel-body a.active {
   color: #0f478c !important;
-  background-color: #9c9c9c !important;
+  background-color: #fff !important;
 }
 
 /* MODAL STYLES
