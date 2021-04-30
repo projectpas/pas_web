@@ -1365,7 +1365,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
     
     transferWorkflow(data) {
-        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/transferWorkflow`, data, this.getRequestHeaders()).catch(error => {
+ return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/copyworkflowdetailstoworkorder?workOrderId=${data.workOrderId}&workflowId=${data.workflowId}&listItem=${data.list}`).catch(error => {
             return this.handleErrorCommon(error, () => this.transferWorkflow(data));
         });
     }

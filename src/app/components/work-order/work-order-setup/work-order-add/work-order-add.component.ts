@@ -867,7 +867,11 @@ setTimeout(() => {
         this.workOrderGeneralInformation.workOrderTypeId = value;
         this.getLatestDefaultSettingByWorkOrderTypeId.emit(value);
     }
-
+    SingleMpnValid(){
+        this.workOrderGeneralInformation.partNumbers=[];
+        const workOrderSettingsAdded = new WorkOrderPartNumber();
+        this.workOrderGeneralInformation.partNumbers.push(workOrderSettingsAdded);
+    }
     // added new MPN
     addMPN() {
   
@@ -3268,14 +3272,14 @@ this.woPartId=rowData.id;
         $('#workFlowTransfer').modal('show'); 
     }
     taskComletedByConfirmation(ev){
-        
+
     }
     transferWorkflow(){
         $('#workFlowTransfer').modal('hide');
         const newArray:any=[];
         
         if(this.workflowTransfer.Material){
-            newArray.push('Material')
+            newArray.push('Materials')
         } if(this.workflowTransfer.Labor){
             newArray.push('Labor')
         } if(this.workflowTransfer.Tools){
@@ -3287,7 +3291,7 @@ this.woPartId=rowData.id;
         const data:any={};
         data.list=newArray.toString()
         data.workOrderId=this.workOrderId;
-        data.WorkflowId=this.workFlowId;
+        data.workflowId=this.workFlowId;
 
         console.log("workORderId")
         this.workOrderService.transferWorkflow(data).subscribe(res => {
