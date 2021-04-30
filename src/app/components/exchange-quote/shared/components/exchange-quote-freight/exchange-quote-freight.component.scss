@@ -1,0 +1,111 @@
+.btn-spaces > button {
+    margin-right: 13px !important;
+  }
+  /* .ui-radiobutton-label{
+    color: #ffffff !important;
+  } */
+  input[type='text'],
+  input[type='number'],
+  select,
+  textarea {
+    height: 24px !important;
+    border-radius: 5px !important;
+  }
+  .select-read-only{
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    box-shadow: none !important;
+  }
+  .table-overflow th {
+    text-align: center;
+  }
+  
+  .sales-analysis-header th{
+    background: #4298ff !important;
+    color:#fff !important;
+  }
+  
+  /* p-radiobutton .ui-radiobutton .ui-radiobutton-box{
+    border: 3px solid #ffffff !important;
+  } */
+  .seve{
+    margin-bottom: 20px;
+    margin-right: 12px;
+  }
+  
+  .ui-table .ui-table-tbody > tr:nth-child(odd) {
+    background-color: #ffffff !important;
+  }
+  
+  .footer td{
+    background-color: #eaf2fd !important;
+  }
+  select.select-read-only {
+    background-color: #ffffff !important;
+  }
+  .sales-quote-radio .ui-radiobutton-label {
+    width: unset !important;
+    margin-right: 10px;
+    color:#333 !important;
+  }
+  
+  .sales-quote-radio .ui-radiobutton-label {
+    margin-left: 10px;
+    text-align: left;
+    font-size: 10.5px !important;
+    margin-top: 12px;
+    font-weight: normal;
+  }
+  
+  .sales-quote-radio .ui-radiobutton{
+  margin-top:2px !important;
+  }
+  .padding-0{
+    padding:0px !important;
+  }
+  .padding-10{
+    padding: 10px !important;
+  }
+  .circle-span{
+    margin-left:3px !important;cursor:pointer !important;
+  }
+  .pencil-span{
+    margin-left:0px !important;cursor:pointer !important;
+  }
+  .quote-freight-label{
+    width: auto !important;margin-top: 3px !important;
+  }
+  .color-white{
+    color: #fff !important;
+  }
+  .quote-th{
+    width:130px !important;color:#fff !important;
+  }
+  .quote-freight-colspan{
+    width:650px;color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;
+  }
+  .quote-freight-th{
+    width:650px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;
+  }
+  .quote-freight-radios{
+    text-align: center; display: flex;    margin-bottom: 0px;
+  }
+  .padding-left-10{
+    padding-left: 10px !important;
+  }
+  .actual-radio-div{
+    float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px
+  }
+  .freight-notview{
+    width:650px;background: #fff; border: 1px solid #e7ecf1;padding: 0;
+  }
+  
+  .notview-th{
+  width:650px; color:#fff !important; border: 1px solid #e7ecf1;padding: 0;padding-left: 20px;
+  }
+  .sales-quote-radio-view .ui-radiobutton{
+    margin-top:-9px !important;
+  }

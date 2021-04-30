@@ -166,6 +166,14 @@ loadData(event) {
   this.pageIndex = pageIndex;
   this.pageSize = event.rows;
   event.first = pageIndex;
+
+  if (this.currentStatus) {
+    this.lazyLoadEventData.filters = {
+        ...this.lazyLoadEventData.filters,
+        status: this.lazyLoadEventData.filters.status == undefined ? this.currentStatus : this.lazyLoadEventData.filters.status,
+    }
+}
+  
   if (!this.isGlobalFilter) {   
     this.getAllWorkOrderQuoteList(event);       
 } else {
@@ -181,7 +189,7 @@ changeOfStatus(status) {
       ...lazyEvent,
       filters: {
           ...lazyEvent.filters,
-          quoteStatus: this.currentStatus,
+          status: this.currentStatus,
       }
   })
 }
