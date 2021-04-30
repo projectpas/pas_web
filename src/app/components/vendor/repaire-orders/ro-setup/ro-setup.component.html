@@ -963,20 +963,47 @@
                                     <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
                                            [disabled]="!approver.isSelected || approver['actionId'] != 2"
                                            [readonly]="!approver.isSelected || approver['actionId'] != 2"/> -->
-                                    <p class="m-0 p-0 p_textEditor"  matTooltipPosition="above" matTooltip="approver['memo']" class="memo-left" [innerHTML]="approver['memo']"></p>
+
+                                    <!-- <p class="m-0 p-0 p_textEditor"
+                                    class="memo-left" [innerHTML]="approver['memo']"></p> -->
+                                   
                                     <!-- </div> -->
-                                    <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
+                                   
+                                    <!-- <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3"> -->
+                                       
                                         <!-- <i class="fa fa-info-circle fa-lg" data-toggle="modal"
                                            data-target="#approvers-memo-popup"
                                            matTooltipPosition="above" matTooltip="Add Memo"
                                            (click)="onClickApproversMemo(approver)" *ngIf="approver.isSelected"></i> -->
 
-                                          <i class="fa fa-pencil btn nobg" data-toggle="modal"
+                                          <!-- <i class="fa fa-pencil btn nobg" data-toggle="modal"
                                            data-target="#approvers-memo-popup"
                                            matTooltipPosition="above" matTooltip="Add Memo"
                                            (click)="onClickApproversMemo(approver)" *ngIf="approver.isSelected"></i
                                          >
-                                    </div>
+                                    </div> -->
+
+
+                                    <div [innerHTML]="approver['memo']" 
+                                    [matTooltip]="parsedText(approver['memo'])"
+                                            matTooltipPosition="above" class="form-control"
+                                         class="text_editor_box parts-memo"></div>
+                                    <!-- <i class="fa fa-info-circle fa-lg pull-right" style="margin-top:-16px"
+                                       data-toggle="modal"
+                                       data-target="#parts-memo-popup" matTooltip="Notes"
+                                       matTooltipPosition="above"
+                                       (click)="onClickPartsMemo(partList)" *ngIf="!partList.isApproved"></i> -->
+                                      
+                                       <div *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
+
+                                      <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"                                      
+                                         data-toggle="modal" style="margin-right:20px"
+                                         data-target="#approvers-memo-popup" matTooltip="Add Memo"
+                                         matTooltipPosition="above"
+                                         (click)="onClickApproversMemo(approver)" *ngIf="approver.isSelected"></i
+                                       >
+                                       <!-- *ngIf="approver.isSelected" -->
+                                       </div>
 
                                 </td>
                                 <td style="min-width:80px" *ngIf="field.field == 'approvedDate' && approver['actionId'] != 5" >
