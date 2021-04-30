@@ -522,12 +522,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 wf.publication = publication;
                 for (let pub of wf.publication) {
 
-                    this.actionService.GetPublicationModel(pub.aircraftManufacturer).subscribe(
-                        model => {
-                            pub["publicationModels"] = model;
-                        },
-                        error => this.errorMessage = <any>error
-                    );
+                    // this.actionService.GetPublicationModel(pub.aircraftManufacturer).subscribe(
+                    //     model => {
+                    //         pub["publicationModels"] = model;
+                    //     },
+                    //     error => this.errorMessage = <any>error
+                    // );
                     for (let dn of pub.workflowPublicationDashNumbers) {
                         dn.dashNumberId = dn.aircraftDashNumberId;
                     }

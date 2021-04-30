@@ -369,7 +369,8 @@
                     <!-- <th>Fixed Freight</th>
                     <th *ngIf="!isQuote">Fixed Amount</th> -->
                     <th rowspan="2" style="z-index:1">Memo</th>
-                    <th *ngIf="!isQuote || !isEdit" rowspan="2" style="z-index:1">Actions </th>
+                    <th *ngIf="!isEdit" rowspan="2" style="z-index:1">Actions </th>
+                    <!-- !isQuote ||  -->
                   </tr>
                   <tr>
                     <th style=" position: sticky;
@@ -458,8 +459,8 @@
                           (click)="onAddTextAreaInfo(f,i)"></i>
                       </div>
                     </td>
-                    <td *ngIf="!isQuote || !isEdit">
-                      <!-- [disabled]="!f.isShowDelete" -->
+                    <td *ngIf=" !isEdit">
+                      <!-- [disabled]="!f.isShowDelete !isQuote &&" -->
                       <button class="btn btn-danger nobg"  (click)="deleteRow(i)">
                         <i class="fa fa-trash"></i>
                       </button>

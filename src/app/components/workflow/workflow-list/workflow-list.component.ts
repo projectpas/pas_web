@@ -434,10 +434,10 @@ this.getAllPercentages();
                     ...sourceWF,
                     fixedAmount: sourceWF.fixedAmount ? formatNumberAsGlobalSettingsModule(sourceWF.fixedAmount, 2) : null,
                     costOfNew: sourceWF.costOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.costOfNew, 2) : null,
-                    percentageOfNew: sourceWF.percentageOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfNew, 2) : null,
+                    // percentageOfNew: sourceWF.percentageOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfNew, 2) : null,
                     percentOfNew: sourceWF.percentOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.percentOfNew, 2) : null,
                     costOfReplacement: sourceWF.costOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.costOfReplacement, 2) : null,
-                    percentageOfReplacement: sourceWF.percentageOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfReplacement, 2) : null,
+                    // percentageOfReplacement: sourceWF.percentageOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfReplacement, 2) : null,
                     percentOfReplacement: sourceWF.percentOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.percentOfReplacement, 2) : null,
                     otherCost: sourceWF.otherCost ? formatNumberAsGlobalSettingsModule(sourceWF.otherCost, 2) : null,
                     berThresholdAmount: sourceWF.berThresholdAmount ? formatNumberAsGlobalSettingsModule(sourceWF.berThresholdAmount, 2) : null,
@@ -447,9 +447,20 @@ this.getAllPercentages();
                 // this.sourceWorkFlow.changedPartNumber = part != undefined ? part.partNumber : '';
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate).toLocaleDateString();
                 this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate != null && this.sourceWorkFlow.workflowExpirationDate != '' ? new Date(this.sourceWorkFlow.workflowExpirationDate).toLocaleDateString() : '';
-          
-                this.calculatePercentOfNew(workflow[0].costOfNew, workflow[0].percentageOfNew);
-                this.calculatePercentOfReplacement(workflow[0].costOfReplacement, workflow[0].percentageOfReplacement);
+                this.totalPercent.forEach(element => {
+                    if(element.value ==this.sourceWorkFlow.percentageOfNew){
+                        this.sourceWorkFlow.percentageOfNew=Number(element.label);
+                       return ;
+                    }   
+                    if(element.value ==this.sourceWorkFlow.percentageOfReplacement){
+                        this.sourceWorkFlow.percentageOfReplacement=Number(element.label);
+                       return ;
+                    }   
+                });
+                this.sourceWorkFlow.percentageOfNew=this.sourceWorkFlow.percentageOfNew? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.percentageOfNew, 2) : null;
+                this.sourceWorkFlow.percentageOfReplacement=this.sourceWorkFlow.percentageOfReplacement? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.percentageOfReplacement, 2) : null,
+                this.calculatePercentOfNew(workflow[0].costOfNew, this.sourceWorkFlow.percentageOfNew);
+                this.calculatePercentOfReplacement(workflow[0].costOfReplacement, this.sourceWorkFlow.percentageOfReplacement);
             //   setTimeout(() => {
                 this.calculateTotalWorkFlowCost();
             //   }, 1000);
@@ -503,9 +514,9 @@ this.getAllPercentages();
             row.verifiedDate = '';
             row.attachmentURL = '';
         }
-    }
+    } 
 
-    private calculatePercentOfNew(myValue, percentValue) {
+    private calculatePercentOfNew(myValue, percentValue) { 
         this.sourceWorkFlow.percentOfNew = "";
         if (myValue && percentValue) {
             this.sourceWorkFlow.percentOfNew = formatNumberAsGlobalSettingsModule((myValue / 100) * percentValue, 2);

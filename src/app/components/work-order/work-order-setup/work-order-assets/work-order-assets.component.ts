@@ -65,7 +65,7 @@ export class WorkOrderAssetsComponent implements OnInit {
         { field: 'name', header: 'Tool Name' ,width:"130px"},
         { field: 'assetId', header: 'Tool Id',width:"130px" },
         { field: 'description', header: 'Tool Description',width:"130px" },
-        { field: 'assetClass', header: 'Tool Class' ,width:"130px"},
+        { field: 'assetTypeName', header: 'Tool Class' ,width:"130px"},
         { field: 'quantity', header: 'Qty',width:"60px" },
         { field: "createdDate", header: "Created Date", width: "130px" },
         { field: "createdBy", header: "CreatedBy", width: "130px" },
@@ -359,9 +359,8 @@ viewAsstesInventory(rowData){
         this.addNewEquipment = true;
     }
     edit(rowData) {
-        debugger;
         this.createNew();
-        this.cdRef.detectChanges();
+        // this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewEquipment = true;
         this.editData = rowData;
