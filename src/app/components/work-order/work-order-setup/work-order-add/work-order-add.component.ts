@@ -3274,6 +3274,7 @@ this.woPartId=rowData.id;
     taskComletedByConfirmation(ev){
 
     }
+
     transferWorkflow(){
         $('#workFlowTransfer').modal('hide');
         const newArray:any=[];
@@ -3287,13 +3288,15 @@ this.woPartId=rowData.id;
         } if(this.workflowTransfer.Charges){
             newArray.push('Charges')
         }
-    //    newArray.toString()
+        
         const data:any={};
-        data.list=newArray.toString()
-        data.workOrderId=this.workOrderId;
-        data.workflowId=this.workFlowId;
+        data.list = newArray.toString()
+        data.workOrderId = this.workOrderId;
+        data.workflowId = this.workFlowId;
+        data.masterCompanyId = this.currentUserMasterCompanyId;
+        data.workOrderPartNumberId = this.workOrderPartNumberId;
+        data.createdBy = this.userName;
 
-        console.log("workORderId")
         this.workOrderService.transferWorkflow(data).subscribe(res => {
             this.alertService.showMessage(
                 this.moduleName,
@@ -3301,6 +3304,5 @@ this.woPartId=rowData.id;
                 MessageSeverity.warn
             ); 
         });
-        
     }
 }   

@@ -359,7 +359,6 @@ viewAsstesInventory(rowData){
         this.addNewEquipment = true;
     }
     edit(rowData) {
-        debugger;
         this.createNew();
         this.cdRef.detectChanges();
         this.isEdit = true;
@@ -676,7 +675,6 @@ viewAsstesInventory(rowData){
     }
     equipmentArr: any = [];
     updateWorkOrderEquipmentList(data) {
-        debugger;
         this.equipmentArr = [];
         if (this.isSubWorkOrder) {
              const equipmentArr = data.equipments.map(x => {
