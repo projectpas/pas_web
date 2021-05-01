@@ -516,7 +516,7 @@ setTimeout(() => {
                     // x.technicianName='Suresh-33 Reddy';
                     this.getStockLineByItemMasterId(x.masterPartId, x.conditionId, index);
                     this.calculatePartTat(x);
-                    this.getPartPublicationByItemMasterId(x, x.masterPartId);
+                    this.getPartPublicationByItemMasterId(x, x.masterPartId,index);
                     this.getWorkFlowByPNandScope(null,x,'onload',index);
                     return {
                         ...x,
@@ -559,40 +559,7 @@ setTimeout(() => {
         }
 
 
-if(!this.isView){
-    setTimeout(() => {
-        this.workOrderGeneralInformation.partNumbers.map((x, index) => {
-            if(x.publicatonExpirationDate){ 
-                // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
-               if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
-                setTimeout(() => {
-                    x.cMMId=0;
-                    this.disableSaveForPart=false;
-                }, 2000);
-                // this.removePublication(x,index);
-               
-                // this.expriryarray.push(x);
-         
-                $('#warningForCmmPublication').modal('show');
-               }
-            }
-            if(x.workflowExpirationDate){ 
-                // console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
-               if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
-               
-                // this.removeWorkflow(x,index);
-                setTimeout(() => {
-                    x.workflowId=0;
-                    this.disableSaveForPart=false;
-                }, 2000);
-                $('#warningForCmmWorkflow').modal('show');
-                // this.expriryarray.push(x);
-        
-               }
-            }
-           }); 
-    }, 5000);
-}
+this.showWaringForPubWorkflow()
     }
     removePublication(currentRecord,index){
 setTimeout(() => {
@@ -607,7 +574,7 @@ setTimeout(() => {
         this.disableSaveForPart=false;
     }, 2000);
     }
-  
+
     getEmployeeData() {
         this.workOrderGeneralInformation.woEmployee = this.authService.currentEmployee.name;
     }
@@ -1167,7 +1134,7 @@ setTimeout(() => {
         if (!this.workOrderGeneralInformation.isSinglePN) {
         }
         const { itemMasterId } = object;
-        this.getPartPublicationByItemMasterId(currentRecord, itemMasterId);
+        this.getPartPublicationByItemMasterId(currentRecord, itemMasterId,index);
         // currentRecord.masterPartId=object.itemMasterId;
         // getWorkFlowByPNandScope(workOrderPartNumber);
         this.getWorkFlowByPNandScope(null,currentRecord,'onload',index);
@@ -1239,7 +1206,7 @@ setTimeout(() => {
         return this[variable + index]
     }
 
-    async getPartPublicationByItemMasterId(currentRecord, itemMasterId) {
+    async getPartPublicationByItemMasterId(currentRecord, itemMasterId,index) {
         this.isSpinnerVisible = true;
         await this.workOrderService.getPartPublicationByItemMaster(itemMasterId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
@@ -1251,6 +1218,12 @@ setTimeout(() => {
             });
             if (this.cmmList && this.cmmList.length > 0) {
                 currentRecord.cMMId = this.cmmList[0].value;
+                this.workOrderGeneralInformation.partNumbers[index].cMMId = this.cmmList[0].value;
+
+                // if(this.cmmList[0].publicatonExpirationDate){
+                // this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmList[0].publicatonExpirationDate;
+                // this.showWaringForPubWorkflow();
+                // }
             }
         },
             err => {
@@ -1328,9 +1301,18 @@ setTimeout(() => {
                     value: x.workFlowId
                 }
             })
-            workOrderPart.workflowId = this.workFlowList[0].value;
+            // workOrderPart.workflowId = this.workFlowList[0].value;
             this.workFlowId=this.workFlowList[0].value;
             this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
+
+            // if(this.cmmList[0].workflowExpirationDate){
+            //     this.workOrderGeneralInformation.partNumbers[index].workflowExpirationDate = this.cmmList[0].workflowExpirationDate;
+
+                 
+            //     this.showWaringForPubWorkflow();
+            //     }
+
+
          }else{
             this.workFlowList=[];
          }
@@ -2910,7 +2892,7 @@ setTimeout(() => {
                 this.handleError(err);
             })
     }
-
+ 
     customerResctrictions(customerId, warningMessage, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
         this.restrictMessage = '';
@@ -3303,4 +3285,40 @@ this.woPartId=rowData.id;
         });
         
     }
+    showWaringForPubWorkflow(){
+        if(!this.isView){
+            setTimeout(() => { 
+                this.workOrderGeneralInformation.partNumbers.map((x, index) => {
+                    if(x.publicatonExpirationDate){ 
+                        // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+                       if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                        setTimeout(() => {
+                            x.cMMId=0;
+                            this.disableSaveForPart=false;
+                        }, 2000);
+                        // this.removePublication(x,index);
+                       
+                        // this.expriryarray.push(x);
+                 
+                        $('#warningForCmmPublication').modal('show');
+                       }
+                    }
+                    if(x.workflowExpirationDate){ 
+                        // console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+                       if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                       
+                        // this.removeWorkflow(x,index);
+                        setTimeout(() => {
+                            x.workflowId=0;
+                            this.disableSaveForPart=false;
+                        }, 2000);
+                        $('#warningForCmmWorkflow').modal('show');
+                        // this.expriryarray.push(x);
+                
+                       }
+                    }
+                   }); 
+            }, 5000);
+        }
+      }
 }   

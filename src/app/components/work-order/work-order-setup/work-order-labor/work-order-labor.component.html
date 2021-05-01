@@ -435,7 +435,7 @@
                 </td>
                 <td  class="text-center">
                     <span *ngIf="!isView"><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
-                      (click)="showDeleteLabourPopup(task.description,rec, i)"><i class="fa fa-trash"></i></button> </span>
+                      (click)="showDeleteLabourPopup(task.description,rec, i)" [disabled]="laborForm.workFloworSpecificTaskorWorkOrder== 'workOrder'"><i class="fa fa-trash"></i></button> </span>
                      </td>
               </tr>
               <div class="modal fade" id="textarea-popup5" role="dialog" data-backdrop="static" data-keyboard="false">

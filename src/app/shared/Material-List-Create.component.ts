@@ -479,6 +479,14 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.isSpinnerVisible = false;
         });
       }else{
+        let exclusionsIds = [];
+        if ( this.workFlow.materialList &&  this.workFlow.materialList.length !=0) {
+            this.workFlow.materialList.forEach(acc => {
+                exclusionsIds.push(acc.itemMasterId);
+            })
+        }else{
+            exclusionsIds.push(0)
+        }
         this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0,this.currentUserMasterCompanyId).subscribe((res:any) => {
             this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
