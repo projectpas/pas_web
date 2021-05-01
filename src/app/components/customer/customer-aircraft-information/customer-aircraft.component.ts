@@ -72,9 +72,9 @@ export class CustomerAircraftComponent implements OnInit {
     ];
     colsaircraftLD = [
         { field: "aircraftType", header: "Aircraft" },
-        { field: "aircraftModel", header: "Model",width:"60px" },
+        { field: "aircraftModel", header: "Model",width:"70px" },
         { field: "dashNumber", header: "Dash Numbers" },
-        { field: "inventory", header: "Inventory" ,width:"70px"},        
+        { field: "inventory", header: "Inventory" ,width:"90px"},        
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },     
         { field: 'updatedDate', header: 'Updated Date' },
