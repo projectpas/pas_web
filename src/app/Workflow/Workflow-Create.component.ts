@@ -2442,13 +2442,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 this.sourceWorkFlow.customerId=null;
             }
             if(this.sourceWorkFlow.workflowExpirationDate){
-                //let d = new Date(this.sourceWorkFlow.workflowExpirationDate);
+                
                 this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate ? this.datePipe.transform(this.sourceWorkFlow.workflowExpirationDate, 'MMM-dd-yyyy') : null;
-                //this.sourceWorkFlow.workflowExpirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; ;
             }
             if(this.sourceWorkFlow.workflowCreateDate){
-                //let d = new Date(this.sourceWorkFlow.workflowCreateDate);
-                //this.sourceWorkFlow.workflowCreateDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
                 this.sourceWorkFlow.workflowCreateDate = this.sourceWorkFlow.workflowCreateDate ? this.datePipe.transform(this.sourceWorkFlow.workflowCreateDate, 'MMM-dd-yyyy') : null;
             }
 
