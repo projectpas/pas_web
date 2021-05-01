@@ -208,7 +208,6 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit {
 
     private onHistoryLoadSuccessful(auditHistory: any, content) {
 
-        // debugger;
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
 

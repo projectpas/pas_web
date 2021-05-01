@@ -675,7 +675,6 @@ viewAsstesInventory(rowData){
     }
     equipmentArr: any = [];
     updateWorkOrderEquipmentList(data) {
-        debugger;
         this.equipmentArr = [];
         if (this.isSubWorkOrder) {
              const equipmentArr = data.equipments.map(x => {
