@@ -2437,6 +2437,15 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             }else{
                 this.sourceWorkFlow.customerId=null;
             }
+            if(this.sourceWorkFlow.workflowExpirationDate){
+                let d=new Date(this.sourceWorkFlow.workflowExpirationDate);
+                this.sourceWorkFlow.workflowExpirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; ;
+            }
+            if(this.sourceWorkFlow.workflowCreateDate){
+                let d=new Date(this.sourceWorkFlow.workflowCreateDate);
+                this.sourceWorkFlow.workflowCreateDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+            }
+
             const workflowData={...this.sourceWorkFlow}
             delete    workflowData.customerName
             this.actionService.addWorkFlowHeader(workflowData).subscribe(result => {

@@ -459,7 +459,8 @@
                       </div>
                     </td>
                     <td *ngIf="!isQuote || !isEdit">
-                      <button class="btn btn-danger nobg" [disabled]="!f.isShowDelete" (click)="deleteRow(i)">
+                      <!-- [disabled]="!f.isShowDelete" -->
+                      <button class="btn btn-danger nobg"  (click)="deleteRow(i)">
                         <i class="fa fa-trash"></i>
                       </button>
                     </td>

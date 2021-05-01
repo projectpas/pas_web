@@ -2048,25 +2048,49 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 200, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.markupList = res;
-                this.markupList.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))
+                this.markupList.sort((n1,n2) => n1.label - n2.label);
             }
         },err => {
              this.errorHandling(err);
             })
+    }
+
+    billingChanged(matData, type) {
+        try {
+            if(matData.billingMethodId ==2)
+            {
+                //matData['billingMethodId']  = this.costPlusType;
+                matData['markupPercentageId'] = '';
+                matData['billingRate'] = 0;
+                matData['billingAmount'] = (matData.quantity * Number(matData.unitCost.toString().split(',').join(''))).toFixed(2);
+                // if(this.costPlusType == 3){
+                //     matData.billingAmount = 0.00;
+                //     this.materialFlatBillingAmount = 0.00;
+                // }
+                // if (Number(this.costPlusType) == 1) {
+                //     this.overAllMarkup = '';
+                // }
+            }
+         
+        }
+        catch (e) {
+        }
     }
     markupChanged(matData, type) {
         try {
             this.markupList.forEach((markup) => {
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
                     matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label))
-                    matData['billingRate'] = (Number(matData['unitCost']) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))).toFixed(2)
+
+              
+                    matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost']) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))), 2);
                     matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
                 }
                 else if (type == 'all' && markup.value == this.overAllMarkup) {
                     this.materialListQuotation.forEach((x) => {
                         x.forEach((mData) => {
                             mData.markupPercentageId = this.overAllMarkup;
-                            mData['billingRate'] = (Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))).toFixed(2)
+                            mData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))), 2);
                             mData['billingAmount'] = this.formateCurrency(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity));
                         })
                     })
