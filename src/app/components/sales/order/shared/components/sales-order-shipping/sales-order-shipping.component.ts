@@ -647,13 +647,24 @@ export class SalesOrderShippingComponent {
 
     disableCreateShippingBtn: boolean = true;
     checkIsChecked() {
+        //var keepGoing = true;
         this.shippingList.forEach(a => {
-            a.soshippingchildviewlist.forEach(ele => {
-                if (ele.selected)
-                    this.disableCreateShippingBtn = false;
-                else
-                    this.disableCreateShippingBtn = true;
-            });
+            if (a.soshippingchildviewlist.findIndex((item) => item.selected === true) >= 0) {
+                this.disableCreateShippingBtn = false;
+            }
+            else {
+                this.disableCreateShippingBtn = true;
+            }
+            // if (keepGoing) {
+            //     a.soshippingchildviewlist.forEach(ele => {
+            //         if (ele.selected) {
+            //             this.disableCreateShippingBtn = false;
+            //             keepGoing = false;
+            //         }
+            //         else
+            //             this.disableCreateShippingBtn = true;
+            //     });
+            // }
         });
     }
 
