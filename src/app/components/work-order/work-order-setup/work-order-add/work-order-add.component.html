@@ -73,7 +73,7 @@
                                         <div class="col-md-3"> 
                                             <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents : isEdit && !isRecCustomer}"
                                                 matTooltip="Single MPN">
-                                                <input type="radio" [value]=true name="type" #type="ngModel"
+                                                <input type="radio" [value]=true name="type" #type="ngModel" (click)="SingleMpnValid()"
                                                     class="radio_adjust"
                                                     [(ngModel)]="workOrderGeneralInformation.isSinglePN">
                                                 Single MPN
@@ -539,7 +539,7 @@
 
                                         <span [ngClass]="{pointerEvents : isView}">
                                             <input type="checkbox" name="tranferwflw{{i}}" #tranferwflw="ngModel"  (ngModelChange)="getValid()" 
-                                            class="form-control w60  mr10" [(ngModel)]="isworkflowTranfer" (click)="tranferCheckbox($event)" matTooltip="Transfer Workflow To Work Order"
+                                            class="form-control w60  mr10" [disabled]="workOrderPartNumber.isWorkflowTranfer" [(ngModel)]="isworkflowTranfer" (click)="tranferCheckbox($event,workOrderPartNumber)" matTooltip="Transfer Workflow To Work Order"
                                             matTooltipPosition="above"> 
                                         </span>
                                     </td> 
@@ -1197,24 +1197,24 @@
                 <!-- <p  class="mar_o warning_color"> Publication is expired </p> -->
 <div class="wo_canges">
     <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Material List"
-    [(ngModel)]="isTaskCompletedByOne"  (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
+    [(ngModel)]="workflowTransfer.Material" value="Material" (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
 </div>
 <div class="wo_canges">
     <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Target Labor Hours"
-    [(ngModel)]="isTaskCompletedByOne" (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
+    [(ngModel)]="workflowTransfer.Labor" value="Labor" (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
 </div>
 <div class="wo_canges">
     <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Tools"
-    [(ngModel)]="isTaskCompletedByOne"  (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
+    [(ngModel)]="workflowTransfer.Tools" value="Tools" (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
 </div>
       <div class="wo_canges">
         <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Misc Charges"
-        [(ngModel)]="isTaskCompletedByOne"(onChange)="taskComletedByConfirmation($event)"></p-checkbox>
+        [(ngModel)]="workflowTransfer.Charges" value="Charges" (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
       </div>
              </div>
             <div class="modal-footer footer-padding"> 
                 <button type="button" class="btn btn-primary" data-dismiss="modal"
-                (click)="transferWorkflow()">Save</button>
+                (click)="transferWorkflow()" [disabled]="!workflowTransfer.Material && !workflowTransfer.Labor && !workflowTransfer.Tools && !workflowTransfer.Charges">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal"
                    >Close</button>
               

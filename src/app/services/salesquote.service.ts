@@ -287,9 +287,9 @@ export class SalesQuoteService {
       this.salesQuoteEndPointSevice.closeSalesOrderQuoteEndPoint(salesQuoteId, updatedBy)
     );
   }
-  convertfromquote(salesQuoteConversionCriteria: SalesOrderConversionCritera): Observable<SalesOrderView[]> {
+  convertfromquote(salesQuoteConversionCriteria: SalesOrderConversionCritera, currentEmployeeId: number): Observable<SalesOrderView[]> {
     return Observable.forkJoin(
-      this.salesQuoteEndPointSevice.convertfromquoteEndPoint(salesQuoteConversionCriteria)
+      this.salesQuoteEndPointSevice.convertfromquoteEndPoint(salesQuoteConversionCriteria, currentEmployeeId)
     );
   }
 

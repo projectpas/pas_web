@@ -245,14 +245,18 @@
         [isQuote]="false">
       </app-sales-order-charges>
     </p-tabPanel>
+    <p-tabPanel header="Pick Ticket">
+      <app-sales-order-pick-tickets [isView]="true"></app-sales-order-pick-tickets>
+    </p-tabPanel>
     <p-tabPanel header="Shipping">
       <app-sales-order-shipping [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId"
-        [customerDetails]="customerDetails" [salesOrder]="salesOrder" [managementStructureId]="managementStructureId">
+        [customerDetails]="customerDetails" [salesOrder]="salesOrder" [isView]="true"
+        [managementStructureId]="managementStructureId">
       </app-sales-order-shipping>
     </p-tabPanel>
     <p-tabPanel header="Billing/Invoicing">
-      <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId" [customerDetails]="customerDetails"
-        [salesOrder]="salesOrder">
+      <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId"
+        [customerDetails]="customerDetails" [salesOrder]="salesOrder" [isView]="true">
       </app-sales-order-billing>
     </p-tabPanel>
     <p-tabPanel header="Document">
