@@ -1265,7 +1265,7 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Request Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
             }
             if (esdate < opendate) {
               this.isSpinnerVisible = false;
@@ -1274,7 +1274,7 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
             }
             if (pdate < opendate) {
               this.isSpinnerVisible = false;
@@ -1283,7 +1283,7 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
             }
           }
         }
