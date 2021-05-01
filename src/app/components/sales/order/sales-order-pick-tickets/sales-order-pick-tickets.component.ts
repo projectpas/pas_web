@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 declare var $: any;
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CurrencyService } from "../../../../services/currency.service";
@@ -56,7 +56,8 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   pickticketauditHistory: any[] = [];
   pickTicketItemInterfaceheader: any[];
   disableSubmitButton: boolean = true;
-
+  @Input() isView: boolean = false;
+  
   constructor(
     private salesOrderService: SalesOrderService,
     public employeeService: EmployeeService,

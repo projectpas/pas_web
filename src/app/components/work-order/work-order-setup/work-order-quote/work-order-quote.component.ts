@@ -2048,7 +2048,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.markupList = res;
-                this.markupList.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))
+                this.markupList.sort((n1,n2) => n1.label - n2.label);
             }
         },err => {
              this.errorHandling(err);

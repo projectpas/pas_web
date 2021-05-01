@@ -429,10 +429,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getPartnumbers(value) {
         this.isSpinnerVisible = true;
         let exclusionsIds = [];
-        if (this.isEdit) {
-  
-            exclusionsIds.push( this.editData?this.editData.itemMasterId:0);
-       
+        if (this.isEdit) {  
+            exclusionsIds.push( this.editData?this.editData.itemMasterId:0);       
         } 
       if(this.isWorkOrder || this.isSubWorkOrder){
         let partSearchParamters = {
@@ -456,7 +454,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             partSearchParamters.restrictDER=false
           }
           partSearchParamters.idlist=  exclusionsIds ? exclusionsIds : 0
-        this.workOrderService.searchPartNumberAdvanced(partSearchParamters).subscribe((res:any) => {
+            this.workOrderService.searchPartNumberAdvanced(partSearchParamters).subscribe((res:any) => {
             this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
             this.allPartnumbersInfo.forEach(element => {

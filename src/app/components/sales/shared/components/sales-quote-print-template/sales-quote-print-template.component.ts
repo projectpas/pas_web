@@ -14,6 +14,7 @@ export class SalesQuotePrintTemplateComponent implements OnInit {
   customerAddress: any = {};
   todayDate: Date = new Date();
   parts: any = [];
+  salesTax: number = 0;
   subtotal: number = 0;
   totalAmount: number = 0;
 
@@ -39,9 +40,12 @@ export class SalesQuotePrintTemplateComponent implements OnInit {
       if (this.parts.length > 0) {
         for (let i = 0; i < this.parts.length; i++) {
           this.subtotal = this.subtotal + this.parts[i].totalSales;
-          this.totalAmount = this.subtotal
+          this.totalAmount = this.subtotal;
         }
       }
+
+      this.salesTax = ((this.subtotal * this.salesQuote.taxRate) / 100);
+      this.totalAmount = this.subtotal + this.salesTax;
     })
   }
 }
