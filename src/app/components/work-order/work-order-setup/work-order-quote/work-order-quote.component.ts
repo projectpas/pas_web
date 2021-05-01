@@ -2045,7 +2045,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
         const strText = value ? value : '';
         // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
-        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 200, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.markupList = res;
                 this.markupList.sort((n1,n2) => n1.label - n2.label);
