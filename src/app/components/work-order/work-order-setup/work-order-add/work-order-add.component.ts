@@ -1597,7 +1597,7 @@ setTimeout(() => {
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Saved Sub Work Order MaterialList  Succesfully',
+                    'Saved Sub Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderIdForSubWO();
@@ -1628,7 +1628,7 @@ setTimeout(() => {
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Saved Work Order MaterialList  Succesfully',
+                    'Saved Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderId();
@@ -1662,7 +1662,7 @@ setTimeout(() => {
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Sub Work Order MaterialList  Succesfully',
+                    'Updated Sub Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderIdForSubWO();
@@ -1690,7 +1690,7 @@ setTimeout(() => {
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Work Order MaterialList  Succesfully',
+                    'Updated Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderId();
@@ -1715,7 +1715,7 @@ setTimeout(() => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
                 this.moduleName,
-                'Saved Work Order Labor  Succesfully',
+                'Saved Work Order Labor Succesfully',
                 MessageSeverity.success
             );
         },
@@ -1754,7 +1754,7 @@ setTimeout(() => {
                 this.workFlowObject.charges = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Saved Sub Work Order Charges  Succesfully',
+                    'Saved Sub Work Order Charges Succesfully',
                     MessageSeverity.success
                 );
                 this.getChargesListByWorkOrderId();
@@ -1814,7 +1814,7 @@ setTimeout(() => {
                 this.workFlowObject.charges = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Sub Work Order Charges  Succesfully',
+                    'Updated Sub Work Order Charges Succesfully',
                     MessageSeverity.success
                 );
                 this.getChargesListByWorkOrderId();
@@ -1840,7 +1840,7 @@ setTimeout(() => {
                 this.workFlowObject.charges = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Work Order Charges  Succesfully',
+                    'Updated Work Order Charges Succesfully',
                     MessageSeverity.success
                 );
                 this.getChargesListByWorkOrderId();
@@ -3301,7 +3301,7 @@ this.woPartId=rowData.id;
             this.alertService.showMessage(
                 this.moduleName,
                 'Transfered WorkflowData to Work Order',
-                MessageSeverity.warn
+                MessageSeverity.success
             ); 
         });
     }
