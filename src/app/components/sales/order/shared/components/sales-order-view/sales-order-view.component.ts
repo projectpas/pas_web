@@ -16,6 +16,9 @@ import { SalesOrderFreightComponent } from "../sales-order-freight/sales-order-f
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { SalesOrderDocumentComponent } from "../sales-document/sales-order-document.component";
 import { SalesOrderAnalysisComponent } from "../../../sales-order-analysis/sales-order-analysis.component";
+import { SalesOrderPickTicketsComponent } from "../../../sales-order-pick-tickets/sales-order-pick-tickets.component";
+import { SalesOrderBillingComponent } from "../sales-order-billing/sales-order-billing.component";
+import { SalesOrderShippingComponent } from "../sales-order-shipping/sales-order-shipping.component";
 
 @Component({
   selector: "app-sales-order-view",
@@ -29,6 +32,9 @@ export class SalesOrderViewComponent implements OnInit {
   @ViewChild(SalesOrderFreightComponent, { static: false }) public salesOrderFreightComponent: SalesOrderFreightComponent;
   @ViewChild(SalesOrderDocumentComponent, { static: false }) public salesOrderDocumentComponent: SalesOrderDocumentComponent;
   @ViewChild(SalesOrderAnalysisComponent, { static: false }) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
+  @ViewChild(SalesOrderPickTicketsComponent, { static: false }) public salesOrderPickTicketsComponent: SalesOrderPickTicketsComponent;
+  @ViewChild(SalesOrderBillingComponent, { static: false }) public salesOrderBillingComponent: SalesOrderBillingComponent;
+  @ViewChild(SalesOrderShippingComponent, { static: false }) public salesOrderShippingComponent: SalesOrderShippingComponent;
   @Input() salesOrderId: any;
   @Input() customerId;
   @Input() salesOrderView: any;
@@ -160,15 +166,29 @@ export class SalesOrderViewComponent implements OnInit {
       this.salesOrderCustomerApprovalComponent.refresh(this.marginSummary, this.salesOrderView.salesOrder.salesOrderId, this.salesOrderView.salesOrder.salesOrderQuoteId, true, this.customerContactList);
     }
     if (event.index == 4) {
-      this.salesOrderFreightComponent.refresh(true);
+      if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
+        this.salesOrderFreightComponent.refresh(false);
+      } else {
+        this.salesOrderFreightComponent.refresh(true);
+      }
     }
     if (event.index == 5) {
-      this.salesOrderChargesComponent.refresh(true);
+      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+        this.salesOrderChargesComponent.refresh(false);
+      } else {
+        this.salesOrderChargesComponent.refresh(true);
+      }
     }
     if (event.index == 6) {
-      this.salesOrderDocumentComponent.refresh();
+      this.salesOrderPickTicketsComponent.refresh(this.salesOrderView.salesOrder.salesOrderId);
     }
-    if (event.index == 9) {
+    if (event.index == 7) {
+      this.salesOrderShippingComponent.refresh(this.selectedParts);
+    }
+    if (event.index == 8) {
+      this.salesOrderBillingComponent.refresh(this.salesOrderView.salesOrder.salesOrderId); //(this.selectedParts);
+    }
+    if (event.index == 10) {
       this.salesOrderAnalysisComponent.refresh(this.salesOrderView.salesOrder.salesOrderId);
     }
   }

@@ -154,10 +154,15 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     getConditionsList() { 
         this.isSpinnerVisible = true;
         let consitionIds = [];
+        // console.log("this.edi",this.isEdit,this.UpdateMode)
         if (this.UpdateMode) {
-            consitionIds = this.workFlow.exclusions.reduce((acc, x) => {
-                return consitionIds.push(acc.conditionId);
-            }, 0)
+            // console.log("edit Data",this.workFlow.exclusions)
+            // consitionIds = this.workFlow.exclusions.reduce((acc, x) => {
+            //  consitionIds.push(this.editData? this.editData.conditionId:0);
+            // }, 0)
+            this.workFlow.exclusions.forEach(element => {
+                consitionIds.push(element.conditionId)
+            });
         }
         if(consitionIds && consitionIds.length ==0){
             consitionIds.push(0)

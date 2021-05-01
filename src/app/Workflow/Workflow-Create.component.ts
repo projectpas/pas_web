@@ -18,10 +18,13 @@ import { AuthService } from "../services/auth.service";
 import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { MenuItem } from 'primeng/api';
+import { DatePipe } from '@angular/common';
+
 @Component({
     selector: 'wf-create',
     templateUrl: './workflow-Create.component.html',
-    styleUrls: ['./workflow-Create.component.css']
+    styleUrls: ['./workflow-Create.component.css'],
+    providers: [DatePipe]
 })
 export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     @Input() isWorkOrder = false;
@@ -183,6 +186,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         private _workflowService: WorkFlowtService,
         private itemser: ItemMasterService,
         private alertService: AlertService,
+        private datePipe: DatePipe,
         private commonService: CommonService) {
     }
     public ngOnDestroy() {
@@ -522,12 +526,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 wf.publication = publication;
                 for (let pub of wf.publication) {
 
-                    this.actionService.GetPublicationModel(pub.aircraftManufacturer).subscribe(
-                        model => {
-                            pub["publicationModels"] = model;
-                        },
-                        error => this.errorMessage = <any>error
-                    );
+                    // this.actionService.GetPublicationModel(pub.aircraftManufacturer).subscribe(
+                    //     model => {
+                    //         pub["publicationModels"] = model;
+                    //     },
+                    //     error => this.errorMessage = <any>error
+                    // );
                     for (let dn of pub.workflowPublicationDashNumbers) {
                         dn.dashNumberId = dn.aircraftDashNumberId;
                     }
@@ -2438,12 +2442,11 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 this.sourceWorkFlow.customerId=null;
             }
             if(this.sourceWorkFlow.workflowExpirationDate){
-                let d=new Date(this.sourceWorkFlow.workflowExpirationDate);
-                this.sourceWorkFlow.workflowExpirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; ;
+                
+                this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate ? this.datePipe.transform(this.sourceWorkFlow.workflowExpirationDate, 'MMM-dd-yyyy') : null;
             }
             if(this.sourceWorkFlow.workflowCreateDate){
-                let d=new Date(this.sourceWorkFlow.workflowCreateDate);
-                this.sourceWorkFlow.workflowCreateDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+                this.sourceWorkFlow.workflowCreateDate = this.sourceWorkFlow.workflowCreateDate ? this.datePipe.transform(this.sourceWorkFlow.workflowCreateDate, 'MMM-dd-yyyy') : null;
             }
 
             const workflowData={...this.sourceWorkFlow}

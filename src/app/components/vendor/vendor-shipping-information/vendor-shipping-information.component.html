@@ -1421,11 +1421,13 @@
                                                     <th class="width-50"></th>
                                                     <th class="table-column-width" *ngFor="let col of columns"
                                                         [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
-                                                        <input class="table-header-input-width" pInputText type="text" *ngIf="col.field != 'expirationDate' && col.field != 'isPrimary' && col.field != 'startDate'"
+                                                        <input class="table-header-input-width" pInputText type="text" *ngIf="col.field != 'updatedDate' && col.field != 'createdDate' && col.field != 'expirationDate' && col.field != 'isPrimary' && col.field != 'startDate'"
                                                                (input)="interShipInfo.filter($event.target.value, col.field, 'contains')">
 
                                                         <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'startDate'" name="startDate" style="width:100%;" (change)="dateFilterForTable($event.target.value, col.field )">
                                                         <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'expirationDate'" name="expirationDate" style="width:100%;" (change)="dateFilterForTable($event.target.value, col.field )">
+                                                        <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate" style="width:100%;" (change)="dateFilterForTable($event.target.value, col.field )">
+                                                        <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width:100%;" (change)="dateFilterForTable($event.target.value, col.field )">
                                                     </th>
                                                     <th class="table-actions-column" style="width:150px !important"></th>
                                                 </tr>
@@ -1452,7 +1454,7 @@
                                                             }}
                                                         </ng-container>
                                                         <ng-container style="text-align: right !important;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
-                                                            {{col.field == 'amount' ? (rowData[col.field] | twoDecimalGlobalNumberFormatPipe):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+                                                            {{col.field == 'amount' ? (rowData[col.field] | twoDecimalGlobalNumberFormatPipe):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                                         </ng-container>
                                                        
                                                     </td>

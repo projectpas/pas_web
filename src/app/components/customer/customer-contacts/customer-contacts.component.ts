@@ -84,7 +84,7 @@ export class CustomerContactsComponent implements OnInit {
 		{ field: 'contactTitle', header: 'Contact Title' },
 		{ field: 'email', header: 'Email' },
 		{ field: 'workPhone', header: 'Work Phone',width:"100px" },
-		{ field: 'mobilePhone', header: 'Mobile Phone',width:"100px" },
+		{ field: 'mobilePhone', header: 'Mobile Phone',width:"110px" },
 		{ field: 'notes', header: 'Memo',width:"250px" },
 		{ field: 'fax', header: 'Fax' },
 		{ field: 'createdDate', header: 'Created Date' },

@@ -524,7 +524,7 @@
                                         </p-dropdown>
                                     </td>
                                     <td class="lign_flex">
-                                        <span class="inline-block">
+                                        <span class="inline-block"> 
                                             <p-dropdown filter="true" [options]="workFlowList" name="workFlow{{i}}"  [autoWidth]="false" [style]="pDropdownStyle"
                                                         #workFlow="ngModel" class="p-dropdown-custom-md1 p-dropdown-mh120"  (ngModelChange)="getValid()"
                                                         [(ngModel)]="workOrderPartNumber.workflowId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">

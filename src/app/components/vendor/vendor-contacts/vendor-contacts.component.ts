@@ -504,6 +504,10 @@ export class VendorContactsComponent implements OnInit {
         if(this.sourceVendor.isDefaultContact == true) {
             this.sourceVendor['tempIsDefaultContact'] = this.sourceVendor.isDefaultContact;
         }
+        this.sourceVendor.tempIsDefaultContact=this.sourceVendor.isActive==false?true:false;
+        
+       
+        
     }
 
     openView(content, row) {

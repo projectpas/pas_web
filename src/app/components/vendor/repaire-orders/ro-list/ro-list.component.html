@@ -254,17 +254,17 @@
 								   matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
 							</span>
 
-							<span *ngIf="rowData.statusId == 3 && isReceivingRolist == true" (click)="getSelectedRow(rowData)">
+							<span *ngIf="rowData.statusId == fulfillingStatusId && isReceivingRolist == true" (click)="getSelectedRow(rowData)">
 								<a data-toggle="tooltip" matTooltip="Receive RO" matTooltipPosition="above" class="btn nobg btn-users-cstm" data-original-title="" edit="">
 									<i class=" fa fa-chevron-down"></i>
 								</a>
 							</span>
-							<span *ngIf="rowData.statusId == 3 && isReceivingRolist == true" (click)="editStockLine(rowData)">
+							<span *ngIf="rowData.statusId == fulfillingStatusId && isReceivingRolist == true" (click)="editStockLine(rowData)">
 								<a class="btn nobg"  matTooltip="Edit Received Parts" matTooltipPosition="above">
 									<i class="fa fa-pencil"></i>
 								</a>
 							</span>
-							<span *ngIf="rowData.statusId == 4 && isReceivingRolist == true" (click)="viewSummary(rowData)">
+							<span *ngIf="rowData.statusId == closedStatusId && isReceivingRolist == true" (click)="viewSummary(rowData)">
 								<a data-toggle="tooltip" matTooltip="View Summary" matTooltipPosition="above"  class="btn nobg" data-original-title="" edit="">
 									<i class="fa fa-external-link"></i>
 								</a>

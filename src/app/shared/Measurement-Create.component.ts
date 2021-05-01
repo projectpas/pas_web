@@ -113,9 +113,12 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         let measurementIds = [];
         if (this.UpdateMode) {
-            measurementIds = this.workFlow.measurements.reduce((acc, x) => {
-                return measurementIds.push(acc.partId);
-            }, 0)
+            // measurementIds = this.workFlow.measurements.reduce((acc, x) => {
+            //     return measurementIds.push(acc.partId);
+            // }, 0)
+            this.workFlow.measurements.forEach(element => {
+                measurementIds.push(element.itemMasterId);
+            });
         }
         this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, measurementIds)
             .subscribe(res => {
