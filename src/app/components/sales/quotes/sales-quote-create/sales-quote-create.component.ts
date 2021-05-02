@@ -1827,6 +1827,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   saveSalesOrderChargesList(e) {
+    debugger;
     this.totalCharges = e;
     this.marginSummary.misc = this.totalCharges;
     this.salesQuoteService.setTotalCharges(e);

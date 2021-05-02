@@ -96,7 +96,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   enforceApproval: boolean=true;
   @ViewChild(ExchangeQuoteChargesComponent, { static: false }) public exchangeQuoteChargesComponent: ExchangeQuoteChargesComponent;
   @ViewChild(ExchangeQuoteFreightComponent, { static: false }) public exchangeQuoteFreightComponent: ExchangeQuoteFreightComponent;
+  moduleName: any = "ExchangeQuote";
   totalCharges = 0;
+  markupList = [];
+  percents: any[];
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -255,19 +258,21 @@ export class ExchangeQuoteCreateComponent implements OnInit {
 
   getInitialDataForExchangeQuote() {
     this.isSpinnerVisible = true;
-
+    let probabilityId = 0;
     let creditLimitTermsId = this.exchangeQuote.creditTermId ? this.exchangeQuote.creditTermId : 0;
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.exchangeQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.exchangeQuote.customerServiceRepId, this.exchangeQuote.salesPersonId),
       this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
       this.exchangequoteService.getAllExchangeQuoteSettings()).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
         this.setCSRAndSalesPersonOrAgentList(result[1]);
         this.setCreditTerms(result[2]);
-        this.setValidDays(result[3]);
+        this.setPercents(result[3]);
+        this.setValidDays(result[4]);
         this.getCustomerDetails();
         if (this.id) {
         } else {
@@ -322,6 +327,11 @@ export class ExchangeQuoteCreateComponent implements OnInit {
 
   setCreditTerms(creditTerms) {
     this.creditTerms = creditTerms;
+  }
+
+  setPercents(percents) {
+    this.percents = percents;
+    this.markupList = percents;
   }
 
   getCustomerDetails() {
@@ -803,6 +813,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   }
 
   saveExchangeQuoteChargesList(e) {
+    debugger;
     this.totalCharges = e;
     this.marginSummary.otherCharges = this.totalCharges;
     this.exchangequoteService.setTotalCharges(e);
