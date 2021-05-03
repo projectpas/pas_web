@@ -988,7 +988,7 @@ setTimeout(() => {
                     workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
                     cMMId:x.cMMId==0 ? null :x.cMMId,
                     masterCompanyId : this.currentUserMasterCompanyId,
-                    workflowId: this.workOrderGeneralInformation.workflowId == 0 ? null : this.workOrderGeneralInformation.workflowId,
+                    workflowId: x.workflowId == 0 ? null : x.workflowId,
                     revisedPartId: this.workOrderGeneralInformation.revisedPartId ? this.workOrderGeneralInformation.revisedPartId : null,
                 }
             })
