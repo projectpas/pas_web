@@ -316,7 +316,7 @@ export class ReceivingRoComponent implements OnInit {
             this.arrayPostatuslist.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('ROStatus', 'ROStatusId', 'Description', '',
-            true, 0, this.arrayPostatuslist.join(), this.currentUserMasterCompanyId)
+            true, 0, this.arrayPostatuslist.join(), 0)
             .subscribe(res => {
                 this.roStatus = res;
                 this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
