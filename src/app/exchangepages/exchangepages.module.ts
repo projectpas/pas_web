@@ -43,6 +43,7 @@ import { ExchangePartDetailsComponent } from "../components/exchange-quote/share
 import { ExchangePartNumberFilterComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-part-number-filter/exchange-part-number-filter.component";
 import { ExchangeMerginComponent } from "../components/exchange-quote/shared/components/exchange-mergin/exchange-mergin.component";
 import { CommonModulesModule } from "../common-modules/common-modules.module";
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 import { ExchangeQuoteApprovalRuleComponent } from "../components/exchange-quote/shared/components/exchange-quote-approval-rule/exchange-quote-approval-rule.component";
 import { ExchangeQuoteApproveComponent } from "../components/exchange-quote/shared/components/exchange-quote-approve/exchange-quote-approve.component";
 import { ExchangeQuoteCustomerApprovalComponent } from "../components/exchange-quote/shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
@@ -87,6 +88,7 @@ import { ExchangeQuoteFreightComponent } from "../components/exchange-quote/shar
     EditorModule,
     SplitButtonModule,
     CommonModulesModule,
+    CommonDocumentsModule
   ],
   declarations: [
     ExchangepagesComponent,
