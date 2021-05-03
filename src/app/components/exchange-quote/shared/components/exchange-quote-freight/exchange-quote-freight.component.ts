@@ -354,14 +354,14 @@ export class ExchangeQuoteFreightComponent implements OnInit {
   }
 
   freightAudiHistory: any = [];
-  // openInterShipViaHistory(content, rowData) {
-  //   if (rowData && rowData.salesOrderQuoteFreightId) {
-  //     this.salesOrderQuoteService.getSOQFreightsHistory(rowData.salesOrderQuoteFreightId).subscribe(
-  //       results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content), error => {
-  //         this.isSpinnerVisible = false;
-  //       });
-  //   }
-  // }
+  openInterShipViaHistory(content, rowData) {
+    if (rowData && rowData.exchangeQuoteFreightId) {
+      this.exchangequoteService.getExchangeQuoteFreightsHistory(rowData.exchangeQuoteFreightId).subscribe(
+        results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content), error => {
+          this.isSpinnerVisible = false;
+        });
+    }
+  }
 
   private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
     this.alertService.stopLoadingMessage();
@@ -412,101 +412,212 @@ export class ExchangeQuoteFreightComponent implements OnInit {
 
   storedData: any = [];
   deletedrowIndex: any;
+  restore(content, rowData, index) {
+    this.restorerecord = rowData;
+    this.deletedrowIndex = index;
+    this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+  }
+
+  restoreRecord() {
+    if (this.restorerecord && this.restorerecord.exchangeQuoteFreightId > 0) {
+      this.commonService.updatedeletedrecords('ExchangeQuoteFreight', 'ExchangeQuoteFreightId', this.restorerecord.exchangeQuoteFreightId,).subscribe(res => {
+        this.refreshFreightsOnSaveOrDelete();
+        this.modal.close();
+        this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+      }, err => {
+      });
+    }
+    else {
+      this.restorerecord.isDeleted = false;
+      this.exchangeQuoteFreightList.splice(this.deletedrowIndex, 1);
+      this.storedData.forEach(element => {
+        if (
+          JSON.stringify(element) === JSON.stringify(this.restorerecord)
+        ) {
+          element.isDeleted = false;
+        }
+      });
+      this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+      this.modal.close();
+    }
+  }
+
+  delete() {
+    this.isSpinnerVisible = true;
+    this.deleteModal.close();
+    if (!this.selectedRowForDelete.exchangeQuoteFreightId) {
+      this.selectedRowForDelete.isDeleted = true;
+      this.isSpinnerVisible = false;
+      if (this.storedData && this.storedData.length != 0) {
+        this.storedData.forEach(element => {
+          if (
+            JSON.stringify(element) === JSON.stringify(this.selectedRowForDelete)
+          ) {
+            element.isDeleted = true;
+            this.exchangeQuoteFreightList.splice(this.selectedRowIndexForDelete, 1);
+          }
+        });
+      }
+      else {
+        this.exchangeQuoteFreightList.splice(this.selectedRowIndexForDelete, 1);
+      }
+      this.storedData = [...this.storedData];
+      this.alertService.showMessage(
+        '',
+        'Deleted Exchange Quote Freight Successfully',
+        MessageSeverity.success
+      );
+    } else {
+      let exchangeQuoteFreightId = this.selectedRowForDelete.exchangeQuoteFreightId;
+      this.exchangequoteService.deleteexchangeQuoteFreightList(exchangeQuoteFreightId, this.userName).subscribe(res => {
+        this.isSpinnerVisible = false;
+        this.alertService.showMessage(
+          '',
+          'Deleted Exchange Quote Freight Successfully',
+          MessageSeverity.success
+        );
+        this.refreshFreightsOnSaveOrDelete(true);
+      }, error => {
+        this.isSpinnerVisible = false;
+      })
+    }
+    $('#addNewFreight').modal('hide');
+    this.isEdit = false;
+    this.isSaveChargesDesabled = false;
+  }
+
+  getDeleteListByStatus(value) {
+    this.deletedStatusInfo = value ? value : false;
+    this.refreshFreightsOnSaveOrDelete();
+  }
 
   setFreightsData(res) {
     if (res && res.length > 0) {
-        this.exchangeQuoteFreightList = res;
-        this.costPlusType = res[0].headerMarkupId;
-        this.overAllMarkup = res[0].headerMarkupPercentageId;
-        if (Number(this.costPlusType) == 3) {
-            this.freightFlatBillingAmount = res[0].markupFixedPrice;
-        }
-        this.isUpdate = true;
+      this.exchangeQuoteFreightList = res;
+      this.costPlusType = res[0].headerMarkupId;
+      this.overAllMarkup = res[0].headerMarkupPercentageId;
+      if (Number(this.costPlusType) == 3) {
+        this.freightFlatBillingAmount = res[0].markupFixedPrice;
+      }
+      this.isUpdate = true;
     } else {
-        this.exchangeQuoteFreightList = [];
-        this.isUpdate = false;
+      this.exchangeQuoteFreightList = [];
+      this.isUpdate = false;
     }
     this.freightForm = [];
-    this.exchangeQuoteFreightList = [];
+    this.exchangeQuoteFreightLists = [];
   }
 
   refreshFreightsOnSaveOrDelete(fromDelete = false) {
     this.isSpinnerVisible = true;
     this.exchangeQuoteFreightList = [];
     this.exchangequoteService.getExchangeQuoteFreights(this.exchangeQuoteId, this.deletedStatusInfo).subscribe(res => {
-        this.isSpinnerVisible = false;
-        //Handeling offline Records also
-        if (this.storedData && this.storedData.length != 0) {
-            if (this.deletedStatusInfo == true) {
-                this.deletedStatusInfo = true;
-                this.storedData.forEach(element => {
-                    if (element.isDeleted == true && element.exchangeQuoteFreightId == 0) {
-                        res.push(element);
-                    }
-                });
-            } else {
-                this.deletedStatusInfo = false;
-                this.storedData.forEach(element => {
-                    if (element.isDeleted == false && element.exchangeQuoteFreightId == 0) {
-                        res.push(element)
-                    }
-                });
+      this.isSpinnerVisible = false;
+      //Handeling offline Records also
+      if (this.storedData && this.storedData.length != 0) {
+        if (this.deletedStatusInfo == true) {
+          this.deletedStatusInfo = true;
+          this.storedData.forEach(element => {
+            if (element.isDeleted == true && element.exchangeQuoteFreightId == 0) {
+              res.push(element);
             }
-            this.setFreightsData(res);
+          });
         } else {
-            this.setFreightsData(res);
+          this.deletedStatusInfo = false;
+          this.storedData.forEach(element => {
+            if (element.isDeleted == false && element.exchangeQuoteFreightId == 0) {
+              res.push(element)
+            }
+          });
         }
+        this.setFreightsData(res);
+      } else {
+        this.setFreightsData(res);
+      }
 
-        if (fromDelete) {
-            this.getTotalBillingAmount();
-            this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
-        }
+      if (fromDelete) {
+        this.getTotalBillingAmount();
+        this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
+      }
     }, error => {
-        this.isSpinnerVisible = false;
+      this.isSpinnerVisible = false;
     })
   }
 
   saveFreightList() {
     this.freightForm = this.freightForm.map(x => {
-        return {
-            ...x,
-            uom: x.uomId ? getValueFromArrayOfObjectById('label', 'value', x.uomId, this.unitOfMeasureList) : '',
-            dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
-            currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
-            billingAmount: this.formateCurrency(x.amount),
-            masterCompanyId: this.currentUserMasterCompanyId
-        }
+      return {
+        ...x,
+        uom: x.uomId ? getValueFromArrayOfObjectById('label', 'value', x.uomId, this.unitOfMeasureList) : '',
+        dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
+        currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
+        billingAmount: this.formateCurrency(x.amount),
+        masterCompanyId: this.currentUserMasterCompanyId
+      }
     });
     if (this.isEdit) {
-        if (this.costPlusType == 1) {
-            this.markupChanged(this.freightForm[0], 'row');
-        }
-        this.exchangeQuoteFreightList[this.mainEditingIndex] = this.freightForm[0];
-        $('#addNewFreight').modal('hide');
-        this.isEdit = false;
+      if (this.costPlusType == 1) {
+        this.markupChanged(this.freightForm[0], 'row');
+      }
+      this.exchangeQuoteFreightList[this.mainEditingIndex] = this.freightForm[0];
+      $('#addNewFreight').modal('hide');
+      this.isEdit = false;
     }
     else {
-        let temp = [];
-        this.exchangeQuoteFreightList.forEach((x) => {
-            if (typeof x[Symbol.iterator] === 'function')
-                temp = [...temp, ...x];
-            else
-                temp = [...temp, x];
-        })
-        temp = [...temp, ...this.freightForm];
-        this.exchangeQuoteFreightLists = temp;
-        this.exchangeQuoteFreightList = [];
-        for (let x in this.exchangeQuoteFreightLists) {
-            this.exchangeQuoteFreightList.push(this.exchangeQuoteFreightLists[x]);
-        }
-        if (this.costPlusType == 1) {
-            this.markupChanged({}, 'all');
-        }
-        $('#addNewFreight').modal('hide');
+      let temp = [];
+      this.exchangeQuoteFreightList.forEach((x) => {
+        if (typeof x[Symbol.iterator] === 'function')
+          temp = [...temp, ...x];
+        else
+          temp = [...temp, x];
+      })
+      temp = [...temp, ...this.freightForm];
+      this.exchangeQuoteFreightLists = temp;
+      this.exchangeQuoteFreightList = [];
+      for (let x in this.exchangeQuoteFreightLists) {
+        this.exchangeQuoteFreightList.push(this.exchangeQuoteFreightLists[x]);
+      }
+      if (this.costPlusType == 1) {
+        this.markupChanged({}, 'all');
+      }
+      $('#addNewFreight').modal('hide');
     }
     this.isEnableUpdateButton = true;
     this.isSaveChargesDesabled = false;
     this.storedData = [...this.exchangeQuoteFreightList];
+  }
+
+  openFreight(content) {
+    this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
+  }
+
+  IsAddShipVia1: boolean = false;
+  ShipViaEditID: number;
+  shipviaindex;
+  isEditModeShipVia: boolean = false;
+  onEditShipVia(value, id, index) {
+    this.shipviaindex = index;
+    if (value == 'Add') {
+      this.ShipViaEditID = 0;
+    }
+    else {
+      this.ShipViaEditID = id;
+      this.isEditModeShipVia = true;
+    }
+    this.IsAddShipVia1 = true;
+  }
+
+  RefreshAfterAddShipVia(ShippingViaId) {
+    if (ShippingViaId != undefined || ShippingViaId > 0) {
+      this.commonService.getShipVia(this.currentUserMasterCompanyId).subscribe(response => {
+        this.isSpinnerVisible = false;
+        this.setShipViaList(response);
+        this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
+        this.isEnableUpdateButton = false;
+      }, error => this.isSpinnerVisible = false);
+    }
+    this.IsAddShipVia1 = false;
+    $('#AddShipVia').modal('hide');
   }
 
 }
