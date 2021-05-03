@@ -264,7 +264,30 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
         this.dismissModel();
     }
 
-    setIsUpdate(value,index){
+    setIsUpdate(value,index,currentRecord){
+        // console.log("this.workFlow.materialList",this.workFlow.expertise)
+        // console.log("evvvv",value)
+        // console.log("this.workFlow",this.workFlow)
+        // anyMeasurement=undefined;
+        // var anyMeasurement = this.workFlow.expertise.filter(expertise =>
+        //     expertise.taskId == this.workFlow.taskId && expertise.expertiseTypeId == value);
+
+// debugger;
+            var anyMeasurement = this.workFlow.expertise.find(x => x.expertiseTypeId !="" && x.expertiseTypeId == value && x.taskId == this.workFlow.taskId);
+
+// console.log("measurement",anyMeasurement)
+//         if ( anyMeasurement!= undefined) {
+//             currentRecord.expetiseTypeName="";
+//             currentRecord.expertiseTypeId = "";
+//             currentRecord.estimatedHours = "";
+//              currentRecord.laborDirectRate="";
+//              currentRecord.overheadBurden="";
+//              currentRecord.overheadCost="";
+//              currentRecord.laborOverheadCost="";
+//              currentRecord.memo="";
+//             this.alertService.showMessage("Workflow", "Expertise Type in Expertise is already in use", MessageSeverity.error);
+//             return;
+//         }
 if(value){
         this.wflwService.getemployeeExpertiseById(value).subscribe(res => {
      if(res){

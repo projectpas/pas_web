@@ -394,7 +394,7 @@
                             <tbody>
                                 <tr class="mpn-row" style="display: table-row;"
                                     *ngFor="let workOrderPartNumber of workOrderGeneralInformation.partNumbers; let i=index;">
-                                    <td>
+                                    <td> 
                                         <!-- getWorkFlowByPNandScope(workOrderPartNumber); -->
                                          <p-autoComplete field="partNumber"
                                                         [(ngModel)]="workOrderPartNumber.masterPartId" name="mpn{{i}}" 
@@ -519,13 +519,13 @@
                                      </td>
                                      <td>
                                         <p-dropdown filter="true" class="min_selct_height" name="cmm{{i}}" #cmm="ngModel"  (ngModelChange)="getValid()"  [autoWidth]="false" [style]="pDropdownStyle"
-                                                    [options]="cmmList" class="p-dropdown-custom-md1 p-dropdown-mh120"
+                                                    [options]="getDynamicVariableData('cmmPublicationList',i)"  class="p-dropdown-custom-md1 p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.cMMId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td class="lign_flex">
                                         <span class="inline-block"> 
-                                            <p-dropdown filter="true" [options]="workFlowList" name="workFlow{{i}}"  [autoWidth]="false" [style]="pDropdownStyle"
+                                            <p-dropdown filter="true" [options]="getDynamicVariableData('dynamicWorkflowList',i)" name="workFlow{{i}}"  [autoWidth]="false" [style]="pDropdownStyle"
                                                         #workFlow="ngModel" class="p-dropdown-custom-md1 p-dropdown-mh120"  (ngModelChange)="getValid()"
                                                         [(ngModel)]="workOrderPartNumber.workflowId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                             </p-dropdown>
@@ -539,7 +539,7 @@
 
                                         <span [ngClass]="{pointerEvents : isView}">
                                             <input type="checkbox" name="tranferwflw{{i}}" #tranferwflw="ngModel"  (ngModelChange)="getValid()" 
-                                            class="form-control w60  mr10" [disabled]="workOrderPartNumber.isWorkflowTranfer" [(ngModel)]="isworkflowTranfer" (change)="tranferCheckbox($event,workOrderPartNumber)" matTooltip="Transfer Workflow To Work Order"
+                                            class="form-control w60  mr10" [disabled]="workOrderPartNumber.isWorkflowTranfer" [(ngModel)]="workOrderPartNumber.isWorkflowTranfer" (change)="tranferCheckbox($event,workOrderPartNumber)" matTooltip="Transfer Workflow To Work Order"
                                             matTooltipPosition="above"> 
                                         </span>
                                     </td> 

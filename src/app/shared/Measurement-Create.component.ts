@@ -83,14 +83,25 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
 		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
     onPartSelect(event, measurement) {
-        var anyMeasurement = this.workFlow.measurements.filter(measurement =>
-            measurement.taskId == this.workFlow.taskId && measurement.partDescription == event);
+        // var anyMeasurement = this.workFlow.measurements.filter(measurement =>
+        //     measurement.taskId == this.workFlow.taskId && measurement.itemMasterId == event.partId);
 
-        if (anyMeasurement.length > 1) {
-  
+
+            var anyMeasurement = this.workFlow.measurements.find(x => x.itemMasterId == event.partId && x.taskId == this.workFlow.taskId);
+
+
+
+        if ( anyMeasurement != undefined) {
+  measurement.partName="";
             measurement.partNumber = "";
             measurement.partDescription = "";
             event = "";
+             measurement.min="";
+             measurement.max="";
+             measurement.sequence="";
+             measurement.diagramURL="";
+             measurement.expected="";
+             measurement.memo="";
             this.alertService.showMessage("Workflow", "PN in measurement is already in use", MessageSeverity.error);
             return;
         }
@@ -240,5 +251,14 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             this.workFlow.measurements[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
     }
 }

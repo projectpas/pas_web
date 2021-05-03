@@ -1210,15 +1210,18 @@ setTimeout(() => {
         this.isSpinnerVisible = true;
         await this.workOrderService.getPartPublicationByItemMaster(itemMasterId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
+            this.cmmList=[];
             this.cmmList = res.map(x => {
                 return {
                     value: x.publicationRecordId,
                     label: x.publicationId
                 }
             });
-            if (this.cmmList && this.cmmList.length > 0) {
-                currentRecord.cMMId = this.cmmList[0].value;
-                this.workOrderGeneralInformation.partNumbers[index].cMMId = this.cmmList[0].value;
+            this['cmmPublicationList'+index]=this.cmmList;
+            console.log("disnamicCm",this['dynamicWorkflowList'+index])
+            if (this.cmmList &&  this['cmmPublicationList' + index].length > 0) {
+                currentRecord.cMMId =  this['cmmPublicationList' + index][0].value;
+                this.workOrderGeneralInformation.partNumbers[index].cMMId =  this['cmmPublicationList' + index][0].value;
 
                 // if(this.cmmList[0].publicatonExpirationDate){
                 // this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmList[0].publicatonExpirationDate;
@@ -1301,9 +1304,14 @@ setTimeout(() => {
                     value: x.workFlowId
                 }
             })
+            this['dynamicWorkflowList' + index]=this.workFlowList;
+            console.log("disnamicCm",this['dynamicWorkflowList' + index])
+            if(this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length!=0){
+                this.workFlowId=this.workFlowList[0].value;
+                this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
+            }
             // workOrderPart.workflowId = this.workFlowList[0].value;
-            this.workFlowId=this.workFlowList[0].value;
-            this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
+        
 
             // if(this.cmmList[0].workflowExpirationDate){
             //     this.workOrderGeneralInformation.partNumbers[index].workflowExpirationDate = this.cmmList[0].workflowExpirationDate;

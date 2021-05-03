@@ -29,13 +29,13 @@
       </td>
       <td class="td-width-280">
         <div class="form-group notes-popup-cstm mat_emo memo-pencil-div">
-          <div [innerHTML]="direction.memo" class="text_editor_box td-width-280"></div>
+          <div [innerHTML]="direction.memo" class="text_editor_box td-width-280" matTooltipPosition="above" [matTooltip]="parsedText(direction.memo)"></div>
           <i class=" fa fa-pencil memo-pencil" data-toggle="modal"
           
             data-target="#textarea-popupMemo" matTooltip="Memo" matTooltipPosition="above"
             (click)="onAddTextAreaInfo(direction,i)"></i>
         </div>
-      </td>
+      </td> 
       <td class="text-center">
         <button class="btn btn-danger nobg" (click)="openDelete(content,direction,i)">
           <i class="fa fa-trash"></i>

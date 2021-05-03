@@ -21,6 +21,7 @@ import { DialogModule } from 'primeng/dialog'; //Prime Ng Dailog
 import { StepsModule } from "primeng/steps";
 import { TreeModule } from 'primeng/tree';
 import { TreeTableModule } from 'primeng/treetable';
+import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
 
 import {EditorModule} from 'primeng/editor';
 
@@ -64,7 +65,8 @@ import { KeyFilterModule } from "primeng/keyfilter";
 		AuditModule,
 		DropdownModule,
 		KeyFilterModule,
-		EditorModule
+		EditorModule,
+		CommonDocumentsModule,
 
 
 	],
