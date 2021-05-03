@@ -675,7 +675,6 @@ viewAsstesInventory(rowData){
     }
     equipmentArr: any = [];
     updateWorkOrderEquipmentList(data) {
-        debugger;
         this.equipmentArr = [];
         if (this.isSubWorkOrder) {
              const equipmentArr = data.equipments.map(x => {
@@ -736,5 +735,13 @@ viewAsstesInventory(rowData){
                     this.isSpinnerVisible = false;
                 })
         }
+    }
+    allowNumberOnly(evt) {
+  
+        // Only ASCII charactar in that range allowed
+        var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+        if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+            return false;
+        return true;
     }
 }

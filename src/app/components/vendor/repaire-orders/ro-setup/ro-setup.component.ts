@@ -378,6 +378,8 @@ export class RoSetupComponent implements OnInit {
 	modal: NgbModalRef;
 	alertText:string
 	salesOrderId:number;
+	msgflag: number = 0;
+
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		private modalService: NgbModal,
@@ -1395,24 +1397,16 @@ export class RoSetupComponent implements OnInit {
 	
 	}
 
-	onWOSelect(id,partList,index)
-	{		
+	onWOSelect(id,partList,index){		
 		this.arrayWOlist.push(id);		
 		this.GetSubWolist(id,partList,index);		
 	}
 
-	onSubWOSelect(id)
-	{
+	onSubWOSelect(id){
 		this.arraysubWOlist.push(id);
-	}	
+	}
 
-	// onROSelect(id)
-	// {
-	// 	this.arrayROlist.push(id);
-	// }
-
-	onSOSelect(id)
-	{
+	onSOSelect(id){
 		this.arraySOlist.push(id);
 	}
 	
@@ -1773,7 +1767,7 @@ export class RoSetupComponent implements OnInit {
 						}
 					});
 					this.allsubWorkOrderInfo = [
-						{ value: 0, label: 'Select' }
+						{ value: 0, label: '-- Select --' }
 					];
 					parentdata.subWorkOrderlist = [...this.allsubWorkOrderInfo, ...data];					
 					parentdata.subWorkOrderId = getObjectByValue('value',parentdata.subWorkOrderId  == null ? 0 : parentdata.subWorkOrderId, parentdata.subWorkOrderlist);
@@ -2414,7 +2408,7 @@ export class RoSetupComponent implements OnInit {
 				}
 			});
 			this.allWorkOrderInfo = [
-				{value: 0, label: 'Select'}
+				{value: 0, label: '-- Select --'}
 			];
 			this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...data];
 			this.allWorkOrderDetails = [...this.allWorkOrderInfo, ...data];
@@ -2438,7 +2432,7 @@ export class RoSetupComponent implements OnInit {
 				}
 			});
 			this.allsubWorkOrderInfo = [
-				{ value: 0, label: 'Select' }
+				{ value: 0, label: '-- Select --' }
 			];
 			//this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
 			this.allsubWorkOrderDetails = [...this.allsubWorkOrderInfo, ...data];
@@ -2464,7 +2458,7 @@ export class RoSetupComponent implements OnInit {
 				}
 			});
 			this.allSalesOrderInfo = [
-				{value: 0, label: 'Select'}
+				{value: 0, label: '-- Select --'}
 			];
 			this.allSalesOrderInfo = [...this.allSalesOrderInfo, ...data];
 			this.allSalesOrderDetails = [...this.allSalesOrderInfo, ...data];
@@ -2634,7 +2628,31 @@ export class RoSetupComponent implements OnInit {
 				this.alertText = "Part No: "+ this.getPartnumber(this.partListData[i].itemMasterId) + '<br/>' +"Please Enter Qty";
 				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
 				return;
-		    }
+			}
+			if(this.partListData[i].workOrderId) {
+				if(this.partListData[i].workOrderId.value != 0) {					
+					if (this.partListData[i].salesOrderId) {
+						if (this.partListData[i].salesOrderId.value != 0) {
+							this.isSpinnerVisible = false;
+							errmessage = errmessage + '<br />' + "Work Order already selected please unselect Sales Order."
+							this.msgflag = 1;
+						}
+					}				
+				}
+			}
+			if(this.msgflag == 0) {
+				if(this.partListData[i].salesOrderId) {
+					if(this.partListData[i].salesOrderId.value != 0) {
+						if(this.partListData[i].workOrderId) {
+							if (this.partListData[i].workOrderId.value != 0) {
+								this.isSpinnerVisible = false;
+								errmessage = errmessage + '<br />' +"Sales Order already selected please unselect Work Order."					
+							}
+						}										
+			 		}						    
+				}
+			 }			
+
 			if(this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
 				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
@@ -2885,12 +2903,11 @@ export class RoSetupComponent implements OnInit {
 					repairOrderPartRecordId: this.partListData[i].repairOrderPartRecordId ? this.partListData[i].repairOrderPartRecordId : 0
 				})
 			}
-		}	
-		
+		}
 		
 		this.repairOrderService.saveRepairOrderParts(this.parentObjectArray).subscribe(res => {
 			if(res) {				
-					this.BindAllParts(res);
+				this.BindAllParts(res);
 			}
 			this.isSpinnerVisible = false;
 			this.enablePartSaveBtn = false;
@@ -3100,6 +3117,7 @@ export class RoSetupComponent implements OnInit {
             err => {
                 this.isSpinnerVisible = false;	}); 
 	}
+
 	loadROApproverStatus() {
 		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(response => {
 			 this.roApproverStatusList = response;			
@@ -3516,7 +3534,7 @@ export class RoSetupComponent implements OnInit {
 				}
 			});
 			this.allPercentData = [
-				{percentId: 0, percentValue: 'Select'}
+				{percentId: 0, percentValue: '-- Select --'}
 			];
 			this.allPercentData = [...this.allPercentData, ...data];
 		},err => {
@@ -4368,7 +4386,7 @@ export class RoSetupComponent implements OnInit {
 		
         this.repairOrderService.saveRepairOrderApproval(data).subscribe(res => {
 			if(res) {
-				this.getApprovalProcessListById(this.roId);
+						this.getApprovalProcessListById(this.roId);
 						this.headerInfo.statusId = res.response;
 						//this.getVendorPOHeaderById(this.roId);
 						this.enableHeaderSaveBtn = false;

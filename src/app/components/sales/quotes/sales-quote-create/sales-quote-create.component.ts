@@ -1265,7 +1265,7 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Request Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
             }
             if (esdate < opendate) {
               this.isSpinnerVisible = false;
@@ -1274,7 +1274,7 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
             }
             if (pdate < opendate) {
               this.isSpinnerVisible = false;
@@ -1283,7 +1283,7 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
             }
           }
         }
@@ -1530,7 +1530,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.isSpinnerVisible = true;
     this.salesOrderConversionCriteriaObj.salesOrderQuoteId = this.id;
 
-    this.salesQuoteService.convertfromquote(this.salesOrderConversionCriteriaObj).subscribe(
+    this.salesQuoteService.convertfromquote(this.salesOrderConversionCriteriaObj, this.employeeId).subscribe(
       results => {
         this.alertService.showMessage(
           "Success",
@@ -1827,6 +1827,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   saveSalesOrderChargesList(e) {
+    debugger;
     this.totalCharges = e;
     this.marginSummary.misc = this.totalCharges;
     this.salesQuoteService.setTotalCharges(e);

@@ -394,4 +394,23 @@ export class ExchangequoteService {
       this.exchangeQuoteEndpointService.createFreight(freightsList)
     );
   }
+
+  deleteexchangeQuoteChargesList(chargesId, userName) {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.deleteexchangeQuoteChargesList(chargesId, userName)
+    );
+  }
+
+  deleteexchangeQuoteFreightList(friegntId, userName) {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.deleteexchangeQuoteFreightList(friegntId, userName)
+    );
+  }
+
+  getExchangeQuoteFreightsHistory(id) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteFreightsHistory(id);
+  }
+  getExchangeQuoteChargesHistory(id) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteChargesHistory(id);
+  }
 }

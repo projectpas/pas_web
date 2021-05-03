@@ -446,7 +446,6 @@ export class ExchangeQuoteCustomerApprovalComponent {
       let validmessages = '';
       this.quotesList.forEach(
           x => {
-              debugger;
               if (x.isSelected) {
                   let validmessage = this.validateApprovalData(x);
                   if (validmessage.length > 0) {

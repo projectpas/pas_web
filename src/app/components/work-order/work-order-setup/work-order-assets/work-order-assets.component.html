@@ -136,7 +136,7 @@
           && col.field !== 'updatedDate'  &&  col.field !== 'quantity'"  pInputText type="text"
                       (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">  
                     
-                      <input type="number" *ngIf="col.field == 'quantity'" pInputNumber name="quantity1" class="table-header-input-width ui-inputtext ui-corner-all ui-state-default ui-widget ng-star-inserted"
+                      <input type="text" *ngIf="col.field == 'quantity'"  (keypress)="allowNumberOnly($event)"  pInputNumber name="quantity1" class="table-header-input-width ui-inputtext ui-corner-all ui-state-default ui-widget ng-star-inserted"
                       (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
                   <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" class="table-header-input-width"
                       (change)="dt.filter($event.target.value, col.field, 'contains')">
@@ -451,14 +451,15 @@
                             <p-autoComplete *ngIf="assetsform.assetStatus == 'checkOut'" field="label" [disabled]="!row.isChecked"
                               class="pautocomp-cstm" [(ngModel)]="row.checkOutById" name="checkInBy{{i}}"
                               [suggestions]="employeeList" (completeMethod)="filterEmployee($event)" [size]="30"
-                              [minLength]="1" [dropdown]="true" errorMessage="Records not found" 
+                              [minLength]="1" [dropdown]="true"  appendTo='body' [baseZIndex]="9999" errorMessage="Records not found" 
                               [forceSelection]="true" > 
                             </p-autoComplete>
                             <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutBy}}</div>
                           </td>
                           <td class="width-100">
                             <div  *ngIf="assetsform.assetStatus == 'checkOut'">
-                              <p-calendar class="pas-clder" [(ngModel)]="row.checkOutDate" [showIcon]="true" [disabled]="!row.isChecked"
+                              <p-calendar class="pas-clder" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="row.checkOutDate"
+                               [showIcon]="true" [disabled]="!row.isChecked"
                                 name="checkOutDate{{i}}"></p-calendar>
                             </div>
                             <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutDate | date: 'MM/dd/yyyy'}}</div>

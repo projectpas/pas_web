@@ -1,9 +1,9 @@
 ﻿<div class="card">
     <div class="card-body p-t-0">
-        <div class="row">
+        <div class="row" *ngIf="!isView">
             <div class="col-md-12 shipping-div">
                 <label class="input-width-100-percent"></label>
-                <div class="form-group perform-shipping-div">
+                <div class="form-group perform-shipping-div" *ngIf="isView == false">
                     <button type="submit" class="btn  submit-btn btn btn-primary"
                         [disabled]="disableGeneratePackagingBtn" (click)="generatePackagingSlip()">Generate Packaging
                         Label</button>&nbsp;
@@ -27,7 +27,7 @@
                             </span>
                         </th>
                         <th colspan="7"></th>
-                        <th></th>
+                        <th *ngIf="isView == false"></th>
                     </tr>
                     <ng-container *ngIf="shippingList.length > 0">
                         <ng-container *ngFor="let summaryPart of shippingList; let rowIndex = index;">
@@ -40,7 +40,7 @@
                                         </span>
                                     </td>
                                     <td colspan="7"></td>
-                                    <td></td>
+                                    <td *ngIf="isView == false"></td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
                                     <th class="background-white"></th>
@@ -57,7 +57,7 @@
                                     <th style="min-width: 70px;">Qty To Ship</th>
                                     <th style="min-width: 100px;">Customs Value</th>
                                     <th style="min-width: 120px;">Commodity Code</th>
-                                    <th style="min-width: 120px; position: sticky !important">Actions</th>
+                                    <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">Actions</th>
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
@@ -109,7 +109,7 @@
                                     <td>
                                         {{ ship.commodityCode }}
                                     </td>
-                                    <td class="zui-sticky-col" style="width:107px !important">
+                                    <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
                                         <span *ngIf="ship.packagingSlipNo !== undefined && ship.packagingSlipNo != ''">
                                             <a class="btn nobg" matTooltip="Print Packaging Slip"
                                                 matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i

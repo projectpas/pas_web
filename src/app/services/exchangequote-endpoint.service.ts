@@ -28,6 +28,10 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly exchangeQuoteChargesSave: string = environment.baseUrl + "/api/exchangequote/createexchangequotecharges";
     private readonly _geExchangeQuoteFreights: string = environment.baseUrl + "/api/exchangequote/exchangequotefreightlist";
     private readonly exchangeQuoteFreightsSave: string = environment.baseUrl + "/api/exchangequote/createexchangequotefreight";
+    private readonly _deleteExchangeQuoteCharge: string = environment.baseUrl + "/api/exchangequote/deleteexchangequotecharge";
+    private readonly _deleteExchangeQuoteFrignt: string = environment.baseUrl + "/api/exchangequote/deleteexchangequotefreight";
+    private readonly getFreightAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-freight-history';
+    private readonly getChargesAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-charges-history';
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -178,6 +182,38 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
         )
         .catch(error => {
           return this.handleErrorCommon(error, () => this.createFreight(sexchangeQuoteFreights));
+        });
+    }
+
+    deleteexchangeQuoteChargesList(chargeId, userName): Observable<boolean> {
+      let endpointUrl = `${this._deleteExchangeQuoteCharge}/${chargeId}?updatedBy=${userName}`;
+      return this.http
+        .delete<boolean>(endpointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.deleteexchangeQuoteChargesList(chargeId, userName));
+        });
+    }
+
+    deleteexchangeQuoteFreightList(frieghtId, userName): Observable<boolean> {
+      let endpointUrl = `${this._deleteExchangeQuoteFrignt}/${frieghtId}?updatedBy=${userName}`;
+      return this.http
+        .delete<boolean>(endpointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.deleteexchangeQuoteFreightList(frieghtId, userName));
+        });
+    }
+
+    getExchangeQuoteFreightsHistory(id) {
+      return this.http.get<any>(`${this.getFreightAudihistory}/?ExchangeQuoteFreightId=${id}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuoteFreightsHistory(id));
+        });
+    }
+
+    getExchangeQuoteChargesHistory(id) {
+      return this.http.get<any>(`${this.getChargesAudihistory}/${id}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuoteChargesHistory(id));
         });
     }
 }  

@@ -11,7 +11,7 @@
                 {{ summaryColumn.header }}
               </span>
             </th>
-            <th>Actions</th>
+            <th *ngIf="isView == false">Actions</th>
           </tr>
           <ng-container *ngIf="pickTickes.length > 0">
             <ng-container *ngFor="let summaryPart of pickTickes;let rowIndex=index;">
@@ -23,7 +23,7 @@
                       {{summaryPart[summaryColumn.field]}}
                     </span>
                   </td>
-                  <td style="position:sticky; width:80px">
+                  <td *ngIf="isView == false" style="position:sticky; width:80px">
                     <span>
                       <button class="btn nobg" mat-icon-button
                         (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
@@ -47,7 +47,7 @@
                   <th>Ctrl Num</th>
                   <th>ID Num</th>
                   <th colspan="2"></th>
-                  <th style="min-width: 120px; position: sticky !important">Actions</th>
+                  <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">Actions</th>
                 </tr>
                 <tr class="child-data splitship-child child-data-back"
                   *ngFor="let part of summaryPart.sopickticketchild; let stockIndex = index">
@@ -83,7 +83,7 @@
                     {{ part.idNumber }}
                   </td>
                   <td colspan="2"></td>
-                  <td class="zui-sticky-col" style="width:107px !important">
+                  <td class="zui-sticky-col" style="width:107px !important" *ngIf="isView == false">
                     <span>
                       <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"
                         (click)="printPickTicket(part);"><i class="fa fa-print"></i></a>

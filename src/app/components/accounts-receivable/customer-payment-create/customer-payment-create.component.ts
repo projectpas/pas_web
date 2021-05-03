@@ -295,7 +295,6 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.display = true;
     }
     else {
-      debugger;
       this.display = false;
       this.isSpinnerVisible = true;
       this.salesOrder = new CustomerPayments();

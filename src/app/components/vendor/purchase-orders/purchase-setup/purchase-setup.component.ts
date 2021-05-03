@@ -4308,7 +4308,7 @@ export class PurchaseSetupComponent implements OnInit {
 	
         this.purchaseOrderService.savePurchaseOrderApproval(data).subscribe(res => {
 			if(res) {
-				this.getApprovalProcessListById(this.poId);
+						this.getApprovalProcessListById(this.poId);
 						this.headerInfo.statusId = res.response;
 						//this.getVendorPOHeaderById(this.poId);
 						this.enableHeaderSaveBtn = false;
