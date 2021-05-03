@@ -3248,10 +3248,14 @@ this.woPartId=rowData.id;
     }
     workflowTransfer:any={}
     tranferCheckbox(ev,currentRecord){
+        if (ev.target.checked) {
+            $('#workFlowTransfer').modal('show'); 
+
+        }
         this.workFlowId=currentRecord.workflowId;
         this.workOrderId=this.workOrderId ? this.workOrderId :currentRecord.workOrderId;
-        console.log("ev",ev,currentRecord)
-        $('#workFlowTransfer').modal('show'); 
+        console.log("ev",ev.target.checked,currentRecord)
+   
     }
     taskComletedByConfirmation(ev){
 

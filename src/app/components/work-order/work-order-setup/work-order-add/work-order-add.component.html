@@ -539,7 +539,7 @@
 
                                         <span [ngClass]="{pointerEvents : isView}">
                                             <input type="checkbox" name="tranferwflw{{i}}" #tranferwflw="ngModel"  (ngModelChange)="getValid()" 
-                                            class="form-control w60  mr10" [disabled]="workOrderPartNumber.isWorkflowTranfer" [(ngModel)]="isworkflowTranfer" (click)="tranferCheckbox($event,workOrderPartNumber)" matTooltip="Transfer Workflow To Work Order"
+                                            class="form-control w60  mr10" [disabled]="workOrderPartNumber.isWorkflowTranfer" [(ngModel)]="isworkflowTranfer" (change)="tranferCheckbox($event,workOrderPartNumber)" matTooltip="Transfer Workflow To Work Order"
                                             matTooltipPosition="above"> 
                                         </span>
                                     </td> 
