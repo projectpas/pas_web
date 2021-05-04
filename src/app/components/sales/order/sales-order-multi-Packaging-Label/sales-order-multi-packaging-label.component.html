@@ -2,25 +2,21 @@
     <h4 class="modal-title" id="modal-basic-title"></h4>
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 </div>
-<div class="modal-content" id="PackagingSlip">
-    <div class="modal-body">
+<div class="modal-body" *ngIf="objpackagingSlips" id="PackagingSlip">
+    <ng-container *ngFor="let packagingSlip of objpackagingSlips; let i = index;">
         <form id="" name="" action="#" method="post" onsubmit="return false;">
             <div class="image">
                 <div style="padding: 0; margin: 0;">
                     <div>
                         <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
-                            <!-- <div class="logo-block">
-                                <img src="{{this.endPointURL + this.management.logo}}" width="130" /> </div>
-                            <div class="clear"></div>
-                            <hr /> -->
                             <div class="very-first-block">
                                 <div class="col-sm-12 address-block">
                                     <div class="col-sm-12 first-block-name"><img class="logo"
-                                            src="{{this.endPointURL + this.management.logo}}" height="30px"
+                                            src="{{this.endPointURL + packagingSlip.managementStructureHeaderData.logo}}" height="30px"
                                             width="100px" /></div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.companyName}}</label>
+                                            disabled>{{packagingSlip.managementStructureHeaderData.companyName}}</label>
                                     </div>
                                     <br />
                                     <!-- <div class="col-sm-12 first-block-name">
@@ -35,23 +31,23 @@
                                     <br /><br /> -->
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.address1}}</label>
+                                            disabled>{{packagingSlip.managementStructureHeaderData.address1}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.address2}}</label>
+                                            disabled>{{packagingSlip.managementStructureHeaderData.address2}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.city}}</label>
+                                            disabled>{{packagingSlip.managementStructureHeaderData.city}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.stateOrProvince}}</label>
+                                            disabled>{{packagingSlip.managementStructureHeaderData.stateOrProvince}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.postalCode}}</label>
+                                            disabled>{{packagingSlip.managementStructureHeaderData.postalCode}}</label>
                                     </div>
                                     <!-- <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Country :</label>
@@ -68,32 +64,32 @@
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Packaging Slip Id</label>
                                     <label style="width: 100%; text-align: left;"
-                                        disabled>{{this.salesOrder.packagingSlipNo}}</label>
+                                        disabled>{{packagingSlip.packagingLabelViewModel.packagingSlipNo}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label"> Invoice Num</label>
                                     <label style="width: 100%; text-align: left;"
-                                        disabled>{{this.salesOrder.invoiceNo}}</label>
+                                        disabled>{{packagingSlip.packagingLabelViewModel.invoiceNo}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Invoice Date & Time</label>
                                     <label style="width: 100%; text-align: left;"
-                                        disabled>{{this.salesOrder.invoiceDate | date:'medium'}}</label>
+                                        disabled>{{packagingSlip.packagingLabelViewModel.invoiceDate | date:'medium'}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
                                     <label style="width: 100%; text-align: left;"
-                                        disabled>{{this.salesOrder.salesOrderNumber}}</label>
+                                        disabled>{{packagingSlip.packagingLabelViewModel.salesOrderNumber}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Num of Items</label>
                                     <label style="width: 100%; text-align: left;"
-                                        disabled>{{this.salesOrder.numberOfItems}}</label>
+                                        disabled>{{packagingSlip.packagingLabelViewModel.numberOfItems}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Num of Containers</label>
                                     <label style="width: 100%; text-align: left;"
-                                        disabled>{{this.salesOrder.noOfContainer}}</label>
+                                        disabled>{{packagingSlip.packagingLabelViewModel.noOfContainer}}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">Prepared By</label>
@@ -116,34 +112,34 @@
                                         <div class="sold-block-div" style="margin-top:10px">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.customerName}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.customerName}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.custToAddress1}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.custToAddress1}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.custToAddress2}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.custToAddress2}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.custToCity}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.custToCity}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.custToState}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.custToState}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-6 first-block-label" disabled>Zip
                                             </label> -->
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.custToCountry}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.custToCountry}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-6 first-block-label" disabled>Country
@@ -165,37 +161,37 @@
                                         <div class="ship-block-div" style="margin-top:10px">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.shipToContactName}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.shipToContactName}}</label>
                                         </div>
                                         <div class="ship-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.shipToAddress1}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.shipToAddress1}}</label>
                                         </div>
                                         <div class="ship-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.shipToAddress2}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.shipToAddress2}}</label>
                                         </div>
                                         <div class="ship-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.shipToCity}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.shipToCity}}</label>
                                         </div>
                                         <div class="ship-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.shipToState}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.shipToState}}</label>
                                         </div>
                                         <div class="ship-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.shipToPostalCode}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.shipToPostalCode}}</label>
                                         </div>
                                         <div class="ship-block-div">
                                             <label class="col-sm-6 first-block-label" style="text-align: left;"
                                                 disabled>
-                                                {{this.salesOrder.shipToCountry}}</label>
+                                                {{packagingSlip.packagingLabelViewModel.shipToCountry}}</label>
                                         </div>
                                         <div class="ship-block-div">
                                             <!-- <label class="col-sm-6 first-block-label" disabled>Email
@@ -228,17 +224,19 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td style="border:1px solid black">{{this.salesOrder.poroNum}}</td>
-                                            <td style="border:1px solid black">{{this.salesOrder.salesPersonName}}</td>
-                                            <td style="border:1px solid black">{{this.salesOrder.customerContactName}}
+                                            <td style="border:1px solid black">{{packagingSlip.packagingLabelViewModel.poroNum}}</td>
+                                            <td style="border:1px solid black">{{packagingSlip.packagingLabelViewModel.salesPersonName}}
                                             </td>
-                                            <td style="border:1px solid black">{{this.salesOrder.creditTerm}}</td>
-                                            <td style="border:1px solid black"></td>
-                                            <td style="border:1px solid black">{{this.salesOrder.shipViaName}}</td>
                                             <td style="border:1px solid black">
-                                                {{this.salesOrder.shipDate | date : "MM/dd/yyyy"}}</td>
-                                            <td style="border:1px solid black">{{this.salesOrder.awb}}</td>
-                                            <td>{{this.salesOrder.shippingOrderNo}}</td>
+                                                {{packagingSlip.packagingLabelViewModel.customerContactName}}
+                                            </td>
+                                            <td style="border:1px solid black">{{packagingSlip.packagingLabelViewModel.creditTerm}}</td>
+                                            <td style="border:1px solid black"></td>
+                                            <td style="border:1px solid black">{{packagingSlip.packagingLabelViewModel.shipViaName}}</td>
+                                            <td style="border:1px solid black">
+                                                {{packagingSlip.packagingLabelViewModel.shipDate | date : "MM/dd/yyyy"}}</td>
+                                            <td style="border:1px solid black">{{packagingSlip.packagingLabelViewModel.awb}}</td>
+                                            <td>{{packagingSlip.packagingLabelViewModel.shippingOrderNo}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -260,7 +258,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <ng-container *ngFor="let part of this.parts let i=index">
+                                        <ng-container *ngFor="let part of packagingSlip.packagingLabelPartViewModel let i=index">
                                             <tr>
                                                 <td>{{i+1}}</td>
                                                 <td>{{part.partNumber}}</td>
@@ -273,8 +271,6 @@
                                             </tr>
                                             <tr>
                                                 <td style="border:1px solid black; max-width: 60px">
-                                                    <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
-                                                        class="image" /> -->
                                                     <img src="{{part.partBarcode}}" alt="barcode" width="100%" />
                                                 </td>
                                                 <td colspan="7"></td>
@@ -306,17 +302,25 @@
                                         </tr>
                                         <tr>
                                             <td style="border-bottom:1px solid black" colspan="8">
-                                                <p>Before you work with any component, assembly or product referred to
+                                                <p>Before you work with any component, assembly or product referred
+                                                    to
                                                     in this document, please read, understand and follow all safety
-                                                    instructions and take all safety precautions including instructions
+                                                    instructions and take all safety precautions including
+                                                    instructions
                                                     from the
-                                                    manufacturer, the material safety data sheet (MSDS), the component
-                                                    Repair Manual, service information letters, all operations letters
-                                                    and government regulations. An MSDS gives instructions on how you
+                                                    manufacturer, the material safety data sheet (MSDS), the
+                                                    component
+                                                    Repair Manual, service information letters, all operations
+                                                    letters
+                                                    and government regulations. An MSDS gives instructions on how
+                                                    you
                                                     must
-                                                    safely use, store and discard chemicals. Get instructions from your
-                                                    employer on how you must safely use, store and discard chemicals.
-                                                    Chemicals may cause injury to you or make you sick. Personal injury
+                                                    safely use, store and discard chemicals. Get instructions from
+                                                    your
+                                                    employer on how you must safely use, store and discard
+                                                    chemicals.
+                                                    Chemicals may cause injury to you or make you sick. Personal
+                                                    injury
                                                     or
                                                     disease may result if safety instructions are not followed.</p>
                                             </td>
@@ -328,8 +332,7 @@
                                 </table>
                             </div>
                             <br />
-                            <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" class="image" /> -->
-                            <img src="{{this.salesOrder.packagingLabelBarcode}}" alt="barcode"
+                            <img src="{{packagingSlip.packagingLabelViewModel.packagingLabelBarcode}}" alt="barcode"
                                 style="padding-left: 7px; padding-top: 5px;" />
                             <p class="barcode-name"></p>
                             <div class="clear"></div>
@@ -340,7 +343,7 @@
                 </div>
             </div>
         </form>
-    </div>
+    </ng-container>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="printContent()">Print</button>

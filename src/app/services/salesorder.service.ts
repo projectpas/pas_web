@@ -647,6 +647,12 @@ export class SalesOrderService {
     );
   }
 
+  getMultiPackagingSlipPrint(salesOrderPackagingSlips: any): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getMultiPackagingSlipPrint(salesOrderPackagingSlips)
+    );
+  }
+
   downloadPDF(url: string) {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.downloadPDF(url)
