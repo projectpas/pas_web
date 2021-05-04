@@ -40,6 +40,7 @@
                         <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" 
                         [showIcon]="true"  appendTo="body"
                         name="startDate" 
+                        [minDate]="posettingModel.startDate"  
                         [yearNavigator]="true"                         
                         [monthNavigator]="true" yearRange="1900:2100" 
                         [(ngModel)]="posettingModel.startDate" 

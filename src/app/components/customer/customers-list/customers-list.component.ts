@@ -301,7 +301,7 @@ export class CustomersListComponent implements OnInit {
                 } 
             }   
             else{this.isSpinnerVisible = false;}                      
-        }, error => this.saveFailedHelper(error))
+        }, error => {this.isSpinnerVisible = false;})
     }
 
     dateFilterForTableCustomerList(date, field) {
@@ -347,7 +347,7 @@ export class CustomersListComponent implements OnInit {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
             this.alertService.showMessage("Success", `Restored Records Successfully`, MessageSeverity.success);
-        }, error => this.saveFailedHelper(error))
+        }, error => {this.isSpinnerVisible = false;})
     }
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -388,7 +388,7 @@ export class CustomersListComponent implements OnInit {
                 this.isSpinnerVisible = false;
             }
             
-        }, error => this.saveFailedHelper(error))
+        }, error => {this.isSpinnerVisible = false;})
         
     }
     edit(rowData) {
@@ -444,6 +444,7 @@ export class CustomersListComponent implements OnInit {
         $('#step19').collapse('show');
         $('#step20').collapse('show');
     }
+
     dblCloseAllCustomerDetailsModel() {
         $('#step11').collapse('hide');
         $('#step12').collapse('hide');
@@ -456,21 +457,25 @@ export class CustomersListComponent implements OnInit {
         $('#step19').collapse('hide');
         $('#step20').collapse('hide');
     }
+
     dismissModel() {
         this.isDeleteMode = false;
         this.modal.close();
     }
+
     delete(content, rowData) {
         this.isDeleteMode = true;
         this.selectedRowforDelete = rowData;
         this.customerId = rowData.customerId;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
+
     restore(restorePopupId, rowData) {
         this.restorerecord = rowData;
         this.customerId = rowData.customerId;
         this.modal = this.modalService.open(restorePopupId, { size: 'sm', backdrop: 'static', keyboard: false });
     }
+    
     deleteItemAndCloseModel() {
         let customerId = this.customerId;
         if (customerId > 0) {
@@ -485,10 +490,11 @@ export class CustomersListComponent implements OnInit {
                 this.getList(PagingData);
                 this.isDeleteMode = false;
                 this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
-            },error => this.saveFailedHelper(error));
+            },error => {this.isSpinnerVisible = false;});
         }
         this.modal.close();
     }
+
     private saveCompleted(user?: any) {
 
         if (this.isDeleteMode == true) {
@@ -501,14 +507,14 @@ export class CustomersListComponent implements OnInit {
         }
         this.getList(this.lazyLoadEventData);
     }
-    private saveFailedHelper(error: any) {
 
-        this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
-        this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-        this.isSpinnerVisible = false;
-        setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
-    }
+    // private saveFailedHelper(error: any) {
+    //     this.alertService.stopLoadingMessage();
+    //     this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
+    //     this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+    //     this.isSpinnerVisible = false;
+    //     setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
+    // }
 
     openContactList(content, row) {
         this.selectedRow = row;
@@ -533,7 +539,7 @@ export class CustomersListComponent implements OnInit {
 
         this.customerService.getContacts(customerId).subscribe(
             results => this.onContactDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false
         );
 
         this.contactcols = [
@@ -555,18 +561,19 @@ export class CustomersListComponent implements OnInit {
         this.allContacts = allWorkFlows;
 
     }
-    private onDataLoadFailed(error: any) {
-        this.alertService.stopLoadingMessage();
 
-    }
+    // private onDataLoadFailed(error: any) {
+    //     this.alertService.stopLoadingMessage();
+
+    // }
+
     getAuditHistoryById(content, row) {
-
         this.alertService.startLoadingMessage();
-
         this.customerService.getCustomerHistory(row.customerId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible = false;});
     }
+
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
         this.customerauditHisory = auditHistory;
@@ -623,6 +630,6 @@ export class CustomersListComponent implements OnInit {
 			dt.exportCSV();
 			dt.value = this.data;
         	this.isSpinnerVisible = false;
-        },error => this.onDataLoadFailed(error))
+        },error => this.isSpinnerVisible = false)
     }
 }
