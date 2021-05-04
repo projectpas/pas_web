@@ -92,6 +92,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
   private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
   private readonly getMultiShipingLabelForPrint: string = environment.baseUrl + "/api/SalesOrder/getMultiShipingLabelForPrint";
+  private readonly getMultiPackagingSlipForPrint: string = environment.baseUrl + "/api/SalesOrder/printMultiplePackagingSlip";
   private readonly getPackagingSlipForPrint: string = environment.baseUrl + "/api/SalesOrder/printPackagingSlip";
   private readonly updateServiceClass: string = environment.baseUrl + "/api/SalesOrder/updateServiceClass";
   private readonly getSalesOrderBillingInvoicingPdfURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingPdf";
@@ -778,12 +779,21 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getMultiShippingLabelPrint(multiPackagingLabel: any): Observable<any> {
+  getMultiShippingLabelPrint(multiShippingLabel: any): Observable<any> {
     const URL = `${this.getMultiShipingLabelForPrint}`;
     return this.http
-      .post<any>(URL, JSON.stringify(multiPackagingLabel), this.getRequestHeaders())
+      .post<any>(URL, JSON.stringify(multiShippingLabel), this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getMultiShippingLabelPrint(multiPackagingLabel));
+        return this.handleErrorCommon(error, () => this.getMultiShippingLabelPrint(multiShippingLabel));
+      });
+  }
+
+  getMultiPackagingSlipPrint(multiPackagingSlip: any): Observable<any> {
+    const URL = `${this.getMultiPackagingSlipForPrint}`;
+    return this.http
+      .post<any>(URL, JSON.stringify(multiPackagingSlip), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getMultiPackagingSlipPrint(multiPackagingSlip));
       });
   }
 
