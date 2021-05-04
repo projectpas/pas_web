@@ -130,7 +130,7 @@ export class ExchangequoteService {
     //   }
     // })
     let partNumberObj = new ExchangeQuotePart();
-    partNumberObj.exchangeQuotepartPartId = selectedPart.exchangeQuotepartPartId;
+    partNumberObj.exchangeQuotePartId = selectedPart.exchangeQuotePartId;
     partNumberObj.stockLineId = selectedPart.stockLineId;
     partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
     // partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
@@ -236,7 +236,7 @@ export class ExchangequoteService {
     //partNumberObj.statusName = selectedPart.statusName;
     partNumberObj.description = selectedPart.partDescription;
     partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
-    partNumberObj.exchangeQuotePartId = selectedPart.salesOrderQuotePartId;
+    partNumberObj.exchangeQuotePartId = selectedPart.exchangeQuotePartId;
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
     partNumberObj.createdBy = selectedPart.createdBy;
     partNumberObj.serialNumber = selectedPart.serialNumber;
@@ -260,6 +260,7 @@ export class ExchangequoteService {
     partNumberObj.coreDueDate=selectedPart.coreDueDate;
     if(selectedPart.exchangeQuoteScheduleBilling.length>0)
     {
+      debugger;
       for(let i=0;i<selectedPart.exchangeQuoteScheduleBilling.length;i++)
       {
         partNumberObj.exchangeQuoteScheduleBilling.push(selectedPart.exchangeQuoteScheduleBilling[i]);
@@ -412,5 +413,15 @@ export class ExchangequoteService {
   }
   getExchangeQuoteChargesHistory(id) {
     return this.exchangeQuoteEndpointService.getExchangeQuoteChargesHistory(id);
+  }
+
+  delete(exchangeQuoteId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.delete(exchangeQuoteId)
+    );
+  }
+
+  getExchangeQuoteHistory(exchangeQuoteId) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteHistory(exchangeQuoteId);
   }
 }

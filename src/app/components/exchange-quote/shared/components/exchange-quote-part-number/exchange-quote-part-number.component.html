@@ -40,6 +40,14 @@
                                     </td>
                                     <td class="width-120"
                                         *ngIf="isViewMode == false">
+                                        <span *ngIf="!isEditDisabled(exchangeQuote, part)">
+                                            <a [class.disabled]="isEditDisabled(exchangeQuote, part)"
+                                                [ngClass]="{'btn_disabled': isEditDisabled(exchangeQuote, part)}"
+                                                class="btn nobg view-part-eye" (click)="openPartToEdit(part)" matTooltip="Edit Price"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>
