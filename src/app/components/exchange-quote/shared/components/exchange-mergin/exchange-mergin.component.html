@@ -82,7 +82,7 @@
           <label>Est. # of Fee Billings<span class="clr-red">*</span></label>
           <input type="text" class="form-control quantityTextBox text-right" pKeyFilter="num"
             name="estOfFeeBilling" (ngModelChange)="part.estOfFeeBilling=formatStringToNumberGlobal($event)" (blur)="addSchesuleBilling($event)" [ngModel]="part.estOfFeeBilling  | globalNmberFormat"
-            />
+            [disabled]="isDisable"/>
         </div>
       </div>
       <div class="col-3 column">
@@ -119,8 +119,8 @@
         <div class="form-group">
           <label>Billing Intervals (Days)<span class="clr-red">*</span></label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
-            name="billingIntervalDays" (ngModelChange)="part.billingIntervalDays=formatStringToNumberGlobal($event)" (blur)="addSchesuleBilling($event)" [ngModel]="part.billingIntervalDays  | globalNmberFormat"
-            />
+            name="billingIntervalDays" (ngModelChange)="part.billingIntervalDays=formatStringToNumberGlobal($event)" (blur)="addSchesuleBillingIntervalDays()" [ngModel]="part.billingIntervalDays  | globalNmberFormat"
+            [disabled]="isDisable"/>
         </div>
       </div>
       <div class="col-3 column">

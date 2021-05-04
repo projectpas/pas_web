@@ -113,7 +113,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
             this.uploadDocsToser.subscribe(v => {
                 this.hideUpoladThing = true;
                 setTimeout(() => {
-                    console.log("event")
+                    console.log("event",this.referenceId)
                     this.onUploadDocumentListToServer();
                 }, 2000);
             });
@@ -149,7 +149,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
             }
         }
         this.id = this.referenceId;
-       
+       console.log("hello",this.referenceId);
        
         this.getModuleList();
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
@@ -494,7 +494,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
             }
         });
         
-        if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile' || this.moduleName == 'CustomerReceipt') {
+        if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile' || this.moduleName == 'CustomerReceipt' || this.moduleName == 'StockLine') {
             this.referenceId = this.referenceId ? this.referenceId : localStorage.getItem('commonId');
             this.itemmasterIdReferenceId = this.referenceId;
         }

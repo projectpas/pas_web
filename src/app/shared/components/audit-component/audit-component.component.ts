@@ -13,6 +13,8 @@ export class AuditComponentComponent implements OnInit {
     constructor( private activeModal: NgbActiveModal,) { } 
 
     ngOnInit() { 
+        console.log("auditHistoryHeader",this.auditHistoryHeader)
+        console.log("auditHistoryHeader",this.auditHistory)
     }
 
     getColorCodeForHistory(i, field, value) {

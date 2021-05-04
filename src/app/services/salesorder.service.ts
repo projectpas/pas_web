@@ -635,6 +635,12 @@ export class SalesOrderService {
     );
   }
 
+  getMultiShippingLabelPrint(salesOrderPackagingSlips: any): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getMultiShippingLabelPrint(salesOrderPackagingSlips)
+    );
+  }
+
   getPackagingSlipPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number, packagingSlipId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getPackagingSlipPrint(salesOrderId, salesOrderPartId, soPickTicketId, packagingSlipId)

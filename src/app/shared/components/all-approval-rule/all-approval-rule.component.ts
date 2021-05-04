@@ -117,6 +117,20 @@ export class AllApprovalRuleComponent implements OnInit {
         this.enableSaveBtn = true;
     }
 
+    onSavecleardata() {
+        this.creatingData.ruleNumberId =0;
+        this.creatingData.amountId =null;
+        this.creatingData.upperValue=0
+        this.creatingData.lowerValue=0
+        this.creatingData.value=0
+        this.employeelist= null
+        // if (this.employeelist && this.employeelist.value && this.employeelist.value > 0) 
+        // {
+        //     this.employeelist.value =0;
+        //     this.employeelist.label ='';
+        // }
+    }
+
   ngOnInit(){   
 
     this.dropdownSettings = {
@@ -282,6 +296,7 @@ export class AllApprovalRuleComponent implements OnInit {
                 MessageSeverity.success
             );
             this.onSaveChange();
+            this.onSavecleardata();
         }
     }
 

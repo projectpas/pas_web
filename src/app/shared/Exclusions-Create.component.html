@@ -86,7 +86,7 @@ style="overflow: hidden;">
         </td>
         <td >
        <div class="form-group memo-popup-cstm mat_emo textarea-memo-div">
-          <div [innerHTML]="exclusion.memo" class="text_editor_box"></div>
+          <div [innerHTML]="exclusion.memo" class="text_editor_box" matTooltipPosition="above" [matTooltip]="parsedText(exclusion.memo)"></div>
             <i class="fa fa-pencil ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
               matTooltip="Memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(exclusion,i)"></i>
           </div>

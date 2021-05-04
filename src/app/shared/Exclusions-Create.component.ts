@@ -261,12 +261,21 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     }
 
     onPartSelect(event, exclusion, index) {
-        var isEpnExist = this.workFlow.exclusions.filter(x => x.partNumber == event.partNumber && x.taskId == this.workFlow.taskId);
-        if (isEpnExist.length > 1) {
+                // console.log("this.workFlow.materialList",this.workFlow.exclusions)
+        // console.log("evvvv",event)
+        // console.log("this.workFlow",this.workFlow)
+        var isEpnExist = this.workFlow.exclusions.find(x => x.itemMasterId == event.partId && x.taskId == this.workFlow.taskId);
+        if (isEpnExist != undefined) {
+            exclusion.partName="";
+            exclusion.itemMasterId="";
+            exclusion.conditionId="";
+            exclusion.itemClassification="";
+            exclusion.stockType="";
+            exclusion.quantity="";
+            exclusion.estimtPercentOccurrance="";
             exclusion.itemMasterId = "";
             exclusion.partDescription = "";
             exclusion.partNumber = "";
-            exclusion.partName = "";
             exclusion.itemClassificationId = '';
             exclusion.createdBy = this.userName;
             event = "";
@@ -512,5 +521,14 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         }
         this.reCalculate();
         this.dismissModel();
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
     }
 }

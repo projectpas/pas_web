@@ -145,5 +145,9 @@ export class WorkFlowtService {
 	getemployeeExpertiseById(id) {
 		return this.workflowEndpoint.getemployeeExpertiseById(id);
 	}
-	
+	workflowAuditHistoryList(id) {
+		return this.workflowEndpoint.workflowAuditHistoryList(id);
+	}
+
+
 }

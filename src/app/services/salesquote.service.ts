@@ -397,7 +397,7 @@ export class SalesQuoteService {
 
   getNetSalesAmount(marginSummary) {
     let netSalesAmount: number = 0;
-    netSalesAmount = marginSummary.sales + marginSummary.misc;
+    netSalesAmount = Number(marginSummary.sales) + Number(marginSummary.misc);
     return netSalesAmount;
   }
 
@@ -475,8 +475,8 @@ export class SalesQuoteService {
     partNumberObj.currencyId = selectedPart.currencyId;
     partNumberObj.uom = selectedPart.uom;
     partNumberObj.controlNumber = selectedPart.controlNumber;
-    partNumberObj.grossSalePrice = selectedPart.grossSalePrice;
     partNumberObj.grossSalePricePerUnit = selectedPart.grossSalePricePerUnit;
+    partNumberObj.grossSalePrice = selectedPart.grossSalePrice + selectedPart.misc;
     partNumberObj.notes = selectedPart.notes;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
     partNumberObj.customerReference = selectedPart.customerRef;
