@@ -1539,6 +1539,10 @@ export class SalesOrderCreateComponent implements OnInit {
             overflow: auto !important;
         }
         
+        thead {
+          display: table-row-group;
+        }
+        
         table thead {
             background: #808080;
             -webkit-print-color-adjust: exact;

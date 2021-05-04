@@ -87,6 +87,8 @@ export class SalesOrderComponent implements OnInit {
     this.isSpinnerVisible = true;
     const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) };
     PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId; 
+    PagingData.filters.status = "Active"; 
+    PagingData.filters.isDeleted = false; 
     this.customerService.getCustomerAll(PagingData).subscribe(res => {
       this.isSpinnerVisible = false;
       this.data = res.results;

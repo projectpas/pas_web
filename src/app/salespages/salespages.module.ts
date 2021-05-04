@@ -106,6 +106,8 @@ import { SalesShippingLabelComponent } from "../components/sales/order/sales-ord
 import { SalesOrderPrintInvoiceComponent } from "../components/sales/order/shared/components/sales-order-print-invoice/sales-order-print-invoice.component";
 import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sales-order-Packaging-Label/sales-order-packaging-label.component";
 import { SalesOrderPrintTemplateComponent } from "../components/sales/order/sales-order-print-template/sales-order-print-template.component";
+import { SalesMultiShippingLabelComponent } from "../components/sales/order/sales-order-multi-shipping-label/sales-order-multi-shipping-label.component";
+import { SalesOrderMultiPackagingLabelComponent } from "../components/sales/order/sales-order-multi-Packaging-Label/sales-order-multi-packaging-label.component";
 //Sales Order Components - End
 
 @NgModule({
@@ -202,9 +204,11 @@ import { SalesOrderPrintTemplateComponent } from "../components/sales/order/sale
     SalesShippingLabelComponent,
     SalesOrderPrintInvoiceComponent,
     SalesOrderPackagingLabelComponent,
-    SalesOrderPrintTemplateComponent
+    SalesOrderPrintTemplateComponent,
+    SalesMultiShippingLabelComponent,
+    SalesOrderMultiPackagingLabelComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
-  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent]
+  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent, SalesMultiShippingLabelComponent, SalesOrderMultiPackagingLabelComponent]
 })
 export class SalesPagesModule { }
