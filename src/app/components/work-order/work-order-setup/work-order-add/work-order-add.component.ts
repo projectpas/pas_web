@@ -1223,10 +1223,10 @@ setTimeout(() => {
                 currentRecord.cMMId =  this['cmmPublicationList' + index][0].value;
                 this.workOrderGeneralInformation.partNumbers[index].cMMId =  this['cmmPublicationList' + index][0].value;
 
-                // if(this.cmmList[0].publicatonExpirationDate){
-                // this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmList[0].publicatonExpirationDate;
-                // this.showWaringForPubWorkflow();
-                // }
+                if(this.cmmList[0].expirationDate){
+                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmList[0].expirationDate;
+                this.showWaringForPubWorkflow();
+                }
             }
         },
             err => {
@@ -1300,15 +1300,21 @@ setTimeout(() => {
          if(res && res.length!=0){
             this.workFlowList = res.map(x => {
                 return {
+                    ...x,
                     label: x.workFlowNo,
                     value: x.workFlowId
                 }
             })
+            
             this['dynamicWorkflowList' + index]=this.workFlowList;
             console.log("disnamicCm",this['dynamicWorkflowList' + index])
             if(this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length!=0){
                 this.workFlowId=this.workFlowList[0].value;
                 this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
+                if(this.cmmList[0].expirationDate){
+                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.workFlowList[0].expirationDate;
+                this.showWaringForPubWorkflow();
+                }
             }
             // workOrderPart.workflowId = this.workFlowList[0].value;
         
@@ -3299,6 +3305,7 @@ this.woPartId=rowData.id;
             ); 
         });
     }
+    publicatonExpirationDate
     showWaringForPubWorkflow(){
         if(!this.isView){
             setTimeout(() => { 

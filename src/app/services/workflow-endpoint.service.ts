@@ -176,5 +176,10 @@ export class WorkFlowEndpoint extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.workflowAuditHistoryList(id));
         });
     }
+	getPublicationsByItemMasterIdDetails(id,idList,mcid){
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/AutoCompleteDropdownsPublicationByItemMaster?searchText=&startWith=&ItemMasterId=${id}&count=0&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${mcid !== undefined ? mcid : 1}`, this.getRequestHeaders()).catch(error => {
+			return this.handleErrorCommon(error, () => this.getPublicationsByItemMasterIdDetails(id,idList,mcid));
+		  });
+	}
 
 }

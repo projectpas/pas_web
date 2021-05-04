@@ -20,7 +20,7 @@
     <tbody class="audithistory-cstm">
         <tr *ngFor="let audit of auditHistory; let i = index;">
             <ng-container *ngFor="let headername of auditHistoryHeader; let j = index;">
-            <td *ngIf="headername.field != 'isDeleted' && headername.field != 'createdDate' && headername.field != 'updatedDate' && headername.field != 'memo'"
+            <td *ngIf="headername.field != 'isActive' && headername.field != 'isDeleted' && headername.field != 'createdDate' && headername.field != 'updatedDate' && headername.field != 'memo'"
                 [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
                 {{audit[headername.field]}}</td>
                 <td *ngIf="headername.field == 'createdDate' || headername.field == 'updatedDate'  "

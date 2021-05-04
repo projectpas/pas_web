@@ -96,6 +96,8 @@ import { ItemMasterCreateCapabilitiesComponent } from '../components/item-master
 import { ItemMasterCapabilitiesListComponent } from '../components/item-masters/Capabilities/item-master-capabilities-list/item-master-capabilities-list.component';
 import { ItemMasterExchangeLoanComponent } from '../components/item-masters/item-master-exch-loan/item-master-exch-loan.component';
 import { ItemmasterpagesModule } from '../itemmasterpages/itemmasterpages.module';
+import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
+
 
 
 
@@ -142,7 +144,7 @@ import { ItemmasterpagesModule } from '../itemmasterpages/itemmasterpages.module
     MatTooltipModule,
     NgbModalModule,
     ItemmasterpagesModule,
-
+    CommonDocumentsModule,
     NgMultiSelectDropDownModule.forRoot()
   ],
   declarations: [
