@@ -20,7 +20,7 @@ import { StocklineViewComponent } from "../../../../shared/components/stockline/
   styleUrls: ["./sales-order-pick-tickets.component.css"]
 })
 export class SalesOrderPickTicketsComponent implements OnInit {
-  isEdit:boolean=false;
+  isEdit: boolean = false;
   isEnablePOList: any;
   pickTickes: any[] = [];
   tempSales: any[] = [];
@@ -57,7 +57,8 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   pickTicketItemInterfaceheader: any[];
   disableSubmitButton: boolean = true;
   @Input() isView: boolean = false;
-  
+  disableBtn: boolean = true;
+
   constructor(
     private salesOrderService: SalesOrderService,
     public employeeService: EmployeeService,
@@ -265,7 +266,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       .getStockLineforPickTicket(itemMasterId, conditionId, salesOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
-        this.isEdit=false;
+        this.isEdit = false;
         this.parts = response[0];
         for (let i = 0; i < this.parts.length; i++) {
           if (this.parts[i].oemDer == null)
@@ -380,7 +381,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   }
 
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
-    this.isEdit=true;
+    this.isEdit = true;
     const soPickTicketId = rowData.soPickTicketId;
     const salesOrderId = rowData.salesOrderId;
     const salesOrderPartId = rowData.salesOrderPartId;
@@ -404,5 +405,31 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       }, error => {
         this.isSpinnerVisible = false;
       });
+  }
+
+  checkedToPrint(evt, pick) {
+    debugger;
+    pick.selected = evt.target.checked;
+    this.checkIsCheckedToPrint();
+  }
+
+  checkIsCheckedToPrint() {
+    var keepGoing = true;
+    this.pickTickes.forEach(a => {
+      if (keepGoing) {
+        a.soshippingchildviewlist.forEach(ele => {
+          if (ele.selected) {
+            this.disableBtn = false;
+            keepGoing = false;
+          }
+          else
+            this.disableBtn = true;
+        });
+      }
+    });
+  }
+
+  printPickTickets() {
+
   }
 }
