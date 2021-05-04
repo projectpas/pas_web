@@ -27,7 +27,10 @@ import { MenuItem } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { ConfigurationService } from '../../../services/configuration.service';
+import { AuditComponentComponent } from '../../../shared/components/audit-component/audit-component.component';
+// src/app/shared/components/audit-component/audit-component.component
 declare var $ : any;
+
 
 @Component({
     selector: 'app-workflow-list',
@@ -120,6 +123,58 @@ export class WorkflowListComponent implements OnInit {
     expertisePercentValue:any;
     chargesPercentValue:any;
     othersPercentValue:any;
+    auditHistoryHeaders = [
+        { field: 'workOrderNumber', header: 'Workflow ID',isRequired:false },
+        { field: 'workflowDescription', header: 'Workflow Description',isRequired:false },
+        { field: 'version', header: 'Version Number',isRequired:false },
+        { field: 'partNumber', header: 'PN',isRequired:false },
+        { field: 'partNumberDescription', header: 'PN Description',isRequired:false },
+        { field: 'workScope', header: 'Work Scope',isRequired:false },
+        { field: 'customerName', header: 'Customer Name',isRequired:false },
+        { field: 'workflowCreateDate', header: 'WF Created Date',isRequired:false },
+        { field: 'workflowExpirationDate', header: 'Expiration Date',isRequired:false },
+        { field: 'revisedPartNumber', header: 'Revised PN',isRequired:false },
+        { field: 'currency', header: 'Currency',isRequired:false },
+        // { field: 'currency', header: 'Currency',isRequired:false },
+        { field: 'berThresholdAmount', header: 'Amount',isRequired:false },
+        { field: 'fixedAmount', header: 'Fixed Amount',isRequired:false },
+        { field: 'costOfNew', header: 'Cost Of New',isRequired:false },
+        { field: 'otherCost', header: 'Other Cost',isRequired:false },
+        // { field: 'amount', header: 'Amount',isRequired:true },
+        { field: 'isActive', header: 'Is Active',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'memo', header: 'Memo',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
+
+    //   changedPartNumber: null
+    //   changedPartNumberDescription: null
+    //   changedPartNumberId: 0 
+    //   costOfReplacement: 0
+    //   createdBy: "admin"
+    //   createdDate: "2021-05-03T22:35:00.0812061"
+    //   currency: "USD"
+    //   currencyId: 0
+    //   customerCode: ""
+    //   flatRate: 0
+    //   isCalculatedBERThreshold: false
+    //   isFixedAmount: false
+    //   isPercentageOfNew: false
+    //   isPercentageOfReplacement: false
+    //  otherCost: 500
+    //   percentageOfCharges: 0
+    //   percentageOfExpertise: 0
+    //   percentageOfMaterial: 0
+    //   percentageOfNew: 0
+    //   percentageOfOthers: 0
+    //   percentageOfReplacement: 0
+    //   percentageOfTotal: 8.07
+    //   revisedPartNumber: " 213798/Ddas611"
+    //   workflowDescription: "Sony Work floe"
+
 
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
@@ -420,10 +475,10 @@ export class WorkflowListComponent implements OnInit {
                     ...sourceWF,
                     fixedAmount: sourceWF.fixedAmount ? formatNumberAsGlobalSettingsModule(sourceWF.fixedAmount, 2) : null,
                     costOfNew: sourceWF.costOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.costOfNew, 2) : null,
-                    percentageOfNew: sourceWF.percentageOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfNew, 2) : null,
+                    // percentageOfNew: sourceWF.percentageOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfNew, 2) : null,
                     percentOfNew: sourceWF.percentOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.percentOfNew, 2) : null,
                     costOfReplacement: sourceWF.costOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.costOfReplacement, 2) : null,
-                    percentageOfReplacement: sourceWF.percentageOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfReplacement, 2) : null,
+                    // percentageOfReplacement: sourceWF.percentageOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfReplacement, 2) : null,
                     percentOfReplacement: sourceWF.percentOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.percentOfReplacement, 2) : null,
                     otherCost: sourceWF.otherCost ? formatNumberAsGlobalSettingsModule(sourceWF.otherCost, 2) : null,
                     berThresholdAmount: sourceWF.berThresholdAmount ? formatNumberAsGlobalSettingsModule(sourceWF.berThresholdAmount, 2) : null,
@@ -431,9 +486,21 @@ export class WorkflowListComponent implements OnInit {
                 };
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate).toLocaleDateString();
                 this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate != null && this.sourceWorkFlow.workflowExpirationDate != '' ? new Date(this.sourceWorkFlow.workflowExpirationDate).toLocaleDateString() : '';
-          
-                this.calculatePercentOfNew(workflow[0].costOfNew, workflow[0].percentageOfNew);
-                this.calculatePercentOfReplacement(workflow[0].costOfReplacement, workflow[0].percentageOfReplacement);
+                this.totalPercent.forEach(element => {
+                    if(element.value ==this.sourceWorkFlow.percentageOfNew){
+                        this.sourceWorkFlow.percentageOfNew=Number(element.label);
+                       return ;
+                    }   
+                    if(element.value ==this.sourceWorkFlow.percentageOfReplacement){
+                        this.sourceWorkFlow.percentageOfReplacement=Number(element.label);
+                       return ;
+                    }   
+                });
+                this.sourceWorkFlow.percentageOfNew=this.sourceWorkFlow.percentageOfNew? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.percentageOfNew, 2) : null;
+                this.sourceWorkFlow.percentageOfReplacement=this.sourceWorkFlow.percentageOfReplacement? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.percentageOfReplacement, 2) : null,
+                this.calculatePercentOfNew(workflow[0].costOfNew, this.sourceWorkFlow.percentageOfNew);
+                this.calculatePercentOfReplacement(workflow[0].costOfReplacement, this.sourceWorkFlow.percentageOfReplacement);
+            //   setTimeout(() => {
                 this.calculateTotalWorkFlowCost();
                 this.getAllTasks();
                 this.isSpinnerVisible = false;
@@ -484,9 +551,9 @@ export class WorkflowListComponent implements OnInit {
             row.verifiedDate = '';
             row.attachmentURL = '';
         }
-    }
+    } 
 
-    private calculatePercentOfNew(myValue, percentValue) {
+    private calculatePercentOfNew(myValue, percentValue) { 
         this.sourceWorkFlow.percentOfNew = "";
         if (myValue && percentValue) {
             this.sourceWorkFlow.percentOfNew = formatNumberAsGlobalSettingsModule((myValue / 100) * percentValue, 2);
@@ -917,6 +984,35 @@ if(element.exclusions){
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
          window.location.assign(url);
     }
- 
+    historyData:any=[];
+    auditHistory(data){
+    this.workFlowtService.workflowAuditHistoryList(data.workflowId).subscribe(res => {
+        console.log("Res",res)
+   
+        if(res && res.length !=0){
+            this.historyData = res;
+                   this.historyData.forEach(element => {
+            element.berThresholdAmount=element.berThresholdAmount ?  formatNumberAsGlobalSettingsModule(element.berThresholdAmount, 2) : '0.00';
+            element.fixedAmount=element.fixedAmount ?  formatNumberAsGlobalSettingsModule(element.fixedAmount, 2) : '0.00';
+            element.costOfNew=element.costOfNew ?  formatNumberAsGlobalSettingsModule(element.costOfNew, 2) : '0.00';
+            element.otherCost=element.otherCost ?  formatNumberAsGlobalSettingsModule(element.otherCost, 2) : '0.00';
+   });
+        }else{
+            console.log("hello")
+            this.historyData = [];
+        }
+        console.log("hello",this.historyData)
+        this.triggerHistory()
+    });
+    
+}
+triggerHistory(){
+    console.log("hello",this.historyData)
+    this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+    this.modal.componentInstance.auditHistoryHeader=[];
+    this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+      this.modal.componentInstance.auditHistory = this.historyData;
+  
+    }
 
 }

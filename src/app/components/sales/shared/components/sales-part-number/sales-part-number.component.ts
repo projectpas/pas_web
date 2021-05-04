@@ -210,7 +210,7 @@ export class SalesPartNumberComponent {
       { field: 'taxType', header: "Tax Type", width: "90px" },
       { field: 'taxAmount', header: "Tax Amt", width: "90px" },
       { field: 'totalSales', header: "Total", width: "90px" },
-      { field: 'unitCostExtended', header: "Extended Cost", width: "100px" },
+      { field: 'unitCostExtended', header: "Ext Cost", width: "100px" },
       { field: 'marginAmountExtended', header: "Product Margin", width: "100px" },
       { field: 'marginPercentageExtended', header: "Product Margin (%)", width: "120px" },
       { field: 'pmaStatus', header: "Stk Type", width: "100px" },
@@ -658,7 +658,7 @@ export class SalesPartNumberComponent {
               errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
               partNameAdded = true;
             }
-            errmessage = errmessage + '<br />' + "Request Date cannot be greater than opem date."
+            errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
           }
           if (esdate < opendate) {
             this.isSpinnerVisible = false;
@@ -667,7 +667,7 @@ export class SalesPartNumberComponent {
               errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
               partNameAdded = true;
             }
-            errmessage = errmessage + '<br />' + "Est. Ship Date cannot be greater than opem date."
+            errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
           }
           if (pdate < opendate) {
             this.isSpinnerVisible = false;
@@ -676,7 +676,7 @@ export class SalesPartNumberComponent {
               errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
               partNameAdded = true;
             }
-            errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be greater than opem date."
+            errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
           }
         }
       }
@@ -944,5 +944,17 @@ export class SalesPartNumberComponent {
 
   onCloseParMultipletDelete() {
     this.deleteAllPartModal.close();
+  }
+
+  getMarginPercentage(part) {
+    return ((((part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended)) / (part.grossSalePrice + Number(part.misc))) * 100).toFixed(2);
+  }
+
+  getMarginAmount(part) {
+    return (part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
+  }
+
+  getTotalRevenue(part) {
+    return (part.grossSalePrice + Number(part.misc)).toFixed(2);
   }
 }

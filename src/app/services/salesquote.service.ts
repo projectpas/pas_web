@@ -287,9 +287,9 @@ export class SalesQuoteService {
       this.salesQuoteEndPointSevice.closeSalesOrderQuoteEndPoint(salesQuoteId, updatedBy)
     );
   }
-  convertfromquote(salesQuoteConversionCriteria: SalesOrderConversionCritera): Observable<SalesOrderView[]> {
+  convertfromquote(salesQuoteConversionCriteria: SalesOrderConversionCritera, currentEmployeeId: number): Observable<SalesOrderView[]> {
     return Observable.forkJoin(
-      this.salesQuoteEndPointSevice.convertfromquoteEndPoint(salesQuoteConversionCriteria)
+      this.salesQuoteEndPointSevice.convertfromquoteEndPoint(salesQuoteConversionCriteria, currentEmployeeId)
     );
   }
 
@@ -397,7 +397,7 @@ export class SalesQuoteService {
 
   getNetSalesAmount(marginSummary) {
     let netSalesAmount: number = 0;
-    netSalesAmount = marginSummary.sales + marginSummary.misc;
+    netSalesAmount = Number(marginSummary.sales) + Number(marginSummary.misc);
     return netSalesAmount;
   }
 
@@ -475,8 +475,8 @@ export class SalesQuoteService {
     partNumberObj.currencyId = selectedPart.currencyId;
     partNumberObj.uom = selectedPart.uom;
     partNumberObj.controlNumber = selectedPart.controlNumber;
-    partNumberObj.grossSalePrice = selectedPart.grossSalePrice;
     partNumberObj.grossSalePricePerUnit = selectedPart.grossSalePricePerUnit;
+    partNumberObj.grossSalePrice = selectedPart.grossSalePrice + selectedPart.misc;
     partNumberObj.notes = selectedPart.notes;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
     partNumberObj.customerReference = selectedPart.customerRef;

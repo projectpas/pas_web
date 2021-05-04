@@ -116,8 +116,8 @@ export class AddressComponentComponent implements OnInit {
 		this.getCountriesList();
 		this.loadShippingViaList();
 		this.showIsPoOnlyButton = this.addressType == AddressTypeEnum.PurchaseOrder;
-		this.sourcePoApproval.shipToUserTypeId = this.companyModuleId;
-		this.sourcePoApproval.billToUserTypeId = this.companyModuleId;
+		this.sourcePoApproval.shipToUserTypeId = this.vendorModuleId;
+		this.sourcePoApproval.billToUserTypeId = this.vendorModuleId;
 		
 		if (this.id !== 0 && this.id !== undefined) {
 			if (this.addressType == AddressTypeEnum.PurchaseOrder) {
@@ -157,8 +157,8 @@ export class AddressComponentComponent implements OnInit {
 
 	getShipToBillToDropDown(res) {
 		const result = res;
-		var shipUsertype = 9;
-		var billUsertype = 9;
+		var shipUsertype = 2;
+		var billUsertype = 2;
 		if (result && result.length > 0) {
 			result.forEach(x => {
 				if (x.label == "SHIP_TYPE") {
@@ -1185,8 +1185,8 @@ export class AddressComponentComponent implements OnInit {
 				this.isSpinnerVisible = false;
 			} else {
 				this.isEditModeAdd = false;
-				this.sourcePoApproval.shipToUserTypeId = this.companyModuleId;
-				this.sourcePoApproval.billToUserTypeId = this.companyModuleId;
+				this.sourcePoApproval.shipToUserTypeId = this.vendorModuleId;
+				this.sourcePoApproval.billToUserTypeId = this.vendorModuleId;
 				if (this.defaultMSCOMPANYID > 0) {
 					this.sourcePoApproval.shipToUserId = getObjectById('userID', this.defaultMSCOMPANYID, this.userShipingList),
 						this.sourcePoApproval.billToUserId = getObjectById('userID', this.defaultMSCOMPANYID, this.userBillingList);

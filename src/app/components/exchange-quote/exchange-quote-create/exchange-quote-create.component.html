@@ -373,6 +373,10 @@
                 <app-exchange-quote-analysis>
                 </app-exchange-quote-analysis>
               </p-tabPanel>
+              <p-tabPanel header="Document">
+                <app-common-documents [moduleName]="moduleName" [referenceId]="id" [isViewMode]="false"
+                    [offLineUpload]="true"></app-common-documents>
+              </p-tabPanel>
             </p-tabView>
           </ng-container>
         </form>

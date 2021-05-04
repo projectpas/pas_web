@@ -429,10 +429,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getPartnumbers(value) {
         this.isSpinnerVisible = true;
         let exclusionsIds = [];
-        if (this.isEdit) {
-  
-            exclusionsIds.push( this.editData?this.editData.itemMasterId:0);
-       
+        if (this.isEdit) {  
+            exclusionsIds.push( this.editData?this.editData.itemMasterId:0);       
         } 
       if(this.isWorkOrder || this.isSubWorkOrder){
         let partSearchParamters = {
@@ -456,7 +454,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             partSearchParamters.restrictDER=false
           }
           partSearchParamters.idlist=  exclusionsIds ? exclusionsIds : 0
-        this.workOrderService.searchPartNumberAdvanced(partSearchParamters).subscribe((res:any) => {
+            this.workOrderService.searchPartNumberAdvanced(partSearchParamters).subscribe((res:any) => {
             this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
             this.allPartnumbersInfo.forEach(element => {
@@ -481,6 +479,14 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.isSpinnerVisible = false;
         });
       }else{
+        let exclusionsIds = [];
+        if ( this.workFlow.materialList &&  this.workFlow.materialList.length !=0) {
+            this.workFlow.materialList.forEach(acc => {
+                exclusionsIds.push(acc.itemMasterId);
+            })
+        }else{
+            exclusionsIds.push(0)
+        }
         this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0,this.currentUserMasterCompanyId).subscribe((res:any) => {
             this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
@@ -508,16 +514,24 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
       }
     }
     onPartSelect(event, material, index) { 
-        var materialObj = this.workFlow.materialList.find(x => x.partItem == event && x.taskId == this.workFlow.taskId);
-        var itemMasterId = this.partCollection.find(x => {
-            if (x.partName == event) {
-                return x.partId
-            }
-        })
+        // var materialObj = this.workFlow.materialList.find(x => x.partItem == event && x.taskId == this.workFlow.taskId);
+        // var itemMasterId = this.partCollection.find(x => {
+        //     if (x.partName == event) {
+        //         return x.partId
+        //     }
+        // })
+        // if(this.isWorkFlow){
+            var materialObj = this.workFlow.materialList.find(x => x.partItem.partId == event.partId && x.taskId == this.workFlow.taskId);
+            // var itemMasterId = this.partCollection.find(x => {
+            //     if (x.partId == event.partId) {
+            //         return x.partId
+            //     }
+            // })
+        // }
         if (materialObj != undefined) {
-            if (this.workFlow.exclusions) {
-                var isPartExcluded = this.workFlow.exclusions.find(x => x.itemMasterId != '' && x.itemMasterId == itemMasterId && x.taskId == this.workFlow.taskId)
-                if (isPartExcluded != undefined) {
+            if (this.workFlow.materialList) { 
+                // var isPartExcluded = this.workFlow.materialList.find(x =>  x.partId == event.partId && x.taskId == this.workFlow.taskId)
+                // if (isPartExcluded != undefined) {
                     material.itemMasterId = '';
                     material.partDescription = '';
                     material.partItem = '';
@@ -525,9 +539,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     material.masterCompanyId = '';
                     material.partName = '';
                     event = '';
-                    this.alertService.showMessage("Workflow", "Part Number already exist in Exclusion List.", MessageSeverity.error);
+                    material.partItem='';
+                    this.alertService.showMessage("Workflow", "Part Number already exist in Material List.", MessageSeverity.error);
                     return;
-                }
+                // }
             }
         }
         material.qtyOnHand = material.quantityOnHand;

@@ -365,12 +365,12 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  convertfromquoteEndPoint(salesQuoteConversionCriteria: SalesOrderConversionCritera): Observable<any> {
-    const URL = `${this.getConvertfromquoteEndPoint}`;
+  convertfromquoteEndPoint(salesQuoteConversionCriteria: SalesOrderConversionCritera, currentEmployeeId: number): Observable<any> {
+    const URL = `${this.getConvertfromquoteEndPoint}?currentEmployeeId=${currentEmployeeId}`;
     return this.http
       .post(URL, salesQuoteConversionCriteria, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.convertfromquoteEndPoint(salesQuoteConversionCriteria));
+        return this.handleErrorCommon(error, () => this.convertfromquoteEndPoint(salesQuoteConversionCriteria, currentEmployeeId));
       });
   }
 

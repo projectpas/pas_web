@@ -91,10 +91,9 @@
                                     (click)="dt.exportCSV({selectionOnly:true})">
                             </button>
                         </div>
-                        <div class="col">
-                            <div class="">
-                              <div
-                                class="col workflow-radios">
+                        <div class="pull-right buttons-div-align">
+                            <div class="col">
+                              <div class="col buttons-top-padding">
                                 <div class="form-group">
                                   <div
                                     class="pull-left radio-buttons-align">
@@ -208,11 +207,11 @@
                                     <i class="fa fa-list"></i>
                                 </a>
                             </span>
-                           
-                            <span data-toggle="modal" data-target="#history">
+                            <!-- data-toggle="modal" data-target="#history"/ -->
+                            <span >
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"
                                     tooltipPosition="bottom" title="" class="btn  nobg"
-                                    data-original-title="History">
+                                    data-original-title="History" (click)="auditHistory(rowData)">
                                     <i class="fa fa-history"></i>
                                 </a>
                             </span>
@@ -1322,7 +1321,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <div class="form-group">
+                                                    <div class="form-group"> 
                                                         <label>Percent: </label> <span
                                                         class="percent-width">{{sourceWorkFlow.percentageOfNew}}%</span>
                                                     </div>

@@ -592,6 +592,7 @@ export class WorkOrderService {
     savesubwocheckininventory(AssetData){
         return this.workOrderEndpointService.savesubwocheckininventory(AssetData);
     }
+
     getWoAssetInventoryHistory(workOrderAssetId){
         return this.workOrderEndpointService.getWoAssetInventoryHistory(workOrderAssetId);
     }
@@ -626,6 +627,10 @@ export class WorkOrderService {
     }
     getMaterialStockHistory(id,isSubWorkOrder){
         return this.workOrderEndpointService.getMaterialStockHistory(id,isSubWorkOrder);
+    }
+
+    transferWorkflow(data){
+        return this.workOrderEndpointService.transferWorkflow(data);
     }
 } 
 

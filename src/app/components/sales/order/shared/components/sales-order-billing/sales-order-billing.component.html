@@ -1,10 +1,10 @@
 ﻿<div class="card">
     <div class="card-body p-t-0">
-        <div class="row">
+        <div class="row" >
             <div class="col-md-12 invoice-div">
                 <label></label>
                 <div class="form-group invoice-button-div">
-                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateInvoiceBtn"
+                    <button *ngIf="isView == false" type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateInvoiceBtn"
                         (click)="PerformBilling()">Invoice</button>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                             </span>
                         </th>
                         <th colspan="7"></th>
-                        <th></th>
+                        <th *ngIf="isView == false"></th>
                     </tr>
                     <ng-container *ngIf="billingList.length > 0">
                         <ng-container *ngFor="let summaryPart of billingList; let rowIndex = index;">
@@ -33,7 +33,7 @@
                                         </span>
                                     </td>
                                     <td colspan="7"></td>
-                                    <td></td>
+                                    <td *ngIf="isView == false"></td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
                                     <th class="background-white"></th>
@@ -50,7 +50,7 @@
                                     <th style="min-width: 60px;">Cond</th>
                                     <th style="min-width: 60px;">Curr</th>
                                     <th style="min-width: 105px;">Billing Amount</th>
-                                    <th style="min-width: 120px; position: sticky !important">Actions</th>
+                                    <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">Actions</th>
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let bill of summaryPart.salesOrderBillingInvoiceChild; let poIndex = index">
@@ -98,7 +98,7 @@
                                     <td>
                                         {{ formateCurrency(bill.totalSales) }}
                                     </td>
-                                    <td class="zui-sticky-col" style="width:107px !important">
+                                    <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
                                         <span *ngIf="bill.qtyBilled > 0">
                                             <a class="btn nobg" matTooltip="Invoice" matTooltipPosition="above"
                                                 (click)="ViewInvoice(bill);"><i class="fa fa-print"></i></a>

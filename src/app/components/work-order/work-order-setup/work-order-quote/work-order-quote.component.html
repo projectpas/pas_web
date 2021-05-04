@@ -186,7 +186,7 @@
                      <label for="customerPhone">
                          Customer phone
                      </label>
-                     <input class="form-control" type="number" [(ngModel)]="customerPhone" name="customerPhone" readonly />
+                     <input class="form-control" type="text" [(ngModel)]="customerPhone" name="customerPhone" readonly />
                  </div>
  
  
@@ -982,7 +982,7 @@
                                  <td class="text-right">{{formateCurrency(matQuotation.unitCost)}}</td>
                                  <td class="text-right">{{formateCurrency((matQuotation.quantity * matQuotation.unitCost).toFixed(2))}}</td>
                                  <td>
-                                     <select class="form-control width-130" (ngModelChange)="getValidMat()" [(ngModel)]="matQuotation.billingMethodId"
+                                     <select class="form-control width-130" (ngModelChange)="getValidMat()" (change)="billingChanged(matQuotation, 'row')" [(ngModel)]="matQuotation.billingMethodId"
                                        [disabled]="isView || costPlusType == 3 || isViewForApprovedPart">
                                          <option value="">Select</option>
                                          <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]" [value]="bm.value">{{bm.label}}</option>
@@ -994,7 +994,7 @@
                                          <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                      </select>
                                  </td>
-                                 <td class="text-right">{{ formateCurrency(matQuotation.billingRate) }}</td>
+                                 <td class="text-right">{{ matQuotation.billingRate }}</td>
                                  <td>
                                      <!-- <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" /> -->
                                      <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
@@ -1767,7 +1767,7 @@
                                  <th>Created By</th>
                                  <th>Updated Date</th>
                                  <th>Updated By</th>
-                                 <th class="events1"></th>
+                                 <th class="events1">Action</th>
                              </tr>
                          </ng-template>
                          <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -1832,7 +1832,7 @@
                                  <th>Created By</th>
                                  <th>Updated Date</th>
                                  <th>Updated By</th>
-                                 <th class="events1"></th>
+                                 <th class="events1">Action</th>
                              </tr>
                          </ng-template>
                          <ng-template pTemplate="body" let-rowData let-columns="columns">

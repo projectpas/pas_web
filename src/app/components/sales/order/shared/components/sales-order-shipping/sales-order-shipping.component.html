@@ -1,16 +1,15 @@
 ﻿<div class="card">
     <div class="card-body p-t-0">
-        <div class="row">
+        <div class="row" *ngIf="!isView">
             <div class="col-md-12 shipping-div">
                 <label class="input-width-100-percent"></label>
-                <div class="form-group perform-shipping-div">
+                <div class="form-group perform-shipping-div" *ngIf="isView == false">
                     <button type="submit" class="btn  submit-btn btn btn-primary"
                         [disabled]="disableGeneratePackagingBtn" (click)="generatePackagingSlip()">Generate Packaging
                         Label</button>&nbsp;
-                    <button type="submit" class="btn  submit-btn btn btn-primary"
-                        [disabled]="true">Print Packaging Label</button>&nbsp;
-                    <button type="submit" class="btn  submit-btn btn btn-primary"
-                        [disabled]="true">Print Shipping Label</button>&nbsp;
+                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedPackagingSlip()">Print Packaging Label</button>&nbsp;
+                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedShippingLabel()">Print Shipping
+                        Label</button>&nbsp;
                     <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
                         (click)="PerformShipping()">Perform Shipping</button>
                 </div>
@@ -27,7 +26,7 @@
                             </span>
                         </th>
                         <th colspan="7"></th>
-                        <th></th>
+                        <th *ngIf="isView == false"></th>
                     </tr>
                     <ng-container *ngIf="shippingList.length > 0">
                         <ng-container *ngFor="let summaryPart of shippingList; let rowIndex = index;">
@@ -40,7 +39,7 @@
                                         </span>
                                     </td>
                                     <td colspan="7"></td>
-                                    <td></td>
+                                    <td *ngIf="isView == false"></td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
                                     <th class="background-white"></th>
@@ -57,12 +56,14 @@
                                     <th style="min-width: 70px;">Qty To Ship</th>
                                     <th style="min-width: 100px;">Customs Value</th>
                                     <th style="min-width: 120px;">Commodity Code</th>
-                                    <th style="min-width: 120px; position: sticky !important">Actions</th>
+                                    <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">
+                                        Actions</th>
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
                                     <td>
-                                        <input id="{{poIndex}}" *ngIf="ship.packagingSlipNo === undefined || ship.packagingSlipNo == ''" name="ship.selectedToGeneratePackaging{{poIndex}}"
+                                        <!-- *ngIf="ship.packagingSlipNo === undefined || ship.packagingSlipNo == ''" -->
+                                        <input id="{{poIndex}}" name="ship.selectedToGeneratePackaging{{poIndex}}"
                                             type="checkbox" (change)="checkedToGenerate($event, ship);"
                                             [(ngModel)]="ship.selectedToGeneratePackaging" />
                                     </td>
@@ -109,7 +110,7 @@
                                     <td>
                                         {{ ship.commodityCode }}
                                     </td>
-                                    <td class="zui-sticky-col" style="width:107px !important">
+                                    <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
                                         <span *ngIf="ship.packagingSlipNo !== undefined && ship.packagingSlipNo != ''">
                                             <a class="btn nobg" matTooltip="Print Packaging Slip"
                                                 matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i
@@ -182,7 +183,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <select [(ngModel)]="shippingHeader.soShippingStatusId" name="status" required
-                                            [disabled]="isView">
+                                            [disabled]="isViewShipping">
                                             <option value="">Select</option>
                                             <option
                                                 *ngFor="let status of [{'label':'Open', 'id':1}, {'label':'Shipped', 'id':2}, {'label':'In Transit', 'id':3}, {'label':'Received', 'id':4}]"
@@ -197,7 +198,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <p-calendar [showIcon]="true" [(ngModel)]="shippingHeader.openDate"
-                                            name="openDate" [disabled]="isView" required></p-calendar>
+                                            name="openDate" [disabled]="isViewShipping" required></p-calendar>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -239,7 +240,7 @@
                                                 class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.shipviaId" [disabled]="isView"
+                                        <select [(ngModel)]="shippingHeader.shipviaId" [disabled]="isViewShipping"
                                             name="shipVia" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let shipvia of shipViaList" [value]="shipvia.value">
@@ -255,7 +256,7 @@
                                     <div class="col-md-8">
                                         <input class="form-control" type="text"
                                             [(ngModel)]="shippingHeader.shippingAccountNo" name="shippingAccountNo"
-                                            [disabled]="isView" required />
+                                            [disabled]="isViewShipping" required />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -265,7 +266,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <p-calendar [showIcon]="true" [(ngModel)]="shippingHeader.shipDate"
-                                            name="shipDate" [disabled]="isView" required></p-calendar>
+                                            name="shipDate" [disabled]="isViewShipping" required></p-calendar>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -275,7 +276,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input class="form-control" type="text" [(ngModel)]="shippingHeader.airwayBill"
-                                            name="airwayBill" [disabled]="isView" required />
+                                            name="airwayBill" [disabled]="isViewShipping" required />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -286,7 +287,7 @@
                                         <input type="number" class="input-field-value" pKeyFilter="num" pInputText
                                             maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
                                             id="shipWeight" title="Export Weight" (keyup)="btnChange()"
-                                            [disabled]="isView" />
+                                            [disabled]="isViewShipping" />
                                     </div>
                                     <div class="col-md-2">
                                         <label class="sale-order-shipping-lable m-l-40">UOM <span class="clr-red"
@@ -298,7 +299,7 @@
                                             [(ngModel)]="shippingHeader.shipWeightUnit" name="shipWeightUnit"
                                             [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
                                             [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()"
-                                            [disabled]="isView">
+                                            [disabled]="isViewShipping">
                                         </p-dropdown>
                                     </div>
                                 </div>
@@ -310,13 +311,16 @@
                                         <span class="display-flex inline-block">
                                             <input type="number" name="exportLength" class="input-field-value"
                                                 pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
-                                                [(ngModel)]="shippingHeader.shipSizeLength" [disabled]="isView" />&nbsp;
+                                                [(ngModel)]="shippingHeader.shipSizeLength"
+                                                [disabled]="isViewShipping" />&nbsp;
                                             <input type="number" name="exportWidth" class="input-field-value" pInputText
                                                 pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
-                                                [(ngModel)]="shippingHeader.shipSizeWidth" [disabled]="isView" />&nbsp;
+                                                [(ngModel)]="shippingHeader.shipSizeWidth"
+                                                [disabled]="isViewShipping" />&nbsp;
                                             <input type="number" name="exportHeight" class="input-field-value"
                                                 pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
-                                                [(ngModel)]="shippingHeader.shipSizeHeight" [disabled]="isView" />
+                                                [(ngModel)]="shippingHeader.shipSizeHeight"
+                                                [disabled]="isViewShipping" />
                                         </span>
                                     </div>
                                     <div class="col-md-2">
@@ -331,7 +335,7 @@
                                             name="shipSizeUnitOfMeasureId" [resetFilterOnHide]="true"
                                             placeholder="Select" [showClear]="true"
                                             [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
-                                            (onChange)="btnChange()" [disabled]="isView"></p-dropdown>
+                                            (onChange)="btnChange()" [disabled]="isViewShipping"></p-dropdown>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -343,7 +347,7 @@
                                             <input type="number" class="input-field-value" pKeyFilter="num" pInputText
                                                 maxlength="10" [(ngModel)]="shippingHeader.noOfContainer"
                                                 name="noOfContainer" id="noOfContainer" title="No Of Container"
-                                                (keyup)="btnChange()" [disabled]="isView" required />
+                                                (keyup)="btnChange()" [disabled]="isViewShipping" required />
                                         </span>
                                     </div>
                                 </div>
@@ -366,7 +370,7 @@
                                     <div class="col-md-8">
                                         <select [(ngModel)]="shippingHeader.originSiteId" name="originSiteId"
                                             (change)="setOriginToAddress(shippingHeader.originSiteId)" required
-                                            [disabled]="isView">
+                                            [disabled]="isViewShipping">
                                             <option *ngFor="let site of orignSiteNames" [ngValue]="site.originSiteId">
                                                 {{site.originName}}</option>
                                         </select>
@@ -450,14 +454,15 @@
                                             (completeMethod)="filterCustomerNameSold($event)"
                                             (onKeyUp)="clearAddress('SoldTo', $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
-                                            class="p-autoComplete-ctsm" [disabled]="isView">
+                                            class="p-autoComplete-ctsm" [disabled]="isViewShipping">
                                         </p-autoComplete>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
-                                            <span *ngIf="isView ? false : (shippingHeader.soldToName ? true : false) "
+                                            <span
+                                                *ngIf="isViewShipping ? false : (shippingHeader.soldToName ? true : false) "
                                                 class="label-span"><a class="fa fa-plus-circle fa-lg"
                                                     matTooltip="Add Site Name" matTooltipPosition="above"
                                                     data-toggle="modal" data-target="#createBillingSiteName1"
@@ -466,8 +471,8 @@
                                     </div>
                                     <div class="col-md-8">
                                         <select [(ngModel)]="shippingHeader.soldToSiteId"
-                                            (change)="setSoldToAddresses()" [disabled]="isView" name="soldToSite"
-                                            required>
+                                            (change)="setSoldToAddresses()" [disabled]="isViewShipping"
+                                            name="soldToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of soldCustomerSiteList" [value]="site.siteID">
                                                 {{site.siteName}}
@@ -483,7 +488,7 @@
                                     <div class="col-md-8">
                                         <input class="form-control" type="text"
                                             [(ngModel)]="shippingHeader.soldToAddress1" name="soldToAddress1" required
-                                            [disabled]="isView" disabled />
+                                            [disabled]="isViewShipping" disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -493,7 +498,7 @@
                                     <div class="col-md-8">
                                         <input class="form-control" type="text"
                                             [(ngModel)]="shippingHeader.soldToAddress2" name="soldToAddress2"
-                                            [disabled]="isView" disabled />
+                                            [disabled]="isViewShipping" disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -502,7 +507,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToCity"
-                                            name="soldToCity" [disabled]="isView" required disabled />
+                                            name="soldToCity" [disabled]="isViewShipping" required disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -511,7 +516,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToState"
-                                            name="soldToState" [disabled]="isView" required disabled />
+                                            name="soldToState" [disabled]="isViewShipping" required disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -520,7 +525,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToZip"
-                                            name="soldToZip" [disabled]="isView" required disabled />
+                                            name="soldToZip" [disabled]="isViewShipping" required disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -530,7 +535,7 @@
                                     <div class="col-md-8">
                                         <input class="form-control" type="text"
                                             [(ngModel)]="shippingHeader.soldToCountryName" name="soldToCountryName"
-                                            [disabled]="isView" required disabled />
+                                            [disabled]="isViewShipping" required disabled />
                                     </div>
                                 </div>
                             </div>
@@ -553,7 +558,7 @@
                                             (completeMethod)="filterCustomerName($event)"
                                             (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
-                                            class="p-autoComplete-ctsm" [disabled]="isView">
+                                            class="p-autoComplete-ctsm" [disabled]="isViewShipping">
                                         </p-autoComplete>
                                     </div>
                                 </div>
@@ -561,7 +566,7 @@
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
                                             <span
-                                                *ngIf="isView ? false : (shippingHeader.shipToCustomerId ? true : false) "
+                                                *ngIf="isViewShipping ? false : (shippingHeader.shipToCustomerId ? true : false) "
                                                 class="label-span"><a class="fa fa-plus-circle fa-lg"
                                                     matTooltip="Add Site Name" matTooltipPosition="above"
                                                     data-toggle="modal" data-target="#createPOSiteName1"
@@ -570,7 +575,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
-                                            [disabled]="isView" name="shipToSite" required>
+                                            [disabled]="isViewShipping" name="shipToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of shipCustomerSiteList" [value]="site.siteID">
                                                 {{site.siteName}}</option>
@@ -658,7 +663,7 @@
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryType']"
                                                 [required]="addCustomerInfo == true" name="entryType"
-                                                [disabled]="isView" />
+                                                [disabled]="isViewShipping" />
                                             <!-- [required]="shippingHeader.originCountryId != shippingHeader.shipToCountryId" -->
                                         </div>
                                     </div>
@@ -671,7 +676,7 @@
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryNumber']"
                                                 [required]="addCustomerInfo == true" name="entryNumber"
-                                                [disabled]="isView" />
+                                                [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -681,7 +686,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['commodityCode']"
-                                                name="entryCommodityCode" [disabled]="isView" />
+                                                name="entryCommodityCode" [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                 </div>
@@ -698,7 +703,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['epu']" name="epu"
-                                                [required]="addCustomerInfo == true" [disabled]="isView" />
+                                                [required]="addCustomerInfo == true" [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -709,7 +714,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['ucr']" name="ucr"
-                                                [required]="addCustomerInfo == true" [disabled]="isView" />
+                                                [required]="addCustomerInfo == true" [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -719,7 +724,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['masterUCR']"
-                                                name="masterUCR" [disabled]="isView" />
+                                                name="masterUCR" [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -729,7 +734,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['movementRefNo']"
-                                                name="MovementRefNo" [disabled]="isView" />
+                                                name="MovementRefNo" [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                 </div>
@@ -747,7 +752,7 @@
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['customsValue']"
                                                 [required]="addCustomerInfo == true" name="customsValue"
-                                                [disabled]="isView" />
+                                                [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -759,7 +764,7 @@
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['netMass']"
                                                 [required]="addCustomerInfo == true" name="netMass"
-                                                [disabled]="isView" />
+                                                [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -769,7 +774,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['vatValue']"
-                                                name="VATValue" [disabled]="isView" />
+                                                name="VATValue" [disabled]="isViewShipping" />
                                         </div>
                                     </div>
                                 </div>
@@ -781,7 +786,8 @@
                     <div class="col-md-12">
                         <div class="card card-stock">
                             <div class="card-body">
-                                <button *ngIf="!isView" class="btn btn-primary pull-right width-100" (click)="save()"
+                                <button *ngIf="!isView && !isViewShipping" class="btn btn-primary pull-right width-100"
+                                    (click)="save()"
                                     [disabled]="!shippingForm.valid">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
                             </div>
                         </div>

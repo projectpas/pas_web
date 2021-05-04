@@ -9,7 +9,7 @@ import { CommonService } from '../../../../services/common.service';
 import { getModuleIdByName } from '../../../../generic/enums';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
-@Component({
+@Component({ 
     selector: 'app-work-order-freight',
     templateUrl: './work-order-freight.component.html',
     styleUrls: ['./work-order-freight.component.css'],

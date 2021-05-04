@@ -638,8 +638,8 @@
             </div>            
             <div id="step2" class="panel-collapse collapse" style="height:0" aria-expanded="false">
                   
-                <div class="panel-body">
-                    <div class="modal-content p-1 aircraft-table-div">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
                          
                         <p-table #aircraft [value]="aircraftListDataValues"
                                  class="rpo-table-cstm rro-table-cstm"
@@ -753,8 +753,8 @@
                 </h4>
             </div>
             <div id="step3" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <div class="modal-content p-1 aircraft-table-div">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
                         <p-table #ataDataTable class="rpo-table-cstm rro-table-cstm "
                                  [value]="ataMappedList" [rows]="ataPageSize" [columns]="atasub"
                                  [scrollable]="true" [style]="{width:'100%'}" [paginator]="true"
@@ -1416,6 +1416,7 @@
                                 <th>Is Delete</th>
                             </tr>
                         </thead>
+                        <tbody>
 
                         <tr *ngFor="let audit of aircraftauditHistory; let i = index">
                             <td [ngStyle]="{
@@ -1455,8 +1456,15 @@
                             <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
                             <td>{{ audit.createdBy }}</td>
                             <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                            <td class="background-white"><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                            <td class="text-center width-60">
+                                <span class="value">
+                                  <label class="wauto">
+                                       <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                    </label>
+                                </span>
+                            </td>
                         </tr>
+                        </tbody>
                     </table>
                     </div>
                 </div>
@@ -1544,7 +1552,12 @@
 
                                 <td>{{ audit.updatedBy }}</td>
                                 <td><p>{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                                <td><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
+                                           <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                        </label>
+                                    </span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1815,7 +1828,13 @@
                         <td><p > {{ audit.createdBy }}</p></td>
                         <td><p> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
                         <td><p > {{ audit.updatedBy }}</p></td>
-                        <td><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                        <td class="text-center width-60">
+                            <span class="value">
+                              <label class="wauto">
+                                  <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                </label>
+                            </span>
+                        </td>
                     </tr>
                 </tbody>
             </table>

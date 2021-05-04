@@ -144,7 +144,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
       this.isUpdate = false;
     }
     this.chargeForm = [];
-    this.exchangeQuoteChargesList = [];
+    this.exchangeQuoteChargesLists = [];
   }
 
   get userName(): string {
@@ -410,25 +410,25 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   }
 
   chargesAudiHistory: any = [];
-  // openInterShipViaHistory(content, rowData) {
-  //   if (rowData && rowData.salesOrderQuoteChargesId) {
-  //     this.salesOrderQuoteService.getSOQChargesHistory(rowData.salesOrderQuoteChargesId).subscribe(
-  //       results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content), error => {
-  //         this.isSpinnerVisible = false;
-  //       });
-  //   }
-  // }
+  openInterShipViaHistory(content, rowData) {
+    if (rowData && rowData.exchangeQuoteChargesId) {
+      this.exchangequoteService.getExchangeQuoteChargesHistory(rowData.exchangeQuoteChargesId).subscribe(
+        results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content), error => {
+          this.isSpinnerVisible = false;
+        });
+    }
+  }
 
-  // private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
-  //   this.alertService.stopLoadingMessage();
-  //   for (let x of auditHistory) {
-  //     x.unitCost = this.formateCurrency(Number(x.unitCost.toString().replace(/\,/g, '')));
-  //     x.billingAmount = this.formateCurrency(Number(x.billingAmount.toString().replace(/\,/g, '')));
-  //     x.extendedCost = this.formateCurrency(Number(x.extendedCost.toString().replace(/\,/g, '')));
-  //   }
-  //   this.chargesAudiHistory = auditHistory;
-  //   this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
-  // }
+  private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
+    this.alertService.stopLoadingMessage();
+    for (let x of auditHistory) {
+      x.unitCost = this.formateCurrency(Number(x.unitCost.toString().replace(/\,/g, '')));
+      x.billingAmount = this.formateCurrency(Number(x.billingAmount.toString().replace(/\,/g, '')));
+      x.extendedCost = this.formateCurrency(Number(x.extendedCost.toString().replace(/\,/g, '')));
+    }
+    this.chargesAudiHistory = auditHistory;
+    this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+  }
 
   dismissModelHistory() {
     this.modal.close();
@@ -542,5 +542,85 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
     }, error => {
       this.isSpinnerVisible = false;
     })
+  }
+
+  delete() {
+    this.deleteModal.close();
+    this.isSpinnerVisible = true;
+    if (!this.selectedRowForDelete.exchangeQuoteChargesId) {
+      this.selectedRowForDelete.isDeleted = true;
+      this.isSpinnerVisible = false;
+      if (this.storedData && this.storedData.length != 0) {
+        this.storedData.forEach(element => {
+          if (
+            JSON.stringify(element) === JSON.stringify(this.selectedRowForDelete)
+          ) {
+            element.isDeleted = true;
+            this.exchangeQuoteChargesList.splice(this.selectedRowIndexForDelete, 1);
+          }
+        });
+      }
+      else {
+        this.exchangeQuoteChargesList.splice(this.selectedRowIndexForDelete, 1);
+      }
+      this.storedData = [...this.storedData];
+      this.alertService.showMessage(
+        '',
+        'Deleted Exchange Quote Charge Successfully',
+        MessageSeverity.success
+      );
+    } else {
+      let exchangeQuoteChargesId = this.selectedRowForDelete.exchangeQuoteChargesId;
+      this.exchangequoteService.deleteexchangeQuoteChargesList(exchangeQuoteChargesId, this.userName).subscribe(res => {
+        this.alertService.showMessage(
+          '',
+          'Deleted Exchange Quote Charge Successfully',
+          MessageSeverity.success
+        );
+        this.isSpinnerVisible = false;
+        this.refreshOnDataSaveOrEditORDelete(true);
+      }, error => {
+        this.isSpinnerVisible = false;
+        const errorLog = error;
+      })
+    }
+
+    $('#addNewCharges').modal('hide');
+    this.isEdit = false;
+    this.isSaveChargesDesabled = false;
+  }
+
+  restoreRecord() {
+    if (this.restorerecord && this.restorerecord.exchangeQuoteChargesId > 0) {
+      this.commonService.updatedeletedrecords('ExchangeQuoteCharges', 'ExchangeQuoteChargesId', this.restorerecord.exchangeQuoteChargesId).subscribe(res => {
+        this.refreshOnDataSaveOrEditORDelete();
+        this.modal.close();
+        this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+      },
+        err => {
+          this.isSpinnerVisible = false;
+        });
+    }
+    else {
+      this.restorerecord.isDeleted = false;
+      this.exchangeQuoteChargesList.splice(this.deletedrowIndex, 1);
+      this.storedData.forEach(element => {
+        if (
+          JSON.stringify(element) === JSON.stringify(this.restorerecord)
+        ) {
+          element.isDeleted = false;
+
+        }
+      });
+      this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+      this.modal.close();
+    }
+  }
+
+  deletedrowIndex: any;
+  restore(content, rowData, index) {
+    this.restorerecord = rowData;
+    this.deletedrowIndex = index;
+    this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
   }
 }

@@ -1592,11 +1592,17 @@ export class VendorShippingInformationComponent {
 
     dateFilterForTable(date, field) {
         if (date !== '') {
+            this.internationalShippingData = this.internationalShippingDataListOriginal;
             const data = [...this.internationalShippingData.filter(x => {
                 if (moment(x.startDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'startDate') {
                     return x;
                 } else if (moment(x.expirationDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'expirationDate') {
                     return x;
+                } else if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+
                 }
             })]
             this.internationalShippingData = data;
@@ -1720,33 +1726,35 @@ export class VendorShippingInformationComponent {
                     }
                 });
             }
-            this.internationalShippingData = newarry;
-        } else if (status == 'ALL') {
-            this.isActivIntStatus = status;
-            if (this.currentDeletedstatusIntenational == false) {
-                this.originalTableDataInternanl.forEach(element => {
-                    if (element.isDeleted == false) {
-                        newarry.push(element);
-                    }
-                });
-            } else {
-                this.originalTableDataInternanl.forEach(element => {
-                    if (element.isDeleted == true) {
-                        newarry.push(element);
-                    }
-                });
+                  this.internationalShippingData = newarry; 
+            }else if(status== 'ALL'){
+                this.isActivIntStatus=status;
+                if(this.currentDeletedstatusIntenational==false){
+                    this.originalTableDataInternanl.forEach(element=>{
+                        if(element.isDeleted==false){
+                            newarry.push(element);
+                        }
+                    });
+                }else{
+                    this.originalTableDataInternanl.forEach(element=>{
+                        if(element.isDeleted==true){
+                            newarry.push(element);
+                        }
+                    });
+                }
+                this.internationalShippingData= newarry;
             }
-            this.internationalShippingData = newarry;
-        }
-        this.internationalShippingData = this.internationalShippingData.map(x => {
-            return {
-                ...x,
-                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
-                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : ''
-            }
-        })
-        this.totalRecords = this.internationalShippingData.length;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+            this.internationalShippingData = this.internationalShippingData.map(x => {
+                return {
+                    ...x,
+                    createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                    updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                    startDate : x.startDate ?  this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a'): '',
+                    expirationDate : x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a'): ''
+                }  
+            })
+            this.totalRecords = this.internationalShippingData.length ;
+            this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }
 
     restoreDomesticShipping(content, rowData) {

@@ -813,6 +813,11 @@
             <div class="modal-body">
                 <app-teardown-overview  *ngIf="isView"  [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [workFlowWorkOrderId1]="workFlowWorkOrderId"></app-teardown-overview>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeViewdiv()">
+                  Close
+                </button>
+              </div>
         </div>
     </div>
 </div>

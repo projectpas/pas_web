@@ -411,7 +411,7 @@ export class SalesOrderPartNumberComponent {
           } else {
             this.part.quantityFromThis = this.part.quantityToBeQuoted;
           }
-          
+
           this.part.qtyAvailable = this.selectedPart.qtyAvailable;
           this.part.quantityOnHand = this.selectedPart.quantityOnHand;
           this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
@@ -886,5 +886,17 @@ export class SalesOrderPartNumberComponent {
     localStorage.setItem("partNumber", rowData.partNumber);
     localStorage.setItem("salesOrderId", this.salesOrderId);
     this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/vendor/`);
+  }
+
+  getMarginPercentage(part) {
+    return ((((part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended)) / (part.grossSalePrice + Number(part.misc))) * 100).toFixed(2);
+  }
+
+  getMarginAmount(part) {
+    return (part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
+  }
+
+  getTotalRevenue(part) {
+    return (part.grossSalePrice + Number(part.misc)).toFixed(2);
   }
 }

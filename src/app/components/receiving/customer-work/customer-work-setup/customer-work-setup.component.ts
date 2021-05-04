@@ -223,7 +223,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.allPartnumbersList = res;
             this.partNumbersInfo = this.allPartnumbersList;
         })
-    }
+    } 
     
     loadEmployeeData(value) {
         this.setEditArray = [];

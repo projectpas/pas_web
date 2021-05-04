@@ -57,10 +57,13 @@ export class PoSettingsComponent implements OnInit {
         this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId);
         this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId).subscribe(res => {
             if (res) {
+                debugger
                 this.posettingModel.PurchaseOrderSettingId = res.purchaseOrderSettingId;
                 this.posettingModel.IsResale = res.isResale;
                 this.posettingModel.IsDeferredReceiver = res.isDeferredReceiver;
                 this.posettingModel.IsEnforceApproval = res.isEnforceApproval;
+                this.posettingModel.startDate = new Date(res.startDate);
+                this.posettingModel.endDate = new Date(res.endDate);
             }
         }, err => {
             this.isSpinnerVisible = false;
@@ -76,12 +79,14 @@ export class PoSettingsComponent implements OnInit {
             PurchaseOrderSettingId : this.posettingModel.PurchaseOrderSettingId,
 			IsResale: this.posettingModel.IsResale,
 			IsDeferredReceiver: this.posettingModel.IsDeferredReceiver,
-			IsEnforceApproval: this.posettingModel.IsEnforceApproval,
+			IsEnforceApproval: this.posettingModel.IsEnforceApproval == true ? 1 : 0,
 			masterCompanyId: this.currentUserMasterCompanyId,
             createdDate: this.posettingModel.createdDate,
             updatedDate: this.posettingModel.updatedDate,
             createdBy: this.posettingModel.createdBy ? this.posettingModel.createdBy : this.userName,
-            updatedBy: this.posettingModel.updatedBy ? this.posettingModel.updatedBy : this.userName
+            updatedBy: this.posettingModel.updatedBy ? this.posettingModel.updatedBy : this.userName,
+            startDate: this.posettingModel.startDate,
+            endDate: this.posettingModel.endDate,
         }
 
         this.purchaseOrderService.savePurchaseOrderSettingMasterDate({ ...headerInfoObj }).subscribe(saveddata => {

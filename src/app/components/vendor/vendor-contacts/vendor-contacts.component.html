@@ -312,7 +312,7 @@
                               </td>
                           </tr>
                       </ng-template>
-                      <ng-template pTemplate="emptymessage" let-columns>
+                      <ng-template pTemplate="emptymessage" let-columns *ngIf="allActions.length == 0">
                           <tr>
                               <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
                                   No records found

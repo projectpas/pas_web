@@ -26,6 +26,7 @@ export class SalesOrderBillingComponent implements OnInit {
     @Input() salesOrderId;
     @Input() salesOrder: any;
     @Input() customerDetails: any;
+    @Input() isView: boolean = false;
     invoiceTypeList = [];
     revisionTypeList = [];
     currencyList = [];

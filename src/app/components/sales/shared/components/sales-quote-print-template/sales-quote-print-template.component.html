@@ -183,15 +183,15 @@ border-spacing: 0 1em;">
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line">Tax Rate</td>
-            <td class="total-value">
-                <div id="total"></div>
+            <td class="total-value" style="text-align: right;">
+                <div id="total">{{salesQuote.taxRate | number : '1.2-2'}} %</div>
             </td>
         </tr>
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line">Sales Tax</td>
-            <td class="total-value">
-                <div id="total"></div>
+            <td class="total-value" style="text-align: right;">
+                <div id="total">{{salesTax | number : '1.2-2'}} </div>
             </td>
         </tr>
         <tr>
@@ -212,7 +212,7 @@ border-spacing: 0 1em;">
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line"><strong>Total</strong></td>
             <td class="total-value" style="text-align: right;">
-                <strong>{{totalAmount | twoDecimalGlobalNumberFormatPipe}}</strong></td>
+                <strong>{{totalAmount | number : '1.2-2'}}</strong></td>
         </tr>
     </tbody>
 </table>
