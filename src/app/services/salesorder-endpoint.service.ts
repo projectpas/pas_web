@@ -93,6 +93,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
   private readonly getMultiShipingLabelForPrint: string = environment.baseUrl + "/api/SalesOrder/getMultiShipingLabelForPrint";
   private readonly getMultiPackagingSlipForPrint: string = environment.baseUrl + "/api/SalesOrder/printMultiplePackagingSlip";
+  private readonly getMultiPickTicketForPrint: string = environment.baseUrl + "/api/SalesOrder/getMultiSalesOrderPickTicketForPrint";
   private readonly getPackagingSlipForPrint: string = environment.baseUrl + "/api/SalesOrder/printPackagingSlip";
   private readonly updateServiceClass: string = environment.baseUrl + "/api/SalesOrder/updateServiceClass";
   private readonly getSalesOrderBillingInvoicingPdfURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingPdf";
@@ -740,6 +741,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId, salesOrderPartId, soPickTicketId));
+      });
+  }
+
+  getMultiPickTicketPrint(multiPickTicket: any): Observable<any> {
+    const URL = `${this.getMultiPickTicketForPrint}`;
+    return this.http
+      .post<any>(URL, JSON.stringify(multiPickTicket), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getMultiPickTicketPrint(multiPickTicket));
       });
   }
 

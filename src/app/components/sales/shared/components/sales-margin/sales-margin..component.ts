@@ -11,6 +11,7 @@ import { formatStringToNumber } from "../../../../../generic/autocomplete";
 })
 export class SalesMarginComponent implements OnInit {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() searchAnotherPN: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() save: EventEmitter<PartDetail> = new EventEmitter<PartDetail>();
   @Input() part: PartDetail;
   @Input() display: boolean;
@@ -45,6 +46,11 @@ export class SalesMarginComponent implements OnInit {
   onSave(event: Event): void {
     event.preventDefault();
     this.save.emit(this.part);
+  }
+
+  onSearchAnotherPN(event: Event): void {
+    event.preventDefault();
+    this.searchAnotherPN.emit(true);
   }
 
   showPartNumberModal() {

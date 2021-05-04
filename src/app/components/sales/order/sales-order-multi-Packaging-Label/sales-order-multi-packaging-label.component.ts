@@ -46,11 +46,7 @@ export class SalesOrderMultiPackagingLabelComponent implements OnInit {
   getPackagingSlipView() {
     this.isSpinnerVisible = true;
     this.salesOrderService.getMultiPackagingSlipPrint(this.packagingSlips).subscribe(res => {
-      debugger;
       this.objpackagingSlips = res[0];
-      // this.salesOrder = res[0].packagingLabelViewModel;
-      // this.parts = res[0].packagingLabelPartViewModel;
-      // this.management = res[0].managementStructureHeaderData;
       this.isSpinnerVisible = false;
     }, error => {
       this.isSpinnerVisible = false;

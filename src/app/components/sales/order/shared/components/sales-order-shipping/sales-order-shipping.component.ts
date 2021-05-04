@@ -127,6 +127,8 @@ export class SalesOrderShippingComponent {
 
     refresh(parts) {
         this.partSelected = false;
+        this.disableGeneratePackagingBtn = true;
+        this.disableCreateShippingBtn = true;
         this.initColumns();
         this.bindData();
     }
@@ -559,39 +561,26 @@ export class SalesOrderShippingComponent {
     generatePackagingSlip() {
         let packagingSlipItems: PackagingSlipItems[] = [];
 
-        //if (this.isMultipleSelected) {
         this.shippingList.filter(a => {
             for (let i = 0; i < a.soshippingchildviewlist.length; i++) {
                 if (a.soshippingchildviewlist[i].selectedToGeneratePackaging == true) {
-                    var p = new PackagingSlipItems;
-                    p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
-                    p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
-                    p.salesOrderPartId = a.soshippingchildviewlist[i].salesOrderPartId;
-                    p.salesOrderId = this.salesOrderId;
-                    p.masterCompanyId = this.currentUserMasterCompanyId;
-                    p.createdBy = this.userName;
-                    p.updatedBy = this.userName;
-                    p.createdDate = new Date().toDateString();
-                    p.updatedDate = new Date().toDateString();
+                    if (a.soshippingchildviewlist[i].packagingSlipId === undefined && a.soshippingchildviewlist[i].packagingSlipId == 0) {
+                        var p = new PackagingSlipItems;
+                        p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
+                        p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
+                        p.salesOrderPartId = a.soshippingchildviewlist[i].salesOrderPartId;
+                        p.salesOrderId = this.salesOrderId;
+                        p.masterCompanyId = this.currentUserMasterCompanyId;
+                        p.createdBy = this.userName;
+                        p.updatedBy = this.userName;
+                        p.createdDate = new Date().toDateString();
+                        p.updatedDate = new Date().toDateString();
 
-                    packagingSlipItems.push(p);
+                        packagingSlipItems.push(p);
+                    }
                 }
             }
         });
-        // }
-        // else {
-        //     var p = new PackagingSlipItems;
-        //     p.SOPickTicketId = this.currSOPickTicketId;
-        //     p.currQtyToShip = this.currQtyToShip;
-        //     p.salesOrderPartId = this.salesOrderPartId;
-        //     p.salesOrderId = this.salesOrderId;
-        //     p.masterCompanyId = this.currentUserMasterCompanyId;
-        //     p.createdBy = this.userName;
-        //     p.updatedBy = this.userName;
-        //     p.createdDate = new Date().toDateString();
-        //     p.updatedDate = new Date().toDateString();
-        //     packagingSlipItems.push(p);
-        // }
         this.isSpinnerVisible = true;
 
         this.salesOrderService.generatePackagingSlip(packagingSlipItems)
@@ -674,16 +663,16 @@ export class SalesOrderShippingComponent {
     checkIsCheckedToGenerate() {
         var keepGoing = true;
         this.shippingList.forEach(a => {
-            if (keepGoing) {
-                a.soshippingchildviewlist.forEach(ele => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (keepGoing) {
                     if (ele.selectedToGeneratePackaging) {
                         this.disableGeneratePackagingBtn = false;
                         keepGoing = false;
                     }
                     else
                         this.disableGeneratePackagingBtn = true;
-                });
-            }
+                }
+            });
         });
     }
 
@@ -1404,7 +1393,6 @@ export class SalesOrderShippingComponent {
     }
 
     printSelectedPackagingSlip() {
-        debugger;
         let packagingSlipsToPrint: MultiPackagingSlips[] = [];
         this.shippingList.forEach(a => {
             a.soshippingchildviewlist.forEach(ele => {
