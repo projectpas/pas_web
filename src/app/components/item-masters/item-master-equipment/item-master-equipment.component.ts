@@ -67,8 +67,8 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	View: boolean = false;
 	Add: boolean = false;
 	Update: boolean = false;
-	allRolesInfo: any[]=[];
-	modelValue: boolean =	false;
+	allRolesInfo: any[] = [];
+	modelValue: boolean = false;
 	display: boolean = false;
 	disableSaveglAccount: boolean;
 	disableSaveManufacturer: boolean;
@@ -146,8 +146,8 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	updatedDate: any = "";
 	auditHisory: AuditHistory[];
 	model: any;
-	@ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-	@ViewChild(MatSort,{static:false}) sort: MatSort;
+	@ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+	@ViewChild(MatSort, { static: false }) sort: MatSort;
 	cols: any[];
 	selectedColumns: any[];
 	displayedColumns = ['itemclassificationId', 'itemclassificationCode', 'description', 'memo'];
@@ -189,20 +189,20 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	private isDeleteMode: boolean = false;
 	allManagemtninfo: any[] = [];
 	allAircraftManufacturer: any[] = [];
-	constructor(public workFlowtService1: LegalEntityService,private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, public itemser: ItemMasterService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public ataMainSer: AtaMainService, public currency: CurrencyService, public priority: PriorityService, public inteService: IntegrationService, public workFlowtService: ItemClassificationService, public itemservice: ItemGroupService, public proService: ProvisionService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private router: Router, public itemMasterService: ItemMasterService) {
+	constructor(public workFlowtService1: LegalEntityService, private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, public itemser: ItemMasterService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public ataMainSer: AtaMainService, public currency: CurrencyService, public priority: PriorityService, public inteService: IntegrationService, public workFlowtService: ItemClassificationService, public itemservice: ItemGroupService, public proService: ProvisionService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private router: Router, public itemMasterService: ItemMasterService) {
 		this.displayedColumns.push('action');
 		this.dataSource = new MatTableDataSource();
 		this.itemser.currentUrl = '/itemmastersmodule/itemmasterpages/app-item-master-equipment';
 		this.itemser.bredcrumbObj.next(this.itemser.currentUrl);//Bread Crumb
-		
-		if (this.itemser.listEquipmentCollection  && this.itemser.isEditMode == true) {
 
-			
+		if (this.itemser.listEquipmentCollection && this.itemser.isEditMode == true) {
+
+
 			this.showLable = true;
 			this.sourceItemMaster = this.itemser.listEquipmentCollection;
 			if (this.sourceItemMaster.standAloneEquipment == false) { this.component = true; }
 			else { this.component = false; }
-			
+
 			//this.sourceItemMaster.memo = this.itemser.listEquipmentCollection.memo;
 			//this.sourceItemMaster.toleranceMinimum = this.itemser.listEquipmentCollection.toleranceMinimum;
 			//this.sourceItemMaster.toleranceMaximum = this.itemser.listEquipmentCollection.toleranceMaximum;
@@ -236,7 +236,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 		this.provisiondata();
 		this.atamaindata();
 		this.integrationData();
-	    this.priorityData();
+		this.priorityData();
 		this.CurrencyData();
 		this.countryData();
 		this.unitofmeasure();
@@ -259,7 +259,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	}
 
 
-	
+
 
 	getAircraftModelsData(): any {
 		this.alertService.startLoadingMessage();
@@ -662,19 +662,19 @@ export class ItemMasterEquipmentComponent implements OnInit {
 
 					if (this.allRolesInfo[i].permittedEditActionDescription = 'Add') {
 						this.EquipmentAdd = true;
-						
+
 					}
 					if (this.allRolesInfo[i].permittedEditActionDescription = 'View') {
-						
+
 						this.EquipmentView = true;
 					}
 					if (this.allRolesInfo[i].permittedEditActionDescription = 'Delete') {
-						
+
 						this.EquipmentDelete = true;
 					}
 
 				}
-				
+
 				if (this.allRolesInfo[i].screenName == 'Equipment') {
 					if (this.allRolesInfo[i].permittedEditActionDescription = 'Add') {
 						this.EquipmentAdd = true;
@@ -701,12 +701,18 @@ export class ItemMasterEquipmentComponent implements OnInit {
 		}
 
 	}
-	
+
+	get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
+
 	private glAccountlistdata() {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
 		let value = "Stock";
-		this.itemser.getItemStockList(value).subscribe(
+		this.itemser.getItemStockList(value, this.currentUserMasterCompanyId).subscribe(
 			results => this.onglAccountSuccessful(results[0]),
 			error => this.onDataLoadFailed(error)
 		);
@@ -727,7 +733,6 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	private loadData() {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
-
 		this.itemser.getItemMasterList().subscribe(
 			results => this.onitemmasterSuccessful(results[0]),
 			error => this.onDataLoadFailed(error)
@@ -1209,181 +1214,181 @@ export class ItemMasterEquipmentComponent implements OnInit {
 
 	}
 
-    itemclassification(content) {
+	itemclassification(content) {
 
-        this.isEditMode = false;
-        this.isDeleteMode = false;
+		this.isEditMode = false;
+		this.isDeleteMode = false;
 
-        this.isSaving = true;
-        this.loadMasterCompanies();
-        this.sourceAction = new ItemClassificationModel();
-        this.sourceAction.isActive = true;
-        this.itemName = "";
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
-
-
-
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
-
-
-    priorty(content) {
-
-        this.isEditMode = false;
-        this.isDeleteMode = false;
-
-        this.isSaving = true;
-        this.loadMasterCompanies();
-        this.sourceAction = new Priority();
-        this.sourceAction.isActive = true;
-        this.priorityName = "";
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
+		this.isSaving = true;
+		this.loadMasterCompanies();
+		this.sourceAction = new ItemClassificationModel();
+		this.sourceAction.isActive = true;
+		this.itemName = "";
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
 
 
 
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
-
-    atamai(content) {
-
-        this.isEditMode = false;
-        this.isDeleteMode = false;
-
-        this.isSaving = true;
-        this.loadMasterCompanies();
-        this.sourceAction = new ATAMain();
-        this.sourceAction.isActive = true;
-        this.ataChapterName = "";
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
 
 
+	priorty(content) {
 
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
+		this.isEditMode = false;
+		this.isDeleteMode = false;
 
-
-    item(content) {
-
-        this.isEditMode = false;
-        this.isDeleteMode = false;
-
-        this.isSaving = true;
-        this.loadMasterCompanies();
-        this.sourceAction = new Itemgroup();
-        this.sourceAction.isActive = true;
-        this.itemGroupName = "";
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
+		this.isSaving = true;
+		this.loadMasterCompanies();
+		this.sourceAction = new Priority();
+		this.sourceAction.isActive = true;
+		this.priorityName = "";
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
 
 
 
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
 
+	atamai(content) {
 
-    waning(content) {
+		this.isEditMode = false;
+		this.isDeleteMode = false;
 
-        this.isEditMode = false;
-        this.isDeleteMode = false;
-
-        this.isSaving = true;
-        this.loadMasterCompanies();
-        //this.sourceAction = new this.warningName();
-        //this.sourceAction.isActive = true;
-
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
-
-
-
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
-
-    provisionope(content) {
-
-        this.isEditMode = false;
-        this.isDeleteMode = false;
-
-        this.isSaving = true;
-        this.loadMasterCompanies();
-        this.sourceAction = new Provision();
-        this.sourceAction.isActive = true;
-
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
+		this.isSaving = true;
+		this.loadMasterCompanies();
+		this.sourceAction = new ATAMain();
+		this.sourceAction.isActive = true;
+		this.ataChapterName = "";
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
 
 
 
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
 
-    integratn(content) {
 
-        this.isEditMode = false;
-        this.isDeleteMode = false;
+	item(content) {
 
-        this.isSaving = true;
-        this.loadMasterCompanies();
-        this.sourceAction = new Integration();
-        this.sourceAction.isActive = true;
-        this.integrationName = "";
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
+		this.isEditMode = false;
+		this.isDeleteMode = false;
+
+		this.isSaving = true;
+		this.loadMasterCompanies();
+		this.sourceAction = new Itemgroup();
+		this.sourceAction.isActive = true;
+		this.itemGroupName = "";
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
 
 
 
-
-    openDelete(content, row) {
-
-        this.isEditMode = false;
-        this.isDeleteMode = true;
-        this.sourceAction = row;
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
-
-    openEdit(content, row) {
-
-        this.isEditMode = true;
-        this.isSaving = true;
-        this.loadMasterCompanies();
-        this.sourceAction = row;
-        this.itemName = this.sourceAction.itemClassificationCode;
-        this.loadMasterCompanies();
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
-
-    openHist(content, row) {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
 
 
-        this.sourceAction = row;
+	waning(content) {
+
+		this.isEditMode = false;
+		this.isDeleteMode = false;
+
+		this.isSaving = true;
+		this.loadMasterCompanies();
+		//this.sourceAction = new this.warningName();
+		//this.sourceAction.isActive = true;
+
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
 
 
 
-        this.isSaving = true;
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
 
-        this.workFlowtService.historyAcion(this.sourceAction.itemClassificationId).subscribe(
-            results => this.onHistoryLoadSuccessful(results[0], content),
-            error => this.saveFailedHelper(error));
+	provisionope(content) {
+
+		this.isEditMode = false;
+		this.isDeleteMode = false;
+
+		this.isSaving = true;
+		this.loadMasterCompanies();
+		this.sourceAction = new Provision();
+		this.sourceAction.isActive = true;
+
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
+
+
+
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+
+	integratn(content) {
+
+		this.isEditMode = false;
+		this.isDeleteMode = false;
+
+		this.isSaving = true;
+		this.loadMasterCompanies();
+		this.sourceAction = new Integration();
+		this.sourceAction.isActive = true;
+		this.integrationName = "";
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+
+
+
+
+	openDelete(content, row) {
+
+		this.isEditMode = false;
+		this.isDeleteMode = true;
+		this.sourceAction = row;
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+
+	openEdit(content, row) {
+
+		this.isEditMode = true;
+		this.isSaving = true;
+		this.loadMasterCompanies();
+		this.sourceAction = row;
+		this.itemName = this.sourceAction.itemClassificationCode;
+		this.loadMasterCompanies();
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+
+	openHist(content, row) {
+		this.alertService.startLoadingMessage();
+		this.loadingIndicator = true;
+
+
+		this.sourceAction = row;
+
+
+
+		this.isSaving = true;
+
+		this.workFlowtService.historyAcion(this.sourceAction.itemClassificationId).subscribe(
+			results => this.onHistoryLoadSuccessful(results[0], content),
+			error => this.saveFailedHelper(error));
 
 
 	}
@@ -1466,7 +1471,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 			}
 		}
 	}
-    filterItems(event) {
+	filterItems(event) {
 
 		this.localCollection = [];
 		if (this.allitemclassificationInfo) {
@@ -1477,9 +1482,9 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
-    filterUnitOfMeasures(event) {
+	filterUnitOfMeasures(event) {
 
 		this.localunit = [];
 		if (this.allUnitOfMeasureinfo) {
@@ -1490,9 +1495,9 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
-    filterItemgroups(event) {
+	filterItemgroups(event) {
 
 		this.localgroup = [];
 		if (this.allitemgroupobjInfo) {
@@ -1503,9 +1508,9 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
-    filterprovisions(event) {
+	filterprovisions(event) {
 
 		this.localprovision = [];
 		if (this.allProvisonInfo) {
@@ -1516,9 +1521,9 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
-    filterpriorities(event) {
+	filterpriorities(event) {
 
 		this.localpriority = [];
 		if (this.allPriorityInfo) {
@@ -1529,9 +1534,9 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
-    filterAtamains(event) {
+	filterAtamains(event) {
 
 		this.localatamain = [];
 		if (this.allATAMaininfo) {
@@ -1542,9 +1547,9 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
-    filterintegrations(event) {
+	filterintegrations(event) {
 
 		this.localintegration = [];
 		if (this.allIntegrationInfo) {
@@ -1555,382 +1560,382 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
 
 
-    handleChange(rowData, e) {
-        if (e.checked == false) {
-            this.sourceAction = rowData;
-            this.sourceAction.updatedBy = this.userName;
-            this.Active = "In Active";
-            this.sourceAction.isActive == false;
-            this.workFlowtService.updateAction(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-            //alert(e);
-        }
-        else {
-            this.sourceAction = rowData;
-            this.sourceAction.updatedBy = this.userName;
-            this.Active = "Active";
-            this.sourceAction.isActive == true;
-            this.workFlowtService.updateAction(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-            //alert(e);
-        }
-
-    }
-    private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
-
-
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-
-        this.auditHisory = auditHistory;
-
-
-        this.modal = this.modalService.open(content, { size: 'lg' });
-
-        this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-
-
-    }
-
-
-    editItemAndCloseModel() {
-
-        this.isSaving = true;
-
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.itemClassificationCode = this.itemName;
-            this.sourceAction.masterCompanyId = 1;
-            this.workFlowtService.newAction(this.sourceAction).subscribe(
-                role => this.saveSuccessHelper(role),
+	handleChange(rowData, e) {
+		if (e.checked == false) {
+			this.sourceAction = rowData;
+			this.sourceAction.updatedBy = this.userName;
+			this.Active = "In Active";
+			this.sourceAction.isActive == false;
+			this.workFlowtService.updateAction(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
 				error => this.saveFailedHelper(error));
-			
-        }
-        else {
+			//alert(e);
+		}
+		else {
+			this.sourceAction = rowData;
+			this.sourceAction.updatedBy = this.userName;
+			this.Active = "Active";
+			this.sourceAction.isActive == true;
+			this.workFlowtService.updateAction(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+			//alert(e);
+		}
 
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.itemClassificationCode = this.itemName;
-            this.sourceAction.masterCompanyId = 1;
-            this.workFlowtService.updateAction(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+	}
+	private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
 
-        // this.modal.close();
-    }
 
-    deleteItemAndCloseModel() {
-        this.isSaving = true;
-        this.sourceAction.updatedBy = this.userName;
-        this.workFlowtService.deleteAcion(this.sourceAction.itemClassificationId).subscribe(
-            response => this.saveCompleted(this.sourceAction),
-            error => this.saveFailedHelper(error));
-        this.modal.close();
-    }
+		this.alertService.stopLoadingMessage();
+		this.loadingIndicator = false;
 
-    dismissModel() {
-        this.isDeleteMode = false;
-        this.isEditMode = false;
+		this.auditHisory = auditHistory;
+
+
+		this.modal = this.modalService.open(content, { size: 'lg' });
+
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+
+
+	}
+
+
+	editItemAndCloseModel() {
+
+		this.isSaving = true;
+
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.itemClassificationCode = this.itemName;
+			this.sourceAction.masterCompanyId = 1;
+			this.workFlowtService.newAction(this.sourceAction).subscribe(
+				role => this.saveSuccessHelper(role),
+				error => this.saveFailedHelper(error));
+
+		}
+		else {
+
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.itemClassificationCode = this.itemName;
+			this.sourceAction.masterCompanyId = 1;
+			this.workFlowtService.updateAction(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
+
+		// this.modal.close();
+	}
+
+	deleteItemAndCloseModel() {
+		this.isSaving = true;
+		this.sourceAction.updatedBy = this.userName;
+		this.workFlowtService.deleteAcion(this.sourceAction.itemClassificationId).subscribe(
+			response => this.saveCompleted(this.sourceAction),
+			error => this.saveFailedHelper(error));
 		this.modal.close();
-		
 	}
 
-	
-    private saveCompleted(user?: any) {
-        this.isSaving = false;
+	dismissModel() {
+		this.isDeleteMode = false;
+		this.isEditMode = false;
+		this.modal.close();
 
-        if (this.isDeleteMode == true) {
-            this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
-            this.isDeleteMode = false;
-        }
-        else {
-            this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success);
-
-        }
-
-        this.itemclass();
-    }
+	}
 
 
-    openView(content, row) {
+	private saveCompleted(user?: any) {
+		this.isSaving = false;
 
-        this.sourceAction = row;
-        this.item_Name = row.itemClassificationCode;
-        this.description = row.description;
-        this.itemType = row.itemType;
-        this.memo = row.memo;
-        this.createdBy = row.createdBy;
-        this.updatedBy = row.updatedBy;
-        this.createdDate = row.createdDate;
-        this.updatedDate = row.updatedDate;
-        this.loadMasterCompanies();
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
-    openHelpText(content) {
-        this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
-    }
+		if (this.isDeleteMode == true) {
+			this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
+			this.isDeleteMode = false;
+		}
+		else {
+			this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success);
 
-    private saveSuccessHelper(role?: any) {
-        this.isSaving = false;
-        this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
+		}
 
-        this.itemclass();
+		this.itemclass();
+	}
 
-    }
 
-    get userName(): string {
-        return this.authService.currentUser ? this.authService.currentUser.userName : "";
-    }
+	openView(content, row) {
 
-    private saveFailedHelper(error: any) {
-        this.isSaving = false;
-        this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
-        this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-    }
+		this.sourceAction = row;
+		this.item_Name = row.itemClassificationCode;
+		this.description = row.description;
+		this.itemType = row.itemType;
+		this.memo = row.memo;
+		this.createdBy = row.createdBy;
+		this.updatedBy = row.updatedBy;
+		this.createdDate = row.createdDate;
+		this.updatedDate = row.updatedDate;
+		this.loadMasterCompanies();
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+	openHelpText(content) {
+		this.modal = this.modalService.open(content, { size: 'sm' });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
 
-    private getDismissReason(reason: any): string {
-        if (reason === ModalDismissReasons.ESC) {
-            return 'by pressing ESC';
-        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-            return 'by clicking on a backdrop';
-        } else {
-            return `with: ${reason}`;
-        }
-    }
+	private saveSuccessHelper(role?: any) {
+		this.isSaving = false;
+		this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
 
-    saveitemclassification() {
+		this.itemclass();
 
-        this.isSaving = true;
+	}
 
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.itemClassificationCode = this.itemName;
-            this.sourceAction.masterCompanyId = 1;
-            this.workFlowtService.newAction(this.sourceAction).subscribe(data => { this.itemclass() })
-            //role => this.saveSuccessHelper(role),
-            //error => this.saveFailedHelper(error));
-        }
-        else {
+	get userName(): string {
+		return this.authService.currentUser ? this.authService.currentUser.userName : "";
+	}
 
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.itemClassificationCode = this.itemName;
-            this.sourceAction.masterCompanyId = 1;
-            this.workFlowtService.updateAction(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+	private saveFailedHelper(error: any) {
+		this.isSaving = false;
+		this.alertService.stopLoadingMessage();
+		this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
+		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+	}
 
-        //this.modal.close();
-    }
+	private getDismissReason(reason: any): string {
+		if (reason === ModalDismissReasons.ESC) {
+			return 'by pressing ESC';
+		} else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+			return 'by clicking on a backdrop';
+		} else {
+			return `with: ${reason}`;
+		}
+	}
 
-    saveitemgroup() {
+	saveitemclassification() {
 
-        this.isSaving = true;
+		this.isSaving = true;
 
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.itemGroupCode = this.itemGroupName;
-            this.sourceAction.masterCompanyId = 1;
-            this.itemservice.newAction(this.sourceAction).subscribe(data => { this.itemgroup() })
-        }
-        else {
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.itemClassificationCode = this.itemName;
+			this.sourceAction.masterCompanyId = 1;
+			this.workFlowtService.newAction(this.sourceAction).subscribe(data => { this.itemclass() })
+			//role => this.saveSuccessHelper(role),
+			//error => this.saveFailedHelper(error));
+		}
+		else {
 
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.itemGroupCode = this.itemGroupName;
-            this.sourceAction.masterCompanyId = 1;
-            this.itemservice.updateAction(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.itemClassificationCode = this.itemName;
+			this.sourceAction.masterCompanyId = 1;
+			this.workFlowtService.updateAction(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
 
-        // this.modal.close();
-    }
+		//this.modal.close();
+	}
 
-    saveprovision() {
+	saveitemgroup() {
 
-        // ;
+		this.isSaving = true;
 
-        this.isSaving = true;
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.itemGroupCode = this.itemGroupName;
+			this.sourceAction.masterCompanyId = 1;
+			this.itemservice.newAction(this.sourceAction).subscribe(data => { this.itemgroup() })
+		}
+		else {
 
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.description = this.provisionName;
-            this.sourceAction.masterCompanyId = 1;
-            this.proService.newProvision(this.sourceAction).subscribe(data => { this.provisiondata() })
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.itemGroupCode = this.itemGroupName;
+			this.sourceAction.masterCompanyId = 1;
+			this.itemservice.updateAction(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
 
-        }
-        else {
+		// this.modal.close();
+	}
 
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.description = this.provisionName;
-            this.sourceAction.masterCompanyId = 1;
-            this.proService.updateProvision(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+	saveprovision() {
 
-        // this.modal.close();
-    }
-    saveatamain() {
+		// ;
 
-        // ;
+		this.isSaving = true;
 
-        this.isSaving = true;
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.description = this.provisionName;
+			this.sourceAction.masterCompanyId = 1;
+			this.proService.newProvision(this.sourceAction).subscribe(data => { this.provisiondata() })
 
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.masterCompanyId = 1;
-            this.sourceAction.ataChapterName = this.ataChapterName;
-            this.ataMainSer.newATAMain(this.sourceAction).subscribe(data => { this.atamaindata() })
+		}
+		else {
 
-        }
-        else {
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.description = this.provisionName;
+			this.sourceAction.masterCompanyId = 1;
+			this.proService.updateProvision(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
 
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.ataChapterName = this.ataChapterName;
-            this.sourceAction.masterCompanyId = 1;
-            this.ataMainSer.updateATAMain(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+		// this.modal.close();
+	}
+	saveatamain() {
 
-        this.modal.close();
-    }
-    saveunitofmeasure() {
+		// ;
 
-        // ;
+		this.isSaving = true;
 
-        this.isSaving = true;
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.masterCompanyId = 1;
+			this.sourceAction.ataChapterName = this.ataChapterName;
+			this.ataMainSer.newATAMain(this.sourceAction).subscribe(data => { this.atamaindata() })
 
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.description = this.unitName;
-            this.sourceAction.masterCompanyId = 1;
-            this.unitService.newUnitOfMeasure(this.sourceAction).subscribe(data => { this.unitofmeasure() })
+		}
+		else {
 
-        }
-        else {
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.ataChapterName = this.ataChapterName;
+			this.sourceAction.masterCompanyId = 1;
+			this.ataMainSer.updateATAMain(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
 
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.description = this.unitName;
-            this.sourceAction.masterCompanyId = 1;
-            this.unitService.updateUnitOfMeasure(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+		this.modal.close();
+	}
+	saveunitofmeasure() {
 
-        // this.modal.close();
-    }
-    savepriority() {
+		// ;
 
-        this.isSaving = true;
+		this.isSaving = true;
 
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.description = this.priorityName;
-            this.priority.newPriority(this.sourceAction).subscribe(data => { this.priorityData() })
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.description = this.unitName;
+			this.sourceAction.masterCompanyId = 1;
+			this.unitService.newUnitOfMeasure(this.sourceAction).subscribe(data => { this.unitofmeasure() })
 
-        }
-        else {
+		}
+		else {
 
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.description = this.priorityName;
-            this.priority.updatePriority(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.description = this.unitName;
+			this.sourceAction.masterCompanyId = 1;
+			this.unitService.updateUnitOfMeasure(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
 
-        //this.modal.close();
-    }
+		// this.modal.close();
+	}
+	savepriority() {
 
-    saveintegration() {
+		this.isSaving = true;
 
-        this.isSaving = true;
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.description = this.priorityName;
+			this.priority.newPriority(this.sourceAction).subscribe(data => { this.priorityData() })
 
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.description = this.integrationName;
-            this.inteService.newAction(this.sourceAction).subscribe(data => { this.integrationData() })
+		}
+		else {
 
-        }
-        else {
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.description = this.priorityName;
+			this.priority.updatePriority(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
 
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.description = this.integrationName;
-            this.inteService.updateAction(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+		//this.modal.close();
+	}
 
-        //this.modal.close();
-    }
+	saveintegration() {
 
-    savewarnings() {
+		this.isSaving = true;
 
-        this.isSaving = true;
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.description = this.integrationName;
+			this.inteService.newAction(this.sourceAction).subscribe(data => { this.integrationData() })
 
-        if (this.isEditMode == false) {
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.updatedBy = this.userName;
-            this.itemser.newWarning(this.sourceAction).subscribe(
-                role => this.saveSuccessHelper(role),
-                error => this.saveFailedHelper(error));
-        }
-        else {
+		}
+		else {
 
-            this.sourceAction.updatedBy = this.userName;
-            this.itemser.updateItemMaster(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
-        }
+			this.sourceAction.updatedBy = this.userName;
+			this.sourceAction.description = this.integrationName;
+			this.inteService.updateAction(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
 
-        // this.modal.close();
-    }
-    setValue(value) {
-        if (value == "standalone") {
+		//this.modal.close();
+	}
+
+	savewarnings() {
+
+		this.isSaving = true;
+
+		if (this.isEditMode == false) {
+			this.sourceAction.createdBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.itemser.newWarning(this.sourceAction).subscribe(
+				role => this.saveSuccessHelper(role),
+				error => this.saveFailedHelper(error));
+		}
+		else {
+
+			this.sourceAction.updatedBy = this.userName;
+			this.itemser.updateItemMaster(this.sourceAction).subscribe(
+				response => this.saveCompleted(this.sourceAction),
+				error => this.saveFailedHelper(error));
+		}
+
+		// this.modal.close();
+	}
+	setValue(value) {
+		if (value == "standalone") {
 			this.component = false;
-		
-        }
-        else if (value == "component") {
-            this.component = true;
-        }
+
+		}
+		else if (value == "component") {
+			this.component = true;
+		}
 	}
 
 
-	
+
 	saveitemMasterclose() {
 		// ;
 		if (this.component == false) {
-			if (!( this.sourceItemMaster.partNumber && this.sourceItemMaster.partdescription && this.sourceItemMaster.assetId && this.sourceItemMaster.glAccountId && this.sourceItemMaster.currencyId && this.sourceItemMaster.equipmentUOMId)) {
+			if (!(this.sourceItemMaster.partNumber && this.sourceItemMaster.partdescription && this.sourceItemMaster.assetId && this.sourceItemMaster.glAccountId && this.sourceItemMaster.currencyId && this.sourceItemMaster.equipmentUOMId)) {
 				this.display = true;
 				this.modelValue = true;
 			}
 		}
-		if (this.component  == true) {
-			if (!(this.sourceItemMaster.parentPartId &&this.sourceItemMaster.partNumber && this.sourceItemMaster.partdescription && this.sourceItemMaster.assetId && this.sourceItemMaster.glAccountId && this.sourceItemMaster.currencyId && this.sourceItemMaster.equipmentUOMId)) {
+		if (this.component == true) {
+			if (!(this.sourceItemMaster.parentPartId && this.sourceItemMaster.partNumber && this.sourceItemMaster.partdescription && this.sourceItemMaster.assetId && this.sourceItemMaster.glAccountId && this.sourceItemMaster.currencyId && this.sourceItemMaster.equipmentUOMId)) {
 				this.display = true;
 				this.modelValue = true;
 			}
@@ -1976,7 +1981,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 								}
 							}
 						}
-						this.AddCustomerAircraftdata(this.collectionofItemMaster); 
+						this.AddCustomerAircraftdata(this.collectionofItemMaster);
 						this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-list')
 						//this.value = 1;
 
@@ -2118,7 +2123,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 								// }
 								if (this.selectedModels.length > 0) {
 									this.saveAircraftmodelinfo(data.partId, data.itemMasterId, this.selectedModels);
-								 }
+								}
 							}
 						}
 
@@ -2129,7 +2134,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 			}
 			else { }
 		}
-		
+
 		// this.modal.close();
 	}
 
@@ -2163,7 +2168,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 		alert("functionality not yet implemented");
 	}
 	// savemfginfo(partid, itemid, data) {
-		
+
 	// 	for (let i = 0; i < data.length; i++) {
 	// 		if (data[i].atcChapterId1 != null) {
 	// 			data[i].itemId = itemid;
@@ -2189,7 +2194,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 
 
 	// saveDistrbution(partid, itemid, data) {
-		
+
 	// 	for (let i = 0; i < data.length; i++) {
 	// 		if (data[i].atcChapterId1 != null) {
 	// 			data[i].itemId = itemid;
@@ -2215,7 +2220,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	// }
 
 	// saveovhinfo(partid, itemid, data) {
-		
+
 	// 	for (let i = 0; i < data.length; i++) {
 	// 		if (data[i].atcChapterId1 != null) {
 	// 			data[i].itemId = itemid;
@@ -2240,7 +2245,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	// 	}
 	// }
 	// saverepairinfo(partid, itemid, data) {
-		
+
 	// 	for (let i = 0; i < data.length; i++) {
 	// 		if (data[i].atcChapterId1 != null) {
 	// 			data[i].itemId = itemid;
@@ -2264,7 +2269,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	// 	}
 	// }
 	// saveexcahneginfo(partid, itemid, data) {
-		
+
 	// 	for (let i = 0; i < data.length; i++) {
 	// 		if (data[i].atcChapterId1 != null) {
 	// 			data[i].itemId = itemid;
@@ -2289,7 +2294,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	// 	}
 	// }
 	// savecertification(partid, itemid, data) {
-		
+
 	// 	for (let i = 0; i < data.length; i++) {
 	// 		if (data[i].atcChapterId1 != null) {
 	// 			data[i].itemId = itemid;
@@ -2434,9 +2439,9 @@ export class ItemMasterEquipmentComponent implements OnInit {
 			console.log('When user closes');
 		}, () => { console.log('Backdrop click') })
 	}
-    saveManufacturer() {
+	saveManufacturer() {
 
-       //;
+		//;
 
 		this.isSaving = true;
 		if (this.isEditMode == false) {
@@ -2444,12 +2449,12 @@ export class ItemMasterEquipmentComponent implements OnInit {
 			this.sourceAction.updatedBy = this.userName;
 			this.sourceAction.description = this.integrationName;
 			this.sourceAction.masterCompanyId = 1;
-		this.itemser.savemanufacutrer(this.sourcemanufacturer).subscribe(data => { this.manufacturerdata() })
-                //role => this.saveSuccessHelper(role),
-                //error => this.saveFailedHelper(error));
-      
+			this.itemser.savemanufacutrer(this.sourcemanufacturer).subscribe(data => { this.manufacturerdata() })
+			//role => this.saveSuccessHelper(role),
+			//error => this.saveFailedHelper(error));
 
-      
+
+
 		}
 		else {
 
@@ -2462,7 +2467,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 
 		this.modal.close();
 	}
-    filtermanufacturer(event) {
+	filtermanufacturer(event) {
 
 		this.localmanufacturer = [];
 		if (this.allManufacturerInfo) {
@@ -2473,28 +2478,28 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
-    // Temporery Item Master Radiuo Route
-    stock() {
-        this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock');
-    }
+	// Temporery Item Master Radiuo Route
+	stock() {
+		this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock');
+	}
 
-    nonStock() {
-        this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-non-stock');
-    }
-    equipment() {
-        this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-equipment');
-    }
-    exchange() {
-        this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-exchange');
-    }
-    loan() {
-        this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-loan');
-    }
+	nonStock() {
+		this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-non-stock');
+	}
+	equipment() {
+		this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-equipment');
+	}
+	exchange() {
+		this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-exchange');
+	}
+	loan() {
+		this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-loan');
+	}
 
-    partnmId(event) {
-        //;
+	partnmId(event) {
+		//;
 		if (this.partcla) {
 			for (let i = 0; i < this.partcla.length; i++) {
 				if (event == this.partcla[i][0].partName) {
@@ -2504,11 +2509,11 @@ export class ItemMasterEquipmentComponent implements OnInit {
 		}
 	}
 
-	
 
-    filterpartItems(event) {
 
-        this.partCollection = [];
+	filterpartItems(event) {
+
+		this.partCollection = [];
 		this.partcla = [];
 		if (this.allPartnumbersInfo) {
 			for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
@@ -2523,52 +2528,52 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
+	}
 
-    //saveequipment() {
+	//saveequipment() {
 
-    //    //;
+	//    //;
 
-    //    this.isSaving = true;
-    //    this.sourceItemMaster.masterCompanyId = 1;
-    //    this.itemser.saveequipment(this.sourceItemMaster).subscribe(
-    //        role => this.saveSuccessHelper(role),
-    //        error => this.saveFailedHelper(error));
-
-
-
-    //}
-
-    //Equipment(content) {
-
-    //    this.isEditMode = false;
-    //    this.isDeleteMode = false;
-
-    //    this.isSaving = true;
-    //    this.loadMasterCompanies();
-    //   // this.sourceAction = new Integration();
-    //    this.sourceAction.isActive = true;
-    //    this.equipmentName = "";
-    //    this.modal = this.modalService.open(content, { size: 'sm' });
-    //    this.modal.result.then(() => {
-    //        console.log('When user closes');
-    //    }, () => { console.log('Backdrop click') })
-    //}
+	//    this.isSaving = true;
+	//    this.sourceItemMaster.masterCompanyId = 1;
+	//    this.itemser.saveequipment(this.sourceItemMaster).subscribe(
+	//        role => this.saveSuccessHelper(role),
+	//        error => this.saveFailedHelper(error));
 
 
 
-    euipId(event) {
-        //;
-        for (let i = 0; i < this.itemColl.length; i++) {
-            if (event == this.itemColl[i][0].equipmentName) {
-                this.sourceItemMaster.partId = this.itemColl[i][0].partId;
-            }
-        }
-    }
+	//}
 
-    filtereqipItems(event) {
+	//Equipment(content) {
 
-        this.equipCollection = [];
+	//    this.isEditMode = false;
+	//    this.isDeleteMode = false;
+
+	//    this.isSaving = true;
+	//    this.loadMasterCompanies();
+	//   // this.sourceAction = new Integration();
+	//    this.sourceAction.isActive = true;
+	//    this.equipmentName = "";
+	//    this.modal = this.modalService.open(content, { size: 'sm' });
+	//    this.modal.result.then(() => {
+	//        console.log('When user closes');
+	//    }, () => { console.log('Backdrop click') })
+	//}
+
+
+
+	euipId(event) {
+		//;
+		for (let i = 0; i < this.itemColl.length; i++) {
+			if (event == this.itemColl[i][0].equipmentName) {
+				this.sourceItemMaster.partId = this.itemColl[i][0].partId;
+			}
+		}
+	}
+
+	filtereqipItems(event) {
+
+		this.equipCollection = [];
 		this.itemColl = [];
 		if (this.allequipmentsInfo) {
 			for (let i = 0; i < this.allequipmentsInfo.length; i++) {
@@ -2583,19 +2588,19 @@ export class ItemMasterEquipmentComponent implements OnInit {
 				}
 			}
 		}
-    }
-   
-	deletecertificateindex(i) {}
+	}
 
-	deleterepairindex(i) {}
+	deletecertificateindex(i) { }
 
-	deleteexcahngeindex(i) {}
+	deleterepairindex(i) { }
 
-	deletehomeFormIndex(homeFormIndex) {}
+	deleteexcahngeindex(i) { }
 
-	deleteovhindex(ovhindex) {}
+	deletehomeFormIndex(homeFormIndex) { }
 
-	deletedisindex(disindex) {}
+	deleteovhindex(ovhindex) { }
+
+	deletedisindex(disindex) { }
 }
 
 

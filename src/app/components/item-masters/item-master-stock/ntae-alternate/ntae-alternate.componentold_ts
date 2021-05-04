@@ -803,12 +803,17 @@ export class NTAEAlternateComponent implements OnInit, AfterViewInit {
         this.allpnNumbers = allWorkFlows;
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
 
     private glAccountlistdata() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
         let value = "Stock";
-        this.itemser.getItemStockList(value).subscribe(
+        this.itemser.getItemStockList(value,this.currentUserMasterCompanyId).subscribe(
             results => this.onglAccountSuccessful(results[0]),
             error => this.onDataLoadFailed(error)
         );
