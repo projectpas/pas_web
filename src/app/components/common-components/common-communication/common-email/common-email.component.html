@@ -174,8 +174,8 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                   <div class="tableFixHead">
-                    <table class="table table-bordered">
+                    <div class="tableFixHead">
+                      <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Email Type</th>
@@ -237,18 +237,10 @@
                                         *ngIf="audit.attachmentDetails && audit.attachmentDetails.length>0">,</span></a>
                             </tr>
                             </td>
-                            <td
-                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
-                                {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                            <td
-                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
-                                {{audit.createdBy}}</td>
-                            <td
-                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
-                                {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                            <td
-                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
-                                {{audit.updatedBy}}</td>
+                            <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                            <td>{{audit.createdBy}}</td>
+                            <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                            <td>{{audit.updatedBy}}</td>
                             <td class="text-center">
                                 <span class="value">
                                     <label class="wauto">
