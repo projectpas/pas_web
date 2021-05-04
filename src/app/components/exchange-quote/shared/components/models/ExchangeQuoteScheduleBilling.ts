@@ -1,7 +1,8 @@
 import { AssertNotNull } from '@angular/compiler';
 
 export class ExchangeQuoteScheduleBilling {
-    scheduleBillingId:number;
+    //scheduleBillingId:number;
+    exchangeQuoteScheduleBillingId:number;
     scheduleBillingDate:Date;
     periodicBillingAmount:number;
     cogs:number;

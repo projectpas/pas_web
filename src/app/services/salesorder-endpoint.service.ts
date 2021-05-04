@@ -91,6 +91,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/salesorder/getpickticketedit"
   private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
   private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
+  private readonly getMultiShipingLabelForPrint: string = environment.baseUrl + "/api/SalesOrder/getMultiShipingLabelForPrint";
   private readonly getPackagingSlipForPrint: string = environment.baseUrl + "/api/SalesOrder/printPackagingSlip";
   private readonly updateServiceClass: string = environment.baseUrl + "/api/SalesOrder/updateServiceClass";
   private readonly getSalesOrderBillingInvoicingPdfURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingPdf";
@@ -774,6 +775,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId));
+      });
+  }
+
+  getMultiShippingLabelPrint(multiPackagingLabel: any): Observable<any> {
+    const URL = `${this.getMultiShipingLabelForPrint}`;
+    return this.http
+      .post<any>(URL, JSON.stringify(multiPackagingLabel), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getMultiShippingLabelPrint(multiPackagingLabel));
       });
   }
 

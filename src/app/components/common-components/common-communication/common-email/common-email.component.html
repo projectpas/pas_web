@@ -312,8 +312,9 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label class="col-md-12"><span *ngIf="type==1">Customer</span> <span
-                                            *ngIf="type==2">Vendor</span> Contact <span class="clr-red">*</span></label>
+                                    <!-- <label class="col-md-12"><span *ngIf="type==1">Customer</span> <span
+                                            *ngIf="type==2">Vendor</span> Contact <span class="clr-red">*</span></label> -->
+                                    <label class="col-md-12">To <span class="clr-red">*</span></label>      
                                     <p-autoComplete field="firstName" [(ngModel)]="customerContact" required
                                         name="cusContact" #cusContact="ngModel" errorMessage="Records not found"
                                         [forceSelection]="true" [dropdown]="true" [suggestions]="cusContactList"
@@ -334,7 +335,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group col-md-12">
-                                    <label class="col-md-12">Contacted By <span class="clr-red">*</span></label>
+                                    <label class="col-md-12">Sent By <span class="clr-red">*</span></label>
                                     <p-autoComplete field="name" [(ngModel)]="contactBy" required name="employees"
                                         #employees="ngModel" errorMessage="Records not found" [forceSelection]="true"
                                         [dropdown]="true" [suggestions]="employeeList"
@@ -343,7 +344,7 @@
                                     </p-autoComplete>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label>Email To <span class="clr-red">*</span></label>
+                                    <label>Email Address <span class="clr-red">*</span></label>
                                     <input class="form-control" type="email" name="email" [(ngModel)]="toEmail" required
                                         disabled>
                                 </div>

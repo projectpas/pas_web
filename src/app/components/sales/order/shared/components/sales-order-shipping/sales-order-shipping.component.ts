@@ -16,6 +16,7 @@ import { CustomerShippingModel } from '../../../../../../models/customer-shippin
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SalesShippingLabelComponent } from '../../../sales-order-shipping-label/sales-order-shipping-label.component'
 import { SalesOrderPackagingLabelComponent } from '../../../sales-order-Packaging-Label/sales-order-packaging-label.component';
+import { SalesMultiShippingLabelComponent } from '../../../sales-order-multi-shipping-label/sales-order-multi-shipping-label.component';
 
 @Component({
     selector: 'app-sales-order-shipping',
@@ -87,6 +88,7 @@ export class SalesOrderShippingComponent {
     isMultipleSelected: boolean = false;
     addCustomerInfo: boolean = false;
     disableGeneratePackagingBtn: boolean = true;
+    isViewShipping: boolean = false;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -157,7 +159,7 @@ export class SalesOrderShippingComponent {
         this.salesOrderPartId = rowData.salesOrderPartId;
         this.partSelected = true;
         this.isMultipleSelected = false;
-        this.isView = false;
+        this.isViewShipping = false;
         this.clearData();
         this.bindData();
     }
@@ -1321,7 +1323,7 @@ export class SalesOrderShippingComponent {
 
     viewShipping(ship) {
         this.isSpinnerVisible = true;
-        this.isView = true;
+        this.isViewShipping = true;
         this.salesOrderPartId = ship.salesOrderPartId;
         this.partSelected = true;
         this.salesOrderService
@@ -1346,7 +1348,7 @@ export class SalesOrderShippingComponent {
 
     PerformShipping() {
         this.clearData();
-        this.isView = false;
+        this.isViewShipping = false;
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.bindData();
@@ -1399,6 +1401,41 @@ export class SalesOrderShippingComponent {
         instance.soPickTicketId = rowData.soPickTicketId;
         instance.packagingSlipId = rowData.packagingSlipId;
     }
+
+    printSelectedPackagingSlip() {
+    }
+
+    printSelectedShippingLabel() {
+        let shippingItemsToPrint: MultiShippingLabels[] = [];
+        this.shippingList.forEach(a => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (ele.selectedToGeneratePackaging) {
+                    var items = new MultiShippingLabels;
+                    items.SalesOrderId = ele.salesOrderId;
+                    items.SalesOrderPartId = ele.salesOrderPartId;
+                    items.SOShippingId = ele.salesOrderShippingId;
+
+                    shippingItemsToPrint.push(items);
+                }
+            });
+        });
+
+        let shippingLabels: any = {};
+
+        shippingLabels['shippingLabels'] = shippingItemsToPrint;
+
+        this.modal = this.modalService.open(SalesMultiShippingLabelComponent, { size: "lg" });
+        let instance: SalesMultiShippingLabelComponent = (<SalesMultiShippingLabelComponent>this.modal.componentInstance)
+        instance.modalReference = this.modal;
+
+        instance.onConfirm.subscribe($event => {
+            if (this.modal) {
+                this.modal.close();
+            }
+        });
+
+        instance.salesshippingLabels = shippingLabels;
+    }
 }
 
 export class ShippingItems {
@@ -1417,4 +1454,10 @@ export class PackagingSlipItems {
     updatedBy: string;
     createdDate: string;
     updatedDate: string;
+}
+
+export class MultiShippingLabels {
+    SalesOrderId: number;
+    SalesOrderPartId: number;
+    SOShippingId: number;
 }

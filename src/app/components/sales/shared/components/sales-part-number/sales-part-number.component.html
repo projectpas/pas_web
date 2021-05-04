@@ -22,7 +22,7 @@
                                 {{ summaryColumn.header }}
                             </ng-container>
                         </th>
-                        <th colspan="17"></th>
+                        <th colspan="11"></th>
                         <th *ngIf="isViewMode == false" class="sales-part-action-column">Actions
                         </th>
                     </tr>
@@ -30,8 +30,8 @@
                         <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                                    <td *ngFor="let summaryColumn of summaryColumns"
-                                        class="summary-column" pReorderableRowHandle>
+                                    <td *ngFor="let summaryColumn of summaryColumns" class="summary-column"
+                                        pReorderableRowHandle>
                                         <!-- <span *ngIf="summaryColumn.field == 'count'">
                                             Item {{ rowIndex + 1 }}
                                         </span> -->
@@ -80,7 +80,7 @@
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                     </td>
-                                    <td colspan="17" style="background-color: #EAF2C5 !important;"></td>
+                                    <td colspan="11" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" class="center">
                                         <a class="btn nobg view-part-eye" (click)="viewPartNumber(summaryPart,rowIndex)"
                                             matTooltip="View Stock Line" matTooltipPosition="above">
@@ -118,7 +118,7 @@
                                     <th>Qty Qted</th>
                                     <th>Qty Prev Qted</th>
                                     <th>Status</th>
-                                    <th>Unit Cost</th>
+                                    <!-- <th>Unit Cost</th>
                                     <th>MarkUp %</th>
                                     <th>MarkUp Amt/Unit</th>
                                     <th style="min-width: 94px;">Gross Price/Unit</th>
@@ -133,7 +133,17 @@
                                     <th style="min-width: 45px !important;">Total</th>
                                     <th style="min-width: 85px !important;">Extended Cost</th>
                                     <th style="min-width: 92px !important;">Product Margin</th>
-                                    <th style="min-width: 110px !important;">Product Margin (%)</th>
+                                    <th style="min-width: 110px !important;">Product Margin (%)</th> -->
+                                    <th>Per Unit</th>
+                                    <th>Ext. Price</th>
+                                    <th>Misc Charges</th>
+                                    <th>Total Revenue</th>
+                                    <th style="min-width: 80px !important;">Unit Cost</th>
+                                    <th style="min-width: 80px !important;">Ext Cost</th>
+                                    <th style="min-width: 85px !important;">Margin Amt</th>
+                                    <th style="min-width: 85px !important;">Margin %</th>
+                                    <th style="min-width: 75px !important;">Freight</th>
+                                    <th style="min-width: 70px !important;">Tax Amt</th>
                                     <th style="min-width: 60px !important;">Stk Type</th>
                                     <th style="min-width: 92px !important;">Alt/Equiv</th>
                                     <th style="min-width: 80px !important;">Cntrl Num</th>
@@ -246,6 +256,36 @@
                                         {{ salesQuote.status }}
                                     </td>
                                     <td class="text-right">
+                                        {{ part.grossSalePricePerUnit  | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.grossSalePrice | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.misc | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ getTotalRevenue(part) | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.unitCostPerUnit | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.unitCostExtended | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ getMarginAmount(part) | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ getMarginPercentage(part) | twoDecimalGlobalNumberFormatPipe}}
+                                        %</td>
+                                    <td class="text-right">
+                                        {{ part.freight  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.taxAmount  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <!-- <td class="text-right">
                                         {{ part.unitCostPerUnit  | twoDecimalGlobalNumberFormatPipe }}
                                     </td>
                                     <td class="text-right">
@@ -292,7 +332,7 @@
                                     </td>
                                     <td class="text-right">
                                         {{ part.marginPercentageExtended  | twoDecimalGlobalNumberFormatPipe }}
-                                    </td>
+                                    </td> -->
                                     <td>
                                         {{ part.pmaStatus }}
                                     </td>
@@ -328,24 +368,25 @@
                                         <span *ngIf="!isEditDisabled(salesQuote, part)">
                                             <a [class.disabled]="isEditDisabled(salesQuote, part)"
                                                 [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
-                                                class="btn nobg view-part-eye" (click)="openPartToEdit(part)" matTooltip="Edit Price"
-                                                matTooltipPosition="above">
+                                                class="btn nobg view-part-eye" (click)="openPartToEdit(part)"
+                                                matTooltip="Edit Price" matTooltipPosition="above">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
                                         </span>
                                         <span>
                                             <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
                                                 [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}"
-                                                class="btn nobg view-part-eye" (click)="openPartDelete(deleteContent,part)"
-                                                matTooltip="Delete" matTooltipPosition="above">
+                                                class="btn nobg view-part-eye"
+                                                (click)="openPartDelete(deleteContent,part)" matTooltip="Delete"
+                                                matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         </span>
                                         <span data-toggle="modal" data-target="#soqPartHistory">
                                             <a [ngClass]="{'btn_disabled': !part.salesOrderQuotePartId}"
-                                                class="btn nobg btn-hist-cstm view-part-eye" (click)="getAuditHistoryById(part)"
-                                                matTooltip="History" matTooltipPosition="above"><i
-                                                    class="fa fa-history"></i></a>
+                                                class="btn nobg btn-hist-cstm view-part-eye"
+                                                (click)="getAuditHistoryById(part)" matTooltip="History"
+                                                matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                         </span>
                                     </td>
                                 </tr>
@@ -355,7 +396,7 @@
                     <ng-container *ngIf="summaryParts.length == 0">
                         <tbody>
                             <tr>
-                                <td colspan="37" class="sales-no-records-found" style="margin-left:-15%" >
+                                <td colspan="37" class="sales-no-records-found" style="margin-left:-15%">
                                     No records found
                                 </td>
                             </tr>
@@ -381,32 +422,14 @@
                 <h4 class="modal-title">Edit Notes</h4>
             </div>
             <div class="modal-body">
-                <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                    <thead>
-                        <th class="color-white">{{"Notes"}}</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
-                                    required>
-                                </p-editor>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table> -->
-                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
-                required>
-            </p-editor>
+                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required>
+                </p-editor>
                 <div class="editor-buttons">
                     <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
-                        
                         (click)="onSaveTextAreaInfo(textAreaInfo)">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger editor-buttons-margin" 
-                        data-dismiss="modal">
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">
                         Close
                     </button>
                 </div>
@@ -420,7 +443,7 @@
         <span>Update</span>
     </button>
     <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
-     (click)="approve()">
+        (click)="approve()">
         <span>Save</span>
     </button>
 </div>
@@ -642,8 +665,8 @@
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                                     {{audit.updatedBy}}</td>
                                 <td>
-                                    <p class="background-white"> <input type="checkbox"
-                                            name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p>
+                                    <p class="background-white"> <input type="checkbox" name="isDeleted"
+                                            [(ngModel)]="audit.isDeleted" disabled></p>
                                 </td>
                             </tr>
                         </tbody>

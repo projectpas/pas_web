@@ -401,15 +401,15 @@
                                 <td>
                                     {{part.stockLine[stockline_row_index].binText}}
                                 </td>
-                                <td>{{SL.ownerType == 1 ? 'Customer' : SL.ownerType == 2 ? 'Vendor' : SL.ownerType == 3 ? 'Company' : 'Other' }}
+                                <td>{{SL.ownerType == customerModuleId ? 'Customer' : SL.ownerType == vendorModuleId ? 'Vendor' : SL.ownerType == companyModuleId ? 'Company' : 'Other' }}
                                 </td>
                                 <td>{{SL.ownerText}}</td>
-                                <td>{{SL.obtainFromType == 1 ? 'Customer' : SL.obtainFromType == 2 ? 'Vendor' : SL.obtainFromType == 3 ? 'Company' : 'Other' }}
+                                <td>{{SL.obtainFromType == customerModuleId ? 'Customer' : SL.obtainFromType == vendorModuleId ? 'Vendor' : SL.obtainFromType == companyModuleId ? 'Company' : 'Other' }}
                                 </td>
                                 <!-- <td>{{SL.obtainFromType == 3 ? 'Vendor' : SL.obtainFromType == 1 ? 'Customer' : 'Other' }}</td> -->
                                 <td>{{SL.obtainFromText}}</td>
                                 <!-- <td>{{SL.traceableToType == 3 ? 'Vendor' : SL.traceableToType == 1 ? 'Customer' : 'Other' }}</td> -->
-                                <td>{{SL.traceableToType == 1 ? 'Customer' : SL.traceableToType == 2 ? 'Vendor' : SL.traceableToType == 3 ? 'Company' : 'Other' }}
+                                <td>{{SL.traceableToType == customerModuleId ? 'Customer' : SL.traceableToType == vendorModuleId ? 'Vendor' : SL.traceableToType == companyModuleId ? 'Company' : 'Other' }}
                                 </td>
                                 <td>{{SL.traceableToText}}</td>
                                 <td>{{SL.manufacturingTrace}}</td>

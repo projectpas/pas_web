@@ -40,4 +40,5 @@ export interface IExchangeQuote {
 	cogs:number;
 	daysForCoreReturn:number;
 	employeeId:number;
+	isApproved: boolean;
 }

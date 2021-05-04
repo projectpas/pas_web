@@ -477,4 +477,29 @@ export class ExchangeQuotePartNumberComponent {
       })
     }
   }
+
+  isEditDisabled(quote: IExchangeQuote, part: any): boolean {
+    if (part.createdBy && part.createdBy == this.userName) {
+      return ((quote.isApproved || part.isApproved) && part.methodType != "S")
+    } else {
+      return true;
+    }
+  }
+
+  openPartToEdit(part) {
+    debugger;
+    this.isEdit = true;
+    let contentPartEdit = this.salesMargin;
+    this.part = part;
+    if (this.part) {
+      this.exchangequoteService.getSearchPartObject().subscribe(data => {
+        this.query = data;
+        this.part = part;
+        // this.query.partSearchParamters.quantityRequested = this.part.quantityRequested;
+        // this.query.partSearchParamters.quantityToQuote = this.part.quantityToBeQuoted;
+        // this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
+      });
+      this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
+    }
+  }
 }

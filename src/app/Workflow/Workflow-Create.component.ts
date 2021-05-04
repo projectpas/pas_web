@@ -2408,7 +2408,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
 
 
             this.validateTask=false;
-            this.alertService.showMessage("Workflow", msg, MessageSeverity.warn);
+            this.alertService.showMessage("Workflow", msg, MessageSeverity.error);
             return;
         }else{ 
             this.validateTask=true;

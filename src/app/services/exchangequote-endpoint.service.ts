@@ -216,4 +216,20 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
           return this.handleErrorCommon(error, () => this.getExchangeQuoteChargesHistory(id));
         });
     }
-}  
+
+    delete(exchangeQuoteId: number): Observable<boolean> {
+      let endpointUrl = `${this.exchangequote}/${exchangeQuoteId}`;
+      return this.http
+        .delete<boolean>(endpointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.delete(exchangeQuoteId));
+        });
+    }
+
+    getExchangeQuoteHistory(exchangeQuoteId) {
+      return this.http.get<any>(`${this.configurations.baseUrl}/api/exchangeQuote/getExchangeQuoteHistory/?exchangeQuoteId=${exchangeQuoteId}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuoteHistory(exchangeQuoteId));
+        });
+    }
+}
