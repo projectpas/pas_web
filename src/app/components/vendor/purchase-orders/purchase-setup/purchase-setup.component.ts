@@ -3139,7 +3139,11 @@ export class PurchaseSetupComponent implements OnInit {
 				needByDate: this.headerInfo.needByDate, 
 				priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 				conditionId: this.defaultCondtionId,
-				discountPercent: 0
+				discountPercent: 0,
+				workOrderId:{value: 0, label: '-- Select --'},
+				subWorkOrderId:{value: 0, label: '-- Select --'},
+				repairOrderId:{value: 0, label: '-- Select --'},
+				salesOrderId:{value: 0, label: '-- Select --'},
 			}
 			this.partListData.push(newParentObject); 			
 			for (let i = 0; i < this.partListData.length; i++) {
