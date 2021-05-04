@@ -40,7 +40,7 @@
             <th colspan="6" class="freight-isview-th">
               <div class="display-flex">
                 <div class="form-group freight-isview-div">
-                  <p-radioButton  class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                  <p-radioButton  class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top" name="costPlusType"
                     label="T&M - Mark Up"  value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                   </p-radioButton>
                   <div>
@@ -52,11 +52,11 @@
                   </div>
                 </div>
                 <div class="radio-align">
-                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
+                  <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType" value="2"
                     label="Actual"   [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                 </div>
                 <div>
-                  <p-radioButton  class="p-radiobutton-label-horizontal" name="costPlusType"
+                  <p-radioButton  class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
                     value="3" label="Flat Rate"   [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                   </p-radioButton>
                 </div>
