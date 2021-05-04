@@ -36,8 +36,8 @@ import { timePattern } from '../../../validations/validation-pattern';
 })
 /** stock-line-setup component*/
 export class StockLineSetupComponent implements OnInit {
+	uploadDocs: Subject<boolean> = new Subject();
 	isEditMode: boolean = false;
-	moduleName: any = 'StockLine';
 	businessUnitList: any;
 	disableSaveMemo: boolean = true;
 	divisionList: any;
@@ -161,7 +161,7 @@ export class StockLineSetupComponent implements OnInit {
 	managementValidCheck: boolean;
 	selectedPartNumber: any;
 	receiverNumber: any;
-
+	moduleName:any='StockLine';
 	constructor(private alertService: AlertService, private stocklineser: StocklineService, private commonService: CommonService, private conditionService: ConditionService, private binService: BinService, private siteService: SiteService, private vendorService: VendorService, private manufacturerService: ManufacturerService, private integrationService: IntegrationService, private itemMasterService: ItemMasterService, private glAccountService: GlAccountService, private router: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe, private authService: AuthService, private configurations: ConfigurationService, private modalService: NgbModal) {
 		this.stockLineForm.siteId = 0;
 		this.stockLineForm.acquistionTypeId = 0;
@@ -1566,8 +1566,10 @@ export class StockLineSetupComponent implements OnInit {
 		this.saveStockLineForm.receiverNumber = this.receiverNumber;
 		this.stocklineser.newStockLine(this.saveStockLineForm).subscribe(res => {
 			this.isSpinnerVisible = false;
-			this.stockLineId = res.stockLineId;
-			this.onUploadDocumentListNew();
+			this.stockLineId = res.stockLineId; 
+			localStorage.setItem('commonId',this.stockLineId.toString())
+			this.uploadDocs.next(true);
+			// this.onUploadDocumentListNew();
 
 			this.alertService.showMessage(
 				'Success',

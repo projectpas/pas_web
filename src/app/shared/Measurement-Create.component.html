@@ -44,7 +44,7 @@
                     value="{{measurement.diagramURL}}"></td>
             <td>
                 <div class="form-group notes-popup-cstm mat_emo memo-pencil-div">
-                    <div [innerHTML]="measurement.memo" class="text_editor_box memo-html-div"></div>
+                    <div [innerHTML]="measurement.memo" class="text_editor_box memo-html-div" matTooltipPosition="above" [matTooltip]="parsedText(measurement.memo)"></div>
                     <i class=" fa fa-pencil memo-pencil"
                          matTooltip="Memo" matTooltipPosition="above"
                         (click)="onAddTextAreaInfo(measurement,i)"></i>
