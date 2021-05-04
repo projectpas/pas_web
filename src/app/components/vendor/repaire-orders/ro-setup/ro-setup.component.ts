@@ -1352,7 +1352,7 @@ export class RoSetupComponent implements OnInit {
 		if (this.arrayRostatuslist.length == 0) {
             this.arrayRostatuslist.push(0); }
 			this.commonService.autoSuggestionSmartDropDownList('ROStatus','ROStatusId','Description','',
-								  true, 0,this.arrayRostatuslist.join(),this.currentUserMasterCompanyId)
+								  true, 0,this.arrayRostatuslist.join(),0)
 				.subscribe(res => {
 				this.roStatusList = res;
 				this.roStatusList = this.roStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));	

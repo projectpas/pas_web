@@ -847,8 +847,8 @@ export class EditRoComponent implements OnInit {
         if (this.arrayrostatuslist.length == 0) {
             this.arrayrostatuslist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('POStatus', 'POStatusId', 'Description', '',
-            true, 0, this.arrayrostatuslist.join(), this.currentUserMasterCompanyId)
+        this.commonService.autoSuggestionSmartDropDownList('ROStatus', 'ROStatusId', 'Description', '',
+            true, 0, this.arrayrostatuslist.join(), 0)
             .subscribe(res => {
                 this.roStatus = res;
                 this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
