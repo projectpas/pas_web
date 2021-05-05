@@ -348,6 +348,10 @@ export class ExchangeQuoteListComponent implements OnInit {
         });
   }
 
+  closeHistoryModal() {
+    this.modal.close();
+  }
+
   getAuditHistoryById(rowData) {
     this.isSpinnerVisible = true;
     this.exchangequoteService.getExchangeQuoteHistory(rowData.exchangeQuoteId).subscribe(res => {
@@ -356,5 +360,20 @@ export class ExchangeQuoteListComponent implements OnInit {
     }, err => {
         this.isSpinnerVisible = false;
     });
+  }
+
+  openHistoryPopup(content) {
+    this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
+  }
+  getColorCodeForHistory(i, field, value) {
+    const data = this.auditHistory;
+    const dataLength = data.length;
+    if (i >= 0 && i <= dataLength) {
+        if ((i + 1) === dataLength) {
+            return true;
+        } else {
+            return data[i + 1][field] === value
+        }
+    }
   }
 }
