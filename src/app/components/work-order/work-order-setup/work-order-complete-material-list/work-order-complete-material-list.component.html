@@ -55,11 +55,8 @@
         <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
              <tr>
                 <td class="table-column-icon-width"> 
-                    <span >
-                     
+                    <span >                     
                     </span>
-                   
-
                       <button type="button"  (click)="getRollupMaterialList(rowData,i)"  *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="btn btn-primary roleUpd" [disabled]="rowData.partStatusId==0"   matTooltip="Show stock line details"
                       matTooltipPosition="above">
                         <i    class="fa fa-plus mr-0"  
@@ -70,7 +67,6 @@
                       <i 
                       class="fa fa-minus mr-0" ></i>  
                     </button>
-
                 </td> 
                 <td class="table-column-width" *ngFor="let col of columns">
                     <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='isFromWorkFlow'"
@@ -712,10 +708,10 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'extendedCost', audit.extendedCost) ? 'black' : 'red'}">{{ audit.extendedCost }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'costDate', audit.costDate) ? 'black' : 'red'}">{{ audit.costDate | date: 'MM/dd/yyyy'}}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderNumber', audit.purchaseOrderNumber) ? 'black' : 'red'}">{{ audit.purchaseOrderNumber }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderNumber', audit.repairOrderNumber) ? 'black' : 'red'}">{{ audit.repairOrderNumber }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'receiver', audit.receiver) ? 'black' : 'red'}">{{ audit.receiver }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'workOrderNumber', audit.workOrderNumber) ? 'black' : 'red'}">{{ audit.workOrderNumber }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'subWorkOrderNo', audit.subWorkOrderNo) ? 'black' : 'red'}">{{ audit.subWorkOrderNo }}</td> 
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderNumber', audit.repairOrderNumber) ? 'black' : 'red'}">{{ audit.repairOrderNumber }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'receiver', audit.receiver) ? 'black' : 'red'}">{{ audit.receiver }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'workOrderNumber', audit.workOrderNumber) ? 'black' : 'red'}">{{ audit.workOrderNumber }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'subWorkOrderNo', audit.subWorkOrderNo) ? 'black' : 'red'}">{{ audit.subWorkOrderNo }}</td> 
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'salesOrder', audit.salesOrder) ? 'black' : 'red'}">{{ audit.salesOrder }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'site', audit.site) ? 'black' : 'red'}">{{ audit.site }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'wareHouse', audit.wareHouse) ? 'black' : 'red'}">{{ audit.wareHouse }}</td>
