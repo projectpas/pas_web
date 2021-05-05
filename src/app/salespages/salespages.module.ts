@@ -109,6 +109,9 @@ import { SalesOrderPrintTemplateComponent } from "../components/sales/order/sale
 import { SalesMultiShippingLabelComponent } from "../components/sales/order/sales-order-multi-shipping-label/sales-order-multi-shipping-label.component";
 import { SalesOrderMultiPackagingLabelComponent } from "../components/sales/order/sales-order-multi-Packaging-Label/sales-order-multi-packaging-label.component";
 import { SalesOrderMultiPickTicketComponent } from "../components/sales/order/sales-order-multi-pickTicket/sales-order-multi-pickTicket.component";
+import { SpeedQuoteListComponent } from "../components/sales/speed-quote/speed-quote-list/speed-quote-list.component";
+import { SpeedQuoteCreateComponent } from "../components/sales/speed-quote/speed-quote-create/speed-quote-create.component";
+import { SpeedQuoteComponent } from "../components/sales/speed-quote/speed-quote/speed-quote-component";
 //Sales Order Components - End
 
 @NgModule({
@@ -155,9 +158,12 @@ import { SalesOrderMultiPickTicketComponent } from "../components/sales/order/sa
   declarations: [
     SalesPagesComponent,
     SalesQuoteListComponent,
+    SpeedQuoteListComponent,
     SalesOrderConfirmationListComponent,
     SalesQuoteCreateComponent,
+    SpeedQuoteCreateComponent,
     SalesQuoteComponent,
+    SpeedQuoteComponent,
     SalesApproveComponent,
     SalesPartNumberComponent,
     SalesAddressComponent,

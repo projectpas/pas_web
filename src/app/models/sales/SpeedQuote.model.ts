@@ -2,11 +2,13 @@ import { IPriority } from "./IPriority";
 import { ISalesQuoteType } from "./ISalesQuoteType";
 import { ILeadSource } from "./ILeadSource";
 import { IStatus } from "./IStatus";
+import { ISpeedQuote } from "./ISpeedQuote.model";
 
-export interface ISalesQuote {
-  salesOrderQuoteId: number;
-  quoteTypeId: number;
+export class SpeedQuote implements ISpeedQuote {
+  speedQuoteId: number;
+  speedQuoteTypeId: number;
   openDate: Date;
+  masterCompanyId: number;
   customerRequestDate: Date;
   customerPromisedDate: Date;
   estimatedShipDate: Date;
@@ -25,7 +27,6 @@ export interface ISalesQuote {
   customerReferenceId: number;
   customerReferenceName: string;
   contractReferenceId: number;
-  masterCompanyId: number;
   contractReferenceName: string;
   salesPersonId: number;
   salesPersonName: string;
@@ -35,9 +36,10 @@ export interface ISalesQuote {
   customerServiceRepName: string;
   probabilityId: number;
   leadSourceId: number;
+  leadSourceReference: string;
   creditLimit: number;
   creditLimitTermsId: number;
-  employeeId: any;
+  employeeId: number;
   employeeName: string;
   restrictPMA: boolean;
   restrictDER: boolean;
@@ -71,4 +73,5 @@ export interface ISalesQuote {
   qtyToBeQuoted: number;
   statusName: string;
   isApproved: boolean;
+  constructor() { }
 }
