@@ -36,6 +36,9 @@ export class PoSettingsComponent implements OnInit {
         this.posettingModel.IsDeferredReceiver = false;
 		this.posettingModel.IsEnforceApproval = false;
         this.isSpinnerVisible = false;
+        this.posettingModel.startDate = new Date();
+        this.posettingModel.endDate = new Date();
+
         this.getPurchaseOrderMasterData(this.currentUserMasterCompanyId);
     }
 
@@ -56,30 +59,47 @@ export class PoSettingsComponent implements OnInit {
     getPurchaseOrderMasterData(currentUserMasterCompanyId) {
         this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId);
         this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId).subscribe(res => {
-            if (res) {
-                debugger
+            if (res) {                
                 this.posettingModel.PurchaseOrderSettingId = res.purchaseOrderSettingId;
                 this.posettingModel.IsResale = res.isResale;
                 this.posettingModel.IsDeferredReceiver = res.isDeferredReceiver;
-                this.posettingModel.IsEnforceApproval = res.isEnforceApproval;
-                this.posettingModel.startDate = new Date(res.startDate);
-                this.posettingModel.endDate = new Date(res.endDate);
+                this.posettingModel.IsEnforceApproval = res.isEnforceApproval;                
+                if(res.startDate){
+                    this.posettingModel.startDate = new Date(res.startDate);
+                    this.posettingModel.endDate = new Date(res.endDate);
+                }
             }
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
+            this.isSpinnerVisible = false;            
             //this.errorMessageHandler(errorLog);
         });
     }
 
-    savePurchaseOrderSetting() {
-		this.isSpinnerVisible = true;
-
+    savePurchaseOrderSetting() {               
+        if(!this.posettingModel.IsEnforceApproval){
+            if(this.posettingModel.startDate == null || this.posettingModel.startDate == undefined){
+                this.alertService.showMessage(
+                    'Error',
+                    `Start Date Require!`,
+                     MessageSeverity.error
+                );
+                return false;
+            }
+            if(this.posettingModel.endDate == null || this.posettingModel.endDate == undefined){
+                this.alertService.showMessage(
+                    'Error',
+                    `End Date Require!`,
+                     MessageSeverity.error
+                );
+                return false;
+            }            
+        }
+        this.isSpinnerVisible = true;
         var headerInfoObj = {
             PurchaseOrderSettingId : this.posettingModel.PurchaseOrderSettingId,
 			IsResale: this.posettingModel.IsResale,
 			IsDeferredReceiver: this.posettingModel.IsDeferredReceiver,
-			IsEnforceApproval: this.posettingModel.IsEnforceApproval == true ? 1 : 0,
+			IsEnforceApproval: this.posettingModel.IsEnforceApproval,
 			masterCompanyId: this.currentUserMasterCompanyId,
             createdDate: this.posettingModel.createdDate,
             updatedDate: this.posettingModel.updatedDate,

@@ -1066,12 +1066,12 @@ export class CustomerShippingInformationComponent implements OnInit {
     openEditIntenational(rowData) {
         this.isprimaryInternationaldata=rowData.isPrimary
         this.isEditInternational = true;
-
+        
         this.internationalShippingInfo = {
             ...rowData,
             amount: rowData.amount ? formatNumberAsGlobalSettingsModule(rowData.amount, 2) : '',
-            startDate: new Date(rowData.startDate),
-            expirationDate: new Date(rowData.expirationDate),
+            startDate: rowData.startDate ? new Date(rowData.startDate) : null,
+            expirationDate: rowData.expirationDate ? new Date(rowData.expirationDate) : null,
             createdDate: new Date(rowData.createdDate),
             updatedDate: new Date(rowData.updatedDate),
         };
