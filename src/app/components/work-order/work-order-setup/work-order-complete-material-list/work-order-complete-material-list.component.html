@@ -253,7 +253,7 @@
                                     </td>
                                     <td>{{x.partNumber}}</td>
                                     <td>{{x.partDescription}}</td>
-                                    <th *ngIf="(statusId == 2 || statusId == 4 || statusId == 5)"></th>
+                                    <td *ngIf="(statusId == 2 || statusId == 4 || statusId == 5)"></td>
                                     <td></td>
                                     <td>{{x.condition}}</td>
                                     <td>{{x.stockType}}</td>
@@ -308,8 +308,9 @@
                                         (completeMethod)="filterEmployee($event)"
                                         (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )" appendTo='body' [baseZIndex]="9999"
                                         [size]="30" [minLength]="1" [dropdown]="true"
-                                        class="p-autoComplete-ctsm"  [required]="x.isParentSelected" [disabled]="!x.isParentSelected">
+                                        class="p-autoComplete-ctsm"  [required]="x.isParentSelected" disabled >
                                     </p-autoComplete>
+                                    <!-- [disabled]="!x.isParentSelected" -->
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
                                        <p-autoComplete field="name" appendTo='body' [baseZIndex]="9999"
@@ -320,17 +321,31 @@
                                         (completeMethod)="filterEmployee($event)"
                                         (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
                                         [size]="30" [minLength]="1" [dropdown]="true"
-                                        class="p-autoComplete-ctsm"  [required]="x.isParentSelected" [disabled]="!x.isParentSelected">
+                                        class="p-autoComplete-ctsm" disabled  [required]="x.isParentSelected">
                                     </p-autoComplete>
-
+                                    <!-- [disabled]="!x.isParentSelected" -->
                                     </td> 
                                 </tr>
                                 <ng-container *ngIf="x.showAlternateParts==true" >
                                 <tr *ngFor="let b of x.woReservedIssuedAltParts; let y=index;">
                                     <td class="text-center">
-                                        <input type="checkbox" [(ngModel)]="b.isChildSelected"
+                                        <input type="checkbox" *ngIf="(statusId === 1 || statusId === 5)" [(ngModel)]="b.isChildSelected" [disabled]="b.quantityReserved==0"
                                             name="isChildSelected{{y}}" (change)="selectedParts(b,$event)">
+
+
+                                            <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="b.isChildSelected" [disabled]="b.quantityReserved==0"
+                                            name="isChildSelected{{y}}" (change)="selectedParts(b,$event)" [disabled]="x.quantityIssued==0">  
                                     </td>
+
+                                  
+
+
+
+
+
+
+
+
                                     <td  *ngIf="isShowAlternatePN && (statusId == 1 || statusId == 3)">
                                     </td>
                                     <td *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)">
@@ -397,9 +412,9 @@
                                         (completeMethod)="filterEmployee($event)"
                                         (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )" appendTo='body' [baseZIndex]="9999"
                                         [size]="30" [minLength]="1" [dropdown]="true"
-                                        class="p-autoComplete-ctsm"   [required]="b.isChildSelected"  [disabled]="!b.isChildSelected">
+                                        class="p-autoComplete-ctsm"   [required]="b.isChildSelected" disabled >
                                     </p-autoComplete>
-
+                                    <!-- [disabled]="!b.isChildSelected" -->
 
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
@@ -411,18 +426,26 @@
                                          (completeMethod)="filterEmployee($event)"
                                          (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
                                          [size]="30" [minLength]="1" [dropdown]="true"
-                                         class="p-autoComplete-ctsm"  appendTo='body' [baseZIndex]="9999"  [required]="b.isChildSelected"  [disabled]="!b.isChildSelected">
+                                         class="p-autoComplete-ctsm"  appendTo='body' [baseZIndex]="9999"  [required]="b.isChildSelected" disabled  >
                                      </p-autoComplete>
-
+                                     <!-- [disabled]="!b.isChildSelected" -->
                                     </td>
                                 </tr>
                                 </ng-container>
                                 <ng-container *ngIf="x.showEqParts==true" >
                                 <tr *ngFor="let c of x.woReservedIssuedEquParts; let z=index; ">
                                     <td class="text-center">
-                                        <input type="checkbox" [(ngModel)]="c.isChildSelected"
+                                        <input type="checkbox" *ngIf="(statusId === 1 || statusId === 5)" [(ngModel)]="c.isChildSelected" [disabled]="c.quantityReserved==0"
+                                            name="isChildSelected{{z}}" (change)="selectedParts(c,$event)">
+
+                                            <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="c.isChildSelected"  [disabled]="c.quantityReserved==0"
                                             name="isChildSelected{{z}}" (change)="selectedParts(c,$event)">
                                     </td>
+
+
+
+
+
                                     <td  *ngIf="isShowAlternatePN && (statusId == 1 || statusId == 3)">
                                     </td>
                                     <td *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)">
@@ -484,8 +507,9 @@
                                          (completeMethod)="filterEmployee($event)"
                                          (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"appendTo='body' [baseZIndex]="9999"
                                          [size]="30" [minLength]="1" [dropdown]="true"
-                                         class="p-autoComplete-ctsm"  [required]="c.isChildSelected"  [disabled]="!c.isChildSelected">
+                                         class="p-autoComplete-ctsm"  [required]="c.isChildSelected"  disabled>
                                      </p-autoComplete>
+                                     <!-- [disabled]="!c.isChildSelected" -->
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
                                       <p-autoComplete field="name" appendTo='body' [baseZIndex]="9999"
@@ -496,8 +520,9 @@
                                          (completeMethod)="filterEmployee($event)"
                                          (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
                                          [size]="30" [minLength]="1" [dropdown]="true"
-                                         class="p-autoComplete-ctsm"   [required]="c.isChildSelected"  [disabled]="!c.isChildSelected">
+                                         class="p-autoComplete-ctsm"   [required]="c.isChildSelected" disabled >
                                      </p-autoComplete> 
+                                     <!-- [disabled]="!c.isChildSelected" -->
                                     </td>
                                 </tr>
                             </ng-container>
