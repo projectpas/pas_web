@@ -108,6 +108,7 @@ import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sal
 import { SalesOrderPrintTemplateComponent } from "../components/sales/order/sales-order-print-template/sales-order-print-template.component";
 import { SalesMultiShippingLabelComponent } from "../components/sales/order/sales-order-multi-shipping-label/sales-order-multi-shipping-label.component";
 import { SalesOrderMultiPackagingLabelComponent } from "../components/sales/order/sales-order-multi-Packaging-Label/sales-order-multi-packaging-label.component";
+import { SalesOrderMultiPickTicketComponent } from "../components/sales/order/sales-order-multi-pickTicket/sales-order-multi-pickTicket.component";
 //Sales Order Components - End
 
 @NgModule({
@@ -186,7 +187,9 @@ import { SalesOrderMultiPackagingLabelComponent } from "../components/sales/orde
     SalesQuotePrintTemplateComponent,
     SalesOrderCopyComponent,
     SalesStockLineDetailsViewComponent,
-    SalesOrderpickTicketComponent, SalesReserveUnreserveComponent, MemoComponent,
+    SalesOrderpickTicketComponent, 
+    SalesReserveUnreserveComponent, 
+    MemoComponent,
     EmailComponent,
     PhoneComponent,
     TextComponent,
@@ -206,9 +209,10 @@ import { SalesOrderMultiPackagingLabelComponent } from "../components/sales/orde
     SalesOrderPackagingLabelComponent,
     SalesOrderPrintTemplateComponent,
     SalesMultiShippingLabelComponent,
-    SalesOrderMultiPackagingLabelComponent
+    SalesOrderMultiPackagingLabelComponent,
+    SalesOrderMultiPickTicketComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
-  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent, SalesMultiShippingLabelComponent, SalesOrderMultiPackagingLabelComponent]
+  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent, SalesMultiShippingLabelComponent, SalesOrderMultiPackagingLabelComponent, SalesOrderMultiPickTicketComponent]
 })
 export class SalesPagesModule { }

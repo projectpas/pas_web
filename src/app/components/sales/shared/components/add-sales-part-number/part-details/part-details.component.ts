@@ -22,6 +22,7 @@ export class PartDetailsComponent implements OnChanges {
   roleUpMaterialList: any = [];
   @Input() parts: IPartJson[];
   @Input() isStockLineViewMode = false;
+  @Input() clearData = false;
   @Input() query: ItemMasterSearchQuery;
   @Output() onPartSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output() select: EventEmitter<any> = new EventEmitter<any>();
@@ -71,6 +72,10 @@ export class PartDetailsComponent implements OnChanges {
           this.totalRecords / 10
         );
       });
+
+      if (this.clearData) {
+        this.parts = [];
+      }
   }
 
   hideStockline(rowIndex) {
