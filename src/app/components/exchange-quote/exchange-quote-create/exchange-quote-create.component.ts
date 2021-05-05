@@ -98,6 +98,8 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   @ViewChild(ExchangeQuoteFreightComponent, { static: false }) public exchangeQuoteFreightComponent: ExchangeQuoteFreightComponent;
   moduleName: any = "ExchangeQuote";
   totalCharges = 0;
+  totalFreights = 0;
+  totalcost=0;
   markupList = [];
   percents: any[];
   @ViewChild("exchangeQuotePrintPopup", { static: false }) public exchangeQuotePrintPopup: ElementRef;
@@ -266,7 +268,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.exchangeQuote.customerServiceRepId, this.exchangeQuote.salesPersonId),
       this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
       this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
-      this.exchangequoteService.getAllExchangeQuoteSettings()).subscribe(result => {
+      this.exchangequoteService.getAllExchangeQuoteSettings(this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
@@ -805,35 +807,44 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     if (data) {
       this.marginSummary = data;
        this.totalCharges = this.marginSummary.otherCharges;
-      // this.totalFreights = this.marginSummary.freightAmount;
+       this.totalFreights = this.marginSummary.freightAmount;
+       this.totalcost = this.marginSummary.otherCost;
        this.exchangequoteService.setTotalCharges(this.marginSummary.otherCharges);
-      // this.salesQuoteService.setTotalFreights(this.marginSummary.freightAmount);
+       this.exchangequoteService.setTotalFreights(this.marginSummary.freightAmount);
+       this.exchangequoteService.setTotalcost(this.marginSummary.otherCost);
     } else {
       this.marginSummary = new ExchangeQUoteMarginSummary;
     }
   }
 
   saveExchangeQuoteChargesList(e) {
-    this.totalCharges = e;
+    this.modelcharges = e;
+    this.totalCharges = this.modelcharges.amount;
+    this.totalcost = this.modelcharges.cost;
     this.marginSummary.otherCharges = this.totalCharges;
-    this.exchangequoteService.setTotalCharges(e);
+    this.marginSummary.otherCost = this.totalcost;
+    this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    this.exchangequoteService.setTotalcost(this.modelcharges.cost);
     this.setFreightsOrCharges();
     this.updateMarginSummary();
   }
-
+  public modelcharges = { amount: 0, cost: 0 };
   updateExchangeQuoteChargesList(e) {
-    this.totalCharges = e;
-    this.exchangequoteService.setTotalCharges(e);
+    this.modelcharges = e;
+    this.totalCharges = this.modelcharges.amount;
+    this.totalcost = this.modelcharges.cost;
+    this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    this.exchangequoteService.setTotalcost(this.modelcharges.cost);
     this.marginSummary.otherCharges = this.totalCharges;
+    this.marginSummary.otherCost = this.totalcost;
     this.setFreightsOrCharges();
     this.updateMarginSummary();
   }
 
   setFreightsOrCharges() {
-    debugger;
     if (this.exchangequoteService.selectedParts && this.exchangequoteService.selectedParts.length > 0) {
       this.exchangequoteService.selectedParts.forEach((part, i) => {
-        //this.exchangequoteService.selectedParts[i].freight = this.totalFreights;
+        this.exchangequoteService.selectedParts[i].freight = this.totalFreights;
         this.exchangequoteService.selectedParts[i].misc = this.totalCharges;
       });
     }
@@ -845,5 +856,21 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   initiatePrintProcess() {
     let content = this.exchangeQuotePrintPopup;
     this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  saveExchangeQuoteFreightsList(e) {
+    this.totalFreights = e;
+    this.marginSummary.freightAmount = this.totalFreights;
+    this.exchangequoteService.setTotalFreights(e);
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
+  }
+
+  updateExchangeQuoteFreightsList(e) {
+    this.totalFreights = e;
+    this.marginSummary.freightAmount = this.totalFreights;
+    this.exchangequoteService.setTotalFreights(e);
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
   }
 }

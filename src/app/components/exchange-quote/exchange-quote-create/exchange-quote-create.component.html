@@ -360,8 +360,8 @@
               <p-tabPanel header="Freight">
                 <app-exchange-quote-freight [freightForm]="freight" [customerId]="customerId"
                     [exchangeQuoteId]="exchangeQuote.exchangeQuoteId"
-                    (saveFreightListForSO)="saveSalesOrderFreightsList($event)"
-                    (updateFreightListForSO)="updateSalesOrderFreightsList($event)"
+                    (saveFreightListForSO)="saveExchangeQuoteFreightsList($event)"
+                    (updateFreightListForSO)="updateExchangeQuoteFreightsList($event)"
                     (refreshData)="getFreightList()" [markupList]="markupList" [isView]="false"
                     [isQuote]="true" [buildMethodDetails]="buildMethodDetails">
                 </app-exchange-quote-freight>

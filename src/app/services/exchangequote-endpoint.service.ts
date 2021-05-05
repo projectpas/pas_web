@@ -82,11 +82,12 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
         });
     }
 
-    getAllExchangeQuoteSettings<T>(): Observable<T> {
-      let endPointUrl = this.getExchngeQuoteeSetting;
+    getAllExchangeQuoteSettings<T>(masterCompanyId): Observable<T> {
+      //let endPointUrl = this.getExchngeQuoteeSetting;
+      let endPointUrl = `${this.getExchngeQuoteeSetting}?masterCompanyId=${masterCompanyId}`;
       return this.http.get<T>(endPointUrl, this.getRequestHeaders())
         .catch(error => {
-          return this.handleErrorCommon(error, () => this.getAllExchangeQuoteSettings());
+          return this.handleErrorCommon(error, () => this.getAllExchangeQuoteSettings(masterCompanyId));
         });
     }
 
