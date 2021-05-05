@@ -100,6 +100,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   totalCharges = 0;
   markupList = [];
   percents: any[];
+  @ViewChild("exchangeQuotePrintPopup", { static: false }) public exchangeQuotePrintPopup: ElementRef;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -813,7 +814,6 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   }
 
   saveExchangeQuoteChargesList(e) {
-    debugger;
     this.totalCharges = e;
     this.marginSummary.otherCharges = this.totalCharges;
     this.exchangequoteService.setTotalCharges(e);
@@ -830,6 +830,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   }
 
   setFreightsOrCharges() {
+    debugger;
     if (this.exchangequoteService.selectedParts && this.exchangequoteService.selectedParts.length > 0) {
       this.exchangequoteService.selectedParts.forEach((part, i) => {
         //this.exchangequoteService.selectedParts[i].freight = this.totalFreights;
@@ -837,5 +838,12 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       });
     }
     this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(this.exchangequoteService.selectedParts, this.marginSummary);
+  }
+  closeModal() {
+    this.modal.close();
+  }
+  initiatePrintProcess() {
+    let content = this.exchangeQuotePrintPopup;
+    this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
   }
 }
