@@ -92,7 +92,7 @@
                                     <label>Open Date <span class="clr-red">*</span></label>
                                     <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
                                         class="calendar" [showIcon]="true" appendTo="body" name="openDate"
-                                        [yearNavigator]="true" [minDate]="headerInfo.openDate" [monthNavigator]="true"
+                                        [yearNavigator]="true" [minDate]="currentDate" [monthNavigator]="true"
                                         yearRange="1900:2100" [(ngModel)]="headerInfo.openDate"
                                         (ngModelChange)="enableHeaderSave()" #openDate="ngModel" required></p-calendar>
                                     <div *ngIf="openDate.invalid && (openDate.dirty || openDate.touched)"
@@ -515,10 +515,10 @@
                                         <td>
                                             <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                 [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"
-                                                appendTo="body" [minDate]="headerInfo.openDate"
-                                                name="needByDate{{row_index}}" id="needByDate{{row_index}}"
-                                                title="Need By Date" [(ngModel)]="partList.needByDate"
-                                                #pNeedByDate="ngModel" (ngModelChange)="enablePartSave()" required
+                                                appendTo="body" [minDate]="currentDate" name="needByDate{{row_index}}"
+                                                id="needByDate{{row_index}}" title="Need By Date"
+                                                [(ngModel)]="partList.needByDate" #pNeedByDate="ngModel"
+                                                (ngModelChange)="enablePartSave()" required
                                                 [disabled]="partList.isApproved"></p-calendar>
                                             <div *ngIf="pNeedByDate.invalid && (pNeedByDate.dirty || pNeedByDate.touched)"
                                                 class="alert alert-danger alert-danger-cstm">

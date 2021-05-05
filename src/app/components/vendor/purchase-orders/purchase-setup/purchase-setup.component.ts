@@ -52,6 +52,7 @@ export class PurchaseSetupComponent implements OnInit {
 	showComunicationtab: boolean = false;
 	showVendorCaptab: boolean = false;
 	addressType: any = 'PO';
+
 	id: number;
 	firstNamesbillTo1: any;
 	firstNamesShipTo1: any[];
@@ -537,8 +538,8 @@ export class PurchaseSetupComponent implements OnInit {
 				this.posettingModel.IsResale = res.isResale;
 				this.posettingModel.IsDeferredReceiver = res.isDeferredReceiver;
 				this.posettingModel.IsEnforceApproval = res.isEnforceApproval;
-				this.posettingModel.startDate = new Date(res.startDate);
-				this.posettingModel.endDate = new Date(res.endDate);
+				this.posettingModel.effectivedate = new Date(res.effectivedate);
+
 
 				if (!this.isEditMode) {
 					this.headerInfo.resale = this.posettingModel.IsResale;
@@ -1565,19 +1566,26 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 			this.enableHeaderSaveBtn = false;
 
-			if (this.posettingModel.startDate && this.posettingModel.startDate
-				&& this.headerInfo.openDate && !this.posettingModel.IsEnforceApproval) {
-				var startdate = new Date(this.posettingModel.startDate);
-				var endtdate = new Date(this.posettingModel.endDate);
-				var openDate = new Date(this.headerInfo.openDate);
-				if (!(openDate <= startdate && openDate >= endtdate)) {
+			if (this.posettingModel.IsEnforceApproval) {
+				this.disablePOStatus = true;
+			}
+			else {
+				if (this.headerInfo.openDate
+					&& this.posettingModel.effectivedate
+					&& new Date(this.headerInfo.openDate) > new Date(this.posettingModel.effectivedate)) {
 					this.posettingModel.IsEnforceApproval = false;
 					this.disablePOStatus = false;
 				}
-			} else {
-				this.disablePOStatus = true;
+				else if (this.headerInfo.openDate
+					&& this.posettingModel.effectivedate
+					&& new Date(this.headerInfo.openDate) < new Date(this.posettingModel.effectivedate)) {
+					this.posettingModel.IsEnforceApproval = true;
+					this.disablePOStatus = true;
+				}
+				else {
+					this.disablePOStatus = true;
+				}
 			}
-
 			this.capvendorId = res.vendorId;
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -2556,6 +2564,26 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 			this.toggle_po_header = false;
 			this.enableHeaderSaveBtn = false;
+			if (this.posettingModel.IsEnforceApproval) {
+				this.disablePOStatus = true;
+			}
+			else {
+				if (headerInfoObj.openDate
+					&& this.posettingModel.effectivedate
+					&& new Date(headerInfoObj.openDate) > new Date(this.posettingModel.effectivedate)) {
+					this.posettingModel.IsEnforceApproval = false;
+					this.disablePOStatus = false;
+				}
+				else if (headerInfoObj.openDate
+					&& this.posettingModel.effectivedate
+					&& new Date(headerInfoObj.openDate) < new Date(this.posettingModel.effectivedate)) {
+					this.posettingModel.IsEnforceApproval = true;
+					this.disablePOStatus = true;
+				}
+				else {
+					this.disablePOStatus = true;
+				}
+			}
 		}
 	}
 
@@ -3171,24 +3199,24 @@ export class PurchaseSetupComponent implements OnInit {
 	addPartNumber() {
 		this.inputValidCheck = false;
 		//if (this.vendorService.isEditMode == false) {
-			let newParentObject = new CreatePOPartsList();
-			newParentObject = {
-				...newParentObject, 
-				needByDate: this.headerInfo.needByDate, 
-				priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
-				conditionId: this.defaultCondtionId,
-				discountPercent: 0,
-				workOrderId:{value: 0, label: '-- Select --'},
-				subWorkOrderId:{value: 0, label: '-- Select --'},
-				repairOrderId:{value: 0, label: '-- Select --'},
-				salesOrderId:{value: 0, label: '-- Select --'},
+		let newParentObject = new CreatePOPartsList();
+		newParentObject = {
+			...newParentObject,
+			needByDate: this.headerInfo.needByDate,
+			priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+			conditionId: this.defaultCondtionId,
+			discountPercent: 0,
+			workOrderId: { value: 0, label: '-- Select --' },
+			subWorkOrderId: { value: 0, label: '-- Select --' },
+			repairOrderId: { value: 0, label: '-- Select --' },
+			salesOrderId: { value: 0, label: '-- Select --' },
+		}
+		this.partListData.push(newParentObject);
+		for (let i = 0; i < this.partListData.length; i++) {
+			if (!this.partListData[i].ifSplitShip) {
+				this.partListData[i].childList = [];
 			}
-			this.partListData.push(newParentObject); 			
-			for (let i = 0; i < this.partListData.length; i++) {
-				if (!this.partListData[i].ifSplitShip) {
-					this.partListData[i].childList = [];
-				}
-			}
+		}
 
 		if (this.headerInfo.companyId > 0) {
 			for (let i = 0; i < this.partListData.length; i++) {
