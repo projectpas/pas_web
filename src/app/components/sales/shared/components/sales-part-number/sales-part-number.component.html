@@ -473,14 +473,14 @@
 </ng-template>
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
-        [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow"
+        [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow" [clearData]="clearData"
         (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SOQ'">
     </app-add-sales-part-number>
 </ng-template>
 
 <ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
     <app-sales-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
-        (close)="onCloseMargin($event)"></app-sales-margin>
+        (close)="onCloseMargin($event)" (searchAnotherPN)="onSearchAnotherPN($event)"></app-sales-margin>
 </ng-template>
 
 <ng-template #deleteContent let-c="close" let-d="dismiss">
