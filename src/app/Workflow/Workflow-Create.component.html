@@ -21,7 +21,7 @@
         </div>
         <div class="card-body pad_10" *ngIf="!toggle_wf_header">
             <div class="form-row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="workflowid">Workflow ID <span class="clr-red">*</span></label>
                         <input type="text" class="form-control" id="workflowid"
@@ -29,11 +29,34 @@
                             [disabled]="true">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="description">Workflow Description</label>
                         <input type="text" class="form-control" id="description" (ngModelChange)="checkEnableUpdate()"
                             [(ngModel)]="sourceWorkFlow.workflowDescription">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="version">Version <span class="clr-red">*</span></label>
+                        <input type="text" class="form-control" id="version" required
+                            [(ngModel)]="sourceWorkFlow.version" [disabled]="true" value="{{'V-1'}}">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="Part Number">
+                            PN <span class="clr-red">*</span>
+                        </label>
+                        <p class="c-workflow-select">
+                            <p-autoComplete appendTo="body" [(ngModel)]="sourceWorkFlow.part"
+                                [suggestions]="partCollection" (completeMethod)="filterpartItems($event)"
+                                [size]="32" [minLength]="1" [dropdown]="true" class="wf-header-select"
+                                #partNum="ngModel" errorMessage="Records not found" field="partName"
+                                (onSelect)="onPartSelect($event)" [forceSelection]="true" title="PN"
+                                required>
+                            </p-autoComplete>
+                        </p>
                     </div>
                 </div>
                 </div>
@@ -515,7 +538,7 @@
                                     <div class="inner-addon inline-block display-flex">
                                         <select class="form-control custom-select" [(ngModel)]="currenttaskId"
                                             (change)="onActionChange()">
-                                            <option value="0">--Select--</option>
+                                            <!-- <option value="0">--Select--</option> -->
                                             <option *ngFor="let action of actions" value={{action.Id}}>
                                                 {{action.Name}}
                                             </option>

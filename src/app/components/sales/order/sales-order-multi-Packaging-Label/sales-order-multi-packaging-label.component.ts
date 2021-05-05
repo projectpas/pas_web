@@ -31,6 +31,8 @@ export class SalesOrderMultiPackagingLabelComponent implements OnInit {
   parts: any = [];
   management: any = {};
   isSpinnerVisible: boolean = false;
+  packagingSlips: any = [];
+  objpackagingSlips: any = [];
 
   constructor(private salesOrderService: SalesOrderService, private authService: AuthService) {
     this.salesOrderCopyParameters = new SalesOrderCopyParameters();
@@ -38,15 +40,13 @@ export class SalesOrderMultiPackagingLabelComponent implements OnInit {
 
   ngOnInit() {
     this.endPointURL = environment.baseUrl;
-    this.getSalesPickTicketView();
+    this.getPackagingSlipView();
   }
 
-  getSalesPickTicketView() {
+  getPackagingSlipView() {
     this.isSpinnerVisible = true;
-    this.salesOrderService.getPackagingSlipPrint(this.salesOrderId, this.salesOrderPartId, this.soPickTicketId, this.packagingSlipId).subscribe(res => {
-      this.salesOrder = res[0].packagingLabelViewModel;
-      this.parts = res[0].packagingLabelPartViewModel;
-      this.management = res[0].managementStructureHeaderData;
+    this.salesOrderService.getMultiPackagingSlipPrint(this.packagingSlips).subscribe(res => {
+      this.objpackagingSlips = res[0];
       this.isSpinnerVisible = false;
     }, error => {
       this.isSpinnerVisible = false;
@@ -68,7 +68,7 @@ export class SalesOrderMultiPackagingLabelComponent implements OnInit {
   printContent() {
     let printContents, popupWin;
     printContents = document.getElementById('PackagingSlip').innerHTML;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin = window.open('', '_blank', 'top=0, left=0, height=100%, width=auto');
     popupWin.document.open();
     popupWin.document.write(`
           <html>

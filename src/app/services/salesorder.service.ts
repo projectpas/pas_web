@@ -611,6 +611,12 @@ export class SalesOrderService {
     );
   }
 
+  getMultiPickTicketPrint(salesOrderPickTickets: any): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getMultiPickTicketPrint(salesOrderPickTickets)
+    );
+  }
+
   getPickTicketEdit(soPickTicketId: number, salesOrderId: number, salesOrderPartId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getPickTicketEdit(soPickTicketId, salesOrderId, salesOrderPartId)
@@ -644,6 +650,12 @@ export class SalesOrderService {
   getPackagingSlipPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number, packagingSlipId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getPackagingSlipPrint(salesOrderId, salesOrderPartId, soPickTicketId, packagingSlipId)
+    );
+  }
+
+  getMultiPackagingSlipPrint(salesOrderPackagingSlips: any): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getMultiPackagingSlipPrint(salesOrderPackagingSlips)
     );
   }
 

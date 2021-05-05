@@ -37,10 +37,10 @@
         <tr class="material-tr" [hidden]="material.isDeleted"
           *ngFor="let material of workFlow.materialList; let i = index" id="row_{{i}}">
           <td *ngIf="!isWorkFlow">
-            <select class="form-control wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
+            <select class="form-control wf-pub-id qtyWidth text_tranform" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
               name="task_{{ i }}" required (change)="onTaskChange(material)">
-              <option value="">Select </option>
-              <option *ngFor="let task of taskList" [value]="task.taskId">{{
+              <!-- <option value="">Select </option> -->
+              <option *ngFor="let task of taskList"  [value]="task.taskId">{{
                 task.description
                 }}</option>
             </select> 

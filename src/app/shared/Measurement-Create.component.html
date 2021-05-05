@@ -18,7 +18,6 @@
         </tr>
     </thead>
     <tbody>
-        
         <tr [hidden]="measurement.isDelete" *ngFor="let measurement of workFlow.measurements;let i= index">
             <td>
                 <p-autoComplete appendTo="body" [(ngModel)]="measurement.partName" [suggestions]="partCollection"
@@ -78,8 +77,6 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>
-
-
 <div class="modal fade" id="textareapopupMemo" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xs">
         <div class="modal-content">
@@ -88,28 +85,12 @@
                 <h4 class="modal-title">Edit {{"Memo"}}</h4>
             </div>
             <div class="modal-body">
-                <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                    <thead>
-                        <th style="color: #fff;background: #4298ff !important;">{{"Memo"}}</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
-                                    required>
-                                </p-editor>                        
-                            </td>
-                        </tr>
-                    </tbody>
-                </table> -->
                 <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
                 required>
               </p-editor>  
-            
            </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
-                       
                         (click)="onSaveTextAreaInfo(textAreaInfo)">
                         Save
                     </button>
@@ -119,7 +100,6 @@
                     </button>
                 </div>
             </div>
-        
     </div>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">

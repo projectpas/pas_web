@@ -987,7 +987,6 @@ if(element.exclusions){
     historyData:any=[];
     auditHistory(data){
     this.workFlowtService.workflowAuditHistoryList(data.workflowId).subscribe(res => {
-        console.log("Res",res)
    
         if(res && res.length !=0){
             this.historyData = res;
@@ -996,12 +995,12 @@ if(element.exclusions){
             element.fixedAmount=element.fixedAmount ?  formatNumberAsGlobalSettingsModule(element.fixedAmount, 2) : '0.00';
             element.costOfNew=element.costOfNew ?  formatNumberAsGlobalSettingsModule(element.costOfNew, 2) : '0.00';
             element.otherCost=element.otherCost ?  formatNumberAsGlobalSettingsModule(element.otherCost, 2) : '0.00';
-   });
+            element.workflowCreateDate= element.workflowCreateDate ?  this.datePipe.transform(element.workflowCreateDate, 'MM/dd/yyyy'): '';
+            element.workflowExpirationDate= element.workflowExpirationDate ?  this.datePipe.transform(element.workflowExpirationDate, 'MM/dd/yyyy'): '';
+        });
         }else{
-            console.log("hello")
             this.historyData = [];
         }
-        console.log("hello",this.historyData)
         this.triggerHistory()
     });
     

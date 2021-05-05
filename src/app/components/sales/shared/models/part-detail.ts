@@ -7,6 +7,7 @@ export class PartDetail {
   conditionDescription: string;
   classification: string;
   itemClassification: any;
+  itemGroup: any;
   quantityRequested: number;
   quantityAlreadyQuoted: number;
   quantityToBeQuoted: number;
@@ -20,7 +21,6 @@ export class PartDetail {
   partType: string;
   markUpPercentage: number;
   salesDiscount: number;
-
   itemMasterId: number;
   partId: number;
   stockLineId: number;
@@ -30,7 +30,6 @@ export class PartDetail {
   serialNumber: string;
   pmaStatus: string;
   idNumber: string;
-
   salesPricePerUnit: number;
   markupPerUnit: number;
   salesDiscountPerUnit: number;
@@ -38,7 +37,6 @@ export class PartDetail {
   unitCostPerUnit: number;
   marginAmountPerUnit: number;
   marginPercentagePerUnit: number;
-
   salesPriceExtended: number;
   markupExtended: number;
   salesDiscountExtended: number;

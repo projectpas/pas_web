@@ -469,15 +469,15 @@
                             <tbody>
                                 <tr *ngFor="let audit of documentauditHisory; let i = index;">
                                     <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'memoId', audit.memoId)  ? 'black' : 'red'  }">{{audit.memoId}}</td> -->
-                                    <td
+                                    <td style="margin-bottom:-10px !important"
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
-                                        <p [innerHTML]="audit.description"></p>
+                                        <p class="margin-tb" [innerHTML]="audit.description"></p>
                                     </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.createdBy}}</td>
                                     <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.updatedBy}}</td>
-                                    <td class="text-center">
+                                    <td class="text-center width-60">
                                         <span class="value">
                                             <label class="wauto">
                                                 <input type="checkbox" name="isDeleted"

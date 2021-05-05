@@ -578,7 +578,7 @@
                             id="mpn-list-table">
                          <thead>
                              <tr class="pad_workflo">
-                                 <th class="approver-th-align th-width">
+                                 <th class="approver-th-align th-width min-width-80">
                                      <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot() || isView"/> Select All
                                  </th>
                                  <th style="z-index: 1;" *ngFor="let header of woQuoteListHeader">{{header.header}}</th>
@@ -587,7 +587,7 @@
                          <tbody>
                              <tr class="mpn-row" style="display: table-row;"
                                  *ngFor="let approver of woQuoteApprovalList; let i=index;">
-                                 <td>
+                                 <td class="text-center">
                                      <input type="checkbox" [(ngModel)]="approver.isSelected" (click)="onApprovalSelected(approver, i)"  [disabled]=" isViewMode ||!getPartToDisableOrNot(approver)||isView"/>
                                  </td>
                                  <ng-container *ngFor="let field of woQuoteListHeader">
@@ -637,12 +637,16 @@
                                            </option>
                                          </select>
                                        </td>
-                                     <td *ngIf="field.field == 'internalMemo'" class="col-sm-12 width-200">
-                                         <div class="col-sm-11">
+                                     <td *ngIf="field.field == 'internalMemo'" class="min-width-130">
+                                         <!-- <div class="col-sm-11"> -->
+
+
                                          <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
                                                 [disabled]="!approver.isSelected || approver['approvalActionId'] != 2"
                                                 [readonly]="!approver.isSelected || approver['approvalActionId'] != 2"/> -->
-                                                <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['internalMemo']"></p>
+                                             
+                                             
+                                                <!-- <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['internalMemo']"></p>
                                                 </div>
  
                                                 <div class="col-sm-1 m-t-4" *ngIf="getApprovalActionInternalStatus(approver)">
@@ -650,7 +654,9 @@
                                                 data-target="#memo-popup"
                                                   matTooltipPosition="above" matTooltip="Add Memo"
                                                   (click)="selectedApprovalIndex = i;memoType = 'internalMemo';"></i>
-                                                  </div>
+                                                  </div> -->
+
+
                                          <!--<div class="form-group memo-popup-cstm" style="margin-top: 12px;">
                                              <div [innerHTML]="approver.internalMemo" class="text_editor_box"></div>
                                              <i class="fa fa-info-circle fa-lg" data-toggle="modal"
@@ -660,6 +666,17 @@
                                                 (click)="onAddTextAreaInfo(approver,i)"></i>
                                          </div>-->
  
+                                         <div [innerHTML]="approver['internalMemo']"
+                                         [matTooltip]="parsedText(approver['internalMemo'])"
+                                                 matTooltipPosition="above" class="form-control"
+                                              class="text_editor_box parts-memo"></div>
+ 
+                                           <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon" *ngIf="getApprovalActionInternalStatus(approver)"                                     
+                                              data-toggle="modal"
+                                              data-target="#memo-popup"
+                                              matTooltipPosition="above" matTooltip="Add Memo"
+                                              (click)="selectedApprovalIndex = i;memoType = 'internalMemo';"></i
+                                            >
  
  
                                      </td>
@@ -705,18 +722,34 @@
                                            </option>
                                          </select>
                                        </td>
-                                     <td *ngIf="field.field == 'customerMemo'" class="col-sm-12 width-200">
-                                         <div class="col-sm-11">
+                                     <td *ngIf="field.field == 'customerMemo'" class="min-width-130">
+                                         <!-- <div class="col-sm-11"> -->
+
                                          <!-- <input type="text" [(ngModel)]="approver['customerMemo']" class="calender-cstm" style="width:200px;"
                                                 [disabled]="!approver.isSelected || approver['approvalActionId'] != 4" /> -->
-                                             <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['customerMemo']"></p>
+                                             
+                                             
+                                                <!-- <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['customerMemo']"></p>
                                              </div>
                                                 <div class="col-sm-1 m-t-4" *ngIf="getApprovalActionCustomerStatus(approver)">
                                                  <i class="fa fa-info-circle fa-lg" data-toggle="modal" 
                                                  data-target="#memo-popup"
                                                    matTooltipPosition="above" matTooltip="Add Memo"
                                                    (click)="memoType = 'customerMemo';selectedApprovalIndex = i;"></i>
-                                                   </div>
+                                                   </div> -->
+
+                                                   <div [innerHTML]="approver['customerMemo']"
+                                         [matTooltip]="parsedText(approver['customerMemo'])"
+                                                 matTooltipPosition="above" class="form-control"
+                                              class="text_editor_box parts-memo"></div>
+ 
+                                              <!-- *ngIf="getApprovalActionCustomerStatus(approver)" -->
+                                           <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon" *ngIf="getApprovalActionCustomerStatus(approver)"                                       
+                                              data-toggle="modal"
+                                              data-target="#memo-popup"
+                                              matTooltipPosition="above" matTooltip="Add Memo"
+                                              (click)="memoType = 'customerMemo';selectedApprovalIndex = i;"></i
+                                            >
                                              </td>
                                      <td *ngIf="field.field == 'customerApprovedDate'">
                                          <label [ngClass]="fields.includes(field.field)?'text-align-right width-60':''">{{approver[field.field]}}</label>
@@ -1542,7 +1575,7 @@
             <h4 class="modal-title">Edit Memo</h4>
           </div>
           <div class="modal-body">
-            <table class="table table-bordered table-fixed workflow-table-material">
+            <!-- <table class="table table-bordered table-fixed workflow-table-material">
               <thead>
                 <th style="color: #fff;">Memo</th>
               </thead>
@@ -1554,13 +1587,14 @@
                   </td>
                 </tr>
               </tbody>
-            </table>
-            <div style="float:right">
-              <button type="button" class="btn btn-primary" 
-              style="padding: 6px 12px !important;margin-top: 10px;" data-dismiss="modal" (click)="saveApprovalMemo(memoPopupContent)">
+            </table> -->
+            <p-editor [(ngModel)]="memoPopupContent" [style]="{'height':'320px'}"
+            name="memoPopupContent" required></p-editor>
+            <div class="editor-buttons">
+              <button type="button" class="btn btn-primary editor-buttons-margin"  data-dismiss="modal" (click)="saveApprovalMemo(memoPopupContent)">
                 Save
               </button>
-              <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+              <button type="button" class="btn btn-danger editor-buttons-margin"
                data-dismiss="modal">
                 Close
               </button>

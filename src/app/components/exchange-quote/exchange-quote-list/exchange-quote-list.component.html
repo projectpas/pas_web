@@ -201,20 +201,20 @@
                                   <i class="fa fa-trash"></i>
                               </a>
                           </span>
-                          <!-- <span>
-                              <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(soHistory,rowData)"
+                          <span>
+                              <a class="btn nobg btn-hist-cstm" (click)="openHistoryPopup(exchangeQuoteHistory); getAuditHistoryById(rowData)"
                                   matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                          </span> -->
+                          </span>
                       </div>
                       <div *ngIf="currentDeletedstatus==true">
                           <!-- <span>
                               <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
                                   matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                           </span> -->
-                          <!-- <span>
-                              <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(soHistory,rowData)"
+                          <span>
+                              <a class="btn nobg btn-hist-cstm" (click)="openHistoryPopup(exchangeQuoteHistory); getAuditHistoryById(rowData)"
                                   matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                          </span> -->
+                          </span>
                           <span><a class="btn nobg" (click)="restore(restoreIdExchangeQuote,rowData);"
                                   matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                       aria-hidden="true"></i></a> </span>
@@ -283,5 +283,97 @@
     <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template>
+  <ng-template #exchangeQuoteHistory let-c="close" let-d="dismiss" data-backdrop="static">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="closeHistoryModal()">&times;</button>
+        <h4 class="modal-title">History of Exchange Quote</h4>
+      </div>
+      <div class="modal-body" *ngIf="auditHistory">
+        <div class="table-responsive">
+          <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+            <thead>
+              <tr>
+                <th>Exch Quote Num</th>
+                <th>Status</th>
+                <th>Customer Name</th>
+                <th>Cust Ref</th>
+                <th>Salesperson</th>
+                <th>Created Date</th>
+                <th>Created By</th>
+                <th>Updated Date</th>
+                <th>Updated By</th>
+                <th>Is Deleted</th>
+              </tr>
+            </thead>
+            <tbody class="audithistory-cstm">
+              <!--*ngIf="auditHistory.length> 0"-->
+              <tr *ngFor="let audit of auditHistory; let i = index;">
+                <!-- auditHistory[i>0 ? i-1 : i] -->
+                <td
+                  [ngStyle]="{'color':  getColorCodeForHistory(i, 'exchangeQuoteNumber', audit.exchangeQuoteNumber)  ? 'black' : 'red'  }">
+                  {{audit.exchangeQuoteNumber}}</td>
+                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'status', audit.status)  ? 'black' : 'red'  }">
+                  {{audit.status}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'customerName', audit.customerName)  ? 'black' : 'red'  }">
+                  {{audit.customerName}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'customerReference', audit.customerReference)  ? 'black' : 'red'  }">
+                  {{audit.customerReference}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'salesPerson', audit.salesPerson)  ? 'black' : 'red'  }">
+                  {{audit.salesPerson}}</td>
+                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                  {{audit.createdBy}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                  {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                  {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                  {{audit.updatedBy}}</td>
+                  <td class="text-center width-60">
+                    <span class="value">
+                      <label class="wauto"> 
+                        <input type="checkbox" name="isDeleted"
+                      [(ngModel)]="audit.isDeleted" disabled>
+                    </label>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-template #noDatavailable>
+            <div class="text-center">
+              <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+              <h4 class="no-history-found-msg">No History Found </h4>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+      <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+        <div class="loading">
+          <div class="lds-roller">
+            <div>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+      </div>
     </div>
   </ng-template>

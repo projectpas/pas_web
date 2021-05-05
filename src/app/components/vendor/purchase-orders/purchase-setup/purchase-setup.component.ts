@@ -3171,20 +3171,24 @@ export class PurchaseSetupComponent implements OnInit {
 	addPartNumber() {
 		this.inputValidCheck = false;
 		//if (this.vendorService.isEditMode == false) {
-		let newParentObject = new CreatePOPartsList();
-		newParentObject = {
-			...newParentObject,
-			needByDate: this.headerInfo.needByDate,
-			priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
-			conditionId: this.defaultCondtionId,
-			discountPercent: 0
-		}
-		this.partListData.push(newParentObject);
-		for (let i = 0; i < this.partListData.length; i++) {
-			if (!this.partListData[i].ifSplitShip) {
-				this.partListData[i].childList = [];
+			let newParentObject = new CreatePOPartsList();
+			newParentObject = {
+				...newParentObject, 
+				needByDate: this.headerInfo.needByDate, 
+				priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+				conditionId: this.defaultCondtionId,
+				discountPercent: 0,
+				workOrderId:{value: 0, label: '-- Select --'},
+				subWorkOrderId:{value: 0, label: '-- Select --'},
+				repairOrderId:{value: 0, label: '-- Select --'},
+				salesOrderId:{value: 0, label: '-- Select --'},
 			}
-		}
+			this.partListData.push(newParentObject); 			
+			for (let i = 0; i < this.partListData.length; i++) {
+				if (!this.partListData[i].ifSplitShip) {
+					this.partListData[i].childList = [];
+				}
+			}
 
 		if (this.headerInfo.companyId > 0) {
 			for (let i = 0; i < this.partListData.length; i++) {

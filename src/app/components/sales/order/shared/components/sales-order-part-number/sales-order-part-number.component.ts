@@ -46,6 +46,7 @@ export class SalesOrderPartNumberComponent {
   summaryColumns: any[] = [];
   selectedSummaryRow: SummaryPart;
   isStockLineViewMode = false;
+  clearData = false;
   selectedSummaryRowIndex = null;
   @ViewChild("addPart", { static: false }) addPart: ElementRef;
   @Input() salesOrderId: any;
@@ -274,6 +275,15 @@ export class SalesOrderPartNumberComponent {
     }
   }
 
+  onSearchAnotherPN(event) {
+    this.show = false;
+    this.salesMarginModal.close();
+    if (!this.isEdit) {
+      this.selectedPart.selected = false;
+      this.openPartNumberClear(true);
+    }
+  }
+
   onClosePartDelete() {
     this.deletePartModal.close();
   }
@@ -304,6 +314,13 @@ export class SalesOrderPartNumberComponent {
 
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
+    this.clearData = viewMode;
+    let contentPart = this.addPart;
+    this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+  }
+
+  openPartNumberClear(viewMode) {
+    this.clearData = viewMode;
     let contentPart = this.addPart;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
@@ -416,6 +433,7 @@ export class SalesOrderPartNumberComponent {
           this.part.quantityOnHand = this.selectedPart.quantityOnHand;
           this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
           this.part.quantityAlreadyQuoted = this.query.partSearchParamters.quantityAlreadyQuoted;
+          this.part.itemGroup = this.selectedPart.itemGroup;
         });
         this.addPartModal.close();
         this.salesMarginModal = this.modalService.open(contentMargin, { size: "lg", backdrop: 'static', keyboard: false });

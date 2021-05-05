@@ -58,6 +58,9 @@ select {
 td{
     width: 10%
 }
+.width_100{
+    width: 100% !important;
+}
 select:disabled {
    background-color: none !important; 
 }
