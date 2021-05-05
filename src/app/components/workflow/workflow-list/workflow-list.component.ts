@@ -999,10 +999,8 @@ if(element.exclusions){
             element.workflowExpirationDate= element.workflowExpirationDate ?  this.datePipe.transform(element.workflowExpirationDate, 'MM/dd/yyyy'): '';
         });
         }else{
-            console.log("hello")
             this.historyData = [];
         }
-        console.log("hello",this.historyData)
         this.triggerHistory()
     });
     
