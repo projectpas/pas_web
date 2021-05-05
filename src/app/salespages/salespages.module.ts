@@ -112,6 +112,8 @@ import { SalesOrderMultiPickTicketComponent } from "../components/sales/order/sa
 import { SpeedQuoteListComponent } from "../components/sales/speed-quote/speed-quote-list/speed-quote-list.component";
 import { SpeedQuoteCreateComponent } from "../components/sales/speed-quote/speed-quote-create/speed-quote-create.component";
 import { SpeedQuoteComponent } from "../components/sales/speed-quote/speed-quote/speed-quote-component";
+import { SpeedQuoteService } from "../services/speedquote.service";
+import { SpeedQuoteEndpointService } from "../services/speedquote-endpoint.service";
 //Sales Order Components - End
 
 @NgModule({
@@ -218,7 +220,7 @@ import { SpeedQuoteComponent } from "../components/sales/speed-quote/speed-quote
     SalesOrderMultiPackagingLabelComponent,
     SalesOrderMultiPickTicketComponent
   ],
-  providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
+  providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe, SpeedQuoteService, SpeedQuoteEndpointService],
   entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent, SalesMultiShippingLabelComponent, SalesOrderMultiPackagingLabelComponent, SalesOrderMultiPickTicketComponent]
 })
 export class SalesPagesModule { }

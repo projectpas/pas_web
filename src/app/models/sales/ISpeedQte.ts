@@ -1,4 +1,4 @@
-export interface ISpeedQuote {
+export interface ISpeedQte {
     speedQuoteId: number;
     speedQuoteTypeId: number;
     openDate: string;

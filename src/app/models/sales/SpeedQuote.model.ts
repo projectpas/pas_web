@@ -4,6 +4,7 @@ import { ILeadSource } from "./ILeadSource";
 import { IStatus } from "./IStatus";
 import { ISpeedQuote } from "./ISpeedQuote.model";
 
+
 export class SpeedQuote implements ISpeedQuote {
   speedQuoteId: number;
   speedQuoteTypeId: number;

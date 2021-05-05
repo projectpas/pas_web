@@ -11,7 +11,6 @@ import {
   MessageSeverity
 } from "../../../../services/alert.service";
 import { ActivatedRoute } from "@angular/router";
-import { SalesQuoteView } from "../../../../models/sales/SalesQuoteView";
 import { CommonService } from "../../../../services/common.service";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
@@ -41,7 +40,6 @@ import { SalesCustomerApprovalsComponent } from "../../quotes/shared/components/
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { SalesOrderQuoteFreightComponent } from "../../shared/components/sales-order-quote-freight/sales-order-quote-freight.component";
 import { SalesOrderQuoteChargesComponent } from "../../shared/components/sales-order-quote-charges/sales-order-quote-charges.component";
-import { SOQuoteMarginSummary } from "../../../../models/sales/SoQuoteMarginSummary";
 import { SalesPartNumberComponent } from "../../shared/components/sales-part-number/sales-part-number.component";
 import { SalesQuoteDocumentsComponent } from "../../quotes/sales-document/salesQuote-document.component";
 import { SalesQuoteAnalysisComponent } from "../../quotes/sales-quote-analysis/sales-quote-analysis.component"
@@ -49,6 +47,10 @@ import { SpeedQuote } from "../../../../models/sales/SpeedQuote.model";
 import { ISpeedQuote } from "../../../../models/sales/ISpeedQuote.model";
 import { SpeedQuoteService } from "../../../../services/speedquote.service";
 import { ISpeedQuoteView } from "../../../../models/sales/ISpeedQuoteView";
+import { ISpeedQte } from "../../../../models/sales/ISpeedQte";
+import { SpeedQuoteView } from "../../../../models/sales/SpeedQuoteView";
+import { SpeedQuoteMarginSummary } from "../../../../models/sales/SpeedQuoteMarginSummary";
+import { SpeedQuoteTypeEnum } from "../models/speed-auote-type-enum";
 
 @Component({
   selector: "app-speed-quote-create",
@@ -68,11 +70,11 @@ export class SpeedQuoteCreateComponent implements OnInit {
   totalPages: number = 0;
   showPaginator: boolean = false;
   customerId: number;
-  SalesOrderQuoteId: number;
+  SpeedQuoteId: number;
   salesQuote: ISpeedQuote;
   enableUpdateButton = true;
   defaultSettingPriority;
-  speedQuote: ISpeedQuote;
+  speedQuote: ISpeedQte;
   salesOrderQuoteObj: any = {};
   speedQuoteView: ISpeedQuoteView;
   creditTerms: any[];
@@ -110,7 +112,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   salesPersonOriginalList: any[] = [];
   salesPersonAndAgentOriginalList: any[] = [];
   managementStructureId: any;
-  marginSummary: SOQuoteMarginSummary = new SOQuoteMarginSummary();
+  marginSummary: SpeedQuoteMarginSummary = new SpeedQuoteMarginSummary();
   headerInfo: any = {};
   toggle_po_header: boolean = true;
   qoId: any;
@@ -120,6 +122,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   divisionList: any;
   bulist: any[] = [];
   divisionlist: any[] = [];
+  SpeedQuoteType: SpeedQuoteTypeEnum;
   private onDestroy$: Subject<void> = new Subject<void>();
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
   @ViewChild("closeQuotePopup", { static: false }) public closeQuotePopup: ElementRef;
@@ -202,7 +205,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     this.initCommunication();
     this.customerId = +this.route.snapshot.paramMap.get("customerId");
     this.id = +this.route.snapshot.paramMap.get("id");
-    this.SalesOrderQuoteId = this.id;
+    this.SpeedQuoteId = this.id;
     this.salesQuote.priorityId = DBkeys.DEFAULT_PRIORITY_ID;
     this.isCreateModeHeader = false;
     this.speedQuoteService.resetSalesOrderQuote();
@@ -319,11 +322,11 @@ export class SpeedQuoteCreateComponent implements OnInit {
       ? this.authService.currentUser.managementStructureId
       : null;
   }
-  
+
   get userId() {
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
-  
+
   get employeeId() {
     return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
   }
@@ -408,7 +411,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.speedQuoteService.setTotalCharges(this.marginSummary.misc);
       this.speedQuoteService.setTotalFreights(this.marginSummary.freightAmount);
     } else {
-      this.marginSummary = new SOQuoteMarginSummary;
+      this.marginSummary = new SpeedQuoteMarginSummary;
     }
   }
 
@@ -870,7 +873,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
         this.load(this.salesOrderQuoteObj.managementStructureId);
       }
 
-      this.marginSummary = this.speedQuoteService.getSalesQuoteHeaderMarginDetails(this.speedQuoteService.selectedParts, this.marginSummary);
+      this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(this.speedQuoteService.selectedParts, this.marginSummary);
       this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.salesQuote.salesQuoteTypes = this.speedQuoteView.salesQuoteTypes;
@@ -901,10 +904,11 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
       this.salesQuote.employeeId = getObjectById('value', this.salesOrderQuoteObj.employeeId, this.allEmployeeList)//this.salesOrderQuoteObj.employeeId;
-      this.salesOrderQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
-      this.salesOrderQuote.salesOrderQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
+      this.speedQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
+      this.speedQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
       this.salesQuote.probabilityId = this.salesOrderQuoteObj.probabilityId;
       this.salesQuote.leadSourceId = this.salesOrderQuoteObj.leadSourceId;
+      this.speedQuote.leadSourceReference = this.salesOrderQuoteObj.leadSourceReference;
       this.salesQuote.creditLimit = this.salesOrderQuoteObj.creditLimit;
       this.salesQuote.creditLimitTermsId = this.salesOrderQuoteObj.creditTermId;
       this.salesQuote.restrictPMA = this.salesOrderQuoteObj.restrictPMA;
@@ -921,8 +925,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.salesQuote.warningId = this.salesOrderQuoteObj.customerWarningId;
       this.salesQuote.memo = this.salesOrderQuoteObj.memo;
       this.salesQuote.notes = this.salesOrderQuoteObj.notes;
-      this.salesQuote.statusName = this.salesQuoteView.salesOrderQuote.status;
-      this.salesQuote.isApproved = this.salesQuoteView.salesOrderQuote.isApproved;
+      this.salesQuote.statusName = this.speedQuoteView.speedQuote.status;
+      this.salesQuote.isApproved = this.speedQuoteView.speedQuote.isApproved;
       this.salesQuote.customerServiceRepId = this.salesOrderQuoteObj.customerSeviceRepId;
       this.salesQuote.salesPersonId = this.salesOrderQuoteObj.salesPersonId;
       this.isSpinnerVisible = false;
@@ -968,6 +972,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       .subscribe(data => {
         this.salesQuote = data && data.length ? data[0] : null;
         this.salesQuote.openDate = new Date();
+        this.salesQuote.speedQuoteTypeId = SpeedQuoteTypeEnum.MRO;
         this.salesQuote.quoteExpiryDate = new Date();
         this.salesQuote.statusChangeDate = new Date();
         this.salesQuote.managementStructureId = this.currentUserManagementStructureId;
@@ -1064,10 +1069,6 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.errorMessages.push("Please select Open Date");
       haveError = true;
     }
-    // if (this.salesQuote.validForDays < 1) {
-    //   this.errorMessages.push("Please enter Valid For (Days)");
-    //   haveError = true;
-    // }
     if (!this.salesQuote.quoteExpiryDate) {
       this.errorMessages.push("Please select Quote Expiry Date");
       haveError = true;
@@ -1100,73 +1101,74 @@ export class SpeedQuoteCreateComponent implements OnInit {
     } else {
       this.display = false;
       this.isSpinnerVisible = true;
-      this.salesOrderQuote.quoteTypeId = this.salesQuote.speedQuoteTypeId;
-      this.salesOrderQuote.openDate = this.salesQuote.openDate.toDateString();
-      this.salesOrderQuote.validForDays = this.salesQuote.validForDays;
-      this.salesOrderQuote.quoteExpireDate = this.salesQuote.quoteExpiryDate.toDateString();
-      this.salesOrderQuote.accountTypeId = this.salesQuote.accountTypeId;
-      this.salesOrderQuote.customerId = this.salesQuote.customerId;
-      this.salesOrderQuote.customerContactId = this.salesQuote.customerContactId;
-      this.salesOrderQuote.customerReference = this.salesQuote.customerReferenceName;
-      this.salesOrderQuote.contractReference = this.salesQuote.contractReferenceName;
-      this.salesOrderQuote.managementStructureId = this.salesQuote.managementStructureId;
-      this.salesOrderQuote.salesOrderQuoteNumber = this.salesQuote.salesOrderQuoteNumber;
-      this.salesOrderQuote.versionNumber = this.salesQuote.versionNumber;
-      this.salesOrderQuote.masterCompanyId = this.masterCompanyId;
-      this.salesOrderQuote.buId = this.salesQuote.buId;
-      this.salesOrderQuote.departmentId = this.salesQuote.departmentId;
-      this.salesOrderQuote.divisionId = this.salesQuote.divisionId;
-      this.salesOrderQuote.salesPersonId = editValueAssignByCondition(
+      this.speedQuote.speedQuoteTypeId = this.salesQuote.speedQuoteTypeId;
+      this.speedQuote.openDate = this.salesQuote.openDate.toDateString();
+      this.speedQuote.validForDays = this.salesQuote.validForDays;
+      this.speedQuote.quoteExpireDate = this.salesQuote.quoteExpiryDate.toDateString();
+      this.speedQuote.accountTypeId = this.salesQuote.accountTypeId;
+      this.speedQuote.customerId = this.salesQuote.customerId;
+      this.speedQuote.customerContactId = this.salesQuote.customerContactId;
+      this.speedQuote.customerReference = this.salesQuote.customerReferenceName;
+      this.speedQuote.contractReference = this.salesQuote.contractReferenceName;
+      this.speedQuote.leadSourceReference = this.salesQuote.leadSourceReference;
+      this.speedQuote.managementStructureId = this.salesQuote.managementStructureId;
+      this.speedQuote.salesOrderQuoteNumber = this.salesQuote.salesOrderQuoteNumber;
+      this.speedQuote.versionNumber = this.salesQuote.versionNumber;
+      this.speedQuote.masterCompanyId = this.masterCompanyId;
+      this.speedQuote.buId = this.salesQuote.buId;
+      this.speedQuote.departmentId = this.salesQuote.departmentId;
+      this.speedQuote.divisionId = this.salesQuote.divisionId;
+      this.speedQuote.salesPersonId = editValueAssignByCondition(
         "employeeId",
         this.salesQuote.salesPersonName
       );
-      this.salesOrderQuote.agentId = editValueAssignByCondition(
+      this.speedQuote.agentId = editValueAssignByCondition(
         "employeeId",
         this.salesQuote.agentId
       );
-      this.salesOrderQuote.agentName = editValueAssignByCondition(
+      this.speedQuote.agentName = editValueAssignByCondition(
         "name",
         this.salesQuote.agentId
       );
-      this.salesOrderQuote.customerSeviceRepId = editValueAssignByCondition(
+      this.speedQuote.customerSeviceRepId = editValueAssignByCondition(
         "employeeId",
         this.salesQuote.customerServiceRepName
       );
 
-      this.salesOrderQuote.probabilityId = this.salesQuote.probabilityId;
-      this.salesOrderQuote.employeeId = editValueAssignByCondition(
+      this.speedQuote.probabilityId = this.salesQuote.probabilityId;
+      this.speedQuote.employeeId = editValueAssignByCondition(
         "value",
         this.salesQuote.employeeId
       );
 
-      this.salesOrderQuote.leadSourceId = this.salesQuote.leadSourceId;
+      this.speedQuote.leadSourceId = this.salesQuote.leadSourceId;
       if (this.salesQuote.approvedDate)
         if (this.id) {
-          this.salesOrderQuote.statusId = this.salesQuote.statusId;
-          this.salesOrderQuote.statusChangeDate = this.salesQuote.statusChangeDate;
+          this.speedQuote.statusId = this.salesQuote.statusId;
+          this.speedQuote.statusChangeDate = this.salesQuote.statusChangeDate;
         }
-      this.salesOrderQuote.creditLimit = this.salesQuote.creditLimit;
-      this.salesOrderQuote.creditTermId = this.salesQuote.creditLimitTermsId;
-      this.salesOrderQuote.restrictPMA = this.salesQuote.restrictPMA;
-      this.salesOrderQuote.restrictDER = this.salesQuote.restrictDER;
-      this.salesOrderQuote.quoteApprovedById = this.salesQuote.quoteApprovedById;
+      this.speedQuote.creditLimit = this.salesQuote.creditLimit;
+      this.speedQuote.creditTermId = this.salesQuote.creditLimitTermsId;
+      this.speedQuote.restrictPMA = this.salesQuote.restrictPMA;
+      this.speedQuote.restrictDER = this.salesQuote.restrictDER;
+      this.speedQuote.quoteApprovedById = this.salesQuote.quoteApprovedById;
       if (this.salesQuote.approvedDate)
-        this.salesOrderQuote.approvedDate = this.salesQuote.approvedDate.toDateString();
-      this.salesOrderQuote.currencyId = this.salesQuote.currencyId;
+        this.speedQuote.approvedDate = this.salesQuote.approvedDate.toDateString();
+      this.speedQuote.currencyId = this.salesQuote.currencyId;
       if (this.customerWarning && this.customerWarning.customerWarningId) {
-        this.salesOrderQuote.customerWarningId = this.customerWarning.customerWarningId;
+        this.speedQuote.customerWarningId = this.customerWarning.customerWarningId;
       } else {
-        this.salesOrderQuote.customerWarningId = this.salesQuote.warningId;
+        this.speedQuote.customerWarningId = this.salesQuote.warningId;
       }
-      this.salesOrderQuote.memo = this.salesQuote.memo;
-      this.salesOrderQuote.notes = this.salesQuote.notes;
-      this.salesOrderQuote.createdBy = this.userName;
-      this.salesOrderQuote.updatedBy = this.userName;
-      this.salesOrderQuote.createdOn = new Date().toDateString();
-      this.salesOrderQuote.updatedOn = new Date().toDateString();
-      this.salesQuoteView = new SalesQuoteView();
-      this.salesQuoteView.createNewVersion = createNewVersion;
-      this.salesQuoteView.salesOrderQuote = this.salesOrderQuote
+      this.speedQuote.memo = this.salesQuote.memo;
+      this.speedQuote.notes = this.salesQuote.notes;
+      this.speedQuote.createdBy = this.userName;
+      this.speedQuote.updatedBy = this.userName;
+      this.speedQuote.createdOn = new Date().toDateString();
+      this.speedQuote.updatedOn = new Date().toDateString();
+      this.speedQuoteView = new SpeedQuoteView();
+      this.speedQuoteView.createNewVersion = createNewVersion;
+      this.speedQuoteView.speedQuote = this.speedQuote
       let partList: any = [];
       let invalidParts = false;
       let invalidDate = false;
@@ -1249,32 +1251,32 @@ export class SpeedQuoteCreateComponent implements OnInit {
           }
         }
         if (!invalidParts && !invalidDate) {
-          let partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
+          let partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
         }
       }
-      this.salesQuoteView.parts = partList;
+      this.speedQuoteView.parts = partList;
 
       if (this.id) {
         if (invalidParts) {
           this.isSpinnerVisible = false;
           this.alertService.resetStickyMessage();
-          this.alertService.showStickyMessage('Sales Order Quote', errmessage, MessageSeverity.error);
+          this.alertService.showStickyMessage('Speed Quote', errmessage, MessageSeverity.error);
         } else if (invalidDate) {
           this.isSpinnerVisible = false;
           this.alertService.resetStickyMessage();
-          this.alertService.showStickyMessage('Sales Order Quote', "Please select valid Dates for Sales Order Quote PartsList!", MessageSeverity.error);
+          this.alertService.showStickyMessage('Speed Quote', "Please select valid Dates for Speed Quote PartsList!", MessageSeverity.error);
         } else {
           this.isSpinnerVisible = false;
-          this.marginSummary.salesOrderQuoteId = this.id;
+          this.marginSummary.speedQuoteId = this.id;
           this.marginSummary.misc = this.totalCharges;
-          this.salesQuoteService.createSOQMarginSummary(this.marginSummary).subscribe(result => {
-            this.marginSummary.soQuoteMarginSummaryId = result
+          this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
+            this.marginSummary.speedQuoteMarginSummaryId = result
           }, error => {
             this.isSpinnerVisible = false;
           });
-          this.salesQuoteService.update(this.salesQuoteView).subscribe(data => {
-            this.SalesOrderQuoteId = data[0].salesOrderQuoteId;
+          this.speedQuoteService.update(this.speedQuoteView).subscribe(data => {
+            this.SpeedQuoteId = data[0].speedQuoteId;
             this.isCreateModeHeader = true;
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
@@ -1284,7 +1286,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
             );
             this.getSalesQuoteInstance(this.id, true);
             if (createNewVersion) {
-              this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
+              this.router.navigateByUrl(`salesmodule/salespages/speed-quote-list`);
             }
             this.toggle_po_header = false;
             if (this.isEdit) {
@@ -1298,33 +1300,33 @@ export class SpeedQuoteCreateComponent implements OnInit {
         }
       } else {
         if (this.isCopyMode == true) {
-          this.salesQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
-          this.salesQuoteView.salesOrderQuote.salesOrderQuoteId = null;
-          this.salesQuoteView.salesOrderQuote.salesOrderQuoteNumber = undefined;
-          if (this.salesQuoteView.parts && this.salesQuoteView.parts.length > 0) {
-            this.salesQuoteView.parts.filter(x => x.salesOrderQuotePartId = null)
+          this.speedQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
+          this.speedQuoteView.speedQuote.speedQuoteId = null;
+          this.speedQuoteView.speedQuote.salesOrderQuoteNumber = undefined;
+          if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
+            this.speedQuoteView.parts.filter(x => x.salesOrderQuotePartId = null)
           }
         }
-        this.salesQuoteService.create(this.salesQuoteView).subscribe(data => {
-          this.SalesOrderQuoteId = data[0].salesOrderQuoteId;
-          this.salesQuoteView.salesOrderQuote.salesOrderQuoteId = this.SalesOrderQuoteId;
+        this.speedQuoteService.create(this.speedQuoteView).subscribe(data => {
+          this.SpeedQuoteId = data[0].speedQuoteId;
+          this.speedQuoteView.speedQuote.speedQuoteId = this.SpeedQuoteId;
           this.isCreateModeHeader = true;
           this.isHeaderSubmit = true;
           this.isSpinnerVisible = false;
           this.alertService.showMessage(
             "Success",
-            `Quote created successfully.`,
+            `Speed Quote created successfully.`,
             MessageSeverity.success
           );
           this.toggle_po_header = false;
-          this.id = this.SalesOrderQuoteId;
-          if (this.SalesOrderQuoteId) {
+          this.id = this.SpeedQuoteId;
+          if (this.SpeedQuoteId) {
             this.router.navigateByUrl(
-              `salesmodule/salespages/sales-quote-edit/${this.customerId}/${this.SalesOrderQuoteId}`
+              `salesmodule/salespages/speed-quote-edit/${this.customerId}/${this.SpeedQuoteId}`
             );
           }
           if (!this.isCreateModeHeader) {
-            this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
+            this.router.navigateByUrl(`salesmodule/salespages/speed-quote-list`);
           }
         }
           , error => {
@@ -1360,11 +1362,11 @@ export class SpeedQuoteCreateComponent implements OnInit {
   }
 
   sendQuoteToCustomer() {
-    this.salesQuoteService.sendQuoteToCustomer(this.id).subscribe(
+    this.speedQuoteService.sendSpeedQuoteToCustomer(this.id).subscribe(
       results => {
         this.alertService.showMessage(
           "Success",
-          `Quote sent to customer successfully.`,
+          `Speed Quote sent to customer successfully.`,
           MessageSeverity.success
         );
 
@@ -1375,31 +1377,31 @@ export class SpeedQuoteCreateComponent implements OnInit {
     );
   }
 
-  convertSalesOrderQuote() {
-    this.conversionStarted = true;
-    this.isSpinnerVisible = true;
-    this.salesOrderConversionCriteriaObj.salesOrderQuoteId = this.id;
+  // convertSalesOrderQuote() {
+  //   this.conversionStarted = true;
+  //   this.isSpinnerVisible = true;
+  //   this.salesOrderConversionCriteriaObj.salesOrderQuoteId = this.id;
 
-    this.salesQuoteService.convertfromquote(this.salesOrderConversionCriteriaObj, this.employeeId).subscribe(
-      results => {
-        this.alertService.showMessage(
-          "Success",
-          `Quote coverted to Order successfully.`,
-          MessageSeverity.success
-        );
-        this.isSpinnerVisible = false;
-        this.salesOrderView = results[0];
+  //   this.speedQuoteService.convertfromquote(this.salesOrderConversionCriteriaObj, this.employeeId).subscribe(
+  //     results => {
+  //       this.alertService.showMessage(
+  //         "Success",
+  //         `Speed Quote coverted to Order successfully.`,
+  //         MessageSeverity.success
+  //       );
+  //       this.isSpinnerVisible = false;
+  //       this.salesOrderView = results[0];
 
-        this.closeModal();
+  //       this.closeModal();
 
-        this.router.navigateByUrl(`salesmodule/salespages/sales-order-edit/${this.salesOrderView.salesOrder.customerId}/${this.salesOrderView.salesOrder.salesOrderId}`);
-      }, error => {
-        this.isSpinnerVisible = false;
-      }
-    );
+  //       this.router.navigateByUrl(`salesmodule/salespages/sales-order-edit/${this.salesOrderView.salesOrder.customerId}/${this.salesOrderView.salesOrder.salesOrderId}`);
+  //     }, error => {
+  //       this.isSpinnerVisible = false;
+  //     }
+  //   );
 
-    this.isSpinnerVisible = false;
-  }
+  //   this.isSpinnerVisible = false;
+  // }
 
   initiateQuoteCopying() {
     let content = this.copyQuotePopup;
@@ -1414,10 +1416,10 @@ export class SpeedQuoteCreateComponent implements OnInit {
       considerParts = false;
     }
     let considerApprovers = false;
-    this.salesQuoteService.initiateQuoteCopying(this.id).subscribe(
+    this.speedQuoteService.initiateQuoteCopying(this.id).subscribe(
       results => {
         this.closeModal()
-        this.router.navigate(['/salesmodule/salespages/sales-quote-create/' + results[0].salesOrderQuote.customerId], { queryParams: { copyRef: results[0].originalSalesOrderQuoteId, considerParts: considerParts, considerApprovers: considerApprovers } });
+        this.router.navigate(['/salesmodule/salespages/speed-quote-create/' + results[0].salesOrderQuote.customerId], { queryParams: { copyRef: results[0].originalSalesOrderQuoteId, considerParts: considerParts, considerApprovers: considerApprovers } });
       }, error => {
         this.isSpinnerVisible = false;
       }
@@ -1543,12 +1545,12 @@ export class SpeedQuoteCreateComponent implements OnInit {
   }
 
   closeSalesOrderQuote() {
-    this.salesQuoteService.closeSalesOrderQuote(this.id, this.userName).subscribe(
+    this.speedQuoteService.closeSpeedQuote(this.id, this.userName).subscribe(
       results => {
         this.isSpinnerVisible = false;
         this.alertService.showMessage(
           "Success",
-          `Quote closed successfully.`,
+          `Speed Quote closed successfully.`,
           MessageSeverity.success
         );
         this.closeModal();
@@ -1598,7 +1600,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
   onPartsSaveEvent(savedParts) {
     if (savedParts) {
-      this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(savedParts, this.marginSummary);
+      this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(savedParts, this.marginSummary);
       this.updateMarginSummary();
       this.getSalesQuoteInstance(this.id, true);
     }
@@ -1606,9 +1608,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
   updateMarginSummary() {
     this.isSpinnerVisible = true;
-    this.marginSummary.salesOrderQuoteId = this.id;
-    this.salesQuoteService.createSOQMarginSummary(this.marginSummary).subscribe(result => {
-      this.marginSummary.soQuoteMarginSummaryId = result;
+    this.marginSummary.speedQuoteId = this.id;
+    this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
+      this.marginSummary.speedQuoteMarginSummaryId = result;
       this.isSpinnerVisible = false;
     }, error => {
       this.isSpinnerVisible = false;
@@ -1619,12 +1621,12 @@ export class SpeedQuoteCreateComponent implements OnInit {
     if (event.index == 0) {
       this.salesPartNumberComponent.refresh();
     }
-    if (event.index == 1) {
-      this.salesApproveComponent.refresh(this.marginSummary);
-    }
-    if (event.index == 2) {
-      this.salesCustomerApprovalsComponent.refresh(this.marginSummary, this.salesQuote.speedQuoteId);
-    }
+    // if (event.index == 1) {
+    //   this.salesApproveComponent.refresh(this.marginSummary);
+    // }
+    // if (event.index == 2) {
+    //   this.salesCustomerApprovalsComponent.refresh(this.marginSummary, this.salesQuote.speedQuoteId);
+    // }
     if (event.index == 4) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderQuoteFreightComponent.refresh(false);
@@ -1648,19 +1650,19 @@ export class SpeedQuoteCreateComponent implements OnInit {
   }
 
   setFreightsOrCharges() {
-    if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
-      this.salesQuoteService.selectedParts.forEach((part, i) => {
-        this.salesQuoteService.selectedParts[i].freight = this.totalFreights;
-        this.salesQuoteService.selectedParts[i].misc = this.totalCharges;
+    if (this.speedQuoteService.selectedParts && this.speedQuoteService.selectedParts.length > 0) {
+      this.speedQuoteService.selectedParts.forEach((part, i) => {
+        this.speedQuoteService.selectedParts[i].freight = this.totalFreights;
+        this.speedQuoteService.selectedParts[i].misc = this.totalCharges;
       });
     }
-    this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
+    this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(this.speedQuoteService.selectedParts, this.marginSummary);
   }
 
   saveSalesOrderFreightsList(e) {
     this.totalFreights = e;
     this.marginSummary.freightAmount = this.totalFreights;
-    this.salesQuoteService.setTotalFreights(e);
+    this.speedQuoteService.setTotalFreights(e);
     this.setFreightsOrCharges();
     this.updateMarginSummary();
   }
@@ -1668,7 +1670,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   updateSalesOrderFreightsList(e) {
     this.totalFreights = e;
     this.marginSummary.freightAmount = this.totalFreights;
-    this.salesQuoteService.setTotalFreights(e);
+    this.speedQuoteService.setTotalFreights(e);
     this.setFreightsOrCharges();
     this.updateMarginSummary();
   }
@@ -1679,14 +1681,14 @@ export class SpeedQuoteCreateComponent implements OnInit {
   saveSalesOrderChargesList(e) {
     this.totalCharges = e;
     this.marginSummary.misc = this.totalCharges;
-    this.salesQuoteService.setTotalCharges(e);
+    this.speedQuoteService.setTotalCharges(e);
     this.setFreightsOrCharges();
     this.updateMarginSummary();
   }
 
   updateSalesOrderChargesList(e) {
     this.totalCharges = e;
-    this.salesQuoteService.setTotalCharges(e);
+    this.speedQuoteService.setTotalCharges(e);
     this.marginSummary.misc = this.totalCharges;
     this.setFreightsOrCharges();
     this.updateMarginSummary();

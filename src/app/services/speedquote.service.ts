@@ -5,30 +5,19 @@ import "rxjs/add/observable/forkJoin";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
 import { Role } from "../models/role.model";
-import { SalesQuoteEndpointService } from "./salesquote-endpoint.service";
-import { ISalesQuote } from "../models/sales/ISalesQuote.model";
 import { ISalesQuoteView } from "../models/sales/ISalesQuoteView";
-import { VerifySalesQuoteModel } from "../components/sales/quotes/models/verify-sales-quote-model";
-import { ISalesOrderQuote } from "../models/sales/ISalesOrderQuote";
-import { ISalesSearchParameters } from "../models/sales/ISalesSearchParameters";
-import { ISalesQuoteListView } from "../models/sales/ISalesQuoteListView";
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { IPartJson } from "../components/sales/shared/models/ipart-json";
 import { PartDetail } from "../components/sales/shared/models/part-detail";
-import { SalesOrderConversionCritera } from "../components/sales/quotes/models/sales-order-conversion-criteria";
 import { SalesOrderView } from "../models/sales/SalesOrderView";
 import { BehaviorSubject } from "rxjs";
-import { ISalesOrderFreight } from "../models/sales/ISalesOrderFreight";
-import { ISalesOrderQuoteCharge } from "../models/sales/ISalesOrderQuoteCharge";
 import { formatStringToNumber } from "../generic/autocomplete";
 import { SalesOrderQuotePart } from "../models/sales/SalesOrderQuotePart";
-import { SOQuoteMarginSummary } from "../models/sales/SoQuoteMarginSummary";
-import { WorkOrderType } from "../models/work-order-type.model";
-import { SalesOrderQuote } from "../models/sales/SalesOrderQuote";
 import { ISpeedQuote } from "../models/sales/ISpeedQuote.model";
 import { SpeedQuote } from "../models/sales/SpeedQuote.model";
 import { ISpeedQuoteView } from "../models/sales/ISpeedQuoteView";
 import { SpeedQuoteEndpointService } from "./speedquote-endpoint.service";
+import { SpeedQuoteMarginSummary } from "../models/sales/SpeedQuoteMarginSummary";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
@@ -44,7 +33,6 @@ export class SpeedQuoteService {
   speedQuote: ISpeedQuote;
   isEditSOQuoteSettingsList = false;
   soQuoteSettingsData;
-  // salesOrderView: SalesOrderView;
   listCollection: any;
   isEditMode: boolean = false;
   parts: IPartJson[];
@@ -117,6 +105,18 @@ export class SpeedQuoteService {
     );
   }
 
+  update(salesquote: ISpeedQuoteView): Observable<ISpeedQuote[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.update(salesquote)
+    );
+  }
+
+  sendSpeedQuoteToCustomer(salesQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.sendQuoteToCustomer(salesQuoteId)
+    );
+  }
+
   marshalSpeedQPartToView(selectedPart) {
     let partNumberObj = new PartDetail();
     partNumberObj.itemMasterId = selectedPart.itemMasterId;
@@ -184,6 +184,71 @@ export class SpeedQuoteService {
     return partNumberObj;
   }
 
+  marshalSpeedQuotePartToSave(selectedPart, userName) {
+    this.checkNullValuesList.forEach(key => {
+      if (!selectedPart[key]) {
+        selectedPart[key] = 0;
+      }
+    })
+    let partNumberObj = new SalesOrderQuotePart();
+    partNumberObj.salesOrderQuotePartId = selectedPart.salesOrderQuotePartId;
+    partNumberObj.stockLineId = selectedPart.stockLineId;
+    partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
+    partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
+    partNumberObj.promisedDate = selectedPart.promisedDate.toDateString();
+    partNumberObj.estimatedShipDate = selectedPart.estimatedShipDate.toDateString();
+    partNumberObj.priorityId = selectedPart.priorityId;
+    partNumberObj.itemMasterId = selectedPart.itemMasterId;
+    partNumberObj.fxRate = selectedPart.fixRate;
+    partNumberObj.qtyQuoted = selectedPart.quantityToBeQuoted ? formatStringToNumber(selectedPart.quantityToBeQuoted) : 0;
+    partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
+    partNumberObj.unitSalePrice = selectedPart.salesPricePerUnit;
+    partNumberObj.salesBeforeDiscount = formatStringToNumber(selectedPart.salesPriceExtended);
+    partNumberObj.discount = selectedPart.discount ? Number(selectedPart.discount) : 0;
+    partNumberObj.discountAmount = selectedPart.salesDiscountPerUnit;
+    partNumberObj.netSales = formatStringToNumber(selectedPart.netSalesPriceExtended);
+    partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
+    partNumberObj.taxType = selectedPart.taxType;
+    partNumberObj.taxAmount = selectedPart.taxAmount;
+    partNumberObj.taxPercentage = selectedPart.taxPercentage;
+    if (!selectedPart.createdBy) {
+      partNumberObj.createdBy = userName;
+    } else {
+      partNumberObj.createdBy = selectedPart.createdBy;
+    }
+
+    partNumberObj.idNumber = selectedPart.idNumber;
+    partNumberObj.updatedBy = userName;
+    partNumberObj.createdOn = new Date().toDateString();
+    partNumberObj.updatedOn = new Date().toDateString();
+    partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
+    partNumberObj.altOrEqType = selectedPart.altOrEqType;
+    partNumberObj.qtyPrevQuoted = selectedPart.quantityAlreadyQuoted;
+    partNumberObj.methodType =
+      selectedPart.stockLineId != null ? "S" : "I";
+    partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0;
+    partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0;
+    partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
+    partNumberObj.markupPerUnit = selectedPart.markupPerUnit;
+    partNumberObj.salesDiscountExtended = selectedPart.salesDiscountExtended;
+    partNumberObj.netSalePriceExtended = selectedPart.netSalePriceExtended;
+    partNumberObj.unitCostExtended = selectedPart.unitCostExtended ? formatStringToNumber(selectedPart.unitCostExtended) : 0;
+    partNumberObj.marginAmount = selectedPart.marginAmount ? formatStringToNumber(selectedPart.marginAmount) : 0;
+    partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended ? formatStringToNumber(selectedPart.marginAmountExtended) : 0;
+    partNumberObj.marginPercentage = selectedPart.marginPercentageExtended ? selectedPart.marginPercentageExtended : 0;
+    partNumberObj.conditionId = selectedPart.conditionId;
+    partNumberObj.currencyId = selectedPart.currencyId;
+    partNumberObj.uom = selectedPart.uom;
+    partNumberObj.controlNumber = selectedPart.controlNumber;
+    partNumberObj.grossSalePricePerUnit = selectedPart.grossSalePricePerUnit;
+    partNumberObj.grossSalePrice = selectedPart.grossSalePrice + selectedPart.misc;
+    partNumberObj.notes = selectedPart.notes;
+    partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
+    partNumberObj.customerReference = selectedPart.customerRef;
+    partNumberObj.itemNo = selectedPart.itemNo;
+    return partNumberObj;
+  }
+
   getSpeedQuoteHeaderMarginDetails(selectedParts, marginSummary) {
     let sales = 0;
     let productCost = 0;
@@ -232,5 +297,21 @@ export class SpeedQuoteService {
     }
 
     return Number(marginPercentage.toFixed(2));
+  }
+
+  createSpeedQuoteMarginSummary(marginSummary: SpeedQuoteMarginSummary) {
+    return this.speedQuoteEndPointSevice.createSpeedQuoteMarginSummary(marginSummary);
+  }
+
+  initiateQuoteCopying(salesQuoteId: number): Observable<ISalesQuoteView[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.initiateQuoteCopying(salesQuoteId)
+    );
+  }
+
+  closeSpeedQuote(salesQuoteId: number, updatedBy: string): Observable<ISalesQuoteView[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.closeSpeedQuoteEndPoint(salesQuoteId, updatedBy)
+    );
   }
 }

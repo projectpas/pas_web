@@ -6,13 +6,14 @@ import { ICreditTerm } from './ICreditTerm';
 import { ISalesProbablity } from './ISalesProbablity';
 import { ILeadSource } from './ILeadSource';
 import { IStatus } from "./IStatus";
+import { ISpeedQuoteView } from './ISpeedQuoteView';
 import { ISpeedQte } from './ISpeedQte';
 
-export interface ISpeedQuoteView {
+export class SpeedQuoteView implements ISpeedQuoteView {
     createNewVersion: boolean;
     originalSalesOrderQuoteId: Number;
     speedQuote: ISpeedQte;
-    parts: ISalesOrderQuotePart[];
+    parts: ISalesOrderQuotePart[]
     priorities: IPriority[];
     salesQuoteTypes: ISalesQuoteType[];
     customerTypes: ICustomerType[];
