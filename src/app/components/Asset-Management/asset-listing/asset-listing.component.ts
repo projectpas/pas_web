@@ -247,6 +247,7 @@ export class AssetListingComponent implements OnInit {
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete
         data.filters['status'] = this.status ? this.status : 'Active';
+        data.filters.masterCompanyId= this.authService.currentUser.masterCompanyId;
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.isSpinnerVisible = true;
         this.assetService.getAssetNewList(PagingData).subscribe(
@@ -266,23 +267,23 @@ export class AssetListingComponent implements OnInit {
         ];
     }
     globalFilterValue: any;
-    filterGlobal(value, type) {
-        this.globalFilterValue = value;
-        this.isSpinnerVisible = true;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters };
-        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-        const isdelete = this.currentDeletedstatus ? true : false;
-        PagingData.filters.isDeleted = isdelete
-        PagingData.filters['status'] = this.status ? this.status : 'Active';
-        PagingData.filters['global'] = value;
-        PagingData.globalFilter = value;
-        this.assetService.getAssetListGlobalFilter(PagingData).subscribe(
-            results => {
-                this.onDataLoadSuccessful(results);
-            },
-            error => this.onDataLoadFailed(error)
-        );
-    }
+    // filterGlobal(value, type) {
+    //     this.globalFilterValue = value;
+    //     this.isSpinnerVisible = true;
+    //     this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters };
+    //     const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+    //     const isdelete = this.currentDeletedstatus ? true : false;
+    //     PagingData.filters.isDeleted = isdelete
+    //     PagingData.filters['status'] = this.status ? this.status : 'Active';
+    //     PagingData.filters['global'] = value;
+    //     PagingData.globalFilter = value;
+    //     this.assetService.getAssetListGlobalFilter(PagingData).subscribe(
+    //         results => {
+    //             this.onDataLoadSuccessful(results);
+    //         },
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
     private onDataLoadSuccessful(allWorkFlows) {
         this.isSpinnerVisible = false;
         this.allAssetInfo = [];

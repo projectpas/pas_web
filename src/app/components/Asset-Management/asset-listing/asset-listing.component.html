@@ -171,6 +171,8 @@
                                                    class="container-input-check" />
                                         </ng-container>
                                         <ng-container *ngIf="col.field =='deprAmort'">
+                                            <!-- <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
+                                            class="container-input-check" /> -->
                                             <input type="checkbox" *ngIf="rowData['assetClass']=='Tangible'" disabled [checked]="rowData['isDepreciable'] == true"
                                             class="container-input-check" />
                                                    <input type="checkbox" disabled *ngIf="rowData['assetClass']=='Intangible'" [checked]="rowData['isAmortizable'] == true"
