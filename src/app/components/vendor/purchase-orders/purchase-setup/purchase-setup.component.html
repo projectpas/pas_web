@@ -515,7 +515,7 @@
                                         <td>
                                             <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                 [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"
-                                                appendTo="body" [minDate]="currentDate" name="needByDate{{row_index}}"
+                                                appendTo="body" [minDate]="headerInfo.openDate"name="needByDate{{row_index}}"
                                                 id="needByDate{{row_index}}" title="Need By Date"
                                                 [(ngModel)]="partList.needByDate" #pNeedByDate="ngModel"
                                                 (ngModelChange)="enablePartSave()" required
