@@ -1,75 +1,87 @@
+<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+<div class="card">
+    <div class="card new-card">
+        <div class="card-header header">
+            <div class="row">
+                <div class="col">
+                    <h4 class="header-name">Repair Order Settings</h4>
+                </div>
+            </div>
+        </div>
+        <div class="card-body header-body">
+            <form #roQuoteSettingsForm="ngForm">
+                <div class="form-group">
+                    <input type="hidden" [(ngModel)]="rosettingModel.RepairOrderSettingId" name="RepairOrderSettingId">
+                    <div class="checkbox-cstm" style="margin-top: 18px;">
+                        <label style="width:100px !important">
+                            Resale
+                        </label>
+                        <span><input type="checkbox" [(ngModel)]="rosettingModel.IsResale"
+                                (ngModelChange)="enableHeaderSave()" name="resale"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox-cstm" style="margin-top: 10px;">
+                        <label style="width:100px !important">
+                            Deferred Receiver
+                        </label>
+                        <span><input type="checkbox" [(ngModel)]="rosettingModel.IsDeferredReceiver"
+                                (ngModelChange)="enableHeaderSave()" name="deferredReceiver"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox-cstm" style="margin-top: 10px;">
+                        <label style="width:100px !important">
+                            Enforce Approval
+                        </label>
+                        <span><input type="checkbox" [(ngModel)]="rosettingModel.IsEnforceApproval"
+                                (ngModelChange)="enableHeaderSave()" name="enforceApproval"></span>
+                    </div>
+                </div>
+                <div class="col-md-2" *ngIf="!rosettingModel.IsEnforceApproval">
+                    <div class="form-group">
+                        <label>Effective Date</label>
+                        <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar"
+                            [showIcon]="true" appendTo="body" name="effectivedate" [yearNavigator]="true"
+                            [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="rosettingModel.effectivedate"
+                            (ngModelChange)="enableHeaderSave()" #startDate="ngModel"></p-calendar>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary pull-right" (click)="saveRepaireOrderSetting()"
+                        style="margin-top: 10px;" [disabled]="!enableHeaderSaveBtn">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb><div class="card">
-  <div class="card new-card">
-      <div class="card-header header">
-          <div class="row">
-              <div class="col">
-                  <h4 class="header-name">Repair Order Settings</h4>
-              </div>
-          </div>
-      </div>
-      <div class="card-body header-body">
-          <form #roQuoteSettingsForm="ngForm">
-              <div class="form-group">
-                <input type="hidden" [(ngModel)]="rosettingModel.RepairOrderSettingId" name="RepairOrderSettingId">
-                  <div class="checkbox-cstm" style="margin-top: 18px;">
-                      <label style="width:100px !important">
-                          Resale
-                      </label>
-                      <span><input type="checkbox" [(ngModel)]="rosettingModel.IsResale" (ngModelChange)="enableHeaderSave()" name="resale"></span>
-                  </div>
-              </div>
-              <div class="form-group">
-                  <div class="checkbox-cstm" style="margin-top: 10px;">
-                      <label style="width:100px !important">
-                          Deferred Receiver
-                      </label>
-                      <span><input type="checkbox" [(ngModel)]="rosettingModel.IsDeferredReceiver" (ngModelChange)="enableHeaderSave()"  name="deferredReceiver"></span>
-                  </div>
-              </div>
-              <div class="form-group">
-                  <div class="checkbox-cstm" style="margin-top: 10px;">
-                      <label style="width:100px !important">
-                          Enforce Approval
-                      </label>
-                      <span><input type="checkbox" [(ngModel)]="rosettingModel.IsEnforceApproval" (ngModelChange)="enableHeaderSave()"  name="enforceApproval"></span>
-                  </div>
-              </div>
-              <div class="form-group">
-                  <button class="btn btn-primary pull-right" (click)="saveRepaireOrderSetting()" style="margin-top: 10px;" [disabled]="!enableHeaderSaveBtn">Update</button>
-              </div>
-          </form>
-      </div>      
-  </div>
+    <ng-template #errorMessagePop let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
+            <h4 class="modal-title"> Please Enter (*) Mandatory Fields</h4>
+        </div>
+        <div class="modal-body">
+            <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
+        </div>
+        <div class="modal-footer">
 
-  <ng-template #errorMessagePop let-c="close" let-d="dismiss">
-      <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
-          <h4 class="modal-title"> Please Enter (*) Mandatory Fields</h4>
-      </div>
-      <div class="modal-body">
-          <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
-      </div>
-      <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeErrorMessage()">
+                Close
+            </button>
+        </div>
+    </ng-template>
 
-          <button type="button" class="btn btn-danger" data-dismiss="modal"
-                  (click)="closeErrorMessage()">
-              Close
-          </button>
-      </div>
-  </ng-template>
-
-  <div class="preloader" *ngIf="isSpinnerVisible">
-      <div class="loading">
-          <div class="lds-roller">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-          </div>
-      </div>
-  </div>
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
