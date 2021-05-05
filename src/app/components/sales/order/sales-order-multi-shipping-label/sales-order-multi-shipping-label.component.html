@@ -1,0 +1,163 @@
+﻿<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title"></h4>
+    <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
+</div>
+<div class="modal-body" *ngIf="objSalesOrderShippingLabels" id="soShippingLabel">
+    <ng-container *ngFor="let salesOrderShipping of objSalesOrderShippingLabels; let i = index;">
+        <form id="" name="" action="#" method="post" onsubmit="return false;">
+            <div class="image">
+                <div style="padding: 0; margin: 0;">
+                    <div>
+                        <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                            <div *ngIf="!isPrint" class="pick-ticket-header"
+                                style="margin-bottom: 15px; display: flex;">
+                                <h4 style="width: 130px">Service Class:</h4>
+                                <select class="form-control" style="width: 95px" name="serviceClass"
+                                    [(ngModel)]="salesOrderShipping.soShippingLabelViewModel.serviceClass" required>
+                                    <option value="First Class">First Class</option>
+                                    <option value="Priority">Priority</option>
+                                </select>
+                            </div>
+                            <div *ngIf="isPrint" class="pick-ticket-header" style="margin-bottom: 15px; display: flex;">
+                                <h4 style="width: 130px">Service Class:</h4>
+                                <h4 style="width: 95px">{{salesOrderShipping.soShippingLabelViewModel.serviceClass}}
+                                </h4>
+                            </div>
+                            <div class="first-block">
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label"><b>Cust Ref:</b></label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.customerRef}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Ship Date:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.shipDate | date:'medium'}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div" style="margin-top:15px">
+                                    <label class="col-sm-3 first-block-label"><b>Origin:</b></label>
+                                    <label class="col-sm-8 first-block-label" disabled></label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Company:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.originCompanyName}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Address1:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.originAddress1}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">City:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.originCity}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">State/Prov, Postal Code:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.originState}},
+                                        {{salesOrderShipping.soShippingLabelViewModel.originPostalCode}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Country:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.originCountry}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div" style="margin-top:15px">
+                                    <label class="col-sm-3 first-block-label"><b>Ship To:</b></label>
+                                    <label class="col-sm-8 first-block-label" disabled></label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Company:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.shipToComanyName}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Site:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.shipToSiteName}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Address1:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.shipToAddress1}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">City:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.shipToCity}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">State/Prov,Postal Code:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.shipToState}},
+                                        {{salesOrderShipping.soShippingLabelViewModel.shipToPostalCode}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Country:</label>
+                                    <label class="col-sm-8 first-block-label"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.shipToCountry}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Phone:</label>
+                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled></label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label">Attn:</label>
+                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled></label>
+                                </div>
+                                <br />
+                                <img src="{{salesOrderShipping.soShippingLabelViewModel.shippingLabelBarcode}}"
+                                    style="height:100px;width:60%" alt="barcode" class="image" />
+                            </div>
+                            <div class="second-block">
+                                <div class="form-group second-block-div">
+                                    <label class="col-sm-4 second-block-label">SO Num</label>
+                                    <label type="text" class="form-control"
+                                        style="background:#fff !important; width: 160px;" name="salesOrderNumber"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.salesOrderNumber}}
+                                    </label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12  form-group second-block-div">
+                                    <label class="col-sm-2">Weight</label>
+                                    <label class="col-sm-3 form-control input-width input-field-border" name="weight"
+                                        style="background:#fff !important; padding-left: 10px !important"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.weight}}</label>
+                                    <label class="col-sm-2">UOM </label>
+                                    <label class="col-sm-3  form-control input-width input-field-border" name="uom"
+                                        style="background:#fff !important; padding-left: 10px !important"
+                                        disabled>{{salesOrderShipping.soShippingLabelViewModel.uom}}</label>
+                                </div>
+                                <br />
+                            </div>
+                            <div class="clear"></div>
+                            <div class="clear"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+</div>

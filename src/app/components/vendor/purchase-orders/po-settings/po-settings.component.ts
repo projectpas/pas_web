@@ -36,6 +36,9 @@ export class PoSettingsComponent implements OnInit {
         this.posettingModel.IsDeferredReceiver = false;
 		this.posettingModel.IsEnforceApproval = false;
         this.isSpinnerVisible = false;
+        this.posettingModel.startDate = new Date();
+        this.posettingModel.endDate = new Date();
+
         this.getPurchaseOrderMasterData(this.currentUserMasterCompanyId);
     }
 
@@ -56,22 +59,42 @@ export class PoSettingsComponent implements OnInit {
     getPurchaseOrderMasterData(currentUserMasterCompanyId) {
         this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId);
         this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId).subscribe(res => {
-            if (res) {
+            if (res) {                
                 this.posettingModel.PurchaseOrderSettingId = res.purchaseOrderSettingId;
                 this.posettingModel.IsResale = res.isResale;
                 this.posettingModel.IsDeferredReceiver = res.isDeferredReceiver;
-                this.posettingModel.IsEnforceApproval = res.isEnforceApproval;
+                this.posettingModel.IsEnforceApproval = res.isEnforceApproval;                
+                if(res.startDate){
+                    this.posettingModel.startDate = new Date(res.startDate);
+                    this.posettingModel.endDate = new Date(res.endDate);
+                }
             }
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
+            this.isSpinnerVisible = false;            
             //this.errorMessageHandler(errorLog);
         });
     }
 
-    savePurchaseOrderSetting() {
-		this.isSpinnerVisible = true;
-
+    savePurchaseOrderSetting() {               
+        if(!this.posettingModel.IsEnforceApproval){
+            if(this.posettingModel.startDate == null || this.posettingModel.startDate == undefined){
+                this.alertService.showMessage(
+                    'Error',
+                    `Start Date Require!`,
+                     MessageSeverity.error
+                );
+                return false;
+            }
+            if(this.posettingModel.endDate == null || this.posettingModel.endDate == undefined){
+                this.alertService.showMessage(
+                    'Error',
+                    `End Date Require!`,
+                     MessageSeverity.error
+                );
+                return false;
+            }            
+        }
+        this.isSpinnerVisible = true;
         var headerInfoObj = {
             PurchaseOrderSettingId : this.posettingModel.PurchaseOrderSettingId,
 			IsResale: this.posettingModel.IsResale,
@@ -81,7 +104,9 @@ export class PoSettingsComponent implements OnInit {
             createdDate: this.posettingModel.createdDate,
             updatedDate: this.posettingModel.updatedDate,
             createdBy: this.posettingModel.createdBy ? this.posettingModel.createdBy : this.userName,
-            updatedBy: this.posettingModel.updatedBy ? this.posettingModel.updatedBy : this.userName
+            updatedBy: this.posettingModel.updatedBy ? this.posettingModel.updatedBy : this.userName,
+            startDate: this.posettingModel.startDate,
+            endDate: this.posettingModel.endDate,
         }
 
         this.purchaseOrderService.savePurchaseOrderSettingMasterDate({ ...headerInfoObj }).subscribe(saveddata => {

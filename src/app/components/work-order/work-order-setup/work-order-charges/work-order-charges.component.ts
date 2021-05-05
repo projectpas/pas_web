@@ -41,14 +41,14 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   totalPages: number = 0;
   pageSize: number = 10;
   cols = [
-    { field: 'chargeType', header: 'Charge Type' ,isRequired:true},
-    { field: 'glAccountName', header: 'Gl Account Name',isRequired:false },
+    { field: 'chargeType', header: 'Charge Type' ,isRequired:true,width:"100px"},
+    { field: 'glAccountName', header: 'Gl Account Name',isRequired:false ,width:"100px"},
     { field: 'description', header: 'Description',isRequired:false },
     { field: 'quantity', header: 'Qty',isRequired:true ,width:"60px"},
     { field: 'refNum', header: 'Ref Num',isRequired:false },
     { field: 'unitCost', header: 'Unit Cost',isRequired:true ,width:"60px"},
-    { field: 'extendedCost', header: 'Extented Cost',isRequired:false ,width:"60px"},
-    { field: 'vendorName', header: 'Vendor Name',isRequired:false },
+    { field: 'extendedCost', header: 'Extented Cost',isRequired:false ,width:"100px"},
+    { field: 'vendorName', header: 'Vendor Name',isRequired:false ,width:"100px"},
   ]
   auditHistoryHeaders = [
     { field: 'taskName', header: 'Task' ,isRequired:true},

@@ -125,7 +125,7 @@
                                             <p-autoComplete (ngModelChange)="setvaliDate($event)"  class="p-autoComplete-ctsm" field="name" name="vendorName" [dropdown]="true"
                                             errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
                                             (completeMethod)="filterWarentyVendor($event)"  [size]="30" [minLength]="1"
-                                            [(ngModel)]="currentCalibration.VendorId"  #prellRevInsp="ngModel" >
+                                            [(ngModel)]="currentCalibration.calibrationDefaultVendorId"  #prellRevInsp="ngModel" >
                                         </p-autoComplete>
                                         </div>
                                     

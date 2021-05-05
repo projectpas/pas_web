@@ -18,7 +18,7 @@ import { ShippingService } from '../../../../services/shipping/shipping-service'
 import { CommonService } from '../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { RepairOrderService } from '../../../../services/repair-order.service';
-
+import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 
 @Component({
     selector: 'app-view-ro',
@@ -70,6 +70,10 @@ export class ViewRoComponent {
     repairOrderHeaderData: any;
     headerManagementStructure: any = {};
     isSpinnerVisible: boolean = false;
+    companyModuleId: number = 0;
+    vendorModuleId: number = 0;
+    customerModuleId: number = 0;
+    otherModuleId: number = 0;
 
     /** edit-ro ctor */
     constructor(public receivingService: ReceivingService,
@@ -92,6 +96,10 @@ export class ViewRoComponent {
         this.localPoData = this.vendorService.selectedPoCollection;
         this.editPoData = this.localData[0];
         this.currentDate = new Date();
+        this.companyModuleId = AppModuleEnum.Company;
+        this.vendorModuleId = AppModuleEnum.Vendor;
+        this.customerModuleId = AppModuleEnum.Customer;
+        this.otherModuleId = AppModuleEnum.Others;
     }
 
     ngOnInit() {
@@ -860,61 +868,7 @@ export class ViewRoComponent {
 
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
-    }
-
-    onObtainFromChange(event) {
-        if (event.target.value === '1') {
-            this.obtainfromcustomer = true;
-            this.obtainfromother = false;
-            this.obtainfromvendor = false;
-        }
-        if (event.target.value === '2') {
-            this.obtainfromother = true;
-            this.obtainfromcustomer = false;
-            this.obtainfromvendor = false;
-        }
-        if (event.target.value === '3') {
-            this.obtainfromvendor = true;
-            this.obtainfromcustomer = false;
-            this.obtainfromother = false;
-        }
-    }
-
-    onOwnerChange(event) {
-        if (event.target.value === '1') {
-            this.ownercustomer = true;
-            this.ownerother = false;
-            this.ownervendor = false;
-        }
-        if (event.target.value === '2') {
-            this.ownerother = true;
-            this.ownercustomer = false;
-            this.ownervendor = false;
-        }
-        if (event.target.value === '3') {
-            this.ownervendor = true;
-            this.ownercustomer = false;
-            this.ownerother = false;
-        }
-    }
-
-    onTraceableToChange(event) {
-        if (event.target.value === '1') {
-            this.traceabletocustomer = true;
-            this.traceabletoother = false;
-            this.traceabletovendor = false;
-        }
-        if (event.target.value === '2') {
-            this.traceabletoother = true;
-            this.traceabletocustomer = false;
-            this.traceabletovendor = false;
-        }
-        if (event.target.value === '3') {
-            this.traceabletovendor = true;
-            this.traceabletocustomer = false;
-            this.traceabletoother = false;
-        }
-    }
+    }  
 
     editStockLine(stockLine: StockLine) {
         stockLine.isEnabled = !stockLine.isEnabled;

@@ -263,6 +263,8 @@ export class SalesQuoteAnalysisComponent implements OnInit {
           this.sales.forEach((sale, i) => {
             this.sales[i]['totalRevenue'] = this.calculateProductRevenue(sale, i);
             this.sales[i]['totalSales'] = this.calculateTotalRevenue(sale, i);
+            this.sales[i]['marginAmountExtended'] = this.calculateMarginAmount(sale, i);
+            this.sales[i]['marginPercentage'] = this.calculateMarginPercentage(sale, i);
           })
         }
         this.totalRecords = response.length;
@@ -319,12 +321,20 @@ export class SalesQuoteAnalysisComponent implements OnInit {
     return data['partNumberType'] === 'Multiple' ? 'green' : 'black';
   }
 
+  calculateMarginPercentage(part: PartDetail, i) {
+    return ((this.sales[i].marginAmountExtended / (this.sales[i]['totalRevenue'])) * 100).toFixed(2);
+  }
+
+  calculateMarginAmount(part: PartDetail, i) {
+    return (this.sales[i].marginAmountExtended + this.sales[i].misc).toFixed(2);
+  }
+
   calculateTotalRevenue(part: PartDetail, i) {
-    return this.sales[i].netSales + this.sales[i].misc;
+    return (this.sales[i].netSales + this.sales[i].misc).toFixed(2);
   }
 
   calculateProductRevenue(part, i) {
-    return this.sales[i].netSales + this.sales[i].misc + this.sales[i].freight + this.sales[i].taxAmount;
+    return this.sales[i].netSales + this.sales[i].misc; // + this.sales[i].freight + this.sales[i].taxAmount;
   }
 
   getPercentage(key) {

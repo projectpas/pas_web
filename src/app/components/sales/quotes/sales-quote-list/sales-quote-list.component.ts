@@ -16,7 +16,6 @@ import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
 import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
-import { CustomerService } from "../../../../services/customer.service";
 import { CommonService } from "../../../../services/common.service";
 import { AuthService } from "../../../../services/auth.service";
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
@@ -133,7 +132,7 @@ export class SalesQuoteListComponent implements OnInit {
             { field: "customerType", header: "Customer Type", width: "120px" },
             { field: "versionNumber", header: "Quote Ver Num", width: "120px" },
             { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
-            { field: "soAmount", header: "SO Amount", width: "110px", style: "text-align:right" },
+            // { field: "soAmount", header: "SO Amount", width: "110px", style: "text-align:right" },
             { field: "priorityType", header: "Priority", width: "100px" },
             { field: "customerReference", header: "Cust Ref", width: "130px" },
             { field: "salesPerson", header: "Salesperson", width: "150px" },

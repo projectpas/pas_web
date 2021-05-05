@@ -315,6 +315,12 @@
               </button>
             </div>
           </div>
+          <div class="card" style="padding: 5px; margin: 5px;" *ngIf="isEdit">
+            <div class="x_panel">
+                <a class="btn btn-primary" (click)="initiatePrintProcess()" style="width: 92px;">Print Agreement
+                </a>
+            </div>
+          </div>
           <!-- <ng-container *ngIf="((isCreateModeHeader||isEdit))">
             <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
                 <p-tabPanel header="Parts List" [selected]="true">
@@ -410,3 +416,18 @@
     </div>
   </div>
 </div>
+<ng-template #exchangeQuotePrintPopup let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+      <h4 class="modal-title">Print Quote</h4>
+  </div>
+  <div class="modal-body">
+      <div class="x_panel" id="quote_print_content">
+          <app-exchange-quote-agreement-template [exchangeQuoteView]="exchangeQuoteView"></app-exchange-quote-agreement-template>
+      </div>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
+  </div>
+</ng-template>

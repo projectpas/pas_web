@@ -46,6 +46,7 @@ export class SalesOrderPartNumberComponent {
   summaryColumns: any[] = [];
   selectedSummaryRow: SummaryPart;
   isStockLineViewMode = false;
+  clearData = false;
   selectedSummaryRowIndex = null;
   @ViewChild("addPart", { static: false }) addPart: ElementRef;
   @Input() salesOrderId: any;
@@ -274,6 +275,15 @@ export class SalesOrderPartNumberComponent {
     }
   }
 
+  onSearchAnotherPN(event) {
+    this.show = false;
+    this.salesMarginModal.close();
+    if (!this.isEdit) {
+      this.selectedPart.selected = false;
+      this.openPartNumberClear(true);
+    }
+  }
+
   onClosePartDelete() {
     this.deletePartModal.close();
   }
@@ -304,6 +314,13 @@ export class SalesOrderPartNumberComponent {
 
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
+    this.clearData = viewMode;
+    let contentPart = this.addPart;
+    this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+  }
+
+  openPartNumberClear(viewMode) {
+    this.clearData = viewMode;
     let contentPart = this.addPart;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
@@ -411,11 +428,12 @@ export class SalesOrderPartNumberComponent {
           } else {
             this.part.quantityFromThis = this.part.quantityToBeQuoted;
           }
-          
+
           this.part.qtyAvailable = this.selectedPart.qtyAvailable;
           this.part.quantityOnHand = this.selectedPart.quantityOnHand;
           this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
           this.part.quantityAlreadyQuoted = this.query.partSearchParamters.quantityAlreadyQuoted;
+          this.part.itemGroup = this.selectedPart.itemGroup;
         });
         this.addPartModal.close();
         this.salesMarginModal = this.modalService.open(contentMargin, { size: "lg", backdrop: 'static', keyboard: false });
@@ -886,5 +904,17 @@ export class SalesOrderPartNumberComponent {
     localStorage.setItem("partNumber", rowData.partNumber);
     localStorage.setItem("salesOrderId", this.salesOrderId);
     this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/vendor/`);
+  }
+
+  getMarginPercentage(part) {
+    return ((((part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended)) / (part.grossSalePrice + Number(part.misc))) * 100).toFixed(2);
+  }
+
+  getMarginAmount(part) {
+    return (part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
+  }
+
+  getTotalRevenue(part) {
+    return (part.grossSalePrice + Number(part.misc)).toFixed(2);
   }
 }

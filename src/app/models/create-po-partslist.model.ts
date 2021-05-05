@@ -21,9 +21,10 @@ export class CreatePOPartsList {
     functionalCurrencyId: number;
     foreignExchangeRate: number;
     reportCurrencyId: number;
-    workOrderId: number;
-    repairOrderId: number;
-    salesOrderId: number;
+    workOrderId: any;
+    subWorkOrderId:any;
+    repairOrderId: any;
+    salesOrderId: any;
     managementStructureId: number;
     memo: string;
     masterCompanyId: number;
@@ -66,6 +67,7 @@ export class CreatePOPartsList {
         this.foreignExchangeRate = null;
         this.reportCurrencyId = null;
         this.workOrderId = null;
+        this.subWorkOrderId=null;
         this.repairOrderId = null;
         this.salesOrderId = null;
         this.managementStructureId = null;

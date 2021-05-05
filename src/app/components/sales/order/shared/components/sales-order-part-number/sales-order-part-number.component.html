@@ -29,7 +29,7 @@
                                 {{ summaryColumn.header }}
                             </span>
                         </th>
-                        <th colspan="19"></th>
+                        <th colspan="13"></th>
                         <th *ngIf="isViewMode == false"
                             style="position: sticky !important; min-width: 145px !important;">Actions
                         </th>
@@ -87,7 +87,7 @@
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                     </td>
-                                    <td colspan="19" style="background-color: #EAF2C5 !important;"></td>
+                                    <td colspan="13" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" style="position:sticky; width:80px">
                                         <span>
                                             <a [class.disabled]="salesQuote.isApproved || isViewMode"
@@ -149,7 +149,7 @@
                                     <!-- <th style="min-width: 84px;">Qty Prev Shpd</th>
                                     <th style="min-width: 100px;">Last Ship Date </th> -->
                                     <th style="min-width: 90px;">Ship Ref</th>
-                                    <th style="min-width: 60px;">Unit Cost </th>
+                                    <!-- <th style="min-width: 60px;">Unit Cost </th>
                                     <th style="min-width: 70px;">Markup % </th>
                                     <th style="min-width: 103px;">Markup Amt/Unit </th>
                                     <th style="min-width: 100px;">Gross Price/Unit </th>
@@ -164,7 +164,17 @@
                                     <th>Total</th>
                                     <th style="min-width: 85px;">Ext Cost</th>
                                     <th style="min-width: 95px;">Prod Margin</th>
-                                    <th style="min-width: 100px;">Prod Margin %</th>
+                                    <th style="min-width: 100px;">Prod Margin %</th> -->
+                                    <th style="min-width: 75px !important;">Per Unit</th>
+                                    <th style="min-width: 75px !important;">Ext. Price</th>
+                                    <th style="min-width: 80px !important;">Misc Charges</th>
+                                    <th style="min-width: 85px !important;">Total Revenue</th>
+                                    <th style="min-width: 80px !important;">Unit Cost</th>
+                                    <th style="min-width: 80px !important;">Ext Cost</th>
+                                    <th style="min-width: 85px !important;">Margin Amt</th>
+                                    <th style="min-width: 85px !important;">Margin %</th>
+                                    <th style="min-width: 75px !important;">Freight</th>
+                                    <th style="min-width: 70px !important;">Tax Amt</th>
                                     <th style="min-width: 90px;">Cntrl Num</th>
                                     <th style="min-width: 100px;">Cntrl ID Num</th>
                                     <th style="width:120px">Notes</th>
@@ -307,7 +317,7 @@
                                     <td>
                                         {{ part.shipReference }}
                                     </td>
-                                    <td class="text-right">
+                                    <!-- <td class="text-right">
                                         {{ part.unitCostPerUnit | twoDecimalGlobalNumberFormatPipe}}
                                     </td>
                                     <td class="text-right">
@@ -354,6 +364,36 @@
                                     </td>
                                     <td class="text-right">
                                         {{ part.marginPercentagePerUnit | twoDecimalGlobalNumberFormatPipe}}
+                                    </td> -->
+                                    <td class="text-right">
+                                        {{ part.grossSalePricePerUnit  | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.grossSalePrice | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.misc | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ getTotalRevenue(part) | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.unitCostPerUnit | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.unitCostExtended | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ getMarginAmount(part) | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ getMarginPercentage(part) | twoDecimalGlobalNumberFormatPipe}}
+                                        %</td>
+                                    <td class="text-right">
+                                        {{ part.freight  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.taxAmount  | twoDecimalGlobalNumberFormatPipe }}
                                     </td>
                                     <td>
                                         {{ part.controlNumber }}
@@ -492,7 +532,7 @@
 </div>
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
-        (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode"
+        (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode" [clearData]="clearData"
         [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'SO'">
     </app-add-sales-part-number>
 </ng-template>
@@ -504,7 +544,7 @@
 </ng-template>
 <ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
     <app-sales-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
-        (close)="onCloseMargin($event)"></app-sales-margin>
+        (close)="onCloseMargin($event)" (searchAnotherPN)="onSearchAnotherPN($event)"></app-sales-margin>
 </ng-template>
 <ng-template #deleteContent let-c="close" let-d="dismiss">
     <div class="modal-header">
