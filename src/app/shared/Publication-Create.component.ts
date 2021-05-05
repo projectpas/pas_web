@@ -83,10 +83,14 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         { field: 'manufacturerName', header: 'Manufacturer' },
         { field: 'itemGroup', header: 'Item Group' },
         { field: 'ataChapter', header: 'AtaChapter' },
-        { field: 'ataSubChapter', header: 'AtaSubChapter' }
+        { field: 'ataSubChapter', header: 'AtaSubChapter' } 
     ];
     headersforAttachment = [
         { field: 'tagTypeName', header: 'Tag Type' }
+    ];
+    allDocumentsList:any=[];
+    allDocumentsListColumns = [
+        { field: 'fileName', header: 'File Name' },
     ];
     publicationDropdown: any;
     aircraftListByPubId: any = [];
@@ -97,7 +101,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     setAircraftArray: any = [];
     setModelArray: any = [];
     setDashNumberArray: any = [];
-
+    WmoduleName: any = 'Publication';
     constructor(private actionService: ActionService,
         private authService: AuthService,
         private masterComapnyService: MasterComapnyService,
@@ -212,30 +216,52 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
-
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
     getPublicationByItemMasterId(itemMasterId) {
         this.isSpinnerVisible = true;
-        this._workflowService.getPublicationsByItemMasterId(itemMasterId).subscribe(res => {
-            this.publicationDropdown = res;
+        // this._workflowService.getPublicationsByItemMasterId(itemMasterId).subscribe(res => {
+        //     this.publicationDropdown = res;
+        //     if(this.publicationDropdown && this.publicationDropdown.length==1){
+        //         this.workFlow.publication[0].publicationId=this.publicationDropdown?this.publicationDropdown[0].publicationRecordId: '';
+        //         this.loadPublicationById(this.workFlow.publication[0], true);
+        //         const pubData = this.publicationDropdown;
+        //         for (var i = 0; i < pubData.length; i++) {
+        //             if (parseInt(pubData[i].publicationRecordId) === parseInt(this.workFlow.publication[0].publicationId)) {
+        //                 this.workFlow.publication[0].attachmentDetails = pubData[i].attachmentDetails;
+        //                 break
+        //             }
+        //         }
+        //     }
+        //     this.isSpinnerVisible = false;
+        // }, error => {
+        //     this.isSpinnerVisible = false;
+        // });
+        const idList:any=[]
+        this._workflowService.getPublicationsByItemMasterIdDetails(itemMasterId,idList,this.currentUserMasterCompanyId).subscribe(res => {
+           this.publicationDropdown = res;
             if(this.publicationDropdown && this.publicationDropdown.length==1){
                 this.workFlow.publication[0].publicationId=this.publicationDropdown?this.publicationDropdown[0].publicationRecordId: '';
                 this.loadPublicationById(this.workFlow.publication[0], true);
-                const pubData = this.publicationDropdown;
-                for (var i = 0; i < pubData.length; i++) {
-                    if (parseInt(pubData[i].publicationRecordId) === parseInt(this.workFlow.publication[0].publicationId)) {
-                        this.workFlow.publication[0].attachmentDetails = pubData[i].attachmentDetails;
-                        break
-                    }
-                }
+                // const pubData = this.publicationDropdown;
+                // for (var i = 0; i < pubData.length; i++) {
+                //     if (parseInt(pubData[i].publicationRecordId) === parseInt(this.workFlow.publication[0].publicationId)) {
+                //         this.workFlow.publication[0].attachmentDetails = pubData[i].attachmentDetails;
+                //         break
+                //     }
+                // }
             }
             this.isSpinnerVisible = false;
         }, error => {
-            this.isSpinnerVisible = false;
-        });
+                this.isSpinnerVisible = false;
+            });
     }
     
      onPublicationChange(event, wfPublication, index) {
-        var isEpnExist = this.workFlow.publication.filter(x => x.publicationId == wfPublication.publicationId && x.taskId == this.workFlow.taskId);
+        var isEpnExist = this.workFlow.publication.filter(x => x.isDeleted==false && x.publicationId == wfPublication.publicationId && x.taskId == this.workFlow.taskId);
         if (isEpnExist.length > 1) {
             wfPublication.publicationId = '';
             wfPublication.publicationDescription = '';
@@ -247,140 +273,47 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             wfPublication.verifiedBy = '';
             wfPublication.verifiedDate = '';
             wfPublication.status = '';
+            wfPublication.publicationTypeName='';
             wfPublication.attachmentDetails = [];
             this.alertService.showMessage("Workflow", "Pub Id already exist in Exclusion List.", MessageSeverity.error);
             this.showAlert = false;
-        }
-
-        const pubData = this.publicationDropdown;
-        for (var i = 0; i < pubData.length; i++) {
-            if (parseInt(pubData[i].publicationRecordId) === parseInt(wfPublication.publicationId)) {
-                wfPublication.attachmentDetails = pubData[i].attachmentDetails;
-                break
-            }
-        }
-        if (wfPublication.publicationId == 0) {
-            this.setPublicationData(null, wfPublication);
             return;
         }
-        if (this.publications != undefined) {
-            var selectedPublication = this.publications.filter(function (publication) {
-                return publication.publicationRecordId == wfPublication.publicationId;
-            });
-            if (selectedPublication.length == 0) {
-                this.loadPublicationById(wfPublication, true);
-            }
-            else {
-                this.setPublicationData(selectedPublication[0], wfPublication);
-            }
-        }
-        else {
-            this.publications = [];
-            this.loadPublicationById(wfPublication, true);
-        }
-    }
-    
-    getAircraftByPublicationId(data, index) {
-        this.setAircraftArray = [];
-        this.isSpinnerVisible = true;
-        this.setAircraftArray.push(data.aircraftManufacturer ? data.aircraftManufacturer : 0);
-        this.publicationService.getAircraftManfacturerByPublicationId(this.itemMasterId, data.publicationId ? data.publicationId : data, this.setAircraftArray.join()).subscribe(res => {
-            this['aircraftListByPubId' + index] = res;
-            this.isSpinnerVisible = false;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
-    getModelByAircraftId(x, index) {
-        this.setModelArray = [];
-        this.setModelArray.push(x.model ? x.model : 0);
-        this.publicationService.getAircraftModelByAircraftManfacturerId(this.itemMasterId, x.publicationId, x.aircraftManufacturer, this.setModelArray.join()).subscribe(res => {
-            this['aircraftModelListByPubId' + index] = res;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
+        this.loadPublicationById(wfPublication, true);
+        const pubData = this.publicationDropdown;
+        // for (var i = 0; i < pubData.length; i++) {
+        //     if (parseInt(pubData[i].publicationRecordId) === parseInt(wfPublication.publicationId)) {
+        //         wfPublication.attachmentDetails = pubData[i].attachmentDetails;
+        //         break
+        //     }
+        // }
+        // if (wfPublication.publicationId == 0) {
+        //     this.setPublicationData(null, wfPublication);
+        //     return;
+        // }
+        // if (this.publications != undefined) {
+        //     var selectedPublication = this.publications.filter(function (publication) {
+        //         return publication.publicationRecordId == wfPublication.publicationId;
+        //     });
+        //     if (selectedPublication.length == 0) {
+        //         this.loadPublicationById(wfPublication, true);
+        //     }
+        //     else {
+        //         this.setPublicationData(selectedPublication[0], wfPublication);
+        //     }
+        // }
+        // else {
+        //     this.publications = [];
+        //     this.loadPublicationById(wfPublication, true);
+        // }
     }
 
-    getDashNumberByModelandAircraftIds(x, index, from) {
-        this.setDashNumberArray = [];
-        this.isSpinnerVisible = true;
-        if (x && x.workflowPublicationDashNumbers && x.workflowPublicationDashNumbers.length != 0) {
-            x.workflowPublicationDashNumbers.forEach(element => {
-                this.setDashNumberArray.push(element.aircraftDashNumberId)
-            });
-        } else {
-            this.setDashNumberArray.push(0);
-        }
-        this.publicationService.getDashNumberByModelandAircraftIds(this.itemMasterId, x.publicationId, x.aircraftManufacturer, x.model, this.setDashNumberArray.join()).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this['dashNumberListByModelId' + index] = res.map(x => {
-                return {
-                    // ...x,
-                    AircraftDashNumberId: x.dashNumberId,
-                    dashNumberId: x.dashNumberId,
-                    dashNumber: x.dashNumber,
-
-                }
-            });
-            if (from == 'html') {
-                this.workFlow.publication[index].workflowPublicationDashNumbers = null;
-            }
-        }, error => {
-            this.isSpinnerVisible = false;
-        })
-    }
 
     getDynamicVariableData(variable, index) {
         return this[variable + index]
     }
 
-    private getUniqueAircraft(aircraftMapping: any[]): any[] {
-        var aircraft = [];
-        var distinctAircraftIds = [];
-        for (var i = 0; i < aircraftMapping.length; i++) {
-            if (aircraftMapping[i].aircraftTypeId != undefined && distinctAircraftIds.indexOf(aircraftMapping[i].aircraftTypeId) == -1) {
-                aircraft.push(aircraftMapping[i]);
-                distinctAircraftIds.push(aircraftMapping[i].aircraftTypeId);
-            }
-        }
 
-        return aircraft;
-    }
-
-    private getUniqueAircraftModels(publication: any): any[] {
-        var aircraftModels = [];
-        var distinctAircraftModelIds = [];
-
-        for (var i = 0; i < publication.itemMasterAircraftMapping.length; i++) {
-            if (publication.itemMasterAircraftMapping[i].aircraftModelId != undefined &&
-                publication.itemMasterAircraftMapping[i].aircraftTypeId == publication.aircraftManufacturer &&
-                distinctAircraftModelIds.indexOf(publication.itemMasterAircraftMapping[i].aircraftModelId) == -1) {
-                aircraftModels.push(publication.itemMasterAircraftMapping[i]);
-                distinctAircraftModelIds.push(publication.itemMasterAircraftMapping[i].aircraftModelId);
-            }
-        }
-
-        return aircraftModels;
-    }
-
-    private getUniqueAircraftDashNumbers(publication: any): any[] {
-        var aircraftDashNumbers = [];
-        var distinctAircraftaircraftDashNumbersIds = [];
-
-        for (var i = 0; i < publication.itemMasterAircraftMapping.length; i++) {
-            if (publication.itemMasterAircraftMapping[i].dashNumberId != undefined &&
-                publication.itemMasterAircraftMapping[i].aircraftTypeId == publication.aircraftManufacturer &&
-                publication.itemMasterAircraftMapping[i].aircraftModelId == publication.model &&
-
-                distinctAircraftaircraftDashNumbersIds.indexOf(publication.itemMasterAircraftMapping[i].dashNumberId) == -1) {
-                aircraftDashNumbers.push(publication.itemMasterAircraftMapping[i]);
-                distinctAircraftaircraftDashNumbersIds.push(publication.itemMasterAircraftMapping[i].aircraftTypeId);
-            }
-        }
-
-        return aircraftDashNumbers;
-    }
 
     bindEditModeData(data) {
         this.workFlow.publication = data.map((x, index) => {
@@ -403,23 +336,8 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
                 wfPublication.publicationTypeName=res[0].publicationTypeName;
                 if (res[0] != undefined && res[0] != null) {
                     this.publications.push(res[0]);
-
                     if (wfPublication.publicationId == res[0].publicationRecordId) {
                         wfPublication.itemMasterAircraftMapping = res[0].itemMasterAircraftMapping;
-
-                        wfPublication.aircraft = this.getUniqueAircraft(res[0].itemMasterAircraftMapping);
-
-                        if (!isDropdownChange) {
-                            wfPublication.aircraftModels = this.getUniqueAircraftModels(wfPublication);
-                            wfPublication.allDashNumbers = this.getUniqueAircraftDashNumbers(wfPublication);
-
-                        }
-                        else {
-                            wfPublication.aircraftModels = [];
-                            wfPublication.allDashNumbers = [];
-                            wfPublication.workflowPublicationDashNumbers = [];
-                        }
-
                         if (isDropdownChange) {
                             this.setPublicationData(res[0], wfPublication);
                         }
@@ -459,7 +377,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             row.sequence = selectedPublication.sequence != null ? selectedPublication.sequence : '';
             row.aircraftManufacturer = '0';
             row.itemMasterAircraftMapping = selectedPublication.itemMasterAircraftMapping;
-            row.aircraft = this.getUniqueAircraft(selectedPublication.itemMasterAircraftMapping);
+            // row.aircraft = this.getUniqueAircraft(selectedPublication.itemMasterAircraftMapping);
             row.source = selectedPublication.asd != null ? selectedPublication.asd : '';
             row.model = '0';
             row.aircraftModels = [];
@@ -468,6 +386,8 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             row.verifiedBy = selectedPublication.verifiedBy != null ? selectedPublication.verifiedBy : '';
             row.status = selectedPublication.isActive != null ? selectedPublication.isActive : '';
             row.verifiedDate = selectedPublication.verifiedDate != undefined ? new Date(selectedPublication.verifiedDate).toLocaleDateString() : '';
+            row.attachmentDetails=selectedPublication.attachmentDetails;
+            row.memo='';
         }
         else {
             row.publicationDescription = '';
@@ -486,11 +406,12 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             row.verifiedBy = '';
             row.status = 0;
             row.verifiedDate = '';
+            row.attachmentDetails=[];
         }
     }
 
     public getAircraftModels(publication) {
-        publication.aircraftModels = this.getUniqueAircraftModels(publication);
+        // publication.aircraftModels = this.getUniqueAircraftModels(publication);
         publication.model = '0';
         publication.workflowPublicationDashNumbers = [];
         publication.allDashNumbers = [];
@@ -507,7 +428,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             return;
         }
 
-        publication.allDashNumbers = this.getUniqueAircraftDashNumbers(publication);
+        // publication.allDashNumbers = this.getUniqueAircraftDashNumbers(publication);
     }
 
 
@@ -556,14 +477,16 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.isSpinnerVisible = false;
         });
     }
-
+    publicationRecordId:any;
     viewPublicationDetails(row) {
+        this.publicationRecordId=undefined;
+        this.allDocumentsList=row.attachmentDetails
         row = { ...row, publicationRecordId: row.publicationId };
         this.closeAllCollapse();
         this.isActive = row.isActive;
         this.loadMasterCompanies();
         this.getFilesByPublicationId(row.publicationRecordId);
-
+        this.publicationRecordId=row.publicationRecordId
         //get general info
         this.isSpinnerVisible = true;
         this.publicationService.getpublicationbyIdView(row.publicationRecordId).subscribe(res => {

@@ -536,10 +536,10 @@
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </span>  
-
+                                        <!-- [disabled]="workOrderPartNumber.isWorkflowTranfer" -->
                                         <span [ngClass]="{pointerEvents : isView}">
                                             <input type="checkbox" name="tranferwflw{{i}}" #tranferwflw="ngModel"  (ngModelChange)="getValid()" 
-                                            class="form-control w60  mr10" [disabled]="workOrderPartNumber.isWorkflowTranfer" [(ngModel)]="workOrderPartNumber.isWorkflowTranfer" (change)="tranferCheckbox($event,workOrderPartNumber)" matTooltip="Transfer Workflow To Work Order"
+                                            class="form-control w60  mr10"  [(ngModel)]="workOrderPartNumber.isWorkflowTranfer" (change)="tranferCheckbox($event,workOrderPartNumber)" matTooltip="Transfer Workflow To Work Order"
                                             matTooltipPosition="above"> 
                                         </span>
                                     </td> 
@@ -622,7 +622,7 @@
                                           ></a>
                                        
                                         <span *ngIf="!workOrderGeneralInformation.isSinglePN " class="delete-row-btn" >
-                                             <button type="button" class="btn nobg btn-delete-cstm" (click)="openDelete(content,i)"  [disabled]="quotestatusofCurrentPart =='Approved' || workOrderPartNumber==false" matTooltip="Delete" matTooltipPosition="above">
+                                             <button type="button" class="btn nobg btn-delete-cstm" (click)="openDelete(content,i)"  [disabled]="quotestatusofCurrentPart =='Approved' || workOrderPartNumber==false" matTooltip="Remove" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
                                             </button> </span> 
                                         <span *ngIf="workOrderGeneralInformation.isSinglePN ">
@@ -1200,7 +1200,7 @@
     [(ngModel)]="workflowTransfer.Material" value="Material" (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
 </div>
 <div class="wo_canges">
-    <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Target Labor Hours"
+    <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Labor Hours"
     [(ngModel)]="workflowTransfer.Labor" value="Labor" (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
 </div>
 <div class="wo_canges">
