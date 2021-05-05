@@ -63,7 +63,7 @@
                   iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
                   matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
             </div>
-            <div class="col" style="width: 70%;">
+            <!-- <div class="col" style="width: 70%;"> -->
                 <div class="pull-right buttons-div-align">
                     <div class="col">
                         <div class="col buttons-top-padding">
@@ -135,7 +135,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
          
     </ng-template>
@@ -189,7 +189,7 @@
                 > 
                 {{convertDate(col.field , rowData)}}
                 </td>
-                <td class="table-actions-column table-column-width action-icons-cstm" *ngIf="selectedColumns.length > 0">
+                <td class="table-actions-column table-column-width width-131 action-icons-cstm" *ngIf="selectedColumns.length > 0">
                     <span data-toggle="modal" data-target="#viewWorkOrder"><a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                     <span><a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                 </td>

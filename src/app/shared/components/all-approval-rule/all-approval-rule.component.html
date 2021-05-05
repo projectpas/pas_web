@@ -246,11 +246,11 @@
                                     <div class="form-group memo-popup-cstm mat_emo">
                                         <div (ngModelChange)="onSaveChange()" [innerHTML]="creatingData.memo"
                                             matTooltipPosition="above" [matTooltip]="parsedText(creatingData.memo)"
-                                            class="form-control" style="width: 100%;" class="text_editor_box"></div>
+                                            class="form-control" style="width: 105%;" class="text_editor_box"></div>
                                     </div>
                                 </span>
                             </div>
-                            <div class="col-sm-1" style="margin-top:-5px">
+                            <div class="col-sm-1">
                                 <span>
                                     <a class="btn nobg btn-edit-cstm" data-toggle="modal"
                                         (ngModelChange)="onSaveChange()" data-target="#memo-popup"
@@ -399,7 +399,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
                                 <tr>
-                                    <td class="table-column-width">
+                                    <td class="table-column-width text-center">
                                         <span class="flag">
                                             <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                                             color: rowData.isPrimary == true ? 'green' : 'none'}" class="fa fa-flag"
@@ -664,7 +664,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Approval Rule1</h4>
+                <h4 class="modal-title">View Approval Rule</h4>
             </div>
             <div class="modal-body">
                 <form #poApprovalForm1="ngForm">
@@ -673,8 +673,8 @@
                             <span class="value">
                                 {{creatingData.approvalTaskId ? ApprovalRuleName : '-'}}
                             </span></p>
-                        <p>
-                            <span class="label"><b>Memo: </b></span>
+                        <p class="view-text-editor" style="margin-bottom:5px">
+                            <span class="label view-text-editor"><b>Memo: </b></span>
                             <span class="value">
                                 <p class="p-0 m-0 p_textEditor" [innerHTML]="creatingData.memo"> </p>
                             </span>
@@ -704,8 +704,8 @@
                             </span></p>
                     </div>
                     <div class="col-md-3">
-                        <div class="card management-structure-card">
-                            <div class="card-header management-structure-card-header">
+                        <div class="card">
+                            <div class="card-header" style="padding: .1rem 3rem;">
                                 <h5 class="management-structure-header" style="color:#333">Management Structure <span
                                         class="clr-red">*</span></h5>
                             </div>
@@ -803,7 +803,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
                                 <tr>
-                                    <td class="table-column-width">
+                                    <td class="table-column-width text-center">
                                         <span class="flag">
                                             <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                                                 color: rowData.isPrimary == true ? 'green' : 'none'
