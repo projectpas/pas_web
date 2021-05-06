@@ -474,7 +474,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     "stockType": element.stockType,
                    "qtyOnHand":element.qtyOnHand,
                     "qtyAvail" : element.qtyAvail,
-                    "stockLineId" : element.stockLineId  
+                    "stockLineId" : element.stockLineId
                 });
             });
 
@@ -518,8 +518,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
       }
     }
     onPartSelect(event, material, index) { 
-        // console.log("event",event)
-        // console.log("material",material)
             var materialObj = this.workFlow.materialList.find(x =>x.isDeleted==false && x.partItem.partId == event.partId && x.taskId == this.workFlow.taskId);
         if (materialObj != undefined) {
             if (this.workFlow.materialList) { 

@@ -521,6 +521,7 @@ setTimeout(() => {
                     if (this.workorderSettings) {
                         x.workOrderStageId =x.workOrderStageId?x.workOrderStageId : this.workorderSettings.defaultStageCodeId;
                         x.workOrderPriorityId = x.workOrderPriorityId? x.workOrderPriorityId:this.workorderSettings.defaultPriorityId;
+                        x.workOrderStatusId =x.workOrderStatusId?x.workOrderStatusId : this.workorderSettings.defaultStatusId;
                     }
                     x.workOrderStageId=x.workOrderStageId ? x.workOrderStageId : 0;
                     x.workOrderPriorityId = x.workOrderPriorityId? x.workOrderPriorityId:0;
@@ -984,7 +985,11 @@ setTimeout(() => {
 
     }
 
+    
     clearautoCompleteInput(currentRecord, field) {
+        // currentRecord[field] = null;
+    }
+    clearautoCompletePartNum(currentRecord, field) {
         // currentRecord[field] = null;
         currentRecord.itemMasterId=undefined;
         currentRecord.description="";
@@ -1067,22 +1072,18 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
            this.isValidationfailed= true;
     }
      if(!x.workOrderScopeId || x.workOrderScopeId==undefined){
-        this.alertService.showMessage('Work Order', 'Tech Name is required', MessageSeverity.error);
-           this.isValidationfailed= true;
-    }
-     if(!x.technicianId || x.technicianId==undefined){
         this.alertService.showMessage('Work Order', 'Work Scope is required', MessageSeverity.error);
            this.isValidationfailed= true;
     }
-     if(!x.itemMasterId || x.itemMasterId==undefined){
+    if(!x.partTechnicianId.employeeId || x.partTechnicianId.employeeId==null){
+        this.alertService.showMessage('Work Order', 'Tech Name is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+    if(!x.masterPartId.itemMasterId || x.masterPartId.itemMasterId==undefined || x.masterPartId.itemMasterId==null){
         this.alertService.showMessage('Work Order', 'MPN is required', MessageSeverity.error);
         this.isValidationfailed= true;
     }
-    // else if(!x.workOrderScopeId || x.workOrderScopeId==undefined){
-    //     this.alertService.showMessage('Work Order', 'Work Scope is required', MessageSeverity.error);
-    // }
-            })
-//  console.log("hellow propritu",generalInfo)
+})
  if(this.isValidationfailed==false){
         const data1 = {
             ...generalInfo,
@@ -3447,7 +3448,7 @@ this.woPartId=rowData.id;
                         // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
                        if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
                         setTimeout(() => {
-                            x.cMMId=0;
+                            // x.cMMId=0;
                             this.disableSaveForPart=false;
                         }, 2000);
                         // this.removePublication(x,index);
@@ -3463,7 +3464,7 @@ this.woPartId=rowData.id;
                        
                         // this.removeWorkflow(x,index);
                         setTimeout(() => {
-                            x.workflowId=0;
+                            // x.workflowId=0;
                             this.disableSaveForPart=false;
                         }, 2000);
                         $('#warningForCmmWorkflow').modal('show');
