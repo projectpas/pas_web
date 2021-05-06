@@ -244,6 +244,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     createNew() {
+        this.ispickticket= false;
         this.isEdit = false;
         this.editData = undefined;
         this.addNewMaterial = true;
@@ -645,6 +646,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
  
     partsIssueRI(statusId) { 
+        this.ispickticket= false;
         this.savebutonDisabled=false;
         this.checkActiveStatus=true;
         this.countDown = null;
