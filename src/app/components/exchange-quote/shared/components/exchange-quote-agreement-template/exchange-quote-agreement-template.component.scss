@@ -9,11 +9,26 @@ input {width:80%;background:#fff;border:1px Solid}
   .picked-by{position: relative;float: left;width:48%}
   .confirmed-by{position: relative;float: left;width:48%}       
   .first-part{position:relative;display:flex;float:left;width:50%}   
-.sixtydays{position:relative;display:flex;float:left;width:90%}
+.sixtydays{position:relative;
+  display:inline-block;
+  // display:flex;
+  float:left;width:90%}
  .seond-part{position:relative;display:flex;float:right;width:24%}  
 
 .first-block-address{margin-right: 20px;text-align: left}
-
+.label-border{
+  border: 1px solid black;
+    width: 100%;
+    text-align: left;
+    line-height: 2;
+    height:25px;
+}
+.margin-left-10{
+  margin-left:10px;
+}
+.label-name{
+  width:50%
+}
 
   .first-block-quotation{margin-right: 20px;text-align: left;margin-top: 10px;}
   
