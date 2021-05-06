@@ -1,0 +1,22 @@
+p-autocomplete {
+  border-radius: 5px !important;
+}
+
+.ui-input-control {
+  margin-top: 6px !important;
+}
+
+.btn-small {
+  padding: 1px;
+}
+
+/* #footer {  
+  font-size: 11px !important;
+  font-weight:12px !important;
+} */
+.footer-t-rec {
+  margin-left: 65%;
+}
+.footer--count {
+  margin-right: 0px;
+}

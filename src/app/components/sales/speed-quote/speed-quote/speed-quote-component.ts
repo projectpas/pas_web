@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { CustomerSearchQuery } from "../models/customer-search-query";
 import { CustomerService } from "../../../../services/customer.service";
+import { CustomerSearchQuery } from "../../quotes/models/customer-search-query";
 import { Customer } from "../../../../models/customer.model";
 import { AlertService, MessageSeverity } from "../../../../services/alert.service";
 import { Router } from "@angular/router";
@@ -16,12 +16,12 @@ import { DatePipe } from '@angular/common';
 import { AuthService } from "../../../../services/auth.service";
 
 @Component({
-  selector: "app-sales-quote",
-  templateUrl: "./sales-quote.component.html",
-  styleUrls: ["./sales-quote.component.css"],
+  selector: "app-speed-quote",
+  templateUrl: "./speed-quote.component.html",
+  styleUrls: ["./speed-quote.component.css"],
   providers: [DatePipe]
 })
-export class SalesQuoteComponent implements OnInit {
+export class SpeedQuoteComponent implements OnInit {
   query: CustomerSearchQuery;
   customers: Customer[];
   totalRecords: number = 0;
@@ -72,8 +72,8 @@ export class SalesQuoteComponent implements OnInit {
   ngOnInit() {
     this.query = new CustomerSearchQuery();
     this.breadcrumbs = [
-      { label: 'Sales Order Quote' },
-      { label: 'Create Quote' },
+      { label: 'Speed Quote' },
+      { label: 'Create Speed Quote' },
     ];
   }
 
@@ -90,12 +90,13 @@ export class SalesQuoteComponent implements OnInit {
     PagingData.filters.status = "Active";
     PagingData.filters.isDeleted = false;
     this.customerService.getCustomerAll(PagingData).subscribe(res => {
+      this.isSpinnerVisible = false;
       this.data = res['results'];
       if (this.data.length > 0) {
         this.totalRecords = res.totalRecordsCount;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
       }
-      this.isSpinnerVisible = false;
+
     }, error => {
       this.isSpinnerVisible = false;
     })
@@ -120,11 +121,11 @@ export class SalesQuoteComponent implements OnInit {
     this.isSpinnerVisible = true;
     this.customerService.getGlobalSearch(value, this.pageIndex, this.pageSize).subscribe(res => {
       this.data = res;
+      this.isSpinnerVisible = false;
       if (res.length > 0) {
         this.totalRecords = res.totalRecordsCount;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
       }
-      this.isSpinnerVisible = false;
     }, error => {
       this.isSpinnerVisible = false;
     })
@@ -181,6 +182,7 @@ export class SalesQuoteComponent implements OnInit {
   getTypesOfWarnings(customerId) {
     this.isSpinnerVisible = true;
     this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name').subscribe(data => {
+      this.isSpinnerVisible = false;
       if (data.length > 0) {
         data.filter(i => {
           if (i.label == DBkeys.GLOBAL_CUSTOMER_WARNING_TYOE_FOR_SALES_QUOTE) {
@@ -188,7 +190,6 @@ export class SalesQuoteComponent implements OnInit {
           }
         })
       }
-      this.isSpinnerVisible = false;
     }, error => {
       this.isSpinnerVisible = false;
     })
@@ -207,6 +208,7 @@ export class SalesQuoteComponent implements OnInit {
         } else {
           this.modal = this.modalService.open(this.restrictionPopup, { size: 'lg', backdrop: 'static', keyboard: false });
         }
+
       }, error => {
         this.isSpinnerVisible = false;
       });
@@ -218,13 +220,13 @@ export class SalesQuoteComponent implements OnInit {
       .getCustomerWarningsByCustomerIdandCustomerWarningsListID(customerId, customerWarningListId)
       .subscribe(res => {
         this.customerWarning = res;
+        this.isSpinnerVisible = false;
         this.customerWarning['customerId'] = customerId;
         if (res.customerWarningId == 0) {
           this.moveToCreate(customerId)
         } else {
           this.modal = this.modalService.open(this.warningPopup, { size: 'lg', backdrop: 'static', keyboard: false });
         }
-        this.isSpinnerVisible = false;
       }, error => {
         this.isSpinnerVisible = false;
       });
@@ -233,7 +235,7 @@ export class SalesQuoteComponent implements OnInit {
   moveToCreate(customerId) {
     this.closeModal();
     this.router.navigateByUrl(
-      `salesmodule/salespages/sales-quote-create/${customerId}`
+      `salesmodule/salespages/speed-quote-create/${customerId}`
     );
   }
 
@@ -242,11 +244,11 @@ export class SalesQuoteComponent implements OnInit {
     this.customerService
       .getServerPages(this.query)
       .subscribe((response: any) => {
+        this.isSpinnerVisible = false;
         this.customers = response[0].customerList;
         this.totalRecords = response[0].totalRecordsCount;
         this.totalPages = Math.ceil(this.totalRecords / this.query.rows);
         this.showPaginator = this.totalRecords > 0;
-        this.isSpinnerVisible = false;
       }, error => {
         this.isSpinnerVisible = false;
       });

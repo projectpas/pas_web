@@ -3,9 +3,9 @@ import { ISalesQuoteType } from "./ISalesQuoteType";
 import { ILeadSource } from "./ILeadSource";
 import { IStatus } from "./IStatus";
 
-export interface ISalesQuote {
-  salesOrderQuoteId: number;
-  quoteTypeId: number;
+export interface ISpeedQuote {
+  speedQuoteId: number;
+  speedQuoteTypeId: number;
   openDate: Date;
   customerRequestDate: Date;
   customerPromisedDate: Date;
@@ -35,6 +35,7 @@ export interface ISalesQuote {
   customerServiceRepName: string;
   probabilityId: number;
   leadSourceId: number;
+  leadSourceReference: string;
   creditLimit: number;
   creditLimitTermsId: number;
   employeeId: any;
