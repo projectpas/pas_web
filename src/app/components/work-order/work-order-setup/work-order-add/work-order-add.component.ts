@@ -3448,7 +3448,7 @@ this.woPartId=rowData.id;
                         // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
                        if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
                         setTimeout(() => {
-                            x.cMMId=0;
+                            // x.cMMId=0;
                             this.disableSaveForPart=false;
                         }, 2000);
                         // this.removePublication(x,index);
@@ -3464,7 +3464,7 @@ this.woPartId=rowData.id;
                        
                         // this.removeWorkflow(x,index);
                         setTimeout(() => {
-                            x.workflowId=0;
+                            // x.workflowId=0;
                             this.disableSaveForPart=false;
                         }, 2000);
                         $('#warningForCmmWorkflow').modal('show');
