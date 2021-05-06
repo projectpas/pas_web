@@ -25,36 +25,39 @@
               <p style="text-align:center"> agreement MUST be signed and returned to <b> Seller Name </b> prior to
                 shipment of Unit</p>
 
-              <div class="col-md-12" style="width:100%">
+              <div class="col-md-12" style="width:100%;margin-left:7%">
 
                 <div class="confirmed-by col-sm-3" style="width:30%">
                   <div class="sixtydays">
-                    <label>Customer Name :</label>
-                    <label>{{exchangeQuoteView.exchangeOrderQuote.customerName}}</label><br />
-                    <!-- <input type="text" value="" /> -->
+                    <label style="width:45%">Customer Name :</label>
                   </div>
+                    <label class="label-border">{{exchangeQuoteView.exchangeOrderQuote.customerName}}</label><br />
+                    <!-- <input type="text" value="" /> -->
+                 
                 </div>
 
-                <div class="confirmed-by col-sm-3" style="width:15%">
+                <div class="confirmed-by col-sm-3 margin-left-10" style="width:15%">
                   <div class="sixtydays">
-                    <label>Customer Ref</label>
-                    <label>{{exchangeQuoteView.exchangeOrderQuote.customerReference}}</label><br />
-                    <!-- <input type="text" value="" /> -->
+                    <label style="width:60%">Customer Ref</label>
                   </div>
+                    <label class="label-border">{{exchangeQuoteView.exchangeOrderQuote.customerReference}}</label><br />
+                    <!-- <input type="text" value="" /> -->
+                 
                 </div>
 
-                <div class="confirmed-by col-sm-3" style="width:15%">
+                <div class="confirmed-by col-sm-3 margin-left-10" style="width:15%">
                   <div class="sixtydays">
-                    <label>PN</label>
-                    <label>{{exchangeQuoteView.parts[0].partNumber}}</label><br />
-                    <!-- <input type="text" value="" /> -->
+                    <label style="width:25%">PN</label>
                   </div>
+                    <label class="label-border">{{exchangeQuoteView.parts[0].partNumber}}</label><br />
+                    <!-- <input type="text" value="" /> -->
+                
                 </div>
 
-                <div class="confirmed-by col-sm-4" style="width:30%">
+                <div class="confirmed-by col-sm-4 margin-left-10" style="width:30%">
                   <div class="sixtydays">
-                    <label>PN Description</label>
-                    <label>{{exchangeQuoteView.parts[0].partDescription}}</label><br />
+                    <label style="width:32%">PN Description</label>
+                    <label class="label-border">{{exchangeQuoteView.parts[0].partDescription}}</label><br />
                     <!-- <input type="text" value="" /> -->
                   </div>
                 </div>
@@ -68,57 +71,57 @@
 
 
 
-              <div class="col-md-12" style="width:100%">
+              <div class="col-md-12" style="width:100%;margin-left:7%">
 
                 <div class="confirmed-by col-sm-3" style="width:14%">
                   <div class="sixtydays">
-                    <label>Quote Num</label>
-                    <label>{{exchangeQuoteView.exchangeOrderQuote.exchangeQuoteNumber}}</label><br />
+                    <label style="width:50%">Quote Num</label>
+                    <label class="label-border">{{exchangeQuoteView.exchangeOrderQuote.exchangeQuoteNumber}}</label><br />
                     <!-- <input type="text" value="" /> -->
                   </div>
                 </div>
 
-                <div class="confirmed-by col-sm-3" style="width:13%">
+                <div class="confirmed-by col-sm-3" style="width:13%;margin-left:-10px">
                   <div class="sixtydays">
-                    <label>SO Num</label><br />
-                    <input type="text" value="" />
+                    <label style="width:45%">SO Num</label><br />
+                    <label class="label-border"></label><br />
                   </div>
                 </div>
 
-                <div class="confirmed-by col-sm-3" style="width:15%;margin-left:36px">
-                  <div class="sixtydays">
-                    <label>Core Return Date</label><br />
-                    <input type="text" value="" />
+                <div class="confirmed-by col-sm-3" style="width:15%;">
+                  <div class="sixtydays" style="width: 100%;">
+                    <label style="width:70%">Core Return Date</label><br />
+                    <label class="label-border"></label><br />
                   </div>
                 </div>
 
-                <div class="confirmed-by col-sm-4" style="width:15%">
-                  <div class="sixtydays">
-                    <label>Exch Fee</label>
-                    <label>{{exchangeQuoteView.parts[0].exchangeListPrice}}</label><br />
+                <div class="confirmed-by col-sm-4" style="width:15%;margin-left:10px">
+                  <div class="sixtydays" style="width:100%">
+                    <label style="width:45%">Exch Fee</label>
+                    <label class="label-border">{{exchangeQuoteView.parts[0].exchangeListPrice}}</label><br />
                     <!-- <input type="text" value="" /> -->
                   </div>
                 </div>
 
-                <div class="confirmed-by col-sm-1" style="width:12%">
+                <div class="confirmed-by col-sm-2" style="width:14%;margin-left:10px">
                   <div class="sixtydays">
-                    <label>Outright Price</label>
-                    <label>{{exchangeQuoteView.parts[0].exchangeOutrightPrice}}</label><br />
+                    <label style="width:100%">Outright Price</label>
+                    <label class="label-border">{{exchangeQuoteView.parts[0].exchangeOutrightPrice}}</label><br />
                     <!-- <input type="text" value="" /> -->
                   </div>
                 </div>
-                <div class="confirmed-by col-sm-1" style="width:15%">
+                <div class="confirmed-by col-sm-2" style="width:14%">
                   <div class="sixtydays">
-                    <label>Core Price</label>
-                    <label>{{exchangeQuoteView.parts[0].exchangeCorePrice}}</label><br />
+                    <label style="width:75%">Core Price</label>
+                    <label class="label-border">{{exchangeQuoteView.parts[0].exchangeCorePrice}}</label><br />
                     <!-- <input type="text" value="" /> -->
                   </div>
                 </div>
 
 
               </div>
-              <div style="margin-top:10%">
-                <p>Subject to the terms and conditions as set forth below, <b>Seller Name </b>agrees to supply
+              
+                <p style="margin-left:-1px;">Subject to the terms and conditions as set forth below, <b>Seller Name </b>agrees to supply
                   <b>Customer </b>(their Customer) with a new, serviceable or overhauled “Exchange Unit” in exchange for
                   a Customer Core Unit described above and fees/prices listed above. The Customer agrees to the
                   following terms and conditions:</p>
@@ -127,7 +130,7 @@
                   Failure to provide the Core Unit by the Due Date will result in additional Fees being charged to the
                   Customer.
                   The schedule of Exchange Fees is as follows:</p>
-              </div>
+             
 
 
               <div class="pick-ticket-header" style="margin-top: 3%;">
@@ -136,24 +139,24 @@
               <div style="width:100%">
                 <div class="col-sm-6" style="width:60%;margin-top:10px">
                   <div class="confirmed-by">
-                    <label>1-30 Calendar Days</label><br />
-                    <input class="first-part" value="Initial Exchange Fee" type="text" value="" />
+                    <label class="label-name">1-30 Calendar Days</label><br />
+                    <label class="label-border first-part"></label><br />
                   </div>
 
-                  <div class="confirmed-by">
-                    <label>31-60 Calendar Days</label><br />
-                    <input class="first-part" value="Second Exchange Fee" type="text" value="" />
+                  <div class="confirmed-by" style="margin-left:10px">
+                    <label class="label-name">31-60 Calendar Days</label><br />
+                    <label class="label-border first-part"></label><br />
                   </div>
                 </div>
-                <div class="confirmed-by col-sm-6" style="width:40%">
+                <div class="confirmed-by col-sm-6" style="width:40%;margin-top:10px">
                   <div class="sixtydays">
-                    <label>61 Calendar Days Plus</label><br />
-                    <input type="text" value="Initial Exchange Fee + 2nd Exchange Fee + Outright Price" value="" />
+                    <label class="label-name">61 Calendar Days Plus</label><br />
+                    <label class="label-border first-part"></label><br />
                   </div>
                 </div>
               </div>
 
-              <div style="margin-top:6%">
+              <div style="margin-top:7%">
                 <p>All sums due hereunder shall be paid in accordance with the terms agreed and as stated on Customer’s
                   original invoice. All Exchange Units are delivered F.O.B. the delivery location. All expenses
                   associated with the shipment of the Exchange Unit (Including any duties or customs) shall be borne by

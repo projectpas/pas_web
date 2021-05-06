@@ -40,6 +40,7 @@ export class ExchangequoteService {
   query: ItemMasterSearchQuery;
   totalFreights = 0;
   totalCharges = 0;
+  totalcost=0;
   constructor(private exchangeQuoteEndpointService: ExchangeQuoteEndpointService) { }
 
   getNewExchangeQuoteInstance(customerId: number) {
@@ -119,8 +120,8 @@ export class ExchangequoteService {
     });
   }
 
-  getAllExchangeQuoteSettings() {
-    return this.exchangeQuoteEndpointService.getAllExchangeQuoteSettings();
+  getAllExchangeQuoteSettings(masterCompanyId) {
+    return this.exchangeQuoteEndpointService.getAllExchangeQuoteSettings(masterCompanyId);
   }
 
   marshalExchangeQuotePartToSave(selectedPart, userName) {
@@ -196,6 +197,7 @@ export class ExchangequoteService {
     partNumberObj.estOfFeeBilling=selectedPart.estOfFeeBilling;
     partNumberObj.billingStartDate=selectedPart.billingStartDate;
     partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
+    partNumberObj.exchangeOverhaulCost=selectedPart.exchangeOverhaulCost;
     partNumberObj.daysForCoreReturn=selectedPart.daysForCoreReturn;
     partNumberObj.billingIntervalDays=formatStringToNumber(selectedPart.billingIntervalDays);
     partNumberObj.currencyId=selectedPart.currencyId;
@@ -261,7 +263,6 @@ export class ExchangequoteService {
     partNumberObj.coreDueDate=selectedPart.coreDueDate;
     if(selectedPart.exchangeQuoteScheduleBilling.length>0)
     {
-      debugger;
       for(let i=0;i<selectedPart.exchangeQuoteScheduleBilling.length;i++)
       {
         partNumberObj.exchangeQuoteScheduleBilling.push(selectedPart.exchangeQuoteScheduleBilling[i]);
@@ -323,6 +324,7 @@ export class ExchangequoteService {
         //const marginpercentage=(parseFloat(marginamount)/parseFloat(totalestrevenue));
         //const totalestcost=parseFloat(parseFloat(cogsfees) + parseFloat(overhaulcost));
       })
+      debugger;
       marginSummary.exchangeFees = exchangefees;
       marginSummary.overhaulPrice = overhaulprice;
       marginSummary.totalEstRevenue = marginSummary ? this.getTotalEstRevenue(marginSummary) : 0;
@@ -337,7 +339,7 @@ export class ExchangequoteService {
 
   getTotalEstRevenue(marginSummary) {
     let totalEstRevenue: number = 0;
-    totalEstRevenue = marginSummary.exchangeFees + marginSummary.overhaulPrice;
+    totalEstRevenue = marginSummary.exchangeFees + marginSummary.overhaulPrice + this.totalCharges;
     return totalEstRevenue;
   }
 
@@ -355,7 +357,7 @@ export class ExchangequoteService {
 
   getTotalEstCost(marginSummary) {
     let totalEstCost: number = 0;
-    totalEstCost = marginSummary.cogsFees + marginSummary.overhaulCost;
+    totalEstCost = marginSummary.cogsFees + marginSummary.overhaulCost + this.totalcost;
     return totalEstCost;
   }
 
@@ -384,6 +386,12 @@ export class ExchangequoteService {
     );
   }
   setTotalCharges(amount) {
+    this.totalCharges = amount;
+  }
+  setTotalFreights(amount) {
+    this.totalFreights = amount;
+  }
+  setTotalcost(amount) {
     this.totalCharges = amount;
   }
 

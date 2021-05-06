@@ -124,12 +124,12 @@
                     <ng-container *ngFor="let col of columns">
                         <td class="uiTable_td_ovrflw_control table-column-width" class="ui-resizable-column">
                             {{
-                                col.field == 'createdDate'
-                                  ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
-                                  : rowData[col.field] && col.field == 'updatedDate'
-                                  ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
-                                  : rowData[col.field] 
-                              }}
+                            col.field == 'createdDate'
+                            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                            : rowData[col.field] && col.field == 'updatedDate'
+                            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                            : rowData[col.field]
+                            }}
                         </td>
                     </ng-container>
                     <td class="action-icons-cstm table-column-width" *ngIf="!isView">
@@ -226,7 +226,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="isEdit = false;">&times;</button>
-                <h4 class="modal-title">{{ isEdit ? 'Edit' : 'Add'  }} Approval Rule</h4>
+                <h4 class="modal-title">{{ isEdit ? 'Edit' : 'Add' }} Approval Rule</h4>
             </div>
             <div class="modal-body">
                 <form #poApprovalForm="ngForm">
@@ -298,13 +298,13 @@
                                 name="value" (change)="onChangevalue('value');" required />
                         </div>
                         <div class="form-group">
-                            <label>Approver <span class="clr-red">*</span></label>
+                            <label>Approver </label>
                             <div class="inner-addon right-addon inline-block">
                                 <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="employeelist"
                                     title="Add Approver" name="approverId" [suggestions]="approverList"
                                     (completeMethod)="filterapprover($event)" [size]="30" [minLength]="1"
                                     [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
-                                    #approverId="ngModel" required>
+                                    #approverId="ngModel">
                                 </p-autoComplete>
                                 <button type="button" class="btn btn-primary m-t-10 pull-right but_stl"
                                     (click)="onAddApprover();">Add</button>
@@ -539,8 +539,7 @@
             <div class="modal-body" *ngIf="auditHistory">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
-                        <table class="table table-bordered"
-                            *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
                             <thead>
                                 <tr>
                                     <th rowspan="2">Task Name</th>
@@ -611,20 +610,20 @@
                                     <td
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                                         {{audit.updatedBy}}</td>
-                                        <td class="text-center width-60">
-                                            <span class="value">
-                                              <label class="wauto">
-                                                   <input type="checkbox"
-                                                name="isActive" [(ngModel)]="audit.isActive" disabled>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                            <label class="wauto">
+                                                <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive"
+                                                    disabled>
                                             </label>
-                                            </span>
+                                        </span>
                                     </td>
                                     <td class="text-center width-60">
                                         <span class="value">
-                                          <label class="wauto"> <input type="checkbox"
-                                                name="isActive" [(ngModel)]="audit.isDeleted" disabled>
-                                          </label>
-                                          </span>
+                                            <label class="wauto"> <input type="checkbox" name="isActive"
+                                                    [(ngModel)]="audit.isDeleted" disabled>
+                                            </label>
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -672,7 +671,8 @@
                         <p><span class="label"><b>Approval Rule <span class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.approvalTaskId ? ApprovalRuleName : '-'}}
-                            </span></p>
+                            </span>
+                        </p>
                         <p class="view-text-editor" style="margin-bottom:5px">
                             <span class="label view-text-editor"><b>Memo: </b></span>
                             <span class="value">
@@ -682,26 +682,31 @@
                         <p><span class="label"><b>Rule number <span class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.ruleNumberId ? ApprovalRuleName : '-'}}
-                            </span></p>
+                            </span>
+                        </p>
                         <p><span class="label"><b>Amount <span class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.amountId ? AmountName : '-'}}
-                            </span></p>
+                            </span>
+                        </p>
                         <p *ngIf="creatingData.amountId == 5"><span class="label"><b>Lower Value <span
                                         class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.lowerValue ? creatingData.lowerValue : '-'}}
-                            </span></p>
+                            </span>
+                        </p>
                         <p *ngIf="creatingData.amountId == 5"><span class="label"><b>Upper Value <span
                                         class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.upperValue ? creatingData.upperValue : '-'}}
-                            </span></p>
+                            </span>
+                        </p>
                         <p *ngIf="creatingData.amountId && creatingData.amountId != 5">
                             <span class="label"><b>Value <span class="clr-red">*</span> : </b></span>
                             <span class="value">
                                 {{creatingData.value ? creatingData.value : '-'}}
-                            </span></p>
+                            </span>
+                        </p>
                     </div>
                     <div class="col-md-3">
                         <div class="card">
@@ -783,14 +788,9 @@
 
                                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
 
-                                        <input
-                                        style="width:100%;" class="incorn_border"
-                                        pInputText
-                                        type="text"
-                                        (input)="
+                                        <input style="width:100%;" class="incorn_border" pInputText type="text" (input)="
                                         ptabletagName1.filter($event.target.value, col.field, 'contains')
-                                        "
-                                      />
+                                        " />
                                         <!-- <input [disabled]="col.field == 'isPrimary'" style="width:100%;" pInputText
                                             type="text"
                                             (input)="ptabletagName.filter($event.target.value, col.field, 'contains')" /> -->
@@ -813,7 +813,7 @@
                                     </td>
                                     <td class="table-column-width" *ngFor="let col of columns">
                                         {{ col.field != 'isPrimary' ? rowData[col.field] : '' &&
-                                    col.field=='employee'?rowData[col.field]:''}}
+                                        col.field=='employee'?rowData[col.field]:''}}
                                     </td>
                                     <td class="table-column-width">
                                         <input *ngIf="rowData.isPrimary" disabled type="checkbox" name="isPrimary"

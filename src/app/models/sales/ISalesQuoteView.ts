@@ -1,5 +1,4 @@
 import { ISalesOrderQuote } from './ISalesOrderQuote';
-import { ISalesOrderQuoteApproverList } from './ISalesOrderQuoteApproverList';
 import { ISalesOrderQuotePart } from './ISalesOrderQuotePart';
 import { IPriority } from './IPriority';
 import { ISalesQuoteType } from './ISalesQuoteType';
@@ -9,12 +8,10 @@ import { ISalesProbablity } from './ISalesProbablity';
 import { ILeadSource } from './ILeadSource';
 import { IStatus } from "./IStatus";
 
-
 export interface ISalesQuoteView {
     createNewVersion: boolean;
     originalSalesOrderQuoteId: Number;
     salesOrderQuote: ISalesOrderQuote;
-    // approverList: ISalesOrderQuoteApproverList[];
     parts: ISalesOrderQuotePart[];
     priorities: IPriority[];
     salesQuoteTypes: ISalesQuoteType[];
