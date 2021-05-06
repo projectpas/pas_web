@@ -518,6 +518,12 @@ setTimeout(() => {
                     this.calculatePartTat(x);
                     this.getPartPublicationByItemMasterId(x, x.masterPartId,index);
                     this.getWorkFlowByPNandScope(null,x,'onload',index);
+                    if (this.workorderSettings) {
+                        x.workOrderStageId =x.workOrderStageId?x.workOrderStageId : this.workorderSettings.defaultStageCodeId;
+                        x.workOrderPriorityId = x.workOrderPriorityId? x.workOrderPriorityId:this.workorderSettings.defaultPriorityId;
+                    }
+                    x.workOrderStageId=x.workOrderStageId ? x.workOrderStageId : 0;
+                    x.workOrderPriorityId = x.workOrderPriorityId? x.workOrderPriorityId:0;
                     return {
                         ...x,
                         
@@ -606,7 +612,12 @@ setTimeout(() => {
                     if (x.partTechnicianId == 0 || (typeof x.partTechnicianId =='object' && x.partTechnicianId.employeeId==null)) {
                         result = true;
                     }
-                    
+                    if (x.workOrderStageId == 0 ||  x.workOrderStageId == null) {
+                        result = true;
+                    }
+                    if (x.workOrderPriorityId == 0 || x.workOrderPriorityId==null ) {
+                        result = true;
+                    }
                 }
             )
         }
@@ -712,9 +723,6 @@ setTimeout(() => {
         this.modal.componentInstance.customerId = customerId;
     }
 
-    clearautoCompleteInput(currentRecord, field) {
-        // currentRecord[field] = null;
-    } 
 
     getMaterialListHandle() {
         if (this.isSubWorkOrder == true) {
@@ -956,6 +964,62 @@ setTimeout(() => {
     dismissModelTask(){
         $('#confirmationSave').modal('hide');
     }
+
+    validationForMpnParts(): any{
+
+        
+        
+        // partTechnicianId:{name:x.technicianName,employeeId:x.technicianId},
+        // // partTechnicianId: getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList),
+        // mappingItemMasterId: getObjectById('mappingItemMasterId', x.mappingItemMasterId, x.revisedParts),
+        // masterPartId: x.woPart,
+        // customerRequestDate: x.customerRequestDate ? new Date(x.customerRequestDate) : null,
+        // receivedDate: x.receivedDate ? new Date(x.receivedDate) : null,
+        // estimatedCompletionDate: (x.estimatedCompletionDate) ? new Date(x.estimatedCompletionDate) : new Date(x.customerRequestDate),
+        // estimatedShipDate: (x.estimatedShipDate) ? new Date(x.estimatedShipDate) : new Date(x.customerRequestDate),
+        // promisedDate: (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate),
+        // x.workOrderStageId =x.workOrderStageId?x.workOrderStageId : this.workorderSettings.defaultStageCodeId;
+        // x.workOrderPriorityId = x.workOrderPriorityId? x.workOrderPriorityId:this.workorderSettings.defaultPriorityId;
+
+
+    }
+
+    clearautoCompleteInput(currentRecord, field) {
+        // currentRecord[field] = null;
+        currentRecord.itemMasterId=undefined;
+        currentRecord.description="";
+        currentRecord.revisedPartNo="";
+        currentRecord.serialNumber="";
+        currentRecord.receivedDate=undefined;
+        currentRecord.customerRequestDate=undefined;
+        currentRecord.promisedDate=new Date();
+        currentRecord.estimatedShipDate=undefined;
+
+        currentRecord.estimatedCompletionDate=new Date();
+        currentRecord.workOrderStageId=0;
+        currentRecord.workOrderStatusId=0;
+        currentRecord.partTechnicianId=0;
+        currentRecord.techStationId=0;
+        
+
+        currentRecord.workOrderScopeId=0;
+        currentRecord.workOrderPriorityId=0;
+        currentRecord.conditionId=0;
+        currentRecord.cMMId=0;
+        currentRecord.workflowId=0;
+
+        currentRecord.itemGroup="";
+        currentRecord.isMPNContract=false;
+        currentRecord.contractNo="";
+        currentRecord.stockLineNumber="";
+        currentRecord.nte="";
+
+        currentRecord.isPMA=false;
+        currentRecord.isDER=false;
+        currentRecord.tatDaysCurrent=0;
+        currentRecord.tatDaysStandard=0;
+    } 
+   isValidationfailed:boolean=false;
     saveWorkOrder(): void {
         this.mpnPartNumbersList = [];
         const generalInfo = this.workOrderGeneralInformation;
@@ -963,6 +1027,63 @@ setTimeout(() => {
     $('#confirmationSave').modal('show');
      return
  } 
+ this.isValidationfailed= false;
+//  if (!this.validationForMpnParts()) {
+//     return;
+// }
+this.workOrderGeneralInformation.partNumbers.map(x => {
+
+    if(!x.workOrderStageId || x.workOrderStage==0){
+        this.alertService.showMessage('Work Order', 'Stage is required', MessageSeverity.error);
+        this.isValidationfailed= true;
+    
+    }
+     if(!x.workOrderPriorityId || x.workOrderPriorityId==0){
+        this.alertService.showMessage('Work Order', 'Priority is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.estimatedShipDate || x.estimatedShipDate==undefined){
+        this.alertService.showMessage('Work Order', 'Est. Ship Date is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.estimatedCompletionDate || x.estimatedCompletionDate==undefined){
+        this.alertService.showMessage('Work Order', 'Est. Comp Date is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.promisedDate || x.promisedDate==undefined){
+        this.alertService.showMessage('Work Order', 'Promised Date is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.receivedDate || x.receivedDate==undefined){
+        this.alertService.showMessage('Work Order', '  Recd  Date is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.customerRequestDate || x.customerRequestDate==undefined){
+        this.alertService.showMessage('Work Order', 'Cust Req Date is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.conditionId || x.conditionId==undefined){
+        this.alertService.showMessage('Work Order', 'Recd Date is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.workOrderScopeId || x.workOrderScopeId==undefined){
+        this.alertService.showMessage('Work Order', 'Tech Name is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.technicianId || x.technicianId==undefined){
+        this.alertService.showMessage('Work Order', 'Work Scope is required', MessageSeverity.error);
+           this.isValidationfailed= true;
+    }
+     if(!x.itemMasterId || x.itemMasterId==undefined){
+        this.alertService.showMessage('Work Order', 'MPN is required', MessageSeverity.error);
+        this.isValidationfailed= true;
+    }
+    // else if(!x.workOrderScopeId || x.workOrderScopeId==undefined){
+    //     this.alertService.showMessage('Work Order', 'Work Scope is required', MessageSeverity.error);
+    // }
+            })
+//  console.log("hellow propritu",generalInfo)
+ if(this.isValidationfailed==false){
         const data1 = {
             ...generalInfo,
             customerId: editValueAssignByCondition('customerId', generalInfo.customerId),
@@ -976,6 +1097,7 @@ setTimeout(() => {
             createdBy: this.userName,
             updatedBy: this.userName,
             revisedPartId: this.revisedPartId == 0 ? null :  this.revisedPartId,
+          
             partNumbers: generalInfo.partNumbers.map(x => {
                 return {
                     ...x,
@@ -994,10 +1116,12 @@ setTimeout(() => {
                 }
             })
         };
+
         if (this.isEdit && this.isRecCustomer === false) {
             this.isSpinnerVisible = true;            
             this.workOrderService.updateNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
                 result => {
+                    this.isValidationfailed=false
                     this.isSpinnerVisible = false;
                     this.disableSaveForEdit = true;
                     this.disableSaveForPart = true;
@@ -1016,6 +1140,7 @@ setTimeout(() => {
             this.isSpinnerVisible = true;            
             this.workOrderService.createNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
                 result => {
+                    this.isValidationfailed=false
                     this.isSpinnerVisible = false;
                     this.isEdit = true;
                     this.disableSaveForPart = true;
@@ -1035,6 +1160,7 @@ setTimeout(() => {
                 }
             );
         }
+    }
     }
 
     createQuote() {
