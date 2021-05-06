@@ -896,14 +896,15 @@ export class SalesOrderPartNumberComponent {
     localStorage.setItem("itemMasterId", rowData.partId);
     localStorage.setItem("partNumber", rowData.partNumber);
     localStorage.setItem("salesOrderId", this.salesOrderId);
-    this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);
+    localStorage.setItem("lsconditionId", rowData.conditionId);
+    this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup`);
   }
 
   createRO(rowData) {
     localStorage.setItem("itemMasterId", rowData.partId);
     localStorage.setItem("partNumber", rowData.partNumber);
     localStorage.setItem("salesOrderId", this.salesOrderId);
-    this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/vendor/`);
+    this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup`);
   }
 
   getMarginPercentage(part) {
