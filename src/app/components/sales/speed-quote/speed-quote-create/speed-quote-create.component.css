@@ -1,0 +1,42 @@
+label {
+  text-align: left;
+  width: 100%;
+}
+
+.form-controls {
+  margin-top: 10px;
+}
+.column {
+  margin-left: 10px;
+}
+
+.column-seperator {
+  margin-left: 20px;
+}
+
+.checkbox-custom-label {
+  margin-left: 15px;
+  margin-top: 10px;
+}
+
+button {
+  border-radius: 5px;
+}
+.form-control:disabled {
+  background-color: #e9ecef !important;
+}
+
+.dropdown-menu span{
+  display: block;
+  padding: 5px;
+  cursor: pointer;
+  font-weight: bold !important;
+}
+.dropdown-menu span:hover{
+  opacity: 0.8;
+}
+.logo{
+  background: url("../../../../assets/images/PAS-logo.png");
+  width: 100px;
+  height: 100px;
+}

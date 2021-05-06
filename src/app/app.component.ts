@@ -924,6 +924,17 @@ export class AppComponent implements OnInit, AfterViewInit {
               ]
             }
           ],
+          [
+            {
+              label: 'Speed Quote',
+              items: [
+                {
+                  label: 'Speed Quote List',
+                  routerLink: '/salesmodule/salespages/speed-quote-list',
+                }
+              ]
+            }
+          ],
         ],
       },
       {

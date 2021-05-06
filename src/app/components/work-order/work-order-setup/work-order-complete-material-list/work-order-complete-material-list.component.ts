@@ -1,4 +1,5 @@
-﻿import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+﻿import { WorkOrderPickticketComponent } from './../work-order-pickticket/work-order-pickticket.component';
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { ItemClassificationService } from '../../../../services/item-classfication.service';
 import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service';
@@ -22,7 +23,9 @@ import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete
     animations: [fadeInOut]
 })
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
+
     @ViewChild("timerAlertNotfi", { static: false }) public timerAlertNotfi: ElementRef;
+    //@ViewChild(WorkOrderPickticketComponent, { static: false }) public workOrderPickticketComponent: WorkOrderPickticketComponent;
     @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
     @Input() isView: boolean = false;
     @Input() workOrderMaterialList;
@@ -44,7 +47,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() saveRIParts = new EventEmitter();
     @Output() refreshData = new EventEmitter();
     @Input() customerId;
+    
     statusId = null;
+    ispickticket : boolean = false;
     minDateValue: Date = new Date();
     addNewMaterial: boolean = false;
     workFlowWorkOrderId: any;
@@ -93,14 +98,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'unitCost', header: 'Unit Cost', align: 1 ,width:"61px"},
         { field: 'extendedCost', header: 'Extended Cost', align: 1 ,width:"90px"},
         { field: 'costDate', header: 'Cost Date',align: 0 },
-        { field: 'purchaseOrderNumber', header: 'PO Num' ,align: 0,width:"60px"},
+        { field: 'purchaseOrderNumber', header: 'PO Num' ,align: 0,width:"100px"},
         { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date',align: 0 },
-        { field: 'repairOrderNumber', header: 'RO Num',align: 0 ,width:"60px"},
+        { field: 'repairOrderNumber', header: 'RO Num',align: 0 ,width:"100px"},
         { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' ,align: 0},
-        { field: 'receiver', header: 'Rec Num',align: 0 ,width:"60px"},
-        { field: 'workOrderNumber', header: 'WO Num',align: 0 ,width:"60px"},
-        { field: 'subWorkOrder', header: 'Sub-WO Num',align: 0 ,width:"83px"},
-        { field: 'salesOrder', header: 'SO Num',align: 0 ,width:"60px"},
+        { field: 'receiver', header: 'Rec Num',align: 0 ,width:"100px"},
+        { field: 'workOrderNumber', header: 'WO Num',align: 0 ,width:"100px"},
+        { field: 'subWorkOrder', header: 'Sub-WO Num',align: 0 ,width:"100px"},
+        { field: 'salesOrder', header: 'SO Num',align: 0 ,width:"100px"},
         { field: 'figure', header: 'Figure',align: 0 },
         { field: 'site', header: 'Site' ,align: 0},
         { field: 'wareHouse', header: 'Warehouse',align: 0 },
@@ -239,6 +244,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     createNew() {
+        this.ispickticket= false;
         this.isEdit = false;
         this.editData = undefined;
         this.addNewMaterial = true;
@@ -627,8 +633,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.employeeList = employee;
         }
     }
+    id: any;
+    onclickpicktiket()
+    {
+      this.ispickticket= true;
+      this.workOrderId=64;
+      let a = document.getElementsByClassName('card-body')[1];
+      if (a) {
+          a.scrollIntoView();
+      }
+      //this.workOrderPickticketComponent.refresh(this.id);
+    }
  
     partsIssueRI(statusId) { 
+        this.ispickticket= false;
         this.savebutonDisabled=false;
         this.checkActiveStatus=true;
         this.countDown = null;
@@ -918,6 +936,18 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             })
 
         })
+        if(event.target.checked==false){
+            if (this.statusId ==1) {
+                currentRecord.quantityReserved=currentRecord.quantityAvailable;
+            }else if(this.statusId ==2) {
+                currentRecord.quantityIssued=currentRecord.quantityAlreadyReserved;
+            }else if(this.statusId ==3) {
+            }else if(this.statusId ==4) {
+                currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued;
+            }else if(this.statusId ==5) {
+                currentRecord.quantityReserved=currentRecord.quantityAlreadyReserved;
+            }
+        }
     }
 
     pageIndexChange(event) {

@@ -100,6 +100,11 @@ export class CommonService extends EndpointFactory {
     });
   }
 
+  AutoCompleteDropdownsMaterialsItemMasterList(searchText, startWith, count?, idList?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsMaterialsItemMasterList?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.AutoCompleteDropdownsMaterialsItemMasterList(searchText, startWith, count, idList, masterCompanyId));
+    });
+  }
   
   autoCompleteDropdownsItemMasterWithStockLine(searchText, startWith, count?, idList?, masterCompanyId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsItemMasterWithStockLine?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
@@ -931,11 +936,6 @@ export class CommonService extends EndpointFactory {
   getPickTicketList(referenceId,moduleId): Observable<any> {
     return this.http.get(`${this.configurations.baseUrl}/api/Common/getpickticketapprovelist?referenceId=${referenceId}&moduleId=${moduleId}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getPickTicketList(referenceId,moduleId));
-    });
-  }
-  getStockLineforPickTicket(itemMasterId,conditionId,referenceId,moduleId): Observable<any> {
-    return this.http.get(`${this.configurations.baseUrl}/api/Common/searchstocklinefrompickticketpop?itemMasterId=${itemMasterId}&conditionId=${conditionId}&referenceId=${referenceId}&moduleId=${moduleId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getStockLineforPickTicket(itemMasterId,conditionId,referenceId,moduleId));
     });
   }
 

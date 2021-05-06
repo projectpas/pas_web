@@ -269,10 +269,11 @@ export class AssetInventoryListingComponent implements OnInit {
         this.lazyLoadEventDataInput = data;
         const isdelete=this.currentDeletedstatus ? true:false;
         data.filters.isDeleted=isdelete
-            data.filters['status'] = this.status ? this.status : 'Active';
-            data.globalFilter= data.globalFilter ? data.globalFilter : '';
-            const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
-          this.isSpinnerVisible=true;
+        data.filters['status'] = this.status ? this.status : 'Active';
+        data.globalFilter= data.globalFilter ? data.globalFilter : '';
+        data.filters.masterCompanyId= this.authService.currentUser.masterCompanyId;
+        const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
+        this.isSpinnerVisible=true;
         this.assetService.getAssetInventoryList(PagingData).subscribe(
             results =>{
                 this.onDataLoadSuccessful(results[0])

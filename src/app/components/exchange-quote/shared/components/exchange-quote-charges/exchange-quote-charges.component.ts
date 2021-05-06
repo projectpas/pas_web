@@ -22,8 +22,8 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   @Input() chargeForm;
   @Input() customerId;
   @Input() exchangeQuoteId: any;;
-  @Output() saveChargesListForSO = new EventEmitter();
-  @Output() updateChargesListForSO = new EventEmitter();
+  @Output() saveChargesListForSO = new EventEmitter<{amount:number, cost:number}>();
+  @Output() updateChargesListForSO = new EventEmitter<{amount:number, cost:number}>();
   @Output() refreshData = new EventEmitter();
   @Input() view: boolean = false;
   @Input() isQuote = false;
@@ -54,6 +54,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   isUpdate: boolean = false;
   frieghtsCreateForm: any;
   storedData: any = [];
+  chargesFlatExtendedCost: any;
   constructor(private exchangequoteService: ExchangequoteService,
     private authService: AuthService,
     private alertService: AlertService,
@@ -281,7 +282,8 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
         MessageSeverity.success
       );
       this.refreshOnDataSaveOrEditORDelete();
-      this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+      //this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+      this.saveChargesListForSO.emit({amount:this.chargesFlatBillingAmount, cost:this.chargesFlatExtendedCost});
     }, error => {
       this.isSpinnerVisible = false;
     })
@@ -380,6 +382,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
     let totalExtendedCost = charges.reduce((acc, x) => {
       return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
     }, 0);
+    this.chargesFlatExtendedCost = totalExtendedCost;
     return totalExtendedCost;
   }
 
@@ -537,7 +540,8 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
       }
       if (fromDelete) {
         this.getTotalBillingAmount();
-        this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+        //this.updateChargesListForSO.emit(this.chargesFlatBillingAmount,this.chargesFlatExtendedCost);
+        this.updateChargesListForSO.emit({amount:this.chargesFlatBillingAmount, cost:this.chargesFlatExtendedCost});
       }
     }, error => {
       this.isSpinnerVisible = false;

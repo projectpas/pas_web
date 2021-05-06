@@ -61,12 +61,12 @@
               </div>
             </div>
           </td>
-          <td class="min-width-150">
+          <td class="min-width-250">
             {{ material.partDescription }}
           </td>
           <td>
-            <p-dropdown placeholder="--Select--" (ngModelChange)="getActive()" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
-              (onChange)="getPNDetails(material)" class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.conditionCodeId"
+            <p-dropdown placeholder="--Select--" (ngModelChange)="getActive()" id="mat_condition" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
+              (onChange)="getPNDetails(material)" class="p-dropdown-1001"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.conditionCodeId"
               required>
             </p-dropdown>
           </td>

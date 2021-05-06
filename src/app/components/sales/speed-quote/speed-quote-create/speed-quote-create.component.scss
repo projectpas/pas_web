@@ -1,0 +1,177 @@
+label {
+  text-align: left;
+  width: 100%;
+}
+
+.form-controls {
+  margin-top: 10px;
+}
+.column {
+  margin-left: 10px;
+}
+
+.column-seperator {
+  margin-left: 20px;
+}
+
+.checkbox-custom-label {
+  margin-left: 15px;
+  margin-top: 10px;
+}
+
+button {
+  border-radius: 5px;
+}
+// .ng-valid[required], .ng-valid.required {
+//     /*border-color: #42A948 !important;*/ /* green */
+// }
+
+// .ng-invalid:not(form) {
+//     border-color: #a94442 !important; /* red */
+// }
+:host ::ng-deep .ui-autocomplete {
+  padding: 0px !important;
+}
+:host ::ng-deep .ui-autocomplete > input {
+  //border-radius: 5px !important;
+  // padding: 12px 15px !important;
+  padding: 0px 15px 0px 2px !important;
+}
+
+:host ::ng-deep .ui-chkbox-label {
+  display: inline;
+  padding-left: 5px;
+  padding-right: 5px;
+  position: relative;
+  vertical-align: bottom;
+}
+.statusChangeDate input {
+  background-color: #e9ecef !important;
+}
+body .ui-state-disabled,
+body .ui-widget:disabled {
+  opacity: 1 !important;
+  background-color: #e9ecef !important;
+}
+@media (min-width: 768px) {
+  .col-md-3 {
+    max-width: 22%;
+    margin-right: 15px;
+  }
+}
+.popup_checkbox_considerations ::ng-deep .ui-chkbox-label {
+  float: none !important;
+  margin-left: 20px !important;
+  top: 7px !important;
+  position: relative !important;
+  width: auto !important;
+}
+
+.inline-label-form-group-sm-label label {
+  width: 100px;
+}
+.inline-label-form-group-sm-label select {
+  width: calc(70% - 100px);
+}
+:host {
+    ::ng-deep {
+        div.ui-widget {
+            padding: 0px !important;
+        }
+
+        div.ui-widget > button {
+            padding: 0px !important;
+            padding-right: 5px !important;
+        }
+
+        div.ui-widget > button > span.ui-button-text {
+            padding: 0px 5px 1px 0px !important;
+            margin-top: -4px;
+        }
+
+        div.ui-widget > button.ui-splitbutton-menubutton {
+            padding-right: 8px !important;
+        }
+
+        div .ui-widget > button.ui-splitbutton-menubutton > span.ui-button-icon-left {
+            left: 0% !important;
+        }
+
+        div.ui-menu > ul > li {
+            padding: 0px !important;
+            text-align: left !important;
+        }
+
+        div.sales-order-actions {
+            padding: 4px 6px !important;
+        }
+    }
+}
+
+:host {
+  ::ng-deep {
+    div.ui-chkbox-box.ui-widget.ui-corner-all.ui-state-default.ui-state-disabled {
+      background-color: #c9c9c9 !important;
+      border-color: rgb(173, 173, 173);
+      opacity: 100 !important;
+      color: rgb(51, 51, 51) !important;
+      border: 1px solid #adadad !important;
+    }
+  }
+}
+.btn {
+    height: 21px
+}
+.margin-top-0{
+  margin-top: 0px !important;
+}
+.padding-10{
+  padding:10px !important;
+}
+.toggle-div{
+  padding-top: 5px !important; padding-bottom: 0px !important;
+}
+.sales-toggle{
+  padding: 5px !important; margin: 5px !important;
+}
+.padding-top-5{
+  padding-top:5px;
+}
+.padding-top-4{
+  padding-top:4px !important;
+}
+.padding-12{
+  padding:12px !important
+}
+.padding-top-8{
+  padding-top: 8px !important
+}
+.padding-top-10{
+  padding-top: 10px !important
+}
+.margin-summary-div{
+  padding:.3rem 1rem !important;
+}
+.margin-summary-label{
+  padding-left: 5px !important; padding-right:5px !important; font-weight: normal
+}
+.mgmt-card-header{
+  padding: 10px 12px !important;
+}
+.mgmt-label{
+  margin-bottom: 0 !important; font-size: 12px !important;
+}
+.mgmt-card-body{
+  padding: 12px 12px 4px !important;
+}
+.m-t-5{
+  margin-top:5px !important;
+}
+.stock-check-box{
+  margin-top: 5px !important; margin-left: 30px !important;
+}
+.radio_adjust{
+  position: relative;
+  top: 2px;
+  margin-left: 6px;
+}

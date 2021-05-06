@@ -21,6 +21,7 @@
     top: -1px;
     background: #0d57b0;
 }
+
 .column-r1-fixed thead th:last-child {
     right: 0;
     z-index: 1;

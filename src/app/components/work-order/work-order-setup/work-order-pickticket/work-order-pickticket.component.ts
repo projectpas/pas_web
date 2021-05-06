@@ -1,27 +1,28 @@
-import { CommonService } from './../../../services/common.service';
-import { SalesOrderService } from './../../../services/salesorder.service';
-import { Component, OnInit,Input } from '@angular/core';
+import { CommonService } from '../../../../services/common.service';
+import { SalesOrderService } from '../../../../services/salesorder.service';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MenuItem } from "primeng/api";
-import { PickTicket } from "../../../models/PickTicket";
-import { CurrencyService } from "../../../services/currency.service";
-import { EmployeeService } from "../../../services/employee.service";
-import { AuthService } from "../../../services/auth.service";
+import { PickTicket } from "../../../../models/PickTicket";
+import { CurrencyService } from "../../../../services/currency.service";
+import { EmployeeService } from "../../../../services/employee.service";
+import { AuthService } from "../../../../services/auth.service";
 import * as moment from 'moment';
-import { AlertService, MessageSeverity } from '../../../services/alert.service';
+import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { DatePipe } from "@angular/common";
-import { CommonPickticketprintComponent } from "../common-pickticketprint/common-pickticketprint.component";
+import { WorkOrderPickticketprintComponent } from "../work-order-pickticketprint/work-order-pickticketprint.component";
 declare var $: any;
-import { listSearchFilterObjectCreation } from "../../../generic/autocomplete";
-import {AppModuleEnum} from "../../../../app/enum/appmodule.enum";
+import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
+import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 
 @Component({
-  selector: 'app-common-pickticket',
-  templateUrl: './common-pickticket.component.html',
-  styleUrls: ['./common-pickticket.component.scss']
+  selector: 'app-work-order-pickticket',
+  templateUrl: './work-order-pickticket.component.html',
+  styleUrls: ['./work-order-pickticket.component.scss'],
+  // encapsulation: ViewEncapsulation.None
 })
-export class CommonPickticketComponent implements OnInit {
-  @Input() moduleId;
+export class WorkOrderPickticketComponent implements OnInit {
+  //@Input() moduleId;
   @Input() referenceId;
   isEnablePOList: any;
   pickTickes: any[] = [];
@@ -39,6 +40,7 @@ export class CommonPickticketComponent implements OnInit {
   pageSize: number = 10;
   pageIndex: number = 0;
   first = 0;
+  moduleId: number = 15;
   showPaginator: boolean = false;
   isSpinnerVisible: boolean = true;
   partColumns: any[];
@@ -51,9 +53,11 @@ export class CommonPickticketComponent implements OnInit {
   viewType: any = 'detailedview';
   breadcrumbs: MenuItem[];
   home: any;
+  isEdit: boolean = false;
+  isView: boolean = false;
   //salesOrderId: any;
   searchParameters: any;
-  PickTicketDetails = new PickTicket(); 
+  PickTicketDetails = new PickTicket();
   disableSave: boolean = true;
   pickticketauditHistory: any[] = [];
   pickTicketItemInterfaceheader: any[];
@@ -67,13 +71,14 @@ export class CommonPickticketComponent implements OnInit {
     private modalService: NgbModal,
     private alertService: AlertService,
     private datePipe: DatePipe,
-    private commonService:CommonService
+    private commonService: CommonService,
+    private workOrderService: WorkOrderService
   ) { }
 
-  ngOnInit() 
-  {
+  ngOnInit() {
     //this.isSpinnerVisible = true;
     this.initColumns();
+    this.onSearch();
     //this.isSpinnerVisible = false;
   }
   attachmoduleList: any = [];
@@ -106,8 +111,8 @@ export class CommonPickticketComponent implements OnInit {
       { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
       { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
       { field: "status", header: "Status", width: "130px" },
-      { field: "salesOrderNumber", header: "SO Num", width: "130px" },
-      { field: "salesOrderQuoteNumber", header: "SOQ Num", width: "130px" },
+      { field: "orderNumber", header: "SO Num", width: "130px" },
+      { field: "orderQuoteNumber", header: "SOQ Num", width: "130px" },
       { field: "customerName", header: "Customer Name", width: "130px" },
       { field: "customerCode", header: "Customer Code", width: "130px" },
     ];
@@ -127,16 +132,18 @@ export class CommonPickticketComponent implements OnInit {
   }
 
   refresh(id) {
-    //this.salesOrderId = id;
+    // this.referenceId = id;
+    // this.moduleId=11;
     this.onSearch();
   }
   onSearch() {
     //this.isSpinnerVisible = true;
-    this.commonService
-      .getPickTicketList(this.referenceId,this.moduleId)
+    this.workOrderService
+      .getPickTicketList(this.referenceId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
-        this.pickTickes = response[0];
+        //this.pickTickes = response[0];
+        this.pickTickes = response;
         this.showPaginator = this.totalRecords > 0;
       }, error => {
         this.isSpinnerVisible = false;
@@ -181,8 +188,8 @@ export class CommonPickticketComponent implements OnInit {
     }
   }
   printPickTicket(rowData: any) {
-    this.modal = this.modalService.open(CommonPickticketprintComponent, { size: "lg" });
-    let instance: CommonPickticketprintComponent = (<CommonPickticketprintComponent>this.modal.componentInstance)
+    this.modal = this.modalService.open(WorkOrderPickticketprintComponent, { size: "lg" });
+    let instance: WorkOrderPickticketprintComponent = (<WorkOrderPickticketprintComponent>this.modal.componentInstance)
     instance.modalReference = this.modal;
 
     instance.onConfirm.subscribe($event => {
@@ -258,11 +265,11 @@ export class CommonPickticketComponent implements OnInit {
     const orderPartId = rowData.orderPartId;
     this.qtyToPick = rowData.qtyToPick;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
-    this.commonService
-      .getStockLineforPickTicket(itemMasterId, conditionId, referenceId,this.moduleId)
+    this.workOrderService
+      .getStockLineforPickTicket(itemMasterId, conditionId, referenceId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
-        this.parts = response[0];
+        this.parts = response;
         for (let i = 0; i < this.parts.length; i++) {
           if (this.parts[i].oemDer == null)
             this.parts[i].oemDer = this.parts[i].stockType;
@@ -297,6 +304,7 @@ export class CommonPickticketComponent implements OnInit {
       this.disableSubmitButton = false;
     }
   }
+
   savepickticketiteminterface(parts) {
     let tempParts = [];
     let invalidQty = false;
@@ -323,11 +331,11 @@ export class CommonPickticketComponent implements OnInit {
     if (invalidQty) {
       this.isSpinnerVisible = false;
       this.alertService.resetStickyMessage();
-      this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
+      this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
     }
     else {
       this.disableSubmitButton = true;
-      this.salesOrderService
+      this.workOrderService
         .savepickticketiteminterface(parts)
         .subscribe(data => {
           this.alertService.stopLoadingMessage();
@@ -341,7 +349,7 @@ export class CommonPickticketComponent implements OnInit {
         }, error => this.isSpinnerVisible = false);
     }
   }
-  
+
   confirmselected: number;
   ptNumber: number;
   confirmedById: any;
@@ -371,7 +379,7 @@ export class CommonPickticketComponent implements OnInit {
     //this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
-  
+
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
     const pickTicketId = rowData.pickTicketId;
     const referenceId = rowData.referenceId;
