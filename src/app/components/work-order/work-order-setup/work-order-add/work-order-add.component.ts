@@ -521,6 +521,7 @@ setTimeout(() => {
                     if (this.workorderSettings) {
                         x.workOrderStageId =x.workOrderStageId?x.workOrderStageId : this.workorderSettings.defaultStageCodeId;
                         x.workOrderPriorityId = x.workOrderPriorityId? x.workOrderPriorityId:this.workorderSettings.defaultPriorityId;
+                        x.workOrderStatusId =x.workOrderStatusId?x.workOrderStatusId : this.workorderSettings.defaultStatusId;
                     }
                     x.workOrderStageId=x.workOrderStageId ? x.workOrderStageId : 0;
                     x.workOrderPriorityId = x.workOrderPriorityId? x.workOrderPriorityId:0;
@@ -984,7 +985,11 @@ setTimeout(() => {
 
     }
 
+    
     clearautoCompleteInput(currentRecord, field) {
+        // currentRecord[field] = null;
+    }
+    clearautoCompletePartNum(currentRecord, field) {
         // currentRecord[field] = null;
         currentRecord.itemMasterId=undefined;
         currentRecord.description="";
@@ -1067,11 +1072,11 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
            this.isValidationfailed= true;
     }
      if(!x.workOrderScopeId || x.workOrderScopeId==undefined){
-        this.alertService.showMessage('Work Order', 'Tech Name is required', MessageSeverity.error);
+        this.alertService.showMessage('Work Order', 'Work Scope is required', MessageSeverity.error);
            this.isValidationfailed= true;
     }
-     if(!x.technicianId || x.technicianId==undefined){
-        this.alertService.showMessage('Work Order', 'Work Scope is required', MessageSeverity.error);
+    if(!x.partTechnicianId.employeeId || x.partTechnicianId.employeeId==null){
+        this.alertService.showMessage('Work Order', 'Tech Name is required', MessageSeverity.error);
            this.isValidationfailed= true;
     }
      if(!x.itemMasterId || x.itemMasterId==undefined){
