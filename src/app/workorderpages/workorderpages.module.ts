@@ -1,7 +1,8 @@
-﻿import { WoqApprovalRuleComponent } from './../components/work-order/work-order-setup/woq-approval-rule/woq-approval-rule.component';
+﻿import { WorkOrderPickticketComponent } from './../components/work-order/work-order-setup/work-order-pickticket/work-order-pickticket.component';
+import { WoqApprovalRuleComponent } from './../components/work-order/work-order-setup/woq-approval-rule/woq-approval-rule.component';
 import { CommonModulesModule } from './../common-modules/common-modules.module';
 import { WoApprovalRuleComponent } from './../components/work-order/work-order-setup/wo-approval-rule/wo-approval-rule.component';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common'; //<-- This one
 import { WorkOrdersPagesRoutingModule } from './workorderpages-routing.module';
@@ -132,7 +133,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     CommonDocumentsModule,
     CommonCommunicationModule,
     SplitButtonModule,
-    CommonModulesModule
+    CommonModulesModule,
   ],
   declarations: [
     WorkOrderPagesComponent,
@@ -192,7 +193,8 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     CommunicationComponent,
     AnalysisComponent,
     WoApprovalRuleComponent,
-    WoqApprovalRuleComponent
+    WoqApprovalRuleComponent,
+    WorkOrderPickticketComponent,
 
   ],
   entryComponents: [],
@@ -212,6 +214,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     SalesQuoteEndpointService,
     DatePipe
   ],
-  exports: [SubWorkOrderComponent, EmailComponent]
+  exports: [SubWorkOrderComponent, EmailComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class WorkOrderPagesModule { }

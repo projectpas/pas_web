@@ -4,6 +4,10 @@
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary" 
         (click)="partsIssueRI(1)" data-toggle="modal"
         data-target="#reserve">Reserve </button>
+    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary" 
+            (click)="onclickpicktiket()">Pick Ticket </button>
+
+
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
          (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve"> Issue
     </button>
@@ -38,8 +42,11 @@
             </div>
         </div> 
     </div>
+</div>
+<div *ngIf="ispickticket">
+    <app-work-order-pickticket [referenceId]="workOrderId"></app-work-order-pickticket>
 </div> 
-<div>
+<div *ngIf="!ispickticket">
     <p-table class="rpo-table-cstm rro-table-cstm ptable-f10" id="custome_material" [columns]="cols" #materialTble
         [value]="workOrderMaterialList" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100]"
         (onPage)="pageIndexChange($event)">

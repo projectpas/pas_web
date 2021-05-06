@@ -1,4 +1,5 @@
-﻿import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+﻿import { WorkOrderPickticketComponent } from './../work-order-pickticket/work-order-pickticket.component';
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { ItemClassificationService } from '../../../../services/item-classfication.service';
 import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service';
@@ -22,7 +23,9 @@ import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete
     animations: [fadeInOut]
 })
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
+
     @ViewChild("timerAlertNotfi", { static: false }) public timerAlertNotfi: ElementRef;
+    //@ViewChild(WorkOrderPickticketComponent, { static: false }) public workOrderPickticketComponent: WorkOrderPickticketComponent;
     @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
     @Input() isView: boolean = false;
     @Input() workOrderMaterialList;
@@ -44,7 +47,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() saveRIParts = new EventEmitter();
     @Output() refreshData = new EventEmitter();
     @Input() customerId;
+    
     statusId = null;
+    ispickticket : boolean = false;
     minDateValue: Date = new Date();
     addNewMaterial: boolean = false;
     workFlowWorkOrderId: any;
@@ -239,6 +244,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     createNew() {
+        this.ispickticket= false;
         this.isEdit = false;
         this.editData = undefined;
         this.addNewMaterial = true;
@@ -627,8 +633,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.employeeList = employee;
         }
     }
+    id: any;
+    onclickpicktiket()
+    {
+      this.ispickticket= true;
+      this.workOrderId=64;
+      let a = document.getElementsByClassName('card-body')[1];
+      if (a) {
+          a.scrollIntoView();
+      }
+      //this.workOrderPickticketComponent.refresh(this.id);
+    }
  
     partsIssueRI(statusId) { 
+        this.ispickticket= false;
         this.savebutonDisabled=false;
         this.checkActiveStatus=true;
         this.countDown = null;
