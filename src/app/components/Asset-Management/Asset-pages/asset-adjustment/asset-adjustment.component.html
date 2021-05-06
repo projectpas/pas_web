@@ -34,7 +34,7 @@
 						<span><b class="clr-red">Asset Description:</b> {{assetAdjustmentSetup.description}}</span>
 					</div>
 					<div class="col-md-2">
-						<span><b class="clr-red">Alt Asset ID:</b> {{assetAdjustmentSetup.alternateAssetId}}</span>
+						<span><b class="clr-red">Alt Asset ID:</b> {{assetAdjustmentSetup.alternateAssetRecord}}</span>
 					</div>
 					<div class="col-md-2">
 						<span><b class="clr-red">In Service Date:</b> {{assetAdjustmentSetup.expirationDate | date: 'MM/dd/yyyy'}}</span>
@@ -220,7 +220,7 @@
 									<tr>
 										<td><input type="checkbox" name="locationAllow" [(ngModel)]="locationAllow" (change)="onChangeLocation(item)"></td>
 										<td>{{item.assetInventoryAdjustmentDataType}}</td>
-										<td>{{assetAdjustmentSetup.asset_LocationName ? assetAdjustmentSetup.asset_LocationName : ''}}</td>
+										<td>{{assetAdjustmentSetup.assetLocationName ? assetAdjustmentSetup.assetLocationName : ''}}</td>
 										<td>
                                             <div *ngIf="locationAllow" class="col-md-8">
 												<select [(ngModel)]="item.afterValue" name="location" (change)="onChangeLocationSelect(item.afterValue)" required>
