@@ -153,48 +153,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.isSpinnerVisible = false;
             this.employeeService.currentUrl = '/employeesmodule/employeepages/app-employee-certification';
         }
-        // if (this.employeeService.generalCollection) {
-        //     this.local = this.employeeService.generalCollection;
-        // }
-        /*
-        if (this.employeeService.listCollection && this.employeeService.isEditMode == true) {
-            this.isEnableNext=true;
-            this.sourceEmployee = this.employeeService.listCollection;
-            if (this.sourceEmployee.employeeId) {
-                this.nextbuttonEnable = true;
-            }       
-            this.empId = this.sourceEmployee.employeeId;
-            this.firstName=this.employeeService.listCollection.firstName;
-            this.lastName=this.employeeService.listCollection.lastName;
-            // this.firstName = editValueAssignByCondition('firstName', this.sourceEmployee.firstName);
-            // this.lastName = editValueAssignByCondition('lastName', this.sourceEmployee.lastName);
-            this.local = this.employeeService.listCollection;
-            // this.sourceEmployee.certificationDate = new Date();
-            this.getwithemployeeLicensureId();
-        }
-        else if(this.employeeService.listCollection){  //for add load data when switch between tabs
-            this.getwithemployeeLicensureId();
-        }*/
-
-        // this.employeeService.currentUrl = '/employeesmodule/employeepages/app-employee-certification';
-        // this.route.queryParams
-        //     .filter(params => params.order)
-        //     .subscribe(params => {               
-        //         this.empId = params.order;
-        //         if (this.empId) {
-        //             this.nextbuttonEnable = true;
-        //         }
-        //         else {
-        //         }
-        //         //this.nextEnable();
-        //         this.firstName = params.firstname;
-        //         this.lastName = params.lastname;
-        //     });      
-       
-        // if (this.local) {
-        //     this.loadData();
-        //     // this.loadDataforCertification();
-        // }
+        
     }
     sourceEmployee: any = {};
     ngAfterViewInit() {
@@ -739,8 +698,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
                 }else{
                     this.gotnextClick()
                 }
-        }
-    
+        }    
     }
 
     redirectToTabWithoutSave(){
