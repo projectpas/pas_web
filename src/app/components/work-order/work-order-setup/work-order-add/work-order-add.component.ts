@@ -1079,15 +1079,11 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         this.alertService.showMessage('Work Order', 'Tech Name is required', MessageSeverity.error);
            this.isValidationfailed= true;
     }
-     if(!x.itemMasterId || x.itemMasterId==undefined){
+    if(!x.masterPartId.itemMasterId || x.masterPartId.itemMasterId==undefined || x.masterPartId.itemMasterId==null){
         this.alertService.showMessage('Work Order', 'MPN is required', MessageSeverity.error);
         this.isValidationfailed= true;
     }
-    // else if(!x.workOrderScopeId || x.workOrderScopeId==undefined){
-    //     this.alertService.showMessage('Work Order', 'Work Scope is required', MessageSeverity.error);
-    // }
-            })
-//  console.log("hellow propritu",generalInfo)
+})
  if(this.isValidationfailed==false){
         const data1 = {
             ...generalInfo,
