@@ -1153,7 +1153,8 @@ export class StockLineSetupComponent implements OnInit {
 
 	getUnitCostSalePrice() {
 		if (this.stockLineForm.itemMasterId && this.stockLineForm.conditionId != '0') {
-			const itemMasterId = getValueFromObjectByKey('value', this.stockLineForm.itemMasterId);
+			//const itemMasterId = getValueFromObjectByKey('value', this.stockLineForm.itemMasterId);
+			const itemMasterId = getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId)
 			const conditionId = this.stockLineForm.conditionId;
 			this.commonService.getPriceDetailsByCondId(itemMasterId, conditionId).subscribe(res => {
 				if (res) {					
