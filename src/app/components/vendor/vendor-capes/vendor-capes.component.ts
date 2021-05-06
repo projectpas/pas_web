@@ -401,30 +401,7 @@ export class VendorCapesComponent implements OnInit {
 			}, error => this.isSpinnerVisible = false) //this.saveFailedHelper(error))
     }
 
-    saveVendorCapes(){
-        // var errmessage = '';
-
-        // for (let i = 0; i < this.fieldArray.length; i++) {
-        //     this.alertService.resetStickyMessage();	
-        //     if(this.fieldArray[i].TAT == 0 || this.fieldArray[i].TAT == null) {	
-		// 		this.isSpinnerVisible = false;	
-		// 		errmessage = errmessage + "TAT values must be greater than zero."
-        //     }
-        //     if(this.fieldArray[i].cost == 0 || this.fieldArray[i].cost == null) {	
-        //         this.isSpinnerVisible = false;	
-        //         if(errmessage != '') {
-        //             errmessage = errmessage + '<br />' + "Cost values must be greater than zero."
-        //         }
-        //         else
-        //         {
-        //             errmessage = errmessage + "Cost values must be greater than zero."
-        //         }				
-        //     }
-        //     if(errmessage != '') {
-		// 		this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
-		// 		return;
-		//     }
-        // }
+    saveVendorCapes(){       
 
         const data = this.fieldArray.map(obj => {
             obj.isPMA = obj.isPMA;
