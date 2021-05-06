@@ -129,7 +129,12 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                         unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
                         extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
                         unitPrice: x.unitPrice ? formatNumberAsGlobalSettingsModule(x.unitPrice, 2) : '0.00',
-                        extendedPrice: x.extendedPrice ? formatNumberAsGlobalSettingsModule(x.extendedPrice, 2) : '0.00'
+                        extendedPrice: x.extendedPrice ? formatNumberAsGlobalSettingsModule(x.extendedPrice, 2) : '0.00',
+                        vendor : {
+                            vendorId: x.vendorId,
+                            vendorName: x.vendorName
+                        }
+                    
                     }
                 })
             }
@@ -187,7 +192,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
 
     onChargeTypeChange(event, charge): void {
         this.isSpinnerVisible = true;
-        var isTypeExist = this.workFlow.charges.filter(x => x.workflowChargeTypeId == charge.workflowChargeTypeId && x.taskId == this.workFlow.taskId);
+        var isTypeExist = this.workFlow.charges.filter(x =>x.isDeleted==false &&  x.workflowChargeTypeId == charge.workflowChargeTypeId && x.taskId == this.workFlow.taskId);
         this.chargesTypes.forEach((ct) => {
             if (ct.chargeId == charge.workflowChargeTypeId) {
                 charge.chargeType = ct.chargeType;

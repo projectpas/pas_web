@@ -20,19 +20,25 @@
     <tbody class="audithistory-cstm">
         <tr *ngFor="let audit of auditHistory; let i = index;">
             <ng-container *ngFor="let headername of auditHistoryHeader; let j = index;">
-            <td *ngIf="headername.field != 'isDeleted' && headername.field != 'createdDate' && headername.field != 'updatedDate' && headername.field != 'memo'"
+            <td *ngIf="headername.field != 'isActive' && headername.field != 'isDeleted' && headername.field != 'createdDate' && headername.field != 'updatedDate' && headername.field != 'memo'"
                 [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
                 {{audit[headername.field]}}</td>
                 <td *ngIf="headername.field == 'createdDate' || headername.field == 'updatedDate'  "
                 [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
                 {{audit[headername.field] | date: 'MM/dd/yyyy h:mm a'}}</td> 
-                <td *ngIf="headername.field == 'isActive'">
-                    <p style="background-color: #fff !important;"> <input type="checkbox"
-                                            name="isActive" [checked]="audit[headername.field]" disabled></p>
+                <td *ngIf="headername.field == 'isActive'" class="text-center width-60">
+                    <span class="value">
+                        <label class="wauto"> <input type="checkbox"
+                                            name="isActive" [checked]="audit[headername.field]" disabled>
+                        </label>
+                        </span>
                 </td>
-                <td *ngIf="headername.field == 'isDeleted'">
-                    <p style="background-color: #fff !important;"> <input type="checkbox"
-                                            name="isDeleted" [checked]="audit[headername.field]" disabled></p>
+                <td *ngIf="headername.field == 'isDeleted'" class="text-center width-60">
+                    <span class="value">
+                        <label class="wauto"> <input type="checkbox"
+                                            name="isDeleted" [checked]="audit[headername.field]" disabled>
+                                        </label>
+                                        </span>
                 </td>
                 <td *ngIf="headername.field == 'memo'" [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
                     <p class="m-0 p-0" [innerHTML]="audit[headername.field]"></p>

@@ -30,3 +30,7 @@
     background: #4298ff !important;
     color:#fff !important;
 }
+
+.print-pick-ticket-div {
+    float: right !important; margin-right: 10px !important;
+}

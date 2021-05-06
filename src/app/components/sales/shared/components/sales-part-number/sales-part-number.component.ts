@@ -66,6 +66,7 @@ export class SalesPartNumberComponent {
   legalEntity: number;
   isSpinnerVisible = false;
   isStockLineViewMode = false;
+  clearData = false;
   canSaveParts = false;
   priorities = [];
   saveButton = false;
@@ -267,6 +268,15 @@ export class SalesPartNumberComponent {
     }
   }
 
+  onSearchAnotherPN(event) {
+    this.show = false;
+    this.salesMarginModal.close();
+    if (!this.isEdit) {
+      this.selectedPart.selected = false;
+      this.openPartNumberClear(true);
+    }
+  }
+
   onClosePartDelete() {
     this.deletePartModal.close();
   }
@@ -300,6 +310,12 @@ export class SalesPartNumberComponent {
 
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
+    let contentPart = this.addPart;
+    this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+  }
+
+  openPartNumberClear(viewMode) {
+    this.clearData = viewMode;
     let contentPart = this.addPart;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }

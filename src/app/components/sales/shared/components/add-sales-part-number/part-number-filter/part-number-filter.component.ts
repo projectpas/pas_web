@@ -28,6 +28,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() allConditionInfo: any;
   @Input() parts: any = [];
   @Input() isStockLineViewMode = false;
+  @Input() clearData = false;
   @Input() selectedParts: any = [];
   @Input() selectedSummaryRow: SummaryPart;
   @Input() type: string;
@@ -101,7 +102,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
         this.query = data;
         this.calculate();
       });
-
+      
     if (this.selectedSummaryRow) {
       this.onPartNumberSelect(this.selectedSummaryRow);
       this.openSalesMarginWithSummaryRow(this.selectedSummaryRow);
@@ -111,6 +112,10 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       this.partEditDisable = true;
     } else {
       this.partEditDisable = false;
+    }
+
+    if (this.clearData) {
+      this.query = new ItemMasterSearchQuery;
     }
 
     this.bindPartsDroppdown('');

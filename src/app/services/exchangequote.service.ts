@@ -253,6 +253,7 @@ export class ExchangequoteService {
     partNumberObj.billingStartDate=selectedPart.billingStartDate;
     partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
     partNumberObj.daysForCoreReturn=selectedPart.daysForCoreReturn;
+    partNumberObj.exchangeOverhaulCost=selectedPart.exchangeOverhaulCost;
     partNumberObj.billingIntervalDays=formatStringToNumber(selectedPart.billingIntervalDays);
     partNumberObj.currencyId=selectedPart.currencyId;
     partNumberObj.currency=selectedPart.currency;

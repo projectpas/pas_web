@@ -62,8 +62,8 @@ export class ItemMasterEndpoint extends EndpointFactory {
     //post
     private readonly _itemPNMappingUrlNew: string = "/api/ItemMaster/PNIMMappingPost";
     private readonly _ItemMasterAircraftPostUrlNew: string = environment.baseUrl + "/api/ItemMaster/ItemMasterAircraftPost";
-    private readonly _ItemMasterATAPostUrlNew: string = environment.baseUrl +"/api/ItemMaster/ItemMasterATAPost";
-    private readonly _ItemMasterATAUpdateUrlNew: string = environment.baseUrl +"/api/ItemMaster/ItemMasterATAUpdate";
+    private readonly _ItemMasterATAPostUrlNew: string = environment.baseUrl + "/api/ItemMaster/ItemMasterATAPost";
+    private readonly _ItemMasterATAUpdateUrlNew: string = environment.baseUrl + "/api/ItemMaster/ItemMasterATAUpdate";
     private readonly _ItemMasterPurcSaleUrlNew: string = "/api/ItemMaster/ItemMasterPurcSalePost";
     //get
     private readonly _getAircraftMapped: string = environment.baseUrl + "/api/ItemMaster/getAircraftMapped";
@@ -243,7 +243,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getAircraftmodels<T>(id?): Observable<T> {
-        let url = `${this.getAircraftUrl}/${id!==undefined ? id : 1}`;
+        let url = `${this.getAircraftUrl}/${id !== undefined ? id : 1}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAircraftmodels(id));
@@ -266,11 +266,11 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getitemListEndpoint<T>(value): Observable<T> {
-        let url = `${this.listUrl}/${value}`;
+    getitemListEndpoint<T>(value, masterCompanyId): Observable<T> {
+        let url = `${this.listUrl}/${value}/${masterCompanyId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getitemListEndpoint(value));
+                return this.handleErrorCommon(error, () => this.getitemListEndpoint(value, masterCompanyId));
             });
     }
     getItemStockListEndPoint<T>(data): Observable<T> {
@@ -1090,7 +1090,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
                 return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
             })
     }
-    
+
     searchMultiPartNumbers<T>(searchParameters: any): Observable<T> {
         return this.http.post<T>(this.getSearchMulitPartNumberUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
             .catch(err => {
@@ -1120,8 +1120,8 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getalterqquparts<T>(itemMasterId: number,masterCompanyId?): Observable<T> {
-        let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}&&masterCompanyId=${masterCompanyId!==undefined ? masterCompanyId : 1}`;
+    getalterqquparts<T>(itemMasterId: number, masterCompanyId?): Observable<T> {
+        let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}&&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}`;
         return this.http
             .get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
@@ -1257,7 +1257,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getItemMasterAircraftMappedAudit?itemMasterAircraftMappingId=${id}`)
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterAircraftAuditHistory(id));
-            });            
+            });
     }
 
     getATAMappedAudit(id) {
@@ -1342,15 +1342,15 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getActivePartListByItemType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+    getActivePartListByItemType(type, masterCompanyId?) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId == undefined ? 1 : masterCompanyId}`)
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type,masterCompanyId));
+                return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type, masterCompanyId));
             });
     }
 
-    getItemMasterClassificationByType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+    getItemMasterClassificationByType(type, masterCompanyId?) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId == undefined ? 1 : masterCompanyId}`)
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterClassificationByType(type));
             });

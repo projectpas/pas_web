@@ -521,13 +521,13 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         //     }
         // })
         // if(this.isWorkFlow){
-            var materialObj = this.workFlow.materialList.find(x => x.partItem.partId == event.partId && x.taskId == this.workFlow.taskId);
+            var materialObj = this.workFlow.materialList.find(x =>x.isDeleted==false && x.partItem.partId == event.partId && x.taskId == this.workFlow.taskId);
             // var itemMasterId = this.partCollection.find(x => {
             //     if (x.partId == event.partId) {
             //         return x.partId
             //     }
             // })
-        // }
+        // } 
         if (materialObj != undefined) {
             if (this.workFlow.materialList) { 
                 // var isPartExcluded = this.workFlow.materialList.find(x =>  x.partId == event.partId && x.taskId == this.workFlow.taskId)
@@ -539,14 +539,27 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     material.masterCompanyId = '';
                     material.partName = '';
                     event = '';
-                    material.partItem='';
+                    material.conditionCodeId='';
+                    material.materialMandatoriesId='';
+                    material.provisionId='';
+                    material.quantity='';
+                    material.qtyOnHand='';
+                    material.qtyAvail='';
+                    material.itemClassification='';
+                    material.unitOfMeasure='';
+                    material.stockType='';
+                    material.unitCost="0.00";
+                    material.extendedCost="0.00";
+                    material.isDeferred=false;
+                    material.memo='';
+                    material.partItem=undefined;
                     this.alertService.showMessage("Workflow", "Part Number already exist in Material List.", MessageSeverity.error);
                     return;
                 // }
             }
         }
-        material.qtyOnHand = material.quantityOnHand;
-        material.qtyAvail = material.qtyAvailable;
+        material.qtyOnHand = event.quantityOnHand;
+        material.qtyAvail = event.qtyAvailable;
         material.itemMasterId = material.partItem.partId;
         material.partDescription = material.partItem.description;
         material.partNumber = material.partItem.partName; 
@@ -576,8 +589,28 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }
         }
     }
-    clearautoCompleteInput(currentRecord) {
-        currentRecord.partItem = undefined;
+    clearautoCompleteInput(material) {
+        material.partItem = undefined;
+        material.itemMasterId = '';
+        material.partDescription = '';
+        material.partItem = '';
+        material.itemClassificationId = '';
+        material.masterCompanyId = '';
+        material.partName = '';
+        material.partItem='';
+        material.conditionCodeId='';
+        material.materialMandatoriesId='';
+        material.provisionId='';
+        material.quantity='';
+        material.qtyOnHand='';
+        material.qtyAvail='';
+        material.itemClassification='';
+        material.unitOfMeasure='';
+        material.stockType='';
+        material.unitCost="0.00";
+        material.extendedCost="0.00";
+        material.isDeferred=false;
+        material.memo='';
     }
     provisionList() {
         this.isSpinnerVisible = true;

@@ -2356,9 +2356,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 for (let exclusion of workflow.exclusions) {
                     if(exclusion.itemMasterId ==0 || exclusion.itemMasterId =='' || exclusion.itemMasterId ==undefined){
                         this.errorValidate.push({'error':'Tool Name Not Added','task':workflow.ActionName,'attribute':'Exclusions'})
-                      }else if(exclusion.quantity == '' || exclusion.quantity == undefined || exclusion.quantity <=0){
-                                this.errorValidate.push({'error':'Quantity Not Added','task':workflow.ActionName,'attribute':'Exclusions'})
-                        }
+                      }
+                    //   else if(exclusion.quantity == '' || exclusion.quantity == undefined || exclusion.quantity <=0){
+                    //             this.errorValidate.push({'error':'Quantity Not Added','task':workflow.ActionName,'attribute':'Exclusions'})
+                    //     }
+                    //     else if(exclusion.unitCost == '' || exclusion.unitCost == undefined || exclusion.unitCost <=0){
+                    //         this.errorValidate.push({'error':'Unit Cost Not Added','task':workflow.ActionName,'attribute':'Charges'})
+                    // }
                 }
             }
             if (workflow.expertise != undefined) {

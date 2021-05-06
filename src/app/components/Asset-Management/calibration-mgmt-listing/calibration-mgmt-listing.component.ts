@@ -191,6 +191,7 @@ currentDate = new Date();
     data.filters.isDeleted=isdelete
         data.filters['status'] = this.status ? this.status : 'Active';
         data.filters['certifytype'] = this.Certifytype ? this.Certifytype : 'calibration';
+        data.filters.masterCompanyId= this.authService.currentUser.masterCompanyId;
         data.globalFilter= data.globalFilter ? data.globalFilter : '';
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
       this.isSpinnerVisible=true;
