@@ -1,5 +1,5 @@
 ﻿<div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title"></h4>
+    <!-- <h4 class="modal-title" id="modal-basic-title"></h4> -->
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 </div>
 <div class="modal-content" id="soPickTicket">
@@ -8,16 +8,17 @@
         <form id="" name="" action="#" method="post" onsubmit="return false;">
             <div class="image">
                 <div style="padding: 0; margin: 0;">
-                    <div>
+                    <!-- <div> -->
                         <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
-                            <div class="pick-ticket-header" style="margin-bottom: 15px;">
+                            <!-- <div class="pick-ticket-header" style="margin-bottom: 15px;">
                                 <h4>SALES ORDER PICK TICKET</h4>
-                            </div>
-                            <div class="very-first-block">
+                            </div> -->
+                            <div class="col-sm-12 invoice-border"  style="border-bottom:1px solid">
+                            <div class="col-sm-8 very-first-block">
                                 <div class="col-sm-12 address-block">
-                                    <div class="col-sm-12 first-block-name"><img class="logo"
-                                            src="{{this.endPointURL + this.management.logo}}" height="30px"
-                                            width="100px" /></div>
+                                    <div class="col-sm-6"><img class="logo"
+                                            src="{{this.endPointURL + this.management.logo}}"  /></div>
+                                            <div class="col-sm-6">
                                     <div class="col-sm-12 first-block-name">
                                         <!-- <label class="col-sm-3 first-block-label"><b>Tagline :</b></label> -->
                                         <label class="col-sm-12 first-block-label"
@@ -49,42 +50,45 @@
                                         <label class="col-sm-12 first-block-label"
                                             disabled>{{this.management.postalCode}}</label>
                                     </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="second-block">
+                            <div class="col-sm-4 second-block border-height" style="height:166px;margin-top:-2px">
+                                <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">INVOICE</h3>
                                 <div class="second-block-div">
-                                    <label class="col-sm-4 second-block-label"><b>Pick Ticket Num</b></label>
-                                    <label class="col-sm-4 second-block-label" style="width:30%"
+                                    <label class="col-sm-6 second-block-label" style="width:100%">Pick Ticket Num</label>
+                                    <label class="col-sm-6 second-block-label" style="width:100%"
                                         disabled>{{this.salesOrder.soPickTicketNumber}}</label>
                                 </div>
                                 <div class="second-block-div">
-                                    <label class="col-sm-4 second-block-label"> Date & time</label>
-                                    <label class="col-sm-6 second-block-label"
+                                    <label class="col-sm-6 second-block-label" style="width:100%"> Date & time</label>
+                                    <label class="col-sm-6 second-block-label" style="width:100%"
                                         disabled>{{this.salesOrder.ptCreatedDate | date:'medium' }}</label>
                                 </div>
                                 <div class="second-block-div">
-                                    <label class="col-sm-4 second-block-label">SO Num</label>
-                                    <label class="col-sm-4 second-block-label" style="width:60%"
+                                    <label class="col-sm-6 second-block-label" style="width:60%">SO Num</label>
+                                    <label class="col-sm-6 second-block-label" style="width:60%"
                                         disabled>{{this.salesOrder.salesOrderNumber}}</label>
                                 </div>
                                 <div class="second-block-div">
-                                    <label class="col-sm-4 second-block-label">Ship Via</label>
-                                    <label class="col-sm-4 second-block-label" style="width:60%"
+                                    <label class="col-sm-6 second-block-label" style="width:60%">Ship Via</label>
+                                    <label class="col-sm-6 second-block-label" style="width:60%"
                                         disabled>{{this.salesOrder.shipViaName}}</label>
                                 </div>
                                 <div class="second-block-div">
-                                    <label class="col-sm-4 second-block-label">Date/Time Printed</label>
-                                    <label class="col-sm-6 second-block-label"
+                                    <label class="col-sm-6 second-block-label" style="width:100%">Date/Time Printed</label>
+                                    <label class="col-sm-6 second-block-label" style="width:100%"
                                         disabled>{{todayDate| date:'medium' }}</label>
                                 </div>
                                 <div class="second-block-div">
-                                    <label class="col-sm-4 second-block-label">Page</label>
-                                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>1 of 1</label>
+                                    <label class="col-sm-6 second-block-label" style="width:100%">Page</label>
+                                    <label class="col-sm-6 second-block-label" style="width:60%" disabled>1 of 1</label>
                                 </div>
                             </div>
-                            <div class="col-sm-12" style="margin-top:2%">
-                                <div class="first-block-sold col-sm-6">
-                                    <label><b>Sold To:</b></label>
+                            </div>
+                            <div class="col-sm-12 first-block-sold-bottom" style="border-bottom:1px solid black;margin-top:-2px">
+                                <div class="first-block-sold col-sm-6" style="border-right:1px solid black !important;height:180px">
+                                    <label class="label-margin"><b>Sold To:</b></label>
                                     <div class="first-block-sold-to">
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-5 first-block-label"><b>Name :</b></label> -->
@@ -124,7 +128,7 @@
                                     </div>
                                 </div>
                                 <div class="first-block-ship col-sm-6">
-                                    <label><b> Ship To:</b></label>
+                                    <label class="label-margin"><b> Ship To:</b></label>
                                     <div class="first-block-ship-to">
                                         <div class="ship-block-div">
                                             <!-- <label class="col-sm-5 first-block-label"><b>Name :</b></label> -->
@@ -165,10 +169,10 @@
                                 </div>
                             </div>
                             <div class="clear"></div>
-                            <hr />
+                            <!-- <hr /> -->
                             <div class="clear"></div>
                             <div class="col-sm-12">
-                                <table rules=none class="parttable" style="width:99%;margin-left:5px;">
+                                <table rules=none class="parttable table-margins">
                                     <thead>
                                         <tr>
                                             <th>Line Num</th>
@@ -181,52 +185,52 @@
                                     <tbody>
                                         <ng-container *ngFor="let part of this.parts let i=index">
                                             <tr>
-                                                <td style="border-left:1px solid white"></td>
+                                                <td ></td>
                                                 <td></td>
+                                                <td style="border-right-color: white !important;"></td>
                                                 <td></td>
+                                                <td style="border-right-color: white !important;"> </td>
+                                                <td style="border-right-color: white !important;"></td>
                                                 <td></td>
-                                                <td> </td>
+                                                <td style="border-right-color: white !important;"></td>
                                                 <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td style="border:1px solid white"></td>
                                             </tr>
                                             <tr>
-                                                <td style="border:1px solid black">{{i+1}}</td>
+                                                <td>{{i+1}}</td>
                                                 <td> PN: {{part.partNumber}}</td>
-                                                <td>UOM: {{part.uom}}</td>
+                                                <td style="border-right-color: white !important;">UOM: {{part.uom}}</td>
                                                 <td>Cond: {{part.conditionDescription}}</td>
-                                                <td> Priority: {{part.priorityName}} </td>
-                                                <td>Qty OH: {{part.quantityOnHand}}</td>
+                                                <td style="border-right-color: white !important;"> Priority: {{part.priorityName}} </td>
+                                                <td style="border-right-color: white !important;">Qty OH: {{part.quantityOnHand}}</td>
                                                 <td>Qty Avl: {{part.qtyAvailable}}</td>
-                                                <td>Qty to Pick: {{part.qtyToPick}}</td>
-                                                <td style="border:1px solid white">Qty Picked: {{part.qtyShipped}}</td>
+                                                <td style="border-right-color: white !important;">Qty to Pick: {{part.qtyToPick}}</td>
+                                                <td >Qty Picked: {{part.qtyShipped}}</td>
                                             </tr>
                                             <tr>
-                                                <td style="border:1px solid black">
+                                                <td>
                                                     <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
                                                     class="image" /> -->
                                                     <img src="{{part.partBarcode}}" alt="barcode" width="98%" />
                                                 </td>
                                                 <td> PN Description: {{part.partDescription}}</td>
-                                                <td>Site: {{part.siteName}}</td>
+                                                <td style="border-right-color: white !important;">Site: {{part.siteName}}</td>
                                                 <td></td>
-                                                <td> Warehouse: {{part.warehouseName}} </td>
-                                                <td>Location: {{part.locationName}}</td>
+                                                <td style="border-right-color: white !important;"> Warehouse: {{part.warehouseName}} </td>
+                                                <td style="border-right-color: white !important;">Location: {{part.locationName}}</td>
                                                 <td></td>
-                                                <td>Shelf: {{part.shelfName}}</td>
-                                                <td style="border:1px solid white"> Bin: {{part.binName}} </td>
+                                                <td style="border-right-color: white !important;">Shelf: {{part.shelfName}}</td>
+                                                <td> Bin: {{part.binName}} </td>
                                             </tr>
                                             <tr>
-                                                <td style="border-left:1px solid white"></td>
+                                                <td></td>
                                                 <td> Serial Num: {{part.serialNumber}}</td>
-                                                <td>SL Num: {{part.stockLineNumber}}</td>
+                                                <td style="border-right-color: white !important;">SL Num: {{part.stockLineNumber}}</td>
                                                 <td>Cntrl #: {{part.controlNumber}}</td>
-                                                <td> </td>
-                                                <td>ID #: {{part.idNumber}}</td>
+                                                <td style="border-right-color: white !important;"> </td>
+                                                <td style="border-right-color: white !important;">ID #: {{part.idNumber}}</td>
                                                 <td></td>
+                                                <td style="border-right-color: white !important;"></td>
                                                 <td></td>
-                                                <td style="border-right:1px solid white"></td>
                                             </tr>
                                             <tr>
                                                 <td style="border:1px solid black" rowspan="2" colspan="9">
@@ -282,10 +286,10 @@
 
                             </div>
                             <div class="clear"></div>
-                            <hr />
+                            <!-- <hr /> -->
                             <div class="clear"></div>
                         </form>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </form>

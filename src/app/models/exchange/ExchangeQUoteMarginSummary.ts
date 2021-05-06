@@ -11,4 +11,5 @@ export class ExchangeQUoteMarginSummary {
     marginAmount:number=0;
     marginPercentage:number=0;
     totalEstCost:number=0;
+    freightAmount:number=0;
 }

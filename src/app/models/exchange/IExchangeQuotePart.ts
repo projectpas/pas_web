@@ -66,6 +66,7 @@ export interface IExchangeQuotePart {
     exchangeOutrightPrice: number;
     daysForCoreReturn: number;
     billingIntervalDays: string;
+    exchangeOverhaulCost:number;
     currencyId: number;
     currency: string;
     depositeAmount: number;
