@@ -1,6 +1,6 @@
 import { CommonService } from '../../../../services/common.service';
 import { SalesOrderService } from '../../../../services/salesorder.service';
-import { Component, OnInit,Input,ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MenuItem } from "primeng/api";
 import { PickTicket } from "../../../../models/PickTicket";
@@ -13,13 +13,13 @@ import { DatePipe } from "@angular/common";
 import { WorkOrderPickticketprintComponent } from "../work-order-pickticketprint/work-order-pickticketprint.component";
 declare var $: any;
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
-import {AppModuleEnum} from "../../../../enum/appmodule.enum";
+import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 
 @Component({
   selector: 'app-work-order-pickticket',
   templateUrl: './work-order-pickticket.component.html',
   styleUrls: ['./work-order-pickticket.component.scss'],
- // encapsulation: ViewEncapsulation.None
+  // encapsulation: ViewEncapsulation.None
 })
 export class WorkOrderPickticketComponent implements OnInit {
   //@Input() moduleId;
@@ -40,7 +40,7 @@ export class WorkOrderPickticketComponent implements OnInit {
   pageSize: number = 10;
   pageIndex: number = 0;
   first = 0;
-  moduleId : number =15;
+  moduleId: number = 15;
   showPaginator: boolean = false;
   isSpinnerVisible: boolean = true;
   partColumns: any[];
@@ -53,11 +53,11 @@ export class WorkOrderPickticketComponent implements OnInit {
   viewType: any = 'detailedview';
   breadcrumbs: MenuItem[];
   home: any;
-  isEdit : boolean = false;
-  isView : boolean = false;
+  isEdit: boolean = false;
+  isView: boolean = false;
   //salesOrderId: any;
   searchParameters: any;
-  PickTicketDetails = new PickTicket(); 
+  PickTicketDetails = new PickTicket();
   disableSave: boolean = true;
   pickticketauditHistory: any[] = [];
   pickTicketItemInterfaceheader: any[];
@@ -71,15 +71,13 @@ export class WorkOrderPickticketComponent implements OnInit {
     private modalService: NgbModal,
     private alertService: AlertService,
     private datePipe: DatePipe,
-    private commonService:CommonService
+    private commonService: CommonService,
+    private workOrderService: WorkOrderService
   ) { }
 
-  ngOnInit() 
-  {
+  ngOnInit() {
     //this.isSpinnerVisible = true;
     this.initColumns();
-    this.referenceId = 64;
-    this.moduleId=15;
     this.onSearch();
     //this.isSpinnerVisible = false;
   }
@@ -140,8 +138,8 @@ export class WorkOrderPickticketComponent implements OnInit {
   }
   onSearch() {
     //this.isSpinnerVisible = true;
-    this.commonService
-      .getPickTicketList(this.referenceId,this.moduleId)
+    this.workOrderService
+      .getPickTicketList(this.referenceId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         //this.pickTickes = response[0];
@@ -267,11 +265,11 @@ export class WorkOrderPickticketComponent implements OnInit {
     const orderPartId = rowData.orderPartId;
     this.qtyToPick = rowData.qtyToPick;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
-    this.commonService
-      .getStockLineforPickTicket(itemMasterId, conditionId, referenceId,this.moduleId)
+    this.workOrderService
+      .getStockLineforPickTicket(itemMasterId, conditionId, referenceId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
-        this.parts = response[0];
+        this.parts = response;
         for (let i = 0; i < this.parts.length; i++) {
           if (this.parts[i].oemDer == null)
             this.parts[i].oemDer = this.parts[i].stockType;
@@ -306,6 +304,7 @@ export class WorkOrderPickticketComponent implements OnInit {
       this.disableSubmitButton = false;
     }
   }
+
   savepickticketiteminterface(parts) {
     let tempParts = [];
     let invalidQty = false;
@@ -332,11 +331,11 @@ export class WorkOrderPickticketComponent implements OnInit {
     if (invalidQty) {
       this.isSpinnerVisible = false;
       this.alertService.resetStickyMessage();
-      this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
+      this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
     }
     else {
       this.disableSubmitButton = true;
-      this.salesOrderService
+      this.workOrderService
         .savepickticketiteminterface(parts)
         .subscribe(data => {
           this.alertService.stopLoadingMessage();
@@ -350,7 +349,7 @@ export class WorkOrderPickticketComponent implements OnInit {
         }, error => this.isSpinnerVisible = false);
     }
   }
-  
+
   confirmselected: number;
   ptNumber: number;
   confirmedById: any;
@@ -380,7 +379,7 @@ export class WorkOrderPickticketComponent implements OnInit {
     //this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
-  
+
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
     const pickTicketId = rowData.pickTicketId;
     const referenceId = rowData.referenceId;
