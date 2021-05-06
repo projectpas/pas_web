@@ -349,9 +349,6 @@ export class CustomerWorkEditComponent {
         }
         this.loadMasterCompanies();
         this.modal = this.modalService.open(content, { size: 'sm' });
-        this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
     }
 
     openHelpText(content) {

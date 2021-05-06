@@ -526,6 +526,7 @@ setTimeout(() => {
                         mappingItemMasterId: getObjectById('mappingItemMasterId', x.mappingItemMasterId, x.revisedParts),
                         masterPartId: x.woPart,
                         customerRequestDate: x.customerRequestDate ? new Date(x.customerRequestDate) : null,
+                        receivedDate: x.receivedDate ? new Date(x.receivedDate) : null,
                         estimatedCompletionDate: (x.estimatedCompletionDate) ? new Date(x.estimatedCompletionDate) : new Date(x.customerRequestDate),
                         estimatedShipDate: (x.estimatedShipDate) ? new Date(x.estimatedShipDate) : new Date(x.customerRequestDate),
                         promisedDate: (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate),
@@ -1218,15 +1219,14 @@ setTimeout(() => {
                 }
             });
             this['cmmPublicationList'+index]=this.cmmList;
-            console.log("disnamicCm",this['dynamicWorkflowList'+index])
             if (this.cmmList &&  this['cmmPublicationList' + index].length > 0) {
                 currentRecord.cMMId =  this['cmmPublicationList' + index][0].value;
                 this.workOrderGeneralInformation.partNumbers[index].cMMId =  this['cmmPublicationList' + index][0].value;
 
-                // if(this.cmmList[0].publicatonExpirationDate){
-                // this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmList[0].publicatonExpirationDate;
-                // this.showWaringForPubWorkflow();
-                // }
+                if(this.cmmList && this.cmmList[0].expirationDate){
+                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmList[0].expirationDate;
+                this.showWaringForPubWorkflow();
+                }
             }
         },
             err => {
@@ -1300,15 +1300,20 @@ setTimeout(() => {
          if(res && res.length!=0){
             this.workFlowList = res.map(x => {
                 return {
+                    ...x,
                     label: x.workFlowNo,
                     value: x.workFlowId
                 }
             })
+            
             this['dynamicWorkflowList' + index]=this.workFlowList;
-            console.log("disnamicCm",this['dynamicWorkflowList' + index])
             if(this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length!=0){
                 this.workFlowId=this.workFlowList[0].value;
                 this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
+                if(this.workFlowList && this.workFlowList[0].expirationDate){
+                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.workFlowList[0].expirationDate;
+                this.showWaringForPubWorkflow();
+                }
             }
             // workOrderPart.workflowId = this.workFlowList[0].value;
         
@@ -3254,15 +3259,16 @@ this.woPartId=rowData.id;
     viewWorkflow(workOrderPartNumber){
         this.currentWorkflowId=workOrderPartNumber.workflowId;
     }
-    workflowTransfer:any={}
-    tranferCheckbox(ev,currentRecord){
+    workflowTransfer:any={};
+    currentRowIndex:any;
+    tranferCheckbox(ev,currentRecord,currentIndex){
+        this.currentRowIndex=currentIndex;
         if (ev.target.checked) {
             $('#workFlowTransfer').modal('show'); 
 
         }
         this.workFlowId=currentRecord.workflowId;
         this.workOrderId=this.workOrderId ? this.workOrderId :currentRecord.workOrderId;
-        console.log("ev",ev.target.checked,currentRecord)
    
     }
     taskComletedByConfirmation(ev){
@@ -3292,6 +3298,9 @@ this.woPartId=rowData.id;
         data.createdBy = this.userName;
 
         this.workOrderService.transferWorkflow(data).subscribe(res => {
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
+            this.showWaringForPubWorkflow();
+            
             this.alertService.showMessage(
                 this.moduleName,
                 'Transfered WorkflowData to Work Order',
@@ -3299,6 +3308,11 @@ this.woPartId=rowData.id;
             ); 
         });
     }
+    closeTranferFlow(){
+        this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
+        $('#workFlowTransfer').modal('hide');
+    }
+    publicatonExpirationDate:any;
     showWaringForPubWorkflow(){
         if(!this.isView){
             setTimeout(() => { 

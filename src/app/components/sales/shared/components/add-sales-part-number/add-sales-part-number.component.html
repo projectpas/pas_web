@@ -8,11 +8,11 @@
   <div class="modal-body">
     <app-customer-detail [salesQuote]="salesQuote"></app-customer-detail>
     <app-part-number-filter [salesQuote]="salesQuote" [parts]="parts" [allConditionInfo]="allConditionInfoArray"
-      [selectedParts]="selectedParts" [isStockLineViewMode]="isStockLineViewMode" (onPartSearch)="onPartSearch($event)"
+      [selectedParts]="selectedParts" [isStockLineViewMode]="isStockLineViewMode" [clearData]="clearData" (onPartSearch)="onPartSearch($event)"
       [selectedSummaryRow]="selectedSummaryRow" (onSearchTypeChange)="onSearchTypeChange($event)" [type]="type">
     </app-part-number-filter>
     <ng-container>
-      <app-part-details [parts]="parts" [query]="query" (select)="onSelect($event)"
+      <app-part-details [parts]="parts" [query]="query" (select)="onSelect($event)" [clearData]="clearData"
         [isStockLineViewMode]="isStockLineViewMode" (onPartSelect)="onShowModalMargin($event)"></app-part-details>
     </ng-container>
   </div>

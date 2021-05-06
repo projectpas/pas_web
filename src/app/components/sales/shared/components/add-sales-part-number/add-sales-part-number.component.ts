@@ -18,6 +18,7 @@ import { AuthService } from "../../../../../services/auth.service";
 export class AddSalesPartNumberComponent implements OnInit {
   @Input() selectedSummaryRow: SummaryPart;
   @Input() isStockLineViewMode = false;
+  @Input() clearData = false;
   @Input() display: boolean;
   @Input() customer: any;
   @Input() salesQuote: ISalesQuote;

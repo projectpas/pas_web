@@ -37,10 +37,10 @@
         <tr class="material-tr" [hidden]="material.isDeleted"
           *ngFor="let material of workFlow.materialList; let i = index" id="row_{{i}}">
           <td *ngIf="!isWorkFlow">
-            <select class="form-control wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
+            <select class="form-control wf-pub-id qtyWidth text_tranform" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
               name="task_{{ i }}" required (change)="onTaskChange(material)">
-              <option value="">Select </option>
-              <option *ngFor="let task of taskList" [value]="task.taskId">{{
+              <!-- <option value="">Select </option> -->
+              <option *ngFor="let task of taskList"  [value]="task.taskId">{{
                 task.description
                 }}</option>
             </select> 
@@ -61,12 +61,12 @@
               </div>
             </div>
           </td>
-          <td class="min-width-150">
+          <td class="min-width-250">
             {{ material.partDescription }}
           </td>
           <td>
-            <p-dropdown placeholder="--Select--" (ngModelChange)="getActive()" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
-              (onChange)="getPNDetails(material)" class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.conditionCodeId"
+            <p-dropdown placeholder="--Select--" (ngModelChange)="getActive()" id="mat_condition" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
+              (onChange)="getPNDetails(material)" class="p-dropdown-1001"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.conditionCodeId"
               required>
             </p-dropdown>
           </td>
