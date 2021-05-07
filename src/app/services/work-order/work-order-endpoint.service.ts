@@ -209,6 +209,11 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getWorkOrderList(data));
         });
     }
+    WorkOrderROlist(data) {
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/WorkOrderROlist`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.WorkOrderROlist(data));
+        });
+    }
     getWorkOrderGlobalSearch(value, pageIndex, pageSize) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woglobalsearch?filterText=${value}&pageNumber=${pageIndex}&pageSize=${pageSize}`).catch(error => {
             return this.handleErrorCommon(error, () => this.getWorkOrderGlobalSearch(value, pageIndex, pageSize));

@@ -95,7 +95,7 @@
                                 <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER"
-                                            (ngModelChange)="enableSave()" disabled>
+                                            (ngModelChange)="enableSave()" [checked]="stockLineForm.isDER == true" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         DER
                                     </label>

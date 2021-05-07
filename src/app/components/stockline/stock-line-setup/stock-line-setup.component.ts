@@ -1092,6 +1092,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
 			this.stockLineForm.daysReceived = partDetails.daysReceived;
 			this.stockLineForm.openDays = partDetails.openDays;
+			this.stockLineForm.isDER = partDetails.isDER;
 			this.stockLineForm.siteId = this.getInactiveObjectOnEdit('value', partDetails.siteId, this.allSites, 'Site', 'SiteId', 'Name');
 			this.getWareHouseList(partDetails.siteId);
 			this.getLocationList(partDetails.warehouseId);
