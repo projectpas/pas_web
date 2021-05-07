@@ -1,0 +1,200 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive default-bg clear">
+      <div class="col-md-3">
+        <p><span class="label"><b>Quote Type <span class="clr-red">*</span> : </b></span>
+          <span class="value">
+            {{exchangeQuote.typeName ? exchangeQuote.typeName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Exchange Quote Num: </b></span>
+          <span class="value">
+            {{exchangeQuote.exchangeQuoteNumber ? exchangeQuote.exchangeQuoteNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Version Num: </b></span>
+          <span class="value">
+            {{exchangeQuote.versionNumber ? exchangeQuote.versionNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Open Date <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{exchangeQuote.openDate | date: 'MM/dd/yyyy'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Ref <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{exchangeQuote.customerReference}}
+          </span>
+        </p>
+        <!-- <p><span class="label"><b>Valid For (Days) <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{exchangeQuote.validForDays ? salesQuote.validForDays : '-'}}
+          </span>
+        </p> -->
+        <p><span class="label"><b>Quote Exp Date <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{exchangeQuote.quoteExpireDate | date: 'MM/dd/yyyy'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Exchange Quote Status: </b></span>
+          <span class="value">{{exchangeQuote.status ? exchangeQuote.status :'-'}}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p><span class="label"><b>Customer Name <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{exchangeQuote.customerName ? exchangeQuote.customerName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Contact <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{exchangeQuote.customerContactName ? exchangeQuote.customerContactName :'-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Cust Email: </b></span>
+          <span class="value">
+            {{exchangeQuote.customerContactEmail ? exchangeQuote.customerContactEmail : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Credit Limit: </b></span>
+          <span class="value">
+            {{ exchangeQuote.creditLimit | twoDecimalGlobalNumberFormatPipe}}
+          </span>
+        </p>
+        <p><span class="label"><b>Credit Terms: </b></span>
+          <span class="value">
+            {{exchangeQuote.creditTerms ? exchangeQuote.creditTerms : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Salesperson: </b></span>
+          <span class="value">{{exchangeQuote.salesPersonName ? exchangeQuote.salesPersonName : '-'}}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+  <p-tabPanel header="Parts List">
+    <app-exchange-quote-part-number [exchangeQuote]="exchangeQuote" [isViewMode]="true"></app-exchange-quote-part-number>
+  </p-tabPanel>
+  <p-tabPanel header="Internal Approvers">
+    <app-exchange-quote-approve>
+    </app-exchange-quote-approve>
+  </p-tabPanel>
+  <p-tabPanel header="Approver Process">
+    <app-exchange-quote-customer-approval *ngIf="isEdit == true" [exchangeQuoteView]="exchangeQuoteView"
+                  [isViewMode]="false" [customerContactList]="customerContactList" [marginSummary]="marginSummary"
+                  (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
+                </app-exchange-quote-customer-approval>
+  </p-tabPanel>
+  <p-tabPanel header="Address">
+    <div class="table-responsive default-bg clear">
+      <div class="col-sm-4">
+        <h5 class="po-head">Ship To</h5>
+        <p><span class="label"><b>User Type: </b></span><span
+            class="value">{{exchangeQuote.shipToUserType ? exchangeQuote.shipToUserType : '-'}}</span></p>
+        <p><span class="label"><b>{{exchangeQuote.shipToUserType}} Name: </b></span><span
+            class="value">{{exchangeQuote.shipToUser ? exchangeQuote.shipToUser : '-'}}</span></p>
+        <p><span class="label"><b>Site Name: </b></span><span
+            class="value">{{exchangeQuote.shipToSiteName ? exchangeQuote.shipToSiteName : '-'}}</span></p>
+        <p><span class="label"><b>Address: </b></span><span
+            class="value">{{exchangeQuote.shipToAddress1 ? exchangeQuote.shipToAddress1 : '-'}}</span></p>
+        <!-- <p><span class="label"><b>Address2: </b></span><span
+            class="value">{{exchangeQuote.shipToAddress2 ? exchangeQuote.shipToAddress2 : '-'}}</span></p>
+        <p><span class="label"><b>Address3: </b></span><span
+            class="value">{{exchangeQuote.shipToAddress3 ? exchangeQuote.shipToAddress3 : '-'}}</span></p> -->
+        <p><span class="label"><b>City: </b></span><span
+            class="value">{{exchangeQuote.shipToCity ? exchangeQuote.shipToCity : '-'}}</span></p>
+        <p><span class="label"><b>Primary State/Province: </b></span><span
+            class="value">{{exchangeQuote.shipToState ? exchangeQuote.shipToState : '-'}}</span></p>
+        <p><span class="label"><b>Postal: </b></span><span
+            class="value">{{exchangeQuote.shipToPostalCode ? exchangeQuote.shipToPostalCode : '-'}}</span></p>
+        <p><span class="label"><b>Country: </b></span><span
+            class="value">{{exchangeQuote.shipToCountry ? exchangeQuote.shipToCountry : '-'}}</span></p>
+        <p><span class="label"><b>Contact Name: </b></span><span
+            class="value">{{exchangeQuote.shipToContactName ? exchangeQuote.shipToContactName : '-'}}</span></p>
+        <p><span class="label"><b>Memo: </b></span><span class="value">
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="exchangeQuote.shipViaMemo"></p>
+
+
+          </span></p>
+        <p><span class="label"><b>Ship Via: </b></span><span
+            class="value">{{exchangeQuote.shipViaName ? exchangeQuote.shipViaName : '-'}}</span></p>
+        <p><span class="label"><b>Shipping Acct Info: </b></span><span
+            class="value">{{exchangeQuote.shipViaShippingAccountInfo ? exchangeQuote.shipViaShippingAccountInfo : '-'}}</span>
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <h5 class="po-head">Bill To</h5>
+        <p><span class="label"><b>User Type: </b></span><span
+            class="value">{{exchangeQuote.billToUserType ? exchangeQuote.billToUserType : '-'}}</span></p>
+        <p><span class="label"><b>{{exchangeQuote.billToUserType}} Name: </b></span><span
+            class="value">{{exchangeQuote.billToUser ? exchangeQuote.billToUser : '-'}}</span></p>
+        <p><span class="label"><b>Site Name: </b></span><span
+            class="value">{{exchangeQuote.billToSiteName ? exchangeQuote.billToSiteName : '-'}}</span></p>
+        <p><span class="label"><b>Address: </b></span><span
+            class="value">{{exchangeQuote.billToAddress1 ? exchangeQuote.billToAddress1 : '-'}}</span></p>
+        <!-- <p><span class="label"><b>Address2: </b></span><span
+            class="value">{{exchangeQuote.billToAddress2 ? exchangeQuote.billToAddress2 : '-'}}</span></p>
+        <p><span class="label"><b>Address3: </b></span><span
+            class="value">{{exchangeQuote.billToAddress3 ? exchangeQuote.billToAddress3 : '-'}}</span></p> -->
+        <p><span class="label"><b>City: </b></span><span
+            class="value">{{exchangeQuote.billToCity ? exchangeQuote.billToCity : '-'}}</span></p>
+        <p><span class="label"><b>Primary State/Province: </b></span><span
+            class="value">{{exchangeQuote.billToState ? exchangeQuote.billToState : '-'}}</span></p>
+        <p><span class="label"><b>Postal: </b></span><span
+            class="value">{{exchangeQuote.billToPostalCode ? exchangeQuote.billToPostalCode : '-'}}</span></p>
+        <p><span class="label"><b>Country: </b></span><span
+            class="value">{{exchangeQuote.billToCountry ? exchangeQuote.billToCountry : '-'}}</span></p>
+        <p><span class="label"><b>Contact Name: </b></span><span
+            class="value">{{exchangeQuote.billToContactName ? exchangeQuote.billToContactName : '-'}}</span></p>
+        <p><span class="label"><b>Memo: </b></span><span class="value">
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="exchangeQuote.billToMemo"></p>
+          </span></p>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Freight">
+    <app-exchange-quote-freight [freightForm]="freight" [customerId]="customerId"
+                    [exchangeQuoteId]="exchangeQuote.exchangeQuoteId"
+                    (saveFreightListForSO)="saveExchangeQuoteFreightsList($event)"
+                    (updateFreightListForSO)="updateExchangeQuoteFreightsList($event)"
+                    (refreshData)="getFreightList()" [markupList]="markupList" [isView]="false"
+                    [isQuote]="true" [buildMethodDetails]="buildMethodDetails">
+                </app-exchange-quote-freight>
+  </p-tabPanel>
+  <p-tabPanel header="Charges">
+    <app-exchange-quote-charges [chargeForm]="charge" [customerId]="customerId"
+                    [exchangeQuoteId]="exchangeQuote.exchangeQuoteId"
+                    (saveChargesListForSO)="saveExchangeQuoteChargesList($event)"
+                    (updateChargesListForSO)="updateExchangeQuoteChargesList($event)"
+                    [markupList]="markupList" [isView]="false"
+                    [isQuote]="true">
+                </app-exchange-quote-charges>
+  </p-tabPanel>
+  <p-tabPanel header="Hypothethical Analysis">
+    <app-exchange-quote-analysis>
+    </app-exchange-quote-analysis>
+  </p-tabPanel>
+  <!-- <p-tabPanel header="Document">
+    <!-- <app-salesQuote-documents [isEditMode]="false" [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" [viewMode]="true">
+    </app-salesQuote-documents> -->
+    <!-- <app-common-documents [moduleName]="moduleName" [referenceId]="exchangeQuote.exchangeQuoteId" [isViewMode]="true"
+      [offLineUpload]="false"></app-common-documents>
+  </p-tabPanel> -->
+</p-tabView>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
