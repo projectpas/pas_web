@@ -44,7 +44,7 @@
     </div>
 </div>
 <div *ngIf="ispickticket">
-    <app-work-order-pickticket [referenceId]="workOrderId"></app-work-order-pickticket>
+    <app-work-order-pickticket [referenceId]="this.savedWorkOrderData.workOrderId"></app-work-order-pickticket>
 </div> 
 <div *ngIf="!ispickticket">
     <p-table class="rpo-table-cstm rro-table-cstm ptable-f10" id="custome_material" [columns]="cols" #materialTble

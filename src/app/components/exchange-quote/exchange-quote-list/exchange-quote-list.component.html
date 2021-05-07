@@ -181,10 +181,10 @@
                   </td>
                   <td class="action-icons-cstm table-column-width">
                       <div *ngIf="currentDeletedstatus==false">
-                          <!-- <span>
-                              <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
+                          <span>
+                              <a class="btn nobg" (click)="viewSelectedRow(viewExchangeQuote,rowData)" matTooltip="View"
                                   matTooltipPosition="above"><i class="fa fa-eye"></i></a>
-                          </span> -->
+                          </span>
                           <span>
                               <a (click)="openExchangeQuoteToEdit(rowData)" matTooltip="Edit" class="btn nobg"
                                   [class.disabled]="rowData.status === 'Closed' || rowData.status === 'Expired'"
@@ -207,10 +207,10 @@
                           </span>
                       </div>
                       <div *ngIf="currentDeletedstatus==true">
-                          <!-- <span>
-                              <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
+                          <span>
+                              <a class="btn nobg" (click)="viewSelectedRow(viewExchangeQuote,rowData)" matTooltip="View"
                                   matTooltipPosition="above"><i class="fa fa-eye"></i></a>
-                          </span> -->
+                          </span>
                           <span>
                               <a class="btn nobg btn-hist-cstm" (click)="openHistoryPopup(exchangeQuoteHistory); getAuditHistoryById(rowData)"
                                   matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
@@ -375,5 +375,20 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
       </div>
+    </div>
+  </ng-template>
+  <ng-template #viewExchangeQuote let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <button type="button" class="close" (click)="dismissModel()">
+        &times;
+      </button>
+      <h4 class="modal-title">Details of Quote</h4>
+    </div>
+    <div class="modal-body">
+      <app-exchange-quote-view [customerId]="customerId" [exchangeQuoteId]="exchangeQuoteId"
+        [exchangeQuoteView]="exchangeQuoteView"></app-exchange-quote-view>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
     </div>
   </ng-template>

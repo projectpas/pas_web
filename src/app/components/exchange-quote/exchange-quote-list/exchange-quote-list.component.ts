@@ -51,6 +51,7 @@ export class ExchangeQuoteListComponent implements OnInit {
   selectedQuoteToDelete: any;
   modal: NgbModalRef;
   auditHistory: AuditHistory[];
+  exchangeQuoteView: IExchangeQuoteView;
   constructor(private exchangequoteService: ExchangequoteService,
     private alertService: AlertService,
     private modalService: NgbModal,
@@ -376,4 +377,18 @@ export class ExchangeQuoteListComponent implements OnInit {
         }
     }
   }
+  dismissModel() {
+    this.modal.close();
+  }
+
+  viewSelectedRow(content, row) {
+    this.isSpinnerVisible = true;
+    this.exchangequoteService.getview(row.exchangeQuoteId).subscribe(res => {
+        this.exchangeQuoteView = res[0];
+        this.modal = this.modalService.open(content, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+        this.isSpinnerVisible = false;
+    }, error => {
+        this.isSpinnerVisible = false;
+    });
+}
 }
