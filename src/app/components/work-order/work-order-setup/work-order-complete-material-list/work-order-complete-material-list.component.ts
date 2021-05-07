@@ -47,9 +47,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() saveRIParts = new EventEmitter();
     @Output() refreshData = new EventEmitter();
     @Input() customerId;
-    
+
     statusId = null;
-    ispickticket : boolean = false;
+    ispickticket: boolean = false;
     minDateValue: Date = new Date();
     addNewMaterial: boolean = false;
     workFlowWorkOrderId: any;
@@ -66,85 +66,85 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     pageSize: number = 10;
     interTotalRecords: number = 0;
     interTotalPages: number = 0;
-    isSpinnerVisibleReserve:boolean=false;
+    isSpinnerVisibleReserve: boolean = false;
     cols = [
-        { field: 'taskName', header: 'Task' ,align: 0}, 
-        { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0,width:"110px"},
-        { field: 'line', header: 'Line Num' ,align: 0,width:"64px"},
-        { field: 'partNumber', header: 'PN' ,align: 0},
-        { field: 'partDescription', header: 'PN Description' ,align: 0},
-        { field: 'serialNumber', header: 'Serial Num',align: 0 },
-        { field: 'condition', header: 'Cond',align: 0 ,width:"100px"},
-        { field: 'stockLineNumber', header: 'Stk Line Num',align: 0 },
-        { field: 'mandatoryOrSupplemental', header: 'Request Type',align: 0 },
-        { field: 'provision', header: 'Provision' ,align: 0},
-        { field: 'quantity', header: 'Qty Req', align: 1 ,width:"60px"},
-        { field: 'quantityReserved', header: 'Qty Res', align: 1 ,width:"60px"},
-        { field: 'quantityIssued', header: 'Qty Iss', align: 1,width:"60px" },
-        { field: 'qunatityTurnIn', header: 'Qty Turned In' ,align: 1,width:"83px"},
-        { field: 'partQuantityOnHand', header: 'Qty OH', align: 1 ,width:"60px"},
-        { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1 ,width:"60px"},
-        { field: 'qunatityRemaining', header: 'Qty Rem', align: 1,width:"60px" },
-        { field: 'uom', header: 'UOM',align: 0,width:"70px" },
-        { field: 'stockType', header: 'Stk Type',align: 0 ,width:"70px"}, //oem
-        { field: 'altEquiv', header: 'Alt/Equiv',align: 0 },
-        { field: 'itemClassification', header: 'Classification',align: 0 },
-        { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1,width:"82px" },
-        { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1,width:"100px" },
-        { field: 'needDate', header: 'Need Date',align: 0 },
-        { field: 'controlNo', header: 'Cntl Num' ,align: 0},
-        { field: 'controlId', header: 'Cntl ID',align: 0 },
-        { field: 'currency', header: 'Cur' ,align: 1,width:"60px"},
-        { field: 'unitCost', header: 'Unit Cost', align: 1 ,width:"61px"},
-        { field: 'extendedCost', header: 'Extended Cost', align: 1 ,width:"90px"},
-        { field: 'costDate', header: 'Cost Date',align: 0 },
-        { field: 'purchaseOrderNumber', header: 'PO Num' ,align: 0,width:"100px"},
-        { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date',align: 0 },
-        { field: 'repairOrderNumber', header: 'RO Num',align: 0 ,width:"100px"},
-        { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' ,align: 0},
-        { field: 'receiver', header: 'Rec Num',align: 0 ,width:"100px"},
-        { field: 'workOrderNumber', header: 'WO Num',align: 0 ,width:"100px"},
-        { field: 'subWorkOrder', header: 'Sub-WO Num',align: 0 ,width:"100px"},
-        { field: 'salesOrder', header: 'SO Num',align: 0 ,width:"100px"},
-        { field: 'figure', header: 'Figure',align: 0 },
-        { field: 'site', header: 'Site' ,align: 0},
-        { field: 'wareHouse', header: 'Warehouse',align: 0 },
-        { field: 'location', header: 'Location',align: 0 },
-        { field: 'shelf', header: 'Shelf' ,align: 0},
-        { field: 'bin', header: 'Bin',align: 0 },
-        { field: 'employeename', header: 'Employee ',align: 0 },
-        { field: 'defered', header: 'Deferred',align: 0,width:"60px" },
-        { field: 'memo', header: 'Memo',align: 0,width:"250px" }
+        { field: 'taskName', header: 'Task', align: 0 },
+        { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
+        { field: 'line', header: 'Line Num', align: 0, width: "64px" },
+        { field: 'partNumber', header: 'PN', align: 0 },
+        { field: 'partDescription', header: 'PN Description', align: 0 },
+        { field: 'serialNumber', header: 'Serial Num', align: 0 },
+        { field: 'condition', header: 'Cond', align: 0, width: "100px" },
+        { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 },
+        { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 },
+        { field: 'provision', header: 'Provision', align: 0 },
+        { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
+        { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
+        { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
+        { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
+        { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
+        { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
+        { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
+        { field: 'uom', header: 'UOM', align: 0, width: "70px" },
+        { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
+        { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
+        { field: 'itemClassification', header: 'Classification', align: 0 },
+        { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
+        { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
+        { field: 'needDate', header: 'Need Date', align: 0 },
+        { field: 'controlNo', header: 'Cntl Num', align: 0 },
+        { field: 'controlId', header: 'Cntl ID', align: 0 },
+        { field: 'currency', header: 'Cur', align: 1, width: "60px" },
+        { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
+        { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
+        { field: 'costDate', header: 'Cost Date', align: 0 },
+        { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
+        { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0 },
+        { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
+        { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0 },
+        { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
+        { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
+        { field: 'subWorkOrder', header: 'Sub-WO Num', align: 0, width: "100px" },
+        { field: 'salesOrder', header: 'SO Num', align: 0, width: "100px" },
+        { field: 'figure', header: 'Figure', align: 0 },
+        { field: 'site', header: 'Site', align: 0 },
+        { field: 'wareHouse', header: 'Warehouse', align: 0 },
+        { field: 'location', header: 'Location', align: 0 },
+        { field: 'shelf', header: 'Shelf', align: 0 },
+        { field: 'bin', header: 'Bin', align: 0 },
+        { field: 'employeename', header: 'Employee ', align: 0 },
+        { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
+        { field: 'memo', header: 'Memo', align: 0, width: "250px" }
     ]
 
     auditHistory = [
-        { field: 'taskName', header: 'Task'}, 
+        { field: 'taskName', header: 'Task' },
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },
         { field: 'serialNumber', header: 'Serial Num' },
-        { field: 'condition', header: 'Cond'},
+        { field: 'condition', header: 'Cond' },
         { field: 'stockLineNumber', header: 'Stk Line Num' },
         { field: 'mandatoryOrSupplemental', header: 'Request Type' },
         { field: 'provision', header: 'Provision' },
-        { field: 'quantity', header: 'Qty Req'},
-        { field: 'quantityReserved', header: 'Qty Res'},
-        { field: 'quantityIssued', header: 'Qty Iss'},
+        { field: 'quantity', header: 'Qty Req' },
+        { field: 'quantityReserved', header: 'Qty Res' },
+        { field: 'quantityIssued', header: 'Qty Iss' },
         { field: 'qunatityTurnIn', header: 'Qty Turned In' },
-        { field: 'partQuantityOnHand', header: 'Qty OH'},
-        { field: 'partQuantityAvailable', header: 'Qty Avail'},
-        { field: 'qunatityRemaining', header: 'Qty Rem'},
-        { field: 'uom', header: 'UOM'},
-        { field: 'stockType', header: 'Stk Type'}, //oem
+        { field: 'partQuantityOnHand', header: 'Qty OH' },
+        { field: 'partQuantityAvailable', header: 'Qty Avail' },
+        { field: 'qunatityRemaining', header: 'Qty Rem' },
+        { field: 'uom', header: 'UOM' },
+        { field: 'stockType', header: 'Stk Type' }, //oem
         { field: 'altEquiv', header: 'Alt/Equiv' },
         { field: 'itemClassification', header: 'Classification' },
-        { field: 'partQuantityOnOrder', header: 'Qty On Order'},
-        { field: 'qunatityBackOrder', header: 'Qty on BK Order'},
+        { field: 'partQuantityOnOrder', header: 'Qty On Order' },
+        { field: 'qunatityBackOrder', header: 'Qty on BK Order' },
         { field: 'needDate', header: 'Need Date' },
         { field: 'controlNo', header: 'Cntl Num' },
         { field: 'controlId', header: 'Cntl ID' },
         { field: 'currency', header: 'Cur' },
-        { field: 'unitCost', header: 'Unit Cost'},
-        { field: 'extendedCost', header: 'Extended Cost'},
+        { field: 'unitCost', header: 'Unit Cost' },
+        { field: 'extendedCost', header: 'Extended Cost' },
         { field: 'costDate', header: 'Cost Date' },
         { field: 'purchaseOrderNumber', header: 'PO Num' },
         { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date' },
@@ -185,7 +185,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     subWoRecord: any = {};
     viewSubWolist: boolean = false;
     moduleName: any = '';
-   constructor(
+    constructor(
         private workOrderService: WorkOrderService,
         public itemClassService: ItemClassificationService,
         public unitofmeasureService: UnitOfMeasureService,
@@ -194,31 +194,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private modalService: NgbModal,
         private alertService: AlertService,
         private stockLineService: StocklineService,
-        ) {
+    ) {
     }
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-    ngOnInit() { 
-        if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
-            if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
-                for (let mpn of this.mpnPartNumbersList) {
-                    if (mpn['value']['workOrderPartNumberId'] == this.mpnId) {
-                        this.workFlowWorkOrderId = mpn['value']['workOrderWorkFlowId'];
-                    }
-                } 
-            }
-            else {
-                this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
-            }
-        } else {
-           this.workFlowWorkOrderId = this.subWOPartNoId;
-        }
-    }
-
-    ngOnChanges(changes: SimpleChanges) { 
+    ngOnInit() {
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -231,7 +214,24 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
             }
         } else {
-             this.workFlowWorkOrderId = this.subWOPartNoId;
+            this.workFlowWorkOrderId = this.subWOPartNoId;
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
+            if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
+                for (let mpn of this.mpnPartNumbersList) {
+                    if (mpn['value']['workOrderPartNumberId'] == this.mpnId) {
+                        this.workFlowWorkOrderId = mpn['value']['workOrderWorkFlowId'];
+                    }
+                }
+            }
+            else {
+                this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
+            }
+        } else {
+            this.workFlowWorkOrderId = this.subWOPartNoId;
         }
     }
 
@@ -244,14 +244,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     createNew() {
-        this.ispickticket= false;
+        this.ispickticket = false;
         this.isEdit = false;
         this.editData = undefined;
         this.addNewMaterial = true;
         this.taskList = this.taskList;
         this.workFlowObject.materialList = [];
-        const newRow:any={}
-   
+        const newRow: any = {}
+
         newRow.conditionCodeId = 1;
         newRow.extendedCost = "0.00";
         newRow.extraCost = "0.00";
@@ -269,7 +269,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         newRow.unitOfMeasureId = null;
         newRow.isDeleted = false;
         newRow.extendedPrice = '';
-        newRow.updatedBy = this.userName; 
+        newRow.updatedBy = this.userName;
         newRow.createdBy = this.userName;
         newRow.createdDate = new Date();
         newRow.masterCompanyId = this.currentUserMasterCompanyId;
@@ -283,8 +283,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewMaterial = true;
-       
-        this.editData = { ...rowData, unitOfMeasure: rowData.uom,partItem:{partId:rowData.itemMasterId,partName:rowData.partNumber} };
+
+        this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
     }
     openDelete(content, row) {
         this.currentRow = row;
@@ -292,7 +292,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     delete() {
-       if (this.isSubWorkOrder == true) {
+        if (this.isSubWorkOrder == true) {
             this.workOrderService.deleteSubWorkOrderMaterialList(this.currentRow.subWorkOrderMaterialsId, this.userName).subscribe(res => {
                 this.refreshData.emit();
                 this.alertService.showMessage(
@@ -318,7 +318,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.modal.close();
     }
 
-    getRollupMaterialList(currentRecord, materialindex) { 
+    getRollupMaterialList(currentRecord, materialindex) {
         currentRecord.isShowPlus = false;
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;
@@ -342,7 +342,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                 })
-        } else { 
+        } else {
             this.isSpinnerVisible = true;
             this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res: any[]) => {
                 res.forEach((element, index) => {
@@ -427,7 +427,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     updateMaterialList(event) {
         this.updateMaterialListForWO.emit(event);
         $('#addNewMaterials').modal('hide');
-        this.isEdit=false;
+        this.isEdit = false;
     }
 
     restrictMinus(e) {
@@ -568,7 +568,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     //     return result;
     //   }
     allowAll(value) {
-        if (value==true) {
+        if (value == true) {
             this.reservedList = this.reservedList.map(x => {
                 if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                     x.woReservedIssuedAltParts.map(x => {
@@ -579,27 +579,27 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                         x.isChildSelected = true;
                     })
                 }
-                if(value==true && (this.statusId === 1 || this.statusId === 5)&& x.quantityReserved !=0){
+                if (value == true && (this.statusId === 1 || this.statusId === 5) && x.quantityReserved != 0) {
                     x.isParentSelected = true;
-                 }
-                 if(value==true && (this.statusId === 2 || this.statusId === 3 || this.statusId === 4 )&& x.quantityIssued !=0){
+                }
+                if (value == true && (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) && x.quantityIssued != 0) {
                     x.isParentSelected = true;
-                 } 
+                }
                 return {
-                    ...x, 
-                    
-                } 
+                    ...x,
+
+                }
             });
 
             this.isAllow = value;
             // this.savebutonDisabled = true;
-            if(this.reservedList &&  this.reservedList.length !=0){
+            if (this.reservedList && this.reservedList.length != 0) {
                 this.reservedList.forEach(element => {
-                 if (element.isParentSelected) {
-                    this.savebutonDisabled = true;
-                 }
-             });
-           }
+                    if (element.isParentSelected) {
+                        this.savebutonDisabled = true;
+                    }
+                });
+            }
         } else {
             this.reservedList = this.reservedList.map(x => {
                 if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
@@ -614,14 +614,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 return {
                     ...x,
                     isParentSelected: false,
-                    
+
                 }
-                
+
             });
             this.isAllow = value;
             this.savebutonDisabled = false;
         }
-       
+
     }
 
     filterEmployee(event): void {
@@ -634,21 +634,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
     }
     id: any;
-    onclickpicktiket()
-    {
-      this.ispickticket= true;
-      this.workOrderId=64;
-      let a = document.getElementsByClassName('card-body')[1];
-      if (a) {
-          a.scrollIntoView();
-      }
-      //this.workOrderPickticketComponent.refresh(this.id);
+    onclickpicktiket() {
+        this.ispickticket = true;
+        this.workOrderId = 64;
+        let a = document.getElementsByClassName('card-body')[1];
+        if (a) {
+            a.scrollIntoView();
+        }
+        //this.workOrderPickticketComponent.refresh(this.id);
     }
- 
-    partsIssueRI(statusId) { 
-        this.ispickticket= false;
-        this.savebutonDisabled=false;
-        this.checkActiveStatus=true;
+
+    partsIssueRI(statusId) {
+        this.ispickticket = false;
+        this.savebutonDisabled = false;
+        this.checkActiveStatus = true;
         this.countDown = null;
         this.counter = 600;
         this.tick = 1000;
@@ -659,78 +658,78 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.eqPartData = [];
         this.isShowEqPN = false;
         this.isShowAlternatePN = false;
-       if (this.workFlowWorkOrderId) {
-           this.isSpinnerVisibleReserve=true;
-           this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder,this.authService.currentUser.masterCompanyId).subscribe(res => {
-               if(res && res.length !=0){
-                this.reservedList = res.map(x => {
-                    x.masterCompanyId = this.authService.currentUser.masterCompanyId;
-                    x.createdBy = x.createdBy? x.createdBy :this.authService.currentUser.userName;
-                    x.updatedBy = this.authService.currentUser.userName;
-                       this.setdefaultValues(x);
-                       if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
-                        //    this.savebutonDisabled = true;
-                           if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
-                               this.isShowAlternatePN = true;
-                               x.isParentSelected = false;
-                               x.showAlternateParts = true;
-                           } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
-                               this.isShowEqPN = true;
-                               x.isParentSelected = false;
-                               x.showEqParts = true;
-                           } else {
-                               x.isParentSelected = false;
-                               x.showAlternateParts = false;
-                               x.showEqParts = false;
-                           }
-                       } else if (this.statusId == 1 || this.statusId == 3) {
-                           x.isParentSelected = false;
-                           x.showAlternateParts = false;
-                           x.showEqParts = false;
-                       }
-                       return {
-                           ...x,
-                           reservedDate: new Date(),
-                           issuedDate: new Date(),
-                           reservedById: this.authService.currentEmployee,
-                           issuedById: this.authService.currentEmployee,
-                           woReservedIssuedAltParts: x.woReservedIssuedAltParts.map(y => {
-                               this.setdefaultValuesForChild(y);
-                               return {
-                                   ...y,
-                                   reservedDate: new Date(),
-                                   issuedDate: new Date(),
-                                   reservedById: this.authService.currentEmployee,
-                                   issuedById: this.authService.currentEmployee,
-                                   masterCompanyId: this.authService.currentUser.masterCompanyId,
-                                   createdBy : y.createdBy? y.createdBy :this.authService.currentUser.userName,
-                                   updatedBy : this.authService.currentUser.userName
-                               }
-                           }),
-                           woReservedIssuedEquParts: x.woReservedIssuedEquParts.map(y => {
-                               this.setdefaultValuesForChild(y);
-                               return {
-                                   ...y,
-                                   reservedDate: new Date(),
-                                   issuedDate: new Date(),
-                                   reservedById: this.authService.currentEmployee,
-                                   issuedById: this.authService.currentEmployee,
-                                   masterCompanyId: this.authService.currentUser.masterCompanyId,
-                                   createdBy : y.createdBy? y.createdBy :this.authService.currentUser.userName,
-                                   updatedBy : this.authService.currentUser.userName
-                               }
-                           })
-                       }
-   
-                   });
-               }else{
-                this.reservedList = [] 
-               }
-                this.isSpinnerVisibleReserve=false;
+        if (this.workFlowWorkOrderId) {
+            this.isSpinnerVisibleReserve = true;
+            this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder, this.authService.currentUser.masterCompanyId).subscribe(res => {
+                if (res && res.length != 0) {
+                    this.reservedList = res.map(x => {
+                        x.masterCompanyId = this.authService.currentUser.masterCompanyId;
+                        x.createdBy = x.createdBy ? x.createdBy : this.authService.currentUser.userName;
+                        x.updatedBy = this.authService.currentUser.userName;
+                        this.setdefaultValues(x);
+                        if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
+                            //    this.savebutonDisabled = true;
+                            if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
+                                this.isShowAlternatePN = true;
+                                x.isParentSelected = false;
+                                x.showAlternateParts = true;
+                            } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
+                                this.isShowEqPN = true;
+                                x.isParentSelected = false;
+                                x.showEqParts = true;
+                            } else {
+                                x.isParentSelected = false;
+                                x.showAlternateParts = false;
+                                x.showEqParts = false;
+                            }
+                        } else if (this.statusId == 1 || this.statusId == 3) {
+                            x.isParentSelected = false;
+                            x.showAlternateParts = false;
+                            x.showEqParts = false;
+                        }
+                        return {
+                            ...x,
+                            reservedDate: new Date(),
+                            issuedDate: new Date(),
+                            reservedById: this.authService.currentEmployee,
+                            issuedById: this.authService.currentEmployee,
+                            woReservedIssuedAltParts: x.woReservedIssuedAltParts.map(y => {
+                                this.setdefaultValuesForChild(y);
+                                return {
+                                    ...y,
+                                    reservedDate: new Date(),
+                                    issuedDate: new Date(),
+                                    reservedById: this.authService.currentEmployee,
+                                    issuedById: this.authService.currentEmployee,
+                                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                                    createdBy: y.createdBy ? y.createdBy : this.authService.currentUser.userName,
+                                    updatedBy: this.authService.currentUser.userName
+                                }
+                            }),
+                            woReservedIssuedEquParts: x.woReservedIssuedEquParts.map(y => {
+                                this.setdefaultValuesForChild(y);
+                                return {
+                                    ...y,
+                                    reservedDate: new Date(),
+                                    issuedDate: new Date(),
+                                    reservedById: this.authService.currentEmployee,
+                                    issuedById: this.authService.currentEmployee,
+                                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                                    createdBy: y.createdBy ? y.createdBy : this.authService.currentUser.userName,
+                                    updatedBy: this.authService.currentUser.userName
+                                }
+                            })
+                        }
+
+                    });
+                } else {
+                    this.reservedList = []
+                }
+                this.isSpinnerVisibleReserve = false;
             },
                 err => {
                     this.reservedList = []
-                    this.isSpinnerVisibleReserve=false;
+                    this.isSpinnerVisibleReserve = false;
                 })
         }
     }
@@ -812,10 +811,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.workOrderService.reservereleasestoclineqty(this.parentMaterialList).subscribe((res: any[]) => {
             },
                 err => {
-               })
+                })
         })
     }
-   
+
     showAlternateParts(isChecked, childPart) {
         this.handelParts = [];
         this.alternatePartData = [];
@@ -836,7 +835,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workOrderService.reserveSubWoAltPartData(this.handelParts).subscribe((res: any[]) => {
                 },
                     err => {
-                     })
+                    })
             } else {
                 this.workOrderService.reserveAltPartData(this.handelParts).subscribe((res: any[]) => {
                 },
@@ -881,7 +880,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workOrderService.reserveEqlPartData(this.eqPartData).subscribe((res: any[]) => {
                 },
                     err => {
-                   })
+                    })
             }
         }
         if (isChecked === false) {
@@ -936,16 +935,16 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             })
 
         })
-        if(event.target.checked==false){
-            if (this.statusId ==1) {
-                currentRecord.quantityReserved=currentRecord.quantityAvailable;
-            }else if(this.statusId ==2) {
-                currentRecord.quantityIssued=currentRecord.quantityAlreadyReserved;
-            }else if(this.statusId ==3) {
-            }else if(this.statusId ==4) {
-                currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued;
-            }else if(this.statusId ==5) {
-                currentRecord.quantityReserved=currentRecord.quantityAlreadyReserved;
+        if (event.target.checked == false) {
+            if (this.statusId == 1) {
+                currentRecord.quantityReserved = currentRecord.quantityAvailable;
+            } else if (this.statusId == 2) {
+                currentRecord.quantityIssued = currentRecord.quantityAlreadyReserved;
+            } else if (this.statusId == 3) {
+            } else if (this.statusId == 4) {
+                currentRecord.quantityIssued = currentRecord.quantityAlreadyIssued;
+            } else if (this.statusId == 5) {
+                currentRecord.quantityReserved = currentRecord.quantityAlreadyReserved;
             }
         }
     }
@@ -964,7 +963,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 })
             } else {
                 this.reservedList.map(x => {
-                      this.releasePartsList.push({ workOrderMaterialsId: x.workOrderMaterialsId });
+                    this.releasePartsList.push({ workOrderMaterialsId: x.workOrderMaterialsId });
                 })
             }
 
@@ -1024,15 +1023,23 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     createNewPoWorkOrder(rowData) {
-       if (this.isSubWorkOrder == true) {
-            window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
+        localStorage.setItem("itemMasterId", rowData.itemMasterId);
+        localStorage.setItem("partNumber", rowData.partNumber);
+        localStorage.setItem("lsWoId", this.workOrderId);
+        localStorage.setItem("lsconditionId", rowData.conditionCodeId);
+        if (this.isSubWorkOrder == true) {
+            localStorage.setItem("lsSubWoId", this.subWOPartNoId);
+            // this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);```
+            window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
+            //window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
         } else {
-            window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${rowData.workOrderMaterialsId}`)
+            // window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${rowData.workOrderMaterialsId}`)
+            window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
         }
     }
-    checkActiveStatus:boolean=false;
+    checkActiveStatus: boolean = false;
     closeMaterial() {
-        this.checkActiveStatus=true;
+        this.checkActiveStatus = true;
         if (this.countDown) {
             this.countDown.unsubscribe();
         }
@@ -1041,7 +1048,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.isAllow = false;
         this.releaseStock();
     }
-    
+
     startTimerplus() {
         this.countDown = timer(0, this.tick).subscribe(() => {
             --this.counter
@@ -1087,7 +1094,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     // create sub work order
     editSubWo(currentRecord) {
         const subworkorderid = currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId : 0
-       window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
+        window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
     }
 
     public dismissModel() {
@@ -1100,7 +1107,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.viewSubWolist = false;
         }, 1000)
     }
-    
+
     subWoClick(currentRecord) {
         this.subWoRecord = {};
         this.subWoRecord = currentRecord;
@@ -1113,73 +1120,73 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         const subworkorderid = 0;
         window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.subWoRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${this.subWoRecord.workOrderMaterialsId}`);
     }
-    
+
     addToExistingSubWo() {
         this.viewSubWolist = true;
         this.dismissModel();
     }
-   
-    clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
- 
-    auditHistoryList:any=[]
-    isSpinnerVisibleHistory:boolean=false;
-        openMaterialAudit(row){
-            this.auditHistoryList=[];
-            this.isSpinnerVisibleHistory=true;
-            this.workOrderService.getMaterialHistory(this.isSubWorkOrder ? row.subWorkOrderMaterialsId: row.workOrderMaterialsId,this.isSubWorkOrder).subscribe(res=>{
-                this.isSpinnerVisibleHistory=false;
- this.auditHistoryList=res.reverse();
 
- if (this.auditHistoryList && this.auditHistoryList.length > 0) {
-    this.auditHistoryList = this.auditHistoryList.map(x => {
-        return {
-            ...x,
-            unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
-            extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00'
-        }
-    })
-}
-            },err=>{
-                this.isSpinnerVisibleHistory=false;
-            })
-        }
-//     openStocklineAudit(row) {
- 
-//   if(row.workOrderMaterialsId && row.workOrderMaterialsId !=0){
-//     this.isSpinnerVisible = true;
-//     this.stockLineService.getStocklineAudit(row.workOrderMaterialsId).subscribe(response => {
-//         this.isSpinnerVisible = false;
-//         this.auditHistory = response.map(res => {
-//             return {
-//                 ...res,
-//                 quantityOnHand: (res.quantityOnHand || res.quantityOnHand == 0) ? formatNumberAsGlobalSettingsModule(res.quantityOnHand, 0) : '',
-//                 quantityReserved: (res.quantityReserved || res.quantityReserved == 0) ? formatNumberAsGlobalSettingsModule(res.quantityReserved, 0) : '',
-//                 quantityIssued: (res.quantityIssued || res.quantityIssued == 0) ? formatNumberAsGlobalSettingsModule(res.quantityIssued, 0) : '',
-//                 quantityAvailable: (res.quantityAvailable || res.quantityAvailable == 0) ? formatNumberAsGlobalSettingsModule(res.quantityAvailable, 0) : '',
-//                 purchaseOrderUnitCost: res.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.purchaseOrderUnitCost, 2) : '',
-//                 repairOrderUnitCost: res.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.repairOrderUnitCost, 2) : '',
-//                 unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '',
-//                 coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '',
-//                 lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '',
-//             }
-//         })
-   
-//     }, error => {
-//         this.isSpinnerVisible = false;
-//     })
-//   }
-//     }
+    clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
+
+    auditHistoryList: any = []
+    isSpinnerVisibleHistory: boolean = false;
+    openMaterialAudit(row) {
+        this.auditHistoryList = [];
+        this.isSpinnerVisibleHistory = true;
+        this.workOrderService.getMaterialHistory(this.isSubWorkOrder ? row.subWorkOrderMaterialsId : row.workOrderMaterialsId, this.isSubWorkOrder).subscribe(res => {
+            this.isSpinnerVisibleHistory = false;
+            this.auditHistoryList = res.reverse();
+
+            if (this.auditHistoryList && this.auditHistoryList.length > 0) {
+                this.auditHistoryList = this.auditHistoryList.map(x => {
+                    return {
+                        ...x,
+                        unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+                        extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00'
+                    }
+                })
+            }
+        }, err => {
+            this.isSpinnerVisibleHistory = false;
+        })
+    }
+    //     openStocklineAudit(row) {
+
+    //   if(row.workOrderMaterialsId && row.workOrderMaterialsId !=0){
+    //     this.isSpinnerVisible = true;
+    //     this.stockLineService.getStocklineAudit(row.workOrderMaterialsId).subscribe(response => {
+    //         this.isSpinnerVisible = false;
+    //         this.auditHistory = response.map(res => {
+    //             return {
+    //                 ...res,
+    //                 quantityOnHand: (res.quantityOnHand || res.quantityOnHand == 0) ? formatNumberAsGlobalSettingsModule(res.quantityOnHand, 0) : '',
+    //                 quantityReserved: (res.quantityReserved || res.quantityReserved == 0) ? formatNumberAsGlobalSettingsModule(res.quantityReserved, 0) : '',
+    //                 quantityIssued: (res.quantityIssued || res.quantityIssued == 0) ? formatNumberAsGlobalSettingsModule(res.quantityIssued, 0) : '',
+    //                 quantityAvailable: (res.quantityAvailable || res.quantityAvailable == 0) ? formatNumberAsGlobalSettingsModule(res.quantityAvailable, 0) : '',
+    //                 purchaseOrderUnitCost: res.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.purchaseOrderUnitCost, 2) : '',
+    //                 repairOrderUnitCost: res.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.repairOrderUnitCost, 2) : '',
+    //                 unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '',
+    //                 coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '',
+    //                 lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '',
+    //             }
+    //         })
+
+    //     }, error => {
+    //         this.isSpinnerVisible = false;
+    //     })
+    //   }
+    //     }
 
     getColorCodeForHistory(i, field, value) {
-		const data = this.auditHistoryList;
-		const dataLength = data.length;
-		if (i >= 0 && i <= dataLength) {
-			if ((i + 1) === dataLength) {
-				return true;
-			} else {
-				return data[i + 1][field] === value
-			}
-		}
+        const data = this.auditHistoryList;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
     }
     // checkIsSeclected(){
     //     if(this.reservedList &&  this.reservedList.length !=0){
