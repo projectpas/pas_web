@@ -485,7 +485,7 @@
                                                         [suggestions]="technicianList" required 
                                                         (onSelect)="onSelectedTechnician($event, workOrderPartNumber);"
                                                         (completeMethod)="filterTechnician($event)"
-                                                        (onClear)="clearautoCompleteInput(workOrderPartNumber, 'partTechnicianId' )"
+                                                        (onClear)="clearautoCompletePartNum(workOrderPartNumber, 'partTechnicianId' )"
                                                         [size]="30" [minLength]="1"
                                                         class="p-autoComplete-ctsm custome_automo p-autocomplete-mh120"
                                                        [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">

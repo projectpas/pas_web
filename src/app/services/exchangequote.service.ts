@@ -324,7 +324,6 @@ export class ExchangequoteService {
         //const marginpercentage=(parseFloat(marginamount)/parseFloat(totalestrevenue));
         //const totalestcost=parseFloat(parseFloat(cogsfees) + parseFloat(overhaulcost));
       })
-      debugger;
       marginSummary.exchangeFees = exchangefees;
       marginSummary.overhaulPrice = overhaulprice;
       marginSummary.totalEstRevenue = marginSummary ? this.getTotalEstRevenue(marginSummary) : 0;
@@ -432,5 +431,10 @@ export class ExchangequoteService {
 
   getExchangeQuoteHistory(exchangeQuoteId) {
     return this.exchangeQuoteEndpointService.getExchangeQuoteHistory(exchangeQuoteId);
+  }
+  getview(exchangeQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.getview(exchangeQuoteId)
+    );
   }
 }

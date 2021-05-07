@@ -375,6 +375,9 @@ export class PurchaseSetupComponent implements OnInit {
 	referenceId: any = 0;
 	moduleName: any = "PurchaseOrder";
 	itemMasterId: number;
+	lsconditionId: number;
+	lsWoId: number;
+	lsSubWoId: number;
 	partName: string;
 	adddefaultpart: boolean = true;
 	salesOrderId: number;
@@ -410,9 +413,12 @@ export class PurchaseSetupComponent implements OnInit {
 		this.vendorService.alertObj.next(this.vendorService.ShowPtab);
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
 		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
-		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
 		this.partName = (localStorage.getItem('partNumber'));
 		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
+		this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
+		this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
+		this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
 	}
 
 	ngOnInit() {
@@ -496,18 +502,19 @@ export class PurchaseSetupComponent implements OnInit {
 						this.getPurchaseOrderAllPartsById(this.poId);
 						this.enableHeaderSaveBtn = false;
 						this.isSpinnerVisible = false;
+						setTimeout(() => {
+							if (this.itemMasterId > 0 && this.adddefaultpart) {
+								this.isSpinnerVisible = true;
+								this.addPartNumbers(this.itemMasterId, this.partName, this.lsconditionId)
+								this.adddefaultpart = false;
+								this.isSpinnerVisible = false;
+							}
+						}, 2000);
 					}, 2200);
 				}
 			});
 
-			setTimeout(() => {
-				if (this.itemMasterId > 0 && this.adddefaultpart) {
-					this.isSpinnerVisible = true;
-					this.addPartNumbers(this.itemMasterId, this.partName)
-					this.adddefaultpart = false;
-					this.isSpinnerVisible = false;
-				}
-			}, 3000);
+
 		}
 		else {
 			if (this.headerInfo.purchaseOrderNumber == "" || this.headerInfo.purchaseOrderNumber == undefined) {
@@ -1993,8 +2000,8 @@ export class PurchaseSetupComponent implements OnInit {
 			parentdata.conditionId = this.defaultCondtionId;
 			parentdata.priorityId = this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null;
 			parentdata.quantityOrdered = '0';
-			parentdata.workOrderId = null;
-			parentdata.repairOrderId = null;
+			//parentdata.workOrderId = null;
+			//parentdata.repairOrderId = null;
 			//parentdata.salesOrderId = null;
 			parentdata.memo = null;
 			//this.getManagementStructureForParentEdit(parentdata,this.employeeId);
@@ -2337,9 +2344,15 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	loadWorkOrderList(filterVal = '') {
-		if (this.arrayWOlist.length == 0) {
-			this.arrayWOlist.push(0);
+		if (this.lsWoId != undefined && this.lsWoId != null) {
+			this.arrayWOlist.push(this.lsWoId);
 		}
+		else {
+			if (this.arrayWOlist.length == 0) {
+				this.arrayWOlist.push(0);
+			}
+		}
+
 		this.commonService.getWODataFilter(filterVal, 20, this.arrayWOlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
 			const data = res.map(x => {
 				return {
@@ -3057,7 +3070,7 @@ export class PurchaseSetupComponent implements OnInit {
 			const funcCurrency = editValueAssignByCondition('value', partList.functionalCurrencyId);
 			const reportCurrency = editValueAssignByCondition('value', partList.reportCurrencyId);
 			if (funcCurrency == reportCurrency) {
-				partList.foreignExchangeRate = '1.00000';
+				partList.foreignExchangeRate = '1.00';
 				if (onChange == 'onChange') {
 					this.alertService.showMessage(
 						'Error',
@@ -3067,19 +3080,26 @@ export class PurchaseSetupComponent implements OnInit {
 				return;
 			}
 			if (partList.foreignExchangeRate) {
-				partList.foreignExchangeRate = formatNumberAsGlobalSettingsModule(partList.foreignExchangeRate, 5);
+				partList.foreignExchangeRate = formatNumberAsGlobalSettingsModule(partList.foreignExchangeRate, 2);
 			}
 		}
 	}
 
 	private loadConditionData() {
-		if (this.arrayConditionlist.length == 0) {
-			this.arrayConditionlist.push(0);
+
+		if (this.lsconditionId != undefined && this.lsconditionId != null) {
+			this.arrayConditionlist.push(this.lsconditionId);
 		}
+		else {
+			if (this.arrayConditionlist.length == 0) {
+				this.arrayConditionlist.push(0);
+			}
+		}
+
 		this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 0, this.arrayConditionlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
 			this.allconditioninfo = res;
 			this.allconditioninfo.map(x => {
-				if (x.label == 'New') {
+				if (x.label.toUpperCase() == 'NEW') {
 					this.defaultCondtionId = x.value;
 					this.newObjectForParent.conditionId = x.value;
 				}
@@ -4512,7 +4532,8 @@ export class PurchaseSetupComponent implements OnInit {
 		}
 	}
 
-	addPartNumbers(partNumberId, partName) {
+	addPartNumbers(partNumberId, partName, conditionid) {
+		debugger;
 		this.inputValidCheck = false;
 		//if (this.vendorService.isEditMode == false) {
 		let newParentObject = new CreatePOPartsList();
@@ -4520,11 +4541,14 @@ export class PurchaseSetupComponent implements OnInit {
 			...newParentObject,
 			needByDate: this.headerInfo.needByDate,
 			priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
-			conditionId: this.defaultCondtionId,
+			conditionId: conditionid > 0 ? conditionid : this.defaultCondtionId,
 			discountPercent: 0,
 			partNumberId: { value: partNumberId, label: partName },
+			workOrderId: getObjectById('value', this.lsWoId == null ? 0 : this.lsWoId, this.allWorkOrderDetails),
+			subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allSalesOrderInfo),
 			salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
 		}
+
 		this.partListData.push(newParentObject);
 		for (let i = 0; i < this.partListData.length; i++) {
 			if (!this.partListData[i].ifSplitShip) {
@@ -4597,6 +4621,9 @@ export class PurchaseSetupComponent implements OnInit {
 			localStorage.removeItem("itemMasterId");
 			localStorage.removeItem("partNumber");
 			localStorage.removeItem("salesOrderId");
+			localStorage.removeItem("lsconditionId");
+			localStorage.removeItem("lsWoId");
+			localStorage.removeItem("lsSubWoId");
 		}
 
 	}

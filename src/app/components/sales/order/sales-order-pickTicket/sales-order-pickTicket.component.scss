@@ -199,7 +199,7 @@
 // }
 
 table {
-  width: 1012px;
+   width: 100.6%;
   overflow: auto !important;
 }
 
@@ -231,7 +231,7 @@ table thead tr th {
   padding: 5px !important;
   color: #000;
   letter-spacing: 0.3px;
-  font-size: 10px;
+  font-size: 10.5px;
   text-transform: capitalize;
   z-index: 1;
 }
@@ -247,7 +247,7 @@ table tbody tr td {
   line-height: 22px;
   height: 22px;
   color: #333;
-  border-right: 1px solid black !important;
+  // border-right: 1px solid black !important;
   font-size: 11.5px !important;
   max-width: 100px;
   letter-spacing: 0.1px;
@@ -278,30 +278,37 @@ hr {
 
 .first-block-sold-to {
   position: relative;
-  min-height: 160px;
+  min-height: 142px;
   height: auto;
   float: left;
   padding-right: 2px;
-  // border: 1px solid black;
+  // border-right: 1px solid black;
   background: #fff;
   width: 100%;
-  padding-left: 2px;
+ 
 }
 
 .first-block-ship-to {
   position: relative;
-  min-height: 160px;
+  min-height: 140px;
   height: auto;
   padding-right: 2px;
-  // border: 1px solid black;
+  // border-right: 1px solid black;
   background: #fff;
   width: 100%;
-  padding-left: 2px;
+
+}
+.border-none{
+  border:none;
+}
+.label-margin{
+  margin-left:-25px;
 }
 
 .first-block-sold {
   position: relative;
-  min-height: 1px;
+  min-height: 140px;
+  height:auto;
   float: left;
   border-right:1px solid black;
   padding-right: 2px;
@@ -315,7 +322,7 @@ hr {
   float: right;
   padding-right: 2px;
   padding-left: 2px;
-  width: 50%;
+  width:50%;
 }
 
 .address-block {
@@ -336,10 +343,11 @@ hr {
 
 .second-block {
   position: relative;
-  min-height: 1px;
+  min-height: 180px;
   float: left;
   padding-right: 2px;
   width: 35%;
+height:auto;
   border-left:1px solid black;
     // margin-left: 16%;
   padding-left: 2px;
@@ -352,7 +360,7 @@ hr {
   display: flex;
 
   min-height: 1px;
-  padding-left: 50px;
+ 
   width: 100%;
 }
 
@@ -448,6 +456,7 @@ hr {
   position: relative;
   min-height: 1px;
   float: left;
+  width:100%;
   padding-right: 2px;
   padding-left: 2px;
   // width: 38.33333333%;
@@ -466,8 +475,8 @@ hr {
 }
 
 .logo {
-  margin-top: 10px;
-  height:150px;
+  padding: 10px;
+  height:130px;
   width:200px;
 }
 
@@ -486,6 +495,12 @@ hr {
   min-height: 1px;
   width: 100%;
 }
+.first-block-sold-bottom{
+  border-bottom: 1px solid black;
+    margin-top: -2px;
+    height: auto;
+    min-height: 140px;
+}
 
 .parttable th {
   background: #fff !important;
@@ -495,9 +510,9 @@ hr {
 .border-bottom{
   border-bottom:1px solid black !important;
 }
-.label-margin{
-  margin-left:-25px;
-}
 .table-margins{
-  margin-top:20px;margin-left:-2px
+  margin-top:20px;margin-left:-3px
 }
+.invoice-border{border-bottom: 1px solid;
+    min-height: 159px;
+    height: auto;}
