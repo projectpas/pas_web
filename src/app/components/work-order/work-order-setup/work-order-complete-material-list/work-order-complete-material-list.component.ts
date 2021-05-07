@@ -13,8 +13,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { unwrapResolvedMetadata } from '@angular/compiler';
 import { StocklineService } from '../../../../services/stockline.service';
 import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
+import { CustomerService } from '../../../../../app/services/customer.service';
 // import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
-
 
 @Component({
     selector: 'app-work-order-complete-material-list',
@@ -25,6 +25,7 @@ import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
 
     @ViewChild("timerAlertNotfi", { static: false }) public timerAlertNotfi: ElementRef;
+    @ViewChild("addPart", { static: false }) addPart: ElementRef;
     //@ViewChild(WorkOrderPickticketComponent, { static: false }) public workOrderPickticketComponent: WorkOrderPickticketComponent;
     @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
     @Input() isView: boolean = false;
@@ -47,7 +48,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() saveRIParts = new EventEmitter();
     @Output() refreshData = new EventEmitter();
     @Input() customerId;
-    
+    @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
+
     statusId = null;
     ispickticket : boolean = false;
     minDateValue: Date = new Date();
@@ -67,6 +69,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     interTotalRecords: number = 0;
     interTotalPages: number = 0;
     isSpinnerVisibleReserve:boolean=false;
+    customer: any;
+    addPartModal: NgbModalRef;
+    show: boolean;
+    clearData = false;
     cols = [
         { field: 'taskName', header: 'Task' ,align: 0}, 
         { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0,width:"110px"},
@@ -194,7 +200,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private modalService: NgbModal,
         private alertService: AlertService,
         private stockLineService: StocklineService,
-        ) {
+        private customerService: CustomerService, 
+        ) { this.show = true;
     }
 
     get userName(): string {
@@ -241,6 +248,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
     closeAddNew() {
         this.addNewMaterial = false;
+    }
+
+    onClosePartSearchPopUp() {
+        this.close.emit(true);
+        this.show = false;
     }
 
     createNew() {
@@ -365,6 +377,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 })
         }
     }
+
+    onClose(event) {
+        this.show = false;
+        this.addPartModal.close();
+      }
 
     removeRollUpList(currentRecord, index) {
         currentRecord.isShowPlus = true;
@@ -1064,6 +1081,17 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             err => {
             });
     }
+
+    openPartNumber() {
+        let contentPart = this.addPart;
+        this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+      }
+    
+      openPartNumberClear(viewMode) {
+        this.clearData = viewMode;
+        let contentPart = this.addPart;
+        this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+      }
 
     opentimerAlertModel() {
         let content = this.timerAlertNotfi;
