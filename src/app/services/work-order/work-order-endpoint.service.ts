@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { WorkOrder } from '../../models/work-order.model';
+import { WOPickTicket } from '../../models/sales/WOPickTicket';
 
 @Injectable()
 export class WorkOrderEndpointService extends EndpointFactory {
@@ -1363,10 +1364,30 @@ export class WorkOrderEndpointService extends EndpointFactory {
             });
         }
     }
-    
+
     transferWorkflow(data) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/copyworkflowdetailstoworkorder?workOrderId=${data.workOrderId}&workflowId=${data.workflowId}&masterCompanyId=${data.masterCompanyId}&workOrderPartNumberId=${data.workOrderPartNumberId}&createdBy=${data.createdBy}&listItem=${data.list}`).catch(error => {
             return this.handleErrorCommon(error, () => this.transferWorkflow(data));
         });
+    }
+
+    getPickTicketList(workOrderId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getpickticketapprovelist?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getPickTicketList(workOrderId));
+        });
+    }
+
+    getStockLineforPickTicket(itemMasterId, conditionId, referenceId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/searchstocklinefrompickticketpop?itemMasterId=${itemMasterId}&conditionId=${conditionId}&referenceId=${referenceId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getStockLineforPickTicket(itemMasterId, conditionId, referenceId));
+        });
+    }
+
+    savepickticketiteminterface(parts: WOPickTicket): Observable<any> {
+        return this.http
+            .post(`${this.configurations.baseUrl}/api/workorder/savepickticketiteminterface`, parts, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.savepickticketiteminterface(parts));
+            });
     }
 }

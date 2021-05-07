@@ -116,14 +116,21 @@ export class SalesQuoteViewComponent implements OnInit {
       ? this.authService.currentUser.userName
       : "";
   }
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
+  }
 
   getRequiredData() {
     this.isSpinnerVisible = true;
     this.managementStructureId = this.salesQuote.managementStructureId;
+    let probabilityId = this.salesQuote.probabilityId ? this.salesQuote.probabilityId : 0;
     forkJoin(
       this.customerService.getContacts(this.salesQuoteView.salesOrderQuote.customerId),
       this.commonservice.getManagementStructureNameandCodes(this.managementStructureId),
-      this.commonservice.smartDropDownList("[Percent]", "PercentId", "PercentValue"),
+      //this.commonservice.smartDropDownList("[Percent]", "PercentId", "PercentValue"),
+      this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
       this.salesQuoteService.getSOQMarginSummary(this.salesQuoteView.salesOrderQuote.salesOrderQuoteId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);

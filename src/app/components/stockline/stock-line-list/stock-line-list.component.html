@@ -143,15 +143,15 @@
                         <input [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'" *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" 
                         class="table-header-input-width" pInputText [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
                             (input)="dt.filter($event.target.value, col.field, 'contains')" >
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'receivedDate'"
+                        <input type="date" class="table-header-input-width" *ngIf="col.field == 'receivedDate'"
                             name="receivedDate"  (change)="dateFilterForTable($event.target.value, col.field)" />                        
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'expirationDate'"
+                        <input type="date" class="table-header-input-width" *ngIf="col.field == 'expirationDate'"
                             name="expirationDate"  (change)="dateFilterForTable($event.target.value, col.field)" />                        
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'tagDate'"
+                        <input type="date" class="table-header-input-width" *ngIf="col.field == 'tagDate'"
                             name="tagDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-                        <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                        <input type="date"   class="table-header-input-width" *ngIf="col.field == 'createdDate'"
                             name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-                        <input type="date"   class="hidePlaceHolder table-header-input-width"  *ngIf="col.field == 'updatedDate'"
+                        <input type="date"   class="table-header-input-width"  *ngIf="col.field == 'updatedDate'"
                             name="updatedDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
                     </th>
                     <th class="table-actions-column"></th>
@@ -241,7 +241,7 @@
         <button type="button" class="close" data-dismiss="modal">
           &times;
         </button>
-        <h4 class="modal-title">History of Stockline Adjustment</h4>
+        <h4 class="modal-title">History of Stockline</h4>
       </div>
       <div class="modal-body">
         <div class="table-responsive stockline-audit">

@@ -32,6 +32,7 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly _deleteExchangeQuoteFrignt: string = environment.baseUrl + "/api/exchangequote/deleteexchangequotefreight";
     private readonly getFreightAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-freight-history';
     private readonly getChargesAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-charges-history';
+    private readonly getExchangeQuoteViewDetails: string = environment.baseUrl + "/api/exchangequote/getview";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -231,6 +232,14 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
       return this.http.get<any>(`${this.configurations.baseUrl}/api/exchangeQuote/getExchangeQuoteHistory/?exchangeQuoteId=${exchangeQuoteId}`)
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getExchangeQuoteHistory(exchangeQuoteId));
+        });
+    }
+    getview(exchangeQuoteId: number): Observable<any> {
+      const URL = `${this.getExchangeQuoteViewDetails}/${exchangeQuoteId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getview(exchangeQuoteId));
         });
     }
 }

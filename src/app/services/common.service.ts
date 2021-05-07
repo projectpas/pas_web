@@ -938,11 +938,6 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.getPickTicketList(referenceId,moduleId));
     });
   }
-  getStockLineforPickTicket(itemMasterId,conditionId,referenceId,moduleId): Observable<any> {
-    return this.http.get(`${this.configurations.baseUrl}/api/Common/searchstocklinefrompickticketpop?itemMasterId=${itemMasterId}&conditionId=${conditionId}&referenceId=${referenceId}&moduleId=${moduleId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getStockLineforPickTicket(itemMasterId,conditionId,referenceId,moduleId));
-    });
-  }
 
   // getAllEditID(purchaseOrderId) {
   //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);
