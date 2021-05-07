@@ -537,7 +537,7 @@
                                             </a>
                                         </span>  
                                         <!-- [disabled]="workOrderPartNumber.isWorkflowTranfer" -->
-                                        <span [ngClass]="{pointerEvents : isView}">
+                                        <span [ngClass]="{pointerEvents : isView || orkOrderPartNumber.workflowId==0 || workOrderPartNumber.workflowId==null}">
                                             <input type="checkbox" name="tranferwflw{{i}}" #tranferwflw="ngModel"  (ngModelChange)="getValid()" 
                                             class="form-control w60  mr10"  [(ngModel)]="workOrderPartNumber.isWorkflowTranfer" (change)="tranferCheckbox($event,workOrderPartNumber,i)" matTooltip="Transfer Workflow To Work Order"
                                             matTooltipPosition="above"> 
@@ -967,7 +967,7 @@
                     (refreshData)="getMaterialListHandle()" [mpnPartNumbersList]="mpnPartNumbersList" [isView]="isView || isViewForApprovedPart"></app-work-order-complete-material-list>
             </div>
            <div *ngIf="labor && (gridActiveTab == 'labor') " [ngClass]="{hidedata : gridActiveTab !== 'labor'}" id="check">
-                <app-work-order-labor [taskList]="taskList" [laborForm]="labor"
+                <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor"
                     [employeesOriginalData]="employeesOriginalData" [workOrderLaborList]="workOrderLaborList"
                     [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [selectedPartNumber]="selectedPartNumber" [savedWorkOrderData]="savedWorkOrderData"

@@ -21,7 +21,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Output() saveworkOrderLabor = new EventEmitter();
   @Output() refreshLabor = new EventEmitter(); 
   @Input() workOrderLaborList: any={};
-  @Input() taskList: any;
+  @Input() labortaskList: any;   
   @Input() isQuote = false;
   @Input() markupList;
   @Input() employeesOriginalData;
@@ -65,6 +65,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   labourHeader: any;
   disabledUpdatebtn:boolean=true; 
   modal: NgbModalRef;
+  taskList:any=[];
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService,private modalService: NgbModal,
     private commonService: CommonService) { }
@@ -81,6 +82,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       itemsShowLimit: 2,
       allowSearchFilter: false
     };
+    this.taskList=[];
+    this.taskList=this.labortaskList;
     if (this.taskList) {
       this.taskListForHeader = this.taskList.map(x => { return { taskId: x.taskId, description: x.description } })
     }
@@ -125,6 +128,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   }
 laborTaskData:any;
   ngOnChanges() {
+    this.taskList=[];
+    this.taskList=this.labortaskList;
     if(this.workOrderLaborList !=undefined){
       this.laborTaskData=this.workOrderLaborList;
       this.isEdit=true;

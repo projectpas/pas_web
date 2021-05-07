@@ -68,7 +68,7 @@
             </label> -->
               
             <p-radioButton (ngModelChange)="checkValid(4)" (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}"  class="p-radiobutton-label-horizontal p-radiobutton-cstm adj" name="HoursorClockorScan"
-            label="Labor Hours" [value]="1"
+            label="Manual Entry" [value]="1"
             [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
            
             <p-radioButton (ngModelChange)="checkValid(5)"  (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" label="Labor Clock In/Out " [value]="2"
