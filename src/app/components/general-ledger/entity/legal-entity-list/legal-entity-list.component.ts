@@ -268,9 +268,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				this.totalPages = 0;
 			}
 		}, err => {
-			this.isSpinnerVisible = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		})
 	}
 
@@ -498,9 +496,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 						MessageSeverity.success
 					);
 				}, err => {
-					this.isSpinnerVisible = false;
-					//const errorLog = err;
-					//this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;					
 				});
 			}
 			if (this.modal) { this.modal.close(); }
@@ -671,18 +667,14 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				this.isSpinnerVisibleHistory = false;
 			}, 1500);
 		}, err => {
-			this.isSpinnerVisibleHistory = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
+			this.isSpinnerVisibleHistory = false;			
 		})
 	}
 	editlegalEntityLogo(attachmentId, legalEntityId) {
 		this.entityService.toGetUploadDocumentsList(attachmentId, legalEntityId, 41).subscribe(res => {
 			this.sourceViewforDocumentList = res;
 		}, err => {
-			this.isSpinnerVisibleHistory = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
+			this.isSpinnerVisibleHistory = false;			
 		});
 	}
 
@@ -784,9 +776,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 			this.bankingApiDataList = [];
 			this.bankingApiDataList = res;
 		}, err => {
-			this.isSpinnerVisible = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		})
 	}
 
@@ -853,9 +843,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 			dt.value = this.allATAMaininfo;
 			this.isSpinnerVisible = false;
 		}, err => {
-			this.isSpinnerVisible = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
 
@@ -866,9 +854,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 			this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 			this.isSpinnerVisible = false;
 		}, err => {
-			this.isSpinnerVisible = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
 
@@ -892,9 +878,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 			this.modal.close();
 			this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
 		}, err => {
-			this.isSpinnerVisible = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
 
