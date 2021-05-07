@@ -14,15 +14,14 @@ import { WorkOrderPickticketprintComponent } from "../work-order-pickticketprint
 declare var $: any;
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
+import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
 
 @Component({
   selector: 'app-work-order-pickticket',
   templateUrl: './work-order-pickticket.component.html',
   styleUrls: ['./work-order-pickticket.component.scss'],
-  // encapsulation: ViewEncapsulation.None
 })
 export class WorkOrderPickticketComponent implements OnInit {
-  //@Input() moduleId;
   @Input() referenceId;
   isEnablePOList: any;
   pickTickes: any[] = [];
@@ -55,7 +54,6 @@ export class WorkOrderPickticketComponent implements OnInit {
   home: any;
   isEdit: boolean = false;
   isView: boolean = false;
-  //salesOrderId: any;
   searchParameters: any;
   PickTicketDetails = new PickTicket();
   disableSave: boolean = true;
@@ -71,16 +69,14 @@ export class WorkOrderPickticketComponent implements OnInit {
     private modalService: NgbModal,
     private alertService: AlertService,
     private datePipe: DatePipe,
-    private commonService: CommonService,
     private workOrderService: WorkOrderService
   ) { }
 
   ngOnInit() {
-    //this.isSpinnerVisible = true;
     this.initColumns();
     this.onSearch();
-    //this.isSpinnerVisible = false;
   }
+
   attachmoduleList: any = [];
   arrayCustlist: any = [];
 
@@ -132,23 +128,22 @@ export class WorkOrderPickticketComponent implements OnInit {
   }
 
   refresh(id) {
-    // this.referenceId = id;
-    // this.moduleId=11;
     this.onSearch();
   }
+
   onSearch() {
-    //this.isSpinnerVisible = true;
+    this.isSpinnerVisible = true;
     this.workOrderService
       .getPickTicketList(this.referenceId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
-        //this.pickTickes = response[0];
         this.pickTickes = response;
         this.showPaginator = this.totalRecords > 0;
       }, error => {
         this.isSpinnerVisible = false;
       });
   }
+
   loadData(event, globalFilter = "") {
     event.filters.statusId = this.currentStatus;
     this.searchParameters.first = parseInt(event.first) / event.rows;
@@ -187,6 +182,7 @@ export class WorkOrderPickticketComponent implements OnInit {
       return data[key];
     }
   }
+
   printPickTicket(rowData: any) {
     this.modal = this.modalService.open(WorkOrderPickticketprintComponent, { size: "lg" });
     let instance: WorkOrderPickticketprintComponent = (<WorkOrderPickticketprintComponent>this.modal.componentInstance)
@@ -197,10 +193,11 @@ export class WorkOrderPickticketComponent implements OnInit {
         this.modal.close();
       }
     });
-    instance.referenceId = rowData.referenceId;
-    instance.orderPartId = rowData.orderPartId;
-    instance.pickTicketId = rowData.pickTicketId;
+    instance.workOrderId = rowData.workOrderId;
+    instance.workOrderPartId = rowData.workOrderMaterialsId;
+    instance.woPickTicketId = rowData.pickTicketId;
   }
+
   QtyRem: Number = 0;
   openEdit(rowData) {
     this.QtyRem = rowData.qtyRemaining;
@@ -222,6 +219,7 @@ export class WorkOrderPickticketComponent implements OnInit {
   enableSave() {
     this.disableSave = false;
   }
+
   getpickticketHistory(rowData) {
     this.isSpinnerVisible = true;
     this.salesOrderService.getpickticketHistory(rowData.pickTicketId).subscribe(res => {
@@ -237,6 +235,7 @@ export class WorkOrderPickticketComponent implements OnInit {
       this.isSpinnerVisible = false;
     });
   }
+  
   getColorCodeForHistory(i, field, value) {
     const data = this.pickticketauditHistory;
     const dataLength = data.length;
@@ -248,6 +247,7 @@ export class WorkOrderPickticketComponent implements OnInit {
       }
     }
   }
+
   closepickticketHistoryModal() {
     $("#pickticketHistory").modal("hide");
   }
@@ -256,17 +256,18 @@ export class WorkOrderPickticketComponent implements OnInit {
     if (value > this.QtyRem) {
     }
   }
+
   parts: any[] = [];
   qtyToPick: number = 0;
   pickticketItemInterface(rowData, pickticketieminterface) {
     const itemMasterId = rowData.itemMasterId;
     const conditionId = rowData.conditionId;
-    const referenceId = rowData.referenceId;
-    const orderPartId = rowData.orderPartId;
+    const workOrderId = rowData.workOrderId;
+    const workOrderMaterialsId = rowData.workOrderMaterialsId;
     this.qtyToPick = rowData.qtyToPick;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
     this.workOrderService
-      .getStockLineforPickTicket(itemMasterId, conditionId, referenceId)
+      .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.parts = response;
@@ -274,8 +275,8 @@ export class WorkOrderPickticketComponent implements OnInit {
           if (this.parts[i].oemDer == null)
             this.parts[i].oemDer = this.parts[i].stockType;
           this.parts[i]['isSelected'] = false;
-          this.parts[i]['referenceId'] = referenceId;
-          this.parts[i]['orderPartId'] = orderPartId;
+          this.parts[i]['workOrderId'] = workOrderId;
+          this.parts[i]['workOrderMaterialsId'] = workOrderMaterialsId;
           this.parts[i].qtyToShip = this.qtyToPick;
           if (this.parts[i].qtyToReserve == 0) {
             this.parts[i].qtyToReserve = null
@@ -285,6 +286,7 @@ export class WorkOrderPickticketComponent implements OnInit {
         this.isSpinnerVisible = false;
       });
   }
+
   onChangeOfPartSelection(event) {
     let selectedPartsLength = 0;
     for (let i = 0; i < this.parts.length; i++) {
@@ -362,7 +364,7 @@ export class WorkOrderPickticketComponent implements OnInit {
   confirmPickTicket(): void {
     this.isSpinnerVisible = true;
     this.confirmedById = this.employeeId;
-    this.salesOrderService.confirmPickTicket(this.confirmselected, this.confirmedById).subscribe(response => {
+    this.workOrderService.confirmPickTicket(this.confirmselected, this.confirmedById).subscribe(response => {
       this.isSpinnerVisible = false;
       this.modal.close();
       this.alertService.showMessage(
@@ -375,17 +377,18 @@ export class WorkOrderPickticketComponent implements OnInit {
       this.isSpinnerVisible = false;
     });
   }
+
   viewStockSelectedRow(rowData) {
-    //this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+    this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
 
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
     const pickTicketId = rowData.pickTicketId;
-    const referenceId = rowData.referenceId;
-    const orderPartId = rowData.orderPartId;
+    const referenceId = rowData.workOrderId;
+    const orderPartId = rowData.workOrderMaterialsId;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
-    this.salesOrderService
+    this.workOrderService
       .getPickTicketEdit(pickTicketId, referenceId, orderPartId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
@@ -405,5 +408,4 @@ export class WorkOrderPickticketComponent implements OnInit {
         this.isSpinnerVisible = false;
       });
   }
-
 }

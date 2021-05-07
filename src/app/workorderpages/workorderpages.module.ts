@@ -100,6 +100,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
 import { CommonCommunicationModule } from '../components/common-components/common-communication/common-communiation.module';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { WorkOrderPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-pickticketprint/work-order-pickticketprint.component';
 @NgModule({
   imports: [
     FormsModule,
@@ -195,9 +196,9 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     WoApprovalRuleComponent,
     WoqApprovalRuleComponent,
     WorkOrderPickticketComponent,
-
+    WorkOrderPickticketprintComponent
   ],
-  entryComponents: [],
+  entryComponents: [WorkOrderPickticketprintComponent],
   providers: [
     WorkFlowtService,
     WorkOrderService,

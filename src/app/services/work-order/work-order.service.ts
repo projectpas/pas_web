@@ -647,4 +647,22 @@ export class WorkOrderService {
             this.workOrderEndpointService.savepickticketiteminterface(parts)
         );
     }
+
+    getPickTicketEdit(woPickTicketId: number, workOrderId: number, workOrderPartId: number): Observable<any> {
+        return Observable.forkJoin(
+            this.workOrderEndpointService.getPickTicketEdit(woPickTicketId, workOrderId, workOrderPartId)
+        );
+    }
+
+    confirmPickTicket(pickticketId: number, confirmById: string): Observable<boolean[]> {
+        return Observable.forkJoin(
+            this.workOrderEndpointService.confirmPickTicket(pickticketId, confirmById)
+        );
+    }
+
+    getPickTicketPrint(workOrderId: number, workOrderPartId: number, woPickTicketId: number): Observable<any> {
+        return Observable.forkJoin(
+            this.workOrderEndpointService.getPickTicketPrint(workOrderId, workOrderPartId, woPickTicketId)
+        );
+    }
 }
