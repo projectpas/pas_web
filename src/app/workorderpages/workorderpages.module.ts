@@ -102,6 +102,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
 import { CommonCommunicationModule } from '../components/common-components/common-communication/common-communiation.module';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { WorkOrderPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-pickticketprint/work-order-pickticketprint.component';
 import { WoPartNumberFilterComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-number-filter/wo-part-number-filter.component';
 
 @NgModule({
@@ -199,11 +200,12 @@ import { WoPartNumberFilterComponent } from '../components/work-order/work-order
     WoApprovalRuleComponent,
     WoqApprovalRuleComponent,
     WorkOrderPickticketComponent,
+    WorkOrderPickticketprintComponent
     WorkOrderMaterialsAddComponent,
     WoCustomerDetailComponent,
     WoPartNumberFilterComponent, 
   ],
-  entryComponents: [],
+  entryComponents: [WorkOrderPickticketprintComponent],
   providers: [
     WorkFlowtService,
     WorkOrderService,
