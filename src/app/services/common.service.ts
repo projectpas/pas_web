@@ -116,6 +116,17 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsWorkorderList(searchText, count, idList, masterCompanyId));
     });
   }
+  AutoCompleteDropdownsPOByItemMaster(searchText,itemmasterid, count?, idList?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsPOByItemMaster?searchText=${searchText}&ItemMasterId=${itemmasterid !== undefined ? itemmasterid : 0}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsWorkorderList(searchText, count, idList, masterCompanyId));
+    });
+  }
+  AutoCompleteDropdownsROByItemMaster(searchText,itemmasterid, count?, idList?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsROByItemMaster?searchText=${searchText}&ItemMasterId=${itemmasterid !== undefined ? itemmasterid : 0}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsWorkorderList(searchText, count, idList, masterCompanyId));
+    });
+  }
+
 
   autoCompleteSmartDropDownCustomerList(customerType, searchText, startWith, count?, idList?, masterCompanyId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownCustomerList?customerType=${customerType}&searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {

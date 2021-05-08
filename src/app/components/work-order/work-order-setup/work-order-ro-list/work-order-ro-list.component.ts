@@ -5,7 +5,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { CommonService } from '../../../../services/common.service';
 import { MessageSeverity, AlertService } from '../../../../services/alert.service';
-import { AuthService } from '../../../../services/auth.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
 import { listSearchFilterObjectCreation, getObjectById } from '../../../../generic/autocomplete';
