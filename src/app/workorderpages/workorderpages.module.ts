@@ -200,7 +200,7 @@ import { WoPartNumberFilterComponent } from '../components/work-order/work-order
     WoApprovalRuleComponent,
     WoqApprovalRuleComponent,
     WorkOrderPickticketComponent,
-    WorkOrderPickticketprintComponent
+    WorkOrderPickticketprintComponent,
     WorkOrderMaterialsAddComponent,
     WoCustomerDetailComponent,
     WoPartNumberFilterComponent, 
