@@ -292,15 +292,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     changeOfDocumentStatus(status) {
-    }
-
-    // errorMessageHandler(log) {
-    //     this.alertService.showMessage(
-    //         'Error',
-    //         log.error,
-    //         MessageSeverity.error
-    //     );
-    // }
+    }  
 
     changeOfStatus(status, viewType) {
         const lazyEvent = this.lazyLoadEventDataInput;

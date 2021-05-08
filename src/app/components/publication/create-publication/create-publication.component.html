@@ -142,10 +142,10 @@
                                     </option>
                                 </select>
                                 <div class="form-row"
-                                    *ngIf="sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3">
-                                    <label for="manufacturer" *ngIf="sourcePublication.publishedById == 3"> Manufacturer
+                                    *ngIf="sourcePublication.publishedById == vendorModuleId || sourcePublication.publishedById == manufacturermoduleid">
+                                    <label for="manufacturer" *ngIf="sourcePublication.publishedById == manufacturermoduleid"> Manufacturer
                                         <span class=" clr-red">*</span></label>
-                                    <label for="vendor" *ngIf="sourcePublication.publishedById == 2"> Vendor
+                                    <label for="vendor" *ngIf="sourcePublication.publishedById == vendorModuleId"> Vendor
                                         <span class=" clr-red">*</span></label>
                                     <div class="col-sm-12">
                                         <p-autoComplete class="p-autoComplete-ctsm" name="publishedByRefId "
@@ -155,17 +155,17 @@
                                             (onSelect)="onChangeInput()"
                                             (completeMethod)="getPublishedByReferencesList($event, sourcePublication.publishedById)"
                                             [dropdown]="true"
-                                            required="{{sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3}}">
+                                            required="{{sourcePublication.publishedById == vendorModuleId || sourcePublication.publishedById == manufacturermoduleid}}">
                                         </p-autoComplete>
                                     </div>
                                 </div>
 
 
-                                <input *ngIf="sourcePublication.publishedById == 4" type="text" pInputText
+                                <input *ngIf="sourcePublication.publishedById == otherModuleId" type="text" pInputText
                                     name="publishedByOthers" size="50" (change)="onChangeInput()"
                                     [(ngModel)]="sourcePublication.publishedByOthers" (onClear)="clearValue()"
                                     class="form-control ui-autocomplete-input"
-                                    required="{{sourcePublication.publishedById == 4}}" placeholder="Specify Others" />
+                                    required="{{sourcePublication.publishedById == otherModuleId}}" placeholder="Specify Others" />
                             </div>
                             <div class="form-group">
                                 <label for="sequence">Revision Num</label>
