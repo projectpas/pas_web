@@ -188,6 +188,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.quantityOnHand = null;
 		this.stockLineForm.oem = 'true';
 		this.stockLineForm.isCustomerStock = false;
+		this.stockLineForm.customerId = 0;
 		this.stockLineForm.tagType = [];
 		this.stockLineForm.stockLineNumber = 'Creating';
 		this.stockLineForm.controlNumber = 'Creating';
@@ -701,13 +702,11 @@ export class StockLineSetupComponent implements OnInit {
 		this.stocklineser.getStockLineDetailsById(stockLineId).subscribe(res => {
 
 			this.itemMasterId= res.itemMasterId;
-			setTimeout(() => {
 				//this.loadPOData(res.itemMasterId);
 				//this.loadROData(res.itemMasterId);
 				this.loadNHAData(res.itemMasterId);
 				this.loadTLAData(res.itemMasterId);
 				this.GetManufacturerByitemMasterId(res.itemMasterId);
-			}, 10000);
 			
 		
 			this.arrayItemMasterlist.push(res.itemMasterId);
@@ -778,6 +777,7 @@ export class StockLineSetupComponent implements OnInit {
 				this.toGetDocumentsListNew(this.stockLineId);
 				this.getDeletedList(this.stockLineId);
 				this.getVendorSelecionOnEdit(res.vendorId);
+				this.getCustomerSelecionOnEdit(res.customerId);
 				this.getWOSelecionOnEdit(res.workOrderId);
 				this.getPOSelecionOnEdit('',res.purchaseOrderId);
 				this.getROSelecionOnEdit('',res.repairOrderId);
@@ -927,6 +927,23 @@ export class StockLineSetupComponent implements OnInit {
 				this.allVendorsList = response;
 				this.vendorNames = this.allVendorsList;
 				this.stockLineForm.vendorId = getObjectById('value', vendorId, this.allVendorsList);
+			}, error => this.saveFailedHelper(error));
+		}
+	}
+	prevent(event)
+	{
+		event.preventDefault();
+	}
+
+	getCustomerSelecionOnEdit(customerId) {
+		this.arrayCustlist.push(customerId);
+		if (customerId > 0) 
+		{
+
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCustomersList = response;
+				this.customerNames = this.allCustomersList;
+				this.stockLineForm.customerId = getObjectById('value', customerId, this.allCustomersList);
 			}, error => this.saveFailedHelper(error));
 		}
 	}
@@ -1547,6 +1564,7 @@ export class StockLineSetupComponent implements OnInit {
 			partNumber: this.stockLineForm.itemMasterId != undefined ? this.stockLineForm.itemMasterId.partnumber : '',
 			itemMasterId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId),
 			vendorId: this.stockLineForm.vendorId ? editValueAssignByCondition('value', this.stockLineForm.vendorId) : '',
+			customerId: this.stockLineForm.customerId ? editValueAssignByCondition('value', this.stockLineForm.customerId) : '',
 			obtainFromName: this.stockLineForm.obtainFromType == 4 ? this.stockLineForm.obtainFrom : (this.stockLineForm.obtainFrom ? getValueFromObjectByKey('label', this.stockLineForm.obtainFrom) : ''),
 			obtainFrom: this.stockLineForm.obtainFromType == 4 ? null : (this.stockLineForm.obtainFrom ? editValueAssignByCondition('value', this.stockLineForm.obtainFrom) : ''),
 			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,
@@ -1566,6 +1584,7 @@ export class StockLineSetupComponent implements OnInit {
 			locationId: this.stockLineForm.locationId > 0 ? this.stockLineForm.locationId : null,
 			shelfId: this.stockLineForm.shelfId > 0 ? this.stockLineForm.shelfId : null,
 			binId: this.stockLineForm.binId > 0 ? this.stockLineForm.binId : null,
+			isCustomerStock: this.stockLineForm.isCustomerStock == 'true' ? 'false' : 'true',
 
 			ownerName: this.stockLineForm.ownerType == 4 ? this.stockLineForm.owner : (this.stockLineForm.owner ? getValueFromObjectByKey('label', this.stockLineForm.owner) : ''),
 			owner: this.stockLineForm.ownerType == 4 ? null : (this.stockLineForm.owner ? editValueAssignByCondition('value', this.stockLineForm.owner) : ''),
