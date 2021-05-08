@@ -7,11 +7,12 @@ import { ISalesQuote } from "../../../../../../../src/app/models/sales/ISalesQuo
   styleUrls: ['./wo-customer-detail.component.scss']
 })
 export class WoCustomerDetailComponent{
-  @Input() customer: any;
-  @Input() workorderdetails: ISalesQuote;
+
+   @Input() customer: any;
+
   constructor() {
     this.customer = {
-      customerName: '',
+      name: '',
       customerCode: '',
       promisedDate: ''
     }

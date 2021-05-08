@@ -1,38 +1,32 @@
 <div class="row">
-  <div class="col-md-12 col-sm-12 col-12">
+  <div *ngIf="customer != undefined" class="col-md-12 col-sm-12 col-12">
     <div class="col-2 column">
       <div class="form-group">
-        <label>Customer Name</label>
-        <input type="text" class="form-control" name="customerName" [ngModel]="workorderdetails.customerName"
+        <label style="width: 90px;" >Customer Name</label>
+        <input type="text" class="form-control" name="name" [ngModel]="customer.name"
           disabled="true" />
       </div>
     </div>
     <div class="col-3 column">
       <div class="form-group">
-        <label>Customer Code</label>
-        <input type="text" class="form-control" name="customerCode" [ngModel]="workorderdetails.customerCode"
+        <label style="width: 90px;">Customer Code</label>
+        <input type="text" class="form-control" name="customerCode" [ngModel]="customer.customerCode"
           disabled="true" />
       </div>
     </div>
-    <!-- <div class="col-2 column">
-      <div class="form-group">
-        <label> Memo</label>
-        <div [innerHTML]="salesQuote.memo" class="form-control" style="width:100%;" class="text_editor_box"></div>
-      </div>
-    </div> -->
     <div class="col-5 column" style="padding: 18px 0px 10px; padding-left:12px">
       <div class="form-group">
         <label></label>
         <div class="col-md-3">
-          <label>
-            <input type="checkbox" [(ngModel)]="workorderdetails.restrictPMA" name="restrictPMA" id="restrictPMA"
+          <label style="width: 90px;">
+            <input type="checkbox" [(ngModel)]="customer.restrictPMA" name="restrictPMA" id="restrictPMA"
               [disabled]="true" />
             Restrict PMA
           </label>
         </div>
         <div class="col-md-6">
-          <label>
-            <input type="checkbox" [(ngModel)]="workorderdetails.restrictDER" name="restrictDER" id="restrictDER"
+          <label style="width: 90px;">
+            <input type="checkbox" [(ngModel)]="customer.restrictDER" name="restrictDER" id="restrictDER"
               [disabled]="true" />
             Restrict DER
           </label>
