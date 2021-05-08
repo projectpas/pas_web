@@ -127,7 +127,7 @@
                                                         <p-calendar [showIcon]="true" class="calender-cstm "
                                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                             name="openDate" #openDate="ngModel" required (ngModelChange)="getmemo($event)"
-                                                            [(ngModel)]="workOrderGeneralInformation.openDate" [disabled]="isView" appendTo="body">
+                                                            [(ngModel)]="workOrderGeneralInformation.openDate" [disabled]="true" appendTo="body">
                                                         </p-calendar>
                                                     </div>
                                                     <div class="form-group">
@@ -170,7 +170,7 @@
                                                                 </a>
                                                             </span>
                                                         </label>
-                                                        <p-autoComplete field="customerName"
+                                                        <p-autoComplete field="customerName" 
                                                             [(ngModel)]="workOrderGeneralInformation.customerId"
                                                             name="customerName" errorMessage="Records not found"
                                                             [forceSelection]="true"
@@ -189,13 +189,10 @@
                                                                 <small> Customer Name is required </small>
                                                             </div>
                                                         </div>
-
                                                         <div class="clear"></div>
-
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Contact Name<span class="text-danger">*</span></label>
-
                                                          <input type="text" *ngIf="isView" class="form-control" name="customercontact"  [(ngModel)]="workOrderGeneralInformation.customerContact"  disabled>
                                                         <p-autoComplete *ngIf="!isView"
                                                             (onSelect)="onSelectCustomerContact(myCustomerContact)"
@@ -266,7 +263,7 @@
                                                     (completeMethod)="filterSalesPerson($event)"
                                                     (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'salesPersonId' )"
                                                     [size]="30" [minLength]="1" [dropdown]="true"
-                                                    class="p-autoComplete-ctsm" [disabled]="isView">
+                                                    class="p-autoComplete-ctsm" [disabled]="true">
                                                 </p-autoComplete>
                                             </div>
                                             <div class="form-group ">
@@ -279,7 +276,7 @@
                                                     [forceSelection]="true" [dropdown]="true" [suggestions]="csrList"
                                                     (completeMethod)="filterCsr($event)"
                                                     (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'csr' )"
-                                                    [size]="30" [minLength]="1" class="p-autoComplete-ctsm" [disabled]="isView">
+                                                    [size]="30" [minLength]="1" class="p-autoComplete-ctsm" [disabled]="true">
                                                 </p-autoComplete>
                                             </div>
 
@@ -359,7 +356,7 @@
                                     <th rowspan="2" style="min-width:80px !important">Est. Ship Date <span class="clr-red">*</span></th>
                                     <th rowspan="2">Stage <span class="clr-red">*</span></th>
                                     <th rowspan="2" style="min-width:90px !important">Status <span class="clr-red">*</span></th>
-                                    <th rowspan="2">Tech Name</th>
+                                    <th rowspan="2">Tech Name <span class="clr-red">*</span></th>
                                     <th rowspan="2" style="min-width: 100px !important;">Station ID</th>
                                     <th rowspan="2" style=" min-width: 100px !important;">Work Scope <span class="clr-red">*</span></th>
                                     <th rowspan="2" style=" min-width: 100px !important;">Priority <span class="clr-red">*</span></th>
@@ -378,7 +375,8 @@
                                     <th rowspan="2" style="min-width:32px !important">Restrict DER</th>
                                     <th rowspan="2" style="min-width:75px !important">TAT   Current</th>    
                                     <th rowspan="2" style="z-index:1;min-width:80px !important">TAT   Standard</th>
-                                    <!-- <th colspan="2">Restriction</th>
+                                    <!-- <th colspan="2">Restriction</th> -->
+                                    <!-- 
                                   
                                      <th colspan="2">TAT (Days)</th> -->
                                     <th rowspan="2" colspan="4">Management Structure </th>
@@ -537,7 +535,7 @@
                                             </a>
                                         </span>  
                                         <!-- [disabled]="workOrderPartNumber.isWorkflowTranfer" -->
-                                        <span [ngClass]="{pointerEvents : isView}">
+                                        <span [ngClass]="{pointerEvents : isView || workOrderPartNumber.workflowId==0 || workOrderPartNumber.workflowId==null}">
                                             <input type="checkbox" name="tranferwflw{{i}}" #tranferwflw="ngModel"  (ngModelChange)="getValid()" 
                                             class="form-control w60  mr10"  [(ngModel)]="workOrderPartNumber.isWorkflowTranfer" (change)="tranferCheckbox($event,workOrderPartNumber,i)" matTooltip="Transfer Workflow To Work Order"
                                             matTooltipPosition="above"> 
@@ -967,7 +965,7 @@
                     (refreshData)="getMaterialListHandle()" [mpnPartNumbersList]="mpnPartNumbersList" [isView]="isView || isViewForApprovedPart"></app-work-order-complete-material-list>
             </div>
            <div *ngIf="labor && (gridActiveTab == 'labor') " [ngClass]="{hidedata : gridActiveTab !== 'labor'}" id="check">
-                <app-work-order-labor [taskList]="taskList" [laborForm]="labor"
+                <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor"
                     [employeesOriginalData]="employeesOriginalData" [workOrderLaborList]="workOrderLaborList"
                     [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [selectedPartNumber]="selectedPartNumber" [savedWorkOrderData]="savedWorkOrderData"
@@ -1191,7 +1189,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="closeTranferFlow()">&times;</button>
-                <h4 class="modal-title warning_color">Transfer Workfow To Work Order</h4>
+                <h4 class="modal-title warning_color">Transfer Workflow To Work Order</h4>
               </div>
             <div class="pad_msf">
                 <!-- <p  class="mar_o warning_color"> Publication is expired </p> -->

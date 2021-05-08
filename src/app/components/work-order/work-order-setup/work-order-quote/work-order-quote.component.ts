@@ -1438,7 +1438,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "markupPercentageId": mList.markupPercentageId,
                 "TotalPartsCost": 155,
                 "Markup": mList.markup,
-                "masterCompanyId": (mList.masterCompanyId == '') ? 1 : mList.masterCompanyId,
+                "masterCompanyId": this.authService.currentUser.masterCompanyId,
                 "TaskId": (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
                 "BillingMethodId": mList.billingMethodId? Number(mList.billingMethodId):this.costPlusType,
                 "BillingRate": mList.billingRate,

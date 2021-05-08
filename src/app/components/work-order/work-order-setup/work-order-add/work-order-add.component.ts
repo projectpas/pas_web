@@ -707,6 +707,49 @@ setTimeout(() => {
         // currentRecord.csr = getObjectById('employeeId', object.csrId, this.csrOriginalList);
         // currentRecord.salesPerson = getObjectById('employeeId', object.salesPersonId, this.salesAgentsOriginalList);
 
+        if (this.workOrderGeneralInformation) {
+            this.workOrderGeneralInformation.partNumbers.forEach(
+                x => {
+
+                    x.masterPartId=undefined;
+                    x.description='';
+                    x.revisedPartNo='';
+
+                    x.description='';
+                    x.revisedPartNo='';
+
+                    x.serialNumber='';
+                    x.quantity=1;
+                    x.tatDaysStandard=0;
+                    x.tatDaysCurrent=0;
+                    x.nte=0;
+
+                    x.stockLineNumber='';
+                    x.contractNo='';
+
+                    x.customerReference='';
+                    x.itemGroup='';
+
+                    x.receivedDate=undefined;
+                    x.customerRequestDate=new Date();
+                    x.promisedDate=new Date();
+                    x.estimatedCompletionDate=new Date();
+                    x.estimatedShipDate=new Date();
+                    x.workOrderStageId=0;
+                    x.workOrderStatusId
+                    x.partTechnicianId=undefined;
+                    x.techStationId=0;
+                    x.workOrderScopeId=0;
+                    x.workOrderPriorityId=0;
+                    x.conditionId=0;
+                    x.cMMId=0;
+                    x.workflowId=0;
+
+
+                }
+            )
+        }
+
         if (this.workOrderGeneralInformation.workOrderTypeId == 1) // Customer
         {
             this.getPartNosByCustomer(object.customerId, 0);
@@ -2035,6 +2078,8 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 if (labSubList && labSubList['expertiseId'] != null){
                     labSubList.masterCompanyId=this.currentUserMasterCompanyId;
                     this.result.LaborList.push(labSubList);
+                    this.result.expertiseId=labSubList['expertiseId'];
+                    this.result.employeeId=labSubList['employeeId'];
                 }
             }
         }
@@ -2903,7 +2948,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
 
         if (event.query !== undefined && event.query !== null) {
             const customers = [...this.customerContactList.filter(x => {
-                return x.contactName.toLowerCase().includes(event.query.toLowerCase())
+                return x.customerContact.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.customerContactInfo = customers;
         }
@@ -3351,6 +3396,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     this.labor.workOrderLaborList[0][task.description.toLowerCase()] = [];
                 }
             })
+            console.log("task list",this.taskList)
         },
             err => {
                 this.handleError(err);
