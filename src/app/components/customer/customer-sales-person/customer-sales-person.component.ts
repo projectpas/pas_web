@@ -502,7 +502,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                 this.csrOriginalList = res.filter(x => {
                     if (CSRid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
                         return x;
-                    }
+                    } 
                 })}
                 
                 if( Agentsid[0] && Agentsid[0].employeeExpertiseId && Agentsid[0].employeeExpertiseId > 0)

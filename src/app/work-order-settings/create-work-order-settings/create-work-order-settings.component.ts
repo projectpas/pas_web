@@ -224,6 +224,9 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             if (this.receivingForm.defaultShelfId) {
                 this.shelfValueChange(this.receivingForm.defaultShelfId)
             }
+            if (this.receivingForm.pickTicketEffectiveDate) {
+                this.receivingForm.pickTicketEffectiveDate = new Date(this.receivingForm.pickTicketEffectiveDate);
+            }
             this.getSiteDetailsOnEdit(this.receivingForm);
          
         },

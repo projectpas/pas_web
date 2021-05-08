@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4 second-block border-height" style="height:auto;min-height:161px;margin-top:-2px">
+                            <div class="col-sm-4 second-block border-height" >
                                 <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">SO Pick Ticket</h3>
                                 <div class="second-block-div">
                                     <label class="col-sm-6 second-block-label" style="width:100%">Pick Ticket Num</label>
@@ -117,7 +117,7 @@
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
                                             <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.custToState}}</label>
+                                                {{this.salesOrder.custToPostalCode}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-5 first-block-label"><b>Country :</b></label> -->
@@ -184,7 +184,7 @@
                                     <tbody>
                                         <ng-container *ngFor="let part of this.parts let i=index">                                           
                                             <tr>
-                                                <td style="vertical-align: top;border-right:1px solid black">
+                                                <td style="vertical-align: top;border-right:1px solid black;width:20%">
                                                     <table class="border-none">
                                                         <tr>
                                                             <td>
@@ -198,7 +198,7 @@
                                                         </tr>
                                                     </table>
                                                 </td>
-                                                <td style="vertical-align: top;border-right:1px solid black">
+                                                <td style="vertical-align: top;border-right:1px solid black;width:20%">
                                                     <table class="border-none">
                                                         <tr>
                                                             <td>
@@ -217,81 +217,82 @@
                                                         </tr>
                                                     </table>
                                                 </td>
-                                                <td style="vertical-align: top;border-right:1px solid black">
+                                                <td style="vertical-align: top;border-right:1px solid black;width:20%">
                                                     <table class="border-none">
                                                         <tr>
                                                             <td>
-                                                                UOM: {{part.uom}}
-                                                            </td>
-                                                            <td>
-                                                                Cond: {{part.conditionDescription}}
+                                                                UOM: {{part.uom}}                                                              
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                             <td colspan="2" >Site: {{part.siteName}}
+                                                            <td>
+                                                                Cond: {{part.conditionDescription}}
+                                                                </td>
+                                                            </tr>
+                                                        <tr>
+                                                             <td  >Site: {{part.siteName}}
                                                                     </td>
                                                         </tr>
                                                         <tr>
                                                                      <td>
                                                                         SL Num: {{part.stockLineNumber}}
-                                                                        </td>
-                                                                        <td>
-                                                                            Cntrl #: {{part.controlNumber}}
+                                                                       
+                                                                          
                                                                         </td>
                                                          </tr>
+                                                         <tr>
+                                                             <td>  Cntrl #: {{part.controlNumber}}
+                                                                 </td>
+                                                             </tr>
                                                         </table>
                                                 </td>
-                                                <td style="vertical-align: top;border-right:1px solid black">
+                                                <td style="vertical-align: top;border-right:1px solid black;width:20%">
                                                     <table class="border-none">
                                                         <tr>
                                                             <td>
                                                                 Priority: {{part.priorityName}}
                                                             </td>
-                                                            <td>
-                                                                Qty OH: {{part.quantityOnHand}}
-                                                            </td>
-                                                            <td>
-                                                                Qty Avl: {{part.qtyAvailable}}
-                                                            </td>
                                                         </tr>
+                                                        <tr><td> Qty OH: {{part.quantityOnHand}}</td></tr>
+                                                        <tr><td>  Qty Avl: {{part.qtyAvailable}}</td></tr>
                                                         <tr>
                                                              <td  >Warehouse: {{part.warehouseName}}
-                                                                    </td>
-                                                                   
-                                                                        <td colspan="2">Location: {{part.locationName}}
-                                                                            </td>
+                                                                Location: {{part.locationName}}
+                                                                  
+                                                             </td>
                                                                       
                                                         </tr>
+                                                     
                                                         <tr>
                                                           
-                                                            <td colspan="3">
+                                                            <td >
                                                                 ID #: {{part.idNumber}}
-                                                                </td>
+                                                            </td>
                                                               
-                                                            </tr>
+                                                        </tr>
                                                         </table>
                                                 </td>
-                                                 <td style="vertical-align: top;border-right:1px solid black">
+                                                 <td style="vertical-align: top;border-right:1px solid black;width:20%">
                                                     <table class="border-none">
                                                         <tr>
                                                             <td>
                                                                 Qty to Pick: {{part.qtyToPick}}
-                                                            </td>
-                                                            <td>
-                                                                Qty Picked: {{part.qtyShipped}}
+                                                          
+                                                              
                                                             </td>
                                                         </tr>
+                                                        <tr><td>  Qty Picked: {{part.qtyShipped}}</td></tr>
                                                       
                                                         <tr>
                                                                     <td>
                                                                         Shelf: {{part.shelfName}}
-                                                                        </td>
-                                                                        <td>
-                                                                            Bin: {{part.binName}}
+                                                                       
+                                                                          
                                                                             </td>
                                                                     </tr>
+                                                                    <tr><td>  Bin: {{part.binName}}</td></tr>
                                                                     <tr>
-                                                                        <td colspan="2" >
+                                                                        <td>
                                                                                </td>
                                                                    </tr>
                                                         </table>

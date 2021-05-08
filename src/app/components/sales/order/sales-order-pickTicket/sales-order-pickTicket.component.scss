@@ -343,11 +343,12 @@ hr {
 
 .second-block {
   position: relative;
-  min-height: 180px;
+  height:auto;min-height:161px;
+  margin-top:-2px;
   float: left;
   padding-right: 2px;
   width: 35%;
-height:auto;
+
   border-left:1px solid black;
     // margin-left: 16%;
   padding-left: 2px;
@@ -475,9 +476,9 @@ height:auto;
 }
 
 .logo {
-  padding: 10px;
-  height:130px;
-  width:200px;
+  padding-top: 10px;
+  height:110px;
+  width:300px;
 }
 
 .sold-block-div {

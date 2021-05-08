@@ -9,6 +9,7 @@ import { ItemMasterSearchQuery } from "../../../../components/sales/quotes/model
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { SalesQuoteService } from "../../../../../app/services/salesquote.service";
 import { ISalesQuote } from "../../../../../app/models/sales/ISalesQuote.model";
+import { CustomerService } from '../../../../../app/services/customer.service';
 
 @Component({
   selector: 'app-work-order-materials-add',
@@ -16,45 +17,49 @@ import { ISalesQuote } from "../../../../../app/models/sales/ISalesQuote.model";
   styleUrls: ['./work-order-materials-add.component.scss']
 })
 export class WorkOrderMaterialsAddComponent implements OnInit {
-  @Input() selectedSummaryRow: SummaryPart;
-  @Input() isStockLineViewMode = false;
-  @Input() clearData = false;
-  @Input() display: boolean;
-  @Input() customer: any;
-  @Input() salesQuote: ISalesQuote;
-  @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() select: EventEmitter<any> = new EventEmitter<any>();
-  @Input() selectedParts: any = [];
-  @Input() type: string;
-  @Input() isWorkOrder = false;
-  @Input() customerId : any;
-  searchType: ItemSearchType;
-  parts: IPartJson[];
-  showModalMargin: boolean;
-  part: PartDetail;
-  query: ItemMasterSearchQuery;
-  allConditionInfo: any[] = [];
-  allConditionInfoArray: any[] = [];
+  // // @Input() selectedSummaryRow: SummaryPart;
+  // // @Input() isStockLineViewMode = false;    
+  // @Input() customer: any;
+  // // @Input() salesQuote: ISalesQuote;
+   @Input() clearData = false;
+   @Input() display: boolean;
+   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
+   @Output() select: EventEmitter<any> = new EventEmitter<any>();
+   @Input() selectedParts: any = [];
+   @Input() type: string;
+   @Input() isWorkOrder = false;
+   @Input() customerId : any;
+   customer: any;
+   searchType: ItemSearchType;
+   parts: IPartJson[];
+   showModalMargin: boolean;
+   workorderdetails : any;
+   part: PartDetail;
+   query: ItemMasterSearchQuery;
+   allConditionInfo: any[] = [];
+   allConditionInfoArray: any[] = [];
 
-  constructor(private authService: AuthService, private salesQuoteService: SalesQuoteService, private conditionService: ConditionService, private workOrderService: WorkOrderService,) {
+  constructor(private authService: AuthService, private salesQuoteService: SalesQuoteService, private conditionService: ConditionService, private workOrderService: WorkOrderService, private customerService: CustomerService) {
     this.searchType = ItemSearchType.ItemMaster; 
     this.showModalMargin = false;
   }
 
   ngOnInit() {
-    console.log(this.customerId);
-    console.log(this.isWorkOrder)
+      this.getCustomerDetails();
       this.getConditions();
-      this.salesQuoteService
-        .getSearchPartResult()
-        .subscribe(data => {
+      this.salesQuoteService.getSearchPartResult().subscribe(data => {
           this.parts = data;
         });
-      this.salesQuoteService.getSearchPartObject()
-        .subscribe(data => {
+      this.salesQuoteService.getSearchPartObject().subscribe(data => {
           this.query = data;
           this.searchType = this.getSearchType(this.query.partSearchParamters.itemSearchType);
         });
+  }
+
+  getCustomerDetails(){
+    this.customerService.getCustomerdataById(this.customerId).subscribe(response => {
+      this.customer = response[0];
+    })
   }
 
   get masterCompanyId(): number {
@@ -137,7 +142,7 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
           let activeConditions = results[0].filter(x => x.isActive == true);
           if (activeConditions && activeConditions.length > 0) {
             this.allConditionInfo = activeConditions;
-            if (this.selectedSummaryRow) {
+            //if (this.selectedSummaryRow) {
               let conditionExists = this.allConditionInfo.find(x => x.conditionId == this.query.partSearchParamters.conditionId);
               if (!conditionExists) {
                 let addConditionExists = results[0].find(x => x.conditionId == this.query.partSearchParamters.conditionId);
@@ -145,30 +150,9 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
                   this.allConditionInfo.push(addConditionExists);
                 }
               }
-            }
+            //}
           }
           this.allConditionInfoArray = this.allConditionInfo.map((item) => ({ label: item.description, value: item.conditionId }));
         });
     }
 }
-
-// export class AddSalesPartNumberComponent implements OnInit {
-  
-//   @Input() salesQuote: ISalesQuote;
-//   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
-//   @Output() select: EventEmitter<any> = new EventEmitter<any>();
-//   @Input() selectedParts: any = [];
-//   @Input() type: string;
-//   searchType: ItemSearchType;
-//   parts: IPartJson[];
-//   showModalMargin: boolean;
-//   part: PartDetail;
-//   query: ItemMasterSearchQuery;
-//   allConditionInfo: any[] = [];
-//   allConditionInfoArray: any[] = [];
-
-//   constructor(private authService: AuthService, private salesQuoteService: SalesQuoteService, private conditionService: ConditionService) {
-//     this.searchType = ItemSearchType.ItemMaster;
-//     this.showModalMargin = false;
-//   }
-// }

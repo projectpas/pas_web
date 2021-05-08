@@ -1127,7 +1127,7 @@
                     </p-accordionTab>
                     <p-accordionTab header="Labor">
                       <div  *ngIf="quoteLaborList && quoteLaborList.workOrderLaborList">
-                        <app-work-order-labor [taskList]="taskList" [savedWorkOrderData]="savedWorkOrderData" [laborForm]="quoteLaborList"  [isQuote]="isQuote" [markupList]="markupList" [isView]="isView" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
+                        <app-work-order-labor [labortaskList]="taskList" [savedWorkOrderData]="savedWorkOrderData" [laborForm]="quoteLaborList"  [isQuote]="isQuote" [markupList]="markupList" [isView]="isView" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
                         ></app-work-order-labor>
                       </div>
                     </p-accordionTab>
@@ -1198,7 +1198,7 @@
                     </p-accordionTab>
                     <p-accordionTab header="Labor">
                       <div>
-                        <app-work-order-labor [taskList]="taskList" [laborForm]="labordata"
+                        <app-work-order-labor [labortaskList]="taskList" [laborForm]="labordata"
                         [employeesOriginalData]="employeesOriginalData" [workOrderLaborList]="workOrderLaborList"
                         [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData"
                         [selectedPartNumber]="selectedPartNumber" [savedWorkOrderData]="savedWorkOrderData"

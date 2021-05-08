@@ -1,4 +1,6 @@
-﻿import { WorkOrderPickticketComponent } from './../components/work-order/work-order-setup/work-order-pickticket/work-order-pickticket.component';
+﻿import { WoCustomerDetailComponent } from './../components/work-order/work-order-setup/work-order-materials-add/wo-customer-detail/wo-customer-detail.component';
+import { WorkOrderMaterialsAddComponent } from './../components/work-order/work-order-setup/work-order-materials-add/work-order-materials-add.component';
+import { WorkOrderPickticketComponent } from './../components/work-order/work-order-setup/work-order-pickticket/work-order-pickticket.component';
 import { WoqApprovalRuleComponent } from './../components/work-order/work-order-setup/woq-approval-rule/woq-approval-rule.component';
 import { CommonModulesModule } from './../common-modules/common-modules.module';
 import { WoApprovalRuleComponent } from './../components/work-order/work-order-setup/wo-approval-rule/wo-approval-rule.component';
@@ -100,6 +102,9 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
 import { CommonCommunicationModule } from '../components/common-components/common-communication/common-communiation.module';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { WorkOrderPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-pickticketprint/work-order-pickticketprint.component';
+import { WoPartNumberFilterComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-number-filter/wo-part-number-filter.component';
+
 @NgModule({
   imports: [
     FormsModule,
@@ -195,9 +200,12 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     WoApprovalRuleComponent,
     WoqApprovalRuleComponent,
     WorkOrderPickticketComponent,
-
+    WorkOrderPickticketprintComponent,
+    WorkOrderMaterialsAddComponent,
+    WoCustomerDetailComponent,
+    WoPartNumberFilterComponent, 
   ],
-  entryComponents: [],
+  entryComponents: [WorkOrderPickticketprintComponent],
   providers: [
     WorkFlowtService,
     WorkOrderService,
