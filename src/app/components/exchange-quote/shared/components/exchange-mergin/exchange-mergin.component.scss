@@ -12,6 +12,9 @@ button {
   .wauto {
     width: auto !important;
   }
+  .border-none{
+    border:none;
+  }
   
   .no-bg {
     background: none !important;
@@ -26,7 +29,7 @@ button {
   }
   
   thead > tr > th {
-    border: 1px solid #3a7fd2;
+    border: 1px solid #c9c9c9;
     font-weight: 500;
     color: #fff;
     background-color: #4298ff;
@@ -54,7 +57,7 @@ button {
     background-color: white !important;
   }
   .quantityTextBox {
-    width: 60%;
+    width: 90%;
   }
   
   div.calculation table thead tr td,

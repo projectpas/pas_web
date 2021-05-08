@@ -89,14 +89,14 @@ table, thead, th {
     //   background: #0d57b0 !important;
       padding: 5px!important;color: #fff;letter-spacing: 0.3px;font-weight:bold;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-       font-size: 14px;text-transform: capitalize; z-index: 1;} 
+       font-size: 12.5px;text-transform: capitalize; z-index: 1;} 
   table tbody{   overflow-y: auto; max-height: 500px;  }
   table tbody tr td{ background: #fff;
      padding: 2px;line-height: 22px;
      height:22px;color: #333;
     //  border-right:1px solid black !important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight;normal;
-    font-size: 14px !important;max-width:100%; letter-spacing: 0.1px;border:0}
+    font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
 
   h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
   
@@ -105,7 +105,7 @@ table, thead, th {
   .first-block-name{margin-right: 20px} 
   .first-block-sold-to {
     position: relative;
-    min-height: 122px;
+    min-height: 82px;
     height: auto;
     float: left;
     padding-right: 2px;
@@ -118,7 +118,7 @@ table, thead, th {
   
   .first-block-ship-to {
     position: relative;
-    min-height: 120px;
+    min-height: 80px;
     height: auto;
     padding-right: 2px;
     border-right: 1px solid black;
@@ -129,12 +129,13 @@ table, thead, th {
   
   .first-block-sold {
     position: relative;
-    min-height: 160px;
+    min-height: 120px;
     height:auto;
     float: left;
     border-right:1px solid black;
     padding-right: 2px;
     padding-left: 2px;
+    margin-left:-1px;
     width: 50%;
   }
   
@@ -143,8 +144,8 @@ table, thead, th {
     min-height: 1px;
     float: right;
     padding-right: 2px;
-    padding-left: 2px;
-    width: 48%;
+   
+    width: 49%;
   }
   
   .address-block {
@@ -165,7 +166,7 @@ table, thead, th {
   
   .second-block {
     position: relative;
-    min-height: 200px;
+    min-height: 120px;
     float: left;
     padding-right: 2px;
     width: 42%;
@@ -182,6 +183,7 @@ table, thead, th {
     display: flex;
   
     min-height: 1px;
+    height:auto
    
     width: 100%;
   }
@@ -195,7 +197,7 @@ table, thead, th {
     float: left;
     padding-right: 2px;
     padding-left: 2px;
-    font-size:14px !important;
+    font-size:12.5px !important;
    
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     width: 38.33333333%;
@@ -212,14 +214,14 @@ table, thead, th {
     // top: 6px;
     position: relative;
     font-weight: normal;
-    font-size:14
+    font-size:12.5
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     // margin-top: 10px;
    
   }
   span {
     font-weight: normal;
-    font-size: 14px !important;
+    font-size: 12.5px !important;
 }
   
   .image {
@@ -295,7 +297,7 @@ table, thead, th {
     padding-right: 2px;
     padding-left: 2px;
     // width: 38.33333333%;
-    font-size:14px !important;
+    font-size:12.5px !important;
   
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-transform: capitalize;
@@ -313,9 +315,10 @@ table, thead, th {
   }
   
   .logo {
-    padding: 10px;
-    height:130px;
-    width:200px;
+     padding-top: 10px;
+    height:70px;
+    width:220px;
+  
   }
   
   .sold-block-div {
@@ -337,7 +340,7 @@ table, thead, th {
     border-bottom: 1px solid black;
       // margin-top: -2px;
       height: auto;
-      min-height: 160px;
+      min-height: 120px;
   }
   
   .parttable th {
@@ -352,7 +355,7 @@ table, thead, th {
     margin-top:20px;margin-left:-1px
   }
   .invoice-border{border-bottom: 1px solid;
-      min-height: 159px;
+      min-height: 120px;
       height: auto;}
   
               </style>

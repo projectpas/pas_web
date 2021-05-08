@@ -145,7 +145,8 @@
                                                     Unknown
                                                 </span>
 
-                                                <p-multiSelect *ngIf=" !modelUnknown && !dashNumberUnknown" class="dashnumber_f"
+                                                <p-multiSelect *ngIf=" !modelUnknown && !dashNumberUnknown" 
+                                                class="imstock-pmselect"
                                                                [disabled]="!selectedAircraftId"
                                                                [options]="search_AircraftDashNumberList"
                                                                [ngModelOptions]="{standalone: true}"

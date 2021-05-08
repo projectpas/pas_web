@@ -95,7 +95,7 @@
                                 <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER"
-                                            (ngModelChange)="enableSave()" disabled>
+                                            (ngModelChange)="enableSave()"  disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         DER
                                     </label>
@@ -303,23 +303,35 @@
                             </div>
                             <div class="form-group">
                                 <label>PO Num</label>
-                                <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                    [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId"
+                                    [suggestions]="allPODetails" (completeMethod)="filterPOList($event)"
+                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    (ngModelChange)="enableSave()" [forceSelection]="true">
+                                </p-autoComplete>
+                                <!-- <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId"
                                     [suggestions]="polistInfo" (completeMethod)="filterPoNumber($event)" [size]="30"
                                     [minLength]="1" [dropdown]="true" errorMessage="Records not found"
                                     (onSelect)="onChangePONum(stockLineForm.purchaseOrderId)" [forceSelection]="true"
                                     (ngModelChange)="enableSave()" [disabled]="stockLineForm.repairOrderId">
-                                </p-autoComplete>
+                                </p-autoComplete> -->
                             </div>
                             <div class="form-group">
                                 <label>RO Num</label>
-                                <p-autoComplete field="repairOrderNumber" class="pautocomp-cstm"
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId"
+                                [suggestions]="allRODetails" (completeMethod)="filterROList($event)"
+                                [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                (ngModelChange)="enableSave()" [forceSelection]="true" [disabled]="stockLineForm.purchaseOrderId">
+                            </p-autoComplete>
+                                <!-- <p-autoComplete field="repairOrderNumber" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId"
                                     [suggestions]="rolistInfo" (completeMethod)="filterRoNumber($event)" [size]="30"
                                     [minLength]="1" [dropdown]="true" errorMessage="Records not found"
                                     (onSelect)="onChangeRONum(stockLineForm.repairOrderId)" [forceSelection]="true"
                                     (ngModelChange)="enableSave()" [disabled]="stockLineForm.purchaseOrderId">
-                                </p-autoComplete>
+                                </p-autoComplete> -->
                             </div>
                             <div class="form-group">
                                 <label>Vendor</label>
@@ -941,7 +953,7 @@
                                     <span>
                                         <div [innerHTML]="stockLineForm.memo "
                                             [matTooltip]="parsedText(stockLineForm.memo)" class="form-control"
-                                            class="text_editor_box  memo-width"></div>
+                                            class="text_editor_box  memo-width" [ngStyle]="{'border':'1px solid red'}"></div>
                                     </span>
                                 </div>
                                 <div class="col-sm-1 black-reason">
