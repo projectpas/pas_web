@@ -111,6 +111,9 @@ export class WorkOrderService {
     getWorkOrderList(paginationData) {
         return this.workOrderEndpointService.getWorkOrderList(paginationData);
     }
+    WorkOrderROlist(paginationData) {
+        return this.workOrderEndpointService.WorkOrderROlist(paginationData);
+    }
     getWorkOrderGlobalSearch(value, pageIndex, pageSize) {
         return this.workOrderEndpointService.getWorkOrderGlobalSearch(value, pageIndex, pageSize);
     }
