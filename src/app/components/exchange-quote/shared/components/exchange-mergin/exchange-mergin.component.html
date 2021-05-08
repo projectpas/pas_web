@@ -50,7 +50,7 @@
       <div class="col-3 column">
         <div class="form-group">
           <label>Entry Date<span class="clr-red">*</span></label>
-          <p-calendar name="entryDate" class="form-control quantityTextBox text-right" [yearNavigator]="true"
+          <p-calendar name="entryDate" class="form-control quantityTextBox border-none text-right" [yearNavigator]="true"
               [monthNavigator]="true" yearRange="1900:2100"
               [(ngModel)]="part.entryDate" [showIcon]="true" id="entryDate"
               #entryDate="ngModel" required>
@@ -88,7 +88,7 @@
       <div class="col-3 column">
         <div class="form-group">
           <label>Billing Start Date<span class="clr-red">*</span></label>
-          <p-calendar name="billingStartDate" class="form-control quantityTextBox text-right" [yearNavigator]="true"
+          <p-calendar name="billingStartDate" class="form-control quantityTextBox border-none text-right" [yearNavigator]="true"
               [monthNavigator]="true" yearRange="1900:2100"
               [(ngModel)]="part.billingStartDate" [showIcon]="true" id="billingStartDate"
               #billingStartDate="ngModel" required>
@@ -147,7 +147,7 @@
       <div class="col-3 column">
         <div class="form-group">
           <label>Core Due Date<span class="clr-red">*</span></label>
-          <p-calendar name="coreDueDate" class="form-control quantityTextBox text-right" [yearNavigator]="true"
+          <p-calendar name="coreDueDate" class="form-control quantityTextBox border-none text-right" [yearNavigator]="true"
               [monthNavigator]="true" yearRange="1900:2100"
               [(ngModel)]="part.coreDueDate" [showIcon]="true" id="coreDueDate"
               #coreDueDate="ngModel" required>
@@ -171,7 +171,7 @@
           <ng-container *ngFor="let partList of part.exchangeQuoteScheduleBilling;let row_index=index;">
             <tr>
               <td>
-                <p-calendar name="scheduleBillingDate{{row_index}}" class="form-control quantityTextBox text-right" [yearNavigator]="true"
+                <p-calendar name="scheduleBillingDate{{row_index}}" class="form-control border-none quantityTextBox text-right" [yearNavigator]="true"
                   [monthNavigator]="true" yearRange="1900:2100"
                   [(ngModel)]="partList.scheduleBillingDate" [showIcon]="true" id="scheduleBillingDate{{row_index}}"
                   #scheduleBillingDate="ngModel" required>

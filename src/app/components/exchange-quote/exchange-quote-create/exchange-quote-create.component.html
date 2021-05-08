@@ -30,7 +30,7 @@
                 </span>
               </label>
               <input type="text" [(ngModel)]="exchangeQuote.customerName" name="customerName" class="form-control"
-                [disabled]="true" id="customerName" #customerName="ngModel" />
+                [disabled]="true" style="margin-top:-10px" id="customerName" #customerName="ngModel" />
               <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
                 class="alert alert-danger alert-danger-cstm">
                 <div *ngIf="customerName.errors.required">
@@ -136,7 +136,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6" style="padding:10px">
+                    <div class="col-md-6" style="padding-top:27px">
                       <div class="form-group" *ngIf="isEdit">
                         <label>Version Num</label>
                         <input type="text" [(ngModel)]="exchangeQuote.versionNumber" name="versionNumber"
@@ -190,7 +190,7 @@
                 </div>
                 <div class="col-md-6 main_ar">
                   <div class="form-row">
-                    <div class="col-md-6" style="padding:10px;">
+                    <div class="col-md-6" style="padding-top:26px;">
                       <div class="form-group">
                         <label>Customer Name
                           <span class="clr-red">*</span>
@@ -199,7 +199,7 @@
                               matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                           </span>
                         </label>
-                        <input type="text" [(ngModel)]="exchangeQuote.customerName" name="customerName"
+                        <input type="text" style="margin-top:-10px" [(ngModel)]="exchangeQuote.customerName" name="customerName"
                           class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" />
                         <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
                           class="alert alert-danger alert-danger-cstm">
@@ -250,7 +250,7 @@
                           (ngModelChange)="exchangeQuote.balanceDue=$event" [disabled]="true" />
                       </div>
                     </div>
-                    <div class="col-md-6" style="padding:10px;">
+                    <div class="col-md-6" style="padding-top:27px;">
                       <div class="form-group">
                         <label>Cust Req Date</label>
                         <p-calendar name="customerRequestDate" [yearNavigator]="true" [monthNavigator]="true"
