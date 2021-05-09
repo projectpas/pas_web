@@ -30,7 +30,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { error } from '@angular/compiler/src/util';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
-
+import { AppModuleEnum } from './../../../enum/appmodule.enum';
 declare var $: any;
 
 @Component({
@@ -226,7 +226,11 @@ export class CreatePublicationComponent implements OnInit {
   rowIndex: number;
   disabledPartNumber: boolean = true;
   disableGeneralInfoSave: boolean = true;
-
+  customerModuleId: number = 0;
+  companyModuleId: number = 0;
+  vendorModuleId: number = 0;
+  otherModuleId: number = 0;
+  manufacturermoduleid : number = 0;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -246,9 +250,14 @@ export class CreatePublicationComponent implements OnInit {
     private commonService: CommonService,
     private configurations: ConfigurationService,
     private localStorage: LocalStoreManager,
-    private modalService: NgbModal
-  ) { }
-
+    private modalService: NgbModal    
+  ) { 
+    this.companyModuleId = AppModuleEnum.Company;
+    this.vendorModuleId = AppModuleEnum.Vendor;
+    this.customerModuleId = AppModuleEnum.Customer;
+    this.otherModuleId = AppModuleEnum.Others;
+    this.manufacturermoduleid = AppModuleEnum.Manufacturer;
+  }
 
   ngOnInit() {
     this.getGlobalDateFormat();
@@ -544,7 +553,7 @@ export class CreatePublicationComponent implements OnInit {
     this.formData.append('asd', this.data.asd);
     this.formData.append('sequence', this.data.sequence);
     this.formData.append('publishedById', this.data.publishedById);
-    if (this.data.publishedById == 2 || this.data.publishedById == 3) {
+    if (this.data.publishedById == this.vendorModuleId || this.data.publishedById == this.manufacturermoduleid) {
       this.formData.append('publishedByRefId', this.data.publishedByRefId.value);
     } else {
       this.formData.append('publishedByRefId', null);
@@ -1075,9 +1084,7 @@ export class CreatePublicationComponent implements OnInit {
     this.searchByFieldUrlCreateforATA();
 
     if (this.ataChapterIdUrl !== '') {
-      this.ataMainSer
-        .getMultiATASubDesc(this.ataChapterIdUrl)
-        .subscribe(atasubchapter => {
+      this.ataMainSer.getMultiATASubDesc(this.ataChapterIdUrl).subscribe(atasubchapter => {
 
           const responseData = atasubchapter;
 
@@ -1577,7 +1584,7 @@ export class CreatePublicationComponent implements OnInit {
   getPublishedByModulesList() {
     let publishedById = this.sourcePublication.publishedById ? this.sourcePublication.publishedById : 0;
     this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, [publishedById].join(), this.masterCompanyId).subscribe(res => {
-      this.publishedByModulesList = res;
+      this.publishedByModulesList = res;      
     });
   }
   getPublishedByReferencesList(event, id) {

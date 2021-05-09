@@ -111,6 +111,9 @@ export class WorkOrderService {
     getWorkOrderList(paginationData) {
         return this.workOrderEndpointService.getWorkOrderList(paginationData);
     }
+    WorkOrderROlist(paginationData) {
+        return this.workOrderEndpointService.WorkOrderROlist(paginationData);
+    }
     getWorkOrderGlobalSearch(value, pageIndex, pageSize) {
         return this.workOrderEndpointService.getWorkOrderGlobalSearch(value, pageIndex, pageSize);
     }
@@ -645,6 +648,24 @@ export class WorkOrderService {
     savepickticketiteminterface(parts: WOPickTicket): Observable<WOPickTicket[]> {
         return Observable.forkJoin(
             this.workOrderEndpointService.savepickticketiteminterface(parts)
+        );
+    }
+
+    getPickTicketEdit(woPickTicketId: number, workOrderId: number, workOrderPartId: number): Observable<any> {
+        return Observable.forkJoin(
+            this.workOrderEndpointService.getPickTicketEdit(woPickTicketId, workOrderId, workOrderPartId)
+        );
+    }
+
+    confirmPickTicket(pickticketId: number, confirmById: string): Observable<boolean[]> {
+        return Observable.forkJoin(
+            this.workOrderEndpointService.confirmPickTicket(pickticketId, confirmById)
+        );
+    }
+
+    getPickTicketPrint(workOrderId: number, workOrderPartId: number, woPickTicketId: number): Observable<any> {
+        return Observable.forkJoin(
+            this.workOrderEndpointService.getPickTicketPrint(workOrderId, workOrderPartId, woPickTicketId)
         );
     }
 }

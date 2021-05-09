@@ -3,37 +3,39 @@
     <label>Stock Type</label>
   </div>
   <div>
-    <label>
-      <input type="checkbox" name="includePMA" [(ngModel)]="query.partSearchParamters.restrictPMA" />&nbsp;Include
+    <label style="width: 120px;">
+      <input type="checkbox" name="includePMA"  />&nbsp;Include
       PMA
     </label>
+    <!-- [(ngModel)]="query.partSearchParamters.restrictPMA" -->
   </div>
   <div>
-    <label>
-      <input type="checkbox" name="includeDER" [(ngModel)]="query.partSearchParamters.restrictDER" />&nbsp;Include
+    <label style="width: 120px;">
+      <input type="checkbox" name="includeDER"  />&nbsp;Include
       DER
     </label>
+    <!-- [(ngModel)]="query.partSearchParamters.restrictDER" -->
   </div>
   <div>
-    <label>
-      <input type="checkbox" name="includeAlternalePN"
-        [(ngModel)]="query.partSearchParamters.includeAlternatePartNumber" />&nbsp;Include
+    <label style="width: 120px;" >
+      <input type="checkbox" name="includeAlternalePN" />&nbsp;Include
       Alternate PN
     </label>
+    <!-- [(ngModel)]="query.partSearchParamters.includeAlternatePartNumber" -->
   </div>
   <div>
-    <label>
-      <input type="checkbox" name="includeEquivalentPartNumber"
-        [(ngModel)]="query.partSearchParamters.includeEquivalentPartNumber" />&nbsp;Include
+    <label style="width: 120px;">
+      <input type="checkbox" name="includeEquivalentPartNumber"/>&nbsp;Include
       Equivalent PN
     </label>
+    <!-- [(ngModel)]="query.partSearchParamters.includeEquivalentPartNumber" -->
   </div>
 </div>
 <div class="row">
   <div class="col-2 column">
     <div class="form-group">
       <label>PN<span class="clr-red">*</span></label>
-      <p-autoComplete field="partNumber" class="autocomp-customer-cstm" name="partNumberObj"
+       <p-autoComplete field="partNumber" class="autocomp-customer-cstm" name="partNumberObj"
         [(ngModel)]="query.partSearchParamters.partNumberObj" [suggestions]="partDetails" [forceSelection]="true"
         field="partNumber" (completeMethod)="searchPartByPartNumber($event)" (onSelect)="onPartNumberSelect($event)"
         [size]="30" [minLength]="1" [dropdown]="true" [disabled]="partEditDisable" required>
@@ -42,9 +44,9 @@
   </div>
   <div class="col-3 column">
     <div class="form-group">
-      <label>PN Description</label>
-      <input type="text" class="form-control" name="partDescription"
-        [(ngModel)]="query.partSearchParamters.partDescription" [disabled]="true" />
+      <label style="width: 120px;">PN Description</label>
+      <input type="text" class="form-control" name="partDescription" [disabled]="true" />
+          <!-- [(ngModel)]="query.partSearchParamters.partDescription" -->
     </div>
   </div>
   <div class="col-7 column">
@@ -56,53 +58,56 @@
         </label>
         <p-multiSelect [options]="allConditionInfo" (onChange)="onConditionSelect()"
           [(ngModel)]="query.partSearchParamters.conditionIds" name="conditionId" defaultLabel="-- Select --"
-          required="true" [disabled]="partEditDisable" class="classification">
+          required="true" class="classification" [disabled]="partEditDisable">           
         </p-multiSelect>
       </div>
     </div>
     <div class="col-2 column">
       <div class="form-group">
-        <label *ngIf="type == 'SOQ'">Qty Req<span class="clr-red">*</span></label>
-        <label *ngIf="type == 'SO'">Qty Ord<span class="clr-red">*</span></label>
-        <input class="form-control text-right" type="text" pKeyFilter="pint" pInputText required
-          [ngModel]="query.partSearchParamters.quantityRequested  | globalNmberFormat"
-          (ngModelChange)="query.partSearchParamters.quantityRequested=formatStringToNumberGlobal($event)"
+        <label *ngIf="type == 'WOQ'">Qty Req<span class="clr-red">*</span></label>
+        <label *ngIf="type == 'WO'">Qty Ord<span class="clr-red">*</span></label>
+        <input class="form-control text-right" type="text" pKeyFilter="pint" pInputText required          
           (keyup)="calculate()" name="quantityRequested" autocomplete="off" />
+          <!-- [ngModel]="query.partSearchParamters.quantityRequested  | globalNmberFormat"
+          (ngModelChange)="query.partSearchParamters.quantityRequested=formatStringToNumberGlobal($event)" -->
       </div>
     </div>
-    <div *ngIf="type == 'SOQ'" class="col-2 column">
+    <div *ngIf="type == 'WOQ'" class="col-2 column">
       <div class="form-group">
         <label>Qty to Quote<span class="clr-red">*</span></label>
         <input type="text" class="form-control text-right" pKeyFilter="pint" required pInputText name="quantityToQuote"
-          [ngModel]="query.partSearchParamters.quantityToQuote  | globalNmberFormat"
-          [ngModelOptions]="{updateOn:'blur'}"
-          (ngModelChange)="query.partSearchParamters.quantityToQuote=formatStringToNumberGlobal($event)"
           autocomplete="off" />
+          <!-- [ngModel]="query.partSearchParamters.quantityToQuote  | globalNmberFormat"
+          [ngModelOptions]="{updateOn:'blur'}"
+          (ngModelChange)="query.partSearchParamters.quantityToQuote=formatStringToNumberGlobal($event)" -->
       </div>
     </div>
     <div class="col-6 column">
-      <div *ngIf="type == 'SOQ'" class="col-5 column">
+      <div *ngIf="type == 'WOQ'" class="col-5 column">
         <div class="form-group">
           <label>Qty AlreadyQuoted</label>
           <input type="text" class="form-control text-right" name="qtyAlreadyQuoted"
-            [ngModel]="query.partSearchParamters.quantityAlreadyQuoted | globalNmberFormat"
-            (ngModelChange)="query.partSearchParamters.quantityAlreadyQuoted=$event" disabled="true" />
+             disabled="true" />
+             <!-- [ngModel]="query.partSearchParamters.quantityAlreadyQuoted | globalNmberFormat"
+            (ngModelChange)="query.partSearchParamters.quantityAlreadyQuoted=$event" -->
         </div>
       </div>
       <div class="col-4 column">
         <div class="form-group">
           <label>Qty On Hand</label>
           <input type="text" class="form-control text-right" name="qtyOnHand"
-            [ngModel]="query.partSearchParamters.qtyOnHand | globalNmberFormat"
-            (ngModelChange)="query.partSearchParamters.qtyOnHand=$event" disabled="true" />
+             disabled="true" />
+             <!-- [ngModel]="query.partSearchParamters.qtyOnHand | globalNmberFormat"
+            (ngModelChange)="query.partSearchParamters.qtyOnHand=$event" -->
         </div>
       </div>
       <div class="col-3 column">
         <div class="form-group">
           <label>Qty Available</label>
           <input type="text" class="form-control text-right" name="qtyAvailable"
-            [ngModel]="query.partSearchParamters.qtyAvailable | globalNmberFormat"
-            (ngModelChange)="query.partSearchParamters.qtyAvailable=$event" disabled="true" />
+             disabled="true" />
+             <!-- [ngModel]="query.partSearchParamters.qtyAvailable | globalNmberFormat"
+            (ngModelChange)="query.partSearchParamters.qtyAvailable=$event" -->
         </div>
       </div>
     </div>
@@ -112,9 +117,10 @@
   <div class="col-1 column" style="margin-right: 8px;">
     <div class="form-group">
       <button class="btn btn-primary" (click)="search($event)"
-        [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
+        [disabled]="searchDisabled ">
+        <!-- [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)"> -->
         Search PN
-      </button>
+      </button> 
     </div>
   </div>
   <div class="col-2 column" style="margin-right: 8px;" *ngIf="enableMultiSearch">
@@ -149,7 +155,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <p-table #dt class="" [value]="multiSearchResult" [rows]="10" [lazy]="true" [paginator]="showPaginator"
+        <!-- <p-table #dt class="" [value]="multiSearchResult" [rows]="10" [lazy]="true" [paginator]="showPaginator"
           [pageLinks]="pageLinks" [columns]="columns" [scrollable]="true" [style]="{ width: '100%' }">
           <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
@@ -202,7 +208,7 @@
               </td>
             </tr>
           </ng-template>
-        </p-table>
+        </p-table> -->
       </div>
     </div>
   </div>

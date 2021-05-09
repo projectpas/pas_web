@@ -22,7 +22,7 @@
               <div class="clear"></div>
               <hr />
               <p style="text-align:center"><b>COMPONENT EXCHANGE AGREEMENT</b></p>
-              <p style="text-align:center"> agreement MUST be signed and returned to <b> Seller Name </b> prior to
+              <p style="text-align:center"> agreement MUST be signed and returned to <b> {{sellerName}} </b> prior to
                 shipment of Unit</p>
 
               <div class="col-md-12" style="width:100%;margin-left:7%">
@@ -121,7 +121,7 @@
 
               </div>
               
-                <p style="margin-left:-1px;">Subject to the terms and conditions as set forth below, <b>Seller Name </b>agrees to supply
+                <p style="margin-left:-1px;">Subject to the terms and conditions as set forth below, <b>{{sellerName}} </b>agrees to supply
                   <b>Customer </b>(their Customer) with a new, serviceable or overhauled “Exchange Unit” in exchange for
                   a Customer Core Unit described above and fees/prices listed above. The Customer agrees to the
                   following terms and conditions:</p>
@@ -140,22 +140,22 @@
                 <div class="col-sm-6" style="width:60%;margin-top:10px">
                   <div class="confirmed-by">
                     <label class="label-name">1-30 Calendar Days</label><br />
-                    <label class="label-border first-part"></label><br />
+                    <label class="label-border first-part">{{formateCurrency(getFirstExchangeFees())}}</label><br />
                   </div>
 
                   <div class="confirmed-by" style="margin-left:10px">
                     <label class="label-name">31-60 Calendar Days</label><br />
-                    <label class="label-border first-part"></label><br />
+                    <label class="label-border first-part">{{formateCurrency(getSecondExchangeFees())}}</label><br />
                   </div>
                 </div>
-                <div class="confirmed-by col-sm-6" style="width:40%;margin-top:10px">
+                <div class="confirmed-by col-sm-6" style="width:30%;margin-top:10px">
                   <div class="sixtydays">
                     <label class="label-name">61 Calendar Days Plus</label><br />
-                    <label class="label-border first-part"></label><br />
+                    <label class="label-border first-part">{{formateCurrency(getThirdExchangeFees())}}</label><br />
                   </div>
                 </div>
               </div>
-
+              <br/>
               <div style="margin-top:7%">
                 <p>All sums due hereunder shall be paid in accordance with the terms agreed and as stated on Customer’s
                   original invoice. All Exchange Units are delivered F.O.B. the delivery location. All expenses
@@ -170,13 +170,13 @@
                   Price.</p>
 
                 <p>All Core Units are to be of the same Part Number as the original Exchange Unit and in As Removed
-                  Condition, unless otherwise pre-approved and agreed to, in writing, <b>Seller Name</b>.
+                  Condition, unless otherwise pre-approved and agreed to, in writing, <b>{{sellerName}}</b>.
                   The Customer agrees to pay the accrued Exchange Fees and the Outright Price for failing to return the
                   core unit in As Removed Condition.
                   The Customer Core unit will be brought to an equivalent standard as the original Exchange Unit during
-                  repair/overhaul at Customer’s expense unless otherwise agreed to, in writing, by<b> Seller Name </b>.
+                  repair/overhaul at Customer’s expense unless otherwise agreed to, in writing, by<b> {{sellerName}} </b>.
                   Prior to the return of any Core Unit, Customer agrees to provide advance copy of the following
-                  documents to <b>Seller Name</b> including but not limited to:
+                  documents to <b>{{sellerName}}</b> including but not limited to:
                   A removal tag containing PN, SN, last airline operator, aircraft serial number (MSN) and/or engine
                   serial number (ESN), and reason for removal
                 <p>Approved traceability: OEM or Manufacturer, 121 or 129. Other trace requires prior, written, approval
@@ -194,7 +194,7 @@
                   additional fees will apply as referenced by the Schedule of Exchange fees above
                   Unused units must be accompanied by a non-use statement or the unit will be recertified as Customer’s
                   expense.
-                  Core Units, previously approved in writing by the <b>Seller Name</b> to be returned in serviceable or
+                  Core Units, previously approved in writing by the <b>{{sellerName}}</b> to be returned in serviceable or
                   overhauled condition, must be accompanied by a Dual Release 8130 and teardown report from a
                   pre-approved source. Customer agrees to extend reciprocating warranty coverage on the Core Unit to
                   that of the Exchange Unit; 6 months for serviceable and 12 months for overhaul.
@@ -212,15 +212,15 @@
                   responsible for accrued Exchange Fees, any/all applicable vendor evaluation charges, and the Outright
                   Price. The BER Core Unit will be returned to the Customer at Customer’s sole risk and expense.
 
-                <p>The failure or rejection of an Exchange Unit must be notified immediately, in writing, to<b> Seller
-                    Name</b>. Failed or Rejected Exchange Units must be received by <b>Seller Name</b> within seven (7)
+                <p>The failure or rejection of an Exchange Unit must be notified immediately, in writing, to
+                  <b> {{sellerName}}</b>. Failed or Rejected Exchange Units must be received by <b>{{sellerName}}</b> within seven (7)
                   calendar days after Return Material Authorization (RMA) or the return will be denied.</p>
                 <p>The Terms and Conditions of this Exchange Agreement shall not be modified except by written document
                   by the Parties undersigned.</p>
                  
-                <p><b>Seller Name </b></p>
+                <p><b>{{sellerName}} </b></p>
                  
-                <p>Name: E.g Sales Person</p>
+                <p>Name: {{exchangeQuote.salesPersonName}}</p>
 
                 <p>Title: SALES MANAGER</p>
 

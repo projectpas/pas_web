@@ -437,4 +437,7 @@ export class ExchangequoteService {
       this.exchangeQuoteEndpointService.getview(exchangeQuoteId)
     );
   }
+  getleasingCompany(masterCompanyId?) {
+    return this.exchangeQuoteEndpointService.getleasingCompany(masterCompanyId);
+  }
 }
