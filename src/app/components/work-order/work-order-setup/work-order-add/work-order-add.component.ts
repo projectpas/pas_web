@@ -1735,7 +1735,69 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
     getmemo($event) {
         this.disableSaveForEdit = false;
     }
+    //new form for material list
+    saveMaterials(data){
+        debugger;
+        console.log("data wo add",data);
+        if (this.isSubWorkOrder == true) {
+            this.isSpinnerVisible = true;
+            const newData={...data,
+                workOrderId: this.subWorkOrderDetails.workOrderId,
+                workFlowWorkOrderId: this.workFlowWorkOrderId,
+                subWOPartNoId: this.subWOPartNoId,
+                subWorkOrderMaterialsId: 0,
+                subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
+                extendedCost:data.extendedCost? data.extendedCost : 0,
+                unitCost:data.unitCost?  data.unitCost: 0,
+                partNumber: data.partItem.partName,
+                taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
+            }        
+            this.workOrderService.createSubWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Saved Sub Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                this.getMaterialListByWorkOrderIdForSubWO();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        } else {
 
+            const newData={...data,
+                workOrderId: this.workOrderId,
+                 workFlowWorkOrderId: this.workFlowWorkOrderId==0? null :this.workFlowWorkOrderId,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
+                extendedCost:data.extendedCost? data.extendedCost : 0,
+                unitCost:data.unitCost?  data.unitCost: 0,
+                // partNumber: data.partItem.partName,
+                taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
+                stockLineId:data.stockLineId==0? null :data.stockLineId,
+                quantity:10,
+                unitOfMeasure: "Ea",
+unitOfMeasureId: 3 ,
+provision:'REPLACE',
+provisionId:data.provisionId ? data.provisionId :2
+            }     
+            this.isSpinnerVisible = true;            
+            this.workOrderService.createWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Saved Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                this.getMaterialListByWorkOrderId();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
     saveWorkOrderMaterialList(data) { 
         if (this.isSubWorkOrder == true) {
             const materialArr = data.materialList.map(x => {

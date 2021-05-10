@@ -38,6 +38,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Input() materialStatus;
     @Input() mpnId;
     @Input() workOrderId;
+    @Input() workFlowWorkOrderId;
+    
     @Input() fromWoList: false;
     @Input() mpnPartNumbersList: any = [];
     @Input() isSubWorkOrder: any = false;
@@ -49,12 +51,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() refreshData = new EventEmitter();
     @Input() customerId;
     @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() saveMaterialsData=new EventEmitter();
 
+    
     statusId = null;
     ispickticket: boolean = false;
     minDateValue: Date = new Date();
     addNewMaterial: boolean = false;
-    workFlowWorkOrderId: any;
     reservedList: any;
     alternatePartData: any = [];
     checkedParts: any = [];
@@ -273,7 +276,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.close.emit(true);
         this.show = false;
     }
+    setmaterialListForSave(data){
+        this.saveMaterialsData.emit(data)
+        console.log("saveMaterialList",data)
+        this.show = false;
+        this.addPartModal.close();
 
+    }
     createNew() {
         this.ispickticket = false;
         this.isEdit = false;
