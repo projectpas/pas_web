@@ -194,6 +194,9 @@ export class WorkOrderService {
     getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId) {
         return this.workOrderEndpointService.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId)
     }
+    getWorkOrderMaterialListNew(workFlowWorkOrderId, workOrderId, masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderMaterialListNew(workFlowWorkOrderId, workOrderId, masterCompanyId)
+    }
     getSubWorkOrderMaterialList(subWOPartNoId, masterCompanyId) {
         return this.workOrderEndpointService.getSubWorkOrderMaterialList(subWOPartNoId, masterCompanyId)
     }
