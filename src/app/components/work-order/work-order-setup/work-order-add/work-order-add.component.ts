@@ -707,6 +707,49 @@ setTimeout(() => {
         // currentRecord.csr = getObjectById('employeeId', object.csrId, this.csrOriginalList);
         // currentRecord.salesPerson = getObjectById('employeeId', object.salesPersonId, this.salesAgentsOriginalList);
 
+        if (this.workOrderGeneralInformation) {
+            this.workOrderGeneralInformation.partNumbers.forEach(
+                x => {
+
+                    x.masterPartId=undefined;
+                    x.description='';
+                    x.revisedPartNo='';
+
+                    x.description='';
+                    x.revisedPartNo='';
+
+                    x.serialNumber='';
+                    x.quantity=1;
+                    x.tatDaysStandard=0;
+                    x.tatDaysCurrent=0;
+                    x.nte=0;
+
+                    x.stockLineNumber='';
+                    x.contractNo='';
+
+                    x.customerReference='';
+                    x.itemGroup='';
+
+                    x.receivedDate=undefined;
+                    x.customerRequestDate=new Date();
+                    x.promisedDate=new Date();
+                    x.estimatedCompletionDate=new Date();
+                    x.estimatedShipDate=new Date();
+                    x.workOrderStageId=0;
+                    x.workOrderStatusId
+                    x.partTechnicianId=undefined;
+                    x.techStationId=0;
+                    x.workOrderScopeId=0;
+                    x.workOrderPriorityId=0;
+                    x.conditionId=0;
+                    x.cMMId=0;
+                    x.workflowId=0;
+
+
+                }
+            )
+        }
+
         if (this.workOrderGeneralInformation.workOrderTypeId == 1) // Customer
         {
             this.getPartNosByCustomer(object.customerId, 0);
@@ -1692,7 +1735,69 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
     getmemo($event) {
         this.disableSaveForEdit = false;
     }
+    //new form for material list
+    saveMaterials(data){
+        debugger;
+        console.log("data wo add",data);
+        if (this.isSubWorkOrder == true) {
+            this.isSpinnerVisible = true;
+            const newData={...data,
+                workOrderId: this.subWorkOrderDetails.workOrderId,
+                workFlowWorkOrderId: this.workFlowWorkOrderId,
+                subWOPartNoId: this.subWOPartNoId,
+                subWorkOrderMaterialsId: 0,
+                subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
+                extendedCost:data.extendedCost? data.extendedCost : 0,
+                unitCost:data.unitCost?  data.unitCost: 0,
+                partNumber: data.partItem.partName,
+                taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
+            }        
+            this.workOrderService.createSubWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Saved Sub Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                this.getMaterialListByWorkOrderIdForSubWO();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        } else {
 
+            const newData={...data,
+                workOrderId: this.workOrderId,
+                 workFlowWorkOrderId: this.workFlowWorkOrderId==0? null :this.workFlowWorkOrderId,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
+                extendedCost:data.extendedCost? data.extendedCost : 0,
+                unitCost:data.unitCost?  data.unitCost: 0,
+                // partNumber: data.partItem.partName,
+                taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
+                stockLineId:data.stockLineId==0? null :data.stockLineId,
+                quantity:10,
+                unitOfMeasure: "Ea",
+unitOfMeasureId: 3 ,
+provision:'REPLACE',
+provisionId:data.provisionId ? data.provisionId :2
+            }     
+            this.isSpinnerVisible = true;            
+            this.workOrderService.createWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Saved Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                this.getMaterialListByWorkOrderId();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
     saveWorkOrderMaterialList(data) { 
         if (this.isSubWorkOrder == true) {
             const materialArr = data.materialList.map(x => {
@@ -2035,6 +2140,8 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 if (labSubList && labSubList['expertiseId'] != null){
                     labSubList.masterCompanyId=this.currentUserMasterCompanyId;
                     this.result.LaborList.push(labSubList);
+                    this.result.expertiseId=labSubList['expertiseId'];
+                    this.result.employeeId=labSubList['employeeId'];
                 }
             }
         }
@@ -2903,7 +3010,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
 
         if (event.query !== undefined && event.query !== null) {
             const customers = [...this.customerContactList.filter(x => {
-                return x.contactName.toLowerCase().includes(event.query.toLowerCase())
+                return x.customerContact.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.customerContactInfo = customers;
         }
@@ -3351,6 +3458,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     this.labor.workOrderLaborList[0][task.description.toLowerCase()] = [];
                 }
             })
+            console.log("task list",this.taskList)
         },
             err => {
                 this.handleError(err);

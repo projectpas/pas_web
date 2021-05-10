@@ -210,6 +210,11 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getWorkOrderList(data));
         });
     }
+    WorkOrderROlist(data) {
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/WorkOrderROlist`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.WorkOrderROlist(data));
+        });
+    }
     getWorkOrderGlobalSearch(value, pageIndex, pageSize) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woglobalsearch?filterText=${value}&pageNumber=${pageIndex}&pageSize=${pageSize}`).catch(error => {
             return this.handleErrorCommon(error, () => this.getWorkOrderGlobalSearch(value, pageIndex, pageSize));
@@ -1388,6 +1393,28 @@ export class WorkOrderEndpointService extends EndpointFactory {
             .post(`${this.configurations.baseUrl}/api/workorder/savepickticketiteminterface`, parts, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.savepickticketiteminterface(parts));
+            });
+    }
+
+    getPickTicketEdit(woPickTicketId: number, workOrderId: number, workOrderPartId: number): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getpickticketedit?woPickTicketId=${woPickTicketId}&workOrderId=${workOrderId}&workOrderPartId=${workOrderPartId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getPickTicketEdit(woPickTicketId, workOrderId, workOrderPartId));
+        });
+    }
+
+    confirmPickTicket(pickticketId: number, confirmById: string): Observable<any> {
+        return this.http
+            .put(`${this.configurations.baseUrl}/api/workorder/confirmpt/${pickticketId}/?confirmById=${confirmById}`, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.confirmPickTicket(pickticketId, confirmById));
+            });
+    }
+
+    getPickTicketPrint(workOrderId: number, workOrderPartId: number, woPickTicketId: number): Observable<any> {
+        return this.http
+            .get<any>(`${this.configurations.baseUrl}/api/workorder/getworkorderpickticketforprint?workOrderId=${workOrderId}&workOrderPartId=${workOrderPartId}&woPickTicketId=${woPickTicketId}`, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getPickTicketPrint(workOrderId, workOrderPartId, woPickTicketId));
             });
     }
 }

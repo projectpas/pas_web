@@ -199,7 +199,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
           break;
       }
     }
-  }
+  } 
 
   calculate() {
     if (this.query.partSearchParamters.conditionIds.length > 0

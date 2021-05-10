@@ -242,4 +242,10 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
           return this.handleErrorCommon(error, () => this.getview(exchangeQuoteId));
         });
     }
+    getleasingCompany(masterCompanyId) {
+      return this.http.get<any>(`${this.configurations.baseUrl}/api/exchangeQuote/getleasingCompany/?masterCompanyId=${masterCompanyId}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getleasingCompany(masterCompanyId));
+        });
+    }
 }

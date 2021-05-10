@@ -102,6 +102,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   totalcost=0;
   markupList = [];
   percents: any[];
+  disableprintagreement:boolean=true;
   @ViewChild("exchangeQuotePrintPopup", { static: false }) public exchangeQuotePrintPopup: ElementRef;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
@@ -679,6 +680,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         const selectedPartsTemp = this.selectedParts;
         selectedPartsTemp.push(partNumberObj)
         this.exchangequoteService.selectedParts = selectedPartsTemp;
+        this.disableprintagreement = false;
       }
       // this.arrayEmplsit.push(this.salesOrderQuoteObj.employeeId);
       // if (!partsRefresh || !isInitialCall) {
@@ -872,5 +874,77 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     this.exchangequoteService.setTotalFreights(e);
     this.setFreightsOrCharges();
     this.updateMarginSummary();
+  }
+
+  print(): void {
+    let printContents, popupWin;
+    printContents = document.getElementById('quote_print_content').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title>Print tab</title>
+          <style>
+          input {width:80%;background:#fff;border:1px Solid}
+
+  h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: 600; width: 100%; margin: 0;}
+  h5{font-family: inherit;font-weight: 500;line-height: 1.1; color: inherit; background: #f4f4f4; color:#000 ;padding: 5px; font-size: 14px;margin-bottom: 15px;margin: 0 !important;padding: 5px;text-align:center }
+  hr{margin-top: 10px; margin-bottom: 10px;border: 0;border-top: 1px solid #e0e0e0; height: 0; box-sizing: content-box;}
+  .first-block {position: relative; min-height: 1px; float: left;padding-right: 2px; padding-left: 2px;width: 66.66666667%;}
+  .first-block-4 {position: relative;min-height: 1px;float: left;padding-right: 2px; padding-left: 2px;}
+  
+  .picked-by{position: relative;float: left;width:48%}
+  .confirmed-by{position: relative;float: left;width:48%}       
+  .first-part{position:relative;display:flex;float:left;width:50%}   
+.sixtydays{position:relative;
+  display:inline-block;
+  // display:flex;
+  float:left;width:90%}
+ .seond-part{position:relative;display:flex;float:right;width:24%}  
+
+.first-block-address{margin-right: 20px;text-align: left}
+.label-border{
+  border: 1px solid black;
+    width: 100%;
+    text-align: left;
+    line-height: 2;
+    height:25px;
+}
+.margin-left-10{
+  margin-left:10px;
+}
+.label-name{
+  width:50%
+}
+
+  .first-block-quotation{margin-right: 20px;text-align: left;margin-top: 10px;}
+  
+  .first-block-name{margin-right: 20px}
+  .second-block {position: relative;min-height: 1px;  float: left;padding-right: 2px;width: 32.33333333%;padding-left: 2px;box-sizing: border-box;}
+  .second-block-div{margin: 2px 0;position: relative;min-height: 1px; float: left;padding-right: 2px; padding-left: 2px;width: 100%;}
+  .second-block-label{position: relative; min-height: 1px;float: left;padding-right: 2px; padding-left: 2px;width: 38.33333333%;text-transform: capitalize;margin-bottom: 0; margin-top: 5px;}
+  .second-block-value{position: relative;min-height: 1px;width: 58.33333333%; float: left;padding-right: 2px;padding-left: 2px;margin-top:4px;}
+  .clear{clear: both;}
+  .form-div{top: 6px; position: relative;font-weight: normal; margin-top: 10px;}
+  .image{border: 1px solid #ccc; padding: 5px;}
+
+  .mtop20 { margin-top: 20px;  }
+  .logo-block { margin: auto; text-align: center }
+  .pdf-block { width: 800px; margin: auto; border: 1px solid #ccc;padding: 25px 15px; } 
+  .table-text{border: 1px solid #ccc; padding: 5px;height: 150px;}  
+  .barcode-name{margin: 0 0 10px;}    
+
+
+.input-field-border{width: 88px; border-radius:0px !important;background:#fff;border: none; border-bottom: 1px solid black;}
+
+.pick-ticket-header{border: 1px solid black;text-align: left; background: #0d57b0 !important;color: #fff !important;}
+.div-height{min-height:500px;height:auto}
+          </style>
+        </head>
+    <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
   }
 }

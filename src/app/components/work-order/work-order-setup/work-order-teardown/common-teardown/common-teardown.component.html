@@ -45,7 +45,7 @@
                             <!-- {{saveTearDownData.workOrderRemovalReasons.reasonId !=0}} ,{{!saveTearDownData.isRemovalReasons}} -->
                             <label>Memo <span class="clr-red" *ngIf="saveTearDownData.isRemovalReasons">*</span></label>
                             <!-- <textarea class="form-control text-area-cstm" required name="removal_Memo"  #removalMemo="ngModel" [disabled]="saveTearDownData.workOrderRemovalReasons.reasonId ==0 ||  !saveTearDownData.isRemovalReasons" [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo1" required [readonly]="saveTearDownData.workOrderRemovalReasons.reasonId ==0 ||  !saveTearDownData.isRemovalReasons" [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo1" required [readonly]="saveTearDownData.workOrderRemovalReasons.reasonId ==0 ||  !saveTearDownData.isRemovalReasons" [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo"></p-editor>
                             <!-- <p-editor [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo" [style]="{'height':'320px'}"></p-editor> -->
                         </div>
                         <div *ngIf="f.submitted && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.memo ==''" >
@@ -154,41 +154,42 @@
                         <div *ngIf="f.submitted &&  saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
                             <div  class="red_bomb">Reason is required</div>
                         </div>
+                        <div > 
+                            <label for="dataentered">Inspector   <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
+                            <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector1" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
+                                errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
+                                (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.inspectorId"  #prellRevInsp="ngModel" >
+                            </p-autoComplete>
+                            </div>
+                            <div *ngIf="f.submitted && saveTearDownData.isPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.inspectorId ==0" >
+                            <div  class="red_bomb">Inspector is required</div>
+                        </div>
+                        <div >
+                            <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
+                            <p-calendar class="p-calendar-cstm" required [showIcon]="true"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="InspectorDate" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
+                                [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.inspectorDate"></p-calendar>
+                        </div>
                     </div>
                     <div class="col-md-9">
                         <div >
                             <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
                             <!-- <textarea required class="form-control text-area-cstm" name="prellrevMemo"  #prelinaryRev="ngModel" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview" [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo2" required [readonly]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview" [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo2" required [readonly]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview" [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.memo"></p-editor>
                         </div>
                         <div *ngIf="f.submitted  && saveTearDownData.isPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.memo==''" >
                             <div  class="red_bomb">Memo is required</div>
                         </div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <!-- <div class="form-row">
                         <div class="col-md-3">
                         </div>
                         <div class="col-md-3">
-                            <div > 
-                                <label for="dataentered">Inspector   <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector1" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
-                                    errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                    (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                    [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.inspectorId"  #prellRevInsp="ngModel" >
-                                </p-autoComplete>
-                                </div>
-                                <div *ngIf="f.submitted && saveTearDownData.isPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.inspectorId ==0" >
-                                <div  class="red_bomb">Inspector is required</div>
-                            </div>
-                            <div >
-                                <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
-                                <p-calendar class="p-calendar-cstm" required [showIcon]="true"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="InspectorDate" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
-                                    [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.inspectorDate"></p-calendar>
-                            </div>
+                            
                         </div>
-                    </div>
+                    </div> -->
             </div>
         </div>
     </div>
@@ -217,57 +218,66 @@
                         <div *ngIf="f.submitted  &&  saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
                             <div  class="red_bomb">Reason is required</div>
                         </div>
+
+
+
+                        <div >
+                            <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                            <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican3" [dropdown]="true"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
+                              (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                              [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.technicianId"  #pressResultTech="ngModel">
+                            </p-autoComplete>
+                          </div>
+                          <div *ngIf="f.submitted   && saveTearDownData.isPreAssmentResults && saveTearDownData.workOrderDiscovery.technicianId ==0" >
+                            <div  class="red_bomb">Technican is required</div>
+                        </div>
+                          <div>
+                            <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                            <p-calendar class="p-calendar-cstm" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" required name="TechnicianDate"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                            [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.technicianDate"></p-calendar>
+                        </div>
+
+
+
+                        <div >
+                            <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                            <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector2" [dropdown]="true"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
+                              (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1" required
+                              [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorId"  #pressResultsInsp="ngModel">
+                            </p-autoComplete>
+                          </div>
+                          <div *ngIf="f.submitted  && saveTearDownData.isPreAssmentResults && saveTearDownData.workOrderPreAssmentResults.inspectorId ==0" >
+                            <div  class="red_bomb">Inspector is required</div>
+                        </div>
+                        <div>
+                            <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                            <p-calendar class="p-calendar-cstm" required [showIcon]="true" name="startDate"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                            [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorDate"></p-calendar>
+                        </div>
                     </div>
                     <div class="col-md-9">
                         <div >
                             <label>Memo  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
                             <!-- <textarea required class="form-control text-area-cstm" name="pressResut_Memo"  #pressResutMemo="ngModel" [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults" [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo3" required [readonly]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults" [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo3" required [readonly]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults" [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.memo"></p-editor>
                         </div>
                         <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.memo ==''" >
                             <div  class="red_bomb">Memo is required</div>
                         </div>
+                     
                     </div>
                     </div>
-                    <div class="form-row">
+                    <!-- <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican3" [dropdown]="true"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.technicianId"  #pressResultTech="ngModel">
-                                </p-autoComplete>
-                              </div>
-                              <div *ngIf="f.submitted   && saveTearDownData.isPreAssmentResults && saveTearDownData.workOrderDiscovery.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
-                            </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                                <p-calendar class="p-calendar-cstm" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" required name="TechnicianDate"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
-                                [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.technicianDate"></p-calendar>
-                            </div>
+                            
                             </div>
                             <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                                    <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector2" [dropdown]="true"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1" required
-                                      [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorId"  #pressResultsInsp="ngModel">
-                                    </p-autoComplete>
-                                  </div>
-                                  <div *ngIf="f.submitted  && saveTearDownData.isPreAssmentResults && saveTearDownData.workOrderPreAssmentResults.inspectorId ==0" >
-                                    <div  class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                                    <p-calendar class="p-calendar-cstm" required [showIcon]="true" name="startDate"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
-                                    [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorDate"></p-calendar>
-                                </div>
+                               
                             </div>
-                            </div>
+                            </div> -->
             </div>
         </div>
     </div>
@@ -298,59 +308,63 @@
                         <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.reasonId ==0" >
                             <div  class="red_bomb">Reason is required</div>
                         </div>
+
+                        <div >
+                            <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                            <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican8" [dropdown]="true" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
+                              (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                              [(ngModel)]="saveTearDownData.workOrderDiscovery.technicianId"  #tddescoverTech="ngModel" >
+                            </p-autoComplete>
+                          </div>
+                          <div *ngIf="f.submitted && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.technicianId ==0" >
+                            <div  class="red_bomb">Technican is required</div>
+                        </div>
+                          <div>
+                            <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                            <p-calendar class="p-calendar-cstm" required [showIcon]="true" name="startDate"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
+                            [(ngModel)]="saveTearDownData.workOrderDiscovery.technicianDate"></p-calendar>
+                        </div>
+
+                        <div >
+                            <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                            <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector6" [dropdown]="true" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
+                              (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                              [(ngModel)]="saveTearDownData.workOrderDiscovery.inspectorId"  #tddescoverInsp="ngModel">
+                            </p-autoComplete>
+                          </div>
+                          <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.inspectorId ==0" >
+                            <div class="red_bomb">Inspector is required</div>
+                        </div>
+                        <div>
+                            <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                            <p-calendar class="p-calendar-cstm" required [showIcon]="true"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" 
+                            [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
+                            [(ngModel)]="saveTearDownData.workOrderDiscovery.inspectorDate"></p-calendar>
+                        </div>
                     </div>
                     <div class="col-md-9">
                     <div >
                         <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
                         <!-- <textarea required class="form-control text-area-cstm" name="tearDesMemos"  #tddescoverMemo="ngModel" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery" [(ngModel)]="saveTearDownData.workOrderDiscovery.memo"></textarea> -->
-                        <p-editor  [style]="{'height':'100px'}" name="textAreaInfo4" required [readonly]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery" [(ngModel)]="saveTearDownData.workOrderDiscovery.memo"></p-editor>
+                        <p-editor  [style]="{'height':'360px'}" name="textAreaInfo4" required [readonly]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery" [(ngModel)]="saveTearDownData.workOrderDiscovery.memo"></p-editor>
                     </div>
                     <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.memo==''" >
                         <div  class="red_bomb">Memo is required</div>
                     </div>
                     </div>
                     </div>
-                    <div class="form-row">
+                    <!-- <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican8" [dropdown]="true" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderDiscovery.technicianId"  #tddescoverTech="ngModel" >
-                                </p-autoComplete>
-                              </div>
-                              <div *ngIf="f.submitted && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
-                            </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                                <p-calendar class="p-calendar-cstm" required [showIcon]="true" name="startDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
-                                [(ngModel)]="saveTearDownData.workOrderDiscovery.technicianDate"></p-calendar>
-                            </div>
+                           
                             </div>
                             <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                                    <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector6" [dropdown]="true" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                      [(ngModel)]="saveTearDownData.workOrderDiscovery.inspectorId"  #tddescoverInsp="ngModel">
-                                    </p-autoComplete>
-                                  </div>
-                                  <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.inspectorId ==0" >
-                                    <div class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                                    <p-calendar class="p-calendar-cstm" required [showIcon]="true"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" 
-                                    [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
-                                    [(ngModel)]="saveTearDownData.workOrderDiscovery.inspectorDate"></p-calendar>
-                                </div>
+                              
                             </div>
-                            </div>
+                            </div> -->
             </div>
         </div>
     </div>
@@ -379,58 +393,60 @@
                         <div *ngIf="f.submitted  && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
                             <div  class="red_bomb">Reason is required</div>
                         </div>
+                        <div >
+                            <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                            <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican7" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
+                              (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                              [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.technicianId"  #preassITech="ngModel">
+                            </p-autoComplete>
+                          </div>
+                          <div *ngIf="f.submitted  && preassITech.errors && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.technicianId ==0" >
+                            <div  class="red_bomb">Technican is required</div>
+                        </div>
+                          <div>
+                            <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                            <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                            [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.technicianDate"></p-calendar>
+                        </div>
+                        <div >
+                            <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                            <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector7" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
+                              (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                              [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorId"  #pressInsp="ngModel">
+                            </p-autoComplete>
+                          </div>
+                          <div *ngIf="f.submitted   && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.inspectorId ==0" >
+                            <div  class="red_bomb">Inspector is required</div>
+                        </div>
+                        <div>
+                            <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                            <p-calendar required class="p-calendar-cstm" [showIcon]="true"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                            [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorDate"></p-calendar>
+                        </div>
                     </div>
                     <div class="col-md-9">
                         <div >
                             <label>Memo  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
                             <!-- <textarea required name="preassemInsp"  #preassemMemo="ngModel" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection" [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.memo" class="form-control text-area-cstm"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo5" required [readonly]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection" [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo5" required [readonly]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection" [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.memo"></p-editor>
                         </div>
                        <div *ngIf="f.submitted  && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.memo==''" >
                         <div  class="red_bomb">Memo is required</div>
                     </div>
                     </div>
                     </div>
-                    <div class="form-row">
+                    <!-- <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican7" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.technicianId"  #preassITech="ngModel">
-                                </p-autoComplete>
-                              </div>
-                              <div *ngIf="f.submitted  && preassITech.errors && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
-                            </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                                <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
-                                [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.technicianDate"></p-calendar>
-                            </div>
+                          
                             </div>
                             <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                                    <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector7" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                      [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorId"  #pressInsp="ngModel">
-                                    </p-autoComplete>
-                                  </div>
-                                  <div *ngIf="f.submitted   && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.inspectorId ==0" >
-                                    <div  class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                                    <p-calendar required class="p-calendar-cstm" [showIcon]="true"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
-                                    [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorDate"></p-calendar>
-                                </div>
+                               
                             </div>
-                            </div>
+                            </div> -->
             </div>
         </div>
     </div>
@@ -461,65 +477,67 @@
                         <div *ngIf="f.submitted  && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
                             <div  class="red_bomb">Reason is required</div>
                         </div>
+                        <div >
+                            <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                            <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican6" [dropdown]="true" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
+                              (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                              [(ngModel)]="saveTearDownData.workOrderWorkPerformed.technicianId"   #workPerfomedInsp="ngModel" >
+                            </p-autoComplete>
+                          </div>
+                          <div *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.technicianId ==0" >
+                            <div  class="red_bomb">Technican is required</div>
+                        </div>
+                          <div>
+                            <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                            <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                            [(ngModel)]="saveTearDownData.workOrderWorkPerformed.technicianDate"></p-calendar>
+                        </div>
+                        <div >
+                            <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                            <!-- <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector8" [dropdown]="true"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList"
+                              (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                              [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorId" >
+                            </p-autoComplete> -->
+                            <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector12" [dropdown]="true" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                            errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
+                            (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                            [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorId"   #workPerformedInsp="ngModel">
+                          </p-autoComplete>
+
+
+                          </div>
+                          <div *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.inspectorId ==0" >
+                            <div  class="red_bomb">Inspector is required</div>
+                        </div>
+                        <div>
+                            <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                            <p-calendar required class="p-calendar-cstm" [showIcon]="true"
+                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                            [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorDate"></p-calendar>
+                        </div>
                     </div>
                     <div class="col-md-9">
                         <div >
                             <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
                             <!-- <textarea required name="removal_Memo"  #wpMemo="ngModel"[disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed" [(ngModel)]="saveTearDownData.workOrderWorkPerformed.memo" class="form-control text-area-cstm"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo6" required [readonly]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed" [(ngModel)]="saveTearDownData.workOrderWorkPerformed.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo6" required [readonly]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed" [(ngModel)]="saveTearDownData.workOrderWorkPerformed.memo"></p-editor>
                         </div>
                         <div *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.memo ==''" >
                             <div  class="red_bomb">Memo is required</div>
                         </div>
                   </div>
                     </div>
-                    <div class="form-row">
+                    <!-- <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican6" [dropdown]="true" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderWorkPerformed.technicianId"   #workPerfomedInsp="ngModel" >
-                                </p-autoComplete>
-                              </div>
-                              <div *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
-                            </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                                <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
-                                [(ngModel)]="saveTearDownData.workOrderWorkPerformed.technicianDate"></p-calendar>
-                            </div>
+                           
                             </div>
                             <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                                    <!-- <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector8" [dropdown]="true"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                      [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorId" >
-                                    </p-autoComplete> -->
-                                    <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector12" [dropdown]="true" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
-                                    errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                    (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                    [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorId"   #workPerformedInsp="ngModel">
-                                  </p-autoComplete>
-
-
-                                  </div>
-                                  <div *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.inspectorId ==0" >
-                                    <div  class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                                    <p-calendar required class="p-calendar-cstm" [showIcon]="true"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
-                                    [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorDate"></p-calendar>
-                                </div>
+                               
                             </div>
-                            </div>
+                            </div> -->
             </div>
         </div>
     </div>
@@ -555,7 +573,7 @@
                         <div >
                             <label>Memo <span class="clr-red" *ngIf="saveTearDownData.isTestDataUsed">*</span></label>
                             <!-- <textarea  required class="form-control text-area-cstm" name="testData"  #testDataUsed="ngModel" [disabled]="saveTearDownData.workOrderTestDataUsed.reasonId ==0 || !saveTearDownData.isTestDataUsed"  [(ngModel)]="saveTearDownData.workOrderTestDataUsed.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo7" required [readonly]="saveTearDownData.workOrderTestDataUsed.reasonId ==0 || !saveTearDownData.isTestDataUsed"  [(ngModel)]="saveTearDownData.workOrderTestDataUsed.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo7" required [readonly]="saveTearDownData.workOrderTestDataUsed.reasonId ==0 || !saveTearDownData.isTestDataUsed"  [(ngModel)]="saveTearDownData.workOrderTestDataUsed.memo"></p-editor>
                         </div>
                        <div *ngIf="f.submitted  && saveTearDownData.isTestDataUsed && saveTearDownData.workOrderTestDataUsed.memo ==''" >
                         <div  class="red_bomb">Memo is required</div>
@@ -597,7 +615,7 @@
                         <div >
                             <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isBulletinsModification">*</span></label>
                             <!-- <textarea  required class="form-control text-area-cstm" name="bulletMod"  #bulletModify="ngModel" [disabled]="saveTearDownData.workOrderBulletinsModification.reasonId ==0 || !saveTearDownData.isBulletinsModification" [(ngModel)]="saveTearDownData.workOrderBulletinsModification.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo8" required [readonly]="saveTearDownData.workOrderBulletinsModification.reasonId ==0 || !saveTearDownData.isBulletinsModification" [(ngModel)]="saveTearDownData.workOrderBulletinsModification.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo8" required [readonly]="saveTearDownData.workOrderBulletinsModification.reasonId ==0 || !saveTearDownData.isBulletinsModification" [(ngModel)]="saveTearDownData.workOrderBulletinsModification.memo"></p-editor>
                         </div>
                         <div *ngIf="f.submitted  && saveTearDownData.isBulletinsModification && saveTearDownData.workOrderBulletinsModification.reasonId ==0" >
                             <div  class="red_bomb">Memo is required</div>
@@ -636,7 +654,7 @@
                         <div >
                             <label>Memo  <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
                             <!-- <textarea required class="form-control text-area-cstm" name="finaltestmemo1" [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest" [(ngModel)]="saveTearDownData.workOrderFinalTest.memo" [required]="saveTearDownData.isFinalTest"  #finaltestMemo="ngModel"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo9" required [readonly]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest" [(ngModel)]="saveTearDownData.workOrderFinalTest.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo9" required [readonly]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest" [(ngModel)]="saveTearDownData.workOrderFinalTest.memo"></p-editor>
                         </div>
                         <div *ngIf="f.submitted  && saveTearDownData.isFinalTest && saveTearDownData.workOrderFinalTest.memo==''" >
                             <div  class="red_bomb">Memo is required</div>
@@ -718,7 +736,7 @@
                         <div >
                             <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isFinalInspection">*</span></label>
                             <!-- <textarea required name="finalInsp_Memo"  #finalInspMemo="ngModel" class="form-control text-area-cstm" [disabled]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection" [(ngModel)]="saveTearDownData.workOrderFinalInspection.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo10" required [readonly]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection" [(ngModel)]="saveTearDownData.workOrderFinalInspection.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo10" required [readonly]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection" [(ngModel)]="saveTearDownData.workOrderFinalInspection.memo"></p-editor>
                         </div>
                        <div *ngIf="f.submitted  && saveTearDownData.isFinalInspection  && saveTearDownData.workOrderFinalInspection.memo ==''"  >
                         <div class="red_bomb">Memo is required</div>
@@ -783,7 +801,7 @@
                         <div >
                             <label>Memo <span class="clr-red" *ngIf="saveTearDownData.isAdditionalComments">*</span></label>
                             <!-- <textarea [required]="saveTearDownData.isAdditionalComments" class="form-control text-area-cstm" name="addcMemo_Memo"  #addcMemo="ngModel" [disabled]="saveTearDownData.workOrderAdditionalComments.reasonId==0  || !saveTearDownData.isAdditionalComments"  [(ngModel)]="saveTearDownData.workOrderAdditionalComments.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo11" required [readonly]="saveTearDownData.workOrderAdditionalComments.reasonId==0  || !saveTearDownData.isAdditionalComments"  [(ngModel)]="saveTearDownData.workOrderAdditionalComments.memo"></p-editor>
+                            <p-editor  [style]="{'height':'360px'}" name="textAreaInfo11" required [readonly]="saveTearDownData.workOrderAdditionalComments.reasonId==0  || !saveTearDownData.isAdditionalComments"  [(ngModel)]="saveTearDownData.workOrderAdditionalComments.memo"></p-editor>
                         </div>
                         <div *ngIf="f.submitted  && saveTearDownData.isAdditionalComments && saveTearDownData.workOrderAdditionalComments.memo=='' " >
                             <div  class="red_bomb">Memo is required</div>
