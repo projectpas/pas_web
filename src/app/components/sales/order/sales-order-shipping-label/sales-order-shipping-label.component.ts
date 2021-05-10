@@ -76,14 +76,8 @@ export class SalesShippingLabelComponent implements OnInit {
                 border: 1px Solid
               }
               
-              h4 {
-                padding: 5px;
-                display: inline-block;
-                font-size: 14px;
-                font-weight: 600;
-                width: 100%;
-                margin: 0;
-              }
+              h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
+  
               
               h5 {
                 font-family: inherit;
@@ -126,6 +120,10 @@ export class SalesShippingLabelComponent implements OnInit {
                 padding-right: 2px;
                 padding-left: 2px;
                  width: 38.33333333%;
+                 font-size:12.5px !important;
+  
+                 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+             
                 text-transform: capitalize;
                 margin-bottom: 0;
                 text-align: left;
@@ -185,6 +183,9 @@ export class SalesShippingLabelComponent implements OnInit {
                 position: relative;
                 min-height: 1px;
                 float: left;
+                font-size:12.5px !important;
+   
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                 padding-right: 2px;
                 padding-left: 2px;
                 width: 38.33333333%;
@@ -208,17 +209,22 @@ export class SalesShippingLabelComponent implements OnInit {
               }
               
               .form-div {
-                top: 6px;
+                // top: 6px;
                 position: relative;
                 font-weight: normal;
-                margin-top: 10px;
+                // margin-top: 10px;
+                font-weight: normal;
+                font-size:12.5
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
               }
               
               .image {
-                border: 1px solid #ccc;
-                padding: 5px;
-                margin-top:20px;
-                margin-bottom:10px;
+                border: 1px solid #000;
+                width: 100%;
+                display: block;
+                // padding: 5px;
+                // margin-top:20px;
+                // margin-bottom:10px;
               }
               
               .mtop20 {
@@ -233,6 +239,8 @@ export class SalesShippingLabelComponent implements OnInit {
               .pdf-block {
                 width: 800px;
                 margin: auto;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-weight:normal;
                 border: 1px solid #ccc;
                 padding: 25px 15px;
               }
@@ -259,8 +267,8 @@ export class SalesShippingLabelComponent implements OnInit {
               .pick-ticket-header {
                 border: 1px solid black;
                 text-align: left;
-                background: #0d57b0 !important;
-                color: #fff !important;
+                // background: #0d57b0 !important;
+                color: #000 !important;
                 -webkit-print-color-adjust: exact;
               }
              

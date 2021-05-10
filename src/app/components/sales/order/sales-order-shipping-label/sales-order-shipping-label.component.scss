@@ -11,7 +11,7 @@ h4 {
   font-weight: 600;
   width: 100%;
   margin: 0;
-}
+ }
 
 h5 {
   font-family: inherit;
@@ -130,17 +130,20 @@ hr {
 }
 
 .form-div {
-  top: 6px;
+  // top: 6px;
   position: relative;
   font-weight: normal;
-  margin-top: 10px;
+  // margin-top: 10px;
 }
 
 .image {
-  border: 1px solid #ccc;
-  padding: 5px;
-  margin-top:20px;
-  margin-bottom:10px;
+  border: 1px solid #000;
+  width: 100%;
+  display: block;
+
+  // padding: 5px;
+  // margin-top:20px;
+  // margin-bottom:10px;
 }
 
 .mtop20 {
@@ -181,8 +184,9 @@ hr {
 .pick-ticket-header {
   border: 1px solid black;
   text-align: left;
-  background: #0d57b0 !important;
-  color: #fff !important;
+  height:26px;
+  // background: #0d57b0 !important;
+  color: #000 !important;
 }
 
 .div-height {
