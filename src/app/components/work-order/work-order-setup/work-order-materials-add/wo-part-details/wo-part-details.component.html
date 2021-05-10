@@ -31,10 +31,10 @@
     <div class="col-2 column">
       <div class="form-group">
         <label class="width_100per">PN<span class="clr-red">*</span></label>
-         <p-autoComplete field="partNumber" class="autocomp-customer-cstm" name="partNumberObj"
+         <p-autoComplete field="partNumber"  class="autocomp-customer-cstm" name="partNumberObj"
           [(ngModel)]="formObject.partNumberObj" [suggestions]="partDetails" [forceSelection]="true"
           field="partNumber" (completeMethod)="searchPartByPartNumber($event)" (onSelect)="onPartNumberSelect($event)"
-          [size]="30" [minLength]="1" [dropdown]="true" [disabled]="partEditDisable" required>
+          [size]="30" [minLength]="1" [dropdown]="true" [disabled]="isEdit" required (onClear)="clearautoCompleteInput()">
         </p-autoComplete>
       </div>
     </div>
@@ -48,9 +48,9 @@
       <div class="col-3 column">
         <label class="width_100per text_start"> Cond <span class="clr-red">*</span> </label>
         <div class="form-group">
-          <p-multiSelect [options]="allConditionInfo" (onChange)="onConditionSelect()"
+          <p-multiSelect [options]="allConditionInfo" (ngModelChange)="getActive()" (onChange)="onConditionSelect()"
             [(ngModel)]="formObject.conditionIds" name="conditionId" defaultLabel="-- Select --"
-            required="true" class="classification" [disabled]="partEditDisable">           
+            required="true" class="classification" [disabled]="isEdit">           
           </p-multiSelect>
         </div>
       </div>
@@ -59,8 +59,8 @@
             <!-- *ngIf="type == 'WOQ'" -->
           <label >Qty Req<span class="clr-red">*</span></label>
           <!-- <label *ngIf="type == 'WO'">Qty Ord<span class="clr-red">*</span></label> -->
-          <input class="form-control text-right" type="text" pKeyFilter="pint" pInputText required          
-             [ngModel]="formObject.quantity" name="quantity" autocomplete="off" />
+          <input class="form-control text-right" type="text" (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
+          [(ngModel)]="formObject.quantity" (change)="calculateExtendedCost()" name="quantity" autocomplete="off" />
             <!-- [ngModel]="formObject.quantity  | globalNmberFormat"
             (ngModelChange)="formObject.quantity=formatStringToNumberGlobal($event)" -->
         </div>
@@ -91,57 +91,93 @@
 
     <div> 
         <label class="width_100per text_start"> Task <span class="clr-red">*</span> </label>
-        <select class="form-control wf-pub-id qtyWidth text_tranform" style="width: 100px;"  [(ngModel)]="formObject.taskId"
-        name="task" required (change)="onTaskChange(formObject)">
+        <select class="form-control wf-pub-id qtyWidth text_tranform" (ngModelChange)="getActive()" style="width: 100px;"  [(ngModel)]="formObject.taskId"
+        name="task" required >
+        <!-- (change)="onTaskChange(formObject)" -->
         <option *ngFor="let task of taskList"  [value]="task.taskId">{{task.description}}</option>
       </select> 
     </div>
     <div class="col-2 column">
       <!-- (ngModelChange)="getActive()"  -->
       <label class="width_100per text_start">Provision<span class="clr-red">*</span></label>
-      <select class="form-control wf-pub-id qtyWidth" [(ngModel)]="formObject.provisionId" name="provision"
+      <select class="form-control wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="formObject.provisionId" name="provision"
       required>
-      <option value="">--Select--</option>
+      <option value="0">--Select--</option>
       <option *ngFor="let item of provisionListData" [ngValue]="item.value" required>
         {{ item.label }}
       </option>
     </select> 
     </div>
     <div class="col-2 column">
+        <label class="width_100per text_start"> Request Type </label>
+        <select class="form-control wf-pub-id full-width qtyWidth mauto" (ngModelChange)="getActive()" [(ngModel)]="formObject.materialMandatoriesId"
+         name="mandi">
+        <option value="0">--select--</option>
+        <option *ngFor="let mandatory of materialMandatory" value="{{ mandatory.materialMandatoriesId }}">
+          {{mandatory.materialMandatoriesName}}
+        </option> 
+      </select>
+    </div>
+    <div class="col-2 column" style="max-width: 13%;">
       <label class="width_100per text_start">Unit Cost</label>
-      <input type="text" class="form-control w100 text-right input-width-100-percent" pInputText pKeyFilter="money"
-        value="{{ unitCost }}" (change)="calculateExtendedCost()" [(ngModel)]="unitCost"
+      <input type="text" class="form-control w100 text-right input-width-100-percent" (ngModelChange)="getActive()" pInputText pKeyFilter="money"
+        value="{{ unitCost }}" (change)="calculateExtendedCost()" [(ngModel)]="formObject.unitCost"
         name="unitcost" maxlength="15" />
     </div>
-    <div class="col-2 column">
+    <div class="col-2 column" style="max-width: 15%;">
       <label class="width_100per text_start">Extened Cost</label>
       <input type="text" class="form-control w100 text-right input-width-100-percent" pInputText pKeyFilter="money"
-        [disabled]="true" value="{{ extendedCost }}" [(ngModel)]="extendedCost"
+        [disabled]="true" value="{{ extendedCost }}" [(ngModel)]="formObject.extendedCost"
        name="extCost" maxlength="15" />
     </div>
-    <div class="col-2 column">
+    <div class="col-2 column pad_top20 label_ajd">
       <div class="custom-checkbox-box text_start">
         <input class="filled-in" id="PMS"  type="checkbox" value="isDeferred"
-          [(ngModel)]="isDeferred" name="isDefered" /> <span>Is Defered</span>
+          [(ngModel)]="formObject.isDeferred" (ngModelChange)="getActive()" name="isDefered" /> <span class="label_ajd">Is Defered</span>
           <!-- (ngModelChange)="getActive()" -->
       </div>
     </div>
-  
+    <div class="col-3 column ">
+        <div class="form-group memo-popup-cstm mat_emo">
+          <div [innerHTML]="formObject.memo" matTooltipPosition="above" [matTooltip]="parsedText(formObject.memo)"
+            class="text_editor_box"></div>
+          <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo"
+            matTooltipPosition="above" (click)="onAddTextAreaInfo(formObject)"></i>
+        </div>
+    </div>
+  </div>
+  <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+          <h4 class="modal-title">Edit Memo</h4>
+        </div>
+        <div class="modal-body">
+          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
+            name="textAreaInfo" required></p-editor>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" [disabled]="disableEditor"
+            (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+          <button type="button" class="btn btn-danger"
+            (click)="onCloseTextAreaInfo()">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="row justify-content-start">
     <div class="col-1 column" style="margin-right: 8px;">
       <div class="form-group">
-        <button class="btn btn-primary"  (click)="search($event)"
+        <button class="btn btn-primary"  [disabled]="!disableforPartNum  || formObject.quantity==0 || (formObject.conditionIds ==undefined || formObject.conditionIds ==[])" (click)="search($event)"
           >
-          <!-- [disabled]=" !formObject.quantity || (formObject.conditionIds && formObject.conditionIds.length==0)" -->
-          Search PN
+     Search PN
         </button> 
       </div>
     </div>
   </div>
-
 <div class="row">
-    <div style="overflow-y: auto;">
+    <div style="overflow-y: auto;width: 100%;">
         <p-table #dt class="rpo-table-cstm salesquotePart" [value]="parts" [rows]="10" [lazy]="true"
             [paginator]="showPaginator" [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords"
             [pageLinks]="pageLinks" [columns]="columns" [scrollable]="true" [resizableColumns]="true"
@@ -184,7 +220,7 @@
                             <!-- <span *ngIf="!getCheckBoxDisplay(part, rowIndex,false)">
                                 <input type="checkbox" (change)="onChange($event, part)" />
                             </span> -->
-                            <input type="checkbox" (change)="onChange($event, part,rowIndex)" [disabled]="isStockLineViewMode" />
+                            <input type="checkbox" [(ngModel)]="part.isPartChecked" (change)="onChange($event, part,rowIndex)" [disabled]="isStockLineViewMode" />
                         </span>
                         <span *ngIf="col.field == 'partNumber'">
                             {{part.partNumber}}
@@ -302,7 +338,7 @@
                     <td *ngFor="let col of stockLinecolumns" pReorderableRowHandle>
                         <span *ngIf="col.field == 'selected'">
                             <span *ngIf="!getCheckBoxDisplay(part, rowIndex,true)">
-                                <input type="checkbox" (change)="onChangeStock($event, part, 0)"
+                                <input type="checkbox" [checked]="part.isPartChecked==true" (change)="onChangeStock($event, part, 0)"
                                     [disabled]="isStockLineViewMode" />
                             </span>
                         </span>
@@ -382,15 +418,16 @@
             </tr>
         </ng-template>
         </p-table>
-
-
     </div>
-    <div class="modal-footer">
-        <!-- [disabled]="searchDisabled " -->
-        <button class="btn btn-primary" (click)="savePart($event)"
+    <div class="modal-footer"> 
+        <button class="btn btn-primary" *ngIf="!isEdit" [disabled]="!disableSaveUpdateButton || formObject.provisionId==0 ||  formObject.quantity==0 || (formObject.conditionIds ==undefined || formObject.conditionIds ==[])" (click)="savePart($event)"
        >
     Save
       </button> 
+      <button class="btn btn-primary" *ngIf="isEdit" [disabled]="disableUpdateButton" (click)="upDatePart($event)"
+      >
+   Update
+     </button> 
         <button type="button" (click)="onClose()" class="btn btn-danger">
           Close
         </button>

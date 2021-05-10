@@ -23,10 +23,13 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
   @Input() salesQuote: ISalesQuote;
    @Input() clearData = false;
    @Input() display: boolean;
-
+   @Input() editData: any={};
+   @Input() isEdit: boolean;
    @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
    @Output() select: EventEmitter<any> = new EventEmitter<any>();
    @Output() setmaterialListForSave: EventEmitter<any> = new EventEmitter<any>();
+   @Output() setmaterialListForUpdate: EventEmitter<any> = new EventEmitter<any>();
+   
    
    @Input() selectedParts: any = [];
    @Input() type: string;
@@ -128,9 +131,12 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
       this.select.emit(part);
   }
   saveMaterial(part:any){
-    console.log("saved data",part)
     this.setmaterialListForSave.emit(part);
   }
+  updateMaterial(part:any){
+    this.setmaterialListForUpdate.emit(part);
+  }
+  
   onSelect(part: any) {
       this.select.emit(part);
   }

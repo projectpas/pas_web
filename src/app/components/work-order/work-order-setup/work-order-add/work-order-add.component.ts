@@ -772,7 +772,9 @@ setTimeout(() => {
         if (this.isSubWorkOrder == true) {
             this.getMaterialListByWorkOrderIdForSubWO();
         } else {
-            this.getMaterialListByWorkOrderId();
+            // this.getMaterialListByWorkOrderId();
+            //new one
+            this.getNewMaterialListByWorkOrderId();
         }
     }
 
@@ -800,7 +802,9 @@ setTimeout(() => {
             if (this.isSubWorkOrder == true) {
                 this.getMaterialListByWorkOrderIdForSubWO();
             } else {
-                this.getMaterialListByWorkOrderId();
+                // this.getMaterialListByWorkOrderId();
+                // new one
+                this.getNewMaterialListByWorkOrderId();
             }
         }
         if (value === 'labor') {
@@ -1282,11 +1286,8 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 currentRecord.conditionId = (this.workorderSettings.defaultConditionId !=0 &&  this.workorderSettings.defaultConditionId !=null) ? this.workorderSettings.defaultConditionId: object.conditionId; 
             }
         }
-        // console.log("hell object",object)
-        // console.log("hell",currentRecord)
         currentRecord.workOrderScopeId= currentRecord.workOrderScopeId ? currentRecord.workOrderScopeId :object.workOderScopeId;
-//  console.log("hell2",currentRecord.workOrderScopeId)
-        if (!this.workOrderGeneralInformation.isSinglePN) {
+    if (!this.workOrderGeneralInformation.isSinglePN) {
             this.checkPartExist(object, this.isEdit, index)
         }
         if (!this.isEdit) {
@@ -1458,9 +1459,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         if(value !=null && form=='html'){
             workOrderPart.workOrderScopeId=value;
         } 
-//  console.log("hello Changed",workOrderPart.workOrderScopeId)
     workOrderPart.workOrderScopeId=(workOrderPart.workOrderScopeId !=undefined || workOrderPart.workOrderScopeId !=null)?workOrderPart.workOrderScopeId :0;
-    // console.log("hello Changed",workOrderPart.workOrderScopeId)
     const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId);
     const { workOrderScopeId } = workOrderPart;
     if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
@@ -1721,7 +1720,9 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                         if (this.isSubWorkOrder == true) {
                             this.getMaterialListByWorkOrderIdForSubWO();
                         } else {
-                            this.getMaterialListByWorkOrderId();
+                            // this.getMaterialListByWorkOrderId();
+                            // nw one
+                            this.getNewMaterialListByWorkOrderId();
                         }
                     // }
                 }
@@ -1737,8 +1738,6 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
     }
     //new form for material list
     saveMaterials(data){
-        debugger;
-        console.log("data wo add",data);
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;
             const newData={...data,
@@ -1776,11 +1775,15 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 // partNumber: data.partItem.partName,
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
                 stockLineId:data.stockLineId==0? null :data.stockLineId,
-                quantity:10,
-                unitOfMeasure: "Ea",
-unitOfMeasureId: 3 ,
-provision:'REPLACE',
-provisionId:data.provisionId ? data.provisionId :2
+                isActive: true,
+                isDeferred: false,
+                isDeleted: false,
+                createdBy:this.userName,
+                updatedBy:this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                quantity:data.quantity ?data.quantity :0 ,
+provisionId:data.provisionId ? data.provisionId :0
             }     
             this.isSpinnerVisible = true;            
             this.workOrderService.createWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1791,13 +1794,154 @@ provisionId:data.provisionId ? data.provisionId :2
                     'Saved Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
-                this.getMaterialListByWorkOrderId();
+// newMaterial list get
+this.getNewMaterialListByWorkOrderId();
+                // old material list get
+                // this.getMaterialListByWorkOrderId();
             },
                 err => {
                     this.handleError(err);
                 })
         }
     }
+
+    updateMaterials(data){
+        if (this.isSubWorkOrder == true) {
+            const newData={...data,
+                workOrderId: this.subWorkOrderDetails.workOrderId,
+                workFlowWorkOrderId: this.workFlowWorkOrderId,
+                subWOPartNoId: this.subWOPartNoId,
+                subWorkOrderMaterialsId: 0,
+                subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
+                extendedCost:data.extendedCost? data.extendedCost : 0,
+                unitCost:data.unitCost?  data.unitCost: 0,
+                partNumber: data.partItem.partName,
+                taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
+            }
+            this.isSpinnerVisible = true;
+            this.workOrderService.createSubWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Updated Sub Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                this.getMaterialListByWorkOrderIdForSubWO();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        } else {
+            const newData={...data,
+                workOrderId: this.workOrderId,
+                 workFlowWorkOrderId: this.workFlowWorkOrderId==0? null :this.workFlowWorkOrderId,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
+                extendedCost:data.extendedCost? data.extendedCost : 0,
+                unitCost:data.unitCost?  data.unitCost: 0,
+                // partNumber: data.partItem.partName,
+                taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
+                stockLineId:data.stockLineId==0? null :data.stockLineId,
+                isActive: true,
+                isDeferred: false,
+                isDeleted: false,
+                createdBy:this.userName,
+                updatedBy:this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                quantity:data.quantity ?data.quantity :0 ,
+provisionId:data.provisionId ? data.provisionId :0
+            }  
+
+            this.isSpinnerVisible = true;
+            this.workOrderService.updateWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Updated Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+        // newMaterial list get
+this.getNewMaterialListByWorkOrderId();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
+
+
+    workOrderMaterial:any=[];
+      getNewMaterialListByWorkOrderId() {
+        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
+            this.workOrderMaterialList = [];
+            this.isSpinnerVisible = true;
+            this.workOrderService.getWorkOrderMaterialListNew(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                if (res.length > 0) {
+                    res.forEach(element => {
+                        this.getValues(element)
+                        element.isShowPlus = true;
+                        if (element.defered == 'No') {
+                            element.defered = false;
+                        } else {
+                            element.defered = true;
+                        }
+                    });
+                    this.workOrderMaterial = res;
+                    this.workOrderMaterial.forEach(element => {
+                       element.currency=element.currency ;
+                       element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                       element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                    }); 
+                    if (this.gridActiveTab === 'billorInvoice') {
+                        this.quoteMaterialList = res;
+                    }
+                    this.materialStatus = res[0].partStatusId;
+                    this.filterParts();
+                }
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
+    summaryParts:any=[];
+    totalRecords: number;
+    pageLinks: any;
+    filterParts() {
+        this.summaryParts = [];
+        let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
+        if (uniqueParts.length > 0) {
+          uniqueParts.forEach((part, i) => {
+            let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
+            if (childParts && childParts.length > 0) {
+            //   uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
+              uniqueParts[i].childParts = childParts;
+            }
+          });
+          this.workOrderMaterialList = uniqueParts;
+        }
+        this.totalRecords = this.workOrderMaterialList.length;
+        this.pageLinks = Math.ceil(
+          this.totalRecords / 10
+        );
+        // this.checkUpdateOrsaveButton();
+      }
+      getUniqueParts(myArr, prop1, prop2, prop3) {
+        let uniqueParts = JSON.parse(JSON.stringify(myArr));
+        uniqueParts.reduceRight((acc, v, i) => {
+          if (acc.some(obj => v[prop1] === obj[prop1] && v[prop2] === obj[prop2] && v[prop3] === obj[prop3])) {
+            uniqueParts.splice(i, 1);
+          } else {
+            acc.push(v);
+          }
+          return acc;
+        }, []);
+        return uniqueParts;
+      }
+    //old material list save
     saveWorkOrderMaterialList(data) { 
         if (this.isSubWorkOrder == true) {
             const materialArr = data.materialList.map(x => {
@@ -1927,7 +2071,39 @@ provisionId:data.provisionId ? data.provisionId :2
                 })
         }
     }
-
+    getMaterialListByWorkOrderId() {
+        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
+            this.workOrderMaterialList = [];
+            this.isSpinnerVisible = true;
+            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                if (res.length > 0) {
+                    res.forEach(element => {
+                        this.getValues(element)
+                        element.isShowPlus = true;
+                        if (element.defered == 'No') {
+                            element.defered = false;
+                        } else {
+                            element.defered = true;
+                        }
+                    });
+                    this.workOrderMaterialList = res;
+                    this.workOrderMaterialList.forEach(element => {
+                       element.currency=element.currency ;
+                       element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                       element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                    }); 
+                    if (this.gridActiveTab === 'billorInvoice') {
+                        this.quoteMaterialList = res;
+                    }
+                    this.materialStatus = res[0].partStatusId;
+                }
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
 
 
     saveworkOrderLabor(data) {
@@ -2168,7 +2344,10 @@ provisionId:data.provisionId ? data.provisionId :2
                     'Updated Parts Data',
                     MessageSeverity.success
                 );
-                this.getMaterialListByWorkOrderId();
+                // this.getMaterialListByWorkOrderId();
+
+                // new one
+                this.getNewMaterialListByWorkOrderId();
             },
                 err => {
                     this.handleError(err);
@@ -2205,39 +2384,8 @@ provisionId:data.provisionId ? data.provisionId :2
             }
         }
     }
-    getMaterialListByWorkOrderId() {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-            this.workOrderMaterialList = [];
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                if (res.length > 0) {
-                    res.forEach(element => {
-                        this.getValues(element)
-                        element.isShowPlus = true;
-                        if (element.defered == 'No') {
-                            element.defered = false;
-                        } else {
-                            element.defered = true;
-                        }
-                    });
-                    this.workOrderMaterialList = res;
-                    this.workOrderMaterialList.forEach(element => {
-                       element.currency=element.currency ;
-                       element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
-                       element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
-                    }); 
-                    if (this.gridActiveTab === 'billorInvoice') {
-                        this.quoteMaterialList = res;
-                    }
-                    this.materialStatus = res[0].partStatusId;
-                }
-            },
-                err => {
-                    this.handleError(err);
-                })
-        }
-    }
+
+
     // getDocumentsByWorkOrderId() {
     //     if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
     //         this.documentsDestructuredData = [];
@@ -2820,7 +2968,9 @@ provisionId:data.provisionId ? data.provisionId :2
                                 } else {
                                     // for billling details 
                                     this.quotestatusofCurrentPart = "NotApproved"
-                                    this.getMaterialListByWorkOrderId();
+                                    // this.getMaterialListByWorkOrderId();
+                                    //new one
+                                    this.getNewMaterialListByWorkOrderId();
                                     this.getChargesListByWorkOrderId();
                                     this.getWorkFlowLaborList();
                                 }
@@ -3458,7 +3608,6 @@ provisionId:data.provisionId ? data.provisionId :2
                     this.labor.workOrderLaborList[0][task.description.toLowerCase()] = [];
                 }
             })
-            console.log("task list",this.taskList)
         },
             err => {
                 this.handleError(err);
@@ -3553,7 +3702,6 @@ this.woPartId=rowData.id;
             setTimeout(() => { 
                 this.workOrderGeneralInformation.partNumbers.map((x, index) => {
                     if(x.publicatonExpirationDate){ 
-                        // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
                        if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
                         setTimeout(() => {
                             // x.cMMId=0;
@@ -3567,8 +3715,7 @@ this.woPartId=rowData.id;
                        }
                     }
                     if(x.workflowExpirationDate){ 
-                        // console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
-                       if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                     if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
                        
                         // this.removeWorkflow(x,index);
                         setTimeout(() => {
