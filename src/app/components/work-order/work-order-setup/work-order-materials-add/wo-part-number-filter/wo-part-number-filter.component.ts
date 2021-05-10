@@ -6,7 +6,11 @@ import { ItemMasterService } from "../../../../../../app/services/itemMaster.ser
 import { AlertService, MessageSeverity } from "../../../../../../app/services/alert.service";
 import { IMultiPartJson } from "../../../../../../app/components/sales/shared/models/imulti-part-json";
 import { AuthService } from "../../../../../../app/services/auth.service";
-import { IWOrkOrderQuote } from "src/app/models/workorder/IWorkOrderQuote";
+import { IWOrkOrderQuote } from "../../../../../../app/models/workorder/IWorkOrderQuote";
+import { formatNumberAsGlobalSettingsModule } from '../../../../../../app/generic/autocomplete';
+import { StocklineService } from '../../../../../../app/services/stockline.service';
+import { ItemSearchType } from '../../../../../../app/components/sales/quotes/models/item-search-type';
+import { CommonService } from '../../../../../../app/services/common.service';
 
 
 @Component({
@@ -18,6 +22,8 @@ export class WoPartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() type: string;
   @Input() allConditionInfo: any;
   @Input() workOrderQuote: IWOrkOrderQuote;
+  @Input() customer :any={}
+  @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild("searchMultiPart", { static: false }) searchMultiPart: ElementRef;
   query: ItemMasterSearchQuery;
   partDetails: any[];
@@ -31,9 +37,9 @@ export class WoPartNumberFilterComponent implements OnInit, OnDestroy {
   multiPartNumbers = "";
   multiPartModal: NgbModalRef;
   multiSearchResult: IMultiPartJson[] = [];
-
+  provisionListData:any=[];
   constructor(private modalService: NgbModal, private itemMasterService: ItemMasterService,private alertService: AlertService,
-    private authService: AuthService, private changeDetector: ChangeDetectorRef,) {
+    private authService: AuthService,    private commonService: CommonService,private changeDetector: ChangeDetectorRef,    private stockLineService: StocklineService,) {
     this.partDetails = [];
     
     this.query = new ItemMasterSearchQuery();
@@ -46,8 +52,28 @@ export class WoPartNumberFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     //this.bindPartsDroppdown('');
+    this.provisionList();
   }
-
+  provisionList() {
+    this.isSpinnerVisible = true;
+    let provisionIds = []; 
+// if(this.workFlow.materialList && this.workFlow.materialList.length !=0){
+//          this.workFlow.materialList.forEach(element => {
+//         return provisionIds.push(element.provisionId);
+//     })
+// }else{
+// } 
+provisionIds.push(0)
+    this.isSpinnerVisible = true;
+    this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 0, provisionIds,this.masterCompanyId)
+        .subscribe(res => {
+            this.isSpinnerVisible = false;
+            this.provisionListData = [];
+                this.provisionListData = res;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
+}
   get masterCompanyId(): number {
     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : 1;
   }
@@ -60,7 +86,63 @@ export class WoPartNumberFilterComponent implements OnInit, OnDestroy {
   calculate() {
   }
 
+  // search($event, programaticSearch = false) {
+
+  // }
   search($event, programaticSearch = false) {
+    let searchQuery = JSON.parse(JSON.stringify(this.query));
+    searchQuery.partSearchParamters.restrictDER = !searchQuery.partSearchParamters.restrictDER;
+    searchQuery.partSearchParamters.restrictPMA = !searchQuery.partSearchParamters.restrictPMA;
+    if (searchQuery.partSearchParamters.conditionIds !== undefined && searchQuery.partSearchParamters.conditionIds.length == 0) {
+      searchQuery.partSearchParamters.conditionIds.push(searchQuery.partSearchParamters.conditionId);
+    }
+
+    if (!programaticSearch) {
+      $event.preventDefault();
+    }
+    if (this.query.partSearchParamters.includeMultiplePartNumber) {
+      // this.getMultipartsQuery();
+    } else {
+      switch (this.query.partSearchParamters.itemSearchType) {
+        case ItemSearchType.StockLine:
+          this.isSpinnerVisible = true;
+          this.stockLineService.searchstocklinefromsoqpop(searchQuery)
+            .subscribe(result => {
+              this.isSpinnerVisible = false;
+              let resultdata = result['data'] || [];
+              let qtyOnHandTemp = 0;
+              let qtyAvailableTemp = 0;
+              if (resultdata.length > 0) {
+                for (let i = 0; i < resultdata.length; i++) {
+                  qtyOnHandTemp = qtyOnHandTemp + resultdata[i].qtyOnHand;
+                  qtyAvailableTemp = qtyAvailableTemp + resultdata[i].qtyAvailable
+                }
+              }
+
+              this.query.partSearchParamters.qtyOnHand = qtyOnHandTemp;
+              this.query.partSearchParamters.qtyAvailable = qtyAvailableTemp;
+              // this.onPartSearch.emit(result);
+            }, error => {
+              this.isSpinnerVisible = false;
+            });
+          break;
+        default:
+          this.isSpinnerVisible = true;
+          this.itemMasterService.searchitemmasterfromsoqpop(searchQuery)
+            .subscribe(result => {
+              this.isSpinnerVisible = false;
+              if (result && result['data'] && result['data'][0]) {
+                this.query.partSearchParamters.qtyOnHand = result['data'][0].qtyOnHand;
+                this.query.partSearchParamters.qtyAvailable = result['data'][0].qtyAvailable;
+              }
+
+              this.onPartSearch.emit(result);
+            }, error => {
+              this.isSpinnerVisible = false;
+            });
+          break;
+      }
+    }
   }
 
   async searchPartByPartNumber(event) {
@@ -70,14 +152,14 @@ export class WoPartNumberFilterComponent implements OnInit, OnDestroy {
   }
 
   bindPartsDroppdown(query) {
-    this.searchDisabled = true;
+    // this.searchDisabled = true;
     let partSearchParamters = {
       'partNumber': query,
       "restrictPMA": this.query.partSearchParamters.restrictPMA,
       "restrictDER": this.query.partSearchParamters.restrictDER,
-      "customerId": this.workOrderQuote.customerId,
-      "custRestrictDER": this.workOrderQuote.restrictDER,
-      "custRestrictPMA": this.workOrderQuote.restrictPMA,
+      "customerId": this.customer.customerId,
+      "custRestrictDER": this.customer.restrictDER,
+      "custRestrictPMA": this.customer.restrictPMA,
       "includeAlternatePartNumber": this.query.partSearchParamters.includeAlternatePartNumber,
       "includeEquivalentPartNumber": this.query.partSearchParamters.includeEquivalentPartNumber,
       "idlist": '0',
@@ -101,9 +183,9 @@ export class WoPartNumberFilterComponent implements OnInit, OnDestroy {
   searchMultiPartNumbers(): void {
     let partSearchParamters = {
       'parts': this.multiPartNumbers.split(","),
-      "restrictPMA": this.workOrderQuote.restrictPMA,
-      "restrictDER": this.workOrderQuote.restrictDER,
-      "customerId": this.workOrderQuote.customerId
+      "restrictPMA": this.customer.restrictPMA,
+      "restrictDER": this.customer.restrictDER,
+      "customerId": this.customer.customerId
     }
 
     this.isSpinnerVisible = true;
@@ -122,7 +204,7 @@ export class WoPartNumberFilterComponent implements OnInit, OnDestroy {
     this.query.partSearchParamters.partNumber = part.partNumber;
     this.query.partSearchParamters.partId = part.partId;
     this.query.partSearchParamters.partDescription = part.partDescription;
-    this.query.partSearchParamters.customerId = this.workOrderQuote.customerId;
+    this.query.partSearchParamters.customerId = this.customer.customerId;
     this.query.partSearchParamters.conditionId = 0;
     this.query.partSearchParamters.quantityAlreadyQuoted = 0;
     this.query.partSearchParamters.quantityRequested = 0;
@@ -153,5 +235,17 @@ export class WoPartNumberFilterComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.subscription !== undefined) this.subscription.unsubscribe();
   }
-
+  unitCost;
+  extendedCost;
+  quantity;
+  calculateExtendedCost(): void {
+    this.unitCost = this.unitCost ? formatNumberAsGlobalSettingsModule(this.unitCost, 2) : '';
+    this.quantity = this.quantity ? this.quantity.toString().replace(/\,/g, '') : 0;
+    if (this.quantity != "" && this.unitCost) {
+        this.extendedCost = formatNumberAsGlobalSettingsModule((this.quantity * this.unitCost.toString().replace(/\,/g, '')), 2);
+    }
+    else {
+        this.extendedCost = "";
+    }
+}
 }
