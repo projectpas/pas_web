@@ -1,25 +1,25 @@
 ﻿<div *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
     <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary mar-left-5"
-        (click)="createNew(); ">Add PN</button>
-    <button type="button" class="btn btn-primary" (click)="openPartNumber()">
+        (click)="createNew();" style="min-width: 97px !important;">Add PN</button>
+    <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
         Add PN New
     </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary" 
-        (click)="partsIssueRI(1)" data-toggle="modal"
+        (click)="partsIssueRI(1)" data-toggle="modal" style="min-width: 97px !important;"
         data-target="#reserve">Reserve </button>
-    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary" 
-            (click)="onclickpicktiket()">Pick Ticket </button>
+    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && (enablePickTicket)" class="btn btn-primary" 
+            (click)="onclickpicktiket()" style="min-width: 97px !important;">Pick Ticket </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
-         (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve"> Issue
+         (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;"> Issue
     </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
-         (click)="partsIssueRI(3)" data-toggle="modal" data-target="#reserve">
+         (click)="partsIssueRI(3)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
         Reserve & Issue </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
-         (click)="partsIssueRI(4)" data-toggle="modal" data-target="#reserve">
+         (click)="partsIssueRI(4)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
         Unissue </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
-         (click)="partsIssueRI(5)" data-toggle="modal" data-target="#reserve">
+         (click)="partsIssueRI(5)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
         Unreserve </button>
 </div>
 
