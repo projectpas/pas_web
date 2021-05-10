@@ -212,12 +212,14 @@ onSaveTextAreaInfo(memo) {
       this.formObject.memo = this.textAreaInfo;
   }
   this.disableEditor = true;
-  $("#textarea-popup").modal("hide");
-  // this.disableUpdateButton = false;
+  $("#textarea-popup2").modal("hide");
+ if(this.isEdit==true){
+  this.disableUpdateButton = false;
+ }
 }
 onCloseTextAreaInfo() {
   this.disableEditor = true;
-  $("#textarea-popup").modal("hide");
+  $("#textarea-popup2").modal("hide");
 }
   onPaging(event) {
   }
