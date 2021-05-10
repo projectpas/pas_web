@@ -821,6 +821,17 @@ setTimeout(() => {
             this.billingCreateOrEdit();
             const { customerId } = this.workOrderGeneralInformation.customerId;
         }
+        if (value == 'pickticket') {
+            this.isSpinnerVisible = true;
+            this.workOrderService.viewWorkOrderHeader(this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                const data = res;
+                this.managementStructureId = res.managementStructureId;
+            },
+                err => {
+                    this.isSpinnerVisible = false;
+                });
+        }
         if (value == 'shipping') {
             this.isSpinnerVisible = true;
             this.workOrderService.viewWorkOrderHeader(this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1577,6 +1588,9 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         }
         else if (this.gridActiveTab === 'quote') {
             this.gridTabChange('quote');
+        }
+        else if (this.gridActiveTab === 'pickticket') {
+            this.gridTabChange('pickticket');
         }
         else if (this.gridActiveTab === 'shipping') {
             this.gridTabChange('shipping');
