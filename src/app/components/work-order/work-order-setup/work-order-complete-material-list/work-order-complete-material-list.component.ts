@@ -7,14 +7,14 @@ import { AlertService, MessageSeverity } from '../../../../services/alert.servic
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 declare var $: any;
 import { AuthService } from '../../../../services/auth.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { unwrapResolvedMetadata } from '@angular/compiler';
-import { StocklineService } from '../../../../services/stockline.service';
 import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
-import { CustomerService } from '../../../../../app/services/customer.service';
+import { CommonService } from '../../../../services/common.service';
+import { takeUntil } from 'rxjs/operators';
 // import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
+import { workOrderGeneralInfo } from '../../../../models/work-order-generalInformation.model';
 
 @Component({
     selector: 'app-work-order-complete-material-list',
@@ -68,7 +68,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     pageSize: number = 10;
     interTotalRecords: number = 0;
     interTotalPages: number = 0;
-    isSpinnerVisibleReserve:boolean=false;
+    isSpinnerVisibleReserve: boolean = false;
     customer: any;
     addPartModal: NgbModalRef;
     show: boolean;
@@ -183,7 +183,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     employeeList: any = [];
     modal: NgbModalRef;
     showEqParts: any;
-    workOrderGeneralInformation: any;
+    workOrderGeneralInformation: workOrderGeneralInfo = new workOrderGeneralInfo();
     currentRow: any = {};
     handelParts: any = [];
     countDown: Subscription;
@@ -192,6 +192,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     subWoRecord: any = {};
     viewSubWolist: boolean = false;
     moduleName: any = '';
+    workorderSettings: any;
+    private onDestroy$: Subject<void> = new Subject<void>();
+    enablePickTicket: boolean = false;
+
     constructor(
         private workOrderService: WorkOrderService,
         public itemClassService: ItemClassificationService,
@@ -200,9 +204,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private cdRef: ChangeDetectorRef,
         private modalService: NgbModal,
         private alertService: AlertService,
-        private stockLineService: StocklineService,
-        private customerService: CustomerService, 
-        ) { this.show = true;}
+        private commonService: CommonService
+    ) { this.show = true; }
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -223,6 +226,22 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         } else {
             this.workFlowWorkOrderId = this.subWOPartNoId;
         }
+
+        this.getWorkOrderDefaultSetting();
+    }
+
+    getWorkOrderDefaultSetting(value?) {
+        const value1 = value ? value : this.workOrderGeneralInformation.workOrderTypeId;
+        this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            if (res.length > 0) {
+                this.workorderSettings = res[0];
+
+                let pickTicketAllowed = this.workorderSettings.enforcePickTicket;
+                let pickTicketDate = new Date(this.workorderSettings.pickTicketEffectiveDate);
+                let todayDate: Date = new Date();
+                this.enablePickTicket = (pickTicketAllowed && todayDate >= pickTicketDate);
+            }
+        })
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -381,7 +400,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     onClose(event) {
         this.show = false;
         this.addPartModal.close();
-      }
+    }
 
     removeRollUpList(currentRecord, index) {
         currentRecord.isShowPlus = true;
@@ -1092,13 +1111,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     openPartNumber() {
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-      }
-    
-      openPartNumberClear(viewMode) {
+    }
+
+    openPartNumberClear(viewMode) {
         this.clearData = viewMode;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-      }
+    }
 
     opentimerAlertModel() {
         let content = this.timerAlertNotfi;
