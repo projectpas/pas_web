@@ -25,22 +25,23 @@
                                 <h5>General</h5>
                             </div>
                             <div class="card-body">
-                                <div class="form-group" *ngIf="isEditMode">
+                                <div class="form-group">
                                     <div class="checkbox-cstm m-t-10">
                                         <label>
-                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock">
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" (ngModelChange)="enableSave()">
+                                            <span class="cr"><i class="cr-icon pi pi-check"(click)="ChekisCustomerStock(stockLineForm.isCustomerStock)"></i></span>
                                             Customer Stock - Rotable 
                                         </label>
                                     </div>
                                 </div>
-                                <div class="form-group" *ngIf="isEditMode && stockLineForm.isCustomerStock">
+                                <div class="form-group" *ngIf="stockLineForm.isCustomerStock">
                                     <label>Customer</label>
                                     <p-autoComplete field="label" class="pautocomp-cstm"
                                         [(ngModel)]="stockLineForm.customerId" name="vendorId" [suggestions]="customerNames"
                                         (completeMethod)="filterCustomerNames($event)" [size]="30" [minLength]="1"
                                         [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
-                                        (ngModelChange)="enableSave()">
+                                        (ngModelChange)="enableSave()"
+                                         required>
                                     </p-autoComplete>
                                 </div>
                                 <div class="form-group">
@@ -1379,7 +1380,7 @@
             </div>
             <div class="form-row pull-right">
                 <button type="button" class="btn btn-primary" (keydown.enter)="$event.preventDefault()" (click)="onSaveStockLine()"
-                    [disabled]="!stockLineSetupForm.valid || disableMagmtStruct || disableManufacturer || disableCondition || disableSiteName || disableSaveForEdit">{{isEditMode
+                    [disabled]="!stockLineSetupForm.valid || disableMagmtStruct || disableCustomer|| disableManufacturer || disableCondition || disableSiteName || disableSaveForEdit">{{isEditMode
                     ? 'Update' : 'Save'}} </button>
             </div>
         </form>

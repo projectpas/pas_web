@@ -237,6 +237,10 @@ getIntangibleList(){
     getAuditDataByInventoryId(id: number) {
         return this.assetEndpoint.getAuditDataByInventoryId(id);
     }
+
+    GetAuditDataByAssetList(id: number) {
+        return this.assetEndpoint.GetAuditDataByAssetList(id);
+    }
     getAuditDataBycalibrationId(id: number) {
         return this.assetEndpoint.getAuditDataBycalibrationId(id);
     }
