@@ -179,9 +179,9 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         return this.capabilitiesForm.get('mfgForm') as FormArray;
     }
 
-    get userName(): string {
-		return this.authService.currentUser ? this.authService.currentUser.userName : "";
-	}
+    // get userName(): string {
+	// 	return this.authService.currentUser ? this.authService.currentUser.userName : "";
+	// }
 
     dataSource: MatTableDataSource<any>;
     cols: any[];
