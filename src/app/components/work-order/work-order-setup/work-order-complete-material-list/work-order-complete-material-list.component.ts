@@ -87,7 +87,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'condition', header: 'Cond', align: 0, width: "100px" },
         { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 },
         { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 },
-        { field: 'provision', header: 'Provision', align: 0 },
+        { field: 'provision', header: 'Provision', align: 0, width: "120px" },
         { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
         { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
         { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
@@ -1305,7 +1305,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
           { field: 'condition', header: 'Cond', align: 0, width: "100px" },
           // { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 },
           { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
-          { field: 'provision', header: 'Provision', align: 0, width: "83px" },
+          { field: 'provision', header: 'Provision', align: 0, width: "120px" },
           { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
           { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
           { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
@@ -1341,8 +1341,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
           // { field: 'shelf', header: 'Shelf', align: 0 },
           // { field: 'bin', header: 'Bin', align: 0 },
           { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
-          { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
-          { field: 'memo', header: 'Memo', align: 0, width: "250px" }
+          { field: 'memo', header: 'Memo', align: 0, width: "250px" },
+          { field: 'isDeferred', header: 'Deferred', align: 0, width: "90px" },
       ]
 
       this.childColumnsData = [
@@ -1378,7 +1378,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
       { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
       { field: 'controlId', header: 'Cntl ID', align: 0 , width: "70px"},
       { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
-      { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
+    //   { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
       { field: 'memo', header: 'Memo', align: 0, width: "250px" },
       { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
       { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
