@@ -118,7 +118,6 @@ export class WoPartDetailsComponent implements OnChanges {
     this.formObject.isDeferred=this.editData.isDeferred;
     this.formObject.memo=this.editData.memo;
     this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
-  
     this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
     this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
     this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
@@ -248,7 +247,7 @@ export class WoPartDetailsComponent implements OnChanges {
 
 
     
-    
+    this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
     this.materialCreateObject.provisionId=this.formObject.provisionId;
     this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
     this.materialCreateObject.quantity=this.formObject.quantity;
@@ -685,9 +684,11 @@ export class WoPartDetailsComponent implements OnChanges {
       if (this.taskList) {
         this.taskList.forEach(
             task => {
+              if(!this.isEdit){
                 if (task.description == "Assemble" || task.description == "assemble") {
-                    this.formObject.taskId = task.taskId;
-                }
+                  this.formObject.taskId = task.taskId;
+              }
+              }
             }
         )
     }
@@ -715,12 +716,14 @@ getMaterailMandatories() {
                   materialMandatoriesName: x.label
               }
           });
+          if(!this.isEdit){
           this.materialMandatory.forEach(element => {
             if (element.materialMandatoriesName == 'Mandatory') {
                 this.formObject.materialMandatoriesId = element.materialMandatoriesId;
                 this.formObject.materialMandatoriesName = element.materialMandatoriesName;
             }
         });
+      }
       }, error => {
           this.isSpinnerVisible = false;
       });
