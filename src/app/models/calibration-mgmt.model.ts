@@ -60,6 +60,7 @@ export class CalibrationMgmt
 	 BuName:string;
 	 DeptName:string;
 	 DivName:string;
+	 IsVendororEmployee:string;
 	
 
 

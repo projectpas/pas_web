@@ -416,15 +416,15 @@
                     <p class="w250"><span class="label"><b>Acquisition Type: </b></span><span class="value">{{calibrationForm.AcquisitionType}}</span></p>
                     <div class="clear"></div>
                     <hr>
-                    <p class="w400"><span class="label"><b>Last {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.LastCalibrationDate}}</span></p>
-                    <p class="w400"><span class="label"><b>Last {{Certifytype}} By: </b></span><span class="value">{{calibrationForm.LastCalibrationBy}}</span></p>
-                    <p class="w400"><span class="label"><b>Vendor or Employee: </b></span>
+                    <p *ngIf="CalibrationId !=0" class="w400"><span class="label"><b>Last {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.LastCalibrationDate}}</span></p>
+                    <p *ngIf="CalibrationId !=0"class="w400"><span class="label"><b>Last {{Certifytype}} By: </b></span><span class="value">{{calibrationForm.LastCalibrationBy}}</span></p>
+                    <p *ngIf="CalibrationId !=0" class="w400"><span class="label"><b>Vendor or Employee: </b></span>
                         <span class="value">
-                            <label class="w60 text-left"><input type="radio" disabled="" checked=""> Vendor</label>
-                            <label class="w80 text-left"><input type="radio" disabled=""> Employee</label>
+                            <label class="w60 text-left"><input name="olddata" type="radio" value="vendor1" [checked]="selectvendororemp" disabled=""> Vendor</label>
+                            <label class="w80 text-left"><input name="olddata" type="radio" value="employee1" [checked]="selectvendororemp" disabled=""> Employee</label>
                         </span>
                     </p>
-                    <p class="w400"><span class="label"><b>Next {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.NextCalibrationDate}}</span></p>
+                    <p *ngIf="CalibrationId !=0" class="w400"><span class="label"><b>Next {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.NextCalibrationDate}}</span></p>
                     <div class="clear"></div>
                     <hr>
                     <div *ngIf="isscheduleprocess== false"><a (click)="showscheduleprocess()" class="btn btn-primary add-verification-btn">Schedule a {{Certifytype}}</a></div>
@@ -433,61 +433,61 @@
                         <div class="col-sm-12"><h4>Schedule a {{Certifytype}}</h4></div>
                   <div class="col-sm-6">
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Vendor or Employee</label>
+                          <label class="control-label col-sm-4">Vendor or Employee <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
-                            <label class="w70 text-left"><input type="radio" name="Schedule" value="vendor" (click)="checkedvendor(calibrationForm.ScheduleIsVendor)" [(ngModel)]="calibrationForm.ScheduleIsVendor"> Vendor</label>
-                            <label class="w80 text-left"><input type="radio" name="Schedule" value="employee" (click)="checkedemployee(calibrationForm.ScheduleIsEmployee)" [(ngModel)]="calibrationForm.ScheduleIsEmployee"> Employee</label>  
-                          </div>
+                            <label class="w70 text-left"><input type="radio" name="Schedule" value="vendor"    (onChange)="enableSave()" (click)="checkedvendor(calibrationForm.IsVendororEmployee)" [(ngModel)]="calibrationForm.IsVendororEmployee"> Vendor</label>
+                            <label class="w80 text-left"><input type="radio" name="Schedule" value="employee"  (onChange)="enableSave()" (click)="checkedemployee(calibrationForm.IsVendororEmployee)" [(ngModel)]="calibrationForm.IsVendororEmployee"> Employee</label>  
+                          </div> 
                         </div>
                       <div class="form-group col-sm-12 verification-vendor-employee verification-vendor" *ngIf="isvendor">
-                          <label class="control-label col-sm-4">Select Vendor</label>
+                          <label style="margin-top: 23px" class="control-label col-sm-4">Select Vendor <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
                             <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
                               <p-autoComplete  class="p-autoComplete-ctsm" field="name" name="vendorName" [dropdown]="true"
                               errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
                               (completeMethod)="filterWarentyVendor($event)"  [size]="30" [minLength]="1"
-                              [(ngModel)]="calibrationForm.VendorId"  #prellRevInsp="ngModel" >
+                              [(ngModel)]="calibrationForm.VendorId" (onChange)="enableSave()" #prellRevInsp="ngModel" required >
                           </p-autoComplete>
                               </div>
                              
                           </div>
                         </div>
                       <div class="form-group col-sm-12 verification-vendor-employee verification-employee" *ngIf="isemployee">
-                          <label class="control-label col-sm-4">Select Employee</label>
+                          <label class="control-label col-sm-4">Select Employee <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
                             <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
                               <p-autoComplete class="p-autoComplete-ctsm employee-autocomplete"  field="label" name="employee" [dropdown]="true"
                               errorMessage="Records not found" [forceSelection]="true" [suggestions]="employeeList"
-                              (completeMethod)="filterEmployee($event); " [size]="30" [minLength]="1" [(ngModel)]="calibrationForm.EmployeeId"
-                              emptyMessage="No Match Found">
+                              (completeMethod)="filterEmployee($event);" (onChange)="enableSave()" [size]="30" [minLength]="1" [(ngModel)]="calibrationForm.EmployeeId"
+                              emptyMessage="No Match Found" required>
                             </p-autoComplete>      
                               </div>                          
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Cost</label>
+                          <label class="control-label col-sm-4">Cost <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
-                            <input  [(ngModel)]="calibrationForm.UnitCost" type="number" class="form-control" id="" name="">                           
+                            <input  required [(ngModel)]="calibrationForm.UnitCost"  (change)="formatToGlobal()"  (ngModelChange)="enableSave()" type="number" class="form-control" id="" name="">                           
                           </div>
                         </div>
                   </div> 
                      <div class="col-sm-6">
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">{{Certifytype}} Date</label>
+                          <label class="control-label col-sm-4">{{Certifytype}} Date <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
                             <p-calendar [showIcon]="true" name ="CalibrationDate" [ngModelOptions]="{standalone: true}"
                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                [maxDate]="currentDate" (ngModelChange)="editorgetmemo($event)"
+                                [minDate]="currentDate" (onChange)="enableSave()" 
                               
-                                [(ngModel)]="calibrationForm.CalibrationDate"></p-calendar> 
+                                [(ngModel)]="calibrationForm.CalibrationDate" required></p-calendar> 
                             <a   data-toggle="modal" data-target="#CalibartionmgmtList" (click)="OpemCalibartionMgmtList(calibrationForm.AssetRecordId)" class="btn btn-link pull-right" style="padding: 0;">View {{Certifytype}} Schedule</a>
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Currency</label>
+                          <label class="control-label col-sm-4">Currency <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
-                            <p-dropdown placeholder="Select Currency"  appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterAction($event.target.value)" filter="true" name="currencyId" [options]="currencyList"
-                            class="p-dropdown-custom-md" [(ngModel)]="calibrationForm.currencyId">
+                            <p-dropdown placeholder="Select Currency" (onChange)="enableSave()"  appendTo="body" [baseZIndex]="9999"  [showClear]="true" (input)="onFilterAction($event.target.value)" filter="true" name="currencyId" [options]="currencyList"
+                            class="p-dropdown-custom-md" [(ngModel)]="calibrationForm.currencyId" required>
                            </p-dropdown>
                           </div>
                         </div>
@@ -506,7 +506,7 @@
                           </div> -->
                           </div>
                         </div>
-                    <button type="button" class="btn btn-info pull-right verification-process-btn" (click)="savecalibrationprocess()" id="" name="" data-toggle="tooltip" title="This will generate a PO if a vendor is selected to perfrom Calibration OR Send a notification to employee if employee is selected">Process</button>
+                    <button type="button" class="btn btn-info pull-right verification-process-btn" (click)="savecalibrationprocess()" [disabled]="disableSaveForEdit" id="" name="" data-toggle="tooltip" title="This will generate a PO if a vendor is selected to perfrom Calibration OR Send a notification to employee if employee is selected">Process</button>
                   </div> 
                         </div>
                 </div>

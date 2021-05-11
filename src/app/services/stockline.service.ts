@@ -228,6 +228,12 @@ export class StocklineService {
 	getStockLineDetailsByStockLineId(stockLineId) {
 		return this.stocklineEndpoint.getStockLineDetailsByStockLineId(stockLineId);
 	}
+
+	GetAllStocklineByPartAndCondtion(itemMasterId, condtionids, mastecompanyId) {
+		return this.stocklineEndpoint.GetAllStocklineByPartAndCondtion(itemMasterId, condtionids, mastecompanyId);
+	}
+
+
 	getWareHouseDataBySiteId(siteId) {
 		return this.stocklineEndpoint.getWareHouseDataBySiteId(siteId);
 	}

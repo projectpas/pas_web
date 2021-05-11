@@ -16,8 +16,8 @@
       [selectedSummaryRow]="selectedSummaryRow" (onSearchTypeChange)="onSearchTypeChange($event)" [type]="type">
     </app-wo-part-number-filter>  -->
     <ng-container>
-      <app-wo-part-details (close)="onClose($event)"  [parts]="parts" [query]="query" [customer]="customer" [allConditionInfo]="allConditionInfoArray" (select)="onSelect($event)" [clearData]="clearData"
-        [isStockLineViewMode]="isStockLineViewMode" (saveMaterialListData)="saveMaterial($event)" (onPartSelect)="onShowModalMargin($event)"></app-wo-part-details>
+      <app-wo-part-details (close)="onClose($event)"  [isEdit]="isEdit" [editData]="editData" [parts]="parts" [query]="query" [customer]="customer" [allConditionInfo]="allConditionInfoArray" (select)="onSelect($event)" [clearData]="clearData"
+        [isStockLineViewMode]="isStockLineViewMode" (saveMaterialListData)="saveMaterial($event)" (updateMaterialListData)="updateMaterial($event)" (onPartSelect)="onShowModalMargin($event)"></app-wo-part-details>
     </ng-container>
   </div>
   <!-- <div class="modal-footer">

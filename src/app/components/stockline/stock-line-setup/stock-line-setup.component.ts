@@ -89,6 +89,7 @@ export class StockLineSetupComponent implements OnInit {
 	disableCondition: boolean = true;
 	disableManufacturer: boolean = true;
 	disableSiteName: boolean = true;
+	disableCustomer: boolean = true;
 	stockLineId: number;
 	timeLifeCyclesId: number;
 	allNHAInfo: any = [];
@@ -1527,6 +1528,30 @@ export class StockLineSetupComponent implements OnInit {
 		}
 	}
 
+	onSelectCustomer() {
+		if(this.stockLineForm.isCustomerStock)
+		{
+			if (this.stockLineForm.customerId != 0 && this.stockLineForm.customerId != null) 
+			{
+				this.disableCustomer = false;
+			} 
+			else {
+				this.disableCustomer = true;
+			}
+		}
+		else {
+			this.disableCustomer = false;
+		}
+	
+	}
+	ChekisCustomerStock(isCustomerStock)
+	{
+		if(!isCustomerStock)
+		{
+			this.stockLineForm.customerId= null;
+		}
+	}
+
 	onSaveStockLine() {
 		this.isSpinnerVisible = true;
 
@@ -1584,7 +1609,7 @@ export class StockLineSetupComponent implements OnInit {
 			locationId: this.stockLineForm.locationId > 0 ? this.stockLineForm.locationId : null,
 			shelfId: this.stockLineForm.shelfId > 0 ? this.stockLineForm.shelfId : null,
 			binId: this.stockLineForm.binId > 0 ? this.stockLineForm.binId : null,
-			isCustomerStock: this.stockLineForm.isCustomerStock == 'true' ? 'false' : 'true',
+			isCustomerStock: this.stockLineForm.isCustomerStock,
 
 			ownerName: this.stockLineForm.ownerType == 4 ? this.stockLineForm.owner : (this.stockLineForm.owner ? getValueFromObjectByKey('label', this.stockLineForm.owner) : ''),
 			owner: this.stockLineForm.ownerType == 4 ? null : (this.stockLineForm.owner ? editValueAssignByCondition('value', this.stockLineForm.owner) : ''),
@@ -2045,6 +2070,20 @@ export class StockLineSetupComponent implements OnInit {
 		}else
 		{
 			this.disableSaveForEdit = true;
+		}
+
+		if(this.stockLineForm.isCustomerStock)
+		{
+			if (this.stockLineForm.customerId != 0 && this.stockLineForm.customerId != null) 
+			{
+				this.disableCustomer = false;
+			} 
+			else {
+				this.disableCustomer = true;
+			}
+		}
+		else {
+			this.disableCustomer = false;
 		}
 
 		if (!this.stockLineForm.inspectionBy) {

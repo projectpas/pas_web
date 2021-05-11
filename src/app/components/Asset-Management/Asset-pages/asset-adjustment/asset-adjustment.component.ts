@@ -107,7 +107,7 @@ export class AssetAdjustmentComponent implements OnInit {
     }
     
     getAssetList() {
-        this.commonService.smartDropDownList('Asset', 'AssetRecordId', 'AssetId').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('Asset', 'AssetRecordId', 'AssetId','','',0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.allAssetList = res;
         })
     }
@@ -119,13 +119,13 @@ export class AssetAdjustmentComponent implements OnInit {
     }
 
     getAdjReasonData() {
-		this.commonService.smartDropDownList('StocklineAdjustmentReason', 'AdjustmentReasonId', 'Description').subscribe(response => {
+		this.commonService.smartDropDownList('StocklineAdjustmentReason', 'AdjustmentReasonId', 'Description','','',0,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allAdjReasonInfo = response;
 		});
 	}	
 
     getAssetAdjustmentDataType() {
-		this.commonService.smartDropDownList('AssetInventoryAdjustmentDataType', 'AssetInventoryAdjustmentDataTypeId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('AssetInventoryAdjustmentDataType', 'AssetInventoryAdjustmentDataTypeId', 'Description','','',0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.assetAdjustmentData = res.map(x => {
 				return {
 					adjustmentDataTypeId: x.value,
