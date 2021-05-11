@@ -199,37 +199,54 @@ export class WorkOrderSmartComponent implements OnInit {
             : null;
     }
     getJobTitles() {
-        this.commonService.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
+        // getJobTitles
+        
+        this.commonService.getSalesExpertise(this.currentUserMasterCompanyId).subscribe(res => {
             this.jobTitles = res;
             this.getAllSalesEmployeeListByJobTitle(this.jobTitles)
         })
     }
+    arayExpTitleIds:any[] = [];
     getAllSalesEmployeeListByJobTitle(jobTitles) {
-        const CSRid = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
-        const Salesid = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
-        const Agentsid = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
-        const Technicianid = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
-        if (CSRid && CSRid[0] && CSRid[0].jobTitleId > 0)
-            this.arayJobTitleIds.push(CSRid[0].jobTitleId);
+        // const CSRid = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
+        // const Salesid = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
+        // const Agentsid = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
+        // const Technicianid = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
 
-        if (Salesid && Salesid[0] && Salesid[0].jobTitleId > 0)
-            this.arayJobTitleIds.push(Salesid[0].jobTitleId);
+        const CSRid = getValueByFieldFromArrayofObject('empExpCode', 'CSR', this.jobTitles);
+        const Salesid = getValueByFieldFromArrayofObject('empExpCode', 'SALES', this.jobTitles);
+       const Agentsid = getValueByFieldFromArrayofObject('empExpCode', 'AGENT', this.jobTitles);
+       const Technicianid = getValueByFieldFromArrayofObject('empExpCode', 'TECHNICIAN', this.jobTitles);
+        // if (CSRid && CSRid[0] && CSRid[0].jobTitleId > 0)
+        //     this.arayJobTitleIds.push(CSRid[0].jobTitleId);
 
-        if (Agentsid && Agentsid[0] && Agentsid[0].jobTitleId > 0)
-            this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
-        this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds, this.currentUserMasterCompanyId).subscribe(res => {
+        // if (Salesid && Salesid[0] && Salesid[0].jobTitleId > 0)
+        //     this.arayJobTitleIds.push(Salesid[0].jobTitleId);
+
+        // if (Agentsid && Agentsid[0] && Agentsid[0].jobTitleId > 0)
+        //     this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
+        if(CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
+        this.arayExpTitleIds.push(CSRid[0].employeeExpertiseId);
+    
+    if(Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
+        this.arayExpTitleIds.push(Salesid[0].employeeExpertiseId);
+
+    if(Agentsid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
+        this.arayExpTitleIds.push(Agentsid[0].employeeExpertiseId);
+        this.commonService.getAllSalesEmployeeListByJobTitle(this.arayExpTitleIds, this.currentUserMasterCompanyId).subscribe(res => {
             if (res) {
-                this.csrOriginalList = res.filter(x => {
-                    if (CSRid[0].jobTitleId == x.jobTitleId) {
-                        return x;
-                    }
-                })
 
-                this.agentsOriginalList = res.filter(x => {
-                    if (Agentsid[0].jobTitleId == x.jobTitleId) {
-                        return x;
-                    }
-                })
+                // this.csrOriginalList = res.filter(x => {
+                //     if (CSRid[0].jobTitleId == x.jobTitleId) {
+                //         return x;
+                //     }
+                // })
+
+                // this.agentsOriginalList = res.filter(x => {
+                //     if (Agentsid[0].jobTitleId == x.jobTitleId) {
+                //         return x;
+                //     }
+                // })
                 this.salesAgentsOriginalList = [...this.agentsOriginalList];
                 this.salesPersonOriginalList = res.filter(x => {
                     if (Salesid[0].jobTitleId == x.jobTitleId) {
@@ -239,6 +256,50 @@ export class WorkOrderSmartComponent implements OnInit {
                 this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
                 this.arayJobTitleIds = [];
             }
+
+
+            if(res){
+                this.salesAgentsOriginalList=[];
+                this.salesAgentsOriginalList=[];
+                if( CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
+                {
+                this.csrOriginalList = res.filter(x => {
+                    if (CSRid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
+                        return x;
+                    } 
+                })}
+                
+                if( Agentsid[0] && Agentsid[0].employeeExpertiseId && Agentsid[0].employeeExpertiseId > 0)
+                {
+                this.agentsOriginalList = res.filter(x => {
+                    if (Agentsid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
+                        return x;
+                    }
+                })
+                this.salesAgentsOriginalList = [...this.agentsOriginalList];
+                }
+
+                if( Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
+                {
+                this.salesPersonOriginalList = res.filter(x => {
+                    if (Salesid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
+                        return x;
+                    }
+                })
+                this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
+                }
+
+                // if (this.id) {
+                //     this.getSalesInfoByCustomerId(this.id)
+                // }
+
+                this.arayExpTitleIds = [];
+            }
+
+
+
+
+
         })
     }
     getAllWorkOrderStages(): void {

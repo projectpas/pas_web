@@ -662,6 +662,48 @@ export class AppComponent implements OnInit, AfterViewInit {
             },
           ],
           [
+  {
+              label: 'Repair Order',
+              items: [
+                {
+                  label: 'RO List',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-ro-list',
+                },
+                {
+                  label: 'Create RO',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-create-ro',
+                },
+                {
+                  label: 'RO Approval',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-ro-approval',
+                },
+                {
+                  label: 'RO Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-ro-approval-rule',
+                },
+                {
+                  label: 'RO Settings',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-ro-settings',
+                }
+              ],
+            },
+            {
+              label: 'Reports & forms',
+              items: [
+                {
+                  label: 'Repair order by WO & SO', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fRepair+Order+by+WO+and+SO&rs:Command=Render');
+                  }
+                },
+              ]
+            }
+          ],
+          [
             {
               label: 'Sales Order',
               items: [
@@ -897,6 +939,29 @@ export class AppComponent implements OnInit, AfterViewInit {
               ],
             },
 
+          
+          ],
+          [
+            {
+              label: 'Work-order Quote',
+              items: [
+                {
+                  label: 'WO Quote List',
+                  routerLink:
+                    '/workordersmodule/workorderspages/app-work-order-quote-list',
+                },
+                {
+                  label: 'Create  WO Quote',
+                  routerLink:
+                    '/workordersmodule/workorderspages/app-work-order-quote',
+                },
+                {
+                  label: 'Work Order Quote Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
+                }
+              ],
+            },
             {
               label: 'Reports and Forms',
               items: [
@@ -921,68 +986,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
               ],
             },
-          ],
-          [
-            {
-              label: 'Work-order Quote',
-              items: [
-                {
-                  label: 'WO Quote List',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-quote-list',
-                },
-                {
-                  label: 'Create  WO Quote',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-quote',
-                },
-                {
-                  label: 'Work Order Quote Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
-                }
-              ],
-            },
-            {
-              label: 'Repair Order',
-              items: [
-                {
-                  label: 'RO List',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-ro-list',
-                },
-                {
-                  label: 'Create RO',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-create-ro',
-                },
-                {
-                  label: 'RO Approval',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-ro-approval',
-                },
-                {
-                  label: 'RO Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-ro-approval-rule',
-                },
-                {
-                  label: 'RO Settings',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-ro-settings',
-                }
-              ],
-            },
-            {
-              label: 'Reports & forms',
-              items: [
-                {
-                  label: 'Repair order by WO & SO', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fRepair+Order+by+WO+and+SO&rs:Command=Render');
-                  }
-                },
-              ]
-            }
+          
 
           ],
           [
@@ -997,6 +1001,17 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'Exchange Quote Approval Rule',
                   routerLink: '/exchangemodule/exchangepages/app-exchange-quote-approval-rule',
                 },
+              ]
+            }
+          ],
+          [
+            {
+              label: 'Speed Quote',
+              items: [
+                {
+                  label: 'Speed Quote List',
+                  routerLink: '/salesmodule/salespages/speed-quote-list',
+                }
               ]
             }
           ],

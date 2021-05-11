@@ -17,7 +17,7 @@ style="overflow: hidden;">
         <th> <label> Item Classification</label></th>
         <th><label class="min-width-90"> Stock Type</label></th>
         <th><label>Qty </label></th>
-        <th><label>Unit Cost</label></th>
+        <th><label>Unit Cost </label></th>
         <th><label class="min-width-90">Extended Cost </label></th>
         <th><label class="min-width-145">Estimated % Occurance</label></th>
         <th><label>Memo</label></th>
@@ -61,14 +61,14 @@ style="overflow: hidden;">
           {{exclusion.stockType}}
         </td>
         <td>
-          <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15" (keyup)="
+          <input type="text" class="form-control text-right"  pInputText pKeyFilter="pnum" maxlength="15" (keyup)="
               calculateExtendedCost(exclusion);
               calculateQtySummation()
             " [(ngModel)]="exclusion.quantity" value="{{ exclusion.quantity }}" name="qty_{{i}}" />
         </td>
         <td>
           <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
-            (change)="calculateExtendedCost(exclusion)" [(ngModel)]="exclusion.unitCost"
+            (change)="calculateExtendedCost(exclusion)"  [(ngModel)]="exclusion.unitCost"
             value="{{ exclusion.unitCost }}" name="unitcost_{{i}}" maxlength="15" />
         </td>
         <td class="text-right">

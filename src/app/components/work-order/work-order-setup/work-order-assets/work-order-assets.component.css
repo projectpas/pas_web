@@ -62,3 +62,6 @@
       .max_widthControl{
         width:80px !important;
       }
+      .text_center{
+        text-align: center;
+      }

@@ -32,6 +32,7 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly _deleteExchangeQuoteFrignt: string = environment.baseUrl + "/api/exchangequote/deleteexchangequotefreight";
     private readonly getFreightAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-freight-history';
     private readonly getChargesAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-charges-history';
+    private readonly getExchangeQuoteViewDetails: string = environment.baseUrl + "/api/exchangequote/getview";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -82,11 +83,12 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
         });
     }
 
-    getAllExchangeQuoteSettings<T>(): Observable<T> {
-      let endPointUrl = this.getExchngeQuoteeSetting;
+    getAllExchangeQuoteSettings<T>(masterCompanyId): Observable<T> {
+      //let endPointUrl = this.getExchngeQuoteeSetting;
+      let endPointUrl = `${this.getExchngeQuoteeSetting}?masterCompanyId=${masterCompanyId}`;
       return this.http.get<T>(endPointUrl, this.getRequestHeaders())
         .catch(error => {
-          return this.handleErrorCommon(error, () => this.getAllExchangeQuoteSettings());
+          return this.handleErrorCommon(error, () => this.getAllExchangeQuoteSettings(masterCompanyId));
         });
     }
 
@@ -230,6 +232,20 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
       return this.http.get<any>(`${this.configurations.baseUrl}/api/exchangeQuote/getExchangeQuoteHistory/?exchangeQuoteId=${exchangeQuoteId}`)
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getExchangeQuoteHistory(exchangeQuoteId));
+        });
+    }
+    getview(exchangeQuoteId: number): Observable<any> {
+      const URL = `${this.getExchangeQuoteViewDetails}/${exchangeQuoteId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getview(exchangeQuoteId));
+        });
+    }
+    getleasingCompany(masterCompanyId) {
+      return this.http.get<any>(`${this.configurations.baseUrl}/api/exchangeQuote/getleasingCompany/?masterCompanyId=${masterCompanyId}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getleasingCompany(masterCompanyId));
         });
     }
 }

@@ -142,6 +142,10 @@ export class WorkFlowtService {
 	getPublicationsByItemMasterId(itemMasterId) {
 		return this.workflowEndpoint.getPublicationsByItemMasterId(itemMasterId);
 	}
+	getPublicationsByItemMasterIdDetails(itemMasterId,idList,masterCompanyId) {
+		return this.workflowEndpoint.getPublicationsByItemMasterIdDetails(itemMasterId,idList,masterCompanyId);
+	}
+	
 	getemployeeExpertiseById(id) {
 		return this.workflowEndpoint.getemployeeExpertiseById(id);
 	}

@@ -35,7 +35,7 @@ export class SalesMultiShippingLabelComponent implements OnInit {
 
   getSalesOrderShippingLabel() {
     this.salesOrderService.getMultiShippingLabelPrint(this.salesshippingLabels).subscribe(res => {
-      this.objSalesOrderShippingLabels = res;
+      this.objSalesOrderShippingLabels = res[0];
     })
   }
 
@@ -46,9 +46,17 @@ export class SalesMultiShippingLabelComponent implements OnInit {
   }
 
   updateServiceClass() {
-    // this.salesOrderService.updateShipping(this.salesOrderShipping.serviceClass, this.soShippingId).subscribe(res => {
-    //     this.printContent();
-    // })
+    let i: number = 0;
+    this.objSalesOrderShippingLabels.forEach(element => {
+      if (element.soShippingLabelViewModel.serviceClass != undefined) {
+        this.salesOrderService.updateShipping(element.soShippingLabelViewModel.serviceClass, element.soShippingLabelViewModel.soShippingId).subscribe(res => {
+          i = i + 1;
+          if (i == this.objSalesOrderShippingLabels.length) {
+            this.printContent();
+          }
+        })
+      }
+    });
   }
 
   print(): void {

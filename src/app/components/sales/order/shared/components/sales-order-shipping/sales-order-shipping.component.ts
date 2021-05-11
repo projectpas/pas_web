@@ -17,6 +17,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SalesShippingLabelComponent } from '../../../sales-order-shipping-label/sales-order-shipping-label.component'
 import { SalesOrderPackagingLabelComponent } from '../../../sales-order-Packaging-Label/sales-order-packaging-label.component';
 import { SalesMultiShippingLabelComponent } from '../../../sales-order-multi-shipping-label/sales-order-multi-shipping-label.component';
+import { SalesOrderMultiPackagingLabelComponent } from '../../../sales-order-multi-Packaging-Label/sales-order-multi-packaging-label.component';
 
 @Component({
     selector: 'app-sales-order-shipping',
@@ -126,6 +127,8 @@ export class SalesOrderShippingComponent {
 
     refresh(parts) {
         this.partSelected = false;
+        this.disableGeneratePackagingBtn = true;
+        this.disableCreateShippingBtn = true;
         this.initColumns();
         this.bindData();
     }
@@ -558,39 +561,26 @@ export class SalesOrderShippingComponent {
     generatePackagingSlip() {
         let packagingSlipItems: PackagingSlipItems[] = [];
 
-        //if (this.isMultipleSelected) {
         this.shippingList.filter(a => {
             for (let i = 0; i < a.soshippingchildviewlist.length; i++) {
                 if (a.soshippingchildviewlist[i].selectedToGeneratePackaging == true) {
-                    var p = new PackagingSlipItems;
-                    p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
-                    p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
-                    p.salesOrderPartId = a.soshippingchildviewlist[i].salesOrderPartId;
-                    p.salesOrderId = this.salesOrderId;
-                    p.masterCompanyId = this.currentUserMasterCompanyId;
-                    p.createdBy = this.userName;
-                    p.updatedBy = this.userName;
-                    p.createdDate = new Date().toDateString();
-                    p.updatedDate = new Date().toDateString();
+                    if (a.soshippingchildviewlist[i].packagingSlipId === undefined && a.soshippingchildviewlist[i].packagingSlipId == 0) {
+                        var p = new PackagingSlipItems;
+                        p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
+                        p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
+                        p.salesOrderPartId = a.soshippingchildviewlist[i].salesOrderPartId;
+                        p.salesOrderId = this.salesOrderId;
+                        p.masterCompanyId = this.currentUserMasterCompanyId;
+                        p.createdBy = this.userName;
+                        p.updatedBy = this.userName;
+                        p.createdDate = new Date().toDateString();
+                        p.updatedDate = new Date().toDateString();
 
-                    packagingSlipItems.push(p);
+                        packagingSlipItems.push(p);
+                    }
                 }
             }
         });
-        // }
-        // else {
-        //     var p = new PackagingSlipItems;
-        //     p.SOPickTicketId = this.currSOPickTicketId;
-        //     p.currQtyToShip = this.currQtyToShip;
-        //     p.salesOrderPartId = this.salesOrderPartId;
-        //     p.salesOrderId = this.salesOrderId;
-        //     p.masterCompanyId = this.currentUserMasterCompanyId;
-        //     p.createdBy = this.userName;
-        //     p.updatedBy = this.userName;
-        //     p.createdDate = new Date().toDateString();
-        //     p.updatedDate = new Date().toDateString();
-        //     packagingSlipItems.push(p);
-        // }
         this.isSpinnerVisible = true;
 
         this.salesOrderService.generatePackagingSlip(packagingSlipItems)
@@ -673,16 +663,16 @@ export class SalesOrderShippingComponent {
     checkIsCheckedToGenerate() {
         var keepGoing = true;
         this.shippingList.forEach(a => {
-            if (keepGoing) {
-                a.soshippingchildviewlist.forEach(ele => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (keepGoing) {
                     if (ele.selectedToGeneratePackaging) {
                         this.disableGeneratePackagingBtn = false;
                         keepGoing = false;
                     }
                     else
                         this.disableGeneratePackagingBtn = true;
-                });
-            }
+                }
+            });
         });
     }
 
@@ -1403,6 +1393,36 @@ export class SalesOrderShippingComponent {
     }
 
     printSelectedPackagingSlip() {
+        let packagingSlipsToPrint: MultiPackagingSlips[] = [];
+        this.shippingList.forEach(a => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (ele.selectedToGeneratePackaging && ele.packagingSlipId > 0) {
+                    var items = new MultiPackagingSlips;
+                    items.SalesOrderId = ele.salesOrderId;
+                    items.SalesOrderPartId = ele.salesOrderPartId;
+                    items.SOPickTicketId = ele.soPickTicketId;
+                    items.PackagingSlipId = ele.packagingSlipId;
+
+                    packagingSlipsToPrint.push(items);
+                }
+            });
+        });
+
+        let packagingSlips: any = {};
+
+        packagingSlips['packagingSlips'] = packagingSlipsToPrint;
+
+        this.modal = this.modalService.open(SalesOrderMultiPackagingLabelComponent, { size: "lg" });
+        let instance: SalesOrderMultiPackagingLabelComponent = (<SalesOrderMultiPackagingLabelComponent>this.modal.componentInstance)
+        instance.modalReference = this.modal;
+
+        instance.onConfirm.subscribe($event => {
+            if (this.modal) {
+                this.modal.close();
+            }
+        });
+
+        instance.packagingSlips = packagingSlips;
     }
 
     printSelectedShippingLabel() {
@@ -1460,4 +1480,11 @@ export class MultiShippingLabels {
     SalesOrderId: number;
     SalesOrderPartId: number;
     SOShippingId: number;
+}
+
+export class MultiPackagingSlips {
+    SalesOrderId: number;
+    SalesOrderPartId: number;
+    SOPickTicketId: number;
+    PackagingSlipId: number;
 }

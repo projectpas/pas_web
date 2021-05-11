@@ -44,10 +44,7 @@
                                                               Roles
                                                               <span class="roles-span"><a class="fa fa-plus-circle fa-lg" [routerLink]="['/rolesmodule/rolespages/app-roles-setup']" target="_blank"></a></span>
                                                           </label>
-                                                          <div class="inner-addon col-12 display-flex roles-margin">
-                                                              <!-- <select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceEmployee">
-                                                                  <option *ngFor="let certificationtype of ['allCertification','jlkjsdf']" [ngValue]="certificationtype">{{certificationtype}}</option>
-                                                              </select> -->
+                                                          <div class="inner-addon col-12 display-flex roles-margin">                                                              
                                                               <ng-multiselect-dropdown  name ="selectedRoles" 
                                                               class="form-control multiple-custom-select"
                                                                                        [data]="employeeRoleLabel"
@@ -57,26 +54,9 @@
                                                                                        (onSelectAll)="onSelectAll($event)"
                                                                                        >
                                                               </ng-multiselect-dropdown>
-                                                               <!-- <p-multiSelect [options]="shiftValues" 
-                                                              name="multipleShiftType" [(ngModel)]="selectedRoles"
-                                                               (ngModelChange)="enableSave()" [panelStyle]="{minWidth:'12em'}">
-
-                                                              </p-multiSelect> -->
-                                                              <!-- <a href="#" data-toggle="modal" data-target="#addCertificationType" class="add-icon"><i class="fa fa-plus"></i></a> -->
-                                                          </div>
-                                                      </div>
-                                                      <!-- <div class="form-group col-sm-12 display-flex">
-                                                        <label class="control-label col-sm-4">
-                                                            Roles
-                                                            <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" [routerLink]="['/rolesmodule/rolespages/app-roles-setup']" target="_blank"></a></span>
-                                                        </label>
-                                                        <div class="inner-addon col-12 display-flex">
-                                                                                                                     
-                                                            <p-multiSelect [options]="employeeRolesList" name="multipleShiftType"
-                                                             [(ngModel)]="employeeRoleLabel" 
-                                                             (ngModelChange)="enableSave()" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
                                                             </div>
-                                                    </div> -->
+                                                      </div>
+                                                      
                                                       <div class="form-group col-sm-12 memo-popup-cstm display-flex">
                                                           <label class="control-label col-sm-4">Memo</label>
                                                           <div class="col-sm-12">
@@ -132,24 +112,7 @@
                 </button>
                 <h4 class="modal-title">Edit Memo</h4>
             </div>
-            <div class="modal-body">
-                <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                    <thead>
-                    <th style="color: #fff;">Memo</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="white-space: inherit">
-                                <p-editor spellcheck="true"
-                                (ngModelChange)="editorgetmemo($event)"
-                                          [(ngModel)]="memoPopupContent"
-                                          [style]="{ height: '320px' }"
-                                          name="memoPopupContent"
-                                          required></p-editor>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table> -->
+            <div class="modal-body">                
                 <p-editor spellcheck="true"
                                 (ngModelChange)="editorgetmemo($event)"
                                           [(ngModel)]="memoPopupContent"

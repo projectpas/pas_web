@@ -715,38 +715,38 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         });
     }
 
-    errorMessageHandler(log) {
-        this.isSpinnerVisible = false;
-        const errorLog = log;
-        if (errorLog.error) {
-            this.alertService.showMessage(
-                "Validation Failed",
-                errorLog.error,
-                MessageSeverity.error
-            );
-            return;
-        }
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
+    // errorMessageHandler(log) {
+    //     this.isSpinnerVisible = false;
+    //     const errorLog = log;
+    //     if (errorLog.error) {
+    //         this.alertService.showMessage(
+    //             "Validation Failed",
+    //             errorLog.error,
+    //             MessageSeverity.error
+    //         );
+    //         return;
+    //     }
+    //     var msg = '';
+    //     if (errorLog.message) {
+    //         if (errorLog.error && errorLog.error.errors.length > 0) {
+    //             for (let i = 0; i < errorLog.error.errors.length; i++) {
+    //                 msg = msg + errorLog.error.errors[i].message + '<br/>'
+    //             }
+    //         }
+    //         this.alertService.showMessage(
+    //             errorLog.error.message,
+    //             msg,
+    //             MessageSeverity.error
+    //         );
+    //     }
+    //     else {
+    //         this.alertService.showMessage(
+    //             'Error',
+    //             log.error,
+    //             MessageSeverity.error
+    //         );
+    //     }
+    // }
 
     // toGetEmployeeTrainingDocumentsList(employeeId,moduleId) {       
     //     this.commonService.GetDocumentsList(employeeId, moduleId,this.currentDeletedstatus).subscribe(res => {

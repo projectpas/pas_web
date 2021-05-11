@@ -356,47 +356,36 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  public allWorkFlows: any[] = [];
-  getList(data) {
-    this.isSpinnerVisible = true;
-    const isdelete = this.currentDeletedstatus ? true : false;
-    data.filters.isDeleted = isdelete;
-    data.filters.masterCompanyId = this.currentUserMasterCompanyId;
-    const PagingData = {
-      ...data,
-      filters: listSearchFilterObjectCreation(data.filters),
-    };
-    this.entityService.getEntityLists(PagingData).subscribe(
-      (res) => {
-        this.alertService.stopLoadingMessage();
-        const data = res;
-        this.isSpinnerVisible = false;
-        this.allATAMaininfo = data[0]["results"].map((x) => {
-          return {
-            ...x,
-            createdDate: x.createdDate
-              ? this.datePipe.transform(x.createdDate, "MM/dd/yyyy hh:mm a")
-              : "",
-            updatedDate: x.updatedDate
-              ? this.datePipe.transform(x.updatedDate, "MM/dd/yyyy hh:mm a")
-              : "",
-          };
-        });
-        if (this.allATAMaininfo.length > 0) {
-          this.totalRecords = data[0]["totalRecordsCount"];
-          this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        } else {
-          this.totalRecords = 0;
-          this.totalPages = 0;
-        }
-      },
-      (err) => {
-        this.isSpinnerVisible = false;
-        //const errorLog = err;
-        //this.errorMessageHandler(errorLog);
-      }
-    );
-  }
+	public allWorkFlows: any[] = [];
+	getList(data) {
+		this.isSpinnerVisible = true;
+		const isdelete = this.currentDeletedstatus ? true : false;
+		data.filters.isDeleted = isdelete;
+		data.filters.masterCompanyId = this.currentUserMasterCompanyId;
+		const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
+		this.entityService.getEntityLists(PagingData).subscribe(res => {
+			this.alertService.stopLoadingMessage();
+			const data = res;
+			this.isSpinnerVisible = false;
+			this.allATAMaininfo = data[0]['results'].map(x => {
+				return {
+					...x,
+					createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+					updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+				}
+			});;
+			if (this.allATAMaininfo.length > 0) {
+				this.totalRecords = data[0]['totalRecordsCount'];
+				this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+			}
+			else {
+				this.totalRecords = 0;
+				this.totalPages = 0;
+			}
+		}, err => {
+			this.isSpinnerVisible = false;			
+		})
+	}
 
   allAssetInfoOriginal: any = [];
   dateObject: any = {};
@@ -628,70 +617,45 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
     });
   }
 
-  editItemAndCloseModel() {
-    if (
-      !(
-        this.sourceLegalEntity.name &&
-        this.sourceLegalEntity.description &&
-        this.sourceLegalEntity.reportingCurrencyId &&
-        this.sourceLegalEntity.reportingCurrencyId &&
-        this.sourceLegalEntity.ledgerName
-      )
-    ) {
-      this.display = true;
-      this.modelValue = true;
-    }
-    if (
-      this.sourceLegalEntity.name &&
-      this.sourceLegalEntity.description &&
-      this.sourceLegalEntity.reportingCurrencyId &&
-      this.sourceLegalEntity.reportingCurrencyId &&
-      this.sourceLegalEntity.ledgerName
-    ) {
-      if (!this.sourceLegalEntity.legalEntityId) {
-        this.sourceLegalEntity.createdBy = this.userName;
-        this.sourceLegalEntity.updatedBy = this.userName;
-        this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
-        this.entityService.newAddEntity(this.sourceLegalEntity).subscribe(
-          (data) => {
-            this.alertService.showMessage(
-              "Success",
-              "Legal Entity added successfully.",
-              MessageSeverity.success
-            );
-          },
-          (err) => {
-            this.isSpinnerVisible = false;
-            //const errorLog = err;
-            //this.errorMessageHandler(errorLog);
-          }
-        );
-      } else {
-        this.sourceLegalEntity.createdBy = this.userName;
-        this.sourceLegalEntity.updatedBy = this.userName;
-        this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
-        this.entityService.updateEntity(this.sourceLegalEntity).subscribe(
-          (data) => {
-            this.alertService.showMessage(
-              "Success",
-              "Legal Entity updated successfully.",
-              MessageSeverity.success
-            );
-          },
-          (err) => {
-            this.isSpinnerVisible = false;
-            //const errorLog = err;
-            //this.errorMessageHandler(errorLog);
-          }
-        );
-      }
-      if (this.modal) {
-        this.modal.close();
-      }
-      if (this.modal1) {
-        this.modal1.close();
-      }
-    }
+	editItemAndCloseModel() {
+		if (!(this.sourceLegalEntity.name && this.sourceLegalEntity.description && this.sourceLegalEntity.reportingCurrencyId && this.sourceLegalEntity.reportingCurrencyId && this.sourceLegalEntity.ledgerName)) {
+			this.display = true;
+			this.modelValue = true;
+		}
+		if (this.sourceLegalEntity.name && this.sourceLegalEntity.description && this.sourceLegalEntity.reportingCurrencyId && this.sourceLegalEntity.reportingCurrencyId && this.sourceLegalEntity.ledgerName) {
+			if (!this.sourceLegalEntity.legalEntityId) {
+				this.sourceLegalEntity.createdBy = this.userName;
+				this.sourceLegalEntity.updatedBy = this.userName;
+				this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
+				this.entityService.newAddEntity(this.sourceLegalEntity).subscribe(data => {
+					this.alertService.showMessage(
+						'Success',
+						'Legal Entity added successfully.',
+						MessageSeverity.success
+					);
+				}, err => {
+					this.isSpinnerVisible = false;
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
+				});
+			}
+			else {
+				this.sourceLegalEntity.createdBy = this.userName;
+				this.sourceLegalEntity.updatedBy = this.userName;
+				this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
+				this.entityService.updateEntity(this.sourceLegalEntity).subscribe(data => {
+					this.alertService.showMessage(
+						'Success',
+						'Legal Entity updated successfully.',
+						MessageSeverity.success
+					);
+				}, err => {
+					this.isSpinnerVisible = false;					
+				});
+			}
+			if (this.modal) { this.modal.close(); }
+			if (this.modal1) { this.modal1.close(); }
+		}
 
     if (this.display == false) {
       this.dismissModel();
@@ -902,37 +866,23 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 
         this.legalEntityMainId = res.legalEntityId;
 
-        if (this.isBankingView == true) {
-          this.bankingAps(legalEntityId);
-          this.getEntityLockBoxDataById(legalEntityId);
-          setTimeout(() => {
-            this.isSpinnerVisibleHistory = false;
-          }, 1500);
-        }
-		this.isSpinnerVisibleHistory = false;
-        this.editlegalEntityLogo(res.attachmentId, legalEntityId);
-      },
-      (err) => {
-        this.isSpinnerVisibleHistory = false;
-        //const errorLog = err;
-        //this.errorMessageHandler(errorLog);
-      }
-    );
-  }
-  editlegalEntityLogo(attachmentId, legalEntityId) {
-    this.entityService
-      .toGetUploadDocumentsList(attachmentId, legalEntityId, 41)
-      .subscribe(
-        (res) => {
-          this.sourceViewforDocumentList = res;
-        },
-        (err) => {
-          this.isSpinnerVisibleHistory = false;
-          //const errorLog = err;
-          //this.errorMessageHandler(errorLog);
-        }
-      );
-  }
+			this.bankingAps(legalEntityId);
+			this.editlegalEntityLogo(res.attachmentId, legalEntityId);
+			this.getEntityLockBoxDataById(legalEntityId);
+			setTimeout(() => {
+				this.isSpinnerVisibleHistory = false;
+			}, 1500);
+		}, err => {
+			this.isSpinnerVisibleHistory = false;			
+		})
+	}
+	editlegalEntityLogo(attachmentId, legalEntityId) {
+		this.entityService.toGetUploadDocumentsList(attachmentId, legalEntityId, 41).subscribe(res => {
+			this.sourceViewforDocumentList = res;
+		}, err => {
+			this.isSpinnerVisibleHistory = false;			
+		});
+	}
 
   isLockBox: any = false;
   isDomesticWire: any = false;
@@ -1032,20 +982,15 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
     });
   }
 
-  bankingApiDataList: any = [];
-  bankingAps(legalEntityId) {
-    this.entityService.getBankingApisData(legalEntityId).subscribe(
-      (res) => {
-        this.bankingApiDataList = [];
-        this.bankingApiDataList = res;
-      },
-      (err) => {
-        this.isSpinnerVisible = false;
-        //const errorLog = err;
-        //this.errorMessageHandler(errorLog);
-      }
-    );
-  }
+	bankingApiDataList: any = [];
+	bankingAps(legalEntityId) {
+		this.entityService.getBankingApisData(legalEntityId).subscribe(res => {
+			this.bankingApiDataList = [];
+			this.bankingApiDataList = res;
+		}, err => {
+			this.isSpinnerVisible = false;			
+		})
+	}
 
   viewDataGeneralInformation: any = {};
   filtercountry(event) {
@@ -1117,43 +1062,27 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
           };
         });
 
-        dt._value = vList;
-        dt.exportCSV();
-        $("#downloadConfirmation").modal("hide");
-        this.dismissModel();
-        dt.value = this.allATAMaininfo;
-        this.isSpinnerVisible = false;
-      },
-      (err) => {
-        this.isSpinnerVisible = false;
-        //const errorLog = err;
-        //this.errorMessageHandler(errorLog);
-      }
-    );
-  }
+			dt._value = vList;
+			dt.exportCSV();
+			$("#downloadConfirmation").modal("hide");
+			this.dismissModel();
+			dt.value = this.allATAMaininfo;
+			this.isSpinnerVisible = false;
+		}, err => {
+			this.isSpinnerVisible = false;			
+		});
+	}
 
-  getLegalEntityHistoryById(content, rowData) {
-    this.isSpinnerVisible = true;
-    this.entityService
-      .getLeaglEntityHistoryById(rowData.legalEntityId)
-      .subscribe(
-        (res) => {
-          this.auditHistory = res;
-          this.modal = this.modalService.open(content, {
-            size: "lg",
-            backdrop: "static",
-            keyboard: false,
-            windowClass: "assetMange",
-          });
-          this.isSpinnerVisible = false;
-        },
-        (err) => {
-          this.isSpinnerVisible = false;
-          //const errorLog = err;
-          //this.errorMessageHandler(errorLog);
-        }
-      );
-  }
+	getLegalEntityHistoryById(content, rowData) {
+		this.isSpinnerVisible = true;
+		this.entityService.getLeaglEntityHistoryById(rowData.legalEntityId).subscribe(res => {
+			this.auditHistory = res;
+			this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+			this.isSpinnerVisible = false;
+		}, err => {
+			this.isSpinnerVisible = false;			
+		});
+	}
 
   restorerecord: any = {};
   downloadFileUpload(rowData) {
@@ -1161,38 +1090,23 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
     window.location.assign(url);
   }
 
-  restoreRecord() {
-    this.commonService
-      .updatedeletedrecords(
-        "LegalEntity",
-        "LegalEntityId",
-        this.restorerecord.legalEntityId
-      )
-      .subscribe(
-        (res) => {
-          // this.getDeleteListByStatus(true)
-          const lazyEvent = this.lazyLoadEventDataInput;
-          this.loadDatas({
-            ...lazyEvent,
-            filters: {
-              ...lazyEvent.filters,
-              status: this.statusForList,
-            },
-          });
-          this.modal.close();
-          this.alertService.showMessage(
-            "Success",
-            `Successfully Updated Status`,
-            MessageSeverity.success
-          );
-        },
-        (err) => {
-          this.isSpinnerVisible = false;
-          //const errorLog = err;
-          //this.errorMessageHandler(errorLog);
-        }
-      );
-  }
+	restoreRecord() {
+		this.commonService.updatedeletedrecords('LegalEntity', 'LegalEntityId', this.restorerecord.legalEntityId).subscribe(res => {
+			// this.getDeleteListByStatus(true)
+			const lazyEvent = this.lazyLoadEventDataInput;
+			this.loadDatas({
+				...lazyEvent,
+				filters: {
+					...lazyEvent.filters,
+					status: this.statusForList
+				}
+			})
+			this.modal.close();
+			this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+		}, err => {
+			this.isSpinnerVisible = false;			
+		});
+	}
 
   restore(content, rowData) {
     this.restorerecord = rowData;

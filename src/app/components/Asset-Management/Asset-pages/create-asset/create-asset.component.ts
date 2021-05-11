@@ -1329,6 +1329,11 @@ export class CreateAssetComponent implements OnInit {
         }
     }
     formatToGlobal(obj) {
+        if(obj.unitCost <0)
+        {
+            obj.unitCost=0; 
+        }
+
         obj.unitCost = obj.unitCost ? formatNumberAsGlobalSettingsModule(obj.unitCost, 2) : '0.00';
 
     }

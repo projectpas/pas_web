@@ -32,6 +32,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
+import { AppModuleEnum } from './../../../enum/appmodule.enum';
 declare var $: any;
 
 @Component({
@@ -242,6 +243,11 @@ export class CreatePublicationComponent implements OnInit {
   isAirCraftNext: Boolean=true;
   isAirCraftPrev: Boolean=true;
   isATAPrev: Boolean=true;
+  customerModuleId: number = 0;
+  companyModuleId: number = 0;
+  vendorModuleId: number = 0;
+  otherModuleId: number = 0;
+  manufacturermoduleid : number = 0;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -263,6 +269,11 @@ export class CreatePublicationComponent implements OnInit {
     private localStorage: LocalStoreManager,
     private modalService: NgbModal
   ) { 
+      this.companyModuleId = AppModuleEnum.Company;
+      this.vendorModuleId = AppModuleEnum.Vendor;
+      this.customerModuleId = AppModuleEnum.Customer;
+      this.otherModuleId = AppModuleEnum.Others;
+      this.manufacturermoduleid = AppModuleEnum.Manufacturer;
     this.isView=this.authService.checkPermission([ModuleConstants.PublicationsList+'.'+PermissionConstants.View]);
     this.isPNAdd=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Add]);
     this.isDownload=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Download]);
@@ -572,11 +583,11 @@ export class CreatePublicationComponent implements OnInit {
 
   saveGeneralInfo() {
     this.data = this.sourcePublication;
-    this.data.employeeId = this.data.employeeId ? this.data.employeeId : 0;
+    this.data.employeeId = this.data.employeeId ? this.data.employeeId : null;
     this.publicationType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.publicationTypeId.toString(), this.publicationTypes);
 
     if (this.data.publishedById == null || this.data.publishedById == "null") {
-      this.data.publishedById = 0;
+      this.data.publishedById = null;
     }
     this.formData.append('entryDate', moment(this.data.entryDate).format('DD/MM/YYYY'));
     this.formData.append('publicationId', this.data.publicationId);
@@ -585,7 +596,7 @@ export class CreatePublicationComponent implements OnInit {
     this.formData.append('asd', this.data.asd);
     this.formData.append('sequence', this.data.sequence);
     this.formData.append('publishedById', this.data.publishedById);
-    if (this.data.publishedById == 2 || this.data.publishedById == 3) {
+    if (this.data.publishedById == this.vendorModuleId || this.data.publishedById == this.manufacturermoduleid) {
       this.formData.append('publishedByRefId', this.data.publishedByRefId.value);
     } else {
       this.formData.append('publishedByRefId', null);
@@ -1116,9 +1127,7 @@ export class CreatePublicationComponent implements OnInit {
     this.searchByFieldUrlCreateforATA();
 
     if (this.ataChapterIdUrl !== '') {
-      this.ataMainSer
-        .getMultiATASubDesc(this.ataChapterIdUrl)
-        .subscribe(atasubchapter => {
+      this.ataMainSer.getMultiATASubDesc(this.ataChapterIdUrl).subscribe(atasubchapter => {
 
           const responseData = atasubchapter;
 
@@ -1618,7 +1627,7 @@ export class CreatePublicationComponent implements OnInit {
   getPublishedByModulesList() {
     let publishedById = this.sourcePublication.publishedById ? this.sourcePublication.publishedById : 0;
     this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, [publishedById].join(), this.masterCompanyId).subscribe(res => {
-      this.publishedByModulesList = res;
+      this.publishedByModulesList = res;      
     });
   }
   getPublishedByReferencesList(event, id) {

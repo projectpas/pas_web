@@ -487,7 +487,6 @@ export class ExchangeQuotePartNumberComponent {
   }
 
   openPartToEdit(part) {
-    debugger;
     this.isEdit = true;
     let contentPartEdit = this.salesMargin;
     this.part = part;

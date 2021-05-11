@@ -575,40 +575,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         } else {
             return null;
         }
-    }
-
-    errorMessageHandler(log) {
-        this.isSpinnerVisible = false;
-        const errorLog = log;
-        if (errorLog.error) {
-            this.alertService.showMessage(
-                "Validation Failed",
-                errorLog.error,
-                MessageSeverity.error
-            );
-            return;
-        }
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
+    }    
 
     getDetailsInactive(res) {
         this.sourceEmployee.employeeExpertiseId = this.getInactiveObjectOnEdit('value', res.employeeExpertiseId, this.allEmployeeExpertiseInfo, 'EmployeeExpertise', 'EmployeeExpertiseId', 'Description');
@@ -1236,13 +1203,10 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                     }
                 },
                 err => {
-                    this.isSpinnerVisible = false;
-                });
+                    this.isSpinnerVisible = false;                   
+            });
         }
     }
-
-
-
 
     removeEmployeeLevaes() {
         for (var i = 0; i < this.sessionLeaveValues.length; i++) {
@@ -1254,6 +1218,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             };
         }
     }
+
     leaveTypeValueRemoved(selectedLevae) {
         if (this.sourceEmployee.employeeId) {
             this.employeeService.updateEmployee(this.sourceEmployee).subscribe(
@@ -1269,6 +1234,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 });
         }
     }
+
     shiftTypeValueRemoved(selectedLevae) {
         this.sourceEmployee.ShiftTypeId = selectedLevae;
         this.sourceEmployee.EmployeeId = this.sourceEmployee.employeeId;
@@ -1681,22 +1647,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             }
         }
     }
-    //private loademployeesexperties() {
-    //    this.alertService.startLoadingMessage();
-    //    this.loadingIndicator = true;
-    //    this.empservice.getWorkFlows().subscribe(
-    //        results => this.onEmpDataLoadSuccessful(results[0]),
-    //        error => this.onDataLoadFailed(error)
-    //    );
-    //}
-    // private loademployeesexperties() {
-    //     this.alertService.startLoadingMessage();
-    //     this.loadingIndicator = true;
-    //     this.commonService.smartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //         this.allEmployeeExpertiseInfo = res;
-    //     });
-    // }
-
+      
     private loademployeesexperties(strText = '') {
         if (this.arrayExpertiselist.length == 0) {
             this.arrayExpertiselist.push(0);

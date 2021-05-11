@@ -171,6 +171,8 @@
                                                    class="container-input-check" />
                                         </ng-container>
                                         <ng-container *ngIf="col.field =='deprAmort'">
+                                            <!-- <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
+                                            class="container-input-check" /> -->
                                             <input type="checkbox" *ngIf="rowData['assetClass']=='Tangible'" disabled [checked]="rowData['isDepreciable'] == true"
                                             class="container-input-check" />
                                                    <input type="checkbox" disabled *ngIf="rowData['assetClass']=='Intangible'" [checked]="rowData['isAmortizable'] == true"
@@ -194,8 +196,8 @@
                                                    matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                             </span>
                                           <span>
-                                                <a class="btn nobg btn-delete-cstm"
-                                                   (click)="openHistory(history,rowData)" matTooltip="History" matTooltipPosition="above">
+                                                <a data-toggle="modal" data-target="#assetInvAudit" class="btn nobg btn-delete-cstm"
+                                                   (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
                                                     <i class="fa fa-history"></i>
                                                 </a>
                                             </span>
@@ -218,8 +220,8 @@
                                             </span>
                                           <span ><a class="btn nobg" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                           <span>
-                                            <a class="btn nobg btn-delete-cstm"
-                                               (click)="openHistory(history,rowData)" matTooltip="History" matTooltipPosition="above">
+                                            <a data-toggle="modal" data-target="#assetInvAudit" class="btn nobg btn-delete-cstm"
+                                               (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
                                                 <i class="fa fa-history"></i>
                                             </a>
                                         </span>
@@ -898,27 +900,109 @@
 
 
     </ng-template>
-    <ng-template #history let-c="close" let-d="dismiss">
-        <div class="modal-header">
-            <h4 class="modal-title">History of Asset </h4>
-            <button type="button" class="close" aria-label="Close" (click)="dismissHistoryModel()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="text-center">
-                <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
-                <h4 class="no-history-found-msg">No History Found </h4>
+
+    <div id="assetInvAudit" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xlg">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">History of Asset </h4>
+                <button type="button" class="close" aria-label="Close" (click)="dismissHistoryModel()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+    
+            <div class="modal-body">
+    
+                <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
+                  <div class="loading">
+                      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                  </div>
+               </div>
+               <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                <div class="tableFixHead">
+                <table class="table table-bordered header-table-width">
+                    <thead>
+                        <tr>
+                
+                            <th>Asset Name</th>
+                            <th>AssetId.</th>
+                            <th>Alt AssetId</th>
+                            <th>Manufacturer</th>
+                            <th>Serialized</th>
+                            <th>Calibrated</th>
+                            <th>Asset Category</th>
+                            <th>Depr/Amort</th>
+                            <th>Asset Class</th>
+                            <th>Created Date</th>
+                            <th>Created By</th>
+                            <th>Updated date</th>
+                            <th>Updated By</th>
+                        </tr>
+                    </thead>
+                    <tr *ngFor="let audit of auditHistory; let i = index;">
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
+                            {{audit.name}}
+                        </td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'assetId', audit.assetId)  ? 'black' : 'red'  }">
+                            {{audit.assetId}}
+                        </td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'alternateAssetId', audit.alternateAssetId)  ? 'black' : 'red'  }">
+                            {{audit.alternateAssetId}}
+                        </td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'manufacturerName', audit.manufacturerName)  ? 'black' : 'red'  }">
+                            {{audit.manufacturerName}}
+                        </td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'isSerializedNew', audit.isSerializedNew)  ? 'black' : 'red'  }">
+                            {{audit.isSerializedNew}}
+                        </td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'calibrationRequiredNew', audit.calibrationRequiredNew)  ? 'black' : 'red'  }">
+                            {{audit.calibrationRequiredNew}}
+                        </td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'assetClass', audit.assetClass)  ? 'black' : 'red'  }">
+                            {{audit.assetClass}}
+                        </td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'deprAmort', audit.deprAmort)  ? 'black' : 'red'  }">
+                            {{audit.deprAmort}}
+                        </td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'assetType', audit.assetType)  ? 'black' : 'red'  }">
+                            {{audit.assetType}}
+                        </td>
+                        <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                            {{audit.createdBy}}
+                        </td>    
+                        <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                            {{audit.updatedBy}}
+                        </td>    
+                    </tr>
+                </table>
+    
+                <ng-template *ngIf="!showhistorylist">
+                    <div class="text-center">
+                        <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
+                        <h4 class="no-history-found-msg">No History Found </h4>
+                    </div>
+                </ng-template>
+                </div>
+            </div>
+            </div>
+            
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
+                    <h4 class="no-history-found-msg">No History Found </h4>
+                </div>
+            </div>
+    
+    
+            <div class="modal-footer">
+    
+                <button type="button" class="btn btn-danger" (click)="dismissHistoryModel()">Close</button>
+            </div>
+          </div>
         </div>
-
-
-        <div class="modal-footer">
-
-            <button type="button" class="btn btn-danger" (click)="dismissHistoryModel()">Close</button>
-        </div>
-
-    </ng-template>
+      </div>
 
 
 <ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">

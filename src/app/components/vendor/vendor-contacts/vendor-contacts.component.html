@@ -802,7 +802,7 @@
                 <label> Primary Contact </label>
                 </div>
                 <div class="col-sm-5">
-                  <input type="checkbox" name="isDefaultContact" (ngModelChange)="enableSave()" [disabled]="sourceVendor.tempIsDefaultContact == true"
+                  <input type="checkbox" name="isDefaultContact" (ngModelChange)="enableSave()" [disabled]="!tempIsDefaultContact"
                     [(ngModel)]="sourceVendor.isDefaultContact" />
               </div>
             </div>

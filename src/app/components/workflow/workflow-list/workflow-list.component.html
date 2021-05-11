@@ -424,7 +424,7 @@
                                                 <h5 class="ber-determination-label">BER Determination</h5>
                                             </div>
                                             <div class="card-body ber-determination-card-body" >
-                                                <div class="row" *ngIf="sourceWorkFlow.isFixedAmount">
+                                                <div class="row" *ngIf="sourceWorkFlow && sourceWorkFlow.isFixedAmount">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Fixed Amount: </label>{{sourceWorkFlow.fixedAmount}}
@@ -444,7 +444,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="row" *ngIf="sourceWorkFlow.isPercentageOfNew == true">
+                                                <div class="row" *ngIf="sourceWorkFlow && sourceWorkFlow.isPercentageOfNew == true">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="cost-new-label">% of Cost of
@@ -476,7 +476,7 @@
                                                 </div>
 
                                                 <div class="row"
-                                                    *ngIf="sourceWorkFlow.isPercentageOfReplacement == true">
+                                                    *ngIf="sourceWorkFlow && sourceWorkFlow.isPercentageOfReplacement == true">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="replacement-label">% of
@@ -1211,6 +1211,11 @@
 </div>
 
 <div *ngIf="isWorkOrder  ">
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
     <div class="card">
         <div class="card-header header">
             <div class="row">
@@ -1226,7 +1231,7 @@
         </div>
         <div class="card-body scroll_set" >
                 <div class="form-horizontal wf-popup-form" *ngIf="toggle_wf_header">
-                    <div class="form-row">
+                    <div class="form-row" *ngIf="sourceWorkFlow">
                         <div class="col-md-6">
                             <div class="form-row m-t-20" >
                                 <div class="col-md-6">
@@ -1284,7 +1289,7 @@
                                     <h5 class="ber-determination-label">BER Determination</h5>
                                 </div>
                                 <div class="card-body ber-determination-card-body" >
-                                    <div class="row" *ngIf="sourceWorkFlow.isFixedAmount">
+                                    <div class="row" *ngIf="sourceWorkFlow && sourceWorkFlow.isFixedAmount">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Fixed Amount: </label>{{sourceWorkFlow.fixedAmount}}
@@ -1305,7 +1310,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row" *ngIf="sourceWorkFlow.isPercentageOfNew == true">
+                                    <div class="row" *ngIf="sourceWorkFlow && sourceWorkFlow.isPercentageOfNew == true">
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="cost-new-label">% of Cost of
@@ -1337,7 +1342,7 @@
                                     </div>
 
                                     <div class="row"
-                                        *ngIf="sourceWorkFlow.isPercentageOfReplacement == true">
+                                        *ngIf="sourceWorkFlow && sourceWorkFlow.isPercentageOfReplacement == true">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label style="text-align: left;width: 150px;">% of
@@ -1373,7 +1378,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group memo-popup-cstm" style="padding-left: 4px;">
+                        <div class="form-group memo-popup-cstm" style="padding-left: 4px;" *ngIf="sourceWorkFlow">
                             <label>
                                 Memo
                             </label>
@@ -1412,7 +1417,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="form-group">
+                                        <div class="form-group" *ngIf="sourceWorkFlow">
                                             <label>Other:
                                             </label> {{sourceWorkFlow.otherCost ? sourceWorkFlow.otherCost : '0.00'}}
                                         </div>
@@ -1635,7 +1640,7 @@
                                         <td class="text-right">{{charge.extendedCost}}</td>
                                       <td>{{charge.vendorName}}</td>
                                       <td>
-                                        <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="equipment.memo"></span> 
+                                        <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="charge.memo"></span> 
                                        </td>
                                     </tr>
                                     <tr>

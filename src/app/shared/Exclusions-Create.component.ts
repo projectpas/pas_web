@@ -261,12 +261,13 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     }
 
     onPartSelect(event, exclusion, index) {
-                // console.log("this.workFlow.materialList",this.workFlow.exclusions)
-        // console.log("evvvv",event)
-        // console.log("this.workFlow",this.workFlow)
-        var isEpnExist = this.workFlow.exclusions.find(x => x.itemMasterId == event.partId && x.taskId == this.workFlow.taskId);
+                console.log("this.workFlow.materialList",this.workFlow.exclusions)
+        console.log("evvvv",event)
+        console.log("this.workFlow",this.workFlow)
+        console.log("exclusion",exclusion)
+        var isEpnExist = this.workFlow.exclusions.find(x => x.isDeleted==false && x.itemMasterId == event.partId && x.taskId == this.workFlow.taskId);
         if (isEpnExist != undefined) {
-            exclusion.partName="";
+            exclusion.partName=undefined;
             exclusion.itemMasterId="";
             exclusion.conditionId="";
             exclusion.itemClassification="";

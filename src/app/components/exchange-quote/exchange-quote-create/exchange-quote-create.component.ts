@@ -39,6 +39,8 @@ import{ExchangeQUoteMarginSummary} from '../../../models/exchange/ExchangeQUoteM
 import{ExchangeQuoteAnalysisComponent} from '../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
 import {ExchangeQuoteChargesComponent} from "../../exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
 import {ExchangeQuoteFreightComponent} from "../../exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
+import { VerifyExchangeQuoteModel } from "../models/verify-exchange-quote-model";
+import { ExchangeSalesOrderConversionCritera } from "../models/exchange-sales-order-conversion-criteria";
 @Component({
   selector: 'app-exchange-quote-create',
   templateUrl: './exchange-quote-create.component.html',
@@ -98,8 +100,16 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   @ViewChild(ExchangeQuoteFreightComponent, { static: false }) public exchangeQuoteFreightComponent: ExchangeQuoteFreightComponent;
   moduleName: any = "ExchangeQuote";
   totalCharges = 0;
+  totalFreights = 0;
+  totalcost=0;
   markupList = [];
   percents: any[];
+  disableprintagreement:boolean=true;
+  @ViewChild("exchangeQuotePrintPopup", { static: false }) public exchangeQuotePrintPopup: ElementRef;
+  verifyExchangeSalesOrderQuoteObj: VerifyExchangeQuoteModel;
+  exchangeSalesOrderConversionCriteriaObj: ExchangeSalesOrderConversionCritera;
+  selectAllForConversion = true;
+  @ViewChild("exchangeQuoteConvertPopup", { static: false }) public exchangeQuoteConvertPopup: ElementRef;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -110,6 +120,8 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     public router: Router,
     private modalService: NgbModal) {
       this.exchangeQuote = new ExchangeQuote();
+      this.verifyExchangeSalesOrderQuoteObj = new VerifyExchangeQuoteModel();
+      this.exchangeSalesOrderConversionCriteriaObj = new ExchangeSalesOrderConversionCritera();
      }
 
   ngOnInit() {
@@ -265,7 +277,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.exchangeQuote.customerServiceRepId, this.exchangeQuote.salesPersonId),
       this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
       this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
-      this.exchangequoteService.getAllExchangeQuoteSettings()).subscribe(result => {
+      this.exchangequoteService.getAllExchangeQuoteSettings(this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
@@ -361,7 +373,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuote.restrictPMA = this.customerDetails.restrictPMA;
       this.exchangeQuote.restrictDER = this.customerDetails.restrictDER;
       this.setValidDaysBasedOnSettings(false);
-      //this.onChangeValidForDays();
+      this.onChangeValidForDays();
     }
     else {
       this.setValidDaysBasedOnSettings(true);
@@ -376,7 +388,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       let validDaysObject = this.validDaysSettingsList[0];
       if (validDaysObject) {
         if (!isEdit) {
-          //this.exchangeQuote.validForDays = validDaysObject.validDays;
+          this.exchangeQuote.validForDays = validDaysObject.validDays;
           //this.exchangeQuote.type = validDaysObject.typeId.toString();
           this.exchangeQuote.statusId = validDaysObject.defaultStatusId;
           this.exchangeQuote.statusName = validDaysObject.defaultStatusName;
@@ -386,10 +398,12 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         //this.defaultSettingPriority = validDaysObject.defaultPriorityId;
       } 
       else {
+        this.exchangeQuote.validForDays = 10;
         this.exchangeQuote.type = "1";
       }
     } 
     else {
+      this.exchangeQuote.validForDays = 10;
       this.exchangeQuote.type = "1";
     }
   }
@@ -503,6 +517,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       //this.exchangOrdereQuote.customerReference = "SO";
       this.exchangOrdereQuote.balanceDue = this.exchangeQuote.balanceDue;
       this.exchangOrdereQuote.approvedById = this.exchangeQuote.approvedById;
+      this.exchangOrdereQuote.validForDays = this.exchangeQuote.validForDays;
       // if (this.exchangOrdereQuote.approvedDate) {
       //   this.exchangOrdereQuote.approvedDate = this.exchangeQuote.approvedDate.toDateString();
       // }
@@ -666,6 +681,8 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       if (data) {
         this.exchangeQuoteView = data && data.length ? data[0] : null;
         this.exchangeQuoteObj = this.exchangeQuoteView.exchangeOrderQuote;
+        this.verifySalesQuoteConversion(this.exchangeQuoteView.verificationResult);
+        this.toggle_po_header = false;
         //this.bindData(this.exchangeQuoteView, initialCall);
       }
       let partList: any[] = this.exchangeQuoteView.parts;
@@ -676,6 +693,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         const selectedPartsTemp = this.selectedParts;
         selectedPartsTemp.push(partNumberObj)
         this.exchangequoteService.selectedParts = selectedPartsTemp;
+        this.disableprintagreement = false;
       }
       // this.arrayEmplsit.push(this.salesOrderQuoteObj.employeeId);
       // if (!partsRefresh || !isInitialCall) {
@@ -699,7 +717,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuote.customerRequestDate = new Date(this.exchangeQuoteObj.customerRequestDate);
       this.exchangeQuote.estimateShipDate = new Date(this.exchangeQuoteObj.estimateShipDate);
       this.exchangeQuote.promiseDate = new Date(this.exchangeQuoteObj.promiseDate);
-      //this.salesQuote.validForDays = this.salesOrderQuoteObj.validForDays;
+      this.exchangeQuote.validForDays = this.exchangeQuoteObj.validForDays;
       this.exchangeQuote.quoteExpireDate = new Date(
         this.exchangeQuoteObj.quoteExpireDate
       );
@@ -731,6 +749,13 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     }, error => {
       this.isSpinnerVisible = false;
     });
+  }
+
+  verifySalesQuoteConversion(results) {
+    const resultsTemp = results;
+    this.verifyExchangeSalesOrderQuoteObj = resultsTemp;
+    this.exchangeSalesOrderConversionCriteriaObj = this.verifyExchangeSalesOrderQuoteObj.exchangeSalesOrderConversionCritera;
+    this.exchangeSalesOrderConversionCriteriaObj.customerReference = "";
   }
 
   onPartsSaveEvent(savedParts) {
@@ -804,27 +829,36 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     if (data) {
       this.marginSummary = data;
        this.totalCharges = this.marginSummary.otherCharges;
-      // this.totalFreights = this.marginSummary.freightAmount;
+       this.totalFreights = this.marginSummary.freightAmount;
+       this.totalcost = this.marginSummary.otherCost;
        this.exchangequoteService.setTotalCharges(this.marginSummary.otherCharges);
-      // this.salesQuoteService.setTotalFreights(this.marginSummary.freightAmount);
+       this.exchangequoteService.setTotalFreights(this.marginSummary.freightAmount);
+       this.exchangequoteService.setTotalcost(this.marginSummary.otherCost);
     } else {
       this.marginSummary = new ExchangeQUoteMarginSummary;
     }
   }
 
   saveExchangeQuoteChargesList(e) {
-    debugger;
-    this.totalCharges = e;
+    this.modelcharges = e;
+    this.totalCharges = this.modelcharges.amount;
+    this.totalcost = this.modelcharges.cost;
     this.marginSummary.otherCharges = this.totalCharges;
-    this.exchangequoteService.setTotalCharges(e);
+    this.marginSummary.otherCost = this.totalcost;
+    this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    this.exchangequoteService.setTotalcost(this.modelcharges.cost);
     this.setFreightsOrCharges();
     this.updateMarginSummary();
   }
-
+  public modelcharges = { amount: 0, cost: 0 };
   updateExchangeQuoteChargesList(e) {
-    this.totalCharges = e;
-    this.exchangequoteService.setTotalCharges(e);
+    this.modelcharges = e;
+    this.totalCharges = this.modelcharges.amount;
+    this.totalcost = this.modelcharges.cost;
+    this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    this.exchangequoteService.setTotalcost(this.modelcharges.cost);
     this.marginSummary.otherCharges = this.totalCharges;
+    this.marginSummary.otherCost = this.totalcost;
     this.setFreightsOrCharges();
     this.updateMarginSummary();
   }
@@ -832,10 +866,164 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   setFreightsOrCharges() {
     if (this.exchangequoteService.selectedParts && this.exchangequoteService.selectedParts.length > 0) {
       this.exchangequoteService.selectedParts.forEach((part, i) => {
-        //this.exchangequoteService.selectedParts[i].freight = this.totalFreights;
+        this.exchangequoteService.selectedParts[i].freight = this.totalFreights;
         this.exchangequoteService.selectedParts[i].misc = this.totalCharges;
       });
     }
     this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(this.exchangequoteService.selectedParts, this.marginSummary);
+  }
+  closeModal() {
+    this.modal.close();
+  }
+  initiatePrintProcess() {
+    let content = this.exchangeQuotePrintPopup;
+    this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  saveExchangeQuoteFreightsList(e) {
+    this.totalFreights = e;
+    this.marginSummary.freightAmount = this.totalFreights;
+    this.exchangequoteService.setTotalFreights(e);
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
+  }
+
+  updateExchangeQuoteFreightsList(e) {
+    this.totalFreights = e;
+    this.marginSummary.freightAmount = this.totalFreights;
+    this.exchangequoteService.setTotalFreights(e);
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
+  }
+
+  print(): void {
+    let printContents, popupWin;
+    printContents = document.getElementById('quote_print_content').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title>Print tab</title>
+          <style>
+          input {width:80%;background:#fff;border:1px Solid}
+
+  h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: 600; width: 100%; margin: 0;}
+  h5{font-family: inherit;font-weight: 500;line-height: 1.1; color: inherit; background: #f4f4f4; color:#000 ;padding: 5px; font-size: 14px;margin-bottom: 15px;margin: 0 !important;padding: 5px;text-align:center }
+  hr{margin-top: 10px; margin-bottom: 10px;border: 0;border-top: 1px solid #e0e0e0; height: 0; box-sizing: content-box;}
+  .first-block {position: relative; min-height: 1px; float: left;padding-right: 2px; padding-left: 2px;width: 66.66666667%;}
+  .first-block-4 {position: relative;min-height: 1px;float: left;padding-right: 2px; padding-left: 2px;}
+  
+  .picked-by{position: relative;float: left;width:48%}
+  .confirmed-by{position: relative;float: left;width:48%}       
+  .first-part{position:relative;display:flex;float:left;width:50%}   
+.sixtydays{position:relative;
+  display:inline-block;
+  // display:flex;
+  float:left;width:90%}
+ .seond-part{position:relative;display:flex;float:right;width:24%}  
+
+.first-block-address{margin-right: 20px;text-align: left}
+.label-border{
+  border: 1px solid black;
+    width: 100%;
+    text-align: left;
+    line-height: 2;
+    height:25px;
+}
+.margin-left-10{
+  margin-left:10px;
+}
+.label-name{
+  width:50%
+}
+
+  .first-block-quotation{margin-right: 20px;text-align: left;margin-top: 10px;}
+  
+  .first-block-name{margin-right: 20px}
+  .second-block {position: relative;min-height: 1px;  float: left;padding-right: 2px;width: 32.33333333%;padding-left: 2px;box-sizing: border-box;}
+  .second-block-div{margin: 2px 0;position: relative;min-height: 1px; float: left;padding-right: 2px; padding-left: 2px;width: 100%;}
+  .second-block-label{position: relative; min-height: 1px;float: left;padding-right: 2px; padding-left: 2px;width: 38.33333333%;text-transform: capitalize;margin-bottom: 0; margin-top: 5px;}
+  .second-block-value{position: relative;min-height: 1px;width: 58.33333333%; float: left;padding-right: 2px;padding-left: 2px;margin-top:4px;}
+  .clear{clear: both;}
+  .form-div{top: 6px; position: relative;font-weight: normal; margin-top: 10px;}
+  .image{border: 1px solid #ccc; padding: 5px;}
+
+  .mtop20 { margin-top: 20px;  }
+  .logo-block { margin: auto; text-align: center }
+  .pdf-block { width: 800px; margin: auto; border: 1px solid #ccc;padding: 25px 15px; } 
+  .table-text{border: 1px solid #ccc; padding: 5px;height: 150px;}  
+  .barcode-name{margin: 0 0 10px;}    
+
+
+.input-field-border{width: 88px; border-radius:0px !important;background:#fff;border: none; border-bottom: 1px solid black;}
+
+.pick-ticket-header{border: 1px solid black;text-align: left; background: #0d57b0 !important;color: #fff !important;}
+.div-height{min-height:500px;height:auto}
+          </style>
+        </head>
+    <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
+
+  initiateExchangeSalesOrderCoversion() {
+    this.selectAllForConversion = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferCharges = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferFreight = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferMemos = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferNotes = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferStockline = true;
+    this.exchangeSalesOrderConversionCriteriaObj.reserveStockline = true;
+    this.exchangeSalesOrderConversionCriteriaObj.customerReference = "";
+    let content = this.exchangeQuoteConvertPopup;
+    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+
+  onActionSelectAllforconvversion() {
+    if (this.selectAllForConversion) {
+      this.exchangeSalesOrderConversionCriteriaObj.transferCharges = true;
+      this.exchangeSalesOrderConversionCriteriaObj.transferFreight = true;
+      this.exchangeSalesOrderConversionCriteriaObj.transferMemos = true;
+      this.exchangeSalesOrderConversionCriteriaObj.transferNotes = true;
+      this.exchangeSalesOrderConversionCriteriaObj.transferStockline = true;
+      this.exchangeSalesOrderConversionCriteriaObj.reserveStockline = true;
+    } else {
+      this.exchangeSalesOrderConversionCriteriaObj.transferCharges = false;
+      this.exchangeSalesOrderConversionCriteriaObj.transferFreight = false;
+      this.exchangeSalesOrderConversionCriteriaObj.transferMemos = false;
+      this.exchangeSalesOrderConversionCriteriaObj.transferNotes = false;
+      this.exchangeSalesOrderConversionCriteriaObj.transferStockline = false;
+      this.exchangeSalesOrderConversionCriteriaObj.reserveStockline = false;
+    }
+  }
+
+  onChangeValidForDays() {
+    let od = new Date(this.exchangeQuote.openDate);
+    let validForDays = +this.exchangeQuote.validForDays;
+    //let validForDays = 10;
+    let ed = new Date(this.exchangeQuote.openDate);
+    ed.setDate(od.getDate() + validForDays);
+    this.exchangeQuote.quoteExpireDate = ed;
+    this.enableUpdateButton = false;
+  }
+  onChangeQuoteExpiryDate() {
+    let od = new Date(this.exchangeQuote.openDate);
+    let ed = new Date(this.exchangeQuote.quoteExpireDate);
+    let Difference_In_Time = ed.getTime() - od.getTime();
+    let Difference_In_Days = Math.floor(
+      Difference_In_Time / (1000 * 3600 * 24)
+    );
+    this.exchangeQuote.validForDays = Difference_In_Days;
+    this.enableUpdateButton = false;
+  }
+  onChangeOpenDate() {
+    let od = new Date(this.exchangeQuote.openDate);
+    let validForDays = +this.exchangeQuote.validForDays;
+    let ed = new Date(this.exchangeQuote.openDate);
+    ed.setDate(od.getDate() + validForDays);
+    this.exchangeQuote.quoteExpireDate = ed;
+    this.enableUpdateButton = false;
   }
 }

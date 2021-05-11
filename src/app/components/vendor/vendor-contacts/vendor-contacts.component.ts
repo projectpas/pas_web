@@ -204,6 +204,7 @@ export class VendorContactsComponent implements OnInit {
     isContactView:boolean=true;
     isNextVisible:Boolean=true;
     isPrevVisible:Boolean=true;
+    tempIsDefaultContact: boolean=true;
 
     constructor(private router: ActivatedRoute,
         private atamain: AtaMainService,
@@ -522,10 +523,13 @@ export class VendorContactsComponent implements OnInit {
             this.getAllTagNameSmartDropDown('', row.contactTagId);
         }
         
-        if(this.sourceVendor.isDefaultContact == true) {
-            this.sourceVendor['tempIsDefaultContact'] = this.sourceVendor.isDefaultContact;
-        }
-        this.sourceVendor.tempIsDefaultContact=this.sourceVendor.isActive==false?true:false;
+      
+        if ((this.sourceVendor.isActive == true && this.sourceVendor.isDefaultContact==true)|| this.sourceVendor.isActive == false) {
+            this.tempIsDefaultContact = false;
+        } 
+        
+        
+        
         
        
         

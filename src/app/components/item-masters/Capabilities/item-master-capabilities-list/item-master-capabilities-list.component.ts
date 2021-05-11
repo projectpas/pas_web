@@ -282,12 +282,16 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     return this.capabilitiesForm.get("mfgForm") as FormArray;
   }
 
-  dataSource: MatTableDataSource<any>;
-  cols: any[];
-  pnCols: any[];
-  nonPnCols: any[];
-  paginator: MatPaginator;
-  sort: MatSort;
+    // get userName(): string {
+	// 	return this.authService.currentUser ? this.authService.currentUser.userName : "";
+	// }
+
+    dataSource: MatTableDataSource<any>;
+    cols: any[];
+    pnCols: any[];
+    nonPnCols: any[];
+    paginator: MatPaginator;
+    sort: MatSort;
 
   private onDataLoadFailed(error: any) {
     this.isSpinnerVisible = false;
@@ -1430,44 +1434,20 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     return itemExisted;
   }
 
-  saveCapability() {
-    this.selectedItemMasterCapData["updatedBy"] = "admin";
-    this.selectedItemMasterCapData["createdBy"] = "admin";
-    (this.selectedItemMasterCapData["isVerified"] =
-      this.selectedItemMasterCapData.isVerified == true ||
-      this.selectedItemMasterCapData.isVerified == "check"
-        ? true
-        : false),
-      (this.selectedItemMasterCapData[
-        "companyId"
-      ] = this.selectedItemMasterCapData.levelId1);
-    this.selectedItemMasterCapData[
-      "buId"
-    ] = this.selectedItemMasterCapData.levelId2;
-    this.selectedItemMasterCapData[
-      "divisionId"
-    ] = this.selectedItemMasterCapData.levelId3;
-    this.selectedItemMasterCapData[
-      "departmentId"
-    ] = this.selectedItemMasterCapData.levelId4;
-    this.selectedItemMasterCapData["masterCompanyId"] =
-      DBkeys.MASTER_COMPANY_ID;
-    this.selectedItemMasterCapData["verifiedDate"] = this.datePipe.transform(
-      this.selectedItemMasterCapData["verifiedDate"],
-      DBkeys.GLOBAL_DATE_FORMAT
-    );
-    this.selectedItemMasterCapData["addedDate"] = this.datePipe.transform(
-      this.selectedItemMasterCapData["addedDate"],
-      DBkeys.GLOBAL_DATE_FORMAT
-    );
-
-    this.itemMasterService
-      .updateItemMasterCapes(
-        this.selectedItemMasterCapData.itemMasterCapesId,
-        this.selectedItemMasterCapData
-      )
-      .subscribe((res) => {
-        this.selectedItemMasterCapData = {};
+    saveCapability() {     
+        this.selectedItemMasterCapData["updatedBy"]= this.userName;  
+        this.selectedItemMasterCapData["createdBy"]= this.userName;  
+        this.selectedItemMasterCapData["isVerified"] = (this.selectedItemMasterCapData.isVerified == true || this.selectedItemMasterCapData.isVerified == 'check') ? true : false,
+        this.selectedItemMasterCapData["companyId"]=this.selectedItemMasterCapData.levelId1;  
+        this.selectedItemMasterCapData["buId"]=this.selectedItemMasterCapData.levelId2;  
+        this.selectedItemMasterCapData["divisionId"]=this.selectedItemMasterCapData.levelId3;  
+        this.selectedItemMasterCapData["departmentId"]=this.selectedItemMasterCapData.levelId4;  
+        this.selectedItemMasterCapData["masterCompanyId"]= this.authService.currentUser.masterCompanyId // DBkeys.MASTER_COMPANY_ID;
+        this.selectedItemMasterCapData["verifiedDate"] = this.datePipe.transform(this.selectedItemMasterCapData["verifiedDate"], DBkeys.GLOBAL_DATE_FORMAT);
+        this.selectedItemMasterCapData["addedDate"] = this.datePipe.transform(this.selectedItemMasterCapData["addedDate"], DBkeys.GLOBAL_DATE_FORMAT);
+        
+        this.itemMasterService.updateItemMasterCapes(this.selectedItemMasterCapData.itemMasterCapesId, this.selectedItemMasterCapData).subscribe(res => {
+            this.selectedItemMasterCapData = {};
 
         this.loadData();
         this.alertService.showMessage(

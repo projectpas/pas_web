@@ -435,14 +435,17 @@
                                         </span>
                                         <span>
                                             <a class="btn nobg btn-plusro-cstm" (click)="createRO(part)"
-                                                matTooltip="Create RO" matTooltipPosition="above">
+                                                matTooltip="Create RO" matTooltipPosition="above"
+                                                [class.disabled]="((part.qtyReserved == null || part.qtyReserved == 0) || (part.stockLineNumber == null || part.stockLineNumber == ''))"
+                                                [ngClass]="{'btn_disabled': (part.qtyReserved == null || part.qtyReserved == 0)}">
                                                 <i class="fa fa-plus" style="color: #259e08;"></i>
                                             </a>
                                         </span>
                                         <span>
                                             <a class="btn nobg btn-plusro-cstm"
                                                 (click)="initiateCreateWOROPO(part, 'WO')" matTooltip="Create WO"
-                                                matTooltipPosition="above">
+                                                matTooltipPosition="above" [class.disabled]="((part.qtyReserved == null || part.qtyReserved == 0) || (part.stockLineNumber == null || part.stockLineNumber == ''))"
+                                                [ngClass]="{'btn_disabled': (part.qtyReserved == null || part.qtyReserved == 0)}">
                                                 <i class="fa fa-plus" style="color: #24089e;"></i>
                                             </a>
                                         </span>
@@ -532,7 +535,7 @@
 </div>
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
-        (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode"
+        (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode" [clearData]="clearData"
         [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'SO'">
     </app-add-sales-part-number>
 </ng-template>
@@ -544,7 +547,7 @@
 </ng-template>
 <ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
     <app-sales-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
-        (close)="onCloseMargin($event)"></app-sales-margin>
+        (close)="onCloseMargin($event)" (searchAnotherPN)="onSearchAnotherPN($event)"></app-sales-margin>
 </ng-template>
 <ng-template #deleteContent let-c="close" let-d="dismiss">
     <div class="modal-header">

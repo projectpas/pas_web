@@ -7,7 +7,7 @@ import { TwoDecimalGlobalNumberFormatPipe } from './pipes/two-decimal-global-num
 import { GlobalNumberFormat } from './pipes/Global-Number-Format';
 import { FiveDecimalGlobalNumberFormatPipe } from './pipes/two-decimal-global-number-format-pipe.pipe';
 
-@NgModule({
+@NgModule({ 
     imports: [
         ProgressSpinnerModule,
         CommonModule

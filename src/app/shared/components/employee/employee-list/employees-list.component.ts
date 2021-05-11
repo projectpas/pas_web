@@ -445,7 +445,7 @@ export class EmployeesListComponent implements OnInit {
 
     //}
 
-    // Not in use
+    // Not in use  <----------------------------------------
     private loadData() {
         this.empService.getEmployeeList().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
@@ -1159,14 +1159,5 @@ export class EmployeesListComponent implements OnInit {
         }
     }
 
-    changeStatus(rowData) { }
-
-
-
-
-
-
-
-
-
+    changeStatus(rowData) {}
 }

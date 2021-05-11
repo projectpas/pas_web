@@ -14,10 +14,9 @@
     <div class="form-row" >
       <div class="col-md-12">
         <div class="col-md-12 display-flex" *ngIf="!hideHeader">
-          <div class="col-md-2" *ngIf="!isQuote"> 
+          <!-- <div class="col-md-2" *ngIf="!isQuote"> 
             <form #labourHeader="ngForm">
               <div class="form-group" *ngIf="!isQuote">
-                <!-- *ngIf="laborForm.isTaskCompletedByOne" -->
                 <label for="expertise">Expertise <span class="clr-red">*</span></label>
                 <p-dropdown placeholder="Select Expertise Type" required (ngModelChange)="checkValid(1)" [options]="expertiseTypeList" class="p-dropdown-custom-md-Header" [(ngModel)]="laborForm.expertiseId"  [disabled]="isView || laborForm.isTaskCompletedByOne" (onChange)="
                   getExpertiseEmployeeByExpertiseIdForHeader(laborForm.expertiseId); assignLabourExpertise(laborForm.expertiseId)" name="expertise"  ></p-dropdown>
@@ -39,9 +38,24 @@
                 </p-autoComplete>
               </div>
             </form> 
-          </div> 
-          <div class="col-md-3 col-offset-3 task-detail" [ngClass]="{'col-offset-3' :!isQuote}">
-              <div class="form-row ht_ad" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
+          </div>  -->
+          <div class="col-md-3 col-offset-1 task-detail" *ngIf="!isQuote">
+            <!-- <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Task Completed by one Tech/Mech"
+              [(ngModel)]="laborForm.isTaskCompletedByOne" [disabled]="isView" (onChange)="taskComletedByConfirmation($event)"></p-checkbox> -->
+            <div class="form-group task-hours-type1">
+                <!-- <p-radioButton (ngModelChange)="checkValid(8)" *ngIf="workFlowId !==0" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder"
+                label="Use target hours from workflow" value="workFlow"
+                [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="savedWorkOrderData.workFlowWorkOrderId == 0 || isView " (click)="calculateOverallTotalHours();getWorkFlowLaborList();"></p-radioButton> -->
+                <p-radioButton (ngModelChange)="checkValid(9)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" label="Assign hours by specific tasks" value="specificTasks"
+                  [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder"  [disabled]="isView " (click)="laborForm.totalWorkHours = 0;refreshCall();"></p-radioButton>
+                  <br>
+                <p-radioButton (ngModelChange)="checkValid(10)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" value="workOrder"
+                  label="Assign total hours to workorder" [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="isView " (click)="assignHoursToToalWorkOrder()"></p-radioButton>
+                  <!-- || !laborForm.isTaskCompletedByOne -->
+              </div>
+         </div>
+          <div class="col-md-3 col-offset-1 task-detail" [ngClass]="{'col-offset-1' :!isQuote}">
+              <div class="form-row ht_ad1" *ngIf="!isQuote  && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
                 <div class="padtp">  
                    <!-- <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
                     matTooltip="Single MPN">
@@ -68,22 +82,22 @@
             </label> -->
               
             <p-radioButton (ngModelChange)="checkValid(4)" (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}"  class="p-radiobutton-label-horizontal p-radiobutton-cstm adj" name="HoursorClockorScan"
-            label="Labor Hours" [value]="1"
+            label="Manual Entry" [value]="1" disabled
             [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
            
-            <p-radioButton (ngModelChange)="checkValid(5)"  (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" label="Labor Clock In/Out " [value]="2"
+            <p-radioButton (ngModelChange)="checkValid(5)" disabled (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" label="Labor Clock In/Out " [value]="2"
               [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
-            <p-radioButton (ngModelChange)="checkValid(6)" [ngClass]="{pointerEvents :isView}"  (change)="headerMaintanance()" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" [value]="3"
+            <p-radioButton (ngModelChange)="checkValid(6)" disabled [ngClass]="{pointerEvents :isView}"  (change)="headerMaintanance()" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" [value]="3"
               label="Scan" [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
- 
-                  </div> 
+ </div> 
               </div>
+              <!-- isQuote || (laborForm.expertiseId && laborForm.employeeId)) &&  -->
                 <div class="col-sm-8" 
-               *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId)) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView">
+               *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView">
                   <div class="form-group">
                       <label>Task</label>
                       <ng-multiselect-dropdown 
-                          class="form-control multiple-custom-select capitalizer" [placeholder]="'Select'"
+                          class="form-control multiple-custom-select capitalizer setCaps" [placeholder]="'Select Task'"
                           [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
                           [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"
                           (onSelect)="onItemSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
@@ -92,26 +106,13 @@
                   </div>
               </div> 
           </div>
-          <div class="col-md-3 col-offset-3 task-detail" *ngIf="!isQuote">
-              <!-- <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Task Completed by one Tech/Mech"
-                [(ngModel)]="laborForm.isTaskCompletedByOne" [disabled]="isView" (onChange)="taskComletedByConfirmation($event)"></p-checkbox> -->
-              <div class="form-group task-hours-type1">
-                  <!-- <p-radioButton (ngModelChange)="checkValid(8)" *ngIf="workFlowId !==0" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder"
-                  label="Use target hours from workflow" value="workFlow"
-                  [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="savedWorkOrderData.workFlowWorkOrderId == 0 || isView " (click)="calculateOverallTotalHours();getWorkFlowLaborList();"></p-radioButton> -->
-                  <p-radioButton (ngModelChange)="checkValid(9)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" label="Assign hours by specific tasks" value="specificTasks"
-                    [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder"  [disabled]="isView " (click)="laborForm.totalWorkHours = 0;refreshCall();"></p-radioButton>
-                    <br>
-                  <p-radioButton (ngModelChange)="checkValid(10)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" value="workOrder"
-                    label="Assign total hours to workorder" [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="isView " (click)="assignHoursToToalWorkOrder()"></p-radioButton>
-                    <!-- || !laborForm.isTaskCompletedByOne -->
-                </div>
-           </div>
+
         </div>
       </div>
     </div>   
   </div>
-  <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId))"
+  <!-- *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId))" -->
+  <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" 
     [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''">
     <div class="tableFixHead">
     <table class="table table-bordered  lastcol-fix mpn-list-table">
@@ -186,6 +187,7 @@
           <ng-container *ngIf="!isQuote">
             <th class="text-center" style="width:70px !important">Adjustments</th>
             <th class="text-center" style="width:70px !important">Adjusted Hours</th>
+            <th class="text-center" style="width:140px;min-width: 140px;">Data Entered By</th>
           </ng-container>
           <ng-container *ngIf="isQuote">
             <th>
@@ -221,7 +223,7 @@
         </tr>
       </thead>
       <tbody>
-       <ng-container *ngFor="let task of taskList; let taskIndex = index">
+       <ng-container *ngFor="let task of allTaskList; let taskIndex = index">
            <tr *ngIf="getLenghtOfTask(laborForm.workOrderLaborList[0][task.description | lowercase])">
             <td class="full-width">
               {{ task.description }}
@@ -248,6 +250,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td *ngIf="!isQuote"></td>
               <ng-container *ngIf="isQuote">
                 <td></td>
                 <td></td>
@@ -292,7 +295,7 @@
                   </p-autoComplete>
                 </td>
                 <td> 
-                  <p-dropdown placeholder="Select Billing Type" (ngModelChange)="checkValid(17)" [options]="billableList" class="p-dropdown-custom-md"
+                  <p-dropdown placeholder="Select Billing Type" (ngModelChange)="checkValid(17)" [options]="billableList" class="p-dropdown-1001"
                   [(ngModel)]="rec.billableId" [disabled]="isView "></p-dropdown>
                 </td>
                 <td *ngIf="
@@ -373,6 +376,15 @@
                   <td class="content-to-end" style="width:70px !important;text-align:right !important">
                       {{ rec.adjustedHours }}
                   </td>
+
+                  <td>
+                  <p-autoComplete class="p-autoComplete-ctsm employee-autocomplete" field="label" (ngModelChange)="checkValid(3)" disabled name="dataEnteredBy" [dropdown]="true"
+                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="dataEnteredByList"
+                  (completeMethod)="filterDataEnteredBy($event)" [size]="30" [minLength]="1" appendTo="body"
+                  [(ngModel)]="laborForm.dataEnteredBy" [disabled]="true ">
+                </p-autoComplete>
+              </td>
+
                 </ng-container>
                 <ng-container *ngIf="isQuote">
                   <td>
@@ -464,12 +476,11 @@
             </div>
             </ng-container>
   </ng-container>
-
-  <tr *ngIf="laborForm && laborForm.workOrderLaborList.length==0">
+  <!-- <tr *ngIf="laborForm.workOrderLaborList[0].length==0">
     <td colspan="12"  class="no-records-msg no-records-cstm">
         No records found
     </td> 
-</tr>
+</tr> -->
           <ng-container *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder'">
             <tr class="footer">
               <td><b>Total Labor Hours</b></td>
@@ -498,6 +509,7 @@
               {{(!isQuote)?calculateTotalAdjustment():''}}</b> -->
             </td>
             <td class="content-to-end" style="text-align:right !important"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
+            <td *ngIf="!isQuote"></td>
             <td></td>
             <ng-container *ngIf="isQuote">
               <td></td>

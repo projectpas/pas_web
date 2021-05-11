@@ -660,21 +660,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.geListByStatus(this.status ? this.status : this.currentstatus)
 		this.isSpinnerVisible = false;
 	}
-
-	// getVendorBasicData(vendorId) {
-	// 	this.isSpinnerVisible = true;
-	// 	this.vendorService.getVendorDataById(vendorId).subscribe(res => {
-	// 		this.vendorData = res;
-	// 		this.isSpinnerVisible = false;
-	// 	}, error => this.onDataLoadFailed(error));
-	// }
-
-	// private onBencustomerLoad(allWorkFlows: any) {
-	// 	this.dataSource.data = allWorkFlows;
-	// 	this.alldata = allWorkFlows;
-	// 	this.isSpinnerVisible = false;
-	// }
-
+	
 	private onDomestciLoad(allWorkFlows: any) {
 		this.dataSource.data = allWorkFlows;
 		this.domesticWithVedor = allWorkFlows;
@@ -1303,7 +1289,6 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					this.disablesaveforCountry = true;
 				}
 			}
-
 		}
 	}
 

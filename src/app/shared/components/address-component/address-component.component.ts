@@ -118,7 +118,7 @@ export class AddressComponentComponent implements OnInit {
 		this.showIsPoOnlyButton = this.addressType == AddressTypeEnum.PurchaseOrder;
 		this.sourcePoApproval.shipToUserTypeId = this.vendorModuleId;
 		this.sourcePoApproval.billToUserTypeId = this.vendorModuleId;
-		
+
 		if (this.id !== 0 && this.id !== undefined) {
 			if (this.addressType == AddressTypeEnum.PurchaseOrder) {
 				this.ModuleID = AppModuleEnum.PurchaseOrder;
@@ -144,9 +144,9 @@ export class AddressComponentComponent implements OnInit {
 					this.getShipToBillToDropDown(res)
 				});
 			}
-			else if(this.addressType == AddressTypeEnum.ExchangeQUote){
+			else if (this.addressType == AddressTypeEnum.ExchangeQUote) {
 				this.ModuleID = AppModuleEnum.ExchangeQuote;
-				this.commonService.getAllAddEditID(this.id,this.ModuleID).subscribe(res => {
+				this.commonService.getAllAddEditID(this.id, this.ModuleID).subscribe(res => {
 					this.getShipToBillToDropDown(res)
 				});
 			}
@@ -205,11 +205,11 @@ export class AddressComponentComponent implements OnInit {
 					this.isSpinnerVisible = false;
 				}, err => {
 					this.isSpinnerVisible = false;
-					
+
 				});
 			}, err => {
 				this.isSpinnerVisible = false;
-				
+
 			});
 
 		}
@@ -440,11 +440,11 @@ export class AddressComponentComponent implements OnInit {
 				}
 			});
 		}
-		, err => {
-			this.isSpinnerVisible = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
-		});
+			, err => {
+				this.isSpinnerVisible = false;
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
+			});
 	}
 
 	// errorMessageHandler(log) {
@@ -640,7 +640,7 @@ export class AddressComponentComponent implements OnInit {
 		}
 	}
 	getShipViaDetailsForShipTo(id?) {
-		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue,this.authService.currentUser.masterCompanyId).subscribe(response => {
+		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue, this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.shipViaList = response;
 			if (this.shipViaList && this.shipViaList.length != 0) {
 				for (var i = 0; i < this.shipViaList.length; i++) {
@@ -842,6 +842,13 @@ export class AddressComponentComponent implements OnInit {
 
 					if (this.shipViaList && this.shipViaList.length > 0) {
 						this.sourcePoApproval.shippingViaId = this.shipViaList[0].shippingViaId;
+						this.shipViaList.forEach(
+                            x => {
+                                if (x.isPrimary) {
+                                    this.sourcePoApproval.shippingViaId = x.shippingViaId;
+                                }
+                            }
+                        )
 						this.getShipViaDetails(this.sourcePoApproval.shippingViaId);
 					}
 
@@ -1185,8 +1192,14 @@ export class AddressComponentComponent implements OnInit {
 				this.isSpinnerVisible = false;
 			} else {
 				this.isEditModeAdd = false;
-				this.sourcePoApproval.shipToUserTypeId = this.vendorModuleId;
-				this.sourcePoApproval.billToUserTypeId = this.vendorModuleId;
+				if (this.ModuleID == AppModuleEnum.SalesOrder || this.ModuleID == AppModuleEnum.SalesQuate || this.ModuleID == AppModuleEnum.ExchangeQuote) {
+					this.sourcePoApproval.shipToUserTypeId = 1;
+					this.sourcePoApproval.billToUserTypeId = 1;
+				}
+				else {
+					this.sourcePoApproval.shipToUserTypeId = this.vendorModuleId;
+					this.sourcePoApproval.billToUserTypeId = this.vendorModuleId;
+				}
 				if (this.defaultMSCOMPANYID > 0) {
 					this.sourcePoApproval.shipToUserId = getObjectById('userID', this.defaultMSCOMPANYID, this.userShipingList),
 						this.sourcePoApproval.billToUserId = getObjectById('userID', this.defaultMSCOMPANYID, this.userBillingList);

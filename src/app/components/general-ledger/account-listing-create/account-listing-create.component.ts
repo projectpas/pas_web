@@ -122,8 +122,7 @@ export class AccountListingCreateComponent implements OnInit {
             }
 
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            const errorLog = err;           
         });
                
         this.breadcrumbs = [
@@ -333,7 +332,7 @@ export class AccountListingCreateComponent implements OnInit {
                     poroCategoryId: data.poroCategoryId ? data.poroCategoryId: 0,
                     glAccountNodeId: data.glAccountNodeId ? data.glAccountNodeId: 0,
                     glAccountLedgerId: data.glAccountLedgerId,
-                    category1099Id: data.category1099Id ? data.category1099Id:0,
+                    category1099Id: data.category1099Id ? data.category1099Id:null,
                     interCompany: data.interCompany ? data.interCompany: false,
                     allowManualJE: data.allowManualJE ? data.allowManualJE: false,
                     glClassFlowClassificationId: data.glClassFlowClassificationId ? data.glClassFlowClassificationId: 0,
@@ -363,16 +362,16 @@ export class AccountListingCreateComponent implements OnInit {
             : null;
     }
    
-    errorMessageHandler(log) {
-        var msg = '';
-        if (typeof log.error == 'string') {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
+    // errorMessageHandler(log) {
+    //     var msg = '';
+    //     if (typeof log.error == 'string') {
+    //         this.alertService.showMessage(
+    //             'Error',
+    //             log.error,
+    //             MessageSeverity.error
+    //         );
+    //     }
+    // }
 
      updateFormPayload(value, list) {
         if(value!=undefined && value!=0){

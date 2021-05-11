@@ -25,14 +25,24 @@
                                 <h5>General</h5>
                             </div>
                             <div class="card-body">
-                                <div class="form-group" *ngIf="isEditMode">
-                                    <div class="checkbox-cstm checkbox-cstm-d m-t-10">
+                                <div class="form-group">
+                                    <div class="checkbox-cstm m-t-10">
                                         <label>
-                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" disabled>
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" (ngModelChange)="enableSave()">
+                                            <span class="cr"><i class="cr-icon pi pi-check"(click)="ChekisCustomerStock(stockLineForm.isCustomerStock)"></i></span>
                                             Customer Stock - Rotable 
                                         </label>
                                     </div>
+                                </div>
+                                <div class="form-group" *ngIf="stockLineForm.isCustomerStock">
+                                    <label>Customer</label>
+                                    <p-autoComplete field="label" class="pautocomp-cstm"
+                                        [(ngModel)]="stockLineForm.customerId" name="vendorId" [suggestions]="customerNames"
+                                        (completeMethod)="filterCustomerNames($event)" [size]="30" [minLength]="1"
+                                        [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
+                                        (ngModelChange)="enableSave()"
+                                         required>
+                                    </p-autoComplete>
                                 </div>
                                 <div class="form-group">
                                     <label>PN <span class="clr-red">*</span>
@@ -95,7 +105,7 @@
                                 <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER"
-                                            (ngModelChange)="enableSave()" disabled>
+                                            (ngModelChange)="enableSave()"  disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         DER
                                     </label>
@@ -299,27 +309,39 @@
                                 <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
                                     [monthNavigator]="true" yearRange="1900:2100" name="entryDate"
                                     [maxDate]="minDateValue" [(ngModel)]="stockLineForm.entryDate"
-                                    (ngModelChange)="enableSave()"></p-calendar>
+                                    (ngModelChange)="enableSave()" disabled></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>PO Num</label>
-                                <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                    [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId"
+                                    [suggestions]="allPODetails" (completeMethod)="filterPOList($event)"
+                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    (ngModelChange)="enableSave()" [forceSelection]="true">
+                                </p-autoComplete>
+                                <!-- <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId"
                                     [suggestions]="polistInfo" (completeMethod)="filterPoNumber($event)" [size]="30"
                                     [minLength]="1" [dropdown]="true" errorMessage="Records not found"
                                     (onSelect)="onChangePONum(stockLineForm.purchaseOrderId)" [forceSelection]="true"
                                     (ngModelChange)="enableSave()" [disabled]="stockLineForm.repairOrderId">
-                                </p-autoComplete>
+                                </p-autoComplete> -->
                             </div>
                             <div class="form-group">
                                 <label>RO Num</label>
-                                <p-autoComplete field="repairOrderNumber" class="pautocomp-cstm"
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId"
+                                [suggestions]="allRODetails" (completeMethod)="filterROList($event)"
+                                [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                (ngModelChange)="enableSave()" [forceSelection]="true" [disabled]="stockLineForm.purchaseOrderId">
+                            </p-autoComplete>
+                                <!-- <p-autoComplete field="repairOrderNumber" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId"
                                     [suggestions]="rolistInfo" (completeMethod)="filterRoNumber($event)" [size]="30"
                                     [minLength]="1" [dropdown]="true" errorMessage="Records not found"
                                     (onSelect)="onChangeRONum(stockLineForm.repairOrderId)" [forceSelection]="true"
                                     (ngModelChange)="enableSave()" [disabled]="stockLineForm.purchaseOrderId">
-                                </p-autoComplete>
+                                </p-autoComplete> -->
                             </div>
                             <div class="form-group">
                                 <label>Vendor</label>
@@ -941,7 +963,7 @@
                                     <span>
                                         <div [innerHTML]="stockLineForm.memo "
                                             [matTooltip]="parsedText(stockLineForm.memo)" class="form-control"
-                                            class="text_editor_box  memo-width"></div>
+                                            class="text_editor_box  memo-width" [ngStyle]="{'border':'1px solid red'}"></div>
                                     </span>
                                 </div>
                                 <div class="col-sm-1 black-reason">
@@ -1357,8 +1379,8 @@
                 </div> -->
             </div>
             <div class="form-row pull-right">
-                <button type="submit" class="btn btn-primary" (click)="onSaveStockLine()"
-                    [disabled]="!stockLineSetupForm.valid || disableMagmtStruct || disableManufacturer || disableCondition || disableSiteName || disableSaveForEdit">{{isEditMode
+                <button type="button" class="btn btn-primary" (keydown.enter)="$event.preventDefault()" (click)="onSaveStockLine()"
+                    [disabled]="!stockLineSetupForm.valid || disableMagmtStruct || disableCustomer|| disableManufacturer || disableCondition || disableSiteName || disableSaveForEdit">{{isEditMode
                     ? 'Update' : 'Save'}} </button>
             </div>
         </form>

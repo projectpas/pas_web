@@ -449,29 +449,18 @@ export class EntityContactComponent implements OnInit {
     this.sourceViewforContact = rowData;
   }
 
-  viewSelectedRowdbl(content, rowData) {
-    if (rowData && rowData.contactId) {
-      this.legalEntityService
-        .getLegalEntityContactById(rowData.contactId)
-        .subscribe(
-          (res) => {
-            this.sourceViewforContact = {
-              ...res[0],
-            };
-            this.modal = this.modalService.open(content, {
-              size: "sm",
-              backdrop: "static",
-              keyboard: false,
-            });
-          },
-          (err) => {
-            //const errorLog = err;
-            //this.errorMessageHandler(errorLog);
-            this.isSpinnerVisible = false;
-          }
-        );
-    }
-  }
+	viewSelectedRowdbl(content, rowData) {
+		if (rowData && rowData.contactId) {
+			this.legalEntityService.getLegalEntityContactById(rowData.contactId).subscribe(res => {
+				this.sourceViewforContact = {
+					...res[0]
+				}
+				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+			}, err => {				
+				this.isSpinnerVisible = false;
+			})
+		}
+	}
 
   onAddContactInfo() {
     this.isEditButton = false;
@@ -900,61 +889,48 @@ export class EntityContactComponent implements OnInit {
     }
   }
 
-  statusForContact: any = "Active";
-  getList(data) {
-    const isdelete = this.currentDeletedstatusCOntact ? true : false;
-    data.filters.isDeleted = isdelete;
-    const PagingData = {
-      ...data,
-      filters: listSearchFilterObjectCreation(data.filters),
-      legalEntityId: this.id,
-    };
-    if (this.id != undefined) {
-      // PagingData.first=PagingData.first ==NaN ? 0 :PagingData.first;
-      if (this.isViewMode == true) {
-        PagingData.first = 0;
-        PagingData.rows = 10;
-        this.pageSize = 10;
-      }
-      this.isSpinnerVisible = true;
-      this.legalEntityService.getContacts(PagingData).subscribe(
-        (res) => {
-          this.alertService.stopLoadingMessage();
-          const data = res;
-          // setTimeout(() => {
-          this.isSpinnerVisible = false;
-          // }, 1200);
-          this.entityContacts = data[0]["results"];
-          this.entityContactsOriginal = data[0]["results"];
-          if (this.entityContacts.length > 0) {
-            this.totalRecordsContacts = data[0]["totalRecordsCount"];
-            this.totalPages = Math.ceil(
-              this.totalRecordsContacts / this.pageSize
-            );
-          } else {
-            this.totalRecordsContacts = 0;
-            this.totalPages = 0;
-          }
-        },
-        (err) => {
-          this.isSpinnerVisible = false;
-        }
-      );
-    }
-  }
-
-  // omit_special_char(event){
-  //     var k;
-  //     k = event.charCode;
-  //     return((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57) || k == 45 || k == 95 );
-  //  }
-  numberonly(event) {
-    var k;
-    k = event.charCode; //         k = event.keyCode;  (Both can be used)
-    return k >= 48 && k <= 57;
-    //    (k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||
-  }
-  restorerecord: any = {};
+	statusForContact: any = 'Active'
+	getList(data) {
+		const isdelete = this.currentDeletedstatusCOntact ? true : false;
+		data.filters.isDeleted = isdelete
+		const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters), legalEntityId: this.id }
+		if (this.id != undefined) {
+			// PagingData.first=PagingData.first ==NaN ? 0 :PagingData.first;
+			if (this.isViewMode == true) {
+				PagingData.first = 0;
+				PagingData.rows = 10;
+				this.pageSize = 10;
+			}
+			this.isSpinnerVisible = true;
+			this.legalEntityService.getContacts(PagingData).subscribe(res => {
+				this.alertService.stopLoadingMessage();
+				const data = res;
+				// setTimeout(() => {
+				this.isSpinnerVisible = false;
+				// }, 1200);
+				this.entityContacts = data[0]['results'];
+				this.entityContactsOriginal=data[0]['results'];
+				if (this.entityContacts.length > 0) {
+					this.totalRecordsContacts = data[0]['totalRecordsCount'];
+					this.totalPages = Math.ceil(this.totalRecordsContacts / this.pageSize);
+				}
+				else {
+					this.totalRecordsContacts = 0;
+					this.totalPages = 0;
+				}
+			}, err => {
+				this.isSpinnerVisible = false;
+			})
+		}
+	}
+	
+	numberonly(event) {
+		var k;
+		k = event.charCode;  //         k = event.keyCode;  (Both can be used)
+		return ((k >= 48 && k <= 57));
+		//    (k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||
+	}
+	restorerecord: any = {}
 
   restoreRecord() {
     this.legalEntityService
@@ -1012,82 +988,44 @@ export class EntityContactComponent implements OnInit {
     }
   }
 
-  customContactExcelUpload(event) {
-    const file = event.target.files;
-    if (file.length > 0) {
-      this.formData.append("file", file[0]);
-      this.formData.append(
-        "masterCompanyId",
-        this.currentUserMasterCompanyId.toString()
-      );
-      this.formData.append("createdBy", this.userName);
-      this.formData.append("updatedBy", this.userName);
-      this.formData.append("isActive", "true");
-      this.formData.append("isDeleted", "false");
-      const data = {
-        masterCompanyId: this.currentUserMasterCompanyId,
-        createdBy: this.userName,
-        updatedBy: this.userName,
-        isActive: true,
-        isDeleted: false,
-      };
-      this.legalEntityService
-        .legalEntityContactFileUpload(this.formData, this.id)
-        .subscribe(
-          (res) => {
-            event.target.value = "";
-            this.formData = new FormData();
-            this.billingStatusForContact(this.statusForContact);
-            this.alertService.showMessage(
-              "Success",
-              `Successfully Uploaded  `,
-              MessageSeverity.success
-            );
-          },
-          (err) => {
-            this.isSpinnerVisible = false;
-          }
-        );
-    }
-  }
-
-  // checkfirstNameExist(value) {
-  // 	//this.disablesaveForFirstname = false;
-  // 	for (let i = 0; i < this.contactsListOriginal.length; i++) {
-  // 		if (this.contactInformation.firstName == this.contactsListOriginal[i].firstName || value == this.contactsListOriginal[i].firstName) {
-  // 			//this.disablesaveForFirstname = true;
-  // 			return;
-  // 		}
-  // 	}
-  // }
-  // checkmiddleNameExist(value) {
-  // 	//this.disableSaveMiddleName = false;
-  // 	for (let i = 0; i < this.contactsListOriginal.length; i++) {
-  // 		if (this.contactInformation.middleName == this.contactsListOriginal[i].middleName || value == this.contactsListOriginal[i].middleName) {
-  // 			//this.disableSaveMiddleName = true;
-  // 			return;
-  // 		}
-  // 	}
-  // 	if (value == "") {
-  // 		//this.disableSaveMiddleName = false;
-  // 	}
-  // }
-  // checklastNameExist(value) {
-  // 	//this.disableSaveLastName = false;
-  // 	for (let i = 0; i < this.contactsListOriginal.length; i++) {
-  // 		if (this.contactInformation.lastName == this.contactsListOriginal[i].lastName || value == this.contactsListOriginal[i].lastName) {
-  // 			//	this.disableSaveLastName = true;
-  // 			return;
-  // 		}
-  // 	}
-  // }
-  patternValidate(event: any) {
-    const pattern = /[0-9\+\-()\ ]/;
-    let inputChar = String.fromCharCode(event.charCode);
-    if (event.keyCode != 8 && !pattern.test(inputChar)) {
-      event.preventDefault();
-    }
-  }
+	customContactExcelUpload(event) {
+		const file = event.target.files;
+		if (file.length > 0) {
+			this.formData.append('file', file[0])
+			this.formData.append('masterCompanyId', this.currentUserMasterCompanyId.toString())
+			this.formData.append('createdBy', this.userName);
+			this.formData.append('updatedBy', this.userName);
+			this.formData.append('isActive', 'true');
+			this.formData.append('isDeleted', 'false');
+			const data = {
+				'masterCompanyId': this.currentUserMasterCompanyId,
+				'createdBy': this.userName,
+				'updatedBy': this.userName,
+				'isActive': true,
+				'isDeleted': false
+			}
+			this.legalEntityService.legalEntityContactFileUpload(this.formData, this.id).subscribe(res => {
+				event.target.value = '';
+				this.formData = new FormData();
+				this.billingStatusForContact(this.statusForContact);
+				this.alertService.showMessage(
+					'Success',
+					`Successfully Uploaded  `,
+					MessageSeverity.success
+				);
+			}, err => {
+				this.isSpinnerVisible = false;
+			})
+		}
+	}
+	
+	patternValidate(event: any) {
+		const pattern = /[0-9\+\-()\ ]/;
+		let inputChar = String.fromCharCode(event.charCode);
+		if (event.keyCode != 8 && !pattern.test(inputChar)) {
+			event.preventDefault();
+		}
+	}
 
   arrayTagNamelist: any = [];
   tagNamesList: any = [];

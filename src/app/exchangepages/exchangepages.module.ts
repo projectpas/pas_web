@@ -52,6 +52,8 @@ import { ExchangeQuoteChargesComponent } from "../components/exchange-quote/shar
 import { ActionService } from '../Workflow/ActionService';
 import { ActionEndpoint } from '../Workflow/action-endpoint.service';
 import { ExchangeQuoteFreightComponent } from "../components/exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
+import { ExchangeQuoteAgreementTemplateComponent } from "../components/exchange-quote/shared/components/exchange-quote-agreement-template/exchange-quote-agreement-template.component";
+import { ExchangeQuoteViewComponent } from "../components/exchange-quote/shared/components/exchange-quote-view/exchange-quote-view.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -106,7 +108,9 @@ import { ExchangeQuoteFreightComponent } from "../components/exchange-quote/shar
     ExchangeQuoteCustomerApprovalComponent,
     ExchangeQuoteAnalysisComponent,
     ExchangeQuoteChargesComponent,
-    ExchangeQuoteFreightComponent
+    ExchangeQuoteFreightComponent,
+    ExchangeQuoteAgreementTemplateComponent,
+    ExchangeQuoteViewComponent
   ],
   providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService,ActionService,ActionEndpoint],
   entryComponents: []

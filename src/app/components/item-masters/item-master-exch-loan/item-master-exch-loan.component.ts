@@ -113,8 +113,8 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
             }
             else
             {
-                this.alertService.stopLoadingMessage();
-                    this.isSpinnerVisible = false;
+                //this.alertService.stopLoadingMessage();
+                this.isSpinnerVisible = false;
             }
         }        
     }
@@ -175,6 +175,8 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
         this.currentItem.isExchange = this.showExchange;
         this.currentItem.isLoan = this.showLoan;
         this.currentItem.itemMasterId = this.itemMasterId;
+        this.currentItem.masterCompanyId = this.authService.currentUser.masterCompanyId;
+
         if (this.currentItem.itemMasterLoanExchId) {
             this.itemMasterService.updateExchangeLoan(this.currentItem).subscribe(() => {
                 this.alertService.showMessage(
@@ -257,8 +259,8 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
 
     private saveFailedHelper(error: any) {
         this.isSpinnerVisible = false;
-        this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-        setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
+        // this.alertService.stopLoadingMessage();
+        // this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+        // setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
     }
 }

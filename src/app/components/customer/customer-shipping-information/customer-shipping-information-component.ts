@@ -79,6 +79,8 @@ export class CustomerShippingInformationComponent implements OnInit {
         { field: 'startDate', header: 'Start Date' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'updatedDate', header: 'Updated Date' },
+        { field: 'createdBy', header: 'Created By' },
+        { field: 'updatedBy', header: 'Updated By' },
         { field: 'expirationDate', header: 'Expiration Date' },
         { field: 'amount', header: 'Amount',width:"70px" },
         { field: 'shipToCountry', header: 'Country' },
@@ -1091,12 +1093,12 @@ export class CustomerShippingInformationComponent implements OnInit {
     openEditIntenational(rowData) {
         this.isprimaryInternationaldata=rowData.isPrimary
         this.isEditInternational = true;
-
+        
         this.internationalShippingInfo = {
             ...rowData,
             amount: rowData.amount ? formatNumberAsGlobalSettingsModule(rowData.amount, 2) : '',
-            startDate: new Date(rowData.startDate),
-            expirationDate: new Date(rowData.expirationDate),
+            startDate: rowData.startDate ? new Date(rowData.startDate) : null,
+            expirationDate: rowData.expirationDate ? new Date(rowData.expirationDate) : null,
             createdDate: new Date(rowData.createdDate),
             updatedDate: new Date(rowData.updatedDate),
         };

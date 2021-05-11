@@ -159,48 +159,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.isSpinnerVisible = false;
             this.employeeService.currentUrl = '/employeesmodule/employeepages/app-employee-certification';
         }
-        // if (this.employeeService.generalCollection) {
-        //     this.local = this.employeeService.generalCollection;
-        // }
-        /*
-        if (this.employeeService.listCollection && this.employeeService.isEditMode == true) {
-            this.isEnableNext=true;
-            this.sourceEmployee = this.employeeService.listCollection;
-            if (this.sourceEmployee.employeeId) {
-                this.nextbuttonEnable = true;
-            }       
-            this.empId = this.sourceEmployee.employeeId;
-            this.firstName=this.employeeService.listCollection.firstName;
-            this.lastName=this.employeeService.listCollection.lastName;
-            // this.firstName = editValueAssignByCondition('firstName', this.sourceEmployee.firstName);
-            // this.lastName = editValueAssignByCondition('lastName', this.sourceEmployee.lastName);
-            this.local = this.employeeService.listCollection;
-            // this.sourceEmployee.certificationDate = new Date();
-            this.getwithemployeeLicensureId();
-        }
-        else if(this.employeeService.listCollection){  //for add load data when switch between tabs
-            this.getwithemployeeLicensureId();
-        }*/
-
-        // this.employeeService.currentUrl = '/employeesmodule/employeepages/app-employee-certification';
-        // this.route.queryParams
-        //     .filter(params => params.order)
-        //     .subscribe(params => {               
-        //         this.empId = params.order;
-        //         if (this.empId) {
-        //             this.nextbuttonEnable = true;
-        //         }
-        //         else {
-        //         }
-        //         //this.nextEnable();
-        //         this.firstName = params.firstname;
-        //         this.lastName = params.lastname;
-        //     });      
-       
-        // if (this.local) {
-        //     this.loadData();
-        //     // this.loadDataforCertification();
-        // }
+        
     }
     sourceEmployee: any = {};
     ngAfterViewInit() {
@@ -276,10 +235,12 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceEmployee.employeeId = this.empId;
             if (this.sourceEmployee.certificationDate != null) {
-                this.sourceEmployee.certificationDate = new Date(this.sourceEmployee.certificationDate);
+                let d=new Date(this.sourceEmployee.certificationDate);
+                this.sourceEmployee.certificationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; 
             }            
             if (this.sourceEmployee.expirationDate != null) {
-                this.sourceEmployee.expirationDate = new Date(this.sourceEmployee.expirationDate);
+                let d=new Date(this.sourceEmployee.expirationDate);
+                this.sourceEmployee.expirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
             }
             // this.sourceEmployee.certificationDate = this.datePipe.transform(this.sourceEmployee.certificationDate, "MM/dd/yyyy");
             // this.sourceEmployee.expirationDate = this.datePipe.transform(this.sourceEmployee.expirationDate, "MM/dd/yyyy");
@@ -301,14 +262,16 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         else {
             this.sourceEmployee.updatedBy = this.userName;
             this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
+            
             this.sourceEmployee['expirationDateTemp'] = this.sourceEmployee.expirationDate;
-            // this.sourceEmployee.expirationDate = this.datePipe.transform(this.sourceEmployee.expirationDate, "MM/dd/yyyy");
-            // this.sourceEmployee.certificationDate = this.datePipe.transform(this.sourceEmployee.certificationDate, "MM/dd/yyyy");
+            
             if (this.sourceEmployee.certificationDate != null) {
-                this.sourceEmployee.certificationDate = new Date(this.sourceEmployee.certificationDate);
+                let d=new Date(this.sourceEmployee.certificationDate);
+                this.sourceEmployee.certificationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; 
             }            
             if (this.sourceEmployee.expirationDate != null) {
-                this.sourceEmployee.expirationDate = new Date(this.sourceEmployee.expirationDate);
+                let d=new Date(this.sourceEmployee.expirationDate);
+                this.sourceEmployee.expirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
             }
             this.employeeService.updateCertificationDetails(this.sourceEmployee).subscribe(data => {
                 this.getwithemployeeLicensureId();  
@@ -745,8 +708,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
                 }else{
                     this.gotnextClick()
                 }
-        }
-    
+        }    
     }
 
     redirectToTabWithoutSave(){

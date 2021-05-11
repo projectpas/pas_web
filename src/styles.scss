@@ -14029,7 +14029,7 @@ select {
   color: #333 !important;
   padding: 1px 2px !important;
 }
-
+ 
 .workflow-page .multiselect-dropdown .dropdown-btn {
   padding: 2px !important;
   border-radius: 0px !important;
@@ -15784,7 +15784,10 @@ body .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link.ui-state-active,
 .p-dropdown-100px .ui-dropdown {
   width: 100px !important;
 }
-
+.p-dropdown-1001 .ui-dropdown {
+  min-width: 80% !important;
+  width: 108px !important;
+}
 .p-dropdown-150px .ui-dropdown {
   width: 180px !important;
 }
@@ -17040,13 +17043,16 @@ input[type="date"]::-webkit-clear-button {
 }
 .multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret:before {
 
-  right: 0 !important;
-  top: 35% !important;
+  // right: 0 !important;
+  // top: 35% !important;
+  right: -5px !important;
+  top: 43% !important;
 }
 .multiselect-dropdown .dropdown-btn {
  border: none !important;
   border-radius: 4px !important;
-  color:#fff !important;
+  // color:#fff !important;
+  color: #4e4c4c !important;
 }
 ng-multiselect-dropdown{
   border-radius: 4px !important;
