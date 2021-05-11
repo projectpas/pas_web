@@ -104,6 +104,10 @@ import { CommonCommunicationModule } from '../components/common-components/commo
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { WorkOrderPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-pickticketprint/work-order-pickticketprint.component';
 import { WoPartNumberFilterComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-number-filter/wo-part-number-filter.component';
+import { WoPartDetailsComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-details/wo-part-details.component';
+// import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
+
+
 
 @NgModule({
   imports: [
@@ -204,6 +208,8 @@ import { WoPartNumberFilterComponent } from '../components/work-order/work-order
     WorkOrderMaterialsAddComponent,
     WoCustomerDetailComponent,
     WoPartNumberFilterComponent, 
+    WoPartDetailsComponent,
+    // TwoDecimalGlobalNumberFormatPipe
   ],
   entryComponents: [WorkOrderPickticketprintComponent],
   providers: [

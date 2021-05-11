@@ -20,11 +20,17 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
   // // @Input() selectedSummaryRow: SummaryPart;
   // // @Input() isStockLineViewMode = false;    
   // @Input() customer: any;
-  // // @Input() salesQuote: ISalesQuote;
+  @Input() salesQuote: ISalesQuote;
    @Input() clearData = false;
    @Input() display: boolean;
+   @Input() editData: any={};
+   @Input() isEdit: boolean;
    @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
    @Output() select: EventEmitter<any> = new EventEmitter<any>();
+   @Output() setmaterialListForSave: EventEmitter<any> = new EventEmitter<any>();
+   @Output() setmaterialListForUpdate: EventEmitter<any> = new EventEmitter<any>();
+   
+   
    @Input() selectedParts: any = [];
    @Input() type: string;
    @Input() isWorkOrder = false;
@@ -124,7 +130,13 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
   onShowModalMargin(part: any) {
       this.select.emit(part);
   }
-
+  saveMaterial(part:any){
+    this.setmaterialListForSave.emit(part);
+  }
+  updateMaterial(part:any){
+    this.setmaterialListForUpdate.emit(part);
+  }
+  
   onSelect(part: any) {
       this.select.emit(part);
   }
@@ -154,5 +166,8 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
           }
           this.allConditionInfoArray = this.allConditionInfo.map((item) => ({ label: item.description, value: item.conditionId }));
         });
+    }
+    savePart(){
+
     }
 }

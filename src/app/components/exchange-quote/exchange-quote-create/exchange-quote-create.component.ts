@@ -39,6 +39,8 @@ import{ExchangeQUoteMarginSummary} from '../../../models/exchange/ExchangeQUoteM
 import{ExchangeQuoteAnalysisComponent} from '../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
 import {ExchangeQuoteChargesComponent} from "../../exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
 import {ExchangeQuoteFreightComponent} from "../../exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
+import { VerifyExchangeQuoteModel } from "../models/verify-exchange-quote-model";
+import { ExchangeSalesOrderConversionCritera } from "../models/exchange-sales-order-conversion-criteria";
 @Component({
   selector: 'app-exchange-quote-create',
   templateUrl: './exchange-quote-create.component.html',
@@ -104,6 +106,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   percents: any[];
   disableprintagreement:boolean=true;
   @ViewChild("exchangeQuotePrintPopup", { static: false }) public exchangeQuotePrintPopup: ElementRef;
+  verifyExchangeSalesOrderQuoteObj: VerifyExchangeQuoteModel;
+  exchangeSalesOrderConversionCriteriaObj: ExchangeSalesOrderConversionCritera;
+  selectAllForConversion = true;
+  @ViewChild("exchangeQuoteConvertPopup", { static: false }) public exchangeQuoteConvertPopup: ElementRef;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -114,6 +120,8 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     public router: Router,
     private modalService: NgbModal) {
       this.exchangeQuote = new ExchangeQuote();
+      this.verifyExchangeSalesOrderQuoteObj = new VerifyExchangeQuoteModel();
+      this.exchangeSalesOrderConversionCriteriaObj = new ExchangeSalesOrderConversionCritera();
      }
 
   ngOnInit() {
@@ -365,7 +373,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuote.restrictPMA = this.customerDetails.restrictPMA;
       this.exchangeQuote.restrictDER = this.customerDetails.restrictDER;
       this.setValidDaysBasedOnSettings(false);
-      //this.onChangeValidForDays();
+      this.onChangeValidForDays();
     }
     else {
       this.setValidDaysBasedOnSettings(true);
@@ -380,7 +388,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       let validDaysObject = this.validDaysSettingsList[0];
       if (validDaysObject) {
         if (!isEdit) {
-          //this.exchangeQuote.validForDays = validDaysObject.validDays;
+          this.exchangeQuote.validForDays = validDaysObject.validDays;
           //this.exchangeQuote.type = validDaysObject.typeId.toString();
           this.exchangeQuote.statusId = validDaysObject.defaultStatusId;
           this.exchangeQuote.statusName = validDaysObject.defaultStatusName;
@@ -390,10 +398,12 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         //this.defaultSettingPriority = validDaysObject.defaultPriorityId;
       } 
       else {
+        this.exchangeQuote.validForDays = 10;
         this.exchangeQuote.type = "1";
       }
     } 
     else {
+      this.exchangeQuote.validForDays = 10;
       this.exchangeQuote.type = "1";
     }
   }
@@ -507,6 +517,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       //this.exchangOrdereQuote.customerReference = "SO";
       this.exchangOrdereQuote.balanceDue = this.exchangeQuote.balanceDue;
       this.exchangOrdereQuote.approvedById = this.exchangeQuote.approvedById;
+      this.exchangOrdereQuote.validForDays = this.exchangeQuote.validForDays;
       // if (this.exchangOrdereQuote.approvedDate) {
       //   this.exchangOrdereQuote.approvedDate = this.exchangeQuote.approvedDate.toDateString();
       // }
@@ -670,6 +681,8 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       if (data) {
         this.exchangeQuoteView = data && data.length ? data[0] : null;
         this.exchangeQuoteObj = this.exchangeQuoteView.exchangeOrderQuote;
+        this.verifySalesQuoteConversion(this.exchangeQuoteView.verificationResult);
+        this.toggle_po_header = false;
         //this.bindData(this.exchangeQuoteView, initialCall);
       }
       let partList: any[] = this.exchangeQuoteView.parts;
@@ -704,7 +717,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuote.customerRequestDate = new Date(this.exchangeQuoteObj.customerRequestDate);
       this.exchangeQuote.estimateShipDate = new Date(this.exchangeQuoteObj.estimateShipDate);
       this.exchangeQuote.promiseDate = new Date(this.exchangeQuoteObj.promiseDate);
-      //this.salesQuote.validForDays = this.salesOrderQuoteObj.validForDays;
+      this.exchangeQuote.validForDays = this.exchangeQuoteObj.validForDays;
       this.exchangeQuote.quoteExpireDate = new Date(
         this.exchangeQuoteObj.quoteExpireDate
       );
@@ -736,6 +749,13 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     }, error => {
       this.isSpinnerVisible = false;
     });
+  }
+
+  verifySalesQuoteConversion(results) {
+    const resultsTemp = results;
+    this.verifyExchangeSalesOrderQuoteObj = resultsTemp;
+    this.exchangeSalesOrderConversionCriteriaObj = this.verifyExchangeSalesOrderQuoteObj.exchangeSalesOrderConversionCritera;
+    this.exchangeSalesOrderConversionCriteriaObj.customerReference = "";
   }
 
   onPartsSaveEvent(savedParts) {
@@ -946,5 +966,64 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       </html>`
     );
     popupWin.document.close();
+  }
+
+  initiateExchangeSalesOrderCoversion() {
+    this.selectAllForConversion = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferCharges = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferFreight = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferMemos = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferNotes = true;
+    this.exchangeSalesOrderConversionCriteriaObj.transferStockline = true;
+    this.exchangeSalesOrderConversionCriteriaObj.reserveStockline = true;
+    this.exchangeSalesOrderConversionCriteriaObj.customerReference = "";
+    let content = this.exchangeQuoteConvertPopup;
+    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+
+  onActionSelectAllforconvversion() {
+    if (this.selectAllForConversion) {
+      this.exchangeSalesOrderConversionCriteriaObj.transferCharges = true;
+      this.exchangeSalesOrderConversionCriteriaObj.transferFreight = true;
+      this.exchangeSalesOrderConversionCriteriaObj.transferMemos = true;
+      this.exchangeSalesOrderConversionCriteriaObj.transferNotes = true;
+      this.exchangeSalesOrderConversionCriteriaObj.transferStockline = true;
+      this.exchangeSalesOrderConversionCriteriaObj.reserveStockline = true;
+    } else {
+      this.exchangeSalesOrderConversionCriteriaObj.transferCharges = false;
+      this.exchangeSalesOrderConversionCriteriaObj.transferFreight = false;
+      this.exchangeSalesOrderConversionCriteriaObj.transferMemos = false;
+      this.exchangeSalesOrderConversionCriteriaObj.transferNotes = false;
+      this.exchangeSalesOrderConversionCriteriaObj.transferStockline = false;
+      this.exchangeSalesOrderConversionCriteriaObj.reserveStockline = false;
+    }
+  }
+
+  onChangeValidForDays() {
+    let od = new Date(this.exchangeQuote.openDate);
+    let validForDays = +this.exchangeQuote.validForDays;
+    //let validForDays = 10;
+    let ed = new Date(this.exchangeQuote.openDate);
+    ed.setDate(od.getDate() + validForDays);
+    this.exchangeQuote.quoteExpireDate = ed;
+    this.enableUpdateButton = false;
+  }
+  onChangeQuoteExpiryDate() {
+    let od = new Date(this.exchangeQuote.openDate);
+    let ed = new Date(this.exchangeQuote.quoteExpireDate);
+    let Difference_In_Time = ed.getTime() - od.getTime();
+    let Difference_In_Days = Math.floor(
+      Difference_In_Time / (1000 * 3600 * 24)
+    );
+    this.exchangeQuote.validForDays = Difference_In_Days;
+    this.enableUpdateButton = false;
+  }
+  onChangeOpenDate() {
+    let od = new Date(this.exchangeQuote.openDate);
+    let validForDays = +this.exchangeQuote.validForDays;
+    let ed = new Date(this.exchangeQuote.openDate);
+    ed.setDate(od.getDate() + validForDays);
+    this.exchangeQuote.quoteExpireDate = ed;
+    this.enableUpdateButton = false;
   }
 }
