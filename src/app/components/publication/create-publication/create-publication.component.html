@@ -228,15 +228,8 @@
                             </div>
 
                         </div>
+                       
                     </div>
-                    <div class="form-row col-row" *ngIf="publicationRecordId">
-                        <div class="col-md-12">
-                            <app-common-documents [moduleName]="moduleName" [referenceId]="publicationRecordId"
-                                [isViewMode]="false" [offLineUpload]="true">
-                            </app-common-documents>
-                        </div>
-                    </div>
-
                     <div class="pull-right">
                         <button type="submit" *ngIf="!isEditMode" (click)="saveGeneralInfo()"
                             [disabled]="!generalInfoForm.valid" class="btn btn-primary button-save-cstm-cstm">
@@ -247,16 +240,15 @@
                             class="btn btn-primary button-save-cstm-cstm">
                             Update
                         </button>
-                        <!-- <button class="btn btn-primary button-save-cstm-cstm"
-                            [disabled]="!generalInfoForm.valid && disableGeneralInfoSave" type="submit"
-                            (click)="saveGeneralInfo(); ">
-                            {{isEditMode ? 'Update' : 'Save' }}
-                        </button> -->
+                       
                         <button class="btn btn-primary button-save-cstm-cstm" [disabled]="!isEnableNext" type="submit"
                             (click)="nextClick('Next')">
                             Next
                         </button>
                     </div>
+                    
+
+                  
                     <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
@@ -278,6 +270,13 @@
                     </ng-template>
 
                 </form>
+                <div class="form-row col-row" *ngIf="publicationRecordId">
+                    <div class="col-md-12">
+                        <app-common-documents [moduleName]="moduleName" [referenceId]="publicationRecordId"
+                            [isViewMode]="false" [offLineUpload]="true">
+                        </app-common-documents>
+                    </div>
+                </div>
             </div>
         </div>
         <div [ngClass]="{hideTab : currentTab !== 'PnMap'}">
@@ -1121,7 +1120,7 @@
             </p>
 
             <p>
-                <span class="label"><b>Ata SubChapter: </b></span><span class="value">{{
+                <span class="label"><b>ATA SubChapter: </b></span><span class="value">{{
                     viewAtaData.ataSubChapterDescription }}</span>
             </p>
 

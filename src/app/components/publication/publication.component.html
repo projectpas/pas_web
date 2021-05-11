@@ -146,7 +146,7 @@
                       " [ngModel]="inputValue" />
 
             <input type="text" *ngIf="col.field == 'verifiedBy'" name="verifiedBy" 
-            class="table-header-input-width" (change)="
+            class="table-header-input-width" (keyup)="
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" />
 
@@ -1415,7 +1415,7 @@
       </p>
 
       <p>
-        <span class="label"><b>Ata SubChapter: </b></span><span class="value">{{
+        <span class="label"><b>ATA SubChapter: </b></span><span class="value">{{
           viewAtaData.ataSubChapterDescription }}</span>
       </p>
 
