@@ -449,22 +449,23 @@ export class AssetListingComponent implements OnInit {
     
           if(res && res.length !=0){
               this.showhistorylist=true;
-              this.auditHistory = res.map(x => {
-                  return {
-                      ...x,
-                   unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
-                //   residualPercentage: x.residualPercentage ? formatNumberAsGlobalSettingsModule(x.residualPercentage, 2) : '',
-                //   installationCost: x.installationCost ? formatNumberAsGlobalSettingsModule(x.installationCost, 2) : '',
-                //   freight: x.freight ? formatNumberAsGlobalSettingsModule(x.freight, 2) : '',
-                //   insurance: x.insurance ? formatNumberAsGlobalSettingsModule(x.insurance, 2) : '',
-                //   taxes: x.taxes ? formatNumberAsGlobalSettingsModule(x.taxes, 2) : '',
-                //   totalCost: x.totalCost ? formatNumberAsGlobalSettingsModule(x.totalCost, 2) : '',
-                //   calibrationDefaultCost: x.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(x.calibrationDefaultCost, 2) : '',
-                //   certificationDefaultCost: x.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.certificationDefaultCost, 2) : '',
-                //   inspectionDefaultCost: x.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(x.inspectionDefaultCost, 2) : '',
-                //   verificationDefaultCost: x.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.verificationDefaultCost, 2) : '',
-                  }
-              });
+              this.auditHistory = res;
+            //   this.auditHistory = res.map(x => {
+            //       return {
+            //           ...x,
+            //        //unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
+            //     //   residualPercentage: x.residualPercentage ? formatNumberAsGlobalSettingsModule(x.residualPercentage, 2) : '',
+            //     //   installationCost: x.installationCost ? formatNumberAsGlobalSettingsModule(x.installationCost, 2) : '',
+            //     //   freight: x.freight ? formatNumberAsGlobalSettingsModule(x.freight, 2) : '',
+            //     //   insurance: x.insurance ? formatNumberAsGlobalSettingsModule(x.insurance, 2) : '',
+            //     //   taxes: x.taxes ? formatNumberAsGlobalSettingsModule(x.taxes, 2) : '',
+            //     //   totalCost: x.totalCost ? formatNumberAsGlobalSettingsModule(x.totalCost, 2) : '',
+            //     //   calibrationDefaultCost: x.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(x.calibrationDefaultCost, 2) : '',
+            //     //   certificationDefaultCost: x.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.certificationDefaultCost, 2) : '',
+            //     //   inspectionDefaultCost: x.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(x.inspectionDefaultCost, 2) : '',
+            //     //   verificationDefaultCost: x.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.verificationDefaultCost, 2) : '',
+            //       }
+            //   });
               //this.isIntangible = this.auditHistory[0].isIntangible;
           }else{
               this.showhistorylist=false;
