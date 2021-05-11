@@ -44,5 +44,6 @@ export class ExchangeOrderQuote implements IExchangeOrderQuote {
 	daysForCoreReturn:number;
 	employeeId:number;
 	isApproved: boolean;
+	validForDays:number;
     constructor() { }
 }

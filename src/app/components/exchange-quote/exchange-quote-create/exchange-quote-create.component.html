@@ -111,7 +111,7 @@
                       <div class="form-group">
                         <label>Open Date<span class="clr-red">*</span></label>
                         <p-calendar name="openDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                          [(ngModel)]="exchangeQuote.openDate" [showIcon]="true" id="openDate" #openDate="ngModel"
+                          [(ngModel)]="exchangeQuote.openDate" [showIcon]="true" id="openDate" #openDate="ngModel" (onSelect)="onChangeOpenDate()"
                           required>
                           <!-- (onSelect)="onChangeOpenDate()"-->
                         </p-calendar>
@@ -126,7 +126,7 @@
                         <label>Quote Exp Date<span class="clr-red">*</span></label>
                         <p-calendar name="quoteExpireDate" [yearNavigator]="true" [monthNavigator]="true"
                           yearRange="1900:2100" [(ngModel)]="exchangeQuote.quoteExpireDate" [showIcon]="true"
-                          id="quoteExpireDate" #quoteExpireDate="ngModel" required (onSelect)="onChangeOpenDate()">
+                          id="quoteExpireDate" #quoteExpireDate="ngModel" required (onSelect)="onChangeQuoteExpiryDate()">
                         </p-calendar>
                         <div *ngIf="quoteExpireDate.invalid && (quoteExpireDate.dirty || quoteExpireDate.touched)"
                           class="alert alert-danger alert-danger-cstm">
@@ -317,6 +317,10 @@
           </div>
           <div class="card" style="padding: 5px; margin: 5px;" *ngIf="isEdit">
             <div class="x_panel">
+              <button type="button" (click)="initiateExchangeSalesOrderCoversion()"
+                [disabled]="verifyExchangeSalesOrderQuoteObj.canCovertToSalesOrder == false" class="btn btn-primary" style="width: 92px;">
+                Create SO
+              </button>
                 <!-- <a class="btn btn-primary" (click)="initiatePrintProcess()" style="width: 92px;" [disabled]="disableprintagreement">Print Agreement
                 </a> -->
                 <button type="submit" *ngIf="isEdit" style="width: 92px;float: left;" (click)="initiatePrintProcess()"
@@ -423,7 +427,7 @@
 <ng-template #exchangeQuotePrintPopup let-c="close" let-d="dismiss">
   <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
-      <h4 class="modal-title">Print Quote</h4>
+      <h4 class="modal-title">Print Exchange Agreement</h4>
   </div>
   <div class="modal-body">
       <div class="x_panel" id="quote_print_content">
@@ -434,4 +438,61 @@
     <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>  
     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
   </div>
+</ng-template>
+<ng-template #exchangeQuoteConvertPopup let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+      <h4 class="modal-title">Creating Sales Order From Quote</h4>
+  </div>
+  <form #quoteConversionForm="ngForm" class="form-horizontal">
+      <div class="modal-body">
+          <div class="form-group">
+              <label>Enter Customer Refrence<span class="clr-red">*</span></label>
+              <input type="text" required class="form-control" name="customerReference" style="max-width: 60%;"
+                  [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.customerReference" (change)="onChangeValidForDays()" />
+          </div>
+          <div class="form-group popup_checkbox_considerations m-t-5">
+              <p-checkbox name="selectAllForConversion" (onChange)="onActionSelectAllforconvversion()"
+                  [(ngModel)]="selectAllForConversion" binary="true" label="Select All">
+              </p-checkbox>
+          </div>
+          <div class="form-group popup_checkbox_considerations stock-check-box">
+              <p-checkbox name="transferStockline" [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.transferStockline"
+                  binary="true" label="Transfer Stockline">
+              </p-checkbox>
+          </div>
+          <div class="form-group popup_checkbox_considerations stock-check-box">
+              <p-checkbox name="reserveStockline" [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.reserveStockline"
+                  binary="true" label="Reserve Stockline">
+              </p-checkbox>
+          </div>
+          <div class="form-group popup_checkbox_considerations stock-check-box">
+              <p-checkbox name="transferNotes" [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.transferNotes"
+                  binary="true" label="Transfer Notes">
+              </p-checkbox>
+          </div>
+          <div class="form-group popup_checkbox_considerations stock-check-box">
+              <p-checkbox name="transferMemos" [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.transferMemos"
+                  binary="true" label="Transfer Memo">
+              </p-checkbox>
+          </div>
+          <div class="form-group popup_checkbox_considerations stock-check-box">
+              <p-checkbox name="transferFreight" [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.transferFreight"
+                  binary="true" label="Transfer Freights">
+              </p-checkbox>
+          </div>
+          <div class="form-group popup_checkbox_considerations stock-check-box">
+              <p-checkbox name="transferCharges" [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.transferCharges"
+                  binary="true" label="Transfer Charges">
+              </p-checkbox>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal"
+              [disabled]="conversionStarted || !quoteConversionForm.valid" (click)="convertSalesOrderQuote()">
+              Create
+          </button>
+      </div>
+  </form>
 </ng-template>

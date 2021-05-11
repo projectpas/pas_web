@@ -12,5 +12,5 @@ export interface IExchangeQuoteView {
     parts: IExchangeQuotePart[];
     // creditTerms: ICreditTerm[];
     // status: IStatus[];
-    // verificationResult;
+    verificationResult;
 }
