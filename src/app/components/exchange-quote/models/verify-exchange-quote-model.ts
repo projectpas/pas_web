@@ -1,12 +1,12 @@
 
-//import { SalesOrderConversionCritera } from './sales-order-conversion-criteria';
+import { ExchangeSalesOrderConversionCritera } from './exchange-sales-order-conversion-criteria';
 
 export class VerifyExchangeQuoteModel {
     public hasOnlyStockline: Boolean;
     public canCovertToExchangeOrder: Boolean;
     public canTransferStockline: Boolean;
     public canReserveStockline: Boolean;
-    //public exchangeOrderConversionCritera: SalesOrderConversionCritera;
+    public exchangeSalesOrderConversionCritera: ExchangeSalesOrderConversionCritera;
 
     constructor() {
     }

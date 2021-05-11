@@ -44,4 +44,5 @@ export interface IExchangeOrderQuote {
 	daysForCoreReturn:number;
 	employeeId:number;
 	isApproved: boolean;
+	validForDays:number;
 }
