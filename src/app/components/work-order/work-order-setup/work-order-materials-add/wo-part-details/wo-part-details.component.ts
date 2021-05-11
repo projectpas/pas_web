@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
-// import { PartDetail } from "./models/part-detail";
 import { IPartJson } from "../../../../../components/sales/shared/models/ipart-json";
 import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -11,13 +10,12 @@ import { StocklineViewComponent } from "../../../../../shared/components/stockli
 import { StocklineHistoryComponent } from "../../../../../shared/components/stockline/stockline-history/stockline-history.component";
 import { AlertService ,MessageSeverity} from "../../../../../services/alert.service";
 import { PartDetail } from "../../../../../components/sales/shared/models/part-detail";
-// import { ItemMasterSearchQuery } from "../../../../exchange-quote/models/item-master-search-query";
 import { AuthService } from "../../../../../services/auth.service";
 import { ItemMasterService } from "../../../../../services/itemMaster.service";
 import { ItemSearchType } from '../../../../../../app/components/sales/quotes/models/item-search-type';
 import { CommonService } from "../../../../../services/common.service";
 import { WorkOrderService } from "../../../../../services/work-order/work-order.service";
-
+declare var $: any;
 @Component({
   selector: "app-wo-part-details",
   templateUrl: "./wo-part-details.component.html",
@@ -26,18 +24,17 @@ import { WorkOrderService } from "../../../../../services/work-order/work-order.
 export class WoPartDetailsComponent implements OnChanges {
   @Input() customer: any;
   roleUpMaterialList: any = [];
-  // @Input() parts: IPartJson[];
-  // @Input() parts: IPartJson[];
   @Input() allConditionInfo: any;
   @Input() isStockLineViewMode = false;
   @Input() clearData = false;
-  // @Input() query: ItemMasterSearchQuery;
   @Output() onPartSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output() select: EventEmitter<any> = new EventEmitter<any>();
-
   @Output() saveMaterialListData = new EventEmitter<any>();
+  @Output() updateMaterialListData = new EventEmitter<any>();
   
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() isEdit = false;
+  @Input() editData;
   selectedColumns: any[];
   showPaginator: boolean;
   totalRecords: number;
@@ -53,7 +50,6 @@ export class WoPartDetailsComponent implements OnChanges {
   selectedParts = [];
   @Input() id: number;
   @Input() conditionId: number;
-
   @Input() workOrderId=0;
   @Input() workFlowWorkOrderId=0;
   @Input('part-number') partNumber: string;
@@ -66,7 +62,12 @@ export class WoPartDetailsComponent implements OnChanges {
   stockLineViewedRow: any;
   customPaginate: CustomPaginate<StocklineListSalesFilter> = new CustomPaginate<StocklineListSalesFilter>();
   parts: any = [];
-  formObject:any={};
+  formObject:any={
+    partNumberObj:undefined,
+    quantity:0,
+    conditionIds:undefined,
+    provisionId:0
+  };
   searchQuery={
     first:0,
     rows:10,
@@ -75,6 +76,8 @@ export class WoPartDetailsComponent implements OnChanges {
     page:10,
     partSearchParamters:{}
   }
+  disableforPartNum:boolean=false;
+  disableSaveUpdateButton:boolean=false;
   constructor(private salesQuoteService: SalesQuoteService,
     private service: StocklineService,
     private modalService: NgbModal,
@@ -91,7 +94,6 @@ export class WoPartDetailsComponent implements OnChanges {
     this.part = null;
     this.customPaginate.filters = new StocklineListSalesFilter();
   }
-
   ngOnInit() {
     // this.salesQuoteService.getSearchPartResult()
     //   .subscribe(data => {
@@ -107,15 +109,35 @@ export class WoPartDetailsComponent implements OnChanges {
     // if (this.clearData) {
     //   this.parts = [];
     // }
+    console.log("editData",this.editData)
+   if(this.editData){
+    this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
+    this.formObject.partDescription=this.editData.partDescription;
+    this.formObject.conditionIds=[this.editData.conditionCodeId];
+    this.formObject.quantity=this.editData.quantity;
+    this.formObject.qtyOnHand=this.editData.qtyOnHand;
+    this.formObject.qtyAvailable=this.editData.qtyAvail;
+    this.formObject.taskId=this.editData.taskId;
+    this.formObject.provisionId=this.editData.provisionId;
+    this.formObject.isDeferred=this.editData.isDeferred;
+    this.formObject.memo=this.editData.memo;
+    this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+  
+    this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
+    this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+    this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
+    
+   }
+    
     this.getTaskList();
     this.provisionList();
-  }
+    this.getMaterailMandatories();
 
+  }
   hideStockline(rowIndex) {
     this.hideme[rowIndex] = !this.hideme[rowIndex];
     this.rowIndex = -1;
   }
-
   ngOnChanges(changes: SimpleChanges) {
     this.salesQuoteService.getSelectedParts().subscribe(data => {
       if (data && data.length > 0) {
@@ -130,7 +152,6 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     }
   }
-
   initColumns() {
     this.columns = [
       { field: 'select', header: '', width: '30px', textalign: 'center' },
@@ -146,7 +167,6 @@ export class WoPartDetailsComponent implements OnChanges {
       { field: 'qtyAvailable', header: 'Qty Avail', width: '90px', textalign: 'right' },
       { field: 'qtyOnHand', header: 'Qty On Hand', width: '90px', textalign: 'right' },
     ]
-
     this.stockLinecolumns = [
       { field: 'selected', header: '', width: '30px', textalign: 'left' },
       { field: 'stockLineNumber', header: 'Stk Line Num', width: '80px', textalign: 'left' },
@@ -171,11 +191,60 @@ export class WoPartDetailsComponent implements OnChanges {
       { field: 'memo', header: 'Memo', width: '80px', textalign: 'left' }
     ]
   }
-
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+}
+disableEditor:boolean=false;
+textAreaInfo:any;
+onAddTextAreaInfo(material) {
+  this.disableEditor = true;
+  this.textAreaInfo = material.memo;
+}
+onSaveTextAreaInfo(memo) {
+  if (memo) {
+      this.textAreaInfo = memo;
+      this.formObject.memo = this.textAreaInfo;
+  }
+  this.disableEditor = true;
+  $("#textarea-popup2").modal("hide");
+ if(this.isEdit==true){
+  this.disableUpdateButton = false;
+ }
+}
+onCloseTextAreaInfo() {
+  this.disableEditor = true;
+  $("#textarea-popup2").modal("hide");
+}
   onPaging(event) {
   }
   savePart(){
+    this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
+    this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
+    this.materialCreateObject.memo=this.formObject.memo;
     this.saveMaterialListData.emit(this.materialCreateObject)
+  }
+
+  upDatePart(){
+    if(this.isEdit){
+      this.materialCreateObject= this.editData
+      this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+    }
+    this.materialCreateObject.memo=this.formObject.memo;
+     this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
+     this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
+    this.updateMaterialListData.emit(this.materialCreateObject)
+    this.disableUpdateButton=true;
+  }
+
+  disableUpdateButton:boolean=true;
+  getActive(){
+    this.disableUpdateButton=false;
   }
   onChange(event, part,index) {
     console.log("part item",part)
@@ -183,13 +252,18 @@ export class WoPartDetailsComponent implements OnChanges {
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable;
     // this.onPartSelect.emit({ checked: checked, part: part });
-
     if(checked==true){
+  
+
+      this.parts.forEach(element => {
+        element.isPartChecked=false;
+      });
+      part.isPartChecked==true;
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject.conditionCodeId=part.conditionId;
       this.materialCreateObject.itemMasterId=part.itemMasterId;
-      this.materialCreateObject.unitCost=part.unitCost;
+      this.materialCreateObject.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
       this.materialCreateObject.partNumber=part.partNumber;
       this.materialCreateObject.itemClassificationId=part.itemClassificationId;
       this.materialCreateObject.itemClassification=part.itemClassification;
@@ -199,29 +273,49 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.taskId=this.formObject.taskId;
       this.materialCreateObject.qtyOnHand = part.qtyOnHand;
       this.materialCreateObject.qtyAvailable = part.qtyAvailable;
-      this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :1;
+      this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
       this.materialCreateObject.stockLineId= null;
       this.materialCreateObject.quantity=this.formObject.quantity;
-      this.materialCreateObject.provisionId=this.formObject.provisionId
-      this.materialCreateObject.provision='';
+      this.materialCreateObject.provisionId=this.formObject.provisionId;
+      this.materialCreateObject.unitOfMeasure=part.unitOfMeasure;
+      this.materialCreateObject.unitOfMeasureId=part.unitOfMeasureId;
+      this.materialCreateObject.provision=''; 
+      this.materialCreateObject.memo=this.formObject.memo;
+      this.disableSaveUpdateButton=true;
+      this.provisionListData.forEach(element => {
+        if(element.value==this.formObject.provisionId){
+          this.materialCreateObject.provision=element.label;
+        }
+      });
       console.log("formObject",this.formObject);
     }else{
+      this.parts.forEach(element => {
+        element.isPartChecked=false;
+      });
+      part.isPartChecked==false;
+      this.disableSaveUpdateButton=false;
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject={};
   
     }
   }
-
+  childPartChecked
   onChangeStock(event, part, salesMargin) {
     console.log("part item",part)
     let checked: boolean = event.srcElement.checked;
+    console.log("roleUpparts",this.roleUpMaterialList)
   if(checked==true){
+
+    this.roleUpMaterialList.forEach(element => {
+      element.childPartChecked=false;
+    });
+    part.childPartChecked=true;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable;
     this.materialCreateObject.conditionCodeId=part.conditionId;
     this.materialCreateObject.itemMasterId=part.itemMasterId;
-    this.materialCreateObject.unitCost=part.unitCost;
+    this.materialCreateObject.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
     this.materialCreateObject.partNumber=part.partNumber;
     this.materialCreateObject.itemClassificationId=part.itemClassificationId;
     this.materialCreateObject.itemClassification=part.itemClassification;
@@ -234,14 +328,28 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :1;
     this.materialCreateObject.stockLineId= part.stockLineId;
     this.materialCreateObject.quantity=this.formObject.quantity
-    this.materialCreateObject.provisionId=this.formObject.provisionId
+    this.materialCreateObject.provisionId=this.formObject.provisionId;
     this.materialCreateObject.provision='';
+    this.materialCreateObject.memo=this.formObject.memo;
     console.log("formObject",this.formObject);
+    this.materialCreateObject.unitOfMeasure=part.unitOfMeasure;
+    this.materialCreateObject.unitOfMeasureId=part.unitOfMeasureId;
+this.disableSaveUpdateButton=true;
+    this.provisionListData.forEach(element => {
+  if(element.value==this.formObject.provisionId){
+    this.materialCreateObject.provision=element.label;
+  }
+});
+
   }else{
+    this.roleUpMaterialList.forEach(element => {
+      element.childPartChecked=false;
+    });
+    part.childPartChecked=false;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable;
     this.materialCreateObject={};
-
+    this.disableSaveUpdateButton=false;
   }
     // this.select.emit({ checked: checked, part: part, salesMargin: salesMargin });
   }
@@ -257,44 +365,10 @@ export class WoPartDetailsComponent implements OnChanges {
     materialMandatoriesId: 1,
     workflowMaterialListId: "0",
   };
-
-
-  // AltPartMasterPartId: null
-  // MaterialMandatoriesName: "Mandatory"
-  // billingRate: 0
-  // extendedCost: "100.00"
-  // extendedPrice: "0.00"
-  // extraCost: "0.00"
-
-  // itemClassification: "Rotables"
-  // itemClassificationId: 10
-  // itemMasterId: 213
-  // markupPercentageId: 0
-  // materialMandatoriesId: 1
-  // qtyAvail: 0
-  // qtyOnHand: 1
-  // quantity: "10"
-  // stockLineId: 499
-  // stockType: "OEM"
-  // unitOfMeasure: "Ea"
-  // unitOfMeasureId: 3
-
-
-
-
-
-
-
-
-
-
-
-
   dismissItemMasterModel() {
     this.isViewOpened = false;
     this.modal.close()
   }
-
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
     if (this.selectedParts.length > 0) {
       let sameParts = [];
@@ -307,7 +381,6 @@ export class WoPartDetailsComponent implements OnChanges {
           part.partNumber == stockLineItem.partNumber
         );
       }
-
       let qtyQuoted = 0;
       if (sameParts && sameParts.length > 0) {
         sameParts.forEach(samePart => {
@@ -335,10 +408,8 @@ export class WoPartDetailsComponent implements OnChanges {
       return false;
     }
   }
-
   getStocklineAccess() {
   }
-
   viewSelectedRow(part, rowindex) {
     if (this.parts.length > 0) {
       this.parts.forEach((part, index) => {
@@ -379,6 +450,7 @@ export class WoPartDetailsComponent implements OnChanges {
         if (resultdata && resultdata.length > 0) {
           this.roleUpMaterialList = resultdata;
           this.roleUpMaterialList.forEach((part, i) => {
+            part.childPartChecked=false;
             this.roleUpMaterialList[i]['qtyRemainedToQuote'] = this.roleUpMaterialList[i].qtyAvailable;
           });
         } else {
@@ -395,17 +467,14 @@ export class WoPartDetailsComponent implements OnChanges {
         this.isSpinnerVisible = false;
       });
   }
-
   viewStockSelectedRow(rowData) {
     this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
-
   viewStockLineHistory(rowData) {
     this.modal = this.modalService.open(StocklineHistoryComponent, { size: 'lg', backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
-
   openStocklineAudit(row) {
     this.isSpinnerVisible = true;
     this.service.getStocklineAudit(row.stockLineId).subscribe(response => {
@@ -428,7 +497,6 @@ export class WoPartDetailsComponent implements OnChanges {
       this.isSpinnerVisible = false;
     })
   }
-
   getColorCodeForHistory(i, field, value) {
     const data = this.auditHistory;
     const dataLength = data.length;
@@ -440,7 +508,6 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     }
   }
-
   get masterCompanyId(): number {
     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : 1;
   }
@@ -450,14 +517,11 @@ export class WoPartDetailsComponent implements OnChanges {
       this.bindPartsDroppdown(event.query);
     }
   }
-
-
   onConditionSelect() {
     if (this.formObject.conditionIds.length > 0 && this.formObject.partNumber && this.formObject.quantity > 0){
       // this.searchDisabled = false;
     }
   }
-
   partDetails: any = [];
   partDetailsList: any = [];
   bindPartsDroppdown(query) {
@@ -488,8 +552,11 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     )
   }
+  clearautoCompleteInput(){
+    this.disableforPartNum=false; 
+  }
   onPartNumberSelect(part: any) {
-  
+    this.disableforPartNum=true;
     this.resetActionButtons();
     this.formObject.partNumber = part.partNumber;
     this.formObject.partId = part.partId;
@@ -507,12 +574,10 @@ export class WoPartDetailsComponent implements OnChanges {
     // this.searchDisabled = false;
     // this.calculate();
   }
-
   resetActionButtons() {
     // this.searchDisabled = true;
     //this.historicalDisabled = true;
   }
-
   search($event, programaticSearch = false) {
     // let searchQuery = JSON.parse(JSON.stringify(this.formObject));
     this.formObject.restrictDER = !this.formObject.restrictDER;
@@ -520,18 +585,9 @@ export class WoPartDetailsComponent implements OnChanges {
     if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
       this.formObject.conditionIds.push(this.formObject.conditionId);
     }
-
-   
-
-
-
     // let searchQuery= new ItemMasterSearchQuery();
     this.searchQuery.partSearchParamters=this.formObject;
-
 console.log("this.formObject",this.formObject)
-
-
-
     if (!programaticSearch) {
       $event.preventDefault();
     }
@@ -554,10 +610,12 @@ console.log("this.formObject",this.formObject)
                   qtyAvailableTemp = qtyAvailableTemp + resultdata[i].qtyAvailable
                 }
               }
-
               this.formObject.qtyOnHand = qtyOnHandTemp;
               this.formObject.qtyAvailable = qtyAvailableTemp;
               this.parts = result['data'];
+              this.parts.forEach(element => {
+                element.isPartChecked=false;
+              });
               // this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
@@ -573,6 +631,9 @@ console.log("this.formObject",this.formObject)
                 // this.formObject.qtyAvailable = result['data'][0].qtyAvailable;
               }
               this.parts = result['data'];
+              this.parts.forEach(element => {
+                element.isPartChecked=false;
+              });
               // this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
@@ -634,10 +695,42 @@ getTaskList() {
       err => {
       })
 }
+materialMandatory:any=[];
+getMaterailMandatories() {
+  let materialMandatoriesIds = [];
+  //     if(this.workFlow.materialList && this.workFlow.materialList.length !=0){
+  //       this.workFlow.materialList.forEach(element => {
+  //         return materialMandatoriesIds.push(element.materialMandatoriesId);  
+  //       }) 
+  // }else{
+  // }
+  materialMandatoriesIds.push(0)
+  // } 
+  this.isSpinnerVisible = true;
+  this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 0, materialMandatoriesIds,this.masterCompanyId)
+      .subscribe(res => {
+          this.isSpinnerVisible = false;
+          this.materialMandatory = res.map(x => {
+              return {
+                  ...x,
+                  materialMandatoriesId: x.value,
+                  materialMandatoriesName: x.label
+              }
+          });
+          this.materialMandatory.forEach(element => {
+            if (element.materialMandatoriesName == 'Mandatory') {
+                this.formObject.materialMandatoriesId = element.materialMandatoriesId;
+                this.formObject.materialMandatoriesName = element.materialMandatoriesName;
+            }
+        });
+      }, error => {
+          this.isSpinnerVisible = false;
+      });
+}
+
 get userName(): string {
   return this.authService.currentUser ? this.authService.currentUser.userName : "";
 }
-
 onClose() {
   this.close.emit(true);
 }
@@ -654,7 +747,7 @@ saveWorkOrderMaterialList(data) {
               AltPartMasterPartId : null,
               materialMandatoriesId :x.materialMandatoriesId,
               extendedCost:x.extendedCost? x.extendedCost : 0,
-              unitCost:x.unitCost?  x.unitCost: 0,
+              unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
               partNumber: x.partItem.partName,
               taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
           }
@@ -662,16 +755,26 @@ saveWorkOrderMaterialList(data) {
       this.isSpinnerVisible = true;            
       this.workOrderService.createWorkOrderMaterialList(materialArr).subscribe(res => {
           this.isSpinnerVisible = false;
-          // this.workFlowObject.materialList = [];
-          // this.moduleName,
-          this.alertService.showMessage(
-       '',
+          this.alertService.showMessage('',
               'Saved Work Order MaterialList Succesfully',
-              MessageSeverity.success
-          );
-          // this.getMaterialListByWorkOrderId();
+              MessageSeverity.success);
       },
           err => {
           })
+}
+
+calculateExtendedCost(): void {
+  this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
+  this.formObject.quantity = this.formObject.quantity ? this.formObject.quantity.toString().replace(/\,/g, '') : 0;
+  if (this.formObject.quantity != 0 && this.formObject.unitCost) {
+      this.formObject.extendedCost = formatNumberAsGlobalSettingsModule((this.formObject.quantity * this.formObject.unitCost.toString().replace(/\,/g, '')), 2);
+  }
+  else {
+      this.formObject.extendedCost = "";
+  }
+  // this.calculateExtendedCostSummation();
+}
+editorgetmemo(ev) {
+  this.disableEditor = false;
 }
 }

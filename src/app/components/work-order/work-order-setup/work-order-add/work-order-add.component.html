@@ -956,7 +956,7 @@
             </div> -->
             <div *ngIf="workOrderId && (gridActiveTab == 'materialList') "
                 [ngClass]="{hidedata : gridActiveTab !== 'materialList' }"> 
-                <app-work-order-complete-material-list (saveMaterialsData)="saveMaterials($event)" [materialStatus]="materialStatus" [isWorkOrder]="isWorkOrder"
+                <app-work-order-complete-material-list (saveMaterialsData)="saveMaterials($event)"  (updateMaterialsData)="updateMaterials($event)"   [materialStatus]="materialStatus" [isWorkOrder]="isWorkOrder"
                     [workFlowObject]="workFlowObject" [savedWorkOrderData]="savedWorkOrderData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [mpnId]="workOrderPartNumberId"  [employeesOriginalData]="employeesOriginalData"
                     [workOrderMaterialList]="workOrderMaterialList" (saveRIParts)="saveReservedPartorIssue($event)"

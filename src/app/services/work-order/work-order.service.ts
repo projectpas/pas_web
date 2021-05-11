@@ -441,6 +441,9 @@ export class WorkOrderService {
     createSubWorkOrderMaterialList(data) {
         return this.workOrderEndpointService.createSubWorkOrderMaterialList(data)
     }
+    // createWorkOrderMaterialListNew(data) {
+    //     return this.workOrderEndpointService.createWorkOrderMaterialListNew(data)
+    // }
     getSubWoMaterialRoleUps(subWorkOrderMaterialId) {
         return this.workOrderEndpointService.getSubWoMaterialRoleUps(subWorkOrderMaterialId)
     }
