@@ -236,7 +236,8 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
+                        <div class="col-md-3 work_order_teardown" style="padding-top:12px;"
+                            *ngIf="receivingForm.enforcePickTicket">
                             <div class="form-group">
                                 <label>Pick Ticket Effective Date</label>
                                 <p-calendar name="pickTicketEffectiveDate" [yearNavigator]="true"
