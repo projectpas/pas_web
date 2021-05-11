@@ -179,6 +179,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         return this.capabilitiesForm.get('mfgForm') as FormArray;
     }
 
+    get userName(): string {
+		return this.authService.currentUser ? this.authService.currentUser.userName : "";
+	}
+
     dataSource: MatTableDataSource<any>;
     cols: any[];
     pnCols: any[];
@@ -1180,14 +1184,14 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     saveCapability() {     
-        this.selectedItemMasterCapData["updatedBy"]="admin";  
-        this.selectedItemMasterCapData["createdBy"]="admin";  
+        this.selectedItemMasterCapData["updatedBy"]= this.userName;  
+        this.selectedItemMasterCapData["createdBy"]= this.userName;  
         this.selectedItemMasterCapData["isVerified"] = (this.selectedItemMasterCapData.isVerified == true || this.selectedItemMasterCapData.isVerified == 'check') ? true : false,
         this.selectedItemMasterCapData["companyId"]=this.selectedItemMasterCapData.levelId1;  
         this.selectedItemMasterCapData["buId"]=this.selectedItemMasterCapData.levelId2;  
         this.selectedItemMasterCapData["divisionId"]=this.selectedItemMasterCapData.levelId3;  
         this.selectedItemMasterCapData["departmentId"]=this.selectedItemMasterCapData.levelId4;  
-        this.selectedItemMasterCapData["masterCompanyId"]=DBkeys.MASTER_COMPANY_ID;
+        this.selectedItemMasterCapData["masterCompanyId"]= this.authService.currentUser.masterCompanyId // DBkeys.MASTER_COMPANY_ID;
         this.selectedItemMasterCapData["verifiedDate"] = this.datePipe.transform(this.selectedItemMasterCapData["verifiedDate"], DBkeys.GLOBAL_DATE_FORMAT);
         this.selectedItemMasterCapData["addedDate"] = this.datePipe.transform(this.selectedItemMasterCapData["addedDate"], DBkeys.GLOBAL_DATE_FORMAT);
         
