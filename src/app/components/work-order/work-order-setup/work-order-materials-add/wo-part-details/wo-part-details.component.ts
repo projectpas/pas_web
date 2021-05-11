@@ -78,6 +78,16 @@ export class WoPartDetailsComponent implements OnChanges {
   }
   disableforPartNum:boolean=false;
   disableSaveUpdateButton:boolean=false;
+  disableEditor:boolean=false;
+  textAreaInfo:any;
+  disableUpdateButton:boolean=true;
+  partDetails: any = [];
+  partDetailsList: any = [];
+  setEditArray:any;
+  taskList:any=[];
+  provisionListData:any=[];
+  materialMandatory:any=[];
+
   constructor(private salesQuoteService: SalesQuoteService,
     private service: StocklineService,
     private modalService: NgbModal,
@@ -94,22 +104,8 @@ export class WoPartDetailsComponent implements OnChanges {
     this.part = null;
     this.customPaginate.filters = new StocklineListSalesFilter();
   }
-  ngOnInit() {
-    // this.salesQuoteService.getSearchPartResult()
-    //   .subscribe(data => {
-    //     this.parts = data;
-    //     this.query = data;
-    //     console.log("hello",this.query)
-    //     this.totalRecords = this.parts.length;
-    //     this.pageLinks = Math.ceil(
-    //       this.totalRecords / 10
-    //     );
-    //   });
 
-    // if (this.clearData) {
-    //   this.parts = [];
-    // }
-    console.log("editData",this.editData)
+  ngOnInit() {    
    if(this.editData){
     this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
     this.formObject.partDescription=this.editData.partDescription;
@@ -134,10 +130,12 @@ export class WoPartDetailsComponent implements OnChanges {
     this.getMaterailMandatories();
 
   }
+
   hideStockline(rowIndex) {
     this.hideme[rowIndex] = !this.hideme[rowIndex];
     this.rowIndex = -1;
   }
+
   ngOnChanges(changes: SimpleChanges) {
     this.salesQuoteService.getSelectedParts().subscribe(data => {
       if (data && data.length > 0) {
@@ -152,6 +150,7 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     }
   }
+
   initColumns() {
     this.columns = [
       { field: 'select', header: '', width: '30px', textalign: 'center' },
@@ -191,6 +190,7 @@ export class WoPartDetailsComponent implements OnChanges {
       { field: 'memo', header: 'Memo', width: '80px', textalign: 'left' }
     ]
   }
+
   parsedText(text) {
     if (text) {
         const dom = new DOMParser().parseFromString(
@@ -198,31 +198,34 @@ export class WoPartDetailsComponent implements OnChanges {
             'text/html');
         const decodedString = dom.body.textContent;
         return decodedString;
-    }
-}
-disableEditor:boolean=false;
-textAreaInfo:any;
-onAddTextAreaInfo(material) {
-  this.disableEditor = true;
-  this.textAreaInfo = material.memo;
-}
-onSaveTextAreaInfo(memo) {
-  if (memo) {
-      this.textAreaInfo = memo;
-      this.formObject.memo = this.textAreaInfo;
+   }
   }
-  this.disableEditor = true;
-  $("#textarea-popup2").modal("hide");
- if(this.isEdit==true){
-  this.disableUpdateButton = false;
- }
-}
-onCloseTextAreaInfo() {
-  this.disableEditor = true;
-  $("#textarea-popup2").modal("hide");
-}
+
+  onAddTextAreaInfo(material) {
+    this.disableEditor = true;
+    this.textAreaInfo = material.memo;
+  }
+
+  onSaveTextAreaInfo(memo) {
+    if (memo) {
+        this.textAreaInfo = memo;
+        this.formObject.memo = this.textAreaInfo;
+    }
+    this.disableEditor = true;
+    $("#textarea-popup2").modal("hide");
+    if(this.isEdit==true){
+      this.disableUpdateButton = false;
+    }
+  }
+
+  onCloseTextAreaInfo() {
+    this.disableEditor = true;
+    $("#textarea-popup2").modal("hide");
+  }
+
   onPaging(event) {
   }
+
   savePart(){
     this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
     this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
@@ -242,10 +245,11 @@ onCloseTextAreaInfo() {
     this.disableUpdateButton=true;
   }
 
-  disableUpdateButton:boolean=true;
+
   getActive(){
     this.disableUpdateButton=false;
   }
+
   onChange(event, part,index) {
     console.log("part item",part)
     let checked: boolean = event.srcElement.checked;
@@ -287,7 +291,6 @@ onCloseTextAreaInfo() {
           this.materialCreateObject.provision=element.label;
         }
       });
-      console.log("formObject",this.formObject);
     }else{
       this.parts.forEach(element => {
         element.isPartChecked=false;
@@ -297,7 +300,6 @@ onCloseTextAreaInfo() {
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject={};
-  
     }
   }
   childPartChecked
@@ -305,11 +307,11 @@ onCloseTextAreaInfo() {
     console.log("part item",part)
     let checked: boolean = event.srcElement.checked;
     console.log("roleUpparts",this.roleUpMaterialList)
-  if(checked==true){
+    if(checked==true){
 
-    this.roleUpMaterialList.forEach(element => {
-      element.childPartChecked=false;
-    });
+      this.roleUpMaterialList.forEach(element => {
+        element.childPartChecked=false;
+      });
     part.childPartChecked=true;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable;
@@ -331,16 +333,14 @@ onCloseTextAreaInfo() {
     this.materialCreateObject.provisionId=this.formObject.provisionId;
     this.materialCreateObject.provision='';
     this.materialCreateObject.memo=this.formObject.memo;
-    console.log("formObject",this.formObject);
     this.materialCreateObject.unitOfMeasure=part.unitOfMeasure;
     this.materialCreateObject.unitOfMeasureId=part.unitOfMeasureId;
-this.disableSaveUpdateButton=true;
+    this.disableSaveUpdateButton=true;
     this.provisionListData.forEach(element => {
-  if(element.value==this.formObject.provisionId){
-    this.materialCreateObject.provision=element.label;
-  }
-});
-
+    if(element.value==this.formObject.provisionId){
+      this.materialCreateObject.provision=element.label;
+    }
+    });
   }else{
     this.roleUpMaterialList.forEach(element => {
       element.childPartChecked=false;
@@ -365,10 +365,12 @@ this.disableSaveUpdateButton=true;
     materialMandatoriesId: 1,
     workflowMaterialListId: "0",
   };
+
   dismissItemMasterModel() {
     this.isViewOpened = false;
     this.modal.close()
   }
+
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
     if (this.selectedParts.length > 0) {
       let sameParts = [];
@@ -408,8 +410,10 @@ this.disableSaveUpdateButton=true;
       return false;
     }
   }
+
   getStocklineAccess() {
   }
+
   viewSelectedRow(part, rowindex) {
     if (this.parts.length > 0) {
       this.parts.forEach((part, index) => {
@@ -425,22 +429,6 @@ this.disableSaveUpdateButton=true;
     this.customPaginate.filters.conditionId = part.conditionId;
     this.customPaginate.filters.partNumber = part.partNumber;
     this.isSpinnerVisible = true;
-    // this.salesQuoteService.getSearchPartResult()
-    //   .subscribe(data => {
-    //     this.parts = data;
-    //     this.totalRecords = this.parts.length;
-    //     this.pageLinks = Math.ceil(
-    //       this.totalRecords / 10
-    //     );
-    //     this.isSpinnerVisible = false;
-    //   }, error => {
-    //     this.isSpinnerVisible = false;
-    //   });
-
-    // this.salesQuoteService.getSearchPartObject()
-    //   .subscribe(data => {
-    //     this.query = data;
-    //   });
     this.formObject.conditionId = part.conditionId;
     this.formObject.partId = part.partId;
     this.service.searchstocklinefromsoqpop(this.searchQuery)
@@ -467,14 +455,17 @@ this.disableSaveUpdateButton=true;
         this.isSpinnerVisible = false;
       });
   }
+
   viewStockSelectedRow(rowData) {
     this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
+
   viewStockLineHistory(rowData) {
     this.modal = this.modalService.open(StocklineHistoryComponent, { size: 'lg', backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
+
   openStocklineAudit(row) {
     this.isSpinnerVisible = true;
     this.service.getStocklineAudit(row.stockLineId).subscribe(response => {
@@ -497,6 +488,7 @@ this.disableSaveUpdateButton=true;
       this.isSpinnerVisible = false;
     })
   }
+
   getColorCodeForHistory(i, field, value) {
     const data = this.auditHistory;
     const dataLength = data.length;
@@ -522,8 +514,7 @@ this.disableSaveUpdateButton=true;
       // this.searchDisabled = false;
     }
   }
-  partDetails: any = [];
-  partDetailsList: any = [];
+
   bindPartsDroppdown(query) {
     // this.searchDisabled = true;
     let partSearchParamters = {
@@ -570,9 +561,6 @@ this.disableSaveUpdateButton=true;
     this.formObject.qtyOnHand = 0;
     this.formObject.qtyAvailable = 0;
     this.formObject.includeMultiplePartNumber = false;
-    // if (this.formObject.conditionIds.length > 0 && this.formObject.quantity > 0)
-    // this.searchDisabled = false;
-    // this.calculate();
   }
   resetActionButtons() {
     // this.searchDisabled = true;
@@ -587,7 +575,6 @@ this.disableSaveUpdateButton=true;
     }
     // let searchQuery= new ItemMasterSearchQuery();
     this.searchQuery.partSearchParamters=this.formObject;
-console.log("this.formObject",this.formObject)
     if (!programaticSearch) {
       $event.preventDefault();
     }
@@ -597,7 +584,6 @@ console.log("this.formObject",this.formObject)
       switch (this.formObject.itemSearchType) {
         case ItemSearchType.StockLine:
           this.isSpinnerVisible = true;
-          console.log("hello viewa")
           this.service.searchstocklinefromsoqpop(this.searchQuery)
             .subscribe(result => {
               this.isSpinnerVisible = false;
@@ -642,17 +628,11 @@ console.log("this.formObject",this.formObject)
       }
     }
   }
-  provisionListData:any=[];
+ 
   provisionList() {
     this.isSpinnerVisible = true;
     let provisionIds = []; 
-// if(this.workFlow.materialList && this.workFlow.materialList.length !=0){
-//          this.workFlow.materialList.forEach(element => {
-//         return provisionIds.push(element.provisionId);
-//     })
-// }else{
-// } 
-provisionIds.push(0)
+    provisionIds.push(0)
     this.isSpinnerVisible = true;
     this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 0, provisionIds,this.masterCompanyId)
         .subscribe(res => {
@@ -662,15 +642,10 @@ provisionIds.push(0)
         }, error => {
             this.isSpinnerVisible = false;
         });
-}
-setEditArray:any;
-taskList:any=[];
-getTaskList() {  
+  }
+
+  getTaskList() {  
   this.setEditArray=[];
-  // if(this.editData){
-  //     this.setEditArray.push(this.editData.taskId ? this.editData.taskId :0)
-  // }else{
-  // } 
   this.setEditArray.push(0);
   const strText = '';
   this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
@@ -695,17 +670,10 @@ getTaskList() {
       err => {
       })
 }
-materialMandatory:any=[];
+
 getMaterailMandatories() {
   let materialMandatoriesIds = [];
-  //     if(this.workFlow.materialList && this.workFlow.materialList.length !=0){
-  //       this.workFlow.materialList.forEach(element => {
-  //         return materialMandatoriesIds.push(element.materialMandatoriesId);  
-  //       }) 
-  // }else{
-  // }
   materialMandatoriesIds.push(0)
-  // } 
   this.isSpinnerVisible = true;
   this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 0, materialMandatoriesIds,this.masterCompanyId)
       .subscribe(res => {
@@ -734,6 +702,7 @@ get userName(): string {
 onClose() {
   this.close.emit(true);
 }
+
 saveWorkOrderMaterialList(data) { 
       const materialArr = data.materialList.map(x => {
           return {
