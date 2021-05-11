@@ -389,13 +389,166 @@
 
 </form>
 
+<div class="modal fade" id="addStockLine" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Stock Line</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-1 column" style="text-align: right;">
+                        PN : <span class="clr-red">*</span>
+                    </div>
+                    <div class="col-2 column">
+                        <div class="form-group">
+                            <p-autoComplete field="label" class="autocomplete" [(ngModel)]="stocklinepartNumberId"
+                                name="stocklineSearch" id="stocklineSearch" [suggestions]="partCollection"
+                                (completeMethod)="filterpartItems($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                (onSelect)="getStoclineetailsById()" title="PN" required>
+                            </p-autoComplete>
+                        </div>
+                    </div>
+
+                    <div class="col-1 column" style="text-align: right;">
+                        Condtion : <span class="clr-red">*</span>
+                    </div>
+                    <div class="col-2 column">
+                        <div class="form-group">
+                            <p-multiSelect [(ngModel)]="stocklineconditionId" [options]="allconditioninfo"
+                                (onChange)="onConditionSelect()" name="conditionId" defaultLabel="-- Select --"
+                                required="true" class="classification">
+                            </p-multiSelect>
+                        </div>
+                    </div>
+                    <div class="col-2 column">
+                        <div class="form-group">
+                            <button type="button"
+                                class="btn btn-primary height40 black-search-button multiple-pns-search-btn btn-cstm"
+                                (click)="getStocklineparts()" [disabled]="searchstocklinepart"><i
+                                    style="color:#fff !important" class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <form #addMultiPNTable="ngForm">
+                    <div class="table-responsive pas-table-cstm">
+                        <div class="tableFixHead-multiple-pn">
+                            <table class="table table-bordered ">
+                                <thead>
+                                    <tr class="header-table-width">
+                                        <th class="multiple-pn th-width" style="text-align:left">
+                                            <span class="checkbox-cstm">
+                                                <label style="width:40px" class="multiple-pn-label">
+                                                    <input type="checkbox" name="addAllMultiPN"
+                                                        [(ngModel)]="addAllMultiPN"
+                                                        (change)="onChangeAddAllMultiPN($event)">
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                </label>
+                                            </span>
+                                        </th>
+                                        <th>Stk Line Num</th>
+                                        <th>Ser Num</th>
+                                        <th>Cntrl Num</th>
+                                        <th>Cntrl ID Num</th>
+                                        <th>PN</th>
+                                        <th>PN Description</th>
+                                        <th>Stk Type</th>
+                                        <!-- <th>Priority</th> -->
+                                        <th>Manufacturer</th>
+                                        <th>UOM</th>
+                                        <th>Qty Avail</th>
+                                        <th>Qty On Hand</th>
+                                        <th>Unit Cost</th>
+                                        <th>Traceable to</th>
+                                        <th>Owner</th>
+                                        <th>Obtain From</th>
+                                        <th>Tag Date</th>
+                                        <th>Cert By</th>
+                                        <th>Cert Date</th>
+                                        <th>Memo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let obj of stocklineData; let row_no=index;">
+                                        <td class="obj-td">
+                                            <span class="checkbox-cstm">
+                                                <!--*ngIf="!multiplePNDetails"-->
+                                                <label class="obj-label">
+                                                    <input type="checkbox" name="addAllMultiPNRows{{row_no}}"
+                                                        [(ngModel)]="obj.addAllMultiPNRows"
+                                                        (change)="onChangeAddEachMultiPN()">
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                </label>
+                                            </span>
+                                        </td>
+                                        <td>{{obj.stockLineNumber === null ? '-':obj.stockLineNumber}}</td>
+                                        <td>{{obj.serialNumber === null ? '-':obj.srialNumber}}</td>
+                                        <td>{{obj.controlNumber === null ? '-':obj.controlNumber}}</td>
+                                        <td>{{obj.idNumber === null ? '-':obj.idNumber}}</td>
+                                        <td>{{obj.partNumber === null ? '-':obj.partNumber}}</td>
+                                        <td>{{obj.partDescription === null ? '-':obj.partDescription}}</td>
+                                        <td>{{obj.stockType === null ? '-':obj.stockType}}</td>
+                                        <td>{{obj.manufacturer === null ? '-':obj.manufacturer}}</td>
+                                        <td>{{obj.unitOfMeasure === null ? '-':obj.unitOfMeasure}}</td>
+                                        <td>{{obj.quantityAvailable === null ? '-':obj.quantityAvailable}}</td>
+                                        <td>{{obj.quantityOnHand === null ? '-':obj.quantityOnHand}}</td>
+                                        <td>{{obj.purchaseOrderUnitCost === null ? '-':obj.purchaseOrderUnitCost}}</td>
+                                        <td>{{obj.traceableToName === null ? '-':obj.traceableToName}}</td>
+                                        <td>{{obj.ownerName === null ? '-':obj.ownerName}}</td>
+                                        <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
+                                        <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
+                                        <td>{{obj.certifiedBy === null ? '-':obj.certifiedBy}}</td>
+                                        <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate}}</td>
+                                        <td>{{obj.memo === null ? '-':obj.memo}}</td>
+                                    </tr>
+                                    <tr *ngIf="stocklineData.length == 0">
+                                        <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
+                                            No records found
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div>
+                        </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addAvailableParts()"
+                    [disabled]="!enableMultiPartAddBtn">Add </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <ng-container *ngIf="isEditModeHeader">
     <p-tabView class="pas-tabview" (onChange)="onChangeTabView($event)">
         <p-tabPanel header="Parts List">
             <form #createROPartsForm="ngForm">
-                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>
-                <button data-toggle="modal" data-target="#add-multiple-partnum" class="btn btn-primary"
-                    (click)="onAddMultParts()" [disabled]="disableAddPart">Add Multiple PN</button>
+                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN
+                </button>
+                <button (click)="addStockLine()" data-toggle="modal" data-target="#addStockLine" class="btn btn-primary"
+                    [disabled]="disableAddPart">Add Stock
+                    Line</button>
+                <button style="display: none;" data-toggle="modal" data-target="#add-multiple-partnum"
+                    class="btn btn-primary" (click)="onAddMultParts()" [disabled]="disableAddPart">Add Multiple
+                    PN</button>
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex">
                     <div class="tableFixHead">
                         <table class="table table-bordered " id="po-table">
@@ -419,6 +572,7 @@
                                     <th>Priority <span class="clr-red">*</span></th>
                                     <th>Need By <span class="clr-red">*</span></th>
                                     <th>Cond <span class="clr-red">*</span></th>
+                                    <th>Stk Line Num <span class="clr-red">*</span></th>
                                     <th class="th-width-90">Order Qty <span class="clr-red">*</span></th>
                                     <th style="min-width:98px !important">Vend List Price <span class="clr-red">*</span>
                                     </th>
@@ -431,7 +585,6 @@
                                     <th>Functional CUR <span class="clr-red">*</span></th>
                                     <th class="th-width-90">FX Rate <span class="clr-red">*</span></th>
                                     <th>Report CUR <span class="clr-red">*</span></th>
-                                    <th>Stk Line Num <span class="clr-red">*</span></th>
                                     <th>Control Id</th>
                                     <th>Control Num</th>
                                     <th>PO</th>
@@ -531,6 +684,17 @@
                                             </select>
                                         </td>
                                         <td>
+                                            <p-autoComplete appendTo="body" field="stockLineNumber" class="autocomplete"
+                                                [(ngModel)]="partList.stocklineId" name="stocklineNum{{row_index}}"
+                                                [suggestions]="partList.allStocklineDetails"
+                                                (completeMethod)="filterStocklineNum($event, partList)" [size]="30"
+                                                [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                                [disabled]="!partList.conditionId"
+                                                (onSelect)="getStockLineDetails(partList)" [forceSelection]="true"
+                                                (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved"
+                                                required></p-autoComplete>
+                                        </td>
+                                        <td>
                                             <input type="text" [ngClass]="inputValidCheck ? 'input-validate' : ''"
                                                 title="Order Qty" class="form-control text-right"
                                                 [(ngModel)]="partList.quantityOrdered"
@@ -614,17 +778,7 @@
                                                 <!--[disabled]=true-->
                                             </p-autoComplete>
                                         </td>
-                                        <td>
-                                            <p-autoComplete appendTo="body" field="stockLineNumber" class="autocomplete"
-                                                [(ngModel)]="partList.stocklineId" name="stocklineNum{{row_index}}"
-                                                [suggestions]="partList.allStocklineDetails"
-                                                (completeMethod)="filterStocklineNum($event, partList)" [size]="30"
-                                                [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                [disabled]="!partList.conditionId"
-                                                (onSelect)="getStockLineDetails(partList)" [forceSelection]="true"
-                                                (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved"
-                                                required></p-autoComplete>
-                                        </td>
+
                                         <td><input type="text" class="form-control" [(ngModel)]="partList.controlId"
                                                 name="controlId{{row_index}}" disabled></td>
                                         <td><input type="text" class="form-control" [(ngModel)]="partList.controlNumber"
