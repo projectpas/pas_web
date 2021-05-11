@@ -2,48 +2,9 @@
 <div>
 
     <div class="page-content">
-
         <div class="right_col" role="main">
             <div class="x_content">
-                <!-- <div class="card">
-                    <div class="card-header">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                                <li class="breadcrumb-item active" aria-current="page">Work order quote settngs</li>
-                                <li class="breadcrumb-item" aria-current="page">Work order quote settngs List</li>
-                            </ol>
-                        </nav>
-                    </div> -->
-                    <!-- <div class="card-body">
-                        <div class="inline-block display-flex">
-                            <h4 class="po-head" style="padding: 0px 10px;">List of Work Order Quote settings </h4>
-                            <a (click)="AddPage()" matTooltipPosition="above"
-                             matTooltip="Create New Setting"
-                              class="plusicon-cstm ">
-                                <i class="fa fa-plus-circle fa-lg"></i>
-                            </a>
-                        </div>
-                        <div class="card-body" style="padding-top: 0;">
-                            <div class="right_col" role="main"> -->
-
-
                                 <div class="card new-card">
-                                    <!-- <div class="card-header bg-primary new-card-header">
-                                        <div class="row">
-                                          <div class="col">
-                                            <h4 class="new-card-heading">List of Work Order Quote settings</h4>
-                                          </div>
-                                          <div>
-                                            <button
-                                               type="button"
-                                               class="btn-sm header-button pull-right"
-                                               (click)="AddPage()">
-                                               Create New Setting
-                                            </button>
-                                         </div>
-                                    
-                                        </div>
-                                    </div> -->
                                     <div class="card-header header ">
                                         <div class="row">
                                             <div class="col">
@@ -56,14 +17,11 @@
                                             class="btn-sm header-button pull-right"
                                             (click)="AddPage()">
                                             Create New Setting
-                                         </button>
-                                              
+                                         </button>                                              
                                             </div>
                                        </div>
                                     </div>
-
                                     <div class="card-body new-card-body">
-
                                 <p-table #dt 
                                 [value]="workflowList" 
                                 class="rpo-table-cstm rro-table-cstm" 
@@ -83,8 +41,7 @@
                                     <ng-template pTemplate="caption">
                                         <!-- <div style="text-align: right"> -->
                                             <div class="row">
-                                                <div class="col">
-                                          
+                                                <div class="col">                                          
                                             <p-multiSelect [maxSelectedLabels]="2"
                                             [options]="gridColumns"
                                             optionLabel="header"
@@ -124,14 +81,8 @@
                                                   matTooltip="Download Selected Data"
                                                    matTooltipPosition="above"
                                                 (click)="dt.exportCSV({selectionOnly:true})"></button>
-                                            <!--<button type="button" class="btn btn-primary" pButton icon="fa-download" iconPos="left" label="Export Data" matTooltip="Download Data" matTooltipPosition="above" (click)="dt.exportCSV()" style="padding: 5px 12px !important;"></button>
-                    <button type="button" class="btn btn-primary" pButton icon="fa-download" iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 12px !important;"></button>-->
-
-                                       
                                         </div>
                                     </div>
-                               
-                               
                                     </ng-template>
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
@@ -145,7 +96,6 @@
                                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                                             </th>
                                             <th style="width:200px;position:sticky">Actions</th>
-                                            <!--<th></th>-->
                                         </tr>
                                         <tr>
                                             <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -173,11 +123,6 @@
                                                         <mat-icon color="green">history</mat-icon>
                                                     </button>
                                                 </div>
-                                                <!--<span data-toggle="modal" data-target="#history">
-                            <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History" (click)="getAuditHistoryById(rowData)" tooltipPosition="bottom" title="" class="btn btn-success nobg" data-original-title="History">
-                                <i class="fa fa-history"></i>
-                            </a>
-                        </span>-->
                                             </td>
                                         </tr>
                                     </ng-template>
@@ -199,17 +144,9 @@
                                 </p-table>
                             </div>
                          </div>
-                        <!-- </div> -->
-               
             </div>
         </div>
     </div>
-
-    
-
-    
-
-    
 
     <div class="modal fade bd-example-modal-xl" tabindex="-1" id="history" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-xl">
@@ -244,7 +181,6 @@
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">{{audit.updatedBy}}</td>
 
                                 <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
-
                             </tr>
                         </tbody>
                     </table>
@@ -255,7 +191,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 

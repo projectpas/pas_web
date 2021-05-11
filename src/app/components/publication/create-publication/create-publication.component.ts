@@ -540,11 +540,11 @@ export class CreatePublicationComponent implements OnInit {
 
   saveGeneralInfo() {
     this.data = this.sourcePublication;
-    this.data.employeeId = this.data.employeeId ? this.data.employeeId : 0;
+    this.data.employeeId = this.data.employeeId ? this.data.employeeId : null;
     this.publicationType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.publicationTypeId.toString(), this.publicationTypes);
 
     if (this.data.publishedById == null || this.data.publishedById == "null") {
-      this.data.publishedById = 0;
+      this.data.publishedById = null;
     }
     this.formData.append('entryDate', moment(this.data.entryDate).format('DD/MM/YYYY'));
     this.formData.append('publicationId', this.data.publicationId);

@@ -1,8 +1,8 @@
 ﻿<div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title"></h4>
+    <!-- <h4 class="modal-title" id="modal-basic-title"></h4> -->
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 </div>
-<div class="modal-content pdf-block " style="width:90%" id="soShippingLabel">
+<div class="modal-content" id="soShippingLabel">
     <div class="modal-body">
         <form id="" name="" action="#" method="post" onsubmit="return false;">
             <div class="image">
@@ -12,7 +12,7 @@
                             <div *ngIf="!isPrint" class="pick-ticket-header"
                                 style="margin-bottom: 15px; display: flex;">
                                 <h4 style="width: 130px">Service Class:</h4>
-                                <select class="form-control" style="width: 95px" name="serviceClass"
+                                <select class="form-control" style="width: 95px;border:1px solid black !important" name="serviceClass"
                                     [(ngModel)]="this.salesOrderShipping.serviceClass" required>
                                     <option value="First Class">First Class</option>
                                     <option value="Priority">Priority</option>
@@ -139,7 +139,7 @@
                                 <div class="form-group second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
                                     <label type="text" class="form-control"
-                                        style="background:#fff !important; width: 160px;" name="salesOrderNumber"
+                                        style="background:#fff !important; width: 160px;height:20px" name="salesOrderNumber"
                                         disabled>{{this.salesOrderShipping.salesOrderNumber}}
                                     </label>
                                 </div>
@@ -153,11 +153,11 @@
                                             disabled>{{this.salesOrderShipping.uom}}</label> -->
                                     <label class="col-sm-2">Weight</label>
                                     <label class="col-sm-3 form-control input-width input-field-border" name="weight"
-                                        style="background:#fff !important; padding-left: 10px !important"
+                                        style="background:#fff !important; padding-left: 10px !important;height:15px;"
                                         disabled>{{this.salesOrderShipping.weight}}</label>
                                     <label class="col-sm-2">UOM </label>
                                     <label class="col-sm-3  form-control input-width input-field-border" name="uom"
-                                        style="background:#fff !important; padding-left: 10px !important"
+                                        style="background:#fff !important; padding-left: 10px !important;height:15px;"
                                         disabled>{{this.salesOrderShipping.uom}}</label>
                                 </div>
                                 <br />

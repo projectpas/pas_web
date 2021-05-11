@@ -155,6 +155,7 @@ export class RoSetupComponent implements OnInit {
 	tempMultiplePN = {};
 	parentQty: any;
 	newData: any = [];
+	stocklineData: any = [];
 	childOrderQtyArray: any = [];
 	childOrderQtyTotal: any;
 	arraySearch: any = [];
@@ -303,6 +304,10 @@ export class RoSetupComponent implements OnInit {
 	splitmoduleId: number = 0;
 	splituserId: number = 0;
 	rosettingModel: any = {};
+	stocklinepartNumberId: any;
+	stocklineconditionId: any;
+	searchstocklinepart: boolean = true;
+
 	fields = ['partsCost', 'partsRevPercentage', 'unitCost', 'extCost', 'qty', 'laborCost', 'laborRevPercentage', 'overHeadCost', 'overHeadPercentage', 'chargesCost', 'freightCost', 'exclusionCost', 'directCost', 'directCostPercentage', 'revenue', 'margin', 'marginPercentage'];
 	approvalProcessHeader = [
 		{
@@ -493,17 +498,18 @@ export class RoSetupComponent implements OnInit {
 						this.getRepairOrderAllPartsById(this.roId);
 						this.enableHeaderSaveBtn = false;
 						this.isSpinnerVisible = false;
+						setTimeout(() => {
+							if (this.itemMasterId > 0 && this.adddefaultpart) {
+								this.isSpinnerVisible = true;
+								this.addPartNumbers(this.itemMasterId, this.partName)
+								this.adddefaultpart = false;
+								this.isSpinnerVisible = false;
+							}
+						}, 2000);
 					}, 2200);
 				}
 			});
-			setTimeout(() => {
-				if (this.itemMasterId > 0 && this.adddefaultpart) {
-					this.isSpinnerVisible = true;
-					this.addPartNumbers(this.itemMasterId, this.partName)
-					this.adddefaultpart = false;
-					this.isSpinnerVisible = false;
-				}
-			}, 3000);
+
 
 		}
 		else {
@@ -1997,6 +2003,31 @@ export class RoSetupComponent implements OnInit {
 
 	}
 
+	getStoclineetailsById() {
+		if (this.stocklineconditionId.length > 0 && this.stocklinepartNumberId.value) {
+			this.searchstocklinepart = false;
+			this.stocklineData = [];
+			this.getStocklineparts();
+		}
+		else {
+			this.searchstocklinepart = true;
+			this.stocklineData = []
+		}
+	}
+
+
+	onConditionSelect() {
+		if (this.stocklineconditionId.length > 0 && this.stocklinepartNumberId.value) {
+			this.searchstocklinepart = false;
+			this.stocklineData = [];
+			this.getStocklineparts();
+		}
+		else {
+			this.searchstocklinepart = true;
+			this.stocklineData = []
+		}
+	}
+
 
 	getPNDetailsById(parentdata, value?) {
 		this.showInput = true;
@@ -3283,6 +3314,11 @@ export class RoSetupComponent implements OnInit {
 		this.addAllMultiPN = false;
 		this.enableMultiPartAddBtn = false;
 	}
+	addStockLine() {
+		this.stocklineconditionId = null;
+		this.stocklinepartNumberId = null;
+		this.enableMultiPartAddBtn = false;
+	}
 
 
 	addPartNumber() {
@@ -3358,6 +3394,21 @@ export class RoSetupComponent implements OnInit {
 
 		//}
 		//this.getRemainingAllQty();
+	}
+
+	getStocklineparts() {
+		if (this.stocklineconditionId != null && this.stocklinepartNumberId != null && this.stocklineconditionId.length > 0) {
+			this.isSpinnerVisible = true;
+			this.newData = [];
+			this.newPNList = [];
+			this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId, this.currentUserMasterCompanyId).subscribe(res => {
+				this.stocklineData = res;
+				this.isSpinnerVisible = false;
+			}, err => {
+				this.isSpinnerVisible = false;
+				this.stocklineData = []
+			});
+		}
 	}
 
 	getAllparts() {
@@ -4596,6 +4647,8 @@ export class RoSetupComponent implements OnInit {
 			return 0;
 		}
 	}
+
+
 
 	getStockLineDetails(partList) {
 		if (partList.stocklineId) {
