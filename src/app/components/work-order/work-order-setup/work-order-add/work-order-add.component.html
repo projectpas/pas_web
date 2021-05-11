@@ -1160,8 +1160,8 @@
                     </div>
                 </div>
                 <div *ngIf="(gridActiveTab == 'pickticket') && !isSubWorkOrder">
-                    <app-work-order-part-pickticket
-                        [referenceId]="isSubWorkOrder == true ? subWOPartNoId : workFlowWorkOrderId" [isView]="isView">
+                    <app-work-order-part-pickticket [referenceId]="workOrderId"
+                        [workFlowWorkOrderId]="workFlowWorkOrderId" [isView]="isView">
                     </app-work-order-part-pickticket>
                 </div>
                 <div *ngIf="(gridActiveTab == 'shipping') && !isSubWorkOrder">

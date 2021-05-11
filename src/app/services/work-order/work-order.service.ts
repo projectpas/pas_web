@@ -647,8 +647,8 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getPickTicketList(workOrderId);
     }
 
-    getStockLineforPickTicket(itemMasterId, conditionId, referenceId) {
-        return this.workOrderEndpointService.getStockLineforPickTicket(itemMasterId, conditionId, referenceId);
+    getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN = false) {
+        return this.workOrderEndpointService.getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN);
     }
 
     savepickticketiteminterface(parts: WOPickTicket): Observable<WOPickTicket[]> {
@@ -657,15 +657,21 @@ export class WorkOrderService {
         );
     }
 
-    getPickTicketEdit(woPickTicketId: number, workOrderId: number, workOrderPartId: number): Observable<any> {
+    savepickticketiteminterface_mainpart(parts: WOPickTicket): Observable<WOPickTicket[]> {
         return Observable.forkJoin(
-            this.workOrderEndpointService.getPickTicketEdit(woPickTicketId, workOrderId, workOrderPartId)
+            this.workOrderEndpointService.savepickticketiteminterface_mainpart(parts)
         );
     }
 
-    confirmPickTicket(pickticketId: number, confirmById: string): Observable<boolean[]> {
+    getPickTicketEdit(woPickTicketId: number, workOrderId: number, workOrderPartId: number, isMPN: boolean = false): Observable<any> {
         return Observable.forkJoin(
-            this.workOrderEndpointService.confirmPickTicket(pickticketId, confirmById)
+            this.workOrderEndpointService.getPickTicketEdit(woPickTicketId, workOrderId, workOrderPartId, isMPN)
+        );
+    }
+
+    confirmPickTicket(pickticketId: number, confirmById: string, isMPN: boolean = false): Observable<boolean[]> {
+        return Observable.forkJoin(
+            this.workOrderEndpointService.confirmPickTicket(pickticketId, confirmById, isMPN)
         );
     }
 
@@ -673,5 +679,15 @@ export class WorkOrderService {
         return Observable.forkJoin(
             this.workOrderEndpointService.getPickTicketPrint(workOrderId, workOrderPartId, woPickTicketId)
         );
+    }
+
+    getPartPickTicketPrint(workOrderId: number, workOrderPartId: number, woPickTicketId: number): Observable<any> {
+        return Observable.forkJoin(
+            this.workOrderEndpointService.getPartPickTicketPrint(workOrderId, workOrderPartId, woPickTicketId)
+        );
+    }
+
+    getPickTicketListMainPart(workOrderId, workFlowWorkOrderId) {
+        return this.workOrderEndpointService.getPickTicketListMainPart(workOrderId, workFlowWorkOrderId);
     }
 }
