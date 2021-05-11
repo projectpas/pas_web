@@ -122,12 +122,16 @@ export class WoPartDetailsComponent implements OnChanges {
     this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
     this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
     this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
-    
-   }
-    
     this.getTaskList();
     this.provisionList();
     this.getMaterailMandatories();
+   }else{
+    this.getTaskList();
+    this.provisionList();
+    this.getMaterailMandatories();
+   }
+    
+
 
   }
 
@@ -230,14 +234,26 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
     this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
     this.materialCreateObject.memo=this.formObject.memo;
+    this.materialCreateObject.isDeferred=this.formObject.isDeferred;
     this.saveMaterialListData.emit(this.materialCreateObject)
   }
 
-  upDatePart(){
+  upDatePart(){ 
     if(this.isEdit){
       this.materialCreateObject= this.editData
       this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
     }
+    
+
+
+
+    
+    
+    this.materialCreateObject.provisionId=this.formObject.provisionId;
+    this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
+    this.materialCreateObject.quantity=this.formObject.quantity;
+    this.materialCreateObject.taskId=this.formObject.taskId;
+    this.materialCreateObject.isDeferred=this.formObject.isDeferred;
     this.materialCreateObject.memo=this.formObject.memo;
      this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
      this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
@@ -632,7 +648,11 @@ export class WoPartDetailsComponent implements OnChanges {
   provisionList() {
     this.isSpinnerVisible = true;
     let provisionIds = []; 
-    provisionIds.push(0)
+    if(this.editData){
+      this.setEditArray.push(this.editData.provisionId ? this.editData.provisionId :0);
+    }else{
+      this.setEditArray.push(0);
+    }
     this.isSpinnerVisible = true;
     this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 0, provisionIds,this.masterCompanyId)
         .subscribe(res => {
@@ -646,7 +666,12 @@ export class WoPartDetailsComponent implements OnChanges {
 
   getTaskList() {  
   this.setEditArray=[];
-  this.setEditArray.push(0);
+
+  if(this.editData){
+    this.setEditArray.push(this.editData.taskId ? this.editData.taskId :0);
+  }else{
+    this.setEditArray.push(0);
+  }
   const strText = '';
   this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
    this.taskList = res.map(x => {
@@ -674,6 +699,11 @@ export class WoPartDetailsComponent implements OnChanges {
 getMaterailMandatories() {
   let materialMandatoriesIds = [];
   materialMandatoriesIds.push(0)
+  if(this.editData){
+    materialMandatoriesIds.push(this.editData.materialMandatoriesId ? this.editData.materialMandatoriesId :0);
+  }else{
+   materialMandatoriesIds.push(0);
+  }
   this.isSpinnerVisible = true;
   this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 0, materialMandatoriesIds,this.masterCompanyId)
       .subscribe(res => {
