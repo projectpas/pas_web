@@ -47,7 +47,7 @@ table tbody tr td {
  line-height: 22px;
  height: 22px;
  color: #333;
-  /* border-right: 1px solid black !important; */
+  border-right: 1px solid black !important;
  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
    font-size: 10.5px !important;
    font-weight: 700;

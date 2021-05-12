@@ -1560,7 +1560,7 @@ export class SalesOrderCreateComponent implements OnInit {
   }
      
   table {font-size:12px !important;
-    width: 100.6%;
+    width: 100%;
     overflow: auto !important;}        
   table thead { background: #808080;}    
    
@@ -1585,7 +1585,7 @@ table, thead, th {
   table tbody tr td{ background: #fff;
      padding: 2px;line-height: 22px;
      height:22px;color: #333;
-    //  border-right:1px solid black !important;
+     border-right:1px solid black !important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 10.5px !important;
     font-weight: 700;max-width:100%; letter-spacing: 0.1px;border:0}
@@ -1639,7 +1639,7 @@ table, thead, th {
     float: right;
     padding-right: 2px;
    
-    width: 48%;
+    width: 49%;
   }
   
   .address-block {
@@ -1710,6 +1710,7 @@ table, thead, th {
   
   .form-div {
     // top: 6px;
+    padding-bottom:10px;
     position: relative;
     font-weight: normal;
     font-size:12.5
@@ -1867,7 +1868,7 @@ table, thead, th {
     border-bottom:1px solid black !important;
   }
   .table-margins{
-    margin-top:0px;margin-left:-1px
+    margin-top:0px;margin-left:0px
   }
   .invoice-border{
     border-bottom: 1px solid;

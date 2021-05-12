@@ -228,7 +228,7 @@
                 <!-- <div class="clear"></div>
                 <hr /> -->
                 <div class="col-sm-12">
-                    <table rules=none class="parttable table-margins">
+                    <table rules=none class="parttable table-margins" style="margin-top:10px">
                         <thead>
                             <tr>
                                 <th>Item Num</th>
@@ -258,15 +258,15 @@
                                         {{(child.qtyRequested * child.unitCost) | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6" rowspan="2">Notes: {{child.notes}}</td>
+                                    <td colspan="6" rowspan="2" style="border:1px solid black">Notes: {{child.notes}}</td>
                                 </tr>
                                 <tr> </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td colspan="7"></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                </tr>
+                                </tr> -->
                                 <tr> </tr>
                             </ng-container>
                             <ng-container
@@ -282,17 +282,17 @@
                                     <td style="text-align: right;">{{child.unitCost | number : '1.2-2'}}</td>
                                     <td style="text-align: right;">{{child.billingAmount | number : '1.2-2'}}</td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td colspan="7">
                                     </td>
                                     <td style="border-bottom-color:white;border-right-color:white;" colspan="2">
                                     </td>
                                     <td style="border-right-color:white;"></td>
-                                </tr>
+                                </tr> -->
                                 <tr></tr>
                             </ng-container>
                             <tr>
-                                <td rowspan="7" colspan="7">
+                                <td rowspan="7" colspan="7" style="border:1px solid black;">
                                     Notes/Instructions: <span>{{getFormattedNotes(this.salesOrderView.soNotes)}}</span>
                                 </td>
                                 <td class="border-transparent" colspan="2">SUBTOTAL</td>
@@ -359,7 +359,7 @@
                                 <!-- <td class="border-transparent" colspan="2">Box 145478</td> -->
                                 <!-- <td class="border-transparent" colspan="3">1454 New York Ave - Suites 1000
                                 </td> -->
-                                <td class="border-transparent" colspan="2">CURRENCY</td>
+                                <td class="border-transparent" style="border-bottom:1px solid black" colspan="2">CURRENCY</td>
                                 <td style="text-align: right;">
                                     <b>{{this.salesOrderView.currency}}</b>
                                 </td>
