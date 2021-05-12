@@ -24,6 +24,10 @@
   margin-top: 10px;
   border-radius: 4px;
 }
+.cls_ad{
+  position: relative;
+  top: -9px;
+}
 .nav-pills-cstm li a:hover {
   background-color: #337ab7 !important;
 }
@@ -292,12 +296,19 @@ height: 25px !important;
   padding: 0 0 4px;
 }
 .mrgn_bt4{
-  margin-bottom: 4px;
+  margin-bottom: 9px;
   margin-top: 0px   !important;
 }
 .w200{ 
     width: 220px !important; 
 } 
+.mult_pn{
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px;
+  padding-left: 12px;
+  letter-spacing: 0.3px;
+}
 .w80{
   width :80px   !important
 }

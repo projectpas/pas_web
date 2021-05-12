@@ -871,11 +871,11 @@
     </div>
     <div class="card align_flx" *ngIf="showTabsGrid">
         <div *ngIf="showTabsMPNGrid">
-            <div class="card-header" *ngIf="!workOrderGeneralInformation.isSinglePN">
+            <div class="card-header mult_pn" *ngIf="!workOrderGeneralInformation.isSinglePN">
                 Multiple MPN
             </div>
             <div class="card-body">
-                <div class="col-md-12" [hidden]="workOrderGeneralInformation.isSinglePN && !showTabsGrid">
+                <div class="col-md-12 cls_ad"  [hidden]="workOrderGeneralInformation.isSinglePN && !showTabsGrid">
                     <div class="col-md-2">
                         <label class="control-label col-sm-3 label_adjf">MPN
                         </label>
@@ -1074,7 +1074,7 @@
             </div> -->
                 <div *ngIf="workOrderId && (gridActiveTab == 'materialList') "
                     [ngClass]="{hidedata : gridActiveTab !== 'materialList' }">
-                    <app-work-order-complete-material-list (saveMaterialsData)="saveMaterials($event)"
+                    <app-work-order-complete-material-list (saveMaterialsData)="saveMaterials($event)" (updateMaterialsData)="updateMaterials($event)"
                         [materialStatus]="materialStatus" [isWorkOrder]="isWorkOrder" [workFlowObject]="workFlowObject"
                         [savedWorkOrderData]="savedWorkOrderData" [isSubWorkOrder]="isSubWorkOrder"
                         [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
