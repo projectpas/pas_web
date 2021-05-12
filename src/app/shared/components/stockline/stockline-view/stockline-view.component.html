@@ -21,6 +21,32 @@
                                     </label>
                                 </div>
                             </div>
+                            <div class="form-group m-t-10" *ngIf="viewSLInfo.isCustomerStock">
+                                <div>
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                        [checked]="viewSLInfo.isCustomerstockType == true"
+                                         disabled>
+                                        <span class="checkmark"></span>  Rotable Customer Stock
+                                    </label>
+                                </div> 
+                            </div>
+
+                            <div class="form-group m-t-10" *ngIf="viewSLInfo.isCustomerStock">
+                                <div>
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" value="0" name="assetRadio" class="form-check-inline"
+                                        [checked]="viewSLInfo.isCustomerstockType == false"
+                                         disabled>
+                                        <span class="checkmark"></span>  Piece Parts
+                                    </label>
+                                </div> 
+                            </div>
+                            <div class="form-group" *ngIf="viewSLInfo.isCustomerStock">
+                                <label>Customer</label>
+
+                                <input class="form-control" type="text" name="partNumber" [(ngModel)]="viewSLInfo.customerName" disabled>
+                            </div>
                             <div class="form-group">
                                 <label>PN <span class="clr-red">*</span></label>
                                 <input class="form-control" type="text" name="partNumber" [(ngModel)]="viewSLInfo.partNumber" disabled>

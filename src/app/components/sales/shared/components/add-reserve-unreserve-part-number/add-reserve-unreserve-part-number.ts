@@ -72,8 +72,9 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
                 { field: "quantity", header: "Qty Required ", width: "100px" },
                 { field: "quantityReserved", header: "Qty Reserved", width: "100px" },
-                { field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
-                { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
+                { field: "qtyToBeReserved", header: "Qty To Be Reserved", width: "100px" },
+                { field: "qtyToReserve", header: "Qty Actually Reserving", width: "100px" },
+                //{ field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
                 { field: "quantityOnHand", header: "Qty On Hand", width: "100px" },
                 { field: "quantityAvailable", header: "Qty Available   ", width: "100px" },
                 { field: "quantityOnOrder", header: "Qty On Order", width: "100px" },
@@ -91,7 +92,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
                 { field: "quantity", header: "Qty Required ", width: "100px" },
                 { field: "quantityReserved", header: "Qty Reserved", width: "100px" },
-                { field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
+                //{ field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
                 { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
                 { field: "quantityOnHand", header: "Qty On Hand", width: "100px" },
                 { field: "quantityAvailable", header: "Qty Available   ", width: "100px" },
@@ -393,6 +394,36 @@ export class SalesReserveUnreserveComponent implements OnInit {
             }
 
             this.parts[i].reservedById = getObjectById('value', this.employeeId, this.employees);
+        }
+    }
+
+    validatePartsQuantity(event, data) {
+        if (this.selectedPartActionType == 'Reserve') {
+            if (data.qtyToReserve > data.quantityAvailable) {
+
+                this.alertService.showMessage(
+                    '',
+                    ' Qty Actually Reserving Cant be greater than Qty Available',
+                    MessageSeverity.warn
+                );
+                data.qtyToReserve = null;
+            } else if (data.qtyToReserve > data.qtyToBeReserved) {
+                this.alertService.showMessage(
+                    '',
+                    ' Qty Actually Reserving Cant be greater than Qty To Be Reserved',
+                    MessageSeverity.warn
+                );
+                data.qtyToReserve = null;
+            }
+        } else {
+            if (data.qtyToUnReserve > data.quantityReserved) {
+                this.alertService.showMessage(
+                    '',
+                    'Qty Unreserving Cant be greater than Qty Reserved',
+                    MessageSeverity.warn
+                );
+                data.qtyToUnReserve = null;
+            }
         }
     }
 }

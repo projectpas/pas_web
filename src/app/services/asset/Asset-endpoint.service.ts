@@ -424,6 +424,11 @@ if(type=='add'){
             return this.handleErrorCommon(error, () => this.getAssetDataForInventoryById(id));
         });
     }
+    GetAuditDataByAssetList(id) {
+        return this.http.get<any>(`${this.baseUrl}/api/AssetModule/GetAuditDataByAssetList/${id}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetAuditDataByAssetList(id));
+        });
+    }
     getAuditDataByInventoryId(id) {
         return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getauditdatabyinventoryid/${id}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getAuditDataByInventoryId(id));

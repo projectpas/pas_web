@@ -25,22 +25,45 @@
                                 <h5>General</h5>
                             </div>
                             <div class="card-body">
-                                <div class="form-group" *ngIf="isEditMode">
+                                <div class="form-group">
                                     <div class="checkbox-cstm m-t-10">
                                         <label>
-                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock">
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            Customer Stock - Rotable 
+                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" (ngModelChange)="enableSave()" [disabled]="isEditMode">
+                                            <span class="cr"><i class="cr-icon pi pi-check"(click)="ChekisCustomerStock(stockLineForm.isCustomerStock)"></i></span>
+                                            Customer Stock 
                                         </label>
                                     </div>
                                 </div>
-                                <div class="form-group" *ngIf="isEditMode && stockLineForm.isCustomerStock">
+
+                                <div class="form-group m-t-10" *ngIf="stockLineForm.isCustomerStock">
+                                    <div>
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                            [checked]="stockLineForm.isCustomerstockType == true"
+                                            (change)="getStockStatus(1)" [disabled]="isEditMode">
+                                            <span class="checkmark"></span>  Rotable Customer Stock
+                                        </label>
+                                    </div> 
+                                </div>
+
+                                <div class="form-group m-t-10" *ngIf="stockLineForm.isCustomerStock">
+                                    <div>
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" value="0" name="assetRadio" class="form-check-inline"
+                                            [checked]="stockLineForm.isCustomerstockType == false"
+                                            (change)="getStockStatus(0)"  [disabled]="isEditMode">
+                                            <span class="checkmark"></span>  Piece Parts
+                                        </label>
+                                    </div> 
+                                </div>
+                                <div class="form-group" *ngIf="stockLineForm.isCustomerStock">
                                     <label>Customer</label>
                                     <p-autoComplete field="label" class="pautocomp-cstm"
                                         [(ngModel)]="stockLineForm.customerId" name="vendorId" [suggestions]="customerNames"
                                         (completeMethod)="filterCustomerNames($event)" [size]="30" [minLength]="1"
                                         [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
-                                        (ngModelChange)="enableSave()">
+                                        (ngModelChange)="enableSave()"
+                                         required [disabled]="isEditMode" > 
                                     </p-autoComplete>
                                 </div>
                                 <div class="form-group">
@@ -1379,7 +1402,7 @@
             </div>
             <div class="form-row pull-right">
                 <button type="button" class="btn btn-primary" (keydown.enter)="$event.preventDefault()" (click)="onSaveStockLine()"
-                    [disabled]="!stockLineSetupForm.valid || disableMagmtStruct || disableManufacturer || disableCondition || disableSiteName || disableSaveForEdit">{{isEditMode
+                    [disabled]="!stockLineSetupForm.valid || disableMagmtStruct || disableCustomer|| disableManufacturer || disableCondition || disableSiteName || disableSaveForEdit">{{isEditMode
                     ? 'Update' : 'Save'}} </button>
             </div>
         </form>

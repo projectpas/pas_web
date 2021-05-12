@@ -229,10 +229,12 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceEmployee.employeeId = this.empId;
             if (this.sourceEmployee.certificationDate != null) {
-                this.sourceEmployee.certificationDate = new Date(this.sourceEmployee.certificationDate);
+                let d=new Date(this.sourceEmployee.certificationDate);
+                this.sourceEmployee.certificationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; 
             }            
             if (this.sourceEmployee.expirationDate != null) {
-                this.sourceEmployee.expirationDate = new Date(this.sourceEmployee.expirationDate);
+                let d=new Date(this.sourceEmployee.expirationDate);
+                this.sourceEmployee.expirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
             }
             // this.sourceEmployee.certificationDate = this.datePipe.transform(this.sourceEmployee.certificationDate, "MM/dd/yyyy");
             // this.sourceEmployee.expirationDate = this.datePipe.transform(this.sourceEmployee.expirationDate, "MM/dd/yyyy");
@@ -254,14 +256,16 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         else {
             this.sourceEmployee.updatedBy = this.userName;
             this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
+            
             this.sourceEmployee['expirationDateTemp'] = this.sourceEmployee.expirationDate;
-            // this.sourceEmployee.expirationDate = this.datePipe.transform(this.sourceEmployee.expirationDate, "MM/dd/yyyy");
-            // this.sourceEmployee.certificationDate = this.datePipe.transform(this.sourceEmployee.certificationDate, "MM/dd/yyyy");
+            
             if (this.sourceEmployee.certificationDate != null) {
-                this.sourceEmployee.certificationDate = new Date(this.sourceEmployee.certificationDate);
+                let d=new Date(this.sourceEmployee.certificationDate);
+                this.sourceEmployee.certificationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; 
             }            
             if (this.sourceEmployee.expirationDate != null) {
-                this.sourceEmployee.expirationDate = new Date(this.sourceEmployee.expirationDate);
+                let d=new Date(this.sourceEmployee.expirationDate);
+                this.sourceEmployee.expirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
             }
             this.employeeService.updateCertificationDetails(this.sourceEmployee).subscribe(data => {
                 this.getwithemployeeLicensureId();  

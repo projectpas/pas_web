@@ -104,6 +104,7 @@ export class AssetCapesComponent implements OnInit {
     AssetId: any;
     static assetService;
     aircraftData: any;
+    aircraftDataNew: any;
     selectedDashnumber: any;
     dashNumberList: any = [];
     viewTable: boolean = false;
@@ -1408,6 +1409,7 @@ export class AssetCapesComponent implements OnInit {
         this.dashNumberUnknown = true;
     }
     mapAircraftInformation(capdata) {
+
         const newCapesData = { ...capdata };
 
 
@@ -1430,9 +1432,9 @@ export class AssetCapesComponent implements OnInit {
             else {
                 if (this.assetServices.isCapsEditMode == false) {
                     if (newCapesData.selectedAircraftTypes !== undefined && newCapesData.selectedAircraftModelTypes !== undefined && newCapesData.selectedDashNumbers !== undefined) {
-                        this.dashnumberservices.getAllDashModels(newCapesData.selectedAircraftModelTypes, newCapesData.selectedAircraftTypes, newCapesData.selectedDashNumbers).subscribe(aircraftdata => {
-                            const responseValue = aircraftdata;
-                            this.aircraftData = responseValue.map(x => {
+                        this.dashnumberservices.getAllDashModels(newCapesData.selectedAircraftModelTypes, newCapesData.selectedAircraftTypes, newCapesData.selectedDashNumbers).subscribe(aircraftDataNew => {
+                            const responseValue = aircraftDataNew;
+                            this.aircraftDataNew = responseValue.map(x => {
                                 return {
                                     AircraftType: x.aircraft,
                                     AircraftModel: x.model,
@@ -1456,10 +1458,34 @@ export class AssetCapesComponent implements OnInit {
                                 }
                             });
 
+                            this.aircraftData.push(this.aircraftDataNew[0])
+
+                            // this.aircraftData.push({
+                            //     AircraftType: responseValue.aircraft,
+                            //     AircraftModel: responseValue.model,
+                            //     DashNumber: responseValue.dashNumber,
+                            //     AircraftModelId: responseValue.modelid,
+                            //     DashNumberId: responseValue.dashNumberId,
+                            //     CapibilityType: newCapesData.selectedCap,
+                            //     PartNumber: newCapesData.selectedPartId.partNumber,
+                            //     CapabilityId: newCapesData.CapabilityTypeId,
+                            //     ItemMasterId: this.itemMasterId,
+                            //     AircraftTypeId: newCapesData.selectedAircraftTypes,
+                            //     AircraftDashNumberId: responseValue.dashNumberId,
+                            //     AssetRecordId: this.currentAsset.assetRecordId,
+                            //     MasterCompanyId: this.authService.currentUser.masterCompanyId,
+                            //     CreatedBy: this.userName,
+                            //     UpdatedBy: this.userName,
+                            //     CreatedDate: new Date(),
+                            //     UpdatedDate: new Date(),
+                            //     isActive: true,
+                            //     isDelete: false
+                            // })
+
                         })
                     }
                     if (this.selectedAircraftId !== undefined && this.modelUnknown) {
-                        this.aircraftData = [{
+                        this.aircraftDataNew = [{
                             AircraftType: this.newValue,
                             // AircraftModel: 'Unknown',
                             // DashNumber: 'Unknown',
@@ -1482,11 +1508,39 @@ export class AssetCapesComponent implements OnInit {
                             isActive: true,
                             isDelete: false
                         }]
+
+                        this.aircraftData.push(this.aircraftDataNew[0])
+
+                        // this.aircraftData.push({
+                        //     AircraftType: this.newValue,
+                        //     // AircraftModel: 'Unknown',
+                        //     // DashNumber: 'Unknown',
+                        //     AircraftModel: null,
+                        //     DashNumber: null,
+                        //     AircraftModelId: '',
+                        //     DashNumberId: '',
+                        //     CapibilityType: newCapesData.selectedCap,
+                        //     PartNumber: newCapesData.selectedPartId.partNumber,
+                        //     CapabilityId: newCapesData.CapabilityTypeId,
+                        //     ItemMasterId: this.itemMasterId,
+                        //     AircraftTypeId: newCapesData.selectedAircraftTypes,
+                        //     AircraftDashNumberId: null,
+                        //     AssetRecordId: this.currentAsset.assetRecordId,
+                        //     MasterCompanyId: this.authService.currentUser.masterCompanyId,
+                        //     CreatedBy: this.userName,
+                        //     UpdatedBy: this.userName,
+                        //     CreatedDate: new Date(),
+                        //     UpdatedDate: new Date(),
+                        //     isActive: true,
+                        //     isDelete: false
+                        // })
                     }
                     // if (this.selectedAircraftId !== undefined && newCapesData.selectedModel !== undefined && this.dashNumberUnknown) {
                     if (newCapesData.selectedAircraftTypes !== undefined && newCapesData.selectedAircraftModelTypes !== undefined && (this.dashNumberUnknown || (newCapesData.selectedDashNumbers && newCapesData.selectedDashNumbers.length == 0))) {
                         if (newCapesData.selectedAircraftModelTypes && newCapesData.selectedAircraftModelTypes.length != 0) {
-                            this.aircraftData = newCapesData.selectedAircraftModelTypes.map(x => {
+
+                            const responseValue = newCapesData.selectedAircraftModelTypes;
+                            this.aircraftDataNew = newCapesData.selectedAircraftModelTypes.map(x => {
                                 return {
                                     AircraftType: this.newValue,
                                     AircraftModel: x ? getValueFromArrayOfObjectById('label', 'value', x, newCapesData.selectedAircraftDataModels) : null,
@@ -1510,6 +1564,31 @@ export class AssetCapesComponent implements OnInit {
                                     isDelete: false
                                 }
                             })
+
+                            this.aircraftData.push(this.aircraftDataNew[0])
+
+                            // this.aircraftData.push({
+                            //     AircraftType: this.newValue,
+                            //     AircraftModel: responseValue ? getValueFromArrayOfObjectById('label', 'value', responseValue, newCapesData.selectedAircraftDataModels) : null,
+                            //     // DashNumber: 'Unknown',
+                            //     DashNumber: null,
+                            //     AircraftModelId: responseValue,
+                            //     DashNumberId: '',
+                            //     CapibilityType: newCapesData.selectedCap,
+                            //     PartNumber: newCapesData.selectedPartId.partNumber,
+                            //     CapabilityId: newCapesData.CapabilityTypeId,
+                            //     ItemMasterId: this.itemMasterId,
+                            //     AircraftTypeId: newCapesData.selectedAircraftTypes,
+                            //     AircraftDashNumberId: null,
+                            //     AssetRecordId: this.currentAsset.assetRecordId,
+                            //     MasterCompanyId: this.authService.currentUser.masterCompanyId,
+                            //     CreatedBy: this.userName,
+                            //     UpdatedBy: this.userName,
+                            //     CreatedDate: new Date(),
+                            //     UpdatedDate: new Date(),
+                            //     isActive: true,
+                            //     isDelete: false
+                            // })
                         }
                     }
 
@@ -1524,9 +1603,9 @@ export class AssetCapesComponent implements OnInit {
                     }
                     else {
                         if (newCapesData.selectedAircraftTypes !== undefined && newCapesData.selectedAircraftModelTypes !== undefined && newCapesData.selectedDashNumbers !== undefined) {
-                            this.dashnumberservices.getAllDashModels(newCapesData.selectedAircraftModelTypes, newCapesData.selectedAircraftTypes, newCapesData.selectedDashNumbers).subscribe(aircraftdata => {
-                                const responseValue = aircraftdata;
-                                this.aircraftData = responseValue.map(x => {
+                            this.dashnumberservices.getAllDashModels(newCapesData.selectedAircraftModelTypes, newCapesData.selectedAircraftTypes, newCapesData.selectedDashNumbers).subscribe(res => {
+                                const responseValue = res;
+                                this.aircraftDataNew = responseValue.map(x => {
                                     return {
                                         AssetCapesId: this.AssetCapesId,
                                         AircraftType: x.aircraft,
@@ -1550,10 +1629,34 @@ export class AssetCapesComponent implements OnInit {
                                         isDelete: false
                                     }
                                 });
+
+                                this.aircraftData.push(this.aircraftDataNew[0])
+
+                                // this.aircraftData.push({
+                                //     AircraftType: responseValue.aircraft,
+                                //     AircraftModel: responseValue.model,
+                                //     DashNumber: responseValue.dashNumber,
+                                //     AircraftModelId: responseValue.modelid,
+                                //     DashNumberId: responseValue.dashNumberId,
+                                //     CapibilityType: newCapesData.selectedCap,
+                                //     PartNumber: newCapesData.selectedPartId.partNumber,
+                                //     CapabilityId: newCapesData.CapabilityTypeId,
+                                //     ItemMasterId: this.itemMasterId,
+                                //     AircraftTypeId: newCapesData.selectedAircraftTypes,
+                                //     AircraftDashNumberId: responseValue.dashNumberId,
+                                //     AssetRecordId: this.currentAsset.assetRecordId,
+                                //     MasterCompanyId: this.authService.currentUser.masterCompanyId,
+                                //     CreatedBy: this.userName,
+                                //     UpdatedBy: this.userName,
+                                //     CreatedDate: new Date(),
+                                //     UpdatedDate: new Date(),
+                                //     isActive: true,
+                                //     isDelete: false
+                                // })
                             })
                         }
                         if (this.selectedAircraftId !== undefined && this.modelUnknown) {
-                            this.aircraftData = [{
+                            this.aircraftDataNew = [{
                                 AssetCapesId: this.AssetCapesId,
                                 AircraftType: this.newValue,
                                 // AircraftModel: 'Unknown',
@@ -1577,11 +1680,39 @@ export class AssetCapesComponent implements OnInit {
                                 isActive: true,
                                 isDelete: false
                             }]
+
+                            this.aircraftData.push(this.aircraftDataNew[0])
+
+                            // this.aircraftData.push({
+                            //     AssetCapesId: this.AssetCapesId,
+                            //     AircraftType: this.newValue,
+                            //     // AircraftModel: 'Unknown',
+                            //     // DashNumber: 'Unknown',
+                            //     AircraftModel: null,
+                            //     DashNumber: null,
+                            //     AircraftModelId: '',
+                            //     DashNumberId: '',
+                            //     CapibilityType: newCapesData.selectedCap,
+                            //     PartNumber: newCapesData.selectedPartId.partNumber,
+                            //     CapabilityId: newCapesData.CapabilityTypeId,
+                            //     ItemMasterId: this.itemMasterId,
+                            //     AircraftTypeId: newCapesData.selectedAircraftTypes,
+                            //     AircraftDashNumberId: null,
+                            //     AssetRecordId: this.currentAsset.assetRecordId,
+                            //     MasterCompanyId: this.authService.currentUser.masterCompanyId,
+                            //     CreatedBy: this.userName,
+                            //     UpdatedBy: this.userName,
+                            //     CreatedDate: new Date(),
+                            //     UpdatedDate: new Date(),
+                            //     isActive: true,
+                            //     isDelete: false
+                            // })
                         }
 
                         if (this.selectedAircraftId !== undefined && newCapesData.selectedModel !== undefined && this.dashNumberUnknown) {
                             console.log("dash nu,ber unknown", newCapesData)
-                            this.aircraftData = newCapesData.selectedModel.map(x => {
+                            const responseValue = newCapesData.selectedModel;
+                            this.aircraftDataNew = newCapesData.selectedModel.map(x => {
                                 return {
                                     AssetCapesId: this.AssetCapesId,
                                     AircraftType: this.newValue,
@@ -1606,6 +1737,32 @@ export class AssetCapesComponent implements OnInit {
                                     isDelete: false
                                 }
                             })
+
+                            this.aircraftData.push(this.aircraftDataNew[0])
+
+                            // this.aircraftData.push({
+                            //     AssetCapesId: this.AssetCapesId,
+                            //         AircraftType: this.newValue,
+                            //         AircraftModel: responseValue.label,
+                            //         // DashNumber: 'Unknown',
+                            //         DashNumber: null,
+                            //         AircraftModelId: responseValue.value,
+                            //         DashNumberId: '',
+                            //         CapibilityType: newCapesData.selectedCap,
+                            //         PartNumber: newCapesData.selectedPartId.partNumber,
+                            //         CapabilityId: newCapesData.CapabilityTypeId,
+                            //         ItemMasterId: this.itemMasterId,
+                            //         AircraftTypeId: newCapesData.selectedAircraftTypes,
+                            //         AircraftDashNumberId: null,
+                            //         AssetRecordId: this.currentAsset.assetRecordId,
+                            //         MasterCompanyId: this.authService.currentUser.masterCompanyId,
+                            //         CreatedBy: this.userName,
+                            //         UpdatedBy: this.userName,
+                            //         CreatedDate: new Date(),
+                            //         UpdatedDate: new Date(),
+                            //         isActive: true,
+                            //         isDelete: false
+                            // })
                         }
 
 

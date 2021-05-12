@@ -89,6 +89,7 @@ export class StockLineSetupComponent implements OnInit {
 	disableCondition: boolean = true;
 	disableManufacturer: boolean = true;
 	disableSiteName: boolean = true;
+	disableCustomer: boolean = true;
 	stockLineId: number;
 	timeLifeCyclesId: number;
 	allNHAInfo: any = [];
@@ -188,6 +189,8 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.quantityOnHand = null;
 		this.stockLineForm.oem = 'true';
 		this.stockLineForm.isCustomerStock = false;
+		this.stockLineForm.isCustomerstockType = false;
+		
 		this.stockLineForm.customerId = 0;
 		this.stockLineForm.tagType = [];
 		this.stockLineForm.stockLineNumber = 'Creating';
@@ -344,6 +347,15 @@ export class StockLineSetupComponent implements OnInit {
 
 		}, error => this.saveFailedHelper(error));
 	}
+
+	
+    getStockStatus(value) {
+        if (value == 1) {
+            this.stockLineForm.isCustomerstockType = true;
+        } else {
+            this.stockLineForm.isCustomerstockType = false;
+        }
+    }
 
 	private loadConditionData() {
 		if (this.arrayConditionlist.length == 0) {
@@ -854,10 +866,10 @@ export class StockLineSetupComponent implements OnInit {
 					this.assetAcquisitionTypeList = [...originalData, obj];
 				}
 				else if (tableName == 'PurchaseOrder') {
-					this.allPolistInfo = [...originalData, { purchaseOrderId: obj.value, purchaseOrderNumber: obj.label }];
+					this.allPolistInfo = [...originalData, { value: obj.value, label: obj.label }];
 				}
 				else if (tableName == 'RepairOrder') {
-					this.allRolistInfo = [...originalData, { repairOrderId: obj.value, repairOrderNumber: obj.label }];
+					this.allRolistInfo = [...originalData, { value: obj.value, label: obj.label }];
 				}
 				else if (tableName == 'Site') {
 					this.allSites = [...originalData, obj];
@@ -1084,7 +1096,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.polistInfo = this.allPolistInfo;
 		const polistData = [
 			...this.allPolistInfo.filter(x => {
-				return x.purchaseOrderNumber.toLowerCase().includes(event.query.toLowerCase());
+				return x.label.toLowerCase().includes(event.query.toLowerCase());
 			})
 		];
 		this.polistInfo = polistData;
@@ -1094,11 +1106,11 @@ export class StockLineSetupComponent implements OnInit {
 	filterReceiverNumber(event) {
 		const polistData = [
 			...this.allPolistInfo.filter(x => {
-				return x.purchaseOrderNumber.toLowerCase().includes(event.query.toLowerCase());
+				return x.label.toLowerCase().includes(event.query.toLowerCase());
 			})
 		];
 		const receverlist = polistData.map(function(item) {
-			return item['purchaseOrderNumber'];
+			return item['label'];
 		  });
 
 		  this.receicerlistInfo = receverlist;
@@ -1527,6 +1539,30 @@ export class StockLineSetupComponent implements OnInit {
 		}
 	}
 
+	onSelectCustomer() {
+		if(this.stockLineForm.isCustomerStock)
+		{
+			if (this.stockLineForm.customerId != 0 && this.stockLineForm.customerId != null) 
+			{
+				this.disableCustomer = false;
+			} 
+			else {
+				this.disableCustomer = true;
+			}
+		}
+		else {
+			this.disableCustomer = false;
+		}
+	
+	}
+	ChekisCustomerStock(isCustomerStock)
+	{
+		if(!isCustomerStock)
+		{
+			this.stockLineForm.customerId= null;
+		}
+	}
+
 	onSaveStockLine() {
 		this.isSpinnerVisible = true;
 
@@ -1584,7 +1620,8 @@ export class StockLineSetupComponent implements OnInit {
 			locationId: this.stockLineForm.locationId > 0 ? this.stockLineForm.locationId : null,
 			shelfId: this.stockLineForm.shelfId > 0 ? this.stockLineForm.shelfId : null,
 			binId: this.stockLineForm.binId > 0 ? this.stockLineForm.binId : null,
-			isCustomerStock: this.stockLineForm.isCustomerStock == 'true' ? 'false' : 'true',
+			isCustomerStock: this.stockLineForm.isCustomerStock,
+			isCustomerstockType: this.stockLineForm.isCustomerstockType,
 
 			ownerName: this.stockLineForm.ownerType == 4 ? this.stockLineForm.owner : (this.stockLineForm.owner ? getValueFromObjectByKey('label', this.stockLineForm.owner) : ''),
 			owner: this.stockLineForm.ownerType == 4 ? null : (this.stockLineForm.owner ? editValueAssignByCondition('value', this.stockLineForm.owner) : ''),
@@ -2045,6 +2082,20 @@ export class StockLineSetupComponent implements OnInit {
 		}else
 		{
 			this.disableSaveForEdit = true;
+		}
+
+		if(this.stockLineForm.isCustomerStock)
+		{
+			if (this.stockLineForm.customerId != 0 && this.stockLineForm.customerId != null) 
+			{
+				this.disableCustomer = false;
+			} 
+			else {
+				this.disableCustomer = true;
+			}
+		}
+		else {
+			this.disableCustomer = false;
 		}
 
 		if (!this.stockLineForm.inspectionBy) {

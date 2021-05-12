@@ -245,15 +245,6 @@ export class SalesOrderPartNumberComponent {
 
   refreshParts() {
     this.salesOrderService.GetSalesOrderPartsViewById(this.salesOrderId).subscribe(res => {
-      // for (let i = 0; i < this.summaryParts.length; i++) {
-      //   for (let j = 0; j < res.parts.length; j++) {
-      //     if (this.summaryParts[i].childParts[0].salesOrderPartId == res.parts[j].salesOrderPartId) {
-      //       this.summaryParts[i].childParts[0].qtyAvailable = res.parts[j].qtyAvailable;
-      //       this.summaryParts[i].childParts[0].qtyReserved = res.parts[j].qtyReserved;
-      //     }
-      //   }
-      // }
-
       for (let i = 0; i < this.salesQuoteService.selectedParts.length; i++) {
         for (let j = 0; j < res.parts.length; j++) {
           if (this.salesQuoteService.selectedParts[i].salesOrderPartId == res.parts[j].salesOrderPartId) {
@@ -262,7 +253,6 @@ export class SalesOrderPartNumberComponent {
           }
         }
       }
-      //this.salesQuoteService.selectedParts = res.parts[0];
     })
   }
 
@@ -328,7 +318,7 @@ export class SalesOrderPartNumberComponent {
   partsAction(type) {
     this.selectedPartActionType = type;
     let contentPart = this.salesReserve;
-    this.salesReserveModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
+    this.salesReserveModal = this.modalService.open(contentPart, { size: "xlg", backdrop: 'static', keyboard: false });
   }
 
   onPartRowSelect(event) {
@@ -641,37 +631,39 @@ export class SalesOrderPartNumberComponent {
 
     for (let i = 0; i < this.selectedParts.length; i++) {
       let selectedPart = this.selectedParts[i];
-      var errmessage = '';
-      if (!selectedPart.customerRequestDate) {
-        this.isSpinnerVisible = false;
-        invalidParts = true;
-        errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
-      }
-      if (!selectedPart.estimatedShipDate) {
-        this.isSpinnerVisible = false;
-        invalidParts = true;
-        errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
-      }
-      if (!selectedPart.promisedDate) {
-        this.isSpinnerVisible = false;
-        invalidParts = true;
-        errmessage = errmessage + '<br />' + "Please enter Promised Date."
-      }
-      if (!selectedPart.priorityId) {
-        this.isSpinnerVisible = false;
-        invalidParts = true;
-        errmessage = errmessage + '<br />' + "Please enter priority ID."
-      }
-      if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-        if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
-          selectedPart.estimatedShipDate < this.salesQuote.openDate ||
-          selectedPart.promisedDate < this.salesQuote.openDate) {
-          invalidDate = true;
+      if (!selectedPart.salesOrderPartId) {
+        var errmessage = '';
+        if (!selectedPart.customerRequestDate) {
+          this.isSpinnerVisible = false;
+          invalidParts = true;
+          errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
         }
-      }
-      if (!invalidParts && !invalidDate) {
-        let partNumberObj = this.salesOrderService.marshalSOPartToSave(selectedPart, this.userName);
-        this.salesOrderView.parts.push(partNumberObj);
+        if (!selectedPart.estimatedShipDate) {
+          this.isSpinnerVisible = false;
+          invalidParts = true;
+          errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
+        }
+        if (!selectedPart.promisedDate) {
+          this.isSpinnerVisible = false;
+          invalidParts = true;
+          errmessage = errmessage + '<br />' + "Please enter Promised Date."
+        }
+        if (!selectedPart.priorityId) {
+          this.isSpinnerVisible = false;
+          invalidParts = true;
+          errmessage = errmessage + '<br />' + "Please enter priority ID."
+        }
+        if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
+          if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
+            selectedPart.estimatedShipDate < this.salesQuote.openDate ||
+            selectedPart.promisedDate < this.salesQuote.openDate) {
+            invalidDate = true;
+          }
+        }
+        if (!invalidParts && !invalidDate) {
+          let partNumberObj = this.salesOrderService.marshalSOPartToSave(selectedPart, this.userName);
+          this.salesOrderView.parts.push(partNumberObj);
+        }
       }
     }
     if (invalidParts) {

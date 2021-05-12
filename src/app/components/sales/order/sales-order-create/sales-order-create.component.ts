@@ -329,6 +329,7 @@ export class SalesOrderCreateComponent implements OnInit {
 
   getSoInstance(initialCall = false) {
     if (this.copyMode) {
+      this.getNewSalesOrderInstance(this.customerId);
       this.copySalesOrderInstance(this.salesOrderCopyParameters.salesOrderId);
     }
     else if (this.id) {
@@ -659,7 +660,10 @@ export class SalesOrderCreateComponent implements OnInit {
       this.selectedParts.push(partNumberObj);
     }
     this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.selectedParts, this.marginSummary);
-    this.salesOrderPartNumberComponent.refresh();
+    
+    if (this.salesOrderPartNumberComponent) { 
+      this.salesOrderPartNumberComponent.refresh(); 
+    }
     this.salesQuote.managementStructureId = this.salesOrderObj.managementStructureId;
     this.managementStructureId = this.salesOrderObj.managementStructureId;
     this.salesQuote.priorities = this.salesOrderView.priorities;
@@ -970,34 +974,34 @@ export class SalesOrderCreateComponent implements OnInit {
           invalidParts = true;
           errmessage = errmessage + '<br />' + "Please enter priority ID."
         }
-        // if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-        //   let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
-        //   let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
-        //   let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
-        //   let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+        if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
+          let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+          let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+          let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+          let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
 
-        //   if (crdate < opendate || esdate < opendate || pdate < opendate) {
-        //     invalidDate = true;
-        //     if (crdate < opendate) {
-        //       this.isSpinnerVisible = false;
-        //       invalidParts = true;
-        //       errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //       errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
-        //     }
-        //     if (esdate < opendate) {
-        //       this.isSpinnerVisible = false;
-        //       invalidParts = true;
-        //       errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //       errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
-        //     }
-        //     if (pdate < opendate) {
-        //       this.isSpinnerVisible = false;
-        //       invalidParts = true;
-        //       errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //       errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
-        //     }
-        //   }
-        // }
+          if (crdate < opendate || esdate < opendate || pdate < opendate) {
+            invalidDate = true;
+            if (crdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
+            }
+            if (esdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
+            }
+            if (pdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
+            }
+          }
+        }
         if (!invalidDate && !invalidParts) {
           let partNumberObj = this.salesOrderService.marshalSOPartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
@@ -1007,7 +1011,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrderView.parts = partList;
       this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesOrderView.parts, this.marginSummary);
 
-      if (this.id) {
+      if (this.id && !this.copyMode) {
         if (invalidParts) {
           this.isSpinnerVisible = false;
           this.alertService.resetStickyMessage();

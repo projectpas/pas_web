@@ -165,36 +165,36 @@ export class SalesOrderActionsComponent implements OnInit {
 
   initActions(): void {
     this.actionItems = [
-      {
-        label: 'Email SO', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.EmailSalesOrder, SalesOrderConfirmationType.None));
-        }
-      },
+      // {
+      //   label: 'Email SO', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.EmailSalesOrder, SalesOrderConfirmationType.None));
+      //   }
+      // },
       {
         label: 'Make Duplicate', command: () => {
           this.copySalesOrder();
         }
       },
-      {
-        label: 'Sales Register', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.SalesRegister, SalesOrderConfirmationType.None));
-        }
-      },
-      {
-        label: 'Activity', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Activity, SalesOrderConfirmationType.None));
-        }
-      },
-      {
-        label: 'Authorize Return', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.AuthorizeReturn, SalesOrderConfirmationType.None));
-        }
-      },
-      {
-        label: 'Refund', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Refund, SalesOrderConfirmationType.None));
-        }
-      }
+      // {
+      //   label: 'Sales Register', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.SalesRegister, SalesOrderConfirmationType.None));
+      //   }
+      // },
+      // {
+      //   label: 'Activity', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Activity, SalesOrderConfirmationType.None));
+      //   }
+      // },
+      // {
+      //   label: 'Authorize Return', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.AuthorizeReturn, SalesOrderConfirmationType.None));
+      //   }
+      // },
+      // {
+      //   label: 'Refund', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Refund, SalesOrderConfirmationType.None));
+      //   }
+      // }
     ];
   }
 
