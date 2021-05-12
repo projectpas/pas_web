@@ -221,7 +221,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal"
-                                    (click)="saveCapabilities(capabilityForm,'add')" [disabled]="aircraftData && aircraftData.length == 0">
+                                    (click)="saveCapabilities(aircraftData,'add')" [disabled]="aircraftData && aircraftData.length == 0">
                                 Save
                             </button>
                             <button type="button" class="btn btn-danger"
