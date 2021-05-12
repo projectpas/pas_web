@@ -87,7 +87,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'condition', header: 'Cond', align: 0, width: "100px" },
         { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 },
         { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 },
-        { field: 'provision', header: 'Provision', align: 0 },
+        { field: 'provision', header: 'Provision', align: 0, width: "120px" },
         { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
         { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
         { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
@@ -1299,13 +1299,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'line', header: 'Line Num', align: 0, width: "64px" },
             { field: 'taskName', header: 'Task', align: 0, width: "100px"},
             { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
-            { field: 'partNumber', header: 'PN', align: 0 ,width: "116px"},
-            { field: 'partDescription', header: 'PN Description', align: 0 ,width: "165px"},
+            { field: 'partNumber', header: 'PN', align: 0 ,width: "160px"},
+            { field: 'partDescription', header: 'PN Description', align: 0 ,width: "200px"},
           // { field: 'serialNumber', header: 'Serial Num', align: 0 },
           { field: 'condition', header: 'Cond', align: 0, width: "100px" },
           // { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 },
-          { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "83px"},
-          { field: 'provision', header: 'Provision', align: 0, width: "83px" },
+          { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
+          { field: 'provision', header: 'Provision', align: 0, width: "120px" },
           { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
           { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
           { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
@@ -1316,7 +1316,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
           { field: 'uom', header: 'UOM', align: 0, width: "70px" },
           { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
           // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
-          { field: 'itemClassification', header: 'Classification', align: 0 },
+          { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
           // { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
           // { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
           { field: 'needDate', header: 'Need Date', align: 0 },
@@ -1340,21 +1340,23 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
           // { field: 'location', header: 'Location', align: 0 },
           // { field: 'shelf', header: 'Shelf', align: 0 },
           // { field: 'bin', header: 'Bin', align: 0 },
-          { field: 'employeename', header: 'Employee ', align: 0 },
-          { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
-          { field: 'memo', header: 'Memo', align: 0, width: "250px" }
+          { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
+          { field: 'memo', header: 'Memo', align: 0, width: "250px" },
+          { field: 'isDeferred', header: 'Deferred', align: 0, width: "90px" },
       ]
 
       this.childColumnsData = [
-        { field: 'line', header: 'Line Num', align: 0, width: "64px" },
-      { field: 'taskName', header: 'Task', align: 0, width: "100px"},
-      { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
-      { field: 'partNumber', header: 'PN', align: 0 ,width: "116px"},
-      { field: 'partDescription', header: 'PN Description', align: 0 ,width: "165px"},
-      { field: 'serialNumber', header: 'Serial Num', align: 0, width: "70px" },
+        { field: 'line', header: ' ', align: 0, width: "64px" },
+    //   { field: 'taskName', header: 'Task', align: 0, width: "100px"},
+    //   { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
+    { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 , width: "83px"},
+    { field: 'serialNumber', header: 'Serial Num', align: 0, width: "70px" },
+      { field: 'partNumber', header: 'PN', align: 0 ,width: "160px"},
+      { field: 'partDescription', header: 'PN Description', align: 0 ,width: "200px"},
+
       { field: 'condition', header: 'Cond', align: 0, width: "100px" },
-      { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 , width: "83px"},
-      { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "83px"},
+     
+      { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
       { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
       { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
       { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
@@ -1366,15 +1368,21 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
       { field: 'uom', header: 'UOM', align: 0, width: "70px" },
       { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
       // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
-      { field: 'itemClassification', header: 'Classification', align: 0,width: "116px" },
-      { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
-      { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
+      { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
       { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
-      { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
-      { field: 'controlId', header: 'Cntl ID', align: 0 , width: "70px"},
+
       { field: 'currency', header: 'Cur', align: 1, width: "60px" },
       { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
       { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
+
+      { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
+      { field: 'controlId', header: 'Cntl ID', align: 0 , width: "70px"},
+      { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
+    //   { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
+      { field: 'memo', header: 'Memo', align: 0, width: "250px" },
+      { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
+      { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
+     
       { field: 'costDate', header: 'Cost Date', align: 0 , width: "70px"},
       { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
       { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0 ,width: "120px" },
@@ -1390,9 +1398,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
       { field: 'location', header: 'Location', align: 0, width: "100px" },
       { field: 'shelf', header: 'Shelf', align: 0, width: "100px" },
       { field: 'bin', header: 'Bin', align: 0 , width: "100px"},
-      { field: 'employeename', header: 'Employee ', align: 0, width: "100px" },
-      { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
-      { field: 'memo', header: 'Memo', align: 0, width: "250px" }
+     
+
   ]
 
       }
@@ -1402,3 +1409,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
 
 }
+
+// min-width: 81px !important;
+// min-width: 91px !important;
+// min-width: 88px !important;
+// min-width: 84px !important;
+// min-width: 72px !important;
+// min-width: 78px !important;

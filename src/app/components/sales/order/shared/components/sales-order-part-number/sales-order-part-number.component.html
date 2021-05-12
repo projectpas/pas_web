@@ -435,14 +435,17 @@
                                         </span>
                                         <span>
                                             <a class="btn nobg btn-plusro-cstm" (click)="createRO(part)"
-                                                matTooltip="Create RO" matTooltipPosition="above">
+                                                matTooltip="Create RO" matTooltipPosition="above"
+                                                [class.disabled]="((part.qtyReserved == null || part.qtyReserved == 0) || (part.stockLineNumber == null || part.stockLineNumber == ''))"
+                                                [ngClass]="{'btn_disabled': (part.qtyReserved == null || part.qtyReserved == 0)}">
                                                 <i class="fa fa-plus" style="color: #259e08;"></i>
                                             </a>
                                         </span>
                                         <span>
                                             <a class="btn nobg btn-plusro-cstm"
                                                 (click)="initiateCreateWOROPO(part, 'WO')" matTooltip="Create WO"
-                                                matTooltipPosition="above">
+                                                matTooltipPosition="above" [class.disabled]="((part.qtyReserved == null || part.qtyReserved == 0) || (part.stockLineNumber == null || part.stockLineNumber == ''))"
+                                                [ngClass]="{'btn_disabled': (part.qtyReserved == null || part.qtyReserved == 0)}">
                                                 <i class="fa fa-plus" style="color: #24089e;"></i>
                                             </a>
                                         </span>

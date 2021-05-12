@@ -112,7 +112,6 @@ export class AddressComponentComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		debugger;
 		this.loadModuleListForVendorComp();
 		this.getCountriesList();
 		this.loadShippingViaList();

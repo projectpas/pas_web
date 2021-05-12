@@ -132,9 +132,9 @@
     </div>
     <div class="col-2 column pad_top20 label_ajd">
       <div class="custom-checkbox-box text_start">
-        <input class="filled-in" id="PMS"  type="checkbox" value="isDeferred"
+        <input class="filled-in" id="PMS"  type="checkbox" value="{{formObject.isDeferred}}"
           [(ngModel)]="formObject.isDeferred" (ngModelChange)="getActive()" name="isDefered" /> <span class="label_ajd">Is Defered</span>
-          <!-- (ngModelChange)="getActive()" -->
+          <!-- (ngModelChange)="getActive()" --> 
       </div>
     </div>
     <div class="col-3 column ">
@@ -143,7 +143,7 @@
             class="text_editor_box"></div>
           <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup2" matTooltip="Memo"
             matTooltipPosition="above" (click)="onAddTextAreaInfo(formObject)"></i>
-        </div>
+        </div> 
     </div>
   </div>
   <div class="modal fade" id="textarea-popup2" role="dialog" data-backdrop="static" data-keyboard="false">
