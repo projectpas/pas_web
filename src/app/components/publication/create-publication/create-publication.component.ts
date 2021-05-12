@@ -1017,8 +1017,8 @@ export class CreatePublicationComponent implements OnInit {
           })
           return {
             ...x,
-            ataChapter: `${x.ataChapterCode} - ${x.ataChapterName}`,
-            ataSubChapter: `${x.ataSubChapterCode} - ${x.ataSubChapterDescription}`,
+            ataChapter: `${x.ataChapterName}`,
+            ataSubChapter: ` ${x.ataSubChapterDescription}`,
           };
 
         });
