@@ -59,7 +59,7 @@ export class SpeedQuote implements ISpeedQuote {
   divisionId: number;
   departmentId: number;
   managementStructureId: number;
-  salesOrderQuoteNumber: string;
+  speedQuoteNumber: string;
   salesOrderNumber: string;
   versionNumber: string;
   totalSalesAmount: number;

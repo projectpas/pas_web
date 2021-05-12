@@ -852,7 +852,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       if (data) {
         this.speedQuoteView = data && data.length ? data[0] : null;
         this.salesOrderQuoteObj = this.speedQuoteView.speedQuote;
-        this.verifySalesQuoteConversion(this.speedQuoteView.verificationResult);
+        //this.verifySalesQuoteConversion(this.speedQuoteView.verificationResult);
         this.toggle_po_header = false;
       }
       if (this.deletePartsWhileCopieng == true) {
@@ -861,13 +861,13 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
       let partList: any[] = this.speedQuoteView.parts;
       this.selectedParts = [];
-      for (let i = 0; i < partList.length; i++) {
-        let selectedPart = partList[i];
-        let partNumberObj = this.speedQuoteService.marshalSpeedQPartToView(selectedPart);
-        const selectedPartsTemp = this.selectedParts;
-        selectedPartsTemp.push(partNumberObj)
-        this.speedQuoteService.selectedParts = selectedPartsTemp;
-      }
+      // for (let i = 0; i < partList.length; i++) {
+      //   let selectedPart = partList[i];
+      //   let partNumberObj = this.speedQuoteService.marshalSpeedQPartToView(selectedPart);
+      //   const selectedPartsTemp = this.selectedParts;
+      //   selectedPartsTemp.push(partNumberObj)
+      //   this.speedQuoteService.selectedParts = selectedPartsTemp;
+      // }
       this.arrayEmplsit.push(this.salesOrderQuoteObj.employeeId);
       if (!partsRefresh || !isInitialCall) {
         this.load(this.salesOrderQuoteObj.managementStructureId);
@@ -894,7 +894,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
         this.salesOrderQuoteObj.quoteExpireDate
       );
 
-      this.salesQuote.salesOrderQuoteNumber = this.salesOrderQuoteObj.salesOrderQuoteNumber;
+      this.salesQuote.speedQuoteNumber = this.salesOrderQuoteObj.speedQuoteNumber;
       this.salesQuote.versionNumber = this.salesOrderQuoteObj.versionNumber;
       this.salesQuote.accountTypeId = this.salesOrderQuoteObj.accountTypeId;
       this.salesQuote.customerId = this.salesOrderQuoteObj.customerId;
@@ -979,7 +979,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
         this.salesQuote.companyId = this.masterCompanyId;
         this.salesQuote.leadSourceId = null;
         this.salesQuote.probabilityId = null;
-        this.salesQuote.salesOrderQuoteNumber = "Creating";
+        this.salesQuote.speedQuoteNumber = "Creating";
         this.load(this.managementStructureId);
         this.getInitialDataForSOQ();
         this.isSpinnerVisible = false;
@@ -1112,7 +1112,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.speedQuote.contractReference = this.salesQuote.contractReferenceName;
       this.speedQuote.leadSourceReference = this.salesQuote.leadSourceReference;
       this.speedQuote.managementStructureId = this.salesQuote.managementStructureId;
-      this.speedQuote.salesOrderQuoteNumber = this.salesQuote.salesOrderQuoteNumber;
+      this.speedQuote.speedQuoteNumber = this.salesQuote.speedQuoteNumber;
       this.speedQuote.versionNumber = this.salesQuote.versionNumber;
       this.speedQuote.masterCompanyId = this.masterCompanyId;
       this.speedQuote.buId = this.salesQuote.buId;
@@ -1302,7 +1302,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
         if (this.isCopyMode == true) {
           this.speedQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
           this.speedQuoteView.speedQuote.speedQuoteId = null;
-          this.speedQuoteView.speedQuote.salesOrderQuoteNumber = undefined;
+          this.speedQuoteView.speedQuote.speedQuoteNumber = undefined;
           if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
             this.speedQuoteView.parts.filter(x => x.salesOrderQuotePartId = null)
           }
