@@ -246,7 +246,7 @@ export class AssetCapesComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonservice.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonservice.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.capabilityTypeData = res;
         }, err => {
             const errorLog = err;
@@ -371,7 +371,7 @@ export class AssetCapesComponent implements OnInit {
         }
 
 
-        this.commonservice.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+        this.commonservice.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
             this.allPartnumbersInfo = response.map(x => {
                 return {
                     partNumber: x.label, itemMasterId: x.value
@@ -670,7 +670,7 @@ export class AssetCapesComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonservice.autoSuggestionSmartDropDownList('AircraftType', 'AircraftTypeId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonservice.autoSuggestionSmartDropDownList('AircraftType', 'AircraftTypeId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.manufacturerData = res;
             this.loadingIndicator = false;
         }, err => {
@@ -686,7 +686,7 @@ export class AssetCapesComponent implements OnInit {
     loadModalsForExistingRecords(capData) {
         if (capData.selectedAircraftTypes) {
            
-            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes).subscribe(results => {
+            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
                         ...x,
@@ -704,7 +704,7 @@ export class AssetCapesComponent implements OnInit {
 
     loadModalsForExistingRecords_1(capData, aircrafttypeid) {
         if (aircrafttypeid) {
-            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', aircrafttypeid).subscribe(results => {
+            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', aircrafttypeid,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
                         ...x,
@@ -781,7 +781,7 @@ export class AssetCapesComponent implements OnInit {
         if (this.itemMasterService.isEditMode == false) {
             if (capData.selectedAircraftTypes) {
             
-                this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes).subscribe(results => {
+                this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
                     const newResp = results.map(x => {
                         return {
                             ...x,

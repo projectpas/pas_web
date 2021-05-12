@@ -205,6 +205,10 @@ getIntangibleList(){
         return Observable.forkJoin(
             this.assetEndpoint.getCapabilityTypeListEndpoint<any[]>(assetRecordId));
     }
+    getAssetInventoryAdjList(id) {
+		return this.assetEndpoint.getAssetInventoryAdjList(id);
+	}
+
 
     getAssetCapesAll(data, id) {
         return this.assetEndpoint.getAssetCapesAll(data, id);

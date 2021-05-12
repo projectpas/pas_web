@@ -52,6 +52,8 @@ export class AssetInventoryListingComponent implements OnInit {
     assetViewList: any = {};
     currentAsset: any = {};
     modal: NgbModalRef;
+    adjAuditHistoryList: any = [];
+    adjAuditHistoryData: any = [];
     historyModal: NgbModalRef;
     private isDeleteMode: boolean = false;
     private isEditMode: boolean = false;
@@ -556,7 +558,7 @@ get userName(): string {
     toGetDocumentsListNew(id) {
         var moduleId = 54;
         if(id){
-        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.maitananceeletedList).subscribe(res => {
+        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.maitananceeletedList,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.sourceViewforDocumentList = res || [];
             this.allDocumentListOriginal = res;
         },err => {			
@@ -567,7 +569,7 @@ get userName(): string {
     toGetDocumentsListWarranty(id) {
         var moduleId = 55;
         if(id){
-        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.warrentyDeletedList).subscribe(res => {
+        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.warrentyDeletedList,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.sourceViewforDocumentListWarranty = res || [];
             this.allDocumentListOriginalWarranty = res;
         },err => {			
@@ -578,7 +580,7 @@ get userName(): string {
     toGetDocumentsListInt(id) {
         var moduleId = 56;
         if(id){
-        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.intangibleDeletedList).subscribe(res => {
+        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.intangibleDeletedList,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.sourceViewforDocumentListInt = res || [];
             this.allDocumentListOriginalInt = res;
 
@@ -704,6 +706,29 @@ get userName(): string {
     onCloseView() {
         $('#invView').modal('hide');
         // this.modal.close();
+    }
+
+    AssethistoryCloseView() {
+        $('#AssetAdjAudit').modal('hide');
+        // this.modal.close();
+    }
+
+    getColorCodeForassetinvAdjHistory(i, field, value) {
+        const data = this.adjAuditHistoryList;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
+    }
+
+    openAssetInventoryAdj(row) {
+        this.assetService.getAssetInventoryAdjList(row.assetInventoryId).subscribe(res => {
+            this.adjAuditHistoryList = res;
+        }, error => this.errorMessageHandler(error))
     }
 
     restorerecord:any={};

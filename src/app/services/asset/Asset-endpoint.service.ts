@@ -370,6 +370,13 @@ if(type=='add'){
             });
     }
 
+    getAssetInventoryAdjList<T>(id){
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/AssetModule/GetAssetInventoryAdjustmentDataByAssetInventoryId/${id}`, this.getRequestHeaders())
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getAssetInventoryAdjList(id));
+        });
+    }
+
 
     getCapabilityTypeListEndpoint<T>(assetRecordId): Observable<T> {
         let endpointUrl = `${this._capabilityListUrl}/${assetRecordId}`;
