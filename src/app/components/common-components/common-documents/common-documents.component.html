@@ -456,8 +456,8 @@
                         <option [value]="item.documentTypeId">{{item.name}}</option>
                     </ng-container>
                   </select> -->
-                <select [(ngModel)]="documentInformation.documentTypeId" name="documentTypeId" id="documentTypeId"
-                  #documentTypeId="ngModel" (ngModelChange)="enableSave()" required>
+                <select [(ngModel)]="documentInformation.documentTypeId" name="documentTypeId" id="documentTypeId" (change)="onDocumentTypeChange(documentInformation.documentTypeId)"
+                  #documentTypeId="ngModel" (ngModelChange)="enableSave()"  required>
                   <option value='0'>--Select</option>
                   <option *ngFor="let item of documentType" [ngValue]="item.documentTypeId">
                     {{item.name}}

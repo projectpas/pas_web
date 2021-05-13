@@ -1034,4 +1034,9 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     resetAddressShipViaForm() { }
+
+    onDocumentTypeChange(documentTypeId){
+        let document=this.documentType.filter(x=>x.documentTypeId==documentTypeId);
+        this.documentInformation.docDescription=document[0].name;
+    }
 }
