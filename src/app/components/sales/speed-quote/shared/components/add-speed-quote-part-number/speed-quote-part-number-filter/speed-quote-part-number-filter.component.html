@@ -1,0 +1,227 @@
+  <div class="row">
+  <div>
+    <label>Stock Type</label>
+  </div>
+  <div>
+    <label>
+      <input type="checkbox" name="includePMA" [(ngModel)]="query.partSearchParamters.restrictPMA" />&nbsp;Include
+      PMA
+    </label>
+  </div>
+  <div>
+    <label>
+      <input type="checkbox" name="includeDER" [(ngModel)]="query.partSearchParamters.restrictDER" />&nbsp;Include
+      DER
+    </label>
+  </div>
+  <div>
+    <label>
+      <input type="checkbox" name="includeAlternalePN"
+        [(ngModel)]="query.partSearchParamters.includeAlternatePartNumber" />&nbsp;Include
+      Alternate PN
+    </label>
+  </div>
+  <div>
+    <label>
+      <input type="checkbox" name="includeEquivalentPartNumber"
+        [(ngModel)]="query.partSearchParamters.includeEquivalentPartNumber" />&nbsp;Include
+      Equivalent PN
+    </label>
+  </div>
+</div>
+<div class="row">
+  <div class="col-2 column">
+    <div class="form-group">
+      <label>PN<span class="clr-red">*</span></label>
+      <p-autoComplete field="partNumber" class="autocomp-customer-cstm" name="partNumberObj"
+        [(ngModel)]="query.partSearchParamters.partNumberObj" [suggestions]="partDetails" [forceSelection]="true"
+        field="partNumber" (completeMethod)="searchPartByPartNumber($event)" (onSelect)="onPartNumberSelect($event)"
+        [size]="30" [minLength]="1" [dropdown]="true" [disabled]="partEditDisable" required>
+      </p-autoComplete>
+    </div>
+  </div>
+  <div class="col-3 column">
+    <div class="form-group">
+      <label>PN Description</label>
+      <input type="text" class="form-control" name="partDescription"
+        [(ngModel)]="query.partSearchParamters.partDescription" [disabled]="true" />
+    </div>
+  </div>
+  <div class="col-7 column">
+    <div class="col-2 column">
+      <div class="form-group">
+        <label>
+          <span class="pull-left">Cond</span>
+          <span class="clr-red">*</span>
+        </label>
+        <p-multiSelect [options]="allConditionInfo" (onChange)="onConditionSelect()"
+          [(ngModel)]="query.partSearchParamters.conditionIds" name="conditionId" defaultLabel="-- Select --"
+          required="true" [disabled]="partEditDisable" class="classification">
+        </p-multiSelect>
+      </div>
+    </div>
+    <div class="col-2 column">
+      <div class="form-group">
+        <label *ngIf="type == 'SQ'">Qty Req<span class="clr-red">*</span></label>
+        <label *ngIf="type == 'SO'">Qty Ord<span class="clr-red">*</span></label>
+        <input class="form-control text-right" type="text" pKeyFilter="pint" pInputText required
+          [ngModel]="query.partSearchParamters.quantityRequested  | globalNmberFormat"
+          (ngModelChange)="query.partSearchParamters.quantityRequested=formatStringToNumberGlobal($event)"
+          (keyup)="calculate()" name="quantityRequested" autocomplete="off" />
+      </div>
+    </div>
+    <div *ngIf="type == 'SQ'" class="col-2 column">
+      <div class="form-group">
+        <label>Qty to Quote<span class="clr-red">*</span></label>
+        <input type="text" class="form-control text-right" pKeyFilter="pint" required pInputText name="quantityToQuote"
+          [ngModel]="query.partSearchParamters.quantityToQuote  | globalNmberFormat"
+          [ngModelOptions]="{updateOn:'blur'}"
+          (ngModelChange)="query.partSearchParamters.quantityToQuote=formatStringToNumberGlobal($event)"
+          autocomplete="off" />
+      </div>
+    </div>
+    <div class="col-6 column">
+      <div *ngIf="type == 'SQ'" class="col-5 column">
+        <div class="form-group">
+          <label>Qty AlreadyQuoted</label>
+          <input type="text" class="form-control text-right" name="qtyAlreadyQuoted"
+            [ngModel]="query.partSearchParamters.quantityAlreadyQuoted | globalNmberFormat"
+            (ngModelChange)="query.partSearchParamters.quantityAlreadyQuoted=$event" disabled="true" />
+        </div>
+      </div>
+      <div class="col-4 column">
+        <div class="form-group">
+          <label>Qty On Hand</label>
+          <input type="text" class="form-control text-right" name="qtyOnHand"
+            [ngModel]="query.partSearchParamters.qtyOnHand | globalNmberFormat"
+            (ngModelChange)="query.partSearchParamters.qtyOnHand=$event" disabled="true" />
+        </div>
+      </div>
+      <div class="col-3 column">
+        <div class="form-group">
+          <label>Qty Available</label>
+          <input type="text" class="form-control text-right" name="qtyAvailable"
+            [ngModel]="query.partSearchParamters.qtyAvailable | globalNmberFormat"
+            (ngModelChange)="query.partSearchParamters.qtyAvailable=$event" disabled="true" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-start">
+  <div class="col-1 column" style="margin-right: 8px;">
+    <div class="form-group">
+      <button class="btn btn-primary" (click)="search($event)"
+        [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
+        Search PN
+      </button>
+    </div>
+  </div>
+  <div class="col-2 column" style="margin-right: 8px;" *ngIf="enableMultiSearch">
+    <div class="form-group">
+      <button class="btn btn-primary" (click)="openMultiPartSearch()" style="background-color: #f0ad4e !important;">
+        Search Multiple PN's
+      </button>
+    </div>
+  </div>
+</div>
+<ng-template #searchMultiPart let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Multiple PN's</h4>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseMultiPartNumbers()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-4">
+        <label class="sales-quote-multi-part-label" style="text-align: left">List of PN's (Saperated by Comma):</label>
+      </div>
+      <div class="col-md-7">
+        <textarea type="text" name="multiPartNumbers" [(ngModel)]="multiPartNumbers">
+                </textarea>
+      </div>
+      <div class="col-md-1">
+        <button type="button" class="btn btn-primary" (click)="searchMultiPartNumbers()">
+          <i class="fa fa-pencil"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p-table #dt class="" [value]="multiSearchResult" [rows]="10" [lazy]="true" [paginator]="showPaginator"
+          [pageLinks]="pageLinks" [columns]="columns" [scrollable]="true" [style]="{ width: '100%' }">
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width:50px"></th>
+              <th>PN</th>
+              <th>PN Description</th>
+              <th>Condition Type</th>
+              <th>Alternate PN</th>
+              <th>Qty Available</th>
+              <th>Qty On Hand</th>
+              <th>Qty To Requested</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-part>
+            <tr>
+              <td style="width:50px">
+                <input type="checkbox" *ngIf="part.exist" [(ngModel)]="part.selected"
+                  (change)="onChange($event, part,salesMargin)" />
+              </td>
+              <td>{{ part.partNumber }}</td>
+              <td>{{ part.partDescription }}</td>
+              <td>
+                <select [(ngModel)]="part.conditionType" [ngModelOptions]="{standalone: true}">
+                  <option>--select--</option>
+                  <option *ngFor="let condition of allConditionInfo" [ngValue]="condition.conditionId">
+                    {{condition.description}}</option>
+                </select>
+              </td>
+              <td>{{ part.alternatePartNumber }}</td>
+              <td><input type="number" class="form-control" [ngModel]="part.qtyAvailable | globalNmberFormat"
+                  (ngModelChange)="part.qtyAvailable=$event" [ngModelOptions]="{standalone: true}" /></td>
+              <td><input type="number" class="form-control" [ngModel]="part.qtyOnHand | globalNmberFormat"
+                  (ngModelChange)="part.qtyOnHand=$event" [ngModelOptions]="{standalone: true}" />
+              </td>
+              <td><input type="number" class="form-control" [ngModel]="part.qtyRequested | globalNmberFormat"
+                  (ngModelChange)="part.qtyRequested=$event" [ngModelOptions]="{standalone: true}" /></td>
+              <td>
+                <span>
+                  <a class="add-part-number clr-red" *ngIf="!part.exist" target="_blank"
+                    routerLink="/itemmastersmodule/itemmasterpages/app-item-master-stock">
+                    Add Part Number
+                  </a>
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="onCloseMultiPartNumbers()">Add Available Parts</button>
+    <button type="button" class="btn btn-danger" (click)="onCloseMultiPartNumbers()">No</button>
+  </div>
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
