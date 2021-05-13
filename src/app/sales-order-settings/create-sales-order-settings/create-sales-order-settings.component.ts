@@ -56,6 +56,9 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
         if (this.salesOrderService.isEditSOSettingsList) {
             this.isEditMode = true;
             this.receivingForm = this.salesOrderService.soSettingsData;
+            if (this.receivingForm.effectiveDate) {
+                this.receivingForm.effectiveDate = new Date(this.receivingForm.effectiveDate);
+            }
         }
         this.getInitialData();
     }
@@ -107,6 +110,7 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
         this.isSpinnerVisible = true;
         let validSettings = this.validateSettings();
         if (validSettings) {
+            this.isSpinnerVisible = false;
             let content = this.errorMessagePop;
             this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
         } else {
@@ -172,6 +176,12 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
         if (this.receivingForm.defaultStatusId <= 0) {
             this.errorMessages.push("Please select SO Status");
             haveError = true;
+        }
+        if (this.receivingForm.isApprovalRule) {
+            if (this.receivingForm.effectiveDate == null) {
+                this.errorMessages.push("Effective Date Required!");
+                haveError = true;
+            }
         }
         return haveError;
     }
