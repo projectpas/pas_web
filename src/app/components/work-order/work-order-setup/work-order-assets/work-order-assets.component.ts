@@ -684,6 +684,7 @@ viewAsstesInventory(rowData){
                     isActive: true,
                     createdBy: this.userName,
                     updatedBy: this.userName,
+                    updatedDate:new Date(),
                     workFlowWorkOrderId: this.workFlowWorkOrderId,
                     subWOPartNoId: this.subWOPartNoId,
                     workOrderId: this.subWorkOrderDetails.workOrderId,
@@ -716,6 +717,7 @@ viewAsstesInventory(rowData){
                     isActive: true,
                     createdBy: this.userName,
                     updatedBy: this.userName,
+                    updatedDate:new Date(),
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
                 }
             })
