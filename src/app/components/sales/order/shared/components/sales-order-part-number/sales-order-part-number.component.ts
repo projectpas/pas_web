@@ -243,17 +243,24 @@ export class SalesOrderPartNumberComponent {
     this.refreshParts();
   }
 
+  salesOrderObj: any;
   refreshParts() {
-    this.salesOrderService.GetSalesOrderPartsViewById(this.salesOrderId).subscribe(res => {
-      for (let i = 0; i < this.salesQuoteService.selectedParts.length; i++) {
-        for (let j = 0; j < res.parts.length; j++) {
-          if (this.salesQuoteService.selectedParts[i].salesOrderPartId == res.parts[j].salesOrderPartId) {
-            this.salesQuoteService.selectedParts[i].qtyAvailable = res.parts[j].qtyAvailable;
-            this.salesQuoteService.selectedParts[i].qtyReserved = res.parts[j].qtyReserved;
-          }
-        }
+    this.salesOrderService.getSalesOrder(this.salesOrderId).subscribe(res => {
+      this.salesOrderObj = res[0].salesOrder;
+      let partList: any[] = res[0].parts;
+
+      if (this.selectedParts.length > 0)
+        this.selectedParts = [];
+
+      for (let i = 0; i < partList.length; i++) {
+        let selectedPart = partList[i];
+        let partNumberObj = this.salesOrderService.marshalSOPartToView(selectedPart, this.salesOrderObj);
+        this.selectedParts.push(partNumberObj);
       }
-    })
+
+      this.salesQuoteService.selectedParts = this.selectedParts;
+      this.refresh();
+    });
   }
 
   onCloseMargin(event) {
@@ -660,10 +667,10 @@ export class SalesOrderPartNumberComponent {
             invalidDate = true;
           }
         }
-        if (!invalidParts && !invalidDate) {
-          let partNumberObj = this.salesOrderService.marshalSOPartToSave(selectedPart, this.userName);
-          this.salesOrderView.parts.push(partNumberObj);
-        }
+      }
+      if (!invalidParts && !invalidDate) {
+        let partNumberObj = this.salesOrderService.marshalSOPartToSave(selectedPart, this.userName);
+        this.salesOrderView.parts.push(partNumberObj);
       }
     }
     if (invalidParts) {

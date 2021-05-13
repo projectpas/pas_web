@@ -128,7 +128,7 @@
                             <div class="form-group">
                                 <label for="sequence">Sequence</label>
                                 <input type="number" name="gSequence" class="form-control" [maxLength]="15"
-                                    (change)="onChangeInput()" #pubID="ngModel"
+                                    (change)="onChangeInput()" #pubID="ngModel"   pKeyFilter="money"
                                     [(ngModel)]="sourcePublication.sequence" />
                             </div>
                             <div class="form-group">
@@ -169,14 +169,14 @@
                             </div>
                             <div class="form-group">
                                 <label for="sequence">Revision Num</label>
-                                <input type="text" name="revisionNumber" class="form-control" [maxLength]="15"
-                                    #pubID="ngModel" (change)="onChangeInput()"
+                                <input type="text" name="revisionNumber" class="form-control text-right" [maxLength]="15"
+                                    #pubID="ngModel" (change)="onChangeInput()"  pKeyFilter="money"
                                     [(ngModel)]="sourcePublication.revisionNum" />
                             </div>
                             <div class="form-group">
                                 <label>Revision Date</label>
                                 <p-calendar name="openDate" [(ngModel)]="sourcePublication.revisionDate"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [maxDate]="currentDate"
                                     (onSelect)="onChangeInput()" [showIcon]="true" id="openDate" #revisionDate="ngModel"
                                     required>
                                 </p-calendar>
@@ -228,15 +228,8 @@
                             </div>
 
                         </div>
+                       
                     </div>
-                    <div class="form-row col-row" *ngIf="publicationRecordId">
-                        <div class="col-md-12">
-                            <app-common-documents [moduleName]="moduleName" [referenceId]="publicationRecordId"
-                                [isViewMode]="false" [offLineUpload]="true">
-                            </app-common-documents>
-                        </div>
-                    </div>
-
                     <div class="pull-right">
                         <button type="submit" *ngIf="!isEditMode" (click)="saveGeneralInfo()"
                             [disabled]="!generalInfoForm.valid" class="btn btn-primary button-save-cstm-cstm">
@@ -247,16 +240,15 @@
                             class="btn btn-primary button-save-cstm-cstm">
                             Update
                         </button>
-                        <!-- <button class="btn btn-primary button-save-cstm-cstm"
-                            [disabled]="!generalInfoForm.valid && disableGeneralInfoSave" type="submit"
-                            (click)="saveGeneralInfo(); ">
-                            {{isEditMode ? 'Update' : 'Save' }}
-                        </button> -->
+                       
                         <button class="btn btn-primary button-save-cstm-cstm" [disabled]="!isEnableNext" type="submit"
                             (click)="nextClick('Next')">
                             Next
                         </button>
                     </div>
+                    
+
+                  
                     <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
@@ -278,27 +270,39 @@
                     </ng-template>
 
                 </form>
+                <div class="form-row col-row" *ngIf="publicationRecordId">
+                    <div class="col-md-12">
+                        <app-common-documents [moduleName]="moduleName" [referenceId]="publicationRecordId"
+                            [isViewMode]="false" [offLineUpload]="true">
+                        </app-common-documents>
+                    </div>
+                </div>
             </div>
         </div>
         <div [ngClass]="{hideTab : currentTab !== 'PnMap'}">
             
-                <!-- <h4 class="po-head-sm">
-                    PN Mapping
-                </h4>
-                <hr /> -->
+               
                 <div class="card new-card">
                 <div class="card-header header">
                     <div class="row">
                       <div class="col">
                         <h4 class="header-name"> PN Mapping</h4>
                       </div>
-                     
+                      <div>
+                        <button 
+                                type="button"
+                                class="btn-sm header-button"  matTooltip="Add PN" 
+                                 matTooltipPosition="above" data-toggle="modal" data-target="#alternateModalPopup"
+                                >
+                            Add PN
+                        </button>
+                    </div>
                     </div>
                   </div>
             
 
             <div>
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                    
                         <div class="col-md-3">
                             <div class="form-group ">
@@ -312,9 +316,7 @@
                                     (completeMethod)="getPartNumberList($event)" [size]="30" [minLength]="1"
                                     [dropdown]="true" required>
                                 </p-autoComplete>
-                                <!-- <p-multiSelect [options]="partNumberList" [(ngModel)]="selectedPartNumbers"
-                                    (click)="openModelPopups(selectedPartNumbers)" class="pub-multi align-x">
-                                </p-multiSelect> -->
+                               
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -327,7 +329,7 @@
                         </div>
                         <div class="clear"></div>
                     
-                </div>
+                </div> -->
                 <div class="col-md-12">
                     
                         <p-table #pnMappingTable class="rpo-table-cstm rro-table-cstm"
@@ -1121,7 +1123,7 @@
             </p>
 
             <p>
-                <span class="label"><b>Ata SubChapter: </b></span><span class="value">{{
+                <span class="label"><b>ATA SubChapter: </b></span><span class="value">{{
                     viewAtaData.ataSubChapterDescription }}</span>
             </p>
 
@@ -1455,6 +1457,152 @@
         </button>
     </div>
 </ng-template>
+
+<!--New code for dialogue-->
+<div id="alternateModalPopup" class="modal fade custom-popup" role="dialog" data-backdrop="static"
+     data-keyboard="false">
+    <div class="modal-dialog modal-sm max-w-800">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form #saveNtaeTabForm="ngForm" (submit)="savePNMapping()" id="add-customerwork" name=""
+                  class="form-horizontal add-custustomer">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">×</button>
+                    <h4 class="modal-title">Add PN</h4>
+                </div>
+                <div class="modal-body" >
+                    
+
+                    <div class="form-row mt-2">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm">PN <strong class="clr-red">*</strong> </label>
+                               
+                                            <p-autoComplete class="p-autoComplete-ctsm" name="selectedPartNumbers"
+                                            [(ngModel)]="selectedPartNumbers" field="label"
+                                            [suggestions]="partNumberListOriginal" [forceSelection]="true"
+                                            (onSelect)="enablePnMappingSave()" emptyMessage="No Match Found"
+                                            (completeMethod)="getPartNumberList($event)" [size]="30" [minLength]="1"
+                                            (onSelect)="bindPartDataInPopup($event)"
+                                            [dropdown]="true" required>
+                                        </p-autoComplete>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-10 max-w-400">
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm">
+                                    Description
+                                </label>
+                                <input type="text"  class="form-control" disabled name="description"
+                                       [(ngModel)]="alternateData.Description">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-10 max-w-400">
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm">
+                                    Manufacturer
+                                </label>
+                                <input type="text"  class="form-control" disabled name="manufacturer"
+                                       [(ngModel)]="alternateData.manufacturer">
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
+                        <div class="col-md-10 max-w-400">
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm">
+                                    Item Classification
+                                </label>
+                                <input type="text" class="form-control" disabled name="itemClassification"
+                                       [(ngModel)]="alternateData.itemClassification">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm">
+                                    Document
+                                </label>
+                                <p-fileUpload #fileUploadInput name="gFileupload[]" multiple="multiple"
+                                              [showCancelButton]="false" [showUploadButton]="false"
+                                              customUpload="true" (ngModelChange)="enableSave()" (onSelect)="fileUploadNtae($event)"
+                                              (onRemove)="removeFile($event)"></p-fileUpload>
+                                <span class="no-records-cstm no-records-msg" *ngIf="uploadedFileTempCount.length==0">No Files attached</span>
+                            </div>
+                        </div> 
+                    </div>-->
+                    <!-- <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
+                        <div class="col-md-12">
+                            <div class="col-md-12 table-responsive table-overflow"
+                                 *ngIf="alternateData.attachmentDetails?.length > 0">
+                                <h4 class="panel-title attachment-padding">
+                                    Attachment Details:
+                                </h4>
+                                <p-table class="table-responsive ptable-cus-pma"
+                                         [paginator]="alternateData?.attachmentDetails?.length > 0"
+                                         [value]="alternateData?.attachmentDetails" [rows]="3">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="table-column-width">
+                                                File Name
+                                            </th>
+                                            <th class="table-column-width">
+                                                Download
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-part let-rowData let-columns="columns"
+                                                 let-i="rowIndex">
+                                        <tr>
+                                            <td class="table-column-width">
+
+                                                {{ part?.ad?.fileName}}
+                                            </td>
+                                            <td class="table-column-width">
+                                                <a (click)="downloadFileUpload(part?.ad)" matTooltip="Download"
+                                                   matTooltipPosition="above" class="btn nobg btn-cstm">
+                                                    <span>
+                                                        <i class="fa fa-download"></i>
+                                                    </span>
+                                                </a>
+                                                <span data-toggle="modal" data-target="#alternatePopupDocDel">
+                                                    <a class="btn nobg"
+                                                       (click)="deleteNTAEDocument(part?.ad)" matTooltip="Delete"
+                                                       matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns
+                                                 *ngIf="alternateData.attachmentDetails.length == 0">
+                                        <tr>
+                                            <td [attr.colspan]="2"
+                                                class="no-records-cstm no-records-msg">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button  type="button" class="btn btn-primary"  (click)="savePNMapping()">Save </button>
+                    <!-- <button *ngIf="isEditMode == true" type="button" class="btn btn-primary" [disabled]="updateBtn" (click)="updateAlternate(saveNtaeTabForm)">Update</button> -->
+                    <button #closeAddPopup type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="preloader modal-header-index" *ngIf="isSpinnerVisible">
     <div class="loading">

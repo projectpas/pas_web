@@ -403,6 +403,7 @@ export class SalesPartNumberComponent {
           }
           this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
           this.part.quantityAlreadyQuoted = this.query.partSearchParamters.quantityAlreadyQuoted;
+          this.part.itemGroup = this.selectedPart.itemGroup;
         });
         this.addPartModal.close();
         this.salesMarginModal = this.modalService.open(contentMargin, { size: "lg", backdrop: 'static', keyboard: false });

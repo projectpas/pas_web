@@ -39,10 +39,10 @@
                     </td>
                     <td *ngFor="let col of columns" pReorderableRowHandle>
                         <span *ngIf="col.field == 'select'">
-                            <!-- <span *ngIf="!getCheckBoxDisplay(part, rowIndex,false)">
+                            <span *ngIf="!getCheckBoxDisplay(part, rowIndex,false)">
                                 <input type="checkbox" (change)="onChange($event, part)" />
-                            </span> -->
-                            <input type="checkbox" (change)="onChange($event, part)" [disabled]="isStockLineViewMode" />
+                            </span>
+                            <!-- <input type="checkbox" (change)="onChange($event, part)" [disabled]="isStockLineViewMode" /> -->
                         </span>
                         <span *ngIf="col.field == 'partNumber'">
                             {{part.partNumber}}

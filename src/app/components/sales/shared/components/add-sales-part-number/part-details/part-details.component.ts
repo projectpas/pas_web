@@ -73,9 +73,9 @@ export class PartDetailsComponent implements OnChanges {
         );
       });
 
-      if (this.clearData) {
-        this.parts = [];
-      }
+    if (this.clearData) {
+      this.parts = [];
+    }
   }
 
   hideStockline(rowIndex) {
@@ -158,6 +158,7 @@ export class PartDetailsComponent implements OnChanges {
   }
 
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
+    debugger;
     if (this.selectedParts.length > 0) {
       let sameParts = [];
       if (isStock) {
@@ -166,31 +167,38 @@ export class PartDetailsComponent implements OnChanges {
         );
       } else {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == stockLineItem.partNumber
+          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId && part.stockLineNumber == undefined
         );
       }
 
-      let qtyQuoted = 0;
-      if (sameParts && sameParts.length > 0) {
-        sameParts.forEach(samePart => {
-          qtyQuoted = qtyQuoted + samePart.quantityFromThis;
-        });
-      }
-      if (qtyQuoted < stockLineItem.qtyAvailable) {
-        let remained = stockLineItem.qtyAvailable - qtyQuoted;
-        if (remained != stockLineItem.qtyAvailable) {
-          if (isStock) {
-            this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
-          } else {
-            this.parts[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
-          }
+      if (isStock) {
+        let qtyQuoted = 0;
+        if (sameParts && sameParts.length > 0) {
+          sameParts.forEach(samePart => {
+            qtyQuoted = qtyQuoted + samePart.quantityFromThis;
+          });
         }
-        if (this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] != this.roleUpMaterialList[rowIndex].qtyAvailable) {
+        if (qtyQuoted < stockLineItem.qtyAvailable) {
+          let remained = stockLineItem.qtyAvailable - qtyQuoted;
+          if (remained != stockLineItem.qtyAvailable) {
+            if (isStock) {
+              this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
+            } else {
+              this.parts[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
+            }
+          }
+          if (this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] != this.roleUpMaterialList[rowIndex].qtyAvailable) {
+            return true;
+          }
+          return false;
+        } else {
           return true;
         }
-        return false;
-      } else {
-        return true;
+      }
+      else {
+        if (sameParts && sameParts.length > 0) {
+          return true;
+        }
       }
     } else {
       this.selectedParts = [];

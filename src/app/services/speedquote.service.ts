@@ -314,4 +314,10 @@ export class SpeedQuoteService {
       this.speedQuoteEndPointSevice.closeSpeedQuoteEndPoint(salesQuoteId, updatedBy)
     );
   }
+
+  resetSearchPart() {
+    this.parts = [];
+    this.query = new ItemMasterSearchQuery();
+    this.query.partSearchParamters.quantityAlreadyQuoted = 0;
+  }
 }
