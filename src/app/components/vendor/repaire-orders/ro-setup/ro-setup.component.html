@@ -432,34 +432,34 @@
                     </div>
                 </div>
                 <form #addMultiPNTable="ngForm">
-                    <div class="table-responsive pas-table-cstm">
-                        <div class="tableFixHead-multiple-pn">
+                    <div class="table-responsive pas-table-cstm parts-list-table-align">
+                        <div class="tableFixHead multiple-pn">
                             <table class="table table-bordered ">
                                 <thead>
                                     <tr class="header-table-width">
-                                        <th class="multiple-pn th-width" style="text-align:left">
-                                            <span class="checkbox-cstm">
-                                                <label style="width:40px" class="multiple-pn-label">
+                                        <th class="multiple-pn th-width" style="text-align:left;z-index: 1;">
+                                            <!-- <span class="checkbox-cstm">
+                                                <label style="width:40px" class="multiple-pn-label"> -->
                                                     <input type="checkbox" name="addAllMultiPN"
                                                         [(ngModel)]="addAllMultiPN"
-                                                        (change)="onChangeAddAllMultiPN($event)">
-                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                        (change)="onChangeAddAllMultiPN($event)" />
+                                                    <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                 </label>
-                                            </span>
+                                            </span> -->
                                         </th>
-                                        <th>Stk Line Num</th>
-                                        <th>Ser Num</th>
-                                        <th>Cntrl Num</th>
-                                        <th>Cntrl ID Num</th>
+                                        <th class="min-width-100">Stk Line Num</th>
+                                        <th class="min-width-100">Ser Num</th>
+                                        <th class="min-width-100">Cntrl Num</th>
+                                        <th class="min-width-100">Cntrl ID Num</th>
                                         <th>PN</th>
                                         <th>PN Description</th>
                                         <th>Stk Type</th>
                                         <!-- <th>Priority</th> -->
                                         <th>Manufacturer</th>
                                         <th>UOM</th>
-                                        <th>Qty Avail</th>
-                                        <th>Qty On Hand</th>
-                                        <th>Unit Cost</th>
+                                        <th class="min-width-80">Qty Avail</th>
+                                        <th class="min-width-80">Qty On Hand</th>
+                                        <th class="min-width-80">Unit Cost</th>
                                         <th>Traceable to</th>
                                         <th>Owner</th>
                                         <th>Obtain From</th>
@@ -472,15 +472,15 @@
                                 <tbody>
                                     <tr *ngFor="let obj of stocklineData; let row_no=index;">
                                         <td class="obj-td">
-                                            <span class="checkbox-cstm">
+                                            <!-- <span class="checkbox-cstm"> -->
                                                 <!--*ngIf="!multiplePNDetails"-->
-                                                <label class="obj-label">
+                                                <!-- <label class="obj-label"> -->
                                                     <input type="checkbox" name="addAllMultiPNRows{{row_no}}"
                                                         [(ngModel)]="obj.addAllMultiPNRows"
                                                         (change)="onChangeAddEachMultiPN()">
-                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                    <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                 </label>
-                                            </span>
+                                            </span> -->
                                         </td>
                                         <td>{{obj.stockLineNumber === null ? '-':obj.stockLineNumber}}</td>
                                         <td>{{obj.serialNumber === null ? '-':obj.srialNumber}}</td>
@@ -739,7 +739,7 @@
                                         <td><input type="text" class="form-control text-right"
                                                 [(ngModel)]="partList.discountAmount" name="discountAmount{{row_index}}"
                                                 pKeyFilter="money" disabled></td>
-                                        <td>
+                                        <td class="text-right">
                                             <input type="text" title="Unit Cost" class="form-control text-right"
                                                 [(ngModel)]="partList.unitCost" name="unitCost{{row_index}}"
                                                 pKeyFilter="money" (ngModelChange)="enablePartSave()"

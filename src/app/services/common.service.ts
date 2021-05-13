@@ -839,8 +839,8 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  GetDocumentsListNewAsset(referenceId, moduleId, isDeleted) {
-    return this.http.get<any>(`${this.baseUrl}/api/FileUpload/getFileDocumentDetailNew/${referenceId}?moduleId=${moduleId}&isdeleted=${isDeleted}`, this.getRequestHeaders()).catch(error => {
+  GetDocumentsListNewAsset(referenceId, moduleId, isDeleted,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/FileUpload/getFileDocumentDetailNew/${referenceId}?moduleId=${moduleId}&isdeleted=${isDeleted}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.GetDocumentsListNewAsset(referenceId, moduleId, isDeleted));
     });
   }
@@ -857,20 +857,20 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getAssetListBasedOnType(tableName, primaryKeyColumn, labelColumn, searchValue?, secondarycolumn?, secondarytextcolumn?, count?, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/bindautocompletedropdownsbasedoncolumn?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&secondarycolumn=${secondarycolumn}&secondarytextcolumn=${secondarytextcolumn}&count=${count !== undefined ? count : 0}&idList=${idList}`, this.getRequestHeaders()).catch(error => {
+  getAssetListBasedOnType(tableName, primaryKeyColumn, labelColumn, searchValue?, secondarycolumn?, secondarytextcolumn?, count?, idList?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/bindautocompletedropdownsbasedoncolumn?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&secondarycolumn=${secondarycolumn}&secondarytextcolumn=${secondarytextcolumn}&count=${count !== undefined ? count : 0}&idList=${idList}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getAssetListBasedOnType(tableName, primaryKeyColumn, labelColumn, searchValue, secondarycolumn, secondarytextcolumn, count, idList));
     });
   }
 
-  getAutoCompleteDropDownsByTwoTables(tableName1, tableName2, primaryKeyColumn, labelColumn, searchValue?, count?, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/Bindautocompletedropdownsbasedontwotables?tableName1=${tableName1}&tableName2=${tableName2}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&count=${count !== undefined ? count : 0}&idList=${idList}`, this.getRequestHeaders()).catch(error => {
+  getAutoCompleteDropDownsByTwoTables(tableName1, tableName2, primaryKeyColumn, labelColumn, searchValue?, count?, idList?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/Bindautocompletedropdownsbasedontwotables?tableName1=${tableName1}&tableName2=${tableName2}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&count=${count !== undefined ? count : 0}&idList=${idList}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getAutoCompleteDropDownsByTwoTables(tableName1, tableName2, primaryKeyColumn, labelColumn, searchValue, count, idList));
     });
   }
 
-  getAutoCompleteDropDownsByCodeWithName(tableName1, primaryKeyColumn, labelColumn, secondarycolumn?, searchValue?, count?, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/Bindautocompletedropdownsbasedontwocolumns?tableName1=${tableName1}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&secondarycolumn=${secondarycolumn}&count=${count !== undefined ? count : 0}&idList=${idList}`, this.getRequestHeaders()).catch(error => {
+  getAutoCompleteDropDownsByCodeWithName(tableName1, primaryKeyColumn, labelColumn, secondarycolumn?, searchValue?, count?, idList?,masterCompany?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/Bindautocompletedropdownsbasedontwocolumns?tableName1=${tableName1}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&secondarycolumn=${secondarycolumn}&count=${count !== undefined ? count : 0}&idList=${idList}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getAutoCompleteDropDownsByCodeWithName(tableName1, primaryKeyColumn, labelColumn, secondarycolumn, searchValue, count, idList));
     });
   }

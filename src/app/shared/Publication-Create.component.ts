@@ -102,6 +102,8 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     setModelArray: any = [];
     setDashNumberArray: any = [];
     WmoduleName: any = 'Publication';
+    viewAircraftData: any;
+    viewAtaData: any;
     constructor(private actionService: ActionService,
         private authService: AuthService,
         private masterComapnyService: MasterComapnyService,
@@ -327,6 +329,25 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             }
         })
     }
+    closeModal() {
+        this.viewAircraftData = {};
+        this.viewAtaData={};
+        if (this.modal) {
+          this.modal.close()
+        }
+      }
+    openAircraftView(rowData, content) {
+        this.viewAircraftData = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm' });
+        this.modal.result.then(() => {
+        }, () => { })
+      }
+      openAtaView(rowData, content) {
+        this.viewAtaData = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm' });
+        this.modal.result.then(() => {
+        }, () => { })
+      }
 
     private loadPublicationById(wfPublication: any, isDropdownChange: boolean) {
         this.isSpinnerVisible = true;

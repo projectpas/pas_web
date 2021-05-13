@@ -68,7 +68,7 @@ export class SalesOrderpickTicketComponent implements OnInit {
         popupWin.document.write(`
           <html>
             <head>
-              <title>Print tab</title>
+               <title>Print tab</title>
               <style>
               @page { size: auto;  margin: 0mm; }
 
@@ -357,6 +357,7 @@ table, thead, th {
     // width:220px;
     height:auto;
     max-width:100%;
+    padding-bottom:10px;
   
   }
   

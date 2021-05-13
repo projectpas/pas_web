@@ -75,6 +75,21 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
             <head>
               <title>Print tab</title>
               <style>
+              // @page { size: auto;  margin: 0mm; }
+
+              @media print
+	{
+		@page {
+		margin-top: 0;
+		margin-bottom: 0;
+		}
+	/*	body  {
+		padding-top: 72px;
+		padding-bottom: 72px ;
+		}*/
+    // @page {size: landscape}
+	} 
+  
               table {font-size:12px !important}        
               table thead { background: #808080;}    
                
@@ -104,7 +119,9 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
                  
 
-                .very-first-block {position: relative; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
+                .very-first-block {position: relative; min-height: 1px;
+                  height:auto;border-right:1px solid black;
+                   float: left;padding-right: 2px;padding-left: 2px;
                   width: 50%;}
                 .first-block-name{margin-right: 20px} 
                 .first-block-sold-to {
@@ -170,12 +187,12 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 
                 .second-block {
                   position: relative;
-                  min-height: 181px;
+                  min-height: 1px;
                   float: left;
                   padding-right: 2px;
                   width: 42%;
                 height:auto;
-                  border-left:1px solid black;
+                  // border-left:1px solid black;
                     // margin-left: 16%;
                   padding-left: 2px;
                   box-sizing: border-box;
@@ -319,9 +336,12 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 }
                 
                 .logo {
-                   padding-top: 10px;
-                  height:70px;
-                  width:220px;
+                  padding-top: 10px;
+                  // height:70px;
+                  // width:220px;
+                  height:auto;
+                  max-width:100%;
+                  padding-bottom:10px;
                 
                 }
                 
@@ -342,9 +362,14 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                 }
                 .first-block-sold-bottom{
                   border-bottom: 1px solid black;
+                  position:relative;
+                  min-height:1px;
+                  height:auto;
+                  width:100%;
+                  float:left;
                     // margin-top: -2px;
                     height: auto;
-                    min-height: 140px;
+                   // min-height: 120px;
                 }
                 
                 .parttable th {
@@ -356,11 +381,16 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                   border-bottom:1px solid black !important;
                 }
                 .table-margins{
-                  margin-top:20px;margin-left:-1px
+                  margin-top:-5px;margin-left:-1px
                 }
-                .invoice-border{border-bottom: 1px solid;
-                    min-height: 179px;
-                    height: auto;}
+                .invoice-border{
+                  border-bottom: 1px solid;
+    poeition:relative;
+      // min-height: 119px;
+      min-height:1px;
+      height: auto;
+    float:left;
+                  }
                
            
               </style>

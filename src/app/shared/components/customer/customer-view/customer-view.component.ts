@@ -20,6 +20,7 @@ import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomp
 
 export class CustomerViewComponent implements OnInit {
     moduleName="Customer"
+    custfincmoduleName =  "CustomerFinance";
     @Input() customerId;
     viewDataGeneralInformation: any = {};
     viewDataclassification: any[];

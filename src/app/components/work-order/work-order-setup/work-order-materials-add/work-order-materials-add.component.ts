@@ -16,10 +16,8 @@ import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
   templateUrl: './work-order-materials-add.component.html',
   styleUrls: ['./work-order-materials-add.component.scss']
 })
+
 export class WorkOrderMaterialsAddComponent implements OnInit {
-  // // @Input() selectedSummaryRow: SummaryPart;
-  // // @Input() isStockLineViewMode = false;    
-  // @Input() customer: any;
   @Input() salesQuote: ISalesQuote;
    @Input() clearData = false;
    @Input() display: boolean;
@@ -159,7 +157,6 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
           let activeConditions = results[0].filter(x => x.isActive == true);
           if (activeConditions && activeConditions.length > 0) {
             this.allConditionInfo = activeConditions;
-            //if (this.selectedSummaryRow) {
               let conditionExists = this.allConditionInfo.find(x => x.conditionId == this.query.partSearchParamters.conditionId);
               if (!conditionExists) {
                 let addConditionExists = results[0].find(x => x.conditionId == this.query.partSearchParamters.conditionId);
@@ -167,7 +164,6 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
                   this.allConditionInfo.push(addConditionExists);
                 }
               }
-            //}
           }
           this.allConditionInfoArray = this.allConditionInfo.map((item) => ({ label: item.description, value: item.conditionId }));
         });

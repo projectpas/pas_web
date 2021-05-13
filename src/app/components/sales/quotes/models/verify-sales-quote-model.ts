@@ -57,6 +57,7 @@ export class SOQSettingsModel {
     soqListViewId: Number;
     soqListStatusId: Number;
     isApprovalRule: Boolean = false;
+    effectiveDate: Date = new Date();
 }
 
 export class SOSettingsModel {
@@ -78,4 +79,5 @@ export class SOSettingsModel {
     soListViewId: Number;
     soListStatusId: Number;
     isApprovalRule: Boolean = false;
+    effectiveDate: Date = new Date();
 }

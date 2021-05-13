@@ -750,7 +750,9 @@
                                         <p>
                                             <span class="label"><b>Attachment Details: </b></span>
                                         </p>
-                                        <p-table #taxexeptTable
+                                        <app-common-documents [moduleName]="custfincmoduleName" [referenceId]="customerId" [isViewMode]="true" 
+                                        [offLineUpload]="false"></app-common-documents>
+                                        <!-- <p-table #taxexeptTable
                                                 class="rpo-table-cstm lastcol-fix"
                                                 [paginator]="true"
                                                 [value]="allCustomerFinanceDocumentsList"
@@ -778,9 +780,9 @@
                                                         {{ col.header }}
                                                         <p-sortIcon *ngIf="col.field !='download' && col.field !='delete'" [field]="col.field"></p-sortIcon>
                                                     </th>
-                                                    <!-- <th>
-                                                        Download
-                                                    </th> -->
+                                                    
+
+
                                                     <th class="table-actions-column">Actions</th>
                                                 </tr>
 
@@ -866,13 +868,13 @@
                                                     pInputText
                                                     type="text" />
                                             </ng-template>
-                                        </p-table>
+                                        </p-table> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                            </div>
-                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

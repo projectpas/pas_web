@@ -614,7 +614,7 @@ export class AssetListingComponent implements OnInit {
         $('#step4').collapse('hide');
     }
     getAssetAcquisitionTypeList() {
-        this.commonservice.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name').subscribe(res => {
+        this.commonservice.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId','Name' ,'','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.assetAcquisitionTypeList = res;
         }, err => {
             const errorLog = err;
@@ -622,7 +622,7 @@ export class AssetListingComponent implements OnInit {
         })
     }
     getDepreciationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name').subscribe(res => {
+        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId','Name' ,'','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.depreciationFrequencyList = res;
         }, err => {
             const errorLog = err;

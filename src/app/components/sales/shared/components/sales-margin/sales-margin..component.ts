@@ -19,11 +19,13 @@ export class SalesMarginComponent implements OnInit {
   query: ItemMasterSearchQuery;
   percentage: any[] = [];
   invalidQuantityenteredForQuantityFromThis: boolean = false;
+  prevQntity = 0;
 
   constructor(private commonservice: CommonService,) {
   }
 
   ngOnInit() {
+    this.prevQntity = this.part.quantityFromThis;
     this.getPercents();
     this.calculate();
   }
@@ -39,6 +41,7 @@ export class SalesMarginComponent implements OnInit {
   }
 
   onClose(event: Event): void {
+    this.part.quantityFromThis = this.prevQntity;
     event.preventDefault();
     this.close.emit(true);
   }

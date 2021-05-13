@@ -1,0 +1,14 @@
+<div class="form-group">
+  <div [ngClass]="(isViewMode == false) ? 'row' : 'row ui-tabview-panels'" class="padding-bottom-8">
+      <button *ngIf="isViewMode == false" type="button" class="btn btn-primary" (click)="addPartNumber()"
+          [disabled]="salesQuote.isApproved">
+          Add PN
+      </button>
+  </div>
+</div>
+<ng-template #addPart let-c="close" let-d="dismiss">
+  <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
+      [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow" [clearData]="clearData"
+      (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SOQ'">
+  </app-add-sales-part-number>
+</ng-template>

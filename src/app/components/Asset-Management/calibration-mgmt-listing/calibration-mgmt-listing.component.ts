@@ -43,7 +43,7 @@ export class CalibrationMgmtListingComponent implements OnInit {
   breadcrumbs: MenuItem[];
 
   cols = [
-    { field: 'assetId', header: 'Asset ID', colspan: '1' },
+    { field: 'assetId', header: 'Asset Identification', colspan: '1' },
     { field: 'assetName', header: 'Asset Name', colspan: '1' },
     { field: 'altAssetId', header: 'Alt Asset ID', colspan: '1' },
     { field: 'serialNum', header: 'Serial Num', colspan: '1' },
@@ -221,6 +221,7 @@ private onDataLoadSuccessful(allWorkFlows) {
            x.createdDate=x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '';
            x.updatedDate=x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '';
            
+           x.inservicesdate=x.inservicesdate ?  this.datePipe.transform(x.inservicesdate, 'MM/dd/yyyy h:mm a'): '';
            x.lastCalibrationDate=x.lastCalibrationDate ?  this.datePipe.transform(x.lastCalibrationDate, 'MM/dd/yyyy h:mm a'): '';
            x.nextCalibrationDate=x.nextCalibrationDate ?  this.datePipe.transform(x.nextCalibrationDate, 'MM/dd/yyyy h:mm a'): '';
            
@@ -394,7 +395,7 @@ Updatetcalibartion()
   arrayContactlist: any = []
   getAllEmployees(strText = '') {
       this.arrayContactlist.push(0);
-      this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
+      this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
           this.employeeList = res.map(x => {
               return {
                   ...x,
@@ -427,7 +428,7 @@ Updatetcalibartion()
       //this.calibrationForm.NextCalibrationDate=this.calibrationForm.CalibrationDate
       this.calibrationForm.LastCalibrationBy=this.userName;
       this.calibrationForm.masterCompanyId = this.authService.currentUser.masterCompanyId;
-      this.calibrationForm.EmployeeId=this.calibrationForm.EmployeeId ? this.calibrationForm.EmployeeId.EmployeeId : null;
+      this.calibrationForm.EmployeeId=this.calibrationForm.EmployeeId ? this.calibrationForm.EmployeeId.employeeId : null;
       this.calibrationForm.VendorId=this.calibrationForm.VendorId ? this.calibrationForm.VendorId.vendorId : null;
 
    
@@ -689,7 +690,7 @@ filterWarentyVendor(event) {
 arrayVendlsit:any=[];
 private vendorList(value) {
     this.arrayVendlsit.push(0); 
-this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join()).subscribe(res => {
+this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
     this.allVendorInfo = res.map(x => {
         return {
             vendorId: x.vendorId,
