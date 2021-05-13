@@ -611,7 +611,7 @@ if(this.laborForm && this.laborForm.laborList && this.laborForm.laborList.length
   }
 
   addNewTask(taskName) {
-    debugger;
+    // debugger;
     let taskData = new AllTasks();
     taskData.expertiseId = Number(this.laborForm.expertiseId);
     taskData.employeeId = this.laborForm.employeeId;

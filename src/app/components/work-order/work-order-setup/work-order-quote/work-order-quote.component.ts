@@ -603,7 +603,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.quoteForm['csrId'] = res['csrId'];
                     this.quoteForm['employeeId'] = res['employeeId'];
                     this.quoteForm['creditTermsId'] = res.customerDetails['creditTermsId'];
-                    this.quoteForm.masterCompanyId = res['masterCompanyId'];
+                    this.quoteForm.masterCompanyId = this.authService.currentUser.masterCompanyId;
                     this.quoteForm.creditTermsandLimit = res.customerDetails.creditLimit;
                     this.quoteForm['versionNo'] = 'V1';
                     this.salesPerson = res.salesPerson.name;
@@ -661,7 +661,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                 }
                                 if (!this.quotationHeader || !this.quotationHeader.workOrderQuoteId) {
                                     this.quoteForm.employeeId=this.authService.currentEmployee;
-                                    this.workOrderService.getQuoteSettings(this.savedWorkOrderData.masterCompanyId, this.savedWorkOrderData.workOrderTypeId)
+                                    this.workOrderService.getQuoteSettings(this.authService.currentUser.masterCompanyId, this.savedWorkOrderData.workOrderTypeId)
                                         .subscribe(
                                             (res) => {
                                                 
@@ -819,7 +819,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             AccountsReceivableBalance: this.accountsReceivableBalance,
             SalesPersonId: quoteHeader.salesPersonId,
             EmployeeId: quoteHeader.employeeId,
-            masterCompanyId: quoteHeader.masterCompanyId,
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             createdBy: "admin",
             updatedBy: "admin",
             IsActive: true,
@@ -1277,7 +1277,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.quoteFreightListPayload["taskId"] = (this.selectedBuildMethod == 'build from scratch') ? this.currenttaskId : 0;
         this.quoteFreightListPayload['WorkflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.quoteFreightListPayload['createdDate'] = (e.createdDate) ? e.createdDate : new Date();
-        this.quoteFreightListPayload.masterCompanyId = this.quotationHeader.masterCompanyId;
+        this.quoteFreightListPayload.masterCompanyId = this.authService.currentUser.masterCompanyId;
         this.quoteFreightListPayload.SelectedId = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
         this.quoteFreightListPayload.WorkOrderQuoteFreight = e['data'].map(fre => {
             if (fre.workOrderQuoteDetailsId && fre.workOrderQuoteDetailsId != 0) {
@@ -1296,7 +1296,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "Amount": fre.amount,
                 "IsFixedFreight": fre.isFixedFreight,
                 "FixedAmount": fre.fixedAmount,
-                "masterCompanyId": this.quotationHeader.masterCompanyId,
+                "masterCompanyId": this.authService.currentUser.masterCompanyId,
                 "markupPercentageId": fre.markupPercentageId ? fre.markupPercentageId: 0,
                 "freightCostPlus": fre.freightCostPlus,
                 "taskId": fre.taskId,
@@ -1371,6 +1371,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         // if(Number(this.costPlusType) == 3){
         this.materialListPayload['materialFlatBillingAmount'] = this.materialFlatBillingAmount;
         // }
+
         this.materialListQuotation.forEach(
             (taskCharge) => {
                 this.taskList.forEach(
@@ -1458,6 +1459,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     saveMaterialList(){ 
         this.isSpinnerVisible=true;
+        this.materialListPayload.masterCompanyId=this.authService.currentUser.masterCompanyId;
         this.workOrderService.saveMaterialListQuote(this.materialListPayload)
         .subscribe(
             res => {
@@ -1513,6 +1515,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.laborPayload['workflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.laborPayload['SelectedId'] = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
         this.isSpinnerVisible=true;
+        this.laborPayload.masterCompanyId= this.authService.currentUser.masterCompanyId
         this.workOrderService.saveLaborListQuote(this.laborPayload)
             .subscribe(
                 res => {
@@ -1550,7 +1553,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.chargesPayload['SelectedId'] = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
         this.chargesPayload.BuildMethodId = this.getBuildMethodId();
         this.chargesPayload['createdDate'] = (data.createdDate) ? data.createdDate : new Date();
-        this.chargesPayload['masterCompanyId'] = this.quotationHeader.masterCompanyId;
+        this.chargesPayload['masterCompanyId'] = this.authService.currentUser.masterCompanyId;
         this.chargesPayload.WorkOrderQuoteCharges = data['data'].map(charge => {
             // if(charge.workOrderQuoteDetailsId && charge.workOrderQuoteDetailsId != 0){
             this.chargesPayload.WorkOrderQuoteDetailsId = this.workOrderQuoteDetailsId;
@@ -1573,7 +1576,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "UnitPrice": charge.unitPrice,
                 "ExtendedPrice": charge.extendedPrice,
                 "HeaderMarkupId": charge.headerMarkupId,
-                "masterCompanyId": this.quotationHeader.masterCompanyId,
+                "masterCompanyId": this.authService.currentUser.masterCompanyId,
                 "taskId": (typeof charge.taskId === 'object')?charge.taskId.taskId :charge.taskId,
                 "CreatedBy": "admin",
                 "UpdatedBy": "admin",
@@ -1745,7 +1748,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.laborPayload.WorkOrderQuoteLaborHeader.EmployeeId = data.employeeId;
         this.laborPayload.WorkOrderQuoteLaborHeader.ExpertiseId = data.expertiseId;
         this.laborPayload.WorkOrderQuoteLaborHeader.TotalWorkHours = data.totalWorkHours;
-        this.laborPayload.WorkOrderQuoteLaborHeader.masterCompanyId = data.masterCompanyId;
+        this.laborPayload.WorkOrderQuoteLaborHeader.masterCompanyId = this.authService.currentUser.masterCompanyId;
         this.laborPayload.WorkOrderQuoteLaborHeader['headerMarkupId'] = data.headerMarkupId;
         this.laborPayload.WorkOrderQuoteLaborHeader['markupFixedPrice'] = data.markupFixedPrice;
         this.laborPayload.WorkOrderQuoteLaborHeader.CreatedBy = "admin"
@@ -1809,6 +1812,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     "BillingRate": labor.billingRate,
                     "BillingAmount": labor.billingAmount,
                     "markupFixedPrice": labor.markupFixedPrice,
+                    "masterCompanyId":this.authService.currentUser.masterCompanyId
                 })
             }
         })
@@ -1867,7 +1871,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "CostPlusAmount": ex.costPlusAmount,
                 "FixedAmount": ex.fixedAmount,
                 "taskId": ex.taskId,
-                "masterCompanyId": (ex.masterCompanyId == '') ? 0 : ex.masterCompanyId,
+                "masterCompanyId": this.authService.currentUser.masterCompanyId,
                 "CreatedBy": "admin",
                 "UpdatedBy": "admin",
                 "IsActive": true,
@@ -1933,7 +1937,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         const exclusionsArr = data.exclusions.map(x => {
             return {
                 ...x,
-                masterCompanyId: 1,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
                 isActive: true,
                 workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
             }
@@ -2930,10 +2934,10 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                             "internalMemo": x.internalMemo,
                             "customerMemo": x.customerMemo,
                             "UpdatedBy": this.authService.currentUser.userName,
-                            "MasterCompanyId": x.masterCompanyId,
+                            "MasterCompanyId": this.authService.currentUser.masterCompanyId,
                             "ApprovalActionId": x.approvalActionId,
                             "IsInternalApprove": x.isInternalApprove,
-                            "masterCompanyId": x.masterCompanyId,
+                            "masterCompanyId": this.authService.currentUser.masterCompanyId,
                             "createdBy": this.authService.currentUser.userName,
                             "updatedBy": this.authService.currentUser.userName,
                             "createdDate": new Date().toDateString(),
