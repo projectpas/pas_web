@@ -1,0 +1,85 @@
+button {
+  border-radius: 5px;
+}
+
+.fs10 {
+  font-size: 10px;
+  font-weight: bold;
+  color: #ff5663;
+  font-family: tahoma;
+  margin: 3px 0px;
+}
+.wauto {
+  width: auto !important;
+}
+
+.no-bg {
+  background: none !important;
+}
+
+label {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+thead > tr > th {
+  border: 1px solid #3a7fd2;
+  font-weight: 500;
+  color: #fff;
+  background-color: #4298ff;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  letter-spacing: 0.3px;
+  padding: 8px 10px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+tbody > tr > td {
+  white-space: nowrap;
+  font-size: 11px;
+  color: #222;
+  padding: 8px 10px;
+  background: inherit;
+  border: 1px solid #c8c8c8;
+}
+
+div.row {
+  padding: 10px;
+}
+
+div.row-table {
+  background-color: white !important;
+}
+.quantityTextBox {
+  width: 60%;
+}
+
+div.calculation table thead tr td,
+div.calculation table tbody tr td {
+  text-align: right;
+}
+.label_ajd{
+  position: relative;
+  top: -3px;
+  left: 5px;
+}
+.pad_top20{
+  padding-top: 20px;
+}
+.mat_emo{
+  display: inline-flex;
+  position: relative;
+  top: 1px;
+  margin-top: 15px;
+}
+.ci_cls{
+  position: relative;
+  top: 6px;
+} 
+.text_editor_box{
+  width: 220px !important;
+  line-height: 17px;
+}

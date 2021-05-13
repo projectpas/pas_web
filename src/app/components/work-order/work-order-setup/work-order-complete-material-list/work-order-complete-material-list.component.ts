@@ -219,6 +219,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit() {
+        console.log("material list",this.workOrderMaterialList)
         this.initColumns();
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
@@ -284,18 +285,15 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     setmaterialListForSave(data){
         this.saveMaterialsData.emit(data)
         this.show = false;
-        this.addPartModal.close();
-
+        // this.addPartModal.close();
+        // $('#addPart').modal("hide");
     }
     setmaterialListForUpdate(data){
-        this.updateMaterialsData.emit(data)
         this.show = false;
-        this.addPartModal.close();
-
+        this.updateMaterialsData.emit(data)
+        // this.addPartModal.close();
+        // $('#addPart').modal("hide");
     }
-
-
-    
     createNew() {
         this.ispickticket = false;
         this.isEdit = false;
@@ -1358,10 +1356,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
      
       { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
       { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
-      { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
-      { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
-      { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
-      { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
+      { field: ' ', header: 'Qty Req', align: 1, width: "60px" },
+      { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
+      { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
+      { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
       { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
       { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
       { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
