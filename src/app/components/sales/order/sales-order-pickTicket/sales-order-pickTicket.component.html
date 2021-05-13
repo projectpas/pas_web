@@ -53,6 +53,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-4 second-block border-height" >
+                                <img src="{{this.salesOrder.soPickTicketBarcode}}" style="width: 100px;float:right;margin-top:8px" alt="barcode" width="98%" />
                                 <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">SO Pick Ticket</h3>
                                 <div class="second-block-div">
                                     <label class="col-sm-6 second-block-label" style="width:100%">Pick Ticket Num</label>
@@ -117,13 +118,13 @@
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
                                             <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.custToPostalCode}}</label>
+                                                {{this.salesOrder.custToPostalCode}}, {{this.salesOrder.custToCountry}}</label>
                                         </div>
-                                        <div class="sold-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Country :</b></label> -->
+                                        <!-- <div class="sold-block-div">
+                                          
                                             <label class="col-sm-12 first-block-label" disabled>
                                                 {{this.salesOrder.custToCountry}}</label>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <div class="first-block-ship col-sm-6">
@@ -157,13 +158,13 @@
                                         <div class="ship-block-div">
                                             <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
                                             <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.shipToPostalCode}}</label>
+                                                {{this.salesOrder.shipToPostalCode}}, {{this.salesOrder.shipToCountry}}</label>
                                         </div>
-                                        <div class="ship-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Country :</b></label> -->
+                                        <!-- <div class="ship-block-div">
+                                           
                                             <label class="col-sm-12 first-block-label" disabled>
                                                 {{this.salesOrder.shipToCountry}}</label>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -176,9 +177,9 @@
                                         <tr>
                                             <th>Line Num</th>
                                             <th>PN Information</th>
-                                            <th>Cust PO:</th>
-                                            <th>Consignment:</th>
-                                            <th>Lot Num:</th>
+                                            <th style="text-align:left">Cust PO:</th>
+                                            <th style="text-align:left">Consign:</th>
+                                            <th style="text-align:left">Lot Num:</th>
                                         </tr>
                                     </thead>
                                     <tbody>

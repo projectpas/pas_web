@@ -106,6 +106,7 @@ import { WorkOrderPickticketprintComponent } from '../components/work-order/work
 import { WoPartNumberFilterComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-number-filter/wo-part-number-filter.component';
 import { WoPartDetailsComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-details/wo-part-details.component';
 import { WorkOrderPartPickticketComponent } from '../components/work-order/work-order-setup/work-order-part-pickticket/work-order-part-pickticket.component';
+import { WorkOrderPartPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-part-pickticketprint/work-order-part-pickticketprint.component';
 // import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
 
 
@@ -210,10 +211,11 @@ import { WorkOrderPartPickticketComponent } from '../components/work-order/work-
     WoCustomerDetailComponent,
     WoPartNumberFilterComponent, 
     WoPartDetailsComponent,
-    WorkOrderPartPickticketComponent
+    WorkOrderPartPickticketComponent,
+    WorkOrderPartPickticketprintComponent
     // TwoDecimalGlobalNumberFormatPipe
   ],
-  entryComponents: [WorkOrderPickticketprintComponent],
+  entryComponents: [WorkOrderPickticketprintComponent, WorkOrderPartPickticketprintComponent],
   providers: [
     WorkFlowtService,
     WorkOrderService,
