@@ -298,7 +298,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
     }
 
+    deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deleteworkordermaterialStockline?workOrderMaterialsId=${workOrderMaterialId}&stocklineId=${stocklineId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy));
+        });
 
+    }
 
     createWorkOrderEquipmentList(data, isSubWorkOrder) {
         if (isSubWorkOrder == true) {
