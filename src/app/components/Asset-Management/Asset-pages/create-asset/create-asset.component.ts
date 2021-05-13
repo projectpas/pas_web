@@ -207,6 +207,7 @@ export class CreateAssetComponent implements OnInit {
             this.assetService.listCollection = null;
             this.assetService.currentUrl = '/assetmodule/assetpages/app-create-asset';
             this.currentAsset.unitCost = "0.00";
+            this.currentAsset.controlNumber = 'Creating';
             this.getManagementStructureDetails(this.authService.currentUser
                 ? this.authService.currentUser.managementStructureId
                 : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
@@ -361,7 +362,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('AssetAttributeType', 'TangibleClassId', 'AssetAttributeTypeName', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('AssetAttributeType', 'TangibleClassId', 'AssetAttributeTypeName', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allAssetTypeInfo = res.map(x => {
                     return {
@@ -389,7 +390,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.getAutoCompleteDropDownsByTwoTables('AssetIntangibleAttributeType', 'AssetIntangibleType', 'AssetIntangibleTypeId', 'AssetIntangibleName', strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.getAutoCompleteDropDownsByTwoTables('AssetIntangibleAttributeType', 'AssetIntangibleType', 'AssetIntangibleTypeId', 'AssetIntangibleName', strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allIntangibleInfo = res.map(x => {
                     return {
@@ -415,7 +416,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allAssetList = res;
      if(value){
         this.allAssetList.forEach(element => {
@@ -477,7 +478,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonservice.getAssetListBasedOnType('Asset', 'AssetRecordId', 'AssetId', strText, this.tableColumnName, 1, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonservice.getAssetListBasedOnType('Asset', 'AssetRecordId', 'AssetId', strText, this.tableColumnName, 1, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             const newResp = res.map(x => {
                 return {
                     ...x,
@@ -649,7 +650,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.AssetAcquisitionTypeList = res.map(x => {
                 return {
                     ...x,
@@ -676,7 +677,7 @@ export class CreateAssetComponent implements OnInit {
     getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEditMode ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID,this.authService.currentUser.masterCompanyId).subscribe(response => {
             if (response) {
                 const result = response;
                 if (result[0] && result[0].level == 'Level1') {
@@ -754,7 +755,7 @@ export class CreateAssetComponent implements OnInit {
         if (legalEntityId) {
             this.currentAsset.companyId = legalEntityId;
             this.currentAsset.managementStructureId = legalEntityId;
-            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.bulist = res;
                 this.currentAsset.buisinessUnitId = 0;
                 this.currentAsset.divisionId = 0;
@@ -769,7 +770,7 @@ export class CreateAssetComponent implements OnInit {
         if (businessUnitId) {
             this.currentAsset.buisinessUnitId = businessUnitId;
             this.currentAsset.managementStructureId = businessUnitId;
-            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.divisionlist = res;
                 this.currentAsset.divisionId = 0;
                 this.currentAsset.departmentId = 0;
@@ -783,7 +784,7 @@ export class CreateAssetComponent implements OnInit {
         if (divisionId) {
             this.currentAsset.divisionId = divisionId;
             this.currentAsset.managementStructureId = divisionId;
-            this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.departmentList = res;
                 this.currentAsset.departmentId = 0;
             }, err => {
@@ -809,7 +810,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Manufacturer ', 'ManufacturerId', 'Name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Manufacturer ', 'ManufacturerId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allManufacturerInfo = res;
             this.ManufactureData = res;
         }, err => {
@@ -831,7 +832,7 @@ export class CreateAssetComponent implements OnInit {
             }
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allUnitOfMeasureinfo = res;
 
         }, err => {
@@ -850,7 +851,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allCurrencyInfo = res;
         }, err => {
             const errorLog = err;
@@ -868,7 +869,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.getAutoCompleteDropDownsByCodeWithName('AssetLocation', 'AssetLocationId', 'Name', 'Code', strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.getAutoCompleteDropDownsByCodeWithName('AssetLocation', 'AssetLocationId', 'Name', 'Code', strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allAssetLocations = res;
 
         }, err => {
@@ -898,7 +899,7 @@ export class CreateAssetComponent implements OnInit {
         }
     }
     getAmortizationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetAmortizationInterval', 'AssetAmortizationIntervalId', 'AssetAmortizationIntervalCode').subscribe(res => {
+        this.commonservice.smartDropDownList('AssetAmortizationInterval', 'AssetAmortizationIntervalId', 'AssetAmortizationIntervalCode','','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.amortizationFrequencyList = res;
         }, err => {
             const errorLog = err;
@@ -906,7 +907,7 @@ export class CreateAssetComponent implements OnInit {
         })
     }
     getDepreciationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name').subscribe(res => {
+        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name','','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.depreciationFrequencyList = res;
         }, err => {
             const errorLog = err;
@@ -972,6 +973,7 @@ export class CreateAssetComponent implements OnInit {
         this.currentAsset.unitOfMeasureId = this.getuom("Eaches");
         this.currentAsset.unitCost = "";
         this.currentAsset.model = "";
+        this.currentAsset.controlNumber = "Creating";
         this.currentAsset.assetAcquisitionTypeId = "";
         this.currentAsset.manufacturedDate = "";
         this.currentAsset.expirationDate = "";
