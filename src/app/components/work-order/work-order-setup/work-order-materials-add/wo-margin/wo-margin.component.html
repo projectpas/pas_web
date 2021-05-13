@@ -1,5 +1,5 @@
   <div class="row margin-row">
-    <div class="col-md-12 col-sm-12 col-12">
+    <div class="col-md-12 col-sm-12 col-12" style="text-align: start   !important;">
       <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
         <p class="fs10 wauto no-bg">
           <label style="width: auto;">PN <span class="clr-red">:</span></label>
@@ -9,12 +9,17 @@
       <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
         <p class="fs10 wauto no-bg">
           <label style="width: auto;">Description <span class="clr-red">:</span></label>
-          {{part.description}} </p>
+         
+          <span *ngIf="!isStockLine"> {{part.description}} </span>
+          <span *ngIf="isStockLine"> {{part.partDescription}} </span>
+        </p>
       </div>
       <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
         <p class="fs10 wauto no-bg">
           <label style="width: auto;">Cond <span class="clr-red">:</span></label>
-          {{part.conditionDescription}}
+          <span *ngIf="!isStockLine"> {{part.conditionDescription}} </span>
+          <span *ngIf="isStockLine"> {{part.condition}} </span>
+
         </p>
       </div>
       <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
@@ -24,7 +29,7 @@
       </div>
       <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
         <p class="fs10 wauto no-bg">
-          <label style="width: auto;">Classification <span class="clr-red">:</span></label>
+          <label style="width: auto;">Item Group <span class="clr-red">:</span></label>
           {{ part.itemGroup  ? part.itemGroup : ''}}</p>
       </div>
 
@@ -53,19 +58,19 @@
              <!-- (ngModelChange)="part.quantity=formatStringToNumberGlobal($event)" -->
         </div>
       </div>
-      <div class="col-3 column">
+      <div class="col-4 column">
         <div class="form-group">
           <label>Quantity from this <span *ngIf="part.method=='ItemMaster'">PN</span><span
               *ngIf="part.method=='StockLine'">{{part.stockLineNumber}}</span></label>
           <input type="text"
-            class="form-control   text-right" name="stocklineQuantity"
+            class="form-control   text-right" name="stocklineQuantity" (keyup)="onChangeQuantityFromThis($event)" (blur)="onChangeQuantityFromThis($event)" 
             [ngModel]="formObject.stocklineQuantity" [ngModelOptions]="{updateOn:'blur'}"
            (change)="onChangeQuantityFromThis($event)"
             name="quantity" autocomplete="off" />
             <!-- (keyup)="onChangeQuantityFromThis($event)" (blur)="onChangeQuantityFromThis($event)" -->
             <!-- (ngModelChange)="part.stocklineQuantity=formatStringToNumberGlobal($event)" -->
           <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
-            <span style="color:red">Value cannot be greater than qty to be quoted and qty available</span>
+            <span style="color:red">Value cannot be greater than qty to be required and qty available</span>
           </div>
         </div>
       </div>
@@ -76,14 +81,14 @@
 
     <div> 
         <label class="width_100per text_start"> Task <span class="clr-red">*</span> </label>
-        <select class="form-control wf-pub-id qtyWidth text_tranform" (ngModelChange)="getActive()" style="width: 100px;"  [(ngModel)]="formObject.taskId"
+        <select class="form-control wf-pub-id qtyWidth text_tranform" [disabled]="isStockView" (ngModelChange)="getActive()" style="width: 100px;"  [(ngModel)]="formObject.taskId"
         name="task" required >
        <option *ngFor="let task of taskList"  [value]="task.taskId">{{task.description}}</option>
       </select> 
     </div>
-    <div class="1col- column"> 
+    <div class="1col- column mar_ad1"> 
       <label class="width_100per text_start">Provision<span class="clr-red">*</span></label>
-      <select class="form-control wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="formObject.provisionId" name="provision"
+      <select class="form-control wf-pub-id qtyWidth" [disabled]="isStockView" (ngModelChange)="getActive()" [(ngModel)]="formObject.provisionId" name="provision"
       required>
       <option value="0">--Select--</option>
       <option *ngFor="let item of provisionListData" [ngValue]="item.value" required>
@@ -91,9 +96,9 @@
       </option>
     </select> 
     </div>
-    <div class="co column">
+    <div class="co column mar_ad2">
         <label class="width_100per text_start"> Request Type </label>
-        <select class="form-control wf-pub-id full-width qtyWidth mauto" (ngModelChange)="getActive()" [(ngModel)]="formObject.materialMandatoriesId"
+        <select class="form-control wf-pub-id full-width qtyWidth mauto" [disabled]="isStockView" (ngModelChange)="getActive()" [(ngModel)]="formObject.materialMandatoriesId"
          name="mandi">
         <option value="0">--select--</option>
         <option *ngFor="let mandatory of materialMandatory" value="{{mandatory.materialMandatoriesId}}">
@@ -103,7 +108,7 @@
     </div>
     <div class="col-1 column" style="max-width: 13%;">
       <label class="width_100per text_start">Unit Cost</label>
-      <input type="text" class="form-control w100 text-right input-width-100-percent" (ngModelChange)="getActive()" pInputText pKeyFilter="money"
+      <input type="text" class="form-control w100 text-right input-width-100-percent" [disabled]="isStockView" (ngModelChange)="getActive()" pInputText pKeyFilter="money"
         value="{{ unitCost }}" (change)="calculateExtendedCost()" [(ngModel)]="formObject.unitCost"
         name="unitcost" maxlength="15" />
     </div>
@@ -115,7 +120,7 @@
     </div>
     <div class="col-1 column pad_top20 label_ajd" style="max-width: 9%;">
       <div class="custom-checkbox-box text_start">
-        <input class="filled-in" id="PMS"  type="checkbox" value="{{formObject.isDeferred}}"
+        <input class="filled-in" id="PMS" [disabled]="isStockView"  type="checkbox" value="{{formObject.isDeferred}}"
           [(ngModel)]="formObject.isDeferred" (ngModelChange)="getActive()" name="isDefered" /> <span class="label_ajd">Is Defered</span>
       </div>
     </div>
@@ -123,7 +128,7 @@
         <div class="form-group memo-popup-cstm mat_emo">
           <div [innerHTML]="formObject.memo" matTooltipPosition="above" [matTooltip]="parsedText(formObject.memo)"
             class="text_editor_box"></div>
-          <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup2" matTooltip="Memo"
+          <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{ pointerEv: isStockView}" data-toggle="modal" data-target="#textarea-popup2" matTooltip="Memo"
             matTooltipPosition="above" (click)="onAddTextAreaInfo(formObject)"></i>
         </div> 
     </div>
@@ -154,7 +159,7 @@
     Save
   </button> -->
   <!-- [disabled]="!disableSaveUpdateButton || part.provisionId==0)" -->
-          <button class="btn btn-primary" *ngIf="!isEdit"  (click)="savePart($event)"
+          <button class="btn btn-primary" *ngIf="!isEdit"   (click)="savePart($event)"
        >
     Save
       </button> 

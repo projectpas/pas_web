@@ -564,7 +564,25 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
   </ng-template>
-
+  <ng-template #Stockcontent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+   </button>
+    </div> 
+    <div class="modal-body">
+        <strong>
+            PN:
+            <span class="new-label">{{currentRow.partNumber}}</span>
+        </strong>
+    </div>  
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteStock()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template>
   <div id="materialAudit" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xlg">
       <div class="modal-content">
@@ -910,7 +928,12 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                     class="form-control w60 defered-check3" [(ngModel)]="childRowData.isDeferred">
                     <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]" class="p_textEditor"></span>
                 </td>
-                <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></td>
+                <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
+                
+                    <span><button class="btn nobg btn-edit-cstm1" (click)="editStockLine(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+              
+                    <span><button type="button" class="btn nobg btn-delete-cstm"  (click)="deleteStockLine(Stockcontent,rowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                </td>
             </tr>
             <tr class="child-data splitship-child child-data-back " *ngIf="rowData.childParts && rowData.childParts.length==0">
                 <td colspan="49" class="no-recordscusMsg" style="background: #fff !important;padding: 3px !important;padding-left:13%  !important;text-transform: capitalize;" >
@@ -936,8 +959,21 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
       " [disabled]="true" pInputText type="text" />
     </ng-template>
 </p-table>
-
-
+<!-- //stocklineEdit -->
+<div class="modal fade" id="showStockLineDetails" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="text-align: start;">
+          <button type="button" class="close" (click)="onCloseMaterial(1)">&times;</button>
+          <h4 class="modal-title">Edit PN Details</h4>
+        </div>
+        <div class="modal-body" *ngIf="editData !=undefined">
+            <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isStockLine]="isStockLine"  (close)="onCloseMaterial($event)"  (updateFinalMaterialListData)="updateMaterialList($event)" [isEdit]="isEdit" [editData]="editData"  [part]="editData" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+           ></app-wo-margin>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- <table class="table table-bordered" id="so-table">
         <tr>

@@ -1929,7 +1929,7 @@ this.getNewMaterialListByWorkOrderId();
         let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
         if (uniqueParts.length > 0) {
           uniqueParts.forEach((part, i) => {
-            let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.subWorkOrderId !=0 && selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
+            let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.stockLineId !=0 && selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
             if (childParts && childParts.length > 0) {
             //   uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
               uniqueParts[i].childParts = childParts;

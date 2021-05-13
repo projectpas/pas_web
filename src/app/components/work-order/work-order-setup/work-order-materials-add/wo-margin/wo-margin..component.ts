@@ -12,16 +12,14 @@ export class WoMarginComponent implements OnInit {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() searchAnotherPN: EventEmitter<boolean> = new EventEmitter<boolean>();
   // @Output() save: EventEmitter<PartDetail> = new EventEmitter<PartDetail>();
-  @Input() part: any={
-    partNumberObj:undefined,
-    quantity:0,
-    conditionIds:undefined,
-    provisionId:0
-  };;
+  @Input() part:any;
   @Input() display: boolean;
   // query: ItemMasterSearchQuery;
   @Input() isEdit = false;
   @Input() editData;
+  @Input() isStockView=false;
+  @Input() isStockLine=false;
+
   @Output() saveFinalMaterialListData = new EventEmitter<any>();
   @Output() updateFinalMaterialListData = new EventEmitter<any>();
   disableUpdateButton:boolean=true;
@@ -31,7 +29,8 @@ export class WoMarginComponent implements OnInit {
     partNumberObj:undefined,
     quantity:0,
     conditionIds:undefined,
-    provisionId:0
+    provisionId:0,
+    stocklineQuantity:0
   };
   isSpinnerVisible = false;
   setEditArray:any=[];
@@ -42,10 +41,39 @@ export class WoMarginComponent implements OnInit {
     private authService: AuthService, ) {
   }
   ngOnInit() {
+    this.formObject={}
     this.part=this.part;
+    // this.formObject=
+    this.formObject.quantity=this.part.quantity;
     console.log("selected part",this.editData)
-    console.log("this.isEdit",this.isEdit)
+    console.log("this.isEdit",this.part)
+    console.log("isEdit",this.isEdit);
+    
     this.formObject.stocklineQuantity=this.part.stocklineQuantity;
+
+    this.formObject.qtyOnHand = this.part.qtyOnHand;
+    this.formObject.qtyAvailable = this.part.qtyAvailable;
+     this.formObject.conditionCodeId=this.part.conditionId;
+     this.formObject.itemMasterId=this.part.itemMasterId;
+     this.formObject.unitCost=this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
+     this.formObject.partNumber=this.part.partNumber;
+     this.formObject.itemClassificationId=this.part.itemClassificationId;
+     this.formObject.itemClassification=this.part.itemClassification;
+     this.formObject.partDescription=this.part.description;
+     this.formObject.workOrderId=this.part.workOrderId;
+     this.formObject.workFlowWorkOrderId=this.part.workFlowWorkOrderId;
+     this.formObject.qtyOnHand = this.part.qtyOnHand;
+     this.formObject.qtyAvailable = this.part.qtyAvailable;
+     this.formObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
+     this.formObject.stockLineId= this.part.stockLineId ? this.part.stockLineId : null ;
+    //  this.formObject.quantity=this.formObject.quantity;
+    //  this.formObject.provisionId=this.formObject.provisionId;
+     this.formObject.unitOfMeasure=this.part.unitOfMeasure;
+     this.formObject.unitOfMeasureId=this.part.unitOfMeasureId;
+
+
+
+
     if(this.editData){
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
@@ -65,6 +93,7 @@ export class WoMarginComponent implements OnInit {
       this.provisionList();
       this.getMaterailMandatories();
      }else{
+
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();
@@ -207,7 +236,7 @@ calculateExtendedCost(): void {
 onChangeQuantityFromThis(event) {
 
   if (Number(this.formObject.stocklineQuantity) != 0) {
-    if (this.formObject['qtyRemainedToQuote']) {
+    if (this.formObject['stocklineQuantity']) {
       this.invalidQuantityenteredForQuantityFromThis = this.formObject.stocklineQuantity > this.formObject.quantity;
     }
     else if (Number(this.formObject.stocklineQuantity) < 0)
@@ -223,20 +252,21 @@ onChangeQuantityFromThis(event) {
 }
 
 
-
 materialCreateObject:any={};
 savePart(){
   console.log("all save part",this.formObject)
+  this.materialCreateObject={...this.formObject}
   this.provisionListData.forEach(element => {
     if(element.value==this.formObject.provisionId){
-      this.formObject.provision=element.label;
+      this.materialCreateObject.provision=element.label;
     }
     });
-  this.formObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-  this.formObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-  this.formObject.memo=this.formObject.memo;
-  this.formObject.isDeferred=this.formObject.isDeferred;
-  this.saveFinalMaterialListData.emit(this.formObject);
+ this.materialCreateObject.unitCost=this.materialCreateObject.unitCost ? formatNumberAsGlobalSettingsModule(this.materialCreateObject.unitCost, 2) : '0.00';
+ this.materialCreateObject.extendedCost=this.materialCreateObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.materialCreateObject.extendedCost, 2) : '0.00';
+ this.materialCreateObject.memo=this.materialCreateObject.memo;
+ this.materialCreateObject.isDeferred=this.materialCreateObject.isDeferred;
+ this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId;
+  this.saveFinalMaterialListData.emit(this.materialCreateObject);
   this.close.emit(true);
   // $("#showMarginDetails").modal("hide");
 }
@@ -250,16 +280,18 @@ upDatePart(){
     // this.part.workOrderMaterialsId=this.editData.workOrderMaterialsId;
   }
   console.log("all save part",this.formObject)
-  this.formObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
-  this.formObject.provisionId=this.formObject.provisionId;
-  this.formObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
-  this.formObject.quantity=this.formObject.quantity;
-  this.formObject.taskId=this.formObject.taskId;
-  this.formObject.isDeferred=this.formObject.isDeferred;
-  this.formObject.memo=this.formObject.memo;
-   this.formObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-   this.formObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-  this.updateFinalMaterialListData.emit(this.formObject)
+  this.materialCreateObject={...this.formObject}
+  this.materialCreateObject.mandatorySupplementalId=this.materialCreateObject.materialMandatoriesId;
+  this.materialCreateObject.provisionId=this.materialCreateObject.provisionId;
+  this.materialCreateObject.materialMandatoriesId=this.materialCreateObject.materialMandatoriesId ? this.materialCreateObject.materialMandatoriesId :null;
+  this.materialCreateObject.taskId=this.materialCreateObject.taskId;
+  this.materialCreateObject.isDeferred=this.materialCreateObject.isDeferred;
+  this.materialCreateObject.memo=this.materialCreateObject.memo;
+  this.materialCreateObject.unitCost=this.materialCreateObject.unitCost ? formatNumberAsGlobalSettingsModule(this.materialCreateObject.unitCost, 2) : '0.00';
+  this.materialCreateObject.extendedCost=this.materialCreateObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.materialCreateObject.extendedCost, 2) : '0.00';
+  // this.materialCreateObject.quantity=this.materialCreateObject.quantity;
+  this.materialCreateObject.quantity=this.part.quantity;
+  this.updateFinalMaterialListData.emit(this.materialCreateObject)
   this.disableUpdateButton=true;
   // $("#showMarginDetails").modal("hide");
   this.close.emit(true);

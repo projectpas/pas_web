@@ -287,14 +287,15 @@ export class WoPartDetailsComponent implements OnChanges {
       console.log("form object",this.formObject);
       this.materialCreateObject.stocklineQuantity=part.qtyToOrder;
       this.disableSaveUpdateButton=true;
+      this.selectedMaterialPart=undefined;
+      this.selectedMaterialPart=this.materialCreateObject;
+      this.openSalesMargin();
       this.provisionListData.forEach(element => {
         if(element.value==this.formObject.provisionId){
           this.materialCreateObject.provision=element.label;
         }
       });
-      this.selectedMaterialPart=undefined;
-      this.selectedMaterialPart=this.materialCreateObject
-      this.openSalesMargin();
+
     }else{ 
       this.selectedMaterialPart=undefined;
       this.parts.forEach(element => {
@@ -784,35 +785,36 @@ finalSaveMaterial(){
 
 }
 
-savePart(){
+savePart(data){
 console.log("wo part detaisl")
-  this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-  this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-  this.materialCreateObject.memo=this.formObject.memo;
-  this.materialCreateObject.isDeferred=this.formObject.isDeferred;
-  this.saveMaterialListData.emit(this.materialCreateObject);
+  // this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
+  // this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
+  // this.materialCreateObject.memo=this.formObject.memo;
+  // this.materialCreateObject.isDeferred=this.formObject.isDeferred;
+  // this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
+  this.saveMaterialListData.emit(data);
   $("#showMarginDetails").modal("hide");
   this.close.emit(true);
   console.log("wo part detaisl22")
 }
 
-upDatePart(){ 
+upDatePart(data){ 
   console.log("wo part detaisl22 ")
-  if(this.isEdit){
-    this.materialCreateObject= this.editData
-    this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
-  }
+  // if(this.isEdit){
+  //   this.materialCreateObject= this.editData
+  //   this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+  // }
 
-  this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
-  this.materialCreateObject.provisionId=this.formObject.provisionId;
-  this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
-  this.materialCreateObject.quantity=this.formObject.quantity;
-  this.materialCreateObject.taskId=this.formObject.taskId;
-  this.materialCreateObject.isDeferred=this.formObject.isDeferred;
-  this.materialCreateObject.memo=this.formObject.memo;
-   this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-   this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-  this.updateMaterialListData.emit(this.materialCreateObject)
+  // this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
+  // this.materialCreateObject.provisionId=this.formObject.provisionId;
+  // this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
+  // this.materialCreateObject.quantity=this.formObject.quantity;
+  // this.materialCreateObject.taskId=this.formObject.taskId;
+  // this.materialCreateObject.isDeferred=this.formObject.isDeferred;
+  // this.materialCreateObject.memo=this.formObject.memo;
+  //  this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
+  //  this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
+  this.updateMaterialListData.emit(data)
   this.disableUpdateButton=true;
   $("#showMarginDetails").modal("hide");
   this.close.emit(true);

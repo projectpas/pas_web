@@ -83,3 +83,9 @@ div.calculation table tbody tr td {
   width: 220px !important;
   line-height: 17px;
 }
+.mar_ad2{
+  margin: 0 4px 0 2px;
+}
+.mar_ad1{
+  margin: 0 4px;
+}
