@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Input, Output, EventEmitter,ElementRef,ViewChild, OnChanges, SimpleChanges } from "@angular/core";
 import { IPartJson } from "../../../../../components/sales/shared/models/ipart-json";
 import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -57,7 +57,7 @@ export class WoPartDetailsComponent implements OnChanges {
   auditHistory: any = [];
   adjAuditHistoryList: any = [];
   adjAuditHistoryData: any = [];
-  hideme = [];
+ hideme = [];
   rowIndex = -1;
   stockLineViewedRow: any;
   customPaginate: CustomPaginate<StocklineListSalesFilter> = new CustomPaginate<StocklineListSalesFilter>();
@@ -87,7 +87,7 @@ export class WoPartDetailsComponent implements OnChanges {
   taskList:any=[];
   provisionListData:any=[];
   materialMandatory:any=[];
-
+  selectedMaterialPart:any;
   constructor(private salesQuoteService: SalesQuoteService,
     private service: StocklineService,
     private modalService: NgbModal,
@@ -107,27 +107,37 @@ export class WoPartDetailsComponent implements OnChanges {
 
   ngOnInit() {    
    if(this.editData){
+    // this.formObject=this.editData;
+    this.disableforPartNum=true;
+    this.formObject.restrictPMA= true,
+    this.formObject.restrictDER= true,
+    this.formObject.customerId= this.customer ? this.customer.customerId:0;
+    this.formObject.partId=this.editData.partItem.partId;
+    this.formObject.includeMultiplePartNumber= false;
+    this.formObject.conditionId=this.editData.conditionCodeId;
+    this.formObject.partNumber=this.editData.partItem.partName;
     this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
     this.formObject.partDescription=this.editData.partDescription;
     this.formObject.conditionIds=[this.editData.conditionCodeId];
     this.formObject.quantity=this.editData.quantity;
     this.formObject.qtyOnHand=this.editData.qtyOnHand;
     this.formObject.qtyAvailable=this.editData.qtyAvail;
-    this.formObject.taskId=this.editData.taskId;
-    this.formObject.provisionId=this.editData.provisionId;
-    this.formObject.isDeferred=this.editData.isDeferred;
-    this.formObject.memo=this.editData.memo;
-    this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
-    this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
-    this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
-    this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
-    this.getTaskList();
-    this.provisionList();
-    this.getMaterailMandatories();
+    // this.formObject.taskId=this.editData.taskId;
+    // this.formObject.provisionId=this.editData.provisionId;
+    // this.formObject.isDeferred=this.editData.isDeferred;
+    // this.formObject.memo=this.editData.memo;
+    // this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+    // this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
+    // this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+    // this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
+    // this.getTaskList();
+    // this.provisionList();
+    // this.getMaterailMandatories();
+    this.search();
    }else{
-    this.getTaskList();
-    this.provisionList();
-    this.getMaterailMandatories();
+    // this.getTaskList();
+    // this.provisionList();
+    // this.getMaterailMandatories();
    }
     
 
@@ -229,36 +239,7 @@ export class WoPartDetailsComponent implements OnChanges {
   onPaging(event) {
   }
 
-  savePart(){
-    this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-    this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-    this.materialCreateObject.memo=this.formObject.memo;
-    this.materialCreateObject.isDeferred=this.formObject.isDeferred;
-    this.saveMaterialListData.emit(this.materialCreateObject)
-  }
 
-  upDatePart(){ 
-    if(this.isEdit){
-      this.materialCreateObject= this.editData
-      this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
-    }
-    
-
-
-
-    
-    this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
-    this.materialCreateObject.provisionId=this.formObject.provisionId;
-    this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
-    this.materialCreateObject.quantity=this.formObject.quantity;
-    this.materialCreateObject.taskId=this.formObject.taskId;
-    this.materialCreateObject.isDeferred=this.formObject.isDeferred;
-    this.materialCreateObject.memo=this.formObject.memo;
-     this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-     this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-    this.updateMaterialListData.emit(this.materialCreateObject)
-    this.disableUpdateButton=true;
-  }
 
 
   getActive(){
@@ -269,15 +250,18 @@ export class WoPartDetailsComponent implements OnChanges {
     console.log("part item",part)
     let checked: boolean = event.srcElement.checked;
     this.formObject.qtyOnHand = part.qtyOnHand;
-    this.formObject.qtyAvailable = part.qtyAvailable;
+    this.formObject.qtyAvailable = part.qtyAvailable; 
     // this.onPartSelect.emit({ checked: checked, part: part });
-    if(checked==true){
-  
 
-      this.parts.forEach(element => {
-        element.isPartChecked=false;
-      });
-      part.isPartChecked==true;
+    if(checked==true){
+      event.srcElement.checked=false;
+      // this.parts.forEach(element => {
+      //   element.isPartChecked=false;
+      // });
+      // part.isPartChecked==true;
+      part.method='ItemMaster';
+      this.materialCreateObject=part;
+      
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject.conditionCodeId=part.conditionId;
@@ -300,13 +284,20 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.unitOfMeasureId=part.unitOfMeasureId;
       this.materialCreateObject.provision=''; 
       this.materialCreateObject.memo=this.formObject.memo;
+      console.log("form object",this.formObject);
+      this.materialCreateObject.stocklineQuantity=part.qtyToOrder;
       this.disableSaveUpdateButton=true;
+      this.selectedMaterialPart=undefined;
+      this.selectedMaterialPart=this.materialCreateObject;
+      this.openSalesMargin();
       this.provisionListData.forEach(element => {
         if(element.value==this.formObject.provisionId){
           this.materialCreateObject.provision=element.label;
         }
       });
-    }else{
+
+    }else{ 
+      this.selectedMaterialPart=undefined;
       this.parts.forEach(element => {
         element.isPartChecked=false;
       });
@@ -324,10 +315,12 @@ export class WoPartDetailsComponent implements OnChanges {
     console.log("roleUpparts",this.roleUpMaterialList)
     if(checked==true){
 
-      this.roleUpMaterialList.forEach(element => {
-        element.childPartChecked=false;
-      });
+      // this.roleUpMaterialList.forEach(element => {
+      //   element.childPartChecked=false;
+      // });
+      part.method='StockLine';
     part.childPartChecked=true;
+    this.materialCreateObject=part;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable;
     this.materialCreateObject.conditionCodeId=part.conditionId;
@@ -351,11 +344,14 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject.unitOfMeasure=part.unitOfMeasure;
     this.materialCreateObject.unitOfMeasureId=part.unitOfMeasureId;
     this.disableSaveUpdateButton=true;
+    this.materialCreateObject.stocklineQuantity=part.qtyAvailable;
     this.provisionListData.forEach(element => {
     if(element.value==this.formObject.provisionId){
       this.materialCreateObject.provision=element.label;
     }
     });
+    this.selectedMaterialPart=this.materialCreateObject
+    this.openSalesMargin();
   }else{
     this.roleUpMaterialList.forEach(element => {
       element.childPartChecked=false;
@@ -581,7 +577,7 @@ export class WoPartDetailsComponent implements OnChanges {
     // this.searchDisabled = true;
     //this.historicalDisabled = true;
   }
-  search($event, programaticSearch = false) {
+  search() {
     // let searchQuery = JSON.parse(JSON.stringify(this.formObject));
     this.formObject.restrictDER = !this.formObject.restrictDER;
     this.formObject.restrictPMA = !this.formObject.restrictPMA;
@@ -590,9 +586,9 @@ export class WoPartDetailsComponent implements OnChanges {
     }
     // let searchQuery= new ItemMasterSearchQuery();
     this.searchQuery.partSearchParamters=this.formObject;
-    if (!programaticSearch) {
-      $event.preventDefault();
-    }
+    // if (!programaticSearch) {
+    //   $event.preventDefault();
+    // }
     if (this.formObject.includeMultiplePartNumber) {
       // this.getMultipartsQuery();
     } else {
@@ -610,7 +606,7 @@ export class WoPartDetailsComponent implements OnChanges {
                   qtyOnHandTemp = qtyOnHandTemp + resultdata[i].qtyOnHand;
                   qtyAvailableTemp = qtyAvailableTemp + resultdata[i].qtyAvailable
                 }
-              }
+              } 
               this.formObject.qtyOnHand = qtyOnHandTemp;
               this.formObject.qtyAvailable = qtyAvailableTemp;
               this.parts = result['data'];
@@ -634,6 +630,7 @@ export class WoPartDetailsComponent implements OnChanges {
               this.parts = result['data'];
               this.parts.forEach(element => {
                 element.isPartChecked=false;
+                element.qtyToOrder=this.formObject.quantity;
               });
               // this.onPartSearch.emit(result);
             }, error => {
@@ -643,7 +640,7 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     }
   }
- 
+
   provisionList() {
     this.isSpinnerVisible = true;
     let provisionIds = []; 
@@ -728,14 +725,15 @@ getMaterailMandatories() {
           this.isSpinnerVisible = false;
       });
 }
-
 get userName(): string {
   return this.authService.currentUser ? this.authService.currentUser.userName : "";
 }
 onClose() {
   this.close.emit(true);
 }
-
+onCloseMargin(){
+  $("#showMarginDetails").modal("hide");
+}
 saveWorkOrderMaterialList(data) { 
       const materialArr = data.materialList.map(x => {
           return {
@@ -779,4 +777,150 @@ calculateExtendedCost(): void {
 editorgetmemo(ev) {
   this.disableEditor = false;
 }
+
+onCloseMaterial(){
+  $("#showMarginDetails").modal("hide");
+}
+finalSaveMaterial(){
+
+}
+
+savePart(data){
+console.log("wo part detaisl")
+  // this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
+  // this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
+  // this.materialCreateObject.memo=this.formObject.memo;
+  // this.materialCreateObject.isDeferred=this.formObject.isDeferred;
+  // this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
+  this.saveMaterialListData.emit(data);
+  $("#showMarginDetails").modal("hide");
+  this.close.emit(true);
+  console.log("wo part detaisl22")
+}
+
+upDatePart(data){ 
+  console.log("wo part detaisl22 ")
+  // if(this.isEdit){
+  //   this.materialCreateObject= this.editData
+  //   this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+  // }
+
+  // this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
+  // this.materialCreateObject.provisionId=this.formObject.provisionId;
+  // this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
+  // this.materialCreateObject.quantity=this.formObject.quantity;
+  // this.materialCreateObject.taskId=this.formObject.taskId;
+  // this.materialCreateObject.isDeferred=this.formObject.isDeferred;
+  // this.materialCreateObject.memo=this.formObject.memo;
+  //  this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
+  //  this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
+  this.updateMaterialListData.emit(data)
+  this.disableUpdateButton=true;
+  $("#showMarginDetails").modal("hide");
+  this.close.emit(true);
+  console.log("wo part detaisl22444")
+}
+openSalesMargin() {
+  // this.isEdit = false;
+  // let contentMargin = this.salesMargin;
+    //  this.woMarginModal = this.modalService.open(contentMargin, { size: "lg", backdrop: 'static', keyboard: false });
+    //   this.woMarginModal.result.then(
+    //     () => { },
+    //     () => {
+    //       // this.selectedPart.selected = false;
+    //     }
+    //   ); 
+
+
+
+    $("#showMarginDetails").modal("show");
+
+  // if (this.selectedPart) {
+  //   if (checked) {
+  //     this.salesQuoteService.getSearchPartObject().subscribe(data => {
+  //       this.query = data;
+  //       this.part = new PartDetail();
+
+  //       this.part.partNumber = this.selectedPart.partNumber;
+  //       this.part.stockLineNumber = this.selectedPart.stockLineNumber;
+  //       this.part.salesPricePerUnit = +this.selectedPart.unitSalePrice;
+  //       this.part.unitCostPerUnit = +this.selectedPart.unitCost;
+  //       this.part.itemClassification = this.selectedPart.itemClassification;
+  //       this.part.freight = this.salesQuoteService.getTotalFreights();
+  //       this.part.misc = this.salesQuoteService.getTotalCharges();
+  //       this.part.createdBy = this.userName;
+  //       this.part.priorityId = this.defaultSettingPriority;
+  //       if (this.selectedPart.itemMasterSale) {
+  //         this.part.fixRate = this.selectedPart.itemMasterSale.fxRate;
+  //       }
+  //       this.part.taxType = this.customer.taxType;
+  //       this.part.taxPercentage = this.customer.taxPercentage;
+  //       if (this.selectedPart.mappingType == 1) {
+  //         this.part.altOrEqType = "Alt";
+  //       } else if (this.selectedPart.mappingType == 2) {
+  //         this.part.altOrEqType = "Equi";
+  //       } else {
+  //         this.part.altOrEqType = "";
+  //       }
+  //       this.part.description = this.selectedPart.description;
+  //       this.part.itemMasterId = this.selectedPart.itemMasterId;
+  //       this.part.partId = this.selectedPart.partId;
+  //       this.part.stockLineId = this.selectedPart.stockLineId;
+  //       this.part.idNumber = this.selectedPart.idNumber;
+  //       this.part.customerRef = this.salesQuote.customerReferenceName;
+  //       this.part.serialNumber = this.selectedPart.serialNumber;
+  //       this.part.qtyAvailable = this.selectedPart.qtyAvailable;
+  //       this.part.quantityOnHand = this.selectedPart.quantityOnHand;
+ 
+  //       this.part.masterCompanyId = this.masterCompanyId;
+  //       this.part.conditionId = this.selectedPart.conditionId;
+  //       this.part.conditionDescription = this.selectedPart.conditionDescription;
+  //       this.part.uom = this.selectedPart.uomDescription;
+  //       this.part.pmaStatus = this.selectedPart.oempmader;
+  //       if (!this.part.pmaStatus) {
+  //         this.part.pmaStatus = this.selectedPart['stockType'];
+  //       }
+  //       this.part.currencyId = this.selectedPart.currencyId;
+  //       this.part.currencyDescription = this.defaultCurrencyDiscription;
+  //       this.part.currencyId = this.defaultCurrencyId;
+  //       this.part.controlNumber = this.selectedPart.controlNumber;
+  //       this.part.salesDiscount = 0;
+  //       this.part.markupPerUnit = 0;
+  //       this.part.markUpPercentage = 0;
+  //       this.part.salesDiscount = 0;
+  //       this.part.grossSalePricePerUnit = 0;
+  //       this.part.grossSalePrice = 0;
+  //       this.part.quantityRequested = this.query.partSearchParamters.quantityRequested;
+  //       this.part.quantityToBeQuoted = this.query.partSearchParamters.quantityToQuote;
+  //       if (this.selectedPart['qtyRemainedToQuote']) {
+  //         if (this.selectedPart['qtyRemainedToQuote'] >= this.part.quantityToBeQuoted) {
+  //           this.part.quantityFromThis = this.part.quantityToBeQuoted;
+  //         } else {
+  //           this.part.quantityFromThis = this.selectedPart['qtyRemainedToQuote'];
+  //         }
+  //       } else {
+  //         this.part.quantityFromThis = this.part.quantityToBeQuoted;
+  //       }
+  //       this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
+  //       this.part.quantityAlreadyQuoted = this.query.partSearchParamters.quantityAlreadyQuoted;
+  //     });
+  //     this.addPartModal.close();
+  //     this.salesMarginModal = this.modalService.open(contentMargin, { size: "lg", backdrop: 'static', keyboard: false });
+  //     this.salesMarginModal.result.then(
+  //       () => { },
+  //       () => {
+  //         this.selectedPart.selected = false;
+  //       }
+  //     );
+  //   } else {
+  //     this.removePartNamber(this.selectedPart);
+  //   }
+  // }
+}
+
+
+
+
+
+
 }

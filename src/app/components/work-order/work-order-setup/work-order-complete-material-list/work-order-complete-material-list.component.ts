@@ -176,7 +176,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
 
 
-    
+    isStockLine:boolean=true;
+    isStockView:boolean=true;
     savebutonDisabled: boolean = false;
     roleUpMaterialList: any = [];
     isAllow: any = false;
@@ -219,6 +220,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit() {
+        console.log("material list",this.workOrderMaterialList)
         this.initColumns();
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
@@ -284,18 +286,15 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     setmaterialListForSave(data){
         this.saveMaterialsData.emit(data)
         this.show = false;
-        this.addPartModal.close();
-
+        // this.addPartModal.close();
+        // $('#addPart').modal("hide");
     }
     setmaterialListForUpdate(data){
-        this.updateMaterialsData.emit(data)
         this.show = false;
-        this.addPartModal.close();
-
+        this.updateMaterialsData.emit(data)
+        // this.addPartModal.close();
+        // $('#addPart').modal("hide");
     }
-
-
-    
     createNew() {
         this.ispickticket = false;
         this.isEdit = false;
@@ -353,6 +352,19 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
   
     }
      
+    editStockLine(rowData) {
+        console.log("rowData",rowData)
+        this.editData = undefined;
+        // this.cdRef.detectChanges();
+        this.isEdit = true;
+
+        this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
+        $("#showStockLineDetails").modal("show");
+      
+        // let contentPart = this.addPart;
+        // this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+  
+    }
     openPartNumber() {
         this.isEdit = false;
         this.editData = undefined;
@@ -364,7 +376,36 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.currentRow = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-
+    deleteStockLine(content, row){
+        this.currentRow = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+    deleteStock(){
+        if (this.isSubWorkOrder == true) {
+            this.workOrderService.deleteSubWorkOrderMaterialList(this.currentRow.subWorkOrderMaterialsId, this.userName).subscribe(res => {
+                this.refreshData.emit();
+                this.alertService.showMessage(
+                    '',
+                    'Deleted WorkOrder Material Successfully',
+                    MessageSeverity.success
+                );
+            },
+                err => {
+                })
+        } else {
+            this.workOrderService.deleteWorkOrderMaterialStocklineById(this.currentRow.workOrderMaterialsId, this.currentRow.stockLineId,this.userName).subscribe(res => {
+                this.refreshData.emit();
+                this.alertService.showMessage(
+                    '',
+                    'Deleted WorkOrder Material Successfully',
+                    MessageSeverity.success
+                );
+            },
+                err => {
+                })
+        }
+        this.modal.close();
+    }
     delete() {
         if (this.isSubWorkOrder == true) {
             this.workOrderService.deleteSubWorkOrderMaterialList(this.currentRow.subWorkOrderMaterialsId, this.userName).subscribe(res => {
@@ -1358,10 +1399,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
      
       { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
       { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
-      { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
-      { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
-      { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
-      { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
+      { field: ' ', header: 'Qty Req', align: 1, width: "60px" },
+      { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
+      { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
+      { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
       { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
       { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
       { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
@@ -1405,9 +1446,22 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
       }
 
 
+    //   updateMaterialListForWO
+    //   updateMaterialList(event) {
+    //     this.updateMaterialListForWO.emit(event);
+    //     $('#addNewMaterials').modal('hide');
+    //     this.isEdit = false;
+    // }
+    // setmaterialListForUpdate(data){
+    //     this.show = false;
+    //     this.updateMaterialListForWO.emit(data)
+    //     // this.addPartModal.close();
+    //     // $('#addPart').modal("hide");
+    // }
 
-
-
+    onCloseMaterial(data){
+        $('#showStockLineDetails').modal("hide");
+    }
 }
 
 // min-width: 81px !important;
