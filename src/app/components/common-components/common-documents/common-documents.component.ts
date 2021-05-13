@@ -946,7 +946,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                         // this.editSiteName = this.shipToAddressList[i].siteName;
                         this.addNew.name = getObjectByValue('name', this.documentType[i].name, this.documentType);
                         this.addNew.description = this.documentType[i].description;
-                        this.addNew.revNum = getObjectByValue('revNum', this.documentType[i].revNum, this.documentType);
+                        //this.addNew.revNum = getObjectByValue('revNum', this.documentType[i].revNum, this.documentType);
                         return;
                     }
                 }
