@@ -138,9 +138,23 @@ viewAsstesInventory(rowData){
     AvailableCount: any;
     showcheckInOutlist = false;
     togglePlus:boolean=false;
+    CloseGrid()
+    {
+        this.showcheckInOutlist = false;
+        this.togglePlus=false;
+    }
     openGrid() {
         this.togglePlus=true;
+
         this.showcheckInOutlist = true;
+        // if(this.showcheckInOutlist)
+        // {
+        //     this.showcheckInOutlist = false;
+        // }else
+        // {
+        //     this.showcheckInOutlist = true;
+        // }
+    
         this.workOrderCheckInCheckOutList = [];
         this.AvailableCount = 0;
         if (this.status == 'checkIn') {
