@@ -220,7 +220,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit() {
-        console.log("material list",this.workOrderMaterialList)
         this.initColumns();
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
@@ -340,7 +339,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
    
     }
     editNew(rowData) {
-        console.log("rowData",rowData)
         this.editData = undefined;
         this.cdRef.detectChanges();
         this.isEdit = true;
@@ -353,7 +351,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
      
     editStockLine(rowData) {
-        console.log("rowData",rowData)
         this.editData = undefined;
         // this.cdRef.detectChanges();
         this.isEdit = true;
