@@ -46,7 +46,7 @@
                                     <th>Ready?</th>
                                     <th>Ship Date</th>
                                     <th>Shipping Num </th>
-                                    <th>AWB</th>
+                                    <th style="min-width:150px;">AWB</th>
                                     <th>Pick Ticket Ref</th>
                                     <th>Line #</th>
                                     <th style="min-width: 120px;">PN</th>
@@ -197,7 +197,7 @@
                                                 class="clr-red">*</span> </label>
                                     </div>
                                     <div class="col-md-8">
-                                        <p-calendar [showIcon]="true" [(ngModel)]="shippingHeader.openDate"
+                                        <p-calendar [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="shippingHeader.openDate"
                                             name="openDate" [disabled]="isViewShipping" required></p-calendar>
                                     </div>
                                 </div>
@@ -265,7 +265,7 @@
                                                 class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <p-calendar [showIcon]="true" [(ngModel)]="shippingHeader.shipDate"
+                                        <p-calendar [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="shippingHeader.shipDate"
                                             name="shipDate" [disabled]="isViewShipping" required></p-calendar>
                                     </div>
                                 </div>
@@ -359,8 +359,8 @@
                 <div class="form-row">
                     <div class="col-md-4">
                         <div class="card card-stock">
-                            <div class="card-header">
-                                <h5 class="text-center">Origin</h5>
+                            <div class="card-header card-height">
+                                <h5 class="text-center card-title">Origin</h5>
                             </div>
                             <div class="card-body">
                                 <div class="form-group col-md-12">
@@ -439,8 +439,8 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card card-stock">
-                            <div class="card-header">
-                                <h5 class="text-center">Bill To</h5>
+                            <div class="card-header card-height">
+                                <h5 class="text-center card-title">Bill To</h5>
                             </div>
                             <div class="card-body">
                                 <div class="form-group col-md-12">
@@ -543,8 +543,8 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card card-stock">
-                            <div class="card-header">
-                                <h5 class="text-center">Ship To</h5>
+                            <div class="card-header card-height">
+                                <h5 class="text-center card-title">Ship To</h5>
                             </div>
                             <div class="card-body">
                                 <div class="form-group col-md-12">
@@ -783,14 +783,10 @@
                     </div>
                 </div>
                 <div class="form-row padding-5">
-                    <div class="col-md-12">
-                        <div class="card card-stock">
-                            <div class="card-body">
-                                <button *ngIf="!isView && !isViewShipping" class="btn btn-primary pull-right width-100"
+                    <div class="col-md-12">                        
+                                <button *ngIf="!isView && !isViewShipping" class="btn btn-primary pull-right"
                                     (click)="save()"
-                                    [disabled]="!shippingForm.valid">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
-                            </div>
-                        </div>
+                                    [disabled]="!shippingForm.valid">{{isEditModeAdd ? 'Update' : 'Save'}}</button>                          
                     </div>
                 </div>
             </form>

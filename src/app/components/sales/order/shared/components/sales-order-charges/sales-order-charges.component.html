@@ -130,7 +130,7 @@
                             <select class="form-control custom-select wf-pub-id" id="dllChargesType"
                                 [(ngModel)]="charge.chargesTypeId"  name="type_{{rowIndex}}"
                                 [disabled]="true">
-                                <option [value]="0">Select</option>
+                                <option value="">Select</option>
                                 <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">
                                     {{
                                     ctype.chargeType
@@ -362,7 +362,7 @@
                                                 disabled maxlength="15" />
                                         </td>
                                         <td>
-                                            <p-autoComplete class="autocomp-customer-cstm" name="vendorName"
+                                            <p-autoComplete class="autocomp-customer-cstm" name="vendorName" appendTo='body' [baseZIndex]="9999"
                                                 (ngModelChange)="enableUpdate()" [(ngModel)]="charge.vendor"
                                                 [ngModelOptions]="{standalone: true}" [suggestions]="vendorCollection"
                                                 [forceSelection]="true" emptyMessage="No Match Found" field="vendorName"
