@@ -15260,12 +15260,16 @@ p-table .ui-paginator-bottom {
   position: relative;
   padding: 0;
 }
-
+.materialListTable .ui-table-wrapper {
+  max-height: 600px !important;
+}
 .rro-table-cstm .ui-table-wrapper table {
   position: relative;
   border-collapse: collapse;
 }
-
+.multiCOndition .ui-state-disabled, .ui-widget:disabled {
+  opacity: 0.8 !important;
+}
 .tab-table-cstm .ui-table {
   padding-bottom: 50px;
 }

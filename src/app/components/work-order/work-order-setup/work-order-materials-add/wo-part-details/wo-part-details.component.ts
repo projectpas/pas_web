@@ -152,7 +152,7 @@ export class WoPartDetailsComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     this.salesQuoteService.getSelectedParts().subscribe(data => {
       if (data && data.length > 0) {
-        this.selectedParts = data;
+        this.selectedParts = data; 
       }
     })
     if (this.parts.length > 0 && this.rowIndex != -1) {
@@ -247,7 +247,6 @@ export class WoPartDetailsComponent implements OnChanges {
   }
 
   onChange(event, part,index) {
-    console.log("part item",part)
     let checked: boolean = event.srcElement.checked;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable; 
@@ -284,10 +283,9 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.unitOfMeasureId=part.unitOfMeasureId;
       this.materialCreateObject.provision=''; 
       this.materialCreateObject.memo=this.formObject.memo;
-      console.log("form object",this.formObject);
       this.materialCreateObject.stocklineQuantity=part.qtyToOrder;
       this.disableSaveUpdateButton=true;
-      this.selectedMaterialPart=undefined;
+      this.selectedMaterialPart={};
       this.selectedMaterialPart=this.materialCreateObject;
       this.openSalesMargin();
       this.provisionListData.forEach(element => {
@@ -310,9 +308,7 @@ export class WoPartDetailsComponent implements OnChanges {
   }
   childPartChecked
   onChangeStock(event, part, salesMargin) {
-    console.log("part item",part)
     let checked: boolean = event.srcElement.checked;
-    console.log("roleUpparts",this.roleUpMaterialList)
     if(checked==true){
 
       // this.roleUpMaterialList.forEach(element => {
@@ -350,6 +346,7 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.provision=element.label;
     }
     });
+    this.selectedMaterialPart={};
     this.selectedMaterialPart=this.materialCreateObject
     this.openSalesMargin();
   }else{
@@ -383,39 +380,39 @@ export class WoPartDetailsComponent implements OnChanges {
   }
 
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
+    // debugger;
     if (this.selectedParts.length > 0) {
       let sameParts = [];
       if (isStock) {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == this.formObject.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
+          part.partNumber == this.formObject.partNumber && part.stockLineId == stockLineItem.stockLineId
         );
-      } else {
-        sameParts = this.selectedParts.filter(part =>
-          part.partNumber == stockLineItem.partNumber
-        );
-      }
-      let qtyQuoted = 0;
-      if (sameParts && sameParts.length > 0) {
-        sameParts.forEach(samePart => {
-          qtyQuoted = qtyQuoted + samePart.quantityFromThis;
-        });
-      }
-      if (qtyQuoted < stockLineItem.qtyAvailable) {
-        let remained = stockLineItem.qtyAvailable - qtyQuoted;
-        if (remained != stockLineItem.qtyAvailable) {
-          if (isStock) {
-            this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
-          } else {
-            this.parts[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
-          }
-        }
-        if (this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] != this.roleUpMaterialList[rowIndex].qtyAvailable) {
+    
+        if (stockLineItem.qtyAvailable==0) {
           return true;
         }
-        return false;
-      } else {
-        return true;
+       else if (sameParts && sameParts.length > 0) {
+          return true;
+        }
       }
+      //  else {
+      //   sameParts = this.selectedParts.filter(part =>
+      //     part.partNumber == stockLineItem.partNumber && part.conditionCodeId == stockLineItem.conditionId && part.stockLineNumber == undefined
+      //   );
+      // } 
+      // if (isStock) {
+      //   if (stockLineItem.qtyAvailable>0) {
+      //     return false;
+      //   }
+      //   if (sameParts && sameParts.length > 0) {
+      //     return true;
+      //   }
+      // }
+      // else {
+      //   if (sameParts && sameParts.length > 0) {
+      //     return true;
+      //   }
+      // }
     } else {
       this.selectedParts = [];
       return false;
@@ -773,6 +770,13 @@ calculateExtendedCost(): void {
       this.formObject.extendedCost = "";
   }
   // this.calculateExtendedCostSummation();
+  // this.addQuantityReqToParts();
+  if(this.parts && this.parts.length !=0){
+    this.parts.forEach(element => {
+      element.isPartChecked=false;
+      element.qtyToOrder=this.formObject.quantity;
+    });
+  }
 }
 editorgetmemo(ev) {
   this.disableEditor = false;
@@ -786,7 +790,6 @@ finalSaveMaterial(){
 }
 
 savePart(data){
-console.log("wo part detaisl")
   // this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
   // this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
   // this.materialCreateObject.memo=this.formObject.memo;
@@ -795,11 +798,9 @@ console.log("wo part detaisl")
   this.saveMaterialListData.emit(data);
   $("#showMarginDetails").modal("hide");
   this.close.emit(true);
-  console.log("wo part detaisl22")
 }
 
 upDatePart(data){ 
-  console.log("wo part detaisl22 ")
   // if(this.isEdit){
   //   this.materialCreateObject= this.editData
   //   this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
@@ -818,7 +819,6 @@ upDatePart(data){
   this.disableUpdateButton=true;
   $("#showMarginDetails").modal("hide");
   this.close.emit(true);
-  console.log("wo part detaisl22444")
 }
 openSalesMargin() {
   // this.isEdit = false;

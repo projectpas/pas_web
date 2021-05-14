@@ -845,7 +845,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
 
 
 
-    <p-table class="rpo-table-cstm rro-table-cstm ptable-f10" id="custome_material" [columns]="summaryColumns" #materialTble
+    <p-table class="rpo-table-cstm rro-table-cstm ptable-f10 materialListTable" id="custome_material" [columns]="summaryColumns" #materialTble
     [value]="workOrderMaterialList" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100,200,500]"
     (onPage)="pageIndexChange($event)">
     <ng-template pTemplate="header" let-columns>
@@ -968,8 +968,8 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
           <h4 class="modal-title">Edit PN Details</h4>
         </div>
         <div class="modal-body" *ngIf="editData !=undefined">
-            <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isStockLine]="isStockLine"  (close)="onCloseMaterial($event)"  (updateFinalMaterialListData)="updateMaterialList($event)" [isEdit]="isEdit" [editData]="editData"  [part]="editData" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
-           ></app-wo-margin>
+            <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isStockLine]="isStockLine"  (close)="onCloseMaterial($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)" [isEdit]="isEdit" [editData]="editData"  [part]="editData" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+           ></app-wo-margin> 
         </div>
       </div>
     </div>
