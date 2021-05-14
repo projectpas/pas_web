@@ -1,6 +1,6 @@
 ﻿<div *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
-    <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary mar-left-5"
-        (click)="createNew();" style="min-width: 97px !important;">Add PN</button>
+    <!-- <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary mar-left-5"
+        (click)="createNew();" style="min-width: 97px !important;">Add PN</button> -->
     <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
         Add PN New
     </button>
@@ -930,9 +930,9 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                 </td>
                 <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
                 
-                    <span><button class="btn nobg btn-edit-cstm1" (click)="editStockLine(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+                    <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
               
-                    <span><button type="button" class="btn nobg btn-delete-cstm"  (click)="deleteStockLine(Stockcontent,rowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                    <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,rowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
                 </td>
             </tr>
             <tr class="child-data splitship-child child-data-back " *ngIf="rowData.childParts && rowData.childParts.length==0">
