@@ -158,7 +158,6 @@ export class PartDetailsComponent implements OnChanges {
   }
 
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
-    debugger;
     if (this.selectedParts.length > 0) {
       let sameParts = [];
       if (isStock) {

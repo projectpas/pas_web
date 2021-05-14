@@ -497,6 +497,7 @@ export class SalesOrderPartNumberComponent {
   }
 
   openPartDelete(contentPartDelete, part) {
+    this.countItemNo = this.countItemNo - 1;
     this.part = part;
     this.deletePartModal = this.modalService.open(contentPartDelete, { size: "sm", backdrop: 'static', keyboard: false });
   }
@@ -685,9 +686,10 @@ export class SalesOrderPartNumberComponent {
         this.canSaveParts = true;
         this.alertService.stopLoadingMessage();
         this.isSpinnerVisible = false;
+        this.updateNewSalesOrderPartNumber(data[0]);
         this.alertService.showMessage(
           "Success",
-          `PN  updated successfully.`,
+          `PN updated successfully.`,
           MessageSeverity.success
         );
         this.saveButton = true;
@@ -698,6 +700,18 @@ export class SalesOrderPartNumberComponent {
       });
     }
     this.closeConfirmationModal();
+  }
+
+  updateNewSalesOrderPartNumber(data) {
+    for (let i = 0; i < this.selectedParts.length; i++) {
+      let selectedPart = this.selectedParts[i];
+      for (let j = 0; j < data.parts.length; j++) {
+        let dt = data.parts[j];
+        if (selectedPart.conditionId == dt.conditionId && selectedPart.itemMasterId == dt.itemMasterId) { 
+          this.selectedParts[i].salesOrderPartId = dt.salesOrderPartId;
+        }
+      }
+    }
   }
 
   onDataLoadFailed(error) {
