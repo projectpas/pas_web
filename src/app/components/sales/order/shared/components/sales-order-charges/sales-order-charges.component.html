@@ -232,7 +232,15 @@
                             </div>
                         </td>
                     </tr>
+                   
                 </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                      <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+                        No records found
+                      </td>
+                    </tr>
+                  </ng-template>
                 <ng-template pTemplate="footer">
                     <tr class="footer">
                         <td class="table-column-width">Total</td>

@@ -10,7 +10,7 @@
       </div>
     </div>
     <div
-      [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+      [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex':'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
       style="min-height: 130px !important;">
       <div class="tableFixHead">
         <table class="table table-bordered" id="so-table">
@@ -20,7 +20,8 @@
                 {{ summaryColumn.header }}
               </span>
             </th>
-            <th *ngIf="isView == false">Actions</th>
+            <th *ngIf="isView == false"
+            style="min-width: 120px; position: sticky !important">Actions</th>
           </tr>
           <ng-container *ngIf="pickTickes.length > 0">
             <ng-container *ngFor="let summaryPart of pickTickes;let rowIndex=index;">
@@ -32,7 +33,7 @@
                       {{summaryPart[summaryColumn.field]}}
                     </span>
                   </td>
-                  <td *ngIf="isView == false" style="position:sticky; width:80px">
+                  <td *ngIf="isView == false"  style="min-width: 120px; position: sticky !important">
                     <span>
                       <button class="btn nobg" mat-icon-button
                         (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
