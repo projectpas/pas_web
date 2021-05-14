@@ -30,6 +30,7 @@ import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-re
 import { DBkeys } from '../../../../services/db-Keys';
 import { MenuItem } from 'primeng/api';
 import {AppModuleEnum} from "../../../../enum/appmodule.enum";
+import { SalesQuoteService } from '../../../../services/salesquote.service';
 
 @Component({
     selector: 'app-work-order-add',
@@ -279,6 +280,7 @@ export class WorkOrderAddComponent implements OnInit {
         private quoteService: WorkOrderQuoteService,
         private salesOrderReferenceStorage: SalesOrderReferenceStorage,
         public vendorService: VendorService,
+        private salesQuoteService: SalesQuoteService,
     ) {
         this.moduleName = 'Work Order';
     }
@@ -1913,6 +1915,7 @@ this.getNewMaterialListByWorkOrderId();
                         this.quoteMaterialList = res;
                     }
                     this.materialStatus = res[0].partStatusId;
+                    this.salesQuoteService.selectedParts = this.workOrderMaterial;
                     this.filterParts();
                 }
             },
@@ -1929,10 +1932,12 @@ this.getNewMaterialListByWorkOrderId();
         let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
         if (uniqueParts.length > 0) {
           uniqueParts.forEach((part, i) => {
-            let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
+            let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.stockLineId !=0 && selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
             if (childParts && childParts.length > 0) {
             //   uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
               uniqueParts[i].childParts = childParts;
+            }else{
+                uniqueParts[i].childParts = [];
             }
           });
           this.workOrderMaterialList = uniqueParts;
@@ -1949,7 +1954,7 @@ this.getNewMaterialListByWorkOrderId();
           if (acc.some(obj => v[prop1] === obj[prop1] && v[prop2] === obj[prop2] && v[prop3] === obj[prop3])) {
             uniqueParts.splice(i, 1);
           } else {
-            acc.push(v);
+            acc.push(v); 
           }
           return acc;
         }, []);
