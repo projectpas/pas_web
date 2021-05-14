@@ -218,7 +218,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     }
     if (this.query.partSearchParamters.quantityToQuote < 0) {
       this.searchDisabled = true;
-      this.alertService.showStickyMessage('', 'Qty To Quote can not be negative', MessageSeverity.error);
+      this.alertService.showStickyMessage('', 'You have quoted more than requested', MessageSeverity.error);
     } else {
       this.alertService.resetStickyMessage();
     }
