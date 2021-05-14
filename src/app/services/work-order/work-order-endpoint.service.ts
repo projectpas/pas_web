@@ -302,9 +302,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deleteworkordermaterialStockline?workOrderMaterialsId=${workOrderMaterialId}&stocklineId=${stocklineId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy));
         });
-
     }
-
+    deleteWorkOrderStockMaterialListById(workOrderMaterialId, updatedBy) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deleteworkordermaterial?workOrderMaterialsId=${workOrderMaterialId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.deleteWorkOrderStockMaterialListById(workOrderMaterialId, updatedBy));
+        });
+    }
     createWorkOrderEquipmentList(data, isSubWorkOrder) {
         if (isSubWorkOrder == true) {
             return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/createsubworkorderasset`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {

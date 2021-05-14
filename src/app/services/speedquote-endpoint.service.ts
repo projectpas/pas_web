@@ -12,7 +12,7 @@ import { SpeedQuoteMarginSummary } from "../models/sales/SpeedQuoteMarginSummary
 @Injectable()
 export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly getNewSpeedQuoteInstanceUrl: string = environment.baseUrl + "/api/speedquote/new";
-  private readonly getSpeedQuoteSetting: string = environment.baseUrl + "/api/SOQuoteSettings/getlist";
+  private readonly getSpeedQuoteSetting: string = environment.baseUrl + "/api/speedquote/getlist";
   private readonly getSpeedQuoteDetails: string = environment.baseUrl + "/api/speedquote/get";
   private readonly saleQuote: string = environment.baseUrl + "/api/speedquote";
   private readonly soqMarginSummary: string = environment.baseUrl + "/api/speedquote/create-quote-margin-data";

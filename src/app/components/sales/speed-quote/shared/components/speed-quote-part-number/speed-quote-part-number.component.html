@@ -9,6 +9,6 @@
 <ng-template #addPart let-c="close" let-d="dismiss">
   <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
       [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow" [clearData]="clearData"
-      (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SOQ'">
+      (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SQ'">
   </app-add-sales-part-number>
 </ng-template>

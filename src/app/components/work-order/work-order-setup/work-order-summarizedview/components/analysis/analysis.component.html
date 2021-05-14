@@ -1,7 +1,9 @@
-<p-treeTable class="p-Treetable-view" [value]="gridData">
+<div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" style="margin-top: 15px;">
+    <div class="tableFixHead">
+<p-treeTable class=" table header-table-width p-Treetable-view" [value]="gridData">
     <ng-template pTemplate="header">
         <tr>
-            <th class="table-column-width" *ngFor="let f of fields">{{f.header}}</th>
+            <th class="analysis-detail-header table-column-width" *ngFor="let f of fields">{{f.header}}</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
@@ -27,3 +29,5 @@
         </tr>
     </ng-template>
 </p-treeTable>
+</div>
+</div>

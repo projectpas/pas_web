@@ -1,36 +1,36 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
-import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
-import { ItemSearchType } from "../../../../quotes/models/item-search-type";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ItemMasterSearchQuery } from "../../../../models/item-master-search-query";
+import { ItemSearchType } from "../../../../models/item-search-type";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ItemMasterService } from "../../../../../../services/itemMaster.service";
-import { StocklineService } from "../../../../../../services/stockline.service";
-import { SalesQuoteService } from "../../../../../../services/salesquote.service";
-import { ConditionService } from '../../../../../../services/condition.service';
-import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
-import { PartSearchParamters } from "../../../../quotes/models/part-search-parameters";
+import { ItemMasterService } from "../../../../../../../services/itemMaster.service";
+import { StocklineService } from "../../../../../../../services/stockline.service";
+import { SalesQuoteService } from "../../../../../../../services/salesquote.service";
+import { ConditionService } from '../../../../../../../services/condition.service';
+import { ISpeedQuote } from "../../../../../../../models/sales/ISpeedQuote.model";
+import { PartSearchParamters } from "../../../../models/part-search-parameters";
 import { IMultiPartJson } from "../../../models/imulti-part-json";
 import { Router } from "@angular/router";
-import { formatStringToNumber } from "../../../../../../generic/autocomplete";
-import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
-import { AlertService, MessageSeverity } from "../../../../../../services/alert.service";
+import { formatStringToNumber } from "../../../../../../../generic/autocomplete";
+import { SpeedQuoteSummaryPart } from "../../../../../../../models/sales/SpeedQuoteSummaryPart";
+import { AlertService, MessageSeverity } from "../../../../../../../services/alert.service";
 import { Subscription } from 'rxjs';
-import { AuthService } from "../../../../../../services/auth.service";
-
+import { AuthService } from "../../../../../../../services/auth.service";
+import { SpeedQuoteService } from "../../../../../../../services/speedquote.service";
 @Component({
-  selector: "app-part-number-filter",
-  templateUrl: "./part-number-filter.component.html",
-  styleUrls: ["./part-number-filter.component.scss"],
+  selector: 'app-speed-quote-part-number-filter',
+  templateUrl: './speed-quote-part-number-filter.component.html',
+  styleUrls: ['./speed-quote-part-number-filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PartNumberFilterComponent implements OnInit, OnDestroy {
+export class SpeedQuotePartNumberFilterComponent implements OnInit {
   @Input() customer: any;
-  @Input() salesQuote: ISalesQuote;
+  @Input() salesQuote: ISpeedQuote;
   @Input() allConditionInfo: any;
   @Input() parts: any = [];
   @Input() isStockLineViewMode = false;
   @Input() clearData = false;
   @Input() selectedParts: any = [];
-  @Input() selectedSummaryRow: SummaryPart;
+  @Input() selectedSummaryRow: SpeedQuoteSummaryPart;
   @Input() type: string;
   @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTypeChange: EventEmitter<ItemSearchType> = new EventEmitter<ItemSearchType>();
@@ -54,9 +54,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   showPaginator: any;
   pageLinks: any;
   subscription: Subscription;
-
-  constructor(
-    private modalService: NgbModal,
+  constructor(private modalService: NgbModal,
     private itemMasterService: ItemMasterService,
     private stockLineService: StocklineService,
     private salesQuoteService: SalesQuoteService,
@@ -64,7 +62,8 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     public conditionService: ConditionService,
     private changeDetector: ChangeDetectorRef,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private speedQuoteService: SpeedQuoteService,) {
     this.partDetails = [];
     this.query = new ItemMasterSearchQuery();
     this.partDetail = {
@@ -97,12 +96,12 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.salesQuoteService.getSearchPartObject()
+    this.speedQuoteService.getSearchPartObject()
       .subscribe(data => {
         this.query = data;
         this.calculate();
       });
-      
+
     if (this.selectedSummaryRow) {
       this.onPartNumberSelect(this.selectedSummaryRow);
       this.openSalesMarginWithSummaryRow(this.selectedSummaryRow);
@@ -199,7 +198,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
           break;
       }
     }
-  } 
+  }
 
   calculate() {
     if (this.query.partSearchParamters.conditionIds.length > 0
@@ -218,11 +217,11 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     }
     if (this.query.partSearchParamters.quantityToQuote < 0) {
       this.searchDisabled = true;
-      this.alertService.showStickyMessage('', 'You have quoted more than requested', MessageSeverity.error);
+      this.alertService.showStickyMessage('', 'Qty To Quote can not be negative', MessageSeverity.error);
     } else {
       this.alertService.resetStickyMessage();
     }
-    this.salesQuoteService.updateSearchPartObject(this.query);
+    this.speedQuoteService.updateSearchPartObject(this.query);
   }
 
   onPartNumberSelect(part: any) {

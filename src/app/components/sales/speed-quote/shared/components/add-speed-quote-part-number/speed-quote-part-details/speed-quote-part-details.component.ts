@@ -1,23 +1,23 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { PartDetail } from "../../../models/part-detail";
 import { IPartJson } from "../../../models/ipart-json";
-import { SalesQuoteService } from "../../../../../../services/salesquote.service";
+import { SalesQuoteService } from "../../../../../../../services/salesquote.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { StocklineService } from "../../../../../../services/stockline.service";
-import { StocklineListSalesFilter } from "../../../../../../models/sales/StocklineListSalesFilter";
-import { CustomPaginate } from "../../../../../../models/custom-paginate";
-import { formatNumberAsGlobalSettingsModule } from "../../../../../../generic/autocomplete";
-import { StocklineViewComponent } from "../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
-import { StocklineHistoryComponent } from "../../../../../../shared/components/stockline/stockline-history/stockline-history.component";
-import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
-import { AlertService } from "../../../../../../services/alert.service";
-
+import { StocklineService } from "../../../../../../../services/stockline.service";
+import { StocklineListSalesFilter } from "../../../../../../../models/sales/StocklineListSalesFilter";
+import { CustomPaginate } from "../../../../../../../models/custom-paginate";
+import { formatNumberAsGlobalSettingsModule } from "../../../../../../../generic/autocomplete";
+import { StocklineViewComponent } from "../../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
+import { StocklineHistoryComponent } from "../../../../../../../shared/components/stockline/stockline-history/stockline-history.component";
+import { ItemMasterSearchQuery } from "../../../../models/item-master-search-query";
+import { AlertService } from "../../../../../../../services/alert.service";
+import { SpeedQuoteService } from "../../../../../../../services/speedquote.service";
 @Component({
-  selector: "app-part-details",
-  templateUrl: "./part-details.component.html",
-  styleUrls: ["./part-details.component.scss"]
+  selector: 'app-speed-quote-part-details',
+  templateUrl: './speed-quote-part-details.component.html',
+  styleUrls: ['./speed-quote-part-details.component.scss']
 })
-export class PartDetailsComponent implements OnChanges {
+export class SpeedQuotePartDetailsComponent implements OnChanges {
   @Input() customer: any;
   roleUpMaterialList: any = [];
   @Input() parts: IPartJson[];
@@ -50,20 +50,20 @@ export class PartDetailsComponent implements OnChanges {
   rowIndex = -1;
   stockLineViewedRow: any;
   customPaginate: CustomPaginate<StocklineListSalesFilter> = new CustomPaginate<StocklineListSalesFilter>();
-
   constructor(private salesQuoteService: SalesQuoteService, private service: StocklineService,
-    private modalService: NgbModal, public alertService: AlertService) {
-    this.parts = [];
+    private modalService: NgbModal, public alertService: AlertService,
+    private speedQuoteService: SpeedQuoteService,) {
+      this.parts = [];
     this.roleUpMaterialList = [];
     this.columns = [];
     this.stockLinecolumns = [];
     this.initColumns();
     this.part = null;
     this.customPaginate.filters = new StocklineListSalesFilter();
-  }
+    }
 
   ngOnInit() {
-    this.salesQuoteService.getSearchPartResult()
+    this.speedQuoteService.getSearchPartResult()
       .subscribe(data => {
         this.parts = data;
         this.query = data;
@@ -73,18 +73,17 @@ export class PartDetailsComponent implements OnChanges {
         );
       });
 
-    if (this.clearData) {
-      this.parts = [];
-    }
+      if (this.clearData) {
+        this.parts = [];
+      }
   }
-
   hideStockline(rowIndex) {
     this.hideme[rowIndex] = !this.hideme[rowIndex];
     this.rowIndex = -1;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.salesQuoteService.getSelectedParts().subscribe(data => {
+    this.speedQuoteService.getSelectedParts().subscribe(data => {
       if (data && data.length > 0) {
         this.selectedParts = data;
       }
@@ -166,38 +165,31 @@ export class PartDetailsComponent implements OnChanges {
         );
       } else {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId && part.stockLineNumber == undefined
+          part.partNumber == stockLineItem.partNumber
         );
       }
 
-      if (isStock) {
-        let qtyQuoted = 0;
-        if (sameParts && sameParts.length > 0) {
-          sameParts.forEach(samePart => {
-            qtyQuoted = qtyQuoted + samePart.quantityFromThis;
-          });
-        }
-        if (qtyQuoted < stockLineItem.qtyAvailable) {
-          let remained = stockLineItem.qtyAvailable - qtyQuoted;
-          if (remained != stockLineItem.qtyAvailable) {
-            if (isStock) {
-              this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
-            } else {
-              this.parts[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
-            }
-          }
-          if (this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] != this.roleUpMaterialList[rowIndex].qtyAvailable) {
-            return true;
-          }
-          return false;
-        } else {
-          return true;
-        }
+      let qtyQuoted = 0;
+      if (sameParts && sameParts.length > 0) {
+        sameParts.forEach(samePart => {
+          qtyQuoted = qtyQuoted + samePart.quantityFromThis;
+        });
       }
-      else {
-        if (sameParts && sameParts.length > 0) {
+      if (qtyQuoted < stockLineItem.qtyAvailable) {
+        let remained = stockLineItem.qtyAvailable - qtyQuoted;
+        if (remained != stockLineItem.qtyAvailable) {
+          if (isStock) {
+            this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
+          } else {
+            this.parts[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
+          }
+        }
+        if (this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] != this.roleUpMaterialList[rowIndex].qtyAvailable) {
           return true;
         }
+        return false;
+      } else {
+        return true;
       }
     } else {
       this.selectedParts = [];
@@ -223,7 +215,7 @@ export class PartDetailsComponent implements OnChanges {
     this.customPaginate.filters.conditionId = part.conditionId;
     this.customPaginate.filters.partNumber = part.partNumber;
     this.isSpinnerVisible = true;
-    this.salesQuoteService.getSearchPartResult()
+    this.speedQuoteService.getSearchPartResult()
       .subscribe(data => {
         this.parts = data;
         this.totalRecords = this.parts.length;
@@ -235,7 +227,7 @@ export class PartDetailsComponent implements OnChanges {
         this.isSpinnerVisible = false;
       });
 
-    this.salesQuoteService.getSearchPartObject()
+    this.speedQuoteService.getSearchPartObject()
       .subscribe(data => {
         this.query = data;
       });
@@ -253,7 +245,7 @@ export class PartDetailsComponent implements OnChanges {
         } else {
           this.roleUpMaterialList = [];
         }
-        this.salesQuoteService.getSelectedParts().subscribe(data => {
+        this.speedQuoteService.getSelectedParts().subscribe(data => {
           if (data && data.length > 0) {
             this.selectedParts = data;
           }
@@ -309,4 +301,5 @@ export class PartDetailsComponent implements OnChanges {
       }
     }
   }
+
 }

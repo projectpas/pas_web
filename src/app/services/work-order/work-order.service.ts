@@ -694,4 +694,11 @@ export class WorkOrderService {
     getPickTicketListMainPart(workOrderId, workFlowWorkOrderId) {
         return this.workOrderEndpointService.getPickTicketListMainPart(workOrderId, workFlowWorkOrderId);
     }
+
+
+    deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy) {
+        return this.workOrderEndpointService.deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy);
+    }
+
+
 }

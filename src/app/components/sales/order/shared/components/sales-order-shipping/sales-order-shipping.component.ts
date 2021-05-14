@@ -564,7 +564,7 @@ export class SalesOrderShippingComponent {
         this.shippingList.filter(a => {
             for (let i = 0; i < a.soshippingchildviewlist.length; i++) {
                 if (a.soshippingchildviewlist[i].selectedToGeneratePackaging == true) {
-                    if (a.soshippingchildviewlist[i].packagingSlipId === undefined && a.soshippingchildviewlist[i].packagingSlipId == 0) {
+                    if (a.soshippingchildviewlist[i].packagingSlipId === undefined || a.soshippingchildviewlist[i].packagingSlipId == 0) {
                         var p = new PackagingSlipItems;
                         p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
                         p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
