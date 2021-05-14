@@ -87,7 +87,7 @@
                                 </button> 
                             </div> -->
                             <!-- <app-materiallist-wo-summarization [value]="materialListMPNs"></app-materiallist-wo-summarization> -->
-                            <div *ngFor="let materialMPN of materialListMPNs; let i=index">
+                            <div >
                                 <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -97,7 +97,7 @@
                                                         <div style="overflow-x: scroll;">
                                                             <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
                                                                 <div class="tableFixHead">
-                                                                <table class="table table-bordered">
+                                                                <table *ngFor="let materialMPN of materialListMPNs; let i=index" class="table table-bordered">
                                                                 <thead *ngIf="i == 0">
                                                                     <tr>
                                                                         <th class="table-column-icon-width"></th>
@@ -119,20 +119,20 @@
                                                                             {{globalizeAmount(materialMPN[matField.field], matField.field)}}
                                                                         </td>
                                                                     </tr>
-                                                                    <tr class="sub-table no-bg">
+                                                                    <tr *ngIf="materialMPN.workOrderMaterialList" class="sub-table no-bg">
                                                                         <td></td>
                                                                         <td colspan="22" class="p-0">
-                                                                        <div id="materialList_{{i}}" class="panel-collapse collapse in ">
+                                                                        <!-- <div id="materialList_{{i}}" class="panel-collapse collapse in ">
                                                                             <div *ngIf="!materialMPN.workOrderMaterialList">
                                                                                 No Record Found
                                                                             </div>
-                                                                            <div *ngIf="materialMPN.workOrderMaterialList">
+                                                                            <div *ngIf="materialMPN.workOrderMaterialList"> -->
                                                                                 <app-work-order-complete-material-list [materialStatus]="materialMPN.materialStatus" isWorkOrder="true"
                                                                                 [workFlowObject]="workFlowObject" [savedWorkOrderData]="savedWorkOrderData" isSubWorkOrder="false" subWOPartNoId="0"
                                                                                 [mpnId]="materialMPN.workOrderPartNumberId" [employeesOriginalData]="employeesOriginalData"
                                                                                 [workOrderMaterialList]="materialMPN.workOrderMaterialList"[taskList]="taskList" [mpnPartNumbersList]="mpnPartNumbersList" isView="true"></app-work-order-complete-material-list>
-                                                                            </div>
-                                                                        </div>
+                                                                            <!-- </div>
+                                                                        </div> -->
                                                                         </td>
                                                                         </tr>
                                                                 </tbody>
@@ -175,7 +175,7 @@
                                 </button>
                             </div>
                             <!-- <app-labour-wo-summarization [value]="labourListMPNs"></app-labour-wo-summarization> -->
-                            <div *ngFor="let labourMPN of labourListMPNs; let i=index">
+                            <div >
                                 <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="margin-bottom: -8px;">
@@ -184,7 +184,7 @@
                                                     <!-- <a data-toggle="collapse" class="ac_cs collapsed" href="#labour_{{i}}" (click)="getLabourListData(labourMPN)"> -->
                                                         <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
                                                             <div class="tableFixHead">
-                                                            <table class="table table-bordered">
+                                                            <table *ngFor="let labourMPN of labourListMPNs; let i=index" class="table table-bordered">
                                                                 <thead *ngIf="i == 0">
                                                                     <tr>
                                                                         <th class="table-column-icon-width"></th>
@@ -194,8 +194,8 @@
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
-                                                                <tbody>
-                                                                    <tr>
+                                                                <tbody >
+                                                                    <tr >
                                                                         <td class="table-column-icon-width">
                                                                             <a data-toggle="collapse" style="padding-right:7px;padding-left:7px" class="btn btn-primary roleUpd" href="#labour_{{i}}" (click)="getLabourListData(labourMPN)">
                                                                                 <i 
@@ -208,17 +208,17 @@
                                                                             </div>
                                                                         </td>
                                                                     </tr>
-                                                                    <tr class="sub-table no-bg">
+                                                                    <tr *ngIf="labourMPN.labor" class="sub-table no-bg">
                                                                         <td></td>
                                                                         <td colspan="9" class="p-0">
-                                                                        <div id="labour_{{i}}" class="panel-collapse collapse in">
+                                                                        <!-- <div id="labour_{{i}}" class="panel-collapse collapse in">
                                                                         <div *ngIf="!labourMPN.labor">
                                                                             No Record Found
-                                                                        </div>
-                                                                        <div *ngIf="labourMPN.labor" style="width: 92%;margin-left: 4%;">
+                                                                        </div> -->
+                                                                        <!-- <div *ngIf="labourMPN.labor" style="width: 92%;margin-left: 4%;"> -->
                                                                             <app-labour-wo-summarization [value]="labourMPN.labor" [type]="labourMPN.labourHours" [partNumber]="labourMPN.partNumber"></app-labour-wo-summarization>
-                                                                        </div>
-                                                                    </div>
+                                                                        <!-- </div> -->
+                                                                    <!-- </div> -->
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
