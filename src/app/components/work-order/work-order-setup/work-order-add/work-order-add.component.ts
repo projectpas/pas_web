@@ -116,6 +116,7 @@ export class WorkOrderAddComponent implements OnInit {
     partNumberList: any;
     technicianList: any[];
     cmmList: any;
+    cmmListNew: any;
     savedWorkOrderData: any;
     workFlowWorkOrderData: any;
     workOrderAssetList: any = [];
@@ -535,7 +536,7 @@ setTimeout(() => {
                         mappingItemMasterId: getObjectById('mappingItemMasterId', x.mappingItemMasterId, x.revisedParts),
                         masterPartId: x.woPart,
                         customerRequestDate: x.customerRequestDate ? new Date(x.customerRequestDate) : null,
-                        receivedDate: x.receivedDate ? new Date(x.receivedDate) : null,
+                        receivedDate: x.receivedDate ? new Date(x.receivedDate) : new Date(this.currentDate),
                         estimatedCompletionDate: (x.estimatedCompletionDate) ? new Date(x.estimatedCompletionDate) : new Date(x.customerRequestDate),
                         estimatedShipDate: (x.estimatedShipDate) ? new Date(x.estimatedShipDate) : new Date(x.customerRequestDate),
                         promisedDate: (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate),
@@ -569,7 +570,8 @@ setTimeout(() => {
         }
 
 
-this.showWaringForPubWorkflow()
+this.showWaringForPublication()
+this.showWaringForWorkflow()
     }
     removePublication(currentRecord,index){
 setTimeout(() => {
@@ -746,11 +748,22 @@ setTimeout(() => {
                     x.conditionId=0;
                     x.cMMId=0;
                     x.workflowId=0;
+                    x.level1='';
+                    x.level2='';
+                    x.level3='';
+                    x.level4='';
+                    x.isDER=false;
+                    x.isPMA=false;
 
 
                 }
             )
         }
+
+        var index = 0;
+        this['cmmPublicationList'+index] =[];
+        this['dynamicWorkflowList'+index] =[];
+        // this['cmmPublicationList']=[];
 
         if (this.workOrderGeneralInformation.workOrderTypeId == 1) // Customer
         {
@@ -1128,7 +1141,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
            this.isValidationfailed= true;
     }
      if(!x.conditionId || x.conditionId==undefined){
-        this.alertService.showMessage('Work Order', 'Recd Date is required', MessageSeverity.error);
+        this.alertService.showMessage('Work Order', 'Condition is required', MessageSeverity.error);
            this.isValidationfailed= true;
     }
      if(!x.workOrderScopeId || x.workOrderScopeId==undefined){
@@ -1396,6 +1409,8 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         await this.workOrderService.getPartPublicationByItemMaster(itemMasterId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.cmmList=[];
+            this.cmmListNew=[];
+            this.cmmListNew= res;
             this.cmmList = res.map(x => {
                 return {
                     value: x.publicationRecordId,
@@ -1407,9 +1422,10 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 currentRecord.cMMId =  this['cmmPublicationList' + index][0].value;
                 this.workOrderGeneralInformation.partNumbers[index].cMMId =  this['cmmPublicationList' + index][0].value;
 
-                if(this.cmmList && this.cmmList[0].expirationDate){
-                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmList[0].expirationDate;
-                this.showWaringForPubWorkflow();
+                if(this.cmmListNew && this.cmmListNew[0].expirationDate)
+                {
+                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmListNew[0].expirationDate;
+                this.showWaringForPublication();
                 }
             }
         },
@@ -1492,9 +1508,9 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
             if(this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length!=0){
                 this.workFlowId=this.workFlowList[0].value;
                 this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
-                if(this.workFlowList && this.workFlowList[0].expirationDate){
-                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.workFlowList[0].expirationDate;
-                this.showWaringForPubWorkflow();
+                if(res && res[0].expirationDate){
+                this.workOrderGeneralInformation.partNumbers[index].workflowExpirationDate = res[0].expirationDate;
+                this.showWaringForWorkflow();
                 }
             }
             // workOrderPart.workflowId = this.workFlowList[0].value;
@@ -3672,6 +3688,18 @@ this.woPartId=rowData.id;
         }
         this.workFlowId=currentRecord.workflowId;
         this.workOrderId=this.workOrderId ? this.workOrderId :currentRecord.workOrderId;
+
+        this.workOrderService.GetWorkflowtranserData(this.workOrderId,).pipe(takeUntil(this.onDestroy$)).subscribe(res => 
+        {
+           this.workflowTransfer.Material =res.material 
+           this.workflowTransfer.Labor =res.labor 
+           this.workflowTransfer.Tools =res.tools 
+           this.workflowTransfer.Charges =res.charges 
+
+
+            //const workOrderData = res;
+           
+        })
    
     }
     taskComletedByConfirmation(ev){
@@ -3701,8 +3729,8 @@ this.woPartId=rowData.id;
         data.createdBy = this.userName;
 
         this.workOrderService.transferWorkflow(data).subscribe(res => {
-            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
-            this.showWaringForPubWorkflow();
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = true;
+            this.showWaringForWorkflow();
             
             this.alertService.showMessage(
                 this.moduleName,
@@ -3712,16 +3740,51 @@ this.woPartId=rowData.id;
         });
     }
     closeTranferFlow(){
-        this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
+
+        if(this.workflowTransfer.Material ||  this.workflowTransfer.Labor ||  this.workflowTransfer.Tools|| this.workflowTransfer.Charges)
+        {
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = true;
+        }
+        else
+        {
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
+        }
+        
         $('#workFlowTransfer').modal('hide');
     }
     publicatonExpirationDate:any;
-    showWaringForPubWorkflow(){
+    showWaringForWorkflow(){
+        if(!this.isView){
+            setTimeout(() => { 
+                this.workOrderGeneralInformation.partNumbers.map((x, index) => {
+                    if(x.workflowExpirationDate){ 
+                     //if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                    if((new Date(x.workflowExpirationDate)) < (new Date())){
+                        // this.removeWorkflow(x,index);
+                        setTimeout(() => {
+                            // x.workflowId=0;
+                            this.disableSaveForPart=false;
+                        }, 2000);
+                        $('#warningForCmmWorkflow').modal('show');
+                        // this.expriryarray.push(x);
+                
+                       }
+                    }
+                   }); 
+            }, 5000);
+        }
+      }
+
+      showWaringForPublication(){
         if(!this.isView){
             setTimeout(() => { 
                 this.workOrderGeneralInformation.partNumbers.map((x, index) => {
                     if(x.publicatonExpirationDate){ 
-                       if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+
+                        
+                       //if(moment(new Date(x.publicatonExpirationDate)).format('MM/DD/YYYY') < moment(new Date()).format('MM/DD/YYYY')){
+
+                        if((new Date(x.publicatonExpirationDate)) < (new Date())){
                         setTimeout(() => {
                             // x.cMMId=0;
                             this.disableSaveForPart=false;
@@ -3731,19 +3794,6 @@ this.woPartId=rowData.id;
                         // this.expriryarray.push(x);
                  
                         $('#warningForCmmPublication').modal('show');
-                       }
-                    }
-                    if(x.workflowExpirationDate){ 
-                     if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
-                       
-                        // this.removeWorkflow(x,index);
-                        setTimeout(() => {
-                            // x.workflowId=0;
-                            this.disableSaveForPart=false;
-                        }, 2000);
-                        $('#warningForCmmWorkflow').modal('show');
-                        // this.expriryarray.push(x);
-                
                        }
                     }
                    }); 

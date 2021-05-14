@@ -624,7 +624,8 @@
                                                         [(ngModel)]="workOrderPartNumber.isWorkflowTranfer"
                                                         (change)="tranferCheckbox($event,workOrderPartNumber,i)"
                                                         matTooltip="Transfer Workflow To Work Order"
-                                                        matTooltipPosition="above">
+                                                        matTooltipPosition="above"
+                                                        [disabled]="!isEdit">
                                                 </span>
                                             </td>
                                             <td>
@@ -705,15 +706,15 @@
                                                     {{workOrderPartNumber.level4}}</p>
                                             </td>
                                             <td *ngIf="!isView" class="table-column-icon-width width100">
-                                                <span><a class="btn nobg btn-plusro-cstm"
+                                                <span><button class="btn nobg btn-plusro-cstm"
                                                         (click)="createNewRoWorkOrder(workOrderPartNumber)"
-                                                        matTooltip="Create RO" matTooltipPosition="above"><i
-                                                            class="fa fa-plus" style="color: #259e08;"></i></a> </span>
-                                                <a matTooltip="Add to an  Existing RO" matTooltipPosition="above"
+                                                        matTooltip="Create RO" matTooltipPosition="above" [disabled]="!isEdit"><i
+                                                            class="fa fa-plus" style="color: #259e08;"></i></button> </span>
+                                                <button matTooltip="Add to an  Existing RO" matTooltipPosition="above"
                                                     data-toggle="modal" data-target="#reserveRo"
                                                     (click)="addToExitRoWorkOrder(workOrderPartNumber)"
-                                                    class="btn nobg btn-plusro-cstm">
-                                                    <span><i class="fa fa-plus clr-red"></i></span></a>
+                                                    class="btn nobg btn-plusro-cstm" [disabled]="!isEdit">
+                                                    <span><i class="fa fa-plus clr-red"></i></span></button>
 
                                                 <span *ngIf="!workOrderGeneralInformation.isSinglePN "
                                                     class="delete-row-btn">
