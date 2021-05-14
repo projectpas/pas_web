@@ -64,6 +64,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     isEditButton: boolean = false;
     allDocumentListOriginal: any[];
     selectedRowForDelete: any;
+    allPurchaseUnitOfMeasureinfo: any[] = [];
     managementStructure = {
         companyId: 0,
         buId: 0,
@@ -153,12 +154,14 @@ export class CustomerWorkSetupComponent implements OnInit {
 
     ngOnInit() {
         this.loadSiteData('fromOnload');
+        this.Purchaseunitofmeasure();
         this.loadModulesNamesForObtainOwnerTraceable();
         this.receivingCustomerWorkId = this._actRoute.snapshot.params['id'];
         this.loadPartNumData('');
         this.loadCompanyData();
         this.getCustomerWarningsList();
         this.getAllEmployeesByManagmentStructureID();
+       
         if (this.receivingCustomerWorkId) {
             this.isEditMode = true;
             this.disableUpdateButton = true;
@@ -406,6 +409,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 ownerTypeId:res.ownerTypeId==null? 0 :res.ownerTypeId,
                 obtainFromTypeId:res.obtainFromTypeId==null? 0 :res.obtainFromTypeId,
                 traceableToTypeId:res.traceableToTypeId==null? 0 :res.traceableToTypeId,
+                purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
             };
             this.getManagementStructureDetails(this.receivingForm
                 ? this.receivingForm.managementStructureId
@@ -534,6 +538,12 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.isCustomerStock = false;
         }
     }
+
+    private Purchaseunitofmeasure() {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.allPurchaseUnitOfMeasureinfo = res;
+		})
+	}
 
 
     getTimeLifeOnEdit(timeLifeId) {
@@ -852,6 +862,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.isSerialized = value.isSerialized;
             this.receivingForm.isTimeLife = value.isTimeLife;
             this.receivingForm.itemGroup = value.itemGroup;
+            this.receivingForm.purchaseUnitOfMeasureId =  this.getInactiveObjectOnEdit('value', value.unitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname');
         }
     }
     resetSerialNoTimeLife() {
@@ -923,6 +934,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         const receivingForm = {
             ...this.receivingForm,
             customerId: getValueFromObjectByKey('customerId', this.receivingForm.customerId),
+            purchaseUnitOfMeasureId: this.receivingForm.purchaseUnitOfMeasureId > 0 ? this.receivingForm.purchaseUnitOfMeasureId : null,
             customerContactId: getValueFromObjectByKey('customerContactId', this.receivingForm.customerContactId),
             mfgDate: this.receivingForm.mfgDate ? this.datePipe.transform(this.receivingForm.mfgDate, "MM/dd/yyyy") : '',
             certifiedDate: this.receivingForm.certifiedDate ? this.datePipe.transform(this.receivingForm.certifiedDate, "MM/dd/yyyy") : '',
