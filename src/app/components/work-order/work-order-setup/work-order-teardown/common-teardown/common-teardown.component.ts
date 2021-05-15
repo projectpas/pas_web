@@ -572,9 +572,13 @@ export class CommonTeardownComponent implements OnInit {
             ...this.saveTearDownData,
             workOrderId: this.workOrderId,
             workFlowWorkOrderId: this.workFlowWorkOrderId,
-            updatedDate: this.updatedDate,
+            createdDate: new Date(),
+            updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
         }
 
         this.saveTearDownData.workOrderAdditionalComments = {
