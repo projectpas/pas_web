@@ -1780,7 +1780,14 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                 extendedCost:data.extendedCost? data.extendedCost : 0,
                 unitCost:data.unitCost?  data.unitCost: 0,
-                partNumber: data.partItem.partName,
+                // partNumber: data.partItem.partName,
+                isActive: true,
+                isDeleted: false,
+                createdBy:this.userName,
+                updatedBy:this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
             }        
             this.workOrderService.createSubWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1808,7 +1815,6 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
                 stockLineId:data.stockLineId==0? null :data.stockLineId,
                 isActive: true,
-                isDeferred: false,
                 isDeleted: false,
                 createdBy:this.userName,
                 updatedBy:this.userName,
@@ -1836,7 +1842,7 @@ this.getNewMaterialListByWorkOrderId();
                 })
         }
     }
-
+  //new form for material list
     updateMaterials(data){
         if (this.isSubWorkOrder == true) {
             const newData={...data,
@@ -1844,10 +1850,17 @@ this.getNewMaterialListByWorkOrderId();
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 subWOPartNoId: this.subWOPartNoId,
                 subWorkOrderMaterialsId: 0,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                 extendedCost:data.extendedCost? data.extendedCost : 0,
                 unitCost:data.unitCost?  data.unitCost: 0,
-                partNumber: data.partItem.partName,
+                isActive: true,
+                isDeleted: false,
+                createdBy:this.userName,
+                updatedBy:this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                // partNumber: data.partItem.partName,
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
             }
             this.isSpinnerVisible = true;
@@ -1875,7 +1888,6 @@ this.getNewMaterialListByWorkOrderId();
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
                 stockLineId:data.stockLineId==0? null :data.stockLineId,
                 isActive: true,
-                isDeferred: false,
                 isDeleted: false,
                 createdBy:this.userName,
                 updatedBy:this.userName,
