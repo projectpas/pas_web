@@ -518,7 +518,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
       }
     }
     onPartSelect(event, material, index) { 
+        if(this.workFlow.materialList && this.workFlow.materialList.length >1){
+
             var materialObj = this.workFlow.materialList.find(x =>x.isDeleted==false && x.partItem.partId == event.partId && x.taskId == this.workFlow.taskId);
+        }
         if (materialObj != undefined) {
             if (this.workFlow.materialList) { 
                 // var isPartExcluded = this.workFlow.materialList.find(x =>  x.partId == event.partId && x.taskId == this.workFlow.taskId)
