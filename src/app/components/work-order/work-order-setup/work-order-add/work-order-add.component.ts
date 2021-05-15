@@ -2381,7 +2381,7 @@ this.getNewMaterialListByWorkOrderId();
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Parts Data',
+                    'Parts Data Updated successfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderIdForSubWO();
@@ -2393,7 +2393,7 @@ this.getNewMaterialListByWorkOrderId();
             this.workOrderService.saveReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Parts Data',
+                    'Parts Data Updated successfully',
                     MessageSeverity.success
                 );
                 // this.getMaterialListByWorkOrderId();

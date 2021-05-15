@@ -38,6 +38,7 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         "isApprovalRule":false
         };
     isEditMode: boolean = false;
+    disablesavebutton: boolean = true;
     private onDestroy$: Subject<void> = new Subject<void>();
     breadcrumbs: MenuItem[] = [
         { label: 'Admin' },
@@ -55,6 +56,11 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         if(this.receivingCustomerWorkOrderService.isEditWOQuoteSettingsList){
             this.isEditMode = true;
             this.receivingForm = this.receivingCustomerWorkOrderService.woQuoteSettingsData;
+
+            if(this.receivingForm.effectivedate)
+            {
+                this.receivingForm.effectivedate= new Date(this.receivingForm.effectivedate);
+            }
         }
     }
 
@@ -112,6 +118,18 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
             }
         )
     }
+    enableHeaderSave()
+    {
+        if(this.receivingForm.isApprovalRule && this.receivingForm.effectivedate == null)
+        {
+            this.disablesavebutton =true;
+        }
+        else{
+            this.disablesavebutton = false;
+        }
+
+    }
+    
 
     errorHandling(err){
         if(err['error']['errors']){
