@@ -65,6 +65,7 @@ export class SalesOrderPartNumberComponent {
   @Output('on-parts-save') onPartsSavedEvent: EventEmitter<ISalesOrderPart[]> = new EventEmitter<ISalesOrderPart[]>();
   query: ItemMasterSearchQuery;
   isEdit: boolean = false;
+  isEditMode: boolean = false;
   selectedPartActionType: any;
   @Input() salesOrderView: ISalesOrderView;
   @ViewChild("updatePNDetailsModal", { static: false })
@@ -237,6 +238,13 @@ export class SalesOrderPartNumberComponent {
     }
   }
 
+  onSave(selectedParts) {
+    this.salesQuoteService.selectedParts = selectedParts;
+    this.refresh();
+    this.canSaveParts = false;
+    this.addPartModal.close();
+  }
+
   onCloseReserve(event) {
     this.show = false;
     this.salesReserveModal.close();
@@ -295,6 +303,9 @@ export class SalesOrderPartNumberComponent {
       this.selectedSummaryRowIndex = null;
     }
     this.openPartNumber(false);
+    if (summaryRow == "") {
+      this.isEditMode = false;
+    }
   }
 
   viewPartNumber(summaryRow: any = '', rowIndex = null) {
@@ -307,12 +318,14 @@ export class SalesOrderPartNumberComponent {
       this.selectedSummaryRowIndex = null;
     }
     this.openPartNumber(true);
+    this.isEditMode = false;
   }
 
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
     this.clearData = viewMode;
     let contentPart = this.addPart;
+    this.isEditMode = true;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
 
@@ -605,7 +618,15 @@ export class SalesOrderPartNumberComponent {
 
   isDeleteDisabled(quote: ISalesQuote, part: any) {
     if (part.createdBy && part.createdBy == this.userName) {
-      return (quote.isApproved || part.isApproved);
+      if (quote.isApproved || part.isApproved) {
+        return true;
+      }
+      else if (part.qtyReserved > 0) {
+        return true;
+      }
+      else {
+        return false;
+      }
     } else {
       return true;
     }
@@ -707,7 +728,7 @@ export class SalesOrderPartNumberComponent {
       let selectedPart = this.selectedParts[i];
       for (let j = 0; j < data.parts.length; j++) {
         let dt = data.parts[j];
-        if (selectedPart.conditionId == dt.conditionId && selectedPart.itemMasterId == dt.itemMasterId) { 
+        if (selectedPart.conditionId == dt.conditionId && selectedPart.itemMasterId == dt.itemMasterId) {
           this.selectedParts[i].salesOrderPartId = dt.salesOrderPartId;
         }
       }
@@ -783,11 +804,12 @@ export class SalesOrderPartNumberComponent {
       uniquePart.totalSales = this.getSum(uniquePart.totalSales, part.totalSales);
       uniquePart.marginAmountExtended = this.getSum(uniquePart.marginAmountExtended, part.marginAmountExtended);
       uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentageExtended);
-      if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
-        uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
-      } else {
-        uniquePart.quantityRequested = Number(part.quantityRequested);
-      }
+      // if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
+      //   uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
+      // } else {
+      //   uniquePart.quantityRequested = Number(part.quantityRequested);
+      // }
+      uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
     })
     uniquePart.partId = parts[0].itemMasterId;
     uniquePart.quantityToBeQuoted = Number(uniquePart.quantityRequested) - Number(uniquePart.quantityAlreadyQuoted);

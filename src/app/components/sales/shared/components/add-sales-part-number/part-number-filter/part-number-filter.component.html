@@ -109,11 +109,19 @@
   </div>
 </div>
 <div class="row justify-content-start">
-  <div class="col-1 column" style="margin-right: 8px;">
+  <div class="col-1 column" style="margin-right: 8px;" *ngIf="!isEdit">
     <div class="form-group">
       <button class="btn btn-primary" (click)="search($event)"
         [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
         Search PN
+      </button>
+    </div>
+  </div>
+  <div class="col-1 column" style="margin-right: 8px;" *ngIf="isEdit">
+    <div class="form-group">
+      <button class="btn btn-primary" (click)="save($event)"
+        [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
+        Save
       </button>
     </div>
   </div>

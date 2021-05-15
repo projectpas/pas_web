@@ -32,7 +32,9 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() selectedParts: any = [];
   @Input() selectedSummaryRow: SummaryPart;
   @Input() type: string;
+  @Input() isEdit = false;
   @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onSave: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTypeChange: EventEmitter<ItemSearchType> = new EventEmitter<ItemSearchType>();
   @ViewChild("searchMultiPart", { static: false }) searchMultiPart: ElementRef;
   query: ItemMasterSearchQuery;
@@ -143,6 +145,10 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   resetActionButtons() {
     this.searchDisabled = true;
     this.historicalDisabled = true;
+  }
+
+  save($event) {
+    this.onSave.emit(this.query);
   }
 
   search($event, programaticSearch = false) {
