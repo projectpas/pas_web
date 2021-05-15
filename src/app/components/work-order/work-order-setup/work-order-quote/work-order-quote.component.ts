@@ -389,6 +389,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     tempMemo:any;
     originlaMlist:any=[];
     historyData:any=[];
+    woqsettingModel: any = {};
     auditHistoryHeaders = [
         { field: 'taskName', header: 'Task' ,isRequired:true},
         { field: 'partNumber', header: 'PN',isRequired:true },
@@ -415,6 +416,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.employeeName= this.authService.currentEmployee.name;
         this.enableEditBtn = Boolean(this.enableEditBtn);
+        this.woqsettingModel.IsApprovalRule = false;
+        this.getWOQSettingMasterData(this.currentUserMasterCompanyId);
         this.getCustomerWarningsList();
         this.breadcrumbs = [
 			{ label: 'Work Order Quote' },
@@ -454,6 +457,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getAllWorkOrderStatus('');
         }
     }
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
 
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
@@ -477,6 +485,23 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         this.isViewMode = isView;
     }
+    getWOQSettingMasterData(currentUserMasterCompanyId) {
+		this.workOrderService.getWOQSettingMasterData(currentUserMasterCompanyId).subscribe(res => {
+			if (res) {
+				this.woqsettingModel.WorkOrderQuoteSettingId = res.workOrderQuoteSettingId;
+				this.woqsettingModel.IsApprovalRule = res.isApprovalRule;
+				this.woqsettingModel.effectivedate = new Date(res.effectivedate);
+
+
+				// if (!this.isEditMode) {
+				// 	this.headerInfo.resale = this.posettingModel.IsResale;
+				// 	this.headerInfo.deferredReceiver = res.isDeferredReceiver;
+				// }
+			}
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
+	}
 
     getInternalSentDateEnableStatus(approver) {
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SentForInternalApproval;

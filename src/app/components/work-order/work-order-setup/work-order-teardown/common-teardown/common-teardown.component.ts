@@ -576,6 +576,127 @@ export class CommonTeardownComponent implements OnInit {
             createdBy: this.userName,
             updatedBy: this.userName,
         }
+
+        this.saveTearDownData.workOrderAdditionalComments = {
+            ...this.saveTearDownData.workOrderAdditionalComments,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderBulletinsModification = {
+            ...this.saveTearDownData.workOrderBulletinsModification,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderDiscovery = {
+            ...this.saveTearDownData.workOrderDiscovery,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderFinalInspection = {
+            ...this.saveTearDownData.workOrderFinalInspection,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderFinalTest = {
+            ...this.saveTearDownData.workOrderFinalTest,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderPmaDerBulletins = {
+            ...this.saveTearDownData.workOrderPmaDerBulletins,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderPreAssemblyInspection = {
+            ...this.saveTearDownData.workOrderPreAssemblyInspection,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderPreAssmentResults = {
+            ...this.saveTearDownData.workOrderPreAssmentResults,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderPreliinaryReview = {
+            ...this.saveTearDownData.workOrderPreliinaryReview,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderRemovalReasons = {
+            ...this.saveTearDownData.workOrderRemovalReasons,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderTestDataUsed = {
+            ...this.saveTearDownData.workOrderTestDataUsed,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
+        this.saveTearDownData.workOrderWorkPerformed = {
+            ...this.saveTearDownData.workOrderWorkPerformed,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            isActive: true,
+            isDeleted: false,
+        }
         this.saveTearDownData.workOrderPreAssmentResults.technicianId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderPreAssmentResults.technicianId);
         this.saveTearDownData.workOrderPreAssmentResults.inspectorId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderPreAssmentResults.inspectorId);
         this.saveTearDownData.workOrderDiscovery.technicianId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderDiscovery.technicianId);
