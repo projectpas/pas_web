@@ -15,6 +15,7 @@ import { CommonService } from '../../../../services/common.service';
 import { takeUntil } from 'rxjs/operators';
 // import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 import { workOrderGeneralInfo } from '../../../../models/work-order-generalInformation.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-work-order-complete-material-list',
@@ -212,6 +213,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private cdRef: ChangeDetectorRef,
         private modalService: NgbModal,
         private alertService: AlertService,
+        public router: Router,
         private commonService: CommonService
     ) { this.show = true; }
 
@@ -1147,11 +1149,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         if (this.isSubWorkOrder == true) {
             localStorage.setItem("lsSubWoId", this.subWOPartNoId);
             // this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);```
-            window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
-            //window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
+             //window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
+            // window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
+            this.router.navigateByUrl(
+                `/vendorsmodule/vendorpages/app-purchase-setup`
+              );
+            
         } else {
             // window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${rowData.workOrderMaterialsId}`)
-            window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
+            // window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/app-purchase-setup`
+              );
+
+
         }
     }
     checkActiveStatus: boolean = false;
@@ -1219,7 +1230,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     // create sub work order
     editSubWo(currentRecord) {
         const subworkorderid = currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId : 0
-        window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
+        // window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
+        this.router.navigateByUrl(
+            `workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`
+          );
+   
+   
     }
 
     public dismissModel() {
