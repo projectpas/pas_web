@@ -1248,7 +1248,12 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         if (!this.workOrderQuoteId) {
             this.customerWarnings(customerId)
         } else {
-            window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            // window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+
+            this.router.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+              );
+            
         }
     }
 
@@ -3352,8 +3357,11 @@ this.getNewMaterialListByWorkOrderId();
                     this.showAlertMessage();
                 } else if (this.warningID == 0 && this.restrictID == 0) {
                     if (this.isQuoteAction == true) {
-                        window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+                        // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
 
+                        this.router.navigateByUrl(
+                            `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+                          );
                     }
                     if (this.isQuoteActionTab == true) {
                         this.onClickQuoteTab();
@@ -3401,7 +3409,11 @@ this.getNewMaterialListByWorkOrderId();
 
     WarnRescticModel() {
         if (this.isQuoteAction == true && this.restrictID == 0) {
-            window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            this.router.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+              );
+      
         }
         else if (this.isCustomerAction == true && this.restrictID != 0) {
             this.workOrderGeneralInformation.customerId = null;
@@ -3677,9 +3689,17 @@ this.getNewMaterialListByWorkOrderId();
     } 
     createNewRoWorkOrder(rowData) {
         if(this.isSubWorkOrder==true){
-            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+            // window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`
+              );
         }else{
-            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+            // window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`
+              );
         }
     }
     woPartId:any;
