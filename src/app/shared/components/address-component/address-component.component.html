@@ -363,6 +363,11 @@
                 </div>
             </div>
         </div>
+
+        <div>
+            <button class="btn btn-primary pull-right" (click)="savePurchaseOrderAddress()"
+                [disabled]="!enableAddSaveBtn">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
+        </div>
       
     </form>
 </ng-container>

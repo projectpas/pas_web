@@ -95,7 +95,7 @@
 
                     <td colspan="12" class="p-0">
                         <!-- rpo-table-cstm rro-table-cstm sales-quote-part-search-data -->
-                        <p-table #dt class=" rpo-table-cstm1 rro-table-cstm salesquotePart "
+                        <p-table #dt class=" rpo-table-cstm1 rro-table-cstm salesquotePart padding-bottom-10" 
                             [value]="roleUpMaterialList" [rows]="10" [lazy]="true" [paginator]="showPaginator"
                             [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords" [pageLinks]="pageLinks"
                             [columns]="stockLinecolumns" [scrollable]="true" [resizableColumns]="true"
@@ -246,8 +246,9 @@
                 <h4 class="modal-title">History of Stockline</h4>
             </div>
             <div class="modal-body pd-10">
-                <div class="table-responsive stockline-audit history_hg tin_cal">
-                    <table class="table table-bordered" *ngIf="auditHistory.length > 0; else noDatavailable">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                    <div class="tableFixHead"> 
+                    <table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
                         <thead>
                             <tr>
                                 <th colspan="16">General</th>
@@ -270,26 +271,26 @@
                             </tr>
                             <tr>
                                 <th>Is Customer Stock</th>
-                                <th>PN</th>
-                                <th>PN Description</th>
+                                <th>PN <span class="clr-red">*</span></th>
+                                <th>PN Description <span class="clr-red">*</span></th>
                                 <th>Revised PN</th>
-                                <th>OEM</th>
-                                <th>PMA</th>
-                                <th>DER</th>
+                                <th class="min-width-60">OEM</th>
+                                <th class="min-width-60">PMA</th>
+                                <th class="min-width-60">DER</th>
                                 <th>Item Group</th>
                                 <th>Cond</th>
-                                <th>Is Serialized</th>
+                                <th class="min-width-60">Is Serialized</th>
                                 <th>Serial Num</th>
-                                <th>Stockline Num</th>
+                                <th>Stockline Num<span class="clr-red">*</span></th>
                                 <th>NSN</th>
                                 <th>ESN</th>
-                                <th>Control Num</th>
-                                <th>Control ID Num</th>
-                                <th>Days Since Received</th>
-                                <th>Days Since Mfg</th>
-                                <th>Days Since Tagged</th>
-                                <th>Days Opened</th>
-                                <th>Shelf Life</th>
+                                <th>Control Num <span class="clr-red">*</span></th>
+                                <th>Control ID Num <span class="clr-red">*</span></th>
+                                <th class="min-width-60">Days Since Received</th>
+                                <th class="min-width-60">Days Since Mfg</th>
+                                <th class="min-width-60">Days Since Tagged</th>
+                                <th class="min-width-60">Days Opened</th>
+                                <th class="min-width-60">Shelf Life</th>
                                 <th>Shelf Life Exp Date</th>
                                 <th>NHA</th>
                                 <th>TLA</th>
@@ -318,14 +319,14 @@
                                 <th>Traceable To</th>
                                 <th>ECCN</th>
                                 <th>ITAR</th>
-                                <th>Qty On Hand</th>
-                                <th>Qty Reserved</th>
-                                <th>Qty Issued</th>
-                                <th>Qty Avail</th>
-                                <th>PO Unit Cost</th>
-                                <th>RO Unit Cost</th>
+                                <th class="min-width-60">Qty On Hand <span class="clr-red">*</span></th>
+                                <th class="min-width-60">Qty Reserved</th>
+                                <th class="min-width-60">Qty Issued</th>
+                                <th class="min-width-60">Qty Avail <span class="clr-red">*</span></th>
+                                <th class="min-width-60">PO Unit Cost</th>
+                                <th class="min-width-60">RO Unit Cost</th>
                                 <th>Unit Sale Price</th>
-                                <th>Core Cost/Unit</th>
+                                <th>Core Cost/Unit <span class="clr-red">*</span></th>
                                 <th>GL Account</th>
                                 <th>Site</th>
                                 <th>Warehouse</th>
@@ -335,11 +336,11 @@
                                 <th>Lot Num</th>
                                 <th>Lot Description</th>
                                 <th>Lot Cost</th>
-                                <th>Black List</th>
-                                <th>Black List Reason</th>
-                                <th>Accident</th>
+                                <th class="min-width-60">Black List</th>
+                                <th >Black List Reason</th>
+                                <th class="min-width-60">Accident</th>
                                 <th>Accident Reason</th>
-                                <th>Incident</th>
+                                <th class="min-width-60">Incident</th>
                                 <th>Incident Reason</th>
                                 <th colspan="4"></th>
                                 <th>Part Cert Num</th>
@@ -366,7 +367,7 @@
                                 <th>Last Since New</th>
                                 <th>Last Since Ovh</th>
                                 <th>Last Since Insp</th>
-                                <th>Is Active</th>
+                                <th class="min-width-60">Is Active</th>
                                 <th>Created Date</th>
                                 <th>Created By</th>
                                 <th>Updated Date</th>
@@ -598,16 +599,16 @@
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'incidentReason', audit.incidentReason) ? 'black' : 'red'}">
                                     <p class="p_editor" [innerHTML]="audit.incidentReason"></p>
                                 </td>
-                                <td class="min-w-100"
+                                <td class="min-width-130"
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">
                                     {{ audit.companyName }}</td>
-                                <td class="min-w-100"
+                                <td class="min-width-130"
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">
                                     {{ audit.buName }}</td>
-                                <td class="min-w-100"
+                                <td class="min-width-130"
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'divName', audit.divName) ? 'black' : 'red'}">
                                     {{ audit.divName }}</td>
-                                <td class="min-w-100"
+                                <td class="min-width-130"
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">
                                     {{ audit.deptName }}</td>
                                 <td
@@ -700,6 +701,7 @@
                             <h4 style="color: #ff5663;">No History Found</h4>
                         </div>
                     </ng-template>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

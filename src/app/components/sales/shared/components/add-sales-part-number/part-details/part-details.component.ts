@@ -109,9 +109,9 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'itemClassification', header: 'Classification', width: '90px', textalign: 'left' },
       { field: 'oempmader', header: 'OEM/PMA/DER', width: '90px', textalign: 'left' },
       { field: 'alternateFor', header: 'Alt/Equiv For', width: '90px', textalign: 'left' },
-      { field: 'qtyToOrder', header: 'Qty Req', width: '110px', textalign: 'right' },
-      { field: 'qtyAvailable', header: 'Qty Avail', width: '90px', textalign: 'right' },
-      { field: 'qtyOnHand', header: 'Qty On Hand', width: '90px', textalign: 'right' },
+      { field: 'qtyToOrder', header: 'Qty Req', width: '70px', textalign: 'right' },
+      { field: 'qtyAvailable', header: 'Qty Avail', width: '70px', textalign: 'right' },
+      { field: 'qtyOnHand', header: 'Qty On Hand', width: '70px', textalign: 'right' },
     ]
 
     this.stockLinecolumns = [
@@ -125,8 +125,8 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'stockType', header: 'Stk Type', width: '100px', textalign: 'left' },
       { field: 'stkLineManufacturer', header: 'Manufacturer', width: '100px', textalign: 'left' },
       { field: 'uomDescription', header: 'UOM', width: '80px', textalign: 'left' },
-      { field: 'qtyAvailable', header: 'Qty Avail', width: '100px', textalign: 'right' },
-      { field: 'qtyOnHand', header: 'Qty On Hand', width: '100px', textalign: 'right' },
+      { field: 'qtyAvailable', header: 'Qty Avail', width: '70px', textalign: 'right' },
+      { field: 'qtyOnHand', header: 'Qty On Hand', width: '70px', textalign: 'right' },
       { field: 'unitCost', header: 'Unit Cost', width: '80px', textalign: 'left' },
       { field: 'tracableToName', header: 'Traceable to', width: '80px', textalign: 'left' },
       { field: 'ownerName', header: 'Owner', width: '100px', textalign: 'left' },
