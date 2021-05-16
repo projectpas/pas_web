@@ -128,7 +128,7 @@
                                 <div class="form-group">
                                     <label for="createdate">Create Date <span class="clr-red">*</span></label>
                                     <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
-                                        [monthNavigator]="true" yearRange="1900:2100"
+                                        [monthNavigator]="true" yearRange="1900:2100" disbaled
                                         [ngModelOptions]="{standalone: true}"
                                         [(ngModel)]="sourceWorkFlow.workflowCreateDate"
                                         (ngModelChange)="checkEnableUpdate()" required #cDate="ngModel">
@@ -151,7 +151,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="expdate">Expiration Date</label>
-                                    <p-calendar class="workflow-clder" [minDate]="sourceWorkFlow.workflowCreateDate"
+                                    <p-calendar class="workflow-clder" [minDate]="todaydate"
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                         [showIcon]="true" [ngModelOptions]="{standalone: true}"
                                         [(ngModel)]="sourceWorkFlow.workflowExpirationDate"
@@ -190,9 +190,9 @@
                                         <p-autoComplete appendTo="body"  [(ngModel)]="sourceWorkFlow.customerName"
                                             [suggestions]="customerNames" (completeMethod)="filterNames($event)"
                                             [size]="32" [minLength]="1" [dropdown]="true" class="wf-header-select"
-                                            #partNum="ngModel" errorMessage="Records not found" field="customerName"
+                                            #partNum="ngModel" placeholder="Select" errorMessage="Records not found" field="customerName"
                                             (onSelect)="onCustomerNameselected($event)" [forceSelection]="true"
-                                            title="customerName">
+                                            title="customerName" (onClear)="clearautoCompleteInput(sourceWorkFlow)">
                                         </p-autoComplete>
                                     </p>
                                 </div>

@@ -910,7 +910,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             <td class="custom_Tdth" *ngFor="let childcol of childColumnsData" [ngStyle]="{'min-width': childcol.width}" style="text-align: center !important;">
                 {{childcol.header}} 
             </td>
-            <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></td>
+            <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></td>
             </tr>
             
             <tr class="child-data splitship-child child-data-back " pReorderableRowHandle  *ngFor="let childRowData of rowData.childParts; let stockIndex1 = index">
@@ -928,7 +928,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                     class="form-control w60 defered-check3" [(ngModel)]="childRowData.isDeferred">
                     <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]" class="p_textEditor"></span>
                 </td>
-                <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
+                <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
                 
                     <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
               
