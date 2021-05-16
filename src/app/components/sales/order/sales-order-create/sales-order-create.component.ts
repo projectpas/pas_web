@@ -1538,27 +1538,14 @@ export class SalesOrderCreateComponent implements OnInit {
         <head>
            <title>Sales Order</title>
            <style>
-           table.print-friendly tr td, table.print-friendly tr th {
-            page-break-inside: avoid;
-        }
-        .table {
-          border-collapse: collapse !important;
-          width: 100%;
-          margin-bottom: 20px;
-        }
-        
-        .table thead {
-          display: table-header-group;
-          height: 1.1cm;
-        }
-        
-        .table tfoot {
-          display: table-row-group;
-        }
-        
-        .table tr {
-          page-break-inside: avoid !important;
-        }
+           div {
+            white-space: normal;
+          }
+          table { page-break-after:auto }
+tr    { page-break-inside:avoid; page-break-after:auto }
+td    { page-break-inside:avoid; page-break-after:auto }
+thead { display: table-row-group; }
+tfoot { display:table-footer-group }
              @media print
              {
                @page {
