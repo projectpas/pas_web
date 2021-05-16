@@ -357,7 +357,9 @@
                                         </div>
                                     </td>
                                     <td *ngIf=" isViewMode==true || isEditDisabled(salesQuote, part)">
-                                        <div [innerHTML]="part.notes" class="text_editor_box"></div>
+                                        <span class="value">
+                                            <p class="p-0 m-0 p_textEditor" [innerHTML]="part.notes"></p>
+                                        </span>
                                     </td>
                                     <td *ngIf="isViewMode == false" class="zui-sticky-col"
                                         style="width:107px !important">

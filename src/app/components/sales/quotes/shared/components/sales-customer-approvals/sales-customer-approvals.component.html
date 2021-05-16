@@ -28,7 +28,11 @@
               </td>
               <ng-container *ngFor="let field of columns">
                 <td style="width:130px !important" *ngIf="field.field != 'internalSentDate'
-                                      && field.field != 'internalApprovedDate'
+                && field.field != 'actionStatus'
+                && field.field != 'partNumber'
+                && field.field != 'partDescription'                     
+                && field.field != 'internalApprovedDate'
+                && field.field != 'internalApprovedBy'
                                       && field.field != 'customerSentDate'
                                       && field.field != 'customerApprovedDate'
                                       && field.field != 'customerApprovedBy'
@@ -64,6 +68,20 @@
                 <td *ngIf="field.field == 'qtyQuoted'" class=" text-right" style="min-width:60px !important">
                   <span>{{approver[field.field] | globalNmberFormat}}</span>
                 </td>
+
+                <td *ngIf="field.field == 'actionStatus'"  style="min-width:150px">
+                  <span>{{approver[field.field]}}</span>
+                </td>
+                <td *ngIf="field.field == 'internalApprovedBy'"  style="min-width:150px">
+                  <span>{{approver[field.field]}}</span>
+                </td>
+                <td *ngIf="field.field == 'partNumber'"  style="min-width:130px">
+                  <span>{{approver[field.field]}}</span>
+                </td>
+                <td *ngIf="field.field == 'partDescription'"  style="min-width:150px">
+                  <span>{{approver[field.field]}}</span>
+                </td>
+
                 <td *ngIf="field.field == 'internalSentDate'">
                   <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
                     [(ngModel)]="approver[field.field]" [yearNavigator]="true" [monthNavigator]="true"
@@ -95,7 +113,7 @@
                     </option>
                   </select>
                 </td>
-                <td *ngIf="field.field == 'internalMemo'" style="min-width: 100px;">
+                <td *ngIf="field.field == 'internalMemo'" class="min-width-100">
                   <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="approver['internalMemo']"></p>
                   <div class="pencil-div" *ngIf="getApprovalActionInternalStatus(approver)">
                     <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#memo-popup"
@@ -139,7 +157,7 @@
                     </option>
                   </select>
                 </td>
-                <td *ngIf="field.field == 'customerMemo'" style="min-width: 100px;">
+                <td *ngIf="field.field == 'customerMemo'" class="min-width-100">
                   <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="approver['customerMemo']"></p>
                   <div class="pencil-div" *ngIf="getApprovalActionCustomerStatus(approver)">
                     <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"

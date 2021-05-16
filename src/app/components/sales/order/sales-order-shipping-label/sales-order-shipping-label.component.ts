@@ -120,7 +120,7 @@ export class SalesShippingLabelComponent implements OnInit {
                 padding-right: 2px;
                 padding-left: 2px;
                  width: 38.33333333%;
-                 font-size:12.5px !important;
+                 font-size:10.5px !important;
   
                  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
              
@@ -164,30 +164,23 @@ export class SalesShippingLabelComponent implements OnInit {
                 padding-left: 2px;
                 box-sizing: border-box;
               }
-              .second-block-div{margin: 2px 0;
+              .second-block-div{
+                margin-bottom: 0px;
                 position: relative;display:flex;
                 min-height: 1px;
                 width: 100%;}
-              // .second-block-div {
-              //   margin: 2px 0;
-              //   position: relative;
-              //   min-height: 1px;
-              //   display:flex;
-              //   float: left;
-              //   padding-right: 2px;
-              //   padding-left: 2px;
-              //   width: 100%;
-              // }
+            
               
               .second-block-label {
                 position: relative;
                 min-height: 1px;
                 float: left;
-                font-size:12.5px !important;
+                font-size:10.5px !important;
    
                 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                 padding-right: 2px;
                 padding-left: 2px;
+                font-weight:700;
                 width: 38.33333333%;
                 text-transform: capitalize;
                 margin-bottom: 0;
