@@ -110,6 +110,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         }
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
         this.getShipViaByCustomerId();
+        //this.getshipvia();
         this.getUOMList('');
         this.getCurrencyList('');
         // this.getCarrierList();
@@ -671,5 +672,58 @@ this.refreshData.emit();
         if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
             return false;
         return true;
+    }
+    shipViaId: number = 0;
+    getShipViaId(event) {
+        this.shipViaId = event;
+    }
+
+    IsAddShipVia: boolean = false;
+    ShipViaEditID: number;
+    shipviaindex;
+    isEditModeShipVia: boolean = false;
+
+    onEditShipVia(value, id, index) {
+        this.shipviaindex = index;
+        if (value == 'Add') {
+            this.ShipViaEditID = 0;
+        }
+        else {
+            this.ShipViaEditID = id;
+            this.isEditModeShipVia = true;
+        }
+        this.IsAddShipVia = true;
+    }
+
+    RefreshAfterAddShipVia(ShippingViaId) {
+        if (ShippingViaId != undefined || ShippingViaId > 0) {
+            this.isSpinnerVisible = true;
+            this.commonService.getShipVia(this.authService.currentUser.masterCompanyId).subscribe(response => {
+                this.isSpinnerVisible = false;
+                this.setShipViaList(response);
+                this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
+                //this.isEnableUpdateButton = false;
+            }, error => this.isSpinnerVisible = false);
+        }
+        this.IsAddShipVia = false;
+        $('#AddShipVia').modal('hide');
+    }
+    getshipvia()
+    {
+        this.commonService.getShipVia(this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.setShipViaList(res);
+        })
+    }
+    setShipViaList(res) {
+        if (res && res.length > 0) {
+            this.shipViaList = res.map(x => {
+                return {
+                    label: x.name,
+                    value: x.shippingViaId
+                }
+            });
+        } else {
+            this.shipViaList = [];
+        }
     }
 }
