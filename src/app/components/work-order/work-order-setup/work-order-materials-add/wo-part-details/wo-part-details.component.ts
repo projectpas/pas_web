@@ -54,6 +54,7 @@ export class WoPartDetailsComponent implements OnChanges {
   @Input() workFlowWorkOrderId=0;
   @Input('part-number') partNumber: string;
   @Input() stockLineInformation: IPartJson[];
+  @Input() isSubWorkOrder:boolean=false;
   auditHistory: any = [];
   adjAuditHistoryList: any = [];
   adjAuditHistoryData: any = [];

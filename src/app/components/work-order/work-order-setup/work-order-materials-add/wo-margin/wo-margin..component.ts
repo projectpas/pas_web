@@ -19,7 +19,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
   @Input() editData;
   @Input() isStockView=false;
   @Input() isStockLine=false;
-
+  @Input() isSubWorkOrder=false;
   @Output() saveFinalMaterialListData = new EventEmitter<any>();
   @Output() updateFinalMaterialListData = new EventEmitter<any>();
   @Output() setmaterialListForUpdate = new EventEmitter<any>();
@@ -141,11 +141,23 @@ this.calculateExtendedCost();
         .subscribe(res => {
             this.isSpinnerVisible = false;
             this.provisionListData = [];
-                this.provisionListData = res;
+                // this.provisionListData = res;
+
+
+                if (this.isSubWorkOrder) {
+                  res.forEach(element => {
+                      if (element.label != "Sub Work Order") {
+                          this.provisionListData.push(element);
+                      }
+                  });
+              } else {
+                  this.provisionListData = res;
+              }
+
         }, error => {
             this.isSpinnerVisible = false;
         });
-  }
+  } 
 
   getTaskList() {  
   this.setEditArray=[];

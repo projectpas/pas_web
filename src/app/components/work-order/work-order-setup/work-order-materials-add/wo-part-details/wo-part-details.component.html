@@ -914,9 +914,9 @@
           <h4 class="modal-title">Edit PN Details</h4>
         </div>
         <div class="modal-body" *ngIf="selectedMaterialPart !=undefined">
-            <app-wo-margin tabindex="-1"(updateFinalMaterialListData)="upDatePart($event)" [isEdit]="isEdit" [editData]="editData" (saveFinalMaterialListData)="savePart($event)" [part]="selectedMaterialPart" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+            <app-wo-margin tabindex="-1"(updateFinalMaterialListData)="upDatePart($event)"   [isSubWorkOrder]="isSubWorkOrder" [isEdit]="isEdit" [editData]="editData" (saveFinalMaterialListData)="savePart($event)" [part]="selectedMaterialPart" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
             (close)="onCloseMargin($event)" (searchAnotherPN)="onSearchAnotherPN($event)"></app-wo-margin>
         </div>
       </div>
     </div>
-  </div>
+  </div> 
