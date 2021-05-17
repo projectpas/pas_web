@@ -30,6 +30,7 @@ import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-re
 import { DBkeys } from '../../../../services/db-Keys';
 import { MenuItem } from 'primeng/api';
 import {AppModuleEnum} from "../../../../enum/appmodule.enum";
+import { SalesQuoteService } from '../../../../services/salesquote.service';
 
 @Component({
     selector: 'app-work-order-add',
@@ -115,6 +116,7 @@ export class WorkOrderAddComponent implements OnInit {
     partNumberList: any;
     technicianList: any[];
     cmmList: any;
+    cmmListNew: any;
     savedWorkOrderData: any;
     workFlowWorkOrderData: any;
     workOrderAssetList: any = [];
@@ -279,6 +281,7 @@ export class WorkOrderAddComponent implements OnInit {
         private quoteService: WorkOrderQuoteService,
         private salesOrderReferenceStorage: SalesOrderReferenceStorage,
         public vendorService: VendorService,
+        private salesQuoteService: SalesQuoteService,
     ) {
         this.moduleName = 'Work Order';
     }
@@ -533,7 +536,7 @@ setTimeout(() => {
                         mappingItemMasterId: getObjectById('mappingItemMasterId', x.mappingItemMasterId, x.revisedParts),
                         masterPartId: x.woPart,
                         customerRequestDate: x.customerRequestDate ? new Date(x.customerRequestDate) : null,
-                        receivedDate: x.receivedDate ? new Date(x.receivedDate) : null,
+                        receivedDate: x.receivedDate ? new Date(x.receivedDate) : new Date(this.currentDate),
                         estimatedCompletionDate: (x.estimatedCompletionDate) ? new Date(x.estimatedCompletionDate) : new Date(x.customerRequestDate),
                         estimatedShipDate: (x.estimatedShipDate) ? new Date(x.estimatedShipDate) : new Date(x.customerRequestDate),
                         promisedDate: (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate),
@@ -567,7 +570,8 @@ setTimeout(() => {
         }
 
 
-this.showWaringForPubWorkflow()
+this.showWaringForPublication()
+this.showWaringForWorkflow()
     }
     removePublication(currentRecord,index){
 setTimeout(() => {
@@ -744,11 +748,22 @@ setTimeout(() => {
                     x.conditionId=0;
                     x.cMMId=0;
                     x.workflowId=0;
+                    x.level1='';
+                    x.level2='';
+                    x.level3='';
+                    x.level4='';
+                    x.isDER=false;
+                    x.isPMA=false;
 
 
                 }
             )
         }
+
+        var index = 0;
+        this['cmmPublicationList'+index] =[];
+        this['dynamicWorkflowList'+index] =[];
+        // this['cmmPublicationList']=[];
 
         if (this.workOrderGeneralInformation.workOrderTypeId == 1) // Customer
         {
@@ -1126,7 +1141,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
            this.isValidationfailed= true;
     }
      if(!x.conditionId || x.conditionId==undefined){
-        this.alertService.showMessage('Work Order', 'Recd Date is required', MessageSeverity.error);
+        this.alertService.showMessage('Work Order', 'Condition is required', MessageSeverity.error);
            this.isValidationfailed= true;
     }
      if(!x.workOrderScopeId || x.workOrderScopeId==undefined){
@@ -1233,7 +1248,12 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         if (!this.workOrderQuoteId) {
             this.customerWarnings(customerId)
         } else {
-            window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            // window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+
+            this.router.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+              );
+            
         }
     }
 
@@ -1394,6 +1414,8 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         await this.workOrderService.getPartPublicationByItemMaster(itemMasterId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.cmmList=[];
+            this.cmmListNew=[];
+            this.cmmListNew= res;
             this.cmmList = res.map(x => {
                 return {
                     value: x.publicationRecordId,
@@ -1405,9 +1427,10 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 currentRecord.cMMId =  this['cmmPublicationList' + index][0].value;
                 this.workOrderGeneralInformation.partNumbers[index].cMMId =  this['cmmPublicationList' + index][0].value;
 
-                if(this.cmmList && this.cmmList[0].expirationDate){
-                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmList[0].expirationDate;
-                this.showWaringForPubWorkflow();
+                if(this.cmmListNew && this.cmmListNew[0].expirationDate)
+                {
+                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmListNew[0].expirationDate;
+                this.showWaringForPublication();
                 }
             }
         },
@@ -1490,9 +1513,9 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
             if(this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length!=0){
                 this.workFlowId=this.workFlowList[0].value;
                 this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
-                if(this.workFlowList && this.workFlowList[0].expirationDate){
-                this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.workFlowList[0].expirationDate;
-                this.showWaringForPubWorkflow();
+                if(res && res[0].expirationDate){
+                this.workOrderGeneralInformation.partNumbers[index].workflowExpirationDate = res[0].expirationDate;
+                this.showWaringForWorkflow();
                 }
             }
             // workOrderPart.workflowId = this.workFlowList[0].value;
@@ -1762,7 +1785,14 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                 extendedCost:data.extendedCost? data.extendedCost : 0,
                 unitCost:data.unitCost?  data.unitCost: 0,
-                partNumber: data.partItem.partName,
+                // partNumber: data.partItem.partName,
+                isActive: true,
+                isDeleted: false,
+                createdBy:this.userName,
+                updatedBy:this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
             }        
             this.workOrderService.createSubWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1790,7 +1820,6 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
                 stockLineId:data.stockLineId==0? null :data.stockLineId,
                 isActive: true,
-                isDeferred: false,
                 isDeleted: false,
                 createdBy:this.userName,
                 updatedBy:this.userName,
@@ -1818,7 +1847,7 @@ this.getNewMaterialListByWorkOrderId();
                 })
         }
     }
-
+  //new form for material list
     updateMaterials(data){
         if (this.isSubWorkOrder == true) {
             const newData={...data,
@@ -1826,10 +1855,17 @@ this.getNewMaterialListByWorkOrderId();
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 subWOPartNoId: this.subWOPartNoId,
                 subWorkOrderMaterialsId: 0,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                 extendedCost:data.extendedCost? data.extendedCost : 0,
                 unitCost:data.unitCost?  data.unitCost: 0,
-                partNumber: data.partItem.partName,
+                isActive: true,
+                isDeleted: false,
+                createdBy:this.userName,
+                updatedBy:this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                // partNumber: data.partItem.partName,
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
             }
             this.isSpinnerVisible = true;
@@ -1857,7 +1893,6 @@ this.getNewMaterialListByWorkOrderId();
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
                 stockLineId:data.stockLineId==0? null :data.stockLineId,
                 isActive: true,
-                isDeferred: false,
                 isDeleted: false,
                 createdBy:this.userName,
                 updatedBy:this.userName,
@@ -1913,6 +1948,7 @@ this.getNewMaterialListByWorkOrderId();
                         this.quoteMaterialList = res;
                     }
                     this.materialStatus = res[0].partStatusId;
+                    this.salesQuoteService.selectedParts = this.workOrderMaterial;
                     this.filterParts();
                 }
             },
@@ -1929,10 +1965,12 @@ this.getNewMaterialListByWorkOrderId();
         let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
         if (uniqueParts.length > 0) {
           uniqueParts.forEach((part, i) => {
-            let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
+            let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.stockLineId !=0 && selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
             if (childParts && childParts.length > 0) {
             //   uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
               uniqueParts[i].childParts = childParts;
+            }else{
+                uniqueParts[i].childParts = [];
             }
           });
           this.workOrderMaterialList = uniqueParts;
@@ -1949,7 +1987,7 @@ this.getNewMaterialListByWorkOrderId();
           if (acc.some(obj => v[prop1] === obj[prop1] && v[prop2] === obj[prop2] && v[prop3] === obj[prop3])) {
             uniqueParts.splice(i, 1);
           } else {
-            acc.push(v);
+            acc.push(v); 
           }
           return acc;
         }, []);
@@ -2343,7 +2381,7 @@ this.getNewMaterialListByWorkOrderId();
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Parts Data',
+                    'Parts Data Updated successfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderIdForSubWO();
@@ -2355,7 +2393,7 @@ this.getNewMaterialListByWorkOrderId();
             this.workOrderService.saveReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Parts Data',
+                    'Parts Data Updated successfully',
                     MessageSeverity.success
                 );
                 // this.getMaterialListByWorkOrderId();
@@ -3319,8 +3357,11 @@ this.getNewMaterialListByWorkOrderId();
                     this.showAlertMessage();
                 } else if (this.warningID == 0 && this.restrictID == 0) {
                     if (this.isQuoteAction == true) {
-                        window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+                        // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
 
+                        this.router.navigateByUrl(
+                            `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+                          );
                     }
                     if (this.isQuoteActionTab == true) {
                         this.onClickQuoteTab();
@@ -3368,7 +3409,11 @@ this.getNewMaterialListByWorkOrderId();
 
     WarnRescticModel() {
         if (this.isQuoteAction == true && this.restrictID == 0) {
-            window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            this.router.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+              );
+      
         }
         else if (this.isCustomerAction == true && this.restrictID != 0) {
             this.workOrderGeneralInformation.customerId = null;
@@ -3644,9 +3689,17 @@ this.getNewMaterialListByWorkOrderId();
     } 
     createNewRoWorkOrder(rowData) {
         if(this.isSubWorkOrder==true){
-            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+            // window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`
+              );
         }else{
-            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+            // window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`
+              );
         }
     }
     woPartId:any;
@@ -3667,6 +3720,18 @@ this.woPartId=rowData.id;
         }
         this.workFlowId=currentRecord.workflowId;
         this.workOrderId=this.workOrderId ? this.workOrderId :currentRecord.workOrderId;
+
+        this.workOrderService.GetWorkflowtranserData(this.workOrderId,).pipe(takeUntil(this.onDestroy$)).subscribe(res => 
+        {
+           this.workflowTransfer.Material =res.material 
+           this.workflowTransfer.Labor =res.labor 
+           this.workflowTransfer.Tools =res.tools 
+           this.workflowTransfer.Charges =res.charges 
+
+
+            //const workOrderData = res;
+           
+        })
    
     }
     taskComletedByConfirmation(ev){
@@ -3696,8 +3761,8 @@ this.woPartId=rowData.id;
         data.createdBy = this.userName;
 
         this.workOrderService.transferWorkflow(data).subscribe(res => {
-            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
-            this.showWaringForPubWorkflow();
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = true;
+            this.showWaringForWorkflow();
             
             this.alertService.showMessage(
                 this.moduleName,
@@ -3707,16 +3772,51 @@ this.woPartId=rowData.id;
         });
     }
     closeTranferFlow(){
-        this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
+
+        if(this.workflowTransfer.Material ||  this.workflowTransfer.Labor ||  this.workflowTransfer.Tools|| this.workflowTransfer.Charges)
+        {
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = true;
+        }
+        else
+        {
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
+        }
+        
         $('#workFlowTransfer').modal('hide');
     }
     publicatonExpirationDate:any;
-    showWaringForPubWorkflow(){
+    showWaringForWorkflow(){
+        if(!this.isView){
+            setTimeout(() => { 
+                this.workOrderGeneralInformation.partNumbers.map((x, index) => {
+                    if(x.workflowExpirationDate){ 
+                     //if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                    if((new Date(x.workflowExpirationDate)) < (new Date())){
+                        // this.removeWorkflow(x,index);
+                        setTimeout(() => {
+                            // x.workflowId=0;
+                            this.disableSaveForPart=false;
+                        }, 2000);
+                        $('#warningForCmmWorkflow').modal('show');
+                        // this.expriryarray.push(x);
+                
+                       }
+                    }
+                   }); 
+            }, 5000);
+        }
+      }
+
+      showWaringForPublication(){
         if(!this.isView){
             setTimeout(() => { 
                 this.workOrderGeneralInformation.partNumbers.map((x, index) => {
                     if(x.publicatonExpirationDate){ 
-                       if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+
+                        
+                       //if(moment(new Date(x.publicatonExpirationDate)).format('MM/DD/YYYY') < moment(new Date()).format('MM/DD/YYYY')){
+
+                        if((new Date(x.publicatonExpirationDate)) < (new Date())){
                         setTimeout(() => {
                             // x.cMMId=0;
                             this.disableSaveForPart=false;
@@ -3726,19 +3826,6 @@ this.woPartId=rowData.id;
                         // this.expriryarray.push(x);
                  
                         $('#warningForCmmPublication').modal('show');
-                       }
-                    }
-                    if(x.workflowExpirationDate){ 
-                     if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
-                       
-                        // this.removeWorkflow(x,index);
-                        setTimeout(() => {
-                            // x.workflowId=0;
-                            this.disableSaveForPart=false;
-                        }, 2000);
-                        $('#warningForCmmWorkflow').modal('show');
-                        // this.expriryarray.push(x);
-                
                        }
                     }
                    }); 

@@ -4533,7 +4533,6 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	addPartNumbers(partNumberId, partName, conditionid) {
-		debugger;
 		this.inputValidCheck = false;
 		//if (this.vendorService.isEditMode == false) {
 		let newParentObject = new CreatePOPartsList();

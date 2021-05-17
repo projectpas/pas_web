@@ -614,19 +614,18 @@
                       <td>{{caldata.assetUnitCost}}</td>
                       <td *ngIf="caldata.isedit==false">{{caldata.createdDate1}}</td>
                       <td *ngIf="caldata.isedit">
-                        <p-calendar  class="calender-cstm woAdd" [showIcon]="true"  name="CreatedDate{{k}}"  [ngModelOptions]="{standalone: true}"
+                        <p-calendar   [showIcon]="true"  name="CreatedDate{{k}}"  [ngModelOptions]="{standalone: true}"
                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                              (ngModelChange)="editorgetmemo($event)"
                              #createdDate="ngModel"
-                            [(ngModel)]="caldata.createdDate" appendTo="body"></p-calendar> 
+                            [(ngModel)]="caldata.createdDate"></p-calendar> 
                        </td>
                        <td *ngIf="caldata.isedit==false">{{caldata.calibrationDate1}}</td>
                        <td  *ngIf="caldata.isedit">
-                        <p-calendar  class="calender-cstm woAdd" [showIcon]="true" name="calibrationDate{{k}}" [ngModelOptions]="{standalone: true}"
+                        <p-calendar  [showIcon]="true" name="calibrationDate{{k}}" [ngModelOptions]="{standalone: true}"
                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                              (ngModelChange)="editorgetmemo($event)"
-                             #calibrationDate="ngModel" 
-                            [(ngModel)]="caldata.calibrationDate" appendTo="body"></p-calendar> 
+                            [(ngModel)]="caldata.calibrationDate"></p-calendar> 
                        </td>
                        <td>{{caldata.lastCalibrationBy}}</td>
                       <!-- <td *ngIf="caldata.isedit" class="dis-btns">

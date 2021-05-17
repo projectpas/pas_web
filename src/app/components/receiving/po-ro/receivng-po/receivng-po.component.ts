@@ -23,7 +23,7 @@ import { ReceivingService } from '../../../../services/receiving/receiving.servi
 import { PurchaseOrder, PurchaseOrderPart, StockLine, StockLineDraft, DropDownData, TimeLife, ReceiveParts, TimeLifeDraft } from './PurchaseOrder.model';
 import { ManagementStructure } from './managementstructure.model';
 import { AccountService } from '../../../../services/account.service';
-import { CompanyService } from '../../../../services/company.service';import { AddressModel } from '../../../../models/address.model';
+import { CompanyService } from '../../../../services/company.service'; import { AddressModel } from '../../../../models/address.model';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
 import { ShippingService } from '../../../../services/shipping/shipping-service';
 import { TagTypeService } from '../../../../services/tagtype.service';
@@ -65,7 +65,7 @@ export class ReceivngPoComponent implements OnInit {
     ManufacturerList: DropDownData[] = [];
     ConditionList: DropDownData[] = [];
     GLAccountList: DropDownData[] = [];
-    ShippingViaList: DropDownData[]= [];
+    ShippingViaList: DropDownData[] = [];
     TagTypeList: any = [];
     receiving_po_header: boolean = false;
     ConditionId: number = 0;
@@ -99,7 +99,7 @@ export class ReceivngPoComponent implements OnInit {
     /** po-approval ctor */
     arrayLegalEntitylsit: any[] = [];
     arraySitelist: any[] = [];
-    arrayVendlsit:any[] = [];
+    arrayVendlsit: any[] = [];
     arrayComplist: any[] = [];
     arrayCustlist: any[] = [];
     arraymanufacturerlist: any[] = [];
@@ -107,11 +107,11 @@ export class ReceivngPoComponent implements OnInit {
     arrayglaccountlist: any[] = [];
     arrayshipvialist: any[] = [];
     arraytagtypelist: any[] = [];
-    companyModuleId: number = 0;   
-    vendorModuleId: number = 0;   
-    customerModuleId: number = 0;   
-    otherModuleId: number = 0; 
-    alertText: string = '';   
+    companyModuleId: number = 0;
+    vendorModuleId: number = 0;
+    customerModuleId: number = 0;
+    otherModuleId: number = 0;
+    alertText: string = '';
     modal: NgbModalRef;
     constructor(public binservice: BinService,
         private purchaseOrderService: PurchaseOrderService,
@@ -125,23 +125,23 @@ export class ReceivngPoComponent implements OnInit {
         public vendorService: VendorService,
         public customerService: CustomerService,
         public companyService: CompanyService,
-        private itemmaster: ItemMasterService,       
+        private itemmaster: ItemMasterService,
         private route: Router,
         public currencyService: CurrencyService,
         public unitofmeasureService: UnitOfMeasureService,
         public conditionService: ConditionService,
         public creditTermsService: CreditTermsService,
         public employeeService: EmployeeService,
-        private alertService: AlertService,      
+        private alertService: AlertService,
         private shippingService: ShippingService,
-        private _actRoute: ActivatedRoute,       
-        private commonService: CommonService,      
+        private _actRoute: ActivatedRoute,
+        private commonService: CommonService,
         private authService: AuthService,
-      
-    ) {        
-        var lststockline = [];                
-        this.getCustomers('',lststockline);       
-        this.getCompanyList('',lststockline);
+
+    ) {
+        var lststockline = [];
+        this.getCustomers('', lststockline);
+        this.getCompanyList('', lststockline);
         this.getManufacturers();
         this.getConditionList();
         this.getAllGLAccount();
@@ -149,25 +149,26 @@ export class ReceivngPoComponent implements OnInit {
         this.getTagType();
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
-        this.companyModuleId = AppModuleEnum.Company;                 
+        this.companyModuleId = AppModuleEnum.Company;
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
-        this.otherModuleId = AppModuleEnum.Others; 
+        this.otherModuleId = AppModuleEnum.Others;
     }
 
     private getAllSite() {
-		if (this.arraySitelist.length == 0) {
-            this.arraySitelist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownList('Site','SiteId','Name','',true, 0,this.arraySitelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-                this.sites = res;                
-            });				
-	}
+        if (this.arraySitelist.length == 0) {
+            this.arraySitelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name', '', true, 0, this.arraySitelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.sites = res;
+        });
+    }
 
-    getCustomers(strText = '',stockLine) {
+    getCustomers(strText = '', stockLine) {
         if (this.arrayCustlist.length == 0) {
             this.arrayCustlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {        
+        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             stockLine.filteredRecords = [];
             const data = response.map(x => {
                 return {
@@ -175,17 +176,18 @@ export class ReceivngPoComponent implements OnInit {
                     Value: x.label
                 }
             });
-            this.CustomerList = data;    
-            stockLine.filteredRecords = this.CustomerList;                
-         }, err => {
+            this.CustomerList = data;
+            stockLine.filteredRecords = this.CustomerList;
+        }, err => {
             this.isSpinnerVisible = false;
         });
-    } 
+    }
 
-    getVendors(filterVal = '',stockLine) {
+    getVendors(filterVal = '', stockLine) {
         if (this.arrayVendlsit.length == 0) {
-            this.arrayVendlsit.push(0); }
-		this.vendorService.getVendorNameCodeListwithFilter(filterVal,20,this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {			            
+            this.arrayVendlsit.push(0);
+        }
+        this.vendorService.getVendorNameCodeListwithFilter(filterVal, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
             stockLine.filteredRecords = [];
             const data = res.map(x => {
                 return {
@@ -193,18 +195,18 @@ export class ReceivngPoComponent implements OnInit {
                     Value: x.vendorName
                 }
             });
-            this.VendorList = data;   
-            stockLine.filteredRecords = this.VendorList;         
-		},err => {
-			this.isSpinnerVisible = false;					
-		});
+            this.VendorList = data;
+            stockLine.filteredRecords = this.VendorList;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
-    dismissModel() {		
-		this.modal.close();					
+    dismissModel() {
+        this.modal.close();
     }
 
-    getCompanyList(strText = '',stockLine) {
+    getCompanyList(strText = '', stockLine) {
         if (this.arrayComplist.length == 0) {
             this.arrayComplist.push(0);
         }
@@ -216,8 +218,8 @@ export class ReceivngPoComponent implements OnInit {
                     Value: x.label
                 }
             });
-            this.CompanyList = data;    
-            stockLine.filteredRecords = this.CustomerList;     
+            this.CompanyList = data;
+            stockLine.filteredRecords = this.CustomerList;
         }, err => {
             this.isSpinnerVisible = false;
         });
@@ -234,7 +236,7 @@ export class ReceivngPoComponent implements OnInit {
                 dropdown.Value = company.label
                 this.ManufacturerList.push(dropdown);
             }
-            
+
         }, err => {
             this.isSpinnerVisible = false;
         });
@@ -244,14 +246,14 @@ export class ReceivngPoComponent implements OnInit {
         if (this.arrayConditionlist.length == 0) {
             this.arrayConditionlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 0, this.arrayConditionlist.join(), this.currentUserMasterCompanyId).subscribe(res => {         
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 0, this.arrayConditionlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             for (let company of res) {
                 var dropdown = new DropDownData();
                 dropdown.Key = company.value.toLocaleString();
                 dropdown.Value = company.label
                 this.ConditionList.push(dropdown);
-            }           
-            },
+            }
+        },
             err => {
                 this.isSpinnerVisible = false;
             });
@@ -260,22 +262,22 @@ export class ReceivngPoComponent implements OnInit {
     getAllGLAccount(strText = '') {
         if (this.arrayglaccountlist.length == 0) {
             this.arrayglaccountlist.push(0);
-        }       
+        }
         this.commonService.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.arrayglaccountlist.join()).subscribe(res => {
-        const data= res.map(x => {
-                    return {
-                        Key:x.value,
-                        Value: x.label
-                    }
-                });
-        this.GLAccountList = data;          
-        })   
+            const data = res.map(x => {
+                return {
+                    Key: x.value,
+                    Value: x.label
+                }
+            });
+            this.GLAccountList = data;
+        })
     }
 
     getShippingVia(strText = '') {
         if (this.arrayshipvialist.length == 0) {
             this.arrayshipvialist.push(0);
-        }       
+        }
         this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText,
             true, 0, this.arrayshipvialist.join(), this.currentUserMasterCompanyId).subscribe(res => {
                 for (let company of res) {
@@ -283,30 +285,30 @@ export class ReceivngPoComponent implements OnInit {
                     dropdown.Key = company.value.toLocaleString();
                     dropdown.Value = company.label
                     this.ShippingViaList.push(dropdown);
-                }                  
-        })   
+                }
+            })
     }
 
     getTagType(strText = '') {
         if (this.arraytagtypelist.length == 0) {
             this.arraytagtypelist.push(0);
-        }       
+        }
         this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,
-            true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {   
-            this.TagTypeList = res;
-        })   
-      }
+            true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+                this.TagTypeList = res;
+            })
+    }
 
     getLegalEntity(strText = '') {
         if (this.arrayLegalEntitylsit.length == 0) {
             this.arrayLegalEntitylsit.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayLegalEntitylsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
-            this.legalEntityList = res;           
+            this.legalEntityList = res;
         }, err => {
             this.isSpinnerVisible = false;
         });
-    }  
+    }
 
     loadModulesNamesForObtainOwnerTraceable() {
         this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
@@ -323,15 +325,15 @@ export class ReceivngPoComponent implements OnInit {
             true, 0, this.arrayPostatuslist.join(), 0)
             .subscribe(res => {
                 this.poStatus = res;
-                this.poStatus = this.poStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));        
-                }
+                this.poStatus = this.poStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+            }
             );
     }
 
     private getStatusById(statusId: string) {
         if (statusId == null)
-            return 'NA';            
-    }    
+            return 'NA';
+    }
 
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser
@@ -345,51 +347,50 @@ export class ReceivngPoComponent implements OnInit {
 
     get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
-        }
+    }
 
-    ngOnInit() {      
-        this.isSpinnerVisible = true; 
+    ngOnInit() {
+        this.isSpinnerVisible = true;
         this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
         this.getReceivingPOHeaderById(this.receivingService.purchaseOrderId);
-        this.receivingService.getPurchaseOrderDataById(this.receivingService.purchaseOrderId,this.employeeId).subscribe(
-            results => {               
+        this.receivingService.getPurchaseOrderDataById(this.receivingService.purchaseOrderId, this.employeeId).subscribe(
+            results => {
                 this.receivingService.purchaseOrder = results[0][0];
-                this.loadPurchaseOrderData(results[0][0],results[0][1]);
-                this.isSpinnerVisible = false; 
+                this.loadPurchaseOrderData(results[0][0], results[0][1]);
+                this.isSpinnerVisible = false;
             },
             error => {
                 return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
-                this.isSpinnerVisible = false; 
+                this.isSpinnerVisible = false;
             }
-        );       
+        );
         this.quantityreceivebtn = false;
     }
 
-    getReceivingPOHeaderById(id) {       
+    getReceivingPOHeaderById(id) {
         this.purchaseOrderService.getPOViewById(id).subscribe(
             res => {
                 this.poDataHeader = res;
                 this.arrayVendlsit.push(res.vendorId);
                 var stockline = [];
-                this.getVendors('',stockline);
+                this.getVendors('', stockline);
                 this.poDataHeader.purchaseOrderNumber = this.poDataHeader.purchaseOrderNumber;
                 this.poDataHeader.openDate = this.poDataHeader.openDate ? new Date(this.poDataHeader.openDate) : '';
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
-                var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId);
-                this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';                 
-                if(!shippingVia || shippingVia == undefined)
-                {
-                    var shippingVia = new DropDownData(); 
+                var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
+                this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';
+                if (!shippingVia || shippingVia == undefined) {
+                    var shippingVia = new DropDownData();
                     shippingVia.Key = this.poDataHeader.shipViaId;
                     shippingVia.Value = this.poDataHeader.shipVia;
                     this.ShippingViaList.push(shippingVia);
-                }  
+                }
             });
     }
 
-    private loadPurchaseOrderData(purchaseOrder: PurchaseOrder,partms) {
+    private loadPurchaseOrderData(purchaseOrder: PurchaseOrder, partms) {
         this.purchaseOrderData = purchaseOrder;
         let parentPart: PurchaseOrderPart;
         var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
@@ -399,14 +400,14 @@ export class ReceivngPoComponent implements OnInit {
             parent.currentSERIndex = 0;
             parent.isDisabledTLboxes = false;
             parent.quantityRejected = 0;
-            
+
             var splitParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == parent.purchaseOrderPartRecordId);
             if (splitParts.length > 0) {
                 parent.hasChildren = true;
                 parent.quantityOrdered = 0;
                 for (let childPart of splitParts) {
                     parent.stockLineCount += childPart.stockLineCount;
-                    parent.draftedStockLineCount += childPart.draftedStockLineCount;                    
+                    parent.draftedStockLineCount += childPart.draftedStockLineCount;
                     parent.quantityRejected += childPart.quantityRejected != null ? childPart.quantityRejected : 0;
                     childPart.managementStructureId = parent.managementStructureId;
                     childPart.managementStructureName = parent.managementStructureName;
@@ -428,100 +429,100 @@ export class ReceivngPoComponent implements OnInit {
             part.isDisabledTLboxes = false;
             part.visible = false;
             part.showStockLineGrid = false;
-            part.isSameDetailsForAllParts = false;            
-            this.arraySitelist.push(part.itemMaster.siteId);                  
+            part.isSameDetailsForAllParts = false;
+            this.arraySitelist.push(part.itemMaster.siteId);
             part.eCCNAlreadyExist = part.itemMaster.exportECCN != null && part.itemMaster.exportECCN.length > 0;
             part.itarNumberExist = part.itemMaster.itarNumber != null && part.itemMaster.itarNumber.length > 0;
-            if (part.isParent) {  
+            if (part.isParent) {
                 parentPart = part;
             }
             else {
-                part.addressText = this.getAddress(part.poPartSplitAddress);              
+                part.addressText = this.getAddress(part.poPartSplitAddress);
                 part.userName = part.poPartSplitUser;
                 part.userTypeName = part.poPartSplitUserTypeName;
                 part.statusText = part.status;
             }
-           this.getManagementStructureForPart(part,partms)
+            this.getManagementStructureForPart(part, partms)
         }
-        this.purchaseOrderData.dateRequested = new Date(); 
+        this.purchaseOrderData.dateRequested = new Date();
         this.purchaseOrderData.dateApprovied = new Date(this.purchaseOrderData.dateApprovied);
         this.purchaseOrderData.needByDate = new Date(); //new Date(this.purchaseOrderData.needByDate);
-        this.isSpinnerVisible = false;       
-        this.getAllSite(); 
+        this.isSpinnerVisible = false;
+        this.getAllSite();
     }
 
-    getManagementStructureForPart(partList,response) {
-        if(response) {
-           const result = response[partList.purchaseOrderPartRecordId];
-           if(result[0] && result[0].level == 'Level1') {
-               partList.maincompanylist = result[0].lstManagmentStrcture;
-               partList.parentCompanyId = result[0].managementStructureId;
-               partList.managementStructureId = result[0].managementStructureId;
-               partList.parentBulist = []
-               partList.parentDivisionlist = [];
-               partList.parentDepartmentlist = [];
-               partList.parentbuId = 0;
-               partList.parentDivisionId = 0;
-               partList.parentDeptId = 0;
-           } else {
-               partList.parentCompanyId = 0;
-               partList.parentbuId = 0;
-               partList.parentDivisionId = 0;
-               partList.parentDeptId = 0;
-               partList.maincompanylist = [];
-               partList.parentBulist = []
-               partList.parentDivisionlist = [];
-               partList.parentDepartmentlist = [];
-           }
-           
-           if(result[1] && result[1].level == 'Level2') {	
-               partList.parentBulist = result[1].lstManagmentStrcture;
-               partList.parentbuId = result[1].managementStructureId;
-               partList.managementStructureId = result[1].managementStructureId;
-               partList.parentDivisionlist = [];
-               partList.parentDepartmentlist = [];					
-               partList.parentDivisionId = 0;
-               partList.parentDeptId = 0;
-           } else {	
-               if(result[1] && result[1].level == 'NEXT') {						
-                   partList.parentBulist = result[1].lstManagmentStrcture;
-               }				
-               partList.parentbuId = 0;
-               partList.parentDivisionId = 0;
-               partList.parentDeptId = 0;	
-               partList.parentDivisionlist = [];
-               partList.parentDepartmentlist = [];
-           }
+    getManagementStructureForPart(partList, response) {
+        if (response) {
+            const result = response[partList.purchaseOrderPartRecordId];
+            if (result[0] && result[0].level == 'Level1') {
+                partList.maincompanylist = result[0].lstManagmentStrcture;
+                partList.parentCompanyId = result[0].managementStructureId;
+                partList.managementStructureId = result[0].managementStructureId;
+                partList.parentBulist = []
+                partList.parentDivisionlist = [];
+                partList.parentDepartmentlist = [];
+                partList.parentbuId = 0;
+                partList.parentDivisionId = 0;
+                partList.parentDeptId = 0;
+            } else {
+                partList.parentCompanyId = 0;
+                partList.parentbuId = 0;
+                partList.parentDivisionId = 0;
+                partList.parentDeptId = 0;
+                partList.maincompanylist = [];
+                partList.parentBulist = []
+                partList.parentDivisionlist = [];
+                partList.parentDepartmentlist = [];
+            }
 
-           if(result[2] && result[2].level == 'Level3') {	
-               partList.parentDivisionlist = result[2].lstManagmentStrcture;
-               partList.parentDivisionId = result[2].managementStructureId;
-               partList.managementStructureId = result[2].managementStructureId;
-               partList.parentDeptId = 0;	
-               partList.parentDepartmentlist = [];
-           } else {
-               if(result[2] && result[2].level == 'NEXT') {						
-                   partList.parentDivisionlist = result[2].lstManagmentStrcture;
-               }
-               partList.parentDivisionId = 0;
-               partList.parentDeptId = 0;	
-               partList.parentDepartmentlist = [];
-           }
+            if (result[1] && result[1].level == 'Level2') {
+                partList.parentBulist = result[1].lstManagmentStrcture;
+                partList.parentbuId = result[1].managementStructureId;
+                partList.managementStructureId = result[1].managementStructureId;
+                partList.parentDivisionlist = [];
+                partList.parentDepartmentlist = [];
+                partList.parentDivisionId = 0;
+                partList.parentDeptId = 0;
+            } else {
+                if (result[1] && result[1].level == 'NEXT') {
+                    partList.parentBulist = result[1].lstManagmentStrcture;
+                }
+                partList.parentbuId = 0;
+                partList.parentDivisionId = 0;
+                partList.parentDeptId = 0;
+                partList.parentDivisionlist = [];
+                partList.parentDepartmentlist = [];
+            }
 
-           if(result[3] && result[3].level == 'Level4') {		
-               partList.parentDepartmentlist = result[3].lstManagmentStrcture;;			
-               partList.parentDeptId = result[3].managementStructureId;	
-               partList.managementStructureId  = result[3].managementStructureId;				
-           } else {
-               partList.parentDeptId = 0;	
-               if(result[3] && result[3].level == 'NEXT') {						
-                   partList.parentDepartmentlist = result[3].lstManagmentStrcture;
-               }
-           }
-       }	
- 
+            if (result[2] && result[2].level == 'Level3') {
+                partList.parentDivisionlist = result[2].lstManagmentStrcture;
+                partList.parentDivisionId = result[2].managementStructureId;
+                partList.managementStructureId = result[2].managementStructureId;
+                partList.parentDeptId = 0;
+                partList.parentDepartmentlist = [];
+            } else {
+                if (result[2] && result[2].level == 'NEXT') {
+                    partList.parentDivisionlist = result[2].lstManagmentStrcture;
+                }
+                partList.parentDivisionId = 0;
+                partList.parentDeptId = 0;
+                partList.parentDepartmentlist = [];
+            }
+
+            if (result[3] && result[3].level == 'Level4') {
+                partList.parentDepartmentlist = result[3].lstManagmentStrcture;;
+                partList.parentDeptId = result[3].managementStructureId;
+                partList.managementStructureId = result[3].managementStructureId;
+            } else {
+                partList.parentDeptId = 0;
+                if (result[3] && result[3].level == 'NEXT') {
+                    partList.parentDepartmentlist = result[3].lstManagmentStrcture;
+                }
+            }
+        }
+
     }
-    
+
     private getAddress(address: AddressModel): string {
         let addr: string = '';
         if (address != null) {
@@ -542,57 +543,54 @@ export class ReceivngPoComponent implements OnInit {
         }
 
         return addr;
-    }  
+    }
 
     public showSplitShipmentParts(purchaseOrderPart: PurchaseOrderPart): void {
         var selectedParts: any = this.purchaseOrderData.purchaseOderPart.filter(function (part) {
             return part.purchaseOrderPartRecordId == purchaseOrderPart.purchaseOrderPartRecordId;
         });
-   
+
         selectedParts.forEach(part => {
             part.toggleIcon = !part.toggleIcon;
-            part.visible = !part.visible;           
+            part.visible = !part.visible;
         });
 
-        this.purchaseOrderData.purchaseOderPart.forEach(part => {   
-            if(part.parentId == purchaseOrderPart.purchaseOrderPartRecordId) {        
-            part.visible = !part.visible;
-        }
-        }); 
+        this.purchaseOrderData.purchaseOderPart.forEach(part => {
+            if (part.parentId == purchaseOrderPart.purchaseOrderPartRecordId) {
+                part.visible = !part.visible;
+            }
+        });
     }
 
     public isSplitShipmentPart(purchaseOrderPartRecordId: number): boolean {
         return this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == purchaseOrderPartRecordId).length > 0;
     }
-    
-    public toggleStockLine(event: any, part: PurchaseOrderPart): void {      
-        var condtion = this.ConditionList.find(temp=> temp.Key == part.conditionId.toString())
+
+    public toggleStockLine(event: any, part: PurchaseOrderPart): void {
+        var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
-        if(!condtion || condtion == undefined)
-          {
-            var condtion = new DropDownData();            
+        if (!condtion || condtion == undefined) {
+            var condtion = new DropDownData();
             condtion.Key = part.conditionId.toString();
             condtion.Value = part.condition.toString();
             this.ConditionList.push(condtion);
-          }     
+        }
         /// For InActive GL Account      
-        var glAccount = this.GLAccountList.find(temp=> temp.Key == part.glAccountId.toString())
-        if(!glAccount || glAccount == undefined)
-           {
-             var glAccount = new DropDownData(); 
-             glAccount.Key = part.glAccountId.toString();
-             glAccount.Value = part.glAccount.toString();
-             this.GLAccountList.push(glAccount);
-           }  
-          
-        var manufacturer = this.ManufacturerList.find(temp=> temp.Key == part.itemMaster.manufacturerId)
-        if(!manufacturer || manufacturer == undefined)
-              {
-                var manufacturer = new DropDownData(); 
-                manufacturer.Key = part.itemMaster.manufacturerId.toString();
-                manufacturer.Value = part.itemMaster.manufacturerName.toString();
-                this.ManufacturerList.push(manufacturer);
-             }  
+        var glAccount = this.GLAccountList.find(temp => temp.Key == part.glAccountId.toString())
+        if (!glAccount || glAccount == undefined) {
+            var glAccount = new DropDownData();
+            glAccount.Key = part.glAccountId.toString();
+            glAccount.Value = part.glAccount.toString();
+            this.GLAccountList.push(glAccount);
+        }
+
+        var manufacturer = this.ManufacturerList.find(temp => temp.Key == part.itemMaster.manufacturerId)
+        if (!manufacturer || manufacturer == undefined) {
+            var manufacturer = new DropDownData();
+            manufacturer.Key = part.itemMaster.manufacturerId.toString();
+            manufacturer.Value = part.itemMaster.manufacturerName.toString();
+            this.ManufacturerList.push(manufacturer);
+        }
 
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
@@ -611,7 +609,7 @@ export class ReceivngPoComponent implements OnInit {
 
         let quantity: number = (part.quantityActuallyReceived != undefined || part.quantityActuallyReceived.toString()) != '' ? part.quantityActuallyReceived : 0;
         if ((part.itemMaster.isSerialized && part.stocklineListObj.length != quantity) ||
-            (!part.itemMaster.isSerialized && part.stocklineListObj.length > 0 
+            (!part.itemMaster.isSerialized && part.stocklineListObj.length > 0
                 && part.stocklineListObj[0].quantity != quantity)) {
             part.stocklineListObj = []
             part.timeLifeList = [];
@@ -620,16 +618,15 @@ export class ReceivngPoComponent implements OnInit {
             part.currentTLIndex = 0;
             part.currentSERIndex = 0;
         }
-      
-        if (quantity > (part.quantityOrdered - part.stockLineCount - part.draftedStockLineCount - part.quantityRejected )) 
-        {
+
+        if (quantity > (part.quantityOrdered - part.stockLineCount - part.draftedStockLineCount - part.quantityRejected)) {
             this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than expected Qty", MessageSeverity.error);
             return;
         }
 
         part.visible = true;
         if (part.stocklineListObj.length != quantity) {
-            this.createStockLineItems(part);            
+            this.createStockLineItems(part);
             if (part.itemMaster.isTimeLife) {
                 for (var i = 0; i < quantity; i++) {
                     let timeLife: TimeLifeDraft = new TimeLifeDraft();
@@ -673,14 +670,14 @@ export class ReceivngPoComponent implements OnInit {
             this.quantityreceivebtn = true;
         } else {
             this.quantityreceivebtn = false;
-        }       
+        }
     }
 
-    createStockLineItems(part: PurchaseOrderPart): void {        
-        part.stocklineListObj = [];       
+    createStockLineItems(part: PurchaseOrderPart): void {
+        part.stocklineListObj = [];
         this.currentSLIndex = 0;
         for (var i = 0; i < part.quantityActuallyReceived; i++) {
-            let stockLine: StockLineDraft = new StockLineDraft();            
+            let stockLine: StockLineDraft = new StockLineDraft();
             stockLine.purchaseOrderId = part.purchaseOrderId;
             stockLine.purchaseOrderPartRecordId = part.purchaseOrderPartRecordId;
             stockLine.itemMasterId = part.itemMaster.itemMasterId;
@@ -691,7 +688,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.manufacturerId = part.itemMaster.manufacturerId;
             stockLine.visible = false;
             stockLine.shippingReference = '';
-            stockLine.shippingViaId = this.poDataHeader.shipViaId;            
+            stockLine.shippingViaId = this.poDataHeader.shipViaId;
             stockLine.shelfId = 0;
             stockLine.warehouseId = 0;
             stockLine.binId = 0;
@@ -701,7 +698,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.conditionId = 0;
             stockLine.masterCompanyId = this.currentUserMasterCompanyId;
             stockLine.createdBy = this.userName;
-            stockLine.updatedBy = this.userName;             
+            stockLine.updatedBy = this.userName;
             stockLine.serialNumberNotProvided = false;
             stockLine.purchaseOrderUnitCost = 0;
             stockLine.purchaseOrderExtendedCost = part.unitCost;
@@ -709,13 +706,13 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.obtainFrom = this.purchaseOrderData.vendor.vendorId;
             stockLine.ownerType = AppModuleEnum.Vendor;
-            stockLine.owner = this.purchaseOrderData.vendor.vendorId;           
-            
-            
+            stockLine.owner = this.purchaseOrderData.vendor.vendorId;
+
+
             stockLine.maincompanylist = part.maincompanylist;
             stockLine.parentCompanyId = part.parentCompanyId;
             stockLine.managementStructureEntityId = part.managementStructureId;
-            stockLine.parentBulist= part.parentBulist;
+            stockLine.parentBulist = part.parentBulist;
             stockLine.parentDivisionlist = part.parentDivisionlist;
             stockLine.parentDepartmentlist = part.parentDepartmentlist;
             stockLine.parentbuId = part.parentbuId;
@@ -732,24 +729,24 @@ export class ReceivngPoComponent implements OnInit {
                 }
             }
             this.getStockLineSite(stockLine);
-            this.getSiteDetailsOnEdit(part, stockLine) 
-            
+            this.getSiteDetailsOnEdit(part, stockLine)
+
             part.stocklineListObj.push(stockLine);
-        }        
+        }
     }
 
     addStockLine(part, visible?: boolean): void {
         const stockObj: any = part.stocklineListObj;
         part.stocklineListObj = stockObj.map(x => {
             return {
-                ...x,                
+                ...x,
                 //siteId: this.getSiteDetailsOnEdit(part, x),               
                 //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
                 shippingAccount: part.shippingAccountInfo,
                 purchaseOrderUnitCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2),
                 purchaseOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2)
             }
-        });              
+        });
         if (visible == undefined) {
             part.showStockLineGrid = !part.showStockLineGrid;
         }
@@ -763,70 +760,70 @@ export class ReceivngPoComponent implements OnInit {
         else {
             this.quantityreceive = true;
             this.quantityreceivebtn = false;
-        }       
+        }
     }
 
     selectedLegalEntity(legalEntityId, stockLine) {
         stockLine.parentBulist = [];
-		stockLine.parentDivisionlist = [];
-		stockLine.parentDepartmentlist = [];
-		stockLine.parentbuId = 0;
-		stockLine.parentDivisionId = 0;
-		stockLine.parentDeptId = 0;		
-        if (stockLine.parentCompanyId != 0 && stockLine.parentCompanyId != null 
+        stockLine.parentDivisionlist = [];
+        stockLine.parentDepartmentlist = [];
+        stockLine.parentbuId = 0;
+        stockLine.parentDivisionId = 0;
+        stockLine.parentDeptId = 0;
+        if (stockLine.parentCompanyId != 0 && stockLine.parentCompanyId != null
             && stockLine.parentCompanyId != undefined) {
-                stockLine.managementStructureEntityId = stockLine.parentCompanyId;
-			this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentCompanyId,this.employeeId ).subscribe(res => {
+            stockLine.managementStructureEntityId = stockLine.parentCompanyId;
+            this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentCompanyId, this.employeeId).subscribe(res => {
                 stockLine.parentBulist = res;
             });
-		 } 
-		  else {
+        }
+        else {
             stockLine.managementStructureEntityId = 0;
-		 }
+        }
     }
 
     selectedBusinessUnit(businessUnitId, stockLine) {
         stockLine.parentDivisionlist = [];
-        stockLine.parentDepartmentlist = [];		
+        stockLine.parentDepartmentlist = [];
         stockLine.parentDivisionId = 0;
-        stockLine.parentDeptId = 0;	 	
-	 	if (stockLine.parentbuId != 0 && stockLine.parentbuId != null && stockLine.parentbuId != undefined) {
+        stockLine.parentDeptId = 0;
+        if (stockLine.parentbuId != 0 && stockLine.parentbuId != null && stockLine.parentbuId != undefined) {
             stockLine.managementStructureEntityId = stockLine.parentbuId;
-	 		this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentbuId,this.employeeId ).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentbuId, this.employeeId).subscribe(res => {
                 stockLine.parentDivisionlist = res;
-	 		});
-	 	}
-	 	 else {
-            stockLine.managementStructureEntityId  = stockLine.parentCompanyId;	 		 
-	 		}	
-	}       
-    
+            });
+        }
+        else {
+            stockLine.managementStructureEntityId = stockLine.parentCompanyId;
+        }
+    }
+
     selectedDivision(divisionUnitId, stockLine) {
         stockLine.parentDeptId = 0;
-		stockLine.parentDepartmentlist = [];	
-        if (stockLine.parentDivisionId != 0 && stockLine.parentDivisionId != null 
-               && stockLine.parentDivisionId != undefined) {
-                stockLine.managementStructureEntityId = stockLine.parentDivisionId; 
-				this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentDivisionId ,this.employeeId ).subscribe(res => {
-                    stockLine.parentDepartmentlist = res;
-                });   
-		}
-		 else {
-            stockLine.managementStructureEntityId  = stockLine.parentbuId;			
-		 }	
+        stockLine.parentDepartmentlist = [];
+        if (stockLine.parentDivisionId != 0 && stockLine.parentDivisionId != null
+            && stockLine.parentDivisionId != undefined) {
+            stockLine.managementStructureEntityId = stockLine.parentDivisionId;
+            this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentDivisionId, this.employeeId).subscribe(res => {
+                stockLine.parentDepartmentlist = res;
+            });
+        }
+        else {
+            stockLine.managementStructureEntityId = stockLine.parentbuId;
+        }
     }
 
     selectedDepartment(departmentId, stockLine) {
         if (stockLine.parentDeptId != 0 && stockLine.parentDeptId != null && stockLine.parentDeptId != undefined) {
-			stockLine.managementStructureEntityId = stockLine.parentDeptId;			
-		}
-		 else {
-			stockLine.managementStructureEntityId = stockLine.parentDivisionId;
-		 }		
+            stockLine.managementStructureEntityId = stockLine.parentDeptId;
+        }
+        else {
+            stockLine.managementStructureEntityId = stockLine.parentDivisionId;
+        }
     }
 
 
-    
+
 
     getStockLineSite(stockLine: StockLineDraft): void {
         stockLine.SiteList = [];
@@ -846,7 +843,7 @@ export class ReceivngPoComponent implements OnInit {
             dropdown.Value = site.label;
             stockLine.SiteList.push(dropdown);
         }
-        
+
     }
 
     getSiteDetailsOnEdit(part, stock) {
@@ -897,7 +894,7 @@ export class ReceivngPoComponent implements OnInit {
         if (stockLine.warehouseId) {
             this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', stockLine.warehouseId).subscribe(
                 results => {
-                    
+
                     for (let loc of results) {
                         var dropdown = new DropDownData();
                         dropdown.Key = loc.value.toLocaleString();
@@ -917,7 +914,7 @@ export class ReceivngPoComponent implements OnInit {
         if (stockLine.locationId) {
             this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', stockLine.locationId).subscribe(
                 results => {
-                    
+
                     for (let shelf of results) {
                         var dropdown = new DropDownData();
                         dropdown.Key = shelf.value.toLocaleString();
@@ -941,25 +938,25 @@ export class ReceivngPoComponent implements OnInit {
                         dropdown.Value = bin.label;
                         stockLine.BinList.push(dropdown);
                     }
-                }               
+                }
             );
         }
 
     }
 
-    onFilter(event, stockLine, type): void { 
-        if (event.query !== undefined && event.query !== null) { 
-            if (type == AppModuleEnum.Customer) {           
-                this.getCustomers(event.query,stockLine);            
+    onFilter(event, stockLine, type): void {
+        if (event.query !== undefined && event.query !== null) {
+            if (type == AppModuleEnum.Customer) {
+                this.getCustomers(event.query, stockLine);
             } else if (type == AppModuleEnum.Vendor) {
-                this.getVendors(event.query,stockLine);           
+                this.getVendors(event.query, stockLine);
             } else if (type == AppModuleEnum.Company) {
-                this.getCompanyList(event.query,stockLine);   
+                this.getCompanyList(event.query, stockLine);
             }
         }
     }
 
-   
+
     onObtainFromChange(event, stockLine) {
         stockLine.obtainFrom = '';
         stockLine.obtainFromObject = {};
@@ -981,45 +978,45 @@ export class ReceivngPoComponent implements OnInit {
         }
     }
 
-    
-    onObtainSelect(stockLine: StockLine,type): void {
+
+    onObtainSelect(stockLine: StockLine, type): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;
-        if (type == AppModuleEnum.Customer) {           
-            this.arrayCustlist.push(stockLine.obtainFromObject.Key);          
-         } else if (type == AppModuleEnum.Vendor) {
-             this.arrayVendlsit.push(stockLine.obtainFromObject.Key);          
-         } else if (type == AppModuleEnum.Company) {
-             this.arrayComplist.push(stockLine.obtainFromObject.Key);       
-         }
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.obtainFromObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.obtainFromObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.obtainFromObject.Key);
+        }
     }
 
-    onOwnerSelect(stockLine: StockLine,type): void {
+    onOwnerSelect(stockLine: StockLine, type): void {
         stockLine.owner = stockLine.ownerObject.Key;
-        if (type == AppModuleEnum.Customer) {           
-            this.arrayCustlist.push(stockLine.ownerObject.Key);          
-         } else if (type == AppModuleEnum.Vendor) {
-             this.arrayVendlsit.push(stockLine.ownerObject.Key);          
-         } else if (type == AppModuleEnum.Company) {
-             this.arrayComplist.push(stockLine.ownerObject.Key);       
-         }
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.ownerObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.ownerObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.ownerObject.Key);
+        }
     }
 
-    onTraceableToSelect(stockLine: StockLine,type): void {
+    onTraceableToSelect(stockLine: StockLine, type): void {
         stockLine.traceableTo = stockLine.traceableToObject.Key;
-        if (type == AppModuleEnum.Customer) {           
-            this.arrayCustlist.push(stockLine.traceableToObject.Key);          
-         } else if (type == AppModuleEnum.Vendor) {
-             this.arrayVendlsit.push(stockLine.traceableToObject.Key);          
-         } else if (type == AppModuleEnum.Company) {
-             this.arrayComplist.push(stockLine.traceableToObject.Key);       
-         }
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.traceableToObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.traceableToObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.traceableToObject.Key);
+        }
     }
 
     onTraceableToChange(event, stockLine) {
         stockLine.traceableTo = '';
         stockLine.traceableToObject = {};
 
-        if (event.target.value === AppModuleEnum.Customer ) {
+        if (event.target.value === AppModuleEnum.Customer) {
             this.traceabletocustomer = true;
             this.traceabletoother = false;
             this.traceabletovendor = false;
@@ -1036,7 +1033,7 @@ export class ReceivngPoComponent implements OnInit {
         }
     }
 
-    
+
     onOwnerChange(event, stockLine) {
         stockLine.owner = '';
         stockLine.ownerObject = {};
@@ -1067,11 +1064,11 @@ export class ReceivngPoComponent implements OnInit {
             part.currentSLIndex = index;
             part.currentSERIndex = index;
             part.currentTLIndex = index;
-            
+
         }
     }
 
-    
+
     moveStockLineMainPage(type: string, index: number, part: PurchaseOrderPart): void {
         var count = type == 'stockline' ? part.stocklineListObj.length : part.timeLifeList.length;
         if (index >= 0 && index < count) {
@@ -1079,7 +1076,7 @@ export class ReceivngPoComponent implements OnInit {
             part.currentSLIndex = index;
             part.currentSERIndex = index;
             part.currentTLIndex = index;
-            
+
             // }
             // part.currentSERIndex = index;
             // part.currentTLIndex = index;
@@ -1087,7 +1084,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     public paginatorFocusOut(event: any, part: PurchaseOrderPart): void {
-        if (event.target.value == '') {           
+        if (event.target.value == '') {
             part.currentTLIndex = 0;
             part.currentSERIndex = 0;
             part.currentSLIndex = 0;
@@ -1104,14 +1101,14 @@ export class ReceivngPoComponent implements OnInit {
         if (index < part.stocklineListObj.length && index >= 0) {
             part.currentSLIndex = index;
             part.currentSERIndex = index;
-            part.currentTLIndex = index; 
+            part.currentTLIndex = index;
         }
         else {
             this.alertService.showMessage(this.pageTitle, "Invalid stock line page", MessageSeverity.error);
-            event.target.value = "1";          
+            event.target.value = "1";
             part.currentSLIndex = 0;
             part.currentSERIndex = 0;
-            part.currentTLIndex = 0; 
+            part.currentTLIndex = 0;
             return;
         }
     }
@@ -1126,14 +1123,14 @@ export class ReceivngPoComponent implements OnInit {
         if (index < part.stocklineListObj.length && index >= 0) {
             part.currentSLIndex = index;
             part.currentSERIndex = index;
-            part.currentTLIndex = index;    
+            part.currentTLIndex = index;
         }
         else {
             this.alertService.showMessage(this.pageTitle, "Invalid stock line page", MessageSeverity.error);
             event.target.value = "1";
             part.currentSLIndex = index;
             part.currentSERIndex = index;
-            part.currentTLIndex = index;    
+            part.currentTLIndex = index;
             return;
         }
     }
@@ -1142,10 +1139,10 @@ export class ReceivngPoComponent implements OnInit {
         this.isSpinnerVisible = true;
         if (part.itemMaster.isSerialized == null) {
             part.itemMaster.isSerialized == false;
-        }        
+        }
         this.itemmaster.updateItemMasterSerialized(part.itemMaster.itemMasterId, part.itemMaster.isSerialized).subscribe(
             result => {
-                var obj = part.stocklineListObj[this.currentSLIndex];               
+                var obj = part.stocklineListObj[this.currentSLIndex];
                 var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == part.purchaseOrderPartRecordId);
                 for (let childPart of childParts) {
                     childPart.itemMaster.isSerialized = part.itemMaster.isSerialized;
@@ -1269,15 +1266,20 @@ export class ReceivngPoComponent implements OnInit {
 
     onSubmitToReceive() {
         let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
-        for (let part of allParts) {           
-            if (part.isSameDetailsForAllParts) {               
-                for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {                    
-                    part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
-                    part.stocklineListObj[part.currentSERIndex].serialNumber = "";  
-                    var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] }; 
+        for (let part of allParts) {
+            if (part.isSameDetailsForAllParts) {
+                for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
+                    if (part.itemMaster.isSerialized) {
+                        part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = false;
+                    }
+                    else {
+                        part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
+                        part.stocklineListObj[part.currentSERIndex].serialNumber = "";
+                    }
+                    var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                     part.stocklineListObj[i] = stockLineToCopy;
-                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };    
-                    part.timeLifeList[i] = timeLifeToCopy;              
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
                 }
             }
         }
@@ -1285,9 +1287,9 @@ export class ReceivngPoComponent implements OnInit {
         this.alertText = '';
         var index = 0;
         if (errorMessages.length > 0) {
-            for(let i=0; i < errorMessages.length; i++) {
+            for (let i = 0; i < errorMessages.length; i++) {
                 this.alertText = this.alertText + errorMessages[i] + "<br/>"
-            }           
+            }
             this.alertService.showMessage(this.pageTitle, this.alertText, MessageSeverity.error);
             return;
         }
@@ -1297,14 +1299,15 @@ export class ReceivngPoComponent implements OnInit {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
             this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
-            return;            
-        },err=>{
-          this.isSpinnerVisible = false;}
+            return;
+        }, err => {
+            this.isSpinnerVisible = false;
+        }
         );
 
     }
 
-    
+
     validatePage() {
         let partsToFetch: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
         let errorMessages: string[] = [];
@@ -1384,31 +1387,31 @@ export class ReceivngPoComponent implements OnInit {
                 for (var i = 0; i < item.timeLifeList.length; i++) {
                     var timeLife = item.timeLifeList[i];
                     if (timeLife.detailsNotProvided != true) {
-                        if (timeLife.cyclesRemainingHrs == null && timeLife.cyclesRemainingMin == null 
-                            && timeLife.cyclesSinceNewHrs == null 
-                            && timeLife.cyclesSinceNewMin == null 
-                            && timeLife.cyclesSinceOVHHrs == null 
-                            && timeLife.cyclesSinceOVHMin == null 
-                            && timeLife.cyclesSinceInspectionHrs == null 
-                            && timeLife.cyclesSinceInspectionMin == null 
-                            && timeLife.cyclesSinceRepairHrs == null 
-                            && timeLife.cyclesSinceRepairMin == null 
-                            && timeLife.timeRemainingHrs == null 
-                            && timeLife.timeRemainingMin == null 
-                            && timeLife.timeSinceNewHrs == null 
-                            && timeLife.timeSinceNewMin == null 
-                            && timeLife.timeSinceOVHHrs == null 
-                            && timeLife.timeSinceOVHMin == null 
-                            && timeLife.timeSinceInspectionHrs == null 
-                            && timeLife.timeSinceInspectionMin == null 
-                            && timeLife.timeSinceRepairHrs == null 
-                            && timeLife.timeSinceRepairMin == null 
-                            && timeLife.lastSinceNewHrs == null 
-                            && timeLife.lastSinceNewMin == null 
-                            && timeLife.lastSinceOVHHrs == null 
-                            && timeLife.lastSinceOVHMin == null 
+                        if (timeLife.cyclesRemainingHrs == null && timeLife.cyclesRemainingMin == null
+                            && timeLife.cyclesSinceNewHrs == null
+                            && timeLife.cyclesSinceNewMin == null
+                            && timeLife.cyclesSinceOVHHrs == null
+                            && timeLife.cyclesSinceOVHMin == null
+                            && timeLife.cyclesSinceInspectionHrs == null
+                            && timeLife.cyclesSinceInspectionMin == null
+                            && timeLife.cyclesSinceRepairHrs == null
+                            && timeLife.cyclesSinceRepairMin == null
+                            && timeLife.timeRemainingHrs == null
+                            && timeLife.timeRemainingMin == null
+                            && timeLife.timeSinceNewHrs == null
+                            && timeLife.timeSinceNewMin == null
+                            && timeLife.timeSinceOVHHrs == null
+                            && timeLife.timeSinceOVHMin == null
+                            && timeLife.timeSinceInspectionHrs == null
+                            && timeLife.timeSinceInspectionMin == null
+                            && timeLife.timeSinceRepairHrs == null
+                            && timeLife.timeSinceRepairMin == null
+                            && timeLife.lastSinceNewHrs == null
+                            && timeLife.lastSinceNewMin == null
+                            && timeLife.lastSinceOVHHrs == null
+                            && timeLife.lastSinceOVHMin == null
                             && timeLife.lastSinceInspectionHrs == null
-                             && timeLife.lastSinceInspectionMin == null) {
+                            && timeLife.lastSinceInspectionMin == null) {
                             errorMessages.push("Please enter atleast one field in Time Life Page - " + (i + 1).toString() + ofPartMsg);
                         }
                     }
@@ -1419,7 +1422,7 @@ export class ReceivngPoComponent implements OnInit {
         return errorMessages;
     }
 
-    
+
     extractAllAllStockLines(): ReceiveParts[] {
         let receiveParts: ReceiveParts[] = [];
         let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
@@ -1440,7 +1443,7 @@ export class ReceivngPoComponent implements OnInit {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
                 sl.masterCompanyId = this.currentUserMasterCompanyId;
-               
+
                 sl.tagTypeId = "1,2,4,7,9,10,11,12,13,14";
                 sl.tagType = 'FAA,CAAC,EASA,FAA1,test,FAA/EASA,DCA,CAAV,Dual1,Mr';
                 // if (sl.tagType && sl.tagType.length > 0) {                    
@@ -1455,14 +1458,14 @@ export class ReceivngPoComponent implements OnInit {
                 //     sl.tagTypeId = "";
                 // }
             }
-            if (part.isSameDetailsForAllParts) {               
+            if (part.isSameDetailsForAllParts) {
                 for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                     part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
-                    part.stocklineListObj[part.currentSERIndex].serialNumber = "";  
-                    var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] }; 
+                    part.stocklineListObj[part.currentSERIndex].serialNumber = "";
+                    var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                     part.stocklineListObj[i] = stockLineToCopy;
-                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };    
-                    part.timeLifeList[i] = timeLifeToCopy;              
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
                 }
             }
         }
@@ -1487,14 +1490,14 @@ export class ReceivngPoComponent implements OnInit {
                 cyclesSinceRepair: ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00')),
                 timeSinceRepair: ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00')),
                 purchaseOrderPartRecordId: purchaseOrderPartRecordId,
-                masterCompanyId : this.currentUserMasterCompanyId,
-                createdBy : this.userName,
-                updatedBy : this.userName
+                masterCompanyId: this.currentUserMasterCompanyId,
+                createdBy: this.userName,
+                updatedBy: this.userName
             }
         })
         return tmLife;
     }
-///////////////////////////////////////// Not Used Code
+    ///////////////////////////////////////// Not Used Code
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
@@ -1521,7 +1524,7 @@ export class ReceivngPoComponent implements OnInit {
 
     btnactive(event) {
 
-    } 
+    }
 
     addPageCustomer() {
         this.route.navigateByUrl('/customersmodule/customerpages/app-customer-general-information');
@@ -1529,14 +1532,21 @@ export class ReceivngPoComponent implements OnInit {
 
     toggleSameDetailsForAllParts(part: PurchaseOrderPart): void {
         part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
-        if (part.isSameDetailsForAllParts) {           
-            part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
-            part.stocklineListObj[part.currentSERIndex].serialNumber = "";           
+        if (part.isSameDetailsForAllParts) {
+            if (part.itemMaster.isSerialized) {
+                part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = false;
+            }
+            else {
+                part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
+                part.stocklineListObj[part.currentSERIndex].serialNumber = "";
+            }
+
+
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
-                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] }; 
+                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.stocklineListObj[i] = stockLineToCopy;
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };    
-                part.timeLifeList[i] = timeLifeToCopy;               
+                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                part.timeLifeList[i] = timeLifeToCopy;
             }
         }
     }
@@ -1546,13 +1556,13 @@ export class ReceivngPoComponent implements OnInit {
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.stocklineListObj[i] = stockLineToCopy;
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
-                part.timeLifeList[i] = timeLifeToCopy; 
+                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] }; var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                part.timeLifeList[i] = timeLifeToCopy;
             }
         }
     }
 
-   
+
     quantityRejectedFocusOut(event, part) {
         if (event.target.value == "") {
             event.target.value = "0";
@@ -1596,7 +1606,7 @@ export class ReceivngPoComponent implements OnInit {
         if (event.ctrlKey && event.keyCode == 38) {
             this.moveStockLinePage('stockline', part.currentSERIndex - 1, part);
         }
-    } 
+    }
 
     onChangeTimeLifeMin(str, part, index) {
         // for(let i=0; i < this.purchaseOrderData.purchaseOderPart.length; i++) {

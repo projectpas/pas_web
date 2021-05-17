@@ -68,9 +68,9 @@ export class SalesOrderpickTicketComponent implements OnInit {
         popupWin.document.write(`
           <html>
             <head>
-              <title>Print tab</title>
-              <style>
-              @page { size: auto;  margin: 0mm; }
+               <title>Print tab</title>        
+<style>
+@page { size: auto;  margin: 0mm; }
 
               @media print
 	{
@@ -78,10 +78,7 @@ export class SalesOrderpickTicketComponent implements OnInit {
 		margin-top: 0;
 		margin-bottom: 0;
 		}
-	/*	body  {
-		padding-top: 72px;
-		padding-bottom: 72px ;
-		}*/
+	
     @page {size: landscape}
 	} 
   span {
@@ -90,7 +87,6 @@ export class SalesOrderpickTicketComponent implements OnInit {
     font-size: 10.5px !important;
     font-weight: 700;
   }
-  
               table {font-size:12px !important}        
   table thead { background: #808080;}    
    
@@ -116,15 +112,11 @@ table, thead, th {
      padding: 2px;line-height: 22px;
      height:22px;color: #333;
     //  border-right:1px solid black !important;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 10.5px !important;
-    font-weight: 700;max-width:100%; letter-spacing: 0.1px;border:0}
-
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight;normal;
+    font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
   h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
   
-  .very-first-block {position: relative; min-height: 1px;
-    height:auto;border-right:1px solid black;
-     float: left;padding-right: 2px;padding-left: 2px;
+  .very-first-block {position: relative; height:auto;border-right:1px solid black; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
     width: 50%;}
   .first-block-name{margin-right: 20px} 
   .first-block-sold-to {
@@ -132,6 +124,7 @@ table, thead, th {
     min-height: 82px;
     height: auto;
     float: left;
+    padding-bottom:5px;
     padding-right: 2px;
     border-right: 1px solid black;
     background: #fff;
@@ -143,6 +136,7 @@ table, thead, th {
   .first-block-ship-to {
     position: relative;
     min-height: 80px;
+    padding-bottom:5px;
     height: auto;
     padding-right: 2px;
     border-right: 1px solid black;
@@ -169,15 +163,14 @@ table, thead, th {
     float: right;
     padding-right: 2px;
    
-    width: 48%;
+    width: 49%;
   }
   
   .address-block {
     position: relative;
-    min-height: 119px;
+    min-height: 1px;
     float: left;
     height:auto;
-
     padding-right: 2px;
     // border: 1px solid black;
     width: 100%;
@@ -223,15 +216,14 @@ table, thead, th {
     float: left;
     padding-right: 2px;
     padding-left: 2px;
-   
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 10.5px !important;
-    font-weight: 700;
-
-    width: 38.33333333%;
-    text-transform: capitalize;
-    margin-bottom: 0;
-    text-align: left;
+        font-size: 10.5px !important;
+        font-weight: 700;
+    
+        width: 38.33333333%;
+        text-transform: capitalize;
+        margin-bottom: 0;
+        text-align: left;
   }
   
   .clear {
@@ -285,7 +277,8 @@ table, thead, th {
   .confirmed-by {
     position: relative;
     float: right;
-    width: 48%;font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 48%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 10.5px !important;
     font-weight: 700;
   }
@@ -330,9 +323,9 @@ table, thead, th {
     padding-right: 2px;
     padding-left: 2px;
     // width: 38.33333333%;
-    
+    font-size:10.5px !important;
+  
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 10.5px !important;
     font-weight: 700;
 
     text-transform: capitalize;
@@ -342,22 +335,22 @@ table, thead, th {
   
   .very-first-block {
     position: relative;
-    min-height: 1px;
-    height:auto;
-    border-right:1px solid black;
+    min-height: 159px;
     float: left;
+    height:auto;
+   border-right:1px solid black;
     padding-right: 2px;
     padding-left: 2px;
     width: 57% !important;
   }
   
   .logo {
-     padding-top: 10px;
-    // height:70px;
-    // width:220px;
-    height:auto;
-    max-width:100%;
-  
+    padding-top: 10px;
+        // height:70px;
+        // width:220px;
+        height:auto;
+        max-width:100%;
+        padding-bottom:10px;
   }
   
   .sold-block-div {
@@ -377,14 +370,13 @@ table, thead, th {
   }
   .first-block-sold-bottom{
     border-bottom: 1px solid black;
-    position:relative;
-    min-height:1px;
-    height:auto;
-    width:100%;
-    float:left;
-      // margin-top: -2px;
-      height: auto;
-     // min-height: 120px;
+        position:relative;
+        min-height:1px;
+        height:auto;
+        width:100%;
+        float:left;
+          // margin-top: -2px;
+         // min-height: 120px;
   }
   
   .parttable th {
@@ -396,17 +388,20 @@ table, thead, th {
     border-bottom:1px solid black !important;
   }
   .table-margins{
-    margin-top:0px;margin-left:-1px
-  }
+        margin-top:-1px;margin-left:0px
+      }
   .invoice-border{
     border-bottom: 1px solid;
-    poeition:relative;
-      // min-height: 119px;
-      min-height:1px;
-      height: auto;
-    float:left;}
+        position:relative;
+          // min-height: 119px;
+          min-height:1px;
+          height: auto;
+          width:100%;
+        float:left;}
   
               </style>
+
+
             </head>
         <body onload="window.print();window.close()">${printContents}</body>
           </html>`

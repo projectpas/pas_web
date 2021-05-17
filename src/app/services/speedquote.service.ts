@@ -314,4 +314,27 @@ export class SpeedQuoteService {
       this.speedQuoteEndPointSevice.closeSpeedQuoteEndPoint(salesQuoteId, updatedBy)
     );
   }
+
+  resetSearchPart() {
+    this.parts = [];
+    this.query = new ItemMasterSearchQuery();
+    this.query.partSearchParamters.quantityAlreadyQuoted = 0;
+  }
+
+  getSearchPartObject() {
+    return Observable.create(observer => {
+      observer.next(this.query);
+      observer.complete();
+    });
+  }
+
+  updateSearchPartObject(query) {
+    this.query = query;
+  }
+  getSearchPartResult() {
+    return Observable.create(observer => {
+      observer.next(this.parts);
+      observer.complete();
+    });
+  }
 }

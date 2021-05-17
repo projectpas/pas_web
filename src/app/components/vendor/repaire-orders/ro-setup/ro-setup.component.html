@@ -432,34 +432,35 @@
                     </div>
                 </div>
                 <form #addMultiPNTable="ngForm">
-                    <div class="table-responsive pas-table-cstm">
-                        <div class="tableFixHead-multiple-pn">
+                    <div class="table-responsive pas-table-cstm parts-list-table-align">
+                        <div class="tableFixHead multiple-pn">
                             <table class="table table-bordered ">
                                 <thead>
                                     <tr class="header-table-width">
-                                        <th class="multiple-pn th-width" style="text-align:left">
-                                            <span class="checkbox-cstm">
-                                                <label style="width:40px" class="multiple-pn-label">
-                                                    <input type="checkbox" name="addAllMultiPN"
-                                                        [(ngModel)]="addAllMultiPN"
-                                                        (change)="onChangeAddAllMultiPN($event)">
-                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        <th class="multiple-pn th-width" style="text-align:left;z-index: 1;">
+                                            <!-- <span class="checkbox-cstm">
+                                                <label style="width:40px" class="multiple-pn-label"> -->
+                                            <input type="checkbox" name="addAllMultiStockline"
+                                                [(ngModel)]="addAllMultiStockline"
+                                                (change)="onChangeAddAllMultiStockLine($event)" />
+                                            <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                 </label>
-                                            </span>
+                                            </span> -->
                                         </th>
-                                        <th>Stk Line Num</th>
-                                        <th>Ser Num</th>
-                                        <th>Cntrl Num</th>
-                                        <th>Cntrl ID Num</th>
                                         <th>PN</th>
                                         <th>PN Description</th>
+                                        <th>Condition</th>
+                                        <th class="min-width-100">Stk Line Num</th>
+                                        <th class="min-width-100">Ser Num</th>
+                                        <th class="min-width-100">Cntrl Num</th>
+                                        <th class="min-width-100">Cntrl ID Num</th>
                                         <th>Stk Type</th>
                                         <!-- <th>Priority</th> -->
                                         <th>Manufacturer</th>
                                         <th>UOM</th>
-                                        <th>Qty Avail</th>
-                                        <th>Qty On Hand</th>
-                                        <th>Unit Cost</th>
+                                        <th class="min-width-80">Qty Avail</th>
+                                        <th class="min-width-80">Qty On Hand</th>
+                                        <th class="min-width-80">Unit Cost</th>
                                         <th>Traceable to</th>
                                         <th>Owner</th>
                                         <th>Obtain From</th>
@@ -471,23 +472,26 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let obj of stocklineData; let row_no=index;">
-                                        <td class="obj-td">
-                                            <span class="checkbox-cstm">
-                                                <!--*ngIf="!multiplePNDetails"-->
-                                                <label class="obj-label">
-                                                    <input type="checkbox" name="addAllMultiPNRows{{row_no}}"
-                                                        [(ngModel)]="obj.addAllMultiPNRows"
-                                                        (change)="onChangeAddEachMultiPN()">
-                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        <td *ngIf="!obj.disableStockline" class="obj-td">
+                                            <!-- <span class="checkbox-cstm"> -->
+                                            <!--*ngIf="!multiplePNDetails"-->
+                                            <!-- <label class="obj-label"> -->
+                                            <input type="checkbox" name="addAllMultiStocklineRows{{row_no}}"
+                                                [(ngModel)]="obj.addAllMultiStocklineRows"
+                                                (change)="onChangeAddstocklinePN()" [disabled]="disableStockline">
+                                            <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                 </label>
-                                            </span>
+                                            </span> -->
                                         </td>
+                                        <td *ngIf="obj.disableStockline" class="obj-td">
+                                        </td>
+                                        <td>{{obj.partNumber === null ? '-':obj.partNumber}}</td>
+                                        <td>{{obj.partDescription === null ? '-':obj.partDescription}}</td>
+                                        <td>{{obj.condition === null ? '-':obj.condition}}</td>
                                         <td>{{obj.stockLineNumber === null ? '-':obj.stockLineNumber}}</td>
                                         <td>{{obj.serialNumber === null ? '-':obj.srialNumber}}</td>
                                         <td>{{obj.controlNumber === null ? '-':obj.controlNumber}}</td>
                                         <td>{{obj.idNumber === null ? '-':obj.idNumber}}</td>
-                                        <td>{{obj.partNumber === null ? '-':obj.partNumber}}</td>
-                                        <td>{{obj.partDescription === null ? '-':obj.partDescription}}</td>
                                         <td>{{obj.stockType === null ? '-':obj.stockType}}</td>
                                         <td>{{obj.manufacturer === null ? '-':obj.manufacturer}}</td>
                                         <td>{{obj.unitOfMeasure === null ? '-':obj.unitOfMeasure}}</td>
@@ -529,8 +533,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addAvailableParts()"
-                    [disabled]="!enableMultiPartAddBtn">Add </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addAvailableStockline()"
+                    [disabled]="!enableMultistocklineAddBtn">Add </button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -626,8 +630,7 @@
                                                 (completeMethod)="filterpartItems($event)" [size]="30" [minLength]="1"
                                                 [dropdown]="true" #partNum="ngModel" errorMessage="Records not found"
                                                 (onSelect)="getPNDetailsById(partList)" [forceSelection]="true"
-                                                title="PN" [disabled]="partList.isApproved"
-                                                (ngModelChange)="enablePartSave()" required man>
+                                                title="PN" disabled (ngModelChange)="enablePartSave()" required man>
                                             </p-autoComplete>
 
                                         </td>
@@ -677,8 +680,7 @@
                                         <td>
                                             <select [(ngModel)]="partList.conditionId" name="conditionCode{{row_index}}"
                                                 (change)="getPriceDetailsByCondId(partList)"
-                                                (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved"
-                                                required>
+                                                (ngModelChange)="enablePartSave()" disabled required>
                                                 <option *ngFor="let item of allconditioninfo" [ngValue]="item.value">
                                                     {{item.label}}</option>
                                             </select>
@@ -689,10 +691,9 @@
                                                 [suggestions]="partList.allStocklineDetails"
                                                 (completeMethod)="filterStocklineNum($event, partList)" [size]="30"
                                                 [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                [disabled]="!partList.conditionId"
-                                                (onSelect)="getStockLineDetails(partList)" [forceSelection]="true"
-                                                (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved"
-                                                required></p-autoComplete>
+                                                disabled (onSelect)="getStockLineDetails(partList)"
+                                                [forceSelection]="true" (ngModelChange)="enablePartSave()" required>
+                                            </p-autoComplete>
                                         </td>
                                         <td>
                                             <input type="text" [ngClass]="inputValidCheck ? 'input-validate' : ''"
@@ -720,26 +721,24 @@
                                         </td>
                                         <td>
                                             <select [(ngModel)]="partList.discountPercent" class="select-right"
-                                                name="discountPercent{{row_index}}"
+                                                name="discountPercent{{row_index}}" disabled
                                                 (change)="onGetDiscPerUnit(partList); onGetDiscAmount(partList); onGetExtCost(partList);"
                                                 (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
                                                 <option *ngFor="let item of allPercentData" [ngValue]="item.percentId">
                                                     {{item.percentValue}}</option>
                                             </select>
-                                            <!-- <p-autoComplete field="percentValue" [ngClass]="inputValidCheck ? 'p-acomp-validate' : ''" class="pautocomp-cstm pautocomp-right" [(ngModel)]="partList.discountPercent" name="discountPercent{{row_index}}" [suggestions]="discountPercentList" (completeMethod)="filterDiscountPercent($event)" (onSelect)="onGetDiscPerUnit(partList); onGetDiscAmount(partList); onGetExtCost(partList);" [size]="30" [minLength]="1" [dropdown]="true" [forceSelection]="true" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
-                                        </p-autoComplete> -->
                                         </td>
                                         <td><input type="text" class="form-control text-right"
                                                 [(ngModel)]="partList.discountPerUnit"
                                                 name="discountPerUnit{{row_index}}" pKeyFilter="money"
                                                 (change)="onGetDiscPercent(partList); onGetDiscAmount(partList);"
-                                                (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
+                                                (ngModelChange)="enablePartSave()" disabled>
                                         </td>
                                         <!--onGetvendorListPrice(partList);-->
                                         <td><input type="text" class="form-control text-right"
                                                 [(ngModel)]="partList.discountAmount" name="discountAmount{{row_index}}"
                                                 pKeyFilter="money" disabled></td>
-                                        <td>
+                                        <td class="text-right">
                                             <input type="text" title="Unit Cost" class="form-control text-right"
                                                 [(ngModel)]="partList.unitCost" name="unitCost{{row_index}}"
                                                 pKeyFilter="money" (ngModelChange)="enablePartSave()"

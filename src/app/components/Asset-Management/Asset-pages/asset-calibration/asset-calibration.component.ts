@@ -134,7 +134,7 @@ export class AssetCalibrationComponent implements OnInit {
             arrayVendlsit:any=[];
     private vendorList(value) {
             this.arrayVendlsit.push(0); 
-        this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join()).subscribe(res => {
+        this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allVendorInfo = res.map(x => {
                 return {
                     vendorId: x.vendorId,
@@ -158,7 +158,7 @@ export class AssetCalibrationComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allGlInfo = res.map(x => {
                         return {
                             glAccountId:x.value,
@@ -203,7 +203,7 @@ export class AssetCalibrationComponent implements OnInit {
             this.setEditArray.push(0);
         }
             const strText='';
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allCurrencyInfo = res;
         },err => {			
             const errorLog = err;

@@ -49,9 +49,9 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>SO Quote Num</label>
-                            <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
-                                name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
-                                id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
+                            <input type="text" [(ngModel)]="salesQuote.speedQuoteNumber"
+                                name="speedQuoteNumber" class="form-control" [disabled]="true"
+                                id="speedQuoteNumber" #speedQuoteNumber="ngModel" />
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -94,9 +94,9 @@
                                     <div class="col-md-6 padding-10" style="padding-bottom: 0px !important">
                                         <div class="form-group">
                                             <label>Speed Quote Num</label>
-                                            <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
-                                                name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
-                                                id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
+                                            <input type="text" [(ngModel)]="salesQuote.speedQuoteNumber"
+                                                name="speedQuoteNumber" class="form-control" [disabled]="true"
+                                                id="speedQuoteNumber" #speedQuoteNumber="ngModel" />
                                         </div>
                                         <div class="form-group padding-top-5" *ngIf="isEdit">
                                             <label>Version Num</label>
@@ -525,6 +525,11 @@
                                     [customer]="customerDetails" [totalFreights]="totalFreights"
                                     [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
                                 </app-sales-part-number>
+                                <!-- <app-speed-quote-part-number [salesQuote]="salesQuote" [salesQuoteView]="salesQuoteView"
+                                    [isViewMode]="false" (on-parts-save)="onPartsSaveEvent($event)"
+                                    [customer]="customerDetails" [totalFreights]="totalFreights"
+                                    [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
+                                </app-speed-quote-part-number> -->
                             </p-tabPanel>
                             <!-- <p-tabPanel header="Internal Approvers" *ngIf="enforceApproval">
                                 <app-sales-approve>

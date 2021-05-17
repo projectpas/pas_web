@@ -290,6 +290,12 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         else {
             this.freightForm.isDelete = true;
         }
+
+        if(this.freightForm.length ==0)
+        {
+            this.disableUpdate=true;
+        }
+        
     }
     memoIndex;
     onAddTextAreaInfo(material, index) {

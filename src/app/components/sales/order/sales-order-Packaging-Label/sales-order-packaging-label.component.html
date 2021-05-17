@@ -140,14 +140,14 @@
                                         <div class="sold-block-div">
                                             <label class="col-sm-12 first-block-label"
                                                 disabled>
-                                                {{this.salesOrder.custToState}}</label>
+                                                {{this.salesOrder.custToState}},{{this.salesOrder.custToCountry}}</label>
                                         </div>
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-6 first-block-label" disabled>Zip
                                             </label> -->
-                                            <label class="col-sm-12 first-block-label"
+                                            <!-- <label class="col-sm-12 first-block-label"
                                                 disabled>
-                                                {{this.salesOrder.custToCountry}}</label>
+                                                {{this.salesOrder.custToCountry}}</label> -->
                                         </div>
                                         <div class="sold-block-div">
                                             <!-- <label class="col-sm-6 first-block-label" disabled>Country
@@ -195,12 +195,12 @@
                                         <div class="ship-block-div">
                                             <label class="col-sm-12 first-block-label"
                                                 disabled>
-                                                {{this.salesOrder.shipToPostalCode}}</label>
+                                                {{this.salesOrder.shipToPostalCode}},{{this.salesOrder.shipToCountry}}</label>
                                         </div>
                                         <div class="ship-block-div">
-                                            <label class="col-sm-12 first-block-label"
+                                            <!-- <label class="col-sm-12 first-block-label"
                                                 disabled>
-                                                {{this.salesOrder.shipToCountry}}</label>
+                                                {{this.salesOrder.shipToCountry}}</label> -->
                                         </div>
                                         <div class="ship-block-div">
                                             <!-- <label class="col-sm-6 first-block-label" disabled>Email
@@ -217,7 +217,7 @@
                             <!-- <hr /> -->
                             <div class="clear"></div>
                             <div class="col-sm-12">
-                                <table rules=none class="parttable table-margins">
+                                <table rules=none class="parttable table-margins packing-slip-table">
                                     <thead>
                                         <tr>
                                             <th>PO/RO NUM</th>
@@ -243,20 +243,21 @@
                                             <td style="vertical-align: top;border-right:1px solid black;" >
                                                 {{this.salesOrder.shipDate | date : "MM/dd/yyyy"}}</td>
                                             <td style="vertical-align: top;border-right:1px solid black;" >{{this.salesOrder.awb}}</td>
-                                            <td >{{this.salesOrder.shippingOrderNo}}</td>
+                                            <td style="vertical-align: top;border-right:1px solid black;">{{this.salesOrder.shippingOrderNo}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="clear"></div>
                             <!-- <hr /> -->
+                            <div class="clear"></div>
                             <div class="col-sm-12">
                                 <table rules=none class="parttable table-margins">
                                     <thead>
                                         <tr>
                                             <th>Item Num</th>
-                                            <th style="border-right:none">PN</th>
-                                            <th style="border-left:none;text-align:center">Stk Line Num</th>
+                                            <th>PN</th>
+                                            <th style="text-align:center">Stk Line Num</th>
                                             <th>PN Description</th>
                                             <th>Serial Num</th>
                                             <th>UOM</th>
@@ -276,7 +277,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <img src="{{part.partBarcode}}" alt="barcode" width="100%" />
+                                                            <img src="{{part.partBarcode}}" style="width: 100px;" alt="barcode" width="98%" />
                                                         </td>
                                                     </tr>
                                                 </table>

@@ -32,7 +32,9 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() selectedParts: any = [];
   @Input() selectedSummaryRow: SummaryPart;
   @Input() type: string;
+  @Input() isEdit = false;
   @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onSave: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTypeChange: EventEmitter<ItemSearchType> = new EventEmitter<ItemSearchType>();
   @ViewChild("searchMultiPart", { static: false }) searchMultiPart: ElementRef;
   query: ItemMasterSearchQuery;
@@ -145,6 +147,10 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     this.historicalDisabled = true;
   }
 
+  save($event) {
+    this.onSave.emit(this.query);
+  }
+
   search($event, programaticSearch = false) {
     let searchQuery = JSON.parse(JSON.stringify(this.query));
     searchQuery.partSearchParamters.restrictDER = !searchQuery.partSearchParamters.restrictDER;
@@ -218,7 +224,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     }
     if (this.query.partSearchParamters.quantityToQuote < 0) {
       this.searchDisabled = true;
-      this.alertService.showStickyMessage('', 'Qty To Quote can not be negative', MessageSeverity.error);
+      this.alertService.showStickyMessage('', 'You have quoted more than requested', MessageSeverity.error);
     } else {
       this.alertService.resetStickyMessage();
     }

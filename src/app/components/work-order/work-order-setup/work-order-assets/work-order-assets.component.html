@@ -386,7 +386,7 @@
                         </a>
                       </span>
 
-                      <button type="button" class="btn btn-danger roleUpd" *ngIf="togglePlus ==true"  matTooltip="Show stock line details"  matTooltipPosition="above"  style="font-size: 10px !important;" >
+                      <button type="button" (click)="CloseGrid()" class="btn btn-danger roleUpd" *ngIf="togglePlus ==true"  matTooltip="Show stock line details"  matTooltipPosition="above"  style="font-size: 10px !important;" >
                       <i 
                       class="fa fa-minus mr-0" ></i>  
                     </button>
