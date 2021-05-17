@@ -366,14 +366,17 @@
             </form>
             <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static"
               data-keyboard="false">
-              <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+              <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
                     <h4 class="modal-title">Edit {{"Memo"}}</h4>
                   </div>
                   <div class="modal-body">
-                    <table class="table table-bordered table-fixed workflow-table-material">
+                    <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                    required>
+                  </p-editor>
+                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
                       <thead>
                         <th style="color: #fff;">{{"Memo"}}</th>
                       </thead>
@@ -386,7 +389,7 @@
                           </td>
                         </tr>
                       </tbody>
-                    </table>
+                    </table> -->
                     <div class="editor-buttons">
                       <button type="button" class="btn btn-primary editor-buttons-margin"
                         (click)="onSaveTextAreaInfo(textAreaInfo);">
@@ -498,7 +501,8 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="table-responsive history_hg">
+    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+      <div class="tableFixHead">  
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -576,6 +580,7 @@
         </tr>
         </tbody>
       </table>
+      </div>
     </div>
   </div>
   <div class="modal-footer">

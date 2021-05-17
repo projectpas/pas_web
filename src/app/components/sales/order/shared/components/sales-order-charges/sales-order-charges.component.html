@@ -130,7 +130,7 @@
                             <select class="form-control custom-select wf-pub-id" id="dllChargesType"
                                 [(ngModel)]="charge.chargesTypeId"  name="type_{{rowIndex}}"
                                 [disabled]="true">
-                                <option value="">Select</option>
+                                <option value="">--Select--</option>
                                 <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">
                                     {{
                                     ctype.chargeType
@@ -417,7 +417,8 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive history_hg">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">  
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -491,6 +492,7 @@
                 </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
