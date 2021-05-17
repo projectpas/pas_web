@@ -215,11 +215,11 @@
     <div class="table-responsive default-bg clear">
       <div class="col-sm-4">
         <h5 class="po-head">Ship To</h5>
-        <p><span class="label"><b>User Type: </b></span><span
+        <p><span class="label"><b>User Type: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.shipToUserType ? salesQuote.shipToUserType : '-'}}</span></p>
-        <p><span class="label"><b>{{salesQuote.shipToUserType}} Name: </b></span><span
+        <p><span class="label"><b>{{salesQuote.shipToUserType}} Name: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.shipToUser ? salesQuote.shipToUser : '-'}}</span></p>
-        <p><span class="label"><b>Site Name: </b></span><span
+        <p><span class="label"><b>Site Name: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.shipToSiteName ? salesQuote.shipToSiteName : '-'}}</span></p>
         <p><span class="label"><b>Address: </b></span><span
             class="value">{{salesQuote.shipToAddress1 ? salesQuote.shipToAddress1 : '-'}}</span></p>
@@ -235,14 +235,14 @@
             class="value">{{salesQuote.shipToPostalCode ? salesQuote.shipToPostalCode : '-'}}</span></p>
         <p><span class="label"><b>Country: </b></span><span
             class="value">{{salesQuote.shipToCountry ? salesQuote.shipToCountry : '-'}}</span></p>
-        <p><span class="label"><b>Contact Name: </b></span><span
+        <p><span class="label"><b>Contact Name: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.shipToContactName ? salesQuote.shipToContactName : '-'}}</span></p>
         <p><span class="label"><b>Memo: </b></span><span class="value">
             <p class="p-0 m-0 p_textEditor" [innerHTML]="salesQuote.shipViaMemo"></p>
 
 
           </span></p>
-        <p><span class="label"><b>Ship Via: </b></span><span
+        <p><span class="label"><b>Ship Via: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.shipViaName ? salesQuote.shipViaName : '-'}}</span></p>
         <p><span class="label"><b>Shipping Acct Info: </b></span><span
             class="value">{{salesQuote.shipViaShippingAccountInfo ? salesQuote.shipViaShippingAccountInfo : '-'}}</span>
@@ -250,11 +250,11 @@
       </div>
       <div class="col-sm-4">
         <h5 class="po-head">Bill To</h5>
-        <p><span class="label"><b>User Type: </b></span><span
+        <p><span class="label"><b>User Type: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.billToUserType ? salesQuote.billToUserType : '-'}}</span></p>
-        <p><span class="label"><b>{{salesQuote.billToUserType}} Name: </b></span><span
+        <p><span class="label"><b>{{salesQuote.billToUserType}} Name: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.billToUser ? salesQuote.billToUser : '-'}}</span></p>
-        <p><span class="label"><b>Site Name: </b></span><span
+        <p><span class="label"><b>Site Name: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.billToSiteName ? salesQuote.billToSiteName : '-'}}</span></p>
         <p><span class="label"><b>Address: </b></span><span
             class="value">{{salesQuote.billToAddress1 ? salesQuote.billToAddress1 : '-'}}</span></p>
@@ -270,7 +270,7 @@
             class="value">{{salesQuote.billToPostalCode ? salesQuote.billToPostalCode : '-'}}</span></p>
         <p><span class="label"><b>Country: </b></span><span
             class="value">{{salesQuote.billToCountry ? salesQuote.billToCountry : '-'}}</span></p>
-        <p><span class="label"><b>Contact Name: </b></span><span
+        <p><span class="label"><b>Contact Name: </b><span class="clr-red">*</span></span><span
             class="value">{{salesQuote.billToContactName ? salesQuote.billToContactName : '-'}}</span></p>
         <p><span class="label"><b>Memo: </b></span><span class="value">
             <p class="p-0 m-0 p_textEditor" [innerHTML]="salesQuote.billToMemo"></p>
