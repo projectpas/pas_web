@@ -274,6 +274,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
     ngOnDestroy() {
         this.countDown = null;
+        // this.counter = 600;
+        // this.tick = 1000;
+        // this.countDown.unsubscribe();
     }
 
     closeAddNew() {

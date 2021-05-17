@@ -460,9 +460,14 @@ setTimeout(() => {
     modifyWorkorderdata() { 
         if (!this.isEdit) { // create new WorkOrder
             this.isEditLabor = true;
-            if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
-                this.getCustomerWarningsList();
-            }
+//             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
+//                 // this.getCustomerWarningsList();
+//                 // this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
+// console.log("customer dtt",this.workOrderGeneralInformation)
+//                 if (this.workOrderGeneralInformation.customerDetails && this.workOrderGeneralInformation.customerDetails.customerId) {
+//                     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId);
+//                 }
+//             }
             this.addMPN();
             this.getAllGridModals();
             this.getEmployeeData();
@@ -483,14 +488,15 @@ setTimeout(() => {
                 }
             )
         } else { // edit WorkOrder
-            if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
+            if (this.recCustomerId != 0 || this.recCustomerId != undefined || this.recCustomerId != null) {
                 // this.getCustomerWarningsList();
+                this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
             }
             //for tat calculation get data
             this.isEditWorkordershowMsg = true;
-            if (this.isView == false && (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null)) {
-                this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
-            }
+            // if (this.isView == false && (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null)) {
+            //     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
+            // }
             this.getWorkOrderDatesFoRTat();
             // check this in differnt scenarios
             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
@@ -3320,10 +3326,15 @@ this.getNewMaterialListByWorkOrderId();
                 }
 
             });
+            console.log("this.workOrderGeneralInformation.customerDetails",this.workOrderGeneralInformation)
             if (this.enumcall = true) {
                 if (this.workOrderGeneralInformation.customerDetails && this.workOrderGeneralInformation.customerDetails.customerId) {
                     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId);
                 }
+                if (!this.isEdit && this.workOrderGeneralInformation.customerId && this.workOrderGeneralInformation.customerId.customerId) {
+                    this.customerWarnings(this.workOrderGeneralInformation.customerId.customerId);
+                }
+
             }
         },
             err => { 
@@ -3332,6 +3343,7 @@ this.getNewMaterialListByWorkOrderId();
     }
 
     customerWarnings(customerId) {
+        console.log("this.customerWarningListId",this.customerWarningListId)
         if (this.customerWarningListId == undefined) {
             this.getCustomerWarningsList();
             this.enumcall = true;
@@ -3419,7 +3431,9 @@ this.getNewMaterialListByWorkOrderId();
     }
 
     showAlertMessage() {
+        if(!this.isView){
         $('#warnRestrictMesg').modal("show");
+        }
     }
     showAlertWarningMessage() {
         $('#warningMesg').modal("show");
