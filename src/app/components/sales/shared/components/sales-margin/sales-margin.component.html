@@ -118,10 +118,13 @@
             </select>
             <span style="padding-left: 5px;">%</span>
           </td>
-          <td><span><input type="text" class="form-control text-right"
+          <td><span>
+              <!-- <input type="text" class="form-control text-right"
                 [ngModel]="part.markupPerUnit | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}"
                 (ngModelChange)="part.markupPerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()"
-                pKeyFilter="money" /></span>
+                pKeyFilter="money" /> -->
+              {{part.markupPerUnit | twoDecimalGlobalNumberFormatPipe}}
+            </span>
           </td>
           <td><span>{{part.markupExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
         </tr>
@@ -138,11 +141,12 @@
 
           </td>
           <td>
-            <input type="text" class="form-control text-right"
+            <!-- <input type="text" class="form-control text-right"
               [ngModel]="part.salesDiscountPerUnit  | twoDecimalGlobalNumberFormatPipe"
               [ngModelOptions]="{updateOn:'blur'}"
               (ngModelChange)="part.salesDiscountPerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()"
-              pKeyFilter="money" />
+              pKeyFilter="money" /> -->
+            <span>{{part.salesDiscountPerUnit | twoDecimalGlobalNumberFormatPipe}}</span>
           </td>
           <td><span>{{part.salesDiscountExtended | twoDecimalGlobalNumberFormatPipe}}</span></td>
         </tr>
@@ -199,7 +203,7 @@
   <button type="button" (click)="onClose($event)" class="btn btn-danger">
     Close
   </button>
-  <button type="submit" class="btn btn-primary" [disabled]="invalidQuantityenteredForQuantityFromThis == true"
+  <button type="submit" *ngIf="!isEdit" class="btn btn-primary" [disabled]="invalidQuantityenteredForQuantityFromThis == true"
     (click)="onSearchAnotherPN($event)">
     Search Another PN
   </button>

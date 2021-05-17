@@ -101,7 +101,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       { field: "qtyToShip", header: "Qty Picked", width: "130px" },
       { field: "qtyToPick", header: "Qty To Pick", width: "130px" },
       { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
-      { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
+      { field: "readyToPick", header: "Ready To Pick", width: "130px" },
       { field: "status", header: "Status", width: "130px" },
       { field: "salesOrderNumber", header: "SO Num", width: "130px" },
       { field: "salesOrderQuoteNumber", header: "SOQ Num", width: "130px" },
@@ -262,7 +262,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     const conditionId = rowData.conditionId;
     const salesOrderId = rowData.salesOrderId;
     const salesOrderPartId = rowData.salesOrderPartId;
-    this.qtyToPick = rowData.qtyToPick;
+    this.qtyToPick = rowData.readyToPick;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
     this.salesOrderService
       .getStockLineforPickTicket(itemMasterId, conditionId, salesOrderId)
@@ -275,7 +275,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
             this.parts[i].oemDer = this.parts[i].stockType;
           this.parts[i]['isSelected'] = false;
           this.parts[i]['salesOrderId'] = salesOrderId;
-          this.parts[i]['salesOrderPartId'] = salesOrderPartId;
+          //this.parts[i]['salesOrderPartId'] = salesOrderPartId;
           this.parts[i].qtyToShip = this.qtyToPick;
           if (this.parts[i].qtyToReserve == 0) {
             this.parts[i].qtyToReserve = null
@@ -336,6 +336,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     }
     else {
       this.disableSubmitButton = true;
+      this.isSpinnerVisible = true;
       this.salesOrderService
         .savepickticketiteminterface(parts)
         .subscribe(data => {
@@ -345,8 +346,11 @@ export class SalesOrderPickTicketsComponent implements OnInit {
             `Item Picked Successfully..`,
             MessageSeverity.success
           );
+          this.isSpinnerVisible = false;
           this.dismissModel();
           this.onSearch();
+        }, error => {
+          this.isSpinnerVisible = false;
         });
     }
   }
