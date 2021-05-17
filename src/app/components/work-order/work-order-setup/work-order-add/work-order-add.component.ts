@@ -792,6 +792,8 @@ setTimeout(() => {
 
 
     getMaterialListHandle() {
+        this.gridActiveTab == '';
+        this.gridActiveTab == 'materialList';
         if (this.isSubWorkOrder == true) {
             this.getMaterialListByWorkOrderIdForSubWO();
         } else {

@@ -1141,6 +1141,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             })
         })
         this.saveRIParts.emit(this.checkedParts);
+        this.refreshData.emit();
         this.isAllow = false;
         this.savebutonDisabled = false;
     }
@@ -1179,6 +1180,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.savebutonDisabled = false;
         this.isAllow = false;
         this.releaseStock();
+        this.refreshData.emit();
     }
 
     startTimerplus() {
