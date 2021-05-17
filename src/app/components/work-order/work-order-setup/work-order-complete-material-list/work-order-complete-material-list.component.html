@@ -1,6 +1,6 @@
 ﻿<div *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
-    <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary mar-left-5"
-        (click)="createNew();" style="min-width: 97px !important;">Add PN</button>
+    <!-- <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary mar-left-5"
+        (click)="createNew();" style="min-width: 97px !important;">Add PN</button> -->
     <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
         Add PN New
     </button>
@@ -47,7 +47,7 @@
     </div>
 </div> 
 <ng-template #addPart let-c="close" let-d="dismiss">
-    <app-work-order-materials-add [isWorkOrder]="isWorkOrder" [isEdit]="isEdit" [editData]="editData" [customerId]="customerId"
+    <app-work-order-materials-add [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder" [isEdit]="isEdit" [editData]="editData" [customerId]="customerId"
                 [clearData]="clearData" [display]="show" [selectedParts]="selectedParts"
                 (close)="onClose($event)" [type]="'WO'" (setmaterialListForSave)="setmaterialListForSave($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)">
                 </app-work-order-materials-add >
@@ -910,7 +910,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             <td class="custom_Tdth" *ngFor="let childcol of childColumnsData" [ngStyle]="{'min-width': childcol.width}" style="text-align: center !important;">
                 {{childcol.header}} 
             </td>
-            <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></td>
+            <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></td>
             </tr>
             
             <tr class="child-data splitship-child child-data-back " pReorderableRowHandle  *ngFor="let childRowData of rowData.childParts; let stockIndex1 = index">
@@ -928,11 +928,11 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                     class="form-control w60 defered-check3" [(ngModel)]="childRowData.isDeferred">
                     <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]" class="p_textEditor"></span>
                 </td>
-                <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
+                <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
                 
-                    <span><button class="btn nobg btn-edit-cstm1" (click)="editStockLine(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+                    <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
               
-                    <span><button type="button" class="btn nobg btn-delete-cstm"  (click)="deleteStockLine(Stockcontent,rowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                    <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,rowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
                 </td>
             </tr>
             <tr class="child-data splitship-child child-data-back " *ngIf="rowData.childParts && rowData.childParts.length==0">
@@ -968,7 +968,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
           <h4 class="modal-title">Edit PN Details</h4>
         </div>
         <div class="modal-body" *ngIf="editData !=undefined">
-            <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isStockLine]="isStockLine"  (close)="onCloseMaterial($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)" [isEdit]="isEdit" [editData]="editData"  [part]="editData" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+            <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isSubWorkOrder]="isSubWorkOrder" [isStockLine]="isStockLine"  (close)="onCloseMaterial($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)" [isEdit]="isEdit" [editData]="editData"  [part]="editData" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
            ></app-wo-margin> 
         </div>
       </div>

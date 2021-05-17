@@ -54,6 +54,7 @@ export class WoPartDetailsComponent implements OnChanges {
   @Input() workFlowWorkOrderId=0;
   @Input('part-number') partNumber: string;
   @Input() stockLineInformation: IPartJson[];
+  @Input() isSubWorkOrder:boolean=false;
   auditHistory: any = [];
   adjAuditHistoryList: any = [];
   adjAuditHistoryData: any = [];
@@ -391,7 +392,7 @@ export class WoPartDetailsComponent implements OnChanges {
         if (stockLineItem.qtyAvailable==0) {
           return true;
         }
-       else if (sameParts && sameParts.length > 0) {
+       else if (sameParts && sameParts.length > 0) { 
           return true;
         }
       }
@@ -416,6 +417,9 @@ export class WoPartDetailsComponent implements OnChanges {
     } else {
       this.selectedParts = [];
       return false;
+    }
+    if (stockLineItem.qtyAvailable==0) {
+      return true;
     }
   }
 

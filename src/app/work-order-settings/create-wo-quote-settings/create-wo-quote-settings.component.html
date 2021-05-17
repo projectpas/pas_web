@@ -23,7 +23,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="form-label"> WO Type</label>
-                            <select [(ngModel)]="receivingForm.workOrderTypeId" name="workOrderTypesId" [disabled]="isEditMode" required>
+                            <select [(ngModel)]="receivingForm.workOrderTypeId" (ngModelChange)="enableHeaderSave()"  name="workOrderTypesId" [disabled]="isEditMode" required>
                                 <option value="0">-- Select --</option>
                                 <option *ngFor="let workOrder of workOrderTypes" [ngValue]="workOrder.id">
                                     {{workOrder.description}}</option>
@@ -33,19 +33,19 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Prefix</label>
-                            <input type="text" name="prefix" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.prefix" required>
+                            <input type="text" name="prefix" class="form-control ui-autocomplete-input" (ngModelChange)="enableHeaderSave()"  [(ngModel)]="receivingForm.prefix" required>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Sufix</label>
-                            <input type="text" name="sufix" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.sufix">
+                            <input type="text" name="sufix" class="form-control ui-autocomplete-input" (ngModelChange)="enableHeaderSave()"  [(ngModel)]="receivingForm.sufix">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label> Start Code</label>
-                            <input type="text" name="startCode" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.startCode" required>
+                            <input type="text" name="startCode" class="form-control ui-autocomplete-input" (ngModelChange)="enableHeaderSave()"   [(ngModel)]="receivingForm.startCode" required>
                         </div>
                     </div>
                 </div>
@@ -53,18 +53,27 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label> Valid Days</label>
-                            <input type="number" name="validDays" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.validDays" required>
+                            <input type="number" name="validDays" class="form-control ui-autocomplete-input" (ngModelChange)="enableHeaderSave()"   [(ngModel)]="receivingForm.validDays" required>
                         </div>
                     </div>
                     <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
                         <div class="form-group">
                             <p-checkbox name="isApprovalRule" binary="true"
-                                [(ngModel)]="receivingForm.isApprovalRule">
+                                [(ngModel)]="receivingForm.isApprovalRule" (ngModelChange)="enableHeaderSave()">
                             </p-checkbox>
                             <label style="padding-left:10px;">Apply Approval Rule
                             </label>
                         </div>
                     </div>
+                    <div class="col-md-3 work_order_teardown" style="padding-top:12px;" *ngIf="receivingForm.isApprovalRule">
+                        <div class="form-group">
+                      <label>Effective Date </label>
+                      <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar"
+                          [showIcon]="true" appendTo="body" name="effectivedate" [yearNavigator]="true"
+                          [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="receivingForm.effectivedate"
+                          (ngModelChange)="enableHeaderSave()" #startDate="ngModel"></p-calendar>
+                  </div>
+                  </div>
                 </div>
 
             </div>
@@ -72,7 +81,7 @@
 
             <div class="form-row pull-right m-t-10">
                 <button type="submit" class="btn btn-primary" (click)="saveOrUpdateWOQuoteSetting()"
-                    [disabled]="!woQuoteSettingsForm.valid">{{isEditMode ? 'Update' : 'Save'}}</button>
+                    [disabled]="!woQuoteSettingsForm.valid || disablesavebutton">{{isEditMode ? 'Update' : 'Save'}}</button>
             </div>
         </form>
     </div>

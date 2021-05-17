@@ -65,6 +65,7 @@ export class SalesOrderPartNumberComponent {
   @Output('on-parts-save') onPartsSavedEvent: EventEmitter<ISalesOrderPart[]> = new EventEmitter<ISalesOrderPart[]>();
   query: ItemMasterSearchQuery;
   isEdit: boolean = false;
+  isEditMode: boolean = false;
   selectedPartActionType: any;
   @Input() salesOrderView: ISalesOrderView;
   @ViewChild("updatePNDetailsModal", { static: false })
@@ -197,7 +198,8 @@ export class SalesOrderPartNumberComponent {
       { field: 'partDescription', header: 'PN Description', width: "200px" },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
-      { field: 'quantityRequested', header: 'Qty Ord', width: "60px" },
+      { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
+      { field: 'quantityAlreadyQuoted', header: 'Qty Ord', width: "60px" },
       { field: 'qtyReserved', header: 'Qty Resvd', width: "70px" },
       { field: 'quantityAlreadyQuoted', header: 'Qty Prev Shipped', width: "98px" },
       { field: 'qtyBackOrder', header: 'Qty Back Ord', width: "98px" },
@@ -235,6 +237,13 @@ export class SalesOrderPartNumberComponent {
     if (this.partActionModal) {
       this.partActionModal.close();
     }
+  }
+
+  onSave(selectedParts) {
+    this.salesQuoteService.selectedParts = selectedParts;
+    this.refresh();
+    this.canSaveParts = false;
+    this.addPartModal.close();
   }
 
   onCloseReserve(event) {
@@ -295,6 +304,9 @@ export class SalesOrderPartNumberComponent {
       this.selectedSummaryRowIndex = null;
     }
     this.openPartNumber(false);
+    if (summaryRow == "") {
+      this.isEditMode = false;
+    }
   }
 
   viewPartNumber(summaryRow: any = '', rowIndex = null) {
@@ -307,12 +319,14 @@ export class SalesOrderPartNumberComponent {
       this.selectedSummaryRowIndex = null;
     }
     this.openPartNumber(true);
+    this.isEditMode = false;
   }
 
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
     this.clearData = viewMode;
     let contentPart = this.addPart;
+    this.isEditMode = true;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
 
@@ -504,14 +518,18 @@ export class SalesOrderPartNumberComponent {
 
   deletePart(): void {
     if (this.part.salesOrderPartId) {
+      this.isSpinnerVisible = true;
       this.salesOrderService.deletePart(this.part.salesOrderPartId).subscribe(response => {
         this.removePartNamber(this.part);
+        this.isSpinnerVisible = false;
         this.deletePartModal.close();
         this.alertService.showMessage(
           "Success",
           `Part removed successfully.`,
           MessageSeverity.success
         );
+      }, error => {
+        this.isSpinnerVisible = false;
       });
     } else {
       this.removePartNamber(this.part);
@@ -605,7 +623,15 @@ export class SalesOrderPartNumberComponent {
 
   isDeleteDisabled(quote: ISalesQuote, part: any) {
     if (part.createdBy && part.createdBy == this.userName) {
-      return (quote.isApproved || part.isApproved);
+      if (quote.isApproved || part.isApproved) {
+        return true;
+      }
+      else if (part.qtyReserved > 0) {
+        return true;
+      }
+      else {
+        return false;
+      }
     } else {
       return true;
     }
@@ -696,7 +722,6 @@ export class SalesOrderPartNumberComponent {
         this.onPartsSavedEvent.emit(this.selectedParts);
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
       });
     }
     this.closeConfirmationModal();
@@ -707,7 +732,7 @@ export class SalesOrderPartNumberComponent {
       let selectedPart = this.selectedParts[i];
       for (let j = 0; j < data.parts.length; j++) {
         let dt = data.parts[j];
-        if (selectedPart.conditionId == dt.conditionId && selectedPart.itemMasterId == dt.itemMasterId) { 
+        if (selectedPart.conditionId == dt.conditionId && selectedPart.itemMasterId == dt.itemMasterId) {
           this.selectedParts[i].salesOrderPartId = dt.salesOrderPartId;
         }
       }
@@ -875,10 +900,12 @@ export class SalesOrderPartNumberComponent {
   deleteMultiplePart(): void {
     if (this.deletedata.length > 0) {
       let data = { "salesOrderPartIds": this.deletedata }
+      this.isSpinnerVisible = true;
       this.salesOrderService.deleteMultiplePart(data).subscribe(response => {
         for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
           this.removePartNamber(this.selectedSummaryRow.childParts[i]);
         }
+        this.isSpinnerVisible = false;
         this.deleteAllPartModal.close();
         this.alertService.showMessage(
           "Success",
