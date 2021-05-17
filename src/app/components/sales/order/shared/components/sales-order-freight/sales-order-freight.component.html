@@ -198,7 +198,7 @@
                                 </span>
                                 <span>
                                     <button class="btn  nobg grey_btn_icon" style="padding:0px"
-                                        [disabled]="freight.SalesOrderFreightId==0"
+                                        [disabled]="freight.salesOrderFreightId==0"
                                         (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                                         matTooltipPosition="above">
                                         <i class="fa fa-history">
@@ -212,7 +212,7 @@
                                             aria-hidden="true"></i></a> </span>
                                 <span>
                                     <button class="btn  nobg grey_btn_icon padding-0"
-                                        [disabled]="freight.SalesOrderFreightId==0"
+                                        [disabled]="freight.salesOrderFreightId==0"
                                         (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                                         matTooltipPosition="above">
                                         <i class="fa fa-history">
@@ -397,7 +397,7 @@
                                             <td>
                                                 <button class="btn btn-danger nobg" [disabled]="isEdit==true"
                                                     data-toggle="modal" 
-                                                    data-target="#deleteConfirmation" matTooltip="Remove" matTooltipPosition="above">
+                                                    data-target="#deleteConfirmation" matTooltip="Delete" matTooltipPosition="above">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </td>
@@ -471,10 +471,16 @@
                 </button>
             </div>
             <div class="modal-body">
-              <!-- <strong >
-                  Employee Name:
-                  <span class="new-label" *ngIf="currentRecord && currentRecord.employeeId">{{currentRecord.employeeId.label}}</span>
-              </strong> -->
+                <strong style="display: inline-flex;">
+                    Ship Via:
+                    <span class="new-label">
+                        <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
+                            [(ngModel)]="restorerecord.shipViaId" disabled>
+                            <option value="">Select</option>
+                            <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+                        </select>
+                    </span>
+                </strong>
             
           </div> 
             <div class="modal-footer">
