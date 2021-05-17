@@ -647,7 +647,7 @@
                 <!-- <div class="form-row"
                     *ngIf="(shippingHeader.originCountryId && shippingHeader.shipToCountryId) && shippingHeader.originCountryId !=shippingHeader.shipToCountryId"> -->
                 <div class="form-row">
-                    <h4 class="heading" style="text-align: left;">Custom Info &nbsp;<a class="fa fa-plus-circle fa-lg"
+                    <h4 class="heading" style="text-align: left;">Custom Info &nbsp;<a [ngClass]="addCustomerInfo == true ? 'fa fa-minus-circle fa-lg' : 'fa fa-plus-circle fa-lg'"
                             matTooltip="Add Custom Info" matTooltipPosition="above" (click)="AddCustomInfo();"></a></h4>
                     <div class="form-row" *ngIf="addCustomerInfo">
                         <div class="col-md-4">
