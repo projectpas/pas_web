@@ -1957,6 +1957,44 @@ this.getNewMaterialListByWorkOrderId();
                 })
         }
     }
+
+    getMaterialListByWorkOrderIdForSubWO() {
+        this.workOrderMaterialList = [];
+        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            // if (res.length > 0) {
+            //     res.forEach(element => {
+            //         this.getValues(element)
+            //         element.isShowPlus = true;
+            //     });
+            //     this.workOrderMaterialList = res;
+            //     this.materialStatus = res[0].partStatusId;
+            // }
+            if (res && res.length > 0) {
+                res.forEach(element => {
+                    this.getValues(element)
+                    element.isShowPlus = true;
+                    if (element.defered == 'No') {
+                        element.defered = false;
+                    } else {
+                        element.defered = true;
+                    }
+                });
+                this.workOrderMaterial=[];
+                this.workOrderMaterial = res;
+                this.workOrderMaterial.forEach(element => {
+                   element.currency=element.currency ;
+                   element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                   element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                });
+                this.materialStatus = res[0].partStatusId;
+                this.salesQuoteService.selectedParts = this.workOrderMaterial;
+                this.filterParts();
+            }
+        },
+            err => {
+                this.handleError(err);
+            })
+    }
     summaryParts:any=[];
     totalRecords: number;
     pageLinks: any;
@@ -3453,22 +3491,7 @@ this.getNewMaterialListByWorkOrderId();
     errorHandling(err) {
         this.handleError(err);
     }
-    getMaterialListByWorkOrderIdForSubWO() {
-        this.workOrderMaterialList = [];
-        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            if (res.length > 0) {
-                res.forEach(element => {
-                    this.getValues(element)
-                    element.isShowPlus = true;
-                });
-                this.workOrderMaterialList = res;
-                this.materialStatus = res[0].partStatusId;
-            }
-        },
-            err => {
-                this.handleError(err);
-            })
-    }
+
     handleError(err) {
         this.isSpinnerVisible = false;
     }
