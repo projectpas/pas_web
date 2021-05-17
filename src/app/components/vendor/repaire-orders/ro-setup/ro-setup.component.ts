@@ -3405,13 +3405,6 @@ export class RoSetupComponent implements OnInit {
 	onChangeAddstocklinePN() {
 		if (this.stocklineData) {
 			for (let i = 0; i < this.stocklineData.length; i++) {
-				if (this.stocklineData[i].addAllMultiStocklineRows) {
-					this.enableMultistocklineAddBtn = true;
-					break;
-				} else {
-					this.enableMultistocklineAddBtn = false;
-				}
-
 				if (this.partListData && this.partListData.length > 0) {
 					for (let j = 0; j < this.partListData.length; j++) {
 						if (this.partListData[j].stocklineId.stocklineId == this.stocklineData[i].stockLineId) {
@@ -3421,7 +3414,14 @@ export class RoSetupComponent implements OnInit {
 					}
 				}
 			}
-
+			for (let i = 0; i < this.stocklineData.length; i++) {
+				if (this.stocklineData[i].addAllMultiStocklineRows) {
+					this.enableMultistocklineAddBtn = true;
+					break;
+				} else {
+					this.enableMultistocklineAddBtn = false;
+				}
+			}
 		}
 
 
