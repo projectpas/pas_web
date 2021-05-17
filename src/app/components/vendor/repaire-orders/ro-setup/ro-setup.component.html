@@ -540,12 +540,12 @@
         </div>
     </div>
 </div>
-
 <ng-container *ngIf="isEditModeHeader">
     <p-tabView class="pas-tabview" (onChange)="onChangeTabView($event)">
         <p-tabPanel header="Parts List">
             <form #createROPartsForm="ngForm">
-                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN
+                <button (click)="addPartNumber()" class="btn btn-primary" style="display: none;"
+                    [disabled]="disableAddPart">Add PN
                 </button>
                 <button (click)="addStockLine()" data-toggle="modal" data-target="#addStockLine" class="btn btn-primary"
                     [disabled]="disableAddPart">Add Stock
@@ -580,9 +580,9 @@
                                     <th class="th-width-90">Order Qty <span class="clr-red">*</span></th>
                                     <th style="min-width:98px !important">Vend List Price <span class="clr-red">*</span>
                                     </th>
-                                    <th class="th-width-90">Disc Percent</th>
+                                    <!-- <th class="th-width-90">Disc Percent</th>
                                     <th class="th-width-90">Disc./unit</th>
-                                    <th class="th-width-90">Disc. Amount</th>
+                                    <th class="th-width-90">Disc. Amount</th> -->
                                     <!--Disc. Cost/unit-->
                                     <th class="th-width-90">Unit Cost</th>
                                     <th class="th-width-90">Ext Cost</th>
@@ -685,16 +685,30 @@
                                                     {{item.label}}</option>
                                             </select>
                                         </td>
-                                        <td>
-                                            <p-autoComplete appendTo="body" field="stockLineNumber" class="autocomplete"
-                                                [(ngModel)]="partList.stocklineId" name="stocklineNum{{row_index}}"
-                                                [suggestions]="partList.allStocklineDetails"
-                                                (completeMethod)="filterStocklineNum($event, partList)" [size]="30"
-                                                [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                disabled (onSelect)="getStockLineDetails(partList)"
-                                                [forceSelection]="true" (ngModelChange)="enablePartSave()" required>
-                                            </p-autoComplete>
+
+                                        <td class="lign_flex">
+                                            <span class="inline-block">
+                                                <p-autoComplete appendTo="body" field="stockLineNumber"
+                                                    class="autocomplete" [(ngModel)]="partList.stocklineId"
+                                                    name="stocklineNum{{row_index}}"
+                                                    [suggestions]="partList.allStocklineDetails"
+                                                    (completeMethod)="filterStocklineNum($event, partList)" [size]="30"
+                                                    [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                                    disabled (onSelect)="getStockLineDetails(partList)"
+                                                    [forceSelection]="true" (ngModelChange)="enablePartSave()" required>
+                                                </p-autoComplete>
+                                            </span>
+                                            <span data-toggle="modal" data-target="#addStockLine">
+                                                <a class="btn nobg btn-view-cstm"
+                                                    (click)="addStockLineView(partList.itemMasterId,partList.conditionId)"
+                                                    data-toggle="modal" data-target="#addStockLine"
+                                                    matTooltip="View All StockLine" matTooltipPosition="above">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </span>
+
                                         </td>
+
                                         <td>
                                             <input type="text" [ngClass]="inputValidCheck ? 'input-validate' : ''"
                                                 title="Order Qty" class="form-control text-right"
@@ -719,7 +733,7 @@
                                                 (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved"
                                                 required>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <select [(ngModel)]="partList.discountPercent" class="select-right"
                                                 name="discountPercent{{row_index}}" disabled
                                                 (change)="onGetDiscPerUnit(partList); onGetDiscAmount(partList); onGetExtCost(partList);"
@@ -734,10 +748,9 @@
                                                 (change)="onGetDiscPercent(partList); onGetDiscAmount(partList);"
                                                 (ngModelChange)="enablePartSave()" disabled>
                                         </td>
-                                        <!--onGetvendorListPrice(partList);-->
                                         <td><input type="text" class="form-control text-right"
                                                 [(ngModel)]="partList.discountAmount" name="discountAmount{{row_index}}"
-                                                pKeyFilter="money" disabled></td>
+                                                pKeyFilter="money" disabled></td> -->
                                         <td class="text-right">
                                             <input type="text" title="Unit Cost" class="form-control text-right"
                                                 [(ngModel)]="partList.unitCost" name="unitCost{{row_index}}"
