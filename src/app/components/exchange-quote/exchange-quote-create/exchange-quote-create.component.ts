@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef } from '@angular/core';
 import {
   NgForm,
   FormGroup
@@ -110,6 +110,22 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   exchangeSalesOrderConversionCriteriaObj: ExchangeSalesOrderConversionCritera;
   selectAllForConversion = true;
   @ViewChild("exchangeQuoteConvertPopup", { static: false }) public exchangeQuoteConvertPopup: ElementRef;
+  customerWarning: any = {};
+  leadSources = [];
+  csrFirstCollection: any[];
+  csrOriginalList: any[] = [];
+  firstCollection: any[];
+  arrayEmplsit: any[] = [];
+  maincompanylist: any[] = [];
+  allEmployeeList: any = [];
+  currentUserEmployeeName: string;
+  departmentList: any;
+  divisionList: any;
+  bulist: any[] = [];
+  divisionlist: any[] = [];
+  managementValidCheck: boolean;
+  tempMemo: any;
+  tempMemoLabel: any;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -118,7 +134,8 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     public currencyService: CurrencyService,
     private authService: AuthService,
     public router: Router,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private changeDetector: ChangeDetectorRef) {
       this.exchangeQuote = new ExchangeQuote();
       this.verifyExchangeSalesOrderQuoteObj = new VerifyExchangeQuoteModel();
       this.exchangeSalesOrderConversionCriteriaObj = new ExchangeSalesOrderConversionCritera();
@@ -145,6 +162,9 @@ export class ExchangeQuoteCreateComponent implements OnInit {
 
     if (this.id) {
       this.getMarginSummary();
+    }
+    if (!this.isEdit) {
+      this.load(this.managementStructureId);
     }
   }
 
@@ -174,6 +194,14 @@ export class ExchangeQuoteCreateComponent implements OnInit {
 
   get userId() {
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
+  }
+  load(managementStructureId: number) {
+    this.managementStructureId = managementStructureId;
+    if (this.id) {
+      this.getManagementStructureDetails(this.managementStructureId, this.employeeId, this.exchangeQuote.managementStructureId);
+    } else {
+      this.getManagementStructureDetails(this.managementStructureId, this.employeeId);
+    }
   }
 
   viewSelectedRow() {
@@ -231,7 +259,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   
   getExchangeInstance(initialCall = false) {
      if (this.id) {
-      this.getExchQuoteInstance(this.id, initialCall);
+      this.getExchQuoteInstance(this.id, false,initialCall);
       //this.getSOMarginSummary();
       this.isEdit = true;
       this.toggle_po_header = false;
@@ -260,7 +288,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         //this.salesQuote.statusChangeDate = new Date();
         this.exchangeQuote.masterCompanyId = this.masterCompanyId;
         this.exchangeQuote.exchangeQuoteNumber = "Creating";
-        //this.load(this.managementStructureId);
+        this.load(this.managementStructureId);
         this.getInitialDataForExchangeQuote();
         this.isSpinnerVisible = false;
       }, error => {
@@ -272,12 +300,16 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     this.isSpinnerVisible = true;
     let probabilityId = 0;
     let creditLimitTermsId = this.exchangeQuote.creditTermId ? this.exchangeQuote.creditTermId : 0;
+    let leadSourceId = this.exchangeQuote.leadSourceId ? this.exchangeQuote.leadSourceId : 0;
+    let warningTypeId = 0;
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.exchangeQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.exchangeQuote.customerServiceRepId, this.exchangeQuote.salesPersonId),
       this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
       this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
-      this.exchangequoteService.getAllExchangeQuoteSettings(this.masterCompanyId)).subscribe(result => {
+      this.exchangequoteService.getAllExchangeQuoteSettings(this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 100, [warningTypeId].join(), this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(),this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
@@ -285,13 +317,15 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         this.setCreditTerms(result[2]);
         this.setPercents(result[3]);
         this.setValidDays(result[4]);
+        this.setTypesOfWarnings(result[5]);
+        this.setLeadSources(result[6]);
         this.getCustomerDetails();
         if (this.id) {
         } else {
           //this.setAllCustomerContact(result[0]);
           this.getDefaultContact();
         }
-        //this.setCSR();
+        this.setCSR();
         this.setSalesPerson();
       }, error => {
         this.isSpinnerVisible = false;
@@ -302,6 +336,86 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     if (result && result.length > 0) {
       this.validDaysSettingsList = result;
     }
+  }
+  setLeadSources(leadSources) {
+    this.leadSources = leadSources;
+  }
+  setTypesOfWarnings(warningsData) {
+    if (warningsData && warningsData.length > 0) {
+      warningsData.filter(i => {
+        if (i.label == DBkeys.GLOBAL_CUSTOMER_WARNING_TYOE_FOR_SALES_QUOTE) {
+          this.getCustomerWarningsData(i.value)
+        }
+      })
+    }
+  }
+  async getCustomerWarningsData(customerWarningListId: number) {
+    await this.customerService
+      .getCustomerWarningsByCustomerIdandCustomerWarningsListID(this.customerId, customerWarningListId)
+      .subscribe(res => {
+        this.customerWarning = res;
+        if (this.customerWarning && this.customerWarning.customerWarningId) {
+          this.exchangeQuote.warningId = this.customerWarning.customerWarningId
+          this.exchangeQuote['customerWarningId'] = this.customerWarning.customerWarningId;
+        }
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
+  }
+  setCSR() {
+    if (this.isEdit && this.exchangeQuoteObj.customerServiceRepId && this.exchangeQuoteObj.customerServiceRepId != 0) {
+      this.exchangeQuote.customerServiceRepName = getObjectById(
+        "employeeId",
+        this.exchangeQuoteObj.customerServiceRepId,
+        this.csrOriginalList
+      );
+    } else if (this.customerDetails && this.customerDetails.csrId) {
+      this.exchangeQuote.customerServiceRepName = getObjectById(
+        "employeeId",
+        this.customerDetails.csrId,
+        this.csrOriginalList
+      );
+    }
+  }
+  filtercsrFirstName(event) {
+    this.csrFirstCollection = this.csrOriginalList;
+    const CSRData = [
+      ...this.csrOriginalList.filter(x => {
+        return x.name.toLowerCase().includes(event.query.toLowerCase());
+      })
+    ];
+    this.csrFirstCollection = CSRData;
+    this.enableUpdateButton = false;
+  }
+  filterfirstName(event) {
+    if (event.query !== undefined && event.query !== null) {
+      this.employeedata(event.query, this.exchangeQuote.managementStructureId);
+    }
+    this.enableUpdateButton = false;
+  }
+  employeedata(strText = '', manStructID = 0) {
+    if (this.arrayEmplsit && this.arrayEmplsit.length == 0) {
+      this.arrayEmplsit.push(0);
+    }
+    this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
+    this.isSpinnerVisible = true;
+    this.commonservice.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID, this.masterCompanyId).subscribe(res => {
+      this.isSpinnerVisible = false;
+      this.allEmployeeList = res;
+      this.firstCollection = res;
+      this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);
+      if (!this.isEdit) {
+        this.getEmployeerOnLoad(this.exchangeQuote.employeeId ? this.exchangeQuote.employeeId.value : this.employeeId);
+      }
+      this.changeDetector.detectChanges();
+    }, err => {
+      this.isSpinnerVisible = false;
+      // const errorLog = err;
+      // this.errorMessageHandler(errorLog);
+    });
+  }
+  getEmployeerOnLoad(id) {
+    this.exchangeQuote.employeeId = getObjectById('value', id, this.allEmployeeList);
   }
 
   setAllCustomerContact(result) {
@@ -315,8 +429,12 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   }
 
   setCSRAndSalesPersonOrAgentList(csrAndSalesPersonList) {
-    //this.csrOriginalList = this.filterUniqueIds(csrAndSalesPersonList.csrEmpList);
+    this.csrOriginalList = this.filterUniqueIds(csrAndSalesPersonList.csrEmpList);
     this.salesPersonAndAgentOriginalList = this.filterUniqueIds(csrAndSalesPersonList.salesEmpList);
+  }
+
+  enableHeaderSave() {
+    this.enableUpdateButton = false;
   }
 
   filterUniqueIds(csrList) {
@@ -674,7 +792,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     this.errorModal.close();
   }
 
-  getExchQuoteInstance(exchangeQuoteId: number, initialCall = false) {
+  getExchQuoteInstance(exchangeQuoteId: number, partsRefresh = false, initialCall = false) {
     this.isSpinnerVisible = true;
     this.exchangequoteService.getExchangeQuote(exchangeQuoteId).subscribe(data => {
       this.isSpinnerVisible = false;
@@ -695,10 +813,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         this.exchangequoteService.selectedParts = selectedPartsTemp;
         this.disableprintagreement = false;
       }
-      // this.arrayEmplsit.push(this.salesOrderQuoteObj.employeeId);
-      // if (!partsRefresh || !isInitialCall) {
-      //   this.load(this.salesOrderQuoteObj.managementStructureId);
-      // }
+      this.arrayEmplsit.push(this.exchangeQuoteObj.employeeId);
+      if (!partsRefresh || !initialCall) {
+        this.load(this.exchangeQuoteObj.managementStructureId);
+      }
 
       this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(this.exchangequoteService.selectedParts, this.marginSummary);
       // this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
@@ -1024,6 +1142,191 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     let ed = new Date(this.exchangeQuote.openDate);
     ed.setDate(od.getDate() + validForDays);
     this.exchangeQuote.quoteExpireDate = ed;
+    this.enableUpdateButton = false;
+  }
+  getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
+    empployid = empployid == 0 ? this.employeeId : empployid;
+    editMSID = this.isEdit ? editMSID = id : 0;
+    this.isSpinnerVisible = true;
+    this.commonservice.getManagmentStrctureData(id, empployid, editMSID, this.masterCompanyId).subscribe(response => {
+      this.isSpinnerVisible = false;
+      if (response) {
+        const result = response;
+        if (result[0] && result[0].level == 'Level1') {
+          this.maincompanylist = result[0].lstManagmentStrcture;
+          this.exchangeQuote.companyId = result[0].managementStructureId;
+          this.exchangeQuote.managementStructureId = result[0].managementStructureId;
+          this.exchangeQuote.buId = 0;
+          this.exchangeQuote.divisionId = 0;
+          this.exchangeQuote.departmentId = 0;
+          this.bulist = [];
+          this.divisionlist = [];
+          this.departmentList = [];
+        } else {
+          this.exchangeQuote.companyId = 0;
+          this.exchangeQuote.buId = 0;
+          this.exchangeQuote.divisionId = 0;
+          this.exchangeQuote.departmentId = 0;
+          this.maincompanylist = [];
+          this.bulist = [];
+          this.divisionlist = [];
+          this.departmentList = [];
+        }
+
+        if (result[1] && result[1].level == 'Level2') {
+          this.bulist = result[1].lstManagmentStrcture;
+          this.exchangeQuote.buId = result[1].managementStructureId;
+          this.exchangeQuote.managementStructureId = result[1].managementStructureId;
+          this.exchangeQuote.divisionId = 0;
+          this.exchangeQuote.departmentId = 0;
+          this.divisionlist = [];
+          this.departmentList = [];
+        } else {
+          if (result[1] && result[1].level == 'NEXT') {
+            this.bulist = result[1].lstManagmentStrcture;
+          }
+          this.exchangeQuote.buId = 0;
+          this.exchangeQuote.divisionId = 0;
+          this.exchangeQuote.departmentId = 0;
+          this.divisionlist = [];
+          this.departmentList = [];
+        }
+
+        if (result[2] && result[2].level == 'Level3') {
+          this.divisionlist = result[2].lstManagmentStrcture;
+          this.exchangeQuote.divisionId = result[2].managementStructureId;
+          this.exchangeQuote.managementStructureId = result[2].managementStructureId;
+          this.exchangeQuote.departmentId = 0;
+          this.departmentList = [];
+        } else {
+          if (result[2] && result[2].level == 'NEXT') {
+            this.divisionlist = result[2].lstManagmentStrcture;
+          }
+          this.exchangeQuote.divisionId = 0;
+          this.exchangeQuote.departmentId = 0;
+          this.departmentList = [];
+        }
+
+        if (result[3] && result[3].level == 'Level4') {
+          this.departmentList = result[3].lstManagmentStrcture;;
+          this.exchangeQuote.departmentId = result[3].managementStructureId;
+          this.exchangeQuote.managementStructureId = result[3].managementStructureId;
+        } else {
+          this.exchangeQuote.departmentId = 0;
+          if (result[3] && result[3].level == 'NEXT') {
+            this.departmentList = result[3].lstManagmentStrcture;
+          }
+        }
+        this.employeedata('', this.exchangeQuote.managementStructureId);
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+      //const errorLog = err;
+      //this.errorMessageHandler(errorLog);
+    });
+  }
+  getBUList(legalEntityId) {
+    this.exchangeQuote.buId = 0;
+    this.exchangeQuote.divisionId = 0;
+    this.exchangeQuote.departmentId = 0;
+    this.bulist = [];
+    this.divisionlist = [];
+    this.departmentList = [];
+    if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
+      this.exchangeQuote.managementStructureId = legalEntityId;
+      this.exchangeQuote.companyId = legalEntityId;
+      this.commonservice.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
+        this.bulist = res;
+        this.employeedata('', this.exchangeQuote.managementStructureId);
+      });
+    }
+    else {
+      this.exchangeQuote.managementStructureId = 0;
+      this.exchangeQuote.companyId = 0;
+    }
+  }
+
+  getDivisionlist(buId) {
+    this.divisionlist = [];
+    this.departmentList = [];
+    this.exchangeQuote.divisionId = 0;
+    this.exchangeQuote.departmentId = 0;
+
+    if (buId != 0 && buId != null && buId != undefined) {
+      this.exchangeQuote.managementStructureId = buId;
+      this.exchangeQuote.buId = buId;
+      this.commonservice.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
+        this.divisionlist = res;
+      });
+    }
+    else {
+      this.exchangeQuote.managementStructureId = this.exchangeQuote.companyId;
+    }
+    this.employeedata('', this.exchangeQuote.managementStructureId);
+  }
+
+  getDepartmentlist(divisionId) {
+    this.exchangeQuote.departmentId = 0;
+    this.departmentList = [];
+    if (divisionId != 0 && divisionId != null && divisionId != undefined) {
+      this.exchangeQuote.divisionId = divisionId;
+      this.exchangeQuote.managementStructureId = divisionId;
+      this.commonservice.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
+        this.departmentList = res;
+      });
+    }
+    else {
+      this.exchangeQuote.managementStructureId = this.exchangeQuote.buId;
+      this.exchangeQuote.divisionId = 0;
+    }
+    this.employeedata('', this.exchangeQuote.managementStructureId);
+  }
+
+
+  getDepartmentId(departmentId) {
+    if (departmentId != 0 && departmentId != null && departmentId != undefined) {
+      this.exchangeQuote.managementStructureId = departmentId;
+      this.exchangeQuote.departmentId = departmentId;
+    }
+    else {
+      this.exchangeQuote.managementStructureId = this.exchangeQuote.divisionId;
+      this.exchangeQuote.departmentId = 0;
+    }
+    this.employeedata('', this.exchangeQuote.managementStructureId);
+  }
+  checkValidOnChange(condition, value) {
+    if (condition != null && condition != 0 && value == "companyId") {
+      this.managementValidCheck = false;
+    }
+  }
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
+  onAddDescription(value) {
+    this.tempMemo = "";
+    if (value == "notes") {
+      this.tempMemoLabel = "Notes";
+      this.tempMemo = this.exchangeQuote.notes;
+    }
+    if (value == "memo") {
+      this.tempMemoLabel = "Memo";
+      this.tempMemo = this.exchangeQuote.memo;
+    }
+  }
+
+  onSaveDescription() {
+    if (this.tempMemoLabel == "Notes") {
+      this.exchangeQuote.notes = this.tempMemo;
+    }
+    if (this.tempMemoLabel == "Memo") {
+      this.exchangeQuote.memo = this.tempMemo;
+    }
     this.enableUpdateButton = false;
   }
 }

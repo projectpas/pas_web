@@ -101,7 +101,7 @@ export class SalesOrderService {
     );
   }
 
-  createBilling(salesOrderBilling: SalesOrderBillingAndInvoicing) : any {
+  createBilling(salesOrderBilling: SalesOrderBillingAndInvoicing): any {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.createBilling(salesOrderBilling)
     );
@@ -405,11 +405,9 @@ export class SalesOrderService {
     partNumberObj.updatedBy = userName;
     partNumberObj.createdOn = new Date().toDateString();
     partNumberObj.updatedOn = new Date().toDateString();
-    
+
     partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
-    partNumberObj.methodType =
-      //selectedPart.method === "Stock Line" ? "S" : "I";
-      selectedPart.stockLineId != null ? "S" : "I";
+    partNumberObj.methodType = selectedPart.methodType != undefined ? selectedPart.methodType : (selectedPart.stockLineId != null ? "S" : "I");
     partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0; //selectedPart.salesPriceExtended;
     partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0; //selectedPart.markupExtended;
     partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
@@ -536,7 +534,7 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.deleteSoSetting(salesOrdersettingsId, updatedBy)
     );
   }
-  
+
   getAllSalesOrderSettings(masterCompanyId) {
     return this.salesOrderEndPointSevice.getAllSalesOrderSettings(masterCompanyId);
   }

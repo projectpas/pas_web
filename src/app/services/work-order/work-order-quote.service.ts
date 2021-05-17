@@ -164,4 +164,7 @@ export class WorkOrderQuoteService {
     getTotals(workOrderQuoteId){
         return this.quoteEndPointService.getTotals(workOrderQuoteId);
     }
+    getWOQSettingMasterData(currentUserMasterCompanyId) {
+        return this.quoteEndPointService.getWOQSettingMasterData(currentUserMasterCompanyId);
+    }
 } 

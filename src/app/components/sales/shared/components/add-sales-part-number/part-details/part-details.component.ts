@@ -143,11 +143,13 @@ export class PartDetailsComponent implements OnChanges {
   }
 
   onChange(event, part) {
+    part.methodType = "I";
     let checked: boolean = event.srcElement.checked;
     this.onPartSelect.emit({ checked: checked, part: part });
   }
 
   onChangeStock(event, part, salesMargin) {
+    part.methodType = "S";
     let checked: boolean = event.srcElement.checked;
     this.select.emit({ checked: checked, part: part, salesMargin: salesMargin });
   }
@@ -166,7 +168,7 @@ export class PartDetailsComponent implements OnChanges {
         );
       } else {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId && part.stockLineNumber == undefined
+          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId && part.methodType == "I"
         );
       }
 
@@ -241,6 +243,7 @@ export class PartDetailsComponent implements OnChanges {
       });
     this.query.partSearchParamters.conditionId = part.conditionId;
     this.query.partSearchParamters.partId = part.partId;
+    this.isSpinnerVisible = true;
     this.service.searchstocklinefromsoqpop(this.query)
       .subscribe(data => {
         this.isSpinnerVisible = false;

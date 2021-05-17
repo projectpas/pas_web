@@ -198,7 +198,8 @@ export class SalesOrderPartNumberComponent {
       { field: 'partDescription', header: 'PN Description', width: "200px" },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
-      { field: 'quantityRequested', header: 'Qty Ord', width: "60px" },
+      { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
+      { field: 'quantityAlreadyQuoted', header: 'Qty Ord', width: "60px" },
       { field: 'qtyReserved', header: 'Qty Resvd', width: "70px" },
       { field: 'quantityAlreadyQuoted', header: 'Qty Prev Shipped', width: "98px" },
       { field: 'qtyBackOrder', header: 'Qty Back Ord', width: "98px" },
@@ -517,14 +518,18 @@ export class SalesOrderPartNumberComponent {
 
   deletePart(): void {
     if (this.part.salesOrderPartId) {
+      this.isSpinnerVisible = true;
       this.salesOrderService.deletePart(this.part.salesOrderPartId).subscribe(response => {
         this.removePartNamber(this.part);
+        this.isSpinnerVisible = false;
         this.deletePartModal.close();
         this.alertService.showMessage(
           "Success",
           `Part removed successfully.`,
           MessageSeverity.success
         );
+      }, error => {
+        this.isSpinnerVisible = false;
       });
     } else {
       this.removePartNamber(this.part);
@@ -717,7 +722,6 @@ export class SalesOrderPartNumberComponent {
         this.onPartsSavedEvent.emit(this.selectedParts);
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
       });
     }
     this.closeConfirmationModal();
@@ -804,12 +808,11 @@ export class SalesOrderPartNumberComponent {
       uniquePart.totalSales = this.getSum(uniquePart.totalSales, part.totalSales);
       uniquePart.marginAmountExtended = this.getSum(uniquePart.marginAmountExtended, part.marginAmountExtended);
       uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentageExtended);
-      // if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
-      //   uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
-      // } else {
-      //   uniquePart.quantityRequested = Number(part.quantityRequested);
-      // }
-      uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
+      if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
+        uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
+      } else {
+        uniquePart.quantityRequested = Number(part.quantityRequested);
+      }
     })
     uniquePart.partId = parts[0].itemMasterId;
     uniquePart.quantityToBeQuoted = Number(uniquePart.quantityRequested) - Number(uniquePart.quantityAlreadyQuoted);
@@ -897,10 +900,12 @@ export class SalesOrderPartNumberComponent {
   deleteMultiplePart(): void {
     if (this.deletedata.length > 0) {
       let data = { "salesOrderPartIds": this.deletedata }
+      this.isSpinnerVisible = true;
       this.salesOrderService.deleteMultiplePart(data).subscribe(response => {
         for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
           this.removePartNamber(this.selectedSummaryRow.childParts[i]);
         }
+        this.isSpinnerVisible = false;
         this.deleteAllPartModal.close();
         this.alertService.showMessage(
           "Success",

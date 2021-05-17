@@ -133,4 +133,11 @@ export class QuoteEndpointService extends EndpointFactory {
     getTotals(workOrderQuoteId){
         return this.http.get(`${this.configurations.baseUrl}/api/workorder/woquotationtotalvalues?workOrderQuoteId=${workOrderQuoteId}`);
     }
+
+    getWOQSettingMasterData(currentUserMasterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/getWOQSetting?masterCompanyId=${currentUserMasterCompanyId}`)
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getWOQSettingMasterData(currentUserMasterCompanyId));
+            });
+    }
 }
