@@ -291,13 +291,14 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             let workFlowId: any = this.isWorkOrder ? this.workFlowId : this._workflowService.currentWorkFlowId;
             this.isSpinnerVisible = true;
             this.actionService.getWorkFlow(workFlowId).subscribe(workFlow => {
-                this.sourceWorkFlow = workFlow[0];
+                this.sourceWorkFlow = {...workFlow[0]};
                 if (workFlow && workFlow[0]) {
                     this.sourceWorkFlow.part = {
                         partId: workFlow[0].itemMasterId,
                         partName: workFlow[0].partNumber
                     }
                 }
+              
                 this.masterItemMasterId = workFlow[0].itemMasterId,
                     this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial > 0 ? this.sourceWorkFlow.percentageOfMaterial : 0;
                 this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise > 0 ? this.sourceWorkFlow.percentageOfExpertise : 0;
@@ -326,7 +327,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                     this.sourceWorkFlow.customerName = "";
                     this.sourceWorkFlow.customerCode = "";
                 }
-                if (this.sourceWorkFlow.costOfNew && this.sourceWorkFlow.percentageOfNew) {
+                this.sourceWorkFlow.customerName={'customerId': workFlow[0].customerId,'customerName':workFlow[0].customerName};
+               if (this.sourceWorkFlow.costOfNew && this.sourceWorkFlow.percentageOfNew) {
                     this.onPercentOfNew(this.sourceWorkFlow.costOfNew, this.sourceWorkFlow.percentageOfNew);
                 }
                 if (this.sourceWorkFlow.costOfReplacement && this.sourceWorkFlow.percentageOfReplacement) {
@@ -868,7 +870,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.disableUpdateButton = false;
         }
         for (let i = 0; i < this.customerNamecoll.length; i++) {
-            if (event == this.customerNamecoll[i][0].name) {
+            if (event.customerName == this.customerNamecoll[i][0].name) {
 
                 this.sourceWorkFlow.customerId = this.customerNamecoll[i][0].customerId;
                 this.sourceWorkFlow.customerCode = this.customerNamecoll[i][0].customerCode;
@@ -897,12 +899,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', query, true, 20, this.arrayCustomerIdlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.customerNames = res.map(x => {
                 this.isSpinnerVisible = false;
-                if (this.sourceWorkFlow.customerId == x.value) {
-                    this.sourceWorkFlow.customerName = {
-                        customerId: x.value,
-                        customerName: x.label
-                    }
-                }
+                // if (this.sourceWorkFlow.customerId == x.value) {
+                //     this.sourceWorkFlow.customerName = {
+                //         customerId: x.value,
+                //         customerName: x.label
+                //     }
+                // }
                 return {
                     customerId: x.value,
                     customerName: x.label
@@ -912,6 +914,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             });
 
         })
+    }
+    clearautoCompleteInput(data){
+        data.customerName='';
+        data.customerId=0;
     }
     getSelectedWorkflowActions() {
         if (this.isWorkFlowEdit) {

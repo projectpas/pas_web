@@ -67,7 +67,7 @@
         <input class="form-control text-right" type="text" pKeyFilter="pint" pInputText required
           [ngModel]="query.partSearchParamters.quantityRequested  | globalNmberFormat"
           (ngModelChange)="query.partSearchParamters.quantityRequested=formatStringToNumberGlobal($event)"
-          (keyup)="calculate()" name="quantityRequested" autocomplete="off" />
+          (keyup)="calculate()" name="quantityRequested" [disabled]="isEdit && type == 'SO'" autocomplete="off" />
       </div>
     </div>
     <div *ngIf="type == 'SOQ'" class="col-2 column">
@@ -109,7 +109,7 @@
   </div>
 </div>
 <div class="row justify-content-start">
-  <div class="col-1 column" style="margin-right: 8px;">
+  <div class="col-1 column" style="margin-right: 8px;" *ngIf="!isEdit">
     <div class="form-group">
       <button class="btn btn-primary" (click)="search($event)"
         [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
@@ -117,6 +117,14 @@
       </button>
     </div>
   </div>
+  <!-- <div class="col-1 column" style="margin-right: 8px;" *ngIf="isEdit">
+    <div class="form-group">
+      <button class="btn btn-primary" (click)="save($event)"
+        [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
+        Save
+      </button>
+    </div>
+  </div> -->
   <div class="col-2 column" style="margin-right: 8px;" *ngIf="enableMultiSearch">
     <div class="form-group">
       <button class="btn btn-primary" (click)="openMultiPartSearch()" style="background-color: #f0ad4e !important;">

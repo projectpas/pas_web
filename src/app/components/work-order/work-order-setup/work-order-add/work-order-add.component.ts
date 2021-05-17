@@ -1253,7 +1253,12 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         if (!this.workOrderQuoteId) {
             this.customerWarnings(customerId)
         } else {
-            window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            // window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+
+            this.router.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+              );
+            
         }
     }
 
@@ -1788,7 +1793,14 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                 extendedCost:data.extendedCost? data.extendedCost : 0,
                 unitCost:data.unitCost?  data.unitCost: 0,
-                partNumber: data.partItem.partName,
+                // partNumber: data.partItem.partName,
+                isActive: true,
+                isDeleted: false,
+                createdBy:this.userName,
+                updatedBy:this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
             }        
             this.workOrderService.createSubWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1816,7 +1828,6 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
                 stockLineId:data.stockLineId==0? null :data.stockLineId,
                 isActive: true,
-                isDeferred: false,
                 isDeleted: false,
                 createdBy:this.userName,
                 updatedBy:this.userName,
@@ -1844,7 +1855,7 @@ this.getNewMaterialListByWorkOrderId();
                 })
         }
     }
-
+  //new form for material list
     updateMaterials(data){
         if (this.isSubWorkOrder == true) {
             const newData={...data,
@@ -1852,10 +1863,17 @@ this.getNewMaterialListByWorkOrderId();
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 subWOPartNoId: this.subWOPartNoId,
                 subWorkOrderMaterialsId: 0,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                 extendedCost:data.extendedCost? data.extendedCost : 0,
                 unitCost:data.unitCost?  data.unitCost: 0,
-                partNumber: data.partItem.partName,
+                isActive: true,
+                isDeleted: false,
+                createdBy:this.userName,
+                updatedBy:this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                // partNumber: data.partItem.partName,
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
             }
             this.isSpinnerVisible = true;
@@ -1883,7 +1901,6 @@ this.getNewMaterialListByWorkOrderId();
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId,
                 stockLineId:data.stockLineId==0? null :data.stockLineId,
                 isActive: true,
-                isDeferred: false,
                 isDeleted: false,
                 createdBy:this.userName,
                 updatedBy:this.userName,
@@ -1947,6 +1964,44 @@ this.getNewMaterialListByWorkOrderId();
                     this.handleError(err);
                 })
         }
+    }
+
+    getMaterialListByWorkOrderIdForSubWO() {
+        this.workOrderMaterialList = [];
+        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            // if (res.length > 0) {
+            //     res.forEach(element => {
+            //         this.getValues(element)
+            //         element.isShowPlus = true;
+            //     });
+            //     this.workOrderMaterialList = res;
+            //     this.materialStatus = res[0].partStatusId;
+            // }
+            if (res && res.length > 0) {
+                res.forEach(element => {
+                    this.getValues(element)
+                    element.isShowPlus = true;
+                    if (element.defered == 'No') {
+                        element.defered = false;
+                    } else {
+                        element.defered = true;
+                    }
+                });
+                this.workOrderMaterial=[];
+                this.workOrderMaterial = res;
+                this.workOrderMaterial.forEach(element => {
+                   element.currency=element.currency ;
+                   element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                   element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                });
+                this.materialStatus = res[0].partStatusId;
+                this.salesQuoteService.selectedParts = this.workOrderMaterial;
+                this.filterParts();
+            }
+        },
+            err => {
+                this.handleError(err);
+            })
     }
     summaryParts:any=[];
     totalRecords: number;
@@ -3348,8 +3403,11 @@ this.getNewMaterialListByWorkOrderId();
                     this.showAlertMessage();
                 } else if (this.warningID == 0 && this.restrictID == 0) {
                     if (this.isQuoteAction == true) {
-                        window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+                        // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
 
+                        this.router.navigateByUrl(
+                            `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+                          );
                     }
                     if (this.isQuoteActionTab == true) {
                         this.onClickQuoteTab();
@@ -3397,7 +3455,11 @@ this.getNewMaterialListByWorkOrderId();
 
     WarnRescticModel() {
         if (this.isQuoteAction == true && this.restrictID == 0) {
-            window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            this.router.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+              );
+      
         }
         else if (this.isCustomerAction == true && this.restrictID != 0) {
             this.workOrderGeneralInformation.customerId = null;
@@ -3437,22 +3499,7 @@ this.getNewMaterialListByWorkOrderId();
     errorHandling(err) {
         this.handleError(err);
     }
-    getMaterialListByWorkOrderIdForSubWO() {
-        this.workOrderMaterialList = [];
-        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            if (res.length > 0) {
-                res.forEach(element => {
-                    this.getValues(element)
-                    element.isShowPlus = true;
-                });
-                this.workOrderMaterialList = res;
-                this.materialStatus = res[0].partStatusId;
-            }
-        },
-            err => {
-                this.handleError(err);
-            })
-    }
+
     handleError(err) {
         this.isSpinnerVisible = false;
     }
@@ -3673,9 +3720,17 @@ this.getNewMaterialListByWorkOrderId();
     } 
     createNewRoWorkOrder(rowData) {
         if(this.isSubWorkOrder==true){
-            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+            // window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`
+              );
         }else{
-            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+            // window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`
+              );
         }
     }
     woPartId:any;

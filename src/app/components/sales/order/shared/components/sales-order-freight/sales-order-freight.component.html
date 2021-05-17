@@ -222,6 +222,13 @@
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                      <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+                        No records found
+                      </td>
+                    </tr>
+                  </ng-template>
                 <ng-template pTemplate="footer">
                     <tr class="footer lastcol-fix">
                         <td class="table-column-width">Total</td>
@@ -308,14 +315,14 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let f of freightForm; let i = index">
-                                            <td>
+                                            <td style="display:flex">
                                                 <p-dropdown placeholder="Select" name="shipVia{{ i }}"
                                                     #shipVia="ngModel" [options]="shipViaList" appendTo='body'
                                                     [baseZIndex]="9999"
                                                     (ngModelChange)="enableUpdate(); getShipViaId($event);"
                                                     class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
                                                 </p-dropdown>
-                                                <span class="circle-span"><a
+                                                <span class="circle-span" style="margin-top:5px"><a
                                                         class="fa fa-plus-circle fa-lg" matTooltip="Add Ship Via"
                                                         matTooltipPosition="above" data-toggle="modal"
                                                         data-target="#AddShipVia"
@@ -400,7 +407,7 @@
                     </form>
                     <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static"
                         data-keyboard="false">
-                        <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
