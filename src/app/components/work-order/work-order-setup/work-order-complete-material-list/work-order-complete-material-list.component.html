@@ -47,7 +47,7 @@
     </div>
 </div> 
 <ng-template #addPart let-c="close" let-d="dismiss">
-    <app-work-order-materials-add [isWorkOrder]="isWorkOrder" [isEdit]="isEdit" [editData]="editData" [customerId]="customerId"
+    <app-work-order-materials-add [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder" [isEdit]="isEdit" [editData]="editData" [customerId]="customerId"
                 [clearData]="clearData" [display]="show" [selectedParts]="selectedParts"
                 (close)="onClose($event)" [type]="'WO'" (setmaterialListForSave)="setmaterialListForSave($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)">
                 </app-work-order-materials-add >
@@ -968,7 +968,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
           <h4 class="modal-title">Edit PN Details</h4>
         </div>
         <div class="modal-body" *ngIf="editData !=undefined">
-            <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isStockLine]="isStockLine"  (close)="onCloseMaterial($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)" [isEdit]="isEdit" [editData]="editData"  [part]="editData" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+            <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isSubWorkOrder]="isSubWorkOrder" [isStockLine]="isStockLine"  (close)="onCloseMaterial($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)" [isEdit]="isEdit" [editData]="editData"  [part]="editData" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
            ></app-wo-margin> 
         </div>
       </div>

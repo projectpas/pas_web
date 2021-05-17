@@ -31,6 +31,7 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
    @Input() type: string;
    @Input() isWorkOrder = false;
    @Input() customerId : any;
+   @Input() isSubWorkOrder:boolean=false;
    @ViewChild("salesMargin", { static: false }) salesMargin: ElementRef;
    woMarginModal: NgbModalRef;
    customer: any;

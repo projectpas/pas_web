@@ -8,7 +8,7 @@
   <div class="modal-body">
     <app-wo-customer-detail [customer]="customer"></app-wo-customer-detail>
     <ng-container>
-      <app-wo-part-details (close)="onClose($event)"  [isEdit]="isEdit" [editData]="editData" [parts]="parts" [query]="query" [customer]="customer" [allConditionInfo]="allConditionInfoArray" (select)="onSelect($event)" [clearData]="clearData"
+      <app-wo-part-details (close)="onClose($event)"    [isSubWorkOrder]="isSubWorkOrder"  [isEdit]="isEdit" [editData]="editData" [parts]="parts" [query]="query" [customer]="customer" [allConditionInfo]="allConditionInfoArray" (select)="onSelect($event)" [clearData]="clearData"
         [isStockLineViewMode]="isStockLineViewMode" (onPartSelect)="onShowModalMargin($event)" (saveMaterialListData)="saveMaterial($event)" (updateMaterialListData)="updateMaterial($event)" (onPartSelect)="onShowModalMargin($event)"></app-wo-part-details>
     </ng-container>
   </div>
