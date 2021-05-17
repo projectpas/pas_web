@@ -687,7 +687,7 @@
                                         </td>
 
                                         <td class="lign_flex">
-                                            <span class="inline-block">
+                                            <span class="inline-block col-sm-9">
                                                 <p-autoComplete appendTo="body" field="stockLineNumber"
                                                     class="autocomplete" [(ngModel)]="partList.stocklineId"
                                                     name="stocklineNum{{row_index}}"
@@ -698,7 +698,7 @@
                                                     [forceSelection]="true" (ngModelChange)="enablePartSave()" required>
                                                 </p-autoComplete>
                                             </span>
-                                            <span data-toggle="modal" data-target="#addStockLine">
+                                            <span class="col-sm-2">
                                                 <a class="btn nobg btn-view-cstm"
                                                     (click)="addStockLineView(partList.itemMasterId,partList.conditionId)"
                                                     data-toggle="modal" data-target="#addStockLine"
