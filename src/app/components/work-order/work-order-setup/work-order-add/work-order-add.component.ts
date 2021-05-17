@@ -921,6 +921,11 @@ setTimeout(() => {
         this.workOrderGeneralInformation.partNumbers=[];
         const workOrderSettingsAdded = new WorkOrderPartNumber();
         this.workOrderGeneralInformation.partNumbers.push(workOrderSettingsAdded);
+        this.array =[];
+
+        var index = 0;
+        this['cmmPublicationList'+index] =[];
+        this['dynamicWorkflowList'+index] =[];
     }
     // added new MPN
     addMPN() {
@@ -1337,6 +1342,8 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         if (!this.workOrderGeneralInformation.isSinglePN) {
         }
         const { itemMasterId } = object;
+        this['cmmPublicationList'+index] =[];
+        this['dynamicWorkflowList'+index] =[];
         this.getPartPublicationByItemMasterId(currentRecord, itemMasterId,index);
         // currentRecord.masterPartId=object.itemMasterId;
         // getWorkFlowByPNandScope(workOrderPartNumber);
@@ -1422,6 +1429,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     label: x.publicationId
                 }
             });
+            this['cmmPublicationList'+index]=[]
             this['cmmPublicationList'+index]=this.cmmList;
             if (this.cmmList &&  this['cmmPublicationList' + index].length > 0) {
                 currentRecord.cMMId =  this['cmmPublicationList' + index][0].value;
@@ -1508,7 +1516,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     value: x.workFlowId
                 }
             })
-            
+            this['dynamicWorkflowList' + index] =[];
             this['dynamicWorkflowList' + index]=this.workFlowList;
             if(this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length!=0){
                 this.workFlowId=this.workFlowList[0].value;

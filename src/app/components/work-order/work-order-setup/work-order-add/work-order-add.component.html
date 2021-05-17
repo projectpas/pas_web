@@ -83,7 +83,7 @@
                                             [ngClass]="{pointerEvents : isEdit && !isRecCustomer}"
                                             matTooltip="Multiple MPN">
                                             <input type="radio" [value]=false name="type" #type="ngModel"
-                                                class="radio_adjust"
+                                                class="radio_adjust" (click)="SingleMpnValid()"
                                                 [(ngModel)]="workOrderGeneralInformation.isSinglePN">
                                             Multiple MPN
                                         </label>
