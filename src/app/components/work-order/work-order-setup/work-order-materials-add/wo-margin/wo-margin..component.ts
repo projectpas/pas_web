@@ -274,26 +274,45 @@ calculateExtendedCost(): void {
 // errorMessage:any;
 onChangeQuantityFromThis(event) {
   // this.errorMessage=''; 
+
   this.invalidQuantityenteredForQuantityFromThis =false;
-  if (Number(this.formObject.stocklineQuantity) != 0) {
-    if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
-      this.invalidQuantityenteredForQuantityFromThis =true;
-      this.disableUpdateButton=true;
-    }
-    else if (Number(this.formObject.stocklineQuantity) < 0)
-    {
+  if(this.part.method=='ItemMaster'){
+    if (Number(this.formObject.stocklineQuantity) != 0) {
+      if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+      }
+      else if (Number(this.formObject.stocklineQuantity) < 0)
+      {
+        this.invalidQuantityenteredForQuantityFromThis = true;
+        this.disableUpdateButton=true;
+      } 
+    } else {
       this.invalidQuantityenteredForQuantityFromThis = true;
       this.disableUpdateButton=true;
     }
-    else if (  Number(this.formObject.stocklineQuantity) > Number(this.formObject.qtyAvailable)) {
+  }else{
+    if (Number(this.formObject.stocklineQuantity) != 0) {
+      if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+      }
+      else if (Number(this.formObject.stocklineQuantity) < 0)
+      {
+        this.invalidQuantityenteredForQuantityFromThis = true;
+        this.disableUpdateButton=true;
+      }
+      else if (  Number(this.formObject.stocklineQuantity) > Number(this.formObject.qtyAvailable)) {
+        this.invalidQuantityenteredForQuantityFromThis = true;
+        this.disableUpdateButton=true;
+        // this.errorMessage=''; partQuantityAvailable
+      } 
+    } else {
       this.invalidQuantityenteredForQuantityFromThis = true;
       this.disableUpdateButton=true;
-      // this.errorMessage=''; partQuantityAvailable
-    } 
-  } else {
-    this.invalidQuantityenteredForQuantityFromThis = true;
-    this.disableUpdateButton=true;
+    }
   }
+ 
 
   // qtyAvailable
 }

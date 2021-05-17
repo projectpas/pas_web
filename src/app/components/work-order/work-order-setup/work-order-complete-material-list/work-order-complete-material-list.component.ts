@@ -54,7 +54,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() saveMaterialsData=new EventEmitter();
     @Output() updateMaterialsData=new EventEmitter();
-    
+    @Output() isSubWorkorder=new EventEmitter();
     statusId = null;
     ispickticket: boolean = false;
     minDateValue: Date = new Date();
@@ -296,6 +296,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     setmaterialListForUpdate(data){
         this.show = false;
         this.updateMaterialsData.emit(data)
+        this.isSubWorkorder.emit(this.isSubWorkOrder)
         // this.addPartModal.close();
         // $('#addPart').modal("hide");
     }

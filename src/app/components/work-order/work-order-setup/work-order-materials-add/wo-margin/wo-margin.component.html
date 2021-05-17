@@ -36,7 +36,7 @@
 </div>
 <div class="row margin-row">
   <div class="row">
-    <div class="col-3 column">
+    <div class="col-3 column"> 
       <div class="form-group">
         <label>Quantity requested</label>
         <input type="text" class="form-control   text-right" pInputText pKeyFilter="num" name="quantityRequest"
@@ -54,7 +54,8 @@
           <!-- (keyup)="onChangeQuantityFromThis($event)" (blur)="onChangeQuantityFromThis($event)"
           [(ngModel)]="formObject.stocklineQuantity" -->
         <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
-          <span style="color:red">Value cannot be greater than qty to be required and qty available</span>
+          <span style="color:red" *ngIf="part.method=='ItemMaster'">Value cannot be greater than qty to be required </span>
+          <span style="color:red" *ngIf="part.method=='StockLine'">Value cannot be greater than qty to be required and qty available</span>
         </div>
       </div>
     </div>

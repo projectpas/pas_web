@@ -177,11 +177,11 @@
                                     </a>
                                 </span>
                                 <span>
-                                    <a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit"
+                                    <a class="btn nobg btn-edit-cstm" [ngClass]="{'disabled ' :rowData.workOrderStatus=='Closed'}" (click)="edit(rowData)" matTooltip="Edit"
                                         matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                 </span>
-                                <span data-toggle="modal" data-target="#woDelete">
-                                    <a class="btn nobg btn-delete-cstm" (click)="delete(rowData)" matTooltip="Delete"
+                                <span >
+                                    <a class="btn nobg btn-delete-cstm"  [ngClass]="{'disabled ' :rowData.workOrderStatus=='Closed'}" data-toggle="modal" data-target="#woDelete"  (click)="delete(rowData)" matTooltip="Delete"
                                         matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                 </span>
                                 <!-- <span data-toggle="modal" data-target="#woHistory">

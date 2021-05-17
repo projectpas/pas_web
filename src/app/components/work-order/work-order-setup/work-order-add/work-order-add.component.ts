@@ -42,12 +42,12 @@ import { SalesQuoteService } from '../../../../services/salesquote.service';
 
 export class WorkOrderAddComponent implements OnInit {
     workOrderModule = "WorkOrder";
-    subWorkOrderModule = "SubWorkOrder"
+    subWorkOrderModule = "SubWorkOrder";
     breadcrumbs: MenuItem[];
     @Input() isView: boolean = false;
     @Input() isEdit: boolean = false;
     @Input() workOrderTypes;
-    @Input() workOrderStatusList;
+    @Input() workOrderStatusList:any=[];
     @Input() creditTerms;
     @Input() jobTitles;
     @Input() employeesOriginalData;
@@ -286,7 +286,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.moduleName = 'Work Order';
     }
 
-    async ngOnInit() {
+  ngOnInit() {
         this.wflowitems = [
             {label: 'View WF', command: () => {
                 this.showWorkflowLabel='View WF';
@@ -343,7 +343,7 @@ export class WorkOrderAddComponent implements OnInit {
            
         }
         if (!this.isSubWorkOrder) {
-            this.workOrderStatus();
+            this.workOrderStatus('onload');
         }
         if (!this.isEdit && this.workOrderGeneralInformation) {
             this.workOrderGeneralInformation.partNumbers.forEach(
@@ -381,6 +381,9 @@ setTimeout(() => {
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        if(changes.workOrderStatusList){
+            this.workOrderStatusList=this.workOrderStatusList
+        }
         if (changes.subWoMpnGridUpdated) {
             this.subWoMpnGridUpdated = changes.subWoMpnGridUpdated.currentValue;
              if (this.subWoMpnGridUpdated == true) {
@@ -463,7 +466,6 @@ setTimeout(() => {
 //             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
 //                 // this.getCustomerWarningsList();
 //                 // this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
-// console.log("customer dtt",this.workOrderGeneralInformation)
 //                 if (this.workOrderGeneralInformation.customerDetails && this.workOrderGeneralInformation.customerDetails.customerId) {
 //                     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId);
 //                 }
@@ -1022,7 +1024,7 @@ setTimeout(() => {
         this.modal.close();
     }
 
-    workOrderStatus() {
+    workOrderStatus(from) {
         this.allValuesSame = this.workOrderGeneralInformation.partNumbers.every((val, i, arr) => val.workOrderStatusId === arr[0].workOrderStatusId);
         if (this.allValuesSame) {
             this.statusId = this.workOrderGeneralInformation.partNumbers[0].workOrderStatusId;
@@ -1031,20 +1033,24 @@ setTimeout(() => {
             this.statusId = 1;
             this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
         }
-        if (this.workOrderStatusList && this.workOrderStatusList.length > 0) {
-            this.workOrderStatusList.forEach(element => {
-                if (element.value == this.statusId) {
-                    this.workOrderNumberStatus = element.label;
-                    this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
-                }
-            });
-        } else {
-            this.workOrderNumberStatus = 'Open';
-            this.workOrderGeneralInformation.workOrderStatusId = 1;
-        }
-        if(this.workOrderNumberStatus=='Close'){
-            this.isView=true;
-        }
+setTimeout(() => {
+    if (this.workOrderStatusList && this.workOrderStatusList.length > 0) {
+        this.workOrderStatusList.forEach(element => {
+            if (element.value == this.statusId) {
+                this.workOrderNumberStatus = element.label;
+                this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
+            }
+        });
+    } else {
+        this.workOrderNumberStatus = 'Open';
+        this.workOrderGeneralInformation.workOrderStatusId = 1;
+    }
+    if(from=='onload'){
+    if(this.workOrderNumberStatus=='Closed'){
+        this.isView=true;
+    }
+}
+}, 1000);
     }
     dismissModelTask(){
         $('#confirmationSave').modal('hide');
@@ -1203,13 +1209,23 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         };
 
         if (this.isEdit && this.isRecCustomer === false) {
-            this.isSpinnerVisible = true;            
+            this.isSpinnerVisible = true;  
+            // console.log("status Id",this.statusId); 
+            // console.log("data",data1); 
+            // console.log("data",this.workOrderNumberStatus) 
+            // if(this.workOrderNumberStatus=='Closed'){
+            //     data1.workOrderStatusId=this.statusId
+            // }
             this.workOrderService.updateNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
                 result => {
                     this.isValidationfailed=false
                     this.isSpinnerVisible = false;
                     this.disableSaveForEdit = true;
                     this.disableSaveForPart = true;
+                    // this.workOrderStatus();
+                    if(this.workOrderNumberStatus=='Closed'){
+                        this.isView=true;
+                    }
                     this.saveWorkOrderGridLogic(result, generalInfo);
                     this.alertService.showMessage(
                         this.moduleName,
@@ -1460,7 +1476,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 this.workOrderGeneralInformation.partNumbers[index].condition = element.label;
             }
         });
-        this.workOrderStatus();
+        this.workOrderStatus('onCondition');
     }
 
     selectedStage(value, currentRecord, index,) {
@@ -1470,7 +1486,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 this.workOrderGeneralInformation.partNumbers[index].workOrderStatusId = element.workOrderStausId;
             }
         });
-        this.workOrderStatus();
+        this.workOrderStatus('onStage');
     }
 
     filterRevisedPartNumber(event, index) {
@@ -1860,6 +1876,11 @@ this.getNewMaterialListByWorkOrderId();
                     this.handleError(err);
                 })
         }
+    }
+    isSubWorkorderCheck(data){
+if(data==true){
+    this.isSubWorkOrder = true;   
+}
     }
   //new form for material list
     updateMaterials(data){
@@ -2430,7 +2451,9 @@ this.getNewMaterialListByWorkOrderId();
     saveReservedPartorIssue(alternatePartData) {  
         alternatePartData.masterCompanyId=alternatePartData.masterCompanyId ? alternatePartData.masterCompanyId : this.currentUserMasterCompanyId;
         if (this.isSubWorkOrder == true) {
+            this.isSpinnerVisible=true;
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible=false;
                 this.alertService.showMessage(
                     this.moduleName,
                     'Parts Data Updated successfully',
@@ -2439,10 +2462,13 @@ this.getNewMaterialListByWorkOrderId();
                 this.getMaterialListByWorkOrderIdForSubWO();
             },
                 err => {
+                    this.isSpinnerVisible=false;
                     this.handleError(err);
                 })
         } else {
+            this.isSpinnerVisible=true;
             this.workOrderService.saveReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible=false;
                 this.alertService.showMessage(
                     this.moduleName,
                     'Parts Data Updated successfully',
@@ -2454,6 +2480,7 @@ this.getNewMaterialListByWorkOrderId();
                 this.getNewMaterialListByWorkOrderId();
             },
                 err => {
+                    this.isSpinnerVisible=false;
                     this.handleError(err);
                 })
         }
@@ -3334,8 +3361,7 @@ this.getNewMaterialListByWorkOrderId();
                 }
 
             });
-            console.log("this.workOrderGeneralInformation.customerDetails",this.workOrderGeneralInformation)
-            if (this.enumcall = true) {
+           if (this.enumcall = true) {
                 if (this.workOrderGeneralInformation.customerDetails && this.workOrderGeneralInformation.customerDetails.customerId) {
                     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId);
                 }
@@ -3351,8 +3377,7 @@ this.getNewMaterialListByWorkOrderId();
     }
 
     customerWarnings(customerId) {
-        console.log("this.customerWarningListId",this.customerWarningListId)
-        if (this.customerWarningListId == undefined) {
+       if (this.customerWarningListId == undefined) {
             this.getCustomerWarningsList();
             this.enumcall = true;
         } else {
@@ -3439,7 +3464,7 @@ this.getNewMaterialListByWorkOrderId();
     }
 
     showAlertMessage() {
-        if(!this.isView){
+        if(!this.isView && !this.isEdit){
         $('#warnRestrictMesg').modal("show");
         }
     }
@@ -3762,6 +3787,8 @@ this.woPartId=rowData.id;
         if (ev.target.checked) {
             $('#workFlowTransfer').modal('show'); 
 
+        }else{
+            $('#workFlowTransfer').modal('show');   
         }
         this.workFlowId=currentRecord.workflowId;
         this.workOrderId=this.workOrderId ? this.workOrderId :currentRecord.workOrderId;

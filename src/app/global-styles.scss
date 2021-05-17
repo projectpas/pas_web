@@ -108,6 +108,11 @@
    .adj_width2{
     width: 190px !important;
   }
+  a.disabled {
+    color: gray;
+    cursor: not-allowed;
+    text-decoration: underline;
+}
   .custom_Tdth{
     min-width: 83px;
     color: #333333 !important;
