@@ -949,8 +949,8 @@ this.commonfunctionHandler();
       if (rec['burdenRateAmount']) {
         rec.totalCostPerHour += Number(rec['burdenRateAmount']);
       }
-      if (rec.hours) {
-        rec['totalCost'] = (Number(rec.totalCostPerHour) * Number(rec.hours)).toFixed(2);
+      if (rec.adjustedHours) {
+        rec['totalCost'] = (Number(rec.totalCostPerHour) * Number(rec.adjustedHours)).toFixed(2);
       }
     }
   }
@@ -977,7 +977,7 @@ this.commonfunctionHandler();
         this.markupList.forEach((markup) => {
           if (type == 'row' && markup.value == matData.markupPercentageId && matData['totalCostPerHour'] && matData['totalCostPerHour']) {
             matData['billingRate'] = ((matData['totalCostPerHour']) + (((matData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
-            matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate']) * Number(matData.hours), 0);
+            matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate']) * Number(matData.adjustedHours), 0);
           }
           else if (type == 'all' && markup.value == this.overAllMarkup) {
             for (let t in this.laborForm.workOrderLaborList[0]) {

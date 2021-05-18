@@ -109,8 +109,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.freightForm = [...this.freightForm, new Freight()];
         }
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
-        this.getShipViaByCustomerId();
-        //this.getshipvia();
+       // this.getShipViaByCustomerId();
+        this.getshipvia();
         this.getUOMList('');
         this.getCurrencyList('');
         // this.getCarrierList();

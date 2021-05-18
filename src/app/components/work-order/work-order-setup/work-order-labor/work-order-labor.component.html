@@ -388,11 +388,11 @@
                 </ng-container>
                 <ng-container *ngIf="isQuote">
                   <td>
-                    <input type="number" class="form-control" (ngModelChange)="checkValid(23)" (blur)="calculateTotalCost(rec); markupChanged(rec, 'row'); calculateBurderRate(rec)"
+                    <input type="number" class="form-control" (ngModelChange)="checkValid(23)" (blur)="calculateBurderRate(rec);calculateTotalCost(rec)"
                       [(ngModel)]="rec.directLaborOHCost" [disabled]="isView" required/>
                   </td>
                   <td>
-                    <select class="form-control select-markup width-100"  (ngModelChange)="checkValid(24)" (change)="calculateBurderRate(rec)" [(ngModel)]="rec.burdaenRatePercentageId"
+                    <select class="form-control select-markup width-100"  (ngModelChange)="checkValid(24)" (change)="calculateBurderRate(rec);calculateTotalCost(rec)" [(ngModel)]="rec.burdaenRatePercentageId"
                    [disabled]="isView">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -408,7 +408,7 @@
                     {{ formateCurrency(rec.totalCost) }}
                   </td>
                   <td>
-                    <select class="form-control min-width-130" (ngModelChange)="checkValid(25)" [(ngModel)]="rec.billingMethodId"
+                    <select class="form-control min-width-130" (ngModelChange)="checkValid(25)" (change)="markupChanged(rec, 'row')"  [(ngModel)]="rec.billingMethodId"
                      
                       [disabled]="isView || laborForm.costPlusType == 3" (change)="rec.markupPercentageId = '';rec.billingRate = 0;">
                       <option value="">Select</option>

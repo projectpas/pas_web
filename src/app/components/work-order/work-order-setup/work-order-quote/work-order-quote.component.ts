@@ -52,6 +52,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     customerRef: any;
     quoteDueDate: Date = new Date();
     isDetailedViewQuote: boolean;
+    IsApprovalBypass: boolean = false;
     validFor: number;
     expirationDate: Date;
     sentDate: Date;
@@ -660,6 +661,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                         this.increaseVer();
                                         // $('#versionNoModel').modal("show");
                                     }
+                                    this.IsApprovalBypass =res.workOrderQuote.isApprovalBypass;
                                     this.quoteDueDate = new Date(res.workOrderQuote.quoteDueDate);
                                     this.expirationDate = new Date(res.workOrderQuote.expirationDate);
                                     this.currency = res.workOrderQuote.currencyId;
@@ -2786,7 +2788,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.setEditArray = [];
         const strText = '';   
             this.setEditArray.push(0); 
-        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', strText, true, 20, this.setEditArray.join(), 0).subscribe(res => {
             this.statusList = res.map(x => {
                 return {
                     ...x,
