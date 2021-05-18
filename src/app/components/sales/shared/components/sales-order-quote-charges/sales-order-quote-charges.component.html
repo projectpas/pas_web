@@ -331,7 +331,7 @@
                     </td>
                     <td>
                       <p-autoComplete class="autocomp-customer-cstm" name="vendorName" [(ngModel)]="charge.vendor"
-                        (ngModelChange)="enableUpdate()" [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="enableUpdate()" [ngModelOptions]="{standalone: true}" appendTo='body' [baseZIndex]="9999"
                         [suggestions]="vendorCollection" [forceSelection]="true" emptyMessage="No Match Found"
                         field="vendorName" (completeMethod)="filterVendor($event)" [size]="30" [minLength]="1"
                         [dropdown]="true">

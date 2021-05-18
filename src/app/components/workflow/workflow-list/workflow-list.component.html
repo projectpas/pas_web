@@ -369,51 +369,61 @@
                                 <div class="form-row">
                                     <div class="col-md-6">
                                         <div class="form-row m-t-20">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Workflow ID:<span class="clr-red">*</span> </label> {{sourceWorkFlow.workOrderNumber}}
+                                            <div class="col-md-6">                                                
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6" >Workflow ID:<span class="clr-red">*</span>
+                                                     </label>
+                                                     <span class="value col-md-6"> {{sourceWorkFlow.workOrderNumber}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Workflow Description:
-                                                    </label>{{sourceWorkFlow.workflowDescription}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Workflow Description:
+                                                    </label> <span class="value col-md-6">{{sourceWorkFlow.workflowDescription}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Version: <span class="clr-red">*</span></label>{{sourceWorkFlow.version}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Version: <span class="clr-red">*</span>
+                                                    </label><span class="value col-md-6">{{sourceWorkFlow.version}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Create Date: <span class="clr-red">*</span></label>{{sourceWorkFlow.workflowCreateDate}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Create Date: <span class="clr-red">*</span>
+                                                    </label> <span class="value col-md-6">{{sourceWorkFlow.workflowCreateDate}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Expiration Date:
-                                                    </label>{{sourceWorkFlow.workflowExpirationDate}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Expiration Date:
+                                                    </label> <span class="value col-md-6">{{sourceWorkFlow.workflowExpirationDate}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Currency: <span class="clr-red">*</span></label>
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Currency: <span class="clr-red">*</span></label>
                                                     <!-- sourceWorkFlow.currencySymbol + ' (' + -->
-                                                    {{ sourceWorkFlow.currencyText }}
+                                                    <span class="value col-md-6">  {{ sourceWorkFlow.currencyText }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">PN:<span class="clr-red">*</span> </label>{{sourceWorkFlow.itemMaster.partNumber}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">PN:<span class="clr-red">*</span> </label>
+                                                    <span class="value col-md-6">{{sourceWorkFlow.itemMaster.partNumber}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">PN Description:
-                                                    </label>{{sourceWorkFlow.itemMaster.partDescription}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">PN Description:
+                                                    </label>
+                                                    <span class="value col-md-6">{{sourceWorkFlow.itemMaster.partDescription}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Revised PN: </label>{{sourceWorkFlow.revisedPartNumber}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Revised PN: </label>
+                                                    <span class="value col-md-6">{{sourceWorkFlow.revisedPartNumber}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Work Scope: <span class="clr-red">*</span> </label>{{sourceWorkFlow.workScope.workScopeCode}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Work Scope: <span class="clr-red">*</span> 
+                                                    </label><span class="value col-md-6">{{sourceWorkFlow.workScope.workScopeCode}}</span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Item Group: <span class="clr-red">*</span> </label>{{sourceWorkFlow.itemGroup}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Item Group: <span class="clr-red">*</span>
+                                                     </label><span class="value col-md-6">{{sourceWorkFlow.itemGroup}}</span>
                                                 </div>
 
                                                 
-                                                <div class="form-group">
-                                                    <label class="margin-bottom-10">Customer Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
+                                                <div class="form-group col-md-12" style="display: flex;">
+                                                    <label class="margin-bottom-10 col-md-6">Customer Name: <span class="clr-red">*</span>
+                                                    </label><span class="value col-md-6">{{sourceWorkFlow.customerName}}</span>
                                                 </div>
                                             </div>
                                         </div>
