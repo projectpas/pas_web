@@ -123,10 +123,13 @@ export class SalesShippingLabelComponent implements OnInit {
                  font-size:10.5px !important;
   
                  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-             
+             font-weight:700;
                 text-transform: capitalize;
                 margin-bottom: 0;
                 text-align: left;
+              }
+              bold-word{
+                font-size:12.5px !important;
               }
               
               .first-block-4 {

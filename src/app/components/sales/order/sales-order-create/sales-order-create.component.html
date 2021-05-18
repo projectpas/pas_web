@@ -166,12 +166,24 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            
-                                                <div class="form-group" style="padding-top: 27px;">
-                                                    <label>Customer Warning</label>
-                                                    <textarea name="warningId" class="form-control customer-warning-msg" disabled
-                                                        value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
-                                                </div>
+                                            <div class="form-group memo-popup-cstm" style="padding-top:27px">
+                                                <label>
+                                                    Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                        data-target="#add-description" matTooltipPosition="above"
+                                                        matTooltip="Add Memo"
+                                                        (click)="onAddDescription('memo')"></i>
+                                                </label>
+                                                <span>
+                                                    <div class="form-group memo-popup-cstm mat_emo">
+                                                        <div [innerHTML]="salesQuote.memo"
+                                                            [matTooltip]="parsedText(salesQuote.memo)"
+                                                            matTooltipPosition="above" class="form-control"
+                                                            style="height: 25px !important;width:100%"
+                                                            class="text_editor_box">
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            </div>
                                             
                                         </div>
                                         <div class="col-md-6 padding-10">
@@ -419,24 +431,12 @@
                                                 </div>
                                             </div>
                                             <div class=" main_ar" style="padding-top:10px">
-                                                <div class="form-group memo-popup-cstm">
-                                                    <label>
-                                                        Memo<i class=" fa fa-pencil" data-toggle="modal"
-                                                            data-target="#add-description" matTooltipPosition="above"
-                                                            matTooltip="Add Memo"
-                                                            (click)="onAddDescription('memo')"></i>
-                                                    </label>
-                                                    <span>
-                                                        <div class="form-group memo-popup-cstm mat_emo">
-                                                            <div [innerHTML]="salesQuote.memo"
-                                                                [matTooltip]="parsedText(salesQuote.memo)"
-                                                                matTooltipPosition="above" class="form-control"
-                                                                style="height: 25px !important;width:100%"
-                                                                class="text_editor_box">
-                                                            </div>
-                                                        </div>
-                                                    </span>
+                                                <div class="form-group">
+                                                    <label>Customer Warning</label>
+                                                    <textarea name="warningId" class="form-control customer-warning-msg" disabled
+                                                        value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
                                                 </div>
+                                                
                                             </div>
                                             <!-- <div class="card">
                                                 <div class="card-header" style="padding:.3rem 1rem">

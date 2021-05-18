@@ -437,8 +437,8 @@
                     <div [innerHTML]="rec.memo" 
                         matTooltipPosition="above" [ngStyle]="{'border':rec.adjustments > 0 ? '1px solid red' : 'inherent'}"
                         [matTooltip]="parsedText(rec.memo)"
-                        class="text_editor_box input-width-100-percent"></div>
-                    <i class="fa fa-pencil contoel_v" data-toggle="modal" [ngStyle]="{'pointerEvents':isView ? 'none' : 'inherent'}"
+                        class="text_editor_box col-sm-10"></div>
+                    <i class="fa fa-pencil contoel_v col-sm-2" data-toggle="modal" [ngStyle]="{'pointerEvents':isView ? 'none' : 'inherent'}"
                         data-target="#textarea-popup5" matTooltip="Memo"
                         matTooltipPosition="above" 
                         (click)="onAddTextAreaInfo(rec.memo,task.description,i,taskIndex)"></i>
