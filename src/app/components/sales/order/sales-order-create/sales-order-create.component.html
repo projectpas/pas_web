@@ -568,11 +568,11 @@
                                     [defaultSettingPriority]="defaultSettingPriority">
                                 </app-sales-order-part-number>
                             </p-tabPanel>
-                            <p-tabPanel header="Internal Approvers">
+                            <p-tabPanel header="Internal Approvers" *ngIf="soSettingsList[0] != null && soSettingsList[0].isApprovalRule">
                                 <app-sales-order-approve>
                                 </app-sales-order-approve>
                             </p-tabPanel>
-                            <p-tabPanel header="Approver Process">
+                            <p-tabPanel header="Approver Process" *ngIf="soSettingsList[0] != null && soSettingsList[0].isApprovalRule">
                                 <app-sales-order-customer-approval *ngIf="isEdit && isContactsLoaded"
                                     [customer-id]="customerId" [sales-order-id]="id" [status]="status"
                                     [customer-contacts]="customerContactList"

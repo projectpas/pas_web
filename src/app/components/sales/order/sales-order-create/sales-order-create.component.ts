@@ -52,6 +52,7 @@ import { SalesOrderBillingComponent } from "../shared/components/sales-order-bil
 import { SalesOrderAnalysisComponent } from "../sales-order-analysis/sales-order-analysis.component";
 import { SalesOrderShippingComponent } from "../shared/components/sales-order-shipping/sales-order-shipping.component";
 import { SalesOrderPickTicketsComponent } from "../sales-order-pick-tickets/sales-order-pick-tickets.component";
+import { NumberFormatStyle } from "@angular/common";
 
 @Component({
   selector: "app-sales-order-create",
@@ -1183,42 +1184,48 @@ export class SalesOrderCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
+    let indexToInc: NumberFormatStyle = 0;
+    if (this.soSettingsList[0] != null && !this.soSettingsList[0].isApprovalRule){
+      indexToInc = 2;
+    }
+
     if (event.index == 0) {
       this.salesOrderPartNumberComponent.refresh();
+      this.salesOrderPartNumberComponent.refreshParts();
     }
-    if (event.index == 1) {
+    if (event.index == (1 - indexToInc)) {
       this.salesOrderApproveComponent.refresh(this.marginSummary);
     }
-    if (event.index == 2) {
+    if (event.index == (2 - indexToInc)) {
       this.salesOrderCustomerApprovalComponent.refresh(this.marginSummary, this.salesOrderView.salesOrder.salesOrderId, this.salesOrderView.salesOrder.salesOrderQuoteId);
     }
-    if (event.index == 3) {
+    if (event.index == (3 - indexToInc)) {
       this.showAddresstab = true;
     }
-    if (event.index == 4) {
+    if (event.index == (4 - indexToInc)) {
       if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
         this.salesOrderFreightComponent.refresh(false);
       } else {
         this.salesOrderFreightComponent.refresh(true);
       }
     }
-    if (event.index == 5) {
+    if (event.index == (5 - indexToInc)) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderChargesComponent.refresh(false);
       } else {
         this.salesOrderChargesComponent.refresh(true);
       }
     }
-    if (event.index == 6) {
+    if (event.index == (6 - indexToInc)) {
       this.salesOrderPickTicketsComponent.refresh(this.id);
     }
-    if (event.index == 7) {
+    if (event.index == (7 - indexToInc)) {
       this.salesOrderShippingComponent.refresh(this.selectedParts);
     }
-    if (event.index == 8) {
+    if (event.index == (8 - indexToInc)) {
       this.salesOrderBillingComponent.refresh(this.id); //(this.selectedParts);
     }
-    if (event.index == 10) {
+    if (event.index == (10 - indexToInc)) {
       this.salesOrderAnalysisComponent.refresh(this.id);
     }
   }

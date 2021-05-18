@@ -57,7 +57,8 @@
                                     *ngFor="let bill of summaryPart.salesOrderBillingInvoiceChild; let poIndex = index">
                                     <td></td>
                                     <td class="table-column-width" *ngIf="bill.invoiceDate != null">
-                                        <label style="color: #0F9D58">{{ bill.invoiceStatus }}</label>
+                                        <label style="color: #0F9D58" *ngIf="bill.invoiceStatus != 'Billed'">{{ bill.invoiceStatus }}</label>
+                                        <label style="color: #0F9D58" *ngIf="bill.invoiceStatus == 'Billed'">Open</label>
                                     </td>
                                     <td class="table-column-width" *ngIf="bill.invoiceDate == null">
                                         <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
