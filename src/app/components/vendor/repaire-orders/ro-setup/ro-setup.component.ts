@@ -1649,7 +1649,6 @@ export class RoSetupComponent implements OnInit {
 					isApproved: x.isApproved ? x.isApproved : false,
 					childList: this.getRepairOrderSplitPartsEdit(x, pindex, data[1]),
 					remQty: 0,
-					stocklineId: x.stockLineId
 				}
 				this.getManagementStructureForParentPart(this.newPartsList, data[1], data[3]);
 
@@ -1828,15 +1827,15 @@ export class RoSetupComponent implements OnInit {
 				this.partWithId = data1[0];
 				parentdata.partId = this.partWithId.itemMasterId;
 				parentdata.partDescription = this.partWithId.partDescription;
-				parentdata.minimumOrderQuantity = this.partWithId.minimumOrderQuantity;
+				parentdata.minimumOrderQuantity = this.partWithId.quantityAvailable;
 				parentdata.itemTypeId = this.partWithId.itemTypeId;
 				parentdata.stockType = this.partWithId.stockType;
 				parentdata.manufacturerId = this.partWithId.manufacturerId;
-				parentdata.manufacturerName = this.partWithId.name;
+				parentdata.manufacturerName = this.partWithId.manufacturer;
 				parentdata.glAccountId = this.partWithId.glAccountId;
 				parentdata.glAccountName = this.partWithId.glAccount;
 				parentdata.UOMId = this.partWithId.purchaseUnitOfMeasureId;
-				parentdata.UOMShortName = this.partWithId.shortName;
+				parentdata.UOMShortName = this.partWithId.unitOfMeasure;
 				parentdata.partNumber = this.partWithId.partNumber;
 				parentdata.itemMasterId = this.partWithId.itemMasterId;
 				parentdata.altPartCollection = this.partWithId.altPartNumList.map(x => {
@@ -1848,14 +1847,17 @@ export class RoSetupComponent implements OnInit {
 				} else if (this.altPartNumList.length > 0) {
 					parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
 				}
+				parentdata.controlId = this.partWithId.idNumber;
+				parentdata.purchaseOrderNum = '';
+				parentdata.controlNumber = this.partWithId.controlNumber;
+				parentdata.stocklineId = { stocklineId: this.partWithId.stockLineId, stockLineNumber: this.partWithId.stockLineNumber };
 				//bind stock line
-
 				// this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId, this.authService.currentUser.masterCompanyId).subscribe(resp => {
 				// 	parentdata.allStocklineDetails = resp;
 				// 	if (parentdata.stockLineId) {
 				// 		parentdata.stocklineId = getObjectById('stockLineId', parentdata.stockLineId, parentdata.allStocklineDetails);
 				// 	}
-				// 	this.getStockLineDetails(parentdata);
+				//this.getStockLineDetails(parentdata);
 				// }, err => { const errorLog = err; });
 
 				// if(parentdata.conditionId && value != 'onEdit') {
@@ -3403,13 +3405,6 @@ export class RoSetupComponent implements OnInit {
 	onChangeAddstocklinePN() {
 		if (this.stocklineData) {
 			for (let i = 0; i < this.stocklineData.length; i++) {
-				if (this.stocklineData[i].addAllMultiStocklineRows) {
-					this.enableMultistocklineAddBtn = true;
-					break;
-				} else {
-					this.enableMultistocklineAddBtn = false;
-				}
-
 				if (this.partListData && this.partListData.length > 0) {
 					for (let j = 0; j < this.partListData.length; j++) {
 						if (this.partListData[j].stocklineId.stocklineId == this.stocklineData[i].stockLineId) {
@@ -3419,7 +3414,14 @@ export class RoSetupComponent implements OnInit {
 					}
 				}
 			}
-
+			for (let i = 0; i < this.stocklineData.length; i++) {
+				if (this.stocklineData[i].addAllMultiStocklineRows) {
+					this.enableMultistocklineAddBtn = true;
+					break;
+				} else {
+					this.enableMultistocklineAddBtn = false;
+				}
+			}
 		}
 
 
@@ -3450,6 +3452,43 @@ export class RoSetupComponent implements OnInit {
 		this.stocklinepartNumberId = null;
 		this.enableMultiPartAddBtn = false;
 		this.addAllMultiStockline = false;
+	}
+
+	addStockLineView(itmeMasterID, Condtionid) {
+		this.stocklineData = [];
+		this.stocklineconditionId = null;
+		this.stocklinepartNumberId = null;
+		this.enableMultiPartAddBtn = false;
+		this.addAllMultiStockline = false;
+		// this.stocklinepartNumberId = itmeMasterID;
+		// this.stocklineconditionId = Condtionid;
+		this.isSpinnerVisible = true;
+		this.stocklineData = [];
+		this.stocklineService.GetAllStocklineByPartAndCondtion(itmeMasterID, Condtionid, this.currentUserMasterCompanyId).subscribe(res => {
+			this.stocklineData = res.map(x => {
+				return {
+					...x,
+					addAllMultiStocklineRows: false,
+					disableStockline: false,
+				}
+			})
+			this.isSpinnerVisible = false;
+			if (this.stocklineData && this.stocklineData.length > 0) {
+				for (let i = 0; i < this.stocklineData.length; i++) {
+					if (this.partListData && this.partListData.length > 0) {
+						for (let j = 0; j < this.partListData.length; j++) {
+							if (this.partListData[j].stocklineId.stocklineId == this.stocklineData[i].stockLineId) {
+								this.stocklineData[i].disableStockline = true;
+							}
+						}
+					}
+				}
+			}
+		}, err => {
+			this.isSpinnerVisible = false;
+			this.stocklineData = []
+		});
+
 	}
 
 
@@ -4795,8 +4834,6 @@ export class RoSetupComponent implements OnInit {
 			return 0;
 		}
 	}
-
-
 
 	getStockLineDetails(partList) {
 		if (partList.stocklineId) {
