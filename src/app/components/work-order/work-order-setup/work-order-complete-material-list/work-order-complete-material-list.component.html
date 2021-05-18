@@ -2,15 +2,15 @@
     <!-- <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary mar-left-5"
         (click)="createNew();" style="min-width: 97px !important;">Add PN</button> -->
     <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
-        Add PN New
+        Add PN  
     </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary" 
         (click)="partsIssueRI(1)" data-toggle="modal" style="min-width: 97px !important;"
-        data-target="#reserve">Reserve </button>
+        data-target="#reserve">Reserve Stock</button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && (enablePickTicket)" class="btn btn-primary" 
             (click)="onclickpicktiket()" style="min-width: 97px !important;">Pick Ticket </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
-         (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;"> Issue
+         (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;"> Issue Stock
     </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && !enablePickTicket" class="btn btn-primary"
          (click)="partsIssueRI(3)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
@@ -918,7 +918,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                     <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='isFromWorkFlow'"
                     class="form-control w60 defered-check2" [(ngModel)]="childRowData.isFromWorkFlow" disabled>
                     <p *ngIf="childcol.field !='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver' && childcol.field !='altEquiv' " style="margin:0px !important"  [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">  {{childRowData[childcol.field]}}</p>
-                    <p *ngIf="childcol.field =='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver'" style="margin:0px !important" class=" p-0 text-right" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> </p>
+                    <p *ngIf="childcol.field =='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver'" style="margin:0px !important" class=" p-0 text-right" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">{{ rowData.line == undefined ?( i + 1):rowData.line }} </p>
                     <p *ngIf="childcol.field =='stockLineNumber' " [matTooltip]="childRowData.stockLineNumber"  [matTooltipDisabled]="childRowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{ childRowData.isMultipleStockLine== 'Single' ? childRowData[childcol.field] : childRowData.isMultipleStockLine}}</p>
                     <p *ngIf=" childcol.field =='controlNo'" [matTooltip]="childRowData.controlNo"  [matTooltipDisabled]="childRowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{childRowData.isMultipleControlNo== 'Single' ? childRowData[childcol.field] : childRowData.isMultipleControlNo  }}</p>
                     <p *ngIf=" childcol.field =='controlId'" [matTooltip]="childRowData.controlId"  [matTooltipDisabled]="childRowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{ childRowData.isMultiplecontrolId== 'Single' ? childRowData[childcol.field] : childRowData.isMultiplecontrolId }}</p>

@@ -54,7 +54,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() saveMaterialsData=new EventEmitter();
     @Output() updateMaterialsData=new EventEmitter();
-    
+    @Output() isSubWorkorder=new EventEmitter();
     statusId = null;
     ispickticket: boolean = false;
     minDateValue: Date = new Date();
@@ -274,6 +274,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
     ngOnDestroy() {
         this.countDown = null;
+        // this.counter = 600;
+        // this.tick = 1000;
+        // this.countDown.unsubscribe();
     }
 
     closeAddNew() {
@@ -293,6 +296,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     setmaterialListForUpdate(data){
         this.show = false;
         this.updateMaterialsData.emit(data)
+        this.isSubWorkorder.emit(this.isSubWorkOrder)
         // this.addPartModal.close();
         // $('#addPart').modal("hide");
     }
@@ -1137,6 +1141,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             })
         })
         this.saveRIParts.emit(this.checkedParts);
+        this.refreshData.emit();
         this.isAllow = false;
         this.savebutonDisabled = false;
     }
@@ -1175,6 +1180,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.savebutonDisabled = false;
         this.isAllow = false;
         this.releaseStock();
+        this.refreshData.emit();
     }
 
     startTimerplus() {
