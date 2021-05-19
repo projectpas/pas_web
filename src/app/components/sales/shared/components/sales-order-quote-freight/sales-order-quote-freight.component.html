@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <div >
+    <div>
       <div class="checkbox-cstm show_cst" [ngClass]="isView ? 'pull-right' : ''">
         <label class="quote-freight-label">
           <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55"
@@ -38,9 +38,9 @@
               <th colspan="5" style="width:519px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;">
                 <div class="display-flex" style="padding-left: 10px;">
                   <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
-                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92" name="costPlusTypeSOQ"
-                      label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView"
-                      (click)="tmchange()">
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92"
+                      name="costPlusTypeSOQ" label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType"
+                      [disabled]="isView" (click)="tmchange()">
                     </p-radioButton>
                     <div>
                       <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')"
@@ -51,13 +51,14 @@
                     </div>
                   </div>
                   <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusTypeSOQ" value="2"
-                      label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusTypeSOQ"
+                      value="2" label="Actual" [(ngModel)]="costPlusType" [disabled]="isView"
+                      (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusTypeSOQ" value="3"
-                      label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView"
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusTypeSOQ"
+                      value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView"
                       (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
@@ -78,7 +79,7 @@
                     <div>
                       <select (ngModelChange)="validated()" class="form-group select-markup m-t-10"
                         (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                        [disabled]="isView || costPlusType != 1" >
+                        [disabled]="isView || costPlusType != 1">
                         <option value="" selected>Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
@@ -127,21 +128,22 @@
         <ng-template pTemplate="body" let-freight let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td class="table-column-width">
-              <select class="form-control select-read-only" id="hideDisabled" [(ngModel)]="freight.shipViaId" disabled>
+              <!-- <select class="form-control select-read-only" id="hideDisabled" [(ngModel)]="freight.shipViaId" disabled>
                 <option value="">Select</option>
                 <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
-              </select>
+              </select> -->
+              {{freight.shipVia}}
             </td>
-            <td class="table-column-width" class="content-to-end">{{freight.weight}}</td>
-            <td class="table-column-width">{{freight.uom}}</td>
-            <td class="table-column-width" class="content-to-end">{{freight.length}}</td>
-            <td class="table-column-width" class="content-to-end">{{freight.height}}</td>
-            <td class="table-column-width" class="content-to-end">{{freight.width}}</td>
-            <td class="table-column-width">{{freight.dimensionUOM}}</td>
-            <td class="table-column-width">{{freight.currency}}</td>
-            <td class="table-column-width" class="content-to-end"><span
+            <td class="table-column-width content-to-end">{{freight.weight}}</td>
+            <td class="table-column-width content-to-end">{{freight.uom}}</td>
+            <td class="table-column-width content-to-end">{{freight.length}}</td>
+            <td class="table-column-width content-to-end">{{freight.height}}</td>
+            <td class="table-column-width content-to-end">{{freight.width}}</td>
+            <td class="table-column-width content-to-end">{{freight.dimensionUOM}}</td>
+            <td class="table-column-width content-to-end">{{freight.currency}}</td>
+            <td class="table-column-width content-to-end"><span
                 *ngIf="freight.amount">{{formateCurrency(freight.amount)}}</span></td>
-            <td class="table-column-width" [innerHTML]="freight.memo"></td>
+            <td class="table-column-width content-to-end" style="text-transform: none;" [innerHTML]="freight.memo"></td>
             <ng-container>
               <td class="table-column-width">
                 <select (ngModelChange)="validated()" class="form-control" [(ngModel)]="freight.billingMethodId"
@@ -181,8 +183,7 @@
                   </a>
                 </span>
                 <span>
-                  <button class="btn  nobg grey_btn_icon padding-0"
-                    [disabled]="freight.salesOrderQuoteFreightId==0"
+                  <button class="btn  nobg grey_btn_icon padding-0" [disabled]="freight.salesOrderQuoteFreightId==0"
                     (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                     matTooltipPosition="above">
                     <i class="fa fa-history">
@@ -196,8 +197,7 @@
                       aria-hidden="true"></i></a>
                 </span>
                 <span>
-                  <button class="btn  nobg grey_btn_icon padding-0"
-                    [disabled]="freight.salesOrderQuoteFreightId==0"
+                  <button class="btn  nobg grey_btn_icon padding-0" [disabled]="freight.salesOrderQuoteFreightId==0"
                     (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                     matTooltipPosition="above">
                     <i class="fa fa-history">
@@ -274,115 +274,113 @@
         </div>
         <div class="tab-content">
           <!-- <div class="table-responsive table-overflow" style="height: 340px;"> -->
-            <form #frieghtsCreateForm="ngForm">
-              <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                <div class="tableFixHead">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th rowspan="2">Ship Via<span class="clr-red">*</span></th>
-                    <th rowspan="2">Weight</th>
-                    <th rowspan="2">UOM</th>
-                    <th colspan="4">Dimensions</th>
-                    <th rowspan="2">Currency</th>
-                    <th rowspan="2">Amount<span class="clr-red">*</span></th>
-                    <th rowspan="2">Memo</th>
-                    <th rowspan="2">Actions</th>
-                  </tr>
-                  <tr>
-                    <th>L</th>
-                    <th>H</th>
-                    <th>W</th>
-                    <th>UOM</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let f of freightForm; let i = index">
-                    <td class="text-center">
-                      <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel" [options]="shipViaList"
-                        (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required
-                        appendTo='body' [baseZIndex]="9999">
-                      </p-dropdown>
-                      <span class="circle-span"><a class="fa fa-plus-circle fa-lg"
-                          matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal"
-                          data-target="#AddShipVia" (click)="onEditShipVia('Add',f.shipViaId,i)"></a></span>
-                      <span class="pencil-span"><a class="btn nobg" *ngIf="f.shipViaId > 0"
-                          matTooltip="Edit Ship Via" matTooltipPosition="above" data-toggle="modal"
-                          data-target="#AddShipVia" (click)="onEditShipVia('Edit',f.shipViaId,i)"><i
-                            class="fa fa-pencil"></i></a>
-                      </span>
-                    </td>
-                    <td class="text-center">
-                      <input type="number" name="weight{{ i }}" (ngModelChange)="enableUpdate()" #weight="ngModel"
-                        [(ngModel)]="f.weight" class="form-control w50" (onChange)="weightChange()" />
-                    </td>
-                    <td class="text-center">
-                      <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()"
-                        (input)="onFilterUom($event.target.value)" name="unitOfMeasureId{{ i }}"
-                        [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
-                        [(ngModel)]="f.uomId" filter="true" [required]="f.weight > 0">
-                      </p-dropdown>
-                    </td>
-                    <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="length{{ i }}"
-                        [(ngModel)]="f.length" #length="ngModel" class="form-control w50" /></td>
-                    <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="height{{ i }}" #height="ngModel"
-                        [(ngModel)]="f.height" class="form-control w50" /></td>
-                    <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="width{{ i }}" #width="ngModel"
-                        [(ngModel)]="f.width" class="form-control w50" /></td>
-                    <td class="text-center">
-                      <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" filter="true"
-                        (input)="onFilterUom($event.target.value)" name="dimensionUOMId{{ i }}"
-                        [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
-                        [(ngModel)]="f.dimensionUOMId" [required]="f.length > 0 || f.height > 0 || f.width > 0">
-                      </p-dropdown>
-                    </td>
-                    <td class="text-center">
-                      <p-dropdown placeholder="Select " (ngModelChange)="enableUpdate()" name="currencyId{{ i }}"
-                        [options]="currencyList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
-                        [(ngModel)]="f.currencyId" filter="true" (input)="onFilterCurrency($event.target.value)">
-                      </p-dropdown>
-                    </td>
-                    <td class="text-center">
-                      <input type="text" (ngModelChange)="enableUpdate()" InputText pKeyFilter="money"
-                        name="amount{{ i }}" #amount="ngModel" [(ngModel)]="f.amount"
-                        class="form-control w100 text_right" (change)="f.amount = formateCurrency(f.amount);" required />
-                    </td>
-                    <td>
-                      <div class="form-group memo-popup-cstm mat_emo"
-                        style="width: 120px;    display: inline-flex; margin-bottom: 0;">
-                        <div [innerHTML]="f.memo" class="text_editor_box"></div>
-                        <i class="fa fa-pencil" data-toggle="modal" style="position: relative;top: 6px;"
-                          data-target="#textarea-popupFreight" matTooltip="Memo" matTooltipPosition="above"
-                          (click)="onAddTextAreaInfo(f,i)"></i>
-                      </div>
-                    </td>
-                    <td>
+          <form #frieghtsCreateForm="ngForm">
+            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+              <div class="tableFixHead">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th rowspan="2">Ship Via<span class="clr-red">*</span></th>
+                      <th rowspan="2">Weight</th>
+                      <th rowspan="2">UOM</th>
+                      <th colspan="4">Dimensions</th>
+                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">Amount<span class="clr-red">*</span></th>
+                      <th rowspan="2">Memo</th>
+                      <!-- <th rowspan="2">Actions</th> -->
+                    </tr>
+                    <tr>
+                      <th>L</th>
+                      <th>H</th>
+                      <th>W</th>
+                      <th>UOM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let f of freightForm; let i = index">
+                      <td class="text-center">
+                        <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel"
+                          [options]="shipViaList" (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md"
+                          [(ngModel)]="f.shipViaId" required appendTo='body' [baseZIndex]="9999">
+                        </p-dropdown>
+                        <span class="circle-span"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Ship Via"
+                            matTooltipPosition="above" data-toggle="modal" data-target="#AddShipVia"
+                            (click)="onEditShipVia('Add',f.shipViaId,i)"></a></span>
+                        <span class="pencil-span"><a class="btn nobg" *ngIf="f.shipViaId > 0" matTooltip="Edit Ship Via"
+                            matTooltipPosition="above" data-toggle="modal" data-target="#AddShipVia"
+                            (click)="onEditShipVia('Edit',f.shipViaId,i)"><i class="fa fa-pencil"></i></a>
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <input type="number" name="weight{{ i }}" (ngModelChange)="enableUpdate()" #weight="ngModel"
+                          [(ngModel)]="f.weight" class="form-control w50" (onChange)="weightChange()" />
+                      </td>
+                      <td class="text-center">
+                        <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()"
+                          (input)="onFilterUom($event.target.value)" name="unitOfMeasureId{{ i }}"
+                          [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
+                          [(ngModel)]="f.uomId" filter="true" [required]="f.weight > 0">
+                        </p-dropdown>
+                      </td>
+                      <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="length{{ i }}"
+                          [(ngModel)]="f.length" #length="ngModel" class="form-control w50" /></td>
+                      <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="height{{ i }}"
+                          #height="ngModel" [(ngModel)]="f.height" class="form-control w50" /></td>
+                      <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="width{{ i }}"
+                          #width="ngModel" [(ngModel)]="f.width" class="form-control w50" /></td>
+                      <td class="text-center">
+                        <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" filter="true"
+                          (input)="onFilterUom($event.target.value)" name="dimensionUOMId{{ i }}"
+                          [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
+                          [(ngModel)]="f.dimensionUOMId" [required]="f.length > 0 || f.height > 0 || f.width > 0">
+                        </p-dropdown>
+                      </td>
+                      <td class="text-center">
+                        <p-dropdown placeholder="Select " (ngModelChange)="enableUpdate()" name="currencyId{{ i }}"
+                          [options]="currencyList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
+                          [(ngModel)]="f.currencyId" filter="true" (input)="onFilterCurrency($event.target.value)">
+                        </p-dropdown>
+                      </td>
+                      <td class="text-center">
+                        <input type="text" (ngModelChange)="enableUpdate()" InputText pKeyFilter="money"
+                          name="amount{{ i }}" #amount="ngModel" [(ngModel)]="f.amount"
+                          class="form-control w100 text_right" (change)="f.amount = formateCurrency(f.amount);"
+                          required />
+                      </td>
+                      <td>
+                        <div class="form-group memo-popup-cstm mat_emo"
+                          style="width: 120px; display: inline-flex; margin-bottom: 0;">
+                          <div [innerHTML]="f.memo" class="text_editor_box"></div>
+                          <i class="fa fa-pencil" data-toggle="modal" style="position: relative;top: 6px;"
+                            data-target="#textarea-popupFreight" matTooltip="Memo" matTooltipPosition="above"
+                            (click)="onAddTextAreaInfo(f,i)"></i>
+                        </div>
+                      </td>
+                      <!-- <td>
                       <button class="btn btn-danger nobg" [disabled]="isEdit==true"
                        
                         matTooltip="Delete" matTooltipPosition="above" data-toggle="modal"
                         data-target="#deleteConfirmation">
                         <i class="fa fa-trash"></i>
                       </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    </td> -->
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              </div>
-            </form>
-            <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static"
-              data-keyboard="false">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
-                    <h4 class="modal-title">Edit {{"Memo"}}</h4>
-                  </div>
-                  <div class="modal-body">
-                    <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
-                    required>
+            </div>
+          </form>
+          <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                  <h4 class="modal-title">Edit {{"Memo"}}</h4>
+                </div>
+                <div class="modal-body">
+                  <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required>
                   </p-editor>
-                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
+                  <!-- <table class="table table-bordered table-fixed workflow-table-material">
                       <thead>
                         <th style="color: #fff;">{{"Memo"}}</th>
                       </thead>
@@ -396,20 +394,19 @@
                         </tr>
                       </tbody>
                     </table> -->
-                    <div class="editor-buttons">
-                      <button type="button" class="btn btn-primary editor-buttons-margin"
-                        (click)="onSaveTextAreaInfo(textAreaInfo);">
-                        Save
-                      </button>
-                      <button type="button" class="btn btn-danger editor-buttons-margin"
-                        (click)="onCloseTextAreaInfo()">
-                        Close
-                      </button>
-                    </div>
+                  <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin"
+                      (click)="onSaveTextAreaInfo(textAreaInfo);">
+                      Save
+                    </button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">
+                      Close
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
           <!-- </div> -->
         </div>
       </div>
@@ -441,15 +438,15 @@
 </div>
 <div id="deleteConfirmation" class="modal fade" role="dialog" data-backdrop="static">
   <div class="modal-dialog modal-sm">
-<div class="modal-content">
-          <div class="modal-header">
-              <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-              <button type="button" class="close" aria-label="Close" data-dismiss="modal">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <!-- <strong style="display: inline-flex;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <strong style="display: inline-flex;">
                   Ship Via:
                   <span class="new-label">
                       <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
@@ -459,13 +456,14 @@
                       </select>
                   </span>
               </strong> -->
-          
-        </div> 
-          <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteRow(i, frieghtsCreateForm)">Yes</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-          </div>
+
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+          (click)="deleteRow(i, frieghtsCreateForm)">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+      </div>
+    </div>
 
   </div>
 </div>
@@ -487,18 +485,28 @@
         </select>
       </span>
     </strong> -->
-    <div class="form-row">
+    <!-- <div class="form-row">
       <div class="col-md-12 margin-right" style="display: inline-flex;">
         <label class="fs12"> Ship Via: </label>
-        <span class="new-label"> 
+        <span class="new-label">
           <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
+            [(ngModel)]="selectedRowForDelete.shipViaId" disabled>
+            <option value="">Select</option>
+            <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+          </select>
+        </span>
+      </div>
+    </div> -->
+    <strong style="display: inline-flex;">
+      Ship Via&nbsp;:&nbsp;
+      <span class="new-label" *ngIf="selectedRowForDelete">
+        <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
           [(ngModel)]="selectedRowForDelete.shipViaId" disabled>
           <option value="">Select</option>
           <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
         </select>
       </span>
-      </div>
-  </div>
+    </strong>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-success" (click)="delete()">Yes</button>
@@ -538,84 +546,84 @@
   </div>
   <div class="modal-body">
     <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-      <div class="tableFixHead">  
-      <table class="table table-bordered header-table-width">
-        <thead>
-          <tr>
-            <th rowspan="2">Ship Via <span class="clr-red">*</span></th>
-            <th rowspan="2">Weight</th>
-            <th rowspan="2">UOM</th>
-            <th colspan="4" class="text-center">Dimensions</th>
-            <th rowspan="2">Currency</th>
-            <th rowspan="2">Amount <span class="clr-red">*</span></th>
-            <th rowspan="2">Memo</th>
-            <th rowspan="2">Billing Method</th>
-            <th rowspan="2">Billing Amount</th>
-            <th rowspan="2">Is Active</th>
-            <th rowspan="2">Created Date</th>
-            <th rowspan="2">Created By</th>
-            <th rowspan="2">Updated Date</th>
-            <th rowspan="2">Updated By</th>
-            <th rowspan="2">Is Deleted</th>
-          </tr>
-          <tr>
-            <th>Length</th>
-            <th>Height</th>
-            <th>Width</th>
-            <th>UOM</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let audit of freightAudiHistory; let i = index;">
-          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'shipVia', audit.shipVia)  ? 'black' : 'red'  }">
-            {{audit.shipVia}}</td>
-          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'weight', audit.weight)  ? 'black' : 'red'  }">
-            {{audit.weight}}</td>
-          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'uom', audit.uom)  ? 'black' : 'red'  }">{{audit.uom}}
-          </td>
-          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'length', audit.length)  ? 'black' : 'red'  }">
-            {{audit.length}}</td>
-          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'height', audit.height)  ? 'black' : 'red'  }">
-            {{audit.height}}</td>
-          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'width', audit.width)  ? 'black' : 'red'  }">
-            {{audit.width}}</td>
-          <td
-            [ngStyle]="{'color':  getColorCodeForHistory(i, 'dimensionUOM', audit.dimensionUOM)  ? 'black' : 'red'  }">
-            {{audit.dimensionUOM}}</td>
-          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'currency', audit.currency)  ? 'black' : 'red'  }">
-            {{audit.currency}}</td>
-          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">
-            {{audit.amount}}</td>
-          <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
-            <p class="p_editor" [innerHTML]="audit.memo"></p>
-          </td>
-          <td
-            [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">
-            {{audit.billingMethodName}}</td>
-          <td
-            [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
-            {{audit.billingAmount}}</td>
-          <td class="text-center">
-            <span class="value">
-              <label class="wauto">
-                <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
-              </label>
-            </span>
-          </td>
-          <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-          <td>{{audit.createdBy}}</td>
-          <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-          <td>{{audit.updatedBy}}</td>
-          <td class="text-center">
-            <span class="value">
-              <label class="wauto">
-                <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
-              </label>
-            </span>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div class="tableFixHead">
+        <table class="table table-bordered header-table-width">
+          <thead>
+            <tr>
+              <th rowspan="2">Ship Via <span class="clr-red">*</span></th>
+              <th rowspan="2">Weight</th>
+              <th rowspan="2">UOM</th>
+              <th colspan="4" class="text-center">Dimensions</th>
+              <th rowspan="2">Currency</th>
+              <th rowspan="2">Amount <span class="clr-red">*</span></th>
+              <th rowspan="2">Memo</th>
+              <th rowspan="2">Billing Method</th>
+              <th rowspan="2">Billing Amount</th>
+              <th rowspan="2">Is Active</th>
+              <th rowspan="2">Created Date</th>
+              <th rowspan="2">Created By</th>
+              <th rowspan="2">Updated Date</th>
+              <th rowspan="2">Updated By</th>
+              <th rowspan="2">Is Deleted</th>
+            </tr>
+            <tr>
+              <th>Length</th>
+              <th>Height</th>
+              <th>Width</th>
+              <th>UOM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let audit of freightAudiHistory; let i = index;">
+              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'shipVia', audit.shipVia)  ? 'black' : 'red'  }">
+                {{audit.shipVia}}</td>
+              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'weight', audit.weight)  ? 'black' : 'red'  }">
+                {{audit.weight}}</td>
+              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'uom', audit.uom)  ? 'black' : 'red'  }">{{audit.uom}}
+              </td>
+              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'length', audit.length)  ? 'black' : 'red'  }">
+                {{audit.length}}</td>
+              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'height', audit.height)  ? 'black' : 'red'  }">
+                {{audit.height}}</td>
+              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'width', audit.width)  ? 'black' : 'red'  }">
+                {{audit.width}}</td>
+              <td
+                [ngStyle]="{'color':  getColorCodeForHistory(i, 'dimensionUOM', audit.dimensionUOM)  ? 'black' : 'red'  }">
+                {{audit.dimensionUOM}}</td>
+              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'currency', audit.currency)  ? 'black' : 'red'  }">
+                {{audit.currency}}</td>
+              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">
+                {{audit.amount}}</td>
+              <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
+                <p class="p_editor" [innerHTML]="audit.memo"></p>
+              </td>
+              <td
+                [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">
+                {{audit.billingMethodName}}</td>
+              <td
+                [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
+                {{audit.billingAmount}}</td>
+              <td class="text-center">
+                <span class="value">
+                  <label class="wauto">
+                    <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
+                  </label>
+                </span>
+              </td>
+              <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+              <td>{{audit.createdBy}}</td>
+              <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+              <td>{{audit.updatedBy}}</td>
+              <td class="text-center">
+                <span class="value">
+                  <label class="wauto">
+                    <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
+                  </label>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -632,10 +640,10 @@
         <h4 class="modal-title">Add Ship Via </h4>
       </div>
       <!-- <div class="modal-body"> -->
-        <div class="form-group">
-          <app-ship-via-create [ShipViaEditID]="ShipViaEditID" (on-shipvia-save)="RefreshAfterAddShipVia($event)">
-          </app-ship-via-create>
-        </div>
+      <div class="form-group">
+        <app-ship-via-create [ShipViaEditID]="ShipViaEditID" (on-shipvia-save)="RefreshAfterAddShipVia($event)">
+        </app-ship-via-create>
+      </div>
       <!-- </div>
       <div class="modal-footer">
       </div> -->
