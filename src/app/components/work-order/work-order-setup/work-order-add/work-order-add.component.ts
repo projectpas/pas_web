@@ -2452,6 +2452,8 @@ this.getNewMaterialListByWorkOrderId();
     }
     saveReservedPartorIssue(alternatePartData) {  
         alternatePartData.masterCompanyId=alternatePartData.masterCompanyId ? alternatePartData.masterCompanyId : this.currentUserMasterCompanyId;
+        this.gridActiveTab == '';
+        this.gridActiveTab == 'materialList';
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible=true;
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {

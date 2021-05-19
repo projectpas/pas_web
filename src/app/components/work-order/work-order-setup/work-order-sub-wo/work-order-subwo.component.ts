@@ -60,6 +60,7 @@ export class SubWorkOrderComponent implements OnInit {
     currentDate=new Date();
      subTabWorkFlow = "viewworkFlow";
      isWorkOrder:boolean=true;
+     woStatus:any;
     constructor(private router: Router,
         private commonService: CommonService,
         private datePipe: DatePipe,
@@ -94,6 +95,10 @@ export class SubWorkOrderComponent implements OnInit {
             this.showTabsGrid = true;
             this.showGridMenu = true;
         }
+      this.woStatus=  localStorage.getItem('woStatus');
+      if(this.woStatus && this.woStatus=='Closed'){
+          this.isView=true;
+      }
         this.getAllExpertiseType(); 
         this.getSubWorkOrderEditData();
         this.getSubWorOrderMpns();
