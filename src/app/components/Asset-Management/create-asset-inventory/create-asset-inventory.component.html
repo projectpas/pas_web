@@ -374,7 +374,7 @@
                         <label>Memo</label>
                         <div class="align_adh">
                             <div [innerHTML]="currentAsset.memo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.memo)"
-                                class="p_editor_box input-width-100-percent"></div>
+                                class="text_editor_box line-height input-width-100-percent" ></div>
                             <i class="fa fa-pencil contoel_v"
                                 (ngModelChange)="getmemo($event)"
                                 data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo"
@@ -493,7 +493,7 @@
             <label>Memo</label>
             <div class="align_adh">
                 <div [innerHTML]="currentAsset.calibrationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.calibrationMemo)"
-                    class="p_editor_box input-width-100-percent"></div>
+                    class="text_editor_box line-height input-width-100-percent"></div>
                 <i class="fa fa-pencil contoel_v"
                     data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above"  matTooltip="Add Calibration Memo" (click)="onAddMemo('Calibration Memo')"></i>
             </div>
@@ -545,12 +545,12 @@
                 <div class="form-group memo-popup-cstm">
                     <!-- <label>Memo <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Tolerance Memo" (click)="onAddMemo('Calibration Memo')"></i></label>
                     <span>
-                        <div [innerHTML]="currentAsset.assetCalibrationMemo" class="form-control" class="p_editor_box"></div>
+                        <div [innerHTML]="currentAsset.assetCalibrationMemo" class="form-control" class="text_editor_box line-height"></div>
                     </span> -->
                     <label>Memo</label>
                     <div class="align_adh">
                         <div [innerHTML]="currentAsset.assetCalibrationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.assetCalibrationMemo)"
-                            class="p_editor_box input-width-100-percent"></div>
+                            class="text_editor_box line-height input-width-100-percent"></div>
                         <i class="fa fa-pencil contoel_v"
                             data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above"  matTooltip="Add Tolerance Memo" (click)="onAddMemo('Tolerance Memo')"></i>
                     </div>
@@ -622,7 +622,7 @@
             <label>Certification Memo</label>
             <div class="align_adh">
                 <div [innerHTML]="currentAsset.certificationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.certificationMemo)"
-                    class="p_editor_box input-width-100-percent" ></div>
+                    class="text_editor_box line-height input-width-100-percent" ></div>
                 <i class="fa fa-pencil contoel_v"
                     data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above"  matTooltip="Add Certification Memo" (click)="onAddMemo('Certification Memo')"></i>
             </div>
@@ -686,13 +686,13 @@
         <div class="form-group memo-popup-cstm">
             <!-- <label>Inspection Memo <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Inspection Memo" (click)="onAddMemo('Inspection Memo')"></i></label>
             <span>
-                <div [innerHTML]="currentAsset.inspectionMemo" class="form-control" class="p_editor_box"></div>
+                <div [innerHTML]="currentAsset.inspectionMemo" class="form-control" class="text_editor_box line-height"></div>
             </span> -->
 
             <label>Inspection Memo </label>
             <div class="align_adh">
                 <div [innerHTML]="currentAsset.inspectionMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.inspectionMemo)"
-                    class="p_editor_box input-width-100-percent"></div>
+                    class="text_editor_box line-height input-width-100-percent"></div>
                 <i class="fa fa-pencil contoel_v"
                     data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above"  matTooltip="Add Inspection Memo" (click)="onAddMemo('Inspection Memo')"></i>
             </div>
@@ -756,12 +756,12 @@
         <div class="form-group memo-popup-cstm">
             <!-- <label>Verification Memo <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Verification Memo" (click)="onAddMemo('Verification Memo')"></i></label>
             <span>
-                <div [innerHTML]="currentAsset.verificationMemo" class="form-control" class="p_editor_box"></div>
+                <div [innerHTML]="currentAsset.verificationMemo" class="form-control" class="text_editor_box line-height"></div>
             </span> -->
             <label>Verification Memo </label>
             <div class="align_adh">
                 <div [innerHTML]="currentAsset.verificationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.verificationMemo)"
-                    class="p_editor_box input-width-100-percent"></div>
+                    class="text_editor_box line-height input-width-100-percent"></div>
                 <i class="fa fa-pencil contoel_v"
                     data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above"  matTooltip="Add Verification Memo" (click)="onAddMemo('Verification Memo')"></i>
             </div>
@@ -812,17 +812,20 @@
                                 <label>GL Account</label>
                                 <input type="text" class="form-control" name="glAccountName" [(ngModel)]="currentAsset.glAccountName" disabled>
                             </div>
-                            <div class="form-group memo-popup-cstm">
+                            <div class="form-group">
                                 <!-- <label>Maintenance Memo <i class="fa fa-info-circle fa-lg" (ngModelChange)="getmemo($event)" data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Maintenance Memo" (click)="onAddMemo('Maintenance Memo')"></i></label>
                                 <span >
-                                    <div [innerHTML]="currentAsset.maintenanceMemo" class="form-control" class="p_editor_box"></div>
+                                    <div [innerHTML]="currentAsset.maintenanceMemo" class="form-control" class="text_editor_box line-height"></div>
                                 </span> -->
                                 <label>Maintenance Memo</label>
                                 <div class="align_adh">
                                     <div [innerHTML]="currentAsset.maintenanceMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.maintenanceMemo)"
-                                        class="p_editor_box input-width-100-percent"></div>
+                                        class="text_editor_box line-height input-width-100-percent"></div>
                                     <i class="fa fa-pencil contoel_v"
-                                        data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above"  matTooltip="Add Maintenance Memo" (click)="onAddMemo('Maintenance Memo')"></i>
+                                        data-toggle="modal" data-target="#cpo-memo"
+                                         matTooltipPosition="above" 
+                                          matTooltip="Add Maintenance Memo"
+                                           (click)="onAddMemo('Maintenance Memo')"></i>
                                 </div>
                             </div>
                         </div>
@@ -1058,12 +1061,12 @@
                                     <div class="form-group memo-popup-cstm">
                                         <!-- <label>Warranty Memo <i class="fa fa-info-circle fa-lg" (ngModelChange)="getmemo($event)" data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Warranty Memo" (click)="onAddMemo('Warranty Memo')"></i></label>
                                         <span matTooltipPosition="above" matTooltip="Warranty Memo">
-                                            <div [innerHTML]="currentAsset.warrantyMemo" class="form-control" class="p_editor_box"></div>
+                                            <div [innerHTML]="currentAsset.warrantyMemo" class="form-control" class="text_editor_box line-height"></div>
                                         </span> -->
                                         <label>Warranty Memo </label>
                                         <div class="align_adh">
                                             <div [innerHTML]="currentAsset.warrantyMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.warrantyMemo)"
-                                                class="p_editor_box input-width-100-percent" ></div>
+                                                class="text_editor_box line-height input-width-100-percent" ></div>
                                             <i class="fa fa-pencil contoel_v"
                                                 data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above"  matTooltip="Add Warranty Memo" (click)="onAddMemo('Warranty Memo')"></i>
                                         </div>
@@ -1517,11 +1520,11 @@ data-backdrop="static">
                     <div class="form-group memo-popup-cstm">
                         <!-- <label style="float: none">Memo <i class="fa fa-info-circle fa-lg"  data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddMemo('Document Memo')"></i></label>
                         <span >
-                            <div [innerHTML]="documentInformation.docMemo" class="form-control" class="p_editor_box"></div></span> -->
+                            <div [innerHTML]="documentInformation.docMemo" class="form-control" class="text_editor_box line-height"></div></span> -->
                             <label>Memo</label>
                             <div class="align_adh">
                                 <div [innerHTML]="documentInformation.docMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(documentInformation.docMemo)"
-                                    class="p_editor_box input-width-100-percent"></div>
+                                    class="text_editor_box line-height input-width-100-percent"></div>
                                 <i class="fa fa-pencil contoel_v"
                                     (ngModelChange)="getmemo($event)"
                                     data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddMemo('Document Memo')"></i>
@@ -1783,11 +1786,11 @@ data-backdrop="static">
                     <div class="form-group memo-popup-cstm">
                         <!-- <label style="float: none">Memo <i class="fa fa-info-circle fa-lg" (ngModelChange)="getmemo($event)" data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddMemo('Document Memo')"></i></label>
                         <span >
-                            <div [innerHTML]="documentInformation.docMemo" class="form-control" class="p_editor_box"></div></span> -->
+                            <div [innerHTML]="documentInformation.docMemo" class="form-control" class="text_editor_box line-height"></div></span> -->
                             <label>Memo</label>
                             <div class="align_adh">
                                 <div [innerHTML]="documentInformation.docMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(documentInformation.docMemo)"
-                                    class="p_editor_box input-width-100-percent"></div>
+                                    class="text_editor_box line-height input-width-100-percent"></div>
                                 <i class="fa fa-pencil contoel_v"
                                     (ngModelChange)="getmemo($event)"
                                     data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddMemo('Document Memo')"></i>
@@ -1957,11 +1960,11 @@ data-backdrop="static">
                     <div class="form-group memo-popup-cstm">
                         <!-- <label style="float: none">Memo <i class="fa fa-info-circle fa-lg" (ngModelChange)="getmemo($event)" data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddMemo('Document Memo')"></i></label>
                         <span >
-                            <div [innerHTML]="documentInformation.docMemo" class="form-control" class="p_editor_box"></div></span> -->
+                            <div [innerHTML]="documentInformation.docMemo" class="form-control" class="text_editor_box line-height"></div></span> -->
                             <label>Memo</label>
                             <div class="align_adh">
                                 <div [innerHTML]="documentInformation.docMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(documentInformation.docMemo)"
-                                    class="p_editor_box input-width-100-percent"></div>
+                                    class="text_editor_box line-height input-width-100-percent"></div>
                                 <i class="fa fa-pencil contoel_v"
                                     (ngModelChange)="getmemo($event)"
                                     data-toggle="modal" data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddMemo('Document Memo')"></i>
