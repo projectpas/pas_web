@@ -83,7 +83,7 @@
     <div class="col-6 column">
       <div *ngIf="type == 'SOQ'" class="col-5 column">
         <div class="form-group">
-          <label>Qty AlreadyQuoted</label>
+          <label>Qty Already Quoted</label>
           <input type="text" class="form-control text-right" name="qtyAlreadyQuoted"
             [ngModel]="query.partSearchParamters.quantityAlreadyQuoted | globalNmberFormat"
             (ngModelChange)="query.partSearchParamters.quantityAlreadyQuoted=$event" disabled="true" />

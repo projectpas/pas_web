@@ -46,7 +46,7 @@
     <div class="col-md-12 col-sm-12 col-12">
       <div class="col-3 column">
         <div class="form-group">
-          <label>Quantity requested</label>
+          <label>Qty requested</label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
             name="quantityRequest" disabled="true" [ngModel]="part.quantityRequested  | globalNmberFormat"
             (ngModelChange)="part.quantityRequested=formatStringToNumberGlobal($event)" />
@@ -54,7 +54,7 @@
       </div>
       <div class="col-3 column">
         <div class="form-group">
-          <label>Quantity already quoted</label>
+          <label>Qty already quoted</label>
           <input type="text" class="form-control quantityTextBox text-right" name="quantityAlreadyQuoted"
             disabled="true" [ngModel]="part.quantityAlreadyQuoted  | globalNmberFormat"
             (ngModelChange)="part.quantityAlreadyQuoted=formatStringToNumberGlobal($event)" />
@@ -62,7 +62,7 @@
       </div>
       <div class="col-3 column">
         <div class="form-group">
-          <label>Quantity from this <span *ngIf="part.method=='Item Master'">PN</span><span
+          <label>Qty from this <span *ngIf="part.method=='Item Master'">PN</span><span
               *ngIf="part.method=='Stock Line'">{{part.stockLineNumber}}</span></label>
           <input type="text" (keyup)="onChangeQuantityFromThis($event)" (blur)="onChangeQuantityFromThis($event)"
             class="form-control quantityTextBox text-right" name="quantityFromThis"
@@ -76,7 +76,7 @@
       </div>
       <div class="col-3 column">
         <div class="form-group">
-          <label>Quantity to be quoted</label>
+          <label>Qty to be quoted</label>
           <input type="text" class="form-control quantityTextBox text-right" name="quantityToBeQuoted" disabled="true"
             [ngModel]="part.quantityToBeQuoted  | globalNmberFormat"
             (ngModelChange)="part.quantityToBeQuoted=formatStringToNumberGlobal($event)" />

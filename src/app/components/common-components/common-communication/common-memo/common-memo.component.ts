@@ -35,7 +35,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     data: any = [];
     modal: NgbModalRef;
     headers = [
-        { field: 'SERIAL_NO', header: 'Serial No' },
+        { field: 'SERIAL_NO', header: 'Serial Num' },
         { field: 'descriptionData', header: 'Memo' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
@@ -43,7 +43,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
         { field: 'updatedBy', header: 'Updated By' },
     ]
     selectedColumns = [
-        { field: 'SERIAL_NO', header: 'Serial No' },
+        { field: 'SERIAL_NO', header: 'Serial Num' },
         { field: 'descriptionData', header: 'Memo' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },

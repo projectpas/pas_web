@@ -18,18 +18,18 @@
                 <table class="table table-bordered" id="so-table">
                     <tr class="font-size-10">
                         <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'min-width': summaryColumn.width}">
-                            <span *ngIf="summaryColumn.field == 'quantityToBeQuoted'
+                            <div *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                  || summaryColumn.field == 'customerRef'
                                  || summaryColumn.field == 'quantityRequested'
                                  || summaryColumn.field == 'quantityOrdered'">
                                 {{ summaryColumn.header }}
-                            </span>
-                            <span *ngIf="summaryColumn.field != 'quantityToBeQuoted' 
+                            </div>
+                            <div *ngIf="summaryColumn.field != 'quantityToBeQuoted' 
                             && summaryColumn.field != 'customerRef'
                                 && summaryColumn.field != 'quantityRequested'
                                 && summaryColumn.field != 'quantityOrdered'">
                                 {{ summaryColumn.header }}
-                            </span>
+                            </div>
                         </th>
                         <th colspan="12"></th>
                         <th *ngIf="isViewMode == false"
