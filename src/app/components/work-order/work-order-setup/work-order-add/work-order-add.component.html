@@ -1121,8 +1121,8 @@
                     [workFlowId]="workFlowId"></app-workflow-list>
             </div> -->
                 <div *ngIf="workOrderId && (gridActiveTab == 'materialList') "
-                    [ngClass]="{hidedata : gridActiveTab !== 'materialList' }">
-                    <app-work-order-complete-material-list (saveMaterialsData)="saveMaterials($event)" (updateMaterialsData)="updateMaterials($event)" (isSubWorkorder)="isSubWorkorderCheck($event)"
+                    [ngClass]="{hidedata : gridActiveTab !== 'materialList' }"> 
+                    <app-work-order-complete-material-list (saveMaterialsData)="saveMaterials($event)" [workOrderNumberStatus]="workOrderNumberStatus" (updateMaterialsData)="updateMaterials($event)" (isSubWorkorder)="isSubWorkorderCheck($event)"
                         [materialStatus]="materialStatus" [isWorkOrder]="isWorkOrder" [workFlowObject]="workFlowObject"
                         [savedWorkOrderData]="savedWorkOrderData" [isSubWorkOrder]="isSubWorkOrder"
                         [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
@@ -1220,7 +1220,7 @@
                 </div>
                 <div *ngIf="workOrderId && (gridActiveTab === 'subWO') "
                     [ngClass]="{hidedata : gridActiveTab !== 'subWO'}">
-                    <app-sub-work-orderlist [workOrderId]="workOrderId" [mpnId]="workOrderPartNumberId"
+                    <app-sub-work-orderlist [workOrderId]="workOrderId" [mpnId]="workOrderPartNumberId" [workOrderNumberStatus]="workOrderNumberStatus"    
                         [isView]="isView || isViewForApprovedPart" [forSubWorkOrder]="false">
                     </app-sub-work-orderlist>
                 </div>

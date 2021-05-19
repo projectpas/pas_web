@@ -19,6 +19,7 @@ export class SubWorkOrderListComponent implements OnInit {
     @Input() isView: boolean = false;
     @Input() forSubWorkOrder = false;
     @Input() workOrderMaterialsId: any;
+    @Input() workOrderNumberStatus:any;
     subWorkOrderData: any = [];
     subWorkOrderCols = [
         { field: 'subWorkOrderNo', header: 'Sub WorkOrderNo' },
@@ -72,7 +73,12 @@ export class SubWorkOrderListComponent implements OnInit {
     }
     edit(rowData) {
         const { subWorkOrderId } = rowData;
-        window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subWorkOrderId}`);
+        localStorage.setItem('woStatus', this.workOrderNumberStatus);
+        // window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subWorkOrderId}`);
+   
+        this._router.navigateByUrl(
+            `workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subWorkOrderId}`
+          );
     }
     delete(rowData) {
 
@@ -82,7 +88,13 @@ export class SubWorkOrderListComponent implements OnInit {
     }
     AddSubWo(rowData) {
         const subworkorderid = 0;
-        window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${rowData.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}&exist=${1}`);
+        // window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${rowData.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}&exist=${1}`);
+   
+        this._router.navigateByUrl(
+            `workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${rowData.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}&exist=${1}`
+          );
+   
+   
     }
     showOtherOptions() { }
     otherOptionSelected(option) { }
