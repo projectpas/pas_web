@@ -46,7 +46,7 @@
     <div class="col-md-12 col-sm-12 col-12">
       <div class="col-3 column">
         <div class="form-group">
-          <label>Qty requested</label>
+          <label>Qty Requested</label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
             name="quantityRequest" disabled="true" [ngModel]="part.quantityRequested  | globalNmberFormat"
             (ngModelChange)="part.quantityRequested=formatStringToNumberGlobal($event)" />
@@ -54,7 +54,7 @@
       </div>
       <div class="col-3 column">
         <div class="form-group">
-          <label>Qty already quoted</label>
+          <label>Qty already Quoted</label>
           <input type="text" class="form-control quantityTextBox text-right" name="quantityAlreadyQuoted"
             disabled="true" [ngModel]="part.quantityAlreadyQuoted  | globalNmberFormat"
             (ngModelChange)="part.quantityAlreadyQuoted=formatStringToNumberGlobal($event)" />
@@ -76,7 +76,7 @@
       </div>
       <div class="col-3 column">
         <div class="form-group">
-          <label>Qty to be quoted</label>
+          <label>Qty to be Quoted</label>
           <input type="text" class="form-control quantityTextBox text-right" name="quantityToBeQuoted" disabled="true"
             [ngModel]="part.quantityToBeQuoted  | globalNmberFormat"
             (ngModelChange)="part.quantityToBeQuoted=formatStringToNumberGlobal($event)" />
