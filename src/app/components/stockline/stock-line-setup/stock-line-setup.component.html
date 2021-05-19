@@ -84,7 +84,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Revised PN</label>
-                                    <input class="form-control" type="text" name="revisedPart" [(ngModel)]="stockLineForm.revisedPart" (ngModelChange)="enableSave()" disabled>
+                                    <div class="inner-addon right-addon inline-block">
+                                        <p-autoComplete field="partnumber" class="pautocomp-cstm" [(ngModel)]="stockLineForm.revicedPNId" name="revicedPNId" [suggestions]="RevicepnList" (completeMethod)="filterRevicePartNumbers($event)" [size]="30" [minLength]="1" [dropdown]="true"  #partNum="ngModel" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enableSave()" required></p-autoComplete>
+                                    </div>
+                                    <!-- <input class="form-control" type="text" name="revisedPart" [(ngModel)]="stockLineForm.revisedPart" (ngModelChange)="enableSave()" disabled> -->
                                 </div>
                                 <div class="form-group m-t-10">
                                     <div>
@@ -338,7 +341,7 @@
                                 <p-autoComplete field="label" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId"
                                     [suggestions]="allPODetails" (completeMethod)="filterPOList($event)"
-                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    [size]="30" [minLength]="1" (onSelect)="onChangePONum(stockLineForm.purchaseOrderId)"  [dropdown]="true" errorMessage="Records not found"
                                     (ngModelChange)="enableSave()" [forceSelection]="true">
                                 </p-autoComplete>
                                 <!-- <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
@@ -354,8 +357,8 @@
                                 <p-autoComplete field="label" class="pautocomp-cstm"
                                 [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId"
                                 [suggestions]="allRODetails" (completeMethod)="filterROList($event)"
-                                [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                (ngModelChange)="enableSave()" [forceSelection]="true" [disabled]="stockLineForm.purchaseOrderId">
+                                [size]="30" [minLength]="1" (onSelect)="onChangeRONum(stockLineForm.repairOrderId)" [dropdown]="true" errorMessage="Records not found"
+                                (ngModelChange)="enableSave()" [forceSelection]="true">
                             </p-autoComplete>
                                 <!-- <p-autoComplete field="repairOrderNumber" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId"
@@ -646,14 +649,20 @@
                             <div class="form-group">
                                 <label>PO Unit Cost</label> 
                                 <input class="form-control text-right" type="text" pInputText pKeyFilter="money" 
-                                    name="purchaseOrderUnitCost" (change)="onChangePOUnitCost()" [disabled]="stockLineForm.repairOrderUnitCost > 0"
+                                    name="purchaseOrderUnitCost" (change)="onChangePOUnitCost()"
                                     [(ngModel)]="stockLineForm.purchaseOrderUnitCost" (ngModelChange)="enableSave()">
                             </div>
                             <div class="form-group">
                                 <label>RO Unit Cost</label>
                                 <input class="form-control text-right" type="text" pInputText pKeyFilter="money" 
-                                    name="repairOrderUnitCost" (change)="onChangeROUnitCost()" [disabled]="stockLineForm.purchaseOrderUnitCost > 0"
+                                    name="repairOrderUnitCost" (change)="onChangeROUnitCost()"
                                     [(ngModel)]="stockLineForm.repairOrderUnitCost" (ngModelChange)="enableSave()">
+                            </div>
+                            <div class="form-group">
+                                <label>Unit Cost</label>
+                                <input class="form-control text-right" type="text" pInputText pKeyFilter="money" 
+                                    name="unitCost"
+                                    [(ngModel)]="stockLineForm.unitCost" (ngModelChange)="enableSave()">
                             </div>
                             <div class="form-group">
                                 <label>Unit Sale Price</label>
@@ -933,6 +942,16 @@
                                     [monthNavigator]="true" yearRange="1900:2100" name="tagDate"
                                     [maxDate]="minDateValue" [(ngModel)]="stockLineForm.tagDate"
                                     (ngModelChange)="enableSave()"></p-calendar>
+                            </div>
+                            <div class="form-group">
+                                <label>Tagged By</label>
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                    [(ngModel)]="stockLineForm.taggedBy" name="taggedBy"
+                                    [suggestions]="TagByNames" (completeMethod)="filterTagEmployees($event)"
+                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    (ngModelChange)="enableSave()" 
+                                    [forceSelection]="true">
+                                </p-autoComplete>
                             </div>
                             <div class="form-group">
                                 <label>Inspected By</label>
