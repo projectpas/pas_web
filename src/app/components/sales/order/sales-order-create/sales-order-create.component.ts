@@ -1184,16 +1184,16 @@ export class SalesOrderCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
-    let indexToInc: NumberFormatStyle = 0;
+    let indexToInc: number = 0;
     if (this.soSettingsList[0] != null && !this.soSettingsList[0].isApprovalRule){
-      indexToInc = 2;
+      indexToInc = 1;
     }
 
     if (event.index == 0) {
       this.salesOrderPartNumberComponent.refresh();
       this.salesOrderPartNumberComponent.refreshParts();
     }
-    if (event.index == (1 - indexToInc)) {
+    if (event.index == 1 && (this.soSettingsList[0] != null && this.soSettingsList[0].isApprovalRule)) {
       this.salesOrderApproveComponent.refresh(this.marginSummary);
     }
     if (event.index == (2 - indexToInc)) {

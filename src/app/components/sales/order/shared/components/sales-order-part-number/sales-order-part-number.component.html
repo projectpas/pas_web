@@ -54,6 +54,8 @@
                                                     && summaryColumn.field != 'quantityAlreadyQuoted'
                                                     && summaryColumn.field != 'qtyAvailable'
                                                     && summaryColumn.field != 'qtyReserved'
+                                                    && summaryColumn.field != 'quantityPrevShipped'
+                                                    && summaryColumn.field != 'qtyBackOrder'
                                                     && summaryColumn.field != 'qtyOnHand'
                                                     && summaryColumn.field != 'fixRate'
                                                     && summaryColumn.field != 'grossSalePrice'
@@ -73,6 +75,8 @@
                                                     || summaryColumn.field == 'quantityAlreadyQuoted'
                                                     || summaryColumn.field == 'qtyAvailable'
                                                     || summaryColumn.field == 'qtyReserved'
+                                                    || summaryColumn.field == 'quantityPrevShipped'
+                                                    || summaryColumn.field == 'qtyBackOrder'
                                                     || summaryColumn.field == 'qtyOnHand'">
                                             {{summaryPart[summaryColumn.field] | globalNmberFormat}}
                                         </span>

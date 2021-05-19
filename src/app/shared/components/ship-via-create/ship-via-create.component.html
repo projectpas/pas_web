@@ -1,60 +1,57 @@
-<!-- <p>
-  ship-via-create works!
-</p> -->
 <form #addShipViaForm="ngForm" class="form-horizontal">
   <div class="modal-body">
     <div class="form-group">
       <div class="col-sm-12">
-      <div class="col-sm-4">
-      <label>Ship Via Name <span class="clr-red">*</span> :</label></div>
-      <div class="col-sm-5">
-      <p-autoComplete                 
-      class="autocomp-customer-cstm" 
-      name="name"
-      [(ngModel)]="addShipViaFormForFreight.Name" 
-      [suggestions]="lstfilterShippVia"                     
-      emptyMessage="No Match Found" 
-      field="name" 
-      (onKeyUp)="checkShipViaNameExist($event.target.value)"
-      (onChange)="checkShipViaNameExist($event.target.value)"
-      (onBlur)="checkShipViaNameExist($event.target.value)"
-      (completeMethod)="filterShippVia($event);" 
-      (ngModelChange)="shipAddChange()"
-      [size]="30" [minLength]="1" [dropdown]="true" required>
-    </p-autoComplete>
-   
-    <div *ngIf="isShipViaNameAlreadyExists" class="clr-red">
-              Name Already Exists
+        <div class="col-sm-4">
+          <label>Ship Via Name <span class="clr-red">*</span> :</label></div>
+        <div class="col-sm-5">
+          <p-autoComplete class="autocomp-customer-cstm" name="name" [(ngModel)]="addShipViaFormForFreight.Name"
+            [suggestions]="lstfilterShippVia" emptyMessage="No Match Found" field="name"
+            (onKeyUp)="checkShipViaNameExist($event.target.value)"
+            (onChange)="checkShipViaNameExist($event.target.value)"
+            (onBlur)="checkShipViaNameExist($event.target.value)" (completeMethod)="filterShippVia($event);"
+            (ngModelChange)="shipAddChange()" [size]="30" [minLength]="1" [dropdown]="true" required>
+          </p-autoComplete>
+          <div *ngIf="isShipViaNameAlreadyExists" class="clr-red">
+            Name Already Exists
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Description :</label>
+        </div>
+        <div class="col-sm-5">
+          <input type="text" [(ngModel)]="addShipViaFormForFreight.Description" name="Description" class="form-control"
+            id="Description" (ngModelChange)="shipAddChange()" />
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Memo:</label></div>
+        <div class="col-sm-5">
+          <div class="form-group memo-popup-cstm">
+            <div [innerHTML]="addShipViaFormForFreight.Memo" class="form-control"
+              [matTooltip]="parsedText(addShipViaFormForFreight.Memo)" class="text_editor_box"
+              style="width:100%;padding:0px !important;line-height:1.6">
+            </div>
+            <i class="fa fa-pencil btn nobg pull-right" style="margin-top:-25px;margin-right:-29px" data-toggle="modal"
+              data-target="#ship-via-add-memo" matTooltip="Memo" matTooltipPosition="above"
+              (click)="onAddShipMemo()"></i>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-      <!-- <input type="text" class="form-control col-md-6" name="siteName" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.siteName" required>-->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+      [disabled]="!(addShipViaForm.valid && ShipViabutton)"
+      (click)="saveShipVia(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>
+    <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeModel()">Close</button>
   </div>
- 
-    <div class="col-sm-12">   
-      <div class="col-sm-4">                         
-    <label>Memo:</label></div>
-    <div  class="col-sm-5">
-    <div class="form-group memo-popup-cstm" > 
-            <div [innerHTML]="addShipViaFormForFreight.Memo" class="form-control"
-            [matTooltip]="parsedText(addShipViaFormForFreight.Memo)"
-           class="text_editor_box" style="width:100%;padding:0px !important;line-height:1.6">
-        </div>
-                    <i class="fa fa-pencil btn nobg pull-right"  style="margin-top:-25px;margin-right:-29px" 
-                    data-toggle="modal"
-                    data-target="#ship-via-add-memo" matTooltip="Memo"
-                    matTooltipPosition="above"
-                    (click)="onAddShipMemo()"></i>
-            </div>  
-    </div>      
-</div>
- </div>
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipVia(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
-  <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeModel()">Close</button>
-</div>
 </form>
-<div class="modal fade" id="ship-via-add-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="ship-via-add-memo" style="z-index: 10000;" role="dialog" data-backdrop="static"
+  data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -62,15 +59,12 @@
         <h4 class="modal-title">Add Memo</h4>
       </div>
       <div class="modal-body">
-        <p-editor [(ngModel)]="tempAddshipViaMemo" 
-        [style]="{'height':'320px'}" name="tempAddshipViaMemo" 
-        required></p-editor>
+        <p-editor [(ngModel)]="tempAddshipViaMemo" [style]="{'height':'320px'}" name="tempAddshipViaMemo" required>
+        </p-editor>
         <div class="editor-buttons">
-          <button type="button" class="btn btn-primary editor-buttons-margin"						 
-           (click)="onSaveTextAreaInfo()">Save</button>
-          <button type="button" class="btn btn-danger editor-buttons-margin"
-           (click)="closeMemoModel()"
-            >Close</button>
+          <button type="button" class="btn btn-primary editor-buttons-margin"
+            (click)="onSaveTextAreaInfo()">Save</button>
+          <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">Close</button>
         </div>
       </div>
     </div>

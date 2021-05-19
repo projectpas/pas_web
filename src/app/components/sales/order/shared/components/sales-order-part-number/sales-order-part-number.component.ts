@@ -201,7 +201,7 @@ export class SalesOrderPartNumberComponent {
       { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
       { field: 'quantityAlreadyQuoted', header: 'Qty Ord', width: "60px" },
       { field: 'qtyReserved', header: 'Qty Resvd', width: "70px" },
-      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Shipped', width: "98px" },
+      { field: 'quantityPrevShipped', header: 'Qty Prev Shipped', width: "98px" },
       { field: 'qtyBackOrder', header: 'Qty Back Ord', width: "98px" },
       { field: 'qtyAvailable', header: 'Qty Avail', width: "98px" },
       { field: 'qtyOnHand', header: 'Qty on Hand', width: "98px" },
@@ -799,6 +799,7 @@ export class SalesOrderPartNumberComponent {
       uniquePart.quantityToBeQuoted = this.getSum(uniquePart.quantityToBeQuoted, part.quantityFromThis);
       uniquePart.quantityAlreadyQuoted = uniquePart.quantityToBeQuoted;
       uniquePart.qtyReserved = this.getSum(uniquePart.qtyReserved, part.qtyReserved);
+      uniquePart.quantityPrevShipped = this.getSum(uniquePart.quantityPrevShipped, part.qtyShipped);
       uniquePart.qtyAvailable = this.getSum(uniquePart.qtyAvailable, part.qtyAvailable);
       uniquePart.qtyOnHand = this.getSum(uniquePart.qtyOnHand ? uniquePart.qtyOnHand : 0, part.quantityOnHand);
       uniquePart.grossSalePrice = this.getSum(uniquePart.grossSalePrice, part.grossSalePrice);
@@ -816,6 +817,7 @@ export class SalesOrderPartNumberComponent {
     })
     uniquePart.partId = parts[0].itemMasterId;
     uniquePart.quantityToBeQuoted = Number(uniquePart.quantityRequested) - Number(uniquePart.quantityAlreadyQuoted);
+    uniquePart.qtyBackOrder = Number(uniquePart.quantityAlreadyQuoted) - Number(uniquePart.quantityPrevShipped);
     uniquePart.conditionDescription = parts[0].conditionDescription;
     uniquePart.conditionId = parts[0].conditionId;
     uniquePart.partNumber = parts[0].partNumber;
