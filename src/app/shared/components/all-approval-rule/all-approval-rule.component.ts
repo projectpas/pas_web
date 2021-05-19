@@ -296,7 +296,8 @@ export class AllApprovalRuleComponent implements OnInit {
                 MessageSeverity.success
             );
             this.onSaveChange();
-            //this.onSavecleardata();
+            // Do not Comment This Method
+            this.onSavecleardata();
         }
     }
 
