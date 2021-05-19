@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
     selector: 'app-work-order-complete-material-list',
     templateUrl: './work-order-complete-material-list.component.html',
     styleUrls: ['./work-order-complete-material-list.component.scss'],
-    animations: [fadeInOut]
+    animations: [fadeInOut] 
 })
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
 
