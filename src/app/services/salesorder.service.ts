@@ -498,7 +498,7 @@ export class SalesOrderService {
     partNumberObj.totalSales = selectedPart.totalSales;
     partNumberObj.salesOrderPartId = selectedPart.salesOrderPartId;
     partNumberObj.salesOrderId = selectedPart.salesOrderId;
-    partNumberObj.uom = selectedPart.uom;
+    partNumberObj.uomName = selectedPart.uomName;
     partNumberObj.salesQuoteNumber = salesOrderObj.salesOrderQuoteNumber;
     partNumberObj.quoteVesrion = salesOrderObj.salesOrderQuoteVersionNumber;
     if (partNumberObj.quoteVesrion) {

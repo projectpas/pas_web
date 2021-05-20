@@ -164,11 +164,12 @@ export class PartDetailsComponent implements OnChanges {
       let sameParts = [];
       if (isStock) {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
+          //part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
+          part.partNumber == this.query.partSearchParamters.partNumber && part.conditionId == stockLineItem.conditionId
         );
       } else {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId && part.methodType == "I"
+          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId// && part.methodType == "I"
         );
       }
 

@@ -13,7 +13,7 @@ export class PartDetail {
   quantityToBeQuoted: number;
   quantityFromThis: number;
   quantityAvailableForThis: number;
-  uom: string;
+  uomName: string;
   currency: any;
   currencyId: string;
   currencyDescription: string;

@@ -7,7 +7,6 @@ import { SalesQuoteService } from "../../../../../../services/salesquote.service
 import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
 import {
   AlertService,
-  DialogType,
   MessageSeverity
 } from "../../../../../../services/alert.service";
 import { SalesOrderService } from "../../../../../../services/salesorder.service";
@@ -207,12 +206,12 @@ export class SalesOrderPartNumberComponent {
       { field: 'qtyOnHand', header: 'Qty on Hand', width: "98px" },
       { field: 'currencyDescription', header: 'Curr', width: "80px" },
       { field: 'fixRate', header: 'FX Rate', width: "75px" },
-      { field: 'uom', header: 'UOM', width: "90px" },
+      { field: 'uomName', header: 'UOM', width: "90px" },
       { field: 'customerRef', header: 'Cust Ref', width: "110px" },
       { field: 'grossSalePrice', header: 'Gross Sale Amt', width: "110px" },
       { field: 'salesDiscountExtended', header: 'Disc Amt', width: "75px" },
       { field: 'netSalesPriceExtended', header: 'Net Sale Amt', width: "84px" },
-      { field: 'qtyPreviouslyShipped', header: 'Qty Prev Shpd', width: "84px" },
+      // { field: 'qtyPreviouslyShipped', header: 'Qty Prev Shpd', width: "84px" },
       { field: 'lastShippedDate', header: 'Last Ship Date', width: "84px" },
       { field: 'misc', header: 'Misc', width: "70px" },
       { field: 'freight', header: 'Freight', width: "80px" },
@@ -413,7 +412,7 @@ export class SalesOrderPartNumberComponent {
           this.part.quoteVesrion = this.salesQuote.versionNumber;
           this.part.customerRef = this.salesQuote.customerReferenceName;
           this.part.serialNumber = this.selectedPart.serialNumber;
-          this.part.uom = this.selectedPart.uomDescription;
+          this.part.uomName = this.selectedPart.uomDescription;
           this.part.pmaStatus = this.selectedPart.oempmader;
           if (!this.part.pmaStatus) {
             this.part.pmaStatus = this.selectedPart['stockType'];
@@ -521,13 +520,14 @@ export class SalesOrderPartNumberComponent {
       this.isSpinnerVisible = true;
       this.salesOrderService.deletePart(this.part.salesOrderPartId).subscribe(response => {
         this.removePartNamber(this.part);
-        this.isSpinnerVisible = false;
         this.deletePartModal.close();
         this.alertService.showMessage(
           "Success",
           `Part removed successfully.`,
           MessageSeverity.success
         );
+        this.isSpinnerVisible = false;
+        this.refreshParts();
       }, error => {
         this.isSpinnerVisible = false;
       });
@@ -720,6 +720,7 @@ export class SalesOrderPartNumberComponent {
         );
         this.saveButton = true;
         this.onPartsSavedEvent.emit(this.selectedParts);
+        this.refreshParts();
       }, error => {
         this.isSpinnerVisible = false;
       });
@@ -827,7 +828,8 @@ export class SalesOrderPartNumberComponent {
     uniquePart.misc = parts[0].misc;
     uniquePart.fixRate = parts[0].fixRate;
     uniquePart.freight = parts[0].freight;
-    uniquePart.uom = parts[0].uom;
+    uniquePart.uomName = parts[0].uomName;
+    uniquePart.methodType = parts[0].methodType;
     uniquePart.customerRef = parts[0].customerRef;
     uniquePart.pmaStatus = parts[0].pmaStatus;
     uniquePart.marginPercentageExtended = (uniquePart.marginPercentageExtended) / parts.length;
@@ -907,13 +909,14 @@ export class SalesOrderPartNumberComponent {
         for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
           this.removePartNamber(this.selectedSummaryRow.childParts[i]);
         }
-        this.isSpinnerVisible = false;
         this.deleteAllPartModal.close();
         this.alertService.showMessage(
           "Success",
           `Part removed successfully.`,
           MessageSeverity.success
         );
+        this.isSpinnerVisible = false;
+        this.refreshParts();
       }, error => {
         this.isSpinnerVisible = false;
       });
