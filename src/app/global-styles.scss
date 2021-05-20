@@ -497,7 +497,7 @@ margin-top: 10px;
 
 // for fix Table head
 .tableFixHead-multiple-pn {
-  overflow-y: auto;
+  // overflow-y: auto;
 }
 .tableFixHead-multiple-pn thead th {
   position: sticky;
@@ -553,6 +553,9 @@ margin-top: 10px;
 .tableFixHead thead th {
   position: sticky;
   top: 0;
+}
+.text-capital{
+  text-transform: capitalize !important;
 }
 table {
   border-collapse: collapse;
