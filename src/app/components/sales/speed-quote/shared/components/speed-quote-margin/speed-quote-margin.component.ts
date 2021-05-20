@@ -1,15 +1,15 @@
-import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PartDetail } from "../../models/part-detail";
-import { CommonService } from '../../../../../services/common.service';
-import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
-import { formatStringToNumber } from "../../../../../generic/autocomplete";
+import { CommonService } from '../../../../../../services/common.service';
+import { ItemMasterSearchQuery } from "../../../models/item-master-search-query";
+import { formatStringToNumber } from "../../../../../../generic/autocomplete";
 
 @Component({
-  selector: "app-sales-margin",
-  templateUrl: "./sales-margin.component.html",
-  styleUrls: ["./sales-margin.component.css"]
+  selector: 'app-speed-quote-margin',
+  templateUrl: './speed-quote-margin.component.html',
+  styleUrls: ['./speed-quote-margin.component.scss']
 })
-export class SalesMarginComponent implements OnInit {
+export class SpeedQuoteMarginComponent implements OnInit {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() searchAnotherPN: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() save: EventEmitter<PartDetail> = new EventEmitter<PartDetail>();
@@ -20,9 +20,7 @@ export class SalesMarginComponent implements OnInit {
   percentage: any[] = [];
   invalidQuantityenteredForQuantityFromThis: boolean = false;
   prevQntity = 0;
-
-  constructor(private commonservice: CommonService,) {
-  }
+  constructor(private commonservice: CommonService,) { }
 
   ngOnInit() {
     this.prevQntity = this.part.quantityFromThis;
@@ -101,10 +99,13 @@ export class SalesMarginComponent implements OnInit {
   }
 
   onChangeQuantityFromThis(event) {
-
+    let qtyEntered = event.target.value;
     if (Number(this.part.quantityFromThis) != 0) {
       if (this.part['qtyRemainedToQuote']) {
         this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted && Number(this.part.quantityFromThis) > Number(this.part['qtyRemainedToQuote']);
+      }
+      else if (qtyEntered > this.part.qtyAvailable || qtyEntered > this.part.quantityRequested) {
+        this.invalidQuantityenteredForQuantityFromThis = true;
       }
       else if (Number(this.part.quantityFromThis) < 0)
       {
@@ -117,4 +118,5 @@ export class SalesMarginComponent implements OnInit {
       this.invalidQuantityenteredForQuantityFromThis = true;
     }
   }
+
 }

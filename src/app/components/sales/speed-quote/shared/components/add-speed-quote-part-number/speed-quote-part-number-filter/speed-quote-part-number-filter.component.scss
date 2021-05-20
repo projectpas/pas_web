@@ -1,0 +1,32 @@
+button {
+    border-radius: 5px;
+  }
+  
+  label {
+    width: 100%;
+  }
+  
+  div.row {
+    padding: 10px;
+  }
+  
+  button {
+    margin-left: 3px;
+  }
+  
+  div.filter-method {
+    background-color: #e5e5e5;
+  }
+  div.filter-method > div {
+    float: left;
+  }
+  .clr-red, .clr-red:hover {
+    color: #ff5663 !important;
+  }
+  .form-control:disabled {
+    background-color: #e9ecef !important;
+  }
+  .classification {
+    display: grid;
+    background: #e9ecef !important;
+  }

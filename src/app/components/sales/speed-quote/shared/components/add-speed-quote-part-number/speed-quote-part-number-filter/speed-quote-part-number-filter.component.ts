@@ -183,7 +183,7 @@ export class SpeedQuotePartNumberFilterComponent implements OnInit {
           break;
         default:
           this.isSpinnerVisible = true;
-          this.itemMasterService.searchitemmasterfromsoqpop(searchQuery)
+          this.itemMasterService.searchitemmasterfromSpeedQuotepop(searchQuery)
             .subscribe(result => {
               this.isSpinnerVisible = false;
               if (result && result['data'] && result['data'][0]) {
@@ -201,22 +201,22 @@ export class SpeedQuotePartNumberFilterComponent implements OnInit {
   }
 
   calculate() {
-    if (this.query.partSearchParamters.conditionIds.length > 0
-      && this.query.partSearchParamters.partNumber
-      && formatStringToNumber(this.query.partSearchParamters.quantityRequested) > 0) {
-      this.searchDisabled = false;
-    } else {
-      this.searchDisabled = true;
-      if (this.query.partSearchParamters.conditionIds !== undefined && this.query.partSearchParamters.conditionIds.length == 0 && this.query.partSearchParamters.conditionId !== 0) {
-        this.query.partSearchParamters.conditionIds.push(this.query.partSearchParamters.conditionId);
-      }
-    }
+    // if (this.query.partSearchParamters.conditionIds.length > 0
+    //   && this.query.partSearchParamters.partNumber
+    //   && formatStringToNumber(this.query.partSearchParamters.quantityRequested) > 0) {
+    //   this.searchDisabled = false;
+    // } else {
+    //   this.searchDisabled = true;
+    //   if (this.query.partSearchParamters.conditionIds !== undefined && this.query.partSearchParamters.conditionIds.length == 0 && this.query.partSearchParamters.conditionId !== 0) {
+    //     this.query.partSearchParamters.conditionIds.push(this.query.partSearchParamters.conditionId);
+    //   }
+    // }
     let qr = + formatStringToNumber(this.query.partSearchParamters.quantityRequested);
     if (qr) {
       this.query.partSearchParamters.quantityToQuote = qr - formatStringToNumber(this.query.partSearchParamters.quantityAlreadyQuoted);
     }
     if (this.query.partSearchParamters.quantityToQuote < 0) {
-      this.searchDisabled = true;
+      this.searchDisabled = false;
       this.alertService.showStickyMessage('', 'Qty To Quote can not be negative', MessageSeverity.error);
     } else {
       this.alertService.resetStickyMessage();

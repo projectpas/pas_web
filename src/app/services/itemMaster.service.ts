@@ -549,5 +549,8 @@ export class ItemMasterService {
     searchitemmasterfromExchangeQuotepop(searchParameters: any) {
         return this.itemMasterEndpoint.searchitemmasterfromExchangeQuotepop(searchParameters);
     }
+    searchitemmasterfromSpeedQuotepop(searchParameters: any) {
+        return this.itemMasterEndpoint.searchitemmasterfromSpeedQuotepop(searchParameters);
+    }
 
 }

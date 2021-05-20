@@ -147,6 +147,7 @@ export class SpeedQuotePartDetailsComponent implements OnChanges {
   }
 
   onChangeStock(event, part, salesMargin) {
+    alert(1);
     let checked: boolean = event.srcElement.checked;
     this.select.emit({ checked: checked, part: part, salesMargin: salesMargin });
   }

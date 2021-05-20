@@ -156,8 +156,8 @@
                   <td *ngFor="let col of stockLinecolumns" pReorderableRowHandle>
                       <span *ngIf="col.field == 'selected'">
                           <span *ngIf="!getCheckBoxDisplay(part, rowIndex,true)">
-                              <input type="checkbox" (change)="onChangeStock($event, part, 0)"
-                                  [disabled]="isStockLineViewMode" />
+                              <!-- <input type="checkbox" (change)="onChangeStock($event, part, 0)"
+                                  [disabled]="isStockLineViewMode" /> -->
                           </span>
                       </span>
 
