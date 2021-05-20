@@ -572,7 +572,7 @@
                                 <app-sales-order-approve>
                                 </app-sales-order-approve>
                             </p-tabPanel>
-                            <p-tabPanel header="Approver Process" *ngIf="soSettingsList[0] != null && soSettingsList[0].isApprovalRule">
+                            <p-tabPanel header="Approver Process">
                                 <app-sales-order-customer-approval *ngIf="isEdit && isContactsLoaded"
                                     [customer-id]="customerId" [sales-order-id]="id" [status]="status"
                                     [customer-contacts]="customerContactList"

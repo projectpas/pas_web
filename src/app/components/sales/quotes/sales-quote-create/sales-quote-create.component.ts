@@ -1766,33 +1766,38 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
+    let indexToInc: number = 0;
+    if (this.validDaysSettingsList[0] != null && !this.validDaysSettingsList[0].isApprovalRule){
+      indexToInc = 1;
+    }
+
     if (event.index == 0) {
       this.salesPartNumberComponent.refresh();
     }
-    if (event.index == 1) {
+    if (event.index == 1 && (this.validDaysSettingsList[0] != null && this.validDaysSettingsList[0].isApprovalRule)) {
       this.salesApproveComponent.refresh(this.marginSummary);
     }
-    if (event.index == 2) {
+    if (event.index == (2 - indexToInc)) {
       this.salesCustomerApprovalsComponent.refresh(this.marginSummary, this.salesQuote.salesOrderQuoteId);
     }
-    if (event.index == 4) {
+    if (event.index == (4 - indexToInc)) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderQuoteFreightComponent.refresh(false);
       } else {
         this.salesOrderQuoteFreightComponent.refresh(true);
       }
     }
-    if (event.index == 5) {
+    if (event.index == (5 - indexToInc)) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderQuoteChargesComponent.refresh(false);
       } else {
         this.salesOrderQuoteChargesComponent.refresh(true);
       }
     }
-    if (event.index == 6) {
+    if (event.index == (6 - indexToInc)) {
       this.salesQuoteDocumentsComponent.refresh();
     }
-    if (event.index == 7) {
+    if (event.index == (7 - indexToInc)) {
       this.salesQuoteAnalysisComponent.refresh(this.id);
     }
   }

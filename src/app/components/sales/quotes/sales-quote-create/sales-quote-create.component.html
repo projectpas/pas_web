@@ -562,7 +562,7 @@
                                 <app-sales-approve>
                                 </app-sales-approve>
                             </p-tabPanel>
-                            <p-tabPanel header="Approver Process" *ngIf="enforceApproval">
+                            <p-tabPanel header="Approver Process">
                                 <app-sales-customer-approvals *ngIf="isEdit == true" [salesQuoteView]="salesQuoteView"
                                     [isViewMode]="false" [customerContactList]="customerContactList"
                                     [marginSummary]="marginSummary"
