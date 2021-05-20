@@ -375,7 +375,7 @@ export class SalesPartNumberComponent {
           this.part.masterCompanyId = this.masterCompanyId;
           this.part.conditionId = this.selectedPart.conditionId;
           this.part.conditionDescription = this.selectedPart.conditionDescription;
-          this.part.uom = this.selectedPart.uomDescription;
+          this.part.uomName = this.selectedPart.uomDescription;
           this.part.pmaStatus = this.selectedPart.oempmader;
           if (!this.part.pmaStatus) {
             this.part.pmaStatus = this.selectedPart['stockType'];
@@ -836,7 +836,7 @@ export class SalesPartNumberComponent {
     uniquePart.misc = parts[0].misc;
     uniquePart.fixRate = parts[0].fixRate;
     uniquePart.freight = parts[0].freight;
-    uniquePart.uom = parts[0].uom;
+    uniquePart.uom = parts[0].uomName;
     uniquePart.customerRef = parts[0].customerRef;
     uniquePart.pmaStatus = parts[0].pmaStatus;
     uniquePart.conditionId = parts[0].conditionId;

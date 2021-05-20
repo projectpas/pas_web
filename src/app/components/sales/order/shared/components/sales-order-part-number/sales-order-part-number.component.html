@@ -5,11 +5,11 @@
             Add PN
         </button>
         <button *ngIf="isViewMode == false" type="button" class="btn btn-primary ml-1"
-            [disabled]="selectedParts.length == 0" (click)="partsAction('Reserve')">
+            [disabled]="selectedParts.length == 0 || !canSaveParts" (click)="partsAction('Reserve')">
             Reserve
         </button>
         <button *ngIf="isViewMode == false" type="button" class="btn btn-primary ml-1"
-            [disabled]="selectedParts.length == 0" (click)="partsAction('Unreserve')">
+            [disabled]="selectedParts.length == 0 || !canSaveParts" (click)="partsAction('Unreserve')">
             Unreserve
         </button>
         <div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
@@ -31,7 +31,7 @@
                                 {{ summaryColumn.header }}
                             </div>
                         </th>
-                        <th colspan="12"></th>
+                        <th colspan="13"></th>
                         <th *ngIf="isViewMode == false"
                             style="position: sticky !important; min-width: 145px !important;">Actions
                         </th>
@@ -93,16 +93,16 @@
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                     </td>
-                                    <td colspan="12" style="background-color: #EAF2C5 !important;"></td>
+                                    <td colspan="13" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" style="position:sticky; width:80px">
-                                        <!-- <span>
+                                        <span *ngIf="summaryPart['methodType'] == 'S'">
                                             <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                                 [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
                                                 class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
                                                 matTooltip="Add Stock Line" matTooltipPosition="above">
                                                 <i class="fa fa-plus" style="color: #000;"></i>
                                             </a>
-                                        </span> -->
+                                        </span>
                                         <span>
                                             <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
                                                 matTooltip="View Stock Line" matTooltipPosition="above">
