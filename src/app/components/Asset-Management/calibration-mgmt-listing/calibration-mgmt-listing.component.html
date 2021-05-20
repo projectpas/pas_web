@@ -406,25 +406,29 @@
 				<h4 class="modal-title">{{Certifytype}}</h4>
 			</div>
 			<div class="modal-body">
-                <div id="adminsearchlocationajax" class="table-responsive default-bg clear"> 
-                    <p class="w250"><span class="label"><b>Asset ID: </b></span><span class="value" name ="AssetId">{{calibrationForm.AssetId}}</span></p>
-                    <p class="w250"><span class="label"><b>Alt Asset ID: </b></span><span class="value">{{calibrationForm.AltAssetId}}</span></p>
-                    <p class="w250"><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>                    
-                    <p class="w250"><span class="label"><b>Location: </b></span><span class="value">{{calibrationForm.Location}}</span></p>
-                    <p class="w250"><span class="label"><b>Serial Num: </b></span><span class="value">{{calibrationForm.SerialNum}}</span></p>                    
-                    <p class="w250"><span class="label"><b>Control ID: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
-                    <p class="w250"><span class="label"><b>Acquisition Type: </b></span><span class="value">{{calibrationForm.AcquisitionType}}</span></p>
-                    <div class="clear"></div>
-                    <hr>
-                    <p *ngIf="CalibrationId !=0" class="w400"><span class="label"><b>Last {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.LastCalibrationDate}}</span></p>
-                    <p *ngIf="CalibrationId !=0"class="w400"><span class="label"><b>Last {{Certifytype}} By: </b></span><span class="value">{{calibrationForm.LastCalibrationBy}}</span></p>
-                    <p *ngIf="CalibrationId !=0" class="w400"><span class="label"><b>Vendor or Employee: </b></span>
+                <div id="adminsearchlocationajax" class="table-responsive default-bg clear col-md-12"> 
+                  <div class="col-md-6"> 
+                  <p><span class="label"><b>Asset ID: </b></span><span class="value" name ="AssetId">{{calibrationForm.AssetId}}</span></p>
+                    <p><span class="label"><b>Alt Asset ID: </b></span><span class="value">{{calibrationForm.AltAssetId}}</span></p>
+                    <p><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>                    
+                    <p><span class="label"><b>Location: </b></span><span class="value">{{calibrationForm.Location}}</span></p>
+                    <p><span class="label"><b>Serial Num: </b></span><span class="value">{{calibrationForm.SerialNum}}</span></p>                    
+                    <p><span class="label"><b>Control ID: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
+                    </div>
+                    <div class="col-md-6">
+                    <p ><span class="label"><b>Acquisition Type: </b></span><span class="value">{{calibrationForm.AcquisitionType}}</span></p>
+                    <!-- <div class="clear"></div>
+                    <hr> -->
+                    <p *ngIf="CalibrationId !=0" ><span class="label"><b>Last {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.LastCalibrationDate}}</span></p>
+                    <p *ngIf="CalibrationId !=0"><span class="label"><b>Last {{Certifytype}} By: </b></span><span class="value">{{calibrationForm.LastCalibrationBy}}</span></p>
+                    <p *ngIf="CalibrationId !=0"><span class="label"><b>Vendor or Employee: </b></span>
                         <span class="value">
-                            <label class="w60 text-left"><input name="olddata" type="radio" value="vendor1" [checked]="selectvendororemp" disabled=""> Vendor</label>
-                            <label class="w80 text-left"><input name="olddata" type="radio" value="employee1" [checked]="selectvendororemp" disabled=""> Employee</label>
+                            <label class="text-left"><input name="olddata" type="radio" value="vendor1" [checked]="selectvendororemp" disabled=""> Vendor</label>
+                            <label class="text-left"><input name="olddata" type="radio" value="employee1" [checked]="selectvendororemp" disabled=""> Employee</label>
                         </span>
                     </p>
-                    <p *ngIf="CalibrationId !=0" class="w400"><span class="label"><b>Next {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.NextCalibrationDate}}</span></p>
+                    <p *ngIf="CalibrationId !=0" ><span class="label"><b>Next {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.NextCalibrationDate}}</span></p>
+                    </div>
                     <div class="clear"></div>
                     <hr>
                     <div *ngIf="isscheduleprocess== false"><a (click)="showscheduleprocess()" class="btn btn-primary add-verification-btn">Schedule a {{Certifytype}}</a></div>
@@ -487,7 +491,7 @@
                           <label class="control-label col-sm-4">Currency <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
                             <p-dropdown placeholder="Select Currency" (onChange)="enableSave()"  appendTo="body" [baseZIndex]="9999"  [showClear]="true" (input)="onFilterAction($event.target.value)" filter="true" name="currencyId" [options]="currencyList"
-                            class="p-dropdown-custom-md" [(ngModel)]="calibrationForm.currencyId" required>
+                            class="p-dropdown-100" [(ngModel)]="calibrationForm.currencyId" required>
                            </p-dropdown>
                           </div>
                         </div>
@@ -495,7 +499,7 @@
                           <label class="control-label col-sm-4">{{Certifytype}} Memo</label>
                           <div class="col-sm-7">
 
-                            <textarea  [(ngModel)]="calibrationForm.memo" class="h50 text" style="margin: 0px; height: 53px; width: 135px;">Sample Memo</textarea>
+                            <textarea  [(ngModel)]="calibrationForm.memo" class="h50 text" style="margin: 0px; height: 53px;">Sample Memo</textarea>
                             <!-- <div class="align_adh">
                               <div [innerHTML]="calibrationForm.memo" class="text_editor_box"  [matTooltip]="parsedText(calibrationForm.memo)"
                                   style="width: 100% !important;"></div>
