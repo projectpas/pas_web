@@ -143,7 +143,7 @@
                         </td>
                         <td class="table-column-width ui-resizable-column text-capital" *ngIf="col.field == 'descriptionData'"
                             pReorderableRowHandle>
-                            <p class="p_textEditor text-capital" [innerHTML]=rowData[col.field]></p>
+                            <p class="p_textEditor p-0 m-0 text-capital" [innerHTML]=rowData[col.field]></p>
                         </td>
                         <td class="table-column-width" *ngIf="col.field !='SERIAL_NO' && col.field!='descriptionData'">
                             {{
@@ -413,7 +413,7 @@
 
     <div id="contentHistDocs" #contentHistDocs class="modal fade" role="dialog" data-backdrop="static"
         data-keyboard="false">
-        <div class="modal-dialog modal-xlg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
 
@@ -464,9 +464,9 @@
                                 <tbody>
                                     <tr *ngFor="let audit of documentauditHisory; let i = index;">
                                         <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'memoId', audit.memoId)  ? 'black' : 'red'  }">{{audit.memoId}}</td> -->
-                                        <td style="margin-bottom:-10px !important"
+                                        <td
                                             [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
-                                            <p class="margin-tb" [innerHTML]="audit.description"></p>
+                                            <p class="m-0 p-0" [innerHTML]="audit.description"></p>
                                         </td>
                                         <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                         <td>{{audit.createdBy}}</td>
