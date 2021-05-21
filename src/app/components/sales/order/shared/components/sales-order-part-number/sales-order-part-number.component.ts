@@ -65,6 +65,7 @@ export class SalesOrderPartNumberComponent {
   query: ItemMasterSearchQuery;
   isEdit: boolean = false;
   isEditMode: boolean = false;
+  isQtyAdjust: boolean = false;
   selectedPartActionType: any;
   @Input() salesOrderView: ISalesOrderView;
   @ViewChild("updatePNDetailsModal", { static: false })
@@ -308,6 +309,21 @@ export class SalesOrderPartNumberComponent {
     }
   }
 
+  adjustQty(summaryRow: any = '', rowIndex = null) {
+    this.salesQuoteService.resetSearchPart();
+    if (summaryRow) {
+      this.selectedSummaryRow = summaryRow;
+      this.selectedSummaryRowIndex = rowIndex;
+    } else {
+      this.selectedSummaryRow = null;
+      this.selectedSummaryRowIndex = null;
+    }
+    this.openQtyAdjust(false);
+    if (summaryRow == "") {
+      this.isEditMode = false;
+    }
+  }
+
   viewPartNumber(summaryRow: any = '', rowIndex = null) {
     this.salesQuoteService.resetSearchPart();
     if (summaryRow) {
@@ -326,6 +342,16 @@ export class SalesOrderPartNumberComponent {
     this.clearData = viewMode;
     let contentPart = this.addPart;
     this.isEditMode = true;
+    this.isQtyAdjust = false;
+    this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+  }
+
+  openQtyAdjust(viewMode) {
+    this.isStockLineViewMode = viewMode;
+    this.clearData = viewMode;
+    let contentPart = this.addPart;
+    this.isEditMode = false;
+    this.isQtyAdjust = true;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
 

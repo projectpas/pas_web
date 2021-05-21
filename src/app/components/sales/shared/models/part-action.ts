@@ -43,4 +43,8 @@ export class PartAction {
     soReservedAltParts: PartAction[];
     soReservedEquParts: PartAction[];
     qtyToShip: number;
+    qtyInvoiced: number;
+    invoiceDate: Date;
+    invoiceNumber: string;
+    shipReference: string;
 }

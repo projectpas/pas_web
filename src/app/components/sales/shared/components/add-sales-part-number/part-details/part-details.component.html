@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="!isQtyAdjust">
     <div style="overflow-y: auto;">
         <p-table #dt class="rpo-table-cstm salesquotePart" [value]="parts" [rows]="10" [lazy]="true"
             [paginator]="showPaginator" [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords"
@@ -96,7 +96,7 @@
                     <td colspan="12" class="p-0">
                         <!-- rpo-table-cstm rro-table-cstm sales-quote-part-search-data -->
                         <p-table #dt class=" rpo-table-cstm1 rro-table-cstm salesquotePart padding-bottom-10" 
-                            [value]="roleUpMaterialList" [rows]="10" [lazy]="true" [paginator]="showPaginator"
+                            [value]="roleUpMaterialList" [rows]="10" [lazy]="true" [paginator]="showChildPaginator"
                             [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords" [pageLinks]="pageLinks"
                             [columns]="stockLinecolumns" [scrollable]="true" [resizableColumns]="true"
                             [reorderableColumns]="true" scrollHeight="450px" [style]="{ width: '100%' }"

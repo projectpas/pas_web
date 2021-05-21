@@ -33,6 +33,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() selectedSummaryRow: SummaryPart;
   @Input() type: string;
   @Input() isEdit = false;
+  @Input() isQtyAdjust = false;
   @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSave: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTypeChange: EventEmitter<ItemSearchType> = new EventEmitter<ItemSearchType>();
