@@ -52,7 +52,6 @@ import { SalesOrderBillingComponent } from "../shared/components/sales-order-bil
 import { SalesOrderAnalysisComponent } from "../sales-order-analysis/sales-order-analysis.component";
 import { SalesOrderShippingComponent } from "../shared/components/sales-order-shipping/sales-order-shipping.component";
 import { SalesOrderPickTicketsComponent } from "../sales-order-pick-tickets/sales-order-pick-tickets.component";
-import { NumberFormatStyle } from "@angular/common";
 
 @Component({
   selector: "app-sales-order-create",
@@ -181,6 +180,7 @@ export class SalesOrderCreateComponent implements OnInit {
   addressType: any = 'SO';
   showAddresstab: boolean = false;
   isContactsLoaded: boolean = false;
+  todayDate: Date = new Date();
 
   constructor(
     private customerService: CustomerService,
@@ -1185,7 +1185,10 @@ export class SalesOrderCreateComponent implements OnInit {
 
   onTabChange(event) {
     let indexToInc: number = 0;
-    if (this.soSettingsList[0] != null && !this.soSettingsList[0].isApprovalRule){
+    if (this.soSettingsList[0] != null && 
+      (!this.soSettingsList[0].isApprovalRule || 
+        (this.soSettingsList[0].isApprovalRule 
+          && new Date(this.soSettingsList[0].effectiveDate) > new Date(this.todayDate)))){
       indexToInc = 1;
     }
 
@@ -1193,7 +1196,9 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrderPartNumberComponent.refresh();
       this.salesOrderPartNumberComponent.refreshParts();
     }
-    if (event.index == 1 && (this.soSettingsList[0] != null && this.soSettingsList[0].isApprovalRule)) {
+    if (event.index == 1 && (this.soSettingsList[0] != null 
+      && this.soSettingsList[0].isApprovalRule 
+      && new Date(this.todayDate) >= new Date(this.soSettingsList[0].effectiveDate))) {
       this.salesOrderApproveComponent.refresh(this.marginSummary);
     }
     if (event.index == (2 - indexToInc)) {
@@ -1893,6 +1898,12 @@ tfoot { display:table-footer-group }
 
   closeModal() {
     this.modal.close();
+  }
+
+  checkEnforceInternalApproval() {
+    return this.soSettingsList[0] != null && 
+    this.soSettingsList[0].isApprovalRule && 
+    new Date(this.todayDate) >= new Date(this.soSettingsList[0].effectiveDate);
   }
 
   getChargesList() { }

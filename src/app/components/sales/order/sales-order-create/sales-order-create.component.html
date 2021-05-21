@@ -568,7 +568,7 @@
                                     [defaultSettingPriority]="defaultSettingPriority">
                                 </app-sales-order-part-number>
                             </p-tabPanel>
-                            <p-tabPanel header="Internal Approvers" *ngIf="soSettingsList[0] != null && soSettingsList[0].isApprovalRule">
+                            <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                                 <app-sales-order-approve>
                                 </app-sales-order-approve>
                             </p-tabPanel>
