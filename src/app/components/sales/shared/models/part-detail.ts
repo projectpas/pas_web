@@ -59,6 +59,10 @@ export class PartDetail {
   qtyAvailable: number;
   qtyToShip: number;
   qtyShipped: number;
+  qtyInvoiced: number;
+  invoiceDate: Date;
+  invoiceNumber: string;
+  shipReference: string;
   salesQuoteNumber: string;
   customerRef: string;
   priority: string;
@@ -81,9 +85,9 @@ export class PartDetail {
   quantityOnHand: number;
   notes: string;
   createdBy: string;
-  itemNo:number;
+  itemNo: number;
   qty: number;
-  
+
   constructor() { }
 
   get QuantityToBeQuoted(): number {

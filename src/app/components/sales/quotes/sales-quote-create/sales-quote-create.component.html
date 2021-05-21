@@ -558,7 +558,7 @@
                                     [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
                                 </app-sales-part-number>
                             </p-tabPanel>
-                            <p-tabPanel header="Internal Approvers" *ngIf="enforceApproval">
+                            <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                                 <app-sales-approve>
                                 </app-sales-approve>
                             </p-tabPanel>
