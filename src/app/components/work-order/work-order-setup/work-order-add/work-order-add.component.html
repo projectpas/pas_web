@@ -1096,6 +1096,8 @@
                             (click)="gridTabChange('woanalysis')"> Margin Analysis</a>
                             <a class="dropdown-item"
                             (click)="gridTabChange('laboranalysis')">Labor Analysis</a>
+                            <a class="dropdown-item"
+                            (click)="gridTabChange('releasefrom')">8130 Form</a>
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                 aria-expanded="false"
                                 (click)="gridTabChange('ActualVsQuote')">Actual vs. Quote Summary</a>
@@ -1253,6 +1255,14 @@
                         [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails">
                     </app-work-order-labour-analysis>
                 </div>
+
+                <div *ngIf="(gridActiveTab == 'releasefrom')"
+                [ngClass]="{hidedata: gridActiveTab !== 'releasefrom'}">
+                <app-wo-release-from 
+                     [workOrderId]="workOrderId" [isSubWorkOrder]="isSubWorkOrder"
+                    [subWOPartNoId]="subWOPartNoId">
+                </app-wo-release-from>
+            </div>
                 <div *ngIf="workOrderId && (gridActiveTab == 'tearDown')" class="wf-label-cstm set_pad"
                     [ngClass]="{hidedata : gridActiveTab !== 'tearDown'}">
                     <app-common-teardown *ngIf="!isView" [workOrderId]="workOrderId"
