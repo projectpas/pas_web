@@ -343,6 +343,7 @@ console.log("ng on changes",this.laborForm)
     }
   }
   calculateBurderRate(rec) {
+    console.log("hello",rec)
     if (rec.burdaenRatePercentageId && rec.directLaborOHCost) {
       this.markupList.forEach((markup) => {
         if (markup.value == rec.burdaenRatePercentageId) {
@@ -623,7 +624,8 @@ if(this.laborForm && this.laborForm.laborList && this.laborForm.laborList.length
         }
       }
     )
-    if (this.isQuote && this.basicLabourDetail) {
+    // this.isQuote && 
+    if (this.basicLabourDetail) {
       if (this.basicLabourDetail['burdenRateIdText'] == 'As A % Of Technician/Mechanic Hourly Rate') {
         taskData['burdaenRatePercentageId'] = this.basicLabourDetail['flatAmount'];
         this.calculateTotalCost(taskData);
@@ -1312,6 +1314,9 @@ this.commonfunctionHandler();
   taskComletedByConfirmation(event) {
     $('#confirmation').modal('show');
   }
+  clearautoCompleteInput(currentRecord) {
+    currentRecord.employeeId = null;
+  }
   checkHoursAndDirectLabour() { 
     var result = false;
     for (let task in this.laborForm.workOrderLaborList[0]) {
@@ -1327,6 +1332,15 @@ this.commonfunctionHandler();
               result = true;
             }
           }
+          if ((data.directLaborOHCost==0 || data.directLaborOHCost==undefined || data.directLaborOHCost==null || data.directLaborOHCost=='') && !this.isQuote) {
+              result = true; 
+          }
+          if ((data.employeeId==0 || data.employeeId==undefined || data.employeeId==null || data.employeeId=='') && !this.isQuote) {
+              result = true;
+          }
+          if ((data.expertiseId==0 || data.expertiseId==undefined || data.expertiseId==null || data.expertiseId=='') && !this.isQuote) {
+            result = true;
+        }
         }
       )
     }
