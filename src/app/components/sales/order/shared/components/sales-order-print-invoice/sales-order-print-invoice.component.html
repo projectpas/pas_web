@@ -258,7 +258,7 @@
                                 <ng-container
                                     *ngFor="let child of this.salesOrderInvoice.salesOrderListToPrint; let i = index;">
                                     <tr>
-                                        <td rowspan="3">{{child.itemNo}}</td>
+                                        <td rowspan="3">{{i+1}}</td>
                                         <td colspan="3" rowspan="3"> PN: {{child.pNumber}}
                                             <br />
                                             PN Description: {{child.pnDescription}}
