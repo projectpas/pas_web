@@ -112,8 +112,8 @@
                           : rowData[col.field]
                           }}
             </td>
-            <td class="table-column-width" *ngIf="col.field == 'docMemo'">
-              <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+            <td class="table-column-width text-capital" *ngIf="col.field == 'docMemo'">
+              <p class="m-0 p-0 p_textEditor float-left text-capital" [innerHTML]="rowData[col.field]"></p>
             </td>
             <td class="table-column-width" *ngIf="col.field == 'fileName'">
         <tr *ngFor="let x of rowData.attachmentDetails">

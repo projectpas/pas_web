@@ -141,11 +141,11 @@
                             <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                             <span> </span>
                         </td>
-                        <td class="table-column-width" *ngIf="col.field == 'description'" class="ui-resizable-column"
+                        <td class="table-column-width ui-resizable-column text-capital" *ngIf="col.field == 'descriptionData'"
                             pReorderableRowHandle>
-                            <p class="p_textEditor" [innerHTML]=rowData[col.field]></p>
+                            <p class="p_textEditor text-capital" [innerHTML]=rowData[col.field]></p>
                         </td>
-                        <td class="table-column-width" *ngIf="col.field !='SERIAL_NO' && col.field!='description'">
+                        <td class="table-column-width" *ngIf="col.field !='SERIAL_NO' && col.field!='descriptionData'">
                             {{
                                         col.field == 'createdDate'
                                           ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
@@ -445,9 +445,9 @@
                         </p>
                     </div>
                 </div> -->
-                    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                        <div class="tableFixHead">
-                            <table class="table table-bordered">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
+						<table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <!-- <th>Memo Id </th> -->
