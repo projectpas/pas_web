@@ -463,6 +463,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 			? this.authService.currentUser.masterCompanyId
 			: null;
 	}
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
@@ -805,6 +808,19 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.formQuoteInfo(this.quoteForm);
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
+        this.quotationHeader.masterCompanyId = this.authService.currentUser.masterCompanyId,
+        this.quotationHeader.CreatedBy= this.userName
+        this.quotationHeader.UpdatedBy= this.userName
+        if(isCreateQuote)
+        {
+            this.quotationHeader.CreatedDate= new Date().toDateString()
+            this.quotationHeader.UpdatedDate= new Date().toDateString()
+        }else
+        {
+            this.quotationHeader.UpdatedDate= new Date().toDateString()
+        }
+      
+
         this.workOrderService.createOrUpdateQuotation(this.quotationHeader)
             .subscribe(
                 res => {
@@ -2502,7 +2518,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     showAlertMessage(warningMessage, restrictMessage) {
-        $('#warnRestrictMesg').modal("show");
+        if(!this.isView)
+        {
+            $('#warnRestrictMesg').modal("show");
+        }
+    
         //   this.modal.close();
     }
 

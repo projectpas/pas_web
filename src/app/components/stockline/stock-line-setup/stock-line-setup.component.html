@@ -85,7 +85,7 @@
                                 <div class="form-group">
                                     <label>Revised PN</label>
                                     <div class="inner-addon right-addon inline-block">
-                                        <p-autoComplete field="partnumber" class="pautocomp-cstm" [(ngModel)]="stockLineForm.revicedPNId" name="revicedPNId" [suggestions]="RevicepnList" (completeMethod)="filterRevicePartNumbers($event)" [size]="30" [minLength]="1" [dropdown]="true"  #partNum="ngModel" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enableSave()" required></p-autoComplete>
+                                        <p-autoComplete field="partnumber" class="pautocomp-cstm" [(ngModel)]="stockLineForm.revicedPNId" name="revicedPNId" [suggestions]="RevicepnList" (completeMethod)="filterRevicePartNumbers($event)" [size]="30" [minLength]="1" [dropdown]="true"  #partNum="ngModel" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enableSave()"></p-autoComplete>
                                     </div>
                                     <!-- <input class="form-control" type="text" name="revisedPart" [(ngModel)]="stockLineForm.revisedPart" (ngModelChange)="enableSave()" disabled> -->
                                 </div>
