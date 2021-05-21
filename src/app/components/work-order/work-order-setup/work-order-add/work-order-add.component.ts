@@ -436,6 +436,7 @@ setTimeout(() => {
             if (this.mpnDropdownList && this.mpnDropdownList.length != 0) {
                 this.changeofMPNForSubWo(this.mpnDropdownList[0].value);
                 this.selectedMPNSubWo = this.mpnDropdownList[0].value;
+             
             }
         },
             err => {
@@ -444,6 +445,7 @@ setTimeout(() => {
     }
 
     changeofMPNForSubWo(data) {
+        this.workOrderService.partNumberData=data;
         this.workFlowId =  (data.workFlowId !=0 || data.workFlowId !=null )? data.workFlowId: 0;
         this.subWOPartNoId = data.subWOPartNoId;
         this.workOrderPartNumberId = data.subWOPartNoId;
@@ -514,6 +516,9 @@ setTimeout(() => {
                     this.workFlowWorkOrderId=this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
                 // }
                 // this.gridTabChange('materialList');
+            }
+            if(this.workOrderGeneralInformation.isSinglePN==true){
+                this.workOrderService.partNumberData=this.workOrderGeneralInformation.partNumbers[0];
             }
             this.gridActiveTab = 'materialList'
             this.gridTabChange('materialList');
@@ -1612,6 +1617,9 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
     changeofMPN(data) {
         this.quotestatusofCurrentPart = data.quoteStatus;
         this.selectedPartNumber = data;
+        // if(this.workOrderGeneralInformation.isSinglePN==true){
+            this.workOrderService.partNumberData=data.datas;
+        // }
         this.mpnGridData = data.datas;
         this.workFlowId = data.workflowId,
             this.workFlowWorkOrderId = data.workOrderWorkFlowId;
@@ -1783,6 +1791,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     }
                     else {
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
+                   
                     }
                     // if (this.workFlowId == null) {
                         this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId;
