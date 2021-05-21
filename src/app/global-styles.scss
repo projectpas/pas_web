@@ -113,6 +113,9 @@
     cursor: not-allowed;
     text-decoration: underline;
 }
+.wosettingLabel  .ui-radiobutton-label {
+  min-width: 120px !important;
+}
   .custom_Tdth{
     min-width: 83px;
     color: #333333 !important;

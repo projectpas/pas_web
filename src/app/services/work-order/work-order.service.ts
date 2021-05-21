@@ -20,6 +20,7 @@ import { WOPickTicket } from '../../models/sales/WOPickTicket';
 export class WorkOrderService {
 
     creditTerms: any;
+    partNumberData:any={};
     constructor(private workOrderEndpointService: WorkOrderEndpointService) {
     }
 

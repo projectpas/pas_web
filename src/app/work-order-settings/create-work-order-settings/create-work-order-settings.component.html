@@ -51,9 +51,9 @@
         <div class="card-body">
             <h4 class="head_lis">Work Order </h4>
             <form #customerWorkForm="ngForm">
-                <div class="form-row">
+                <div class="form-row mr_b12">
                     <div class="col-md-12">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>
                                     WO Type <span class="clr-red">*</span> <span
@@ -69,30 +69,28 @@
                             </div>
 
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Prefix</label>
                                 <input type="text" name="prefix" class="form-control ui-autocomplete-input"
                                     [(ngModel)]="receivingForm.prefix">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Sufix <span class="text-danger">*</span></label>
-                                <input type="text" required name="sufix" class="form-control ui-autocomplete-input"
+                                <input type="text" required name="sufix" class="form-control ui-autocomplete-input wd_9"
                                     [(ngModel)]="receivingForm.sufix">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label> StartCode</label>
-                                <input type="text" name="startCode" class="form-control ui-autocomplete-input"
+                                <input type="text" name="startCode" class="form-control ui-autocomplete-input wd_9"
                                     [(ngModel)]="receivingForm.startCode">
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Default Condition <span class="text-danger">*</span></label>
 
@@ -104,150 +102,157 @@
                             </div>
 
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Default Stage Code</label>
-                                <select [(ngModel)]="receivingForm.defaultStageCodeId" name="workOrderStageId">
-                                    <option value="0">-- Select --</option>
-                                    <option *ngFor="let workOrderStages of workOrderStagesList"
-                                        [ngValue]="workOrderStages.workOrderStageId">{{workOrderStages.workOrderStage}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Default Priority</label>
-                                <select [(ngModel)]="receivingForm.defaultPriorityId" name="PriorityId">
-                                    <option value="0">-- Select --</option>
-                                    <option *ngFor="let priority of priorityList" [ngValue]="priority.value">
-                                        {{priority.label}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Teardown Types</label>
-                                <ng-multiselect-dropdown class="form-control multiple-custom-select"
-                                    [placeholder]="'Select'" [data]="tearDownTypes" [(ngModel)]="selectedTearDownTypes"
-                                    [settings]="dropdownSettings" name="tearDownTypes">
-                                </ng-multiselect-dropdown>
-                            </div>
-                        </div>
-                        <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
-                            <div class="form-group">
-                                <label>
-                                    Site <span style="margin-left:3px;cursor:pointer;">
-                                    </span>
-                                </label>
+                    </div>
+                   
+                </div>
+                <div class="form-row mr_b12" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
+                    <div class="col-md-2" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Site <span style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
 
-                                <p-dropdown (onChange)="siteValueChange(receivingForm.defaultSiteId)" [showClear]="true"
-                                    class="p-dropdown-100" (ngModelChange)="getmemo($event)"
-                                    (input)="onFilterSite($event.target.value)" [options]="allSites" filter="true"
-                                    [(ngModel)]="receivingForm.defaultSiteId" name="DefaultSiteId"
-                                    [resetFilterOnHide]="true" placeholder="-- Select --"></p-dropdown>
-                            </div>
-                        </div>
-                        <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
-                            <div class="form-group">
-                                <label>
-                                    Warehouse <span style="margin-left:3px;cursor:pointer;">
-                                    </span>
-                                </label>
-
-                                <p-dropdown (onChange)="wareHouseValueChange(receivingForm.defaultWearhouseId)"
-                                    [showClear]="true" class="p-dropdown-100" (ngModelChange)="getmemo($event)"
-                                    [options]="allWareHouses" filter="true"
-                                    [(ngModel)]="receivingForm.defaultWearhouseId" name="defaultWearhouseId"
-                                    [resetFilterOnHide]="true" placeholder="-- Select --"></p-dropdown>
-                            </div>
-                        </div>
-                        <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
-                            <div class="form-group">
-                                <label>
-                                    Location <span style="margin-left:3px;cursor:pointer;">
-                                    </span>
-                                </label>
-
-                                <p-dropdown (onChange)="locationValueChange(receivingForm.defaultLocationId)"
-                                    [showClear]="true" class="p-dropdown-100" (ngModelChange)="getmemo($event)"
-                                    [options]="allLocations" filter="true" [(ngModel)]="receivingForm.defaultLocationId"
-                                    name="defaultLocationId" [resetFilterOnHide]="true" placeholder="-- Select --">
-                                </p-dropdown>
-                            </div>
-                        </div>
-                        <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
-                            <div class="form-group">
-                                <label>
-                                    Shelf <span style="margin-left:3px;cursor:pointer;">
-                                    </span>
-                                </label>
-
-                                <p-dropdown (onChange)="shelfValueChange(receivingForm.defaultShelfId)"
-                                    [showClear]="true" class="p-dropdown-100" (ngModelChange)="getmemo($event)"
-                                    [options]="allShelfs" filter="true" [(ngModel)]="receivingForm.defaultShelfId"
-                                    name="defaultShelfId" [resetFilterOnHide]="true" placeholder="-- Select --">
-                                </p-dropdown>
-                            </div>
-                        </div>
-                        <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
-                            <div class="form-group">
-                                <label>
-                                    Bin <span style="margin-left:3px;cursor:pointer;">
-                                    </span>
-                                </label>
-                                <p-dropdown [showClear]="true" class="p-dropdown-100" (ngModelChange)="getmemo($event)"
-                                    [options]="allBins" filter="true" [(ngModel)]="receivingForm.defaultBinId"
-                                    name="defaultBinId" [resetFilterOnHide]="true" placeholder="-- Select --">
-                                </p-dropdown>
-                            </div>
-                        </div>
-                        <div class="col-md-3 task-detail" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
-                            <div class="form-group task-hours-type">
-                                <p-radioButton (ngModelChange)="getmemo($event)"
-                                    class="p-radiobutton-label-horizontal p-radiobutton-cstm adj"
-                                    name="WorkFloworSpecificTaskorWorkOrder" label="Labor Hours" [value]="1"
-                                    [(ngModel)]="receivingForm.laborHoursMedthodId"></p-radioButton>
-                                <br />
-                                <p-radioButton (ngModelChange)="getmemo($event)"
-                                    class="p-radiobutton-label-horizontal p-radiobutton-cstm jda"
-                                    name="WorkFloworSpecificTaskorWorkOrder" label="Labor Clock In/Out " [value]="2"
-                                    [(ngModel)]="receivingForm.laborHoursMedthodId"></p-radioButton>
-                                <br />
-                                <p-radioButton (ngModelChange)="getmemo($event)"
-                                    class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="Scan"
-                                    [value]="3" label="Scan" [(ngModel)]="receivingForm.laborHoursMedthodId">
-                                </p-radioButton>
-                            </div>
-                        </div>
-                        <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
-                            <!-- <div class="form-group">
-                                <p-checkbox name="isApprovalRule" binary="true"
-                                    [(ngModel)]="receivingForm.isApprovalRule">
-                                </p-checkbox>
-                                <label style="padding-left:10px;">Apply Approval Rule
-                                </label>
-                            </div> -->
-                            <div class="form-group">
-                                <p-checkbox name="enforcePickTicket" binary="true"
-                                    [(ngModel)]="receivingForm.enforcePickTicket">
-                                </p-checkbox>
-                                <label style="padding-left:10px;">Enforce Pick Ticket
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-3 work_order_teardown" style="padding-top:12px;"
-                            *ngIf="receivingForm.enforcePickTicket">
-                            <div class="form-group">
-                                <label>Pick Ticket Effective Date</label>
-                                <p-calendar name="pickTicketEffectiveDate" [yearNavigator]="true"
-                                    [monthNavigator]="true" yearRange="1900:2100"
-                                    [(ngModel)]="receivingForm.pickTicketEffectiveDate" [showIcon]="true"
-                                    id="pickTicketEffectiveDate" #pickTicketEffectiveDate="ngModel">
-                                </p-calendar>
-                            </div>
+                            <p-dropdown (onChange)="siteValueChange(receivingForm.defaultSiteId)" [showClear]="true"
+                                class="p-dropdown-100" (ngModelChange)="getmemo($event)"
+                                (input)="onFilterSite($event.target.value)" [options]="allSites" filter="false"
+                                [(ngModel)]="receivingForm.defaultSiteId" name="DefaultSiteId"
+                                [resetFilterOnHide]="true" placeholder="-- Select --"></p-dropdown>
                         </div>
                     </div>
+                    <div class="col-md-2" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Warehouse <span style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+
+                            <p-dropdown (onChange)="wareHouseValueChange(receivingForm.defaultWearhouseId)"
+                                [showClear]="true" class="p-dropdown-100" (ngModelChange)="getmemo($event)"
+                                [options]="allWareHouses" filter="false"
+                                [(ngModel)]="receivingForm.defaultWearhouseId" name="defaultWearhouseId"
+                                [resetFilterOnHide]="true" placeholder="-- Select --"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Location <span style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+
+                            <p-dropdown (onChange)="locationValueChange(receivingForm.defaultLocationId)"
+                                [showClear]="true" class="p-dropdown-100" (ngModelChange)="getmemo($event)"
+                                [options]="allLocations" filter="false" [(ngModel)]="receivingForm.defaultLocationId"
+                                name="defaultLocationId" [resetFilterOnHide]="true" placeholder="-- Select --">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Shelf <span style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+
+                            <p-dropdown (onChange)="shelfValueChange(receivingForm.defaultShelfId)"
+                                [showClear]="true" class="p-dropdown-100" (ngModelChange)="getmemo($event)"
+                                [options]="allShelfs" filter="false" [(ngModel)]="receivingForm.defaultShelfId"
+                                name="defaultShelfId" [resetFilterOnHide]="true" placeholder="-- Select --">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Bin <span style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+                            <p-dropdown [showClear]="true" class="p-dropdown-100" (ngModelChange)="getmemo($event)"
+                                [options]="allBins" filter="false" [(ngModel)]="receivingForm.defaultBinId"
+                                name="defaultBinId" [resetFilterOnHide]="true" placeholder="-- Select --">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="form-row mr_b12">
+                       
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Default Stage Code</label>
+                            <select [(ngModel)]="receivingForm.defaultStageCodeId" name="workOrderStageId">
+                                <option value="0">-- Select --</option>
+                                <option *ngFor="let workOrderStages of workOrderStagesList"
+                                    [ngValue]="workOrderStages.workOrderStageId">{{workOrderStages.workOrderStage}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Default Priority</label>
+                            <select [(ngModel)]="receivingForm.defaultPriorityId" name="PriorityId">
+                                <option value="0">-- Select --</option>
+                                <option *ngFor="let priority of priorityList" [ngValue]="priority.value">
+                                    {{priority.label}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Teardown Types</label>
+                            <ng-multiselect-dropdown class="form-control multiple-custom-select"
+                                [placeholder]="'Select'" [data]="tearDownTypes" [(ngModel)]="selectedTearDownTypes"
+                                [settings]="dropdownSettings" name="tearDownTypes">
+                            </ng-multiselect-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-4 task-detail" *ngIf="receivingForm.workOrderTypeId ==woTypeId" style="padding-top: 12px;">
+                        <div class="form-group task-hours-type" style="display: inline-flex;">
+                            <p-radioButton (ngModelChange)="getmemo($event)"
+                                class="p-radiobutton-label-horizontal p-radiobutton-cstm adj"
+                                name="WorkFloworSpecificTaskorWorkOrder" label="Labor Hours" [value]="1"
+                                [(ngModel)]="receivingForm.laborHoursMedthodId"></p-radioButton>
+                            <br />
+                            <p-radioButton (ngModelChange)="getmemo($event)"
+                                class="p-radiobutton-label-horizontal p-radiobutton-cstm jda wosettingLabel "
+                                name="WorkFloworSpecificTaskorWorkOrder" label="Labor Clock In/Out " [value]="2"
+                                [(ngModel)]="receivingForm.laborHoursMedthodId"></p-radioButton>
+                            <br />
+                            <p-radioButton (ngModelChange)="getmemo($event)"
+                                class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="Scan"
+                                [value]="3" label="Scan" [(ngModel)]="receivingForm.laborHoursMedthodId">
+                            </p-radioButton>
+                        </div>
+                    </div>
+                    <div class="col-md-2 work_order_teardown" style="padding-top:12px;"  *ngIf="receivingForm.enforcePickTicket">
+                    <div class="form-group left_adj">
+                        <p-checkbox name="enforcePickTicket" binary="true"
+                            [(ngModel)]="receivingForm.enforcePickTicket">
+                        </p-checkbox>
+                        <label class="alt_cos" >Enforce Pick Ticket
+                        </label>
+                    </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <!-- <div class="col-md-3 work_order_teardown" style="padding-top:12px;"  *ngIf="receivingForm.enforcePickTicket"> -->
+                        <!-- <div class="form-group">
+                            <p-checkbox name="isApprovalRule" binary="true"
+                                [(ngModel)]="receivingForm.isApprovalRule">
+                            </p-checkbox>
+                            <label style="padding-left:10px;">Apply Approval Rule
+                            </label>
+                        </div> -->
+                        <!-- <div class="form-group">
+                            <p-checkbox name="enforcePickTicket" binary="true"
+                                [(ngModel)]="receivingForm.enforcePickTicket">
+                            </p-checkbox>
+                            <label style="padding-left:10px;">Enforce Pick Ticket
+                            </label>
+                        </div>
+                    </div> -->
                 </div>
                 <div class="form-row pull-right m-t-10">
                     <button type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"

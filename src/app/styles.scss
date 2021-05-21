@@ -17108,6 +17108,11 @@ input[type="date"]::-webkit-clear-button {
   top: 0;
   padding: 2px 0px !important;
 }
+.multiselect-dropdown .dropdown-btn .selected-item {
+  padding: 0 2px !important;
+
+  font-size: 9px;
+}
 .multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret:before {
 
   // right: 0 !important;
@@ -17116,7 +17121,7 @@ input[type="date"]::-webkit-clear-button {
   top: 43% !important;
 }
 .multiselect-dropdown .dropdown-btn {
-  padding: 6px 9px !important;
+  padding: 4px 9px 4px 4px !important;
  border: none !important;
   border-radius: 4px !important;
   color:#fff !important;

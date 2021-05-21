@@ -12,7 +12,18 @@
 }
 .input-width-100-percent{
   width:100% !important;
+  margin: 0px;
 
+}
+.adK_f{
+  display: inline-flex;
+}
+.change_cd{
+  text-align: left;
+  width: 34px;
+}
+.cost_v{
+  width: 95px;
 }
 .width-36{
   width:36px !important;
