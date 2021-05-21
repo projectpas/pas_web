@@ -41,9 +41,12 @@
                                 <ng-template pTemplate="caption">
                                     <div class="row">
                                         <div class="col">
-                                            <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
-                                                [(ngModel)]="selectedColumns" class="multiselect-field"
-                                                (onChange)="columnsChanges()"></p-multiSelect>
+
+                                            <p-multiSelect [options]="gridColumns" [(ngModel)]="selectedGridColumns" optionLabel="header"
+                                            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                            <!-- <p-multiSelect [maxSelectedLabels]="2" [options]="selectedGridColumn" optionLabel="header"
+                                                [(ngModel)]="selectedGridColumn" class="multiselect-field"
+                                                (onChange)="columnsChanges()"></p-multiSelect> -->
                                         </div>
                                         <div class="col">
                                             <div class="global-search-field inner-addon right-addon inline-block">
