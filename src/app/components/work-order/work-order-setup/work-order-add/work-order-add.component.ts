@@ -2057,7 +2057,15 @@ this.getNewMaterialListByWorkOrderId();
                 uniqueParts[i].childParts = [];
             }
           });
+          uniqueParts.map((x,xindex)=>{
+             if(x.childParts && x.childParts.length !=0){
+                x.childParts.map((y,yindex)=>{
+                    y.line = (xindex + 1) + '.' + (yindex + 1)
+                })
+             } 
+          })
           this.workOrderMaterialList = uniqueParts;
+console.log("material list",this.workOrderMaterialList)
         }
         this.totalRecords = this.workOrderMaterialList.length;
         this.pageLinks = Math.ceil(
