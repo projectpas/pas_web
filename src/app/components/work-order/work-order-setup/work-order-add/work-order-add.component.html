@@ -1138,7 +1138,7 @@
                 </div>
                 <div *ngIf="labor && (gridActiveTab == 'labor') " [ngClass]="{hidedata : gridActiveTab !== 'labor'}"
                     id="check">
-                    <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor"
+                    <app-work-order-labor [markupList]="markupList" [labortaskList]="taskList" [laborForm]="labor"
                         [employeesOriginalData]="employeesOriginalData" [workOrderLaborList]="workOrderLaborList"
                         [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData"
                         [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId"
