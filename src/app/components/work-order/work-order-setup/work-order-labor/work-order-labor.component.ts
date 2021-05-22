@@ -240,7 +240,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     this.getAllExpertiseType();
 
     this.originalLaborForm = this.laborForm; 
-    console.log("laborForm",this.laborForm);
+    // console.log("laborForm",this.laborForm);
   }
   originalLaborForm: any = {};
   storeFormForBackUp: any = [];
@@ -339,8 +339,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     }
   }
   onPartSelect(event, currentRecord, index) {
-    console.log("event",event)
-    console.log("event",currentRecord)
+    // console.log("event",event)
+    // console.log("event",currentRecord)
     currentRecord.directLaborOHCost=event.overHeadBurden; 
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
   }
