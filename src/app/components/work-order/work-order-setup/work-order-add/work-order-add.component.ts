@@ -2392,6 +2392,7 @@ this.getNewMaterialListByWorkOrderId();
     } 
 
     formWorkerOrderLaborJson(data) {
+        console.log("data ",data)
         if (this.isSubWorkOrder == true) {
             this.result = {
                 "subWorkOrderLaborHeaderId": data['subWorkOrderLaborHeaderId'] ? data['subWorkOrderLaborHeaderId'] : 0,
@@ -2416,7 +2417,8 @@ this.getNewMaterialListByWorkOrderId();
                 "labourMemo": data['labourMemo'],
                 "LaborList": [
                 ],
-                "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
+                "WorkOrderQuoteTask": data['WorkOrderQuoteTask'],
+
             }
             data.WorkOrderQuoteTask.forEach(element => {
                 element.subWorkOrderLaborId = element.subWorkOrderLaborId ? element.subWorkOrderLaborId : 0;
@@ -2451,6 +2453,11 @@ this.getNewMaterialListByWorkOrderId();
             for (let labSubList of data.workOrderLaborList[labList]) {
                 if (labSubList && labSubList['expertiseId'] != null){
                     labSubList.masterCompanyId=this.currentUserMasterCompanyId;
+                    labSubList.burdenRateAmount=
+                    // labSubList.directLaborOHCost
+                    // labSubList.directLaborOHCost
+                    // labSubList.directLaborOHCost
+                    // labSubList.directLaborOHCost
                     this.result.LaborList.push(labSubList);
                     this.result.expertiseId=labSubList['expertiseId'];
                     this.result.employeeId=labSubList['employeeId'];
@@ -2586,6 +2593,9 @@ this.getNewMaterialListByWorkOrderId();
                         employeeId: {employeeId:this.data.employeeId,name:this.data.employeeName,value:this.data.employeeId,label:this.data.employeeName},
                         dataEnteredBy: {value:this.data.dataEnteredBy,label:this.data.dataEnteredByName},
                     };
+                    console.log("labor data",this.workOrderLaborList);
+                    // if(this.is)
+                    this.getMarkup();
                     this.labor.hoursorClockorScan = res.hoursorClockorScan;
                     this.labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0) ? 'workFlow' : (res.workOrderHoursType == 1) ? 'specificTasks' : 'workOrder';
                     this.labor.totalWorkHours = res.totalWorkHours;
@@ -2642,6 +2652,7 @@ this.getNewMaterialListByWorkOrderId();
             },
                 err => {
                     this.workOrderLaborList=[];
+                    this.getMarkup();
                     this.handleError(err);
                 })
         }
@@ -2658,7 +2669,26 @@ this.getNewMaterialListByWorkOrderId();
             }
         }
     }
+    markupList:any=[];
+    getMarkup(value?) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            // this.setEditArray.push(this.currentAsset.tangibleClassId ? this.currentAsset.tangibleClassId : 0);
 
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+            if (res && res.length != 0) { 
+                this.markupList = res;
+                this.markupList.sort((n1,n2) => n1.label - n2.label);
+            }
+        },err => {
+             this.errorHandling(err);
+            })
+    }
     otherOptionTabSelected(value) {
         this.subTabWorkFlow = '';
         this.subTabMainComponent = '';
