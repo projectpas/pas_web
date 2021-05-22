@@ -162,8 +162,9 @@
           <tr>
             <th class="text-center padding-td tasks-th" style="width:100px">Tasks</th>
             <th class="text-center expertise-th" style="width:100px;min-width: 100px !important;">Expertise</th>
-            <th class="text-center employee-th" style="width:140px;min-width: 140px;" *ngIf="!isQuote">
+            <th class="text-center employee-th" style="width:140px;min-width: 140px;" >
               Employee
+              <!-- *ngIf="!isQuote" -->
             </th>
             <th class="text-center th-zindex-2 width-70">Billable /NonBillable</th>
             <th class="text-center width-70" *ngIf="
@@ -306,8 +307,8 @@
                     </ng-container>
                   </select>
                 </td>
-                <td  *ngIf="!isQuote">
-              
+                <td  >
+                  <!-- *ngIf="!isQuote" -->
 
                   <p-autoComplete field="label" (ngModelChange)="checkValid(16)" (onSelect)="onPartSelect($event, rec,i)" [(ngModel)]="rec.employeeId" #salesPerson="ngModel"
                     errorMessage="Records not found" [forceSelection]="true" [dropdown]="true" [suggestions]="

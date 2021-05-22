@@ -606,7 +606,7 @@ this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'Pe
     })
   }
   getExpertiseEmployeeByExpertiseId(value, index, object) {
-    if (!this.isQuote) {
+    // if (!this.isQuote) {
       object.employeeId = null;
       if (value) {
         this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
@@ -621,7 +621,7 @@ this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'Pe
           err => {
           })
       }
-    }
+    // }
   }
 
   getExpertiseEmployeeByExpertiseIdForHeader(value) {
