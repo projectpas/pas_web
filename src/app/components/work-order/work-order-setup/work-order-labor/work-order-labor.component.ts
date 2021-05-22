@@ -22,7 +22,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Output() refreshLabor = new EventEmitter();
   @Input() workOrderLaborList: any = {};
   @Input() labortaskList: any;
-  @Input() isQuote = false;
+  @Input() isQuote = false; 
   @Input() markupList;
   @Input() employeesOriginalData;
   @Input() isView: boolean = false;
@@ -135,12 +135,15 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     if (this.selectedPartNumber && this.selectedPartNumber.managementStructureId && !this.basicLabourDetail) {
       this.getBasicLabourData(this.selectedPartNumber.managementStructureId);
     }
+    // 
 
   }
   laborTaskData: any;
   allTaskList: any = [];
   ngOnChanges() {
-
+    setTimeout(() => {
+      this.checkPercentageData();
+    }, 1000);
     // this.taskList=[];
     // this.allTaskList=[];
     // this.allTaskList=this.labortaskList;
@@ -241,7 +244,24 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
 
     this.originalLaborForm = this.laborForm; 
     // console.log("laborForm",this.laborForm);
+ 
   }
+  checkPercentageData(value?) {
+    // console.log("ggggggg",this.markupList);
+if(this.markupList && this.markupList.length ==0){
+  this.setEditArray = [];
+  this.setEditArray.push(0);
+// console.log("hello")
+const strText = value ? value : '';
+this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+  if (res && res.length != 0) { 
+      this.markupList = res;
+      this.markupList.sort((n1,n2) => n1.label - n2.label);
+  }
+},err => {
+  })
+}
+}
   originalLaborForm: any = {};
   storeFormForBackUp: any = [];
   assignHoursToToalWorkOrder() {

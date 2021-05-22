@@ -2671,6 +2671,14 @@ this.getNewMaterialListByWorkOrderId();
                     this.handleError(err);
                 })
         }
+        console.log("this.data",this.data)
+        // console.log("this.data",Object.keys(this.data).length)
+        // setTimeout(() => {
+        //    if(Object.keys(this.data).length == 0){
+        //        console.log("this.data",this.data)
+        //     this.getMarkup();
+        //    }
+        // }, 500);
         if (!this.isSubWorkOrder) {
             if (this.workOrderGeneralInformation.isSinglePN == true) {
                 this.labor['employeeId'] = this.workOrderGeneralInformation.partNumbers[0]['technicianId'];
@@ -2694,6 +2702,7 @@ this.getNewMaterialListByWorkOrderId();
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
+        // console.log("add form")
         // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) { 
