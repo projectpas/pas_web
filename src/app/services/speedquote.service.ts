@@ -337,4 +337,7 @@ export class SpeedQuoteService {
       observer.complete();
     });
   }
+  getItemMasterDataConditionWise(id) {
+    return this.speedQuoteEndPointSevice.getItemMasterDataConditionWise(id);
+  }
 }

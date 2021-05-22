@@ -211,6 +211,15 @@ export class SpeedQuotePartNumberFilterComponent implements OnInit {
     //     this.query.partSearchParamters.conditionIds.push(this.query.partSearchParamters.conditionId);
     //   }
     // }
+    if (this.query.partSearchParamters.partNumber
+      && formatStringToNumber(this.query.partSearchParamters.quantityRequested) > 0) {
+      this.searchDisabled = false;
+    } else {
+      this.searchDisabled = true;
+      // if (this.query.partSearchParamters.conditionIds !== undefined && this.query.partSearchParamters.conditionIds.length == 0 && this.query.partSearchParamters.conditionId !== 0) {
+      //   this.query.partSearchParamters.conditionIds.push(this.query.partSearchParamters.conditionId);
+      // }
+    }
     let qr = + formatStringToNumber(this.query.partSearchParamters.quantityRequested);
     if (qr) {
       this.query.partSearchParamters.quantityToQuote = qr - formatStringToNumber(this.query.partSearchParamters.quantityAlreadyQuoted);
