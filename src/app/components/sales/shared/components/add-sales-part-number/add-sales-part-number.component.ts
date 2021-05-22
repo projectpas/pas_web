@@ -28,6 +28,7 @@ export class AddSalesPartNumberComponent implements OnInit {
   @Input() selectedParts: any = [];
   @Input() type: string;
   @Input() isEdit: boolean = false;
+  @Input() isQtyAdjust: boolean = false;
   searchType: ItemSearchType;
   parts: IPartJson[];
   showModalMargin: boolean;
@@ -111,7 +112,9 @@ export class AddSalesPartNumberComponent implements OnInit {
       .subscribe(data => {
         let selectedData = data;
         selectedData.forEach((part, i) => {
-          selectedData[i].quantityRequested = this.query.partSearchParamters.quantityRequested;
+          if (selectedData[i].itemMasterId == this.query.partSearchParamters.partId && selectedData[i].conditionId == this.query.partSearchParamters.conditionId) {
+            selectedData[i].quantityRequested = this.query.partSearchParamters.quantityRequested;
+          }
         });
 
         this.save.emit(selectedData);

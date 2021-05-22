@@ -1,11 +1,11 @@
 ﻿<div class="card">
     <div class="card-body p-t-0">
-        <div class="row" >
+        <div class="row">
             <div class="col-md-12 invoice-div">
                 <label></label>
                 <div class="form-group invoice-button-div">
-                    <button *ngIf="isView == false" type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateInvoiceBtn"
-                        (click)="PerformBilling()">Invoice</button>
+                    <button *ngIf="isView == false" type="submit" class="btn  submit-btn btn btn-primary"
+                        [disabled]="disableCreateInvoiceBtn" (click)="PerformBilling()">Invoice</button>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
                                         <span *ngIf="summaryColumn.field != 'itemNo'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
-                                        
+
                                     </td>
                                     <td colspan="7"></td>
                                     <td *ngIf="isView == false"></td>
@@ -51,14 +51,17 @@
                                     <th style="min-width: 85px;">Cond</th>
                                     <th style="min-width: 60px;">Curr</th>
                                     <th style="min-width: 105px;">Billing Amount</th>
-                                    <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">Actions</th>
+                                    <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">
+                                        Actions</th>
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let bill of summaryPart.salesOrderBillingInvoiceChild; let poIndex = index">
                                     <td></td>
                                     <td class="table-column-width" *ngIf="bill.invoiceDate != null">
-                                        <label style="color: #0F9D58" *ngIf="bill.invoiceStatus != 'Billed'">{{ bill.invoiceStatus }}</label>
-                                        <label style="color: #0F9D58" *ngIf="bill.invoiceStatus == 'Billed'">Open</label>
+                                        <label style="color: #0F9D58"
+                                            *ngIf="bill.invoiceStatus != 'Billed'">{{ bill.invoiceStatus }}</label>
+                                        <label style="color: #0F9D58"
+                                            *ngIf="bill.invoiceStatus == 'Billed'">Open</label>
                                     </td>
                                     <td class="table-column-width" *ngIf="bill.invoiceDate == null">
                                         <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
@@ -582,8 +585,10 @@
         <h4 class="modal-title">Print OR Post Invoice</h4>
     </div>
     <div class="modal-body">
-        <app-sales-order-print-invoice [salesOrderbillingInvoicingId]="SObillingInvoicingId"
-            [salesOrderId]="salesOrderId"></app-sales-order-print-invoice>
+        <div id="soInvoice">
+            <app-sales-order-print-invoice [salesOrderbillingInvoicingId]="SObillingInvoicingId"
+                [salesOrderId]="salesOrderId"></app-sales-order-print-invoice>
+        </div>
     </div>
     <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
         <div class="loading">

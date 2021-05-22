@@ -91,7 +91,13 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
-                    <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column"
+                    <ng-container *ngFor="let col of columns">
+                    <td class="table-column-width ui-resizable-column text-capital" *ngIf="col.field == 'emailType'"
+                    pReorderableRowHandle>
+                    <p class="p_textEditor p-0 m-0 text-capital" [innerHTML]=rowData[col.field]></p>
+                </td>
+                    <td class="table-column-width"
+                    *ngIf="col.field !='emailType'" class="ui-resizable-column"
                         pReorderableRowHandle>
                         {{
                             col.field == 'createdDate'
@@ -101,6 +107,7 @@
                               : rowData[col.field] 
                           }}
                     </td>
+                    </ng-container>
                     <td class="action-icons-cstm table-column-width">
                         <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#viewEmail"
                                 (click)="emailView(rowData)" matTooltip="View" matTooltipPosition="above"><i
@@ -164,7 +171,7 @@
 </div>
 <div id="contentHistDocs" #contentHistDocs class="modal fade" role="dialog" data-backdrop="static"
     data-keyboard="false">
-    <div class="modal-dialog modal-xlg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">History of Email</h4>
@@ -227,9 +234,9 @@
                                     <td *ngIf="type==2"
                                         [ngStyle]="{'color':  getColorCodeForHistory(i, 'vendorContact', audit.vendorContact)  ? 'black' : 'red'  }">
                                         {{audit.vendorContact}}</td>
-                                    <td style="margin-bottom:-10px !important"
+                                    <td 
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'emailBody', audit.emailBody)  ? 'black' : 'red'  }">
-                                        <p [innerHTML]="audit.emailBody"></p>
+                                        <p class="m-0 p-0" [innerHTML]="audit.emailBody"></p>
                                     </td>
                                     <td>
                                 <tr *ngFor="let x of audit.attachmentDetails">

@@ -95,10 +95,14 @@
                                     </td>
                                     <td colspan="13" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" style="position:sticky; width:80px">
+                                        <span>
+                                            <a class="btn nobg" (click)="adjustQty(summaryPart,rowIndex)"
+                                                matTooltip="Adjust Qty" matTooltipPosition="above">
+                                                <i class="fa fa-cubes" style="color: #000;"></i>
+                                            </a>
+                                        </span>
                                         <span *ngIf="summaryPart['methodType'] == 'S'">
-                                            <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                                [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                                class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
+                                            <a class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
                                                 matTooltip="Add Stock Line" matTooltipPosition="above">
                                                 <i class="fa fa-plus" style="color: #000;"></i>
                                             </a>
@@ -545,7 +549,7 @@
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
         (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode" [clearData]="clearData"
-        [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'SO'" [isEdit]="isEditMode"
+        [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'SO'" [isEdit]="isEditMode" [isQtyAdjust]="isQtyAdjust"
         (save)="onSave($event)">
     </app-add-sales-part-number>
 </ng-template>

@@ -3,17 +3,21 @@
     <button type="button" class="close" (click)="onClose()">
       &times;
     </button>
-    <h4 class="modal-title">{{ isStockLineViewMode ? 'View Stock Line' : (isEdit ? 'Edit PN' : 'Add PN')  }} </h4>
+    <h4 class="modal-title">
+      {{ isStockLineViewMode ? 'View Stock Line' : (isQtyAdjust ? 'Adjust Qty' : (isEdit ? 'Edit PN' : 'Add PN'))  }}
+    </h4>
   </div>
   <div class="modal-body">
     <app-customer-detail [salesQuote]="salesQuote"></app-customer-detail>
     <app-part-number-filter [salesQuote]="salesQuote" [parts]="parts" [allConditionInfo]="allConditionInfoArray"
-      [selectedParts]="selectedParts" [isStockLineViewMode]="isStockLineViewMode" [clearData]="clearData" (onPartSearch)="onPartSearch($event)"
-      [selectedSummaryRow]="selectedSummaryRow" (onSearchTypeChange)="onSearchTypeChange($event)" [type]="type" (onSave)="onSave($event)" [isEdit]="isEdit">
+      [selectedParts]="selectedParts" [isStockLineViewMode]="isStockLineViewMode" [clearData]="clearData"
+      (onPartSearch)="onPartSearch($event)" [selectedSummaryRow]="selectedSummaryRow" [isQtyAdjust]="isQtyAdjust"
+      (onSearchTypeChange)="onSearchTypeChange($event)" [type]="type" (onSave)="onSave($event)" [isEdit]="isEdit">
     </app-part-number-filter>
     <ng-container>
       <app-part-details [parts]="parts" [query]="query" (select)="onSelect($event)" [clearData]="clearData"
-        [isStockLineViewMode]="isStockLineViewMode" (onPartSelect)="onShowModalMargin($event)"></app-part-details>
+        [isEdit]="isEdit" [isQtyAdjust]="isQtyAdjust" [isStockLineViewMode]="isStockLineViewMode"
+        (onPartSelect)="onShowModalMargin($event)"></app-part-details>
     </ng-container>
   </div>
   <div class="modal-footer">
