@@ -47,10 +47,10 @@
                 label="Use target hours from workflow" value="workFlow"
                 [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="savedWorkOrderData.workFlowWorkOrderId == 0 || isView " (click)="calculateOverallTotalHours();getWorkFlowLaborList();"></p-radioButton> -->
                 <p-radioButton (ngModelChange)="checkValid(9)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" label="Assign hours by specific tasks" value="specificTasks"
-                  [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder"  [disabled]="isView " (click)="laborForm.totalWorkHours = 0;refreshCall();"></p-radioButton>
+                  [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder"  disabled (click)="laborForm.totalWorkHours = 0;refreshCall();"></p-radioButton>
                   <br>
                 <p-radioButton (ngModelChange)="checkValid(10)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" value="workOrder"
-                  label="Assign total hours to workorder" [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="isView " (click)="assignHoursToToalWorkOrder()"></p-radioButton>
+                  label="Assign total hours to workorder" [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" disabled (click)="assignHoursToToalWorkOrder()"></p-radioButton>
                   <!-- || !laborForm.isTaskCompletedByOne -->
               </div>
          </div>
@@ -309,9 +309,9 @@
                 <td  *ngIf="!isQuote">
               
 
-                  <p-autoComplete field="label" (ngModelChange)="checkValid(16)" [(ngModel)]="rec.employeeId" #salesPerson="ngModel"
+                  <p-autoComplete field="label" (ngModelChange)="checkValid(16)" (onSelect)="onPartSelect($event, rec,i)" [(ngModel)]="rec.employeeId" #salesPerson="ngModel"
                     errorMessage="Records not found" [forceSelection]="true" [dropdown]="true" [suggestions]="
-                      getDynamicVariableData('expertiseEmployee', i) " (onClear)="clearautoCompleteInput(rec)"
+                      getDynamicVariableData('expertiseEmployee', i) " (onClear)="clearautoCompleteInput(rec)" 
                       (completeMethod)="filterExpertiseEmployee($event, i)" emptyMessage="No Match Found" [size]="30"
                     [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required [disabled]="isView || laborForm.isTaskCompletedByOne" appendTo="body">
                   </p-autoComplete>
@@ -469,7 +469,7 @@
                   <td class="content-to-end" style="text-align:right !important">
                     {{(rec.burdenRateAmount)?formateCurrency(rec.burdenRateAmount):0.00}}
                   </td>
-                  
+
                   <td class="content-to-end" style="text-align:right !important">
                     {{ (rec.totalCostPerHour)?formateCurrency(rec.totalCostPerHour):0.00 }}
                   </td>
