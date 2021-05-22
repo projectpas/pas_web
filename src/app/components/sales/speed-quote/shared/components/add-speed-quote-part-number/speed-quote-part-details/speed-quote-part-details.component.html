@@ -28,14 +28,14 @@
           <ng-template pTemplate="body" let-part let-columns="columns" let-rowIndex="rowIndex">
               <tr [ngClass]="{'row-bg1':part.alternateFor.length==0}" pReorderableRowHandle>
                   <td>
-                      <a class="expand-row" *ngIf="!hideme[rowIndex]" (click)="viewSelectedRow(part,rowIndex)">
+                      <!-- <a class="expand-row" *ngIf="!hideme[rowIndex]" (click)="viewSelectedRow(part,rowIndex)">
                           <i class="fa fa-plus btn btn-success poro-plus-cstm btn-xs"
                               matTooltip="Show stock line details" style="padding: 3px 8px !important;"></i>
                       </a>
                       <a class="expand-row" *ngIf="hideme[rowIndex]" (click)="hideStockline(rowIndex)">
                           <i class="fa fa-minus btn-danger poro-plus-cstm btn-xs" matTooltip="Hide stock line details"
                               style="padding: 3px 8px !important;"></i>
-                      </a>
+                      </a> -->
                   </td>
                   <td *ngFor="let col of columns" pReorderableRowHandle>
                       <span *ngIf="col.field == 'select'">

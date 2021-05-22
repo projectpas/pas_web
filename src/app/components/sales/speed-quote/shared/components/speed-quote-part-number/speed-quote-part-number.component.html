@@ -7,14 +7,14 @@
   </div>
 </div>
 <ng-template #addPart let-c="close" let-d="dismiss">
-  <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
+  <!-- <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
         [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow" [clearData]="clearData"
         (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SOQ'">
-  </app-add-sales-part-number>
-  <!-- <app-add-speed-quote-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
+  </app-add-sales-part-number> -->
+  <app-add-speed-quote-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
       [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow" [clearData]="clearData"
       (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SQ'">
-  </app-add-speed-quote-part-number> -->
+  </app-add-speed-quote-part-number>
 </ng-template>
 <ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
   <app-speed-quote-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
