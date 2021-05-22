@@ -2065,7 +2065,7 @@ this.getNewMaterialListByWorkOrderId();
              } 
           })
           this.workOrderMaterialList = uniqueParts;
-console.log("material list",this.workOrderMaterialList)
+// console.log("material list",this.workOrderMaterialList)
         }
         this.totalRecords = this.workOrderMaterialList.length;
         this.pageLinks = Math.ceil(
@@ -2400,7 +2400,7 @@ console.log("material list",this.workOrderMaterialList)
     } 
 
     formWorkerOrderLaborJson(data) {
-        console.log("data ",data)
+        // console.log("data ",data)
         if (this.isSubWorkOrder == true) {
             this.result = {
                 "subWorkOrderLaborHeaderId": data['subWorkOrderLaborHeaderId'] ? data['subWorkOrderLaborHeaderId'] : 0,
@@ -2601,7 +2601,7 @@ console.log("material list",this.workOrderMaterialList)
                         employeeId: {employeeId:this.data.employeeId,name:this.data.employeeName,value:this.data.employeeId,label:this.data.employeeName},
                         dataEnteredBy: {value:this.data.dataEnteredBy,label:this.data.dataEnteredByName},
                     };
-                    console.log("labor data",this.workOrderLaborList);
+                    // console.log("labor data",this.workOrderLaborList);
                     // if(this.is)
                     this.getMarkup();
                     this.labor.hoursorClockorScan = res.hoursorClockorScan;

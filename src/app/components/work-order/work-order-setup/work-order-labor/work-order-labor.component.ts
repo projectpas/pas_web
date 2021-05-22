@@ -318,6 +318,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         else if (this.basicLabourDetail['laborHoursIdText'] == 'Assign Hours by Specific Actions') {
           this.laborForm.workFloworSpecificTaskorWorkOrder = 'specificTasks';
         }
+        this.laborForm.hoursorClockorScan=this.basicLabourDetail.laborHoursMedthodId;
       }
       else {
         this.populateQuoteData();
