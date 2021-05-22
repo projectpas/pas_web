@@ -113,8 +113,8 @@
           </td>
           <td>
             <select style="width:90%" [(ngModel)]="part.markUpPercentage" (change)="calculate()">
-              <option [ngValue]="0">Select</option>
-              <option *ngFor="let p of percentage" [ngValue]="p.label">{{ p.label }}</option>
+              <option [value]="0">Select</option>
+              <option *ngFor="let p of percentage" [value]="p.label">{{ p.label }}</option>
             </select>
             <span style="padding-left: 5px;">%</span>
           </td>
@@ -134,8 +134,8 @@
           </td>
           <td>
             <select style="width:90%" [(ngModel)]="part.salesDiscount" (change)="calculate()">
-              <option [ngValue]="0">Select</option>
-              <option *ngFor="let p of percentage" [ngValue]="p.label">{{ p.label }}</option>
+              <option [value]="0">Select</option>
+              <option *ngFor="let p of percentage" [value]="p.label">{{ p.label }}</option>
             </select>
             <span style="padding-left: 5px;">%</span>
 
