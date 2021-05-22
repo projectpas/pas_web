@@ -2461,7 +2461,7 @@ console.log("material list",this.workOrderMaterialList)
             for (let labSubList of data.workOrderLaborList[labList]) {
                 if (labSubList && labSubList['expertiseId'] != null){
                     labSubList.masterCompanyId=this.currentUserMasterCompanyId;
-                    labSubList.burdenRateAmount=
+                    // labSubList.burdenRateAmount=
                     // labSubList.directLaborOHCost
                     // labSubList.directLaborOHCost
                     // labSubList.directLaborOHCost
@@ -2635,8 +2635,15 @@ console.log("material list",this.workOrderMaterialList)
                                     taskData['endDate'] = labList['endDate'] ? new Date(labList['endDate']) : null;
                                     taskData['hours'] = labList['hours'];
                                     taskData['adjustments'] = labList['adjustments'];
-                                    taskData['adjustedHours'] = labList['adjustedHours'];
+                                    taskData['adjustedHours'] = labList['adjustedHours'].toFixed(2);
                                     taskData['memo'] = labList['memo'];
+
+                                    taskData['burdaenRatePercentageId'] = labList['burdaenRatePercentageId'];
+                                    taskData['burdenRateAmount'] = labList['burdenRateAmount'] ? formatNumberAsGlobalSettingsModule(labList['burdenRateAmount'], 2) : '0.00';
+                                    taskData['directLaborOHCost'] = labList['directLaborOHCost'] ? formatNumberAsGlobalSettingsModule(labList['directLaborOHCost'], 2) : '0.00';
+                                    taskData['totalCost'] = labList['totalCost'] ? formatNumberAsGlobalSettingsModule(labList['totalCost'], 2) : '0.00';
+                                    taskData['totalCostPerHour'] = labList['totalCostPerHour'] ? formatNumberAsGlobalSettingsModule(labList['totalCostPerHour'], 2) : '0.00';
+
                                     if (taskData.hours) {
                                         let hours = taskData.hours.toFixed(2);
                                         taskData['totalHours'] = hours.toString().split('.')[0];
