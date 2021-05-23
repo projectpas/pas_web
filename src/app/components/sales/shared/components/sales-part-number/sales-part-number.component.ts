@@ -7,7 +7,6 @@ import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
 import {
   AlertService,
-  DialogType,
   MessageSeverity
 } from "../../../../../services/alert.service";
 import { formatNumberAsGlobalSettingsModule } from "../../../../../generic/autocomplete";
@@ -57,6 +56,8 @@ export class SalesPartNumberComponent {
   public updatePNDetailsModal: ElementRef;
   @Output() myEvent = new EventEmitter();
   isEdit: boolean = false;
+  isEditMode: boolean = false;
+  isQtyAdjust: boolean = false;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output('on-parts-save') onPartsSavedEvent: EventEmitter<ISalesOrderQuotePart[]> = new EventEmitter<ISalesOrderQuotePart[]>();
   public partSaveConfirmationModal: ElementRef;
@@ -293,6 +294,40 @@ export class SalesPartNumberComponent {
       this.selectedSummaryRowIndex = null;
     }
     this.openPartNumber(false);
+    if (summaryRow == "") {
+      this.isEditMode = false;
+    }
+  }
+
+  adjustQty(summaryRow: any = '', rowIndex = null) {
+    this.salesQuoteService.resetSearchPart();
+    if (summaryRow) {
+      this.selectedSummaryRow = summaryRow;
+      this.selectedSummaryRowIndex = rowIndex;
+    } else {
+      this.selectedSummaryRow = null;
+      this.selectedSummaryRowIndex = null;
+    }
+    this.openQtyAdjust(false);
+    if (summaryRow == "") {
+      this.isEditMode = false;
+    }
+  }
+
+  openQtyAdjust(viewMode) {
+    this.isStockLineViewMode = viewMode;
+    this.clearData = viewMode;
+    let contentPart = this.addPart;
+    this.isEditMode = false;
+    this.isQtyAdjust = true;
+    this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+  }
+
+  onSave(selectedParts) {
+    this.salesQuoteService.selectedParts = selectedParts;
+    this.refresh();
+    this.canSaveParts = false;
+    this.addPartModal.close();
   }
 
   viewPartNumber(summaryRow: any = '', rowIndex = null) {
@@ -306,11 +341,14 @@ export class SalesPartNumberComponent {
       this.selectedSummaryRowIndex = null;
     }
     this.openPartNumber(true);
+    this.isEditMode = false;
   }
 
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
     let contentPart = this.addPart;
+    this.isEditMode = true;
+    this.isQtyAdjust = false;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
 
@@ -346,9 +384,10 @@ export class SalesPartNumberComponent {
           this.part.misc = this.salesQuoteService.getTotalCharges();
           this.part.createdBy = this.userName;
           this.part.priorityId = this.defaultSettingPriority;
-          if (this.selectedPart.itemMasterSale) {
-            this.part.fixRate = this.selectedPart.itemMasterSale.fxRate;
-          }
+          // if (this.selectedPart.itemMasterSale) {
+          //   this.part.fixRate = this.selectedPart.itemMasterSale.fxRate;
+          // }
+          this.part.fixRate = this.selectedPart.fixRate;
           this.part.taxType = this.customer.taxType;
           this.part.taxPercentage = this.customer.taxPercentage;
           if (this.selectedPart.mappingType == 1) {
@@ -730,9 +769,6 @@ export class SalesPartNumberComponent {
     this.closeConfirmationModal();
   }
 
-  onSave(event) {
-  }
-
   onClosePart(event) {
   }
 
@@ -819,6 +855,7 @@ export class SalesPartNumberComponent {
       uniquePart.totalSales = this.getSum(uniquePart.totalSales, part.totalSales);
       uniquePart.marginAmountExtended = this.getSum(uniquePart.marginAmountExtended, part.marginAmountExtended);
       uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentageExtended);
+      uniquePart.unitCostExtended = this.getSum(uniquePart.unitCostExtended, part.unitCostExtended);
       if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
         uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
       } else {
