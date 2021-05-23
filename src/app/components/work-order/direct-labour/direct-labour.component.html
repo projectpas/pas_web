@@ -84,6 +84,7 @@
                     <th class="text-center" colspan="2">
                         Overhead Burden Rate
                     </th>
+                    <th></th>
                     <th style="width: 120px; position:sticky">Actions</th>
                 </ng-container>
 
@@ -106,18 +107,26 @@
                         <i class="fa fa-eye view_icon_adjust"></i>
                     </a>
                 </th>    <!--How To Apply Hours To Work Orders?-->
-                <th colspan="2"></th>          
+                <th colspan="2"></th>    
+                <th>
+                    Labor Hours Method
+                </th>      
                 <th style="width: 120px; position:sticky"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowIndex="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)">
                 <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                  
-                    <ng-container *ngIf="col.field!='averageRate' && col.field!='flatAmount'">
+                    <ng-container *ngIf="col.field!='averageRate' &&  col.field !='laborHoursMedthodId' && col.field!='flatAmount'">
                         {{rowData[col.field]}}
                     </ng-container>
                     <ng-container *ngIf="col.field=='averageRate' || col.field=='flatAmount'">
                         <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                    </ng-container> 
+                    <ng-container *ngIf="col.field == 'laborHoursMedthodId'">
+                        <span *ngIf="rowData[col.field]==1">Labor Hours</span>
+                        <span *ngIf="rowData[col.field]==2">Labor ClockIn/Out</span>
+                        <span *ngIf="rowData[col.field]==3">Scan</span>
                     </ng-container> 
                 </td>
                 <td style="width:120px">

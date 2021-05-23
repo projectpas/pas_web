@@ -26,7 +26,9 @@ export class DirectLabourComponent implements OnInit {
 		{ field: 'averageRate', header: 'What Labor Rate To Use On Work Orders?' },
 		{ field: 'laborHoursIdText', header: 'How To Apply Hours To Work Orders?' },
 		{ field: 'burdenRateIdText', header: 'Overhead Burden Rate Text' },
-		{ field: 'flatAmount', header: 'Overhead Burden Rate' }
+		{ field: 'flatAmount', header: 'Overhead Burden Rate' },
+        { field: 'laborHoursMedthodId', header: 'Labor Hours Method'},
+        
 	];
 	selectedColumns = this.cols;
 	selectedColumn: any;

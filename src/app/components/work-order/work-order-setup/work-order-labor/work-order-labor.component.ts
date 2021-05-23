@@ -22,7 +22,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Output() refreshLabor = new EventEmitter();
   @Input() workOrderLaborList: any = {};
   @Input() labortaskList: any;
-  @Input() isQuote = false;
+  @Input() isQuote = false; 
   @Input() markupList;
   @Input() employeesOriginalData;
   @Input() isView: boolean = false;
@@ -135,12 +135,15 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     if (this.selectedPartNumber && this.selectedPartNumber.managementStructureId && !this.basicLabourDetail) {
       this.getBasicLabourData(this.selectedPartNumber.managementStructureId);
     }
+    // 
 
   }
   laborTaskData: any;
   allTaskList: any = [];
   ngOnChanges() {
-
+    setTimeout(() => {
+      this.checkPercentageData();
+    }, 1000);
     // this.taskList=[];
     // this.allTaskList=[];
     // this.allTaskList=this.labortaskList;
@@ -240,7 +243,25 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     this.getAllExpertiseType();
 
     this.originalLaborForm = this.laborForm; 
+    // console.log("laborForm",this.laborForm);
+ 
   }
+  checkPercentageData(value?) {
+    // console.log("ggggggg",this.markupList);
+if(this.markupList && this.markupList.length ==0){
+  this.setEditArray = [];
+  this.setEditArray.push(0);
+// console.log("hello")
+const strText = value ? value : '';
+this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+  if (res && res.length != 0) { 
+      this.markupList = res;
+      this.markupList.sort((n1,n2) => n1.label - n2.label);
+  }
+},err => {
+  })
+}
+}
   originalLaborForm: any = {};
   storeFormForBackUp: any = [];
   assignHoursToToalWorkOrder() {
@@ -317,6 +338,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         else if (this.basicLabourDetail['laborHoursIdText'] == 'Assign Hours by Specific Actions') {
           this.laborForm.workFloworSpecificTaskorWorkOrder = 'specificTasks';
         }
+        this.laborForm.hoursorClockorScan=this.basicLabourDetail.laborHoursMedthodId;
       }
       else {
         this.populateQuoteData();
@@ -337,10 +359,14 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       }
     }
   }
-  onPartSelect(event, currentRecord, index) { 
+  onPartSelect(event, currentRecord, index) {
     // console.log("event",event)
-    // console.log("currentRecord",currentRecord)
-    currentRecord.directLaborOHCost=event.overHeadBurden;
+    // console.log("event",currentRecord)
+    currentRecord.directLaborOHCost=event.overHeadBurden; 
+    currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
+  }
+  modifyDirectLoaborFormat(ev){
+    ev.directLaborOHCost= ev.directLaborOHCost ? formatNumberAsGlobalSettingsModule(ev.directLaborOHCost, 2) : '0.00';
   }
   calculateBurderRate(rec) { 
     if (rec.burdaenRatePercentageId && rec.directLaborOHCost) {
@@ -388,7 +414,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
           })
           if (value.expertiseId) {
             this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
-              this['expertiseEmployeeOriginalData' + index] = res.map(x => { return { value: x.employeeId, label: x.name } });
+              this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
+                ...x,
+                 value: x.employeeId, label: x.name } });
             },
               err => {
               })
@@ -398,7 +426,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     }
     if (this.laborForm && this.laborForm.expertiseId && (!this.employeesOriginalData || this.employeesOriginalData.length <= 0)) {
       this.commonService.getExpertiseEmployeesByCategory(this.laborForm.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
-        this.employeesOriginalData = res.map(x => { return { value: x.employeeId, label: x.name } });
+        this.employeesOriginalData = res.map(x => { return {
+          ...x,
+           value: x.employeeId, label: x.name } });
       },
         err => {
         })
@@ -576,7 +606,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     })
   }
   getExpertiseEmployeeByExpertiseId(value, index, object) {
-    if (!this.isQuote) {
+    // if (!this.isQuote) {
       object.employeeId = null;
       if (value) {
         this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
@@ -591,7 +621,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
           err => {
           })
       }
-    }
+    // }
   }
 
   getExpertiseEmployeeByExpertiseIdForHeader(value) {
@@ -672,7 +702,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
           })
           if (value.expertiseId && !isNaN(value.expertiseId)) {
             this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
-              this['expertiseEmployeeOriginalData' + index] = res.map(x => { return { value: x.employeeId, label: x.name } });
+              this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
+                ...x,
+                value: x.employeeId, label: x.name } });
             },
               err => {
               })
@@ -945,7 +977,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
           }
         })
         this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
-          this['expertiseEmployeeOriginalData' + index] = res.map(x => { return { value: x.employeeId, label: x.name } });
+          this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
+            ...x,
+             value: x.employeeId, label: x.name } });
         },
           err => {
           })
