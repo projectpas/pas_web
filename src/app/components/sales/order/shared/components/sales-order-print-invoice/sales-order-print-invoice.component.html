@@ -267,13 +267,13 @@
                                         </td>
                                         <td> {{child.uom}}</td>
                                         <td>{{child.cond}}</td>
-                                        <td> - </td>
-                                        <td>{{child.qtyShipped}}</td>
+                                        <td style="text-align: right;">{{child.qtyOnBACKOrder}}</td>
+                                        <td style="text-align: right;">{{child.qtyShipped}}</td>
                                         <td style="text-align: right;">{{child.unitPrice | number : '1.2-2'}}</td>
                                         <td style="text-align: right;">{{child.amount | number : '1.2-2'}}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" rowspan="2" style="border:1px solid black">Notes</td>
+                                        <td colspan="6" rowspan="2" style="border:1px solid black">Notes : <span>{{getFormattedNotes(child.notes)}}</span></td>
                                     </tr>
                                     <tr></tr>
                                     <!-- <tr>
@@ -362,7 +362,7 @@
                                         <b>Payment by check Mail Wire:</b>
                                     </td>
                                     <td class="border-transparent" colspan="2">DEPOSIT</td>
-                                    <td> - </td>
+                                    <td style="text-align: right;"> 0.00 </td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2"></td>

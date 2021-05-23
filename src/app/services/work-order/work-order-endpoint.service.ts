@@ -924,7 +924,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
 
     getLaborOHSettingsByManagementstrucId(id, masterCompanyId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/LaborOHSettings/GetLaborOHSettingsByManagementstrucId/${id}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/LaborOHSettings/GetLaborOHSettingsByManagementstrucId?id=${id}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getLaborOHSettingsByManagementstrucId(id, masterCompanyId));
         });
     }
