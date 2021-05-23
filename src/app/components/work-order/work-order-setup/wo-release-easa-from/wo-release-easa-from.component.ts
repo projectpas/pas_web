@@ -33,7 +33,7 @@ export class WoReleaseEasaFromComponent implements OnInit {
   {
     this.isSpinnerVisible = true;
     this.workOrderService
-      .GetWorkorderReleaseFromData(this.workOrderId)
+      .GetWorkorderReleaseEasaFromData(this.workOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.ReleaseData = response;

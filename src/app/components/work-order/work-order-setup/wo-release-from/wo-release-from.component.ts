@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
 declare var $: any;
+import * as moment from 'moment';
 @Component({
   selector: 'app-wo-release-from',
   templateUrl: './wo-release-from.component.html',
@@ -37,6 +38,18 @@ export class WoReleaseFromComponent implements OnInit {
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.ReleaseData = response;
+
+
+        var date = new Date(this.ReleaseData.date);  
+        var dateformatted = moment(date).format('D MMMM YYYY');  
+
+        this.ReleaseData.date=dateformatted;
+
+        var date2 = new Date(this.ReleaseData.date2);  
+        var date2formatted = moment(date2).format('D MMMM YYYY');  
+
+        this.ReleaseData.date2=date2formatted;
+
       }, error => {
         this.isSpinnerVisible = false;
       });

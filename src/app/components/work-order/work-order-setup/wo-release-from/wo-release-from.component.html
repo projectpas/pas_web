@@ -33,14 +33,14 @@
                                     <span style="vertical-align:top;margin-right:100%;"><b>2.</b></span><br />
                                     <b style="font-size:30px">AUTHORIZED RELEASE CERTIFICATE</b><br />
                                 <b style="font-size:15px;text-align:center">FAA Form 8130-3,AIRWORTHINESS APPROVAL TAG</b></td>
-                                <td rowspan="2" style="vertical-align:top"><b>3.Form Traking Number:</b></td>
+                                <td rowspan="2" style="vertical-align:top"><b>3.Form Traking Number: {{ReleaseData.trackingNo}}</b></td>
                                
                             </tr>
     <tr></tr>
                         <tr>
-                                <td rowspan="2" colspan="2" style="width:72px"><b>4.Organization Name and Address</b></td>
+                                <td rowspan="2" colspan="2" style="width:72px"><b>4.Organization Name and Address  {{ReleaseData.organizationName}}</b></td>
                                
-                               <td rowspan="2" ><b>5.Work Order/Contract/Invoice Number:</b></td>
+                               <td rowspan="2" ><b>5.Work Order/Contract/Invoice Number: {{ReleaseData.invoiceNo}}</b></td>
                                
                             </tr>
     <tr></tr>
@@ -59,21 +59,21 @@
                          <th>8.Part Number:</th>
                          <th>9.Eligibility:<span>*</span></th>
                          <th>10.Quantity</th>
-                           <th>11.Serial/Batch Number:</th>
+                        <th>11.Serial/Batch Number:</th>
                          <th>12.Status/Work</th>
                        </tr>
     
                     </thead>
                         <tbody>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ReleaseData.itemName}}</td>
+                                <td>{{ReleaseData.description}}</td>
+                                <td>{{ReleaseData.partNumber}}</td>
     
-                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ReleaseData.eligibility}}</td>
+                                <td>{{ReleaseData.quantity}}</td>
+                                <td>{{ReleaseData.batchnumber}}</td>
+                                <td>{{ReleaseData.status}}</td>
                                
                                
                             </tr>
@@ -96,13 +96,13 @@
                             <tr>
                                 <td colspan="2" style="width:51%;vertical-align:top">
                                     <b>14.Certifies the items identified above were manufactured in conformity to:<br />
-                                  <input type="checkbox" value="" />
+                                  <input type="checkbox" [checked]="ReleaseData.approved" value="" />
                                   approved design data and are in condition for safe operation <br />
-    <input type="checkbox" value="" />Non-approved design data specified in Block 13.</b> <br />
+    <input type="checkbox" [checked]="ReleaseData.nonapproved"  value="" />Non-approved design data specified in Block 13.</b> <br />
                                </td>
                                 <td colspan="2"><b>19. 
-                                    <input type="checkbox" value="" />14 CFR 43.9 Return to Service 
-    <input type="checkbox" value="" />Other regulation specified in Block 13. <br />
+                                    <input type="checkbox" [checked]="ReleaseData.cFR"  value="" />14 CFR 43.9 Return to Service 
+    <input type="checkbox" [checked]="ReleaseData.otherregulation" value="" />Other regulation specified in Block 13. <br />
     
     Certifies that unless otherwise specified in Block 13,the work identified in Block 12 and described in Block 13 was accomplished in accordance with Title 14,
     code of Federal Regulations, Part 43 and respect to that work,the items are approved for return to service.</b> 
@@ -114,18 +114,18 @@
                     
     <tr></tr>
      <tr style="height:50px;vertical-align:top">
-                                <td><b>15.Authorised Signature:</b></td>
-                                <td><b>16.Approval/Authorization No.:</b></td>
-                                <td><b>20.Authorised Signature:</b></td>
-                                <td><b>21.Approval Certificate No.:</b></td>
+                                <td><b>15.Authorised Signature: {{ReleaseData.authorisedSign}}</b></td>
+                                <td><b>16.Approval/Authorization No.: {{ReleaseData.authorizationNo}}</b></td>
+                                <td><b>20.Authorised Signature: {{ReleaseData.authorisedSign2}}</b></td>
+                                <td><b>21.Approval Certificate No.: {{ReleaseData.approvalCertificate}}</b></td>
                                
                                
                             </tr>
      <tr style="height:50px;vertical-align:top">
-                                <td><b>17.Name(Typed/Printed):</b></td>
-                               <td><b>18.Date:</b></td>
-                                <td><b>22.Name(Typed/Printed):</b></td>
-                               <td><b>23.Date(m/d/y)</b></td>
+                                <td><b>17.Name(Typed/Printed): {{ReleaseData.printedName}}</b></td>
+                               <td><b>18.Date: {{ReleaseData.date}}</b></td>
+                                <td><b>22.Name(Typed/Printed): {{ReleaseData.printedName2}}</b></td>
+                               <td><b>23.Date(m/d/y) : {{ReleaseData.date2}}</b></td>
                                
                             </tr>
     <tr>
