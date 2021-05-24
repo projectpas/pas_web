@@ -505,6 +505,21 @@ export class SalesPartNumberComponent {
         this.query.partSearchParamters.quantityRequested = this.part.quantityRequested;
         this.query.partSearchParamters.quantityToQuote = this.part.quantityToBeQuoted;
         this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
+
+        let parentLine = this.summaryParts.filter(a => a.partId == this.part.itemMasterId && a.conditionId == this.part.conditionId);
+
+        if (parentLine) {
+          this.query.partSearchParamters.quantityToQuote = parentLine[0].quantityToBeQuoted;
+          this.query.partSearchParamters.quantityAlreadyQuoted = parentLine[0].quantityAlreadyQuoted;
+          this.part['quantityToQuote'] = parentLine[0].quantityToBeQuoted;
+          
+          if ((parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis'])) > 0)
+            this.part['quantityAlreadyQuoted'] = parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis']);
+          else
+            this.part['quantityAlreadyQuoted'] = Number(this.part['quantityFromThis']);
+
+          this.part['quantityToBeQuoted'] = (this.part.quantityRequested - parentLine[0].quantityAlreadyQuoted) + Number(this.part['quantityFromThis']);
+        }
       });
       this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
     }
