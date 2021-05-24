@@ -205,30 +205,36 @@ setTimeout(() => {
             updatedBy: this.userName,
             masterCompanyId: this.currentUserMasterCompanyId
         };
-        if(this.directLaborData.burdenRateId==1){
+        if(data.burdenRateId==1){
             this.allPercentList.forEach(element => {
-                if(this.directLaborData.flatAmount==element.value){
-                    this.directLaborData.flatAmount=element.label;
+                if(data.flatAmount==element.value){
+                    data.flatAmount=element.label;
                 }
             });
         }
         if(!this.isEditMode) {
+            this.isSpinnerVisible=true;
             this.laborOHService.createLaborOHSettings(data).subscribe(res => {
-                console.log(res);
+                this.isSpinnerVisible=false;
                 this.router.navigateByUrl('/workordersmodule/workorderspages/app-direct-labour');
                 this.alertService.showMessage(
                     'Success',
                     `Saved Direct Labor Sucessfully`,
                     MessageSeverity.success)
+            },err=>{
+                this.isSpinnerVisible=false;
             })
         } else {
+                this.isSpinnerVisible=true;
             this.laborOHService.updateLaborOHSettings(data).subscribe(res => {
-                console.log(res);
+                this.isSpinnerVisible=false;
                 this.router.navigateByUrl('/workordersmodule/workorderspages/app-direct-labour');
                 this.alertService.showMessage(
                     'Success',
                     `Updated Direct Labor Sucessfully`,
                     MessageSeverity.success)
+            },err=>{
+                this.isSpinnerVisible=false;
             })
         }
     }

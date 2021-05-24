@@ -384,9 +384,10 @@ export class SalesPartNumberComponent {
           this.part.misc = this.salesQuoteService.getTotalCharges();
           this.part.createdBy = this.userName;
           this.part.priorityId = this.defaultSettingPriority;
-          if (this.selectedPart.itemMasterSale) {
-            this.part.fixRate = this.selectedPart.itemMasterSale.fxRate;
-          }
+          // if (this.selectedPart.itemMasterSale) {
+          //   this.part.fixRate = this.selectedPart.itemMasterSale.fxRate;
+          // }
+          this.part.fixRate = this.selectedPart.fixRate;
           this.part.taxType = this.customer.taxType;
           this.part.taxPercentage = this.customer.taxPercentage;
           if (this.selectedPart.mappingType == 1) {
@@ -854,6 +855,7 @@ export class SalesPartNumberComponent {
       uniquePart.totalSales = this.getSum(uniquePart.totalSales, part.totalSales);
       uniquePart.marginAmountExtended = this.getSum(uniquePart.marginAmountExtended, part.marginAmountExtended);
       uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentageExtended);
+      uniquePart.unitCostExtended = this.getSum(uniquePart.unitCostExtended, part.unitCostExtended);
       if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
         uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
       } else {

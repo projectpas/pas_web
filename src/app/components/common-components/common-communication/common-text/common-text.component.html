@@ -108,7 +108,7 @@
                     <ng-container *ngFor="let col of columns">
                         <td class="table-column-width text-capital" *ngIf="col.field == 'notesData'" class="ui-resizable-column"
                             pReorderableRowHandle>
-                            <p class="p_textEditor text-capital" [innerHTML]=rowData[col.field]></p>
+                            <p class="p_textEditor p-0 m-0 text-capital" [innerHTML]=rowData[col.field]></p>
                         </td>
                         <td class="table-column-width" *ngIf=" col.field!='notesData'">
                             {{ col.field == 'createdDate'
@@ -378,7 +378,7 @@
 </div>
 <div id="contentHistDocs" #contentHistDocs class="modal fade" role="dialog" data-backdrop="static"
     data-keyboard="false">
-    <div class="modal-dialog modal-xlg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">History of Text</h4>
@@ -416,7 +416,7 @@
                                         {{audit.contactBy}}</td>
                                     <td style="margin-bottom:-10px !important"
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
-                                        <p class="margin-tb" [innerHTML]="audit.notes"></p>
+                                        <p class="margin-tb m-0 p-0" [innerHTML]="audit.notes"></p>
                                     </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.createdBy}}</td>

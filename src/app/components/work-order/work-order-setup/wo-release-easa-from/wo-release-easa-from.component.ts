@@ -5,11 +5,11 @@ import { WorkOrderService } from 'src/app/services/work-order/work-order.service
 declare var $: any;
 import * as moment from 'moment';
 @Component({
-  selector: 'app-wo-release-from',
-  templateUrl: './wo-release-from.component.html',
-  styleUrls: ['./wo-release-from.component.css']
+  selector: 'app-wo-release-easa-from',
+  templateUrl: './wo-release-easa-from.component.html',
+  styleUrls: ['./wo-release-easa-from.component.css']
 })
-export class WoReleaseFromComponent implements OnInit {
+export class WoReleaseEasaFromComponent implements OnInit {
 
   moduleType:any  = 'WO'; 
 	id: number;
@@ -26,7 +26,7 @@ export class WoReleaseFromComponent implements OnInit {
 
   ngOnInit() 
   {
-    $('#woReleaseFromDiv').modal('show');
+    $('#woReleaseEasaFromDiv').modal('show');
     this.GetWorkorderReleaseFromData();
   }
 
@@ -34,12 +34,12 @@ export class WoReleaseFromComponent implements OnInit {
   {
     this.isSpinnerVisible = true;
     this.workOrderService
-      .GetWorkorderReleaseFromData(this.workOrderId)
+      .GetWorkorderReleaseEasaFromData(this.workOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.ReleaseData = response;
 
-
+        
         var date = new Date(this.ReleaseData.date);  
         var dateformatted = moment(date).format('D MMMM YYYY');  
 
@@ -55,11 +55,9 @@ export class WoReleaseFromComponent implements OnInit {
       });
 
   }
-  
-
   print(): void {
     let printContents, popupWin;
-    printContents = document.getElementById('woReleaseFrom').innerHTML;
+    printContents = document.getElementById('woReleaseEasaFrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
     popupWin.document.write(`

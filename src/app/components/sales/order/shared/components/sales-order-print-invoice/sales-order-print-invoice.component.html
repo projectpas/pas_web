@@ -207,7 +207,7 @@
                     <!-- <hr /> -->
                     <div class="clear"></div>
                     <div class="col-sm-12">
-                        <table rules=none  class=" print-friendly parttable print-table table-margins">
+                        <table rules=none class="parttable print-table print-friendly table-margins" style="margin-top:10px">
                             <thead>
                                 <tr>
                                     <th>PO/RO NUM</th>
@@ -258,7 +258,7 @@
                                 <ng-container
                                     *ngFor="let child of this.salesOrderInvoice.salesOrderListToPrint; let i = index;">
                                     <tr>
-                                        <td rowspan="3">{{child.itemNo}}</td>
+                                        <td rowspan="3">{{i+1}}</td>
                                         <td colspan="3" rowspan="3"> PN: {{child.pNumber}}
                                             <br />
                                             PN Description: {{child.pnDescription}}
@@ -267,13 +267,13 @@
                                         </td>
                                         <td> {{child.uom}}</td>
                                         <td>{{child.cond}}</td>
-                                        <td> - </td>
-                                        <td>{{child.qtyShipped}}</td>
+                                        <td style="text-align: right;">{{child.qtyOnBACKOrder}}</td>
+                                        <td style="text-align: right;">{{child.qtyShipped}}</td>
                                         <td style="text-align: right;">{{child.unitPrice | number : '1.2-2'}}</td>
                                         <td style="text-align: right;">{{child.amount | number : '1.2-2'}}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" rowspan="2" style="border:1px solid black">Notes</td>
+                                        <td colspan="6" rowspan="2" style="border:1px solid black">Notes : <span>{{getFormattedNotes(child.notes)}}</span></td>
                                     </tr>
                                     <tr></tr>
                                     <!-- <tr>
@@ -362,7 +362,7 @@
                                         <b>Payment by check Mail Wire:</b>
                                     </td>
                                     <td class="border-transparent" colspan="2">DEPOSIT</td>
-                                    <td> - </td>
+                                    <td style="text-align: right;"> 0.00 </td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2"></td>
@@ -396,8 +396,7 @@
                                     <td class="border-transparent" colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" rowspan="3"
-                                        style="width: 18%; vertical-align: bottom; text-align: center;">Barcode
+                                    <td colspan="2" rowspan="3">Barcode
                                         <br /><img src="{{this.salesOrderInvoice.barcode}}" alt="barcode" /></td>
                                     <!-- <td class="border-transparent" colspan="2">USA</td> -->
                                     <!-- <td class="border-transparent" colspan="3">Account Name: PowerAeroSuites.com
@@ -408,12 +407,12 @@
                                     <!-- <td class="border-transparent" colspan="2"></td> -->
                                     <!-- <td class="border-transparent" colspan="3">Acct #: 1015487 ABA: 11187514
                                     </td> -->
-                                    <td class="border-transparent" colspan="3"></td>
+                                    <td class="border-transparent"  colspan="3"></td>
                                 </tr>
                                 <tr>
                                     <!-- <td colspan="2"></td> -->
                                     <!-- <td colspan="3">SWIFT: NYB45147</td> -->
-                                    <td colspan="3"></td>
+                                    <td colspan="3" class="print-border-bottom"></td>
                                 </tr>
                                 <tr></tr>
                             </tbody>

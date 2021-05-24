@@ -976,10 +976,10 @@
                             List
                         </a>
                     </li>
-                    <li class="nav-item" *ngIf="!isSubWorkOrder">
+                    <!-- <li class="nav-item" *ngIf="!isSubWorkOrder">
                         <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'pickticket'}"
                             (click)="gridTabChange('pickticket')">Pick Ticket</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a id="pills-home-tab" role="tab" aria-controls="pills-home" aria-selected="true"
                             [ngClass]="{active : gridActiveTab === 'labor'}"
@@ -1098,6 +1098,8 @@
                             (click)="gridTabChange('laboranalysis')">Labor Analysis</a>
                             <a class="dropdown-item"
                             (click)="gridTabChange('releasefrom')">8130 Form</a>
+                            <a class="dropdown-item"
+                            (click)="gridTabChange('woreleaseeasafrom')">9130A Form</a>
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                 aria-expanded="false"
                                 (click)="gridTabChange('ActualVsQuote')">Actual vs. Quote Summary</a>
@@ -1138,7 +1140,7 @@
                 </div>
                 <div *ngIf="labor && (gridActiveTab == 'labor') " [ngClass]="{hidedata : gridActiveTab !== 'labor'}"
                     id="check">
-                    <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor"
+                    <app-work-order-labor [markupList]="markupList" [labortaskList]="taskList" [laborForm]="labor"
                         [employeesOriginalData]="employeesOriginalData" [workOrderLaborList]="workOrderLaborList"
                         [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData"
                         [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId"
@@ -1263,6 +1265,14 @@
                     [subWOPartNoId]="subWOPartNoId">
                 </app-wo-release-from>
             </div>
+
+            <div *ngIf="(gridActiveTab == 'woreleaseeasafrom')"
+            [ngClass]="{hidedata: gridActiveTab !== 'woreleaseeasafrom'}">
+            <app-wo-release-easa-from 
+                 [workOrderId]="workOrderId" [isSubWorkOrder]="isSubWorkOrder"
+                [subWOPartNoId]="subWOPartNoId">
+            </app-wo-release-easa-from>
+        </div>
                 <div *ngIf="workOrderId && (gridActiveTab == 'tearDown')" class="wf-label-cstm set_pad"
                     [ngClass]="{hidedata : gridActiveTab !== 'tearDown'}">
                     <app-common-teardown *ngIf="!isView" [workOrderId]="workOrderId"

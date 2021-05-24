@@ -19,6 +19,7 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly getEmailQuoteEndointUrl: string = environment.baseUrl + "/api/speedquote/soqsendmail";
   private readonly getCopyEndpointUrl: string = environment.baseUrl + "/api/speedquote/copy";
   private readonly getCloseEndointUrl: string = environment.baseUrl + "/api/speedquote/close";
+  private readonly getItemMasterDataConditionWiseURL : string = environment.baseUrl + "/api/itemMaster/getItemMasterDataConditionWise";
 
   constructor(
     http: HttpClient,
@@ -115,6 +116,15 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
       .put(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.closeSpeedQuoteEndPoint(salesQuoteId, updatedBy));
+      });
+  }
+
+  getItemMasterDataConditionWise(itemMasterId: number): Observable<any> {
+    const URL = `${this.getItemMasterDataConditionWiseURL}/${itemMasterId}`;
+    return this.http
+      .get(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getItemMasterDataConditionWise(itemMasterId));
       });
   }
 }
