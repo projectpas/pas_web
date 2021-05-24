@@ -143,7 +143,7 @@ export class SalesQuoteAnalysisComponent implements OnInit {
       { field: "status", header: "Status", width: "80px" },
       { field: "currency", header: "Curr", width: "80px" },
       { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
-      { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+      { field: "salesPriceExtended", header: "Ext. Price", width: "120px" },
       { field: "misc", header: "Misc Charges", width: "120px" },
       { field: "totalSales", header: "Total Revenue", width: "130px" },
       { field: "unitCost", header: "Unit Cost", width: "130px" },
@@ -188,7 +188,7 @@ export class SalesQuoteAnalysisComponent implements OnInit {
       { field: "currency", header: "Curr", width: "100px" },
       { field: "qtyQuoted", header: "Qty", width: "70px" },
       { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
-      { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+      { field: "salesPriceExtended", header: "Ext. Price", width: "120px" },
       { field: "misc", header: "Misc Charges", width: "120px" },
       { field: "totalSales", header: "Total Revenue", width: "130px" },
       { field: "unitCost", header: "Unit Cost", width: "130px" },
@@ -330,11 +330,11 @@ export class SalesQuoteAnalysisComponent implements OnInit {
   }
 
   calculateTotalRevenue(part: PartDetail, i) {
-    return (this.sales[i].netSales + this.sales[i].misc).toFixed(2);
+    return (this.sales[i].salesPriceExtended + this.sales[i].misc).toFixed(2);
   }
 
   calculateProductRevenue(part, i) {
-    return this.sales[i].netSales + this.sales[i].misc; // + this.sales[i].freight + this.sales[i].taxAmount;
+    return this.sales[i].salesPriceExtended + this.sales[i].misc; // + this.sales[i].freight + this.sales[i].taxAmount;
   }
 
   getPercentage(key) {

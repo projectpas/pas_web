@@ -92,12 +92,15 @@
                                             matTooltip="View Stock Line" matTooltipPosition="above">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                            [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                            class="btn nobg view-part-eye" (click)="addPartNumber(summaryPart,rowIndex)"
-                                            matTooltip="Add/Edit PN" matTooltipPosition="above">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
+                                        <span *ngIf="summaryPart['methodType'] == 'S'">
+                                            <a [class.disabled]="salesQuote.isApproved || isViewMode"
+                                                [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
+                                                class="btn nobg view-part-eye"
+                                                (click)="addPartNumber(summaryPart,rowIndex)" matTooltip="Add/Edit PN"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </span>
                                         <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                             [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
                                             class="btn nobg"
@@ -265,7 +268,7 @@
                                         {{ part.grossSalePricePerUnit  | twoDecimalGlobalNumberFormatPipe}}
                                     </td>
                                     <td class="text-right">
-                                        {{ part.grossSalePrice | twoDecimalGlobalNumberFormatPipe}}
+                                        {{ part.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}
                                     </td>
                                     <td class="text-right">
                                         {{ part.misc | twoDecimalGlobalNumberFormatPipe}}

@@ -20,12 +20,16 @@ export class SalesMarginComponent implements OnInit {
   percentage: any[] = [];
   invalidQuantityenteredForQuantityFromThis: boolean = false;
   prevQntity = 0;
+  markUpPercentage: any;
+  salesDiscount: any;
 
   constructor(private commonservice: CommonService,) {
   }
 
   ngOnInit() {
     this.prevQntity = this.part.quantityFromThis;
+    this.markUpPercentage = Number(this.part.markUpPercentage).toFixed(2).toString();
+    this.salesDiscount = Number(this.part.salesDiscount).toFixed(2).toString();
     this.getPercents();
     this.calculate();
   }
@@ -71,6 +75,9 @@ export class SalesMarginComponent implements OnInit {
 
   calculatePart() {
     try {
+      this.part.markUpPercentage = Number(this.markUpPercentage);
+      this.part.salesDiscount = Number(this.salesDiscount);
+
       this.part.salesPriceExtended = Number(this.part.salesPricePerUnit) * Number(this.part.quantityFromThis);
       this.part.markupPerUnit = + (Number(this.part.salesPricePerUnit) * (Number(this.part.markUpPercentage) / 100)).toFixed(2);
       this.part.markupExtended = + (Number(this.part.markupPerUnit) * Number(this.part.quantityFromThis)).toFixed(2);
@@ -111,7 +118,7 @@ export class SalesMarginComponent implements OnInit {
         this.invalidQuantityenteredForQuantityFromThis = true;
       }
       else {
-        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted;
+        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted || this.part.quantityFromThis > this.part.qtyAvailable;
       }
     } else {
       this.invalidQuantityenteredForQuantityFromThis = true;
