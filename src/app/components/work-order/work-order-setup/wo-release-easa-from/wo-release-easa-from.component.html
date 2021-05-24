@@ -1,9 +1,9 @@
-<div id="woReleaseFromDiv" class="modal fade" role="dialog" data-backdrop="static">
+<div id="woReleaseEasaFromDiv" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
-       <div class="modal-content" id="woReleaseFrom">
+       <div class="modal-content" id="woReleaseEasaFrom">
           <div class="modal-header">
              <button type="button" class="close" data-dismiss="modal">&times;</button>
-             <h4 class="modal-title warning_color">9130 From</h4>
+             <h4 class="modal-title warning_color"></h4>
           </div>
           <div class="modal-body">
              <div class="clear"></div>
@@ -27,12 +27,12 @@
              <span style="vertical-align:top !important;margin-right:100%;">2.</span>
              <b style="font-size:30px">AUTHORIZED RELEASE CERTIFICATE</b><br />
              <b style="font-size:15px;text-align:center">EASA FORM 1</b></td>
-             <td rowspan="2" style="vertical-align:top"><b>3.Form Traking Number</b></td>
+             <td rowspan="2" style="vertical-align:top"><b>3.Form Traking Number: {{ReleaseData.trackingNo}}</b></td>
              </tr>
              <tr></tr>
              <tr>
-             <td rowspan="2" colspan="2" style="width:72px;height:80px;vertical-align:top"><b>4.Organization Name and Address</b></td>
-             <td rowspan="2" style="vertical-align:top"><b>5.Work Order/Contract/Invoice</b></td>
+             <td rowspan="2" colspan="2" style="width:72px;height:80px;vertical-align:top"><b>4.Organization Name and Address {{ReleaseData.organizationName}}</b></td>
+             <td rowspan="2" style="vertical-align:top"><b>5.Work Order/Contract/Invoice  {{ReleaseData.invoiceNo}}</b></td>
              </tr>
              <tr></tr>
              </tbody>
@@ -52,12 +52,12 @@
              </thead>
              <tbody>
              <tr>
-             <td></td>
-             <td></td>
-             <td></td>
-             <td></td>
-             <td></td>
-             <td></td>
+             <td>{{ReleaseData.itemName}}</td>
+             <td>{{ReleaseData.description}}</td>
+             <td>{{ReleaseData.partNumber}}</td>
+             <td>{{ReleaseData.quantity}}</td>
+             <td>{{ReleaseData.batchnumber}}</td>
+             <td>{{ReleaseData.status}}</td>
              </tr>
              <tr>
              <td colspan="6" rowspan="4" style="height: 150px;
@@ -76,25 +76,25 @@
              <tr>
              <td colspan="2" style="width:51%;vertical-align:top">
              <b>13a.Certifies that the items identified above were manufactured in conformity to:<br />
-             <input type="checkbox" value="" />approved design data and are in condition for safe operation <br />
-             <input type="checkbox" value="" />Non-approved design data specified in Block 12.</b> <br /></td>
-             <td colspan="2"><b>14a. <input type="checkbox" value="" />Part-145.A.50 Release to Service 
-             <input type="checkbox" value="" />Other regulation specified in Block 12 <br />
+             <input type="checkbox" [checked]="ReleaseData.approved" value="" />approved design data and are in condition for safe operation <br />
+             <input type="checkbox" [checked]="ReleaseData.nonapproved" value="" />Non-approved design data specified in Block 12.</b> <br /></td>
+             <td colspan="2"><b>14a. <input type="checkbox" [checked]="ReleaseData.cFR" value="" />Part-145.A.50 Release to Service 
+             <input type="checkbox" [checked]="ReleaseData.otherregulation" value="" />Other regulation specified in Block 12 <br />
              Certifies that unless otherwise specified in Block 12,the work identified in Block 11 and described in Block 12 was accomplished in accordance with Part-145
              and in respect to that work the items are considered ready for release to service.</b> </td>
              </tr>
              <tr></tr>
              <tr style="height:50px;vertical-align:top">
-             <td><b>13b.Authorised Signature:</b></td>
-             <td><b>13c.Approval/Authorization Number:</b></td>
-             <td><b>14b.Authorised Signature</b></td>
-             <td><b>14c.Certificate/Approval Ref.No.:</b></td>
+             <td><b>13b.Authorised Signature: {{ReleaseData.authorisedSign}}</b></td>
+             <td><b>13c.Approval/Authorization Number: {{ReleaseData.authorizationNo}}</b></td>
+             <td><b>14b.Authorised Signature {{ReleaseData.authorisedSign2}}</b></td>
+             <td><b>14c.Certificate/Approval Ref.No.: {{ReleaseData.approvalCertificate}}</b></td>
              </tr>
              <tr style="height:50px;vertical-align:top">
-             <td><b>13d.Name</b></td>
-             <td><b>13e.Date(dd/mm/yyyy)</b></td>
-             <td><b>14d.Name</b></td>
-             <td><b>14e.Date(dd/mm/yyyy)</b></td>
+             <td><b>13d.Name: {{ReleaseData.printedName}}</b></td>
+             <td><b>13e.Date(dd/mm/yyyy) : {{ReleaseData.date}}</b></td>
+             <td><b>14d.Name : {{ReleaseData.printedName2}}</b></td>
+             <td><b>14e.Date(dd/mm/yyyy): {{ReleaseData.date2}}</b></td>
              </tr>
              </tbody>
              </table>
