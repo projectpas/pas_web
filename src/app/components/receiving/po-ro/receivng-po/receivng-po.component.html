@@ -332,7 +332,8 @@
                             </tr>
 
                             <tr class="child-header splitship-head child-header-back" [hidden]="!part.visible"
-                                *ngIf="!part.isParent">
+                                *ngIf="isSplitShipmentPart(part.purchaseOrderPartRecordId)">
+                                <!-- *ngIf="!part.isParent" -->
                                 <th class="min-width-40"></th>
                                 <th>PN</th>
                                 <th class="min-width-60">Qty Ord</th>

@@ -1,3 +1,9 @@
+<nav aria-label="breadcrumb" *ngIf="!isView">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item" aria-current="page">{{moduleName}}</li>
+        <li class="breadcrumb-item active" aria-current="page" *ngIf="!isView">{{moduleName}} Approval Rule</li>
+    </ol>
+</nav>
 <div class="card new-card">
     <div class="card-header header">
         <div class="row">

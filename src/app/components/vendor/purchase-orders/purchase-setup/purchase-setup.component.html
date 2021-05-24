@@ -2287,12 +2287,15 @@
             </button>
         </div>
         <div class="modal-body">
-            <h5 [ngStyle]="{'color':'red'}">
+            <strong>
+                <span [ngStyle]="{'color':'red'}">
                 <div [innerHTML]="alertText"></div>
-            </h5>
+                </span>
+            </strong>
+            
         </div>
         <div class="modal-footer">
-            <button type="button" *ngIf="!displayWarningModal" class="btn btn-primary"
+            <button type="button" *ngIf="!displayWarningModal" class="btn btn-danger"
                 (click)="dismissModel(false);">close</button>
             <button type="button" *ngIf="displayWarningModal" class="btn btn-primary"
                 (click)="dismissModel(true);">Yes</button>
