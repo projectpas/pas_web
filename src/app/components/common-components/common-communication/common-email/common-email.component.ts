@@ -87,7 +87,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
         } else {
 
-            this.headers.unshift({ field: 'vendorContact', header: 'Customer Contact' })
+            this.headers.unshift({ field: 'vendorContact', header: 'Vendor Contact' })
         }
     }
 

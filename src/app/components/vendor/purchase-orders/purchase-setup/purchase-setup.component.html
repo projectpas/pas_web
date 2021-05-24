@@ -2302,6 +2302,22 @@
     </div>
 </ng-template>
 
+<ng-template #salesOrderPrintPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Print Purchase Order</h4>
+    </div>
+    <div class="modal-content" id="sales_order_print_content">
+        <div class="modal-body" >
+            <!-- <app-sales-order-print-template [salesOrderView]="salesOrderView"></app-sales-order-print-template> -->
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
 
 
 <!-- <div class="modal fade" id="ship-via-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
