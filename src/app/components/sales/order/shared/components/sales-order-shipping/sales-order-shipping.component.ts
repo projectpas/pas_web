@@ -129,8 +129,16 @@ export class SalesOrderShippingComponent {
         this.partSelected = false;
         this.disableGeneratePackagingBtn = true;
         this.disableCreateShippingBtn = true;
-        this.initColumns();
-        this.bindData();
+        this.commonService.getAddressById(this.salesOrderId, AddressTypeEnum.SalesOrder, AppModuleEnum.SalesOrder).subscribe(res => {
+            if (res[0].ShipToSiteId == 0 && res[0].BillToSiteId == 0) {
+                this.alertService.resetStickyMessage();
+                this.alertService.showStickyMessage('Sales Order Shipping', "Please Save 'Bill To' and 'Ship To' address from address tab", MessageSeverity.error);
+            }
+            else {
+                this.initColumns();
+                this.bindData();
+            }
+        });
     }
 
     bindData() {
@@ -1373,7 +1381,7 @@ export class SalesOrderShippingComponent {
     }
 
     AddCustomInfo() {
-        this.addCustomerInfo = true;
+        this.addCustomerInfo = !this.addCustomerInfo;
     }
 
     printPackagingLabel(rowData: any) {

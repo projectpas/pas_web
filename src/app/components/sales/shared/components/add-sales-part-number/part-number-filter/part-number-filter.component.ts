@@ -33,6 +33,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() selectedSummaryRow: SummaryPart;
   @Input() type: string;
   @Input() isEdit = false;
+  @Input() isQtyAdjust = false;
   @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSave: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTypeChange: EventEmitter<ItemSearchType> = new EventEmitter<ItemSearchType>();
@@ -224,7 +225,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     }
     if (this.query.partSearchParamters.quantityToQuote < 0) {
       this.searchDisabled = true;
-      this.alertService.showStickyMessage('', 'You have quoted more than requested', MessageSeverity.error);
+      this.alertService.showStickyMessage('', 'You cannot reduce the requested qty.', MessageSeverity.error);
     } else {
       this.alertService.resetStickyMessage();
     }

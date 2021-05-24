@@ -319,7 +319,7 @@
          <div class="card col-md-12 list_caps" id="approvalTabs">
              <div class="form-group margin-0">
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'mpns'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('mpns');">MPNs</button>
-                 <button *ngIf="woqsettingModel.IsApprovalRule" type="button" class="btn" [ngClass]="approvalGridActiveTab === 'internalApprovers'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('internalApprovers');">Internal Approvers</button>
+                 <button *ngIf="!IsApprovalBypass" type="button" class="btn" [ngClass]="approvalGridActiveTab === 'internalApprovers'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('internalApprovers');">Internal Approvers</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'approvalProcess'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('approvalProcess');selectall = false;">Approval Process</button>
                  <!--<button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'setForInternalApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('setForInternalApproval');selectall = false;">Sent for Internal Approval</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'submittedInternalApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('submittedInternalApproval');selectall = false;">Submitted Internal Approval</button>
@@ -537,7 +537,7 @@
                                      <label>{{approver.approverCode}}</label>
                                  </td>
                                  <td>
-                                     <label>{{approver.ApproverEmail}}</label>
+                                     <label>{{approver.approverEmail}}</label>
                                  </td>
                                  <td>
                                      <label>{{approver.totalCost}}</label>
@@ -587,7 +587,7 @@
                          <tbody>
                              <tr class="mpn-row" style="display: table-row;"
                                  *ngFor="let approver of woQuoteApprovalList; let i=index;">
-                                 <td class="text-center">
+                                 <td class="text-left">
                                      <input type="checkbox" [(ngModel)]="approver.isSelected" (click)="onApprovalSelected(approver, i)"  [disabled]=" isViewMode ||!getPartToDisableOrNot(approver)||isView"/>
                                  </td>
                                  <ng-container *ngFor="let field of woQuoteListHeader">

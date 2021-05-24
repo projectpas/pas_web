@@ -44,8 +44,8 @@ export class AllTasks {
   adjustedHours: number;
   memo: string;
   taskId: number;
-
-
+  burdaenRatePercentageId:any=0;
+  directLaborOHCost:any=0;
 
 
   constructor() {
@@ -63,7 +63,8 @@ export class AllTasks {
     this.adjustedHours = 0;
     this.memo = '';
     this.taskId = 0;
-
+    this.burdaenRatePercentageId=0;
+this.directLaborOHCost='0.00';
   }
 }
 

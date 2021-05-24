@@ -139,7 +139,7 @@ export class SpeedQuoteService {
     partNumberObj.description = selectedPart.partDescription;
     partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
     partNumberObj.customerRef = selectedPart.customerReference;
-    partNumberObj.uom = selectedPart.uomName;
+    partNumberObj.uomName = selectedPart.uomName;
     partNumberObj.pmaStatus = selectedPart.stockType;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
     partNumberObj.quantityOnHand = selectedPart.quantityOnHand;
@@ -336,5 +336,8 @@ export class SpeedQuoteService {
       observer.next(this.parts);
       observer.complete();
     });
+  }
+  getItemMasterDataConditionWise(id) {
+    return this.speedQuoteEndPointSevice.getItemMasterDataConditionWise(id);
   }
 }

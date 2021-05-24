@@ -2,12 +2,12 @@
     <div class="card-header header">
         <div class="row">
             <div class="col">
-                <h4 class="header-name"> Communication - Phone </h4>
+                <h4 class="header-name"> Phone </h4>
             </div>
             <div>
                 <button *ngIf="!isView" type="button" class="btn-sm header-button" data-toggle="modal"
                     data-target="#addNewPhone" (click)="addPhone()">
-                    Create Phone
+                    Add Phone
                 </button>
             </div>
         </div>
@@ -113,12 +113,12 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <ng-container *ngFor="let col of columns">
-                        <td class="table-column-width" *ngIf="col.field == 'notes'" class="ui-resizable-column"
-                            pReorderableRowHandle>
-                            <p class="m-0 p-0 p_textEditor" style="white-space: nowrap;" matTooltip="view"
+                        <td class="table-column-width ui-resizable-column text-capital" *ngIf="col.field == 'notesData'"     
+                                                   pReorderableRowHandle>
+                            <p class="m-0 p-0 p_textEditor text-capital" style="white-space: nowrap;" matTooltip="view"
                                 matTooltipPosition="above" [innerHTML]=rowData[col.field]></p>
                         </td>
-                        <td class="table-column-width" *ngIf="col.field !='notes'">
+                        <td class="table-column-width" *ngIf="col.field !='notesData'">
                             {{ col.field == 'createdDate'
                                       ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                                       : rowData[col.field] && col.field == 'updatedDate'
@@ -340,7 +340,7 @@
 </div>
 <div id="contentHistDocs" #contentHistDocs class="modal fade" role="dialog" data-backdrop="static"
     data-keyboard="false">
-    <div class="modal-dialog modal-xlg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">History of Phone</h4>
@@ -380,9 +380,9 @@
                                     <td
                                         [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactBy', audit.contactBy)  ? 'black' : 'red'  }">
                                         {{audit.contactBy}}</td>
-                                    <td style="margin-bottom:-10px !important"
+                                    <td
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
-                                        <p class="margin-tb" [innerHTML]="audit.notes"></p>
+                                        <p class="m-0 p-0" [innerHTML]="audit.notes"></p>
                                     </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.createdBy}}</td>

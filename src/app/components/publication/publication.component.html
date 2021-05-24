@@ -973,14 +973,27 @@
                 <div id="step3" class="panel-collapse collapse">
                   <div class="panel-body">
                     <div class="col-sm-12">
-                      <div class="shadow-Box">
-                        <p-table #aircraftTable class="rpo-table-cstm" [columns]="aircraftInformationCols"
-                          [value]="aircraftList" [paginator]="true" [rows]="aircraftPageSize" [first]="first"
-                          [rowsPerPageOptions]="[10, 20, 50, 100]">
+                      <!-- <div > -->
+                        <p-table #aircraftTable class="rpo-table-cstm rro-table-cstm"
+                         [columns]="aircraftInformationCols"
+                          [value]="aircraftList" [paginator]="true"
+                          selectionMode="multiple" [metaKeySelection]="true"
+                          [resizableColumns]="true"
+                         [reorderableColumns]="true" [scrollable]="true"
+                          scrollHeight="450px"
+                           [rows]="aircraftPageSize" [first]="first"
+                          [rowsPerPageOptions]="[10, 20, 50, 100]"
+                          (onPage)="aircraftPageIndexChange($event)">
+                          <ng-template pTemplate="colgroup" let-columns>
+                            <colgroup>
+                                <col *ngFor="let col of columns" class="table-column-width"/>
+                            </colgroup>
+                        </ng-template>
                           <ng-template pTemplate="header" let-columns>
                             <tr>
                               <!-- <th>ID</th> -->
-                              <th style="padding: 8px 5px !important;"  class="table-column-width" *ngFor="let col of columns"
+                              <th class="table-column-width" 
+                              pResizableColumn pReorderableColumn *ngFor="let col of columns"
                                 [pSortableColumn]="col.field">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -988,7 +1001,7 @@
                               <th class="table-actions-column">Actions</th>
                             </tr>
                             <tr>
-                              <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                              <th *ngFor="let col of columns" class="table-column-width" [ngSwitch]="col.field">
                                 <input class="table-header-input-width" pInputText type="text" (input)="
                                     aircraftTable.filter(
                                       $event.target.value,
@@ -1001,21 +1014,22 @@
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-                            <tr>
+                            <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                               <!-- <td>{{ rowIndex + 1 }}</td> -->
-                              <td class="table-column-width" *ngFor="let col of columns">
+                              <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                 <span *ngIf="col.field != 'dashNumber' ||  col.field != 'model'">
                                   {{
                                   rowData[col.field] }}
-                                </span>
-                                <span *ngIf="col.field == 'dashNumber'">
+                              </span>
+                              <span *ngIf="col.field == 'dashNumber'">
                                   <span *ngIf="rowData[col.field] != 'Unknown'">{{ rowData[col.field]
-                                    }}</span>
-                                </span>
-                                <span *ngIf=" col.field == 'model'">
+                                      }}</span>
+                              </span>
+                              <span *ngIf=" col.field =='model'">
                                   <span *ngIf=" rowData[col.field] != 'Unknown'">{{ rowData[col.field]
-                                    }}</span>
-                                </span>
+                                      }}</span>
+                              </span>
+
                               </td>
                               <td class="table-actions-column">
                                 <span data-toggle="modal" data-target="#airCraftView">
@@ -1028,7 +1042,7 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="aircraftList.length == 0">
                             <tr>
-                              <td [attr.colspan]="3" class="no-records-msg no-records-cstm">
+                              <td [attr.colspan]="8" class="no-records-msg no-records-cstm">
                                 No records found
                               </td>
                             </tr>
@@ -1048,7 +1062,7 @@
                               " [disabled]="true" pInputText type="text" />
                           </ng-template>
                         </p-table>
-                      </div>
+                      <!-- </div> -->
                     </div>
                   </div>
                 </div>

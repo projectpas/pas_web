@@ -23,7 +23,19 @@
         <h4 class="modal-title">{{isEdit ? 'Edit' : 'Add'}} Tools </h4>
       </div>
       <div class="modal-body " id="asset_create">
+        <div class="form-row input-width-100-percent">
+          <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-2 adK_f" >
+              <label class="change_cd">MPN : </label>
+              <span class="span-header-red"> {{masterPartData?.partNumber}}</span>
+          </div>
+          <div class="col-md-9">
+              <label class="cost_v">MPN Description: </label>
+              <span class="span-header-red"> {{masterPartData?.description}}</span>
 
+          </div>
+          </div>
+      </div>
         <div *ngIf="!isEdit && addNewEquipment">
           <grd-equipment [workFlowObject]="workFlowObject" [moduleName]="moduleName" [isWorkOrder]="isWorkOrder"
             (saveEquipmentListForWO)="saveEquipmentList($event)" (closeEvent)="closerefreshview()"></grd-equipment>
@@ -486,7 +498,7 @@
                               <div [innerHTML]="row.notes"
                                   matTooltipPosition="above"
                                   [matTooltip]="parsedText(row.notes)"
-                                  class="text_editor_box input-width-100-percent"></div>
+                                  class="text_editor_box"></div>
                               <i class="fa fa-pencil contoel_v" data-toggle="modal"
                                   data-target="#textarea-popup" matTooltip="Memo"
                                   matTooltipPosition="above"
@@ -751,7 +763,7 @@
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <h4 class="modal-title">Are You Sure Want to Remove?</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
       <span aria-hidden="true">&times;</span>
     </button>

@@ -139,18 +139,25 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    
-                                            <div class="form-group" style="padding-left: 5px;">
-                                                <label>Customer Warning</label>
-                                                <textarea name="warningId" class="form-control"
-                                                    style="height: 25px !important; width:100% !important; color: #d42c2c !important;"
-                                                    disabled 
-                                                    value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
-                                                                                  
-                                           
+
+                                        <div class="form-group memo-popup-cstm">
+                                            <label>
+                                                Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                    data-target="#add-description" matTooltipPosition="above"
+                                                    matTooltip="Memo" (click)="onAddDescription('memo')"></i>
+                                            </label>
+                                            <span>
+                                                <div class="form-group memo-popup-cstm mat_emo">
+                                                    <div [innerHTML]="salesQuote.memo"
+                                                        [matTooltip]="parsedText(salesQuote.memo)" class="form-control"
+                                                        style="height: 25px !important; width:100%"
+                                                        class="text_editor_box">
+                                                    </div>
                                                 </div>
-                                      
-                                        
+                                            </span>
+                                        </div>
+
+
                                         <!-- <div class="form-group">
                                             <label>Employee<span class="clr-red">*</span></label>
                                             <p-autoComplete field="label" class="autocomp-customer-cstm"
@@ -251,24 +258,24 @@
                                                 </select>
                                             </div>
                                         </div>
-                                       
-                                            <div class="form-group memo-popup-cstm">
-                                                <label style="margin-top:10px">
-                                                    Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                                        matTooltipPosition="above" matTooltip="Notes"
-                                                        (click)="onAddDescription('notes')"></i>
-                                                </label>
-                                                <span>
-                                                    <div class="form-group memo-popup-cstm mat_emo">
-                                                        <div [innerHTML]="salesQuote.notes"
-                                                            [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
-                                                            style="height: 25px !important; width:100% !important"
-                                                            class="text_editor_box">
-                                                        </div>
+
+                                        <div class="form-group memo-popup-cstm">
+                                            <label style="margin-top:10px">
+                                                Notes<i class="fa fa-pencil" data-toggle="modal"
+                                                    data-target="#add-description" matTooltipPosition="above"
+                                                    matTooltip="Notes" (click)="onAddDescription('notes')"></i>
+                                            </label>
+                                            <span>
+                                                <div class="form-group memo-popup-cstm mat_emo">
+                                                    <div [innerHTML]="salesQuote.notes"
+                                                        [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
+                                                        style="height: 25px !important; width:100% !important"
+                                                        class="text_editor_box">
                                                     </div>
-                                                </span>
-                                            </div>
-                                        
+                                                </div>
+                                            </span>
+                                        </div>
+
                                         <!-- <div class="form-group" style="padding-top: 24px">
                                             <label>Valid For (Days)<span class="clr-red">*</span></label>
                                             <input type="number" name="validForDays"
@@ -288,7 +295,8 @@
                             </div>
                             <div class="col-md-6 main_ar">
                                 <div class="form-row">
-                                    <div class="col-md-6 padding-10 padding-top-5" style="padding-bottom: 0px !important;">
+                                    <div class="col-md-6 padding-10 padding-top-5"
+                                        style="padding-bottom: 0px !important;">
                                         <div class="form-group padding-6">
                                             <!-- <label></label> -->
                                             <div class="col-md-5" style="margin-bottom: 4px;">
@@ -313,8 +321,8 @@
                                                     name="employeeId" [(ngModel)]="salesQuote.employeeId"
                                                     [suggestions]="firstCollection" [forceSelection]="true"
                                                     emptyMessage="No Match Found" field="label"
-                                                    (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1"
-                                                    [dropdown]="true" #employeeName="ngModel" required>
+                                                    (completeMethod)="filterfirstName($event)" [size]="30"
+                                                    [minLength]="1" [dropdown]="true" #employeeName="ngModel" required>
                                                 </p-autoComplete>
                                                 <div *ngIf="employeeName.invalid && (employeeName.dirty || employeeName.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
@@ -465,43 +473,36 @@
                                             </div>
                                         </div>
                                         <div class=" main_ar" style="padding-top:10px">
-                                            <div class="form-group memo-popup-cstm">
-                                                <label>
-                                                    Memo<i class=" fa fa-pencil" data-toggle="modal"
-                                                        data-target="#add-description" matTooltipPosition="above"
-                                                        matTooltip="Memo" (click)="onAddDescription('memo')"></i>
-                                                </label>
-                                                <span>
-                                                    <div class="form-group memo-popup-cstm mat_emo">
-                                                        <div [innerHTML]="salesQuote.memo"
-                                                            [matTooltip]="parsedText(salesQuote.memo)"
-                                                            class="form-control"
-                                                            style="height: 25px !important; width:100%"
-                                                            class="text_editor_box">
-                                                        </div>
-                                                    </div>
-                                                </span>
+                                            <div class="form-group" style="padding-left: 5px;">
+                                                <label>Customer Warning</label>
+                                                <textarea name="warningId" class="form-control"
+                                                    style="height: 80px !important; width:100% !important; color: #d42c2c !important;"
+                                                    disabled
+                                                    value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
+
+
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-row mb-2">
-                          
+
                             <!-- <div class="col-md-4 main_ar"> -->
-                                <div class="form-group" style="position: absolute; right: 10px; bottom: 0;">
-                                    <button type="submit" *ngIf="!isEdit && !isCreateModeHeader"
-                                        (click)="onSubmit(true)" [disabled]="!newSalesQuoteForm.form.valid"
-                                        class="btn pull-right submit-btn btn btn-primary">
-                                        Save
-                                    </button>
-                                    <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
-                                        (click)="openConfirmationModal(true)" [disabled]="enableUpdateButton"
-                                        class="btn pull-right submit-btn btn btn-primary">
-                                        Update
-                                    </button>
-                                </div>
+                            <div class="form-group" style="position: absolute; right: 10px; bottom: 0;">
+                                <button type="submit" *ngIf="!isEdit && !isCreateModeHeader" (click)="onSubmit(true)"
+                                    [disabled]="!newSalesQuoteForm.form.valid"
+                                    class="btn pull-right submit-btn btn btn-primary">
+                                    Save
+                                </button>
+                                <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
+                                    (click)="openConfirmationModal(true)" [disabled]="enableUpdateButton"
+                                    class="btn pull-right submit-btn btn btn-primary">
+                                    Update
+                                </button>
+                            </div>
                             <!-- </div> -->
                         </div>
                         <!-- <div class="col-md-12">
@@ -557,11 +558,11 @@
                                     [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
                                 </app-sales-part-number>
                             </p-tabPanel>
-                            <p-tabPanel header="Internal Approvers" *ngIf="enforceApproval">
+                            <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                                 <app-sales-approve>
                                 </app-sales-approve>
                             </p-tabPanel>
-                            <p-tabPanel header="Approver Process" *ngIf="enforceApproval">
+                            <p-tabPanel header="Approver Process">
                                 <app-sales-customer-approvals *ngIf="isEdit == true" [salesQuoteView]="salesQuoteView"
                                     [isViewMode]="false" [customerContactList]="customerContactList"
                                     [marginSummary]="marginSummary"
@@ -599,7 +600,7 @@
                                 <app-sales-quote-analysis>
                                 </app-sales-quote-analysis>
                             </p-tabPanel>
-                            <p-tabPanel header="Communication">
+                            <p-tabPanel header="Communications">
                                 <app-communication [isViewMode]="false" [type]="1" [moduleName]="moduleName"
                                     [idForContact]="customerId" [referenceId]="id"></app-communication>
                             </p-tabPanel>
@@ -830,8 +831,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
 <div class="preloader" *ngIf="isSpinnerVisible">

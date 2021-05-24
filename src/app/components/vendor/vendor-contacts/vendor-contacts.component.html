@@ -166,7 +166,7 @@
                       <ng-template pTemplate="colgroup" let-columns>
                           <colgroup>
                               <col *ngFor="let col of columns"
-                              [ngStyle]="{'width': col.width}"   />
+                              class="table-column-width"   />
                           </colgroup>
                       </ng-template>
                       <ng-template pTemplate="header" let-columns>

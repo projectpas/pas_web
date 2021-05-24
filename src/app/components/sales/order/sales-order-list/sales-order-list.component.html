@@ -162,11 +162,7 @@
                     [pSelectableRowDblClick]="rowData">
                     <td *ngFor="let col of columns" class="table-column-width"
                         [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
-                        [matTooltipDisabled]="rowData['partDescriptionType'] != 'Multiple' ||
-                                rowData['partNumberType'] != 'Multiple'  || 
-                                rowData['requestedDateType'] != 'Multiple'||
-                                    rowData['estimatedShipDateType'] != 'Multiple'||
-                                    rowData['priorityType'] != 'Multiple'"
+                        [matTooltipDisabled]="rowData['partNumberType'] != 'Multiple'"
                         [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
                         <span
                             *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' && col.field != 'openDate'">

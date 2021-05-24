@@ -38,60 +38,48 @@
                                 [(selection)]="selectedGridColumn" 
                                 [resizableColumns]="true" 
                                 [reorderableColumns]="true">
-                                    <ng-template pTemplate="caption">
-                                        <!-- <div style="text-align: right"> -->
-                                            <div class="row">
-                                                <div class="col">                                          
-                                            <p-multiSelect [maxSelectedLabels]="2"
-                                            [options]="gridColumns"
-                                            optionLabel="header"
-                                            [(ngModel)]="selectedGridColumns"
-                                            [style]="{ minWidth: '220px' }"
-                                            style="float:left"
-                                            (onChange)="columnsChanges()">
-                                        </p-multiSelect>
-                                    </div>
-                                    <div class="col">
-                                    <div style="width: auto !important; float: right;"
-                                     class="inner-addon right-addon w50 inline-block g-filter-search-cstm">        
-                                    <i class="fa fa-search"></i>
-                                                <input type="text"
-                                                    pInputText
-                                                    size="50"
-                                                    class="form-control"
-                                                    (input)="globalSearch($event.target.value)"
-                                                    placeholder="Filter"
-                                                    style="height: 28px !important;" />
+                                <ng-template pTemplate="caption">
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <p-multiSelect [options]="gridColumns" [(ngModel)]="selectedGridColumns" optionLabel="header"
+                                            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                            <!-- <p-multiSelect [maxSelectedLabels]="2" [options]="selectedGridColumn" optionLabel="header"
+                                                [(ngModel)]="selectedGridColumn" class="multiselect-field"
+                                                (onChange)="columnsChanges()"></p-multiSelect> -->
+                                        </div>
+                                        <div class="col">
+                                            <div class="global-search-field inner-addon right-addon inline-block">
+                                                <i class="fa fa-search"></i>
+                                                <input type="text" pInputText size="50" class="form-control"
+                                                    (input)="globalSearch($event.target.value)" placeholder=" Filter" />
                                             </div>
                                         </div>
                                     </div>
-                                   
-                                    <div class="col">
-                                      <div class="col">
-                                            <button type="button" class="btn btn-primary new-table-button"
-                                             pButton icon="fa-download" 
-                                                iconPos="left" style="left:-10px;padding: 5px 12px !important;"
-                                                label="Export Data" matTooltip="Download Data"
-                                                 matTooltipPosition="above"
-                                                (click)="dt.exportCSV()"></button>
-                                            <button type="button" class="btn btn-primary new-table-button"
-                                             pButton icon="fa-download" iconPos="left"
-                                                label="Export Selected Data"
-                                                 style="padding: 5px 12px !important;"
-                                                  matTooltip="Download Selected Data"
-                                                   matTooltipPosition="above"
-                                                (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                    <!-- <div class="row">
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+                                                matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
+                                                data-toggle="modal"
+                                                (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
+                                            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download"
+                                                iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
+                                                matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
                                         </div>
-                                    </div>
-                                    </ng-template>
+                                        <div class="pull-right buttons-div-align">
+                                            <div class="col">
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </ng-template>
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
-                                            <col *ngFor="let col of columns" style="width:130px">
+                                            <col *ngFor="let col of columns" class="table-column-width"  style="width:130px">
                                         </colgroup>
                                     </ng-template>
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th style="width:auto" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                            <th class="table-column-width" style="width:auto" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                                                 {{col.header}}
                                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                                             </th>

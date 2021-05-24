@@ -260,8 +260,10 @@
       </app-sales-order-billing>
     </p-tabPanel>
     <p-tabPanel header="Document">
-      <app-sales-order-document [salesOrderId]="salesQuote.salesOrderId" [isEditMode]="false" [viewMode]="true">
-      </app-sales-order-document>
+      <!-- <app-sales-order-document [salesOrderId]="salesQuote.salesOrderId" [isEditMode]="false" [viewMode]="true">
+      </app-sales-order-document> -->
+      <app-common-documents [moduleName]="moduleName" [referenceId]="salesQuote.salesOrderId" [isViewMode]="true" [offLineUpload]="true">
+      </app-common-documents>
     </p-tabPanel>
     <p-tabPanel header="Analysis">
       <app-sales-order-analysis></app-sales-order-analysis>

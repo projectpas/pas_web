@@ -53,4 +53,5 @@ export interface IPartJson {
     CustomerReference: string;
     itemMasterId?: number;
     partId?: number;
+    fixRate: number;
 }

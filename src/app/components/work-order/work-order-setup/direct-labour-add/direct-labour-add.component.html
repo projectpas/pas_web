@@ -1,238 +1,338 @@
 <div [@fadeInOut] class="page-content">
     <div class="right_col" role="main">
         <form #laborForm="ngForm">
-            <div class="col-md-12">              
-                    <div class="x_content">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item" aria-current="page">Direct Labor and Overhead Cost</li>
-                                <li class="breadcrumb-item active" aria-current="page">{{ isEditMode ? 'Edit' : 'Create' }} Direct Labor and Overhead Cost</li>                               
-                            </ol>
-                        </nav>
-                        <!-- <div class="pheading">
-                            <h4 class="page-heading">Direct Labor and Overhead Cost Setup</h4>
-                               </div> -->
-                        <div class="clear"></div>
-                        <div class="card new-card">
-                            <div class="card-header bg-primary">
-                              <div class="row">
+            <div class="col-md-12">
+                <div class="x_content">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item" aria-current="page">Direct Labor and Overhead Cost</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ isEditMode ? 'Edit' : 'Create' }}
+                                Direct Labor and Overhead Cost</li>
+                        </ol>
+                    </nav>
+                    <div class="clear"></div>
+                    <div class="card new-card">
+                        <div class="header">
+                            <div class="row">
                                 <div class="col">
-                                    <h4 class="new-card-heading">
-                                        {{ isEditMode ? 'Edit' : 'Create' }} Direct Labor and Overhead Cost</h4>
+                                    <h4 class="header-name"> {{ isEditMode ? 'Edit' : 'Create' }} Direct Labor and
+                                        Overhead Cost</h4>
                                 </div>
                                 <div>
-                                  <button
-                                    type="button"
-                                    class="btn-sm new-btn-primary"
-                                    [routerLink]="['/workordersmodule/workorderspages/app-direct-labour']"
-                                  >
-                                    Direct Labour and Overhead Cost                                  </button>
+                                    <button type="button" class="btn-sm header-button"
+                                        [routerLink]="['/workordersmodule/workorderspages/app-direct-labour']">
+                                        Direct Labour and Overhead Cost
+                                    </button>
                                 </div>
-                              </div>
                             </div>
-                            <div class="card-body new-card-body">
-                                <div class="col-md-12">
-                                    <div class="form-row">
-                                        <div class="col-sm-5">
-                                            <div class="col-sm-12">
-                                                <h5 class="heading">Direct Labor (Technician/Mechanic)</h5>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="checkbox-cstm">
-                                                    <label style="font-weight: bold;">
-                                                        What Labor Rate to use on Work Orders? <span class="clr-red">*</span>
-                                                    </label>
-                                                    <!-- <label>                                            
-                                                        <input type="radio" name="laborRateId" [(ngModel)]="directLaborData.laborRateId" value="1" required>
-                                                       <span>Use Individual Technician/Mechanic Labor Rate</span>
-                                                    </label> -->
-                                                    <div class="m-t-10">
-                                                        <label class="radio-cstm wauto">
-                                                            <input type="radio" name="laborRateId" class="form-control" value="1" [(ngModel)]="directLaborData.laborRateId" (change)="onChangeLaborRate()" required>
-                                                            <span class="checkmark"></span>Use Individual Technician/Mechanic Labor Rate</label>
+                        </div>
+                        <div class="card-body new-card-body">
+                            <div class="col-md-12">
+                                <div class="form-row">
+                                    <div class="col-sm-5">
+                                        <div class="col-sm-12">
+                                            <h5 class="heading" style="text-align: start;">Direct Labor (Technician/Mechanic)</h5>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox-cstm">
+                                                <label style="font-weight: bold;">
+                                                    What Labor Rate to use on Work Orders? <span
+                                                        class="clr-red">*</span>
+                                                </label>
+                                                <div class="m-t-10">
+                                                    <label class="radio-cstm wauto">
+                                                        <input type="radio" name="laborRateId" class="form-control"
+                                                            value="1" (ngModelChange)="getActive()" [(ngModel)]="directLaborData.laborRateId"
+                                                            (change)="onChangeLaborRate()" required>
+                                                        <span class="checkmark"></span>Use Individual
+                                                        Technician/Mechanic Labor Rate</label>
+                                                </div>
+                                                <div class="m-t-10">
+                                                    <label class="radio-cstm wauto">
+                                                        <input type="radio" name="laborRateId" class="form-control"
+                                                            value="2" (ngModelChange)="getActive()" [(ngModel)]="directLaborData.laborRateId"
+                                                            required>
+                                                        <span class="checkmark"></span>Use Average Hourly Rate of all
+                                                        Technician/Mechanic</label>
+                                                </div>
+                                                <div class="form-row m-b-10" *ngIf="directLaborData.laborRateId == '2'">
+                                                    <div class="col-md-6">
+                                                        <input type="number" style="width: 120px;" pKeyFilter="num"
+                                                            name="averageRate"
+                                                            (focusout)="onChangeCost($event.target.value)"
+                                                            class="form-control text-right" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="directLaborData.averageRate" required>
                                                     </div>
-                                                    <!-- <label>
-                                                        <input type="radio" name="laborRateId" [(ngModel)]="directLaborData.laborRateId" value="2" required>
-                                                       Use Average Rate of All Technician/Mechanic 
-                                                    </label> -->
-                                                    <div class="m-t-10">
-                                                        <label class="radio-cstm wauto">
-                                                            <input type="radio" name="laborRateId" class="form-control" value="2" [(ngModel)]="directLaborData.laborRateId" required>
-                                                            <span class="checkmark"></span>Use Average Hourly Rate of all Technician/Mechanic</label>
-                                                    </div>
-                                                    <div class="form-row m-b-10" *ngIf="directLaborData.laborRateId == '2'">
-                                                        <div class="col-md-6">
-                                                            <input type="number" style="width: 120px;" pKeyFilter="num" name="averageRate" (focusout)="onChangeCost($event.target.value)" class="form-control text-right" [(ngModel)]="directLaborData.averageRate" required>
-                                                        </div>
-                                                        </div>
-                                                </div>            
-                                            </div>
-
-                                            <div class="form-group">
-                                                <div class="checkbox-cstm">
-                                                    <label style="font-weight: bold; margin-top: 10px;">
-                                                       How to Apply Hours to Work Orders? <span class="clr-red">*</span>
-                                                    </label>                                                      
-                                                    <!-- <label>
-                                                        <input type="radio" name="laborHoursId" [(ngModel)]="directLaborData.laborHoursId" value="1" required>
-                                                       Assign Hours by Specific Actions
-                                                    </label> -->
-                                                    <div class="m-t-10">
-                                                        <label class="radio-cstm wauto">
-                                                            <input type="radio" name="laborHoursId" class="form-control" value="1" [(ngModel)]="directLaborData.laborHoursId" required>
-                                                            <span class="checkmark"></span>Assign Hours by Specific Task</label>
-                                                    </div>
-                                                    <!-- <label>
-                                                        <input type="radio" name="laborHoursId" [(ngModel)]="directLaborData.laborHoursId" value="2" required>
-                                                       Assign Total Hours to Work Order
-                                                    </label> -->
-                                                    <div class="m-t-10">
-                                                        <label class="radio-cstm wauto">
-                                                            <input type="radio" name="laborHoursId" class="form-control" value="2" [(ngModel)]="directLaborData.laborHoursId" required>
-                                                            <span class="checkmark"></span>Assign Total Hours to Work Order</label>
-                                                    </div>
-                                                </div>        
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
-                                            <div class="col-sm-12">
-                                                <h5 class="heading">Overhead Burden Rate</h5>
-                                            </div>
-                                            <div class="form-group">
-                                                <div>
-                                                    <!-- <label>
-                                                        <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="1" (change)="onChangeBurdenRate()" required>
-                                                        As A% of Technician/Mechanic Hourly Rate 
-                                                        <span *ngIf="directLaborData.burdenRateId == '1'" class="clr-red">*</span>
-                                                    </label> -->
-                                                    <div class="m-t-10" style="clear: both;">
-                                                        <label class="radio-cstm wauto">
-                                                            <input type="radio" name="burdenRateId" class="form-control" value="1" [(ngModel)]="directLaborData.burdenRateId" (change)="onChangeBurdenRate()" required>
-                                                            <span class="checkmark"></span>  Use fixed hourly rate 
-                                                            <span *ngIf="directLaborData.burdenRateId == '1'" class="clr-red">*</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-row m-b-10" *ngIf="directLaborData.burdenRateId == '1'">
-                                                        <div class="col-md-7">
-                                                            <select class="form-control" style="width: 120px;margin-top: 8px;" [(ngModel)]="directLaborData.flatAmount" name="flatAmount" required>
-                                                                <option *ngFor="let item of allPercentList" value="{{item.percentId}}">{{item.percentValue}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- <label>
-                                                        <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="2" (change)="onChangeBurdenRate()" required>
-                                                      Flat Amount per Hour
-                                                      <span *ngIf="directLaborData.burdenRateId == '2'" class="clr-red">*</span>
-                                                    </label> -->
-                                                    <div class="m-t-10">
-                                                        <label class="radio-cstm wauto">
-                                                            <input type="radio" name="burdenRateId" class="form-control" value="2" [(ngModel)]="directLaborData.burdenRateId" (change)="onChangeBurdenRate()" required>
-                                                            <span class="checkmark"></span>Flat Amount per Hour 
-                                                            <span *ngIf="directLaborData.burdenRateId == '2'" class="clr-red">*</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-row m-b-10" *ngIf="directLaborData.burdenRateId == '2'">
-                                                    <div class="col-md-7">
-                                                        <input type="number" pKeyFilter="num" name="flatAmount" style="width: 120px;margin-top: 8px;" (focusout)="onChangeBurdenCost($event.target.value)" class="form-control text-right" [(ngModel)]="directLaborData.flatAmount" required>
-                                                    </div>
-                                                    </div>
-                                                    
-                                                    <!-- <label>
-                                                        <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="3" (change)="onChangeBurdenRate()" required>
-                                                      Flat Amount per Work Order
-                                                      <span *ngIf="directLaborData.burdenRateId == '3'" class="clr-red">*</span>
-                                                    </label> -->
-                                                    <!-- <div class="m-t-10">
-                                                        <label class="radio-cstm wauto">
-                                                            <input type="radio" name="burdenRateId" class="form-control" value="3" [(ngModel)]="directLaborData.burdenRateId" (change)="onChangeBurdenRate()" required>
-                                                            <span class="checkmark"></span>Flat Amount per Work Order 
-                                                            <span *ngIf="directLaborData.burdenRateId == '3'" class="clr-red">*</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-row m-b-10" *ngIf="directLaborData.burdenRateId == '3'">
-                                                    <div class="col-md-7">
-                                                        <input type="text" pKeyFilter="num" name="flatAmount" (focusout)="onChangeBurdenCost($event.target.value)" class="form-control text-right" [(ngModel)]="directLaborData.flatAmount" required>
-                                                    </div>
-                                                    </div> -->
+                                        <div class="form-group">
+                                            <div class="checkbox-cstm">
+                                                <label style="font-weight: bold; margin-top: 10px;">
+                                                    How to Apply Hours to Work Orders? <span class="clr-red">*</span>
+                                                </label>
+                                                <div class="m-t-10">
+                                                    <label class="radio-cstm wauto">
+                                                        <input type="radio" name="laborHoursId" class="form-control"
+                                                            value="1" (ngModelChange)="getActive()" [(ngModel)]="directLaborData.laborHoursId"
+                                                            required>
+                                                        <span class="checkmark"></span>Assign Hours by Specific
+                                                        Task</label>
                                                 </div>
-
-                                                <div class="form-group m-t-10">
+                                                <div class="m-t-10">
+                                                    <label class="radio-cstm wauto">
+                                                        <input type="radio" name="laborHoursId" class="form-control"
+                                                            value="2" (ngModelChange)="getActive()" [(ngModel)]="directLaborData.laborHoursId"
+                                                            required>
+                                                        <span class="checkmark"></span>Assign Total Hours to Work
+                                                        Order</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12 task-detail" style="padding-top: 12px;">
+                                                <div class="form-group task-hours-type" style="display: inline-flex;">
+                                                    <p-radioButton 
+                                                        class="p-radiobutton-label-horizontal p-radiobutton-cstm adj"
+                                                        name="WorkFloworSpecificTaskorWorkOrder" label="Manual Hours"
+                                                        [value]="1" (ngModelChange)="getActive()" [(ngModel)]="directLaborData.laborHoursMedthodId">
+                                                    </p-radioButton>
+                                                    <br />
+                                                    <p-radioButton 
+                                                        class="p-radiobutton-label-horizontal p-radiobutton-cstm jda wosettingLabel "
+                                                        name="WorkFloworSpecificTaskorWorkOrder"
+                                                        label="Labor Clock In/Out " [value]="2" (ngModelChange)="getActive()"
+                                                        [(ngModel)]="directLaborData.laborHoursMedthodId">
+                                                    </p-radioButton>
+                                                    <br />
+                                                    <p-radioButton 
+                                                        class="p-radiobutton-label-horizontal p-radiobutton-cstm jda"
+                                                        name="Scan" [value]="3" label="Scan" (ngModelChange)="getActive()"
+                                                        [(ngModel)]="directLaborData.laborHoursMedthodId">
+                                                    </p-radioButton>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="col-sm-12">
+                                            <h5 class="heading" style="text-align: start;">Overhead Burden Rate</h5>
+                                        </div>
+                                        <div class="form-group">
+                                            <div>
+                                                <div class="m-t-10" style="clear: both;">
+                                                    <label class="radio-cstm wauto">
+                                                        <input type="radio" name="burdenRateId" class="form-control"
+                                                            value="1" [(ngModel)]="directLaborData.burdenRateId"
+                                                            (ngModelChange)="getActive()"   (change)="onChangeBurdenRate()" required>
+                                                        <span class="checkmark"></span> Use fixed hourly rate
+                                                        <span *ngIf="directLaborData.burdenRateId == '1'"
+                                                            class="clr-red">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-row m-b-10"
+                                                    *ngIf="directLaborData.burdenRateId == '1'">
+                                                    <div class="col-md-7">
+                                                        <select class="form-control"
+                                                            style="width: 120px;margin-top: 8px;" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="directLaborData.flatAmount" name="flatAmount1"
+                                                            required>
+                                                            <!-- <option *ngFor="let item of allPercentList"
+                                                            [ngValue]="item.value">{{item.label}} %
+                                                            </option>  value="{{item.value}}"-->
+                                                            <option *ngFor="let item of allPercentList" [ngValue]="item.value" >{{item.label}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="m-t-10">
+                                                    <label class="radio-cstm wauto">
+                                                        <input type="radio" name="burdenRateId" class="form-control"
+                                                        (ngModelChange)="getActive()"   value="2" [(ngModel)]="directLaborData.burdenRateId"
+                                                            (change)="onChangeBurdenRate()" required>
+                                                        <span class="checkmark"></span>Flat Amount per Hour
+                                                        <span *ngIf="directLaborData.burdenRateId == '2'"
+                                                            class="clr-red">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-row m-b-10"
+                                                    *ngIf="directLaborData.burdenRateId == '2'">
+                                                    <div class="col-md-7">
+                                                        <input type="number" pKeyFilter="num" name="flatAmount"
+                                                            style="width: 120px;margin-top: 8px;"
+                                                           
+                                                            class="form-control text-right" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="directLaborData.flatAmount" required>
+                                                            <!-- (focusout)="onChangeBurdenCost($event.target.value)" -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-t-10">
                                                 <label>Functional Currency <span class="clr-red">*</span></label>
                                                 <div class="form-row m-b-10">
                                                     <div class="col-md-7">
-                                                        <select class="form-control" style="width: 120px;" [(ngModel)]="directLaborData.functionalCurrencyId" name="functionalCurrencyId" required>
-                                                            <option *ngFor="let item of allEmployeeList" value="{{item.value}}">{{item.label}}</option>
+                                                        <select class="form-control" style="width: 120px;"
+                                                        (ngModelChange)="getActive()"     [(ngModel)]="directLaborData.functionalCurrencyId"
+                                                            name="functionalCurrencyId" required>
+                                                            <option *ngFor="let item of allCurrencyData"
+                                                                value="{{item.value}}">{{item.label}}</option>
                                                         </select>
                                                     </div>
-                                                </div>  
-                                                
                                                 </div>
+                                            </div>
                                             <div class="form-group">
                                                 <label>Transactional Currency <span class="clr-red">*</span></label>
                                                 <div class="form-row m-b-10">
                                                     <div class="col-md-7">
-                                                        <select class="form-control" style="width: 120px;" [(ngModel)]="directLaborData.transactionalCurrencyId" name="transactionalCurrencyId" required>
-                                                            <option *ngFor="let item of allEmployeeList" value="{{item.value}}">{{item.label}}</option>
+                                                        <select class="form-control" style="width: 120px;"
+                                                        (ngModelChange)="getActive()"    [(ngModel)]="directLaborData.transactionalCurrencyId"
+                                                            name="transactionalCurrencyId" required>
+                                                            <option *ngFor="let item of allCurrencyData"
+                                                                value="{{item.value}}">{{item.label}}</option>
                                                         </select>
                                                     </div>
-                                                </div>                                                  
-                                            </div>            
+                                                </div>
                                             </div>
                                         </div>
-                                        
-                                        <div class="col-sm-3">
-                                            <div class="card" style="margin-top: 20px;margin-bottom: 10px;">
-                                                <div class="card-header" style="padding: 10px 12px;">
-                                                    <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="clr-red">*</span></h5>
-                                                </div>
-                                                <div class="card-body" style="padding: 12px 12px 4px;">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <select class="form-control" name="company" [(ngModel)]="managementStructure.companyId" 
-                                                            (change)="selectedLegalEntity(managementStructure.companyId);" #companyName="ngModel" required>
-                                                                <option value="0">Select Legal Entity</option>
-                                                                <option *ngFor="let name of legalEntityList" [ngValue]="name.value">{{name.label}}</option>
-                                                            </select>
-                                                            <div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)" class="alert alert-danger alert-danger-cstm">
-                                                                    <div *ngIf="companyName.errors.required">
-                                                                        <small> Legal Entity Name is required </small>
-                                                                    </div>
-                                                            </div>        
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <select class="form-control" [(ngModel)]="managementStructure.buId" name="buId" (change)="selectedBusinessUnit(managementStructure.buId)">
-                                                                <option value="0">-- Select --</option>
-                                                                <option *ngFor="let name of businessUnitList" [ngValue]="name.value">{{name.label}}</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <select class="form-control" [(ngModel)]="managementStructure.divisionId" name="divisionId" (change)="selectedDivision(managementStructure.divisionId)">
-                                                                <option value="0">-- Select --</option>
-                                                                <option *ngFor="let name of divisionList" [ngValue]="name.value">{{name.label}}</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <select class="form-control" [(ngModel)]="managementStructure.departmentId" name="departmentId" (change)="selectedDepartment(managementStructure.departmentId)">
-                                                                <option value="0">-- Select --</option>
-                                                                <option *ngFor="let name of departmentList" [ngValue]="name.value">{{name.label}}</option>
-                                                            </select>
-                                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 main_facture">
+                                        <div class="card mgmt-card">
+                                            <div class="card-header mgmt-card-header">
+                                                <h5 class="mgmt-header">
+                                                    Management Structure <span class="text-danger">*</span>
+                                                </h5>
+                                            </div>
+                                            <div class="card-body mgmt-card-body">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                                            (onChange)="selectedLegalEntity(managementStructure.companyId,'html');"
+                                                            required (ngModelChange)="getActive()" [options]="legalEntityList"
+                                                            filter="true" [(ngModel)]="managementStructure.companyId"
+                                                            name="companyId" [resetFilterOnHide]="true" placeholder="Select">
+                                                        </p-dropdown>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                                            (onChange)="selectedBusinessUnit(managementStructure.buId,'html')"
+                                                            (ngModelChange)="getActive()" [options]="businessUnitList" filter="true"
+                                                            [(ngModel)]="managementStructure.buId" name="buId"
+                                                            [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                                            (onChange)="selectedDivision(managementStructure.divisionId,'html')"
+                                                            (ngModelChange)="getActive()" [options]="divisionList" filter="true"
+                                                            [(ngModel)]="managementStructure.divisionId" name="divisionId"
+                                                            [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                                            (onChange)="selectedDepartment(managementStructure.departmentId,'html' )"
+                                                            (ngModelChange)="getActive()" [options]="departmentList" filter="true"
+                                                            [(ngModel)]="managementStructure.departmentId" name="departmentId"
+                                                            [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>            
-                                    </div>                                   
+                                        </div> 
+                                    </div>
+
+
+
+                                    <!-- <div class="col-sm-3">
+                                        <div class="card" style="margin-top: 20px;margin-bottom: 10px;">
+                                            <div class="card-header" style="padding: 10px 12px;">
+                                                <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure
+                                                    <span class="clr-red">*</span>
+                                                </h5>
+                                            </div>
+                                            <div class="card-body" style="padding: 12px 12px 4px;">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <select class="form-control" name="company"
+                                                            [(ngModel)]="managementStructure.companyId"
+                                                            (change)="selectedLegalEntity(managementStructure.companyId);"
+                                                            #companyName="ngModel" required>
+                                                            <option value="0">Select Legal Entity</option>
+                                                            <option *ngFor="let name of legalEntityList"
+                                                                [ngValue]="name.value">{{name.label}}</option>
+                                                        </select>
+                                                        <div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)"
+                                                            class="alert alert-danger alert-danger-cstm">
+                                                            <div *ngIf="companyName.errors.required">
+                                                                <small> Legal Entity Name is required </small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="form-control"
+                                                            [(ngModel)]="managementStructure.buId" name="buId"
+                                                            (change)="selectedBusinessUnit(managementStructure.buId)">
+                                                            <option value="0">-- Select --</option>
+                                                            <option *ngFor="let name of businessUnitList"
+                                                                [ngValue]="name.value">{{name.label}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="form-control"
+                                                            [(ngModel)]="managementStructure.divisionId"
+                                                            name="divisionId"
+                                                            (change)="selectedDivision(managementStructure.divisionId)">
+                                                            <option value="0">-- Select --</option>
+                                                            <option *ngFor="let name of divisionList"
+                                                                [ngValue]="name.value">{{name.label}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="form-control"
+                                                            [(ngModel)]="managementStructure.departmentId"
+                                                            name="departmentId"
+                                                            (change)="selectedDepartment(managementStructure.departmentId)">
+                                                            <option value="0">-- Select --</option>
+                                                            <option *ngFor="let name of departmentList"
+                                                                [ngValue]="name.value">{{name.label}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+
+
+
                                 </div>
-                                <div class="form-row pull-right">
-                                    <button type="submit" class="btn btn-primary" (click)="onSaveDirectLabor()" [disabled]="!laborForm.valid">{{isEditMode ? 'Update' : 'Save'}}</button>
-                                </div>
+                            </div>
+                            <div class="form-row pull-right">
+                                <button  *ngIf="!isEditMode" type="submit" class="btn btn-primary" (click)="onSaveDirectLabor()"
+                                    [disabled]="!laborForm.valid"> Save</button>
+                                    <button *ngIf="isEditMode" type="submit" class="btn btn-primary" (click)="onSaveDirectLabor()"
+                                    [disabled]="!laborForm.valid  || disableUpdateButton">Update</button>
+
+                                   
+
                             </div>
                         </div>
                     </div>
+                </div>
                 <div>
                 </div>
             </div>
         </form>
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 </div>

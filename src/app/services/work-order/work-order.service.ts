@@ -20,6 +20,7 @@ import { WOPickTicket } from '../../models/sales/WOPickTicket';
 export class WorkOrderService {
 
     creditTerms: any;
+    partNumberData:any={};
     constructor(private workOrderEndpointService: WorkOrderEndpointService) {
     }
 
@@ -649,6 +650,15 @@ export class WorkOrderService {
 
     getPickTicketList(workOrderId) {
         return this.workOrderEndpointService.getPickTicketList(workOrderId);
+    }
+
+    
+    GetWorkorderReleaseFromData(workOrderId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId);
+    }
+
+    GetWorkorderReleaseEasaFromData(workOrderId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseEasaFromData(workOrderId);
     }
 
     getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN = false) {

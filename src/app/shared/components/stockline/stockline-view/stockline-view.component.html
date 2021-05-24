@@ -57,7 +57,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Revised PN</label>
-                                <input class="form-control" type="text" name="revisedPart" [(ngModel)]="viewSLInfo.revisedPart" disabled>
+                                <input class="form-control" type="text" name="revicedPNNumber" [(ngModel)]="viewSLInfo.revicedPNNumber" disabled>
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm m-t-10">
@@ -79,7 +79,7 @@
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.isPMA">
                                 <label class="stock-line-check">OEM PN <span class="clr-red">*</span></label>
-                                <input class="form-control" type="text" name="oemPnPartNum" [(ngModel)]="viewSLInfo.oemPnPartNum" disabled>
+                                <input class="form-control" type="text" name="oEMPNNumber" [(ngModel)]="viewSLInfo.oEMPNNumber" disabled>
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm">
@@ -354,6 +354,10 @@
                                 <input class="form-control text-right" type="text" name="repairOrderUnitCost" [(ngModel)]="viewSLInfo.repairOrderUnitCost" disabled>
                             </div>
                             <div class="form-group">
+                                <label>Unit Cost</label>
+                                <input class="form-control text-right" type="text" name="unitCost" [(ngModel)]="viewSLInfo.unitCost" disabled>
+                            </div>
+                            <div class="form-group">
                                 <label>Unit Sale Price</label>
                                 <input class="form-control text-right" type="text" name="unitSalesPrice" [(ngModel)]="viewSLInfo.unitSalesPrice" disabled>
                             </div>
@@ -523,6 +527,10 @@
                             <div class="form-group">
                                 <label>Tag Date</label>
                                 <input type="text" class="form-control" name="tagDate" [(ngModel)]="viewSLInfo.tagDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Tagged By</label>
+                                <input class="form-control" type="text" name="taggedByName" [(ngModel)]="viewSLInfo.taggedByName" disabled />
                             </div>
                             <div class="form-group">
                                 <label>Inspection By</label>

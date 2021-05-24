@@ -5,11 +5,11 @@
             Add PN
         </button>
         <button *ngIf="isViewMode == false" type="button" class="btn btn-primary ml-1"
-            [disabled]="selectedParts.length == 0" (click)="partsAction('Reserve')">
+            [disabled]="selectedParts.length == 0 || !canSaveParts" (click)="partsAction('Reserve')">
             Reserve
         </button>
         <button *ngIf="isViewMode == false" type="button" class="btn btn-primary ml-1"
-            [disabled]="selectedParts.length == 0" (click)="partsAction('Unreserve')">
+            [disabled]="selectedParts.length == 0 || !canSaveParts" (click)="partsAction('Unreserve')">
             Unreserve
         </button>
         <div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
@@ -18,20 +18,20 @@
                 <table class="table table-bordered" id="so-table">
                     <tr class="font-size-10">
                         <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'min-width': summaryColumn.width}">
-                            <span *ngIf="summaryColumn.field == 'quantityToBeQuoted'
+                            <div *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                  || summaryColumn.field == 'customerRef'
                                  || summaryColumn.field == 'quantityRequested'
                                  || summaryColumn.field == 'quantityOrdered'">
                                 {{ summaryColumn.header }}
-                            </span>
-                            <span *ngIf="summaryColumn.field != 'quantityToBeQuoted' 
+                            </div>
+                            <div *ngIf="summaryColumn.field != 'quantityToBeQuoted' 
                             && summaryColumn.field != 'customerRef'
                                 && summaryColumn.field != 'quantityRequested'
                                 && summaryColumn.field != 'quantityOrdered'">
                                 {{ summaryColumn.header }}
-                            </span>
+                            </div>
                         </th>
-                        <th colspan="12"></th>
+                        <th colspan="13"></th>
                         <th *ngIf="isViewMode == false"
                             style="position: sticky !important; min-width: 145px !important;">Actions
                         </th>
@@ -54,6 +54,8 @@
                                                     && summaryColumn.field != 'quantityAlreadyQuoted'
                                                     && summaryColumn.field != 'qtyAvailable'
                                                     && summaryColumn.field != 'qtyReserved'
+                                                    && summaryColumn.field != 'quantityPrevShipped'
+                                                    && summaryColumn.field != 'qtyBackOrder'
                                                     && summaryColumn.field != 'qtyOnHand'
                                                     && summaryColumn.field != 'fixRate'
                                                     && summaryColumn.field != 'grossSalePrice'
@@ -73,6 +75,8 @@
                                                     || summaryColumn.field == 'quantityAlreadyQuoted'
                                                     || summaryColumn.field == 'qtyAvailable'
                                                     || summaryColumn.field == 'qtyReserved'
+                                                    || summaryColumn.field == 'quantityPrevShipped'
+                                                    || summaryColumn.field == 'qtyBackOrder'
                                                     || summaryColumn.field == 'qtyOnHand'">
                                             {{summaryPart[summaryColumn.field] | globalNmberFormat}}
                                         </span>
@@ -89,18 +93,16 @@
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                     </td>
-                                    <td colspan="12" style="background-color: #EAF2C5 !important;"></td>
+                                    <td colspan="13" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" style="position:sticky; width:80px">
                                         <span>
-                                            <!-- <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                                [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                                class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
-                                                matTooltip="Add/Edit Stock Line" matTooltipPosition="above">
-                                                <i class="fa fa-pencil"></i>
-                                            </a> -->
-                                            <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                                [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                                class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
+                                            <a class="btn nobg" (click)="adjustQty(summaryPart,rowIndex)"
+                                                matTooltip="Adjust Qty" matTooltipPosition="above">
+                                                <i class="fa fa-cubes" style="color: #000;"></i>
+                                            </a>
+                                        </span>
+                                        <span *ngIf="summaryPart['methodType'] == 'S'">
+                                            <a class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
                                                 matTooltip="Add Stock Line" matTooltipPosition="above">
                                                 <i class="fa fa-plus" style="color: #000;"></i>
                                             </a>
@@ -547,7 +549,7 @@
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
         (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode" [clearData]="clearData"
-        [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'SO'" [isEdit]="isEditMode"
+        [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'SO'" [isEdit]="isEditMode" [isQtyAdjust]="isQtyAdjust"
         (save)="onSave($event)">
     </app-add-sales-part-number>
 </ng-template>

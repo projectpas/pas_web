@@ -42,12 +42,12 @@ import { SalesQuoteService } from '../../../../services/salesquote.service';
 
 export class WorkOrderAddComponent implements OnInit {
     workOrderModule = "WorkOrder";
-    subWorkOrderModule = "SubWorkOrder"
+    subWorkOrderModule = "SubWorkOrder";
     breadcrumbs: MenuItem[];
     @Input() isView: boolean = false;
     @Input() isEdit: boolean = false;
     @Input() workOrderTypes;
-    @Input() workOrderStatusList;
+    @Input() workOrderStatusList:any=[];
     @Input() creditTerms;
     @Input() jobTitles;
     @Input() employeesOriginalData;
@@ -286,7 +286,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.moduleName = 'Work Order';
     }
 
-    async ngOnInit() {
+  ngOnInit() {
         this.wflowitems = [
             {label: 'View WF', command: () => {
                 this.showWorkflowLabel='View WF';
@@ -343,7 +343,7 @@ export class WorkOrderAddComponent implements OnInit {
            
         }
         if (!this.isSubWorkOrder) {
-            this.workOrderStatus();
+            this.workOrderStatus('onload');
         }
         if (!this.isEdit && this.workOrderGeneralInformation) {
             this.workOrderGeneralInformation.partNumbers.forEach(
@@ -381,6 +381,9 @@ setTimeout(() => {
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        if(changes.workOrderStatusList){
+            this.workOrderStatusList=this.workOrderStatusList
+        }
         if (changes.subWoMpnGridUpdated) {
             this.subWoMpnGridUpdated = changes.subWoMpnGridUpdated.currentValue;
              if (this.subWoMpnGridUpdated == true) {
@@ -433,6 +436,7 @@ setTimeout(() => {
             if (this.mpnDropdownList && this.mpnDropdownList.length != 0) {
                 this.changeofMPNForSubWo(this.mpnDropdownList[0].value);
                 this.selectedMPNSubWo = this.mpnDropdownList[0].value;
+             
             }
         },
             err => {
@@ -441,6 +445,7 @@ setTimeout(() => {
     }
 
     changeofMPNForSubWo(data) {
+        this.workOrderService.partNumberData=data;
         this.workFlowId =  (data.workFlowId !=0 || data.workFlowId !=null )? data.workFlowId: 0;
         this.subWOPartNoId = data.subWOPartNoId;
         this.workOrderPartNumberId = data.subWOPartNoId;
@@ -460,9 +465,13 @@ setTimeout(() => {
     modifyWorkorderdata() { 
         if (!this.isEdit) { // create new WorkOrder
             this.isEditLabor = true;
-            if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
-                this.getCustomerWarningsList();
-            }
+//             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
+//                 // this.getCustomerWarningsList();
+//                 // this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
+//                 if (this.workOrderGeneralInformation.customerDetails && this.workOrderGeneralInformation.customerDetails.customerId) {
+//                     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId);
+//                 }
+//             }
             this.addMPN();
             this.getAllGridModals();
             this.getEmployeeData();
@@ -483,14 +492,15 @@ setTimeout(() => {
                 }
             )
         } else { // edit WorkOrder
-            if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
+            if (this.recCustomerId != 0 || this.recCustomerId != undefined || this.recCustomerId != null) {
                 // this.getCustomerWarningsList();
+                this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
             }
             //for tat calculation get data
             this.isEditWorkordershowMsg = true;
-            if (this.isView == false && (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null)) {
-                this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
-            }
+            // if (this.isView == false && (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null)) {
+            //     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
+            // }
             this.getWorkOrderDatesFoRTat();
             // check this in differnt scenarios
             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
@@ -506,6 +516,9 @@ setTimeout(() => {
                     this.workFlowWorkOrderId=this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
                 // }
                 // this.gridTabChange('materialList');
+            }
+            if(this.workOrderGeneralInformation.isSinglePN==true){
+                this.workOrderService.partNumberData=this.workOrderGeneralInformation.partNumbers[0];
             }
             this.gridActiveTab = 'materialList'
             this.gridTabChange('materialList');
@@ -784,6 +797,8 @@ setTimeout(() => {
 
 
     getMaterialListHandle() {
+        this.gridActiveTab == '';
+        this.gridActiveTab == 'materialList';
         if (this.isSubWorkOrder == true) {
             this.getMaterialListByWorkOrderIdForSubWO();
         } else {
@@ -921,6 +936,11 @@ setTimeout(() => {
         this.workOrderGeneralInformation.partNumbers=[];
         const workOrderSettingsAdded = new WorkOrderPartNumber();
         this.workOrderGeneralInformation.partNumbers.push(workOrderSettingsAdded);
+        this.array =[];
+
+        var index = 0;
+        this['cmmPublicationList'+index] =[];
+        this['dynamicWorkflowList'+index] =[];
     }
     // added new MPN
     addMPN() {
@@ -1011,7 +1031,7 @@ setTimeout(() => {
         this.modal.close();
     }
 
-    workOrderStatus() {
+    workOrderStatus(from) {
         this.allValuesSame = this.workOrderGeneralInformation.partNumbers.every((val, i, arr) => val.workOrderStatusId === arr[0].workOrderStatusId);
         if (this.allValuesSame) {
             this.statusId = this.workOrderGeneralInformation.partNumbers[0].workOrderStatusId;
@@ -1020,20 +1040,24 @@ setTimeout(() => {
             this.statusId = 1;
             this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
         }
-        if (this.workOrderStatusList && this.workOrderStatusList.length > 0) {
-            this.workOrderStatusList.forEach(element => {
-                if (element.value == this.statusId) {
-                    this.workOrderNumberStatus = element.label;
-                    this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
-                }
-            });
-        } else {
-            this.workOrderNumberStatus = 'Open';
-            this.workOrderGeneralInformation.workOrderStatusId = 1;
-        }
-        if(this.workOrderNumberStatus=='Close'){
-            this.isView=true;
-        }
+setTimeout(() => {
+    if (this.workOrderStatusList && this.workOrderStatusList.length > 0) {
+        this.workOrderStatusList.forEach(element => {
+            if (element.value == this.statusId) {
+                this.workOrderNumberStatus = element.label;
+                this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
+            }
+        });
+    } else {
+        this.workOrderNumberStatus = 'Open';
+        this.workOrderGeneralInformation.workOrderStatusId = 1;
+    }
+    if(from=='onload'){
+    if(this.workOrderNumberStatus=='Closed'){
+        this.isView=true;
+    }
+}
+}, 1000);
     }
     dismissModelTask(){
         $('#confirmationSave').modal('hide');
@@ -1192,13 +1216,23 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         };
 
         if (this.isEdit && this.isRecCustomer === false) {
-            this.isSpinnerVisible = true;            
+            this.isSpinnerVisible = true;  
+            // console.log("status Id",this.statusId); 
+            // console.log("data",data1); 
+            // console.log("data",this.workOrderNumberStatus) 
+            // if(this.workOrderNumberStatus=='Closed'){
+            //     data1.workOrderStatusId=this.statusId
+            // }
             this.workOrderService.updateNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
                 result => {
                     this.isValidationfailed=false
                     this.isSpinnerVisible = false;
                     this.disableSaveForEdit = true;
                     this.disableSaveForPart = true;
+                    // this.workOrderStatus();
+                    if(this.workOrderNumberStatus=='Closed'){
+                        this.isView=true;
+                    }
                     this.saveWorkOrderGridLogic(result, generalInfo);
                     this.alertService.showMessage(
                         this.moduleName,
@@ -1337,6 +1371,8 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         if (!this.workOrderGeneralInformation.isSinglePN) {
         }
         const { itemMasterId } = object;
+        this['cmmPublicationList'+index] =[];
+        this['dynamicWorkflowList'+index] =[];
         this.getPartPublicationByItemMasterId(currentRecord, itemMasterId,index);
         // currentRecord.masterPartId=object.itemMasterId;
         // getWorkFlowByPNandScope(workOrderPartNumber);
@@ -1422,6 +1458,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     label: x.publicationId
                 }
             });
+            this['cmmPublicationList'+index]=[]
             this['cmmPublicationList'+index]=this.cmmList;
             if (this.cmmList &&  this['cmmPublicationList' + index].length > 0) {
                 currentRecord.cMMId =  this['cmmPublicationList' + index][0].value;
@@ -1446,7 +1483,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 this.workOrderGeneralInformation.partNumbers[index].condition = element.label;
             }
         });
-        this.workOrderStatus();
+        this.workOrderStatus('onCondition');
     }
 
     selectedStage(value, currentRecord, index,) {
@@ -1456,7 +1493,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 this.workOrderGeneralInformation.partNumbers[index].workOrderStatusId = element.workOrderStausId;
             }
         });
-        this.workOrderStatus();
+        this.workOrderStatus('onStage');
     }
 
     filterRevisedPartNumber(event, index) {
@@ -1508,7 +1545,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     value: x.workFlowId
                 }
             })
-            
+            this['dynamicWorkflowList' + index] =[];
             this['dynamicWorkflowList' + index]=this.workFlowList;
             if(this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length!=0){
                 this.workFlowId=this.workFlowList[0].value;
@@ -1580,6 +1617,9 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
     changeofMPN(data) {
         this.quotestatusofCurrentPart = data.quoteStatus;
         this.selectedPartNumber = data;
+        // if(this.workOrderGeneralInformation.isSinglePN==true){
+            this.workOrderService.partNumberData=data.datas;
+        // }
         this.mpnGridData = data.datas;
         this.workFlowId = data.workflowId,
             this.workFlowWorkOrderId = data.workOrderWorkFlowId;
@@ -1751,6 +1791,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     }
                     else {
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
+                   
                     }
                     // if (this.workFlowId == null) {
                         this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId;
@@ -1846,6 +1887,11 @@ this.getNewMaterialListByWorkOrderId();
                     this.handleError(err);
                 })
         }
+    }
+    isSubWorkorderCheck(data){
+if(data==true){
+    this.isSubWorkOrder = true;   
+}
     }
   //new form for material list
     updateMaterials(data){
@@ -1957,6 +2003,44 @@ this.getNewMaterialListByWorkOrderId();
                 })
         }
     }
+
+    getMaterialListByWorkOrderIdForSubWO() {
+        this.workOrderMaterialList = [];
+        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            // if (res.length > 0) {
+            //     res.forEach(element => {
+            //         this.getValues(element)
+            //         element.isShowPlus = true;
+            //     });
+            //     this.workOrderMaterialList = res;
+            //     this.materialStatus = res[0].partStatusId;
+            // }
+            if (res && res.length > 0) {
+                res.forEach(element => {
+                    this.getValues(element)
+                    element.isShowPlus = true;
+                    if (element.defered == 'No') {
+                        element.defered = false;
+                    } else {
+                        element.defered = true;
+                    }
+                });
+                this.workOrderMaterial=[];
+                this.workOrderMaterial = res;
+                this.workOrderMaterial.forEach(element => {
+                   element.currency=element.currency ;
+                   element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                   element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                });
+                this.materialStatus = res[0].partStatusId;
+                this.salesQuoteService.selectedParts = this.workOrderMaterial;
+                this.filterParts();
+            }
+        },
+            err => {
+                this.handleError(err);
+            })
+    }
     summaryParts:any=[];
     totalRecords: number;
     pageLinks: any;
@@ -1973,7 +2057,15 @@ this.getNewMaterialListByWorkOrderId();
                 uniqueParts[i].childParts = [];
             }
           });
+          uniqueParts.map((x,xindex)=>{
+             if(x.childParts && x.childParts.length !=0){
+                x.childParts.map((y,yindex)=>{
+                    y.line = (xindex + 1) + '.' + (yindex + 1)
+                })
+             } 
+          })
           this.workOrderMaterialList = uniqueParts;
+// console.log("material list",this.workOrderMaterialList)
         }
         this.totalRecords = this.workOrderMaterialList.length;
         this.pageLinks = Math.ceil(
@@ -2308,6 +2400,7 @@ this.getNewMaterialListByWorkOrderId();
     } 
 
     formWorkerOrderLaborJson(data) {
+        // console.log("data ",data)
         if (this.isSubWorkOrder == true) {
             this.result = {
                 "subWorkOrderLaborHeaderId": data['subWorkOrderLaborHeaderId'] ? data['subWorkOrderLaborHeaderId'] : 0,
@@ -2332,7 +2425,8 @@ this.getNewMaterialListByWorkOrderId();
                 "labourMemo": data['labourMemo'],
                 "LaborList": [
                 ],
-                "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
+                "WorkOrderQuoteTask": data['WorkOrderQuoteTask'],
+
             }
             data.WorkOrderQuoteTask.forEach(element => {
                 element.subWorkOrderLaborId = element.subWorkOrderLaborId ? element.subWorkOrderLaborId : 0;
@@ -2367,6 +2461,11 @@ this.getNewMaterialListByWorkOrderId();
             for (let labSubList of data.workOrderLaborList[labList]) {
                 if (labSubList && labSubList['expertiseId'] != null){
                     labSubList.masterCompanyId=this.currentUserMasterCompanyId;
+                    // labSubList.burdenRateAmount=
+                    // labSubList.directLaborOHCost
+                    // labSubList.directLaborOHCost
+                    // labSubList.directLaborOHCost
+                    // labSubList.directLaborOHCost
                     this.result.LaborList.push(labSubList);
                     this.result.expertiseId=labSubList['expertiseId'];
                     this.result.employeeId=labSubList['employeeId'];
@@ -2377,8 +2476,12 @@ this.getNewMaterialListByWorkOrderId();
     }
     saveReservedPartorIssue(alternatePartData) {  
         alternatePartData.masterCompanyId=alternatePartData.masterCompanyId ? alternatePartData.masterCompanyId : this.currentUserMasterCompanyId;
+        this.gridActiveTab == '';
+        this.gridActiveTab == 'materialList';
         if (this.isSubWorkOrder == true) {
+            this.isSpinnerVisible=true;
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible=false;
                 this.alertService.showMessage(
                     this.moduleName,
                     'Parts Data Updated successfully',
@@ -2387,10 +2490,13 @@ this.getNewMaterialListByWorkOrderId();
                 this.getMaterialListByWorkOrderIdForSubWO();
             },
                 err => {
+                    this.isSpinnerVisible=false;
                     this.handleError(err);
                 })
         } else {
+            this.isSpinnerVisible=true;
             this.workOrderService.saveReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible=false;
                 this.alertService.showMessage(
                     this.moduleName,
                     'Parts Data Updated successfully',
@@ -2402,6 +2508,7 @@ this.getNewMaterialListByWorkOrderId();
                 this.getNewMaterialListByWorkOrderId();
             },
                 err => {
+                    this.isSpinnerVisible=false;
                     this.handleError(err);
                 })
         }
@@ -2494,6 +2601,9 @@ this.getNewMaterialListByWorkOrderId();
                         employeeId: {employeeId:this.data.employeeId,name:this.data.employeeName,value:this.data.employeeId,label:this.data.employeeName},
                         dataEnteredBy: {value:this.data.dataEnteredBy,label:this.data.dataEnteredByName},
                     };
+                    // console.log("labor data",this.workOrderLaborList);
+                    // if(this.is)
+                    this.getMarkup();
                     this.labor.hoursorClockorScan = res.hoursorClockorScan;
                     this.labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0) ? 'workFlow' : (res.workOrderHoursType == 1) ? 'specificTasks' : 'workOrder';
                     this.labor.totalWorkHours = res.totalWorkHours;
@@ -2525,8 +2635,15 @@ this.getNewMaterialListByWorkOrderId();
                                     taskData['endDate'] = labList['endDate'] ? new Date(labList['endDate']) : null;
                                     taskData['hours'] = labList['hours'];
                                     taskData['adjustments'] = labList['adjustments'];
-                                    taskData['adjustedHours'] = labList['adjustedHours'];
+                                    taskData['adjustedHours'] = labList['adjustedHours'].toFixed(2);
                                     taskData['memo'] = labList['memo'];
+
+                                    taskData['burdaenRatePercentageId'] = labList['burdaenRatePercentageId'];
+                                    taskData['burdenRateAmount'] = labList['burdenRateAmount'] ? formatNumberAsGlobalSettingsModule(labList['burdenRateAmount'], 2) : '0.00';
+                                    taskData['directLaborOHCost'] = labList['directLaborOHCost'] ? formatNumberAsGlobalSettingsModule(labList['directLaborOHCost'], 2) : '0.00';
+                                    taskData['totalCost'] = labList['totalCost'] ? formatNumberAsGlobalSettingsModule(labList['totalCost'], 2) : '0.00';
+                                    taskData['totalCostPerHour'] = labList['totalCostPerHour'] ? formatNumberAsGlobalSettingsModule(labList['totalCostPerHour'], 2) : '0.00';
+
                                     if (taskData.hours) {
                                         let hours = taskData.hours.toFixed(2);
                                         taskData['totalHours'] = hours.toString().split('.')[0];
@@ -2550,9 +2667,18 @@ this.getNewMaterialListByWorkOrderId();
             },
                 err => {
                     this.workOrderLaborList=[];
+                    this.getMarkup();
                     this.handleError(err);
                 })
         }
+        console.log("this.data",this.data)
+        // console.log("this.data",Object.keys(this.data).length)
+        // setTimeout(() => {
+        //    if(Object.keys(this.data).length == 0){
+        //        console.log("this.data",this.data)
+        //     this.getMarkup();
+        //    }
+        // }, 500);
         if (!this.isSubWorkOrder) {
             if (this.workOrderGeneralInformation.isSinglePN == true) {
                 this.labor['employeeId'] = this.workOrderGeneralInformation.partNumbers[0]['technicianId'];
@@ -2566,7 +2692,27 @@ this.getNewMaterialListByWorkOrderId();
             }
         }
     }
+    markupList:any=[];
+    getMarkup(value?) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            // this.setEditArray.push(this.currentAsset.tangibleClassId ? this.currentAsset.tangibleClassId : 0);
 
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        // console.log("add form")
+        // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+            if (res && res.length != 0) { 
+                this.markupList = res;
+                this.markupList.sort((n1,n2) => n1.label - n2.label);
+            }
+        },err => {
+             this.errorHandling(err);
+            })
+    }
     otherOptionTabSelected(value) {
         this.subTabWorkFlow = '';
         this.subTabMainComponent = '';
@@ -3282,10 +3428,14 @@ this.getNewMaterialListByWorkOrderId();
                 }
 
             });
-            if (this.enumcall = true) {
+           if (this.enumcall = true) {
                 if (this.workOrderGeneralInformation.customerDetails && this.workOrderGeneralInformation.customerDetails.customerId) {
                     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId);
                 }
+                if (!this.isEdit && this.workOrderGeneralInformation.customerId && this.workOrderGeneralInformation.customerId.customerId) {
+                    this.customerWarnings(this.workOrderGeneralInformation.customerId.customerId);
+                }
+
             }
         },
             err => { 
@@ -3294,7 +3444,7 @@ this.getNewMaterialListByWorkOrderId();
     }
 
     customerWarnings(customerId) {
-        if (this.customerWarningListId == undefined) {
+       if (this.customerWarningListId == undefined) {
             this.getCustomerWarningsList();
             this.enumcall = true;
         } else {
@@ -3381,7 +3531,9 @@ this.getNewMaterialListByWorkOrderId();
     }
 
     showAlertMessage() {
+        if(!this.isView && !this.isEdit){
         $('#warnRestrictMesg').modal("show");
+        }
     }
     showAlertWarningMessage() {
         $('#warningMesg').modal("show");
@@ -3453,22 +3605,7 @@ this.getNewMaterialListByWorkOrderId();
     errorHandling(err) {
         this.handleError(err);
     }
-    getMaterialListByWorkOrderIdForSubWO() {
-        this.workOrderMaterialList = [];
-        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            if (res.length > 0) {
-                res.forEach(element => {
-                    this.getValues(element)
-                    element.isShowPlus = true;
-                });
-                this.workOrderMaterialList = res;
-                this.materialStatus = res[0].partStatusId;
-            }
-        },
-            err => {
-                this.handleError(err);
-            })
-    }
+
     handleError(err) {
         this.isSpinnerVisible = false;
     }
@@ -3717,6 +3854,8 @@ this.woPartId=rowData.id;
         if (ev.target.checked) {
             $('#workFlowTransfer').modal('show'); 
 
+        }else{
+            $('#workFlowTransfer').modal('show');   
         }
         this.workFlowId=currentRecord.workflowId;
         this.workOrderId=this.workOrderId ? this.workOrderId :currentRecord.workOrderId;
