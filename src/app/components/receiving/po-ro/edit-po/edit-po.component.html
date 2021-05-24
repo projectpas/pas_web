@@ -240,7 +240,7 @@
                                 <th>Manufacturer</th>
                                 <th>Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
                                 <th>UOM</th>
-                                <th>Stock Type</th>
+                                <th colspan="2">Stock Type</th>
                                 <th style="min-width:70px !important">Qty Ord</th>
                                 <th style="min-width:70px !important">Discount</th>
                                 <th>Unit Cost <span _ngcontent-c22="" class="clr-red">*</span></th>
@@ -280,7 +280,7 @@
                                         </select>
                                     </td>
                                     <td>{{part.unitOfMeasure}}</td>
-                                    <td>{{part.stockType}}</td>
+                                    <td colspan="2">{{part.stockType}}</td>
                                     <td class="text-right">{{part.quantityOrdered}}</td>
                                     <td class="text-right">{{part.discountPerUnit}}</td>
                                     <td>
@@ -472,7 +472,7 @@
                                         <th>Serial Num</th>
                                         <th>Qty Received</th>
                                         <th style="min-width:70px !important">Back Ord</th>
-                                        <th style="min-width:70px !important">Receiver No.</th>
+                                        <th style="min-width:70px !important">Rec No.</th>
                                         <th>Unit Cost <span _ngcontent-c22="" class="clr-red">*</span></th>
                                         <th>Extended Cost</th>
                                         <th>WO </th>
@@ -511,7 +511,7 @@
                                         <th>Time Life</th>
                                         <th colspan="5">Cycles</th>
                                         <th colspan="5">Time</th>
-                                        <th colspan="4">Last</th>                                        
+                                        <th colspan="5">Last</th>                                        
                                         <th colspan="1"></th>
                                     </tr>
                                     <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
@@ -1125,6 +1125,7 @@
                                                         <div class="col-md-5"><input class="form-control time-remaining-input" placeholder="MM" [disabled]="!SL.isEnabled" type="number" pInputText pKeyFilter="hex" [(ngModel)]="part.timeLife[stockline_row_index].lastSinceInspectionMin" (change)="onChangeTimeLifeMin('lastSinceInspectionMin', stockline_row_index)"></div>
                                                     </div>
                                                 </td>  
+                                                <td></td> 
                                                 <td></td>                                                 
                                             </ng-container>
                                                                                      

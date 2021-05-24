@@ -604,6 +604,7 @@
                             <label class="col-md-6">Ship Via: <span class="clr-red">*</span></label>
                             <select class="form-control col-md-6" title="Ship Via" name="shipVia"
                                 [(ngModel)]="addShipViaFormForShipping.shipViaId" (change)="shipViaChange()" required>
+                                <option value="0">-- Select --</option>
                                 <option *ngFor="let object of allShipViaInfo" [ngValue]="object.value">{{object.label}}
                                 </option>
                             </select>
