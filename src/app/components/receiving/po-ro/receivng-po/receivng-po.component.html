@@ -354,7 +354,9 @@
                                 <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
                             </tr>
                             <tr class="child-data splitship-child child-data-back" 
-                                *ngIf="!part.isParent">
+                                *ngIf="isSplitShipmentPart(part.purchaseOrderPartRecordId)">
+                                <!-- *ngIf="!part.isParent" -->
+                                
                                 <!-- [hidden]="!part.visible" -->
                                 <!-- <td>&nbsp;</td> -->
                                 <td>{{part?.itemMaster?.partNumber}}</td>
