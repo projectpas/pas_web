@@ -1408,6 +1408,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
     }
 
+    GetWorkorderReleaseEasaFromData(workOrderId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/GetWorkorderReleaseEasaFromData?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkorderReleaseEasaFromData(workOrderId));
+        });
+    }
+
     getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN): Observable<any> {
         return this.http.get(`${this.configurations.baseUrl}/api/workorder/searchstocklinefrompickticketpop?itemMasterId=${itemMasterId}&conditionId=${conditionId}&referenceId=${referenceId}&isMPN=${isMPN}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN));

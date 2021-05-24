@@ -657,6 +657,10 @@ export class WorkOrderService {
         return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId);
     }
 
+    GetWorkorderReleaseEasaFromData(workOrderId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseEasaFromData(workOrderId);
+    }
+
     getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN = false) {
         return this.workOrderEndpointService.getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN);
     }
