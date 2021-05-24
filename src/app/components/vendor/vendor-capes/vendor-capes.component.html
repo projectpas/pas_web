@@ -120,7 +120,7 @@
         <tbody>
           <tr class="table-parent-data" *ngFor="let field of fieldArray; let i = index">
             <!-- Part Number   -->
-            <td>
+            <td class="pn-width">
               <p-autoComplete appendTo="body" class="autocomp-customer-cstm" [(ngModel)]="field.partNumber"
                 name="partNumber{{i}}" field="partNumber" [suggestions]="itemMasterlistCollection"
                 (onChange)="onChangeItemMasterId(field)" (onSelect)="getPNDetailsById($event, field)"
@@ -130,7 +130,7 @@
               </p-autoComplete>
             </td>
             <!-- Part Decription * -->
-            <td>
+            <td class="pn-desc-width">
               <input type="text" style="width: 100%;" class="input-field-value" pInputText maxlength="100"
                 [(ngModel)]="field.partDescription" name="PartDescription{{i}}" disabled required />
             </td>

@@ -68,7 +68,7 @@
 			  <ng-template pTemplate="header" let-columns>
 				  <tr>
 					<th class="table-column-width table-header-text" >Capability Type</th>
-					<th class="table-header-text" style="width:600px !important" colspan="4">Managment Structure <span class="clr-red">*</span></th>
+					<th class="table-header-text" colspan="4">Managment Structure <span class="clr-red">*</span></th>
 					<th class="table-column-width table-header-text" *ngFor="let col of columns" pResizableColumn>
 					  {{ col.header }}
 					</th>
@@ -82,10 +82,10 @@
 				<ng-container> <!--*ngFor="let rowData of aircraftData; let row_no = index;"-->
 				  <tr>            
 					<td >{{ rowData.capailityTypeName }}</td>
-					<td style="width:150px">
+					<td>
 					  <p-dropdown
 					  placeholder="Select"
-					  appendTo='body' [baseZIndex]="9999"
+					  appendTo="body" [baseZIndex]="9999"
 					  name="company{{row_no}}"
 					  #companyId="ngModel"
 					  [options]="  getDynamicVariableData('legalEntityList',row_no)"
@@ -96,7 +96,7 @@
 					  [required]="true">
 					</p-dropdown>
 					</td>
-					<td class="table-width-150">
+					<td>
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -109,7 +109,7 @@
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td class="table-width-150">
+					<td>
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -122,7 +122,7 @@
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td class="table-width-150">
+					<td>
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"

@@ -1,3 +1,9 @@
+<nav aria-label="breadcrumb" *ngIf="!isView">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item" aria-current="page">{{moduleName}}</li>
+        <li class="breadcrumb-item active" aria-current="page" *ngIf="!isView">{{moduleName}} Approval Rule</li>
+    </ol>
+</nav>
 <div class="card new-card">
     <div class="card-header header">
         <div class="row">
@@ -676,7 +682,7 @@
                         <p class="view-text-editor" style="margin-bottom:5px">
                             <span class="label view-text-editor"><b>Memo: </b></span>
                             <span class="value">
-                                <p class="p-0 m-0 p_textEditor" [innerHTML]="creatingData.memo"> </p>
+                                <p class="p-0 m-0 p_textEditor" style="margin-top:-2px" [innerHTML]="creatingData.memo?creatingData.memo:'-'"> </p>
                             </span>
                         </p>
                         <p><span class="label"><b>Rule number <span class="clr-red">*</span> : </b></span>
