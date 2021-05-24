@@ -37,7 +37,7 @@
                                 (ngModelChange)="enableHeaderSave()" name="enforceApproval"></span>
                     </div>
                 </div>
-                <div class="col-md-2" *ngIf="!posettingModel.IsEnforceApproval">
+                <div class="col-md-1 effective-date-left" *ngIf="!posettingModel.IsEnforceApproval">
                     <div class="form-group">
                         <label>Effective Date </label>
                         <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar"
@@ -52,7 +52,7 @@
                 </div>
             </form>
         </div>
-        <hr>
+        <!-- <hr> -->
     </div>
     <ng-template #errorMessagePop let-c="close" let-d="dismiss">
         <div class="modal-header">
