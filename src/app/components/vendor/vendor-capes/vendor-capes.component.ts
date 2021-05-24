@@ -312,7 +312,7 @@ export class VendorCapesComponent implements OnInit {
 			this.arraylistCapabilityTypeId.push(0); }
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', true, 2000, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
-            this.CapesTypelistCollection = res;
+            this.CapesTypelistCollection = res;            
             this.isSpinnerVisible = false;
         },err => {
             const errorLog = err;
@@ -369,11 +369,15 @@ export class VendorCapesComponent implements OnInit {
         this.isSpinnerVisible = false;
     }
 
-    onChangeCapabilityTypeId(field)
-    {
-        var ObjCapabilityType = getObjectById('value', field.capabilityTypeId, this.CapesTypelistCollection);        
-        if(ObjCapabilityType != undefined && ObjCapabilityType !=  null)
-            field.capabilityTypeDescription = ObjCapabilityType.label;
+    onChangeCapabilityTypeId(field){
+        // var ObjCapabilityType = getObjectById('value', field.capabilityTypeId, this.CapesTypelistCollection);        
+        // if(ObjCapabilityType != undefined && ObjCapabilityType !=  null)
+        //     field.capabilityTypeDescription = ObjCapabilityType.label;
+
+        this.commonService.GetCapabilityTypeDescription(field.capabilityTypeId).subscribe(response => {			
+			field.capabilityTypeDescription = response.description;
+		},err => {			
+		});
     }
 
     onChangeCostAmt(field)

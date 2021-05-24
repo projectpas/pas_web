@@ -950,6 +950,12 @@ export class CommonService extends EndpointFactory {
     });
   }
 
+  GetCapabilityTypeDescription(capabilityId){
+    return this.http.get(`${this.configurations.baseUrl}/api/Common/getCapabilityTypeDescription?capabilityId=${capabilityId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.GetCapabilityTypeDescription(capabilityId));
+    });
+  }
+
   // getAllEditID(purchaseOrderId) {
   //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);
   // }
