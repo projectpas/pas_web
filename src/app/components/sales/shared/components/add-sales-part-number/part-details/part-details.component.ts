@@ -166,21 +166,26 @@ export class PartDetailsComponent implements OnChanges {
     if (this.selectedParts.length > 0) {
       let sameParts = [];
       if (isStock) {
-        if (!this.isEdit) {
-          sameParts = this.selectedParts.filter(part =>
-            //part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
-            part.partNumber == this.query.partSearchParamters.partNumber && part.conditionId == stockLineItem.conditionId
-          );
-        }
-        else
-        {
-          sameParts = this.selectedParts.filter(part =>
-            part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
-          );
+        sameParts = this.selectedParts.filter(part =>
+          part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == undefined
+        );
+
+        if (!(sameParts && sameParts.length > 0)) {
+          if (!this.isEdit) {
+            sameParts = this.selectedParts.filter(part =>
+              //part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
+              part.partNumber == this.query.partSearchParamters.partNumber && part.conditionId == stockLineItem.conditionId
+            );
+          }
+          else {
+            sameParts = this.selectedParts.filter(part =>
+              part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
+            );
+          }
         }
       } else {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId// && part.methodType == "I"
+          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId
         );
       }
 
