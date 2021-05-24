@@ -229,10 +229,10 @@ export class SalesPartNumberComponent {
       { field: 'partDescription', header: 'PN Description', width: '200px' },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
-      { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
-      { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "84px" },
-      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "84px" },
-      { field: 'quantityAvailable', header: 'Qty Avail', width: "75px" },
+      { field: 'quantityRequested', header: 'Qty Req', width: "53px" },
+      { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "80px" },
+      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "82px" },
+      { field: 'quantityAvailable', header: 'Qty Avail', width: "58px" },
       { field: 'qtyOnHand', header: 'Qty on Hand', width: "75px" },
       { field: 'currencyDescription', header: 'Curr', width: "80px" },
       { field: 'fixRate', header: 'FX Rate', width: "80px" },
@@ -874,6 +874,7 @@ export class SalesPartNumberComponent {
     uniquePart.fixRate = parts[0].fixRate;
     uniquePart.freight = parts[0].freight;
     uniquePart.uom = parts[0].uomName;
+    uniquePart.methodType = parts[0].methodType;
     uniquePart.customerRef = parts[0].customerRef;
     uniquePart.pmaStatus = parts[0].pmaStatus;
     uniquePart.conditionId = parts[0].conditionId;
@@ -1001,14 +1002,14 @@ export class SalesPartNumberComponent {
   }
 
   getMarginPercentage(part) {
-    return ((((part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended)) / (part.grossSalePrice + Number(part.misc))) * 100).toFixed(2);
+    return ((((part.salesPriceExtended + Number(part.misc)) - (part.unitCostExtended)) / (part.salesPriceExtended + Number(part.misc))) * 100).toFixed(2);
   }
 
   getMarginAmount(part) {
-    return (part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
+    return (part.salesPriceExtended + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
   }
 
   getTotalRevenue(part) {
-    return (part.grossSalePrice + Number(part.misc)).toFixed(2);
+    return (part.salesPriceExtended + Number(part.misc)).toFixed(2);
   }
 }

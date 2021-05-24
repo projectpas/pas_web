@@ -319,9 +319,10 @@
                     </div>
                     <div class="col-md-3">
                         <div class="card management-structure-card">
-                            <div class="card-header management-structure-card-header">
-                                <h5 class="management-structure-header" style="color:#333">Management Structure <span
+                            <div class="card-header management-structure-card-header" style="padding:0px !important">
+                                <h5 class="management-structure-header" style="color:#000;margin-left:10px">Management Structure <span
                                         class="clr-red">*</span></h5>
+
                             </div>
                             <div class="card-body structure-card-body">
                                 <div class="form-group">
@@ -548,13 +549,13 @@
                         <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
                             <thead>
                                 <tr>
-                                    <th rowspan="2">Task Name</th>
-                                    <th rowspan="2">Rule No</th>
-                                    <th rowspan="2">Amount</th>
+                                    <th rowspan="2">Task Name<span class="clr-red">*</span></th>
+                                    <th rowspan="2">Rule No <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Amount <span class="clr-red">*</span></th>
                                     <th rowspan="2">Value</th>
-                                    <th rowspan="2">Lower Value</th>
-                                    <th rowspan="2">Upper Value</th>
-                                    <th>Memo</th>
+                                    <th rowspan="2">Lower Value <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Upper Value <span class="clr-red">*</span></th>
+                                    <th class="history-memo-width">Memo <span class="clr-red">*</span></th>
                                     <th colspan="4" rowspan="2">Management Structure</th>
                                     <th rowspan="2">Approver</th>
                                     <th rowspan="2">Created Date</th>
@@ -715,10 +716,11 @@
                         </p>
                     </div>
                     <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-header" style="padding: .1rem 3rem;">
-                                <h5 class="management-structure-header" style="color:#333">Management Structure <span
+                        <div class="card management-structure-card">
+                            <div class="card-header management-structure-card-header" style="padding:0px !important">
+                                <h5 class="management-structure-header" style="color:#000;margin-left:10px">Management Structure <span
                                         class="clr-red">*</span></h5>
+
                             </div>
                             <div class="card-body structure-card-body">
                                 <div class="form-group">
