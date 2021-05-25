@@ -229,10 +229,10 @@ export class SalesPartNumberComponent {
       { field: 'partDescription', header: 'PN Description', width: '200px' },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
-      { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
-      { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "84px" },
-      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "84px" },
-      { field: 'quantityAvailable', header: 'Qty Avail', width: "75px" },
+      { field: 'quantityRequested', header: 'Qty Req', width: "53px" },
+      { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "80px" },
+      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "82px" },
+      { field: 'quantityAvailable', header: 'Qty Avail', width: "58px" },
       { field: 'qtyOnHand', header: 'Qty on Hand', width: "75px" },
       { field: 'currencyDescription', header: 'Curr', width: "80px" },
       { field: 'fixRate', header: 'FX Rate', width: "80px" },
@@ -505,6 +505,21 @@ export class SalesPartNumberComponent {
         this.query.partSearchParamters.quantityRequested = this.part.quantityRequested;
         this.query.partSearchParamters.quantityToQuote = this.part.quantityToBeQuoted;
         this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
+
+        let parentLine = this.summaryParts.filter(a => a.partId == this.part.itemMasterId && a.conditionId == this.part.conditionId);
+
+        if (parentLine) {
+          this.query.partSearchParamters.quantityToQuote = parentLine[0].quantityToBeQuoted;
+          this.query.partSearchParamters.quantityAlreadyQuoted = parentLine[0].quantityAlreadyQuoted;
+          this.part['quantityToQuote'] = parentLine[0].quantityToBeQuoted;
+          
+          if ((parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis'])) > 0)
+            this.part['quantityAlreadyQuoted'] = parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis']);
+          else
+            this.part['quantityAlreadyQuoted'] = Number(this.part['quantityFromThis']);
+
+          this.part['quantityToBeQuoted'] = (this.part.quantityRequested - parentLine[0].quantityAlreadyQuoted) + Number(this.part['quantityFromThis']);
+        }
       });
       this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
     }
@@ -874,6 +889,7 @@ export class SalesPartNumberComponent {
     uniquePart.fixRate = parts[0].fixRate;
     uniquePart.freight = parts[0].freight;
     uniquePart.uom = parts[0].uomName;
+    uniquePart.methodType = parts[0].methodType;
     uniquePart.customerRef = parts[0].customerRef;
     uniquePart.pmaStatus = parts[0].pmaStatus;
     uniquePart.conditionId = parts[0].conditionId;
@@ -1001,14 +1017,14 @@ export class SalesPartNumberComponent {
   }
 
   getMarginPercentage(part) {
-    return ((((part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended)) / (part.grossSalePrice + Number(part.misc))) * 100).toFixed(2);
+    return ((((part.salesPriceExtended + Number(part.misc)) - (part.unitCostExtended)) / (part.salesPriceExtended + Number(part.misc))) * 100).toFixed(2);
   }
 
   getMarginAmount(part) {
-    return (part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
+    return (part.salesPriceExtended + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
   }
 
   getTotalRevenue(part) {
-    return (part.grossSalePrice + Number(part.misc)).toFixed(2);
+    return (part.salesPriceExtended + Number(part.misc)).toFixed(2);
   }
 }

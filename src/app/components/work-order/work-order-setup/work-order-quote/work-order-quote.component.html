@@ -492,7 +492,9 @@
                                          {{workOrderPart['levelCode4'] }}
                                      </label>
                                  </td>
-                                 <td class="flex_d table-actions-column1 mpn-table-buttons">
+                                 <!-- <td class="flex_d table-actions-column1 mpn-table-buttons"> -->
+                  
+                                 <td class="table-actions-column woq-actions-width" >
                                      <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
                      <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                  </td>

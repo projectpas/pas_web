@@ -494,7 +494,9 @@ setTimeout(() => {
         } else { // edit WorkOrder
             if (this.recCustomerId != 0 || this.recCustomerId != undefined || this.recCustomerId != null) {
                 // this.getCustomerWarningsList();
+                if(this.workOrderGeneralInformation && this.workOrderGeneralInformation.customerDetails){
                 this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
+                }
             }
             //for tat calculation get data
             this.isEditWorkordershowMsg = true;

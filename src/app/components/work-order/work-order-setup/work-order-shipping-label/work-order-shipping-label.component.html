@@ -1,0 +1,207 @@
+            
+   <div id="ShippingSlipDiv" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xlg">
+        <div class="modal-content" id="soShippingLabel">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title warning_color"></h4>
+            </div>
+            <div class="modal-body">
+                <form id="" name="" action="#" method="post" onsubmit="return false;">
+                    <div class="image">
+                        <div style="padding: 0; margin: 0;">
+                            <div>
+                                <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                                    <div *ngIf="!isPrint" class="pick-ticket-header"
+                                        style="margin-bottom: 15px; display: flex;">
+                                        <h4 style="width: 130px">Service Class:</h4>
+                                        <select class="form-control" style="width: 95px;border:1px solid black !important"
+                                            name="serviceClass" [(ngModel)]="this.workOrderShipping.serviceClass" required>
+                                            <option value="First Class">First Class</option>
+                                            <option value="Priority">Priority</option>
+                                        </select>
+                                    </div>
+                                    <div *ngIf="isPrint" class="pick-ticket-header"
+                                        style="margincu-bottom: 15px; display: flex;">
+                                        <h4 style="width: 130px">Service Class:</h4>
+                                        <h4 style="width: 95px">{{this.workOrderShipping.serviceClass}}</h4>
+                                    </div>
+                                    <div class="first-block">
+                                        <!-- <div class="col-sm-4 first-block-4"> -->
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label bold-word"><b>Cust Ref:</b></label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.customerRef}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Ship Date:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.shipDate | date:'medium'}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label bold-word"><b>Origin:</b></label>
+                                            <label class="col-sm-8 first-block-label" disabled></label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Company:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.originCompanyName}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Address1:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.originAddress1}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">City:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.originCity}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">State/Prov, Postal Code:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.originState}},
+                                                {{this.workOrderShipping.originPostalCode}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Country:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.originCountry}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label bold-word"><b>Ship To:</b></label>
+                                            <label class="col-sm-8 first-block-label" disabled></label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Company:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.shipToComanyName}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Site:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.shipToSiteName}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Address1:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.shipToAddress1}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">City:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.shipToCity}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">State/Prov,Postal Code:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.shipToState}},
+                                                {{this.workOrderShipping.shipToPostalCode}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Country:</label>
+                                            <label class="col-sm-8 first-block-label"
+                                                disabled>{{this.workOrderShipping.shipToCountry}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Phone:</label>
+                                            <label class="col-sm-8 first-block-label" style="width:80%" disabled>
+                                                {{this.workOrderShipping.shipToPhone}}</label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12 sold-block-div">
+                                            <label class="col-sm-3 first-block-label">Attn:</label>
+                                            <label class="col-sm-8 first-block-label" style="width:80%" disabled>
+                                                {{this.workOrderShipping.shipToAttention}}</label>
+                                        </div>
+                                        <br />
+        
+                                        <img src="{{this.workOrderShipping.shippingLabelBarcode}}"
+                                            style="height:100px;width:60%" alt="barcode" class="image" />
+        
+                                        <!-- </div> -->
+                                    </div>
+                                    <div class="second-block">
+                                        <!-- <div class="second-block-div">
+                                            <label class="col-sm-4 second-block-label">SO Num</label>
+                                            <label class="col-sm-4 first-block-label" style="width:30%"
+                                                disabled>{{this.workOrderShipping.salesOrderNumber}}</label>
+                                        </div> -->
+                                        <div class="form-group second-block-div">
+                                            <label class="col-sm-4 second-block-label">WO Num</label>
+                                            <label style="background:#fff !important; width: 160px;height:20px"
+                                                name="salesOrderNumber" disabled>{{this.workOrderShipping.workOrderNumber}}
+                                            </label>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12  form-group second-block-div">
+                                            <!-- <label>Weight
+                                                <label class="col-sm-4 first-block-label input-field-border"
+                                                    disabled>{{this.workOrderShipping.weight}}</label>
+                                                UOM</label>
+                                                <label class="col-sm-4 first-block-label input-field-border"
+                                                    disabled>{{this.workOrderShipping.uom}}</label> -->
+                                            <label class="col-sm-2">Weight</label>
+                                            <label class="col-sm-3" name="weight"
+                                                style="background:#fff !important; padding-left: 10px !important;height:15px;"
+                                                disabled>{{this.workOrderShipping.weight}}</label>
+                                            <label class="col-sm-2" style="margin-left:10px">UOM </label>
+                                            <label class="col-sm-3" name="uom"
+                                                style="background:#fff !important; padding-left: 10px !important;height:15px;"
+                                                disabled>{{this.workOrderShipping.uom}}</label>
+                                        </div>
+                                        <br />
+                                    </div>
+                                    <div class="clear"></div>
+        
+                                    <div class="clear"></div>
+        
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="height:100px"> &nbsp;</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+            </div>
+          </div>
+         
+    </div>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+
+            
+

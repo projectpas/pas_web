@@ -14,7 +14,7 @@ import { CommonService } from '../../../../../services/common.service';
     selector: 'app-common-teardown',
     templateUrl: 'common-teardown.component.html',
     styleUrls: ['common-teardown.component.scss']
-})
+}) 
 
 export class CommonTeardownComponent implements OnInit {
     private onDestroy$: Subject<void> = new Subject<void>();
@@ -60,7 +60,11 @@ export class CommonTeardownComponent implements OnInit {
     technicianList: any = [];
     inspectionList: any = [];
     TearDownReasons: any;
-
+    moduleNameeRemoval:any='RemovalReasons';
+    moduleNameePrellinary:any='PreliinaryReview';
+    moduleNameePreAssesment:any='Pre-AssessmentResults';
+    moduleNameeTearDescovery:any='TeardownDiscovery';
+    moduleNameePreAssembly:any='PreAssemblyInspection';
     constructor(private workOrderService: WorkOrderService, private authService: AuthService,
         private alertService: AlertService, private commonService: CommonService,) {
     }
@@ -135,11 +139,12 @@ export class CommonTeardownComponent implements OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        console.log("jobtitles",this.jobTitles)
         if (this.getsaveTearDownData && this.getsaveTearDownData.length != 0 && this.getsaveTearDownData != null) {
             this.showViewTemplate = true;
           var iscall= false;  
-
-        const TechnicianId = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
+        //   jobTitleCode
+        const TechnicianId = getValueByFieldFromArrayofObject('empExpCode', 'TECHNICIAN', this.jobTitles);
         if (TechnicianId !== undefined) 
         {
             if(this.arrayTechnicianlist.length == 0) 
@@ -197,13 +202,13 @@ export class CommonTeardownComponent implements OnInit {
                     }
                 }		
             }	
-                 this.commonService.autoCompleteDropdownsEmployeeByJobTitle('',TechnicianId[0].jobTitleId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
+                 this.commonService.autoCompleteDropdownsEmployeeByExpertise('',TechnicianId[0].employeeExpertiseId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                     this.technicianOriginalList = res; 
                     this.technicianList = this.technicianOriginalList;
                 }, error => error => this.saveFailedHelper(error))
         }
-
-        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'INSPECTOR', this.jobTitles);
+        //  jobTitleCode
+        const id = getValueByFieldFromArrayofObject('empExpCode', 'INSPECTOR', this.jobTitles);
         if (id !== undefined) 
         {
             if(this.arrayInsectorlist.length == 0) 
@@ -279,7 +284,7 @@ export class CommonTeardownComponent implements OnInit {
                     }
                 }	
             }	
-                 this.commonService.autoCompleteDropdownsEmployeeByJobTitle('',id[0].jobTitleId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
+                 this.commonService.autoCompleteDropdownsEmployeeByExpertise('',id[0].employeeExpertiseId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                     this.inspectorsOriginalList = res; 
                     this.inspectionList = this.inspectorsOriginalList; 
                     if(!iscall) 
@@ -334,13 +339,14 @@ export class CommonTeardownComponent implements OnInit {
     }
 
     async autoCompleteDropdownsEmployeeByJobTitleInspector(serachtext:string) {
-        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'INSPECTOR', this.jobTitles);
+        // jobTitleCode
+        const id = getValueByFieldFromArrayofObject('empExpCode', 'INSPECTOR', this.jobTitles);
         if (id !== undefined) 
         {
             if(this.arrayInsectorlist.length == 0) {			
                 this.arrayInsectorlist.push(0); 
             }	
-                await this.commonService.autoCompleteDropdownsEmployeeByJobTitle(serachtext,id[0].jobTitleId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
+                await this.commonService.autoCompleteDropdownsEmployeeByExpertise(serachtext,id[0].employeeExpertiseId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                     this.inspectorsOriginalList = res; 
                     this.inspectionList = this.inspectorsOriginalList;           
                 }, error => error => this.saveFailedHelper(error))
@@ -348,13 +354,14 @@ export class CommonTeardownComponent implements OnInit {
     }
     
     async autoCompleteDropdownsEmployeeByJobTitleTechnician(serachtext:string) {
-        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
+        // jobTitleCode
+        const id = getValueByFieldFromArrayofObject('empExpCode', 'TECHNICIAN', this.jobTitles);
         if (id !== undefined) 
         {
             if(this.arrayTechnicianlist.length == 0) {			
                 this.arrayTechnicianlist.push(0); 
             }	
-                await this.commonService.autoCompleteDropdownsEmployeeByJobTitle(serachtext,id[0].jobTitleId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
+                await this.commonService.autoCompleteDropdownsEmployeeByExpertise(serachtext,id[0].employeeExpertiseId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                     this.technicianOriginalList = res; 
                     this.technicianList = this.technicianOriginalList;           
                 }, error => error => this.saveFailedHelper(error))
@@ -461,16 +468,21 @@ export class CommonTeardownComponent implements OnInit {
                 this.TearDownReasons = res;
                 if (this.TearDownReasons) {
                     if (type == 1) {
+                        // this.moduleNameeRemoval='RemovalReasons';
                         this.saveTearDownData.workOrderRemovalReasons.memo = this.TearDownReasons.memo;
                     } else if (type == 2) {
                         this.saveTearDownData.workOrderPreliinaryReview.memo = this.TearDownReasons.memo;
                     } else if (type == 3) {
+                        // this.moduleNameePrellinary='PreliinaryReview';
                         this.saveTearDownData.workOrderPreAssmentResults.memo = this.TearDownReasons.memo;
                     } else if (type == 4) {
+                        // this.moduleNameePreAssesment='Pre-AssessmentResults';
                         this.saveTearDownData.workOrderDiscovery.memo = this.TearDownReasons.memo;
                     } else if (type == 5) {
+                        // this.moduleNameeTearDescovery='TeardownDiscovery';
                         this.saveTearDownData.workOrderPreAssemblyInspection.memo = this.TearDownReasons.memo;
                     } else if (type == 6) {
+                        // this.moduleNameePreAssembly='PreAssemblyInspection';
                         this.saveTearDownData.workOrderWorkPerformed.memo = this.TearDownReasons.memo;
                     } else if (type == 7) {
                         this.saveTearDownData.workOrderTestDataUsed.memo = this.TearDownReasons.memo;
@@ -498,6 +510,7 @@ export class CommonTeardownComponent implements OnInit {
             this.worOrderTearDownReasonListById(type);
         }
         if (type == 1) {
+            this.moduleNameeRemoval='RemovalReasons';
             source.reasonId = 0;
             source.memo = '';
         } else if (type == 2) {
@@ -508,18 +521,24 @@ export class CommonTeardownComponent implements OnInit {
             source.pmaParts = '';
             source.derRepairs = '';
         } else if (type == 3) {
+            this.moduleNameePrellinary='PreliinaryReview';
             source.memo = '';
             source.reasonId = 0;
             source.inspectorId = 0;
             source.inspectorDate = new Date();
         }
         else if (type == 4) {
+
+            this.moduleNameePreAssesment='Pre-AssessmentResults';
+
+
             source.reasonId = 0;
             source.memo = '';
             source.technicianId = 0;
             source.inspectorId = 0;
             source.technicianDate = new Date();
         } else if (type == 5) {
+            this.moduleNameeTearDescovery='TeardownDiscovery';
             source.reasonId = 0;
             source.memo = '';
             source.technicianId = 0;
@@ -528,6 +547,7 @@ export class CommonTeardownComponent implements OnInit {
             source.inspectorDate = new Date();
         }
         else if (type == 6) {
+            this.moduleNameePreAssembly='PreAssemblyInspection';
             source.memo = '';
             source.reasonId = 0;
             source.technicianId = 0;

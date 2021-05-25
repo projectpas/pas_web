@@ -112,7 +112,7 @@
                                 <label>Effective Date </label>
                                 <p-calendar class="calendar" [showIcon]="true" appendTo="body" name="effectiveDate"
                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                    [(ngModel)]="receivingForm.effectiveDate" #startDate="ngModel"></p-calendar>
+                                    [(ngModel)]="receivingForm.effectiveDate" #startDate="ngModel" [required]="receivingForm.isApprovalRule == true"></p-calendar>
                             </div>
                         </div>
                     </div>
