@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 declare var $ : any;
 import {AlertService} from '../../../../services/alert.service';
 import * as moment from 'moment';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { DatePipe } from "@angular/common";
 import { Table } from 'primeng/table';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -58,7 +58,7 @@ export class WorkOrderQuoteListComponent implements OnInit {
   filteredText: any = '';
   currentStatus = 'open';
 
-  constructor(private router: ActivatedRoute,      private authService: AuthService, private modalService: NgbModal, private datePipe: DatePipe,private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService:AlertService, private workorderMainService: WorkOrderService, private currencyService:CurrencyService, private cdRef: ChangeDetectorRef,  private route: Router) {}
+  constructor(private router: ActivatedRoute, private routs: Router, private authService: AuthService, private modalService: NgbModal, private datePipe: DatePipe,private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService:AlertService, private workorderMainService: WorkOrderService, private currencyService:CurrencyService, private cdRef: ChangeDetectorRef,  private route: Router) {}
   ngOnInit() {
     this.breadcrumbs = [
       { label: 'Work Order Quote' },
@@ -145,7 +145,7 @@ refreshList() {
     return arrDates;
   }
   edit(data){
-    window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${data.workOrderId}`, "_self");
+    this.routs.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${data.workOrderId}`);
   }
   view(data){
     this.woQuoteViewData = undefined;
