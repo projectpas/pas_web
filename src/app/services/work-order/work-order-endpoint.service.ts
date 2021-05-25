@@ -1329,6 +1329,14 @@ export class WorkOrderEndpointService extends EndpointFactory {
         //   });
     }
 
+    generatePackagingSlip(packagingSlip: any): Observable<any> {
+        return this.http
+          .post(`${this.configurations.baseUrl}/api/workOrder/SavePackingSlip`, JSON.stringify(packagingSlip), this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.generatePackagingSlip(packagingSlip));
+          });
+      }
+
 
     // api/workOrder/getworkorderChargesauditlist?workOrderChargesId=154
     // api/workOrder/workorderfreightauditlist?workOrderFreightId=154
@@ -1471,4 +1479,49 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getPickTicketListMainPart(workOrderId, workFlowWorkOrderId));
         });
     }
+
+    getPackagingSlipPrint(WorkOrderId: number, WorkOrderPartNoId: number, woPickTicketId: number, packagingSlipId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workorder/printPackagingSlip?WorkOrderId=${WorkOrderId}&WorkOrderPartNoId=${WorkOrderPartNoId}&woPickTicketId=${woPickTicketId}&packagingSlipId=${packagingSlipId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getPackagingSlipPrint(WorkOrderId, WorkOrderPartNoId, woPickTicketId, packagingSlipId));
+          });
+      }
+
+      getMultiShippingLabelPrint(multiShippingLabel: any): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workorder/getMultiShipingLabelForPrint`;
+        return this.http
+          .post<any>(URL, JSON.stringify(multiShippingLabel), this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getMultiShippingLabelPrint(multiShippingLabel));
+          });
+      }
+
+      getMultiPackagingSlipPrint(multiPackagingSlip: any): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workorder/printMultiplePackagingSlip`;
+        return this.http
+          .post<any>(URL, JSON.stringify(multiPackagingSlip), this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getMultiPackagingSlipPrint(multiPackagingSlip));
+          });
+      }
+
+      getShippingLabelPrint(workOrderId: number, workOrderPartId: number, woShippingId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workorder/getShipingLabelForPrint?workOrderId=${workOrderId}&workOrderPartId=${workOrderPartId}&woShippingId=${woShippingId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getShippingLabelPrint(workOrderId, workOrderPartId, woShippingId));
+          });
+      }
+
+      updateShipping(serviceClass: string, workOrderShippingId: number): Observable<any> {
+        let url: string = `${this.configurations.baseUrl}/api/workorder/updateServiceClass?serviceClass=${serviceClass}&workOrderShippingId=${workOrderShippingId}`;
+        return this.http
+          .put(url, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.updateShipping(serviceClass, workOrderShippingId));
+          });
+      }
 }
