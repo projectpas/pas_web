@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
     selector: 'app-work-order-complete-material-list',
     templateUrl: './work-order-complete-material-list.component.html',
     styleUrls: ['./work-order-complete-material-list.component.scss'],
-    animations: [fadeInOut]
+    animations: [fadeInOut] 
 })
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
 
@@ -54,7 +54,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() saveMaterialsData=new EventEmitter();
     @Output() updateMaterialsData=new EventEmitter();
-    
+    @Output() isSubWorkorder=new EventEmitter();
+    @Input() workOrderNumberStatus:any;
     statusId = null;
     ispickticket: boolean = false;
     minDateValue: Date = new Date();
@@ -239,6 +240,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
 
         this.getWorkOrderDefaultSetting();
+        this.setStatusForSubWo();
     }
 
     getWorkOrderDefaultSetting(value?) {
@@ -274,6 +276,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
     ngOnDestroy() {
         this.countDown = null;
+        // this.counter = 600;
+        // this.tick = 1000;
+        // this.countDown.unsubscribe();
     }
 
     closeAddNew() {
@@ -293,6 +298,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     setmaterialListForUpdate(data){
         this.show = false;
         this.updateMaterialsData.emit(data)
+        this.isSubWorkorder.emit(this.isSubWorkOrder)
         // this.addPartModal.close();
         // $('#addPart').modal("hide");
     }
@@ -922,7 +928,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         });
     }
-
+setStatusForSubWo(){
+    localStorage.setItem('woStatus', this.workOrderNumberStatus);
+}
     uncheckAltEqlPartCall(data) {
         this.parentMaterialList = [];
         data.map(x => {
@@ -1056,7 +1064,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         })
         if (event.target.checked == false) {
             if (this.statusId == 1) {
-                currentRecord.quantityReserved = currentRecord.quantityAvailable;
+                currentRecord.quantityReserved = currentRecord.qtyToBeReserved;
+                // currentRecord.quantityReserved = currentRecord.quantityAvailable;
             } else if (this.statusId == 2) {
                 currentRecord.quantityIssued = currentRecord.quantityAlreadyReserved;
             } else if (this.statusId == 3) {
@@ -1136,9 +1145,17 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 }
             })
         })
-        this.saveRIParts.emit(this.checkedParts);
-        this.isAllow = false;
+
+        // this.refreshData.emit();
+        this.checkActiveStatus = true;
+        if (this.countDown) {
+            this.countDown.unsubscribe();
+        }
+        this.countDown = null;
         this.savebutonDisabled = false;
+        this.isAllow = false;
+        this.saveRIParts.emit(this.checkedParts);
+
     }
 
     createNewPoWorkOrder(rowData) {
@@ -1175,6 +1192,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.savebutonDisabled = false;
         this.isAllow = false;
         this.releaseStock();
+        this.refreshData.emit();
     }
 
     startTimerplus() {
@@ -1231,6 +1249,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     editSubWo(currentRecord) {
         const subworkorderid = currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId : 0
         // window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
+        // &workOrderStatus=${this.workOrderNumberStatus}
         this.router.navigateByUrl(
             `workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`
           );
@@ -1259,7 +1278,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     createNewSubWo() {
         this.dismissModel();
         const subworkorderid = 0;
-        window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.subWoRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${this.subWoRecord.workOrderMaterialsId}`);
+        // window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.subWoRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${this.subWoRecord.workOrderMaterialsId}`);
+  
+        this.router.navigateByUrl(
+            `workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.subWoRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${this.subWoRecord.workOrderMaterialsId}`
+          );
+  
+  
     }
 
     addToExistingSubWo() {

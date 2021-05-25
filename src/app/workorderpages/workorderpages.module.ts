@@ -108,6 +108,12 @@ import { WoPartDetailsComponent } from '../components/work-order/work-order-setu
 import { WorkOrderPartPickticketComponent } from '../components/work-order/work-order-setup/work-order-part-pickticket/work-order-part-pickticket.component';
 import { WorkOrderPartPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-part-pickticketprint/work-order-part-pickticketprint.component';
 import { WoMarginComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-margin/wo-margin..component';
+import { WoReleaseFromComponent } from '../components/work-order/work-order-setup/wo-release-from/wo-release-from.component';
+import { WoReleaseEasaFromComponent } from '../components/work-order/work-order-setup/wo-release-easa-from/wo-release-easa-from.component';
+import { WorkOrderMultiPackagingLabelComponent } from '../components/work-order/work-order-setup/wo-order-multi-Packaging-Label/wo-order-multi-Packaging-Label.component';
+import { WorkOrderMultiShippingLabelComponent } from '../components/work-order/work-order-setup/work-order-multi-shipping-label/work-order-multi-shipping-label.component';
+import { WorkOrderPackagingLabelComponent } from '../components/work-order/work-order-setup/work-order-packaging-label/work-order-packaging-label.component';
+import { WorkOrderShippingLabelComponent } from '../components/work-order/work-order-setup/work-order-shipping-label/work-order-shipping-label.component';
 // import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
 
 
@@ -214,7 +220,14 @@ import { WoMarginComponent } from '../components/work-order/work-order-setup/wor
     WoPartDetailsComponent,
     WorkOrderPartPickticketComponent,
     WorkOrderPartPickticketprintComponent,
-    WoMarginComponent
+    WoMarginComponent,
+    WoReleaseFromComponent,
+    WoReleaseEasaFromComponent,
+    WorkOrderMultiPackagingLabelComponent,
+    WorkOrderMultiShippingLabelComponent,
+    WorkOrderShippingComponent,
+    WorkOrderPackagingLabelComponent,
+    WorkOrderShippingLabelComponent
     // TwoDecimalGlobalNumberFormatPipe
   ],
   entryComponents: [WorkOrderPickticketprintComponent, WorkOrderPartPickticketprintComponent],

@@ -12,13 +12,14 @@
                             <div *ngIf="!isPrint" class="pick-ticket-header"
                                 style="margin-bottom: 15px; display: flex;">
                                 <h4 style="width: 130px">Service Class:</h4>
-                                <select class="form-control" style="width: 95px;border:1px solid black !important" name="serviceClass"
-                                    [(ngModel)]="this.salesOrderShipping.serviceClass" required>
+                                <select class="form-control" style="width: 95px;border:1px solid black !important"
+                                    name="serviceClass" [(ngModel)]="this.salesOrderShipping.serviceClass" required>
                                     <option value="First Class">First Class</option>
                                     <option value="Priority">Priority</option>
                                 </select>
                             </div>
-                            <div *ngIf="isPrint" class="pick-ticket-header" style="margincu-bottom: 15px; display: flex;">
+                            <div *ngIf="isPrint" class="pick-ticket-header"
+                                style="margincu-bottom: 15px; display: flex;">
                                 <h4 style="width: 130px">Service Class:</h4>
                                 <h4 style="width: 95px">{{this.salesOrderShipping.serviceClass}}</h4>
                             </div>
@@ -116,12 +117,14 @@
                                 <br />
                                 <div class="col-sm-12 sold-block-div">
                                     <label class="col-sm-3 first-block-label">Phone:</label>
-                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled></label>
+                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled>
+                                        {{this.salesOrderShipping.shipToPhone}}</label>
                                 </div>
                                 <br />
                                 <div class="col-sm-12 sold-block-div">
                                     <label class="col-sm-3 first-block-label">Attn:</label>
-                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled></label>
+                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled>
+                                        {{this.salesOrderShipping.shipToAttention}}</label>
                                 </div>
                                 <br />
 
@@ -138,9 +141,8 @@
                                 </div> -->
                                 <div class="form-group second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
-                                    <label 
-                                        style="background:#fff !important; width: 160px;height:20px" name="salesOrderNumber"
-                                        disabled>{{this.salesOrderShipping.salesOrderNumber}}
+                                    <label style="background:#fff !important; width: 160px;height:20px"
+                                        name="salesOrderNumber" disabled>{{this.salesOrderShipping.salesOrderNumber}}
                                     </label>
                                 </div>
                                 <br />

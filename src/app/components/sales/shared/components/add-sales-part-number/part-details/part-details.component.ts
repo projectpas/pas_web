@@ -23,11 +23,14 @@ export class PartDetailsComponent implements OnChanges {
   @Input() parts: IPartJson[];
   @Input() isStockLineViewMode = false;
   @Input() clearData = false;
+  @Input() isEdit = false;
+  @Input() isQtyAdjust = false;
   @Input() query: ItemMasterSearchQuery;
   @Output() onPartSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output() select: EventEmitter<any> = new EventEmitter<any>();
   selectedColumns: any[];
   showPaginator: boolean;
+  showChildPaginator: boolean;
   totalRecords: number;
   pageLinks: any;
   part: PartDetail;
@@ -164,11 +167,25 @@ export class PartDetailsComponent implements OnChanges {
       let sameParts = [];
       if (isStock) {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
+          part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == undefined
         );
+
+        if (!(sameParts && sameParts.length > 0)) {
+          if (!this.isEdit) {
+            sameParts = this.selectedParts.filter(part =>
+              //part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
+              part.partNumber == this.query.partSearchParamters.partNumber && part.conditionId == stockLineItem.conditionId
+            );
+          }
+          else {
+            sameParts = this.selectedParts.filter(part =>
+              part.partNumber == this.query.partSearchParamters.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
+            );
+          }
+        }
       } else {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId && part.methodType == "I"
+          part.partNumber == stockLineItem.partNumber && part.conditionId == stockLineItem.conditionId
         );
       }
 

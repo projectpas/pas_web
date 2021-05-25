@@ -1024,6 +1024,17 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         <head>
           <title>Print tab</title>
           <style>
+          @page { size: auto;  margin: 0mm; }
+
+              @media print
+	{
+		@page {
+		margin-top: 0;
+		margin-bottom: 0;
+		}
+	
+    @page {size: landscape}
+	} 
           input {width:80%;background:#fff;border:1px Solid}
 
   h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: 600; width: 100%; margin: 0;}
@@ -1049,9 +1060,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     line-height: 2;
     height:25px;
 }
-.margin-left-10{
-  margin-left:10px;
-}
+
 .label-name{
   width:50%
 }
@@ -1073,7 +1082,28 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   .table-text{border: 1px solid #ccc; padding: 5px;height: 150px;}  
   .barcode-name{margin: 0 0 10px;}    
 
+.pdf-part{
+  position: relative;
+    display: flex;
+    float: left;
+    width: 100%;
+}
 
+.pdf-margin-top{
+  margin-top:8%;
+}
+.pdf-margin-left-3{
+  margin-left:-3px !important;
+}
+.pdf-margin-left-10{
+  margin-left:10px;
+}
+.margin-left-10{
+  margin-left:10px;
+}
+.pdf-width-16{
+  width:16% !important;
+}
 .input-field-border{width: 88px; border-radius:0px !important;background:#fff;border: none; border-bottom: 1px solid black;}
 
 .pick-ticket-header{border: 1px solid black;text-align: left; background: #0d57b0 !important;color: #fff !important;}

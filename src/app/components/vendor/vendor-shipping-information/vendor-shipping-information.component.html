@@ -143,7 +143,7 @@
                                             </ng-template>
                                             <ng-template pTemplate="colgroup" let-columns>
                                                 <colgroup>
-                                                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                                                    <col *ngFor="let col of columns" class="table-column-width">
                                                 </colgroup>
                                             </ng-template>
                                             <ng-template pTemplate="header" let-columns>
@@ -1404,7 +1404,7 @@
 
                                             <ng-template pTemplate="colgroup" let-columns>
                                                 <colgroup>
-                                                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                                                    <col *ngFor="let col of columns" class="table-column-width">
                                                 </colgroup>
                                             </ng-template>
                                             <ng-template pTemplate="header" let-columns>
@@ -2355,7 +2355,7 @@
                                             <i class="fa fa-pencil contoel_v" style="font-size:12px !important" data-toggle="modal"
                                                 data-target="#textarea-popup2" matTooltip="Memo"
                                                 matTooltipPosition="above"
-                                                (click)="onAddDomesticMemo()"></i>
+                                                (click)="onAddInternationalmemo()"></i>
                                         </div>
                             </div>
                         </div>

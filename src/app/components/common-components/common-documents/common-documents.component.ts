@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, Output, EventEmitter, Input, SimpleChanges, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, Output, EventEmitter, Input, SimpleChanges, OnDestroy, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
@@ -22,7 +22,7 @@ import { editValueAssignByCondition, getValueFromArrayOfObjectById, getObjectByV
     providers: [DatePipe]
 })
 /** common component*/
-export class CommonDocumentsComponent implements OnInit, OnDestroy {
+export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     disableSave: boolean = true;
     moduleId: any;
     targetData: any;
@@ -148,13 +148,17 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                 //     this.onUploadDocumentListToServer();
                 //   }, 1200);
             }
+            if (property == 'moduleName') {
+                this.moduleName = this.moduleName; 
         }
+    }
         this.id = this.referenceId;
        console.log("hello",this.referenceId);
        
         this.getModuleList();
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         this.moduleName = this.moduleName;
+        console.log("moduleName", this.moduleName);
     }
 
     attachmoduleList: any = [];
@@ -489,7 +493,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     itemmasterIdReferenceId:number
     onUploadDocumentListToServer() {
-        
+        console.log("this.moduleName",this.moduleName)
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
                 this.moduleId = element.value;

@@ -498,16 +498,21 @@ export class SalesOrderService {
     partNumberObj.totalSales = selectedPart.totalSales;
     partNumberObj.salesOrderPartId = selectedPart.salesOrderPartId;
     partNumberObj.salesOrderId = selectedPart.salesOrderId;
-    partNumberObj.uom = selectedPart.uom;
+    partNumberObj.uomName = selectedPart.uomName;
     partNumberObj.salesQuoteNumber = salesOrderObj.salesOrderQuoteNumber;
     partNumberObj.quoteVesrion = salesOrderObj.salesOrderQuoteVersionNumber;
     if (partNumberObj.quoteVesrion) {
       partNumberObj.quoteDate = selectedPart.quoteDate;
     }
     partNumberObj.qtyReserved = selectedPart.qtyReserved;
+    partNumberObj.qtyShipped = selectedPart.qtyShipped;
     partNumberObj.quantityOnHand = selectedPart.quantityOnHand
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
-    partNumberObj.qtyToShip = selectedPart.qtyToShip;
+    partNumberObj.qtyToShip = (selectedPart.qtyToShip - selectedPart.qtyShipped);
+    partNumberObj.qtyInvoiced = selectedPart.qtyInvoiced;
+    partNumberObj.shipReference = selectedPart.shipReference;
+    partNumberObj.invoiceNumber = selectedPart.invoiceNumber;
+    partNumberObj.invoiceDate = selectedPart.invoiceDate;
     partNumberObj.idNumber = selectedPart.idNumber;
     partNumberObj.isApproved = selectedPart.isApproved;
     partNumberObj.customerRef = salesOrderObj.customerReference;

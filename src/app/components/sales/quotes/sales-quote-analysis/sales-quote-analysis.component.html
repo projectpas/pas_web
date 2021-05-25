@@ -101,7 +101,7 @@
                 || col.field == 'salesDiscountExtended'
                 || col.field == 'netSales'
                 || col.field == 'misc'
-                || col.field == 'grossSalePrice'
+                || col.field == 'salesPriceExtended'
                 || col.field == 'totalSales'
                 || col.field == 'unitCost'
                 || col.field == 'unitCostExtended'
@@ -124,7 +124,7 @@
                 && col.field != 'salesDiscountExtended'
                 && col.field != 'netSales'
                 && col.field != 'misc'
-                && col.field != 'grossSalePrice'
+                && col.field != 'salesPriceExtended'
                 && col.field != 'totalSales'
                 && col.field != 'unitCost'
                 && col.field != 'unitCostExtended'
@@ -147,7 +147,7 @@
               class="margin-0">{{getTotalAmount('grossSalePricePerUnit')}}</label>
           </td>
           <td class="table-column-width content-to-end"><label
-              class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
+              class="margin-0">{{getTotalAmount('salesPriceExtended')}}</label>
           </td>
           <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
           </td>

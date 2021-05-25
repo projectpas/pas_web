@@ -190,14 +190,15 @@
                                     </a>
                                 </span>
                                 <span *ngIf="!isView">
-                                    <a class="btn nobg btn-delete-cstm" (click)="openDelete(content,freight,rowIndex)"
-                                        matTooltip="Delete">
+                                    <a class="btn nobg btn-delete-cstm" 
+                                    matTooltip="Delete" matTooltipPosition="above" (click)="openDelete(content,freight,rowIndex)"
+                                   >
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </span>
                                 <span>
                                     <button class="btn  nobg grey_btn_icon" style="padding:0px"
-                                        [disabled]="freight.SalesOrderFreightId==0"
+                                        [disabled]="freight.salesOrderFreightId==0"
                                         (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                                         matTooltipPosition="above">
                                         <i class="fa fa-history">
@@ -211,7 +212,7 @@
                                             aria-hidden="true"></i></a> </span>
                                 <span>
                                     <button class="btn  nobg grey_btn_icon padding-0"
-                                        [disabled]="freight.SalesOrderFreightId==0"
+                                        [disabled]="freight.salesOrderFreightId==0"
                                         (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                                         matTooltipPosition="above">
                                         <i class="fa fa-history">
@@ -395,7 +396,8 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-danger nobg" [disabled]="isEdit==true"
-                                                    (click)="deleteRow(i, frieghtsCreateForm)">
+                                                    data-toggle="modal" 
+                                                    data-target="#deleteConfirmation" matTooltip="Delete" matTooltipPosition="above">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </td>
@@ -459,6 +461,36 @@
         </div>
     </div>
 </div>
+<div id="deleteConfirmation" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+ <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <strong style="display: inline-flex;">
+                    Ship Via:
+                    <span class="new-label">
+                        <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
+                            [(ngModel)]="restorerecord.shipViaId" disabled>
+                            <option value="">Select</option>
+                            <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+                        </select>
+                    </span>
+                </strong>
+            
+          </div> 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteRow(i, content)">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of Freights</h4>
@@ -467,7 +499,8 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive history_hg">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">  
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -552,6 +585,7 @@
                 </tbody>
             </table>
         </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" (click)="dismissModelHistory()">Close</button>
@@ -623,14 +657,14 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add Ship Via </h4>
             </div>
-            <div class="modal-body">
-                <div class="form-row">
+            <!-- <div class="modal-body"> -->
+                <div class="form-group">
                     <app-ship-via-create [ShipViaEditID]="ShipViaEditID"
                         (on-shipvia-save)="RefreshAfterAddShipVia($event)"></app-ship-via-create>
-                </div>
-            </div>
+               </div>
+            <!-- </div>
             <div class="modal-footer">
-            </div>
+            </div> --> 
         </div>
     </div>
 </div>

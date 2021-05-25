@@ -178,6 +178,8 @@ export class SalesQuoteCreateComponent implements OnInit {
   managementValidCheck: boolean;
   moduleName: any = "SalesQuote";
   enforceApproval: boolean;
+  effectiveDate: Date;
+  todayDate: Date = new Date();
 
   constructor(
     private customerService: CustomerService,
@@ -343,9 +345,9 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
       this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 100, [warningTypeId].join(), this.masterCompanyId),
-      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
-      this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
-      this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(),this.masterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(), this.masterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(), this.masterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(), this.masterCompanyId),
 
       this.salesQuoteService.getAllSalesOrderQuoteSettings(this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
@@ -985,6 +987,7 @@ export class SalesQuoteCreateComponent implements OnInit {
         }
         this.defaultSettingPriority = validDaysObject.defaultPriorityId;
         this.enforceApproval = validDaysObject.isApprovalRule;
+        this.effectiveDate = validDaysObject.effectiveDate;
       } else {
         this.salesQuote.validForDays = 10;
         if (this.salesQuote.salesQuoteTypes && this.salesQuote.salesQuoteTypes.length > 0) {
@@ -998,6 +1001,11 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesQuote.quoteTypeId = this.salesQuote.salesQuoteTypes[0].id;
       }
     }
+  }
+
+  checkEnforceInternalApproval() {
+    return this.enforceApproval &&
+      new Date(this.todayDate) >= new Date(this.effectiveDate);
   }
 
   getNewSalesQuoteInstance(customerId: number, isInitialCall = false) {
@@ -1766,33 +1774,43 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
+    let indexToInc: number = 0;
+    if (this.validDaysSettingsList[0] != null &&
+      (!this.validDaysSettingsList[0].isApprovalRule ||
+        (this.validDaysSettingsList[0].isApprovalRule
+          && new Date(this.validDaysSettingsList[0].effectiveDate) > new Date(this.todayDate)))) {
+      indexToInc = 1;
+    }
+
     if (event.index == 0) {
       this.salesPartNumberComponent.refresh();
     }
-    if (event.index == 1) {
+    if (event.index == 1 && (this.validDaysSettingsList[0] != null 
+      && this.validDaysSettingsList[0].isApprovalRule 
+      && new Date(this.todayDate) >= new Date(this.validDaysSettingsList[0].effectiveDate))) {
       this.salesApproveComponent.refresh(this.marginSummary);
     }
-    if (event.index == 2) {
+    if (event.index == (2 - indexToInc)) {
       this.salesCustomerApprovalsComponent.refresh(this.marginSummary, this.salesQuote.salesOrderQuoteId);
     }
-    if (event.index == 4) {
+    if (event.index == (4 - indexToInc)) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderQuoteFreightComponent.refresh(false);
       } else {
         this.salesOrderQuoteFreightComponent.refresh(true);
       }
     }
-    if (event.index == 5) {
+    if (event.index == (5 - indexToInc)) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderQuoteChargesComponent.refresh(false);
       } else {
         this.salesOrderQuoteChargesComponent.refresh(true);
       }
     }
-    if (event.index == 6) {
+    if (event.index == (6 - indexToInc)) {
       this.salesQuoteDocumentsComponent.refresh();
     }
-    if (event.index == 7) {
+    if (event.index == (7 - indexToInc)) {
       this.salesQuoteAnalysisComponent.refresh(this.id);
     }
   }

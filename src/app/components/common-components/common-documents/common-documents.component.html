@@ -112,8 +112,8 @@
                           : rowData[col.field]
                           }}
             </td>
-            <td class="table-column-width" *ngIf="col.field == 'docMemo'">
-              <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+            <td class="table-column-width text-capital" *ngIf="col.field == 'docMemo'">
+              <p class="m-0 p-0 p_textEditor float-left text-capital" [innerHTML]="rowData[col.field]"></p>
             </td>
             <td class="table-column-width" *ngIf="col.field == 'fileName'">
         <tr *ngFor="let x of rowData.attachmentDetails">
@@ -347,7 +347,7 @@
           <p><span class="label"><b>Updated By: </b></span><span
               class="value">{{sourceViewforDocument.updatedBy}}</span></p>
           <div class="mt-3">
-            <h6 class="panel-title">Attachment Details: <span class="clr-red">*</span></h6>
+            <span class="panel-title"><b>Attachment Details: </b><span class="clr-red"></span></span>
             <p-table #dt class="table-responsive ptable-cus-pma" [paginator]="sourceViewforDocumentList.length > 0"
               [value]="sourceViewforDocumentList" [rows]="3" [columns]="sourceViewforDocumentListColumns">
               <ng-template pTemplate="header" let-columns>
@@ -430,7 +430,7 @@
               </p>
             </div> -->
       </div>
-      <!-- </div> -->
+      <!-- </div> --> 
       <form #addDocumentForm="ngForm" class="form-horizontal">
         <div class="modal-body">
           <div class="form-row">

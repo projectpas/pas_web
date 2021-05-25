@@ -927,7 +927,7 @@
                         <div class="form-group">
                             <div class="checkbox-cstm m-t-15">
                                 <label>
-                                    <input type="checkbox" name="isTimeLife1" [(ngModel)]="isDocumentsToShow"
+                                    <input type="checkbox" [disabled]="isEditMode" name="isTimeLife1" [(ngModel)]="isDocumentsToShow"
                                         [value]="isDocumentsToShow==true">
                                     <span class="cr disabled_color1">
                                         <i class="cr-icon pi pi-check"></i>

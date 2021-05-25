@@ -104,7 +104,7 @@
                   </div>
                 </div>
               </th>
-            <th colspan="5" class="isview-th"  *ngIf="!isView" >
+            <th colspan="5" class="isview-th" style="width:50px" *ngIf="!isView" >
                 <!-- <div class="form-group" style="text-align: center;">
                       <p-radioButton
                         class="p-radiobutton-label-horizontal p-radio-custom"
@@ -153,19 +153,19 @@
               <th colspan="4"></th> -->
             </tr>
       <tr>
-        <th style="width:180px !important">Task <span style="color: #ff0000;">*</span></th>
+        <th style="width:200px !important">Task <span style="color: #ff0000;">*</span></th>
         <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns">
           {{ col.header }} <span style="color: #ff0000;" *ngIf="col.isRequired == true">*</span>
         </th>
         <ng-container *ngIf="isQuote">
-          <th class="table-column-width">Billing Method</th>
-          <th class="table-column-width">Mark Up</th>
+          <th class="table-column-width" style="width:100px !important">Billing Method</th>
+          <th class="table-column-width" style="width:100px !important">Mark Up</th>
           <!-- <th tooltip="Time & Materials">T&M Amount</th>
           <th>Flate Rate</th> -->
-          <th class="table-column-width">
+          <th class="table-column-width" style="width:100px !important">
             Billing Rate
           </th>
-          <th class="table-column-width">
+          <th class="table-column-width" style="width:100px !important">
             Billing Amount
           </th>
         </ng-container>
@@ -292,10 +292,9 @@
       <tr class="footer">
         <td>Total</td>
         <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
         <td class="content-to-end"><strong>{{ getTotalQuantity() }} </strong></td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td class="content-to-end"><strong>{{ getTotalUnitCost() }} </strong></td>

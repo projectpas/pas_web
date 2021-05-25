@@ -40,7 +40,7 @@
                                     <div class="clear"></div>
                                     <hr />
                                     <div class="card-body header-body">
-                                        <p-table #dt class="rpo-table-cstm lastcol-fix" 
+                                        <p-table #dt class="rpo-table-cstm rro-table-cstm ptable-f10" 
                                                     [value]="allActions" 
                                                     [style]="{ width: '100%' }"
                                                     [metaKeySelection]="true"
@@ -112,7 +112,7 @@
                                             </ng-template>
                                             <ng-template pTemplate="colgroup" let-columns>
                                                 <colgroup>
-                                                    <col *ngFor="let col of columns"  [ngStyle]="{'width': col.width}" />
+                                                    <col *ngFor="let col of columns"  class="table-column-width" />
                                                 </colgroup>
                                             </ng-template>
                                             <ng-template pTemplate="header" let-columns>
@@ -549,7 +549,7 @@
 
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                                    <col *ngFor="let col of columns" class="table-column-width">
                                 </colgroup>
                             </ng-template>
 

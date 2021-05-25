@@ -1,16 +1,6 @@
 ﻿<div class="card new-card" style="padding: 10px;">
-    <!-- <div class="col-md-12">
-        <h4 class="po-head-sm">
-            Direct Labor and OH Cost
-            <a matTooltip="Create Direct Labor" class="plusicon-cstm new-margin" [routerLink]="[
-                '/workordersmodule/workorderspages/app-direct-labour-add'
-            ]">
-                <i class="fa fa-plus-circle fa-lg"></i>
-            </a>
-        </h4>
-        <hr />
-    </div> -->
-    <div class="card-header bg-primary new-card-header">
+ 
+    <!-- <div class="card-header bg-primary new-card-header">
         <div class="row">
           <div class="col">
             <h4 class="new-card-heading">Direct Labor and OH Cost</h4>
@@ -25,9 +15,21 @@
             </button>
           </div>
         </div>
-      </div>
+      </div> -->
+      <div class="header">
+        <div class="row">
+            <div class="col">
+                <h4 class="header-name"> Direct Labor and OH Cost</h4>
+            </div>
+            <div>
+                <button type="button" class="btn-sm header-button"
+                [routerLink]="['/workordersmodule/workorderspages/app-direct-labour-add']">
+                Create Direct Labor
+                </button>
+            </div>
+        </div>
+    </div>
       <div class="card-body new-card-body">
-
     <p-table class="rpo-table-cstm rro-table-cstm" #dt [value]="directLaborList"
         [rows]="pageSize" [metaKeySelection]="true" [paginator]="true" [pageLinks]="3"
         [rowsPerPageOptions]="[10,20,50,100]" [columns]="selectedColumns" selectionMode="multiple"
@@ -43,8 +45,7 @@
                 <div class="col">
                   <div
                     style="width: auto !important; float: right;"
-                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                  >
+                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
                     <i class="fa fa-search"></i>
                     <input type="text" pInputText size="50"
                      class="form-control"
@@ -64,30 +65,15 @@
                     (click)="dt.exportCSV({selectionOnly:true})"></button>
             </div>
             </div>
-
             <div class="clear"></div>
         </ng-template>
-
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
                 <col *ngFor="let col of columns" style="width:130px">
             </colgroup>
         </ng-template>
-
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <!-- <ng-container *ngFor="let col of columns">
-                    <th class="text-center"
-                        *ngIf="col.field!='levelCode1' && col.field!='levelCode2' && col.field!='levelCode3' && col.field!='levelCode4'"
-                        pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
-                        {{col.header}}
-                        <p-sortIcon [field]="col.field"></p-sortIcon>
-                    </th>
-                    <th class="text-center" *ngIf="col.field=='level1'" colspan="4" pResizableColumn pReorderableColumn
-                        [pSortableColumn]="col.field">
-                        Management Structure
-                    </th>
-                </ng-container> -->
                 <ng-container>
                     <th class="text-center" colspan="4">
                         Management Structure
@@ -98,17 +84,12 @@
                     <th class="text-center" colspan="2">
                         Overhead Burden Rate
                     </th>
+                    <th></th>
                     <th style="width: 120px; position:sticky">Actions</th>
                 </ng-container>
 
             </tr>
             <tr>
-                <!-- <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <ng-container *ngIf="col.field!='isVerified'">
-                        <input style="width:100%;" pInputText type="text"
-                            (input)="dt.filter($event.target.value, col.field, 'contains')">
-                    </ng-container>
-                </th> -->
                 <ng-container *ngFor="let col of columns">
                     <th *ngIf="col.field=='levelCode1' || col.field=='levelCode2' || col.field=='levelCode3' || col.field=='levelCode4'" [ngSwitch]="col.field">
                         <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
@@ -126,31 +107,28 @@
                         <i class="fa fa-eye view_icon_adjust"></i>
                     </a>
                 </th>    <!--How To Apply Hours To Work Orders?-->
-                <th colspan="2"></th>          
+                <th colspan="2"></th>    
+                <th>
+                    Labor Hours Method
+                </th>      
                 <th style="width: 120px; position:sticky"></th>
             </tr>
-            <!--
-            <tr>
-                <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
-
-                </th>
-            </tr>
-            -->
         </ng-template>
-
         <ng-template pTemplate="body" let-rowIndex="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)">
-
                 <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                  
-                    <ng-container *ngIf="col.field!='averageRate' && col.field!='flatAmount'">
+                    <ng-container *ngIf="col.field!='averageRate' &&  col.field !='laborHoursMedthodId' && col.field!='flatAmount'">
                         {{rowData[col.field]}}
                     </ng-container>
                     <ng-container *ngIf="col.field=='averageRate' || col.field=='flatAmount'">
                         <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                     </ng-container> 
+                    <ng-container *ngIf="col.field == 'laborHoursMedthodId'">
+                        <span *ngIf="rowData[col.field]==1">Labor Hours</span>
+                        <span *ngIf="rowData[col.field]==2">Labor ClockIn/Out</span>
+                        <span *ngIf="rowData[col.field]==3">Scan</span>
+                    </ng-container> 
                 </td>
-
                 <td style="width:120px">
                     <p-inputSwitch
 					[(ngModel)]="rowData['isActive']"
@@ -165,7 +143,6 @@
                     <span data-toggle="modal" data-target="#deleteLabor"><a class="btn nobg" (click)="delete(rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a></span>
                     <span data-toggle="modal" data-target="#auditLabor"><a class="btn nobg" matTooltip="History" matTooltipPosition="above" (click)="getAuditHistoryById(rowData)"><i class="fa fa-history"></i></a></span>
                 </td>
-
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns *ngIf="directLaborList?.length == 0">
@@ -188,7 +165,6 @@
     </p-table>
     </div>
 </div>
-
 <div class="modal fade" id="deleteLabor" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -203,7 +179,6 @@
       </div>
     </div>
 </div>
-
 <div id="auditLabor" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl">  
       <!-- Modal content-->
@@ -269,10 +244,8 @@
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
       </div>
-  
     </div>
 </div>
-
 <div class="modal fade" id="viewLabor" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
@@ -330,7 +303,6 @@
                                         </div>
                                     </div>        
                                 </div>
-
                                 <div class="p-t-10" style="clear: both;">
                                     <h4 class="po-head-sm">Overhead Burden Rate</h4>
                                     <hr />

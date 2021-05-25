@@ -119,7 +119,7 @@ export class WOQuoteSettingsListComponent {
         this.customerService.getGlobalSearch(value, this.pageIndex, this.pageSize).subscribe(res => {
             this.data = res;
             if (res.length > 0) {
-                this.totalRecords = res[0].totalRecords;
+                this.totalRecords = res[0].totalRecolumnsChangescords;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
             }
         })

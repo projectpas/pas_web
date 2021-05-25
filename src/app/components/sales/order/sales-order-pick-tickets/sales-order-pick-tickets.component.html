@@ -38,7 +38,7 @@
                       <button class="btn nobg" mat-icon-button
                         (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
                         matTooltipPosition="above" style="font-weight: bold;"
-                        [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
+                        [disabled]="!(summaryPart.readyToPick > 0)">
                         <i class="fa fa-plus"></i>
                       </button>
                     </span>

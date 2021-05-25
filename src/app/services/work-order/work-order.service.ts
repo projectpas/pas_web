@@ -20,6 +20,7 @@ import { WOPickTicket } from '../../models/sales/WOPickTicket';
 export class WorkOrderService {
 
     creditTerms: any;
+    partNumberData:any={};
     constructor(private workOrderEndpointService: WorkOrderEndpointService) {
     }
 
@@ -623,6 +624,12 @@ export class WorkOrderService {
         );
     }
 
+    generatePackagingSlip(packagingSlip: any): Observable<any> {
+        return Observable.forkJoin(
+          this.workOrderEndpointService.generatePackagingSlip(packagingSlip)
+        );
+      }
+
 
     getquoteMaterialHistory(id) {
         return this.workOrderEndpointService.getquoteMaterialHistory(id);
@@ -649,6 +656,15 @@ export class WorkOrderService {
 
     getPickTicketList(workOrderId) {
         return this.workOrderEndpointService.getPickTicketList(workOrderId);
+    }
+
+    
+    GetWorkorderReleaseFromData(workOrderId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId);
+    }
+
+    GetWorkorderReleaseEasaFromData(workOrderId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseEasaFromData(workOrderId);
     }
 
     getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN = false) {
@@ -699,6 +715,38 @@ export class WorkOrderService {
     deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy) {
         return this.workOrderEndpointService.deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy);
     }
+
+    getPackagingSlipPrint(WorkOrderId: number, WorkOrderPartNoId: number, woPickTicketId: number, packagingSlipId: number): Observable<any> {
+        return Observable.forkJoin(
+          this.workOrderEndpointService.getPackagingSlipPrint(WorkOrderId, WorkOrderPartNoId, woPickTicketId, packagingSlipId)
+        );
+      }
+
+      
+  getMultiShippingLabelPrint(workOrderPackagingSlips: any): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.getMultiShippingLabelPrint(workOrderPackagingSlips)
+    );
+  }
+
+  getMultiPackagingSlipPrint(workOrderPackagingSlips: any): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.getMultiPackagingSlipPrint(workOrderPackagingSlips)
+    );
+  }
+
+  getShippingLabelPrint(workOrderId: number, workOrderPartId: number, woShippingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.getShippingLabelPrint(workOrderId, workOrderPartId, woShippingId)
+    );
+  }
+
+  updateShipping(serviceClass: string, workOrderShippingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.updateShipping(serviceClass, workOrderShippingId)
+    );
+  }
+
 
 
 }

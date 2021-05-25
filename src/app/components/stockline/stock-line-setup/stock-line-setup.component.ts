@@ -50,8 +50,10 @@ export class StockLineSetupComponent implements OnInit {
 	allCompanyList: any = [];
 	allPartnumbersList: any = [];
 	allEmployeeList: any = [];
+	alltagEmployeeList: any = [];
 	partNumbersCollection: any = [];
 	oempnList: any[];
+	RevicepnList: any[];
 	allConditionInfo: Condition[] = [];
 	minDateValue: Date = new Date();
 	currentDate: Date = new Date();
@@ -73,6 +75,7 @@ export class StockLineSetupComponent implements OnInit {
 	vendorNames: any[];
 	companyNames: any[];
 	certifyByNames: any[];
+	TagByNames: any[];
 	allManufacturerInfo: any = [];
 	allTagTypes: any = [];
 	allPolistInfo: any = [];
@@ -153,10 +156,12 @@ export class StockLineSetupComponent implements OnInit {
 	arrayVendorlist: any[] = [];
 	arrayCompanylist: any[] = [];
 	arrayItemMasterlist: any[] = [];
+	arrayReviceItemMasterlist: any[] = [];
 	arrayWOlist: any[] = [];
 	arrayPOlist: any[] = [];
 	arrayROlist: any[] = [];
 	arrayEmployeelist: any[] = [];
+	arrayTagEmployeelist: any[] = [];
 	arrayModulelist: any[] = [];
 	arrayConditionlist: any[] = [];
 	headerInfo: any = {};
@@ -190,6 +195,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.oem = 'true';
 		this.stockLineForm.isCustomerStock = false;
 		this.stockLineForm.isCustomerstockType = false;
+		this.stockLineForm.unitCost=0;
 		
 		this.stockLineForm.customerId = 0;
 		this.stockLineForm.tagType = [];
@@ -217,6 +223,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.loadModuleTypes();
 		this.loadModulesNamesForObtainOwnerTraceable();
 		this.loadAssetAcquisitionTypeList();
+	
 
 		this.stockLineId = this._actRoute.snapshot.params['id'];
 		if (this.stockLineId) {
@@ -228,8 +235,10 @@ export class StockLineSetupComponent implements OnInit {
 			this.loadVendorData();
 			this.loadCompanyData();
 			this.loadPartNumData();
+			this.loadRevicePnPartNumData('',0);
 			this.loadEmployeeData();
 			this.loadWorkOrderList();
+			this.loadTagByEmployeeData('',0)
 		}
 	}
 
@@ -320,6 +329,32 @@ export class StockLineSetupComponent implements OnInit {
 			this.partNumbersCollection = this.allPartnumbersList;
 		}, error => this.saveFailedHelper(error));
 	}
+	loadRevicePnPartNumData(strText = '',revicedPNId) {
+		if (this.arrayReviceItemMasterlist.length == 0) {
+			this.arrayReviceItemMasterlist.push(0);
+		}
+		if (revicedPNId > 0) 
+		{
+			this.arrayReviceItemMasterlist.push(revicedPNId);
+		}
+		if (this.arrayReviceItemMasterlist.length == 0) {
+			this.arrayReviceItemMasterlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayReviceItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+			this.allPartnumbersList = response.map(x => {
+				return {
+					partnumber: x.label, itemMasterId: x.value
+				}
+			})
+
+			this.RevicepnList = this.allPartnumbersList;
+			if(revicedPNId >0)
+			{
+				this.stockLineForm.revicedPNId = getObjectById('itemMasterId', revicedPNId, this.RevicepnList);
+			}
+
+		}, error => this.saveFailedHelper(error));
+	}
 
 	loadOemPnPartNumData(strText = '') {
 		if (this.arrayItemMasterlist.length == 0) {
@@ -398,6 +433,27 @@ export class StockLineSetupComponent implements OnInit {
 			.subscribe(response => {
 				this.allEmployeeList = response;
 				this.certifyByNames = this.allEmployeeList;
+			}, error => this.saveFailedHelper(error));
+	}
+	loadTagByEmployeeData(strText = '',taggedBy) {
+		if(taggedBy >0)
+		{
+			this.arrayTagEmployeelist.push(taggedBy);
+		}
+		if (this.arrayTagEmployeelist.length == 0) {
+			this.arrayTagEmployeelist.push(0);
+		}
+
+	
+		this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayTagEmployeelist.join(), this.currentUserManagementStructureId)
+			.subscribe(response => {
+				this.alltagEmployeeList = response;
+				this.TagByNames = this.alltagEmployeeList;
+				if(taggedBy >0)
+				{
+					this.stockLineForm.taggedBy = getObjectById('value', taggedBy, this.alltagEmployeeList);
+				}
+				
 			}, error => this.saveFailedHelper(error));
 	}
 
@@ -793,6 +849,8 @@ export class StockLineSetupComponent implements OnInit {
 				this.getWOSelecionOnEdit(res.workOrderId);
 				this.getPOSelecionOnEdit('',res.purchaseOrderId);
 				this.getROSelecionOnEdit('',res.repairOrderId);
+				this.loadRevicePnPartNumData('',res.revicedPNId);
+				this.loadTagByEmployeeData('',res.taggedBy);
 				
 				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);
 
@@ -1091,6 +1149,12 @@ export class StockLineSetupComponent implements OnInit {
 			this.loadPartNumData(event.query);
 		}
 	}
+	filterRevicePartNumbers(event) {
+		this.partNumbersCollection = this.allPartnumbersList;
+		if (event.query !== undefined && event.query !== null) {
+			this.loadRevicePnPartNumData(event.query,0);
+		}
+	}
 
 	filterPoNumber(event) {
 		this.polistInfo = this.allPolistInfo;
@@ -1156,6 +1220,12 @@ export class StockLineSetupComponent implements OnInit {
 		}
 	}
 
+	filterTagEmployees(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadTagByEmployeeData(event.query,0);
+		}
+	}
+
 	filterWorkOrderList(event) {
 		if (event.query !== undefined && event.query !== null) {
 			this.loadWorkOrderList(event.query);
@@ -1181,6 +1251,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.loadTLAData(itemMasterId);
 		this.GetManufacturerByitemMasterId(itemMasterId);
 		this.getUnitCostSalePrice();
+		
 		this.sourceTimeLife = {};
 		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {			
 			const partDetails = res;
@@ -1211,13 +1282,14 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.exportECCN = partDetails.exportECCN;
 			this.stockLineForm.coreUnitCost = partDetails.coreUnitCost;
 			this.stockLineForm.purchaseUnitOfMeasureId =  this.getInactiveObjectOnEdit('value', partDetails.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname');
-			this.stockLineForm.purchaseOrderUnitCost = partDetails.poUnitCost ? formatNumberAsGlobalSettingsModule(partDetails.poUnitCost, 2) : '0.00';
+			this.stockLineForm.unitCost = partDetails.poUnitCost ? formatNumberAsGlobalSettingsModule(partDetails.poUnitCost, 2) : '0.00';
 		    this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice ? formatNumberAsGlobalSettingsModule(partDetails.unitSalesPrice, 2) : '0.00';
 			this.stockLineForm.conditionId = partDetails.conditionId;
 			this.stockLineForm.tagDays = partDetails.tagDays;
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
 			this.stockLineForm.daysReceived = partDetails.daysReceived;
 			this.stockLineForm.openDays = partDetails.openDays;
+			this.loadRevicePnPartNumData('',partDetails.revisedPartId)
 			//this.stockLineForm.isDER = partDetails.isDER;
 			this.stockLineForm.siteId = this.getInactiveObjectOnEdit('value', partDetails.siteId, this.allSites, 'Site', 'SiteId', 'Name');
 			this.getWareHouseList(partDetails.siteId);
@@ -1446,35 +1518,37 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	onChangePONum(selected) {
-		this.stocklineser.getPurchaseOrderUnitCost(selected.purchaseOrderId).subscribe(res => {
+		this.stocklineser.getPurchaseOrderUnitCost(selected.value).subscribe(res => {
 			const resp: any = res;
 			if (resp.length > 0) {
-				this.stockLineForm.repairOrderUnitCost = null;
+				//this.stockLineForm.repairOrderUnitCost = null;
 				this.stockLineForm.purchaseOrderUnitCost = resp[0].unitCost ? formatNumberAsGlobalSettingsModule(resp[0].unitCost, 2) : '0.00';
-				this.arrayVendorlist.push(resp[0].vendorId);
-				this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
-					this.allVendorsList = response;
-					this.vendorNames = this.allVendorsList;
-					this.stockLineForm.vendorId = getObjectById('value', resp[0].vendorId, this.allVendorsList);
-					this.disableVendor = true;
-				}, error => this.saveFailedHelper(error));
+				this.changeUnitPrice();
+				// this.arrayVendorlist.push(resp[0].vendorId);
+				// this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				// 	this.allVendorsList = response;
+				// 	this.vendorNames = this.allVendorsList;
+				// 	this.stockLineForm.vendorId = getObjectById('value', resp[0].vendorId, this.allVendorsList);
+				// 	this.disableVendor = true;
+				// }, error => this.saveFailedHelper(error));
 			} else {
 				this.disableVendor = false;
 			}
 		});
 
-		this.commonService.smartDropDownList('PurchaseOrder', 'PurchaseOrderId', 'RequestedBy', 'PurchaseOrderId', selected.purchaseOrderId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-			if (res.length > 0) {
-				const empId = res[0].label;
-				this.stockLineForm.requestorId = getObjectById('value', empId, this.allEmployeeList);
-			}
-		});
+		// this.commonService.smartDropDownList('PurchaseOrder', 'PurchaseOrderId', 'RequestedBy', 'PurchaseOrderId', selected.purchaseOrderId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		// 	if (res.length > 0) {
+		// 		const empId = res[0].label;
+		// 		this.stockLineForm.requestorId = getObjectById('value', empId, this.allEmployeeList);
+		// 	}
+		// });
 	}
 
 	onChangeRONum(selected) {
-		this.stocklineser.getRepairOrderUnitCost(selected.repairOrderId).subscribe(res => {
-			this.stockLineForm.purchaseOrderUnitCost = null;
+		this.stocklineser.getRepairOrderUnitCost(selected.value).subscribe(res => {
+			//this.stockLineForm.purchaseOrderUnitCost = null;
 			this.stockLineForm.repairOrderUnitCost = res[0].unitCost ? formatNumberAsGlobalSettingsModule(res[0].unitCost, 2) : '0.00';
+			this.changeUnitPrice();
 		});
 	}
 	
@@ -1599,6 +1673,7 @@ export class StockLineSetupComponent implements OnInit {
 			//receiverNumber: this.stockLineForm.receiverNumber != undefined && this.stockLineForm.receiverNumber.purchaseOrderNumber != undefined? this.stockLineForm.receiverNumber.purchaseOrderNumber : this.stockLineForm.receiverNumber,
 			partNumber: this.stockLineForm.itemMasterId != undefined ? this.stockLineForm.itemMasterId.partnumber : '',
 			itemMasterId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId),
+			revicedPNId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.revicedPNId),
 			vendorId: this.stockLineForm.vendorId ? editValueAssignByCondition('value', this.stockLineForm.vendorId) : '',
 			customerId: this.stockLineForm.customerId ? editValueAssignByCondition('value', this.stockLineForm.customerId) : '',
 			obtainFromName: this.stockLineForm.obtainFromType == 4 ? this.stockLineForm.obtainFrom : (this.stockLineForm.obtainFrom ? getValueFromObjectByKey('label', this.stockLineForm.obtainFrom) : ''),
@@ -1628,7 +1703,7 @@ export class StockLineSetupComponent implements OnInit {
 
 			traceableToName: this.stockLineForm.traceableToType == 4 ? this.stockLineForm.traceableTo : (this.stockLineForm.traceableTo ? getValueFromObjectByKey('label', this.stockLineForm.traceableTo) : ''),
 			traceableTo: this.stockLineForm.traceableToType == 4 ? null : (this.stockLineForm.traceableTo ? editValueAssignByCondition('value', this.stockLineForm.traceableTo) : ''),
-
+			taggedBy: this.stockLineForm.taggedBy ? getValueFromObjectByKey('value', this.stockLineForm.taggedBy) : '',
 			requestorId: this.stockLineForm.requestorId ? getValueFromObjectByKey('value', this.stockLineForm.requestorId) : '',
 			inspectionBy: this.stockLineForm.inspectionBy ? getValueFromObjectByKey('value', this.stockLineForm.inspectionBy) : '',
 			workOrderId: this.stockLineForm.workOrderId && this.getValueFromObj(this.stockLineForm.workOrderId) != 0 ? this.getValueFromObj(this.stockLineForm.workOrderId) : null,
@@ -1639,6 +1714,7 @@ export class StockLineSetupComponent implements OnInit {
 			purchaseOrderUnitCost: this.stockLineForm.purchaseOrderUnitCost ? parseFloat(this.stockLineForm.purchaseOrderUnitCost.toString().replace(/\,/g, '')) : '0.00',
 			repairOrderUnitCost: this.stockLineForm.repairOrderUnitCost ? parseFloat(this.stockLineForm.repairOrderUnitCost.toString().replace(/\,/g, '')) : '0.00',
 			unitSalesPrice: this.stockLineForm.unitSalesPrice ? parseFloat(this.stockLineForm.unitSalesPrice.toString().replace(/\,/g, '')) : '0.00',
+			unitCost: this.stockLineForm.unitCost ? parseFloat(this.stockLineForm.unitCost.toString().replace(/\,/g, '')) : '0.00',
 			coreUnitCost: this.stockLineForm.coreUnitCost ? parseFloat(this.stockLineForm.coreUnitCost.toString().replace(/\,/g, '')) : '0.00',
 			lotCost: this.stockLineForm.lotCost ? parseFloat(this.stockLineForm.lotCost.toString().replace(/\,/g, '')) : '0.00',
 			timeLifes: { ...timeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
@@ -1747,13 +1823,45 @@ export class StockLineSetupComponent implements OnInit {
 			return null;
 		}
 	}
+	POValue : number = 0;
+	ROValue : number = 0;
+	UnitPrice : number = 0;
+	changeUnitPrice()
+	{
+		debugger;
+		
+		var ROValue = 0
+		if (this.stockLineForm.purchaseOrderUnitCost != "" && this.stockLineForm.purchaseOrderUnitCost != null && this.stockLineForm.purchaseOrderUnitCost != undefined) {
+			this.POValue = this.stockLineForm.purchaseOrderUnitCost.replace(/,/g, '');
+		}
+		else {
+			this.POValue = 0
+		}
 
-	onChangePOUnitCost() {
-		this.stockLineForm.purchaseOrderUnitCost = this.stockLineForm.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(this.stockLineForm.purchaseOrderUnitCost, 2) : '0.00';
+		if (this.stockLineForm.repairOrderUnitCost != "" && this.stockLineForm.repairOrderUnitCost != null && this.stockLineForm.repairOrderUnitCost != undefined) {
+			this.ROValue = this.stockLineForm.repairOrderUnitCost.replace(/,/g, '');
+		}
+		else {
+			ROValue = 0
+		}
+
+		 this.UnitPrice = Number(this.POValue)+ Number(this.ROValue);
+
+		this.stockLineForm.unitCost = this.UnitPrice ? formatNumberAsGlobalSettingsModule(this.UnitPrice, 2) : '0.00';
+
+
 	}
 
-	onChangeROUnitCost() {
+	onChangePOUnitCost() 
+	{
+		this.stockLineForm.purchaseOrderUnitCost = this.stockLineForm.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(this.stockLineForm.purchaseOrderUnitCost, 2) : '0.00';
+		this.changeUnitPrice();
+	}
+
+	onChangeROUnitCost() 
+	{
 		this.stockLineForm.repairOrderUnitCost = this.stockLineForm.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(this.stockLineForm.repairOrderUnitCost, 2) : '0.00';
+		this.changeUnitPrice();
 	}
 
 	onChangeUnitSalesPrice() {

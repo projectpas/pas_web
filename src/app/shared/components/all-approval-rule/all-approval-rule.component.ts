@@ -86,11 +86,11 @@ export class AllApprovalRuleComponent implements OnInit {
     creatingData: any;
     headers = [
         { field: 'taskName', header: 'Task Name' },
-        { field: 'ruleNo', header: 'Rule No', width: "60px" },
-        { field: 'amount', header: 'Amount', width: "60px" },
-        { field: 'value', header: 'Value', width: "60px" },
-        { field: 'lowerValue', header: 'Lower Value', width: "60px" },
-        { field: 'upperValue', header: 'Upper Value', width: "60px" },
+        { field: 'ruleNo', header: 'Rule No', width: "100px" },
+        { field: 'amount', header: 'Amount', width: "100px" },
+        { field: 'value', header: 'Value', width: "100px" },
+        { field: 'lowerValue', header: 'Lower Value', width: "100px" },
+        { field: 'upperValue', header: 'Upper Value', width: "100px" },
         { field: 'companyName', header: 'Level 01' },
         { field: 'buName', header: 'Level 02' },
         { field: 'divName', header: 'Level 03' },
@@ -296,7 +296,8 @@ export class AllApprovalRuleComponent implements OnInit {
                 MessageSeverity.success
             );
             this.onSaveChange();
-            //this.onSavecleardata();
+            // Do not Comment This Method
+            this.onSavecleardata();
         }
     }
 

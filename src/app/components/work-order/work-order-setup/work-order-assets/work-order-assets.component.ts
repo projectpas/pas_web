@@ -99,9 +99,11 @@ export class WorkOrderAssetsComponent implements OnInit {
     assetAuditHistory: any;
     addNewEquipment: boolean = false;
     //customerName:any;
-
+    masterPartData:any={};
     ngOnInit(): void {
       // this.customerName="A Pusapkraj";
+     this.masterPartData= this.workOrderService.partNumberData;
+     console.log("helo mast",this.masterPartData)
     }
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, private datePipe: DatePipe, private commonService: CommonService,
         private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef) {

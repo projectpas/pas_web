@@ -82,16 +82,25 @@
                                     </td>
                                     <td colspan="11" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" class="center">
+                                        <a [class.disabled]="salesQuote.isApproved || isViewMode"
+                                            [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
+                                            class="btn nobg" (click)="adjustQty(summaryPart,rowIndex)"
+                                            matTooltip="Adjust Qty" matTooltipPosition="above">
+                                            <i class="fa fa-cubes" style="color: #000;"></i>
+                                        </a>
                                         <a class="btn nobg view-part-eye" (click)="viewPartNumber(summaryPart,rowIndex)"
                                             matTooltip="View Stock Line" matTooltipPosition="above">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                            [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                            class="btn nobg view-part-eye" (click)="addPartNumber(summaryPart,rowIndex)"
-                                            matTooltip="Add/Edit PN" matTooltipPosition="above">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
+                                        <span *ngIf="summaryPart['methodType'] == 'S'">
+                                            <a [class.disabled]="salesQuote.isApproved || isViewMode"
+                                                [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
+                                                class="btn nobg view-part-eye"
+                                                (click)="addPartNumber(summaryPart,rowIndex)" matTooltip="Add/Edit PN"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </span>
                                         <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                             [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
                                             class="btn nobg"
@@ -259,7 +268,7 @@
                                         {{ part.grossSalePricePerUnit  | twoDecimalGlobalNumberFormatPipe}}
                                     </td>
                                     <td class="text-right">
-                                        {{ part.grossSalePrice | twoDecimalGlobalNumberFormatPipe}}
+                                        {{ part.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}
                                     </td>
                                     <td class="text-right">
                                         {{ part.misc | twoDecimalGlobalNumberFormatPipe}}
@@ -364,6 +373,8 @@
                                     <td *ngIf="isViewMode == false" class="zui-sticky-col"
                                         style="width:107px !important">
                                         <a class="btn nobg view-part-eye" data-toggle="tooltip"
+                                            [class.disabled]="(part.stockLineNumber == null || part.stockLineNumber == '')"
+                                            [ngClass]="{'btn_disabled': (part.stockLineNumber == null || part.stockLineNumber == '')}"
                                             (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">
                                             <i class="fa fa-eye"></i>
                                         </a>
@@ -476,7 +487,8 @@
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
         [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow" [clearData]="clearData"
-        (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SOQ'">
+        (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SOQ'" [isEdit]="isEditMode"
+        [isQtyAdjust]="isQtyAdjust" (save)="onSave($event)">
     </app-add-sales-part-number>
 </ng-template>
 

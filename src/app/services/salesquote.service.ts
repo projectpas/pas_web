@@ -438,7 +438,7 @@ export class SalesQuoteService {
     partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
     partNumberObj.unitSalePrice = selectedPart.salesPricePerUnit;
     partNumberObj.salesBeforeDiscount = formatStringToNumber(selectedPart.salesPriceExtended);
-    partNumberObj.discount = selectedPart.discount ? Number(selectedPart.discount) : 0;
+    partNumberObj.discount = selectedPart.salesDiscount ? formatStringToNumber(selectedPart.salesDiscount) : 0;
     partNumberObj.discountAmount = selectedPart.salesDiscountPerUnit;
     partNumberObj.netSales = formatStringToNumber(selectedPart.netSalesPriceExtended);
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
@@ -522,7 +522,7 @@ export class SalesQuoteService {
     partNumberObj.description = selectedPart.partDescription;
     partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
     partNumberObj.customerRef = selectedPart.customerReference;
-    partNumberObj.uom = selectedPart.uomName;
+    partNumberObj.uomName = selectedPart.uomName;
     partNumberObj.pmaStatus = selectedPart.stockType;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
     partNumberObj.quantityOnHand = selectedPart.quantityOnHand;

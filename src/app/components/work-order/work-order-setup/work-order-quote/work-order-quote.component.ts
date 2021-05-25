@@ -52,6 +52,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     customerRef: any;
     quoteDueDate: Date = new Date();
     isDetailedViewQuote: boolean;
+    IsApprovalBypass: boolean = false;
     validFor: number;
     expirationDate: Date;
     sentDate: Date;
@@ -462,6 +463,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 			? this.authService.currentUser.masterCompanyId
 			: null;
 	}
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
@@ -657,9 +661,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     if (res.workOrderQuote['versionNo']) {
                                         // let vNo = Number(res.workOrderQuote['versionNo'].split('V')[1]) + 1;
                                         this.quoteForm['versionNo'] = res.workOrderQuote['versionNo'];
-                                        this.increaseVer();
+                                        // this.increaseVer();
                                         // $('#versionNoModel').modal("show");
                                     }
+                                    this.IsApprovalBypass =res.workOrderQuote.isApprovalBypass;
                                     this.quoteDueDate = new Date(res.workOrderQuote.quoteDueDate);
                                     this.expirationDate = new Date(res.workOrderQuote.expirationDate);
                                     this.currency = res.workOrderQuote.currencyId;
@@ -803,6 +808,19 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.formQuoteInfo(this.quoteForm);
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
+        this.quotationHeader.masterCompanyId = this.authService.currentUser.masterCompanyId,
+        this.quotationHeader.CreatedBy= this.userName
+        this.quotationHeader.UpdatedBy= this.userName
+        if(isCreateQuote)
+        {
+            this.quotationHeader.CreatedDate= new Date().toDateString()
+            this.quotationHeader.UpdatedDate= new Date().toDateString()
+        }else
+        {
+            this.quotationHeader.UpdatedDate= new Date().toDateString()
+        }
+      
+
         this.workOrderService.createOrUpdateQuotation(this.quotationHeader)
             .subscribe(
                 res => {
@@ -810,6 +828,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.quotationHeader = res;
                     this.quoteCreated=true;
                     this.quoteForm.quoteNumber = res['quoteNumber'];
+                    this.quoteForm.versionNo = res['versionNo'];
                     this.setWorkOrderQuoteId(res['workOrderQuoteId']);
                     this.laborPayload.StatusId = this.exclusionPayload.StatusId = this.chargesPayload.StatusId = this.materialListPayload.StatusId = this.quoteFreightListPayload.StatusId = res['quoteStatusId']
                     this.alertService.showMessage(
@@ -2075,7 +2094,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         const strText = value ? value : '';
         // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-            if (res && res.length != 0) {
+            if (res && res.length != 0) { 
                 this.markupList = res;
                 this.markupList.sort((n1,n2) => n1.label - n2.label);
             }
@@ -2500,7 +2519,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     showAlertMessage(warningMessage, restrictMessage) {
-        $('#warnRestrictMesg').modal("show");
+        if(!this.isView)
+        {
+            $('#warnRestrictMesg').modal("show");
+        }
+    
         //   this.modal.close();
     }
 
@@ -2786,7 +2809,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.setEditArray = [];
         const strText = '';   
             this.setEditArray.push(0); 
-        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', strText, true, 20, this.setEditArray.join(), 0).subscribe(res => {
             this.statusList = res.map(x => {
                 return {
                     ...x,

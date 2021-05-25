@@ -1,14 +1,31 @@
 ﻿
 <div class="card">
     <div class="card-body p-t-0">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12" style="padding-left:25px; padding-top:5px">
                 <label style="width: 100%;"></label>
                 <div class="form-group" style="float: right; margin-right: 10px;">
                     <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn">Perform Shipping</button>
                 </div>
             </div>
+        </div> -->
+
+        
+  <div class="row" *ngIf="!isView">
+    <div class="col-md-12 shipping-div">
+        <label class="input-width-100-percent"></label>
+        <div class="form-group perform-shipping-div" *ngIf="isView == false">
+            <button type="submit" class="btn  submit-btn btn btn-primary"
+                [disabled]="disableGeneratePackagingBtn" (click)="generatePackagingSlip()">Generate Packaging
+                Label</button>&nbsp;
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedPackagingSlip()">Print Packaging Label</button>&nbsp;
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedShippingLabel()">Print Shipping
+                Label</button>&nbsp;
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
+                (click)="PerformShipping()">Perform Shipping</button>
         </div>
+    </div>
+</div>
 
         <div [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
             style="min-height: 130px !important;">
@@ -70,7 +87,12 @@
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let ship of summaryPart.woshippingchildviewlist; let poIndex = index">
-                                    <td></td>
+                                    <td>
+                                        <!-- *ngIf="ship.packagingSlipNo === undefined || ship.packagingSlipNo == ''" -->
+                                        <input id="{{poIndex}}" name="ship.selectedToGeneratePackaging{{poIndex}}"
+                                            type="checkbox" (change)="checkedToGenerate($event, ship);"
+                                            [(ngModel)]="ship.selectedToGeneratePackaging" />
+                                    </td>
                                     <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
                                         <label style="color: #0F9D58">Shipped</label>
                                     </td>
@@ -114,14 +136,42 @@
                                     <td>
                                         {{ ship.commodityCode }}
                                     </td>
-                                    <!-- <td colspan="2"></td> -->
-                                    <td class="zui-sticky-col" style="width:107px !important">
-                                        <!-- <span>
-                                            <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
-                                                (click)="onSelectPartNumber(ship)" matTooltip="Perform Shipping"
-                                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="!ship.selected">
+
+                                    <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
+                                        <span *ngIf="ship.packagingSlipNo !== undefined && ship.packagingSlipNo != ''">
+                                            <a class="btn nobg" matTooltip="Print Packaging Slip"
+                                                matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i
+                                                    class="fa fa-print"></i></a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg" matTooltip="Print Shipping Label"
+                                                matTooltipPosition="above" (click)="printShippingLabel(ship);"><i
+                                                    class="fa fa-print"></i></a>
+                                        </span>
+                                        <span>
+                                            <button *ngIf="ship.qtyShipped > 0" class="btn nobg font-bold"
+                                                mat-icon-button (click)="viewShippingData(ship)" matTooltip="View Shipping"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button class="btn nobg font-bold" *ngIf="ship.qtyShipped == 0"
+                                                type="submit" (click)="onSelectPartNumber(ship)"
+                                                matTooltip="Perform Shipping" matTooltipPosition="above"
+                                                [disabled]="!ship.selected">
                                                 <i class="fa fa-plus"></i></button>
+                                        </span>
+                                        <!-- <span>
+                                            <button [hidden]="true" class="btn nobg font-bold" mat-icon-button
+                                                (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
                                         </span> -->
+                                    </td>
+                                    <!-- <td colspan="2"></td> -->
+                                    <!-- <td class="zui-sticky-col" style="width:107px !important">
                                         <span>
                                             <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button
                                                 (click)="viewShippingData(ship)" matTooltip="View"
@@ -129,7 +179,7 @@
                                                 <i class="fa fa-pencil"></i>
                                             </button>
                                         </span> 
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </ng-container>
@@ -761,6 +811,19 @@
     <div class="row">
         <button *ngIf="!isView" class="btn btn-primary pull-right btn-width-100" (click)="save()" [disabled]="!shippingForm.valid">Save</button>
     </div>
+</div>
+<div *ngIf="workorderpackage">
+    <app-wo-order-multi-Packaging-Label [packagingSlips]="packagingSlips"></app-wo-order-multi-Packaging-Label>
+</div>
+<div *ngIf="workordershipping">
+    <app-work-order-multi-shipping-label [shippingLabels]="shippingLabels" ></app-work-order-multi-shipping-label>
+</div>
+
+<div *ngIf="workordersinglepacking">
+    <app-work-order-packaging-label [workOrderId]="workOrderId" [workOrderPartId]="workOrderPartId" [woPickTicketId]="woPickTicketId"  [packagingSlipId]="packagingSlipId"></app-work-order-packaging-label>
+</div>
+<div *ngIf="workordersingleshipping">
+    <app-work-order-shipping-label [workOrderId]="workOrderId" [workOrderPartId]="workOrderPartId" [woShippingId]="woShippingId"></app-work-order-shipping-label>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
