@@ -312,6 +312,9 @@ export class RoSetupComponent implements OnInit {
 	revisedPartNumCollection: any = [];
 	workPerformedCollection: any = [];
 	acTailNumCollection: any = [];
+	includeAlternatePartNumber:any;
+	includeEquivalentPartNumber:any;
+	includeRevicePartNumber:any;
 
 	fields = ['partsCost', 'partsRevPercentage', 'unitCost', 'extCost', 'qty', 'laborCost', 'laborRevPercentage', 'overHeadCost', 'overHeadPercentage', 'chargesCost', 'freightCost', 'exclusionCost', 'directCost', 'directCostPercentage', 'revenue', 'margin', 'marginPercentage'];
 	approvalProcessHeader = [
@@ -440,7 +443,9 @@ export class RoSetupComponent implements OnInit {
 		this.rosettingModel.IsDeferredReceiver = false;
 		this.rosettingModel.IsEnforceApproval = false;
 		this.getRepairOrderMasterData();
-
+		this.includeAlternatePartNumber = true;
+		this.includeEquivalentPartNumber = true;
+		this.includeRevicePartNumber = true;
 
 		this.vendorIdByParams = this._actRoute.snapshot.params['vendorId'];
 		this.id = this.roId = this._actRoute.snapshot.params['id'];
@@ -1659,7 +1664,8 @@ export class RoSetupComponent implements OnInit {
 					workPerformedId: getObjectById('value', x.workPerformedId == null ? 0 : x.workPerformedId, this.workPerformedCollection),
 					estRecordDate: x.estRecordDate ? new Date(x.estRecordDate) : '',	
 					vendorQuoteDate: x.vendorQuoteDate ? new Date(x.vendorQuoteDate) : '',	
-					acTailNum : x.acTailNum ? getObjectByValue ('label', x.acTailNum, this.acTailNumCollection) : null,					
+					//acTailNum : x.acTailNum ? getObjectByValue ('label', x.acTailNum, this.acTailNumCollection) : null,	
+					acTailNum: { value: 0, label: x.acTailNum },				
 				}
 				
 				console.log(this.newPartsList)
@@ -3493,7 +3499,7 @@ export class RoSetupComponent implements OnInit {
 		// this.stocklineconditionId = Condtionid;
 		this.isSpinnerVisible = true;
 		this.stocklineData = [];
-		this.stocklineService.GetAllStocklineByPartAndCondtion(itmeMasterID, Condtionid, this.currentUserMasterCompanyId).subscribe(res => {
+		this.stocklineService.GetAllStocklineByPartAndCondtion(itmeMasterID, Condtionid,this.includeAlternatePartNumber,this.includeEquivalentPartNumber,this.includeRevicePartNumber, this.currentUserMasterCompanyId).subscribe(res => {
 			this.stocklineData = res.map(x => {
 				return {
 					...x,
@@ -3601,7 +3607,7 @@ export class RoSetupComponent implements OnInit {
 		if (this.stocklineconditionId != null && this.stocklinepartNumberId != null && this.stocklineconditionId.length > 0) {
 			this.isSpinnerVisible = true;
 			this.stocklineData = [];
-			this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId, this.currentUserMasterCompanyId).subscribe(res => {
+			this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId,this.includeAlternatePartNumber,this.includeEquivalentPartNumber,this.includeRevicePartNumber,this.currentUserMasterCompanyId).subscribe(res => {
 				this.stocklineData = res.map(x => {
 					return {
 						...x,
