@@ -48,7 +48,6 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
   }
 
   getPackagingSlipView() {
-    debugger;
     this.isSpinnerVisible = true;
     const data={
      'packagingSlips' :this.packagingSlips

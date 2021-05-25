@@ -87,7 +87,7 @@
                                                 disabled>{{this.workOrder.invoiceDate | date: 'MM/dd/yyyy h:mm a '}}</label>
                                         </div>
                                         <div class="second-block-div">
-                                            <label class="col-sm-6 second-block-label" style="width:100%">SO Num</label>
+                                            <label class="col-sm-6 second-block-label" style="width:100%">WO Num</label>
                                             <label class="col-sm-6 second-block-label" style="width:100%"
                                                 disabled>{{this.workOrder.workOrderNumber}}</label>
                                         </div>
@@ -151,7 +151,7 @@
                                                     </label> -->
                                                     <!-- <label class="col-sm-12 first-block-label"
                                                         disabled>
-                                                        {{this.salesOrder.custToCountry}}</label> -->
+                                                        {{this.workOrder.custToCountry}}</label> -->
                                                 </div>
                                                 <div class="sold-block-div">
                                                     <!-- <label class="col-sm-6 first-block-label" disabled>Country
@@ -204,7 +204,7 @@
                                                 <div class="ship-block-div">
                                                     <!-- <label class="col-sm-12 first-block-label"
                                                         disabled>
-                                                        {{this.salesOrder.shipToCountry}}</label> -->
+                                                        {{this.workOrder.shipToCountry}}</label> -->
                                                 </div>
                                                 <div class="ship-block-div">
                                                     <!-- <label class="col-sm-6 first-block-label" disabled>Email
@@ -245,7 +245,7 @@
                                                     <td style="vertical-align: top;border-right:1px solid black;"></td>
                                                     <td style="vertical-align: top;border-right:1px solid black;">{{this.workOrder.shipViaName}}</td>
                                                     <td style="vertical-align: top;border-right:1px solid black;" >
-                                                        {{this.salesOrder.shipDate | date : "MM/dd/yyyy"}}</td>
+                                                        {{this.workOrder.shipDate | date : "MM/dd/yyyy"}}</td>
                                                     <td style="vertical-align: top;border-right:1px solid black;" >{{this.workOrder.awb}}</td>
                                                     <td style="vertical-align: top;border-right:1px solid black;">{{this.workOrder.shippingOrderNo}}</td>
                                                 </tr>

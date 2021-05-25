@@ -40,14 +40,12 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
 
   ngOnInit() 
   {
-    debugger;
     $('#PackagingSlipDiv').modal('show');
     this.getSalesPickTicketView();
   }
 
  
   getSalesPickTicketView() {
-    debugger;
     this.isSpinnerVisible = true;
     this.workOrderService.getPackagingSlipPrint(this.workOrderId, this.workOrderPartId, this.woPickTicketId, this.packagingSlipId).subscribe(res => {
       this.workOrder = res[0].packagingLabelViewModel;
