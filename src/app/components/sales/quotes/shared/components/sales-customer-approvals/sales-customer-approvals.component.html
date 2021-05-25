@@ -113,7 +113,7 @@
                     </option>
                   </select>
                 </td>
-                <td *ngIf="field.field == 'internalMemo'" class="min-width-100">
+                <td *ngIf="field.field == 'internalMemo'" class="min-width-300">
                   <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="approver['internalMemo']"></p>
                   <div class="pencil-div" *ngIf="getApprovalActionInternalStatus(approver)">
                     <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#memo-popup"
@@ -157,7 +157,7 @@
                     </option>
                   </select>
                 </td>
-                <td *ngIf="field.field == 'customerMemo'" class="min-width-100">
+                <td *ngIf="field.field == 'customerMemo'" class="min-width-300">
                   <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="approver['customerMemo']"></p>
                   <div class="pencil-div" *ngIf="getApprovalActionCustomerStatus(approver)">
                     <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
