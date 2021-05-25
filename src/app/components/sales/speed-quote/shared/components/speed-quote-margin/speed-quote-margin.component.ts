@@ -12,7 +12,8 @@ import { SpeedQuoteService } from "../../../../../../services/speedquote.service
 export class SpeedQuoteMarginComponent implements OnInit {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() searchAnotherPN: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() save: EventEmitter<PartDetail> = new EventEmitter<PartDetail>();
+  //@Output() save: EventEmitter<PartDetail> = new EventEmitter<PartDetail>();
+  @Output() save: EventEmitter<string[]> = new EventEmitter<string[]>();
   @Input() part: PartDetail;
   @Input() display: boolean;
   @Input() isEdit: boolean;
@@ -37,7 +38,9 @@ export class SpeedQuoteMarginComponent implements OnInit {
       results => {
         console.log("results",results);
         this.partData =  results;
+        //this.part = results;
         console.log("psrt1",this.partData);
+        //console.log("part",this.part);
         this.calculate();
       }, error => {
         //this.isSpinnerVisible = false;
@@ -65,6 +68,7 @@ export class SpeedQuoteMarginComponent implements OnInit {
     event.preventDefault();
     console.log("Save",this.partData);
     //this.save.emit(this.part);
+    this.save.emit(this.partData);
   }
 
   onSearchAnotherPN(event: Event): void {
