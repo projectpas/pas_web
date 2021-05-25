@@ -197,6 +197,41 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this._workflowService.currentWorkFlowId = null;
         }
     }
+    setCurrentPanel(itemName, id): void {
+        this.currentPanelId = id;
+        itemName = itemName.replace(" ", "_");
+        this.workFlow.partNumber = this.sourceWorkFlow.itemMasterId;
+        var list = document.getElementsByClassName('pan');
+        for (var i = 0; i < list.length; i++) {
+            list[i].classList.remove('active');
+            list[i].classList.remove('in');
+        }
+        var elem = document.getElementById('tab_' + itemName);
+        if (elem != null) {
+            document.getElementById('tab_' + itemName).classList.remove('fade');
+            document.getElementById('tab_' + itemName).classList.add('in');
+            document.getElementById('tab_' + itemName).classList.add('active');
+        }
+    }
+    SetCurrectTab(taskId, index?): void {
+        this.currenttaskId = taskId;
+        if (index !== undefined || index !== null) {
+            this.selectedSideTabIndex = index;
+        }
+        this.workFlow = this.workFlowList.filter(x => x.taskId == this.currenttaskId)[0];
+        var list = document.getElementsByClassName('actrmv');
+        for (var i = 0; i < list.length; i++) {
+            list[i].classList.add('active');
+        }
+        for (var i = 0; i < this.workFlowList.length; i++) {
+            document.getElementById('tab_' + this.workFlowList[i].taskId).classList.remove('active');
+        }
+        document.getElementById('tab_' + taskId).classList.add('active');
+        // if (this.workFlow.selectedItems != undefined || this.workFlow.selectedItems.length > 0) {
+            this.setSelectedItems(this.workFlow);
+        // }
+        this.selectedItems = this.workFlow.selectedItems;
+    }
     setSelectedItems(workFlow: any): void {
         this.selectedItems = [];
         if (workFlow.charges != undefined && workFlow.charges.length > 0) {
@@ -245,10 +280,14 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                         this.setCurrentPanel(this.selectedItems[i].Name, this.selectedItems[i].Id);
                     } else {
                         this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
-                        return;
+                        // return;
                     }
                 }
             }
+            setTimeout(() => {
+                this.currentPanelId = this.selectedItems[0].Id;
+                this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id)
+            }, 1000);
     }
     ngOnInit(): void {
         if (this._workflowService.enableUpdateMode) {
@@ -1296,41 +1335,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.isSpinnerVisible = false;
         });
     }
-    setCurrentPanel(itemName, id): void {
-        this.currentPanelId = id;
-        itemName = itemName.replace(" ", "_");
-        this.workFlow.partNumber = this.sourceWorkFlow.itemMasterId;
-        var list = document.getElementsByClassName('pan');
-        for (var i = 0; i < list.length; i++) {
-            list[i].classList.remove('active');
-            list[i].classList.remove('in');
-        }
-        var elem = document.getElementById('tab_' + itemName);
-        if (elem != null) {
-            document.getElementById('tab_' + itemName).classList.remove('fade');
-            document.getElementById('tab_' + itemName).classList.add('in');
-            document.getElementById('tab_' + itemName).classList.add('active');
-        }
-    }
-    SetCurrectTab(taskId, index?): void {
-        this.currenttaskId = taskId;
-        if (index !== undefined || index !== null) {
-            this.selectedSideTabIndex = index;
-        }
-        this.workFlow = this.workFlowList.filter(x => x.taskId == this.currenttaskId)[0];
-        var list = document.getElementsByClassName('actrmv');
-        for (var i = 0; i < list.length; i++) {
-            list[i].classList.add('active');
-        }
-        for (var i = 0; i < this.workFlowList.length; i++) {
-            document.getElementById('tab_' + this.workFlowList[i].taskId).classList.remove('active');
-        }
-        document.getElementById('tab_' + taskId).classList.add('active');
-        if (this.workFlow.selectedItems != undefined || this.workFlow.selectedItems.length > 0) {
-            this.setSelectedItems(this.workFlow);
-        }
-        this.selectedItems = this.workFlow.selectedItems;
-    }
+
     AddPage() {
         this.route.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock');
     }

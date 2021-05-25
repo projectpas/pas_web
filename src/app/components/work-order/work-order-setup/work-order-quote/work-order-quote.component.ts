@@ -661,7 +661,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     if (res.workOrderQuote['versionNo']) {
                                         // let vNo = Number(res.workOrderQuote['versionNo'].split('V')[1]) + 1;
                                         this.quoteForm['versionNo'] = res.workOrderQuote['versionNo'];
-                                        this.increaseVer();
+                                        // this.increaseVer();
                                         // $('#versionNoModel').modal("show");
                                     }
                                     this.IsApprovalBypass =res.workOrderQuote.isApprovalBypass;
@@ -828,6 +828,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.quotationHeader = res;
                     this.quoteCreated=true;
                     this.quoteForm.quoteNumber = res['quoteNumber'];
+                    this.quoteForm.versionNo = res['versionNo'];
                     this.setWorkOrderQuoteId(res['workOrderQuoteId']);
                     this.laborPayload.StatusId = this.exclusionPayload.StatusId = this.chargesPayload.StatusId = this.materialListPayload.StatusId = this.quoteFreightListPayload.StatusId = res['quoteStatusId']
                     this.alertService.showMessage(

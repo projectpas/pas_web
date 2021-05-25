@@ -405,7 +405,7 @@ this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'Pe
           if (this.laborForm.hoursorClockorScan != 1) {
             this.calculateWorkingHoursandMins(value);
           }
-          this.allTaskList.forEach(t => {
+          this.allTaskList.forEach(t => { 
             if (t.description == task) {
               this.calculateTaskHours(t);
               this.calculateAdjustmentHours(t);
