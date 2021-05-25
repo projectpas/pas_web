@@ -254,8 +254,9 @@
                             <th class="min-width-80">Back Ord </th>
                             <th class="min-width-60">Status</th>
                             <!-- <th [attr.colspan]="disableParentSpace ? '0' : '3'" class="text-center"></th> -->
-                            <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22=""
-                                    class="clr-red">*</span></th>
+                            <th colspan="4" class="mgmt-structure-td-width">
+                                Management Structure <span _ngcontent-c22="" class="clr-red">*</span>
+                            </th>
                             <th class="min-width-80">Is Serialized</th>
                             <th class="min-width-80">Is TimeLife</th>
                             <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
@@ -267,12 +268,11 @@
                             <!--this row is for the parent part-->
                             <tr class="parent-data parent-td-background" *ngIf="part.isParent">
                                 <!-- <td class="details-control eachcol parent-padding">
-                                    <section *ngIf="isSplitShipmentPart(part.purchaseOrderPartRecordId)">
+                                     <section *ngIf="isSplitShipmentPart(part.purchaseOrderPartRecordId)">
                                         <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
-                                            (click)="showSplitShipmentParts(part)"></i>
+                                           (click)="showSplitShipmentParts(part)"></i>
                                     </section>
                                 </td> -->
-
                                 <!-- <td class="text-right">{{row_index + 1}}</td> -->
                                 <td>
                                     {{part.itemMaster.partNumber}}
@@ -286,9 +286,12 @@
                                 <td class="text-right">{{part.stockLineCount}}</td>
                                 <td class="text-right">{{part.quantityRejected}}</td>
                                 <td class="text-right">{{part.quantityBackOrdered}}</td>
-                                <td>{{part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered
-                                        ? 'Fulfilling' : 'Received' }}</td>
-                                <td colspan="4">{{part?.level1}},{{part?.level2}}, {{part?.level3}},{{part?.level4}}
+                                <td>
+                                    {{
+                                    part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered
+                                        ? 'Fulfilling' : 'Received' }} </td>
+                                <td colspan="4">
+                                    {{part?.level1}},{{part?.level2}}, {{part?.level3}},{{part?.level4}}
                                 </td>
                                 <td>
                                     <section
@@ -332,10 +335,8 @@
                                 </td>
                             </tr>
 
-                            <tr class="child-header splitship-head child-header-back" 
-                                *ngIf="isSplitShipmentPart(part.purchaseOrderPartRecordId)">
-                                <!-- *ngIf="!part.isParent" -->
-                                <!-- [hidden]="!part.visible" -->
+                            <tr class="child-header splitship-head child-header-back" [hidden]="!part.visible"
+                                *ngIf="!part.isParent && part.showHeader">
                                 <!-- <th class="min-width-40"></th> -->
                                 <th>PN</th>
                                 <th class="min-width-60">Qty Ord</th>
@@ -354,11 +355,8 @@
                                 <th></th>
                                 <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
                             </tr>
-                            <tr class="child-data splitship-child child-data-back" 
-                                *ngIf="isSplitShipmentPart(part.purchaseOrderPartRecordId)">
-                                <!-- *ngIf="!part.isParent" -->
-                                
-                                <!-- [hidden]="!part.visible" -->
+                            <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
+                                *ngIf="!part.isParent">
                                 <!-- <td>&nbsp;</td> -->
                                 <td>{{part?.itemMaster?.partNumber}}</td>
                                 <td class="right">{{part?.quantityOrdered}}</td>
@@ -397,7 +395,7 @@
                             </tr>
 
                             <tr class="more-info" *ngIf="part.showStockLineGrid" [hidden]="!part.visible">
-                                <td colspan="13">
+                                <td colspan="12">
                                     <div class="form-row pn-div">
                                         <div class="col-md-2">
                                             <div class="form-group">
@@ -726,7 +724,6 @@
                                                     </div>
                                                     <div class="form-group"
                                                         *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType != undefined && part.stocklineListObj[part.currentSLIndex].obtainFromType > 0">
-                                                        <label>{{part.stocklineListObj[part.currentSLIndex].obtainFromType}}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete
@@ -795,7 +792,6 @@
                                                     </div>
                                                     <div class="form-group"
                                                         *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType != undefined && part.stocklineListObj[part.currentSLIndex].ownerType > 0">
-                                                        <label>{{part.stocklineListObj[part.currentSLIndex].ownerType.name}}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete
@@ -862,7 +858,6 @@
                                                     </div>
                                                     <div class="form-group"
                                                         *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType != undefined && part.stocklineListObj[part.currentSLIndex].traceableToType > 0">
-                                                        <label>{{part.stocklineListObj[part.currentSLIndex].traceableToType}}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete
@@ -1082,7 +1077,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <!-- <br /> -->
+                                        <!--<br />-->
                                         <section>
                                             <h4 class="add-details-heading text-left" style="margin-top:0px"
                                                 *ngIf="part.itemMaster.isSerialized && !part.isSameDetailsForAllParts">
@@ -1278,7 +1273,7 @@
                                                                     (change)="onChangeTimeLifeMin('cyclesSinceOVHMin', part, part.currentTLIndex)">
                                                             </td>
                                                             <td>Since Ovh</td>
-                                                            <td >
+                                                            <td>
                                                                 <input class="form-control" placeholder="HH"
                                                                     [disabled]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                     type="number" pInputText pKeyFilter="hex"
@@ -1306,7 +1301,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Since Insp</td>
-                                                            <td >
+                                                            <td>
                                                                 <input class="form-control" placeholder="HH"
                                                                     [disabled]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                     type="number" pInputText pKeyFilter="hex"
@@ -1319,7 +1314,7 @@
                                                                     (change)="onChangeTimeLifeMin('cyclesSinceInspectionMin', part, part.currentTLIndex)">
                                                             </td>
                                                             <td>Since Insp</td>
-                                                            <td >
+                                                            <td>
                                                                 <input class="form-control" placeholder="HH"
                                                                     [disabled]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                     type="number" pInputText pKeyFilter="hex"
@@ -1336,7 +1331,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Since Repair</td>
-                                                            <td >
+                                                            <td>
                                                                 <input class="form-control" placeholder="HH"
                                                                     [disabled]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                     type="number" pInputText pKeyFilter="hex"
@@ -1349,7 +1344,7 @@
                                                                     (change)="onChangeTimeLifeMin('cyclesSinceRepairMin', part, part.currentTLIndex)">
                                                             </td>
                                                             <td>Since Repair</td>
-                                                            <td >
+                                                            <td>
                                                                 <input class="form-control" placeholder="HH"
                                                                     [disabled]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                     type="number" pInputText pKeyFilter="hex"
