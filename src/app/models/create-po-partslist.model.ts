@@ -11,6 +11,7 @@ export class CreatePOPartsList {
     glAccountId: number;
     UOMId: number;
     needByDate: Date;
+    estRecordDate:Date;
     priorityId: number;
     conditionId: number;
     quantityOrdered: number;
@@ -56,6 +57,7 @@ export class CreatePOPartsList {
         this.glAccountId = null;
         this.UOMId = null;
         this.needByDate = null;
+        this.estRecordDate = null;
         this.priorityId = null;
         this.conditionId = null;
         this.quantityOrdered = null;
@@ -103,6 +105,7 @@ export class PartDetails {
         priorityId: number;
         quantityOrdered: number;
         needByDate: Date;
+        estRecordDate: Date;
         managementStructureId: number;
         masterCompanyId: number;
         childBulist: any[];
@@ -128,6 +131,7 @@ export class PartDetails {
             this.priorityId = null;
             this.quantityOrdered = null;
             this.needByDate = null;
+            this.estRecordDate = null;
             this.managementStructureId = null;
             this.masterCompanyId = 1;
             this.childBulist = [];

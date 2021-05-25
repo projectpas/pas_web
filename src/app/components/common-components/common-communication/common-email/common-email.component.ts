@@ -447,7 +447,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.arrayContactlist.push(0);
         //this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
             this.commonService.autoSuggestionSmartDropDownList('Employee', 'EmployeeId', 'FirstName', strText,
-			true, 0, this.arrayContactlist.join(), 0).subscribe(res => {
+			true, 0, this.arrayContactlist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
 
             this.employeeList = res.map(x => {
                 return {
