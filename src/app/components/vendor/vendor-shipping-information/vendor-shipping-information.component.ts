@@ -380,7 +380,7 @@ export class VendorShippingInformationComponent {
     onAddInternationalmemo(){
         this.textInternationalMemo=this.shipViaInterObj.memo;
         this.disableEditor=true;
-    
+        this.enableSaveInternationalShipVia();
     }
     
     onCloseTextAreaInfo(type) {
