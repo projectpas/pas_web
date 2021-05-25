@@ -168,8 +168,6 @@ export class SalesPartNumberComponent {
       this.defaultCurrencyDiscription = res.currencyName;
     }, error => {
       this.isSpinnerVisible = false;
-      const errorLog = error;
-      this.onDataLoadFailed(errorLog)
     })
   }
 
@@ -230,7 +228,7 @@ export class SalesPartNumberComponent {
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
       { field: 'quantityRequested', header: 'Qty Req', width: "53px" },
-      { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "80px" },
+      { field: 'quantityToBeQuoted', header: 'Qty To Qte', width: "66px" },
       { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "82px" },
       { field: 'quantityAvailable', header: 'Qty Avail', width: "58px" },
       { field: 'qtyOnHand', header: 'Qty on Hand', width: "75px" },
@@ -542,8 +540,6 @@ export class SalesPartNumberComponent {
         );
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
       });
     } else {
       this.removePartNamber(this.part);
@@ -777,38 +773,12 @@ export class SalesPartNumberComponent {
         this.onPartsSavedEvent.emit(this.selectedParts);
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        //this.onDataLoadFailed(errorLog)
       });
     }
     this.closeConfirmationModal();
   }
 
   onClosePart(event) {
-  }
-
-  onDataLoadFailed(log) {
-    const errorLog = log;
-    var msg = '';
-    if (errorLog.message) {
-      if (errorLog.error && errorLog.error.errors.length > 0) {
-        for (let i = 0; i < errorLog.error.errors.length; i++) {
-          msg = msg + errorLog.error.errors[i].message + '<br/>'
-        }
-      }
-      this.alertService.showMessage(
-        errorLog.error.message,
-        msg,
-        MessageSeverity.error
-      );
-    }
-    else {
-      this.alertService.showMessage(
-        'Error',
-        log.error,
-        MessageSeverity.error
-      );
-    }
   }
 
   notesIndex;
@@ -942,8 +912,6 @@ export class SalesPartNumberComponent {
       this.isSpinnerVisible = false;
     }, err => {
       this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.onDataLoadFailed(errorLog);
     });
   }
 

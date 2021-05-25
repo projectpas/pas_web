@@ -17,6 +17,7 @@ export class SalesQuotePrintTemplateComponent implements OnInit {
   salesTax: number = 0;
   subtotal: number = 0;
   totalAmount: number = 0;
+  miscCharges: number = 0;
 
   constructor(private customerService: CustomerService, private salesQuoteService: SalesQuoteService) {
   }
@@ -39,13 +40,15 @@ export class SalesQuotePrintTemplateComponent implements OnInit {
       this.parts = this.salesQuoteView.parts;
       if (this.parts.length > 0) {
         for (let i = 0; i < this.parts.length; i++) {
-          this.subtotal = this.subtotal + this.parts[i].totalSales;
+          this.subtotal = this.subtotal + (this.parts[i].qtyQuoted * this.parts[i].unitSalePrice);//this.parts[i].totalSales;
           this.totalAmount = this.subtotal;
         }
+        
+        this.miscCharges = this.parts[0].misc;
       }
 
       this.salesTax = ((this.subtotal * this.salesQuote.taxRate) / 100);
-      this.totalAmount = this.subtotal + this.salesTax;
+      this.totalAmount = this.subtotal + this.salesTax + this.miscCharges;
     })
   }
 }
