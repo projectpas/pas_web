@@ -32,6 +32,7 @@ import { StocklineReferenceStorage } from '../../../stockline/shared/stockline-r
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { StatusEnum } from '../../../../enum/status.enum';
 
 @Component({
 	selector: 'app-purchase-setup',
@@ -385,7 +386,16 @@ export class PurchaseSetupComponent implements OnInit {
 	msgflag: number = 0;
 
 	modal: NgbModalRef;
-	alertText: string
+	alertText: string;
+
+	openStatusId: number  = 0
+    pendingStatusId: number  = 0
+    fulfillingStatusId: number  = 0
+    closedStatusId: number  = 0
+    canceledStatusId: number  = 0
+    descriptionStatusId: number  = 0
+	closingStatusId: number  = 0
+	
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		private modalService: NgbModal,
@@ -419,6 +429,13 @@ export class PurchaseSetupComponent implements OnInit {
 		this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
 		this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
 		this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		this.openStatusId = StatusEnum.Open;    
+        this.pendingStatusId = StatusEnum.Pending;    
+        this.fulfillingStatusId = StatusEnum.Fulfilling;    
+        this.closedStatusId = StatusEnum.Closed;    
+        this.canceledStatusId = StatusEnum.Canceled;    
+        this.descriptionStatusId = StatusEnum.Description;    
+        this.closingStatusId = StatusEnum.Closing; 
 	}
 
 	ngOnInit() {
@@ -2569,6 +2586,10 @@ export class PurchaseSetupComponent implements OnInit {
 						`Updated PO Header Successfully`,
 						MessageSeverity.success
 					);
+					if(headerInfoObj.statusId == this.fulfillingStatusId) {						
+						this.route.navigate(['/vendorsmodule/vendorpages/app-polist']);
+					}
+
 				}, err => {
 					this.isSpinnerVisible = false;
 					this.toggle_po_header = true;
