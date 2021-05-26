@@ -20,6 +20,7 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly getCopyEndpointUrl: string = environment.baseUrl + "/api/speedquote/copy";
   private readonly getCloseEndointUrl: string = environment.baseUrl + "/api/speedquote/close";
   private readonly getItemMasterDataConditionWiseURL : string = environment.baseUrl + "/api/itemMaster/getItemMasterDataConditionWise";
+  private readonly searchSpeedQuote: string = environment.baseUrl + "/api/speedquote/speedquotesearch";
 
   constructor(
     http: HttpClient,
@@ -125,6 +126,21 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
       .get(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getItemMasterDataConditionWise(itemMasterId));
+      });
+  }
+  search(
+    speedQuoteSearchParameters
+  ): Observable<any> {
+    return this.http
+      .post(
+        this.searchSpeedQuote,
+        JSON.stringify(speedQuoteSearchParameters),
+        this.getRequestHeaders()
+      )
+      .catch(error => {
+        return this.handleErrorCommon(error, () =>
+          this.search(speedQuoteSearchParameters)
+        );
       });
   }
 }

@@ -161,7 +161,7 @@ border-spacing: 0 1em;">
             <td class="td14" style="text-align: right;">{{part.qtyQuoted}}</td>
             <td class="td48" style="text-align: right;">{{part.unitSalePrice | twoDecimalGlobalNumberFormatPipe}}</td>
             <td class="td16" style="text-align: right;">{{part.discountAmount | twoDecimalGlobalNumberFormatPipe}}</td>
-            <td class="td17" style="text-align: right;">{{part.totalSales | twoDecimalGlobalNumberFormatPipe}}</td>
+            <td class="td17" style="text-align: right;">{{(part.qtyQuoted * part.unitSalePrice) | twoDecimalGlobalNumberFormatPipe}}</td>
         </tr>
         <tr>
             <td></td>
@@ -205,15 +205,15 @@ border-spacing: 0 1em;">
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line">Other Tax(es)</td>
-            <td class="total-value">
+            <td class="total-value" style="text-align: right;">
                 <div id="total"></div>
             </td>
         </tr>
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line">Misc Charges</td>
-            <td class="total-value">
-                <div id="total"></div>
+            <td class="total-value" style="text-align: right;">
+                <div id="miscCharges">{{miscCharges | twoDecimalGlobalNumberFormatPipe}}</div>
             </td>
         </tr>
         <tr>

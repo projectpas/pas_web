@@ -119,6 +119,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
                 }, 2000);
             });
         }
+        console.log("moduleName", this.moduleName); 
     }
 
     generalCode: any;
@@ -150,6 +151,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
             }
             if (property == 'moduleName') {
                 this.moduleName = this.moduleName; 
+                console.log("moduleName", this.moduleName);
         }
     }
         this.id = this.referenceId;
@@ -580,7 +582,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
     documentCollectionOriginal: any = [];
     getList() {
-        
+        console.log("moduleName", this.moduleName);
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
@@ -730,8 +732,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
     newDocumentDetails: any = {};
 
-    saveDocumentInformation() {
-        debugger;
+    saveDocumentInformation() { 
         if (this.documentInformation.documentTypeId == 0) {
             this.alertService.showMessage("Error", `Please select document type.`, MessageSeverity.error);
             return false;

@@ -724,6 +724,7 @@
                                                     </div>
                                                     <div class="form-group"
                                                         *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType != undefined && part.stocklineListObj[part.currentSLIndex].obtainFromType > 0">
+                                                        <label>{{part.stocklineListObj[part.currentSLIndex].obtainFromType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].obtainFromType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].obtainFromType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete
@@ -791,7 +792,8 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group"
-                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType != undefined && part.stocklineListObj[part.currentSLIndex].ownerType > 0">
+                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType != undefined && part.stocklineListObj[part.currentSLIndex].ownerType > 0">                                                        
+                                                        <label>{{part.stocklineListObj[part.currentSLIndex].ownerType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].ownerType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].ownerType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete
@@ -857,7 +859,8 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group"
-                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType != undefined && part.stocklineListObj[part.currentSLIndex].traceableToType > 0">
+                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType != undefined && part.stocklineListObj[part.currentSLIndex].traceableToType > 0">                                                        
+                                                        <label>{{part.stocklineListObj[part.currentSLIndex].traceableToType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].traceableToType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].traceableToType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete

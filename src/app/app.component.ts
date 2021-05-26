@@ -395,7 +395,17 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               label: 'Reports and Forms',
               items: [
-                { label: 'Trial Balance', routerLink: '/#' },
+                // { label: 'Trial Balance', routerLink: '/#' },
+                {
+                  label: 'Trial Balance', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTrial+Bal&rs:Command=Render');
+                  }
+                },
+                {
+                  label: 'Trial Bal Trends', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTrial+Bal+Trends&rs:Command=Render');
+                  }
+                },
                 { label: 'Income Statement', routerLink: '/#' },
                 { label: 'Balance Sheet', routerLink: '/#' },
               ],
@@ -459,7 +469,12 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               label: 'Reports and Forms',
               items: [
-                { label: 'AR Aging', routerLink: '/#' },
+                // { label: 'AR Aging', routerLink: '/#' },
+                {
+                  label: 'AR Aging', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fAR+Invoice+Aging&rs:Command=Render ');
+                  }
+                },
                 { label: 'History By Customer', routerLink: '/#' },
                 { label: 'History By Payment', routerLink: '/#' },
                 { label: 'Customer Statement', routerLink: '/#' },

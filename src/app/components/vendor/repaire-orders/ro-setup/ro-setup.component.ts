@@ -33,6 +33,7 @@ import { RepairOrderService } from '../../../../services/repair-order.service';
 import { StocklineService } from '../../../../services/stockline.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
 
 @Component({
 	selector: 'app-ro-setup',
@@ -308,6 +309,12 @@ export class RoSetupComponent implements OnInit {
 	stocklinepartNumberId: any;
 	stocklineconditionId: any;
 	searchstocklinepart: boolean = true;
+	revisedPartNumCollection: any = [];
+	workPerformedCollection: any = [];
+	acTailNumCollection: any = [];
+	includeAlternatePartNumber:any;
+	includeEquivalentPartNumber:any;
+	includeRevicePartNumber:any;
 
 	fields = ['partsCost', 'partsRevPercentage', 'unitCost', 'extCost', 'qty', 'laborCost', 'laborRevPercentage', 'overHeadCost', 'overHeadPercentage', 'chargesCost', 'freightCost', 'exclusionCost', 'directCost', 'directCostPercentage', 'revenue', 'margin', 'marginPercentage'];
 	approvalProcessHeader = [
@@ -436,7 +443,9 @@ export class RoSetupComponent implements OnInit {
 		this.rosettingModel.IsDeferredReceiver = false;
 		this.rosettingModel.IsEnforceApproval = false;
 		this.getRepairOrderMasterData();
-
+		this.includeAlternatePartNumber = true;
+		this.includeEquivalentPartNumber = true;
+		this.includeRevicePartNumber = true;
 
 		this.vendorIdByParams = this._actRoute.snapshot.params['vendorId'];
 		this.id = this.roId = this._actRoute.snapshot.params['id'];
@@ -1630,7 +1639,7 @@ export class RoSetupComponent implements OnInit {
 					ifSplitShip: x.roPartSplits.length > 0 ? true : false,
 					partNumber: x.partNumber,
 					partDescription: x.partDescription,
-					needByDate: x.needByDate ? new Date(x.needByDate) : '',
+					needByDate: x.needByDate ? new Date(x.needByDate) : '',					
 					conditionId: parseInt(x.conditionId),
 					priorityId: parseInt(x.priorityId),
 					discountPercent: x.discountPercent ? parseInt(x.discountPercent) : 0,
@@ -1649,7 +1658,17 @@ export class RoSetupComponent implements OnInit {
 					isApproved: x.isApproved ? x.isApproved : false,
 					childList: this.getRepairOrderSplitPartsEdit(x, pindex, data[1]),
 					remQty: 0,
+					
+					revisedPartId : x.revisedPartId ? getObjectById('itemMasterId',x.revisedPartId, this.revisedPartNumCollection) : 0,
+					vendorQuoteNoId: getObjectById('value', x.vendorQuoteNoId == null ? 0 : x.vendorQuoteNoId, this.allSalesOrderDetails),
+					workPerformedId: getObjectById('value', x.workPerformedId == null ? 0 : x.workPerformedId, this.workPerformedCollection),
+					estRecordDate: x.estRecordDate ? new Date(x.estRecordDate) : '',	
+					vendorQuoteDate: x.vendorQuoteDate ? new Date(x.vendorQuoteDate) : '',	
+					//acTailNum : x.acTailNum ? getObjectByValue ('label', x.acTailNum, this.acTailNumCollection) : null,	
+					acTailNum: { value: 0, label: x.acTailNum },				
 				}
+				
+				console.log(this.newPartsList)
 				this.getManagementStructureForParentPart(this.newPartsList, data[1], data[3]);
 
 				if (this.newPartsList.childList && this.newPartsList.childList.length > 0) {
@@ -2043,6 +2062,7 @@ export class RoSetupComponent implements OnInit {
 		this.altPartNumList = [];
 		this.altPartNumList = parentdata.x.altPartNumList;
 		parentdata.needByDate = this.headerInfo.needByDate;
+		parentdata.estRecordDate = this.headerInfo.needByDate;
 		parentdata.conditionId = parentdata.x.conditionId;
 		parentdata.priorityId = this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null;
 		parentdata.quantityOrdered = parentdata.x.quantityAvailable;
@@ -2089,6 +2109,7 @@ export class RoSetupComponent implements OnInit {
 		parentdata.altEquiPartNumberId = null;
 		if (value != 'onEdit') {
 			parentdata.needByDate = this.headerInfo.needByDate;
+			parentdata.estRecordDate = this.headerInfo.needByDate;
 			parentdata.conditionId = this.defaultCondtionId;
 			parentdata.priorityId = this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null;
 			parentdata.quantityOrdered = '0';
@@ -2626,6 +2647,9 @@ export class RoSetupComponent implements OnInit {
 		this.loadSalesOrderList();
 		this.loapartItems();
 		this.loadModuleListForVendorComp();
+		this.getAllrevisedPart();
+		this.getAllworkPerformed();
+		this.getAllACTailNum('');	
 	}
 
 	saveRepairOrderHeader() {
@@ -2992,15 +3016,15 @@ export class RoSetupComponent implements OnInit {
 				itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				//partNumber : this.partListData[i].itemMasterId ? this.getPartnumber(this.partListData[i].itemMasterId) : null,
 				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getValueFromObj(this.partListData[i].altEquiPartNumberId) : null,
-				//altPartNumber : this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumer(this.partListData[i].altEquiPartNumberId) : null,
+				//altPartNumber : this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumer(this.partListData[i].altEquiPartNumberId) : null,				
 				assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
 				partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				itemTypeId: this.partListData[i].itemTypeId ? this.partListData[i].itemTypeId : 0,
 				manufacturerId: this.partListData[i].manufacturerId ? this.partListData[i].manufacturerId : 0,
 				glAccountId: this.partListData[i].glAccountId ? this.partListData[i].glAccountId : 0,
 				UOMId: this.partListData[i].UOMId ? this.partListData[i].UOMId : 0,
-				needByDate: this.datePipe.transform(this.partListData[i].needByDate, "MM/dd/yyyy"),
-				conditionId: this.partListData[i].conditionId ? this.partListData[i].conditionId : 0,
+				needByDate: this.datePipe.transform(this.partListData[i].needByDate, "MM/dd/yyyy"),				
+				conditionId: this.partListData[i].conditionId ? this.partListData[i].conditionId : 0,				
 				//condition : this.partListData[i].conditionId ? this.getCondition(this.partListData[i].conditionId): 0,
 				priorityId: this.partListData[i].priorityId ? this.partListData[i].priorityId : 0,
 				//priority : this.partListData[i].priorityId ? this.getPriorityName(this.partListData[i].priorityId) : 0,
@@ -3034,7 +3058,16 @@ export class RoSetupComponent implements OnInit {
 				createdBy: this.userName,
 				updatedBy: this.userName,
 				employeeID: this.employeeId ? this.employeeId : 0,
+
+				revisedPartId : this.partListData[i].revisedPartId ? editValueAssignByCondition('itemMasterId', this.partListData[i].revisedPartId) : null,				
+				workPerformedId: this.partListData[i].workPerformedId ? this.getValueFromObj(this.partListData[i].workPerformedId) : null,
+				estRecordDate : this.datePipe.transform(this.partListData[i].estRecordDate, "MM/dd/yyyy"),
+				vendorQuoteNoId :  this.partListData[i].vendorQuoteNoId ? this.getValueFromObj(this.partListData[i].vendorQuoteNoId) : null,
+				vendorQuoteDate : this.partListData[i].vendorQuoteDate ? this.datePipe.transform(this.partListData[i].vendorQuoteDate, "MM/dd/yyyy") : null,
+				acTailNum: this.partListData[i].acTailNum ? editValueAssignByCondition('label', this.partListData[i].acTailNum) : null,				
+				
 			}
+						
 			if (!this.isEditMode) {
 				this.parentObjectArray.push({
 					...this.parentObject,
@@ -3306,6 +3339,7 @@ export class RoSetupComponent implements OnInit {
 						...newParentObject,
 						partNumberId: { value: x.itemMasterId, label: x.partNumber },
 						needByDate: this.headerInfo.needByDate,
+						estRecordDate: this.headerInfo.needByDate,
 						conditionId: x.conditionId,
 						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 						discountPercent: 0,
@@ -3345,6 +3379,7 @@ export class RoSetupComponent implements OnInit {
 						...newParentObject,
 						partNumberId: { value: x.itemMasterId, label: x.partNumber },
 						needByDate: this.headerInfo.needByDate,
+						estRecordDate: this.headerInfo.needByDate,
 						conditionId: this.defaultCondtionId,
 						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 						discountPercent: 0,
@@ -3464,7 +3499,7 @@ export class RoSetupComponent implements OnInit {
 		// this.stocklineconditionId = Condtionid;
 		this.isSpinnerVisible = true;
 		this.stocklineData = [];
-		this.stocklineService.GetAllStocklineByPartAndCondtion(itmeMasterID, Condtionid, this.currentUserMasterCompanyId).subscribe(res => {
+		this.stocklineService.GetAllStocklineByPartAndCondtion(itmeMasterID, Condtionid,this.includeAlternatePartNumber,this.includeEquivalentPartNumber,this.includeRevicePartNumber, this.currentUserMasterCompanyId).subscribe(res => {
 			this.stocklineData = res.map(x => {
 				return {
 					...x,
@@ -3499,6 +3534,7 @@ export class RoSetupComponent implements OnInit {
 		newParentObject = {
 			...newParentObject,
 			needByDate: this.headerInfo.needByDate,
+			estRecordDate: this.headerInfo.needByDate,
 			priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 			conditionId: this.defaultCondtionId,
 			discountPercent: 0
@@ -3571,7 +3607,7 @@ export class RoSetupComponent implements OnInit {
 		if (this.stocklineconditionId != null && this.stocklinepartNumberId != null && this.stocklineconditionId.length > 0) {
 			this.isSpinnerVisible = true;
 			this.stocklineData = [];
-			this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId, this.currentUserMasterCompanyId).subscribe(res => {
+			this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId,this.includeAlternatePartNumber,this.includeEquivalentPartNumber,this.includeRevicePartNumber,this.currentUserMasterCompanyId).subscribe(res => {
 				this.stocklineData = res.map(x => {
 					return {
 						...x,
@@ -3624,6 +3660,7 @@ export class RoSetupComponent implements OnInit {
 			...childPart,
 			quantityOrdered: 0,
 			needByDate: partList.needByDate ? partList.needByDate : null,
+			estRecordDate: partList.estRecordDate ? partList.estRecordDate : null,
 			priorityId: partList.priorityId ? getValueFromArrayOfObjectById('label', 'value', partList.priorityId, this.allPriorityInfo) : null
 		}
 		partList.childList.push(childPart);
@@ -4881,6 +4918,7 @@ export class RoSetupComponent implements OnInit {
 		newParentObject = {
 			...newParentObject,
 			needByDate: this.headerInfo.needByDate,
+			estRecordDate:this.headerInfo.needByDate,
 			priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 			conditionId: this.defaultCondtionId,
 			discountPercent: 0,
@@ -4960,5 +4998,72 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
+	arrayrevisedPartlist: any = []
+	getAllrevisedPart(strText = ''){		
+		if (this.arrayrevisedPartlist.length == 0) {
+			this.arrayrevisedPartlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20,this.arrayrevisedPartlist.join(),this.currentUserMasterCompanyId).subscribe(res => {                    
+            this.revisedPartNumCollection = [];
+            for (let i = 0; i < res.length; i++) {                
+                this.revisedPartNumCollection.push({itemMasterId: res[i].value,partNumber: res[i].label});                               
+            };
+        });
+	}
 
+	filterRevisedPart(event) {
+		if (event.query !== undefined && event.query !== null) {
+            this.getAllrevisedPart(event.query);
+        } else {
+            this.getAllrevisedPart('');
+        }       
+	}
+
+	arrayworkPerformedlist: any[] = [];
+	getAllworkPerformed(strText = '') {
+		if (this.arrayworkPerformedlist.length == 0) {
+			this.arrayworkPerformedlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('WorkPerformed', 'WorkPerformedId', 'WorkPerformedCode', strText, true, 20, this.arrayworkPerformedlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.workPerformedCollection = res;			
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
+	}
+	
+	filterworkPerformed(event) {
+		if (event.query !== undefined && event.query !== null) {
+            this.getAllworkPerformed(event.query);
+        } else {
+            this.getAllworkPerformed('');
+        }       
+	}
+
+	arrayactailnumlist: any[] = [];
+	getAllACTailNum(strText = '') {
+		if (this.arrayactailnumlist.length == 0) {
+			this.arrayactailnumlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('Stockline', 'StockLineId', 'StockLineNumber', strText, true, 20, this.arrayactailnumlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.acTailNumCollection = res;				
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
+	}
+	
+	filterACTailNum (event) {
+		if (event.query !== undefined && event.query !== null) {
+            this.getAllACTailNum(event.query);
+        } else {
+            this.getAllACTailNum('');
+        }       
+	}
+
+	StockLinePopup(row) {
+		if(row.stockLineId > 0) {
+			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
+        	this.modal.componentInstance.stockLineId = row.stockLineId;
+			this.modal.result.then(() => { }, () => { });
+		}
+	}
 }
