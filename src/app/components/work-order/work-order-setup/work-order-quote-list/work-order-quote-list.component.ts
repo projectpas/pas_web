@@ -37,6 +37,7 @@ export class WorkOrderQuoteListComponent implements OnInit {
     { field: 'workOrderNum', header: 'WO Num' },
     { field: 'customerName', header: 'Cust Name' },
     { field: 'customerCode', header: 'Cust Code' },
+    { field: 'versionNo', header: 'Quote Version' },
     { field: 'openDate', header: 'Open Date' },
     { field: 'promisedDate', header: 'Promise Date' },
     { field: 'estCompletionDate', header: 'Est. Comp Date' },
