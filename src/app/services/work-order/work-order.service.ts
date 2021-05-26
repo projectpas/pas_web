@@ -270,6 +270,9 @@ export class WorkOrderService {
     assetsHistoryByWorkOrderAssetId(workOrderAssetId, isSubWorkOrder) {
         return this.workOrderEndpointService.assetsHistoryByWorkOrderAssetId(workOrderAssetId, isSubWorkOrder);
     }
+    GetReleaseHistory(ReleaseFromId) {
+        return this.workOrderEndpointService.GetReleaseHistory(ReleaseFromId);
+    }
     deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy, isSubWorkOrder) {
         return this.workOrderEndpointService.deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy, isSubWorkOrder);
     }
@@ -379,6 +382,9 @@ export class WorkOrderService {
     }
     workOrderAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId) {
         return this.workOrderEndpointService.workOrderAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId);
+    }
+    workOrderReleaseFromListData(workOrderId, workOrderPartNoId) {
+        return this.workOrderEndpointService.workOrderReleaseFromListData(workOrderId, workOrderPartNoId);
     }
     worOrderTearDownReasonListById(tearDownTypeId) {
         return this.workOrderEndpointService.worOrderTearDownReasonListById(tearDownTypeId);
@@ -659,12 +665,12 @@ export class WorkOrderService {
     }
 
     
-    GetWorkorderReleaseFromData(workOrderId) {
-        return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId);
+    GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId);
     }
 
-    GetWorkorderReleaseEasaFromData(workOrderId) {
-        return this.workOrderEndpointService.GetWorkorderReleaseEasaFromData(workOrderId);
+    GetWorkorderReleaseEasaFromData(workOrderId,workOrderPartNumberId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseEasaFromData(workOrderId,workOrderPartNumberId);
     }
 
     getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN = false) {
@@ -746,6 +752,10 @@ export class WorkOrderService {
       this.workOrderEndpointService.updateShipping(serviceClass, workOrderShippingId)
     );
   }
+
+  CreateUpdateReleasefrom(Releasefrom) {
+    return this.workOrderEndpointService.CreateUpdateReleasefrom<any>(Releasefrom);
+}
 
 
 
