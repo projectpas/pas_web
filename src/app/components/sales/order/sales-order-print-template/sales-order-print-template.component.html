@@ -253,9 +253,9 @@
                                     <td>{{child.conditionDescription}}</td>
                                     <td> - </td>
                                     <td style="text-align: right;">{{child.qtyRequested | number : '1.2-2'}}</td>
-                                    <td style="text-align: right;">{{child.unitCost | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;">{{child.grossSalePricePerUnit | number : '1.2-2'}}</td>
                                     <td style="text-align: right;">
-                                        {{(child.qtyRequested * child.unitCost) | number : '1.2-2'}}</td>
+                                        {{(child.qtyRequested * child.grossSalePricePerUnit) | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" rowspan="2" style="border:1px solid black">Notes: {{child.notes}}</td>

@@ -296,11 +296,11 @@
                 </td>
                 <td *ngIf="i >= 1">&nbsp;</td>
                 <td>
-
+                  <!-- || laborForm.isTaskCompletedByOne -->
                   <select class="check-valid-td" [(ngModel)]="rec.expertiseId" (ngModelChange)="checkValid(15)"
                    (change)="
                       getExpertiseEmployeeByExpertiseId($event.target.value, i, rec)
-                    " [disabled]="isView || laborForm.isTaskCompletedByOne" required>
+                    " [disabled]="isView " required>
                     <option value="0">Select</option>
                     <ng-container *ngFor="let exp of expertiseTypeList">
                       <option [value]="exp.value">{{ exp.label }}</option>
@@ -309,12 +309,12 @@
                 </td>
                 <td  >
                   <!-- *ngIf="!isQuote" -->
-
+                  <!-- || laborForm.isTaskCompletedByOne -->
                   <p-autoComplete field="label" (ngModelChange)="checkValid(16)" (onSelect)="onPartSelect($event, rec,i)" [(ngModel)]="rec.employeeId" #salesPerson="ngModel"
                     errorMessage="Records not found" [forceSelection]="true" [dropdown]="true" [suggestions]="
                       getDynamicVariableData('expertiseEmployee', i) " (onClear)="clearautoCompleteInput(rec)" 
                       (completeMethod)="filterExpertiseEmployee($event, i)" emptyMessage="No Match Found" [size]="30"
-                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required [disabled]="isView || laborForm.isTaskCompletedByOne" appendTo="body">
+                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required [disabled]="isView " appendTo="body">
                   </p-autoComplete>
                 </td>
                 <td> 

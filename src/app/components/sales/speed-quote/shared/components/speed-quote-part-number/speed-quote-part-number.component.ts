@@ -12,6 +12,7 @@ import {
 } from "../../../../../../services/alert.service";
 import { formatNumberAsGlobalSettingsModule } from "../../../../../../generic/autocomplete";
 import { ISalesQuoteView } from "../../../../../../models/sales/ISalesQuoteView";
+import { ISpeedQuoteView } from "../../../../../../models/sales/ISpeedQuoteView";
 import { AuthService } from "../../../../../../services/auth.service";
 import { CommonService } from "../../../../../../services/common.service";
 import { ISalesOrderQuotePart } from "../../../../../../models/sales/ISalesOrderQuotePart";
@@ -51,7 +52,7 @@ export class SpeedQuotePartNumberComponent {
   @Input() salesQuote: ISpeedQuote;
   @Input() isViewMode: Boolean;
   query: ItemMasterSearchQuery;
-  @Input() salesQuoteView: ISalesQuoteView;
+  @Input() salesQuoteView: ISpeedQuoteView;
   @Input() defaultSettingPriority;
   @ViewChild("updatePNDetailsModal", { static: false })
   public updatePNDetailsModal: ElementRef;
@@ -70,6 +71,7 @@ export class SpeedQuotePartNumberComponent {
   canSaveParts = false;
   priorities = [];
   saveButton = false;
+  partActionModal: NgbModalRef;
   constructor(private modalService: NgbModal,
     //private salesQuoteService: SalesQuoteService,
     private alertService: AlertService,
@@ -81,6 +83,21 @@ export class SpeedQuotePartNumberComponent {
   }
 
   ngOnInit() {
+    this.speedQuoteService.getSearchPartObject().subscribe(data => {
+      this.query = data;
+    });
+    this.speedQuoteService.getSelectedParts().subscribe(data => {
+      if (data) {
+        this.selectedParts = data;
+      } else {
+        this.selectedParts = [];
+      }
+      this.filterParts();
+
+    //this.getDefaultCurrency();
+    });
+    this.columns = [];
+    this.initColumns();
   }
 
   addPartNumber(summaryRow: any = '', rowIndex = null) {
@@ -110,6 +127,89 @@ export class SpeedQuotePartNumberComponent {
     return this.authService.currentUser
       ? this.authService.currentUser.masterCompanyId
       : 1;
+  }
+  initColumns() {
+    this.columns = [
+      { field: 'partNumber', header: "PN", width: "130px" },
+      { field: 'description', header: "PN Description", width: "250px" },
+      { field: 'stockLineNumber', header: "Stk Line Num", width: "100px" },
+      { field: 'serialNumber', header: "Ser Num", width: "70px" },
+      { field: 'conditionDescription', header: "Cond", width: "70px" },
+      // { header: "Customer Ref", width: "100px" },
+      { field: 'priorityName', header: "Priority", width: "100px" },
+      { field: 'openDate', header: "Quote Date", width: "100px" },
+      // { header: "UOM", width: "70px" },
+      { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
+      // { field: 'qtyAvailable', header: "Qty Req", width: "90px" },
+      // { field: 'quantityToBeQuoted', header: "Qty to Quote", width: "70px" },
+      // { field: 'quantityAlreadyQuoted', header: "Qty Prev Quoted", width: "70px" },
+      // { field: 'customerRequestDate', header: "Cust Request Date", width: "155px" },
+      // { field: 'promisedDate', header: "Cust Promised Date", width: "155px" },
+      // { field: 'estimatedShipDate', header: "Est.Ship Date", width: "155px" },
+      // { field: 'statusName', header: "Status", width: "70px" },
+      // // { header: "Curr", width: "60px" },
+      // { header: "FX Rate", width: "80px" },
+      { field: 'unitCostPerUnit', header: "Unit Cost", width: "90px" },
+      // { field: 'markUpPercentage', header: "MarkUp %", width: "70px" },
+      // { field: 'markupPerUnit', header: "MarkUp Amt/Unit", width: "110px" },
+      // { field: 'grossSalePricePerUnit', header: "Gross Price/Unit", width: "110px" },
+      // { field: 'salesDiscount', header: "Disc. %", width: "60px" },
+      // { field: 'salesDiscountPerUnit', header: "Disc. Amt/Unit", width: "110px" },
+      // { field: 'markupExtended', header: "MarkUp Amt", width: "100px" },
+      // { field: 'grossSalePrice', header: "Gross Sales Amt", width: "110px" },
+      // { field: 'salesDiscountExtended', header: "Disc. Amt", width: "90px" },
+      { field: 'netSalesPriceExtended', header: "Net Sales Amt", width: "100px" },
+      // { header: "Misc Amt", width: "90px" },
+      // // { header: "Freight", width: "90px" },
+      // { field: 'taxType', header: "Tax Type", width: "90px" },
+      // { field: 'taxAmount', header: "Tax Amt", width: "90px" },
+      // { field: 'totalSales', header: "Total", width: "90px" },
+      { field: 'unitCostExtended', header: "Ext Cost", width: "100px" },
+      { field: 'marginAmountExtended', header: "Product Margin", width: "100px" },
+      { field: 'marginPercentageExtended', header: "Product Margin (%)", width: "120px" },
+      { field: 'pmaStatus', header: "Stk Type", width: "100px" },
+      { field: 'altOrEqType', header: "Alt/Equiv", width: "100px" },
+      // { field: 'controlNumber', header: "Cntrl Num", width: "80px" },
+      // { field: 'idNumber', header: "Cntrl ID Num", width: "90px" },
+      { field: 'notes', header: "Notes", width: "120px" },
+    ];
+
+    this.summaryColumns = [
+      // { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
+      // { field: 'itemNo', header: 'Line #', width: '42px', textalign: 'center' },
+      { field: 'partNumber', header: 'PN', width: "140px" },
+      // { field: 'partDescription', header: 'PN Description', width: '200px' },
+      { field: 'description', header: 'PN Description', width: '200px' },
+      // { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
+      { field: 'conditionDescription', header: 'Cond', width: "70px" },
+      { field: 'quantityRequested', header: 'Qty', width: "60px" },
+      { field: 'manufacturer', header: 'Manufacturer', width: "84px" },
+      { field: 'oempmader', header: 'Item Type', width: "60px" },
+      // { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "84px" },
+      // { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "84px" },
+      // { field: 'quantityAvailable', header: 'Qty Avail', width: "75px" },
+      // { field: 'qtyOnHand', header: 'Qty on Hand', width: "75px" },
+      // { field: 'currencyDescription', header: 'Curr', width: "80px" },
+      // { field: 'fixRate', header: 'FX Rate', width: "80px" },
+      // { field: 'uom', header: 'UOM', width: "58px" },
+      // { field: 'customerRef', header: 'Cust Ref', width: "120px" },
+      { field: 'unitSalePrice', header: 'Unit Price', width: "90px" },
+      // { field: 'grossSalePrice', header: 'Gross Sale Amt', width: "90px" },
+      // { field: 'salesDiscountExtended', header: 'Disc Amt', width: "90px" },
+      // { field: 'netSalesPriceExtended', header: 'Net Sale Amt', width: "84px" },
+      // { field: 'misc', header: 'Misc', width: "79px" },
+      // { field: 'freight', header: 'Freight', width: "84px" },
+      // { field: 'taxAmount', header: 'Tax Amt', width: "84px" },
+      // { field: 'totalSales', header: 'Total', width: "95px" },
+      { field: 'unitCostExtended', header: 'Extended Cost', width: "90px" },
+      { field: 'marginAmountExtended', header: 'Margin Amt', width: "103px" },
+      { field: 'marginPercentageExtended', header: 'Margin%', width: "102px" },
+      { field: 'notes', header: "Notes", width: "120px" },
+    ]
+    // if (!this.isViewMode) {
+    //   // { header: "Notes", width: "100px" },
+    //   this.summaryColumns.push({ header: "Actions", width: "100px" });
+    // }
   }
   openSalesMargin(event) {
     this.isEdit = false;
@@ -219,7 +319,8 @@ export class SpeedQuotePartNumberComponent {
     this.part.quantityAlreadyQuoted = Number(event.quantityFromThis);
     //this.part.itemNo = this.countItemNo + 1;
     this.speedQuoteService.updateSearchPartObject(this.query);
-    let partObj = { ...this.part };
+    //let partObj = { ...this.part };
+    let partObj = { ...event };
     if (!this.isEdit) {
       if (this.selectedSummaryRow) {
         this.selectedSummaryRow.quantityToBeQuoted = this.query.partSearchParamters.quantityToQuote;
@@ -232,7 +333,12 @@ export class SpeedQuotePartNumberComponent {
       }
       this.openPartNumber(false);
       const partsList = this.selectedParts;
-      partsList.push(partObj);
+      for(let i=0;i<event.length;i++)
+      {
+        event[i].quantityRequested = this.query.partSearchParamters.quantityRequested;
+        partsList.push(event[i]);
+      }
+      //partsList.push(partObj);
       this.speedQuoteService.selectedParts = partsList;
     }
     this.filterParts();
@@ -255,13 +361,13 @@ export class SpeedQuotePartNumberComponent {
     this.summaryParts = [];
     let uniqueParts = this.getUniqueParts(this.selectedParts, 'partNumber', 'conditionId', 'pmaStatus');
     if (uniqueParts.length > 0) {
-      uniqueParts.forEach((part, i) => {
-        let childParts = this.selectedParts.filter(selectedPart => selectedPart.partNumber == part.partNumber && selectedPart.conditionId == part.conditionId && selectedPart.pmaStatus == part.pmaStatus)
-        if (childParts && childParts.length > 0) {
-          uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
-          uniqueParts[i].childParts = childParts;
-        }
-      });
+      // uniqueParts.forEach((part, i) => {
+      //   let childParts = this.selectedParts.filter(selectedPart => selectedPart.partNumber == part.partNumber && selectedPart.conditionId == part.conditionId && selectedPart.pmaStatus == part.pmaStatus)
+      //   if (childParts && childParts.length > 0) {
+      //     uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
+      //     uniqueParts[i].childParts = childParts;
+      //   }
+      // });
       this.summaryParts = uniqueParts;
     }
     this.totalRecords = this.summaryParts.length;
@@ -349,6 +455,100 @@ export class SpeedQuotePartNumberComponent {
     if (!this.isEdit) {
       this.selectedPart.selected = false;
       this.openPartNumber(false);
+    }
+  }
+  onClose(event) {
+    this.show = false;
+    if (this.addPartModal) {
+      this.addPartModal.close();
+    }
+    if (this.partActionModal) {
+      this.partActionModal.close();
+    }
+  }
+  enableUpdateButton: boolean = false;
+  approve() {
+    debugger;
+    this.enableUpdateButton = true;
+    let partList: any = [];
+    this.salesQuoteView.parts = [];
+    let invalidParts = false;
+    let invalidDate = false;
+    var errmessage = '';
+    for (let i = 0; i < this.selectedParts.length; i++) {
+      let selectedPart = this.selectedParts[i];
+      let partNameAdded = false;
+      //if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) 
+      if (!invalidParts && !invalidDate) {
+        let partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
+        this.salesQuoteView.parts.push(partNumberObj);
+      }
+    }
+    if (invalidParts) {
+      this.alertService.resetStickyMessage();
+      this.alertService.showStickyMessage('Sales Order Quote', errmessage, MessageSeverity.error);
+    } else if (invalidDate) {
+      this.alertService.resetStickyMessage();
+      this.alertService.showStickyMessage('Sales Order Quote', "Please select valid Dates for Sales Order Quote PartsList!", MessageSeverity.error);
+    } else {
+      this.isSpinnerVisible = true;
+      this.speedQuoteService.update(this.salesQuoteView).subscribe(data => {
+        this.canSaveParts = true;
+        this.alertService.stopLoadingMessage();
+        this.isSpinnerVisible = false;
+        this.inputValidCheckHeader = true;
+        this.alertService.showMessage(
+          "Success",
+          `PN  updated successfully.`,
+          MessageSeverity.success
+        );
+        this.onPartsSavedEvent.emit(this.selectedParts);
+      }, error => {
+        this.isSpinnerVisible = false;
+        const errorLog = error;
+        //this.onDataLoadFailed(errorLog)
+      });
+    }
+    this.closeConfirmationModal();
+  }
+  closeConfirmationModal() {
+    if (this.modal) {
+      this.modal.close();
+    }
+  }
+
+  refresh() {
+    this.speedQuoteService.getSelectedParts().subscribe(data => {
+      if (data) {
+        this.selectedParts = data;
+      } else {
+        this.selectedParts = [];
+      }
+      this.filterParts();
+    });
+    this.canSaveParts = true;
+    if (this.salesQuote.priorities) {
+      let activePriorities = this.salesQuote.priorities.filter(x => x.isActive == true);
+      if (activePriorities && activePriorities.length > 0) {
+        this.priorities = activePriorities;
+      }
+    }
+    if (this.summaryParts && this.summaryParts.length > 0) {
+      this.summaryParts.forEach(summaryPart => {
+        if (summaryPart.childParts && summaryPart.childParts.length > 0) {
+          summaryPart.childParts.forEach(part => {
+            if (part.salesOrderQuotePartId) {
+              let priorityExists = this.priorities.find(x => x.priorityId == part.priorityId);
+              if (!priorityExists) {
+                let inActivePriority = this.salesQuote.priorities.find(x => x.priorityId == part.priorityId);
+                if (inActivePriority) {
+                  this.priorities.push(inActivePriority);
+                }
+              }
+            }
+          });
+        }
+      })
     }
   }
 }

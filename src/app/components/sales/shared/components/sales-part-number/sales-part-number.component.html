@@ -89,14 +89,14 @@
                                             <i class="fa fa-cubes" style="color: #000;"></i>
                                         </a>
                                         <a class="btn nobg view-part-eye" (click)="viewPartNumber(summaryPart,rowIndex)"
-                                            matTooltip="View Stock Line" matTooltipPosition="above">
+                                            matTooltip="View Inventory" matTooltipPosition="above">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         <span *ngIf="summaryPart['methodType'] == 'S'">
                                             <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                                 [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
                                                 class="btn nobg view-part-eye"
-                                                (click)="addPartNumber(summaryPart,rowIndex)" matTooltip="Add/Edit PN"
+                                                (click)="addPartNumber(summaryPart,rowIndex)" matTooltip="Add StkLine"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
@@ -105,7 +105,7 @@
                                             [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
                                             class="btn nobg"
                                             (click)="openmultiplepartDelete(summaryPart,rowIndex,deletepartcontent)"
-                                            matTooltip="Delete" matTooltipPosition="above">
+                                            matTooltip="Remove" matTooltipPosition="above">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
@@ -390,7 +390,7 @@
                                             <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
                                                 [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}"
                                                 class="btn nobg view-part-eye"
-                                                (click)="openPartDelete(deleteContent,part)" matTooltip="Delete"
+                                                (click)="openPartDelete(deleteContent,part)" matTooltip="Remove"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
                                             </a>

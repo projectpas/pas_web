@@ -31,6 +31,7 @@ export class PartDetail {
     pmaStatus: string;
     idNumber: string;
     salesPricePerUnit: number;
+    unitSalePrice:number;
     markupPerUnit: number;
     salesDiscountPerUnit: number;
     netSalesPricePerUnit: number;
@@ -81,6 +82,11 @@ export class PartDetail {
     notes: string;
     createdBy: string;
     itemNo:number;
+    manufacturerId:number;
+    manufacturer:string;
+    type:string;
+    oempmader:string;
+    tat:number;
     constructor() { }
   
     get QuantityToBeQuoted(): number {

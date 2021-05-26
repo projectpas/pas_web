@@ -851,8 +851,9 @@ export class SalesOrderPartNumberComponent {
       uniquePart.netSalesPriceExtended = this.getSum(uniquePart.netSalesPriceExtended, part.netSalesPriceExtended);
       uniquePart.taxAmount = this.getSum(uniquePart.taxAmount, part.taxAmount);
       uniquePart.totalSales = this.getSum(uniquePart.totalSales, part.totalSales);
+      uniquePart.unitCostExtended = this.getSum(uniquePart.unitCostExtended, part.unitCostExtended);
       uniquePart.marginAmountExtended = this.getSum(uniquePart.marginAmountExtended, part.marginAmountExtended);
-      uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentageExtended);
+      uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentagePerUnit);
       if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
         uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
       } else {
