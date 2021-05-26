@@ -397,24 +397,27 @@
                 <h4 class="modal-title">Add Stock Line</h4>
             </div>
             <div class="modal-body">
-                <div class="row">   
+                <div class="row">
                     <div>
-                        <label style="width: 140px;" >
-                        <input type="checkbox" name="includeAlternalePN" [(ngModel)]="includeAlternatePartNumber"/>&nbsp;Include
-                        Alternate PN
-                        </label> 
+                        <label style="width: 140px;">
+                            <input type="checkbox" name="includeAlternalePN"
+                                [(ngModel)]="includeAlternatePartNumber" />&nbsp;Include
+                            Alternate PN
+                        </label>
                     </div>
                     <div>
                         <label style="width: 140px;">
-                        <input type="checkbox" name="includeEquivalentPartNumber" [(ngModel)]="includeEquivalentPartNumber"/>&nbsp;Include
-                        Equivalent PN
-                        </label> 
+                            <input type="checkbox" name="includeEquivalentPartNumber"
+                                [(ngModel)]="includeEquivalentPartNumber" />&nbsp;Include
+                            Equivalent PN
+                        </label>
                     </div>
                     <div>
                         <label style="width: 140px;">
-                        <input type="checkbox" name="includeRevicePartNumber" [(ngModel)]="includeRevicePartNumber"/>&nbsp;Include
-                        Revice PN 
-                        </label> 
+                            <input type="checkbox" name="includeRevicePartNumber"
+                                [(ngModel)]="includeRevicePartNumber" />&nbsp;Include
+                            Revice PN
+                        </label>
                     </div>
                 </div>
                 <br>
@@ -525,7 +528,7 @@
                                         <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
                                         <td>{{obj.certifiedBy === null ? '-':obj.certifiedBy}}</td>
                                         <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate}}</td>
-                                        <td>{{obj.memo === null ? '-':obj.memo}}</td>                                        
+                                        <td>{{obj.memo === null ? '-':obj.memo}}</td>
                                     </tr>
                                     <tr *ngIf="stocklineData.length == 0">
                                         <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
@@ -575,13 +578,13 @@
                     class="btn btn-primary" (click)="onAddMultParts()" [disabled]="disableAddPart">Add Multiple
                     PN</button>
                 <!-- <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex"> -->
-                    <div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
+                <div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
                     style="min-height: 130px !important;">
                     <div class="tableFixHead">
                         <table class="table table-bordered " id="po-table">
                             <thead>
                                 <!-- <tr class="header-table-width"> -->
-                                    <tr class="header-table-width font-size-10">
+                                <tr class="header-table-width font-size-10">
                                     <!-- <th class="th-width"></th> -->
                                     <!-- <th style="padding-bottom: 2px !important;min-width: 50px;">
                                     <span class="checkbox-cstm">
@@ -630,7 +633,8 @@
                                     <th>GL Account</th>
                                     <th>AC Tail Num</th>
                                     <th>UOM</th>
-                                    <th class="msHeader" colspan="4">Management Structure <span class="clr-red">*</span></th>
+                                    <th class="msHeader" colspan="4">Management Structure <span class="clr-red">*</span>
+                                    </th>
                                     <th>Notes</th>
                                     <th style="position: sticky !important; min-width: 100px !important;">Actions</th>
                                 </tr>
@@ -691,18 +695,13 @@
                                         </td>
                                         <td class="parts-des-td">{{partList.partDescription}}</td>
                                         <td>
-                                            <p-autoComplete field="partNumber"
-                                                        (ngModelChange)="enablePartSave()"
-                                                        class="autocomplete" appendTo="body"
-                                                        [(ngModel)]="partList.revisedPartId"                                                       
-                                                        name="revisedPartId{{row_index}}" id="revisedPartId{{row_index}}"
-                                                        [forceSelection]="true"
-                                                        [suggestions]="revisedPartNumCollection"
-                                                        (completeMethod)="filterRevisedPart($event)"
-                                                        [size]="30"
-                                                        [minLength]="1"
-                                                        [dropdown]="true"
-                                                        [disabled]="partList.isApproved">
+                                            <p-autoComplete field="partNumber" (ngModelChange)="enablePartSave()"
+                                                class="autocomplete" appendTo="body"
+                                                [(ngModel)]="partList.revisedPartId" name="revisedPartId{{row_index}}"
+                                                id="revisedPartId{{row_index}}" [forceSelection]="true"
+                                                [suggestions]="revisedPartNumCollection"
+                                                (completeMethod)="filterRevisedPart($event)" [size]="30" [minLength]="1"
+                                                [dropdown]="true" [disabled]="partList.isApproved">
                                             </p-autoComplete>
                                         </td>
                                         <td>{{partList.stockType}}</td>
@@ -779,18 +778,14 @@
                                         </td>
 
                                         <td>
-                                            <p-autoComplete field="label"
-                                                        (ngModelChange)="enablePartSave()"
-                                                        class="autocomplete" appendTo="body"
-                                                        [(ngModel)]="partList.workPerformedId"                                                       
-                                                        name="workPerformedId{{row_index}}" id="workPerformedId{{row_index}}"
-                                                        [forceSelection]="true"
-                                                        [suggestions]="workPerformedCollection"
-                                                        (completeMethod)="filterworkPerformed($event)"
-                                                        [size]="30"
-                                                        [minLength]="1"
-                                                        [dropdown]="true"
-                                                        [disabled]="partList.isApproved" required>
+                                            <p-autoComplete field="label" (ngModelChange)="enablePartSave()"
+                                                class="autocomplete" appendTo="body"
+                                                [(ngModel)]="partList.workPerformedId"
+                                                name="workPerformedId{{row_index}}" id="workPerformedId{{row_index}}"
+                                                [forceSelection]="true" [suggestions]="workPerformedCollection"
+                                                (completeMethod)="filterworkPerformed($event)" [size]="30"
+                                                [minLength]="1" [dropdown]="true" [disabled]="partList.isApproved"
+                                                required>
                                             </p-autoComplete>
                                         </td>
 
@@ -928,23 +923,22 @@
                                         </td>
                                         <td>
                                             <p-autoComplete field="label" class="autocomplete" appendTo="body"
-                                                [(ngModel)]="partList.vendorQuoteNoId" name="VendorQuoteNoId{{row_index}}"
-                                                [suggestions]="allSalesOrderDetails"
+                                                [(ngModel)]="partList.vendorQuoteNoId"
+                                                name="VendorQuoteNoId{{row_index}}" [suggestions]="allSalesOrderDetails"
                                                 (onSelect)="onSOSelect($event.value)"
                                                 (completeMethod)="filterSalesOrderList($event)" [size]="30"
                                                 [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                (ngModelChange)="enablePartSave()"
-                                                [forceSelection]="false"
+                                                (ngModelChange)="enablePartSave()" [forceSelection]="false"
                                                 [disabled]="partList.isApproved" required>
                                             </p-autoComplete>
                                         </td>
                                         <td>
                                             <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                 [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"
-                                                appendTo="body" 
-                                                name="vendorQuoteDate{{row_index}}" id="vendorQuoteDate{{row_index}}"
-                                                title="Vend Qte Date" [(ngModel)]="partList.vendorQuoteDate"
-                                                #vendorQuoteDate="ngModel" (ngModelChange)="enablePartSave()" required
+                                                appendTo="body" name="vendorQuoteDate{{row_index}}"
+                                                id="vendorQuoteDate{{row_index}}" title="Vend Qte Date"
+                                                [(ngModel)]="partList.vendorQuoteDate" #vendorQuoteDate="ngModel"
+                                                (ngModelChange)="enablePartSave()" required
                                                 [disabled]="partList.isApproved"></p-calendar>
                                             <div *ngIf="vendorQuoteDate.invalid && (vendorQuoteDate.dirty || vendorQuoteDate.touched)"
                                                 class="alert alert-danger alert-danger-cstm">
@@ -965,20 +959,13 @@
                                         </p-autoComplete>   -->
                                         </td>
                                         <td>
-                                            <p-autoComplete
-                                                class="autocomplete"
-                                                appendTo="body"
+                                            <p-autoComplete class="autocomplete" appendTo="body"
                                                 name="aCTailNum{{row_index}}" id="aCTailNum{{row_index}}"
-                                                [(ngModel)]="partList.acTailNum"                                                
-                                                [suggestions]="acTailNumCollection"
-                                                [forceSelection]="false"
-                                                field="label"
+                                                [(ngModel)]="partList.acTailNum" [suggestions]="acTailNumCollection"
+                                                [forceSelection]="false" field="label"
                                                 (completeMethod)="filterACTailNum($event)"
-                                                (ngModelChange)="enablePartSave()"
-                                                [size]="30"
-                                                [minLength]="1"
-                                                [dropdown]="true"                                
-                                                required>
+                                                (ngModelChange)="enablePartSave()" [size]="30" [minLength]="1"
+                                                [dropdown]="true" required>
                                             </p-autoComplete>
                                         </td>
                                         <td>
@@ -1049,19 +1036,20 @@
                                                 data-toggle="modal" data-target="#parts-memo-popup" matTooltip="Notes"
                                                 matTooltipPosition="above" (click)="onClickPartsMemo(partList)"
                                                 *ngIf="!partList.isApproved"></i>
-                                            </td>
-
-
-
-                                            <!-- <input type="text" class="form-control" [(ngModel)]="partList.memo"
-                                        name="memo{{row_index}}"> -->
-                                        <td style="position:sticky; width:80px"><i class="fa fa-trash parts-list-delete-msg"
-                                            matTooltip="Delete Part Number" matTooltipPosition="after"
-                                            (click)="onDelPNRow(partList, row_index)"
-                                            *ngIf="!partList.isApproved"></i></td>
-
-
                                         </td>
+
+
+
+                                        <!-- <input type="text" class="form-control" [(ngModel)]="partList.memo"
+                                        name="memo{{row_index}}"> -->
+                                        <td style="position:sticky; width:80px"><i
+                                                class="fa fa-trash parts-list-delete-msg"
+                                                matTooltip="Delete Part Number" matTooltipPosition="after"
+                                                (click)="onDelPNRow(partList, row_index)"
+                                                *ngIf="!partList.isApproved"></i></td>
+
+
+
 
                                         <td style="position:sticky; width:80px">
 
@@ -1075,21 +1063,20 @@
                                                 (click)="onDelPNRow(partList, row_index)"
                                                 *ngIf="!partList.isApproved"></i> -->
 
-                                                    <i class="fa fa-trash parts-list-delete-msg mr-1"
-                                                    matTooltip="Delete Part Number" matTooltipPosition="after"
-                                                    (click)="onDelPNRow(partList, row_index)"
-                                                    *ngIf="!partList.isApproved"></i>
-    
-                                                    <i class="fa fa-eye parts-list-delete-msg mr-1"
-                                                    matTooltip="View StockLine" matTooltipPosition="after"
-                                                    (click)="StockLinePopup(partList)"
-                                                    *ngIf="!partList.isApproved"></i>                                               
-                                                
-                                                    <i class="fa fa-eye parts-list-eye"
-                                                    (click)="addStockLineView(partList.itemMasterId,partList.conditionId)"
-                                                    data-toggle="modal" data-target="#addStockLine"
-                                                    matTooltip="View All StockLine" matTooltipPosition="above">
-                                                    </i>
+                                            <i class="fa fa-trash parts-list-delete-msg mr-1"
+                                                matTooltip="Delete Part Number" matTooltipPosition="after"
+                                                (click)="onDelPNRow(partList, row_index)"
+                                                *ngIf="!partList.isApproved"></i>
+
+                                            <i class="fa fa-eye parts-list-delete-msg mr-1" matTooltip="View StockLine"
+                                                matTooltipPosition="after" (click)="StockLinePopup(partList)"
+                                                *ngIf="!partList.isApproved"></i>
+
+                                            <i class="fa fa-eye parts-list-eye"
+                                                (click)="addStockLineView(partList.itemMasterId,partList.conditionId)"
+                                                data-toggle="modal" data-target="#addStockLine"
+                                                matTooltip="View All StockLine" matTooltipPosition="above">
+                                            </i>
 
                                             <!-- <span class="checkbox-cstm" *ngIf="!partList.isApproved">
                                                 <label class="checkbox-label-width">
@@ -1363,9 +1350,10 @@
                                                 <td colspan="21"></td>
                                                 <td class="zui-sticky-col width-107">
                                                     <span> <i class="fa fa-trash parts-list-delete-msg"
-                                                        matTooltip="Delete Split Shipment" matTooltipPosition="above"
-                                                        (click)="deleteSplitShipment(partChildList,row_no,row_index)"
-                                                        *ngIf="!partChildList.isApproved"></i></span>
+                                                            matTooltip="Delete Split Shipment"
+                                                            matTooltipPosition="above"
+                                                            (click)="deleteSplitShipment(partChildList,row_no,row_index)"
+                                                            *ngIf="!partChildList.isApproved"></i></span>
 
                                                 </td>
                                             </tr>
@@ -1398,7 +1386,7 @@
                                     <td class="child-td-align"><b>Total: </b></td>
                                     <td></td>
                                     <td></td>
-                                    
+
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
