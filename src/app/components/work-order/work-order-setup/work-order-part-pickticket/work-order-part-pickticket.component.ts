@@ -109,8 +109,8 @@ export class WorkOrderPartPickticketComponent implements OnInit {
       { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
       { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
       { field: "status", header: "Status", width: "130px" },
-      { field: "orderNumber", header: "SO Num", width: "130px" },
-      { field: "orderQuoteNumber", header: "SOQ Num", width: "130px" },
+      { field: "orderNumber", header: "WO Num", width: "130px" },
+      { field: "orderQuoteNumber", header: "WOQ Num", width: "130px" },
       { field: "customerName", header: "Customer Name", width: "130px" },
       { field: "customerCode", header: "Customer Code", width: "130px" },
     ];
