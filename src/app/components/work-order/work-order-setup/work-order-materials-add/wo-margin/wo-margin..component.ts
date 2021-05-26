@@ -11,7 +11,7 @@ declare var $: any;
 export class WoMarginComponent implements OnInit, OnChanges {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() searchAnotherPN: EventEmitter<boolean> = new EventEmitter<boolean>();
-   @Input() part:any={};
+   @Input() part:any={}; 
   @Input() display: boolean; 
   @Input() isEdit = false;
   @Input() editData;
@@ -82,6 +82,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
 
 
 this.calculateExtendedCost();
+// console.log("this.edit",this.editData)
     if(this.editData){
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
