@@ -36,4 +36,5 @@ export class SpeedQuotePart implements ISpeedQuotePart {
     manufacturer:string;
     type:string;
     tat:number;
+    quantityRequested: number;
 }

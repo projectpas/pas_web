@@ -518,7 +518,7 @@
                         <div class="clearfix mb-1"></div>
                     </ng-container>
                     <ng-container *ngIf="((isCreateModeHeader||isEdit) && !isEmailTabEnabled)">
-                        <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+                        <p-tabView class="pas-tabview" (onChange)="onTabChange($event)" [activeIndex]="selectedIndex">
                             <p-tabPanel header="Parts List" [selected]="true">
                                 <!-- <app-sales-part-number [salesQuote]="salesQuote" [salesQuoteView]="salesQuoteView"
                                     [isViewMode]="false" (on-parts-save)="onPartsSaveEvent($event)"
@@ -528,8 +528,12 @@
                                 <app-speed-quote-part-number [salesQuote]="salesQuote" [salesQuoteView]="speedQuoteView"
                                     [isViewMode]="false" (on-parts-save)="onPartsSaveEvent($event)"
                                     [customer]="customerDetails" [totalFreights]="totalFreights"
-                                    [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
+                                    (triggerTabChange)="changeToExclusionTab($event)" [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
                                 </app-speed-quote-part-number>
+                            </p-tabPanel>
+                            <p-tabPanel header="Exclusions">
+                                <app-speed-quote-exclusions [salesQuote]="salesQuote">
+                                </app-speed-quote-exclusions>
                             </p-tabPanel>
                             <!-- <p-tabPanel header="Internal Approvers" *ngIf="enforceApproval">
                                 <app-sales-approve>

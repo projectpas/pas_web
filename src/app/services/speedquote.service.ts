@@ -165,6 +165,7 @@ export class SpeedQuoteService {
     partNumberObj.manufacturer = selectedPart.manufacturer;
     partNumberObj.oempmader = selectedPart.type;
     partNumberObj.tat = selectedPart.tat;
+    partNumberObj.isEditPart = true;
     return partNumberObj;
   }
 
@@ -178,7 +179,8 @@ export class SpeedQuoteService {
     partNumberObj.speedQuotePartId = selectedPart.speedQuotePartId;
     partNumberObj.itemMasterId = selectedPart.itemMasterId;
     partNumberObj.qtyQuoted = selectedPart.quantityToBeQuoted ? formatStringToNumber(selectedPart.quantityToBeQuoted) : 0;
-    partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
+    //partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
+    partNumberObj.quantityRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
     partNumberObj.unitSalePrice = selectedPart.unitSalePrice;
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
     if (!selectedPart.createdBy) {
@@ -210,6 +212,7 @@ export class SpeedQuoteService {
     partNumberObj.manufacturer = selectedPart.manufacturer;
     partNumberObj.type = selectedPart.oempmader;
     partNumberObj.tat = selectedPart.tat;
+    partNumberObj.marginAmount = selectedPart.marginAmountPerUnit;
     return partNumberObj;
   }
 
@@ -310,5 +313,12 @@ export class SpeedQuoteService {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.search(speedQuoteSearchParameters)
     );
+  }
+
+  saveExclusionPart(data) {
+    return this.speedQuoteEndPointSevice.saveExclusionPart(data);
+  }
+  getExclusionList(id) {
+    return this.speedQuoteEndPointSevice.getExclusionList(id);
   }
 }

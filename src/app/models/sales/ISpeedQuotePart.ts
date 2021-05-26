@@ -35,5 +35,6 @@ export interface ISpeedQuotePart {
     manufacturer:string;
     type:string;
     tat:number;
+    quantityRequested: number;
   }
   
