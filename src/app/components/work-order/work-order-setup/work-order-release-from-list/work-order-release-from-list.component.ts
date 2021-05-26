@@ -33,8 +33,9 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     isView:boolean=false;
     isEdit:boolean=false;
     isViewopen:boolean=false;
-    assetAuditHistory: any;
+    EsafromAuditHistory: any;
     ReleaseData: any;
+    isSpinnerVisible: boolean = true;
     private onDestroy$: Subject<void> = new Subject<void>();
     headers = [
         { field: 'trackingNo', header: 'Trackin No' },
@@ -50,14 +51,14 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     ]
     selectedColumns = this.headers;
 
-    constructor(private workOrderService: WorkOrderService,        private authService: AuthService, private localStorage: LocalStoreManager) { }
+    constructor(private workOrderService: WorkOrderService,        private authService: AuthService, private localStorage: LocalStoreManager,   private alertService: AlertService) { }
 
     ngOnInit() {
         if (this.data.length != 0) {
             this.totalRecords = this.data.length;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         }
-        this.getWorkOrderAnalysisData(this.workOrderId,this.workOrderPartNumberId);
+        this.getWorkOrderReleaseFromData(this.workOrderId,this.workOrderPartNumberId);
         this.getGlobalSettings();
     }
     ngOnChanges() {
@@ -75,7 +76,7 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
         this.global_lang = this.globalSettings.cultureName;
     }
 
-    getWorkOrderAnalysisData(workOrderId,workOrderPartNumberId) {
+    getWorkOrderReleaseFromData(workOrderId,workOrderPartNumberId) {
         this.workOrderService.workOrderReleaseFromListData(workOrderId, workOrderPartNumberId)
             .pipe(takeUntil(this.onDestroy$)).subscribe(
                 (res: any) => {
@@ -102,11 +103,23 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     {
       
         this.workOrderService.GetReleaseHistory(rowData.releaseFromId).subscribe(res => {
-            this.assetAuditHistory = res;
+            this.EsafromAuditHistory = res;
         },
             err => {
             })
 
+    }
+
+    getColorCodeForHistory(i, field, value) {
+        const data = this.EsafromAuditHistory;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
     }
 
     Edit(rowData)
@@ -122,6 +135,46 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
         }
        
     }
+
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+    
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
+    Locked(rowData)
+    {
+             rowData.masterCompanyId= this.authService.currentUser.masterCompanyId;
+             rowData.createdBy= this.userName;
+             rowData.updatedBy= this.userName;
+             rowData.createdDate= new Date();
+             rowData.updatedDate= new Date();
+             rowData.isActive= true;
+             rowData.isDeleted= false;
+            //   rowData.IsClosed= true;
+            //  rowData.workOrderPartNoId=this.workOrderPartNumberId;
+            //  rowData.WorkorderId=this.workOrderId;
+      this.workOrderService.LockedWorkorderpart(rowData).pipe(takeUntil(this.onDestroy$)).subscribe(
+        result => {
+            this.isSpinnerVisible = false;
+            this.isEdit = true;
+            this.alertService.showMessage(
+                '',
+                'Locked WorkOrder Successfully',
+                MessageSeverity.success
+            );
+        },
+        err => {
+            this.handleError(err);
+        }
+    );
+    }
+    handleError(err) {
+        this.isSpinnerVisible = false;
+    }
+  
 
     view(rowData)
     {   this.releaseFromId= rowData.releaseFromId;
@@ -154,6 +207,9 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
 
     formatCost(val) {
         if (val) {
