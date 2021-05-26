@@ -51,8 +51,11 @@ export class SalesMarginComponent implements OnInit {
   }
 
   onSave(event: Event): void {
-    event.preventDefault();
-    this.save.emit(this.part);
+    let isInvalid = this.validateInput();
+    if (!isInvalid) {
+      event.preventDefault();
+      this.save.emit(this.part);
+    }
   }
 
   onSearchAnotherPN(event: Event): void {
@@ -107,14 +110,31 @@ export class SalesMarginComponent implements OnInit {
     }
   }
 
+  validateInput() {
+    if (Number(this.part.quantityFromThis) != 0) {
+      if (this.part['qtyRemainedToQuote']) {
+        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted && Number(this.part.quantityFromThis) > Number(this.part['qtyRemainedToQuote']);
+      }
+      else if (Number(this.part.quantityFromThis) < 0) {
+        this.invalidQuantityenteredForQuantityFromThis = true;
+      }
+      else {
+        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted || this.part.quantityFromThis > this.part.qtyAvailable;
+      }
+    } else {
+      this.invalidQuantityenteredForQuantityFromThis = true;
+    }
+
+    return this.invalidQuantityenteredForQuantityFromThis;
+  }
+
   onChangeQuantityFromThis(event) {
 
     if (Number(this.part.quantityFromThis) != 0) {
       if (this.part['qtyRemainedToQuote']) {
         this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted && Number(this.part.quantityFromThis) > Number(this.part['qtyRemainedToQuote']);
       }
-      else if (Number(this.part.quantityFromThis) < 0)
-      {
+      else if (Number(this.part.quantityFromThis) < 0) {
         this.invalidQuantityenteredForQuantityFromThis = true;
       }
       else {
