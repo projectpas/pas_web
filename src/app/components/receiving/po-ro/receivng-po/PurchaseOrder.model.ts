@@ -198,8 +198,7 @@ export class PurchaseOrderPart {
     timeLife: TimeLife[];
     stockLineDraft: StockLine[];
     timeLifeDraft: TimeLife[];
-
-
+    showHeader: boolean;
 }
 
 export class TimeLife {
