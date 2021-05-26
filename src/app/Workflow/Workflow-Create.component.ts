@@ -284,10 +284,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                     }
                 }
             }
+            this.isSpinnerVisible=true;
             setTimeout(() => {
                 this.currentPanelId = this.selectedItems[0].Id;
                 this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id)
-            }, 1000);
+                this.isSpinnerVisible=false;
+            }, 500);
     }
     ngOnInit(): void {
         if (this._workflowService.enableUpdateMode) {

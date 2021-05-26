@@ -51,9 +51,7 @@
          [(ngModel)]="formObject.stocklineQuantity"
           (input)="onChangeQuantityFromThis($event);calculateExtendedCost()" (ngModelChange)="getActive()"
           name="quantity" autocomplete="off" />
-          <!-- (keyup)="onChangeQuantityFromThis($event)" (blur)="onChangeQuantityFromThis($event)"
-          [(ngModel)]="formObject.stocklineQuantity" -->
-        <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
+          <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
           <span style="color:red" *ngIf="part.method=='ItemMaster'">Value cannot be greater than qty to be required </span>
           <span style="color:red" *ngIf="part.method=='StockLine'">Value cannot be greater than qty to be required and qty available</span>
         </div>
@@ -143,7 +141,7 @@
     (click)="savePart($event)">
     Save
   </button>
-  <button class="btn btn-primary" *ngIf="isEdit" [disabled]="disableUpdateButton || formObject.stocklineQuantity==0 " (click)="upDatePart($event)">
+  <button class="btn btn-primary" *ngIf="isEdit" [disabled]="disableUpdateButton || formObject.stocklineQuantity==0" (click)="upDatePart($event)">
     Update
   </button>
   <button type="button" (click)="onClose($event)" class="btn btn-danger">

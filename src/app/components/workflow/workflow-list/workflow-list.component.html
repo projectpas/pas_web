@@ -595,10 +595,10 @@
                         <button type="button" class="btn btn-primary" (click)="onCloseAllView()">Close All</button>
                         <hr />
                     </div>
-
+                    <!-- (click)="onAccordTabClick1(task)"  [selected]="task.selected" -->
                     <p-accordion [multiple]="true" class="p-accordion-cstm">
-                        <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected"
-                            header="{{task.Name}}" (click)="onAccordTabClick1(task)">
+                        <p-accordionTab *ngFor="let task of addedTasks"
+                            header="{{task.Name}}" >
                             <div *ngIf="task.charges && task.charges.length > 0">
                                 <h5 class="po-head">Charges</h5>
                                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
@@ -1049,7 +1049,7 @@
                                 </div>
                                 </div>
                             </div>
-                        </p-accordionTab>
+                        </p-accordionTab> 
                     </p-accordion>
                     <h5>Total Cost for the Workflow  : $ {{Total}}</h5>
                 </div>
@@ -1456,9 +1456,10 @@
                 <button type="button" class="btn btn-primary" (click)="onCloseAllView()">Close All</button>
                 <hr />
             </div>
-            <p-accordion  class="p-accordion-cstm p-acc-thright">
-                <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected" class="inspect">
-                  <p-header (click)="onAccordTabClick1(task)">{{task.Name}}</p-header>
+            <!-- [selected]="task.selected" (click)="onAccordTabClick1(task)" -->
+            <p-accordion  class="p-accordion-cstm p-acc-thright"> 
+                <p-accordionTab *ngFor="let task of addedTasks"  class="inspect">
+                  <p-header >{{task.Name}}</p-header>
                     <div *ngIf="task.directions && task.directions.length > 0">
                         <h5 class="po-head m-t-20">Directions</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
