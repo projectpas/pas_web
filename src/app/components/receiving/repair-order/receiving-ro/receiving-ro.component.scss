@@ -78,7 +78,11 @@ input[type="text"], input[type="number"], select, textarea {
     float: left;
 }
 .time-remaining tr td input:first-child {
-    width: 50px;
+    width: 30px;
+}
+.parent-td-background td{
+    width: auto !important;
+    background-color: #EAF2C5 !important;
 }
 .time-remaining span {
     float: left;

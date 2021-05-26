@@ -1049,11 +1049,16 @@
                                                 data-toggle="modal" data-target="#parts-memo-popup" matTooltip="Notes"
                                                 matTooltipPosition="above" (click)="onClickPartsMemo(partList)"
                                                 *ngIf="!partList.isApproved"></i>
+                                            </td>
 
 
 
                                             <!-- <input type="text" class="form-control" [(ngModel)]="partList.memo"
                                         name="memo{{row_index}}"> -->
+                                        <td style="position:sticky; width:80px"><i class="fa fa-trash parts-list-delete-msg"
+                                            matTooltip="Delete Part Number" matTooltipPosition="after"
+                                            (click)="onDelPNRow(partList, row_index)"
+                                            *ngIf="!partList.isApproved"></i></td>
 
 
                                         </td>
@@ -1391,10 +1396,9 @@
 
                                 <tr *ngIf="partListData.length > 0" class="child-header-back">
                                     <td class="child-td-align"><b>Total: </b></td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+                                    
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>

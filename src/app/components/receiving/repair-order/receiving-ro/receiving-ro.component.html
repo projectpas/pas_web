@@ -133,7 +133,7 @@
                                         <label>
                                             <input type="checkbox" name="resale" class="form-control"
                                                 [(ngModel)]="repairOrderHeaderData.resale" disabled>
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            <span class="cr" style="background:#a9a9a9"><i class="cr-icon pi pi-check"></i></span>
                                             Resale
                                         </label>
                                     </div>
@@ -143,7 +143,7 @@
                                         <label>
                                             <input type="checkbox" class="receiver-input-back" name="deferredReceiver"
                                                 [(ngModel)]="repairOrderHeaderData.deferredReceiver" disabled>
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            <span class="cr" style="background:#a9a9a9"><i class="cr-icon pi pi-check"></i></span>
                                             Deferred Receiver
                                         </label>
                                     </div>
@@ -233,10 +233,10 @@
                         class="table lastcol-fix table-bordered">
                         <thead>
                             <tr class="header-table-width">
-                                <th class="min-width-40"></th>
+                                <!-- <th class="min-width-40"></th> -->
                                 <!-- <th class="min-width-60">Line Num</th> -->
                                 <th>PN <span class="clr-red">*</span></th>
-                                <th>PN Desc</th>
+                                <th colspan="4">PN Desc</th>
                                 <th>Alt/Equiv</th>
                                 <th>Item Type</th>
                                 <th>Stock Type</th>
@@ -258,16 +258,16 @@
                         <tbody>
                             <ng-container *ngFor="let part of repairOrderData; let row_index=index">
                                 <!--this row is for the parent part-->
-                                <tr class="parent-data" *ngIf="part.isParent">
-                                    <td class="details-control eachcol parent-padding">
+                                <tr class="parent-data parent-td-background" *ngIf="part.isParent">
+                                    <!-- <td class="details-control eachcol parent-padding">
                                         <section *ngIf="isSplitShipmentPart(part.repairOrderPartRecordId)">
                                             <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
                                                 (click)="showSplitShipmentParts(part)"></i>
                                         </section>
-                                    </td>
+                                    </td> -->
                                     <!-- <td class="text-right">{{row_index+1}}</td> -->
                                     <td>{{part.itemMaster.partNumber}}</td>
-                                    <td>{{part.itemMaster.partDescription}}</td>
+                                    <td colspan="4">{{part.itemMaster.partDescription}}</td>
                                     <td>{{part.altEquiPartNumber}}</td>
                                     <td>{{part.itemType}}</td>
                                     <td>{{part.stockType}}</td>
@@ -331,12 +331,12 @@
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back" [hidden]="!part.visible"
                                     *ngIf="!part.isParent">
-                                    <th class="min-width-40"></th>
+                                    <!-- <th class="min-width-40"></th> -->
                                     <!-- <th class="min-width-60"></th> -->
                                     <th>PN <span class="clr-red">*</span></th>
                                     <th class="min-width-60">Qty to Repair </th>
-                                    <th class="min-width-60">Qty Repaired</th>
-                                    <th class="min-width-60">Qty Rejected</th>
+                                    <th class="min-width-80">Qty Repaired</th>
+                                    <th class="min-width-80">Qty Rejected</th>
                                     <th class="min-width-60">Back Ord</th>
                                     <th class="min-width-60">Status</th>
                                     <th>StockLine Num <span class="clr-red">*</span></th>
@@ -351,7 +351,7 @@
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
                                     *ngIf="!part.isParent">
-                                    <td>&nbsp;</td>
+                                    <!-- <td>&nbsp;</td> -->
                                     <!-- <td>&nbsp;</td> -->
                                     <td>{{part?.itemMaster?.partNumber}}</td>
                                     <td class="right">{{part?.quantityToRepair}}</td>
@@ -1003,7 +1003,7 @@
                                             </section>
                                             <br />
                                             <section>
-                                                <h4 class="add-details-heading text-left"
+                                                <h4 class="add-details-heading text-left" style="margin-top:0px"
                                                     *ngIf="part.itemMaster.isSerialized">Serialized
                                                 </h4> 
                                                 <div class="pull-right serialised-div"
@@ -1118,7 +1118,7 @@
                                                                         (change)="onChangeTimeLifeMin('timeRemainingMin', part, part.currentTLIndex)">
                                                                 </td>
                                                                 <td>Since New</td>
-                                                                <td>
+                                                                <td style="background-color: #fff !important;">
                                                                     <input class="form-control" placeholder="HH"
                                                                         [disabled]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                         type="number" pInputText pKeyFilter="hex"
@@ -1159,7 +1159,7 @@
                                                                         (change)="onChangeTimeLifeMin('timeSinceNewMin', part, part.currentTLIndex)">
                                                                 </td>
                                                                 <td>Since Ovh</td>
-                                                                <td>
+                                                                <td style="background-color: #fff !important;">
                                                                     <input class="form-control" placeholder="HH"
                                                                         [disabled]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                         type="number" pInputText pKeyFilter="hex"
@@ -1200,7 +1200,7 @@
                                                                         (change)="onChangeTimeLifeMin('timeSinceOVHMin', part, part.currentTLIndex)">
                                                                 </td>
                                                                 <td>Since Insp</td>
-                                                                <td>
+                                                                <td style="background-color: #fff !important;">
                                                                     <input class="form-control" placeholder="HH"
                                                                         [disabled]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                         type="number" pInputText pKeyFilter="hex"
@@ -1241,7 +1241,7 @@
                                                                         (change)="onChangeTimeLifeMin('timeSinceInspectionMin', part, part.currentTLIndex)">
                                                                 </td>
                                                                 <td></td>
-                                                                <td></td>
+                                                                <td style="background-color: #fff !important;"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Since Repair</td>
@@ -1271,7 +1271,7 @@
                                                                         (change)="onChangeTimeLifeMin('timeSinceRepairMin', part, part.currentTLIndex)">
                                                                 </td>
                                                                 <td></td>
-                                                                <td></td>
+                                                                <td style="background-color: #fff !important;"></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
