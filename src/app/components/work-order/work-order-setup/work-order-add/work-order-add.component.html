@@ -258,8 +258,8 @@
 
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control wo-input" name="creditTerm"
-                                                        #creditTerm="ngModel"
-                                                        [(ngModel)]="workOrderGeneralInformation.creditTerm" required
+                                                        #creditTerms="ngModel"
+                                                        [(ngModel)]="workOrderGeneralInformation.creditTerms" required
                                                         [readonly]="true">
                                                 </div>
                                             </div>
@@ -318,7 +318,7 @@
                                                     <div [innerHTML]="workOrderGeneralInformation.memo"
                                                         matTooltipPosition="above"
                                                         [matTooltip]="parsedText(workOrderGeneralInformation.memo)"
-                                                        class="form-control text_editor_box memo_cehck1 adjust_he overflow">
+                                                        class="form-control text_editor_box memo_cehck1 adjust_he word-wrap-class">
                                                     </div>
                                                 </div>
                                             </span>
@@ -1149,7 +1149,7 @@
                     <app-work-order-labor [markupList]="markupList" [labortaskList]="taskList" [laborForm]="labor"
                         [employeesOriginalData]="employeesOriginalData" [workOrderLaborList]="workOrderLaborList"
                         [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData"
-                        [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId"
+                        [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [islaborCreated]="islaborCreated"
                         [subWorkOrderDetails]="subWorkOrderDetails" [selectedPartNumber]="selectedPartNumber"
                         [savedWorkOrderData]="savedWorkOrderData" (saveworkOrderLabor)="saveworkOrderLabor($event)"
                         (refreshLabor)="refreshLabor($event)" [workFlowId]="workFlowId"

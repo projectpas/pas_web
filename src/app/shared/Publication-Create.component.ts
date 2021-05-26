@@ -223,27 +223,22 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             ? this.authService.currentUser.masterCompanyId
             : null;
     }
+    setEditArray:any=[];
     getPublicationByItemMasterId(itemMasterId) {
+        this.setEditArray=[];
         this.isSpinnerVisible = true;
-        // this._workflowService.getPublicationsByItemMasterId(itemMasterId).subscribe(res => {
-        //     this.publicationDropdown = res;
-        //     if(this.publicationDropdown && this.publicationDropdown.length==1){
-        //         this.workFlow.publication[0].publicationId=this.publicationDropdown?this.publicationDropdown[0].publicationRecordId: '';
-        //         this.loadPublicationById(this.workFlow.publication[0], true);
-        //         const pubData = this.publicationDropdown;
-        //         for (var i = 0; i < pubData.length; i++) {
-        //             if (parseInt(pubData[i].publicationRecordId) === parseInt(this.workFlow.publication[0].publicationId)) {
-        //                 this.workFlow.publication[0].attachmentDetails = pubData[i].attachmentDetails;
-        //                 break
-        //             }
-        //         }
-        //     }
-        //     this.isSpinnerVisible = false;
-        // }, error => {
-        //     this.isSpinnerVisible = false;
-        // });
-        const idList:any=[]
-        this._workflowService.getPublicationsByItemMasterIdDetails(itemMasterId,idList,this.currentUserMasterCompanyId).subscribe(res => {
+
+if(this.workFlow && this.workFlow.publication !=undefined){
+    this.workFlow.publication.forEach(element => {
+        this.setEditArray.push(element.publicationId ? element.publicationId : 0);
+    });
+}
+if(this.setEditArray && this.setEditArray.length==0){
+    this.setEditArray.push(0);
+}
+        console.log("current workflow",this.workFlow)
+       
+        this._workflowService.getPublicationsByItemMasterIdDetails(itemMasterId,this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
            this.publicationDropdown = res;
             if(this.publicationDropdown && this.publicationDropdown.length==1){
                 this.workFlow.publication[0].publicationId=this.publicationDropdown?this.publicationDropdown[0].publicationRecordId: '';

@@ -36,6 +36,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() isSubWorkOrder: boolean = false;
   @Input() frombilling: any = false;
   @Input() hideHeader: boolean = false;
+  @Input() islaborCreated: boolean = false;
+  
   totalHours: number;
   disableSaveForEdit: boolean = false;
   workOrderWorkFlowList: any;
@@ -81,8 +83,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       unSelectAllText: 'UnSelect All',
       itemsShowLimit: 2,
       allowSearchFilter: false
-    };
-    // debugger;
+    }; 
     this.taskList = [];
     this.allTaskList = [];
     this.allTaskList = [...this.labortaskList];
@@ -155,6 +156,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     //     }
     //   }
     // )
+    this.islaborCreated=this.islaborCreated;
     if (this.workOrderLaborList != undefined) {
       this.laborTaskData = this.workOrderLaborList;
       this.isEdit = true;
@@ -243,15 +245,12 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     this.getAllExpertiseType();
 
     this.originalLaborForm = this.laborForm; 
-    // console.log("laborForm",this.laborForm);
  
   }
   checkPercentageData(value?) {
-    // console.log("ggggggg",this.markupList);
 if(this.markupList && this.markupList.length ==0){
   this.setEditArray = [];
   this.setEditArray.push(0);
-// console.log("hello")
 const strText = value ? value : '';
 this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
   if (res && res.length != 0) { 
@@ -322,6 +321,14 @@ this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'Pe
           else {
             this.basicLabourDetail = undefined;
           }
+setTimeout(() => {
+  if(!this.islaborCreated){
+  if(this.basicLabourDetail.laborHoursIdText=='Assign Total Hours To Work Order'){
+    this.laborForm.workFloworSpecificTaskorWorkOrder = 'workOrder';
+    this.assignAllTask();
+  }
+}
+}, 1000);
         },
         err => {
           this.basicLabourDetail = undefined;
@@ -360,8 +367,6 @@ this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'Pe
     }
   }
   onPartSelect(event, currentRecord, index) {
-    // console.log("event",event)
-    // console.log("event",currentRecord)
     currentRecord.directLaborOHCost=event.overHeadBurden; 
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
   }

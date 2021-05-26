@@ -716,7 +716,7 @@ setTimeout(() => {
         }
         currentRecord.creditLimit = object.creditLimit ? formatNumberAsGlobalSettingsModule(object.creditLimit, 2):'0.00';
         currentRecord.creditTermsId = object.creditTermsId;
-        currentRecord.creditTerm = object.creditTerm;
+        currentRecord.creditTerms = object.creditTerms;
         this.myCustomerContact = object.customerContact;
         currentRecord.customerPhoneNo = object.customerPhoneNo;
         currentRecord.csrId = object.csrId;
@@ -1219,9 +1219,6 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
 
         if (this.isEdit && this.isRecCustomer === false) {
             this.isSpinnerVisible = true;  
-            // console.log("status Id",this.statusId); 
-            // console.log("data",data1); 
-            // console.log("data",this.workOrderNumberStatus) 
             // if(this.workOrderNumberStatus=='Closed'){
             //     data1.workOrderStatusId=this.statusId
             // }
@@ -2067,7 +2064,6 @@ this.getNewMaterialListByWorkOrderId();
              } 
           })
           this.workOrderMaterialList = uniqueParts;
-// console.log("material list",this.workOrderMaterialList)
         }
         this.totalRecords = this.workOrderMaterialList.length;
         this.pageLinks = Math.ceil(
@@ -2262,6 +2258,7 @@ this.getNewMaterialListByWorkOrderId();
         }
         this.workOrderService.createWorkOrderLabor(this.formWorkerOrderLaborJson(data), this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
+            this.islaborCreated=true;
             this.alertService.showMessage(
                 this.moduleName,
                 'Saved Work Order Labor Succesfully',
@@ -2402,7 +2399,6 @@ this.getNewMaterialListByWorkOrderId();
     } 
 
     formWorkerOrderLaborJson(data) {
-        // console.log("data ",data)
         if (this.isSubWorkOrder == true) {
             this.result = {
                 "subWorkOrderLaborHeaderId": data['subWorkOrderLaborHeaderId'] ? data['subWorkOrderLaborHeaderId'] : 0,
@@ -2588,84 +2584,89 @@ this.getNewMaterialListByWorkOrderId();
     refreshLabor(value){
         this.getWorkFlowLaborList();
     }
+    islaborCreated:boolean=false;
     getWorkFlowLaborList() {
         this.clearLaborList();
         if ((this.workFlowWorkOrderId !== 0 || this.workFlowWorkOrderId !== undefined) && this.workOrderId) {
             this.isSpinnerVisible = true;
             this.workOrderService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
-                this.data = {};
-                this.data = res;
-                if (res) {
-                    this.workOrderLaborList = {
-                        ...this.data,
-                        workFlowWorkOrderId: getObjectById('value', this.data.workFlowWorkOrderId, this.workOrderWorkFlowOriginalData),
-                        employeeId: {employeeId:this.data.employeeId,name:this.data.employeeName,value:this.data.employeeId,label:this.data.employeeName},
-                        dataEnteredBy: {value:this.data.dataEnteredBy,label:this.data.dataEnteredByName},
-                    };
-                    // console.log("labor data",this.workOrderLaborList);
-                    // if(this.is)
-                    this.getMarkup();
-                    this.labor.hoursorClockorScan = res.hoursorClockorScan;
-                    this.labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0) ? 'workFlow' : (res.workOrderHoursType == 1) ? 'specificTasks' : 'workOrder';
-                    this.labor.totalWorkHours = res.totalWorkHours;
-                    this.labor.expertiseId = res.expertiseId;
-                    this.labor['labourMemo'] = res.labourMemo;
-                    this.labor['workOrderHoursType'] = res['workOrderHoursType'];
-                    if (this.isSubWorkOrder == true) {
-                        this.labor['subWorkOrderLaborHeaderId'] = res['subWorkOrderLaborHeaderId'];
-                    }
-                }
-                if (res) {
-                    for (let labList of this.data['laborList']) {
-                        if (this.taskList) {
-                            for (let task of this.taskList) {
-                                if (task.taskId == labList['taskId']) {
-                                    if (!this.labor.workOrderLaborList[0][task.description.toLowerCase()]) {
-                                        this.labor.workOrderLaborList[0][task.description.toLowerCase()] = []
-                                    }
-                                    if (this.labor.workOrderLaborList[0][task.description.toLowerCase()][0] && (this.labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == undefined || this.labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == null)) {
-                                        this.labor.workOrderLaborList[0][task.description.toLowerCase()].splice(0, 1);
-                                    }
-                                    let taskData = new AllTasks()
-                                    taskData['workOrderLaborHeaderId'] = labList['workOrderLaborHeaderId'];
-                                    taskData['workOrderLaborId'] = labList['workOrderLaborId'];
-                                    taskData['expertiseId'] = labList['expertiseId'];
-                                    taskData['employeeId']={value:labList['employeeId'],label:labList['employeeName']};
-                                    taskData['billableId'] = labList['billableId'];
-                                    taskData['startDate'] = labList['startDate'] ? new Date(labList['startDate']) : null;
-                                    taskData['endDate'] = labList['endDate'] ? new Date(labList['endDate']) : null;
-                                    taskData['hours'] = labList['hours'];
-                                    taskData['adjustments'] = labList['adjustments'];
-                                    taskData['adjustedHours'] = labList['adjustedHours'].toFixed(2);
-                                    taskData['memo'] = labList['memo'];
-
-                                    taskData['burdaenRatePercentageId'] = labList['burdaenRatePercentageId'];
-                                    taskData['burdenRateAmount'] = labList['burdenRateAmount'] ? formatNumberAsGlobalSettingsModule(labList['burdenRateAmount'], 2) : '0.00';
-                                    taskData['directLaborOHCost'] = labList['directLaborOHCost'] ? formatNumberAsGlobalSettingsModule(labList['directLaborOHCost'], 2) : '0.00';
-                                    taskData['totalCost'] = labList['totalCost'] ? formatNumberAsGlobalSettingsModule(labList['totalCost'], 2) : '0.00';
-                                    taskData['totalCostPerHour'] = labList['totalCostPerHour'] ? formatNumberAsGlobalSettingsModule(labList['totalCostPerHour'], 2) : '0.00';
-
-                                    if (taskData.hours) {
-                                        let hours = taskData.hours.toFixed(2);
-                                        taskData['totalHours'] = hours.toString().split('.')[0];
-                                        taskData['totalMinutes'] = hours.toString().split('.')[1];
-                                    }
-                                    if (taskData.adjustments) {
-                                        let adjustments = taskData.adjustments.toFixed(2);
-                                        taskData['adjtotalHours'] = adjustments.toString().split('.')[0];
-                                        taskData['ajdtotalMinutes'] = adjustments.toString().split('.')[1];
-                                    }
-                                    this.labor.workOrderLaborList[0][task.description.toLowerCase()].push(taskData);
-                                    break;
-                                }
-                            }
+if(res && res.response=='Record not Exist with these details. !' ){
+    this.getMarkup();
+    this.islaborCreated=false;
+  }  else{
+    this.islaborCreated=true;
+    this.data = {};
+    this.data = res;
+    if (res) {
+        this.workOrderLaborList = { 
+            ...this.data,
+            workFlowWorkOrderId: getObjectById('value', this.data.workFlowWorkOrderId, this.workOrderWorkFlowOriginalData),
+            employeeId: {employeeId:this.data.employeeId,name:this.data.employeeName,value:this.data.employeeId,label:this.data.employeeName},
+            dataEnteredBy: {value:this.data.dataEnteredBy,label:this.data.dataEnteredByName},
+        };
+        this.getMarkup();
+        this.labor.hoursorClockorScan = res.hoursorClockorScan;
+        this.labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0) ? 'workFlow' : (res.workOrderHoursType == 1) ? 'specificTasks' : 'workOrder';
+        this.labor.totalWorkHours = res.totalWorkHours;
+        this.labor.expertiseId = res.expertiseId;
+        this.labor['labourMemo'] = res.labourMemo;
+        this.labor['workOrderHoursType'] = res['workOrderHoursType'];
+        if (this.isSubWorkOrder == true) {
+            this.labor['subWorkOrderLaborHeaderId'] = res['subWorkOrderLaborHeaderId'];
+        }
+    }
+    if (res) {
+        for (let labList of this.data['laborList']) {
+            if (this.taskList) {
+                for (let task of this.taskList) {
+                    if (task.taskId == labList['taskId']) {
+                        if (!this.labor.workOrderLaborList[0][task.description.toLowerCase()]) {
+                            this.labor.workOrderLaborList[0][task.description.toLowerCase()] = []
                         }
-                    }
-                    if (this.gridActiveTab === 'billorInvoice') {
-                        this.quoteChargesList = this.data['laborList'];
+                        if (this.labor.workOrderLaborList[0][task.description.toLowerCase()][0] && (this.labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == undefined || this.labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == null)) {
+                            this.labor.workOrderLaborList[0][task.description.toLowerCase()].splice(0, 1);
+                        }
+                        let taskData = new AllTasks()
+                        taskData['workOrderLaborHeaderId'] = labList['workOrderLaborHeaderId'];
+                        taskData['workOrderLaborId'] = labList['workOrderLaborId'];
+                        taskData['expertiseId'] = labList['expertiseId'];
+                        taskData['employeeId']={value:labList['employeeId'],label:labList['employeeName']};
+                        taskData['billableId'] = labList['billableId'];
+                        taskData['startDate'] = labList['startDate'] ? new Date(labList['startDate']) : null;
+                        taskData['endDate'] = labList['endDate'] ? new Date(labList['endDate']) : null;
+                        taskData['hours'] = labList['hours'];
+                        taskData['adjustments'] = labList['adjustments'];
+                        taskData['adjustedHours'] = labList['adjustedHours'].toFixed(2);
+                        taskData['memo'] = labList['memo'];
+
+                        taskData['burdaenRatePercentageId'] = labList['burdaenRatePercentageId'];
+                        taskData['burdenRateAmount'] = labList['burdenRateAmount'] ? formatNumberAsGlobalSettingsModule(labList['burdenRateAmount'], 2) : '0.00';
+                        taskData['directLaborOHCost'] = labList['directLaborOHCost'] ? formatNumberAsGlobalSettingsModule(labList['directLaborOHCost'], 2) : '0.00';
+                        taskData['totalCost'] = labList['totalCost'] ? formatNumberAsGlobalSettingsModule(labList['totalCost'], 2) : '0.00';
+                        taskData['totalCostPerHour'] = labList['totalCostPerHour'] ? formatNumberAsGlobalSettingsModule(labList['totalCostPerHour'], 2) : '0.00';
+
+                        if (taskData.hours) {
+                            let hours = taskData.hours.toFixed(2);
+                            taskData['totalHours'] = hours.toString().split('.')[0];
+                            taskData['totalMinutes'] = hours.toString().split('.')[1];
+                        }
+                        if (taskData.adjustments) {
+                            let adjustments = taskData.adjustments.toFixed(2);
+                            taskData['adjtotalHours'] = adjustments.toString().split('.')[0];
+                            taskData['ajdtotalMinutes'] = adjustments.toString().split('.')[1];
+                        }
+                        this.labor.workOrderLaborList[0][task.description.toLowerCase()].push(taskData);
+                        break;
                     }
                 }
+            }
+        }
+        if (this.gridActiveTab === 'billorInvoice') {
+            this.quoteChargesList = this.data['laborList'];
+        }
+    }
+}
             },
                 err => {
                     this.workOrderLaborList=[];
@@ -2673,11 +2674,8 @@ this.getNewMaterialListByWorkOrderId();
                     this.handleError(err);
                 })
         }
-        console.log("this.data",this.data)
-        // console.log("this.data",Object.keys(this.data).length)
         // setTimeout(() => {
         //    if(Object.keys(this.data).length == 0){
-        //        console.log("this.data",this.data)
         //     this.getMarkup();
         //    }
         // }, 500);
@@ -2704,7 +2702,6 @@ this.getNewMaterialListByWorkOrderId();
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        // console.log("add form")
         // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) { 

@@ -108,7 +108,6 @@ export class WoPartDetailsComponent implements OnChanges {
 
   ngOnInit() {    
    if(this.editData){
-    // this.formObject=this.editData;
     this.disableforPartNum=true;
     this.formObject.restrictPMA= true,
     this.formObject.restrictDER= true,
@@ -123,33 +122,14 @@ export class WoPartDetailsComponent implements OnChanges {
     this.formObject.quantity=this.editData.quantity;
     this.formObject.qtyOnHand=this.editData.qtyOnHand;
     this.formObject.qtyAvailable=this.editData.qtyAvail;
-    // this.formObject.taskId=this.editData.taskId;
-    // this.formObject.provisionId=this.editData.provisionId;
-    // this.formObject.isDeferred=this.editData.isDeferred;
-    // this.formObject.memo=this.editData.memo;
-    // this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
-    // this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
-    // this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
-    // this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
-    // this.getTaskList();
-    // this.provisionList();
-    // this.getMaterailMandatories();
     this.search();
    }else{
-    // this.getTaskList();
-    // this.provisionList();
-    // this.getMaterailMandatories();
    }
-    
-
-
   }
-
   hideStockline(rowIndex) {
     this.hideme[rowIndex] = !this.hideme[rowIndex];
     this.rowIndex = -1;
   }
-
   ngOnChanges(changes: SimpleChanges) {
     this.salesQuoteService.getSelectedParts().subscribe(data => {
       if (data && data.length > 0) {
@@ -164,7 +144,6 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     }
   }
-
   initColumns() {
     this.columns = [
       { field: 'select', header: '', width: '30px', textalign: 'center' },
@@ -204,7 +183,6 @@ export class WoPartDetailsComponent implements OnChanges {
       { field: 'memo', header: 'Memo', width: '80px', textalign: 'left' }
     ]
   }
-
   parsedText(text) {
     if (text) {
         const dom = new DOMParser().parseFromString(
@@ -214,12 +192,10 @@ export class WoPartDetailsComponent implements OnChanges {
         return decodedString;
    }
   }
-
   onAddTextAreaInfo(material) {
     this.disableEditor = true;
     this.textAreaInfo = material.memo;
   }
-
   onSaveTextAreaInfo(memo) {
     if (memo) {
         this.textAreaInfo = memo;
@@ -231,37 +207,23 @@ export class WoPartDetailsComponent implements OnChanges {
       this.disableUpdateButton = false;
     }
   }
-
   onCloseTextAreaInfo() {
     this.disableEditor = true;
     $("#textarea-popup2").modal("hide");
   }
-
   onPaging(event) {
   }
-
-
-
-
   getActive(){
     this.disableUpdateButton=false;
   }
-
   onChange(event, part,index) {
     let checked: boolean = event.srcElement.checked;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable; 
-    // this.onPartSelect.emit({ checked: checked, part: part });
-
-    if(checked==true){
+ if(checked==true){
       event.srcElement.checked=false;
-      // this.parts.forEach(element => {
-      //   element.isPartChecked=false;
-      // });
-      // part.isPartChecked==true;
-      part.method='ItemMaster';
+ part.method='ItemMaster';
       this.materialCreateObject=part;
-      
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject.conditionCodeId=part.conditionId;
@@ -311,11 +273,7 @@ export class WoPartDetailsComponent implements OnChanges {
   onChangeStock(event, part, salesMargin) {
     let checked: boolean = event.srcElement.checked;
     if(checked==true){
-
-      // this.roleUpMaterialList.forEach(element => {
-      //   element.childPartChecked=false;
-      // });
-      part.method='StockLine';
+  part.method='StockLine';
     part.childPartChecked=true;
     this.materialCreateObject=part;
     this.formObject.qtyOnHand = part.qtyOnHand;
@@ -360,7 +318,6 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject={};
     this.disableSaveUpdateButton=false;
   }
-    // this.select.emit({ checked: checked, part: part, salesMargin: salesMargin });
   }
   materialCreateObject:any={  
     isActive: true,
@@ -381,7 +338,6 @@ export class WoPartDetailsComponent implements OnChanges {
   }
 
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
-    // debugger;
     if (this.selectedParts.length > 0) {
       let sameParts = [];
       if (isStock) {
@@ -396,24 +352,7 @@ export class WoPartDetailsComponent implements OnChanges {
           return true;
         }
       }
-      //  else {
-      //   sameParts = this.selectedParts.filter(part =>
-      //     part.partNumber == stockLineItem.partNumber && part.conditionCodeId == stockLineItem.conditionId && part.stockLineNumber == undefined
-      //   );
-      // } 
-      // if (isStock) {
-      //   if (stockLineItem.qtyAvailable>0) {
-      //     return false;
-      //   }
-      //   if (sameParts && sameParts.length > 0) {
-      //     return true;
-      //   }
-      // }
-      // else {
-      //   if (sameParts && sameParts.length > 0) {
-      //     return true;
-      //   }
-      // }
+
     } else {
       this.selectedParts = [];
       return false;
@@ -515,7 +454,6 @@ export class WoPartDetailsComponent implements OnChanges {
   get masterCompanyId(): number {
     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : 1;
   }
-  //part filters start from here
   async searchPartByPartNumber(event) {
     if (event.query !== undefined && event.query !== null) {
       this.bindPartsDroppdown(event.query);
@@ -528,7 +466,6 @@ export class WoPartDetailsComponent implements OnChanges {
   }
 
   bindPartsDroppdown(query) {
-    // this.searchDisabled = true;
     let partSearchParamters = {
       'partNumber': query,
       "restrictPMA": this.formObject.restrictPMA,
@@ -551,7 +488,6 @@ export class WoPartDetailsComponent implements OnChanges {
           this.partDetailsList = [];
           this.partDetails = [];
         }
-        // this.changeDetector.detectChanges();
       }
     )
   }
@@ -575,24 +511,16 @@ export class WoPartDetailsComponent implements OnChanges {
     this.formObject.includeMultiplePartNumber = false;
   }
   resetActionButtons() {
-    // this.searchDisabled = true;
-    //this.historicalDisabled = true;
   }
   search() {
-    // let searchQuery = JSON.parse(JSON.stringify(this.formObject));
-    this.formObject.restrictDER = !this.formObject.restrictDER;
+     this.formObject.restrictDER = !this.formObject.restrictDER;
     this.formObject.restrictPMA = !this.formObject.restrictPMA;
     if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
       this.formObject.conditionIds.push(this.formObject.conditionId);
     }
-    // let searchQuery= new ItemMasterSearchQuery();
     this.searchQuery.partSearchParamters=this.formObject;
-    // if (!programaticSearch) {
-    //   $event.preventDefault();
-    // }
     if (this.formObject.includeMultiplePartNumber) {
-      // this.getMultipartsQuery();
-    } else {
+   } else {
       switch (this.formObject.itemSearchType) {
         case ItemSearchType.StockLine:
           this.isSpinnerVisible = true;
@@ -614,7 +542,6 @@ export class WoPartDetailsComponent implements OnChanges {
               this.parts.forEach(element => {
                 element.isPartChecked=false;
               });
-              // this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
             });
@@ -625,15 +552,12 @@ export class WoPartDetailsComponent implements OnChanges {
             .subscribe(result => {
               this.isSpinnerVisible = false;
               if (result && result['data'] && result['data'][0]) {
-                // this.formObject.qtyOnHand = result['data'][0].qtyOnHand;
-                // this.formObject.qtyAvailable = result['data'][0].qtyAvailable;
-              }
+             }
               this.parts = result['data'];
               this.parts.forEach(element => {
                 element.isPartChecked=false;
                 element.qtyToOrder=this.formObject.quantity;
               });
-              // this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
             });
@@ -641,7 +565,6 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     }
   }
-
   provisionList() {
     this.isSpinnerVisible = true;
     let provisionIds = []; 
@@ -660,7 +583,6 @@ export class WoPartDetailsComponent implements OnChanges {
             this.isSpinnerVisible = false;
         });
   }
-
   getTaskList() {  
   this.setEditArray=[];
 
@@ -694,7 +616,6 @@ export class WoPartDetailsComponent implements OnChanges {
       err => {
       })
 }
-
 getMaterailMandatories() {
   let materialMandatoriesIds = [];
   materialMandatoriesIds.push(0)
@@ -763,8 +684,9 @@ saveWorkOrderMaterialList(data) {
           err => {
           })
 }
-
+updateQuantiry:boolean=false;
 calculateExtendedCost(): void {
+  this.updateQuantiry=true;
   this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
   this.formObject.quantity = this.formObject.quantity ? this.formObject.quantity.toString().replace(/\,/g, '') : 0;
   if (this.formObject.quantity != 0 && this.formObject.unitCost) {
@@ -773,8 +695,6 @@ calculateExtendedCost(): void {
   else {
       this.formObject.extendedCost = "";
   }
-  // this.calculateExtendedCostSummation();
-  // this.addQuantityReqToParts();
   if(this.parts && this.parts.length !=0){
     this.parts.forEach(element => {
       element.isPartChecked=false;
@@ -785,146 +705,23 @@ calculateExtendedCost(): void {
 editorgetmemo(ev) {
   this.disableEditor = false;
 }
-
 onCloseMaterial(){
   $("#showMarginDetails").modal("hide");
 }
 finalSaveMaterial(){
-
 }
-
 savePart(data){
-  // this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-  // this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-  // this.materialCreateObject.memo=this.formObject.memo;
-  // this.materialCreateObject.isDeferred=this.formObject.isDeferred;
-  // this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
-  this.saveMaterialListData.emit(data);
+this.saveMaterialListData.emit(data);
   $("#showMarginDetails").modal("hide");
   this.close.emit(true);
 }
-
 upDatePart(data){ 
-  // if(this.isEdit){
-  //   this.materialCreateObject= this.editData
-  //   this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
-  // }
-
-  // this.materialCreateObject.mandatorySupplementalId=this.formObject.materialMandatoriesId;
-  // this.materialCreateObject.provisionId=this.formObject.provisionId;
-  // this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
-  // this.materialCreateObject.quantity=this.formObject.quantity;
-  // this.materialCreateObject.taskId=this.formObject.taskId;
-  // this.materialCreateObject.isDeferred=this.formObject.isDeferred;
-  // this.materialCreateObject.memo=this.formObject.memo;
-  //  this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-  //  this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-  this.updateMaterialListData.emit(data)
+this.updateMaterialListData.emit(data)
   this.disableUpdateButton=true;
   $("#showMarginDetails").modal("hide");
   this.close.emit(true);
 }
 openSalesMargin() {
-  // this.isEdit = false;
-  // let contentMargin = this.salesMargin;
-    //  this.woMarginModal = this.modalService.open(contentMargin, { size: "lg", backdrop: 'static', keyboard: false });
-    //   this.woMarginModal.result.then(
-    //     () => { },
-    //     () => {
-    //       // this.selectedPart.selected = false;
-    //     }
-    //   ); 
-
-
-
-    $("#showMarginDetails").modal("show");
-
-  // if (this.selectedPart) {
-  //   if (checked) {
-  //     this.salesQuoteService.getSearchPartObject().subscribe(data => {
-  //       this.query = data;
-  //       this.part = new PartDetail();
-
-  //       this.part.partNumber = this.selectedPart.partNumber;
-  //       this.part.stockLineNumber = this.selectedPart.stockLineNumber;
-  //       this.part.salesPricePerUnit = +this.selectedPart.unitSalePrice;
-  //       this.part.unitCostPerUnit = +this.selectedPart.unitCost;
-  //       this.part.itemClassification = this.selectedPart.itemClassification;
-  //       this.part.freight = this.salesQuoteService.getTotalFreights();
-  //       this.part.misc = this.salesQuoteService.getTotalCharges();
-  //       this.part.createdBy = this.userName;
-  //       this.part.priorityId = this.defaultSettingPriority;
-  //       if (this.selectedPart.itemMasterSale) {
-  //         this.part.fixRate = this.selectedPart.itemMasterSale.fxRate;
-  //       }
-  //       this.part.taxType = this.customer.taxType;
-  //       this.part.taxPercentage = this.customer.taxPercentage;
-  //       if (this.selectedPart.mappingType == 1) {
-  //         this.part.altOrEqType = "Alt";
-  //       } else if (this.selectedPart.mappingType == 2) {
-  //         this.part.altOrEqType = "Equi";
-  //       } else {
-  //         this.part.altOrEqType = "";
-  //       }
-  //       this.part.description = this.selectedPart.description;
-  //       this.part.itemMasterId = this.selectedPart.itemMasterId;
-  //       this.part.partId = this.selectedPart.partId;
-  //       this.part.stockLineId = this.selectedPart.stockLineId;
-  //       this.part.idNumber = this.selectedPart.idNumber;
-  //       this.part.customerRef = this.salesQuote.customerReferenceName;
-  //       this.part.serialNumber = this.selectedPart.serialNumber;
-  //       this.part.qtyAvailable = this.selectedPart.qtyAvailable;
-  //       this.part.quantityOnHand = this.selectedPart.quantityOnHand;
- 
-  //       this.part.masterCompanyId = this.masterCompanyId;
-  //       this.part.conditionId = this.selectedPart.conditionId;
-  //       this.part.conditionDescription = this.selectedPart.conditionDescription;
-  //       this.part.uom = this.selectedPart.uomDescription;
-  //       this.part.pmaStatus = this.selectedPart.oempmader;
-  //       if (!this.part.pmaStatus) {
-  //         this.part.pmaStatus = this.selectedPart['stockType'];
-  //       }
-  //       this.part.currencyId = this.selectedPart.currencyId;
-  //       this.part.currencyDescription = this.defaultCurrencyDiscription;
-  //       this.part.currencyId = this.defaultCurrencyId;
-  //       this.part.controlNumber = this.selectedPart.controlNumber;
-  //       this.part.salesDiscount = 0;
-  //       this.part.markupPerUnit = 0;
-  //       this.part.markUpPercentage = 0;
-  //       this.part.salesDiscount = 0;
-  //       this.part.grossSalePricePerUnit = 0;
-  //       this.part.grossSalePrice = 0;
-  //       this.part.quantityRequested = this.query.partSearchParamters.quantityRequested;
-  //       this.part.quantityToBeQuoted = this.query.partSearchParamters.quantityToQuote;
-  //       if (this.selectedPart['qtyRemainedToQuote']) {
-  //         if (this.selectedPart['qtyRemainedToQuote'] >= this.part.quantityToBeQuoted) {
-  //           this.part.quantityFromThis = this.part.quantityToBeQuoted;
-  //         } else {
-  //           this.part.quantityFromThis = this.selectedPart['qtyRemainedToQuote'];
-  //         }
-  //       } else {
-  //         this.part.quantityFromThis = this.part.quantityToBeQuoted;
-  //       }
-  //       this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
-  //       this.part.quantityAlreadyQuoted = this.query.partSearchParamters.quantityAlreadyQuoted;
-  //     });
-  //     this.addPartModal.close();
-  //     this.salesMarginModal = this.modalService.open(contentMargin, { size: "lg", backdrop: 'static', keyboard: false });
-  //     this.salesMarginModal.result.then(
-  //       () => { },
-  //       () => {
-  //         this.selectedPart.selected = false;
-  //       }
-  //     );
-  //   } else {
-  //     this.removePartNamber(this.selectedPart);
-  //   }
-  // }
+ $("#showMarginDetails").modal("show");
 }
-
-
-
-
-
-
 }

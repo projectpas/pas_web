@@ -399,7 +399,7 @@
                       <p-dropdown placeholder="Select Site Name"  appendTo="body" [baseZIndex]="9999"  (ngModelChange)="getActive()" name="shipVia{{ i }}" #shipVia="ngModel"
                         [options]="shipViaList" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
                       </p-dropdown>
-                      <span class="circle-span" style="margin-top:5px"><a
+                      <span class="circle-span" style="margin-top:5px;margin-left:10px;"><a
                         class="fa fa-plus-circle fa-lg" matTooltip="Add Ship Via"
                         matTooltipPosition="above" data-toggle="modal"
                         data-target="#AddShipVia"
