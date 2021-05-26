@@ -56,17 +56,13 @@
       </div>
       <div class="col-2 column">
         <div class="form-group">
-            <!-- *ngIf="type == 'WOQ'" -->
           <label >Qty Req<span class="clr-red">*</span></label>
-          <!-- <label *ngIf="type == 'WO'">Qty Ord<span class="clr-red">*</span></label> -->
           <input class="form-control text-right" type="text" (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
           [(ngModel)]="formObject.quantity" (change)="calculateExtendedCost()" name="quantity" autocomplete="off" />
-            <!-- [ngModel]="formObject.quantity  | globalNmberFormat"
-            (ngModelChange)="formObject.quantity=formatStringToNumberGlobal($event)" -->
-        </div>
+         </div>
       </div>
       <div class="col-6 column">
-        <div class="col-3 column">
+        <div class="col-4 column">
           <div class="form-group">
             <label>Qty On Hand</label>
             <input type="text" class="form-control text-right" [ngModel]="formObject.qtyOnHand" name="qtyOnHand"
@@ -75,95 +71,16 @@
               (ngModelChange)="formObject.qtyOnHand=$event" -->
           </div>
         </div>
-        <div class="col-3 column">
+        <div class="col-4 column">
           <div class="form-group">
             <label>Qty Available</label>
             <input type="text" class="form-control text-right" [ngModel]="formObject.qtyAvailable" name="qtyAvailable"
                disabled="true" />
-               <!-- [ngModel]="formObject.qtyAvailable | globalNmberFormat"
-              (ngModelChange)="formObject.qtyAvailable=$event" -->
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- <div class="row"  style="display: none;" style="width: 68%;">
-
-    <div> 
-        <label class="width_100per text_start"> Task <span class="clr-red">*</span> </label>
-        <select class="form-control wf-pub-id qtyWidth text_tranform" (ngModelChange)="getActive()" style="width: 100px;"  [(ngModel)]="formObject.taskId"
-        name="task" required >
-        <option *ngFor="let task of taskList"  [value]="task.taskId">{{task.description}}</option>
-      </select> 
-    </div>
-    <div class="col-2 column">
-      <label class="width_100per text_start">Provision<span class="clr-red">*</span></label>
-      <select class="form-control wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="formObject.provisionId" name="provision"
-      required>
-      <option value="0">--Select--</option>
-      <option *ngFor="let item of provisionListData" [ngValue]="item.value" required>
-        {{ item.label }}
-      </option>
-    </select> 
-    </div>
-    <div class="col-2 column">
-        <label class="width_100per text_start"> Request Type </label>
-        <select class="form-control wf-pub-id full-width qtyWidth mauto" (ngModelChange)="getActive()" [(ngModel)]="formObject.materialMandatoriesId"
-         name="mandi">
-        <option value="0">--select--</option>
-        <option *ngFor="let mandatory of materialMandatory" value="{{ mandatory.materialMandatoriesId }}">
-          {{mandatory.materialMandatoriesName}}
-        </option> 
-      </select>
-    </div>
-    <div class="col-2 column" style="max-width: 13%;">
-      <label class="width_100per text_start">Unit Cost</label>
-      <input type="text" class="form-control w100 text-right input-width-100-percent" (ngModelChange)="getActive()" pInputText pKeyFilter="money"
-        value="{{ unitCost }}" (change)="calculateExtendedCost()" [(ngModel)]="formObject.unitCost"
-        name="unitcost" maxlength="15" />
-    </div>
-    <div class="col-2 column" style="max-width: 15%;">
-      <label class="width_100per text_start">Extened Cost</label>
-      <input type="text" class="form-control w100 text-right input-width-100-percent" pInputText pKeyFilter="money"
-        [disabled]="true" value="{{ extendedCost }}" [(ngModel)]="formObject.extendedCost"
-       name="extCost" maxlength="15" />
-    </div>
-    <div class="col-2 column pad_top20 label_ajd">
-      <div class="custom-checkbox-box text_start">
-        <input class="filled-in" id="PMS"  type="checkbox" value="{{formObject.isDeferred}}"
-          [(ngModel)]="formObject.isDeferred" (ngModelChange)="getActive()" name="isDefered" /> <span class="label_ajd">Is Defered</span>
- 
-      </div>
-    </div>
-    <div class="col-3 column ">
-        <div class="form-group memo-popup-cstm mat_emo">
-          <div [innerHTML]="formObject.memo" matTooltipPosition="above" [matTooltip]="parsedText(formObject.memo)"
-            class="text_editor_box"></div>
-          <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup2" matTooltip="Memo"
-            matTooltipPosition="above" (click)="onAddTextAreaInfo(formObject)"></i>
-        </div> 
-    </div>
-  </div> -->
-  <!-- <div  style="display: none;" class="modal fade" id="textarea-popup2" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
-          <h4 class="modal-title">Edit Memo</h4>
-        </div>
-        <div class="modal-body">
-          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
-            name="textAreaInfo" required></p-editor>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" [disabled]="disableEditor"
-            (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
-          <button type="button" class="btn btn-danger"
-            (click)="onCloseTextAreaInfo()">Close</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div class="row justify-content-start">
     <div class="col-1 column" style="margin-right: 8px;">
       <div class="form-group">
@@ -198,7 +115,6 @@
                             {{ col.header }}
                         </span>
                     </th>
-                    <!-- <th style="width:80px;">Actions</th> -->
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-part let-columns="columns" let-rowIndex="rowIndex">
@@ -217,9 +133,6 @@
                     </td>
                     <td *ngFor="let col of columns" pReorderableRowHandle>
                         <span *ngIf="col.field == 'select'">
-                            <!-- <span *ngIf="!getCheckBoxDisplay(part, rowIndex,false)">
-                                <input type="checkbox" (change)="onChange($event, part)" />
-                            </span>  [(ngModel)]="part.isPartChecked"-->
                             <input type="checkbox"  (change)="onChange($event, part,rowIndex)" [disabled]="isStockLineViewMode" />
                         </span>
                         <span *ngIf="col.field == 'partNumber'">
@@ -234,47 +147,22 @@
                             *ngIf="col.field != 'qtyToOrder' && col.field != 'qtyAvailable' && col.field != 'qtyOnHand' && col.field != 'unitListPrice' && col.field != 'unitCost' && col.field != 'partNumber'&& col.field != 'selected'&&col.field != 'itemClassification'&& col.field != 'glAccount'">{{part[col.field] }}</span>
                         <span *ngIf="col.field == 'unitCost'" class="float-right">
                             {{ part.unitCost  }}
-                            <!-- | twoDecimalGlobalNumberFormatPipe -->
                         </span>
                         <span *ngIf="col.field == 'qtyOnHand'" class="float-right">
                             {{ part.qtyOnHand }}
-                            <!-- | globalNmberFormat -->
                         </span>
                         <span *ngIf="col.field == 'qtyToOrder'" class="float-right">
                             {{ part.qtyToOrder }}
-                            <!-- | globalNmberFormat -->
                         </span>
                         <span *ngIf="col.field == 'qtyAvailable'" class="float-right">
                             {{ part.qtyAvailable  }}
-                            <!-- | globalNmberFormat -->
-                            <!-- <span class="
-                            alternate-part-label"
-                                *ngIf="part.qtyRemainedToQuote != part.qtyAvailable">({{part.qtyRemainedToQuote}})
-                            </span> -->
                         </span>
                     </td>
-                    <!-- <td style="width:80px; text-align:center"> -->
-                    <!-- <span> -->
-                    <!-- <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                (click)="viewSelectedRow(part, itemMasterViewTemplate)" matTooltip="View">
-                                <i class="fa fa-list"></i>
-                            </a> -->
-                    <!-- <span data-toggle="modal" data-target="#stockAudit"><a class="btn nobg btn-hist-cstm"
-                                    (click)="openStocklineAudit(part)" matTooltip="History"
-                                    matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
-                    <!-- <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                (click)="viewStockLineHistory(part)" matTooltip="History">
-                                <i class="fa fa-history"></i>
-                            </a> -->
-                    <!-- </span> -->
-                    <!-- </td> -->
 
                 </tr>
                 <tr [hidden]="!hideme[rowIndex]" class="sub-table no-bg">
 
                     <td style="text-align: center;"> </td>
-                    <!-- *ngIf="!isStockLineViewMode" -->
-
                     <td colspan="12" class="p-0">
                         <p-table #dt class=" rpo-table-cstm1 rro-table-cstm salesquotePart "
                             [value]="roleUpMaterialList" [rows]="10" [lazy]="true" [paginator]="showPaginator"
@@ -326,23 +214,13 @@
             <ng-template pTemplate="body" let-part let-rowIndex="rowIndex" let-columns="stockLinecolumns">
                 <tr>
                     <td *ngFor="let col of stockLinecolumns" pReorderableRowHandle>
-                        <!-- <span *ngIf="col.field == 'selected'">
-                            <span *ngIf="!getCheckBoxDisplay(part, rowIndex,true)">
-                                <input type="checkbox" (change)="onChangeStock($event, part, 0)"
-                                    [disabled]="isStockLineViewMode" />
-                            </span>
-                        </span> -->
-
-                        <span *ngIf="col.field == 'selected'">
+                      <span *ngIf="col.field == 'selected'">
                             <span *ngIf="!getCheckBoxDisplay(part, rowIndex,true)">
                                 <input type="checkbox" (change)="onChangeStock($event, part, 0)"
                                     [disabled]="isStockLineViewMode" />
                             </span>
                         </span>
-<!-- <span>{{!getCheckBoxDisplay(part, rowIndex,true)}}</span> -->
-
-
-                        <span class="float-left" *ngIf=" col.field=='partNumber'">{{ part.partNumber }}
+                          <span class="float-left" *ngIf=" col.field=='partNumber'">{{ part.partNumber }}
                             <span class=" alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span>
                             <span class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span>
                         </span>
@@ -914,7 +792,7 @@
           <h4 class="modal-title">Edit PN Details</h4>
         </div>
         <div class="modal-body" *ngIf="selectedMaterialPart !=undefined">
-            <app-wo-margin tabindex="-1"(updateFinalMaterialListData)="upDatePart($event)"   [isSubWorkOrder]="isSubWorkOrder" [isEdit]="isEdit" [editData]="editData" (saveFinalMaterialListData)="savePart($event)" [part]="selectedMaterialPart" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+            <app-wo-margin tabindex="-1"(updateFinalMaterialListData)="upDatePart($event)"   [isSubWorkOrder]="isSubWorkOrder" [enableUpdateBtn]="updateQuantiry" [isEdit]="isEdit" [editData]="editData" (saveFinalMaterialListData)="savePart($event)" [part]="selectedMaterialPart" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
             (close)="onCloseMargin($event)" (searchAnotherPN)="onSearchAnotherPN($event)"></app-wo-margin>
         </div>
       </div>
