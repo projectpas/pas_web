@@ -15,6 +15,10 @@
 .add-color {
   border: 1px solid grey;
 }
+.tab-back-color{
+  background-color: #f4f4f4 !important;
+  border:#c5c5c5 !important;
+}
 .add-icon-new {
   border-radius: 14px !important;
   background: #337ab7;
@@ -495,7 +499,9 @@ input[type='date']::-webkit-outer-spin-button {
 }
 .ntae-section .md-stepper-horizontal .md-step {
   cursor: pointer;
-  background: #bcceff;
+  // background: #bcceff;
+   background-color: #f4f4f4;
+  border:1px solid #c5c5c5;
 }
 .ntae-section .md-step .md-step-title{
   color: #333 !important;
