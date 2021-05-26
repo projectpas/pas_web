@@ -1,4 +1,4 @@
-import { ISalesOrderQuotePart } from './ISalesOrderQuotePart';
+import { ISpeedQuotePart } from './ISpeedQuotePart';
 import { IPriority } from './IPriority';
 import { ISalesQuoteType } from './ISalesQuoteType';
 import { ICustomerType } from './ICustomerType';
@@ -13,7 +13,7 @@ export class SpeedQuoteView implements ISpeedQuoteView {
     createNewVersion: boolean;
     originalSalesOrderQuoteId: Number;
     speedQuote: ISpeedQte;
-    parts: ISalesOrderQuotePart[]
+    parts: ISpeedQuotePart[]
     priorities: IPriority[];
     salesQuoteTypes: ISalesQuoteType[];
     customerTypes: ICustomerType[];

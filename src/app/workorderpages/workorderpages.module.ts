@@ -110,6 +110,11 @@ import { WorkOrderPartPickticketprintComponent } from '../components/work-order/
 import { WoMarginComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-margin/wo-margin..component';
 import { WoReleaseFromComponent } from '../components/work-order/work-order-setup/wo-release-from/wo-release-from.component';
 import { WoReleaseEasaFromComponent } from '../components/work-order/work-order-setup/wo-release-easa-from/wo-release-easa-from.component';
+import { WorkOrderMultiPackagingLabelComponent } from '../components/work-order/work-order-setup/wo-order-multi-Packaging-Label/wo-order-multi-Packaging-Label.component';
+import { WorkOrderMultiShippingLabelComponent } from '../components/work-order/work-order-setup/work-order-multi-shipping-label/work-order-multi-shipping-label.component';
+import { WorkOrderPackagingLabelComponent } from '../components/work-order/work-order-setup/work-order-packaging-label/work-order-packaging-label.component';
+import { WorkOrderShippingLabelComponent } from '../components/work-order/work-order-setup/work-order-shipping-label/work-order-shipping-label.component';
+import { WorkOrderReleaseFromListComponent } from '../components/work-order/work-order-setup/work-order-release-from-list/work-order-release-from-list.component';
 // import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
 
 
@@ -218,7 +223,13 @@ import { WoReleaseEasaFromComponent } from '../components/work-order/work-order-
     WorkOrderPartPickticketprintComponent,
     WoMarginComponent,
     WoReleaseFromComponent,
-    WoReleaseEasaFromComponent
+    WoReleaseEasaFromComponent,
+    WorkOrderMultiPackagingLabelComponent,
+    WorkOrderMultiShippingLabelComponent,
+    WorkOrderShippingComponent,
+    WorkOrderPackagingLabelComponent,
+    WorkOrderShippingLabelComponent,
+    WorkOrderReleaseFromListComponent
     // TwoDecimalGlobalNumberFormatPipe
   ],
   entryComponents: [WorkOrderPickticketprintComponent, WorkOrderPartPickticketprintComponent],

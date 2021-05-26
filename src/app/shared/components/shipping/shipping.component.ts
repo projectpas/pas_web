@@ -6,6 +6,9 @@ import { AddressModel } from '../../../models/address.model';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { AuthService } from '../../../services/auth.service';
 import { editValueAssignByCondition } from '../../../generic/autocomplete';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SalesOrderMultiPackagingLabelComponent } from 'src/app/components/sales/order/sales-order-multi-Packaging-Label/sales-order-multi-packaging-label.component';
+import { SalesMultiShippingLabelComponent } from 'src/app/components/sales/order/sales-order-multi-shipping-label/sales-order-multi-shipping-label.component';
 
 @Component({
     selector: 'app-shipping',
@@ -29,9 +32,19 @@ export class ShippingComponent implements OnInit {
     customerListOriginal: any;
     customerallListOriginal: any;;
     arrayCustlist: any[] = [];
+    packagingSlips : any[]=[];
+    shippingLabels : any[]=[];
     customerNames: { customerId: any; name: any; }[];
     soldCustomerAddress: any = new AddressModel();
     shipCustomerAddress: any = new AddressModel();
+    addCustomerInfo: boolean = false;
+    isMultipleSelected: boolean = false;
+    customerDetails:any;
+    workOrderPartId:number;
+    woShippingId:number;
+    woPickTicketId : number;
+    packagingSlipId; number
+    modal: NgbModalRef;
     shippingHeader: any = {
         "workOrderShippingId": 0,
         "woShippingStatusId": 1,
@@ -65,12 +78,23 @@ export class ShippingComponent implements OnInit {
     shipToSite: any;
     headers = [];
     selectedColumns;
+    workorderpackage: boolean = false;
+    workordershipping: boolean = false;
+    workordersinglepacking: boolean = false;
+    workordersingleshipping: boolean = false;
+    isEditModeAdd: boolean = false;
+    partSelected = false;
+    disableGeneratePackagingBtn: boolean = true;
+    isViewShipping: boolean = false;
+    currwOPickTicketId: number;
+    currQtyToShip: number;
 
     constructor(public customerService: CustomerService, private commonService: CommonService,
-        private workorderService: WorkOrderService, private alertService: AlertService, private authService: AuthService) {
+        private workorderService: WorkOrderService, private alertService: AlertService, private authService: AuthService,private modalService: NgbModal) {
     }
 
     ngOnInit(): void {
+        this.disableGeneratePackagingBtn = true;
         if (this.workOrderGeneralInformation) {
             this.workOrderId = this.workOrderGeneralInformation.workOrderId;
             this.CustomerId = this.workOrderGeneralInformation['customerDetails']['customerId'];
@@ -122,6 +146,7 @@ export class ShippingComponent implements OnInit {
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
                 this.shippingList = response[0];
+                this.checkIsChecked();
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -131,11 +156,220 @@ export class ShippingComponent implements OnInit {
         ship.selected = evt.target.checked;
         this.checkIsChecked();
     }
+    generatePackagingSlip() {
+        let packagingSlipItems: PackagingSlipItems[] = [];
 
+        this.shippingList.filter(a => {
+            for (let i = 0; i < a.woshippingchildviewlist.length; i++) {
+                if (a.woshippingchildviewlist[i].selectedToGeneratePackaging == true) {
+                    if (a.woshippingchildviewlist[i].packagingSlipId === undefined || a.woshippingchildviewlist[i].packagingSlipId == 0) {
+                        var p = new PackagingSlipItems;
+                        p.WOPickTicketId = a.woshippingchildviewlist[i].wOPickTicketId;
+                        p.currQtyToShip = a.woshippingchildviewlist[i].qtyToShip;
+                        p.WOPartNoId = a.woshippingchildviewlist[i].workOrderPartId;
+                        p.WorkOrderId = this.workOrderId;
+                        p.masterCompanyId = this.currentUserMasterCompanyId;
+                        p.createdBy = this.userName;
+                        p.updatedBy = this.userName;
+                        p.createdDate = new Date().toDateString();
+                        p.updatedDate = new Date().toDateString();
+
+                        packagingSlipItems.push(p);
+                    }
+                }
+            }
+        });
+        this.isSpinnerVisible = true;
+
+        this.workorderService.generatePackagingSlip(packagingSlipItems)
+            .subscribe(
+                (res: any) => {
+                    this.isSpinnerVisible = false;
+                    this.isEditModeAdd = false;
+
+                    this.alertService.showMessage(
+                        'Sales Order',
+                        'Packaging Slip created Succesfully',
+                        MessageSeverity.success
+                    );
+                    this.partSelected = false;
+                    this.getShippingList();
+                    this.disableGeneratePackagingBtn = true;
+                }, err => {
+                    this.isSpinnerVisible = false;
+                });
+    }
+printSelectedPackagingSlip()
+{
+   this.workorderpackage=true;
+
+    let packagingSlipsToPrint: MultiPackagingSlips[] = [];
+        this.shippingList.forEach(a => {
+            a.woshippingchildviewlist.forEach(ele => {
+                if (ele.selectedToGeneratePackaging && ele.packagingSlipId > 0) {
+                    var items = new MultiPackagingSlips;
+                    items.WorkOrderId = ele.workOrderId;
+                    items.WOPartNoId = ele.workOrderPartId;
+                    items.WOPickTicketId = ele.woPickTicketId;
+                    items.PackagingSlipId = ele.packagingSlipId;
+
+                    packagingSlipsToPrint.push(items);
+                }
+            });
+        });
+
+        let packagingSlips1: any[] = [];
+
+        packagingSlips1 = packagingSlipsToPrint;
+        //const packagingSlip
+
+        this.packagingSlips =[];
+        this.packagingSlips =[...packagingSlips1];
+        console.log(this.packagingSlips);
+        // this.modal = this.modalService.open(SalesOrderMultiPackagingLabelComponent, { size: "lg" });
+        // let instance: SalesOrderMultiPackagingLabelComponent = (<SalesOrderMultiPackagingLabelComponent>this.modal.componentInstance)
+        // instance.modalReference = this.modal;
+
+        // instance.onConfirm.subscribe($event => {
+        //     if (this.modal) {
+        //         this.modal.close();
+        //     }
+        // });
+
+        // instance.packagingSlips = packagingSlips;
+}
+
+printSelectedShippingLabel()
+{
+    this.workordershipping=true;
+
+    let shippingItemsToPrint: MultiShippingLabels[] = [];
+    this.shippingList.forEach(a => {
+        a.woshippingchildviewlist.forEach(ele => {
+            if (ele.selectedToGeneratePackaging) {
+                var items = new MultiShippingLabels;
+                items.WorkOrderId = ele.workOrderId;
+                items.WOPartNoId = ele.workOrderPartId;
+                items.WOShippingId = ele.workOrderShippingId;
+
+                shippingItemsToPrint.push(items);
+            }
+        });
+    });
+
+    let shippingLabels1: any[] = [];
+
+    //shippingLabels['shippingLabels'] = shippingItemsToPrint;
+
+    this.shippingLabels =[];
+        this.shippingLabels =[...shippingLabels1];
+        console.log(this.shippingLabels);
+
+    // this.modal = this.modalService.open(SalesMultiShippingLabelComponent, { size: "lg" });
+    // let instance: SalesMultiShippingLabelComponent = (<SalesMultiShippingLabelComponent>this.modal.componentInstance)
+    // instance.modalReference = this.modal;
+
+    // instance.onConfirm.subscribe($event => {
+    //     if (this.modal) {
+    //         this.modal.close();
+    //     }
+    // });
+
+    // instance.salesshippingLabels = shippingLabels;
+}
+
+PerformShipping()
+{
+    this.clearData();
+    this.isViewShipping = false;
+    this.isMultipleSelected = true;
+    this.partSelected = true;
+    this.bindData();
+}
+
+printShippingLabel(rowData: any) {
+ debugger;
+    this.workordersingleshipping=true;
+    this.workOrderId = rowData.workOrderId;
+    this.workOrderPartId = rowData.workOrderPartId;
+    this.woShippingId = rowData.workOrderShippingId;
+}
+
+printPackagingLabel(rowData: any) 
+{
+    this.workordersinglepacking=true;
+    this.workOrderId = rowData.workOrderId;
+    this.workOrderPartId = rowData.workOrderPartId;
+    this.woPickTicketId = rowData.woPickTicketId;
+    this.packagingSlipId = rowData.packagingSlipId;
+}
+
+onSelectPartNumber(rowData) {
+    this.currwOPickTicketId = rowData.woPickTicketId;
+    this.currQtyToShip = rowData.qtyToShip;
+    this.workOrderPartId = rowData.workOrderPartId;
+    this.partSelected = true;
+    this.isMultipleSelected = false;
+    this.isViewShipping = false;
+    this.clearData();
+    this.bindData();
+}
+
+bindData() {
+    this.getShippingList();
+    this.getShipVia();
+    this.getCountriesList();
+    this.getOriginSiteNames();
+    this.getUnitOfMeasure();
+    //this.getAddressById(this.salesOrderId);
+
+    if (this.customerDetails) {
+        this.shippingHeader['soldToName'] = this.customerDetails['name'];
+        this.shippingHeader['shipToName'] = this.customerDetails['name'];
+        this.shippingHeader['customerId'] = this.customerDetails['customerId'];
+    }
+    this.shippingHeader['soShippingNum'] = 'Creating';
+}
+
+clearData() {
+    this.clearShipToAddress();
+    //this.clearOriginAddress();
+    this.clearSoldToAddress();
+    this.isEditModeAdd = false;
+    this.shippingHeader.airwayBill = '';
+    this.shippingHeader.weight = 0;
+    this.shippingHeader.shipWeight = 0;
+    this.shippingHeader.shipWeightUnit = 0;
+    this.shippingHeader.shipSizeLength = 0;
+    this.shippingHeader.shipSizeWidth = 0;
+    this.shippingHeader.shipSizeHeight = 0;
+    this.shippingHeader.shipSizeUnitOfMeasureId = 0;
+    this.shippingHeader.salesOrderShippingId = 0;
+    this.shippingHeader['salesOrderCustomsInfo']['entryType'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['entryNumber'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['commodityCode'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['epu'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['ucr'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['masterUCR'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['movementRefNo'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['customsValue'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['netMass'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['vatValue'] = '';
+    this.shippingHeader['salesOrderCustomsInfo']['salesOrderCustomsInfoId'] = 0;
+    this.addCustomerInfo = false;
+}
+
+AddCustomInfo() {
+    this.addCustomerInfo = !this.addCustomerInfo;
+}
+checkedToGenerate(evt, ship) {
+    ship.selectedToGeneratePackaging = evt.target.checked;
+    this.checkIsCheckedToGenerate();
+}
     disableCreateShippingBtn: boolean = true;
     checkIsChecked() {
         this.shippingList.forEach(a => {
-            a.soshippingchildviewlist.forEach(ele => {
+            a.woshippingchildviewlist.forEach(ele => {
                 if (ele.selected)
                     this.disableCreateShippingBtn = false;
                 else
@@ -143,6 +377,22 @@ export class ShippingComponent implements OnInit {
             });
         });
     }
+    checkIsCheckedToGenerate() {
+        var keepGoing = true;
+        this.shippingList.forEach(a => {
+            a.woshippingchildviewlist.forEach(ele => {
+                if (keepGoing) {
+                    if (ele.selectedToGeneratePackaging) {
+                        this.disableGeneratePackagingBtn = false;
+                        keepGoing = false;
+                    }
+                    else
+                        this.disableGeneratePackagingBtn = true;
+                }
+            });
+        });
+    }
+
 
     getOriginSiteNames() {
         this.orignSiteNames = [];
@@ -557,4 +807,35 @@ export class ShippingComponent implements OnInit {
     viewShippingData(ship) {
         this.isView = true;
     }
+}
+
+export class ShippingItems {
+    SOPickTicketId: number;
+    currQtyToShip: number;
+    salesOrderPartId: number;
+}
+
+export class PackagingSlipItems {
+    WOPickTicketId: number;
+    currQtyToShip: number;
+    WOPartNoId: number;
+    WorkOrderId: number;
+    masterCompanyId: number;
+    createdBy: string;
+    updatedBy: string;
+    createdDate: string;
+    updatedDate: string;
+}
+
+export class MultiShippingLabels {
+    WorkOrderId: number;
+    WOPartNoId: number;
+    WOShippingId: number;
+}
+
+export class MultiPackagingSlips {
+    WorkOrderId: number;
+    WOPartNoId: number;
+    WOPickTicketId: number;
+    PackagingSlipId: number;
 }

@@ -286,7 +286,7 @@
           <p><span class="label"><b>Updated By: </b></span><span
               class="value">{{sourceViewforDocument.updatedBy}}</span></p>
           <div class="mt-3">
-            <h6 class="panel-title">Attachment Details: <span class="clr-red">*</span></h6>
+            <span class="panel-title"><b>Attachment Details: </b><span class="clr-red"></span></span>
             <p-table #dt class="table-responsive ptable-cus-pma" [paginator]="sourceViewforDocumentList.length > 0"
               [value]="sourceViewforDocumentList" [rows]="3" [columns]="sourceViewforDocumentListColumns">
               <ng-template pTemplate="header" let-columns>

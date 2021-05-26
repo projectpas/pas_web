@@ -716,7 +716,7 @@ setTimeout(() => {
         }
         currentRecord.creditLimit = object.creditLimit ? formatNumberAsGlobalSettingsModule(object.creditLimit, 2):'0.00';
         currentRecord.creditTermsId = object.creditTermsId;
-        currentRecord.creditTerm = object.creditTerm;
+        currentRecord.creditTerms = object.creditTerms;
         this.myCustomerContact = object.customerContact;
         currentRecord.customerPhoneNo = object.customerPhoneNo;
         currentRecord.csrId = object.csrId;

@@ -87,7 +87,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
         } else {
 
-            this.headers.unshift({ field: 'vendorContact', header: 'Customer Contact' })
+            this.headers.unshift({ field: 'vendorContact', header: 'Vendor Contact' })
         }
     }
 
@@ -445,7 +445,10 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     arrayContactlist: any = []
     getAllEmployees(strText = '') {
         this.arrayContactlist.push(0);
-        this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
+        //this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('Employee', 'EmployeeId', 'FirstName', strText,
+			true, 0, this.arrayContactlist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+
             this.employeeList = res.map(x => {
                 return {
                     ...x,
@@ -453,7 +456,6 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                     name: x.label
                 }
             });
-
         }, err => {
             this.errorMessageHandler();
         })

@@ -270,6 +270,9 @@ export class WorkOrderService {
     assetsHistoryByWorkOrderAssetId(workOrderAssetId, isSubWorkOrder) {
         return this.workOrderEndpointService.assetsHistoryByWorkOrderAssetId(workOrderAssetId, isSubWorkOrder);
     }
+    GetReleaseHistory(ReleaseFromId) {
+        return this.workOrderEndpointService.GetReleaseHistory(ReleaseFromId);
+    }
     deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy, isSubWorkOrder) {
         return this.workOrderEndpointService.deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy, isSubWorkOrder);
     }
@@ -379,6 +382,9 @@ export class WorkOrderService {
     }
     workOrderAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId) {
         return this.workOrderEndpointService.workOrderAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId);
+    }
+    workOrderReleaseFromListData(workOrderId, workOrderPartNoId) {
+        return this.workOrderEndpointService.workOrderReleaseFromListData(workOrderId, workOrderPartNoId);
     }
     worOrderTearDownReasonListById(tearDownTypeId) {
         return this.workOrderEndpointService.worOrderTearDownReasonListById(tearDownTypeId);
@@ -624,6 +630,12 @@ export class WorkOrderService {
         );
     }
 
+    generatePackagingSlip(packagingSlip: any): Observable<any> {
+        return Observable.forkJoin(
+          this.workOrderEndpointService.generatePackagingSlip(packagingSlip)
+        );
+      }
+
 
     getquoteMaterialHistory(id) {
         return this.workOrderEndpointService.getquoteMaterialHistory(id);
@@ -653,12 +665,12 @@ export class WorkOrderService {
     }
 
     
-    GetWorkorderReleaseFromData(workOrderId) {
-        return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId);
+    GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId);
     }
 
-    GetWorkorderReleaseEasaFromData(workOrderId) {
-        return this.workOrderEndpointService.GetWorkorderReleaseEasaFromData(workOrderId);
+    GetWorkorderReleaseEasaFromData(workOrderId,workOrderPartNumberId) {
+        return this.workOrderEndpointService.GetWorkorderReleaseEasaFromData(workOrderId,workOrderPartNumberId);
     }
 
     getStockLineforPickTicket(itemMasterId, conditionId, referenceId, isMPN = false) {
@@ -709,6 +721,42 @@ export class WorkOrderService {
     deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy) {
         return this.workOrderEndpointService.deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy);
     }
+
+    getPackagingSlipPrint(WorkOrderId: number, WorkOrderPartNoId: number, woPickTicketId: number, packagingSlipId: number): Observable<any> {
+        return Observable.forkJoin(
+          this.workOrderEndpointService.getPackagingSlipPrint(WorkOrderId, WorkOrderPartNoId, woPickTicketId, packagingSlipId)
+        );
+      }
+
+      
+  getMultiShippingLabelPrint(workOrderPackagingSlips: any): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.getMultiShippingLabelPrint(workOrderPackagingSlips)
+    );
+  }
+
+  getMultiPackagingSlipPrint(workOrderPackagingSlips: any): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.getMultiPackagingSlipPrint(workOrderPackagingSlips)
+    );
+  }
+
+  getShippingLabelPrint(workOrderId: number, workOrderPartId: number, woShippingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.getShippingLabelPrint(workOrderId, workOrderPartId, woShippingId)
+    );
+  }
+
+  updateShipping(serviceClass: string, workOrderShippingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.updateShipping(serviceClass, workOrderShippingId)
+    );
+  }
+
+  CreateUpdateReleasefrom(Releasefrom) {
+    return this.workOrderEndpointService.CreateUpdateReleasefrom<any>(Releasefrom);
+}
+
 
 
 }

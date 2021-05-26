@@ -478,6 +478,7 @@ export class SalesOrderService {
     partNumberObj.salesPriceExtended = selectedPart.salesBeforeDiscount;
     partNumberObj.salesDiscount = selectedPart.discount;
     partNumberObj.salesDiscountPerUnit = selectedPart.discountAmount;
+    partNumberObj.salesDiscountExtended = selectedPart.salesDiscountExtended;
     partNumberObj.netSalesPriceExtended = selectedPart.netSales;
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
     partNumberObj.quantityFromThis = selectedPart.qty;

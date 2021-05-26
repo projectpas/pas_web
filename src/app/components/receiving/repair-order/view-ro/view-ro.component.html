@@ -288,9 +288,9 @@
                     </tr>
 
                     <ng-container>
-                        <tr *ngIf="part.stockLine.length > 0">
+                        <tr class="child-header splitship-head child-header-back" *ngIf="part.stockLine.length > 0">
                             <!--<th>Stock Line</th>-->
-                            <td></td>
+                            <th></th>
                             <th>PN</th>
                             <th>PN Description</th>
                             <th>Ctrl Num</th>
@@ -332,7 +332,7 @@
                             <th>Shipping Ref#/AWB</th>
                             <th>Ship Via</th>
                             <th>Shipping Account</th>
-                            <th>Engine Serial Number</th>
+                            <th>Engine Serial No</th>
                             <th>GL Account</th>
                             <th>Time Life</th>
                             <ng-container *ngIf="part.timeLife != null && part.timeLife.length > 0">
@@ -457,33 +457,33 @@
                                 </td>
                                 <ng-container
                                     *ngIf="part.timeLife != null && part.timeLife.length > 0 && part.timeLife[stockline_row_index] != null">
-                                    <td style="min-width: 106px;">Remaining
+                                    <td style="min-width: 120px;">Remaining
                                         {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
-                                    <td style="min-width: 106px;">Since New
+                                    <td style="min-width: 120px;">Since New
                                         {{part.timeLife[stockline_row_index].cyclesSinceNew}} hrs</td>
-                                    <td style="min-width: 106px;">Since OVH
+                                    <td style="min-width: 120px;">Since OVH
                                         {{part.timeLife[stockline_row_index].cyclesSinceOVH}} hrs</td>
-                                    <td style="min-width: 106px;">Since Insp
+                                    <td style="min-width: 120px;">Since Insp
                                         {{part.timeLife[stockline_row_index].cyclesSinceInspection}} hrs</td>
-                                    <td style="min-width: 106px;">Since Repair
+                                    <td style="min-width: 120px;">Since Repair
                                         {{part.timeLife[stockline_row_index].cyclesSinceRepair}} hrs</td>
 
-                                    <td style="min-width: 106px;">Remaining
+                                    <td style="min-width: 120px;">Remaining
                                         {{part.timeLife[stockline_row_index].timeRemaining}} hrs</td>
-                                    <td style="min-width: 106px;">Since New
+                                    <td style="min-width: 120px;">Since New
                                         {{part.timeLife[stockline_row_index].timeSinceNew}} hrs</td>
-                                    <td style="min-width: 106px;">Since OVH
+                                    <td style="min-width: 120px;">Since OVH
                                         {{part.timeLife[stockline_row_index].timeSinceOVH}} hrs</td>
-                                    <td style="min-width: 106px;">Since Insp
+                                    <td style="min-width: 120px;">Since Insp
                                         {{part.timeLife[stockline_row_index].timeSinceInspection}} hrs</td>
-                                    <td style="min-width: 106px;">Since Repair
+                                    <td style="min-width: 120px;">Since Repair
                                         {{part.timeLife[stockline_row_index].timeSinceRepair}} hrs</td>
 
-                                    <td style="min-width: 106px;">Since New
+                                    <td style="min-width: 120px;">Since New
                                         {{part.timeLife[stockline_row_index].lastSinceNew}} hrs</td>
-                                    <td style="min-width: 106px;">Since OVH
+                                    <td style="min-width: 120px;">Since OVH
                                         {{part.timeLife[stockline_row_index].lastSinceOVH}} hrs</td>
-                                    <td style="min-width: 106px;">Since Insp
+                                    <td style="min-width: 120px;">Since Insp
                                         {{part.timeLife[stockline_row_index].lastSinceInspection}} hrs</td>
                                 </ng-container>
                             </tr>

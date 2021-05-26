@@ -92,8 +92,8 @@ export class TextCommonComponent implements OnInit, OnChanges {
         // }
         // this.getAllEmployees('');
         // this.getAllTextList();
-        this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
-        this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' })
+         this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
+         this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' }) 
     }
 
     ngOnChanges(): void {

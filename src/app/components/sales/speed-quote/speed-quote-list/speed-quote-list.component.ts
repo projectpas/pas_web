@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 declare var $: any;
 import { SalesQuoteService } from "../../../../services/salesquote.service";
+import { SpeedQuoteService } from "../../../../services/speedquote.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
 import {
@@ -89,7 +90,8 @@ export class SpeedQuoteListComponent implements OnInit {
         private commonservice: CommonService,
         public currencyService: CurrencyService,
         private authService: AuthService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private speedQuoteService: SpeedQuoteService,
     ) { }
 
     ngOnInit() {
@@ -123,16 +125,16 @@ export class SpeedQuoteListComponent implements OnInit {
     initColumns() {
         this.headers = [
             { field: "customerName", header: "Customer Name", width: "160px" },
-            { field: "salesOrderQuoteNumber", header: "Quote Num", width: "120px" },
+            { field: "speedQuoteNumber", header: "Quote Num", width: "120px" },
             { field: "quoteDate", header: "Quote Date", width: "120px" },
             { field: "partNumberType", header: "PN", width: "130px" },
             { field: "partDescriptionType", header: "PN Description", width: "200px" },
-            { field: "salesOrderNumber", header: "SO Num", width: "120px" },
+            //{ field: "salesOrderNumber", header: "SO Num", width: "120px" },
             { field: "status", header: "Qte Status", width: "100px" },
             { field: "customerType", header: "Customer Type", width: "120px" },
             { field: "versionNumber", header: "Quote Ver Num", width: "120px" },
             { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
-            { field: "priorityType", header: "Priority", width: "100px" },
+            //{ field: "priorityType", header: "Priority", width: "100px" },
             { field: "customerReference", header: "Cust Ref", width: "130px" },
             { field: "salesPerson", header: "Salesperson", width: "150px" },
             { field: "createdDate", header: "Created Date", width: "120px" },
@@ -203,7 +205,7 @@ export class SpeedQuoteListComponent implements OnInit {
     }
     onSearch() {
         this.isSpinnerVisible = true;
-        this.salesQuoteService
+        this.speedQuoteService
             .search(this.searchParameters)
             .subscribe((response: any) => {
                 if (response[0].results) {
@@ -261,10 +263,10 @@ export class SpeedQuoteListComponent implements OnInit {
 
     openQuoteToEdit(row) {
         this.isSpinnerVisible = true;
-        this.salesOrderQuoteId = row.salesOrderQuoteId;
+        this.salesOrderQuoteId = row.speedQuoteId;
         let customerId = row.customerId;
         this.router.navigateByUrl(
-            `salesmodule/salespages/sales-quote-edit/${customerId}/${this.salesOrderQuoteId}`
+            `salesmodule/salespages/speed-quote-edit/${customerId}/${this.salesOrderQuoteId}`
         );
     }
 

@@ -273,12 +273,13 @@ export class SalesOrderPickTicketsComponent implements OnInit {
         for (let i = 0; i < this.parts.length; i++) {
           if (this.parts[i].oemDer == null)
             this.parts[i].oemDer = this.parts[i].stockType;
+          debugger;
           this.parts[i]['isSelected'] = false;
           this.parts[i]['salesOrderId'] = salesOrderId;
-          //this.parts[i]['salesOrderPartId'] = salesOrderPartId;
-          this.parts[i].qtyToShip = this.qtyToPick;
+          //this.parts[i].qtyToShip = this.qtyToPick;
+          this.parts[i].qtyToShip = this.parts[i].qtyToReserve;
           if (this.parts[i].qtyToReserve == 0) {
-            this.parts[i].qtyToReserve = null
+            this.parts[i].qtyToReserve = null;
           }
         }
       }, error => {
@@ -309,12 +310,14 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   savepickticketiteminterface(parts) {
     let tempParts = [];
     let invalidQty = false;
+    let selectedQty = 0;
     parts.filter(x => {
       x.createdBy = this.userName;
       x.updatedBy = this.userName;
       x.pickedById = this.employeeId;
       x.masterCompanyId = this.masterCompanyId;
       if (x.isSelected == true) {
+        selectedQty += x.qtyToShip;
         tempParts.push(x)
       }
     })
@@ -323,10 +326,15 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     for (let i = 0; i < parts.length; i++) {
       let selectedItem = parts[i];
       var errmessage = '';
-      if (selectedItem.qtyToShip > this.qtyToPick) {
+      if (selectedItem.qtyToShip > selectedItem.qtyToReserve) {//this.qtyToPick) {
         this.isSpinnerVisible = false;
         invalidQty = true;
-        errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+        errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick of this item";
+      }
+      if (selectedQty > this.qtyToPick) {
+        this.isSpinnerVisible = false;
+        invalidQty = true;
+        errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
       }
     }
     if (invalidQty) {

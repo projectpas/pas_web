@@ -405,7 +405,16 @@ export class ReceivngPoComponent implements OnInit {
             if (splitParts.length > 0) {
                 parent.hasChildren = true;
                 parent.quantityOrdered = 0;
+                // parent.showHeader = true;
+                var i = 0;
                 for (let childPart of splitParts) {
+                    // if (i == 0) {
+                    //     parent.showHeader = true;
+                    //     i = 1;
+                    // }
+                    // else {
+                    //     parent.showHeader = false;
+                    // }
                     parent.stockLineCount += childPart.stockLineCount;
                     parent.draftedStockLineCount += childPart.draftedStockLineCount;
                     parent.quantityRejected += childPart.quantityRejected != null ? childPart.quantityRejected : 0;
@@ -420,14 +429,14 @@ export class ReceivngPoComponent implements OnInit {
         }
 
         for (let part of this.purchaseOrderData.purchaseOderPart) {
-            part.toggleIcon = false;
+            part.toggleIcon = true;
             part.stocklineListObj = [];
             part.timeLifeList = [];
             part.currentSLIndex = 0;
             part.currentTLIndex = 0;
             part.currentSERIndex = 0;
             part.isDisabledTLboxes = false;
-            part.visible = false;
+            part.visible = true;
             part.showStockLineGrid = false;
             part.isSameDetailsForAllParts = false;
             this.arraySitelist.push(part.itemMaster.siteId);
@@ -444,11 +453,29 @@ export class ReceivngPoComponent implements OnInit {
             }
             this.getManagementStructureForPart(part, partms)
         }
+
         this.purchaseOrderData.dateRequested = new Date();
         this.purchaseOrderData.dateApprovied = new Date(this.purchaseOrderData.dateApprovied);
         this.purchaseOrderData.needByDate = new Date(); //new Date(this.purchaseOrderData.needByDate);
         this.isSpinnerVisible = false;
         this.getAllSite();
+
+        for (let i = 0; i < this.purchaseOrderData.purchaseOderPart.length; i++) {
+            var K = 0;
+            this.purchaseOrderData.purchaseOderPart.forEach(p => {
+                if (p.parentId == this.purchaseOrderData.purchaseOderPart[i].purchaseOrderPartRecordId) {
+                    if (K == 0) {
+                        p.showHeader = true;
+                        K = 1;
+                    }
+                    else {
+                        p.showHeader = false;
+                    }
+                }
+            });
+        }
+
+
     }
 
     getManagementStructureForPart(partList, response) {
@@ -1602,7 +1629,7 @@ export class ReceivngPoComponent implements OnInit {
         if (event.ctrlKey && event.keyCode == 40) {
             this.moveStockLinePage('stockline', part.currentSERIndex + 1, part);
         }
-        // CTRL + Up Arrow
+        // CTRL +  Up Arrow
         if (event.ctrlKey && event.keyCode == 38) {
             this.moveStockLinePage('stockline', part.currentSERIndex - 1, part);
         }

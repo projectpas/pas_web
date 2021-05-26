@@ -258,8 +258,8 @@
 
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control wo-input" name="creditTerm"
-                                                        #creditTerm="ngModel"
-                                                        [(ngModel)]="workOrderGeneralInformation.creditTerm" required
+                                                        #creditTerms="ngModel"
+                                                        [(ngModel)]="workOrderGeneralInformation.creditTerms" required
                                                         [readonly]="true">
                                                 </div>
                                             </div>
@@ -318,7 +318,7 @@
                                                     <div [innerHTML]="workOrderGeneralInformation.memo"
                                                         matTooltipPosition="above"
                                                         [matTooltip]="parsedText(workOrderGeneralInformation.memo)"
-                                                        class="form-control text_editor_box memo_cehck1 adjust_he overflow">
+                                                        class="form-control text_editor_box memo_cehck1 adjust_he word-wrap-class">
                                                     </div>
                                                 </div>
                                             </span>
@@ -1096,15 +1096,21 @@
                             (click)="gridTabChange('woanalysis')"> Margin Analysis</a>
                             <a class="dropdown-item"
                             (click)="gridTabChange('laboranalysis')">Labor Analysis</a>
-                            <a class="dropdown-item"
+                            <!-- <a class="dropdown-item"
                             (click)="gridTabChange('releasefrom')">8130 Form</a>
                             <a class="dropdown-item"
-                            (click)="gridTabChange('woreleaseeasafrom')">9130A Form</a>
+                            (click)="gridTabChange('woreleaseeasafrom')">9130A Form</a> -->
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                 aria-expanded="false"
                                 (click)="gridTabChange('ActualVsQuote')">Actual vs. Quote Summary</a>
                        
                             </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-contact-tab" role="tab"
+                            [ngClass]="{active : gridActiveTab === 'releasefrom'}"
+                            (click)="gridTabChange('releasefrom')" >8130 Form</a>
                     </li>
                 </ul>
                 <div *ngIf="isWorkOrderMainView && mainWorkOrderId !=0"
@@ -1260,19 +1266,21 @@
 
                 <div *ngIf="(gridActiveTab == 'releasefrom')"
                 [ngClass]="{hidedata: gridActiveTab !== 'releasefrom'}">
-                <app-wo-release-from 
+
+                <app-work-order-release-from-list [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-work-order-release-from-list>
+                <!-- <app-wo-release-from 
                      [workOrderId]="workOrderId" [isSubWorkOrder]="isSubWorkOrder"
                     [subWOPartNoId]="subWOPartNoId">
-                </app-wo-release-from>
+                </app-wo-release-from> -->
             </div>
 
-            <div *ngIf="(gridActiveTab == 'woreleaseeasafrom')"
+            <!-- <div *ngIf="(gridActiveTab == 'woreleaseeasafrom')"
             [ngClass]="{hidedata: gridActiveTab !== 'woreleaseeasafrom'}">
             <app-wo-release-easa-from 
                  [workOrderId]="workOrderId" [isSubWorkOrder]="isSubWorkOrder"
                 [subWOPartNoId]="subWOPartNoId">
             </app-wo-release-easa-from>
-        </div>
+        </div> -->
                 <div *ngIf="workOrderId && (gridActiveTab == 'tearDown')" class="wf-label-cstm set_pad"
                     [ngClass]="{hidedata : gridActiveTab !== 'tearDown'}">
                     <app-common-teardown *ngIf="!isView" [workOrderId]="workOrderId"

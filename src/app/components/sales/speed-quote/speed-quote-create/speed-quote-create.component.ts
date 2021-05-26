@@ -41,6 +41,7 @@ import { forkJoin } from "rxjs/observable/forkJoin";
 import { SalesOrderQuoteFreightComponent } from "../../shared/components/sales-order-quote-freight/sales-order-quote-freight.component";
 import { SalesOrderQuoteChargesComponent } from "../../shared/components/sales-order-quote-charges/sales-order-quote-charges.component";
 import { SalesPartNumberComponent } from "../../shared/components/sales-part-number/sales-part-number.component";
+import { SpeedQuotePartNumberComponent } from "../shared/components/speed-quote-part-number/speed-quote-part-number.component";
 import { SalesQuoteDocumentsComponent } from "../../quotes/sales-document/salesQuote-document.component";
 import { SalesQuoteAnalysisComponent } from "../../quotes/sales-quote-analysis/sales-quote-analysis.component"
 import { SpeedQuote } from "../../../../models/sales/SpeedQuote.model";
@@ -137,6 +138,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   @ViewChild(SalesOrderQuoteFreightComponent, { static: false }) public salesOrderQuoteFreightComponent: SalesOrderQuoteFreightComponent;
   @ViewChild(SalesOrderQuoteChargesComponent, { static: false }) public salesOrderQuoteChargesComponent: SalesOrderQuoteChargesComponent;
   @ViewChild(SalesPartNumberComponent, { static: false }) public salesPartNumberComponent: SalesPartNumberComponent;
+  @ViewChild(SpeedQuotePartNumberComponent, { static: false }) public speedQuotePartNumberComponent: SpeedQuotePartNumberComponent;
   @ViewChild(SalesQuoteDocumentsComponent, { static: false }) public salesQuoteDocumentsComponent: SalesQuoteDocumentsComponent;
   @ViewChild(SalesQuoteAnalysisComponent, { static: false }) public salesQuoteAnalysisComponent: SalesQuoteAnalysisComponent;
   @ViewChild(ManagementStructureComponent, { static: false }) public managementStructureComponent: ManagementStructureComponent;
@@ -850,6 +852,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     }
     this.speedQuoteService.getSpeedQuote(salesQuoteId).subscribe(data => {
       if (data) {
+        debugger;
         this.speedQuoteView = data && data.length ? data[0] : null;
         this.salesOrderQuoteObj = this.speedQuoteView.speedQuote;
         //this.verifySalesQuoteConversion(this.speedQuoteView.verificationResult);
@@ -861,26 +864,26 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
       let partList: any[] = this.speedQuoteView.parts;
       this.selectedParts = [];
-      // for (let i = 0; i < partList.length; i++) {
-      //   let selectedPart = partList[i];
-      //   let partNumberObj = this.speedQuoteService.marshalSpeedQPartToView(selectedPart);
-      //   const selectedPartsTemp = this.selectedParts;
-      //   selectedPartsTemp.push(partNumberObj)
-      //   this.speedQuoteService.selectedParts = selectedPartsTemp;
-      // }
+      for (let i = 0; i < partList.length; i++) {
+        let selectedPart = partList[i];
+        let partNumberObj = this.speedQuoteService.marshalSpeedQPartToView(selectedPart);
+        const selectedPartsTemp = this.selectedParts;
+        selectedPartsTemp.push(partNumberObj)
+        this.speedQuoteService.selectedParts = selectedPartsTemp;
+      }
       this.arrayEmplsit.push(this.salesOrderQuoteObj.employeeId);
       if (!partsRefresh || !isInitialCall) {
         this.load(this.salesOrderQuoteObj.managementStructureId);
       }
 
-      this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(this.speedQuoteService.selectedParts, this.marginSummary);
+      //this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(this.speedQuoteService.selectedParts, this.marginSummary);
       this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.salesQuote.salesQuoteTypes = this.speedQuoteView.salesQuoteTypes;
       this.salesQuote.status = this.speedQuoteView.status;
       this.salesQuote.priorities = this.speedQuoteView.priorities;
-      if (this.salesPartNumberComponent) {
-        this.salesPartNumberComponent.refresh();
+      if (this.speedQuotePartNumberComponent) {
+        this.speedQuotePartNumberComponent.refresh();
       }
       this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
       this.salesQuote.speedQuoteTypeId = this.salesOrderQuoteObj.quoteTypeId;
@@ -1304,7 +1307,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
           this.speedQuoteView.speedQuote.speedQuoteId = null;
           this.speedQuoteView.speedQuote.speedQuoteNumber = undefined;
           if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
-            this.speedQuoteView.parts.filter(x => x.salesOrderQuotePartId = null)
+            this.speedQuoteView.parts.filter(x => x.speedQuotePartId = null)
           }
         }
         this.speedQuoteService.create(this.speedQuoteView).subscribe(data => {

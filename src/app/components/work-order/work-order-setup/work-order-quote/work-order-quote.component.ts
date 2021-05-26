@@ -620,7 +620,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.salesPerson=res.salesPerson?res.salesPerson.name : '' ;
                     this.customerEmail = res.customerDetails.customerEmail;
                     this.customerPhone = res.customerDetails.customerPhone;
-                    this.creditTerms=res.creditTerm;
+                    this.creditTerms=res.creditTerms;
                     this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 2);
                     this.workOrderNumber = res.workOrderNum;
                     this.quoteForm.WorkOrderId = res.workOrderId;
@@ -819,7 +819,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         {
             this.quotationHeader.UpdatedDate= new Date().toDateString()
         }
-      
 
         this.workOrderService.createOrUpdateQuotation(this.quotationHeader)
             .subscribe(

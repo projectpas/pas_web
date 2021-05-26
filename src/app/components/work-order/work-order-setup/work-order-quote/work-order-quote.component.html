@@ -492,7 +492,9 @@
                                          {{workOrderPart['levelCode4'] }}
                                      </label>
                                  </td>
-                                 <td class="flex_d table-actions-column1 mpn-table-buttons">
+                                 <!-- <td class="flex_d table-actions-column1 mpn-table-buttons"> -->
+                  
+                                 <td class="table-actions-column woq-actions-width" >
                                      <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
                      <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                  </td>
@@ -1916,20 +1918,33 @@
              <!-- Modal content-->
              <div class="modal-content">
                  <div class="modal-header text_start">
-                     <h4 class="modal-title">Do you want to increase the Quote Version?</h4>
+                     <h4 class="modal-title">Do you want to create new version or update existing Work order quote ?</h4>
                      <button type="button" class="close" data-dismiss="modal" (click)="saveType = ''">
                          &times;
                      </button>
                  </div>
                  <div class="modal-body table-responsive text_end">
-                     <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="increaseVerConfirmation(true)"
-                             style="padding: 6px 12px !important;">
-                         YES
-                     </button>
-                     <button class="btn btn-danger" data-dismiss="modal"
-                             style="padding: 6px 12px !important;" (click)="increaseVerConfirmation(false)">
-                         NO
-                     </button>
+                        <!-- <button class="btn btn-danger" data-dismiss="modal"
+                                style="padding: 6px 12px !important;" (click)="increaseVerConfirmation(false)">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="increaseVerConfirmation(true)"
+                                style="padding: 6px 12px !important;">
+                            Create New Version
+                        </button>
+                        <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="increaseVerConfirmation(true)"
+                                style="padding: 6px 12px !important;">
+                            Update
+                        </button> -->
+
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        (click)="increaseVerConfirmation(false)">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        (click)="increaseVerConfirmation(true)">
+                            Create New Version
+                        </button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            (click)="increaseVerConfirmation(false)">Update</button>
                  </div>
              </div>
          </div>

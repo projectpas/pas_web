@@ -513,6 +513,7 @@ export class SalesOrderPartNumberComponent {
       }
       this.openPartNumber(false);
       this.selectedParts.push(partObj);
+      this.salesQuoteService.selectedParts = this.selectedParts;
     }
     this.salesMarginModal.close();
     this.filterParts();
@@ -528,8 +529,24 @@ export class SalesOrderPartNumberComponent {
         this.query = data;
         this.part = part;
         this.query.partSearchParamters.quantityRequested = this.part.quantityRequested;
+
         this.query.partSearchParamters.quantityToQuote = this.part.quantityToBeQuoted;
         this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
+        let parentLine = this.summaryParts.filter(a => a.partId == this.part.itemMasterId && a.conditionId == this.part.conditionId);
+
+        if (parentLine) {
+          this.query.partSearchParamters.quantityToQuote = parentLine[0].quantityToBeQuoted;
+          this.query.partSearchParamters.quantityAlreadyQuoted = parentLine[0].quantityAlreadyQuoted;
+          this.part['quantityToQuote'] = parentLine[0].quantityToBeQuoted;
+          
+          if ((parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis'])) > 0)
+            this.part['quantityAlreadyQuoted'] = parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis']);
+          else
+            this.part['quantityAlreadyQuoted'] = Number(this.part['quantityFromThis']);
+
+          this.part['quantityToBeQuoted'] = (this.part.quantityRequested - parentLine[0].quantityAlreadyQuoted) + Number(this.part['quantityFromThis']);
+        }
+
       });
       this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
     }
@@ -652,7 +669,7 @@ export class SalesOrderPartNumberComponent {
       if (quote.isApproved || part.isApproved) {
         return true;
       }
-      else if (part.qtyReserved > 0) {
+      else if (part.qtyReserved > 0 || part.qtyShipped > 0 || part.qtyInvoiced > 0) {
         return true;
       }
       else {
@@ -834,8 +851,9 @@ export class SalesOrderPartNumberComponent {
       uniquePart.netSalesPriceExtended = this.getSum(uniquePart.netSalesPriceExtended, part.netSalesPriceExtended);
       uniquePart.taxAmount = this.getSum(uniquePart.taxAmount, part.taxAmount);
       uniquePart.totalSales = this.getSum(uniquePart.totalSales, part.totalSales);
+      uniquePart.unitCostExtended = this.getSum(uniquePart.unitCostExtended, part.unitCostExtended);
       uniquePart.marginAmountExtended = this.getSum(uniquePart.marginAmountExtended, part.marginAmountExtended);
-      uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentageExtended);
+      uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentagePerUnit);
       if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
         uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
       } else {
