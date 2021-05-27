@@ -397,9 +397,10 @@
     <p-tabView class="pas-tabview" (onChange)="onChangeTabView($event)">
         <p-tabPanel header="Parts List">
             <form #createPOPartsForm="ngForm">
-                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>
+                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>                
                 <button data-toggle="modal" data-target="#add-multiple-partnum" class="btn btn-primary"
                     (click)="onAddMultParts()" [disabled]="disableAddPart">Add Multiple PN</button>
+                <button (click)="initiatePOPrintProcess()" class="btn btn-primary">Print</button>
                 <div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
                     style="min-height: 130px !important;">
                     <div class="tableFixHead">
@@ -1509,8 +1510,6 @@
     </div>
 </div>
 
-
-
 <div class="modal fade" id="cpo-memo" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -2289,7 +2288,6 @@
     </div>
 </div>
 
-
 <div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xsm">
         <div class="modal-content">
@@ -2358,7 +2356,7 @@
     </div>
 </ng-template>
 
-<ng-template #salesOrderPrintPopup let-c="close" let-d="dismiss">
+<ng-template #purchaseOrderPrintPopup let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
         <h4 class="modal-title">Print Purchase Order</h4>
@@ -2366,6 +2364,7 @@
     <div class="modal-content" id="sales_order_print_content">
         <div class="modal-body" >
             <!-- <app-sales-order-print-template [salesOrderView]="salesOrderView"></app-sales-order-print-template> -->
+            <app-purchase-order-print-template [referenceId]="id"></app-purchase-order-print-template>            
         </div>
     </div>
     <div class="modal-footer">
