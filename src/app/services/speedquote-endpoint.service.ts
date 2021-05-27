@@ -21,7 +21,8 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly getCloseEndointUrl: string = environment.baseUrl + "/api/speedquote/close";
   private readonly getItemMasterDataConditionWiseURL : string = environment.baseUrl + "/api/itemMaster/getItemMasterDataConditionWise";
   private readonly searchSpeedQuote: string = environment.baseUrl + "/api/speedquote/speedquotesearch";
-
+  private readonly createexclusionpart: string = environment.baseUrl + "/api/speedquote/createexclusionpart";
+  private readonly _getExclusionPartList: string = environment.baseUrl + "/api/speedquote/getexclusionpartlist";
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
@@ -141,6 +142,23 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () =>
           this.search(speedQuoteSearchParameters)
         );
+      });
+  }
+
+  saveExclusionPart<T>(param: any): Observable<any> {
+    let body = JSON.stringify(param);
+    return this.http.post(this.createexclusionpart, body, this.getRequestHeaders())
+      .map((response: Response) => {
+        return <any>response;
+
+      }).catch(error => {
+        return this.handleErrorCommon(error, () => this.saveExclusionPart<T>(param));
+      });
+  }
+  getExclusionList(id) {
+    return this.http.get<any>(`${this._getExclusionPartList}?SpeedQuoteId=${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getExclusionList(id));
       });
   }
 }

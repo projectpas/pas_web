@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ElementRef, Input } from "@angular/core";
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { CreditTermsService } from '../../../../services/Credit Terms.service';
 import { VendorService } from '../../../../services/vendor.service';
@@ -395,6 +395,7 @@ export class PurchaseSetupComponent implements OnInit {
     canceledStatusId: number  = 0
     descriptionStatusId: number  = 0
 	closingStatusId: number  = 0
+	@ViewChild("purchaseOrderPrintPopup", { static: false }) public purchaseOrderPrintPopup: ElementRef;
 	
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
@@ -4646,5 +4647,14 @@ export class PurchaseSetupComponent implements OnInit {
 			localStorage.removeItem("lsSubWoId");
 		}
 
+	}
+
+	initiatePOPrintProcess() {
+		let content = this.purchaseOrderPrintPopup;
+		this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+	}
+
+	closeModal() {
+		this.modal.close();
 	}
 }

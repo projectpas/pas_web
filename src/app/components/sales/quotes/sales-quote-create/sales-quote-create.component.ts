@@ -1100,6 +1100,10 @@ export class SalesQuoteCreateComponent implements OnInit {
       : 1;
   }
 
+  onCreateNewVersionEvent(event) {
+    this.onSubmit(true, true);
+  }
+
   onSubmit(submitType: Boolean, createNewVersion: boolean = false) {
     this.errorMessages = [];
     let haveError = false;
@@ -1785,8 +1789,8 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (event.index == 0) {
       this.salesPartNumberComponent.refresh();
     }
-    if (event.index == 1 && (this.validDaysSettingsList[0] != null 
-      && this.validDaysSettingsList[0].isApprovalRule 
+    if (event.index == 1 && (this.validDaysSettingsList[0] != null
+      && this.validDaysSettingsList[0].isApprovalRule
       && new Date(this.todayDate) >= new Date(this.validDaysSettingsList[0].effectiveDate))) {
       this.salesApproveComponent.refresh(this.marginSummary);
     }
