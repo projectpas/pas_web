@@ -4657,4 +4657,5 @@ export class PurchaseSetupComponent implements OnInit {
 	closeModal() {
 		this.modal.close();
 	}
+	
 }
