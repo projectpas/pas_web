@@ -11,19 +11,18 @@ declare var $: any;
 export class WoMarginComponent implements OnInit, OnChanges {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() searchAnotherPN: EventEmitter<boolean> = new EventEmitter<boolean>();
-  // @Output() save: EventEmitter<PartDetail> = new EventEmitter<PartDetail>();
-  @Input() part:any={};
-  @Input() display: boolean;
-  // query: ItemMasterSearchQuery;
+   @Input() part:any={}; 
+  @Input() display: boolean; 
   @Input() isEdit = false;
   @Input() editData;
   @Input() isStockView=false;
   @Input() isStockLine=false;
   @Input() isSubWorkOrder=false;
+  @Input() enableUpdateBtn:boolean=false;
   @Output() saveFinalMaterialListData = new EventEmitter<any>();
   @Output() updateFinalMaterialListData = new EventEmitter<any>();
   @Output() setmaterialListForUpdate = new EventEmitter<any>();
-  
+
   disableUpdateButton:boolean=true;
   percentage: any[] = [];
   invalidQuantityenteredForQuantityFromThis: boolean = false;
@@ -45,8 +44,6 @@ export class WoMarginComponent implements OnInit, OnChanges {
     ngOnInit() {
 }
   ngOnChanges()    {
-
-   
     this.formObject=={
       partNumberObj:undefined,
       quantity:0,
@@ -55,13 +52,9 @@ export class WoMarginComponent implements OnInit, OnChanges {
       stocklineQuantity:0
     };
     this.part=this.part;
-    // this.formObject=
     this.formObject.quantity=this.part.quantity; 
-    
     this.formObject.stocklineQuantity=this.part.stocklineQuantity;
-
     this.formObject.qtyOnHand = this.part.qtyOnHand;
-  
     if(this.isStockLine){
       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
     }else{
@@ -79,27 +72,23 @@ export class WoMarginComponent implements OnInit, OnChanges {
      this.formObject.qtyOnHand = this.part.qtyOnHand;
      if(this.isStockLine){
        this.formObject.qtyAvailable = this.part.partQuantityAvailable;
-
     }else{
       this.formObject.qtyAvailable = this.part.qtyAvailable;
     }
      this.formObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
      this.formObject.stockLineId= this.part.stockLineId ? this.part.stockLineId : null ;
-    //  this.formObject.quantity=this.formObject.quantity;
-    //  this.formObject.provisionId=this.formObject.provisionId;
-     this.formObject.unitOfMeasure=this.part.unitOfMeasure;
+ this.formObject.unitOfMeasure=this.part.unitOfMeasure;
      this.formObject.unitOfMeasureId=this.part.unitOfMeasureId;
 
 
 this.calculateExtendedCost();
-
+// console.log("this.edit",this.editData)
     if(this.editData){
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
      this.formObject.conditionIds=[this.editData.conditionCodeId];
      this.formObject.quantity=this.editData.quantity;
      this.formObject.qtyOnHand=this.editData.qtyOnHand;
-  
      if(this.isStockLine){
       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
 
@@ -122,6 +111,10 @@ this.calculateExtendedCost();
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();
+     }
+     this.enableUpdateBtn=this.enableUpdateBtn;
+     if(this.enableUpdateBtn==true){
+       this.disableUpdateButton=false;
      }
   }
 

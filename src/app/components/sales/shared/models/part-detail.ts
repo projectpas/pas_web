@@ -44,6 +44,7 @@ export class PartDetail {
   unitCostExtended: number;
   marginAmountExtended: number;
   marginPercentageExtended: number;
+  marginPercentage: number;
   taxCode: string;
   taxType: string;
   taxAmount: number;

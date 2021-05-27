@@ -620,6 +620,15 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
 
     }
+
+    GetReleaseHistory(ReleaseFromId) 
+    {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetReleaseHistory?ReleaseFromId=${ReleaseFromId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetReleaseHistory(ReleaseFromId));
+        });
+
+
+    }
     deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy, isSubWorkOrder) {
         if (isSubWorkOrder == true) {
             return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deletesubworkorderasset?subWorkOrderAssetId=${workOrderAssetId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
@@ -910,6 +919,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
                 return this.handleErrorCommon(error, () => this.workOrderAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId));
             });
         }
+    }
+
+    workOrderReleaseFromListData(workOrderId, workOrderPartNoId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workOrderReleaseFromListData?workOrderId=${workOrderId}&workOrderPartNoId=${workOrderPartNoId}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.workOrderReleaseFromListData(workOrderId, workOrderPartNoId));
+        });
     }
     // http://localhost:5050/api/teardownreason/getteardownreasonbyid/2
     worOrderTearDownReasonListById(tearDownTypeId) {
@@ -1410,15 +1425,15 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
     }
 
-    GetWorkorderReleaseFromData(workOrderId): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/GetWorkorderReleaseFromData?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.GetWorkorderReleaseFromData(workOrderId));
+    GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/GetWorkorderReleaseFromData?workOrderId=${workOrderId}&workOrderPartNumberId=${workOrderPartNumberId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId));
         });
     }
 
-    GetWorkorderReleaseEasaFromData(workOrderId): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/GetWorkorderReleaseEasaFromData?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.GetWorkorderReleaseEasaFromData(workOrderId));
+    GetWorkorderReleaseEasaFromData(workOrderId,workOrderPartNumberId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/GetWorkorderReleaseEasaFromData?workOrderId=${workOrderId}&workOrderPartNumberId=${workOrderPartNumberId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkorderReleaseEasaFromData(workOrderId,workOrderPartNumberId));
         });
     }
 
@@ -1524,4 +1539,13 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.updateShipping(serviceClass, workOrderShippingId));
           });
       }
+      
+      CreateUpdateReleasefrom<T>(Releasefrom: any): Observable<T> {
+
+
+        return this.http.post<T>(`${this.configurations.baseUrl}/api/workOrder/CreateUpdateReleasefrom`, JSON.stringify(Releasefrom), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.CreateUpdateReleasefrom(Releasefrom));
+        });
+
+    }
 }

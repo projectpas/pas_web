@@ -1,63 +1,139 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input,OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
 declare var $: any;
 import * as moment from 'moment';
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators';
+import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
 @Component({
   selector: 'app-wo-release-from',
   templateUrl: './wo-release-from.component.html',
   styleUrls: ['./wo-release-from.component.css']
 })
-export class WoReleaseFromComponent implements OnInit {
+export class WoReleaseFromComponent implements OnInit,OnChanges {
 
-  moduleType:any  = 'WO'; 
-	id: number;
-  ReleaseData: any;
+  @Input() workOrderPartNumberId;
+  @Input() workOrderId;
+  @Input() releaseFromId;
+  @Input() isView;
+  @Input() isEdit;
+  @Input() ReleaseData;
+  //ReleaseData: any;
   isSpinnerVisible: boolean = true;
-  workOrderId:Number=1;
+  private onDestroy$: Subject<void> = new Subject<void>();
   constructor(
     private authService: AuthService,
     private acRouter: ActivatedRoute,
     private router: Router,
     private workOrderService: WorkOrderService,
+    private alertService: AlertService,
   ) 
   {}
 
   ngOnInit() 
   {
     $('#woReleaseFromDiv').modal('show');
-    this.GetWorkorderReleaseFromData();
+    if(this.isEdit || this.isView)
+    {
+      this.BindData(this.ReleaseData);
+    }else
+    {
+      this.GetWorkorderReleaseFromData();
+    }
+    }
+    
+
+  ngOnChanges() 
+  {
+  
   }
+
+  get userName(): string {
+    return this.authService.currentUser ? this.authService.currentUser.userName : "";
+}
+
+get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+}
+
+BindData(response)
+{
+  this.ReleaseData = response;
+
+
+  var date = new Date(this.ReleaseData.date);  
+  var dateformatted = moment(date).format('D/ MMMM/ YYYY');  
+
+  this.ReleaseData.date=dateformatted;
+
+  var date2 = new Date(this.ReleaseData.date2);  
+  var date2formatted = moment(date2).format('D/ MMMM/ YYYY');   
+
+  this.ReleaseData.date2=date2formatted;
+  this.ReleaseData.printedName=this.userName;
+  this.ReleaseData.printedName2=this.userName;
+}
 
   GetWorkorderReleaseFromData()
   {
     this.isSpinnerVisible = true;
     this.workOrderService
-      .GetWorkorderReleaseFromData(this.workOrderId)
+      .GetWorkorderReleaseFromData(this.workOrderId,this.workOrderPartNumberId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
-        this.ReleaseData = response;
-
-
-        var date = new Date(this.ReleaseData.date);  
-        var dateformatted = moment(date).format('D MMMM YYYY');  
-
-        this.ReleaseData.date=dateformatted;
-
-        var date2 = new Date(this.ReleaseData.date2);  
-        var date2formatted = moment(date2).format('D MMMM YYYY');  
-
-        this.ReleaseData.date2=date2formatted;
+        this.BindData(response);
 
       }, error => {
         this.isSpinnerVisible = false;
       });
 
   }
+
+  CreateUpdateReleasedata()
+  {
+            this.ReleaseData.masterCompanyId= this.authService.currentUser.masterCompanyId;
+            this.ReleaseData.createdBy= this.userName;
+            this.ReleaseData.updatedBy= this.userName;
+            this.ReleaseData.createdDate= new Date();
+            this.ReleaseData.updatedDate= new Date();
+            this.ReleaseData.isActive= true;
+            this.ReleaseData.isDeleted= false;
+            this.ReleaseData.is8130from= true;
+            if(this.isEdit)
+            {
+              this.ReleaseData.ReleaseFromId=this.releaseFromId;
+            }
+            else{
+              this.ReleaseData.ReleaseFromId=0;
+            }
+            this.ReleaseData.ReleaseFromId=0;
+            this.ReleaseData.workOrderPartNoId=this.workOrderPartNumberId;
+            this.ReleaseData.WorkorderId=this.workOrderId;
+    this.workOrderService.CreateUpdateReleasefrom(this.ReleaseData).pipe(takeUntil(this.onDestroy$)).subscribe(
+      result => {
+          this.isSpinnerVisible = false;
+          this.isEdit = true;
+          this.alertService.showMessage(
+              '',
+              '8130 from Added Succesfully',
+              MessageSeverity.success
+          );
+      },
+      err => {
+          this.handleError(err);
+      }
+  );
+  }
+
+  handleError(err) {
+    this.isSpinnerVisible = false;
+}
   
 
   print(): void {
+    this.CreateUpdateReleasedata();
     let printContents, popupWin;
     printContents = document.getElementById('woReleaseFrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
