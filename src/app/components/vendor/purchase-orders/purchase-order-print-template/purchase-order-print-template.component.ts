@@ -20,11 +20,17 @@ export class PurchaseOrderPrintTemplateComponent implements OnInit {
   
   constructor(
     private purchaseOrderService: PurchaseOrderService,
+    private authService: AuthService
   ) { }
 
-  ngOnInit() {
-    
+  ngOnInit() {    
     this.getPrintPurchaseOrderData(this.referenceId);
+  }
+
+  get userName(): string {
+    return this.authService.currentUser
+      ? this.authService.currentUser.userName
+      : "";
   }
 
   getPrintPurchaseOrderData(PurchseOrderId){
