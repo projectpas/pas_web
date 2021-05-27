@@ -1158,31 +1158,32 @@
                                                 </div>
                                         </div>                                        
                                     </div>
-                                    <div class="row advance-search-card"
+                                    <div class="row adv-row">
+                                    <div class="col-md-12"
                                     *ngIf="showAdvancedSearchCard == true">
-                                        <div class="col">
+                                        <div class="col-md-12">
                                                 <div class="col-md-1 col-md-1-cstm">
-                                                    <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                                    <label class="item-master-search">Search :</label>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group ">
-                                                        <label class="fs12">Aircraft </label>
+                                                        <label>Aircraft </label>
                                                         <p-multiSelect [options]="manufacturerData" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectAircraftManfacturer" (onChange)="getAircraftModelByManfacturerType()"
                                                                         class="pub-multi"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group">
-                                                        <label class="fs12">
+                                                        <label>
                                                             Aircraft Model
                                                         </label>
                                                         <p-multiSelect [maxSelectedLabels]="2" [options]="aircraftModelList" [(ngModel)]="selectedAircraftModel" [ngModelOptions]="{standalone: true}"
                                                                         class="pub-multi" (onChange)="getDashNumberByManfacturerandModel()" [selectionLimit]="30"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group">
-                                                        <label class="fs12">DashNumber </label>
+                                                        <label>DashNumber </label>
                                                         <p-multiSelect [maxSelectedLabels]="2" [options]="dashNumberList" [(ngModel)]="selectedDashNumbers" [ngModelOptions]="{standalone: true}"
                                                                         class="pub-multi" [selectionLimit]="30"></p-multiSelect>
                                                     </div>
@@ -1192,10 +1193,15 @@
                                                         <button style="margin-top:20%;" class="btn btn-primary mtop20" type="button" (click)="searchAircraftInformation()">
                                                             <i class="pi pi-search pi-search"></i>
                                                         </button>
+                                                        <button type="button" matTooltip="Search" style="margin-top:20%" matTooltipPosition="above" (click)="clearSerchData()"
+                                                        class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                          Clear
+                                                       </button>
                                                     </div>
                                                 </div>
                                                 <div class="clear"></div>
                                         </div>
+                                    </div>
                                     </div>
                             </ng-template>
 
@@ -1438,7 +1444,7 @@
                                 *ngIf="showAdvancedSearchCardAtaChapter == true">
                                     <div class="col">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                            <label class="item-master-search">Search :</label>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group ">
@@ -1462,6 +1468,10 @@
                                                 <button type="button" class="btn btn-primary mtop20" (click)="searchATA()">
                                                     <i class="pi pi-search pi-search"></i>
                                                 </button>
+                                                <button type="button" matTooltip="Search" style="margin-top:20%" matTooltipPosition="above" (click)="clearSerchData()"
+                                                class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                  Clear
+                                               </button>
                                             </div>
                                         </div>
                                     </div>
