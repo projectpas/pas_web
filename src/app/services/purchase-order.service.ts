@@ -131,6 +131,10 @@ export class PurchaseOrderService {
         return this.purchaseOrderEndpoint.purchaseOrderGlobalSearch(filterText, pageNumber, pageSize, vendorId);
     }
 
+    getPrintPurchaseOrderData(purchaseOrderId) {
+        return this.purchaseOrderEndpoint.getPrintPurchaseOrderData(purchaseOrderId);
+    }
+
 
 
 

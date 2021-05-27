@@ -484,7 +484,7 @@
                             <div class="col-md-9 general-info-columns-four">
                                 <div class="col-md-4" >
                                     <div class="form-group">
-                                        <div class="form-group m-t-10">
+                                        <div class="form-group m-t-10" style="margin-top:32px !important">
                                             <div class="checkbox-cstm">
                                                 <label>
                                                     <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -499,15 +499,15 @@
                                         </div>
                                         <div class="clear"></div>
 
-                                        <div class="inline-block display-flex spacing-label">
-                                            <label class="control-label">
+                                        
+                                            <label class="control-label spacing-label">
                                                 Manufacturer <strong class="clr-red">*</strong>
                                             </label>
-                                        </div>
+                                       
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allManufacturerInfo"  (ngModelChange)="getmemo()" filter="true" [(ngModel)]="sourceItemMaster.manufacturerId" name="manufacturerId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                                         </div>
-                                        <div class="form-group m-t-10">
+                                        <div class="form-group m-t-10" style="margin-top:19px !important">
                                             <div class="checkbox-cstm">
                                                 <label>
                                                     <input type="checkbox"
@@ -520,53 +520,46 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
-                                            <label class="control-label">
+                                            <label class="control-label spacing-label" style="margin-top:10px;">
                                                 Purchase UOM <strong class="clr-red">*</strong>
                                             </label>
 
-                                        </div>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allPurchaseUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="onChangeOfPurchaseUOM()" required></p-dropdown>
                                         </div>
                                         <!--/Purchase UOM-->
                                         <!--Stock UOM-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
-                                            <label class="control-label">
+                                      
+                                            <label class="control-label spacing-label">
                                                 Stock UOM
                                             </label>
-                                        </div>
+                                       
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allStockUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.stockUnitOfMeasureId" name="stockUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
                                         </div>
                                         <!--/Stock UOM-->
                                         <!--Consume UOM-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4" >
-                                            <label class="control-label">
+                                            <label class="control-label spacing-label">
                                                 Consume UOM
                                             </label>
-                                        </div>
+                                        
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allConsumeUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.consumeUnitOfMeasureId" name="consumeUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
                                         </div>
                                         <!--/Consume UOM-->
                                         <!--Purchase Currency-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
-                                            <label class="control-label">
+                                            <label class="control-label spacing-label">
                                                 Purchase Currency <strong class="clr-red">*</strong>
                                             </label>
-                                        </div>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="purchaseCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseCurrencyId" name="purchaseCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required (onChange)="SetSalesCurrency()"></p-dropdown>
                                         </div>
                                         <!--/Purchase Currency-->
                                         <div class="clear"></div>
                                         <!--Purchase Currency--> 
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
-                                            <label class="control-label">
+                                            <label class="control-label spacing-label">
                                                 Sales Currency <strong class="clr-red">*</strong>
                                             </label>
-                                        </div>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="salesCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.salesCurrencyId" name="salesCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                                         </div>
@@ -662,7 +655,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-right: 0px;" >
-                                    <span class="label m-t-10">Memo </span>
+                                    <span class="label m-t-11">Memo </span>
                                     <div class="form-group">
                                    
                                     <div class="col-sm-11" style="margin-left:-4px !important">
@@ -692,7 +685,7 @@
 
                                     <!-- Site-->
                                     <div class="inline-adjust inline-block display-flex">
-                                        <label class="control-label spacing-label">
+                                        <label class="control-label spacing-label m-t-11">
                                             Site <strong class="clr-red">*</strong>
                                         </label>
                                     </div>
@@ -1944,7 +1937,7 @@
                 </div>
             </div>
             <!-- NHA, TLA, Alternate, Equivalency OPEN-->
-            <div class="ntae-section" [ngClass]="{hideTab : currentTab !== 'NhaTlaAlternateTab'}">
+            <div class="ntae-section tab-back-color" [ngClass]="{hideTab : currentTab !== 'NhaTlaAlternateTab'}">
                 <div class="clear"></div>
                 <div class="card" style="margin: 5px">
                     <div class="md-stepper-horizontal orange">
@@ -2075,7 +2068,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <div class="form-row m-t-10">
+                                        <div class="form-row">
                                             <div class="col-md-5">
                                                 <label>Weight</label>
                                                 
@@ -4072,7 +4065,7 @@
                         <th colspan="1" class="bg4"> </th>
                         <th colspan="13" class="bg1">Unit Sale Price</th>
                         <th colspan="4"></th>
-                        <th colspan="1"></th>
+                        <th colspan="1" style="position:static"></th>
                     </tr>
                     <tr>
                         <th colspan="10"></th>
@@ -4080,7 +4073,7 @@
                         <th colspan="5" class="bg2">Use Flat Sale Price</th>
                         <th colspan="8" class="bg3">Calculate Unit Sale Price Using Puchase Price</th>
                         <th colspan="4"></th>
-                        <th colspan="1"></th>
+                        <th colspan="1" style="position:static"></th>
                     </tr>
                     <tr>
                         <th class="table-column-width">Cond <span class="clr-red">*</span></th>
@@ -4113,7 +4106,7 @@
                         <th class="table-column-width">Created By</th>
                         <th class="table-column-width">Updated Date</th>
                         <th class="table-column-width">Updated By</th>
-                        <th class="table-column-width">Is Deleted</th>
+                        <th class="table-column-width" style="position:static">Is Deleted</th>
                     </tr>
                 </thead>
                 <tbody>

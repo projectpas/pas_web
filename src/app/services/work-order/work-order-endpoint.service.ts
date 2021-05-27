@@ -623,7 +623,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
     GetReleaseHistory(ReleaseFromId) 
     {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetReleaseHistory?ReleaseFromId=${ReleaseFromId}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workOrderReleaseFromAuditData?ReleaseFromId=${ReleaseFromId}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.GetReleaseHistory(ReleaseFromId));
         });
 
@@ -1545,6 +1545,15 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
         return this.http.post<T>(`${this.configurations.baseUrl}/api/workOrder/CreateUpdateReleasefrom`, JSON.stringify(Releasefrom), this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.CreateUpdateReleasefrom(Releasefrom));
+        });
+
+    }
+
+    LockedWorkorderpart<T>(Releasefrom: any): Observable<T> {
+
+
+        return this.http.post<T>(`${this.configurations.baseUrl}/api/workOrder/LockedWorkorderpart`, JSON.stringify(Releasefrom), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.LockedWorkorderpart(Releasefrom));
         });
 
     }

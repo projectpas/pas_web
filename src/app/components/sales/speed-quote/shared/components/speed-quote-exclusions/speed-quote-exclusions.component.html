@@ -1,0 +1,122 @@
+<div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
+  style="min-height: 130px !important;">
+  <div class="tableFixHead">
+    <table class="table table-bordered " id="po-table">
+      <thead>
+        <tr class="header-table-width font-size-10">
+          <th class="min-width-30">Line#</th>
+          <th class="th-width">PN</th>
+          <th>PN Description</th>
+          <th></th>
+          <th>PN</th>
+          <th>PN Description</th>
+          <th>Item Type</th>
+          <td>Qty</td>
+          <td>Unit Price</td>
+          <td>Est Price</td>
+          <td>Occurance (%)*</td>
+          <td>Notes</td>
+          <td>Action</td>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let partList of partListData;let row_index=index;">
+          <tr class="table-parent-data purchase-td-back" *ngIf="!partList.isDeleted">
+
+            <td>{{row_index + 1}}</td>
+            <td class="parts-des-td">{{partList.pn}}</td>
+            <td class="parts-des-td">{{partList.description}}</td>
+            <td>
+              <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add PN"
+                matTooltipPosition="above" style="padding: 0px 4px !important;" (click)="addPartNumber(partList)"></i>
+            </td>
+            <td>
+              <p-autoComplete appendTo="body" [(ngModel)]="partList.partNumber" [suggestions]="partCollection"
+                (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
+                class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
+                (onSelect)="onPartSelect($event,row_index)" [forceSelection]="true" title="PN" required
+                name="pn_{{row_index}}">
+              </p-autoComplete>
+            </td>
+            <td class="parts-des-td">{{partList.exPartDescription}}</td>
+            <td class="parts-des-td">{{partList.exStockType}}</td>
+            <td>
+              <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15"
+                (keyup)="calculateExtendedCost(partList)" [(ngModel)]="partList.exQuantity"
+                value="{{ partList.exQuantity }}" name="exQuantity_{{row_index}}" />
+            </td>
+            <td>
+              <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
+                (change)="calculateExtendedCost(partList)" [(ngModel)]="partList.exUnitPrice"
+                value="{{ partList.exUnitPrice }}" name="exUnitPrice_{{row_index}}" maxlength="15" />
+            </td>
+            <td>
+              <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
+                [(ngModel)]="partList.exExtPrice"
+                value="{{ partList.exExtPrice }}" name="exExtPrice_{{row_index}}" maxlength="15" />
+            </td>
+            <td>
+              <select class="form-control wf-pub-id full-width" id="ddlEstimatedOccurance"
+                [(ngModel)]="partList.exOccurance" name="exOccurance_{{row_index}}"> Occurance
+                <option value="-1">--Select--</option>
+                <option value="{{ occurance.label }}" *ngFor="
+                                                let occurance of exclusionEstimatedOccurances;
+                                                let i = index">{{ occurance.value }}</option>
+              </select>
+            </td>
+            <td>
+              <div class="form-group memo-popup-cstm mat_emo textarea-memo-div">
+                <div [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
+                  [matTooltip]="parsedText(partList.exNotes)"></div>
+                <i class="fa fa-pencil ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
+                  matTooltip="Notes" matTooltipPosition="above" (click)="onAddTextAreaInfo(partList,row_index)"></i>
+              </div>
+            </td>
+            <td></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <div class="float-right">
+    <button class="btn btn-primary m-t-10" (click)="saveSpeedQuoteExclusions()">
+      Save
+    </button>
+  </div>
+</div>
+<div class="modal fade" id="textarea-popupexclusion" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseTextAreaInfo()">
+          &times;
+        </button>
+        <h4 class="modal-title">Edit Notes</h4>
+      </div>
+      <div class="modal-body">
+        <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()" [style]="{'height':'320px'}"
+          name="textAreaInfo" required></p-editor>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disabledMemo"
+          (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+        <button type="button" class="btn btn-danger editor-buttons-margin"
+          (click)="onCloseTextAreaInfo()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>

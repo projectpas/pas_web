@@ -452,7 +452,7 @@
 </div>
 <div *ngIf="isViewMode == false" class="view-mode-div">
     <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
-        (click)="approve()">
+        (click)="checkIfApprovedPartUpdated()">
         <span>Update</span>
     </button>
     <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
@@ -474,6 +474,22 @@
         </div>
     </div>
 </div>
+<ng-template #updateConfirmationModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
+        <h4 class="modal-title">Do you want to create new version or update existing sales order quote ?</h4>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+            (click)="closeConfirmationModal()">Cancel</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            (click)="createNewSalesOrderQuoteVersion()">
+            Create New Version
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            (click)="approve()">Update</button>
+    </div>
+</ng-template>
 <ng-template #updatePNDetailsModal let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>

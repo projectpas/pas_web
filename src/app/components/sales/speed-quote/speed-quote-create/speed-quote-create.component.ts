@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ɵConsole } from "@angular/core";
 import {
   NgForm,
   FormGroup
@@ -52,7 +52,7 @@ import { ISpeedQte } from "../../../../models/sales/ISpeedQte";
 import { SpeedQuoteView } from "../../../../models/sales/SpeedQuoteView";
 import { SpeedQuoteMarginSummary } from "../../../../models/sales/SpeedQuoteMarginSummary";
 import { SpeedQuoteTypeEnum } from "../models/speed-auote-type-enum";
-
+import { SpeedQuoteExclusionsComponent } from "../shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
 @Component({
   selector: "app-speed-quote-create",
   templateUrl: "./speed-quote-create.component.html",
@@ -143,6 +143,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   @ViewChild(SalesQuoteAnalysisComponent, { static: false }) public salesQuoteAnalysisComponent: SalesQuoteAnalysisComponent;
   @ViewChild(ManagementStructureComponent, { static: false }) public managementStructureComponent: ManagementStructureComponent;
   @ViewChild(SalesAddressComponent, { static: false }) public salesAddressComponent: SalesAddressComponent;
+  @ViewChild(SpeedQuoteExclusionsComponent, { static: false }) public speedQuoteExclusionsComponent: SpeedQuoteExclusionsComponent;
   isCopyMode: boolean = false;
   quoteCopyRefId: any;
   copyConsiderations: CopyConsiderationsForSalesQuote;
@@ -179,7 +180,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   managementValidCheck: boolean;
   moduleName: any = "SpeedQuote";
   enforceApproval: boolean;
-
+  selectedIndex: number = 0;
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -852,7 +853,6 @@ export class SpeedQuoteCreateComponent implements OnInit {
     }
     this.speedQuoteService.getSpeedQuote(salesQuoteId).subscribe(data => {
       if (data) {
-        debugger;
         this.speedQuoteView = data && data.length ? data[0] : null;
         this.salesOrderQuoteObj = this.speedQuoteView.speedQuote;
         //this.verifySalesQuoteConversion(this.speedQuoteView.verificationResult);
@@ -1622,7 +1622,12 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
   onTabChange(event) {
     if (event.index == 0) {
-      this.salesPartNumberComponent.refresh();
+      this.selectedIndex = 0;
+      this.speedQuotePartNumberComponent.refresh();
+    }
+    if (event.index == 1) {
+      this.selectedIndex = 1;
+      this.speedQuoteExclusionsComponent.refresh(true);
     }
     // if (event.index == 1) {
     //   this.salesApproveComponent.refresh(this.marginSummary);
@@ -1698,5 +1703,11 @@ export class SpeedQuoteCreateComponent implements OnInit {
   }
 
   getChargesList() {
+  }
+
+  changeToExclusionTab(event) {
+    console.log("rowdata",event);
+    this.selectedIndex = 1;
+    this.speedQuoteExclusionsComponent.addPartNumber(event);
   }
 }

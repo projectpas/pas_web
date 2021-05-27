@@ -38,7 +38,7 @@
   <div class="row">
     <div class="col-3 column"> 
       <div class="form-group">
-        <label>Quantity requested</label>
+        <label>Quantity requested</label> 
         <input type="text" class="form-control   text-right" pInputText pKeyFilter="num" name="quantityRequest"
           disabled="true" [(ngModel)]="part.quantity " style="width: 100%;" />
       </div>
@@ -49,7 +49,7 @@
             *ngIf="part.method=='StockLine'">{{part.stockLineNumber}}</span></label>
         <input type="text" class="form-control   text-right" name="stocklineQuantity"
          [(ngModel)]="formObject.stocklineQuantity"
-          (input)="onChangeQuantityFromThis($event);calculateExtendedCost()" (ngModelChange)="getActive()"
+          (input)="onChangeQuantityFromThis();calculateExtendedCost()" (ngModelChange)="getActive()"
           name="quantity" autocomplete="off" />
           <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
           <span style="color:red" *ngIf="part.method=='ItemMaster'">Value cannot be greater than qty to be required </span>
@@ -137,7 +137,7 @@
 </div>
 <div class="modal-footer">
   <button class="btn btn-primary" *ngIf="!isEdit"
-    [disabled]="formObject.stocklineQuantity==0 || formObject.taskId==0 || formObject.provisionId==0"
+    [disabled]="formObject.stocklineQuantity==0 || formObject.taskId==0 || formObject.provisionId==0 || disableUpdateButton"
     (click)="savePart($event)">
     Save
   </button>

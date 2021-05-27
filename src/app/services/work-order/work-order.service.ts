@@ -757,6 +757,10 @@ export class WorkOrderService {
     return this.workOrderEndpointService.CreateUpdateReleasefrom<any>(Releasefrom);
 }
 
+LockedWorkorderpart(Releasefrom) {
+    return this.workOrderEndpointService.LockedWorkorderpart<any>(Releasefrom);
+}
+
 
 
 }

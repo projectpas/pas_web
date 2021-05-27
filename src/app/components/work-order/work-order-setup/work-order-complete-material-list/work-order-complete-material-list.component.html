@@ -259,7 +259,6 @@
                                     <td class="text-center">
                                         <input type="checkbox" *ngIf="(statusId === 1 || statusId === 5)" [(ngModel)]="b.isChildSelected" [disabled]="b.quantityReserved==0"
                                             name="isChildSelected{{y}}" (change)="selectedParts(b,$event)">
-<span>{{b.quantityReserved}}</span>
 
                                             <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="b.isChildSelected" [disabled]="b.quantityReserved==0"
                                             name="isChildSelected{{y}}" (change)="selectedParts(b,$event)" [disabled]="x.quantityIssued==0">  
