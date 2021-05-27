@@ -20,6 +20,7 @@ declare var $: any;
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 import { StocklineViewComponent } from "../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
 import { SpeedQuoteService } from "../../../../../../services/speedquote.service";
+import { SpeedQuoteExclusionsComponent } from "../../../shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
 @Component({
   selector: 'app-speed-quote-part-number',
   templateUrl: './speed-quote-part-number.component.html',
@@ -72,6 +73,9 @@ export class SpeedQuotePartNumberComponent {
   priorities = [];
   saveButton = false;
   partActionModal: NgbModalRef;
+  isEditable:boolean=false;
+  @ViewChild(SpeedQuoteExclusionsComponent, { static: false }) public speedQuoteExclusionsComponent: SpeedQuoteExclusionsComponent;
+  @Output() triggerTabChange = new EventEmitter();
   constructor(private modalService: NgbModal,
     //private salesQuoteService: SalesQuoteService,
     private alertService: AlertService,
@@ -368,6 +372,9 @@ export class SpeedQuotePartNumberComponent {
       //     uniqueParts[i].childParts = childParts;
       //   }
       // });
+      uniqueParts.forEach((part, i) => {
+        uniqueParts[i].isEditPart = true;
+      });
       this.summaryParts = uniqueParts;
     }
     this.totalRecords = this.summaryParts.length;
@@ -438,15 +445,15 @@ export class SpeedQuotePartNumberComponent {
     let partFoundWithId = false;
     if (this.summaryParts && this.summaryParts.length > 0) {
       this.summaryParts.forEach(summaryPart => {
-        if (summaryPart.childParts && summaryPart.childParts.length > 0) {
-          summaryPart.childParts.forEach(part => {
-            if (part.salesOrderQuotePartId && !partFoundWithId) {
+        //if (summaryPart.childParts && summaryPart.childParts.length > 0) {
+          //summaryPart.childParts.forEach(part => {
+            if (summaryPart.speedQuotePartId && !partFoundWithId) {
               partFoundWithId = true;
               this.saveButton = true;
             }
           });
-        }
-      })
+        //}
+      //})
     }
   }
   onCloseMargin(event) {
@@ -468,7 +475,6 @@ export class SpeedQuotePartNumberComponent {
   }
   enableUpdateButton: boolean = false;
   approve() {
-    debugger;
     this.enableUpdateButton = true;
     let partList: any = [];
     this.salesQuoteView.parts = [];
@@ -477,6 +483,7 @@ export class SpeedQuotePartNumberComponent {
     var errmessage = '';
     for (let i = 0; i < this.selectedParts.length; i++) {
       let selectedPart = this.selectedParts[i];
+      console.log("selectedPart",selectedPart);
       let partNameAdded = false;
       //if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) 
       if (!invalidParts && !invalidDate) {
@@ -537,7 +544,7 @@ export class SpeedQuotePartNumberComponent {
       this.summaryParts.forEach(summaryPart => {
         if (summaryPart.childParts && summaryPart.childParts.length > 0) {
           summaryPart.childParts.forEach(part => {
-            if (part.salesOrderQuotePartId) {
+            if (part.speedQuotePartId) {
               let priorityExists = this.priorities.find(x => x.priorityId == part.priorityId);
               if (!priorityExists) {
                 let inActivePriority = this.salesQuote.priorities.find(x => x.priorityId == part.priorityId);
@@ -550,5 +557,45 @@ export class SpeedQuotePartNumberComponent {
         }
       })
     }
+  }
+  unitSalePricetext:boolean=false;
+  onChangeUnitSalesPrice(index,event)
+  {
+    let saleprice = event;
+    //this.unitSalePricetext[0] = true;
+    console.log("this.selectedParts[i]",this.selectedParts);
+    for(let i=0;i<this.selectedParts.length;i++)
+    {
+      if(i == index)
+      {
+        //this.summaryParts[i].isEditPart = true;
+        //this.unitSalePricetext[i] = true;
+        this.selectedParts[i].unitSalePrice = saleprice;
+        this.selectedParts[i].marginAmountPerUnit = +(Number(this.selectedParts[i].unitSalePrice) - Number(this.selectedParts[i].unitCostPerUnit)).toFixed(2);
+        if (Number(this.selectedParts[i].unitSalePrice) > 0) {
+          this.selectedParts[i].marginPercentagePerUnit = +((Number(this.selectedParts[i].marginAmountPerUnit) / Number(this.selectedParts[i].unitSalePrice)) * 100).toFixed(2);
+        } else {
+          this.selectedParts[i].marginPercentagePerUnit = 0;
+        }
+        this.selectedParts[i].salesPriceExtended = Number(this.selectedParts[i].unitSalePrice) * Number(this.selectedParts[i].quantityRequested);
+        this.selectedParts[i].unitCostExtended = +(Number(this.selectedParts[i].unitCostPerUnit) * Number(this.selectedParts[i].quantityRequested)).toFixed(2);
+        this.selectedParts[i].marginAmountExtended = +((Number(this.selectedParts[i].salesPriceExtended) - Number(this.selectedParts[i].unitCostExtended))).toFixed(2);
+        if (Number(this.selectedParts[i].salesPriceExtended) > 0) {
+          this.selectedParts[i].marginPercentageExtended = +((Number(this.selectedParts[i].marginAmountExtended) / Number(this.selectedParts[i].salesPriceExtended)) * 100).toFixed(2);
+        } else {
+          this.selectedParts[i].marginPercentageExtended = 0;
+        }
+        this.canSaveParts = false;
+      }
+      this.summaryParts = this.selectedParts;
+    }
+  }
+  editPart(rowIndex = null) {
+    this.summaryParts[rowIndex].isEditPart = false;
+  }
+
+  createExclusionPN(rowdata){
+    //this.speedQuoteExclusionsComponent.refresh(true);
+    this.triggerTabChange.next(rowdata);
   }
 }
