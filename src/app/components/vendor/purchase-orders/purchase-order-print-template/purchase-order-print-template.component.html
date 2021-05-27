@@ -13,224 +13,206 @@
             <div class="very-first-block col-sm-8">
               <div class="col-sm-12 address-block" style="width:100%;display:flex;">
                 <div class="col-sm-6" style="width:50%"><img class="logo"
-                  src="http://design.poweraerosuites.com/image/logo.png" /></div>
-                  <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
-                    <div class="col-sm-12 first-block-name">
-                      <label class="col-sm-12 first-block-label"
-                      disabled>Satish MRO :</label>
-                    </div>
-                    <div class="col-sm-12 first-block-name">                     
+                    src="http://design.poweraerosuites.com/image/logo.png" /></div>
+                <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.companyName ? managementStructureHeaderData.companyName : '' }}</label>
+                  </div>
+                  <!-- <div class="col-sm-12 first-block-name">                     
                       <label class="col-sm-12 first-block-label"
                           disabled>Slogan</label>
-                    </div>
-                    <div class="col-sm-12 first-block-name">                     
-                      <label class="col-sm-12 first-block-label"
-                          disabled>Address</label>
-                    </div>
-                    <div class="col-sm-12 first-block-name">                     
-                      <label class="col-sm-12 first-block-label"
-                          disabled>City</label>
-                    </div>
-                    <div class="col-sm-12 first-block-name">                     
-                      <label class="col-sm-12 first-block-label"
-                          disabled>State</label>
-                    </div>
-                    <div class="col-sm-12 first-block-name">                     
-                      <label class="col-sm-12 first-block-label"
-                          disabled>Zip</label>
-                    </div>
-                    <div class="col-sm-12 first-block-name">                     
-                      <label class="col-sm-12 first-block-label"
-                          disabled>Phonexxxxx Fax....</label>
-                    </div>
-                <!-- <div class="col-sm-12">Satish MRO : </div>
-                <div class="col-sm-12 first-block-name">Slogan</div>
-                <div class="col-sm-12 first-block-address">{{managementStructureHeaderData.address1 ? managementStructureHeaderData.address1 : '-'}}</div>
-
-
-                <div class="col-sm-12 first-block-name">
-                  <br />
-                  {{managementStructureHeaderData.city ? managementStructureHeaderData.city : '-'}}
-                  <br />
-                  {{managementStructureHeaderData.stateOrProvince ? managementStructureHeaderData.stateOrProvince : '-'}}
-                  <br />
-                  {{managementStructureHeaderData.postalCode ? managementStructureHeaderData.postalCode : '-'}}
-                  <br />
-                  {{managementStructureHeaderData.phoneNumber ? managementStructureHeaderData.phoneNumber : '-'}}
-                  <br />
-                </div> -->
+                    </div> -->
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.address1 ? managementStructureHeaderData.address1 : ''}}</label>
+                  </div>
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.city ? managementStructureHeaderData.city : ''}}</label>
+                  </div>
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{ managementStructureHeaderData.stateOrProvince ? managementStructureHeaderData.stateOrProvince : '' }}</label>
+                  </div>
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.postalCode ? managementStructureHeaderData.postalCode : ''}}</label>
+                  </div>
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.phoneNumber ? managementStructureHeaderData.phoneNumber : ''}}</label>
+                  </div>
+                </div>
               </div>
             </div>
-            </div>
 
-             
-            
             <div class="second-block col-sm-4">
-              <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">PURCHASE ORDER</h3>
+              <h3
+                style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
+                PURCHASE ORDER</h3>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">PO Num</label>
-               <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{poHeaderAdd.purchaseOrderNumber ? poHeaderAdd.purchaseOrderNumber : '-'}}</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.purchaseOrderNumber ? poHeaderAdd.purchaseOrderNumber : ''}}</label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Order Date</label>
-                <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{poHeaderAdd.openDate | date: 'MM/dd/yyyy'}}</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.openDate | date: 'MM/dd/yyyy'}}</label>
               </div>
               <div class="second-block-div">
-                <label class="col-sm-6 second-block-label" style="width:100%">Vendor Num</label>                
-               <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{poHeaderAdd.vendorCode ? poHeaderAdd.vendorCode : '-'}}</label>
+                <label class="col-sm-6 second-block-label" style="width:100%">Vendor Num</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.vendorCode ? poHeaderAdd.vendorCode : ''}}</label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Buyer</label>
-                <label class="col-sm-6 second-block-label" style="width:100%" disabled>------</label>
+                <label class="col-sm-6 second-block-label" style="width:100%" disabled></label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Prepared By</label>
-                <label class="col-sm-6 second-block-label" style="width:100%" disabled>------</label>
+                <label class="col-sm-6 second-block-label" style="width:100%" disabled></label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Date Printed</label>
-                <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{poHeaderAdd.printdate | date: 'MM/dd/yyyy'}}</label>  
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.printdate | date: 'MM/dd/yyyy'}}</label>
               </div>
-              <br />
+
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Num of Items</label>
-               <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{poHeaderAdd.itemcount ? poHeaderAdd.itemcount : '-'}}</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.itemcount ? poHeaderAdd.itemcount : ''}}</label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Credit Terms</label>
-               <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{poHeaderAdd.creditTerm ? poHeaderAdd.creditTerm : '-'}}</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.creditTerm ? poHeaderAdd.creditTerm : ''}}</label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Resale</label>
-                <label class="col-sm-6 second-block-label" style="width:100%" disabled>------</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.resale == true ? 'Yes' : 'No'}}</label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Ship Via</label>
-               <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{poHeaderAdd.shipVia ? poHeaderAdd.shipVia : '-'}}</label>                
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.shipVia ? poHeaderAdd.shipVia : ''}}</label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Shipping Acct</label>
-               <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{poHeaderAdd.shippingAccountNo ? poHeaderAdd.shippingAccountNo : '-'}}</label>  
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{poHeaderAdd.shippingAccountNo ? poHeaderAdd.shippingAccountNo : ''}}</label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">F.O.B</label>
-                <label class="col-sm-6 second-block-label" style="width:100%" disabled>------</label>
+                <label class="col-sm-6 second-block-label" style="width:100%" disabled></label>
               </div>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">Currency</label>
-                <label class="col-sm-6 second-block-label" style="width:100%" disabled>------</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{vendorInfo.currency ? vendorInfo.currency : ''}}</label>
               </div>
             </div>
           </div>
-
           <div class="clear"></div>
-           <div class="col-sm-12">
-                <table rules=none  class=" print-friendly parttable print-table table-margins">
-                  <thead>
-                    <tr>
-                      <th>VENDOR</th>
-                      <th>SHIP TO</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="vertical-align: top;border-right:1px solid black;width:30%">
-                        <table class="border-none">
-                          <tr>
-                            <td>Company Name :- {{vendorInfo.vendorName ? vendorInfo.vendorName : '-'}}</td>                            
-                          </tr>
-                          <tr>
-                            <td>Address :- {{vendorInfo.address1 ? vendorInfo.address1 : '-'}}</td>                            
-                          </tr>
-                          <tr>
-                            <td>Address - {{vendorInfo.address2 ? vendorInfo.address2 : '-'}}</td>                           
-                          </tr>
-                          <tr>
-                            <td>City,State,Postal Code :- {{vendorInfo.city ? vendorInfo.city : '-'}} , {{vendorInfo.stateOrProvince ? vendorInfo.stateOrProvince : '-'}} , {{vendorInfo.postalCode ? vendorInfo.postalCode : '-'}}</td>                            
-                          </tr>
-                          <tr>
-                            <td>Phone :- {{vendorInfo.vendorPhone ? vendorInfo.vendorPhone : '-'}}</td>                            
-                          </tr>
-                          <tr>
-                            <td>Attention :- ----</td>                            
-                          </tr>
-                        </table>
-                      </td>
-                      <td style="vertical-align: top;border-right:1px solid black;width:30%">
-                        <table class="border-none">
-                          <tr>
-                            <td>Company Name :- {{poHeaderAdd.shipToUser ? poHeaderAdd.shipToUser : '-'}}</td>                            
-                          </tr>
-                          <tr>
-                            <td>Address :- {{poHeaderAdd.shipToAddress1 ? poHeaderAdd.shipToAddress1 : '-'}}</td>                            
-                          </tr>
-                          <tr>
-                            <td>Address :- {{poHeaderAdd.shipToAddress2 ? poHeaderAdd.shipToAddress2 : '-'}}</td>                            
-                          </tr>
-                          <tr>
-                            <td>City,State,Postal Code :- 
-                                {{poHeaderAdd.shipToCity ? poHeaderAdd.shipToCity : '-'}},
-                                {{poHeaderAdd.shipToState ? poHeaderAdd.shipToState : '-'}},
-                                {{poHeaderAdd.shipToPostalCode ? poHeaderAdd.shipToPostalCode : '-'}}</td>
-                          </tr>
-                          <tr>
-                            <td>Phone :- {{poHeaderAdd.shipToContactPhone ? poHeaderAdd.shipToContactPhone : '-'}}</td>                          
-                          </tr>
-                          <tr>
-                            <td>Attention :- -----</td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            <div class="clear"></div>
-            <div class="col-sm-12">
-              <table rules=none  class=" print-friendly parttable print-table table-margins">
-                <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>PN</th>
-                    <th colspan="2">PN Description</th>
-                    <th>Priority</th>
-                    <th>Cond</th>
-                    <th>Need Date</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ng-container *ngFor="let partList of poPartsList; let i = index;">
+          <div class="col-sm-12">
+            <table rules=none class=" print-friendly parttable print-table table-margins">
+              <thead>
+                <tr>
+                  <th>VENDOR</th>
+                  <th>SHIP TO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="vertical-align: top;border-right:1px solid black;width:30%">
+                    <table class="border-none">
+                      <tr>
+                        <td>{{vendorInfo.vendorName ? vendorInfo.vendorName : ''}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{vendorInfo.address1 ? vendorInfo.address1 : ''}}</td>
+                      </tr>
+                      <tr *ngIf="vendorInfo.address2">
+                        <td>{{vendorInfo.address2 ? vendorInfo.address2 : ''}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{vendorInfo.city ? vendorInfo.city : ''}}
+                          {{vendorInfo.stateOrProvince ? vendorInfo.stateOrProvince : ''}}
+                          {{vendorInfo.postalCode ? vendorInfo.postalCode : ''}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{vendorInfo.vendorPhone ? vendorInfo.vendorPhone : ''}}</td>
+                      </tr>
+                      <tr>
+                        <td>Attention</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td style="vertical-align: top;border-right:1px solid black;width:30%">
+                    <table class="border-none">
+                      <tr>
+                        <td>{{poHeaderAdd.shipToUser ? poHeaderAdd.shipToUser : ''}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{poHeaderAdd.shipToAddress1 ? poHeaderAdd.shipToAddress1 : ''}}</td>
+                      </tr>
+                      <tr *ngIf="poHeaderAdd.shipToAddress2">
+                        <td>{{poHeaderAdd.shipToAddress2 ? poHeaderAdd.shipToAddress2 : ''}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{poHeaderAdd.shipToCity ? poHeaderAdd.shipToCity : ''}}
+                          {{poHeaderAdd.shipToState ? poHeaderAdd.shipToState : ''}}
+                          {{poHeaderAdd.shipToPostalCode ? poHeaderAdd.shipToPostalCode : ''}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{poHeaderAdd.shipToContactPhone ? poHeaderAdd.shipToContactPhone : ''}}</td>
+                      </tr>
+                      <tr>
+                        <td>Attention</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="clear"></div>
+          <div class="col-sm-12">
+            <table rules=none class=" print-friendly parttable print-table table-margins">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>PN</th>
+                  <th colspan="2">PN Description</th>
+                  <th>Priority</th>
+                  <th>Cond</th>
+                  <th>Need Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let partList of poPartsList; let i = index;">
                   <tr>
                     <td class="border-right">{{i+1}}</td>
-                    <td class="border-right">{{partList?.partNumber}}</td>  
+                    <td class="border-right">{{partList?.partNumber}}</td>
                     <td class="border-right" style="border-top:1px solid" colspan="2">{{partList?.partDescription}}</td>
                     <td class="border-right">{{partList?.priority}}</td>
                     <td class="border-right">{{partList?.condition}}</td>
                     <td class="border-right">{{partList?.needByDate | date: 'MM/dd/yyyy' }}</td>
-                  </tr>  
-               
-              
-                   <!-- </ng-container>   
-                </tbody>
-              </table>
-          </div>            
-          <div class="col-sm-12">
-            <table rules=none class="parttable print-table print-friendly table-margins" style="margin-top:10px"> -->
-                <!-- <thead>  -->
-                    <tr>
+                  </tr>
+                  <tr>
                     <th></th>
-                    <th><u>Qty </u></th>
-                    <th><u>UOM</u></th>
-                    <th><u>Unit Price</u></th>
-                    <th><u>Ext Amount</u></th>
-                    <th><u>Disc Amount</u></th>
-                    <th><u>Misc Charge</u></th>
-                    <th><u>Total</u></th>
-                  </tr>  
-                  <!-- </thead> -->
-                  <!-- <tbody>    -->
-                    <!-- <ng-container *ngFor="let partList of poPartsList; let i = index;">              -->
+                    <th>Qty</th>
+                    <th>UOM</th>
+                    <th>Unit Price</th>
+                    <th>Ext Amount</th>
+                    <th>Disc Amount</th>
+                    <th>Misc Charge</th>
+                    <th>Total</th>
+                  </tr>
                   <tr>
                     <td class="border-bottom"></td>
                     <td class="border-bottom">{{partList?.quantityOrdered}}</td>
@@ -238,225 +220,147 @@
                     <td class="border-bottom">{{partList?.unitCost}}</td>
                     <td class="border-bottom">{{partList?.extendedCost}}</td>
                     <td class="border-bottom">{{partList?.discountAmount}}</td>
-                    <td class="border-bottom">-----</td>
+                    <td class="border-bottom"></td>
                     <td class="border-bottom">{{partList?.extendedCost}}</td>
                   </tr>
                 </ng-container>
-                  <tr>
-                    <td colspan="6" rowspan="8" style="border:1px solid black;vertical-align:top">
-                      terms and Conditions/Notes:  <span class="value">
-          <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.notes">
-          </p>
-        </span></td>
+                <tr>
+                  <td colspan="6" rowspan="8" style="border:1px solid black;vertical-align:top">
+                    terms and Conditions/Notes: <span class="value">
+                      <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.notes"></p>
+                    </span>
+                  </td>
                 </tr>
                 <tr>
                   <td class="text-right border-top"><b>SUBTOTAL</b></td>
-                  <td class="border-bottom border-top">1,358.66</td>
+                  <td class="border-bottom border-top">{{totalExtCost}}</td>
                 </tr>
                 <tr>
                   <td class="text-right">Tax(Rate 8.25%)</td>
-                  <td class="border-bottom">112.09</td>
+                  <td class="border-bottom"></td>
                 </tr>
                 <tr>
                   <td class="text-right">Other Tax</td>
-                  <td class="border-bottom">-</td>
+                  <td class="border-bottom"></td>
                 </tr>
                 <tr>
                   <td class="text-right">Shipping & Handling</td>
-                  <td class="border-bottom">85.00</td>
+                  <td class="border-bottom">{{poHeaderAdd.shippingandhandlingCost}}</td>
                 </tr>
                 <tr>
                   <td class="text-right">Freight</td>
-                  <td class="border-bottom">45.00</td>
+                  <td class="border-bottom"></td>
                 </tr>
                 <tr>
                   <td class="text-right">Misc Charges</td>
-                  <td class="border-bottom">50.00</td>
+                  <td class="border-bottom"></td>
                 </tr>
                 <tr>
                   <td class="text-right"><b>Total</b></td>
-                  <td class="border-bottom">1,650.75</td>
+                  <td class="border-bottom">{{finaltotal}}</td>
                 </tr>
+              </tbody>
+            </table>
+          </div>
 
-
-
-                <!-- <tr>
-                  <td colspan="2" rowspan="2">Barcode
-                      <br /><img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" />
-                  </td>
-                
-                  <td class="border-transparent" colspan="2"></td>
-              </tr>
-              <tr>
-                 
-                  <td class="border-transparent" colspan="2"></td>
-              </tr>
-              <tr>
-                   <td colspan="2"></td>
-              </tr>
-              <tr></tr> -->
-            
-              
+          <div style="width:100%;display:flex">
+            <div class="col-sm-12">
+              <table rules=none class="parttable print-table print-friendly table-margins">
+                <thead>
+                  <tr>
+                    <th>RETURN TO</th>
+                    <th>BILL TO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                      <table class="border-none">
+                        <tr>
+                          <td>{{vendorInfo.vendorName ? vendorInfo.vendorName : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{vendorInfo.address1 ? vendorInfo.address1 : ''}}</td>
+                        </tr>
+                        <tr *ngIf="vendorInfo.address2">
+                          <td>{{vendorInfo.address2 ? vendorInfo.address2 : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{vendorInfo.city ? vendorInfo.city : ''}}
+                            {{vendorInfo.stateOrProvince ? vendorInfo.stateOrProvince : ''}}
+                            {{vendorInfo.postalCode ? vendorInfo.postalCode : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{vendorInfo.vendorPhone ? vendorInfo.vendorPhone : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>Attention</td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                      <table class="border-none">
+                        <tr>
+                          <td>{{poHeaderAdd.billToUser ? poHeaderAdd.billToUser : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{poHeaderAdd.billToAddress1 ? poHeaderAdd.billToAddress1 : ''}}</td>
+                        </tr>
+                        <tr *ngIf="poHeaderAdd.billToAddress2">
+                          <td>{{poHeaderAdd.billToAddress2 ? poHeaderAdd.billToAddress2 : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{poHeaderAdd.billToCity ? poHeaderAdd.billToCity : ''}}
+                            {{poHeaderAdd.billToState ? poHeaderAdd.billToState : ''}}
+                            {{poHeaderAdd.billToPostalCode ? poHeaderAdd.billToPostalCode : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{poHeaderAdd.billToContactPhone ? poHeaderAdd.billToContactPhone : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>Attention </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
-                <!-- </ng-container>                               -->
-               
-          <!-- </div> -->
-        
-      <!-- <div style="width:75%;border:1px solid black;vertical-align:top;height:100px;margin-top:25%">Terms and Conditions
-        / Notes <br>
-        <span class="value">
-          <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.notes">
-          </p>
-        </span>
-      </div> -->
-   
- 
-  <div style="width:100%;display:flex">
-    <div class="col-sm-12">
-      <table  rules=none class="parttable print-table print-friendly table-margins">
-        <thead>
-          <tr>
-            <th>RETURN TO</th>
-            <th>BILL TO</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="vertical-align: top;border-right:1px solid black;width:20%">
-              <table class="border-none">
+          </div>
+          <div class="col-sm-12">
+            <table rules=none class="parttable print-table print-friendly table-margins">
+              <tbody>
                 <tr>
-                  <td>Company Name :- {{vendorInfo.vendorName ? vendorInfo.vendorName : '-'}}</td>                            
+                  <!-- <td> <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" />
+                    <p class="barcode-name"><b>145875</b></p>
+                  </td> -->
+                  <td>Barcode
+                    <br /><img src="{{poHeaderAdd.barcode}}" alt="barcode" />
+                  </td>
+                  <td class="align-top"> <label class="col-sm-2">Print Name</label></td>
+                  <td class="align-top"> <label class="col-sm-2">Signature </label></td>
+                  <td class="align-top"><label class="col-sm-2">Date {{poHeaderAdd.printdate | date: 'MM/dd/yyyy'}}</label></td>
                 </tr>
-                <tr>
-                  <td>Address :- {{vendorInfo.address1 ? vendorInfo.address1 : '-'}}</td>                            
-                </tr>
-                <tr>
-                  <td>Address - {{vendorInfo.address2 ? vendorInfo.address2 : '-'}}</td>                           
-                </tr>
-                <tr>
-                  <td>City,State,Postal Code :- {{vendorInfo.city ? vendorInfo.city : '-'}} , {{vendorInfo.stateOrProvince ? vendorInfo.stateOrProvince : '-'}} , {{vendorInfo.postalCode ? vendorInfo.postalCode : '-'}}</td>                            
-                </tr>
-                <tr>
-                  <td>Phone :- {{vendorInfo.vendorPhone ? vendorInfo.vendorPhone : '-'}}</td>                            
-                </tr>
-                <tr>
-                  <td>Attention :- ----</td>                            
-                </tr>
-              </table>
-            </td>
-            <td style="vertical-align: top;border-right:1px solid black;width:20%">
-              <table class="border-none">
-                <tr>
-                  <td>Company Name :- {{poHeaderAdd.billToUser ? poHeaderAdd.billToUser : '-'}}</td>
-                </tr>
-                <tr>
-                  <td>Address :- {{poHeaderAdd.billToAddress1 ? poHeaderAdd.billToAddress1 : '-'}}</td>
-                </tr>
-                <tr>
-                  <td>Address :- {{poHeaderAdd.billToAddress2 ? poHeaderAdd.billToAddress2 : '-'}}</td>
-                </tr>
-                <tr>
-                  <td>City,State,Postal Code :- {{poHeaderAdd.billToCity ? poHeaderAdd.billToCity : '-'}},{{poHeaderAdd.billToState ? poHeaderAdd.billToState : '-'}},{{poHeaderAdd.billToPostalCode ? poHeaderAdd.billToPostalCode : '-'}}</td>
-                </tr>
-                <tr>
-                  <td>Phone :- {{poHeaderAdd.billToContactPhone ? poHeaderAdd.billToContactPhone : '-'}}</td>
-                </tr>
-                <tr>
-                  <td>Attention :- -----</td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
     </div>
-    <!-- <div style="width:45%;margin-top:20px">
-      <table>
-        <tbody>
-          <tr>
-            <td class="text-right"><b>SUBTOTAL</b></td>
-            <td class="border-bottom">1,358.66</td>
-          </tr>
-          <tr>
-            <td class="text-right">Tax(Rate 8.25%)</td>
-            <td class="border-bottom">112.09</td>
-          </tr>
-          <tr>
-            <td class="text-right">Other Tax</td>
-            <td class="border-bottom">-</td>
-          </tr>
-          <tr>
-            <td class="text-right">Shipping & Handling</td>
-            <td class="border-bottom">85.00</td>
-          </tr>
-          <tr>
-            <td class="text-right">Freight</td>
-            <td class="border-bottom">45.00</td>
-          </tr>
-          <tr>
-            <td class="text-right">Misc Charges</td>
-            <td class="border-bottom">50.00</td>
-          </tr>
-          <tr>
-            <td class="text-right"><b>Total</b></td>
-            <td class="border-bottom">1,650.75</td>
-          </tr>          
-        </tbody>
-      </table>
-    </div> -->
   </div>
-  <div class="col-sm-12">
-    <table  rules=none class="parttable print-table print-friendly table-margins">
-      <tbody>
-        <tr>
-          <td> <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" />
-            <p class="barcode-name"><b>145875</b></p></td>
-          <td class="align-top"> <label class="col-sm-2">Print Name</label></td>
-          <td class="align-top"> <label class="col-sm-2">Signature </label></td>
-          <td class="align-top"><label class="col-sm-2">Date </label></td>
-         
-        </tr>
-      </tbody>
-    </table>
-  </div>
-<!-- 
-  <div class="col-sm-12 " style="width:100%;margin-top:10px;display:flex;">
-    <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" />
-    <p class="barcode-name"><b>145875</b></p>
-    <div class="col-sm-4">
-    <label class="col-sm-4">Print Name</label>
-    <input type="text" class="input-field-border" value="" disabled /></div>
-    <div class="col-sm-4">
-    <label class="col-sm-2">Signature </label>
-    <input type="text" class="input-field-border" value="" disabled /></div>
-    <div class="col-sm-4">
-    <label class="col-sm-2">Date </label>
-    <input type="text" class="input-field-border" value="" disabled /></div>
-  </div> -->
-</form>
-</div>
-</div>
-</div>
- 
-
-
-
-  <!-- </div> -->
 </form>
 
 <div class="preloader" *ngIf="isSpinnerVisible">
   <div class="loading">
-      <div class="lds-roller">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-      </div>
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </div>
