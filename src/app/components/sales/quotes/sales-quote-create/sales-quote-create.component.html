@@ -555,7 +555,8 @@
                                 <app-sales-part-number [salesQuote]="salesQuote" [salesQuoteView]="salesQuoteView"
                                     [isViewMode]="false" (on-parts-save)="onPartsSaveEvent($event)"
                                     [customer]="customerDetails" [totalFreights]="totalFreights"
-                                    [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
+                                    [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority"
+                                    (on-create-new-version)="onCreateNewVersionEvent($event)">
                                 </app-sales-part-number>
                             </p-tabPanel>
                             <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
