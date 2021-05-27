@@ -118,13 +118,12 @@
                                     <th *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)" class="text-center">
                                         Equivalent Parts
                                     </th>
-                                    
-                                    
                                     <th class="text-center" style="min-width: 110px;">PN </th>
                                     <th class="text-center" style="min-width: 130px;">Part Description</th>
                                     <th class="text-center" style="min-width: 110px;" *ngIf="(statusId == 2 || statusId == 4 || statusId == 5) && (showAlternateParts ||showEqParts) ">Alt/Equiv</th>
                                     <th class="text-center" style="min-width: 96px;"> Alternate PN For</th>
                                     <th class="text-center"> Cond Type</th>
+                                    <th class="text-center"> StockLine Number</th>
                                     <th class="text-center width-50"> Stk Type</th>
                                     <th class="text-center width-50" style="width:60px !important">Qty Req</th> 
                                     <th class="text-center width-50" style="width:60px !important">Qty Res</th>
@@ -166,8 +165,6 @@
                                     <td class="text-center">
                                       <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 1 || statusId === 5)"
                                             [(ngModel)]="x.isParentSelected" (change)="selectedParts(x,$event)" [disabled]="x.quantityReserved==0">
-
-
                                             <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)"
                                             [(ngModel)]="x.isParentSelected" (change)="selectedParts(x,$event)" [disabled]="x.quantityIssued==0">
                                         </td>
@@ -186,6 +183,7 @@
                                     <td *ngIf="(statusId == 2 || statusId == 4 || statusId == 5)"></td>
                                     <td></td>
                                     <td>{{x.condition}}</td>
+                                    <td>{{x.stockLineNumber}}</td>
                                     <td>{{x.stockType}}</td>
                                     <td class="tex_end">
                                         {{x.quantity}}
@@ -276,9 +274,8 @@
                                         <span>Alternative</span>
                                     </td>
                                     <td>{{b.parentPartNo}}</td>
-
-
                                     <td>{{b.condition}}</td>
+                                    <td>{{b.stockLineNumber}}</td>
                                     <td>{{b.stockType}}</td>
                                     <td class="tex_end">
                                         {{b.quantity}}
@@ -291,10 +288,8 @@
                                         <input type="number" name="quantity1_{{y}}" [(ngModel)]="b.quantityReserved" (keypress)="restrictMinus($event)"
                                             (keyup)="validatePartsQuantity($event,b)" (input)="childPartValidate($event.target.value, b,1)"
                                             [disabled]="!b.isChildSelected">
-
                                     </td>
                                     <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
-
                                         <input type="number" name="quantity2_{{y}}" [(ngModel)]="b.quantityIssued" (keypress)="restrictMinus($event)"
                                             (keyup)="validatePartsQuantity($event,b)"
                                             (input)="childPartValidate($event.target.value, b,1)"
@@ -321,7 +316,6 @@
                                             #issuedDateAlt="ngModel" [(ngModel)]="b.issuedDate" disabled
                                             [required]="b.isChildSelected">
                                         </p-calendar>
-
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId  != 3 && statusId != 4">
                                         <p-autoComplete field="name"
@@ -334,8 +328,6 @@
                                         [size]="30" [minLength]="1" [dropdown]="true"
                                         class="p-autoComplete-ctsm"   [required]="b.isChildSelected" disabled >
                                     </p-autoComplete>
-                                    <!-- [disabled]="!b.isChildSelected" -->
-
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
                                         <p-autoComplete field="name"
@@ -366,13 +358,14 @@
                                     </td>
                                     <td *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)">
                                     </td>
- <td  *ngIf="statusId == 2 || statusId == 4 || statusId == 5">
+                                    <td  *ngIf="statusId == 2 || statusId == 4 || statusId == 5">
                                         <span>Equivalent</span>
                                      </td>
                                     <td>{{c.equPartNumber}}</td>
                                     <td>{{c.equPartDescription}}</td>
                                     <td>{{c.parentPartNo}}</td>
                                     <td>{{c.condition}}</td>
+                                    <td>{{c.stockLineNumber}}</td>
                                     <td>{{c.stockType}}</td>
                                     <td class="tex_end">
                                         {{c.quantity}}
@@ -823,14 +816,6 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
 <div *ngIf="!ispickticket" >
     <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align1 parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
     style="min-height: 130px !important;">
-
-
-
-
-
-
-
-
     <p-table class="rpo-table-cstm rro-table-cstm ptable-f10 materialListTable" id="custome_material" [columns]="summaryColumns" #materialTble
     [value]="workOrderMaterialList" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100,200,500]"
     (onPage)="pageIndexChange($event)">
@@ -865,15 +850,9 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             <!-- <td></td> -->
             <td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td>
             <td class="summary-column"></td>
-          
-          
-          
-          
-          
             <td class="action-icons-cstm  lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
                 <span><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit" matTooltipPosition="above" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"><i  [ngClass]="{'btn_disabled':rowData.quantityIssued!=0 || rowData.quantityReserved !=0}" class="fa fa-pencil"></i></button></span>
                 <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"   matTooltip="Create PO" matTooltipPosition="above" ><i class="fa fa-plus"></i></button></span>
-               
                 <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
                     <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId == 0" (click)="subWoClick(rowData)" [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'" matTooltipPosition="above" [disabled]="!(rowData.partStatusId ==2 || rowData.partStatusId ==3)" >
                     <i class="fa fa-plus grn_clr"   [ngClass]="{'btn_disabled':!(rowData.partStatusId ==2 || rowData.partStatusId ==3)}"></i>
@@ -889,7 +868,6 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             </span>
             <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;" (click)="openDelete(content,rowData)"  [ngClass]="{'btn_disabled': (rowData.quantityIssued!=0 || rowData.quantityReserved!=0)}" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
            <span data-toggle="modal" data-target="#materialAudit"><a class="btn nobg btn-hist-cstm mr-top5"  (click)="openMaterialAudit(rowData)" matTooltip="Material List History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-        
         </td>
         </tr>
         <tr class="child-header splitship-head child-header-back">
@@ -898,7 +876,6 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             </td>
             <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></td>
             </tr>
-            
             <tr class="child-data splitship-child child-data-back " pReorderableRowHandle  *ngFor="let childRowData of rowData.childParts; let stockIndex1 = index">
                 <td  *ngFor="let childcol of childColumnsData; let i = index" class="summary-column" pReorderableRowHandle>
                     <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='isFromWorkFlow'"
@@ -1056,15 +1033,3 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
     </table> -->
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
