@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input,Output, OnChanges,EventEmitter } from '@angular/core';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { editValueAssignByCondition, getObjectById, listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
@@ -19,6 +19,7 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
 
     @Input() workOrderPartNumberId;
     @Input() workOrderId;
+    @Output() updateRelreaseList = new EventEmitter();
     lazyLoadEventData: any;
     pageSize: number = 10;
     pageIndex: number = 0;
@@ -98,6 +99,13 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
                     }
                 }
             )
+    }
+
+    UpdateGird()
+    {
+        this.updateRelreaseList.emit();
+        this.getWorkOrderReleaseFromData(this.workOrderId,this.workOrderPartNumberId);
+        this.getGlobalSettings();
     }
     getAuditHistoryById(rowData) 
     {

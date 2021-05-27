@@ -58,6 +58,29 @@
                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                 (click)="dt.exportCSV({ selectionOnly: true })"></button>
                </div>
+               <div class="pull-right buttons-div-align">
+                <div class="col">
+                  <div class="col buttons-top-padding">
+                    <div class="form-group">
+                      <div class="pull-left radio-buttons-align">
+                        <label class="radio-cstm wauto">
+                            <input type="radio" name="viewType" class="form-control" value="detailedview"
+                              [(ngModel)]="viewType" (click)="changeOfStatus('','detailedview')">
+                            <span class="checkmark"></span>Detailed View
+                          </label>
+                      </div>
+                      <div class="pull-left radio-buttons-align">
+                        <label class="radio-cstm wauto">
+                            <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
+                              (click)="changeOfStatus('','pnview')">
+                            <span class="checkmark"></span>summary view
+                          </label>
+                       
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
                </div>
                
                 <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -109,8 +132,8 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex"  let-expanded="expanded" let-rowData let-columns="columns">
+                <tr [pSelectableRowDblClick]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
                     <td class="table-column-width"
                     *ngFor="let col of columns"
                     class="ui-resizable-column"
@@ -122,6 +145,47 @@
                         <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                     </ng-container> 
                     </td>                    
+                </tr>
+
+                <tr *ngIf="!pnViewSelected && rowIndex == (data.length-1)" class="footer">
+                    <td class="table-column-width" colspan="5">&nbsp;
+                    </td>
+                    <td class="table-column-width"><label>Total</label>
+                    </td>
+                    <td class="content-to-end table-column-width">  
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('hours')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('stdHours')}}</p>
+                    </td>
+                    <td class="content-to-end table-column-width">
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('varHours')}}</p>
+                    </td>
+                    <td class="content-to-end table-column-width">
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('varPercentage')}}</p>
+                    </td>
+                    <td class="content-to-end table-column-width" colspan="4">
+                    </td>
+                </tr>
+                <tr *ngIf="pnViewSelected && rowIndex == (data.length-1)" class="footer">
+                    <td class="table-column-width" colspan="5">&nbsp;
+                    </td>
+                    <td class="table-column-width"><label>Total</label>
+                    </td>
+                    <td class="content-to-end table-column-width">  
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('hours')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('stdHours')}}</p>
+                    </td>
+                    <td class="content-to-end table-column-width">
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('varHours')}}</p>
+                    </td>
+                    <td class="content-to-end table-column-width">
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('varPercentage')}}</p>
+                    </td>
+                    <td class="content-to-end table-column-width" colspan="4">
+                    </td>
                 </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns>
