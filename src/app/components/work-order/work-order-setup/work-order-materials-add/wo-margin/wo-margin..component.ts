@@ -3,7 +3,7 @@ import { CommonService } from '../../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from "../../../../../generic/autocomplete";
 import { AuthService } from "../../../../../services/auth.service";
 declare var $: any;
-@Component({
+@Component({ 
   selector: "app-wo-margin",
   templateUrl: "./wo-margin.component.html",
   styleUrls: ["./wo-margin.component.css"]
@@ -82,6 +82,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
 
 
 this.calculateExtendedCost();
+this.onChangeQuantityFromThis();
 // console.log("this.edit",this.editData)
     if(this.editData){
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
@@ -265,7 +266,7 @@ calculateExtendedCost(): void {
   // this.calculateExtendedCostSummation();
 }
 // errorMessage:any;
-onChangeQuantityFromThis(event) {
+onChangeQuantityFromThis() {
   // this.errorMessage=''; 
 
   this.invalidQuantityenteredForQuantityFromThis =false;
@@ -274,6 +275,7 @@ onChangeQuantityFromThis(event) {
       if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
       }
       else if (Number(this.formObject.stocklineQuantity) < 0)
       {
@@ -288,6 +290,7 @@ onChangeQuantityFromThis(event) {
     if (Number(this.formObject.stocklineQuantity) != 0) {
       if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
         this.disableUpdateButton=true;
       }
       else if (Number(this.formObject.stocklineQuantity) < 0)

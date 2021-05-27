@@ -680,13 +680,13 @@
   </div>
   <div class="modal-body"> 
     <!-- (ngModelChange)="editorgetmemo($event)" -->
-    <input type="text"  [(ngModel)]="textAreaInfoLabor" >
-      <p-editor  spellcheck="true" autofocus [(ngModel)]="textAreaInfoLabor" class="text_sen" id="textAfdw_{{currentIndex}}_{{taskIndexMemo}}"
+    <!-- <input type="text"  [(ngModel)]="textAreaInfoLabor1" > -->
+      <p-editor  (ngModelChange)="editorgetmemo($event)"  [style]="{'height':'320px'}" spellcheck="true" autofocus [(ngModel)]="textAreaInfoLabor1" class="text_sen" id="textAfdw_{{currentIndex}}_{{taskIndexMemo}}"
        name="textAfd_{{currentIndex}}_{{taskIndexMemo}}" required>
   </p-editor> 
     <div class="editor-buttons">
       <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)"
-      (click)="onSaveTextAreaInfo(textAreaInfoLabor)" [disabled]="disableEditor">Save</button>
+      (click)="onSaveTextAreaInfo()" [disabled]="disableEditor">Save</button>
       <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
     </div>
   </div>

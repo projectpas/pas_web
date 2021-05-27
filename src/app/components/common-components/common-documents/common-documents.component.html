@@ -478,7 +478,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p-editor spellcheck="true" [(ngModel)]="memoPopupContent" (ngModelChange)="enableSaveMemo()"
+    <p-editor spellcheck="true" [(ngModel)]="memoPopupContent" [style]="{'height':'320px'}" (ngModelChange)="enableSaveMemo()"
       [style]="{ height: '320px' }" name="memoPopupContent" required></p-editor>
     <div class="editor-buttons">
       <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disabledMemo"

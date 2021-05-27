@@ -1444,7 +1444,7 @@ setTimeout(() => {
     this.currentIndex = index;
     this.taskIndexMemo = track;
     this.currentTaks = taskName;
-    this.textAreaInfoLabor = material;
+    this.textAreaInfoLabor1 = material;
     this.disableEditor = true;
     this.modalMemo = this.modalService.open(contentMemo, { size: 'sm', backdrop: 'static', keyboard: false });
   }
@@ -1453,11 +1453,12 @@ setTimeout(() => {
   editorgetmemo(ev) {
     this.disableEditor = false;
   }
-  onSaveTextAreaInfo(memo) {
+  textAreaInfoLabor1:any;
+  onSaveTextAreaInfo() {
     this.disableSaveForEdit = false;
-    if (memo) {
-      this.textAreaInfoLabor = memo;
-      this.laborForm.workOrderLaborList[0][this.currentTaks][this.currentIndex].memo = memo;
+    if (this.textAreaInfoLabor1) {
+      this.textAreaInfoLabor = this.textAreaInfoLabor1;
+      this.laborForm.workOrderLaborList[0][this.currentTaks][this.currentIndex].memo = this.textAreaInfoLabor1;
     }
     // $("#textarea-popup5").modal("hide");
     this.modalMemo.close();

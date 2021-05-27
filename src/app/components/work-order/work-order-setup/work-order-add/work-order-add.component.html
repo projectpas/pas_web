@@ -1107,7 +1107,7 @@
                             </div>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item" *ngIf="!isSubWorkOrder">
                         <a class="nav-link" id="pills-contact-tab" role="tab"
                             [ngClass]="{active : gridActiveTab === 'releasefrom'}"
                             (click)="gridTabChange('releasefrom')" >8130 Form</a>
