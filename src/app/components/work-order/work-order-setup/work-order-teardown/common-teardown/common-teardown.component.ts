@@ -139,7 +139,6 @@ export class CommonTeardownComponent implements OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log("jobtitles",this.jobTitles)
         if (this.getsaveTearDownData && this.getsaveTearDownData.length != 0 && this.getsaveTearDownData != null) {
             this.showViewTemplate = true;
           var iscall= false;  
@@ -386,7 +385,6 @@ export class CommonTeardownComponent implements OnInit {
     // getTearDownReasons(): void {
     //     this.commonService.smartDropDownList('TeardownReason', 'TeardownReasonId', 'Reason').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
     //         this.tearDownReasonList = res;
-    //         console.log("reasons list", res);
     //     })
     // }
     setEditArray: any = []
@@ -527,7 +525,7 @@ export class CommonTeardownComponent implements OnInit {
             source.inspectorId = 0;
             source.inspectorDate = new Date();
         }
-        else if (type == 4) {
+        else if (type == 4) { 
 
             this.moduleNameePreAssesment='Pre-AssessmentResults';
 

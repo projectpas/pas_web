@@ -444,15 +444,23 @@ export class WorkflowListComponent implements OnInit {
     }
 
     onOpenAllView() {
-        for (let task of this.addedTasks) {
-            task.selected = true;
-        }
+        // for (let task of this.addedTasks) {
+        //     task.selected = true;
+        // }
+        this.addedTasks.map((x,index)=>{
+            let val='#step'+index;
+            $(val).collapse('show');
+        })
     }
 
     onCloseAllView() {
-        for (let task of this.addedTasks) {
-            task.selected = false;
-        }
+        // for (let task of this.addedTasks) {
+        //     task.selected = false;
+        // }
+        this.addedTasks.map((x,index)=>{
+            let val='#step'+index;
+            $(val).collapse('hide');
+        })
     }
 
     onAccordTabClick1(task: any) {

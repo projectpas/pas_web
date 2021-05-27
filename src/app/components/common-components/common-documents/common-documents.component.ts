@@ -77,6 +77,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     localCollection: any;
     selectedRowForDelete: any;
     modal: NgbModalRef;
+    modalMemo: NgbModalRef;
     sourceViewforDocumentList: any = [];
     documentauditHisory: any[];
     headersforAttachment = [
@@ -101,7 +102,6 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     }
 
     ngOnInit() {
-        
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         if (this.generalInformtionData) {
             this.id = this.referenceId;           
@@ -113,23 +113,20 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
             this.id = this.referenceId;            
             this.uploadDocsToser.subscribe(v => {
                 this.hideUpoladThing = true;
-                setTimeout(() => {
-                    console.log("event",this.referenceId)
+                setTimeout(() => { 
                     this.onUploadDocumentListToServer();
                 }, 2000);
             });
         }
-        console.log("moduleName", this.moduleName); 
     }
 
     generalCode: any;
     generalName: any;
 
     ngOnDestroy() {
-        // console.log("chhcc")
         // if (this.uploadDocsToser) this.uploadDocsToser.unsubscribe();
     }
-
+storeVariable:any={};
     ngOnChanges(changes: SimpleChanges) {
         
         for (let property in changes) {
@@ -151,16 +148,13 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
             }
             if (property == 'moduleName') {
                 this.moduleName = this.moduleName; 
-                console.log("moduleName", this.moduleName);
         }
     }
         this.id = this.referenceId;
-       console.log("hello",this.referenceId);
        
         this.getModuleList();
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         this.moduleName = this.moduleName;
-        console.log("moduleName", this.moduleName);
     }
 
     attachmoduleList: any = [];
@@ -204,10 +198,12 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
     enableSaveMemo() {
         this.disabledMemo = false;
+
     }
 
     closeMyModel(type) {
-        $(type).modal("hide");
+        // $(type).modal("hide");
+        this.modal.close()
         this.disableSave = true;
     }
 
@@ -243,7 +239,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         this.getDocumentTypeList();
     }
 
-    addDocumentDetails() {
+    addDocumentDetails(content) {
         this.selectedFileAttachment = [];
         this.sourceViewforDocumentList = [];
         this.isEditButton = false;
@@ -256,6 +252,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
             attachmentId: 0,
             name: '',
         }
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
     parsedText(text) {
@@ -283,6 +280,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         if (!this.isEditButton) {
             this.fileUploadInput.clear();
         }
+        this.modal.close()
     }
 
     downloadFile(rowData) {
@@ -334,14 +332,16 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         }
     }
 
-    onClickMemo() {
+    onClickMemo(contentMemo) {
         this.memoPopupContent = this.documentInformation.docMemo;
+        this.modalMemo = this.modalService.open(contentMemo, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
     onClickPopupSave() {
         this.documentInformation.docMemo = this.memoPopupContent;
         this.memoPopupContent = '';
-        $('#memo-popup-Doc-common').modal("hide");
+        // $('#memo-popup-Doc-common').modal("hide");
+        this.modalMemo.close();
         this.disabledMemo = true;
         if(this.isEditButton){
             this.disableSave = false;
@@ -349,7 +349,8 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     }
 
     closeMemoModel() {
-        $('#memo-popup-Doc-common').modal("hide");
+        this.modalMemo.close();
+        // $('#memo-popup-Doc-common').modal("hide");
         this.disabledMemo = true;
     }
 
@@ -495,8 +496,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
     itemmasterIdReferenceId:number
     onUploadDocumentListToServer() {
-        console.log("this.moduleName",this.moduleName)
-        this.attachmoduleList.forEach(element => {
+            this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
                 this.moduleId = element.value;
             }
@@ -581,8 +581,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     }
 
     documentCollectionOriginal: any = [];
-    getList() {
-        console.log("moduleName", this.moduleName);
+    getList() { 
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
@@ -815,7 +814,8 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         this.index = 0;
         this.disableSave == false;
 
-        $('#commonaddDocumentDetails').modal("hide");
+        // $('#commonaddDocumentDetails').modal("hide");
+        this.modal.close();
         if (this.fileUploadInput) {
             this.fileUploadInput.clear()
         }
