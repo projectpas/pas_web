@@ -7,10 +7,13 @@ import * as moment from 'moment';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-wo-release-from',
   templateUrl: './wo-release-from.component.html',
-  styleUrls: ['./wo-release-from.component.css']
+  styleUrls: ['./wo-release-from.component.css'],
+  providers:[DatePipe]
 })
 export class WoReleaseFromComponent implements OnInit,OnChanges {
 
@@ -19,16 +22,22 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
   @Input() releaseFromId;
   @Input() isView;
   @Input() isEdit;
-  @Input() ReleaseData;
+  @Input() ReleaseDataForm;
   //ReleaseData: any;
+  ReleaseData : any = {};
   isSpinnerVisible: boolean = true;
+  modal: NgbModalRef;
   private onDestroy$: Subject<void> = new Subject<void>();
+  Printeddate1 : string;
+  Printeddate2 : string;
   constructor(
     private authService: AuthService,
     private acRouter: ActivatedRoute,
     private router: Router,
     private workOrderService: WorkOrderService,
     private alertService: AlertService,
+    private modalService: NgbModal,
+    private datePipe: DatePipe,
   ) 
   {}
 
@@ -37,7 +46,7 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
     $('#woReleaseFromDiv').modal('show');
     if(this.isEdit || this.isView)
     {
-      this.BindData(this.ReleaseData);
+      this.BindData(this.ReleaseDataForm);
     }else
     {
       this.GetWorkorderReleaseFromData();
@@ -57,23 +66,37 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
 get currentUserMasterCompanyId(): number {
     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
 }
+enableSave(date)
+{
+    if(date =='date')
+    {
+      this.Printeddate1 =moment(this.ReleaseData.date).format('D/ MMMM/ YYYY'); 
+    }else
+    {
+      this.Printeddate2 =moment(this.ReleaseData.date2).format('D/ MMMM/ YYYY'); 
+    }
+}
 
 BindData(response)
 {
   this.ReleaseData = response;
 
 
+  
   var date = new Date(this.ReleaseData.date);  
   var dateformatted = moment(date).format('D/ MMMM/ YYYY');  
 
-  this.ReleaseData.date=dateformatted;
+  this.ReleaseData.date=date;
 
   var date2 = new Date(this.ReleaseData.date2);  
   var date2formatted = moment(date2).format('D/ MMMM/ YYYY');   
 
-  this.ReleaseData.date2=date2formatted;
+  this.ReleaseData.date2=date2;
+  this.Printeddate1 =moment(date).format('D/ MMMM/ YYYY'); 
+  this.Printeddate2 =moment(date2).format('D/ MMMM/ YYYY'); 
   this.ReleaseData.printedName=this.userName;
   this.ReleaseData.printedName2=this.userName;
+
 }
 
   GetWorkorderReleaseFromData()
@@ -101,6 +124,7 @@ BindData(response)
             this.ReleaseData.isActive= true;
             this.ReleaseData.isDeleted= false;
             this.ReleaseData.is8130from= true;
+            this.ReleaseData.isClosed= false;
             if(this.isEdit)
             {
               this.ReleaseData.ReleaseFromId=this.releaseFromId;
@@ -108,7 +132,6 @@ BindData(response)
             else{
               this.ReleaseData.ReleaseFromId=0;
             }
-            this.ReleaseData.ReleaseFromId=0;
             this.ReleaseData.workOrderPartNoId=this.workOrderPartNumberId;
             this.ReleaseData.WorkorderId=this.workOrderId;
     this.workOrderService.CreateUpdateReleasefrom(this.ReleaseData).pipe(takeUntil(this.onDestroy$)).subscribe(

@@ -7,7 +7,7 @@
   <div class="card-header header" >
     <div class="row">
       <div class="col">
-        <h4 class="header-name"> 8130 From</h4>
+        <h4 class="header-name"> Release From</h4>
       </div>
       <div>
         <button type="button" class="btn-sm header-button " *ngIf="!isView"
@@ -144,10 +144,13 @@ selectionMode="multiple"
                             <i class="fa fa-eye"></i>
                         </a>
                         </span>
-                      <span  *ngIf="!isView" ><a class="btn nobg btn-edit-cstm"
+                      <span  *ngIf="!isView || rowData['isClosed'] !=true" ><a class="btn nobg btn-edit-cstm"
                         (click)="Edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                     </span>
-                        <span data-toggle="modal" data-target="#assetHistory">
+                    <span  *ngIf="!isView || rowData['isClosed'] !=true"  ><a class="btn nobg btn-lo-cstm"
+                      (click)="Locked(rowData)" matTooltip="Locked" matTooltipPosition="above"><i class="fa fa-lock"></i></a>
+                    </span>
+                        <span data-toggle="modal" data-target="#easaHistory">
                           <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"  matTooltipPosition="above" matTooltip="History"><i
                               class="fa fa-history"> </i></a></span>
                     </div>
@@ -181,11 +184,172 @@ selectionMode="multiple"
 </div>
 
 <div *ngIf="is8130from">
-            <app-wo-release-from [ReleaseData]="ReleaseData" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId" [releaseFromId]="releaseFromId" [isView]="isViewopen" [isEdit]="isEdit">
+            <app-wo-release-from [ReleaseDataForm]="ReleaseData" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId" [releaseFromId]="releaseFromId" [isView]="isViewopen" [isEdit]="isEdit">
             </app-wo-release-from>
 </div>
 
 <div *ngIf="is9130from">
-    <app-wo-release-easa-from [ReleaseData]="ReleaseData" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId" [releaseFromId]="releaseFromId"  [isView]="isViewopen" [isEdit]="isEdit">
+    <app-wo-release-easa-from [ReleaseDataForm]="ReleaseData" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId" [releaseFromId]="releaseFromId"  [isView]="isViewopen" [isEdit]="isEdit">
     </app-wo-release-easa-from>
 </div>
+
+<!-- Modal -->
+<div id="easaHistory" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="closePopupmodel('easaHistory')">
+            &times;
+          </button>
+          <h4 class="modal-title">Easa From History</h4>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+            <table class="table table-bordered tool-history">
+              <thead>
+                <tr>
+                  <th>TrackingNo</th>
+                  <th>
+                    OrganizationName
+                  </th>
+                  <th>InvoiceNo</th>
+                  <th>Description</th>
+                  <th>PartNumber</th>
+                  <th>Eligibility</th>
+                  <th>Quantity</th>
+                  <th>Batchnumber</th>
+                  <th>Status</th>
+                  <th>Remarks</th>
+                  <th>PrintedName</th>
+                  <th>ApprovalCertificate</th>
+                </tr>
+              </thead >
+              <tbody *ngIf="EsafromAuditHistory && EsafromAuditHistory.length ==0">
+                <tr>
+                  <td colspan="11" class="no-records-msg no-records-cstm">
+                      No records found
+                  </td>
+              </tr>
+              </tbody>
+              <tbody *ngIf="EsafromAuditHistory && EsafromAuditHistory.length !=0">
+                <tr *ngFor="let audit of EsafromAuditHistory; let i = index">
+                  <td [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'trackingNo',
+                      audit.trackingNo
+                    )
+                      ? 'black'
+                      : 'red'
+                  }">
+                  {{ audit.trackingNo }}
+                </td>
+                  <td [ngStyle]="{
+                      color: getColorCodeForHistory(i, 'organizationName', audit.organizationName)
+                        ? 'black'
+                        : 'red'
+                    }">
+                    {{ audit.organizationName }}
+                  </td>
+                  <td [ngStyle]="{
+                    color: getColorCodeForHistory(i, 'invoiceNo', audit.invoiceNo)
+                      ? 'black'
+                      : 'red'
+                  }">
+                  {{ audit.invoiceNo }}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(i, 'description', audit.description)
+                    ? 'black'
+                    : 'red'
+                }">
+                {{ audit.description }}
+              </td>
+              <td [ngStyle]="{
+                color: getColorCodeForHistory(i, 'partNumber', audit.partNumber)
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.partNumber }}
+            </td>
+            <td [ngStyle]="{
+              color: getColorCodeForHistory(i, 'eligibility', audit.eligibility)
+                ? 'black'
+                : 'red'
+            }">
+            {{ audit.eligibility }}
+          </td>
+          <td [ngStyle]="{
+            color: getColorCodeForHistory(i, 'quantity', audit.quantity)
+              ? 'black'
+              : 'red'
+          }">
+          {{ audit.quantity }}
+        </td>
+        <td [ngStyle]="{
+          color: getColorCodeForHistory(i, 'batchnumber', audit.batchnumber)
+            ? 'black'
+            : 'red'
+        }">
+        {{ audit.batchnumber }}
+      </td>
+                  <td [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'status',
+                      audit.status
+                    )
+                      ? 'black'
+                      : 'red'
+                  }">
+                  {{ audit.status}}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'remarks',
+                    audit.remarks
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                  {{ audit.remarks }}
+                </td>
+                <td [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'printedName',
+                      audit.printedName
+                    )
+                      ? 'black'
+                      : 'red'
+                  }">
+                    {{ audit.printedName }}
+                  </td>
+                  <td [ngStyle]="{
+                      color: getColorCodeForHistory(
+                        i,
+                        'approvalCertificate',
+                        audit.approvalCertificate
+                      )
+                        ? 'black'
+                        : 'red'
+                    }">
+                    {{ audit.approvalCertificate }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="closePopupmodel('easaHistory')">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
