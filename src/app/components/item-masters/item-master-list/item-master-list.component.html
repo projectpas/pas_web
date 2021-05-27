@@ -155,7 +155,7 @@
                               </div>
                               <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width">
+                                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                                 </colgroup>
                             </ng-template>
             <ng-template pTemplate="header" let-columns>
@@ -341,7 +341,7 @@
 
                         <ng-template pTemplate="colgroup" let-columns>
                             <colgroup>
-                                <col *ngFor="let col of columns" class="table-column-width">
+                                <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                             </colgroup>
                         </ng-template>
 
@@ -567,7 +567,7 @@
                                 <div class="col-md-12" *ngIf="isOpenAdvancedSearch">
                                     <div class="col-md-12 ">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14 item-master-search">Search :</h4>
+                                            <label class="item-master-search">Search :</label>
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
@@ -635,7 +635,7 @@
                         </ng-template>
                         <ng-template pTemplate="colgroup" let-columns>
                             <colgroup>
-                                <col *ngFor="let col of columns" class="table-column-width">
+                                <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
                             </colgroup>
                         </ng-template>
                         <ng-template pTemplate="header" let-columns>
@@ -679,8 +679,8 @@
                                     <td class="table-column-width" *ngIf="col.field != 'unitCost' && col.field != 'listPrice' && col.field != 'createdDate' && col.field != 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         {{rowData[col.field]}}
                                     </td>
-                                    <td  class="table-column-width text-left" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
-                                        <p class="m-0 p-0 text-left">{{rowData[col.field]}}</p>
+                                    <td  class="table-column-width text-right" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
+                                        <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                                     </td>                                        
                                     <td class="table-column-width" *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         <p class="m-0 p-0 text-left">{{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}</p>
