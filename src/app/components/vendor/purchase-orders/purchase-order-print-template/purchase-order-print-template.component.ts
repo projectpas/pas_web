@@ -17,6 +17,7 @@ export class PurchaseOrderPrintTemplateComponent implements OnInit {
   poHeaderAdd: any = {};
   poPartsList: any = [];
   vendorInfo:any = {};
+  managementStructureHeaderData:any = {};
   
   constructor(
     private purchaseOrderService: PurchaseOrderService,
@@ -44,7 +45,8 @@ export class PurchaseOrderPrintTemplateComponent implements OnInit {
         printdate: new Date(),
         itemcount: res[1].length
       };
-      this.vendorInfo = res[2];      
+      this.vendorInfo = res[2]; 
+      this.managementStructureHeaderData = res[3];  
       res[1].map(x => {
         const partList = {
           ...x,
