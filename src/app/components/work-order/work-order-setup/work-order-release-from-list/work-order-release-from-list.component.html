@@ -144,11 +144,11 @@ selectionMode="multiple"
                             <i class="fa fa-eye"></i>
                         </a>
                         </span>
-                      <span  *ngIf="!isView || rowData['isClosed'] !=true" ><a class="btn nobg btn-edit-cstm"
-                        (click)="Edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                      <span  *ngIf="!isView" ><button [disabled]="rowData['isClosed'] ==true" class="btn nobg btn-edit-cstm"
+                        (click)="Edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></button>
                     </span>
-                    <span  *ngIf="!isView || rowData['isClosed'] !=true"  ><a class="btn nobg btn-lo-cstm"
-                      (click)="Locked(rowData)" matTooltip="Locked" matTooltipPosition="above"><i class="fa fa-lock"></i></a>
+                    <span  *ngIf="!isView"  ><button [disabled]="rowData['isClosed'] ==true" class="btn nobg btn-lo-cstm"
+                      (click)="Locked(rowData)" matTooltip="Locked" matTooltipPosition="above"><i class="fa fa-lock"></i></button>
                     </span>
                         <span data-toggle="modal" data-target="#easaHistory">
                           <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"  matTooltipPosition="above" matTooltip="History"><i
