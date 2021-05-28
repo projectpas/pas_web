@@ -381,12 +381,12 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
                 var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
                 this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';
-                if (!shippingVia || shippingVia == undefined) {
-                    var shippingVia = new DropDownData();
-                    shippingVia.Key = this.poDataHeader.shipViaId;
-                    shippingVia.Value = this.poDataHeader.shipVia;
-                    this.ShippingViaList.push(shippingVia);
-                }
+                // if (!shippingVia || shippingVia == undefined) {
+                //     var shippingVia = new DropDownData();
+                //     shippingVia.Key = this.poDataHeader.shipViaId;
+                //     shippingVia.Value = this.poDataHeader.shipVia;
+                //     this.ShippingViaList.push(shippingVia);
+                // }
             });
     }
 
@@ -769,6 +769,7 @@ export class ReceivngPoComponent implements OnInit {
                 ...x,
                 //siteId: this.getSiteDetailsOnEdit(part, x),               
                 //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
+                shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,                
                 shippingAccount: part.shippingAccountInfo,
                 purchaseOrderUnitCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2),
                 purchaseOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2)

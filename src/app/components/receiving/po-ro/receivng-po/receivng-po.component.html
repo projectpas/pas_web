@@ -766,7 +766,7 @@
                                                                     *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == otherModuleId"
                                                                     class="form-control" type="text"
                                                                     [ngModelOptions]="{standalone: true}"
-                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFrom"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFromName"
                                                                     pInputText>
 
                                                             </div>
@@ -833,7 +833,7 @@
                                                                     *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == otherModuleId"
                                                                     class="form-control" type="text"
                                                                     [ngModelOptions]="{standalone: true}"
-                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].owner"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].ownerName"
                                                                     pInputText>
 
                                                             </div>
@@ -900,7 +900,7 @@
                                                                     *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == otherModuleId"
                                                                     class="form-control" type="text"
                                                                     [ngModelOptions]="{standalone: true}"
-                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].traceableTo"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].traceableToName"
                                                                     pInputText>
 
                                                             </div>

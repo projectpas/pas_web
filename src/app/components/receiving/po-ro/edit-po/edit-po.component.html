@@ -690,7 +690,7 @@
                                                             <input *ngIf="SL.ownerType == otherModuleId"
                                                                 class="form-control" type="text"
                                                                 [ngModelOptions]="{standalone: true}"
-                                                                [disabled]="!SL.isEnabled" [(ngModel)]="SL.owner"
+                                                                [disabled]="!SL.isEnabled" [(ngModel)]="SL.ownerName"
                                                                 pInputText>
 
                                                         </div>
@@ -751,7 +751,7 @@
                                                                 class="form-control" type="text"
                                                                 [disabled]="!SL.isEnabled"
                                                                 [ngModelOptions]="{standalone: true}"
-                                                                [(ngModel)]="SL.obtainFrom" pInputText>
+                                                                [(ngModel)]="SL.obtainFromName" pInputText>
 
                                                         </div>
                                                     </div>
@@ -814,7 +814,7 @@
                                                                 class="form-control" type="text"
                                                                 [disabled]="!SL.isEnabled"
                                                                 [ngModelOptions]="{standalone: true}"
-                                                                [(ngModel)]="SL.traceableTo" pInputText>
+                                                                [(ngModel)]="SL.traceableToName" pInputText>
 
                                                         </div>
                                                     </div>
