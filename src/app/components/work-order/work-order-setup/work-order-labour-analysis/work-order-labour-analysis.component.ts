@@ -25,18 +25,20 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     totalPages: number = 10;
     data: any[] = [];
     isSpinnerVisible: boolean = false;
-    viewType: any = 'detailedview';
+    viewType: any = 'pnview';
     headers: any[];
     columns: any[];
     selectedColumns: any[];
     selectedColumn: any[];
     works: any[] = [];
     tempworks: any[] = [];
-    pnViewSelected = false;
+    //pnViewSelected = false;
     showPaginator: boolean = false;
     isGlobalFilter: boolean = false;
+    isDetailView: boolean = false;
     filterText: any = '';
     private onDestroy$: Subject<void> = new Subject<void>();
+    workOrderId: any;
     // headers = [
     //     { field: 'partNumber', header: 'Main PN' },
     //     { field: 'revisedPN', header: 'Revised PN' },
@@ -54,8 +56,9 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     //     { field: 'status', header: 'Status' }
     // ]
     // selectedColumns = this.headers;
-    workOrderId: any;
+    
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, ) { }
+
     ngOnInit() {
         this.workOrderId = this.savedWorkOrderData.workOrderId;
         this.initColumns();
@@ -65,31 +68,35 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
         }
         this.getWorkOrderLabourAnalysisData(this.workOrderId);
     }
+
     ngOnChanges() {
         if (this.data.length != 0) {
             this.totalRecords = this.data.length;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         }
     }
+
     ngOnDestroy(): void {
         this.onDestroy$.next();
     }
+
     getWorkOrderLabourAnalysisData(workOrderId) {
         this.isSpinnerVisible = true;
- const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
-        this.workOrderService.workOrderLabourAnalysisData(workOrderId, id, this.isSubWorkOrder,this.authService.currentUser.masterCompanyId)
-            .pipe(takeUntil(this.onDestroy$)).subscribe(
-                (res: any) => {
-                    this.isSpinnerVisible = false;
-                    if (res) {
-                        this.data = res;
-                    }
-                },
-                err => {
-                    this.isSpinnerVisible = false;
-                }
-            )
+        const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
+              this.workOrderService.workOrderLabourAnalysisData(workOrderId, id, this.isSubWorkOrder, this.isDetailView, this.authService.currentUser.masterCompanyId)
+                  .pipe(takeUntil(this.onDestroy$)).subscribe(
+                      (res: any) => {
+                          this.isSpinnerVisible = false;
+                          if (res) {
+                              this.data = res;
+                          }
+                      },
+                      err => {
+                          this.isSpinnerVisible = false;
+                      }
+                  )
     }
+
     loadData(event) {
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;
@@ -102,12 +109,6 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                 viewType: this.viewType
             }
         }
-
-        // if (!this.isGlobalFilter) {   
-        //     this.getAllWorkOrderList(event);         
-        // } else {
-        //     this.globalSearch(this.filterText)
-        // }
     }
 
     initColumns() {
@@ -132,8 +133,8 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
 
       initSummaryColumns() {
         this.headers = [
-          { field: "salesOrderNumber", header: "SO Num", width: "120px" },
-          { field: "versionNumber", header: "Ver Num", width: "80px" },
+          { field: "salesOrderNumber", header: "WO Num", width: "120px" },
+          // { field: "versionNumber", header: "Ver Num", width: "80px" },
           { field: "partNumber", header: "PN", width: "130px" },
           { field: "partDescription", header: "PN Description", width: "180px" },
           { field: "uomName", header: "UOM", width: "100px" },
@@ -158,22 +159,24 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
         if (viewType == 'detailedview') {
           this.initColumns();
           this.data = JSON.parse(JSON.stringify(this.tempworks));
-          this.pnViewSelected = false;
+          this.isDetailView = true;
+          this.getWorkOrderLabourAnalysisData(this.workOrderId);
     
         } else {
           this.initSummaryColumns();
           this.tempworks = JSON.parse(JSON.stringify(this.data));
-          this.pnViewSelected = true;
+          this.isDetailView = false;
+          this.getWorkOrderLabourAnalysisData(this.workOrderId);
           this.filterParts(this.data);
         }
       }
 
-      filterParts(tempSales) {
+      filterParts(tempwo) {
         this.data = [];
-        let uniqueParts = this.getUniqueParts(tempSales, 'partNumber');
+        let uniqueParts = this.getUniqueParts(tempwo, 'partNumber');
         if (uniqueParts.length > 0) {
           uniqueParts.forEach((part, i) => {
-            let childParts = tempSales.filter(selectedPart => selectedPart.partNumber == part.partNumber)
+            let childParts = tempwo.filter(selectedPart => selectedPart.partNumber == part.partNumber)
             if (childParts && childParts.length > 0) {
               uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
               uniqueParts[i].childParts = childParts;
