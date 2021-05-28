@@ -1453,8 +1453,8 @@ setStatusForSubWo(){
       { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
       { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
       { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
-      { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
-      { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
+      { field: 'stockLineQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
+      { field: 'stockLineQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
       { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
       { field: 'uom', header: 'UOM', align: 0, width: "70px" },
       { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
