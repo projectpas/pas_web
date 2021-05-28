@@ -62,7 +62,7 @@
 						<col class="table-column-width">
 						<col class="table-column-width">
 						<col class="table-column-width">
-						<col *ngFor="let col of columns"  class="table-column-width">
+						<col *ngFor="let col of columns"  class="table-column-width " [ngStyle]="{'width': col.width}" />
 					</colgroup>
 				</ng-template>
 			  <ng-template pTemplate="header" let-columns>

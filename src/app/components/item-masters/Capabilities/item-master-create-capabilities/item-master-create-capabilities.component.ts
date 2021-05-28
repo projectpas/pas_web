@@ -58,7 +58,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     colaircraft: any[] = [];
     cols: any[] = [
         { field: 'addedDate', header: 'Date Added', width: "150px" },
-        { field: 'isVerified', header: 'Verified', width: "100px" },
+        { field: 'isVerified', header: 'Verified', width: "70px" },
         { field: 'verifiedById', header: 'Verified By', width: "150px" },
         { field: 'verifiedDate', header: 'Verified Date', width: "150px" },
         { field: 'memo', header: 'Memo', width: "150px" },

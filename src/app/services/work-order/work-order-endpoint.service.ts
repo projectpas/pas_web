@@ -254,6 +254,24 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
     }
 
+    getWorkOrderBillingByShipping(workOrderId: number, partId, workOrderShippingId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workorder/getWorkOrderBillingByShipping?workOrderId=${workOrderId}&workOrderPartId=${partId}&workOrderShippingId=${workOrderShippingId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getWorkOrderBillingByShipping(workOrderId, partId, workOrderShippingId));
+          });
+      }
+
+      getBillingInvoiceList(workOrderId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workorder/getBillingInvoiceList?workOrderId=${workOrderId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getBillingInvoiceList(workOrderId));
+          });
+      }
+
     getWorkOrderAssetList(isSubWorkOrder, data) {
         if (isSubWorkOrder == true) {
             return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/subworkorderassetlist`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {

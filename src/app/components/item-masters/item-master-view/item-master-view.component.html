@@ -121,7 +121,7 @@
                                     </span>
                                 </p>
                                 <p *ngIf="viewItemMaster.isExpirationDateAvailable">
-                                    <span class="label"><b>Lesser Of: </b></span><span class="value">{{viewItemMaster.expirationDate | date: 'MM-dd-yyyy'}}</span>
+                                    <span class="label"><b>Lesser Of: </b></span><span class="value">{{viewItemMaster.expirationDate | date: 'MM/dd/yyyy h:mm a'}}</span>
                                 </p>
                                 <div class="form-row" *ngIf="viewItemMaster.isExpirationDateAvailable">
                                     <div class="col-md-6">
@@ -949,14 +949,14 @@
                                         <td class="text-right"> <p> 
                                             {{field.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p> {{field.pP_LastListPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td> <p> {{field.pP_LastListPriceDate | date:'MM/dd/yyyy h:mm a'}}</p></td>
                                         <td class="text-right"> <p> 
                                             {{field.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
                                         <td class="text-right"> <p> 
                                             {{field.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p > {{field.pP_LastPurchaseDiscDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td> <p > {{field.pP_LastPurchaseDiscDate | date:'MM/dd/yyyy h:mm a'}}</p></td>
                                         <td class="text-right"> <p> 
                                             {{field.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
@@ -971,7 +971,7 @@
                                         <td class="text-right"> <p> 
                                             {{field.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p > {{field.sP_FSP_LastFlatPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td> <p > {{field.sP_FSP_LastFlatPriceDate | date:'MM/dd/yyyy h:mm a'}}</p></td>
                                         <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
@@ -979,7 +979,7 @@
                                             {{field.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
                                         <td> <p > 
-                                            {{field.sP_CalSPByPP_LastMarkUpDate | date:'MM-dd-yyyy'}}</p>
+                                            {{field.sP_CalSPByPP_LastMarkUpDate | date:'MM/dd/yyyy h:mm a'}}</p>
                                         </td>
                                         <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
@@ -991,7 +991,7 @@
                                             {{field.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
                                         <td> <p> 
-                                            {{field.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy'}}</p>
+                                            {{field.sP_CalSPByPP_LastSalesDiscDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                                         </td>
                                         <td class="text-right"> <p> 
                                             {{field.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
@@ -1548,10 +1548,10 @@
                                     {{audit.ataSubChapterCode}}
                                 </td>
                                 <td>{{ audit.createdBy }}</td>
-                                <td><p>{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                                <td><p>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
 
                                 <td>{{ audit.updatedBy }}</td>
-                                <td><p>{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                                <td><p>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                                 <td class="text-center width-60">
                                     <span class="value">
                                       <label class="wauto">
@@ -1692,7 +1692,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >    {{ audit.pP_LastListPriceDate  | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscPercValue', audit.pP_PurchaseDiscPercValue)
@@ -1714,7 +1714,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >  {{ audit.pP_LastPurchaseDiscDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_UnitPurchasePrice', audit.pP_UnitPurchasePrice)
@@ -1763,7 +1763,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpPercOnListPriceValue', audit.sP_CalSPByPP_MarkUpPercOnListPriceValue)
@@ -1784,7 +1784,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_BaseSalePrice', audit.sP_CalSPByPP_BaseSalePrice)
@@ -1812,7 +1812,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+                          <p >   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM/dd/yyyy h:mm a' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_UnitSalePrice', audit.sP_CalSPByPP_UnitSalePrice)
@@ -1824,9 +1824,9 @@
                       
                       
                       
-                        <td><p > {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p > {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                         <td><p > {{ audit.createdBy }}</p></td>
-                        <td><p> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p> {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                         <td><p > {{ audit.updatedBy }}</p></td>
                         <td class="text-center width-60">
                             <span class="value">

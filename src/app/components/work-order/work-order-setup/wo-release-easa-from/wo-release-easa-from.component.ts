@@ -1,4 +1,4 @@
-import { Component, OnInit ,Input} from '@angular/core';
+import { Component, OnInit ,Input,Output,EventEmitter} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
@@ -23,6 +23,7 @@ export class WoReleaseEasaFromComponent implements OnInit {
   @Input() isView;
   @Input() isEdit;
   @Input() ReleaseDataForm;
+  @Output() updateRelreaseList = new EventEmitter();
   ReleaseData : any = {};
   //ReleaseData: any;
   isSpinnerVisible: boolean = true;
@@ -136,9 +137,10 @@ BindData(response)
       result => {
           this.isSpinnerVisible = false;
           this.isEdit = true;
+          this.updateRelreaseList.emit();
           this.alertService.showMessage(
               '',
-              '8130 from Added Succesfully',
+              '9130 from Added Succesfully',
               MessageSeverity.success
           );
       },

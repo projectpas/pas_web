@@ -161,13 +161,13 @@ export class StockLineListComponent implements OnInit {
     // To display the values in header and column name values
     headers = [        
         { field: 'partNumber', header: 'PN' },
-        { field: 'partDescription', header: 'PN Description' },
+        { field: 'partDescription', header: 'PN Description' ,width:"200px"},
         { field: 'manufacturer', header: 'Manufacturer' },
         { field: 'revisedPN', header: 'Revised PN' },
         { field: 'itemGroup', header: 'Item Group' },
-        { field: 'unitOfMeasure', header: 'UOM' },
-        { field: 'quantityOnHand', header: 'Qty On Hand' },
-        { field: 'quantityAvailable', header: 'Qty Avail' },
+        { field: 'unitOfMeasure', header: 'UOM' ,width:"60px"},
+        { field: 'quantityOnHand', header: 'Qty On Hand',width:"80px" },
+        { field: 'quantityAvailable', header: 'Qty Avail',width:"80px" },
         { field: 'serialNumber', header: 'Serial Num' },
         { field: 'stocklineNumber', header: 'SL Num' },
         { field: 'controlNumber', header: 'Control Number' },
