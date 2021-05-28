@@ -331,7 +331,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-
+this.gridTabChange('materialList');
     }
 
     ngOnChanges() {
@@ -364,7 +364,6 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                                 )
                             }
                         )
-                        console.log(this.materialListMPNs);
                     },
                     (err) => {
                         this.isSpinnerVisible = false;
@@ -690,19 +689,62 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                 }
         }
     }
-
+    isShowPlus:boolean=true;
+    isShowChild:boolean=false;
+    summaryParts:any=[];
+    totalRecords: number;
+    pageLinks: any; 
+    workOrderMaterial:any=[];
+    handelPlus(){
+        this.isShowPlus=true;
+        this.isShowChild=false;
+    }
     getMaterialListData(materialMPN){
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderMaterialList(materialMPN.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
+            this.isShowPlus=false;
+            this.isShowChild=true;
             if (res.length > 0) {
                 res.forEach(element => {
                     this.getValues(element)
                             element.isShowPlus=true;
                             if(element.currency)element.currency= element.currency.symbol;
                         });
-                materialMPN.workOrderMaterialList = res;
-                materialMPN.materialStatus = res[0].partStatusId;
+             
+                        this.workOrderMaterial=res;
+
+               
+                    this.summaryParts = [];
+                    let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
+                    if (uniqueParts.length > 0) {
+                      uniqueParts.forEach((part, i) => {
+                        let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.stockLineId !=0 && selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
+                        if (childParts && childParts.length > 0) {
+                        //   uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
+                          uniqueParts[i].childParts = childParts;
+                        }else{
+                            uniqueParts[i].childParts = [];
+                        }
+                      });
+                      uniqueParts.map((x,xindex)=>{
+                         if(x.childParts && x.childParts.length !=0){
+                            x.childParts.map((y,yindex)=>{
+                                y.line = (xindex + 1) + '.' + (yindex + 1)
+                            })
+                         } 
+                      })
+                      materialMPN.workOrderMaterialList =uniqueParts;
+                      materialMPN.materialStatus = res[0].partStatusId;
+                    //   this.workOrderMaterialList = uniqueParts;
+                    }
+                    this.totalRecords =materialMPN.workOrderMaterialList.length;
+                    this.pageLinks = Math.ceil(
+                      this.totalRecords / 10
+                    );
+
+
+
             }
         },
         err => {
@@ -710,7 +752,18 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
             this.errorHandling(err);
         })
     }
-
+    getUniqueParts(myArr, prop1, prop2, prop3) {
+        let uniqueParts = JSON.parse(JSON.stringify(myArr));
+        uniqueParts.reduceRight((acc, v, i) => {
+          if (acc.some(obj => v[prop1] === obj[prop1] && v[prop2] === obj[prop2] && v[prop3] === obj[prop3])) {
+            uniqueParts.splice(i, 1);
+          } else {
+            acc.push(v); 
+          }
+          return acc;
+        }, []);
+        return uniqueParts;
+      }
     getLabourListData(labourMPN){
         this.workOrderService.getLabourListForDetailedView(labourMPN.workFlowWorkOrderId)
         .subscribe(

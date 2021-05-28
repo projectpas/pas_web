@@ -77,12 +77,12 @@
                                     <ng-template pTemplate="body" let-rowData let-columns="columns">
                                         <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
                                             <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                                              <span *ngIf="col.field == 'laborHoursMedthodId'">
+                                              <!-- <span *ngIf="col.field == 'laborHoursMedthodId'">
                                                   <span *ngIf="rowData[col.field]==1">Labor Hours</span>
                                                   <span *ngIf="rowData[col.field]==2">Labor ClockIn/Out</span>
                                                   <span *ngIf="rowData[col.field]==3">Scan</span>
-                                            </span>
-                                            <span *ngIf="col.field !== 'laborHoursMedthodId'">
+                                            </span> -->
+                                            <span  >
                                                 {{rowData[col.field]}}
                                                 </span>
                                             </td>

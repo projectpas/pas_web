@@ -1,16 +1,16 @@
-<div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
-    <div class="panel">
-        <div class="panel-heading">
+<!-- <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" > -->
+    <!-- <div class="panel"> -->
+        <!-- <div class="panel-heading">
             <h4 class="panel-title">
                 <div></div>
                 <a data-toggle="collapse" class="ac_cs collapsed" href="#stepadd1" (click)="resetParentTab()"> Summary of WO Overview</a>
             </h4>
-        </div>
-        <div id="stepadd1" class="panel-collapse collapse in">
-            <div class="panel-body">
+        </div> -->
+        <!-- <div id="stepadd1" class="panel-collapse collapse in">
+            <div class="panel-body"> -->
                     <div class="card col-md-12" style="background: #ffffff; margin-top: 0px; margin-bottom: 50px;">
                         <ul class="nav nav-pills nav-pills-cstm back_filsd" id="pills-tab" role="tablist"
-                            style="margin-top: 2px;">
+                            style="margin-top: 2px;background-color: #fff !important;">
                             <li class="nav-item">
                                 <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'materialList'}"
                                     (click)="gridTabChange('materialList');resetParentTab() ">
@@ -101,7 +101,7 @@
                                                                 <thead *ngIf="i == 0">
                                                                     <tr>
                                                                         <th class="table-column-icon-width"></th>
-                                                                        <th *ngFor="let matHeader of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
+                                                                        <th *ngFor="let matHeader of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; min-width: 100px !important;;background-color: #4397f7;
                                                                         color: white;">
                                                                             {{matHeader.header}}
                                                                         </th>
@@ -109,17 +109,21 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td class="table-column-icon-width">
-                                                                            <a data-toggle="collapse" style="padding-right:7px;padding-left:7px" class="btn btn-primary roleUpd"
-                                                                              href="#materialList_{{i}}" (click)="getMaterialListData(materialMPN)"> 
-                                                                                <i 
-                                                                                class="fa fa-minus mr-0" ></i>  </a>
+                                                                        <td class="table-column-icon-width1" style="min-width: 100px !important;">
+                                                                            <a data-toggle="collapse" style="padding-right:7px;padding-left:7px"  
+                                                                             > 
+                                                                                <!-- <i    href="#materialList_{{i}}"
+                                                                                class="fa fa-minus mr-0" ></i>  (click)="getMaterialListData(materialMPN)"-->
+
+                                                                                <i *ngIf="isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
+                                                                                <i *ngIf="isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 7px 8px !important;" (click)="handelPlus()"></i>   
+                                                                            </a>    
                                                                         </td>
-                                                                        <td *ngFor="let matField of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;width: 11%;color: black;">
+                                                                        <td *ngFor="let matField of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
                                                                             {{globalizeAmount(materialMPN[matField.field], matField.field)}}
                                                                         </td>
                                                                     </tr>
-                                                                    <tr *ngIf="materialMPN.workOrderMaterialList" class="sub-table no-bg">
+                                                                    <tr *ngIf="materialMPN.workOrderMaterialList && isShowChild==true" class="sub-table no-bg">
                                                                         <td></td>
                                                                         <td colspan="22" class="p-0">
                                                                         <!-- <div id="materialList_{{i}}" class="panel-collapse collapse in ">
@@ -295,10 +299,10 @@
                         </div>
 
                     </div>
-            </div>
-        </div>
-    </div>
-</div>
+            <!-- </div> -->
+        <!-- </div> -->
+    <!-- </div> -->
+<!-- </div> -->
 
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
