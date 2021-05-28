@@ -361,7 +361,6 @@ export class WoPartDetailsComponent implements OnChanges {
         if (sameParts && sameParts.length > 0) {
           return true;
         }
-      
       }
     }
     } else {
@@ -704,6 +703,16 @@ saveWorkOrderMaterialList(data) {
 }
 updateQuantiry:boolean=false;
 calculateExtendedCost(): void {
+  if(this.editData){
+    if(this.formObject.quantity < this.editData.quantity){
+      this.alertService.showMessage(
+        '',
+        ' Qty Req should be greater than Actual Qty Req',
+        MessageSeverity.warn
+    );
+    this.formObject.quantity= this.editData.quantity;
+    }
+  }
   this.updateQuantiry=true;
   this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
   this.formObject.quantity = this.formObject.quantity ? this.formObject.quantity.toString().replace(/\,/g, '') : 0;
