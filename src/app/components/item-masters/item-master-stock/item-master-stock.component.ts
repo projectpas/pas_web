@@ -668,7 +668,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
         this.atasub = [
             { field: 'partNumber', header: 'Part Number' },
-            { field: 'partDescription', header: 'Part Description' },
+            { field: 'partDescription', header: 'Part Description',width:"200px" },
             { field: 'ataChapterName', header: 'ATA Chapter' },
             { field: 'ataSubChapterDescription', header: 'ATA Sub-Chapter' },
 

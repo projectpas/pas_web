@@ -295,8 +295,8 @@
                                 <td rowspan="7" colspan="7" style="border:1px solid black;">
                                     Notes/Instructions: <span>{{getFormattedNotes(this.salesOrderView.soNotes)}}</span>
                                 </td>
-                                <td class="border-transparent" colspan="2">SUBTOTAL</td>
-                                <td style="text-align: right;"> {{this.salesOrderView.subTotal | number : '1.2-2'}}</td>
+                                <td class="border-transparent" style="border-top:1px solid black !important" colspan="2">SUBTOTAL</td>
+                                <td style="text-align: right;border-top:1px solid black !important"> {{this.salesOrderView.subTotal | number : '1.2-2'}}</td>
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2">TAX RATE</td>
