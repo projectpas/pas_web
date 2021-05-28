@@ -366,13 +366,13 @@ export class ReceivingRoComponent implements OnInit {
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
             this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';
             this.repairOrderHeaderData.creditLimit = this.repairOrderHeaderData.creditLimit ? formatNumberAsGlobalSettingsModule(this.repairOrderHeaderData.creditLimit, 2) : '0.00';                 
-            var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId);                       
-            if(!shippingVia || shippingVia == undefined) {
-                var shippingVia = new DropDownData(); 
-                shippingVia.Key = this.repairOrderHeaderData.shipViaId;
-                shippingVia.Value = this.repairOrderHeaderData.shipVia;
-                this.ShippingViaList.push(shippingVia);
-            }      
+            // var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId);                       
+            // if(!shippingVia || shippingVia == undefined) {
+            //     var shippingVia = new DropDownData(); 
+            //     shippingVia.Key = this.repairOrderHeaderData.shipViaId;
+            //     shippingVia.Value = this.repairOrderHeaderData.shipVia;
+            //     this.ShippingViaList.push(shippingVia);
+            // }      
         });
     }
 
@@ -682,7 +682,7 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.createdDate = new Date();
             stockLine.manufacturerId = part.itemMaster.manufacturerId;
             stockLine.visible = false;
-            stockLine.shippingReference = '';
+            stockLine.shippingReference = '';            
             stockLine.shippingViaId = this.repairOrderHeaderData.shipViaId;
             stockLine.shelfId = 0;
             stockLine.warehouseId = 0;
@@ -726,15 +726,15 @@ export class ReceivingRoComponent implements OnInit {
         }       
     }
 
-    addStockLine(part, visible?: boolean): void {
+    addStockLine(part, visible?: boolean): void {        
         const stockObj: any = part.stocklineListObj;
         part.stocklineListObj = stockObj.map(x => {
             return {
                 ...x,
                 //siteId: this.getSiteDetailsOnEdit(part, x),
-                // certifiedBy: 0,
-                //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
-                //shippingAccount: part.shippingAccountInfo,
+                // certifiedBy: 0,                
+                shippingViaId: x.shippingViaId ? x.shippingViaId.toLocaleString() : null,
+                shippingAccount: x.shippingAccount,                
                 repairOrderUnitCost: formatNumberAsGlobalSettingsModule(x.repairOrderUnitCost, 2),
                 repairOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2)
             }

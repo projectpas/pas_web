@@ -379,14 +379,15 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
-                var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
+                //var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
                 this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';
-                if (!shippingVia || shippingVia == undefined) {
-                    var shippingVia = new DropDownData();
-                    shippingVia.Key = this.poDataHeader.shipViaId;
-                    shippingVia.Value = this.poDataHeader.shipVia;
-                    this.ShippingViaList.push(shippingVia);
-                }
+               
+                // if (!shippingVia || shippingVia == undefined) {
+                //     var shippingVia = new DropDownData();
+                //     shippingVia.Key = this.poDataHeader.shipViaId;
+                //     shippingVia.Value = this.poDataHeader.shipVia;
+                //     this.ShippingViaList.push(shippingVia);
+                // }
             });
     }
 
@@ -618,7 +619,7 @@ export class ReceivngPoComponent implements OnInit {
             manufacturer.Value = part.itemMaster.manufacturerName.toString();
             this.ManufacturerList.push(manufacturer);
         }
-
+        
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
         }
@@ -768,7 +769,7 @@ export class ReceivngPoComponent implements OnInit {
             return {
                 ...x,
                 //siteId: this.getSiteDetailsOnEdit(part, x),               
-                //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
+                shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
                 shippingAccount: part.shippingAccountInfo,
                 purchaseOrderUnitCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2),
                 purchaseOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2)
@@ -1008,6 +1009,7 @@ export class ReceivngPoComponent implements OnInit {
 
     onObtainSelect(stockLine: StockLine, type): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;
+        console.log(stockLine.obtainFrom)
         if (type == AppModuleEnum.Customer) {
             this.arrayCustlist.push(stockLine.obtainFromObject.Key);
         } else if (type == AppModuleEnum.Vendor) {
@@ -1322,6 +1324,7 @@ export class ReceivngPoComponent implements OnInit {
         }
         let partsToPost: ReceiveParts[] = this.extractAllAllStockLines();
         this.isSpinnerVisible = true;
+        console.log(partsToPost)
         this.shippingService.receiveParts(partsToPost).subscribe(data => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
