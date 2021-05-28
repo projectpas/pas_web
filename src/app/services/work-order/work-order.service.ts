@@ -145,6 +145,16 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getbillingCostDataForWoOnly(workOrderWorkflowId, managementStructureId);
     }
 
+    getWorkOrderBillingByShipping(workOrderId, partId, workOrderShippingId) {
+        return this.workOrderEndpointService.getWorkOrderBillingByShipping(workOrderId, partId, workOrderShippingId);
+      }
+
+      getBillingInvoiceList(workOrderId: number): Observable<any> {
+        return Observable.forkJoin(
+          this.workOrderEndpointService.getBillingInvoiceList(workOrderId)
+        );
+      }
+
     getWorkOrderAssetList(isSubWorkOrder, data) {
         return this.workOrderEndpointService.getWorkOrderAssetList(isSubWorkOrder, data);
     }
