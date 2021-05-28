@@ -379,6 +379,7 @@ export class PurchaseSetupComponent implements OnInit {
 	lsconditionId: number;
 	lsWoId: number;
 	lsSubWoId: number;
+	lsqty: number;
 	partName: string;
 	adddefaultpart: boolean = true;
 	salesOrderId: number;
@@ -388,15 +389,15 @@ export class PurchaseSetupComponent implements OnInit {
 	modal: NgbModalRef;
 	alertText: string;
 
-	openStatusId: number  = 0
-    pendingStatusId: number  = 0
-    fulfillingStatusId: number  = 0
-    closedStatusId: number  = 0
-    canceledStatusId: number  = 0
-    descriptionStatusId: number  = 0
-	closingStatusId: number  = 0
+	openStatusId: number = 0
+	pendingStatusId: number = 0
+	fulfillingStatusId: number = 0
+	closedStatusId: number = 0
+	canceledStatusId: number = 0
+	descriptionStatusId: number = 0
+	closingStatusId: number = 0
 	@ViewChild("purchaseOrderPrintPopup", { static: false }) public purchaseOrderPrintPopup: ElementRef;
-	
+
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		private modalService: NgbModal,
@@ -430,13 +431,14 @@ export class PurchaseSetupComponent implements OnInit {
 		this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
 		this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
 		this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
-		this.openStatusId = StatusEnum.Open;    
-        this.pendingStatusId = StatusEnum.Pending;    
-        this.fulfillingStatusId = StatusEnum.Fulfilling;    
-        this.closedStatusId = StatusEnum.Closed;    
-        this.canceledStatusId = StatusEnum.Canceled;    
-        this.descriptionStatusId = StatusEnum.Description;    
-        this.closingStatusId = StatusEnum.Closing; 
+		this.lsqty = JSON.parse(localStorage.getItem('lsqty'));
+		this.openStatusId = StatusEnum.Open;
+		this.pendingStatusId = StatusEnum.Pending;
+		this.fulfillingStatusId = StatusEnum.Fulfilling;
+		this.closedStatusId = StatusEnum.Closed;
+		this.canceledStatusId = StatusEnum.Canceled;
+		this.descriptionStatusId = StatusEnum.Description;
+		this.closingStatusId = StatusEnum.Closing;
 	}
 
 	ngOnInit() {
@@ -2587,7 +2589,7 @@ export class PurchaseSetupComponent implements OnInit {
 						`Updated PO Header Successfully`,
 						MessageSeverity.success
 					);
-					if(headerInfoObj.statusId == this.fulfillingStatusId) {						
+					if (headerInfoObj.statusId == this.fulfillingStatusId) {
 						this.route.navigate(['/vendorsmodule/vendorpages/app-polist']);
 					}
 
@@ -4631,6 +4633,7 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 		}
 		this.getPNDetailsById(newParentObject, null)
+		newParentObject.quantityOrdered = null ? 0 : this.lsqty;
 
 		//}
 		//this.getRemainingAllQty();
@@ -4645,6 +4648,8 @@ export class PurchaseSetupComponent implements OnInit {
 			localStorage.removeItem("lsconditionId");
 			localStorage.removeItem("lsWoId");
 			localStorage.removeItem("lsSubWoId");
+			localStorage.removeItem("lsqty");
+
 		}
 
 	}
@@ -5038,10 +5043,10 @@ export class PurchaseSetupComponent implements OnInit {
         </head>
         <body onload="window.print();window.close()">${printContents}</body>
       </html>`
-    );
+		);
 		popupWin.document.close();
-	  }
+	}
 
 
-	
+
 }
