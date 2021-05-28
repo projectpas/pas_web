@@ -125,7 +125,7 @@
                                                         <input type="radio" name="burdenRateId" class="form-control"
                                                             value="1" [(ngModel)]="directLaborData.burdenRateId"
                                                             (ngModelChange)="getActive()"   (change)="onChangeBurdenRate()" required>
-                                                        <span class="checkmark"></span> Use fixed hourly rate
+                                                        <span class="checkmark"></span> Use fixed hourly rate %
                                                         <span *ngIf="directLaborData.burdenRateId == '1'"
                                                             class="clr-red">*</span>
                                                     </label>
