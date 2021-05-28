@@ -23,6 +23,9 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly searchSpeedQuote: string = environment.baseUrl + "/api/speedquote/speedquotesearch";
   private readonly createexclusionpart: string = environment.baseUrl + "/api/speedquote/createexclusionpart";
   private readonly _getExclusionPartList: string = environment.baseUrl + "/api/speedquote/getexclusionpartlist";
+  private readonly getSpeedQuoteViewDetails: string = environment.baseUrl + "/api/speedquote/getview";
+  private readonly speedQuoteDeletePart: string = environment.baseUrl + "/api/speedquote/deletepart";
+  private readonly getSpeedQuotePartDateHistory: string = environment.baseUrl + "/api/speedquote/getSpeedQuotePartHistory";
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
@@ -159,6 +162,43 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
     return this.http.get<any>(`${this._getExclusionPartList}?SpeedQuoteId=${id}`, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getExclusionList(id));
+      });
+  }
+  delete(speedQuoteId: number): Observable<boolean> {
+    let endpointUrl = `${this.saleQuote}/${speedQuoteId}`;
+    return this.http
+      .delete<boolean>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.delete(speedQuoteId));
+      });
+  }
+  getSpeedQuoteHistory(speedQuoteId) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/speedquote/getSpeedQuoteHistory/?speedQuoteId=${speedQuoteId}`)
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSpeedQuoteHistory(speedQuoteId));
+      });
+  }
+  getview(speedQuoteId: number): Observable<any> {
+    const URL = `${this.getSpeedQuoteViewDetails}/${speedQuoteId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getview(speedQuoteId));
+      });
+  }
+  deletePart(speedQuotePartId: number): Observable<boolean> {
+    let endpointUrl = `${this.speedQuoteDeletePart}/${speedQuotePartId}`;
+    return this.http
+      .delete<boolean>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.deletePart(speedQuotePartId));
+      });
+  }
+  getSpeedQuotePartHistory(speedQuotePartId) {
+    const URL = `${this.getSpeedQuotePartDateHistory}/${speedQuotePartId}`;
+    return this.http.get<any>(URL)
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSpeedQuotePartHistory(speedQuotePartId));
       });
   }
 }

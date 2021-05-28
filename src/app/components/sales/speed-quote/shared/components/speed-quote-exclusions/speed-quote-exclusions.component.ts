@@ -9,6 +9,7 @@ declare var $ : any;
 import { Router, ActivatedRoute } from '@angular/router';
 import { SpeedQuoteService } from "../../../../../../services/speedquote.service";
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
+import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-speed-quote-exclusions',
   templateUrl: './speed-quote-exclusions.component.html',
@@ -24,20 +25,25 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   id:number;
   speedQuoteId:number;
   isSpinnerVisible:boolean=false;
+  modal: NgbModalRef;
+  alertText: string;
+  @Input() SQId:number;
+  @Input() isViewMode: Boolean;
   constructor(private commonService: CommonService,
     private authService: AuthService,private itemMasterService: ItemMasterService,
     private changeDetector: ChangeDetectorRef,private _actRoute: ActivatedRoute,
-    private alertService: AlertService,private speedQuoteService: SpeedQuoteService,) { }
+    private alertService: AlertService,private speedQuoteService: SpeedQuoteService,
+    private modalService: NgbModal,) { }
 
   ngOnInit() {
     this.loapartItems();
     this.getPercentage();
-    this.id = this.speedQuoteId = this._actRoute.snapshot.params['id'];
+    //this.id = this.speedQuoteId = this._actRoute.snapshot.params['id'];
+    this.speedQuoteId = this.SQId;
     this.getExclusionList();
   }
   refresh(rowdata){
-    
-    
+    this.getExclusionList();
   }
   addPartNumber(rowdata) {
 		let newParentObject = new SpeedQuoteExclusion();
@@ -45,9 +51,10 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
 			...newParentObject,
 			itemMasterId: rowdata.itemMasterId,
       //partNumber: rowdata.partNumber,
-      pn: rowdata.partNumber,
+      pn: rowdata.partNumber ? rowdata.partNumber : rowdata.pn,
       description: rowdata.description,
       speedQuotePartId: rowdata.speedQuotePartId,
+      isEditPart :false,
 		}
     this.partListData.push(newParentObject);
   }
@@ -164,11 +171,24 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   }
   parentObject: any = {};
   parentObjectArray: any[] = [];
-  saveSpeedQuoteExclusions(){
+  saveSpeedQuoteExclusions(content){
+    this.parentObjectArray = [];
+    var errmessage = '';
     this.isSpinnerVisible = true;
     console.log(this.partListData);
     for(let i=0;i<this.partListData.length;i++)
     {
+      this.alertService.resetStickyMessage();
+      if (this.partListData[i].exitemMasterId == 0) {
+				this.isSpinnerVisible = false;
+				errmessage = errmessage + '<br />' + "PN is required."
+				//this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+				return;
+      }
+      if (errmessage != '') {
+				this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, 'Please select PN');
+				return;
+			}
       this.parentObject = {};
       this.parentObject = {
         speedQuoteId: this.speedQuoteId,
@@ -216,7 +236,17 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   getExclusionList(){
     this.speedQuoteService.getExclusionList(this.speedQuoteId).subscribe(res => {
       //this.isSpinnerVisible = false;
-      this.partListData = res;
+      if (res) {
+        this.partListData = res.map(x => {
+                return {
+                    ...x,
+                    //exOccurance: getObjectByValue('value',x.exOccurance,this.exclusionEstimatedOccurances),
+                    exOccurance: x.exOccurance ? parseInt(x.exOccurance) : 0,
+                }
+            });
+          }
+      //this.partListData = res;
+      console.log("partlist",this.partListData);
     }, error => this.isSpinnerVisible = false);
   }
   calculateExtendedCost(exclusion): void {
@@ -230,5 +260,11 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     else {
         exclusion.exExtPrice = "";
     }
-}
+  }
+  dismissModel() {
+		this.modal.close();
+  }
+  editPart(rowIndex) {
+    this.partListData[rowIndex].isEditPart = false;
+  }
 }

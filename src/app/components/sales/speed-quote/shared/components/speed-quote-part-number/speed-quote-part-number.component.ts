@@ -598,4 +598,80 @@ export class SpeedQuotePartNumberComponent {
     //this.speedQuoteExclusionsComponent.refresh(true);
     this.triggerTabChange.next(rowdata);
   }
+  openPartDelete(contentPartDelete, part) {
+    console.log("part",part);
+    this.part = part;
+    this.deletePartModal = this.modalService.open(contentPartDelete, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+  deletePart(): void {
+    if (this.part.speedQuotePartId) {
+      this.speedQuoteService.deletePart(this.part.speedQuotePartId).subscribe(response => {
+        this.removePartNamber(this.part);
+        this.deletePartModal.close();
+        this.alertService.showMessage(
+          "Success",
+          `Part removed successfully.`,
+          MessageSeverity.success
+        );
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
+    } else {
+      this.removePartNamber(this.part);
+      this.deletePartModal.close();
+      this.alertService.showMessage(
+        "Success",
+        `Part removed successfully.`,
+        MessageSeverity.success
+      );
+    }
+  }
+  removePartNamber(selectedPart) {
+    let selectedPartNamber = selectedPart.partNumber;
+    let selectedStockLineNumber = selectedPart.stockLineNumber;
+    let selectedConditionId = selectedPart.conditionId;
+    let selectedPmaStatus = selectedPart.pmaStatus;
+    for (let i = 0; i < this.selectedParts.length; i++) {
+      let partNumber = this.selectedParts[i].partNumber;
+      let stockLineNumber = this.selectedParts[i].stockLineNumber;
+      let conditionId = this.selectedParts[i].conditionId;
+      let pmaStatus = this.selectedParts[i].pmaStatus;
+      if (
+        partNumber == selectedPartNamber &&
+        stockLineNumber == selectedStockLineNumber &&
+        conditionId == selectedConditionId &&
+        pmaStatus == selectedPmaStatus
+      ) {
+        this.selectedParts.splice(i, 1);
+      }
+    }
+    this.filterParts();
+    this.checkUpdateOrsaveButton();
+  }
+  onClosePartDelete() {
+    this.deletePartModal.close();
+  }
+  getAuditHistoryById(rowData) {
+    this.isSpinnerVisible = true;
+    this.speedQuoteService.getSpeedQuotePartHistory(rowData.speedQuotePartId).subscribe(res => {
+      this.auditHistory = res;
+      this.isSpinnerVisible = false;
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+  closeHistoryModal() {
+    $("#speedQuotePartHistory").modal("hide");
+  }
+  getColorCodeForHistory(i, field, value) {
+    const data = this.auditHistory;
+    const dataLength = data.length;
+    if (i >= 0 && i <= dataLength) {
+      if ((i + 1) === dataLength) {
+        return true;
+      } else {
+        return data[i + 1][field] === value
+      }
+    }
+  }
 }

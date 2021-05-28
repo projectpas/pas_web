@@ -885,8 +885,10 @@ export class SpeedQuoteCreateComponent implements OnInit {
       if (this.speedQuotePartNumberComponent) {
         this.speedQuotePartNumberComponent.refresh();
       }
-      this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
-      this.salesQuote.speedQuoteTypeId = this.salesOrderQuoteObj.quoteTypeId;
+      //this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
+      this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.speedQuoteId;
+      //this.salesQuote.speedQuoteTypeId = this.salesOrderQuoteObj.quoteTypeId;
+      this.salesQuote.speedQuoteTypeId = this.salesOrderQuoteObj.speedQuoteTypeId;
       this.salesQuote.statusId = this.salesOrderQuoteObj.statusId;
       this.salesQuote.statusChangeDate = new Date(
         this.salesOrderQuoteObj.statusChangeDate
@@ -907,11 +909,13 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
       this.salesQuote.employeeId = getObjectById('value', this.salesOrderQuoteObj.employeeId, this.allEmployeeList)//this.salesOrderQuoteObj.employeeId;
-      this.speedQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
-      this.speedQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
+      this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
+      //this.speedQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
+      //this.speedQuote.speedQuoteId = this.salesOrderQuoteObj.speedQuoteId;
+      this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.speedQuoteId;
       this.salesQuote.probabilityId = this.salesOrderQuoteObj.probabilityId;
       this.salesQuote.leadSourceId = this.salesOrderQuoteObj.leadSourceId;
-      this.speedQuote.leadSourceReference = this.salesOrderQuoteObj.leadSourceReference;
+      this.salesQuote.leadSourceReference = this.salesOrderQuoteObj.leadSourceReference;
       this.salesQuote.creditLimit = this.salesOrderQuoteObj.creditLimit;
       this.salesQuote.creditLimitTermsId = this.salesOrderQuoteObj.creditTermId;
       this.salesQuote.restrictPMA = this.salesOrderQuoteObj.restrictPMA;
@@ -1179,80 +1183,80 @@ export class SpeedQuoteCreateComponent implements OnInit {
       for (let i = 0; i < this.selectedParts.length; i++) {
         let partNameAdded = false;
         let selectedPart = this.selectedParts[i];
-        if (!selectedPart.customerRequestDate) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
-          }
-          errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
-        }
-        if (!selectedPart.estimatedShipDate) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
-          }
-          errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
-        }
-        if (!selectedPart.promisedDate) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
-          }
-          errmessage = errmessage + '<br />' + "Please enter Promised Date."
-        }
-        if (!selectedPart.priorityId) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
-          }
-          errmessage = errmessage + '<br />' + "Please enter priority ID."
-        }
+        // if (!selectedPart.customerRequestDate) {
+        //   this.isSpinnerVisible = false;
+        //   invalidParts = true;
+        //   if (!partNameAdded) {
+        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //     partNameAdded = true;
+        //   }
+        //   errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
+        // }
+        // if (!selectedPart.estimatedShipDate) {
+        //   this.isSpinnerVisible = false;
+        //   invalidParts = true;
+        //   if (!partNameAdded) {
+        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //     partNameAdded = true;
+        //   }
+        //   errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
+        // }
+        // if (!selectedPart.promisedDate) {
+        //   this.isSpinnerVisible = false;
+        //   invalidParts = true;
+        //   if (!partNameAdded) {
+        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //     partNameAdded = true;
+        //   }
+        //   errmessage = errmessage + '<br />' + "Please enter Promised Date."
+        // }
+        // if (!selectedPart.priorityId) {
+        //   this.isSpinnerVisible = false;
+        //   invalidParts = true;
+        //   if (!partNameAdded) {
+        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //     partNameAdded = true;
+        //   }
+        //   errmessage = errmessage + '<br />' + "Please enter priority ID."
+        // }
 
-        if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-          let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
-          let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
-          let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
-          let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+        // if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
+        //   let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+        //   let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+        //   let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+        //   let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
 
-          if (crdate < opendate || esdate < opendate || pdate < opendate) {
-            invalidDate = true;
-            if (crdate < opendate) {
-              this.isSpinnerVisible = false;
-              invalidParts = true;
-              if (!partNameAdded) {
-                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-                partNameAdded = true;
-              }
-              errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
-            }
-            if (esdate < opendate) {
-              this.isSpinnerVisible = false;
-              invalidParts = true;
-              if (!partNameAdded) {
-                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-                partNameAdded = true;
-              }
-              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
-            }
-            if (pdate < opendate) {
-              this.isSpinnerVisible = false;
-              invalidParts = true;
-              if (!partNameAdded) {
-                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-                partNameAdded = true;
-              }
-              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
-            }
-          }
-        }
+        //   if (crdate < opendate || esdate < opendate || pdate < opendate) {
+        //     invalidDate = true;
+        //     if (crdate < opendate) {
+        //       this.isSpinnerVisible = false;
+        //       invalidParts = true;
+        //       if (!partNameAdded) {
+        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //         partNameAdded = true;
+        //       }
+        //       errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
+        //     }
+        //     if (esdate < opendate) {
+        //       this.isSpinnerVisible = false;
+        //       invalidParts = true;
+        //       if (!partNameAdded) {
+        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //         partNameAdded = true;
+        //       }
+        //       errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
+        //     }
+        //     if (pdate < opendate) {
+        //       this.isSpinnerVisible = false;
+        //       invalidParts = true;
+        //       if (!partNameAdded) {
+        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //         partNameAdded = true;
+        //       }
+        //       errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
+        //     }
+        //   }
+        // }
         if (!invalidParts && !invalidDate) {
           let partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
@@ -1603,8 +1607,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
   onPartsSaveEvent(savedParts) {
     if (savedParts) {
-      this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(savedParts, this.marginSummary);
-      this.updateMarginSummary();
+      //this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(savedParts, this.marginSummary);
+      //this.updateMarginSummary();
       this.getSalesQuoteInstance(this.id, true);
     }
   }
@@ -1612,12 +1616,12 @@ export class SpeedQuoteCreateComponent implements OnInit {
   updateMarginSummary() {
     this.isSpinnerVisible = true;
     this.marginSummary.speedQuoteId = this.id;
-    this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
-      this.marginSummary.speedQuoteMarginSummaryId = result;
-      this.isSpinnerVisible = false;
-    }, error => {
-      this.isSpinnerVisible = false;
-    })
+    // this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
+    //   this.marginSummary.speedQuoteMarginSummaryId = result;
+    //   this.isSpinnerVisible = false;
+    // }, error => {
+    //   this.isSpinnerVisible = false;
+    // })
   }
 
   onTabChange(event) {
@@ -1635,26 +1639,26 @@ export class SpeedQuoteCreateComponent implements OnInit {
     // if (event.index == 2) {
     //   this.salesCustomerApprovalsComponent.refresh(this.marginSummary, this.salesQuote.speedQuoteId);
     // }
-    if (event.index == 4) {
-      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
-        this.salesOrderQuoteFreightComponent.refresh(false);
-      } else {
-        this.salesOrderQuoteFreightComponent.refresh(true);
-      }
-    }
-    if (event.index == 5) {
-      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
-        this.salesOrderQuoteChargesComponent.refresh(false);
-      } else {
-        this.salesOrderQuoteChargesComponent.refresh(true);
-      }
-    }
-    if (event.index == 6) {
-      this.salesQuoteDocumentsComponent.refresh();
-    }
-    if (event.index == 7) {
-      this.salesQuoteAnalysisComponent.refresh(this.id);
-    }
+    // if (event.index == 4) {
+    //   if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+    //     this.salesOrderQuoteFreightComponent.refresh(false);
+    //   } else {
+    //     this.salesOrderQuoteFreightComponent.refresh(true);
+    //   }
+    // }
+    // if (event.index == 5) {
+    //   if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+    //     this.salesOrderQuoteChargesComponent.refresh(false);
+    //   } else {
+    //     this.salesOrderQuoteChargesComponent.refresh(true);
+    //   }
+    // }
+    // if (event.index == 6) {
+    //   this.salesQuoteDocumentsComponent.refresh();
+    // }
+    // if (event.index == 7) {
+    //   this.salesQuoteAnalysisComponent.refresh(this.id);
+    // }
   }
 
   setFreightsOrCharges() {
