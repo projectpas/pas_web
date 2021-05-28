@@ -5,7 +5,7 @@ import { CommonService } from '../../../../services/common.service';
 import { AddressModel } from '../../../../models/address.model';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { CustomerService } from '../../../../services/customer.service';
-import { getObjectById, editValueAssignByCondition } from '../../../../generic/autocomplete';
+import { getObjectById,editValueAssignByCondition, formatNumberAsGlobalSettingsModule, getValueFromObjectByKey, getObjectByValue, } from '../../../../generic/autocomplete';
 import { Billing } from '../../../../models/work-order-billing.model';
 import { getModuleIdByName } from '../../../../generic/enums';
 import { WorkOrderQuoteService } from '../../../../services/work-order/work-order-quote.service';
@@ -58,6 +58,9 @@ export class WorkOrderBillingComponent implements OnInit {
     shipToAttention;
     soldCustomerAddress: any = new AddressModel();
     shipCustomerAddress: any = new AddressModel();
+    showBillingForm: boolean = false;
+    isMultipleSelected: boolean = false;
+    isSpinnerVisible = false;
     managementStructure = {
         companyId: null,
         buId: null,
@@ -77,7 +80,7 @@ export class WorkOrderBillingComponent implements OnInit {
     // numberData = [{ label: 1, value: 1 }];
     invoiceTypeList: any;
     shipViaData: any;
-    isView: boolean = true;
+    isView: boolean = false;
     workFlowObject = {
         materialList: [],
         equipments: [],
@@ -89,6 +92,10 @@ export class WorkOrderBillingComponent implements OnInit {
     markupList: any;
     costPlusType: any;
     workOrderMaterialList: any[];
+    selectedColumns;
+    headers = [];
+    billingList: any[] = [];
+    partSelected: boolean = false;
     cols = [
         { field: 'taskName', header: 'Task' },
         { field: 'partNumber', header: 'PN' },
@@ -127,6 +134,7 @@ export class WorkOrderBillingComponent implements OnInit {
     ngOnInit() {
 
         console.log("status", this.quotestatusofCurrentPart)
+        this.initColumns();
         if (this.workOrderQuoteId == 0) {
             // this.workOrderChargesList();
         }
@@ -140,6 +148,7 @@ export class WorkOrderBillingComponent implements OnInit {
         // }
         const data = this.billingorInvoiceForm;
         this.workOrderId = this.savedWorkOrderData.workOrderId;
+        this.getBillingList();
         this.getEmployeeList(this.workOrderId);
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
         // this.getCustomerDetailsFromHeader();
@@ -240,6 +249,90 @@ export class WorkOrderBillingComponent implements OnInit {
             this.resetLaborOverHead();
             this.calculateTotalWorkOrderCost();
         }
+    }
+    
+    initColumns() {
+        this.headers = [
+            { field: "workOrderNumber", header: "WO Num", width: "100px" },
+            { field: "partNumber", header: "PN", width: "100px" },
+            { field: "partDescription", header: "PN Description", width: "100px" },
+            { field: "qtyToBill", header: "Qty Shipped", width: "110px" },
+            { field: "qtyBilled", header: "Qty Billed", width: "90px" },
+            { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+            { field: "status", header: "Status", width: "90px" },
+        ];
+        this.selectedColumns = this.headers;
+    }
+    getBillingList() {
+        this.isSpinnerVisible = true;
+        this.workOrderService
+            .getBillingInvoiceList(this.workOrderId)
+            .subscribe((response: any) => {
+                this.isSpinnerVisible = false;
+                this.billingList = response[0];
+                this.checkIsChecked();
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+    }
+    disableCreateInvoiceBtn: boolean = true;
+    checkIsChecked() {
+        this.billingList.forEach(a => {
+            a.workOrderBillingInvoiceChild.forEach(ele => {
+                if (ele.selected)
+                    this.disableCreateInvoiceBtn = false;
+                else
+                    this.disableCreateInvoiceBtn = true;
+            });
+        });
+    }
+    PerformBilling() {
+        this.isMultipleSelected = true;
+        this.partSelected = true;
+        let lastworkOrderPartId: number;
+        let lastworkOrderShippingId: number;
+
+        if (this.isMultipleSelected) {
+            this.billingList.filter(a => {
+                for (let i = 0; i < a.workOrderBillingInvoiceChild.length; i++) {
+                    if (a.workOrderBillingInvoiceChild[i].selected == true) {
+                        lastworkOrderShippingId = a.workOrderBillingInvoiceChild[i].workOrderShippingId;
+                        lastworkOrderPartId = a.workOrderBillingInvoiceChild[i].workOrderPartId;
+                    }
+                }
+            });
+        }
+        this.getBillingAndInvoicingForSelectedPart(lastworkOrderPartId, lastworkOrderShippingId);
+        this.showBillingForm = true;
+    }
+
+    getBillingAndInvoicingForSelectedPart(partNumber, lastworkOrderShippingId) {
+        this.isSpinnerVisible = true;
+        this.selectedPartNumber = partNumber;
+        this.workOrderService.getWorkOrderBillingByShipping(this.workOrderId, partNumber, lastworkOrderShippingId).subscribe(result => {
+            this.isSpinnerVisible = false;
+            if (result) {
+                this.billingorInvoiceForm = result;
+                this.billingorInvoiceForm.openDate = new Date(result.openDate);
+                this.billingorInvoiceForm.printDate = new Date();
+                this.billingorInvoiceForm.invoiceDate = new Date();
+                this.billingorInvoiceForm.creditLimit = this.formateCurrency(result.creditLimit);
+                this.billingorInvoiceForm.customerId = result.customerId;
+            } else {
+                this.billingorInvoiceForm = new WorkOrderBillingAndInvoicing();
+            }
+            //this.getAddressById(this.salesOrderId);
+            this.getCurrencyList();
+            this.getInvoiceList();
+           // this.getRevisionTypeList();
+            this.getShipViaByCustomerId();
+            //this.getCustomerDetails();
+        }, error => {
+            this.isSpinnerVisible = false;
+        })
+    }
+    formateCurrency(amount) {
+        return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
     }
     getbillingCostDataForWoOnly() {
         this.workOrderService.getbillingCostDataForWoOnly(this.workFlowWorkOrderId, this.billingorInvoiceForm.managementStructureId).subscribe(res => {
@@ -765,4 +858,50 @@ export class WorkOrderBillingComponent implements OnInit {
         
     })
 }
+}
+
+export class WorkOrderBillingAndInvoicing {
+    woBillingInvoicingId: number;
+    workOrderId: number;
+    workOrderPartId: number;
+    itemMasterId: number;
+    invoiceTypeId: number;
+    invoiceNo: string;
+    customerId: number;
+    masterCompanyId: number;
+    invoiceDate: Date;
+    printDate: Date;
+    openDate: Date;
+    noofPieces: number;
+    revType: string;
+    currencyId: number;
+    soldToCustomerId: number;
+    soldToSiteId: number;
+    soldToCustomerName: string;
+    shipToCustomerId: number;
+    shipToSiteId: number;
+    shipToAttention: string;
+    shipViaId: number;
+    wayBillRef: string;
+    tracking: string;
+    availableCredit: number;
+    creditLimit: number;
+    billToCustomerId: number;
+    billToSiteId: number;
+    billToAttention: string;
+    employeeName: string;
+    salesPersonId: number;
+    salesPerson: string;
+    customerRef: string;
+    typeId: number;
+    workOrderType: string;
+    invoiceStatus: string;
+    qtyToBill: number;
+    createdBy: string;
+    updatedBy: string;
+    isActive: boolean;
+    isDeleted: boolean;
+    createdDate: Date;
+    updatedDate: Date;
+    billingItems: any;
 }
