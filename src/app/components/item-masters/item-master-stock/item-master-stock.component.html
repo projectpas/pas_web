@@ -1158,31 +1158,32 @@
                                                 </div>
                                         </div>                                        
                                     </div>
-                                    <div class="row advance-search-card"
+                                    <div class="row adv-row">
+                                    <div class="col-md-12"
                                     *ngIf="showAdvancedSearchCard == true">
-                                        <div class="col">
+                                        <div class="col-md-12">
                                                 <div class="col-md-1 col-md-1-cstm">
-                                                    <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                                    <label class="item-master-search">Search :</label>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group ">
-                                                        <label class="fs12">Aircraft </label>
+                                                        <label>Aircraft </label>
                                                         <p-multiSelect [options]="manufacturerData" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectAircraftManfacturer" (onChange)="getAircraftModelByManfacturerType()"
                                                                         class="pub-multi"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group">
-                                                        <label class="fs12">
+                                                        <label>
                                                             Aircraft Model
                                                         </label>
                                                         <p-multiSelect [maxSelectedLabels]="2" [options]="aircraftModelList" [(ngModel)]="selectedAircraftModel" [ngModelOptions]="{standalone: true}"
                                                                         class="pub-multi" (onChange)="getDashNumberByManfacturerandModel()" [selectionLimit]="30"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group">
-                                                        <label class="fs12">DashNumber </label>
+                                                        <label>DashNumber </label>
                                                         <p-multiSelect [maxSelectedLabels]="2" [options]="dashNumberList" [(ngModel)]="selectedDashNumbers" [ngModelOptions]="{standalone: true}"
                                                                         class="pub-multi" [selectionLimit]="30"></p-multiSelect>
                                                     </div>
@@ -1192,10 +1193,15 @@
                                                         <button style="margin-top:20%;" class="btn btn-primary mtop20" type="button" (click)="searchAircraftInformation()">
                                                             <i class="pi pi-search pi-search"></i>
                                                         </button>
+                                                        <button type="button" matTooltip="Search" style="margin-top:20%" matTooltipPosition="above" (click)="clearSerchData()"
+                                                        class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                          Clear
+                                                       </button>
                                                     </div>
                                                 </div>
                                                 <div class="clear"></div>
                                         </div>
+                                    </div>
                                     </div>
                             </ng-template>
 
@@ -1434,23 +1440,24 @@
                                     </div>
                                 </div>
                                 </div>
-                                <div class="row advance-search-card"
+                                <div class="row adv-row">
+                                <div class="col-md-12"
                                 *ngIf="showAdvancedSearchCardAtaChapter == true">
-                                    <div class="col">
+                                   <div class="col-md-12">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                            <label class="item-master-search">Search :</label>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-1">
                                             <div class="form-group ">
-                                                <label class="fs12">ATA Chapter</label>
+                                                <label>ATA Chapter</label>
                                                 <p-multiSelect [options]="LoadAtachapter"
                                                             [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedATAchapter" (onChange)=" getSubChapterByATAChapter()"
                                                             [panelStyle]="{minWidth:'12em'}" class="pub-multi"></p-multiSelect>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-1">
                                             <div class="form-group">
-                                                <label class="fs12">
+                                                <label>
                                                     ATA Subchapter
                                                 </label>
                                                 <p-multiSelect [options]="atasubchapterValues" [ngModelOptions]="{standalone: true}"
@@ -1462,15 +1469,20 @@
                                                 <button type="button" class="btn btn-primary mtop20" (click)="searchATA()">
                                                     <i class="pi pi-search pi-search"></i>
                                                 </button>
+                                                <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()"
+                                                class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                  Clear
+                                               </button>
                                             </div>
                                         </div>
+                                    </div>
                                     </div>
                                 </div>  <!--/advance-search-card-->
                             </ng-template>
 
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width" />
+                                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
                                 </colgroup>
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
@@ -1623,12 +1635,12 @@
                               </div>
                             </div>
                         </div>
-                        <div class="row" style="margin-bottom: 10px;">
+                        <div class="row">
                             <div class="col">
                             </div>
                             <div class="col-md-4" style="margin-right:15px">                              
                                 <div class="checkbox-cstm pull-right checkbox-align">
-                                    <label class="checkbox-label-align">
+                                    <label class="checkbox-label-align" style="margin-top:5px">
                                       <input type="checkbox" [(ngModel)]="currentDeleteStatus" name="cparent" (click)="getPSListOnDeleteStatus($event.target.checked)" />
                                       <span  class="cr"><i class="cr-icon pi pi-check"></i></span>
                                     Show Deleted List
@@ -1642,13 +1654,13 @@
                                 <div class="tableFixHead">  
                                 <table class="table table-bordered header-table-width" id="mpn-list-table">
                                     <thead>
-                                        <tr>
+                                        <tr class="tableFixHead">
                                             <th colspan="10">Unit Purchase Price</th>
                                             <th class="bg4"></th>
                                             <th colspan="13" class="bg1">Unit Sale Price</th>
                                             <th></th>
                                         </tr>
-                                        <tr>
+                                        <tr class="tableFixHead">
                                             <th colspan="10"></th>
                                             <th class="bg4"></th>
                                             <th colspan="5" class="bg2">Use Flat Sale Price</th>
@@ -1656,31 +1668,31 @@
                                             <th></th>
                                         </tr>
                                         <tr>
-                                            <th>Cond <span class="clr-red">*</span></th>
-                                            <th>UOM <span class="clr-red">*</span></th>
-                                            <th>Currency <span class="clr-red">*</span></th>
+                                            <th style="z-index:1">Cond <span class="clr-red">*</span></th>
+                                            <th style="z-index:1">UOM <span class="clr-red">*</span></th>
+                                            <th style="z-index:1">Currency <span class="clr-red">*</span></th>
                                             <th>FX Rate <span class="clr-red">*</span></th>
                                             <th>Vendor List Price</th>
                                             <th>Last List Price Date</th>
-                                            <th>Purchase Disc %</th>
+                                            <th style="z-index:1">Purchase Disc %</th>
                                             <th>Purchase Disc Amount</th>
                                             <th>Last Purchase Disc Date</th>
                                             <th>Unit Purchase Price</th>
-                                            <th class="bg4">Sale Price <span class="clr-red">*</span></th>
-                                            <th class="bg2">UOM <span class="clr-red">*</span></th>
-                                            <th class="bg2">Currency <span class="clr-red">*</span></th>
+                                            <th style="z-index:1" class="bg4">Sale Price <span class="clr-red">*</span></th>
+                                            <th style="z-index:1" class="bg2">UOM <span class="clr-red">*</span></th>
+                                            <th style="z-index:1" class="bg2">Currency <span class="clr-red">*</span></th>
                                             <th class="bg2">FX Rate <span class="clr-red">*</span></th>
                                             <th class="bg2">Flat Price Amount</th>
                                             <th class="bg2">Last Flat Price Date</th>
-                                            <th class="bg3">Mark % on List Price</th>
+                                            <th style="z-index:1" class="bg3">Mark % on List Price</th>
                                             <th class="bg3">Mark Up Amount</th>
                                             <th class="bg3">Last Mark Up Date</th>
                                             <th class="bg3">Base Sale Price</th>
-                                            <th class="bg3">Sale Disc %</th>
+                                            <th style="z-index:1" class="bg3">Sale Disc %</th>
                                             <th class="bg3">Sale Disc Amount</th>
                                             <th class="bg3">Last Sales Disc Date</th>
                                             <th class="bg3">Unit Sale Price</th>
-                                            <th>Actions</th>
+                                            <th style="z-index:1">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -2166,7 +2178,7 @@
                     <app-pn-header [partData]="sourceItemMaster"></app-pn-header>
                     <form #aircraftAddForm="ngForm">
                         <div class="form-row mt-2">
-                            <div class="col-md-2">
+                            <div class="col-md-2" style="margin-top:2px">
                                 <div class="form-group">
                                     <label class="popup-plusicon-cstm">Aircraft <span class="clr-red">*</span></label>
                                     <p-dropdown class="p-dropdown-100" name="selectedAircraftId" [options]="manufacturerData" filter="true"
