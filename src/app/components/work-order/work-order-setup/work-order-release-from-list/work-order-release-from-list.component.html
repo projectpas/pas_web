@@ -187,7 +187,6 @@ selectionMode="multiple"
             <app-wo-release-from (updateRelreaseList)="UpdateGird()" [ReleaseDataForm]="ReleaseData" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId" [releaseFromId]="releaseFromId" [isView]="isViewopen" [isEdit]="isEdit">
             </app-wo-release-from>
 </div>
-
 <div *ngIf="is9130from">
     <app-wo-release-easa-from  (updateRelreaseList)="UpdateGird()" [ReleaseDataForm]="ReleaseData" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId" [releaseFromId]="releaseFromId"  [isView]="isViewopen" [isEdit]="isEdit">
     </app-wo-release-easa-from>

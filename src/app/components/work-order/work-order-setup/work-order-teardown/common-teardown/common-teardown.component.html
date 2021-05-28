@@ -62,11 +62,11 @@
                             </div>
                         </div>
                         <div class="col-md-12"  *ngIf="saveTearDownData &&  saveTearDownData.workOrderRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId">
-                            <app-common-documents [moduleName]="moduleNameeRemoval"
+                            <app-common-documents [moduleName]="moduleNameeRemoval"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView"   [offLineUpload]="false"></app-common-documents>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -244,7 +244,7 @@
                             </div>
                         </div>
                         <div class="col-md-12"  *ngIf="saveTearDownData && saveTearDownData.workOrderPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.reasonId">
-                            <app-common-documents [moduleName]="moduleNameePrellinary"
+                            <app-common-documents [moduleName]="moduleNameePrellinary"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
                         </div>
@@ -366,7 +366,7 @@
 
                         </div>
                         <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderPreAssmentResults && saveTearDownData.workOrderPreAssmentResults.reasonId">
-                            <app-common-documents [moduleName]="moduleNameePreAssesment"
+                            <app-common-documents [moduleName]="moduleNameePreAssesment"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
                         </div>
@@ -478,7 +478,7 @@
                             </div>
                         </div>
                         <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderDiscovery && saveTearDownData.workOrderDiscovery.reasonId">
-                            <app-common-documents [moduleName]="moduleNameeTearDescovery"
+                            <app-common-documents [moduleName]="moduleNameeTearDescovery"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
                         </div>
@@ -593,7 +593,7 @@
                             </div>
                         </div>
                         <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.reasonId">
-                            <app-common-documents [moduleName]="moduleNameePreAssembly"
+                            <app-common-documents [moduleName]="moduleNameePreAssembly"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
                         </div>

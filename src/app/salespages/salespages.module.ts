@@ -120,6 +120,7 @@ import { SpeedQuoteCustpmerDetailsComponent } from "../components/sales/speed-qu
 import { SpeedQuotePartNumberFilterComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/speed-quote-part-number-filter/speed-quote-part-number-filter.component";
 import { SpeedQuotePartDetailsComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/speed-quote-part-details/speed-quote-part-details.component";
 import { SpeedQuoteMarginComponent } from "../components/sales/speed-quote/shared/components/speed-quote-margin/speed-quote-margin.component";
+import { SpeedQuoteExclusionsComponent } from "../components/sales/speed-quote/shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
 //Sales Order Components - End
 
 @NgModule({
@@ -231,6 +232,7 @@ import { SpeedQuoteMarginComponent } from "../components/sales/speed-quote/share
     SpeedQuotePartNumberFilterComponent,
     SpeedQuotePartDetailsComponent,
     SpeedQuoteMarginComponent,
+    SpeedQuoteExclusionsComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe, SpeedQuoteService, SpeedQuoteEndpointService],
   entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent, SalesMultiShippingLabelComponent, SalesOrderMultiPackagingLabelComponent, SalesOrderMultiPickTicketComponent]

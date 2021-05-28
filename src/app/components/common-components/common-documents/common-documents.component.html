@@ -5,9 +5,9 @@
         <h4 class="header-name"> Documents List</h4>
       </div>
       <div>
-        <a *ngIf="isViewMode == false" data-toggle="modal" data-target="#commonaddDocumentDetails">
+        <a *ngIf="isViewMode == false">
           <button type="button" class="btn-sm header-button" matTooltip="Add Documents" matTooltipPosition="above"
-            (click)="addDocumentDetails();">
+            (click)="addDocumentDetails(content);">
             Add Documents
           </button>
         </a>
@@ -40,11 +40,6 @@
               icon="fa-download" matTooltip="Download  Data" matTooltipPosition="above" iconPos="left"
               label="Export  Data" (click)="selectedOnly = false; targetData = documents;" data-toggle="modal"
               data-target="#downloadConfirmationDocument"></button>
-            <!-- 
-                  <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
-                  matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
-                  data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
-                  data-target="#downloadConfirmation"></button> -->
             <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" pButton
               icon="fa-download" matTooltip="Download Selected Data" matTooltipPosition="above" iconPos="left"
               label="Export Selected Data" (click)="documents.exportCSV({ selectionOnly: true })"></button>
@@ -105,12 +100,12 @@
             <td class="table-column-width" *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
               class="ui-resizable-column" pReorderableRowHandle>
               {{
-                            col.field == 'createdDate'
-                          ? (rowData[col.field] | date: 'MM/dd/yyyy  h:mm a')
-                          : rowData[col.field] && col.field == 'updatedDate'
-                          ? (rowData[col.field] | date: 'MM/dd/yyyy  h:mm a')
-                          : rowData[col.field]
-                          }}
+              col.field == 'createdDate'
+              ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+              : rowData[col.field] && col.field == 'updatedDate'
+              ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+              : rowData[col.field]
+              }}
             </td>
             <td class="table-column-width text-capital" *ngIf="col.field == 'docMemo'">
               <p class="m-0 p-0 p_textEditor float-left text-capital" [innerHTML]="rowData[col.field]"></p>
@@ -121,7 +116,8 @@
         </tr>
         </td>
         </ng-container>
-        <td class="table-actions-column action-icons-cstm table-column-width" style="width:131px !important" *ngIf="isViewMode == false">
+        <td class="table-actions-column action-icons-cstm table-column-width" style="width:131px !important"
+          *ngIf="isViewMode == false">
           <div *ngIf="currentDeletedstatus==true">
             <span>
               <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#commondocView"
@@ -148,10 +144,9 @@
               <a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                   class="fa fa-pencil"></i></a> </span>
             <span *ngIf="isViewMode == false">
-              <a class="btn nobg"
-                (click)="openDelete(deleteContent, rowData); documents.reset()" matTooltip="Delete"
+              <a class="btn nobg" (click)="openDelete(deleteContent, rowData); documents.reset()" matTooltip="Delete"
                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                
+
             <span><a class="btn nobg greyHistory" data-toggle="modal" data-target="#commoncontentAuditHist"
                 (click)="openHistory(rowData)" [class.disabled]="rowData.attachmentId == 0" matTooltip="History"
                 matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
@@ -193,25 +188,15 @@
   </div>
   <div *ngIf="moduleName !='ItemMaster'">
     <div class="margin-bottom-30" *ngIf="isViewMode == false && offLineUpload==true">
-    <!-- <div style="margin-top:-40px;margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
-            <div style="margin-top:-10px;margin-bottom: 15px;" *ngIf="isViewMode == false && offLineUpload==true"> -->
-    <button [disabled]="isEnableUpdateButton" type="button" class="btn btn-primary pull-right submit-btn"
-      (click)="onUploadDocumentListToServer()" *ngIf="isViewMode == false && !hideUpoladThing">
-      <span *ngIf="enableUpdate"> Update </span>
-      <span *ngIf="!enableUpdate">Save </span>
-    </button>
-    <button type="button" *ngIf="moduleName == 'LegalEntity'" class="btn btn-primary pull-right submit-btn"
-      (click)="backClick()">Previous</button>
-   </div>
-  </div>  
-  <!-- <div style="margin-top:10px" *ngIf="isViewMode == false && moduleId==30"> -->
-  <!-- <button type="button" class="btn btn-primary pull-right submit-btn"
-            (click)="savedocument()" [routerLink]="[
-            '/generalledgermodule/generalledgerpage/app-legal-entity-list'
-          ]">{{ editMode ? 'Update' : 'Save' }}</button> -->
-  <!-- <button type="button" class="btn btn-primary pull-right submit-btn"
-             (click)="backClick()" *ngIf="isViewMode == false">Previous</button>      
-        </div> -->
+      <button [disabled]="isEnableUpdateButton" type="button" class="btn btn-primary pull-right submit-btn"
+        (click)="onUploadDocumentListToServer()" *ngIf="isViewMode == false && !hideUpoladThing">
+        <span *ngIf="enableUpdate"> Update </span>
+        <span *ngIf="!enableUpdate">Save </span>
+      </button>
+      <button type="button" *ngIf="moduleName == 'LegalEntity'" class="btn btn-primary pull-right submit-btn"
+        (click)="backClick()">Previous</button>
+    </div>
+  </div>
 </div>
 <ng-template #deleteContent id="deleteContent" let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-header">
@@ -219,41 +204,13 @@
     <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="dismissModeldelete()">
       <span aria-hidden="true">&times;</span>
     </button>
-    <!-- <div class="col-md-12 shadow-box-cstm">
-        <div class="col-md-6">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Name:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ generalName }}
-            </span>
-          </p>
-        </div>
-        <div class="col-md-6">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Code:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ generalCode }}
-            </span>
-          </p>
-        </div>
-      </div>  -->
   </div>
   <div class="modal-body">
-    <!-- <strong>
-        Document Name:
-        <span class="new-label">{{ selectedRowForDelete.docName }}</span>
-      </strong> -->
     <div class="form-row">
       <div class="col-md-12 margin-right">
         <label class="fs12"> Document Name: </label>
         <span class="new-label"> {{selectedRowForDelete.docName}}</span>
       </div>
-      <!-- <div class="col-md-8" style="margin-right: 0px !important;">
-            <label class="fs12">File Name  : </label>
-            <span class="new-label"> {{selectedRowForDelete.fileName}}</span>
-        </div> -->
     </div>
   </div>
   <div class="modal-footer">
@@ -295,55 +252,37 @@
           &times;
         </button>
         <h4 class="modal-title">Details of Document</h4>
-        <!-- <div class="col-md-12 shadow-box-cstm">
-            <div class="col-md-6">
-              <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Name:
-                </label>
-                <span class="span-header-red" style="text-transform: capitalize">
-                  {{ generalName }}
-                </span>
-              </p>
-            </div>
-            <div class="col-md-6">
-              <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Code:
-                </label>
-                <span class="span-header-red" style="text-transform: capitalize">
-                  {{ generalCode }}
-                </span>
-              </p>
-            </div>
-          </div>  -->
       </div>
       <div class="modal-body" *ngIf="sourceViewforDocument">
         <div class="col-sm-12">
           <p>
-            <span class="label"><b>Name  : <span class="clr-red">*</span></b></span><span
-              class="value">{{ sourceViewforDocument.docName }}</span>
+            <span class="label"><b>Name : <span class="clr-red">*</span></b></span><span class="value">{{
+              sourceViewforDocument.docName }}</span>
           </p>
           <p>
             <span class="label"><b>Description : </b></span><span class="value">{{
-                sourceViewforDocument.docDescription
+              sourceViewforDocument.docDescription
               }}</span>
           </p>
           <p>
             <span class="label"><b>Document Type : <span class="clr-red">*</span> </b></span><span class="value">{{
-                sourceViewforDocument.name
+              sourceViewforDocument.name
               }}</span>
           </p>
           <p class="view-text-editor" style="margin-bottom:8px">
             <span class="label view-text-editor"><b>Memo: </b></span>
             <span class="value">
-              <p class="p-0 m-0 p_textEditor" style="margin-bottom:-4px !important" [innerHTML]="sourceViewforDocument.docMemo">
+              <p class="p-0 m-0 p_textEditor" style="margin-bottom:-4px !important"
+                [innerHTML]="sourceViewforDocument.docMemo">
               </p>
-            </span></p>
-          <p><span class="label"><b>Created Date: </b></span><span
-              class="value">{{sourceViewforDocument.createdDate | date: 'MM/dd/yyyy h:mm a '}}</span></p>
+            </span>
+          </p>
+          <p><span class="label"><b>Created Date: </b></span><span class="value">{{sourceViewforDocument.createdDate |
+              date: 'MM/dd/yyyy h:mm a '}}</span></p>
           <p><span class="label"><b>Created By: </b></span><span
               class="value">{{sourceViewforDocument.createdBy}}</span></p>
-          <p><span class="label"><b>Updated Date: </b></span><span
-              class="value">{{sourceViewforDocument.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</span></p>
+          <p><span class="label"><b>Updated Date: </b></span><span class="value">{{sourceViewforDocument.updatedDate |
+              date: 'MM/dd/yyyy h:mm a '}}</span></p>
           <p><span class="label"><b>Updated By: </b></span><span
               class="value">{{sourceViewforDocument.updatedBy}}</span></p>
           <div class="mt-3">
@@ -402,247 +341,157 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="commonaddDocumentDetails" role="dialog" data-backdrop="static">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close font_chck" (click)="closeMyModel('#commonaddDocumentDetails')">
-          &times;
-        </button>
-        <h4 class="modal-title"> {{isEditButton ? 'Edit' : 'Add' }} Document Details</h4>
-        <!-- <div class="col-md-12 shadow-box-cstm">
-            <div class="col-md-6">
-              <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Name:
-                </label>
-                <span class="span-header-red" style="text-transform: capitalize">
-                  {{ generalName }}
+
+<ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">{{isEditButton ? 'Edit' : 'Add'}} Document Details </h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeMyModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #addDocumentForm="ngForm" id="commonaddDocumentDetails{{moduleName}}"
+      name="commonaddDocumentDetails{{moduleName}}" class="form-horizontal">
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Document Type <span class="clr-red">*</span></label>
+              <span class="circle-span"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Document Type"
+                  matTooltipPosition="above" data-toggle="modal" data-target="#createDocumentType"
+                  (click)="onClickDocumentType('Add')"></a></span>
+              <select [(ngModel)]="documentInformation.documentTypeId" name="documentTypeId" id="documentTypeId"
+                (change)="onDocumentTypeChange(documentInformation.documentTypeId)" #documentTypeId="ngModel"
+                (ngModelChange)="enableSave()" required>
+                <option value='0'>--Select</option>
+                <option *ngFor="let item of documentType" [ngValue]="item.documentTypeId">
+                  {{item.name}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Document Name <span class="clr-red">*</span></label>
+              <input class="form-control" type="text" name="name-Docs" [(ngModel)]="documentInformation.docName"
+                (ngModelChange)="enableSave()" required />
+            </div>
+            <div class="form-group">
+              <label>Description </label>
+              <textarea class="form-control" name="descriptionDocs" [(ngModel)]="documentInformation.docDescription"
+                type="text" (ngModelChange)="enableSave()"></textarea>
+            </div>
+            <div class="form-group" style="margin-top:0px">
+              <span class="label">Memo </span>
+              <div class="col-sm-11" style="margin-left:-3px">
+                <span>
+                  <div class="form-group memo-popup-cstm mat_emo">
+                    <div [innerHTML]="documentInformation.docMemo ? documentInformation.docMemo.trim() : ''"
+                      [matTooltip]="parsedText(documentInformation.docMemo)" class="form-control"
+                      style="width: 109%;line-height:1.5 !important" class="text_editor_box"></div>
+                  </div>
                 </span>
-              </p>
-            </div>
-            <div class="col-md-6">
-              <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Code:
-                </label>
-                <span class="span-header-red" style="text-transform: capitalize">
-                  {{ generalCode }}
+              </div>
+              <div class="col-sm-1">
+                <span class="margin-left-10">
+                  <!-- data-toggle="modal" data-target="#memo-popup-Doc-common" -->
+                  <a class="btn nobg"  (click)="onClickMemo(contentMemo)"
+                    matTooltip="Add Memo" matTooltipPosition="above"><i class="fa fa-pencil" style="color: #2275ce;
+                    font-size: 14px;"></i>
+                  </a>
                 </span>
-              </p>
-            </div> -->
-      </div>
-      <!-- </div> --> 
-      <form #addDocumentForm="ngForm" class="form-horizontal">
-        <div class="modal-body">
-          <div class="form-row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Document Type <span class="clr-red">*</span></label>
-                <span class="circle-span"><a class="fa fa-plus-circle fa-lg"
-                    matTooltip="Add Document Type" matTooltipPosition="above" data-toggle="modal"
-                    data-target="#createDocumentType" (click)="onClickDocumentType('Add')"></a></span>
-                <!-- <span style="margin-left:0px;cursor:pointer;">
-                              <a
-                                class="btn nobg"
-                                *ngIf="documentInformation.documentTypeId > 0"
-                                matTooltip="Edit Site Name" matTooltipPosition="above"
-                                 data-toggle="modal" data-target="#createDocumentType" 
-                                 (click)="onClickDocumentType('Edit','')"
-                                ><i class="fa fa-pencil" ></i
-                              ></a>
-                              </span> -->
-                <!-- <select [ngClass]='select-validate-cstm' class="form-control" name="documentTypeId" [(ngModel)]="documentInformation.documentTypeId" #documentTypeId="ngModel" (change)="doctype(documentTypeId);" required>
-                    <option value="0">-- Select --</option>
-                    <ng-container *ngFor="let item of documentType">
-                        <option [value]="item.documentTypeId">{{item.name}}</option>
-                    </ng-container>
-                  </select> -->
-                <select [(ngModel)]="documentInformation.documentTypeId" name="documentTypeId" id="documentTypeId" (change)="onDocumentTypeChange(documentInformation.documentTypeId)"
-                  #documentTypeId="ngModel" (ngModelChange)="enableSave()"  required>
-                  <option value='0'>--Select</option>
-                  <option *ngFor="let item of documentType" [ngValue]="item.documentTypeId">
-                    {{item.name}}
-                  </option>
-                </select>
-                <!-- <p-autoComplete field="name" [ngClass]="p-acomp-validate" class="pautocomp-cstm"
-                                                                 (onClear)="clearInputShipTo()"
-                                                                 (onSelect)="onDocumentTypeSelect($event)"
-                                                                 [(ngModel)]="documentInformation.name" 
-                                                                 name="documentTypeId"
-                                                                 [suggestions]="lstfilterDocumentType"
-                                                                 (completeMethod)="filterDocumentType($event, documentInformation.documentTypeId)"
-                                                                 [size]="30"
-                                                                 title="Document Type"
-                                                                 [minLength]="1"
-                                                                 [dropdown]="true"
-                                                                 errorMessage="Records not found"
-                                                                 [forceSelection]="true"
-                                                                 #documentTypeId="ngModel" required>
-                                                 </p-autoComplete> -->
               </div>
-              <div class="form-group">
-                <label>Document Name <span class="clr-red">*</span></label>
-                <input class="form-control" type="text" name="name-Docs" [(ngModel)]="documentInformation.docName"
-                  (ngModelChange)="enableSave()" required />
-              </div>
-              <div class="form-group">
-                <label>Description </label>
-                <textarea class="form-control" name="descriptionDocs" [(ngModel)]="documentInformation.docDescription"
-                  type="text" (ngModelChange)="enableSave()"></textarea>
-              </div>
-              <div class="form-group" style="margin-top:0px">
-                <span class="label">Memo </span>
-                <div class="col-sm-11" style="margin-left:-3px">
-                  <span>
-                    <div class="form-group memo-popup-cstm mat_emo">
-                      <div [innerHTML]="documentInformation.docMemo ? documentInformation.docMemo.trim() : ''"
-                        [matTooltip]="parsedText(documentInformation.docMemo)" class="form-control" 
-                        style="width: 109%;line-height:1.5 !important"
-                        class="text_editor_box"></div>
-                    </div>
-                  </span>
-                </div>
-                <div class="col-sm-1">
-                  <span class="margin-left-10">
-                    <a class="btn nobg" data-toggle="modal" data-target="#memo-popup-Doc-common" (click)="onClickMemo()"
-                      matTooltip="Add Memo" matTooltipPosition="above"><i class="fa fa-pencil" style="color: #2275ce;
-                      font-size: 14px;"></i>
-                    </a>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <!-- *ngIf="!isEditButton" -->
-            <div class="col-md-12">
-              <div class="form-group">
-                <label style="float: none;">Attachments <span class="clr-red" *ngIf="!isEditButton">*</span></label>
-                <p-fileUpload #fileUploadInput name="fileupload[]" multiple="multiple" [showCancelButton]="false"
-                  [showUploadButton]="false" customUpload="true" (ngModelChange)="enableSave()"
-                  (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)" required></p-fileUpload>
-              </div>
-            </div>
-            <div class="table-responsive table-overflow" *ngIf="isEditButton">
-              <h6 class="panel-title" style="padding-left: 10px;">
-                Attachment Details:
-              </h6>
-              <!-- [paginator]="sourceViewforDocumentList.length > 0" -->
-              <p-table class="table-responsive ptable-cus-pma" [value]="sourceViewforDocumentList" [rows]="3"
-                [columns]="sourceViewforDocumentListColumns">
-                <ng-template pTemplate="header" let-columns>
-                  <tr>
-                    <th class="table-column-width" *ngFor="let col of columns">
-                      {{ col.header }}
-                    </th>
-                    <th class="table-actions-column">
-                      Download
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-part let-rowData let-columns="columns" let-i="rowIndex">
-                  <tr>
-                    <td class="table-column-width" *ngFor="let col of columns">
-                      <ng-container *ngIf="col.field == 'fileName'">
-                        {{ part[col.field] }}
-                      </ng-container>
-                    </td>
-                    <!-- <td class="text_c">
-                        <button [disabled]="part.attachmentId ==0"
-                          (click)="downloadFile(part)"
-                          matTooltip="Download"  matTooltipPosition="above"
-                          class="downld"
-                          ><span><i class="fa fa-download"></i></span
-                        ></button>
-                      </td> -->
-                    <!-- <td class="text_c"> *ngIf="part.attachmentId!=0" -->
-                    <!-- <a (click)="downloadFile(part)" matTooltip="Download" matTooltipPosition="above" class="btn nobg btn-cstm"><span><i class="fa fa-download"></i></span></a> -->
-                    <!-- <span>
-                            <a class="btn nobg"
-                               (click)="openDeletes(content,rowData)"
-                               matTooltip="Delete" matTooltipPosition="above">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </span> -->
-                    <!-- </td> -->
-                    <td class="table-actions-column action-icons-cstm" class="text_c">
-                      <button *ngIf="part.attachmentId!=0" (click)="downloadFile(part)" matTooltip="Download"
-                        matTooltipPosition="above" class="downld"><span><i class="fa fa-download"></i></span></button>
-                      <button *ngIf="part.attachmentId==0" matTooltip="Download will be enabled after Save Records"
-                        matTooltipPosition="above" class="downld"><span><i class="fa fa-download"></i></span></button>
-                    </td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage" let-columns *ngIf="sourceViewforDocumentList.length == 0">
-                  <tr>
-                    <td [attr.colspan]="2" class="no-records-cstm no-records-msg">
-                      No records found
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" *ngIf="!isEditButton" class="btn btn-primary editor-buttons-margin"
-            (click)="saveDocumentInformation()" [disabled]="!addDocumentForm.valid || disableSave">
-            Save
-          </button>
-          <button type="button" *ngIf="isEditButton" class="btn btn-primary editor-buttons-margin"
-            (click)="saveDocumentInformation()" [disabled]="!addDocumentForm.valid || disableSave">
-            Update
-          </button>
-          <button type="button" class="btn btn-danger editor-buttons-margin"
-            (click)="dismissDocumentPopupModel(); closeMyModel('#commonaddDocumentDetails')">
-            Close
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="modal fade" id="memo-popup-Doc-common" style="z-index: 15000 !important;" role="dialog"
-    data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" (click)="closeMemoModel()">
-            &times;
-          </button>
-          <h4 class="modal-title">Edit Memo</h4>
-        </div>
-        <div class="modal-body">
-          <!-- <table class="table table-bordered table-fixed workflow-table-material">
-              <thead>
-                <th style="color: #fff;">Memo</th>
-              </thead>
-              <tbody>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label style="float: none;">Attachments <span class="clr-red" *ngIf="!isEditButton">*</span></label>
+              <p-fileUpload #fileUploadInput name="fileupload[]" multiple="multiple" [showCancelButton]="false"
+                [showUploadButton]="false" customUpload="true" (ngModelChange)="enableSave()"
+                (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)" required></p-fileUpload>
+            </div>
+          </div>
+          <div class="table-responsive table-overflow" *ngIf="isEditButton">
+            <h6 class="panel-title" style="padding-left: 10px;">
+              Attachment Details:
+            </h6>
+            <p-table class="table-responsive ptable-cus-pma" [value]="sourceViewforDocumentList" [rows]="3"
+              [columns]="sourceViewforDocumentListColumns">
+              <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <td style="white-space: inherit">
-                    <p-editor
-                     spellcheck="true"
-                      [(ngModel)]="memoPopupContent"  (ngModelChange)="enableSaveMemo()"
-                      [style]="{ height: '320px' }"
-                      name="memoPopupContent"
-                      required
-                    ></p-editor>
+                  <th class="table-column-width" *ngFor="let col of columns">
+                    {{ col.header }}
+                  </th>
+                  <th class="table-actions-column">
+                    Download
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-part let-rowData let-columns="columns" let-i="rowIndex">
+                <tr>
+                  <td class="table-column-width" *ngFor="let col of columns">
+                    <ng-container *ngIf="col.field == 'fileName'">
+                      {{ part[col.field] }}
+                    </ng-container>
+                  </td>
+                  <td class="table-actions-column action-icons-cstm" class="text_c">
+                    <button *ngIf="part.attachmentId!=0" (click)="downloadFile(part)" matTooltip="Download"
+                      matTooltipPosition="above" class="downld"><span><i class="fa fa-download"></i></span></button>
+                    <button *ngIf="part.attachmentId==0" matTooltip="Download will be enabled after Save Records"
+                      matTooltipPosition="above" class="downld"><span><i class="fa fa-download"></i></span></button>
                   </td>
                 </tr>
-              </tbody>
-            </table> -->
-          <p-editor spellcheck="true" [(ngModel)]="memoPopupContent" (ngModelChange)="enableSaveMemo()"
-            [style]="{ height: '320px' }" name="memoPopupContent" required></p-editor>
-          <div class="editor-buttons">
-            <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disabledMemo"
-              (click)="onClickPopupSave()">
-              Save
-            </button>
-            <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">
-              Close
-            </button>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" let-columns *ngIf="sourceViewforDocumentList.length == 0">
+                <tr>
+                  <td [attr.colspan]="2" class="no-records-cstm no-records-msg">
+                    No records found
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
           </div>
         </div>
       </div>
+      <div class="modal-footer">
+        <button type="button" *ngIf="!isEditButton" class="btn btn-primary editor-buttons-margin"
+          (click)="saveDocumentInformation()" [disabled]="!addDocumentForm.valid || disableSave">
+          Save
+        </button>
+        <button type="button" *ngIf="isEditButton" class="btn btn-primary editor-buttons-margin"
+          (click)="saveDocumentInformation()" [disabled]="!addDocumentForm.valid || disableSave">
+          Update
+        </button>
+        <button type="button" class="btn btn-danger editor-buttons-margin"
+          (click)=" closeMyModel()">
+          <!-- dismissDocumentPopupModel(); -->
+          Close
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<ng-template #contentMemo let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Memo </h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeMemoModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p-editor spellcheck="true" [(ngModel)]="memoPopupContent" [style]="{'height':'320px'}" (ngModelChange)="enableSaveMemo()"
+      [style]="{ height: '320px' }" name="memoPopupContent" required></p-editor>
+    <div class="editor-buttons">
+      <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disabledMemo"
+        (click)="onClickPopupSave()">
+        Save
+      </button>
+      <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">
+        Close
+      </button>
     </div>
   </div>
-</div>
+</ng-template> 
+
 <div id="commoncontentAuditHist" #commoncontentAuditHist class="modal fade" role="dialog" data-backdrop="static"
   data-keyboard="false">
   <div class="modal-dialog modal-xlg">
@@ -654,82 +503,59 @@
         </button>
       </div>
       <div class="modal-body">
-        <!-- <div class="col-md-12 shadow-box-cstm">
-                    <div class="col-md-4">
-                        <p class="fs12">
-                            <label class="control-label labels-font-header"
-                             style="width: auto;">Name: </label>
-                            <span class="span-header-red"
-                             style="text-transform: capitalize"> {{generalName }}
-                             </span>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="fs12">
-                            <label class="control-label labels-font-header"
-                             style="width: auto;">Code: </label>
-                            <span class="span-header-red" 
-                            style="text-transform: capitalize"> {{generalCode }} 
-                        </span>
-                        </p>
-                    </div>
-                </div> -->
-                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                  <div class="tableFixHead">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Name <span class="clr-red">*</span></th>
-                <th>Description</th>
-                <th>Doc Type <span class="clr-red">*</span></th>
-                <th>Memo</th>
-                <th>File Name</th>
-                <th>Created Date</th>
-                <th>Created By</th>
-                <th> Updated Date</th>
-                <th>Updated By</th>
-                <th>Is Deleted</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- <tr *ngIf="documentauditHisory && documentauditHisory.length !=0"> -->
-              <tr *ngFor="let audit of documentauditHisory; let i = index;">
-                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'docName', audit.docName)  ? 'black' : 'red'  }">
-                  {{audit.docName}}
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+          <div class="tableFixHead">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Name <span class="clr-red">*</span></th>
+                  <th>Description</th>
+                  <th>Doc Type <span class="clr-red">*</span></th>
+                  <th>Memo</th>
+                  <th>File Name</th>
+                  <th>Created Date</th>
+                  <th>Created By</th>
+                  <th> Updated Date</th>
+                  <th>Updated By</th>
+                  <th>Is Deleted</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let audit of documentauditHisory; let i = index;">
+                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'docName', audit.docName)  ? 'black' : 'red'  }">
+                    {{audit.docName}}
+                  </td>
+                  <td
+                    [ngStyle]="{'color': getColorCodeForHistory(i, 'docDescription', audit.docDescription)  ? 'black' : 'red'  }">
+                    {{audit.docDescription}}
+                  </td>
+                  <td [ngStyle]="{'color': getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
+                    {{audit.name}}
+                  </td>
+                  <td [ngStyle]="{'color': getColorCodeForHistory(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }">
+                    <p [innerHTML]="audit.docMemo"></p>
+                  </td>
+                  <td>
+                <tr *ngFor="let x of audit.attachmentDetails">
+                  <a [ngStyle]="{'color':  getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }"
+                    class="filelink" (click)="downloadFile(x)"> {{x.fileName}} <span
+                      *ngIf="audit.attachmentDetails && audit.attachmentDetails.length>0">,</span></a>
+                </tr>
                 </td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'docDescription', audit.docDescription)  ? 'black' : 'red'  }">
-                  {{audit.docDescription}}
+                <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                <td style="width:60px">{{audit.createdBy}}</td>
+                <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                <td style="width:60px">{{audit.updatedBy}}</td>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto">
+                      <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
+                    </label>
+                  </span>
                 </td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
-                  {{audit.name}}
-                </td>
-                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }">
-                  <p [innerHTML]="audit.docMemo"></p>
-                </td>
-                <td>
-              <tr *ngFor="let x of audit.attachmentDetails">
-                <a [ngStyle]="{'color':  getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }"
-                  class="filelink" (click)="downloadFile(x)"> {{x.fileName}} <span
-                    *ngIf="audit.attachmentDetails && audit.attachmentDetails.length>0">,</span></a>
-              </tr>
-              </td>
-              <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }">{{audit.fileName}}</td> -->
-              <td >{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-              <td style="width:60px">{{audit.createdBy}}</td>
-              <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-              <td style="width:60px">{{audit.updatedBy}}</td>
-              <td class="text-center width-60">
-                <span class="value">
-                  <label class="wauto">
-                    <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
-                  </label>
-                </span>
-              </td>
-              </tr>
-            </tbody>
-          </table>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -745,28 +571,6 @@
     <button type="button" class="close" aria-label="Close" (click)="dismissModelRestore()">
       <span aria-hidden="true">&times;</span>
     </button>
-    <!-- <div class="col-md-12 shadow-box-cstm">
-            <div class="col-md-6">
-                <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
-                        Customer Name:
-                    </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
-                        {{ generalName }}
-                    </span>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
-                        Customer Code:
-                    </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
-                        {{ generalCode }}
-                    </span>
-                </p>
-            </div>
-        </div> -->
   </div>
   <div class="modal-body">
     <strong>
@@ -801,9 +605,8 @@
         <h4 class="modal-title">Add Document Type</h4>
       </div>
       <form #addDocumenttypeForm="ngForm" class="form-horizontal">
-      <div class="modal-body">
-        <div class="form-row">
-        
+        <div class="modal-body">
+          <div class="form-row">
             <div class="form-group col-md-12">
               <div class="col-md-4"><label>Document Name <span class="clr-red">*</span> :</label></div>
               <p-autoComplete class="autocomp-customer-cstm col-md-6" name="name" [(ngModel)]="addNew.name"
@@ -817,25 +620,6 @@
                 Document Type Already Exists
               </div>
             </div>
-            <!-- <div class="form-group col-md-12">
-              <div class="col-md-4"><label class="col-md-6">Rev Num <span class="clr-red"></span> :</label></div>
-              <p-autoComplete class="autocomp-customer-cstm col-md-6" name="revNum" [(ngModel)]="addNew.revNum"
-                [suggestions]="lstfilterDocumentTypeRevNum" emptyMessage="No Match Found" field="revNum"
-                (onKeyUp)="checkDocumentRevnumExist($event.target.value)"
-                (onChange)="checkDocumentRevnumExist($event.target.value)"
-                (onBlur)="checkDocumentRevnumExist($event.target.value)"
-                (completeMethod)="filterDocumentTypeRevnum($event);" [size]="30" [minLength]="1" [dropdown]="true"
-                >
-              </p-autoComplete>
-              <div *ngIf="isDocumentrevnumAlreadyExists" class="clr-red">
-                Rev Num Already Exists
-              </div>
-            </div> -->
-            <!-- <div class="form-group col-md-12">
-              <div class="col-md-4"><label class="col-md-6">Description <span class="clr-red">*</span> :</label></div>
-              <input type="text" class="form-control col-md-6" name="description" [(ngModel)]="addNew.description"
-                required>
-            </div> -->
             <div class="form-group col-md-12">
               <div class="col-md-4"><label class="col-md-6" style="vertical-align: top;">Memo:</label></div>
               <div class="col-md-6">
@@ -849,41 +633,36 @@
                 </div>
               </div>
             </div>
-          
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipViaForShipTo(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
-        <button type="button" class="btn btn-primary" [disabled]="!(addDocumenttypeForm.valid && DocumentTypebutton)"
-          (click)="saveDocumenttype();" data-dismiss="modal">Save</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <!-- (click)="resetAddressShippingForm(); -->
-      </div>
-    </form>
-     
-    </div>
-  </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" [disabled]="!(addDocumenttypeForm.valid && DocumentTypebutton)"
+            (click)="saveDocumenttype();" data-dismiss="modal">Save</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </form>
 
-<div class="modal fade" id="documenttype-add-memo" style="z-index: 10000;" role="dialog" data-backdrop="static"
-  data-keyboard="false">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Memo</h4>
-      </div>
-      <div class="modal-body">
-        <p-editor [(ngModel)]="tempAddDocumentTypeMemo" [style]="{'height':'320px'}" name="tempAddDocumentTypeMemo"
-          required></p-editor>
-        <div class="editor-buttons">
-          <button type="button" class="btn btn-primary editor-buttons-margin"
-            (click)="onSaveTextAreaInfo()">Save</button>
-          <button type="button" class="btn btn-danger editor-buttons-margin"
-            (click)="closeMemoModelpopup()">Close</button>
+    </div>
+  </div>
+  <div class="modal fade" id="documenttype-add-memo" style="z-index: 10000;" role="dialog" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Memo</h4>
+        </div>
+        <div class="modal-body">
+          <p-editor [(ngModel)]="tempAddDocumentTypeMemo" [style]="{'height':'320px'}" name="tempAddDocumentTypeMemo"
+            required></p-editor>
+          <div class="editor-buttons">
+            <button type="button" class="btn btn-primary editor-buttons-margin"
+              (click)="onSaveTextAreaInfo()">Save</button>
+            <button type="button" class="btn btn-danger editor-buttons-margin"
+              (click)="closeMemoModelpopup()">Close</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </div>

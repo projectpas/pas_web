@@ -87,6 +87,7 @@ export class PartDetail {
     type:string;
     oempmader:string;
     tat:number;
+    isEditPart:boolean=false;
     constructor() { }
   
     get QuantityToBeQuoted(): number {

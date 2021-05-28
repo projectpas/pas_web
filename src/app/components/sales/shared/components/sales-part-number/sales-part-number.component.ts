@@ -44,6 +44,7 @@ export class SalesPartNumberComponent {
   summaryColumns: any[] = [];
   @ViewChild("addPart", { static: false }) addPart: ElementRef;
   @ViewChild("salesMargin", { static: false }) salesMargin: ElementRef;
+  @ViewChild("updateConfirmationModal", { static: false }) public updateConfirmationModal: ElementRef;
   @Input() customer: any;
   @Input() totalFreights = 0;
   @Input() totalCharges = 0;
@@ -60,6 +61,7 @@ export class SalesPartNumberComponent {
   isQtyAdjust: boolean = false;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output('on-parts-save') onPartsSavedEvent: EventEmitter<ISalesOrderQuotePart[]> = new EventEmitter<ISalesOrderQuotePart[]>();
+  @Output('on-create-new-version') createNewVersionEvent: EventEmitter<any[]> = new EventEmitter<any[]>();
   public partSaveConfirmationModal: ElementRef;
   isSuccess: boolean = false;
   defaultCurrencyId: any;
@@ -71,6 +73,8 @@ export class SalesPartNumberComponent {
   canSaveParts = false;
   priorities = [];
   saveButton = false;
+  isApprovedPartUpdated: boolean = false;
+
   constructor(
     private modalService: NgbModal,
     private salesQuoteService: SalesQuoteService,
@@ -457,6 +461,10 @@ export class SalesPartNumberComponent {
   }
 
   openSalesMarginSave(event) {
+    debugger;
+    if (event.isApproved == true) {
+      this.isApprovedPartUpdated = true;
+    }
     // if(!this.checkForDuplicates(event)){
     this.salesQuoteService.getSearchPartObject().subscribe(data => {
       this.query = data;
@@ -510,7 +518,7 @@ export class SalesPartNumberComponent {
           this.query.partSearchParamters.quantityToQuote = parentLine[0].quantityToBeQuoted;
           this.query.partSearchParamters.quantityAlreadyQuoted = parentLine[0].quantityAlreadyQuoted;
           this.part['quantityToQuote'] = parentLine[0].quantityToBeQuoted;
-          
+
           if ((parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis'])) > 0)
             this.part['quantityAlreadyQuoted'] = parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis']);
           else
@@ -662,6 +670,15 @@ export class SalesPartNumberComponent {
     // }
   }
 
+  checkIfApprovedPartUpdated() {
+    if (this.isApprovedPartUpdated) {
+      this.modal = this.modalService.open(this.updateConfirmationModal, { size: "sm" });
+    }
+    else {
+      this.approve();
+    }
+  }
+
   enableUpdateButton: boolean = false;
 
   approve() {
@@ -765,9 +782,10 @@ export class SalesPartNumberComponent {
         this.alertService.stopLoadingMessage();
         this.isSpinnerVisible = false;
         this.inputValidCheckHeader = true;
+        this.isApprovedPartUpdated = false;
         this.alertService.showMessage(
           "Success",
-          `PN  updated successfully.`,
+          `PN updated successfully.`,
           MessageSeverity.success
         );
         this.onPartsSavedEvent.emit(this.selectedParts);
@@ -978,6 +996,97 @@ export class SalesPartNumberComponent {
         MessageSeverity.success
       );
     }
+  }
+
+  createNewSalesOrderQuoteVersion() {
+    let updatedParts = [];
+    let invalidParts = false;
+    let invalidDate = false;
+    var errmessage = '';
+    for (let i = 0; i < this.selectedParts.length; i++) {
+      let selectedPart = this.selectedParts[i];
+      let partNameAdded = false;
+      if (!selectedPart.customerRequestDate) {
+        this.isSpinnerVisible = false;
+        invalidParts = true;
+        if (!partNameAdded) {
+          errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+          partNameAdded = true;
+        }
+        errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
+      }
+      if (!selectedPart.estimatedShipDate) {
+        this.isSpinnerVisible = false;
+        invalidParts = true;
+        if (!partNameAdded) {
+          errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+          partNameAdded = true;
+        }
+        errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
+      }
+      if (!selectedPart.promisedDate) {
+        this.isSpinnerVisible = false;
+        invalidParts = true;
+        if (!partNameAdded) {
+          errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+          partNameAdded = true;
+        }
+        errmessage = errmessage + '<br />' + "Please enter Promised Date."
+      }
+      if (!selectedPart.priorityId) {
+        this.isSpinnerVisible = false;
+        invalidParts = true;
+        if (!partNameAdded) {
+          errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+          partNameAdded = true;
+        }
+        errmessage = errmessage + '<br />' + "Please enter priority ID."
+      }
+      if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
+        let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+        let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+        let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+        let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+
+        if (crdate < opendate || esdate < opendate || pdate < opendate) {
+          invalidDate = true;
+          if (crdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
+          }
+          if (esdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
+          }
+          if (pdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
+          }
+        }
+      }
+      if (!invalidParts && !invalidDate) {
+        let partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
+        updatedParts.push(partNumberObj);
+      }
+    }
+
+    this.createNewVersionEvent.emit(updatedParts);
+    this.closeConfirmationModal();
   }
 
   onCloseParMultipletDelete() {

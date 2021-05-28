@@ -67,6 +67,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   labourHeader: any;
   disabledUpdatebtn: boolean = true;
   modal: NgbModalRef;
+  modalMemo: NgbModalRef;
   taskList: any = [];
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService, private modalService: NgbModal,
@@ -1439,29 +1440,33 @@ setTimeout(() => {
   taskIndex: any;
   currentTaks: any;
   taskIndexMemo: any;
-  onAddTextAreaInfo(material, taskName, index, track) {
+  onAddTextAreaInfo(contentMemo,material, taskName, index, track) {
     this.currentIndex = index;
     this.taskIndexMemo = track;
     this.currentTaks = taskName;
-    this.textAreaInfoLabor = material;
+    this.textAreaInfoLabor1 = material;
     this.disableEditor = true;
+    this.modalMemo = this.modalService.open(contentMemo, { size: 'sm', backdrop: 'static', keyboard: false });
   }
   textAreaInfoLabor: any;
   disableEditor: any = true;
   editorgetmemo(ev) {
     this.disableEditor = false;
   }
-  onSaveTextAreaInfo(memo) {
+  textAreaInfoLabor1:any;
+  onSaveTextAreaInfo() {
     this.disableSaveForEdit = false;
-    if (memo) {
-      this.textAreaInfoLabor = memo;
-      this.laborForm.workOrderLaborList[0][this.currentTaks][this.currentIndex].memo = memo;
+    if (this.textAreaInfoLabor1) {
+      this.textAreaInfoLabor = this.textAreaInfoLabor1;
+      this.laborForm.workOrderLaborList[0][this.currentTaks][this.currentIndex].memo = this.textAreaInfoLabor1;
     }
-    $("#textarea-popup5").modal("hide");
+    // $("#textarea-popup5").modal("hide");
+    this.modalMemo.close();
     this.disabledUpdatebtn = false;
   }
   onCloseTextAreaInfo() {
-    $("#textarea-popup5").modal("hide");
+    // $("#textarea-popup5").modal("hide");
+    this.modalMemo.close()
   }
   checkValid(v) {
     this.disabledUpdatebtn = false;

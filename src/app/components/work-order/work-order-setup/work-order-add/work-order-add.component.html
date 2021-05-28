@@ -998,10 +998,15 @@
                         <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'communication'}"
                             (click)="gridTabChange('communication')">Communication</a>
                     </li>
-                    <li class="nav-item">
-                        <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'pickMPN'}"
-                            (click)="gridTabChange('pickMPN')">Pick MPN</a>
+                    <li class="nav-item" *ngIf="!isSubWorkOrder">
+                        <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'pickticket'}"
+                            (click)="gridTabChange('pickticket')">Pick MPN</a>
                     </li>
+                     <!-- <li class="nav-item" *ngIf="!isSubWorkOrder">
+                        <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'pickticket'}"
+                            (click)="gridTabChange('pickticket')">Pick Ticket</a>
+                    </li> -->
+
                     <li class="nav-item" *ngIf="!isSubWorkOrder">
                         <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'subWO'}"
                             (click)="gridTabChange('subWO')">Sub-WO</a>
@@ -1106,7 +1111,6 @@
                        
                             </div>
                     </li>
-
                     <li class="nav-item"*ngIf="!isSubWorkOrder" >
                         <a class="nav-link" id="pills-contact-tab" role="tab"
                             [ngClass]="{active : gridActiveTab === 'releasefrom'}"

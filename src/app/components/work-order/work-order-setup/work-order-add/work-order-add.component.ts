@@ -858,15 +858,15 @@ setTimeout(() => {
             const { customerId } = this.workOrderGeneralInformation.customerId;
         }
         if (value == 'pickticket') {
-            //this.isSpinnerVisible = true;
-            // this.workOrderService.getPickTicketListMainPart(this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            //     this.isSpinnerVisible = false;
-            //     const data = res;
-            //     this.managementStructureId = res.managementStructureId;
-            // },
-            //     err => {
-            //         this.isSpinnerVisible = false;
-            //     });
+            this.isSpinnerVisible = true;
+            this.workOrderService.getPickTicketListMainPart(this.workOrderId, this.workFlowWorkOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                const data = res;
+                this.managementStructureId = res.managementStructureId;
+            },
+                err => {
+                    this.isSpinnerVisible = false;
+                });
         }
         if (value == 'shipping') {
             this.isSpinnerVisible = true;

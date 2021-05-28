@@ -84,7 +84,9 @@ import { CommonCommunicationModule } from "../components/common-components/commo
 import { POViewStockDraftListComponent } from "../components/receiving/po-ro/po-view-draftlist/po-view-draftlist.component";
 import { POViewListComponent } from "../components/receiving/po-ro/po-view-list/po-view-list.component";
 import { ROViewStockDraftListComponent } from "../components/receiving/repair-order/ro-view-draftlist/ro-view-draftlist.component";
-import { ROViewListComponent } from "../components/receiving/repair-order/ro-view-list/ro-view-list.component";					
+import { ROViewListComponent } from "../components/receiving/repair-order/ro-view-list/ro-view-list.component";	
+import { PurchaseOrderPrintTemplateComponent } from "../components/vendor/purchase-orders/purchase-order-print-template/purchase-order-print-template.component";
+				
 
 
 @NgModule({
@@ -161,7 +163,8 @@ import { ROViewListComponent } from "../components/receiving/repair-order/ro-vie
 		POViewStockDraftListComponent,
 		POViewListComponent,
 		ROViewStockDraftListComponent,
-		ROViewListComponent
+		ROViewListComponent,
+		PurchaseOrderPrintTemplateComponent
 	],
 	providers: [
 		VendorClassificationComponent,

@@ -484,10 +484,11 @@
                         matTooltipPosition="above" [ngStyle]="{'border':rec.adjustments > 0 ? '1px solid red' : 'inherent'}"
                         [matTooltip]="parsedText(rec.memo)"
                         class="text_editor_box col-sm-10"></div>
-                    <i class="fa fa-pencil contoel_v col-sm-2" data-toggle="modal" [ngStyle]="{'pointerEvents':isView ? 'none' : 'inherent'}"
-                        data-target="#textarea-popup5" matTooltip="Memo"
+                        <!-- data-target="#textarea-popup5"  data-toggle="modal" -->
+                    <i class="fa fa-pencil contoel_v col-sm-2" [ngStyle]="{'pointerEvents':isView ? 'none' : 'inherent'}"
+                        matTooltip="Memo"
                         matTooltipPosition="above" 
-                        (click)="onAddTextAreaInfo(rec.memo,task.description,i,taskIndex)"></i>
+                        (click)="onAddTextAreaInfo(contentMemo,rec.memo,task.description,i,taskIndex)"></i>
                 </div>
                
                 </td>
@@ -496,7 +497,7 @@
                       (click)="showDeleteLabourPopup(task.description,rec, i)" [disabled]="laborForm.workFloworSpecificTaskorWorkOrder== 'workOrder'"><i class="fa fa-trash"></i></button> </span>
                      </td>
               </tr>
-              <div class="modal fade" id="textarea-popup5" role="dialog" data-backdrop="static" data-keyboard="false">
+              <div class="modal fade" id="textarea-popup15" role="dialog" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
     
                     <div class="modal-content">
@@ -520,6 +521,13 @@
     
                 </div>
             </div>
+
+
+
+
+
+
+
             </ng-container>
   </ng-container>
   <!-- <tr *ngIf="laborForm.workOrderLaborList[0].length==0">
@@ -663,3 +671,23 @@
 </button>
 
 <!-- text_sen ng-touched ng-dirty ng-valid -->
+<ng-template #contentMemo let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Memo </h4>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseTextAreaInfo()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body"> 
+    <!-- (ngModelChange)="editorgetmemo($event)" -->
+    <!-- <input type="text"  [(ngModel)]="textAreaInfoLabor1" > -->
+      <p-editor  (ngModelChange)="editorgetmemo($event)"  [style]="{'height':'320px'}" spellcheck="true" autofocus [(ngModel)]="textAreaInfoLabor1" class="text_sen" id="textAfdw_{{currentIndex}}_{{taskIndexMemo}}"
+       name="textAfd_{{currentIndex}}_{{taskIndexMemo}}" required>
+  </p-editor> 
+    <div class="editor-buttons">
+      <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)"
+      (click)="onSaveTextAreaInfo()" [disabled]="disableEditor">Save</button>
+      <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
+    </div>
+  </div>
+</ng-template>
