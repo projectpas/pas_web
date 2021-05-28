@@ -86,6 +86,7 @@ export class SalesOrderBillingComponent implements OnInit {
     billingSieListOriginal: any[];
     countryList: any = [];
     shippingSieListOriginal: any[];
+    invoiceStatus: string;
 
     constructor(public salesOrderService: SalesOrderService,
         public commonService: CommonService,
@@ -177,6 +178,10 @@ export class SalesOrderBillingComponent implements OnInit {
         }, err => {
             this.isSpinnerVisible = false;
         })
+    }
+
+    onInvoiceLoad(invoiceStatus) {
+        this.invoiceStatus = invoiceStatus;
     }
 
     getBillingAndInvoicingForSelectedPart(partNumber, salesOrderShippingId) {
@@ -472,7 +477,7 @@ export class SalesOrderBillingComponent implements OnInit {
             // let pdfPath = billingInvoiceData[0].invoiceFilePath;
             // this.commonService.toDownLoadFile(pdfPath);
             this.print();
-            
+
             billingInvoiceData[0].invoiceStatus = 'Reviewed';
             this.salesOrderService.UpdateSalesOrderBillingInvoicing(this.salesOrderBillingInvoiceId, billingInvoiceData[0]).subscribe(result => {
                 this.getBillingList();
@@ -498,6 +503,17 @@ export class SalesOrderBillingComponent implements OnInit {
                 this.close();
                 this.isSpinnerVisible = false;
             });
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+    }
+
+    PrintInvoiced() {
+        this.isSpinnerVisible = true;
+        this.salesOrderService.getSalesOrderBillingInvoicingById(this.salesOrderBillingInvoiceId).subscribe(result => {
+            this.print();
+            this.close();
+            this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
         });

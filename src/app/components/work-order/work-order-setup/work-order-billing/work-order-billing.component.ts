@@ -9,10 +9,13 @@ import { getObjectById,editValueAssignByCondition, formatNumberAsGlobalSettingsM
 import { Billing } from '../../../../models/work-order-billing.model';
 import { getModuleIdByName } from '../../../../generic/enums';
 import { WorkOrderQuoteService } from '../../../../services/work-order/work-order-quote.service';
+import * as moment from 'moment';
 import {
     WorkOrderLabor
 } from '../../../../models/work-order-labor.modal';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
+import { InvoiceTypeEnum } from 'src/app/components/sales/order/models/sales-order-invoice-type-enum';
+import { AuthService } from 'src/app/services/auth.service';
 
  
 @Component({
@@ -52,6 +55,7 @@ export class WorkOrderBillingComponent implements OnInit {
     @Input() isbillingNotCreated = false;
     overAllMarkup: any;
     employeeList: any;
+    workOrderPartNumberId:number
     customerNamesList: Object;
     soldCustomerSiteList = [];
     shipCustomerSiteList = [];
@@ -60,7 +64,10 @@ export class WorkOrderBillingComponent implements OnInit {
     shipCustomerAddress: any = new AddressModel();
     showBillingForm: boolean = false;
     isMultipleSelected: boolean = false;
+    workOrderShippingId:number;
+    selectedQtyToBill:number;
     isSpinnerVisible = false;
+    loginDetailsForCreate:any;
     managementStructure = {
         companyId: null,
         buId: null,
@@ -91,6 +98,7 @@ export class WorkOrderBillingComponent implements OnInit {
     labor = new WorkOrderLabor();
     markupList: any;
     costPlusType: any;
+    workOrderBillingInvoiceId:number;
     workOrderMaterialList: any[];
     selectedColumns;
     headers = [];
@@ -126,7 +134,7 @@ export class WorkOrderBillingComponent implements OnInit {
     conditions: any;
     currencyList:any=[];
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService,
-        private customerService: CustomerService, private quoteService: WorkOrderQuoteService, private alertService: AlertService
+        private customerService: CustomerService, private quoteService: WorkOrderQuoteService, private alertService: AlertService,   private authService: AuthService,
 
     ) {
 
@@ -148,6 +156,7 @@ export class WorkOrderBillingComponent implements OnInit {
         // }
         const data = this.billingorInvoiceForm;
         this.workOrderId = this.savedWorkOrderData.workOrderId;
+        this.workOrderPartNumberId = this.savedWorkOrderData.woPartNoId;
         this.getBillingList();
         this.getEmployeeList(this.workOrderId);
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
@@ -302,8 +311,19 @@ export class WorkOrderBillingComponent implements OnInit {
                 }
             });
         }
-        this.getBillingAndInvoicingForSelectedPart(lastworkOrderPartId, lastworkOrderShippingId);
+       // this.getBillingAndInvoicingForSelectedPart(lastworkOrderPartId, lastworkOrderShippingId);
         this.showBillingForm = true;
+    }
+
+    onSelectPartNumber(rowData) {
+        if (rowData.workOrderPartId != 0 && rowData.workOrderPartId != 0) {
+            this.selectedQtyToBill = rowData.qtyToBill;
+            this.partSelected = true;
+            this.showBillingForm = true;
+            this.isMultipleSelected = false;
+            this.workOrderShippingId = rowData.workOrderShippingId;
+            //this.getBillingAndInvoicingForSelectedPart(rowData.salesOrderPartId, rowData.salesOrderShippingId);
+        }
     }
 
     getBillingAndInvoicingForSelectedPart(partNumber, lastworkOrderShippingId) {
@@ -462,15 +482,15 @@ export class WorkOrderBillingComponent implements OnInit {
             this.soldCustomerSiteList = res[0].map(x => {
                 return {
                     label: x.siteName,
-                    value: x.customerShippingAddressId
+                    value: x.customerDomensticShippingId
 
                 }
             });
             this.soldCustomerShippingOriginalData.forEach(
                 x => {
                     if (x.isPrimary) {
-                        this.billingorInvoiceForm.soldToSiteId = x.customerShippingAddressId;
-                        this.changeOfSoldSiteName(x.customerShippingAddressId);
+                        this.billingorInvoiceForm.soldToSiteId = x.customerDomensticShippingId;
+                        this.changeOfSoldSiteName(x.customerDomensticShippingId);
                     }
                 }
             )
@@ -482,7 +502,8 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     changeOfSoldSiteName(value) {
-        const data = getObjectById('customerShippingAddressId', value, this.soldCustomerShippingOriginalData);
+        debugger;
+        const data = getObjectById('customerDomensticShippingId', value, this.soldCustomerShippingOriginalData);
         if (data) {
             this.soldCustomerAddress.line1 = data.address1;
             this.soldCustomerAddress.line2 = data.address2;
@@ -507,14 +528,14 @@ export class WorkOrderBillingComponent implements OnInit {
             this.shipCustomerSiteList = res[0].map(x => {
                 return {
                     label: x.siteName,
-                    value: x.customerShippingAddressId
+                    value: x.customerDomensticShippingId
                 }
             });
             this.shipCustomerShippingOriginalData.forEach(
                 x => {
                     if (x.isPrimary) {
-                        this.billingorInvoiceForm.shipToSiteId = x.customerShippingAddressId
-                        this.changeOfShipSiteName(x.customerShippingAddressId);
+                        this.billingorInvoiceForm.shipToSiteId = x.customerDomensticShippingId
+                        this.changeOfShipSiteName(x.customerDomensticShippingId);
                     }
                 }
             )
@@ -525,7 +546,8 @@ export class WorkOrderBillingComponent implements OnInit {
             })
     }
     changeOfShipSiteName(value) {
-        const data = getObjectById('customerShippingAddressId', value, this.shipCustomerShippingOriginalData);
+        debugger;
+        const data = getObjectById('customerDomensticShippingId', value, this.shipCustomerShippingOriginalData);
 
         if (data) {
             this.shipCustomerAddress.line1 = data.address1;
@@ -725,15 +747,154 @@ export class WorkOrderBillingComponent implements OnInit {
 
 
 
-    saveWorkOrderBilling() {
-        this.saveWOBilling.emit(this.billingorInvoiceForm);
+    // saveWorkOrderBilling() {
+    //     this.saveWOBilling.emit(this.billingorInvoiceForm);
 
-        // this.getQuoteCostingData();
+    //     // this.getQuoteCostingData();
+    // }
+
+    get userName(): string {
+        return this.authService.currentUser
+            ? this.authService.currentUser.userName
+            : "";
     }
-    updateWorkOrderBilling() {
-        this.updateWOBilling.emit(this.billingorInvoiceForm);
-        // this.getQuoteCostingData();
+    GenerateInvoice() {
+        this.saveWorkOrderBilling(InvoiceTypeEnum.Billed);
     }
+    updateWorkOrderBilling() { }
+
+
+    saveWorkOrderBilling(invoiceStatus: InvoiceTypeEnum) {
+        debugger;
+        let billingItems: BillingItems[] = [];
+
+        if (this.isMultipleSelected) {
+            this.billingList.filter(a => {
+                for (let i = 0; i < a.workOrderBillingInvoiceChild.length; i++) {
+                    if (a.workOrderBillingInvoiceChild[i].selected == true) {
+                        var p = new BillingItems;
+                        p.workOrderShippingId = a.workOrderBillingInvoiceChild[i].workOrderShippingId;
+                        p.noOfPieces = a.workOrderBillingInvoiceChild[i].qtyToBill;
+                        p.workOrderPartId = a.workOrderBillingInvoiceChild[i].workOrderPartId;
+
+                        billingItems.push(p);
+                    }
+                }
+            });
+        }
+        else {
+            var p = new BillingItems;
+            p.workOrderShippingId = this.workOrderShippingId;
+            p.noOfPieces = this.selectedQtyToBill;
+            p.workOrderPartId = this.selectedPartNumber;
+
+            billingItems.push(p);
+        }
+
+        this.isSpinnerVisible = true;
+        let billingorInvoiceFormTemp = JSON.parse(JSON.stringify(this.billingorInvoiceForm));
+        this.billingorInvoiceForm.soldToCustomerId = billingorInvoiceFormTemp.soldToCustomerId['customerId'];
+        this.billingorInvoiceForm.shipToCustomerId = billingorInvoiceFormTemp.shipToCustomerId['customerId'];
+       //this.billingorInvoiceForm.billToCustomerId = billingorInvoiceFormTemp.billToCustomerId['userID'];
+        //this.billingorInvoiceForm.billToSiteId = billingorInvoiceFormTemp.billToSiteId;
+        this.billingorInvoiceForm.shipToSiteId = billingorInvoiceFormTemp.shipToSiteId;
+        this.billingorInvoiceForm.soldToSiteId = billingorInvoiceFormTemp.soldToSiteId;
+        this.billingorInvoiceForm.createdDate = new Date();
+        this.billingorInvoiceForm.updatedDate = new Date();
+        this.billingorInvoiceForm.createdBy = this.userName;
+        this.billingorInvoiceForm.updatedBy = this.userName;
+        this.billingorInvoiceForm.workOrderId = this.workOrderId;
+        this.billingorInvoiceForm.workFlowWorkOrderId= this.workFlowWorkOrderId;
+        this.billingorInvoiceForm.workOrderPartNoId =this.workOrderPartNumberId;
+        this.billingorInvoiceForm.itemMasterId =this.workOrderPartNumberId;
+        this.billingorInvoiceForm.masterCompanyId= this.authService.currentUser.masterCompanyId;
+        this.billingorInvoiceForm.isActive= true;
+        this.billingorInvoiceForm.isDeleted= false;
+        this.billingorInvoiceForm.customerId = billingorInvoiceFormTemp.customerId;
+        this.billingorInvoiceForm.invoiceNo = "test";
+        this.billingorInvoiceForm.invoiceStatus = invoiceStatus == InvoiceTypeEnum.Billed ? 'Billed' : (invoiceStatus == InvoiceTypeEnum.Reviewed ? 'Reviewed' : 'Invoiced');
+        this.billingorInvoiceForm.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId),
+        this.billingorInvoiceForm.employeeId= editValueAssignByCondition('value', this.savedWorkOrderData.employeeId),
+        this.billingorInvoiceForm.billingItems = billingItems;
+        this.billingorInvoiceForm.invoiceTime =moment(billingorInvoiceFormTemp.invoiceTime, ["h:mm A"]).format("HH:mm")
+
+        this.workOrderService.createBillingByWorkOrderId(this.billingorInvoiceForm).subscribe(result => {
+            this.alertService.showMessage(
+                this.moduleName,
+                'Saved Work Order Billing Succesfully',
+                MessageSeverity.success
+            );
+            this.getBillingList();
+            this.showBillingForm = false;
+            this.workOrderId = result[0].workOrderId;
+            this.workOrderBillingInvoiceId = result[0].woBillingInvoicingId;
+            //this.loadInvoiceView();
+            this.isSpinnerVisible = false;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+    }
+    createModeData() {
+        this.loginDetailsForCreate = {
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
+            createdBy: this.userName,
+            updatedBy: this.userName,
+            createdDate: new Date(),
+            updatedDate: new Date(),
+            isActive: true,
+            isDeleted: false
+        }
+    }
+
+    // saveWorkOrderBilling(object) {
+    //     const data = {
+    //         ...object,
+    //         ...this.loginDetailsForCreate,
+    //         workOrderId: this.workOrderId,
+    //         workFlowWorkOrderId: this.workFlowWorkOrderId,
+    //         workOrderPartNoId: this.workOrderPartNumberId,
+    //         itemMasterId: this.workOrderPartNumberId,
+    //         customerId: editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId),
+    //         employeeId: editValueAssignByCondition('value', this.savedWorkOrderData.employeeId),
+    //         soldToCustomerId: editValueAssignByCondition('customerId', object.soldToCustomerId),
+    //         shipToCustomerId: editValueAssignByCondition('customerId', object.shipToCustomerId),
+    //         invoiceTime: moment(object.invoiceTime, ["h:mm A"]).format("HH:mm")
+    //     }
+
+    //     if (this.isEditBilling) {
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.updateBillingByWorkOrderId(data).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //             this.isSpinnerVisible = false;
+    //             this.alertService.showMessage(
+    //                 this.moduleName,
+    //                 'Updated Work Order Billing Succesfully',
+    //                 MessageSeverity.success
+    //             );
+    //         },
+    //             err => {
+    //                 this.isSpinnerVisible = false;
+    //                 this.errorHandling(err)
+    //             })
+    //     } else {
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.createBillingByWorkOrderId(data).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //             this.isSpinnerVisible = false;
+    //             this.alertService.showMessage(
+    //                 this.moduleName,
+    //                 'Saved Work Order Billing Succesfully',
+    //                 MessageSeverity.success
+    //             );
+    //         },
+    //             err => {
+    //                 this.isSpinnerVisible = false;
+    //                 this.errorHandling(err)
+    //             })
+    //     }
+    // }
+    // updateWorkOrderBilling() {
+    //     this.updateWOBilling.emit(this.billingorInvoiceForm);
+    //     // this.getQuoteCostingData();
+    // }
 
     onChangeWOCostPlus() {
         if (this.billingorInvoiceForm.totalWorkOrder) {
@@ -754,6 +915,8 @@ export class WorkOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.miscChargesCostPlus = this.billingorInvoiceForm.miscChargesCostPlus.toFixed(2);
         // this.calculateGrandTotal();
     }
+
+    
     getSiteNames(object) {
         const { customerId } = object;
         this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
@@ -761,15 +924,15 @@ export class WorkOrderBillingComponent implements OnInit {
             this.soldCustomerSiteList = res[0].map(x => {
                 return {
                     label: x.siteName,
-                    value: x.customerShippingAddressId
+                    value: x.customerDomensticShippingId
 
                 }
             });
             this.soldCustomerShippingOriginalData.forEach(
                 x => {
                     if (x.isPrimary) {
-                        this.billingorInvoiceForm.soldToSiteId = x.customerShippingAddressId;
-                        this.changeOfSoldSiteName(x.customerShippingAddressId);
+                        this.billingorInvoiceForm.soldToSiteId = x.customerDomensticShippingId;
+                        this.changeOfSoldSiteName(x.customerDomensticShippingId);
                     }
                 }
             )
@@ -777,14 +940,14 @@ export class WorkOrderBillingComponent implements OnInit {
             this.shipCustomerSiteList = res[0].map(x => {
                 return {
                     label: x.siteName,
-                    value: x.customerShippingAddressId
+                    value: x.customerDomensticShippingId
                 }
             });
             this.shipCustomerShippingOriginalData.forEach(
                 x => {
                     if (x.isPrimary) {
-                        this.billingorInvoiceForm.shipToSiteId = x.customerShippingAddressId
-                        this.changeOfShipSiteName(x.customerShippingAddressId);
+                        this.billingorInvoiceForm.shipToSiteId = x.customerDomensticShippingId
+                        this.changeOfShipSiteName(x.customerDomensticShippingId);
                     }
                 }
             )
@@ -904,4 +1067,10 @@ export class WorkOrderBillingAndInvoicing {
     createdDate: Date;
     updatedDate: Date;
     billingItems: any;
+}
+
+export class BillingItems {
+    workOrderShippingId: number;
+    noOfPieces: number;
+    workOrderPartId: number;
 }

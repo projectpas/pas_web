@@ -255,7 +255,7 @@
                 </td>
                 <td> 
                   <p-dropdown placeholder="Select Billing Type" (ngModelChange)="checkValid(17)" [options]="billableList" class="p-dropdown-1001"
-                  [(ngModel)]="rec.billableId" [disabled]="isView "></p-dropdown>
+                  [(ngModel)]="rec.billableId" [disabled]="isView " appendTo="body"></p-dropdown>
                 </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&

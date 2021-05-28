@@ -6,6 +6,8 @@
               <div class="form-group invoice-button-div">
                   <button *ngIf="isView == false" type="submit" class="btn  submit-btn btn btn-primary"
                       [disabled]="disableCreateInvoiceBtn" (click)="PerformBilling()">Invoice</button>
+                      <button *ngIf="isView == false" type="submit" class="btn  submit-btn btn btn-primary"
+                      [disabled]="disableCreateInvoiceBtn" (click)="PerformBilling()">Invoice for Qoute</button>
               </div>
           </div>
       </div>
@@ -1117,7 +1119,7 @@
                 </div>
           
                 <div class="float-right" *ngIf="!isViewMode">
-                  <button class="btn btn-primary pull-right"  *ngIf="!isEditBilling" (click)="saveWorkOrderBilling()" [disabled]="!billinForm.valid">Save</button>
+                  <button class="btn btn-primary pull-right"  *ngIf="!isEditBilling" (click)="GenerateInvoice()" >Save</button>
                   <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button>
                 </div>
               </form>

@@ -587,7 +587,7 @@
     <div class="modal-body">
         <div id="soInvoice">
             <app-sales-order-print-invoice [salesOrderbillingInvoicingId]="SObillingInvoicingId"
-                [salesOrderId]="salesOrderId"></app-sales-order-print-invoice>
+                [salesOrderId]="salesOrderId" (onInvoiceLoad)="onInvoiceLoad($event)"></app-sales-order-print-invoice>
         </div>
     </div>
     <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
@@ -607,8 +607,9 @@
     </div>
     <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="PrintInvoice()">Print</button>
-        <button type="button" class="btn btn-primary" (click)="PrintPostInvoice()">Print And Post</button>
+        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Billed'" (click)="PrintInvoice()">Print</button>
+        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Invoiced'" (click)="PrintInvoiced()">Print</button>
+        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Reviewed'" (click)="PrintPostInvoice()">Print And Post</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
     </div>
 </ng-template>

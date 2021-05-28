@@ -176,7 +176,17 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'memo', header: 'Memo' }
     ]
 
-
+     pickTicketItemInterfaceheader = [
+        { field: "partNumber", header: "PN", width: "100px" },
+        { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
+        { field: "qtyOnHand", header: "Qty On Hand", width: "50px" },
+        { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
+        { field: "qtyToShip", header: "Qty To Pick", width: "100px" },
+        { field: "serialNumber", header: "Serial Num", width: "100px" },
+        { field: "stkLineManufacturer", header: "Manufacturer", width: "100px" },
+        { field: "stockType", header: "Stock Type", width: "100px" },
+        { field: "tracableToName", header: "Tracable To", width: "100px" },
+      ];
 
     isStockLine:boolean=true;
     isStockView:boolean=true;
@@ -1443,8 +1453,8 @@ setStatusForSubWo(){
       { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
       { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
       { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
-      { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
-      { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
+      { field: 'stockLineQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
+      { field: 'stockLineQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
       { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
       { field: 'uom', header: 'UOM', align: 0, width: "70px" },
       { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
@@ -1498,7 +1508,84 @@ setStatusForSubWo(){
     //     // this.addPartModal.close();
     //     // $('#addPart').modal("hide");
     // }
-
+    parts: any[] = [];
+    qtyToPick: number = 0;
+    pickticketItemInterface(rowData, pickticketieminterface) {
+      const itemMasterId = rowData.itemMasterId;
+      const conditionId = rowData.conditionCodeId;
+      const workOrderId = rowData.workOrderId;
+      const workOrderMaterialsId = rowData.workOrderMaterialsId;
+      this.qtyToPick = rowData.qtyToPick;
+      this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
+      this.workOrderService
+        .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId)
+        .subscribe((response: any) => {
+          this.isSpinnerVisible = false;
+          this.parts = response;
+          for (let i = 0; i < this.parts.length; i++) {
+            if (this.parts[i].oemDer == null)
+              this.parts[i].oemDer = this.parts[i].stockType;
+            this.parts[i]['isSelected'] = false;
+            this.parts[i]['workOrderId'] = workOrderId;
+            this.parts[i]['workOrderMaterialsId'] = workOrderMaterialsId;
+            this.parts[i].qtyToShip = this.qtyToPick;
+            if (this.parts[i].qtyToReserve == 0) {
+              this.parts[i].qtyToReserve = null
+            }
+          }
+        }, error => {
+          this.isSpinnerVisible = false;
+        });
+    }
+    get employeeId() {
+        return this.authService.currentUser
+          ? this.authService.currentUser.employeeId
+          : "";
+      }
+    savepickticketiteminterface(parts) {
+        let tempParts = [];
+        let invalidQty = false;
+        parts.filter(x => {
+          x.createdBy = this.userName;
+          x.updatedBy = this.userName;
+          x.pickedById = this.employeeId;
+          x.masterCompanyId = this.currentUserMasterCompanyId;
+          if (x.isSelected == true) {
+            tempParts.push(x)
+          }
+        })
+        parts = [];
+        parts = tempParts;
+        for (let i = 0; i < parts.length; i++) {
+          let selectedItem = parts[i];
+          var errmessage = '';
+          if (selectedItem.qtyToShip > this.qtyToPick) {
+            this.isSpinnerVisible = false;
+            invalidQty = true;
+            errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+          }
+        }
+        if (invalidQty) {
+          this.isSpinnerVisible = false;
+          this.alertService.resetStickyMessage();
+          this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
+        }
+        else {
+        //   this.disableSubmitButton = true;
+          this.workOrderService
+            .savepickticketiteminterface(parts)
+            .subscribe(data => {
+              this.alertService.stopLoadingMessage();
+              this.alertService.showMessage(
+                "Success",
+                `Item Picked Successfully..`,
+                MessageSeverity.success
+              );
+              this.dismissModel();
+            //   this.onSearch();
+            }, error => this.isSpinnerVisible = false);
+        }
+      }
     onCloseMaterial(data){
         $('#showStockLineDetails').modal("hide");
     }

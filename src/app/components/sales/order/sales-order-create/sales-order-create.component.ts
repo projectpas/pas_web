@@ -661,9 +661,9 @@ export class SalesOrderCreateComponent implements OnInit {
       this.selectedParts.push(partNumberObj);
     }
     this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.selectedParts, this.marginSummary);
-    
-    if (this.salesOrderPartNumberComponent) { 
-      this.salesOrderPartNumberComponent.refresh(); 
+
+    if (this.salesOrderPartNumberComponent) {
+      this.salesOrderPartNumberComponent.refresh();
     }
     this.salesQuote.managementStructureId = this.salesOrderObj.managementStructureId;
     this.managementStructureId = this.salesOrderObj.managementStructureId;
@@ -1185,10 +1185,10 @@ export class SalesOrderCreateComponent implements OnInit {
 
   onTabChange(event) {
     let indexToInc: number = 0;
-    if (this.soSettingsList[0] != null && 
-      (!this.soSettingsList[0].isApprovalRule || 
-        (this.soSettingsList[0].isApprovalRule 
-          && new Date(this.soSettingsList[0].effectiveDate) > new Date(this.todayDate)))){
+    if (this.soSettingsList[0] != null &&
+      (!this.soSettingsList[0].isApprovalRule ||
+        (this.soSettingsList[0].isApprovalRule
+          && new Date(this.soSettingsList[0].effectiveDate) > new Date(this.todayDate)))) {
       indexToInc = 1;
     }
 
@@ -1196,8 +1196,8 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrderPartNumberComponent.refresh();
       this.salesOrderPartNumberComponent.refreshParts();
     }
-    if (event.index == 1 && (this.soSettingsList[0] != null 
-      && this.soSettingsList[0].isApprovalRule 
+    if (event.index == 1 && (this.soSettingsList[0] != null
+      && this.soSettingsList[0].isApprovalRule
       && new Date(this.todayDate) >= new Date(this.soSettingsList[0].effectiveDate))) {
       this.salesOrderApproveComponent.refresh(this.marginSummary);
     }
@@ -1412,6 +1412,18 @@ export class SalesOrderCreateComponent implements OnInit {
       this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);
       if (!this.isEdit) {
         this.getEmployeerOnLoad(this.salesQuote.employeeId ? this.salesQuote.employeeId.value : this.employeeId);
+      }
+      else {
+        if (this.salesQuote != undefined) {
+          this.salesQuote.employeeId = getObjectById('value', this.salesOrderObj.employeeId, this.allEmployeeList);//this.salesOrderObj.employeeId;
+          this.setSalesPerson();
+          this.setCSR();
+          this.salesQuote.employeeName = getObjectById(
+            "value",
+            this.salesOrderObj.employeeId,
+            this.allEmployeeList
+          );
+        }
       }
     }, err => {
       this.isSpinnerVisible = false;
@@ -1901,9 +1913,9 @@ tfoot { display:table-footer-group }
   }
 
   checkEnforceInternalApproval() {
-    return this.soSettingsList[0] != null && 
-    this.soSettingsList[0].isApprovalRule && 
-    new Date(this.todayDate) >= new Date(this.soSettingsList[0].effectiveDate);
+    return this.soSettingsList[0] != null &&
+      this.soSettingsList[0].isApprovalRule &&
+      new Date(this.todayDate) >= new Date(this.soSettingsList[0].effectiveDate);
   }
 
   getChargesList() { }
