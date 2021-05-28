@@ -574,6 +574,7 @@
                 <button (click)="addStockLine()" data-toggle="modal" data-target="#addStockLine" class="btn btn-primary"
                     [disabled]="disableAddPart">Add Stock
                     Line</button>
+                <button (click)="initiateROPrintProcess()" class="btn btn-primary">Print</button>
                 <button style="display: none;" data-toggle="modal" data-target="#add-multiple-partnum"
                     class="btn btn-primary" (click)="onAddMultParts()" [disabled]="disableAddPart">Add Multiple
                     PN</button>
@@ -2919,6 +2920,22 @@
             <button type="button" *ngIf="displayWarningModal" class="btn btn-danger"
                 (click)="dismissModel(false)">No</button>
         </div>
+    </div>
+</ng-template>
+
+<ng-template #repairOrderPrintPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Print Repair Order</h4>
+    </div>
+    <div class="modal-content" id="repair_order_print_content">
+        <div class="modal-body">            
+            <app-repair-order-print-template [referenceId]="id"></app-repair-order-print-template>  
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
 

@@ -115,7 +115,13 @@ export class RepairOrderService {
 
   getAllEditID(reairOrderId) {
     return this.repairOrderEndpoint.getAllEditID(reairOrderId);
-}
+  }
+
+  getPrintRepairOrderData(repairOrderId) {
+    return this.repairOrderEndpoint.getPrintRepairOrderData(repairOrderId);
+  }
+
+
 
   ///////
 /*****
