@@ -378,14 +378,18 @@
                                             (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <span *ngIf="!isEditDisabled(salesQuote, part)">
+                                        <!-- <span *ngIf="!isEditDisabled(salesQuote, part)">
                                             <a [class.disabled]="isEditDisabled(salesQuote, part)"
                                                 [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
                                                 class="btn nobg view-part-eye" (click)="openPartToEdit(part)"
                                                 matTooltip="Edit Price" matTooltipPosition="above">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                        </span>
+                                        </span> -->
+                                        <a class="btn nobg view-part-eye" (click)="openPartToEdit(part)"
+                                            matTooltip="Edit Price" matTooltipPosition="above">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
                                         <span>
                                             <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
                                                 [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}"
@@ -486,8 +490,7 @@
             (click)="createNewSalesOrderQuoteVersion()">
             Create New Version
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal"
-            (click)="approve()">Update</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="approve()">Update</button>
     </div>
 </ng-template>
 <ng-template #updatePNDetailsModal let-c="close" let-d="dismiss">

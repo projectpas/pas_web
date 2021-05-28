@@ -222,8 +222,8 @@ export class SalesQuoteListComponent implements OnInit {
                         this.totalRecords / this.searchParameters.rows
                     );
                     this.showPaginator = this.totalRecords > 0;
+                    this.isSpinnerVisible = false;
                 }
-                this.isSpinnerVisible = false;
             }, error => {
                 this.isSpinnerVisible = false;
             });
