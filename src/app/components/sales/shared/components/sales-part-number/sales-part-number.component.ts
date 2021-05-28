@@ -849,7 +849,7 @@ export class SalesPartNumberComponent {
     parts.forEach(part => {
       uniquePart.quantityToBeQuoted = this.getSum(uniquePart.quantityToBeQuoted, part.quantityFromThis);
       uniquePart.quantityAlreadyQuoted = uniquePart.quantityToBeQuoted;
-      uniquePart.qtyAvailable = this.getSum(uniquePart.qtyAvailable, part.qtyAvailable);
+      uniquePart.quantityAvailable = this.getSum(uniquePart.quantityAvailable ? uniquePart.quantityAvailable : 0, part.qtyAvailable);
       uniquePart.qtyOnHand = this.getSum(uniquePart.qtyOnHand ? uniquePart.qtyOnHand : 0, part.quantityOnHand);
       uniquePart.grossSalePrice = this.getSum(uniquePart.grossSalePrice, part.grossSalePrice);
       uniquePart.salesDiscountExtended = this.getSum(uniquePart.salesDiscountExtended, part.salesDiscountExtended);
@@ -883,7 +883,7 @@ export class SalesPartNumberComponent {
     uniquePart.conditionId = parts[0].conditionId;
     uniquePart.marginPercentageExtended = (uniquePart.marginPercentageExtended) / parts.length;
     uniquePart.itemNo = parts[0].itemNo;
-    uniquePart.quantityAvailable = parts[0].qtyAvailable;
+    uniquePart.qtyAvailable = parts[0].qtyAvailable;
     uniquePart.quantityOnHand = parts[0].quantityOnHand;
     this.countItemNo = parts[0].itemNo;
     return uniquePart;

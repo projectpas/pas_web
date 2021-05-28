@@ -4,6 +4,8 @@ import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../../../services/auth.service';
 declare var $ : any;
+import * as moment from 'moment';
+import { formatNumberAsGlobalSettingsModule, listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
 @Component({
     selector: 'app-work-order-labour-analysis',
     templateUrl: './work-order-labour-analysis.component.html',
@@ -23,28 +25,40 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     totalPages: number = 10;
     data: any[] = [];
     isSpinnerVisible: boolean = false;
+    viewType: any = 'detailedview';
+    headers: any[];
+    columns: any[];
+    selectedColumns: any[];
+    selectedColumn: any[];
+    works: any[] = [];
+    tempworks: any[] = [];
+    pnViewSelected = false;
+    showPaginator: boolean = false;
+    isGlobalFilter: boolean = false;
+    filterText: any = '';
     private onDestroy$: Subject<void> = new Subject<void>();
-    headers = [
-        { field: 'partNumber', header: 'Main PN' },
-        { field: 'revisedPN', header: 'Revised PN' },
-        { field: 'partDescription', header: 'PN Description' },
-        { field: 'action', header: 'Task' },
-        { field: 'expertise', header: 'Expertise' },
-        { field: 'employeeName', header: 'Employee' },
-        { field: 'hours', header: 'Act Hours',width:"60px" },
-        { field: 'stdHours', header: 'Std Hours',width:"60px" },
-        { field: 'varHours', header: 'Var. Hours',width:"60px" },
-        { field: 'varPercentage', header: 'Var %',width:"60px" },
-        { field: 'customer', header: 'Customer' },
-        { field: 'workOrderNum', header: 'WO Num' },
-        { field: 'stage', header: 'Stage' },
-        { field: 'status', header: 'Status' }
-    ]
-    selectedColumns = this.headers;
+    // headers = [
+    //     { field: 'partNumber', header: 'Main PN' },
+    //     { field: 'revisedPN', header: 'Revised PN' },
+    //     { field: 'partDescription', header: 'PN Description' },
+    //     { field: 'action', header: 'Task' },
+    //     { field: 'expertise', header: 'Expertise' },
+    //     { field: 'employeeName', header: 'Employee' },
+    //     { field: 'hours', header: 'Act Hours',width:"60px" },
+    //     { field: 'stdHours', header: 'Std Hours',width:"60px" },
+    //     { field: 'varHours', header: 'Var. Hours',width:"60px" },
+    //     { field: 'varPercentage', header: 'Var %',width:"60px" },
+    //     { field: 'customer', header: 'Customer' },
+    //     { field: 'workOrderNum', header: 'WO Num' },
+    //     { field: 'stage', header: 'Stage' },
+    //     { field: 'status', header: 'Status' }
+    // ]
+    // selectedColumns = this.headers;
     workOrderId: any;
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, ) { }
     ngOnInit() {
         this.workOrderId = this.savedWorkOrderData.workOrderId;
+        this.initColumns();
         if (this.data.length != 0) {
             this.totalRecords = this.data.length;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -76,6 +90,144 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                 }
             )
     }
+    loadData(event) {
+        this.lazyLoadEventData = event;
+        const pageIndex = parseInt(event.first) / event.rows;
+        this.pageIndex = pageIndex;
+        this.pageSize = event.rows;
+        event.first = pageIndex;
+        if (this.viewType) {
+            this.lazyLoadEventData.filters = {
+                ...this.lazyLoadEventData.filters,
+                viewType: this.viewType
+            }
+        }
+
+        // if (!this.isGlobalFilter) {   
+        //     this.getAllWorkOrderList(event);         
+        // } else {
+        //     this.globalSearch(this.filterText)
+        // }
+    }
+
+    initColumns() {
+        this.headers = [
+            { field: 'partNumber', header: 'Main PN' },
+            { field: 'revisedPN', header: 'Revised PN' },
+            { field: 'partDescription', header: 'PN Description' },
+            { field: 'action', header: 'Task' },
+            { field: 'expertise', header: 'Expertise' },
+            { field: 'employeeName', header: 'Employee' },
+            { field: 'hours', header: 'Act Hours',width:"60px" },
+            { field: 'stdHours', header: 'Std Hours',width:"60px" },
+            { field: 'varHours', header: 'Var. Hours',width:"60px" },
+            { field: 'varPercentage', header: 'Var %',width:"60px" },
+            { field: 'customer', header: 'Customer' },
+            { field: 'workOrderNum', header: 'WO Num' },
+            { field: 'stage', header: 'Stage' },
+            { field: 'status', header: 'Status' }
+        ];
+        this.selectedColumns = this.headers;
+      }
+
+      initSummaryColumns() {
+        this.headers = [
+          { field: "salesOrderNumber", header: "SO Num", width: "120px" },
+          { field: "versionNumber", header: "Ver Num", width: "80px" },
+          { field: "partNumber", header: "PN", width: "130px" },
+          { field: "partDescription", header: "PN Description", width: "180px" },
+          { field: "uomName", header: "UOM", width: "100px" },
+          { field: "currency", header: "Curr", width: "100px" },
+          { field: "qty", header: "Qty", width: "85px" },
+          { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
+          { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+          { field: "misc", header: "Misc Charges", width: "120px" },
+          { field: "totalSales", header: "Total Revenue", width: "130px" },
+          { field: "unitCost", header: "Unit Cost", width: "130px" },
+          { field: "unitCostExtended", header: "Ext Cost", width: "130px" },
+          { field: "marginAmountExtended", header: "Margin Amt", width: "120px", style: "text-align:right" },
+          { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
+          { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
+          { field: "taxAmount", header: "Tax Amt", width: "120px" },
+          { field: "notes", header: "Notes", width: "120px" }
+        ];
+        this.selectedColumns = this.headers;
+      }
+
+    changeOfStatus(part, viewType) {
+        if (viewType == 'detailedview') {
+          this.initColumns();
+          this.data = JSON.parse(JSON.stringify(this.tempworks));
+          this.pnViewSelected = false;
+    
+        } else {
+          this.initSummaryColumns();
+          this.tempworks = JSON.parse(JSON.stringify(this.data));
+          this.pnViewSelected = true;
+          this.filterParts(this.data);
+        }
+      }
+
+      filterParts(tempSales) {
+        this.data = [];
+        let uniqueParts = this.getUniqueParts(tempSales, 'partNumber');
+        if (uniqueParts.length > 0) {
+          uniqueParts.forEach((part, i) => {
+            let childParts = tempSales.filter(selectedPart => selectedPart.partNumber == part.partNumber)
+            if (childParts && childParts.length > 0) {
+              uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
+              uniqueParts[i].childParts = childParts;
+            }
+          });
+          this.data = uniqueParts;
+        }
+        this.totalRecords = this.data.length;
+        this.totalPages = Math.ceil(
+          this.totalRecords / this.pageSize
+        );
+        this.showPaginator = this.totalRecords > 0;
+      }
+
+      calculateSummarizedRow(parts, uniquePart) {
+        uniquePart = parts[0];
+        if (parts.length > 1) {
+          parts.splice(0, 1);
+          parts.forEach(part => {
+            uniquePart.qty = this.getSum(uniquePart.qty, part.qty);
+            uniquePart.markupExtended = this.getSum(uniquePart.markupExtended, part.markupExtended);
+            uniquePart.grossSalePrice = this.getSum(uniquePart.grossSalePrice, part.grossSalePrice);
+            uniquePart.salesDiscountExtended = this.getSum(uniquePart.salesDiscountExtended, part.salesDiscountExtended);
+            uniquePart.netSales = this.getSum(uniquePart.netSales, part.netSales);
+            uniquePart.misc = this.getSum(uniquePart.misc, part.misc);
+            uniquePart.totalSales = this.getSum(uniquePart.totalSales, part.totalSales);
+            uniquePart.unitCostExtended = this.getSum(uniquePart.unitCostExtended, part.unitCostExtended);
+            uniquePart.marginAmountExtended = this.getSum(uniquePart.marginAmountExtended, part.marginAmountExtended);
+            uniquePart.marginPercentage = this.getSum(uniquePart.marginPercentage, part.marginPercentage);
+            uniquePart.freight = this.getSum(uniquePart.freight, part.freight);
+            uniquePart.taxAmount = this.getSum(uniquePart.taxAmount, part.taxAmount);
+            uniquePart.totalRevenue = this.getSum(uniquePart.totalRevenue, part.totalRevenue);
+          })
+          uniquePart.marginPercentage = uniquePart.marginPercentage / parts.length + 1;
+        }
+        return uniquePart;
+      }
+
+      getSum(num1, num2) {
+        return Number(num1) + Number(num2);
+      }
+    
+      getUniqueParts(myArr, prop1) {
+        let uniqueParts = JSON.parse(JSON.stringify(myArr));
+        uniqueParts.reduceRight((acc, v, i) => {
+          if (acc.some(obj => v[prop1] === obj[prop1])) {
+            uniqueParts.splice(i, 1);
+          } else {
+            acc.push(v);
+          }
+          return acc;
+        }, []);
+        return uniqueParts;
+      }
 
     pageIndexChange(event) {
         this.pageSize = event.rows;
@@ -87,4 +239,306 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     closeModal() {
         $("#downloadConfirmation").modal("hide");
     }
+
+    mouseOverData(key, data) {
+        if (key === 'partNumberType') {
+          return data['partNumber']
+        } else if (key === 'partDescriptionType') {
+          return data['partDescription']
+        } else if (key === 'priorityType') {
+          return data['priority']
+        }
+        else if (key === 'quoteDate' && data[key]) {
+          return moment(data['quoteDate']).format('MM-DD-YYYY');
+        } else if (key === 'createdDate' && data[key]) {
+          return moment(data['createdDate']).format('MM-DD-YYYY');
+        } else if (key === 'updatedDate' && data[key]) {
+          return moment(data['updatedDate']).format('MM-DD-YYYY');
+        }
+        else {
+          return data[key];
+        }
+      }
+    
+      convertDate(key, data) {
+        if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate') && data[key]) {
+          return moment(data[key]).format('MM/DD/YYYY');
+        } else {
+          return data[key];
+        }
+      }
+    
+      getColorCodeForMultiple(data) {
+        return data['partNumberType'] === 'Multiple' ? 'green' : 'black';
+      }
+    
+      calculateMarginPercentage(part: PartDetail, i) {
+        return ((this.data[i].marginAmountExtended / (this.data[i]['totalRevenue'])) * 100).toFixed(2);
+      }
+    
+      calculateMarginAmount(part: PartDetail, i) {
+        return (this.data[i].marginAmountExtended + this.data[i].misc).toFixed(2);
+      }
+    
+      calculateTotalRevenue(part: PartDetail, i) {
+        return (this.data[i].netSales + this.data[i].misc).toFixed(2);
+      }
+    
+      calculateProductRevenue(part, i) {
+        return this.data[i].netSales + this.data[i].misc; // + this.sales[i].freight + this.sales[i].taxAmount;
+      }
+    
+      getPercentage(key) {
+        if (this.data && this.data.length > 0) {
+          let percentage = this.getTotalAmount(key);
+          return (percentage / this.data.length).toFixed(2);
+        }
+      }
+    
+      getTotalAmount(key) {
+        let total = 0;
+        if (this.data && this.data.length > 0) {
+          this.data.forEach(
+            (part) => {
+              total += Number(this.sumAmount(part, key));
+            }
+          )
+        }
+        total.toFixed(2);
+        return this.formateCurrency(total);
+      }
+    
+      sumAmount(part, key) {
+        let total = 0;
+        if (part[key]) {
+          total += Number(part[key].toString().replace(/\,/g, ''));
+        }
+        return total.toFixed(2);
+      }
+    
+      formateCurrency(amount) {
+        return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
+      }
 }
+
+export class PartDetail {
+    salesOrderPartId: number;
+    partNumber: string;
+    stockLineNumber: string;
+    description: string;
+    conditionId: number;
+    conditionDescription: string;
+    classification: string;
+    itemClassification: any;
+    itemGroup: any;
+    quantityRequested: number;
+    quantityAlreadyQuoted: number;
+    quantityToBeQuoted: number;
+    quantityFromThis: number;
+    quantityAvailableForThis: number;
+    uomName: string;
+    currency: any;
+    currencyId: string;
+    currencyDescription: string;
+    fixRate: number;
+    partType: string;
+    markUpPercentage: number;
+    salesDiscount: number;
+    itemMasterId: number;
+    partId: number;
+    stockLineId: number;
+    masterCompanyId: number;
+    method: string;
+    methodType: string;
+    serialNumber: string;
+    pmaStatus: string;
+    idNumber: string;
+    salesPricePerUnit: number;
+    markupPerUnit: number;
+    salesDiscountPerUnit: number;
+    netSalesPricePerUnit: number;
+    unitCostPerUnit: number;
+    marginAmountPerUnit: number;
+    marginPercentagePerUnit: number;
+    salesPriceExtended: number;
+    markupExtended: number;
+    salesDiscountExtended: number;
+    netSalesPriceExtended: number;
+    unitCostExtended: number;
+    marginAmountExtended: number;
+    marginPercentageExtended: number;
+    taxCode: string;
+    taxType: string;
+    taxAmount: number;
+    taxPercentage: number;
+    freight: number;
+    misc: number;
+    totalSales: number;
+    isApproved: boolean;
+    salesOrderId: number;
+    salesOrderQuoteId: number;
+    salesOrderQuotePartId: number;
+    qtyReserved: number;
+    qtyAvailable: number;
+    qtyToShip: number;
+    qtyShipped: number;
+    qtyInvoiced: number;
+    invoiceDate: Date;
+    invoiceNumber: string;
+    shipReference: string;
+    salesQuoteNumber: string;
+    customerRef: string;
+    priority: string;
+    quoteDate?: Date;
+    quoteVesrion: string;
+    itar: string;
+    eccn: string;
+    customerRequestDate?: Date;
+    promisedDate?: Date;
+    estimatedShipDate?: Date;
+    priorityId?: number;
+    statusId?: number;
+    CustomerReference: string;
+    statusName: string;
+    priorityName: string;
+    controlNumber: string;
+    grossSalePrice: number;
+    grossSalePricePerUnit: number;
+    altOrEqType: string;
+    quantityOnHand: number;
+    notes: string;
+    createdBy: string;
+    itemNo: number;
+    qty: number;
+  
+    constructor() { }
+  
+    get QuantityToBeQuoted(): number {
+      return this.quantityToBeQuoted;
+    }
+  
+    set QuantityToBeQuoted(value: number) {
+      this.quantityToBeQuoted = value;
+    }
+  
+    get SalesPricePerUnit(): number {
+      return this.salesPricePerUnit;
+    }
+  
+    set SalesPricePerUnit(value: number) {
+      this.salesPricePerUnit = value;
+    }
+  
+    get MarkupPerUnit(): number {
+      return this.markupPerUnit;
+    }
+  
+    set MarkupPerUnit(value: number) {
+      this.markupPerUnit = value;
+    }
+  
+    get SalesDiscountPerUnit(): number {
+      return this.salesDiscountPerUnit;
+    }
+  
+    set SalesDiscountPerUnit(value: number) {
+      this.salesDiscountPerUnit = value;
+    }
+  
+    get NetSalesPricePerUnit(): number {
+      return this.netSalesPricePerUnit;
+    }
+  
+    set NetSalesPricePerUnit(value: number) {
+      this.netSalesPricePerUnit = value;
+    }
+  
+    get UnitCostPerUnit(): number {
+      return this.unitCostPerUnit;
+    }
+  
+    set MarginAmountPerUnit(value: number) {
+      this.marginAmountPerUnit = value;
+    }
+  
+    get MarginPercentagePerUnit(): number {
+      return this.marginAmountPerUnit;
+    }
+  
+    set MarginPercentagePerUnit(value: number) {
+      this.marginAmountPerUnit = value;
+    }
+  
+    get SalesPriceExtended(): number {
+      return this.salesPriceExtended;
+    }
+  
+    set SalesPriceExtended(value: number) {
+      this.salesDiscountExtended = value;
+    }
+  
+    get MarkupExtended(): number {
+      return this.markupExtended;
+    }
+  
+    set MarkupExtended(value: number) {
+      this.markupExtended = value;
+    }
+  
+    get SalesDiscountExtended(): number {
+      return this.salesDiscountExtended;
+    }
+  
+    set SalesDiscountExtended(value: number) {
+      this.salesDiscountExtended = value;
+    }
+  
+    get NetSalesPriceExtended(): number {
+      return this.netSalesPriceExtended;
+    }
+  
+    set NetSalesPriceExtended(value: number) {
+      this.netSalesPriceExtended = value;
+    }
+  
+    get UnitCostExtended(): number {
+      return this.unitCostExtended;
+    }
+  
+    set UnitCostExtended(value: number) {
+      this.unitCostExtended = value;
+    }
+  
+    get MarginAmountExtended(): number {
+      return this.marginAmountExtended;
+    }
+  
+    set MarginAmountExtended(value: number) {
+      this.marginAmountExtended = value;
+    }
+  
+    get MarginPercentageExtended(): number {
+      return this.marginPercentageExtended;
+    }
+  
+    set MarginPercentageExtended(value: number) {
+      this.marginPercentageExtended = value;
+    }
+  
+    get MarkUpPercentage(): number {
+      return this.markUpPercentage;
+    }
+  
+    set MarkUpPercentage(value: number) {
+      this.markUpPercentage = value;
+    }
+  
+    get SalesDiscount(): number {
+      return this.salesDiscount;
+    }
+  
+    set SalesDiscount(value: number) {
+      this.salesDiscount = value;
+    }
+  }
+  

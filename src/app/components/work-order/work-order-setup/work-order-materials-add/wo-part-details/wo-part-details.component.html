@@ -133,7 +133,7 @@
                     </td>
                     <td *ngFor="let col of columns" pReorderableRowHandle>
                         <span *ngIf="col.field == 'select'">
-                            <input type="checkbox"  (change)="onChange($event, part,rowIndex)" [disabled]="isStockLineViewMode" />
+                            <input type="checkbox" *ngIf="!getCheckBoxDisplay(part, rowIndex,false)" (change)="onChange($event, part,rowIndex)" [disabled]="isStockLineViewMode" />
                         </span>
                         <span *ngIf="col.field == 'partNumber'">
                             {{part.partNumber}}

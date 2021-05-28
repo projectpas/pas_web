@@ -1439,7 +1439,7 @@ setStatusForSubWo(){
      
       { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
       { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
-      { field: ' ', header: 'Qty Req', align: 1, width: "60px" },
+      { field: 'showempty', header: ' ', align: 1, width: "60px" },
       { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
       { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
       { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },

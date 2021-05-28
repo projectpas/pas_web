@@ -1199,7 +1199,7 @@ setTimeout(() => {
       var rminutes = Math.round(minutes);
       obj['adjustedHours'] = rhours + '.' + rminutes
       obj.hours = obj.totalHours + '.' + obj.totalMinutes;
-      obj.hours = obj.adjtotalHours + '.' + obj.ajdtotalMinutes;
+      // obj.hours = obj.adjtotalHours + '.' + obj.ajdtotalMinutes;
       var totalHours = 0;
     }
     this.calculateTotalWorkHours();

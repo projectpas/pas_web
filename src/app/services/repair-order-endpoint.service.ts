@@ -240,7 +240,14 @@ export class RepairOrderEndpoint extends EndpointFactory {
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getPartDetailsWithidForSinglePart<T>(partId));
 			});
-	}
+  }
+  
+  getPrintRepairOrderData(repairOrderId) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/repairOrder/getPrintRepairOrderData?repairOrderId=${repairOrderId}`)
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getPrintRepairOrderData(repairOrderId) );
+    });    
+  }
 
 ////////////////////////////////////////////
  /*

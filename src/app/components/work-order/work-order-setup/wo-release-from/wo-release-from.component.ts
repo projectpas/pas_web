@@ -1,4 +1,4 @@
-import { Component, OnInit,Input,OnChanges } from '@angular/core';
+import { Component, OnInit,Input,OnChanges,Output,EventEmitter} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
@@ -23,6 +23,7 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
   @Input() isView;
   @Input() isEdit;
   @Input() ReleaseDataForm;
+  @Output() updateRelreaseList = new EventEmitter();
   //ReleaseData: any;
   ReleaseData : any = {};
   isSpinnerVisible: boolean = true;
@@ -138,6 +139,7 @@ BindData(response)
       result => {
           this.isSpinnerVisible = false;
           this.isEdit = true;
+          this.updateRelreaseList.emit();
           this.alertService.showMessage(
               '',
               '8130 from Added Succesfully',
@@ -157,6 +159,7 @@ BindData(response)
 
   print(): void {
     this.CreateUpdateReleasedata();
+   
     let printContents, popupWin;
     printContents = document.getElementById('woReleaseFrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');

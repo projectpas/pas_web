@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { CreditTermsService } from '../../../../services/Credit Terms.service';
 import { VendorService } from '../../../../services/vendor.service';
@@ -34,6 +34,7 @@ import { StocklineService } from '../../../../services/stockline.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
+import { StatusEnum } from '../../../../enum/status.enum';
 
 @Component({
 	selector: 'app-ro-setup',
@@ -394,6 +395,14 @@ export class RoSetupComponent implements OnInit {
 	alertText: string
 	salesOrderId: number;
 	msgflag: number = 0;
+	openStatusId: number  = 0
+    pendingStatusId: number  = 0
+    fulfillingStatusId: number  = 0
+    closedStatusId: number  = 0
+    canceledStatusId: number  = 0
+    descriptionStatusId: number  = 0
+	closingStatusId: number  = 0
+	@ViewChild("repairOrderPrintPopup", { static: false }) public repairOrderPrintPopup: ElementRef;
 
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
@@ -424,6 +433,13 @@ export class RoSetupComponent implements OnInit {
 		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
 		this.partName = (localStorage.getItem('partNumber'));
 		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		this.openStatusId = StatusEnum.Open;    
+        this.pendingStatusId = StatusEnum.Pending;    
+        this.fulfillingStatusId = StatusEnum.Fulfilling;    
+        this.closedStatusId = StatusEnum.Closed;    
+        this.canceledStatusId = StatusEnum.Canceled;    
+        this.descriptionStatusId = StatusEnum.Description;    
+        this.closingStatusId = StatusEnum.Closing; 
 	}
 
 	ngOnInit() {
@@ -2743,6 +2759,9 @@ export class RoSetupComponent implements OnInit {
 						`Updated RO Header Successfully`,
 						MessageSeverity.success
 					);
+					if(headerInfoObj.statusId == this.fulfillingStatusId) {						
+						this.route.navigate(['/vendorsmodule/vendorpages/app-ro-list']); 
+					}
 				}, err => {
 					this.isSpinnerVisible = false;
 					this.toggle_ro_header = true;
@@ -5065,5 +5084,14 @@ export class RoSetupComponent implements OnInit {
         	this.modal.componentInstance.stockLineId = row.stockLineId;
 			this.modal.result.then(() => { }, () => { });
 		}
+	}
+
+	initiateROPrintProcess() {
+		let content = this.repairOrderPrintPopup;
+		this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+	}
+
+	closeModal() {
+		this.modal.close();
 	}
 }
