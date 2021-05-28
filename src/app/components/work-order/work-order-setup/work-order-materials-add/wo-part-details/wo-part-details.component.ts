@@ -354,6 +354,7 @@ export class WoPartDetailsComponent implements OnChanges {
           return true;
         }
       }else{
+        if(!this.isEdit){
         sameParts = this.selectedParts.filter(part =>
           part.partNumber == this.formObject.partNumber && part.conditionCodeId == stockLineItem.conditionId
         );
@@ -362,7 +363,7 @@ export class WoPartDetailsComponent implements OnChanges {
         }
       
       }
-
+    }
     } else {
       this.selectedParts = [];
       return false;
