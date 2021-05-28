@@ -49,94 +49,29 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     labourDetailedViewOpened: boolean = false;
 
     materialListHeader = [
-        {
-            "header": "Task",
-            "field": "task"
-        },
-        {
-            "header": "MPN",
-            "field": "partNumber"
-        },
-        {
-            "header": "Revised Part No",
-            "field": "revisedPartNo"
-        },
-        {
-            "header": "Part Description",
-            "field": "partDescription"
-        },
-        {
-            "header": "SN",
-            "field": "serialNo"
-        },
-        {
-            "header": "Stock Line No",
-            "field": "stockLineNo"
-        },
-        {
-            "header": "Stock Type",
-            "field": "stockType"
-        },
-        {
-            "header": "Control #",
-            "field": "controllerId"
-        },
-        {
-            "header": "Control Num",
-            "field": "controllerNo"
-        },
-        {
-            "header": "Cond #",
-            "field": "condition"
-        },
-        {
-            "header": "Item Type",
-            "field": "itemType"
-        },
-        {
-            "header": "Qty Required",
-            "field": "quantityReq"
-        },
-        {
-            "header": "Qty On Hand",
-            "field": "quantityOnHand"
-        },
-        {
-            "header": "Qty Available",
-            "field": "quantityAvailable"
-        },
-        {
-            "header": "QTY Issued",
-            "field": "qtyssued"
-        },
-        {
-            "header": "Unit Cost",
-            "field": "unitCost"
-        },
-        {
-            "header": "Extended Cost",
-            "field": "extendedCost"
-        },
-        {
-            "header": "Warehouse",
-            "field": "warehouse"
-        },
-        {
-            'header': 'Location',
-            'field': 'location'
-        },
-        {
-            'header': 'Receiver',
-            'field': 'receiver'
-        },
-        {
-            'header': 'Site',
-            'field': 'site'
-        },
-        {
-            "header": 'Shelf',
-            "field": "shelf"
-        }
+        {"header": "", "field": "plus"},
+        {"header": "Task","field": "task"},
+        {"header": "MPN", "field": "partNumber"},
+        {"header": "Revised Part No","field": "revisedPartNo"},
+        {"header": "Part Description","field": "partDescription"},
+        {"header": "SN","field": "serialNo"},
+        {"header": "Stock Line No","field": "stockLineNo"},
+        {"header": "Stock Type","field": "stockType"},
+        {"header": "Control #", "field": "controllerId"},
+        {"header": "Control Num","field": "controllerNo"},
+        {"header": "Cond #","field": "condition"},
+        {"header": "Item Type","field": "itemType"},
+        {"header": "Qty Required","field": "quantityReq"},
+        {"header": "Qty On Hand","field": "quantityOnHand"},
+        {"header": "Qty Available","field": "quantityAvailable"},
+        {"header": "QTY Issued","field": "qtyssued"},
+        {"header": "Unit Cost", "field": "unitCost"},
+        { "header": "Extended Cost", "field": "extendedCost"},
+        {"header": "Warehouse","field": "warehouse"},
+        {'header': 'Location','field': 'location'},
+        {'header': 'Receiver','field': 'receiver'},
+        {'header': 'Site','field': 'site'},
+        {"header": 'Shelf',"field": "shelf"}
     ]
 
     labourListHeader = [
@@ -347,7 +282,7 @@ this.gridTabChange('materialList');
         switch(tabname){
             case 'materialList':{
                 this.gridActiveTab = tabname;
-                this.isSpinnerVisible = true;
+                this.isSpinnerVisible = true; 
                 this.workOrderService.getMaterialListMPNS(this.workOrderId)
                 .subscribe(
                     (res: any[]) => {
@@ -355,6 +290,7 @@ this.gridTabChange('materialList');
                         this.materialListMPNs = res;
                         this.materialListMPNs.forEach(
                             first => {
+                                first.isShowPlus=true;
                                 this.mpnPartNumbersList.forEach(
                                     second => {
                                         if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
@@ -688,27 +624,26 @@ this.gridTabChange('materialList');
                     $(`#${grid}_${x}`).collapse('hide');
                 }
         }
-    }
-    isShowPlus:boolean=true;
+    } 
     isShowChild:boolean=false;
     summaryParts:any=[];
     totalRecords: number;
     pageLinks: any; 
     workOrderMaterial:any=[];
-    handelPlus(){
-        this.isShowPlus=true;
+    workOrderMaterialList:any=[];
+    handelPlus(materialMPN){
+        materialMPN.isShowPlus=true;
         this.isShowChild=false;
     }
     getMaterialListData(materialMPN){
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderMaterialList(materialMPN.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
-            this.isShowPlus=false;
+            materialMPN.isShowPlus=false;
             this.isShowChild=true;
             if (res.length > 0) {
                 res.forEach(element => {
-                    this.getValues(element)
-                            element.isShowPlus=true;
+                    this.getValues(element) 
                             if(element.currency)element.currency= element.currency.symbol;
                         });
              
@@ -734,7 +669,9 @@ this.gridTabChange('materialList');
                             })
                          } 
                       })
-                      materialMPN.workOrderMaterialList =uniqueParts;
+                      this.workOrderMaterialList=[];
+                      materialMPN.workOrderMaterialList =[];
+                      materialMPN.workOrderMaterialList=uniqueParts;
                       materialMPN.materialStatus = res[0].partStatusId;
                     //   this.workOrderMaterialList = uniqueParts;
                     }
