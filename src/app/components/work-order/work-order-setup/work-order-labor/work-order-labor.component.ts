@@ -367,8 +367,16 @@ setTimeout(() => {
       }
     }
   }
-  onPartSelect(event, currentRecord, index) {
-    currentRecord.directLaborOHCost=event.overHeadBurden; 
+  onPartSelect(event, currentRecord) {
+    // currentRecord.directLaborOHCost=event.overHeadBurden; 
+    if(this.basicLabourDetail){
+      // currentRecord.burdaenRatePercentageId=
+      if(this.basicLabourDetail.laborRateId==2){
+        currentRecord.directLaborOHCost=this.basicLabourDetail.averageRate; 
+      }else{
+        currentRecord.directLaborOHCost=event.hourlyPay; 
+      }
+    }
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
   }
   modifyDirectLoaborFormat(ev){
@@ -661,7 +669,7 @@ setTimeout(() => {
     // debugger;
     let taskData = new AllTasks();
     taskData.expertiseId = Number(this.laborForm.expertiseId);
-    taskData.employeeId = this.laborForm.employeeId;
+    // taskData.employeeId = this.laborForm.employeeId;
     this.allTaskList.forEach(
       task => {
         if (task.description == "Assemble") {
@@ -672,6 +680,7 @@ setTimeout(() => {
     )
     // this.isQuote && 
     if (this.basicLabourDetail) {
+      // burdenRateId
       if (this.basicLabourDetail['burdenRateIdText'] == 'As A % Of Technician/Mechanic Hourly Rate') {
         taskData['burdaenRatePercentageId'] = this.basicLabourDetail['flatAmount'];
         this.calculateTotalCost(taskData);
@@ -682,7 +691,9 @@ setTimeout(() => {
         this.calculateTotalCost(taskData);
         this.markupChanged(taskData, 'row');
       }
-      if (this.basicLabourDetail['laborRateIdText'] == 'Use Average Rate Of ALL Technician/Mechanic') {
+
+      // laborRateId
+      if (this.basicLabourDetail['laborRateId'] == 2) {
         if (this.basicLabourDetail['averageRate']) {
           taskData['directLaborOHCost'] = Number(this.basicLabourDetail['averageRate']).toFixed(2);
         }
@@ -692,7 +703,7 @@ setTimeout(() => {
       }
 
     }
-    this.laborForm.workOrderLaborList[0][taskName].push(taskData);
+    
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       if (this.laborForm.workOrderLaborList[0][task] && this.laborForm.workOrderLaborList[0][task].length != 0) {
         this.laborForm.workOrderLaborList[0][task].forEach((value) => {
@@ -704,6 +715,7 @@ setTimeout(() => {
               this.calculateTaskHours(t);
               this.calculateAdjustmentHours(t);
               this.calculateAdjustedHours(t);
+              this.calculateHoursDifference(t);
             }
           })
           if (value.expertiseId && !isNaN(value.expertiseId)) {
@@ -711,6 +723,22 @@ setTimeout(() => {
               this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
                 ...x,
                 value: x.employeeId, label: x.name } });
+
+                if(this.basicLabourDetail){
+                  // taskData['burdaenRatePercentageId'] = this.basicLabourDetail['flatAmount'];
+                  // if(this.basicLabourDetail.laborRateId==2){
+                  //   currentRecord.directLaborOHCost=event.overHeadBurden; 
+                  // }else{
+                  //   currentRecord.directLaborOHCost=event.hourlyPay; 
+                  // }
+                  // debugger;
+// console.log("ddd",this['expertiseEmployeeOriginalData' + index])
+//                   this['expertiseEmployeeOriginalData' + index].forEach(element => {
+//                     if(taskData.employeeId==element.employeeId){
+//                       taskData.directLaborOHCost=element.hourlyPay; 
+//                     }
+//                   });
+                }
             },
               err => {
               })
@@ -718,6 +746,7 @@ setTimeout(() => {
         })
       }
     })
+    this.laborForm.workOrderLaborList[0][taskName].push(taskData);
   }
 
   startandStop(currentRecord) {

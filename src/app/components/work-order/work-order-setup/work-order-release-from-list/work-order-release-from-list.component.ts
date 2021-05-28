@@ -103,6 +103,11 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
 
     UpdateGird()
     {
+        this.is8130from= false;
+        this.is9130from= false;
+        this.isView=false;
+        this.isViewopen= false;
+        this.isEdit= false;
         this.updateRelreaseList.emit();
         this.getWorkOrderReleaseFromData(this.workOrderId,this.workOrderPartNumberId);
         this.getGlobalSettings();
@@ -133,6 +138,7 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     Edit(rowData)
     {   this.releaseFromId= rowData.releaseFromId;
         this.isEdit= true;
+        this.isViewopen= false;
         this.ReleaseData = rowData;
         if(rowData.is8130from)
         {
@@ -187,6 +193,7 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     view(rowData)
     {   this.releaseFromId= rowData.releaseFromId;
         this.isViewopen= true;
+        this.isEdit= false;
         this.ReleaseData = rowData;
         if(rowData.is8130from)
         {
@@ -200,10 +207,16 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     }
     createNew()
     {
+        this.isViewopen=false;
+        this.isEdit= false;
         this.is8130from= true;
+        this.is9130from= false;
     }
     create9130New()
     {
+        this.isViewopen=false;
+        this.isEdit= false;
+        this.is8130from= false;
         this.is9130from= true;
     }
     
