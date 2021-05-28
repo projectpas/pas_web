@@ -49,94 +49,29 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     labourDetailedViewOpened: boolean = false;
 
     materialListHeader = [
-        {
-            "header": "Task",
-            "field": "task"
-        },
-        {
-            "header": "MPN",
-            "field": "partNumber"
-        },
-        {
-            "header": "Revised Part No",
-            "field": "revisedPartNo"
-        },
-        {
-            "header": "Part Description",
-            "field": "partDescription"
-        },
-        {
-            "header": "SN",
-            "field": "serialNo"
-        },
-        {
-            "header": "Stock Line No",
-            "field": "stockLineNo"
-        },
-        {
-            "header": "Stock Type",
-            "field": "stockType"
-        },
-        {
-            "header": "Control #",
-            "field": "controllerId"
-        },
-        {
-            "header": "Control Num",
-            "field": "controllerNo"
-        },
-        {
-            "header": "Cond #",
-            "field": "condition"
-        },
-        {
-            "header": "Item Type",
-            "field": "itemType"
-        },
-        {
-            "header": "Qty Required",
-            "field": "quantityReq"
-        },
-        {
-            "header": "Qty On Hand",
-            "field": "quantityOnHand"
-        },
-        {
-            "header": "Qty Available",
-            "field": "quantityAvailable"
-        },
-        {
-            "header": "QTY Issued",
-            "field": "qtyssued"
-        },
-        {
-            "header": "Unit Cost",
-            "field": "unitCost"
-        },
-        {
-            "header": "Extended Cost",
-            "field": "extendedCost"
-        },
-        {
-            "header": "Warehouse",
-            "field": "warehouse"
-        },
-        {
-            'header': 'Location',
-            'field': 'location'
-        },
-        {
-            'header': 'Receiver',
-            'field': 'receiver'
-        },
-        {
-            'header': 'Site',
-            'field': 'site'
-        },
-        {
-            "header": 'Shelf',
-            "field": "shelf"
-        }
+        {"header": "", "field": "plus"},
+        {"header": "Task","field": "task"},
+        {"header": "MPN", "field": "partNumber"},
+        {"header": "Revised Part No","field": "revisedPartNo"},
+        {"header": "Part Description","field": "partDescription"},
+        {"header": "SN","field": "serialNo"},
+        {"header": "Stock Line No","field": "stockLineNo"},
+        {"header": "Stock Type","field": "stockType"},
+        {"header": "Control #", "field": "controllerId"},
+        {"header": "Control Num","field": "controllerNo"},
+        {"header": "Cond #","field": "condition"},
+        {"header": "Item Type","field": "itemType"},
+        {"header": "Qty Required","field": "quantityReq"},
+        {"header": "Qty On Hand","field": "quantityOnHand"},
+        {"header": "Qty Available","field": "quantityAvailable"},
+        {"header": "QTY Issued","field": "qtyssued"},
+        {"header": "Unit Cost", "field": "unitCost"},
+        { "header": "Extended Cost", "field": "extendedCost"},
+        {"header": "Warehouse","field": "warehouse"},
+        {'header': 'Location','field': 'location'},
+        {'header': 'Receiver','field': 'receiver'},
+        {'header': 'Site','field': 'site'},
+        {"header": 'Shelf',"field": "shelf"}
     ]
 
     labourListHeader = [
@@ -331,7 +266,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-
+this.gridTabChange('materialList');
     }
 
     ngOnChanges() {
@@ -347,7 +282,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
         switch(tabname){
             case 'materialList':{
                 this.gridActiveTab = tabname;
-                this.isSpinnerVisible = true;
+                this.isSpinnerVisible = true; 
                 this.workOrderService.getMaterialListMPNS(this.workOrderId)
                 .subscribe(
                     (res: any[]) => {
@@ -355,6 +290,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                         this.materialListMPNs = res;
                         this.materialListMPNs.forEach(
                             first => {
+                                first.isShowPlus=true;
                                 this.mpnPartNumbersList.forEach(
                                     second => {
                                         if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
@@ -364,7 +300,6 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                                 )
                             }
                         )
-                        console.log(this.materialListMPNs);
                     },
                     (err) => {
                         this.isSpinnerVisible = false;
@@ -689,20 +624,64 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                     $(`#${grid}_${x}`).collapse('hide');
                 }
         }
+    } 
+    isShowChild:boolean=false;
+    summaryParts:any=[];
+    totalRecords: number;
+    pageLinks: any; 
+    workOrderMaterial:any=[];
+    workOrderMaterialList:any=[];
+    handelPlus(materialMPN){
+        materialMPN.isShowPlus=true;
+        this.isShowChild=false;
     }
-
     getMaterialListData(materialMPN){
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderMaterialList(materialMPN.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
+            materialMPN.isShowPlus=false;
+            this.isShowChild=true;
             if (res.length > 0) {
                 res.forEach(element => {
-                    this.getValues(element)
-                            element.isShowPlus=true;
+                    this.getValues(element) 
                             if(element.currency)element.currency= element.currency.symbol;
                         });
-                materialMPN.workOrderMaterialList = res;
-                materialMPN.materialStatus = res[0].partStatusId;
+             
+                        this.workOrderMaterial=res;
+
+               
+                    this.summaryParts = [];
+                    let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
+                    if (uniqueParts.length > 0) {
+                      uniqueParts.forEach((part, i) => {
+                        let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.stockLineId !=0 && selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
+                        if (childParts && childParts.length > 0) {
+                        //   uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
+                          uniqueParts[i].childParts = childParts;
+                        }else{
+                            uniqueParts[i].childParts = [];
+                        }
+                      });
+                      uniqueParts.map((x,xindex)=>{
+                         if(x.childParts && x.childParts.length !=0){
+                            x.childParts.map((y,yindex)=>{
+                                y.line = (xindex + 1) + '.' + (yindex + 1)
+                            })
+                         } 
+                      })
+                      this.workOrderMaterialList=[];
+                      materialMPN.workOrderMaterialList =[];
+                      materialMPN.workOrderMaterialList=uniqueParts;
+                      materialMPN.materialStatus = res[0].partStatusId;
+                    //   this.workOrderMaterialList = uniqueParts;
+                    }
+                    this.totalRecords =materialMPN.workOrderMaterialList.length;
+                    this.pageLinks = Math.ceil(
+                      this.totalRecords / 10
+                    );
+
+
+
             }
         },
         err => {
@@ -710,7 +689,18 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
             this.errorHandling(err);
         })
     }
-
+    getUniqueParts(myArr, prop1, prop2, prop3) {
+        let uniqueParts = JSON.parse(JSON.stringify(myArr));
+        uniqueParts.reduceRight((acc, v, i) => {
+          if (acc.some(obj => v[prop1] === obj[prop1] && v[prop2] === obj[prop2] && v[prop3] === obj[prop3])) {
+            uniqueParts.splice(i, 1);
+          } else {
+            acc.push(v); 
+          }
+          return acc;
+        }, []);
+        return uniqueParts;
+      }
     getLabourListData(labourMPN){
         this.workOrderService.getLabourListForDetailedView(labourMPN.workFlowWorkOrderId)
         .subscribe(

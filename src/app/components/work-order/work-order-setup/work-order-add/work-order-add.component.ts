@@ -1751,7 +1751,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
             })
     } 
     closeModel(){
-        
+        this.isShowSummary=false;
     }
     //for multiple mpn controll dropdown bellow all tabs
     getWorkOrderWorkFlowNos() {
@@ -3944,7 +3944,10 @@ this.woPartId=rowData.id;
             }, 5000);
         }
       }
-
+      isShowSummary:boolean=false;
+      summaryShow(){
+    this.isShowSummary=true;
+}
       showWaringForPublication(){
         if(!this.isView){
             setTimeout(() => { 
