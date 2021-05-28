@@ -1295,6 +1295,12 @@ export class ReceivngPoComponent implements OnInit {
         let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
         for (let part of allParts) {
             if (part.isSameDetailsForAllParts) {
+                if (part.isSameDetailsForAllParts && !part.itemMaster.isSerialized && part.stocklineListObj && part.stocklineListObj.length > 0) {
+                    part.stocklineListObj.push(part.stocklineListObj[0]);
+                    if (part.timeLifeList && part.timeLifeList.length > 0) {
+                        part.timeLifeList.push(part.timeLifeList[0]);
+                    }
+                }
                 for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                     if (part.itemMaster.isSerialized) {
                         part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = false;
