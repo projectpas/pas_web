@@ -4708,6 +4708,10 @@ tfoot { display:table-footer-group }
 		   .border-none{
 			 border:none;
 		   }
+		   .child-table-header th{
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12.5px;text-transform: capitalize;font-weight:bold;
+		   }
 		   .td-width-25{
 			width:25%;
 		  }

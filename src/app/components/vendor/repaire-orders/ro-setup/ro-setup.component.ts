@@ -5130,7 +5130,7 @@ tfoot { display:table-footer-group }
 			   font-size: 10.5px !important;
 			   font-weight: 700;
 			 }
-						 table {font-size:12px !important}        
+						 table {font-size:12px !important,border-left:-1px !important}        
 			 table thead { background: #808080;}    
 			  
 			 table, thead, td {
@@ -5144,8 +5144,22 @@ tfoot { display:table-footer-group }
 		   .border-none{
 			 border:none;
 		   }
-		   .border-right tr td{
+		   .td-width-25{
+			width:25%;
+		  }
+		  
+		   .table-border-right tr td{
 			   border-right:1px solid black;
+		   }
+		   .border{
+			   border:1px solid black !important;
+		   }
+		   .top-table-alignment{
+			   width:100.3% !important;
+		   }
+		   .child-table-header th{
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12.5px;text-transform: capitalize;font-weight:bold;
 		   }
 			 table thead tr th 
 			 {
@@ -5393,8 +5407,8 @@ tfoot { display:table-footer-group }
 			   float: left;
 			   height:auto;
 			  border-right:1px solid black;
-			   padding-right: 2px;
-			   padding-left: 2px;
+			//    padding-right: 2px;
+			//    padding-left: 2px;
 			   width: 57% !important;
 			 }
 			 
