@@ -381,12 +381,12 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
                 var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
                 this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';
-                if (!shippingVia || shippingVia == undefined) {
-                    var shippingVia = new DropDownData();
-                    shippingVia.Key = this.poDataHeader.shipViaId;
-                    shippingVia.Value = this.poDataHeader.shipVia;
-                    this.ShippingViaList.push(shippingVia);
-                }
+                // if (!shippingVia || shippingVia == undefined) {
+                //     var shippingVia = new DropDownData();
+                //     shippingVia.Key = this.poDataHeader.shipViaId;
+                //     shippingVia.Value = this.poDataHeader.shipVia;
+                //     this.ShippingViaList.push(shippingVia);
+                // }
             });
     }
 
@@ -769,6 +769,7 @@ export class ReceivngPoComponent implements OnInit {
                 ...x,
                 //siteId: this.getSiteDetailsOnEdit(part, x),               
                 //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
+                shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,                
                 shippingAccount: part.shippingAccountInfo,
                 purchaseOrderUnitCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2),
                 purchaseOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2)
@@ -1295,6 +1296,12 @@ export class ReceivngPoComponent implements OnInit {
         let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
         for (let part of allParts) {
             if (part.isSameDetailsForAllParts) {
+                if (part.isSameDetailsForAllParts && !part.itemMaster.isSerialized && part.stocklineListObj && part.stocklineListObj.length > 0) {
+                    part.stocklineListObj.push(part.stocklineListObj[0]);
+                    if (part.timeLifeList && part.timeLifeList.length > 0) {
+                        part.timeLifeList.push(part.timeLifeList[0]);
+                    }
+                }
                 for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                     if (part.itemMaster.isSerialized) {
                         part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = false;

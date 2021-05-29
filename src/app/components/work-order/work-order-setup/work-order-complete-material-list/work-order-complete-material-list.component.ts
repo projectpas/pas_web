@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
     selector: 'app-work-order-complete-material-list',
     templateUrl: './work-order-complete-material-list.component.html',
     styleUrls: ['./work-order-complete-material-list.component.scss'],
-    animations: [fadeInOut] 
+    animations: [fadeInOut]
 })
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
 
@@ -40,7 +40,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Input() mpnId;
     @Input() workOrderId;
     @Input() workFlowWorkOrderId;
-    
+
     @Input() fromWoList: false;
     @Input() mpnPartNumbersList: any = [];
     @Input() isSubWorkOrder: any = false;
@@ -52,10 +52,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() refreshData = new EventEmitter();
     @Input() customerId;
     @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
-    @Output() saveMaterialsData=new EventEmitter();
-    @Output() updateMaterialsData=new EventEmitter();
-    @Output() isSubWorkorder=new EventEmitter();
-    @Input() workOrderNumberStatus:any;
+    @Output() saveMaterialsData = new EventEmitter();
+    @Output() updateMaterialsData = new EventEmitter();
+    @Output() isSubWorkorder = new EventEmitter();
+    @Input() workOrderNumberStatus: any;
     statusId = null;
     ispickticket: boolean = false;
     minDateValue: Date = new Date();
@@ -299,13 +299,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.close.emit(true);
         this.show = false;
     }
-    setmaterialListForSave(data){
+    setmaterialListForSave(data) {
         this.saveMaterialsData.emit(data)
         this.show = false;
         // this.addPartModal.close();
         // $('#addPart').modal("hide");
     }
-    setmaterialListForUpdate(data){
+    setmaterialListForUpdate(data) {
         this.show = false;
         this.updateMaterialsData.emit(data)
         this.isSubWorkorder.emit(this.isSubWorkOrder)
@@ -354,7 +354,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.addNewMaterial = true;
 
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
-   
+
     }
     editNew(rowData) {
         this.editData = undefined;
@@ -365,39 +365,39 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-  
+
     }
-     
+
     editStockLine(rowData) {
         this.editData = undefined;
         // this.cdRef.detectChanges();
         this.isEdit = true;
 
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
-        this.editData.method='StockLine'
+        this.editData.method = 'StockLine'
         // console.log("edit Data",this.editData)
         $("#showStockLineDetails").modal("show");
-      
+
         // let contentPart = this.addPart;
         // this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-  
+
     }
     openPartNumber() {
         this.isEdit = false;
         this.editData = undefined;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-      }
+    }
 
     openDelete(content, row) {
         this.currentRow = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-    deleteStockLine(content, row){
+    deleteStockLine(content, row) {
         this.currentRow = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-    deleteStock(){
+    deleteStock() {
         if (this.isSubWorkOrder == true) {
             this.workOrderService.deleteSubWorkOrderMaterialList(this.currentRow.subWorkOrderMaterialsId, this.userName).subscribe(res => {
                 this.refreshData.emit();
@@ -410,7 +410,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 err => {
                 })
         } else {
-            this.workOrderService.deleteWorkOrderMaterialStocklineById(this.currentRow.workOrderMaterialsId, this.currentRow.stockLineId,this.userName).subscribe(res => {
+            this.workOrderService.deleteWorkOrderMaterialStocklineById(this.currentRow.workOrderMaterialsId, this.currentRow.stockLineId, this.userName).subscribe(res => {
                 this.refreshData.emit();
                 this.alertService.showMessage(
                     '',
@@ -940,9 +940,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         });
     }
-setStatusForSubWo(){
-    localStorage.setItem('woStatus', this.workOrderNumberStatus);
-}
+    setStatusForSubWo() {
+        localStorage.setItem('woStatus', this.workOrderNumberStatus);
+    }
     uncheckAltEqlPartCall(data) {
         this.parentMaterialList = [];
         data.map(x => {
@@ -1175,21 +1175,22 @@ setStatusForSubWo(){
         localStorage.setItem("partNumber", rowData.partNumber);
         localStorage.setItem("lsWoId", this.workOrderId);
         localStorage.setItem("lsconditionId", rowData.conditionCodeId);
+        localStorage.setItem("lsqty", rowData.quantity);
         if (this.isSubWorkOrder == true) {
             localStorage.setItem("lsSubWoId", this.subWOPartNoId);
             // this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);```
-             //window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
+            //window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
             // window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
             this.router.navigateByUrl(
                 `/vendorsmodule/vendorpages/app-purchase-setup`
-              );
-            
+            );
+
         } else {
             // window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${rowData.workOrderMaterialsId}`)
             // window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
             this.router.navigateByUrl(
                 `vendorsmodule/vendorpages/app-purchase-setup`
-              );
+            );
 
 
         }
@@ -1230,9 +1231,9 @@ setStatusForSubWo(){
             });
     }
 
-  
-   
-      openPartNumberClear(viewMode) {
+
+
+    openPartNumberClear(viewMode) {
         this.clearData = viewMode;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
@@ -1264,9 +1265,9 @@ setStatusForSubWo(){
         // &workOrderStatus=${this.workOrderNumberStatus}
         this.router.navigateByUrl(
             `workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`
-          );
-   
-   
+        );
+
+
     }
 
     public dismissModel() {
@@ -1291,12 +1292,12 @@ setStatusForSubWo(){
         this.dismissModel();
         const subworkorderid = 0;
         // window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.subWoRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${this.subWoRecord.workOrderMaterialsId}`);
-  
+
         this.router.navigateByUrl(
             `workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.subWoRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${this.subWoRecord.workOrderMaterialsId}`
-          );
-  
-  
+        );
+
+
     }
 
     addToExistingSubWo() {
@@ -1375,75 +1376,75 @@ setStatusForSubWo(){
     //     });
     //   }
     // }  
-    summaryColumns:any=[]; 
-    childColumnsData:any=[];
+    summaryColumns: any = [];
+    childColumnsData: any = [];
     initColumns() {
 
-    
+
         if (!this.isView) {
-          this.childColumnsData.push({ header: "Notes", width: "120px" });
+            this.childColumnsData.push({ header: "Notes", width: "120px" });
         }
-    
-   
+
+
 
         this.summaryColumns = [
             { field: 'line', header: 'Line Num', align: 0, width: "64px" },
-            { field: 'taskName', header: 'Task', align: 0, width: "100px"},
+            { field: 'taskName', header: 'Task', align: 0, width: "100px" },
             { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
-            { field: 'partNumber', header: 'PN', align: 0 ,width: "160px"},
-            { field: 'partDescription', header: 'PN Description', align: 0 ,width: "200px"},
-          // { field: 'serialNumber', header: 'Serial Num', align: 0 },
-          { field: 'condition', header: 'Cond', align: 0, width: "100px" },
-          // { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 },
-          { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
-          { field: 'provision', header: 'Provision', align: 0, width: "120px" },
-          { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
-          { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
-          { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
-          { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
-          { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
-          { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
-          { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
-          { field: 'uom', header: 'UOM', align: 0, width: "70px" },
-          { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
-          // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
-          { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
-          // { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
-          // { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
-          { field: 'needDate', header: 'Need Date', align: 0 },
-          // { field: 'controlNo', header: 'Cntl Num', align: 0 },
-          // { field: 'controlId', header: 'Cntl ID', align: 0 },
-          { field: 'currency', header: 'Cur', align: 1, width: "60px" },
-          { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
-          { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
-          // { field: 'costDate', header: 'Cost Date', align: 0 },
-          // { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
-          // { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0 },
-          // { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
-          // { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0 },
-          // { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
-          { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
-          { field: 'subWorkOrder', header: 'Sub-WO Num', align: 0, width: "100px" },
-          // { field: 'salesOrder', header: 'SO Num', align: 0, width: "100px" },
-          // { field: 'figure', header: 'Figure', align: 0 },
-          // { field: 'site', header: 'Site', align: 0 },
-          // { field: 'wareHouse', header: 'Warehouse', align: 0 },
-          // { field: 'location', header: 'Location', align: 0 },
-          // { field: 'shelf', header: 'Shelf', align: 0 },
-          // { field: 'bin', header: 'Bin', align: 0 },
-          { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
-          { field: 'memo', header: 'Memo', align: 0, width: "250px" },
-          { field: 'isDeferred', header: 'Deferred', align: 0, width: "90px" },
-      ]
+            { field: 'partNumber', header: 'PN', align: 0, width: "160px" },
+            { field: 'partDescription', header: 'PN Description', align: 0, width: "200px" },
+            // { field: 'serialNumber', header: 'Serial Num', align: 0 },
+            { field: 'condition', header: 'Cond', align: 0, width: "100px" },
+            // { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 },
+            { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0, width: "110px" },
+            { field: 'provision', header: 'Provision', align: 0, width: "120px" },
+            { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
+            { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
+            { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
+            { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
+            { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
+            { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
+            { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
+            { field: 'uom', header: 'UOM', align: 0, width: "70px" },
+            { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
+            // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
+            { field: 'itemClassification', header: 'Classification', align: 0, width: "150px" },
+            // { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
+            // { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
+            { field: 'needDate', header: 'Need Date', align: 0 },
+            // { field: 'controlNo', header: 'Cntl Num', align: 0 },
+            // { field: 'controlId', header: 'Cntl ID', align: 0 },
+            { field: 'currency', header: 'Cur', align: 1, width: "60px" },
+            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
+            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
+            // { field: 'costDate', header: 'Cost Date', align: 0 },
+            // { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
+            // { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0 },
+            // { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
+            // { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0 },
+            // { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
+            { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
+            { field: 'subWorkOrder', header: 'Sub-WO Num', align: 0, width: "100px" },
+            // { field: 'salesOrder', header: 'SO Num', align: 0, width: "100px" },
+            // { field: 'figure', header: 'Figure', align: 0 },
+            // { field: 'site', header: 'Site', align: 0 },
+            // { field: 'wareHouse', header: 'Warehouse', align: 0 },
+            // { field: 'location', header: 'Location', align: 0 },
+            // { field: 'shelf', header: 'Shelf', align: 0 },
+            // { field: 'bin', header: 'Bin', align: 0 },
+            { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
+            { field: 'memo', header: 'Memo', align: 0, width: "250px" },
+            { field: 'isDeferred', header: 'Deferred', align: 0, width: "90px" },
+        ]
 
-      this.childColumnsData = [
-        { field: 'line', header: ' ', align: 0, width: "64px" },
-    //   { field: 'taskName', header: 'Task', align: 0, width: "100px"},
-    //   { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
-    { field: 'stockLineNumber', header: 'Stk Line Num', align: 0 , width: "83px"},
-    { field: 'serialNumber', header: 'Serial Num', align: 0, width: "70px" },
-      { field: 'partNumber', header: 'PN', align: 0 ,width: "160px"},
-      { field: 'partDescription', header: 'PN Description', align: 0 ,width: "200px"},
+        this.childColumnsData = [
+            { field: 'line', header: ' ', align: 0, width: "64px" },
+            //   { field: 'taskName', header: 'Task', align: 0, width: "100px"},
+            //   { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
+            { field: 'stockLineNumber', header: 'Stk Line Num', align: 0, width: "83px" },
+            { field: 'serialNumber', header: 'Serial Num', align: 0, width: "70px" },
+            { field: 'partNumber', header: 'PN', align: 0, width: "160px" },
+            { field: 'partDescription', header: 'PN Description', align: 0, width: "200px" },
 
       { field: 'condition', header: 'Cond', align: 0, width: "100px" },
      
@@ -1462,38 +1463,38 @@ setStatusForSubWo(){
       { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
       { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
 
-      { field: 'currency', header: 'Cur', align: 1, width: "60px" },
-      { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
-      { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
+            { field: 'currency', header: 'Cur', align: 1, width: "60px" },
+            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
+            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
 
-      { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
-      { field: 'controlId', header: 'Cntl ID', align: 0 , width: "70px"},
-      { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
-    //   { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
-      { field: 'memo', header: 'Memo', align: 0, width: "250px" },
-      { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
-      { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
-     
-      { field: 'costDate', header: 'Cost Date', align: 0 , width: "70px"},
-      { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
-      { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0 ,width: "120px" },
-      { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
-      { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0,width: "120px" },
-      { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
-      { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
-      { field: 'subWorkOrder', header: 'Sub-WO Num', align: 0, width: "100px" },
-      { field: 'salesOrder', header: 'SO Num', align: 0, width: "100px" },
-      { field: 'figure', header: 'Figure', align: 0, width: "70px" },
-      { field: 'site', header: 'Site', align: 0 , width: "100px"},
-      { field: 'wareHouse', header: 'Warehouse', align: 0 , width: "100px"},
-      { field: 'location', header: 'Location', align: 0, width: "100px" },
-      { field: 'shelf', header: 'Shelf', align: 0, width: "100px" },
-      { field: 'bin', header: 'Bin', align: 0 , width: "100px"},
-     
+            { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
+            { field: 'controlId', header: 'Cntl ID', align: 0, width: "70px" },
+            { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
+            //   { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
+            { field: 'memo', header: 'Memo', align: 0, width: "250px" },
+            { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
+            { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
 
-  ]
+            { field: 'costDate', header: 'Cost Date', align: 0, width: "70px" },
+            { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
+            { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0, width: "120px" },
+            { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
+            { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0, width: "120px" },
+            { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
+            { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
+            { field: 'subWorkOrder', header: 'Sub-WO Num', align: 0, width: "100px" },
+            { field: 'salesOrder', header: 'SO Num', align: 0, width: "100px" },
+            { field: 'figure', header: 'Figure', align: 0, width: "70px" },
+            { field: 'site', header: 'Site', align: 0, width: "100px" },
+            { field: 'wareHouse', header: 'Warehouse', align: 0, width: "100px" },
+            { field: 'location', header: 'Location', align: 0, width: "100px" },
+            { field: 'shelf', header: 'Shelf', align: 0, width: "100px" },
+            { field: 'bin', header: 'Bin', align: 0, width: "100px" },
 
-      }
+
+        ]
+
+    }
 
 
     //   updateMaterialListForWO
