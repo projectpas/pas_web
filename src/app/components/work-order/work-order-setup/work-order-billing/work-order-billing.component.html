@@ -500,7 +500,7 @@
                                 name="shipcustomerName"
                                 errorMessage="Records not found"
                                 [forceSelection]="true"
-                                (onSelect)="getSiteNamesByShipCustomerId($event)"
+                                (onSelect)="onselectcustomergetsite($event)"
                                 [suggestions]="customerNamesList"
                                 (completeMethod)="filterCustomerName($event)"
                                 (onKeyUp)="clearAddress('ShipTo', $event.target.value)"
@@ -520,35 +520,23 @@
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label for="credit">Site Name</label><span class="clr-red">*</span>
-                            <p-dropdown
-                              placeholder="Select Site Name"
-                              name="scope"
-                              #scope="ngModel"
-                              [options]="soldCustomerSiteList"
-                              class="p-dropdown-custom-md-Header"
-                              (onChange)="changeOfSoldSiteName($event.value)"
-                              [(ngModel)]="billingorInvoiceForm.soldToSiteId"
-                              [disabled]="isViewMode"
-                              required
-                            >
-                            </p-dropdown>
+                                  <select [(ngModel)]="billingorInvoiceForm.soldToSiteId" (change)="setSoldToAddress()"
+                                  [disabled]="isView" name="soldToSite" required>
+                              <option value="">Select</option>
+                              <option *ngFor="let site of siteList" [value]="site.siteID">
+                                  {{site.siteName}}
+                              </option>
+                          </select>
                             </div>
                           </div>
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label for="credit">Site Name</label><span class="clr-red">*</span>
-                            <p-dropdown
-                              placeholder="Select Site Name"
-                              name="scope1"
-                              #scope1="ngModel"
-                              [options]="shipCustomerSiteList"
-                              class="p-dropdown-custom-md-Header"
-                              (onChange)="changeOfShipSiteName($event.value)"
-                              [(ngModel)]="billingorInvoiceForm.shipToSiteId"
-                              [disabled]="isViewMode"
-                              required
-                            >
-                            </p-dropdown>
+                                  <select [(ngModel)]="billingorInvoiceForm.shipToSiteId" (change)="setShipToAddress()"
+                                  [disabled]="isView" name="shipToSite" required>
+                              <option value="">Select</option>
+                              <option *ngFor="let site of shipCustomerSiteList" [value]="site.siteID">{{site.siteName}}</option>
+                          </select>
                             </div>
                           </div>
                         </div>

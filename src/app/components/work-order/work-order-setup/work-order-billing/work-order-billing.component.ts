@@ -59,6 +59,7 @@ export class WorkOrderBillingComponent implements OnInit {
     customerNamesList: Object;
     soldCustomerSiteList = [];
     shipCustomerSiteList = [];
+    siteList: any = [];
     shipToAttention;
     soldCustomerAddress: any = new AddressModel();
     shipCustomerAddress: any = new AddressModel();
@@ -170,11 +171,11 @@ export class WorkOrderBillingComponent implements OnInit {
         this.resetOtherOptions();
         if (this.isEditBilling) {
             if (data.soldToCustomerId.customerId == data.shipToCustomerId.customerId) {
-                this.getSiteNames(data.soldToCustomerId);
+                this.getSiteNames(this.customerId,data.soldToCustomerId);
             }
             else {
-                this.getSiteNamesBySoldCustomerId(data.soldToCustomerId);
-                this.getSiteNamesByShipCustomerId(data.shipToCustomerId);
+                this.getSiteNames(this.customerId,data.soldToCustomerId);
+                this.getSiteNamesByShipCustomerId(this.customerId,data.shipToCustomerId);
             }
             this.bindManagementStructure(data);
             if (this.billingorInvoiceForm.soldToCustomerId) {
@@ -199,14 +200,15 @@ export class WorkOrderBillingComponent implements OnInit {
             }
         } else {
             if (this.billingorInvoiceForm.soldToCustomerId && this.billingorInvoiceForm.shipToCustomerId && (this.billingorInvoiceForm.soldToCustomerId.customerId == this.billingorInvoiceForm.shipToCustomerId.customerId)) {
-                this.getSiteNames(data.soldToCustomerId);
+                this.getSiteNames(this.customerId,data.soldToCustomerId);
             }
             else {
                 if (this.billingorInvoiceForm.soldToCustomerId) {
-                    this.getSiteNamesBySoldCustomerId(this.billingorInvoiceForm.soldToCustomerId);
+                    this.getSiteNames(this.customerId,this.billingorInvoiceForm.soldToCustomerId);
+                   // this.getSiteNamesBySoldCustomerId(this.billingorInvoiceForm.soldToCustomerId);
                 }
                 if (this.billingorInvoiceForm.shipToCustomerId) {
-                    this.getSiteNamesByShipCustomerId(this.billingorInvoiceForm.shipToCustomerId);
+                    this.getSiteNamesByShipCustomerId(this.customerId,this.billingorInvoiceForm.shipToCustomerId);
                 }
             }
             this.resetMisCharges();
@@ -474,6 +476,17 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.errorHandling(err);
             })
     }
+    onselectcustomergetsite(object) {
+        const { customerId } = object;
+        this.getSiteNamesByShipCustomerId(customerId, 0);
+
+    }
+
+    onselectcustomergetSoldsite(object) {
+        const { customerId } = object;
+        this.getSiteNames(customerId, 0);
+
+    }
     async getSiteNamesBySoldCustomerId(object) {
         const { customerId } = object;
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
@@ -521,30 +534,30 @@ export class WorkOrderBillingComponent implements OnInit {
             this.billingorInvoiceForm.shipAccountInfo = data.shippingAccountInfo;
         }
     }
-    async getSiteNamesByShipCustomerId(object) {
-        const { customerId } = object;
-        await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
-            this.shipCustomerShippingOriginalData = res[0];
-            this.shipCustomerSiteList = res[0].map(x => {
-                return {
-                    label: x.siteName,
-                    value: x.customerDomensticShippingId
-                }
-            });
-            this.shipCustomerShippingOriginalData.forEach(
-                x => {
-                    if (x.isPrimary) {
-                        this.billingorInvoiceForm.shipToSiteId = x.customerDomensticShippingId
-                        this.changeOfShipSiteName(x.customerDomensticShippingId);
-                    }
-                }
-            )
-        },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
-            })
-    }
+    // async getSiteNamesByShipCustomerId(object) {
+    //     const { customerId } = object;
+    //     await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+    //         this.shipCustomerShippingOriginalData = res[0];
+    //         this.shipCustomerSiteList = res[0].map(x => {
+    //             return {
+    //                 label: x.siteName,
+    //                 value: x.customerDomensticShippingId
+    //             }
+    //         });
+    //         this.shipCustomerShippingOriginalData.forEach(
+    //             x => {
+    //                 if (x.isPrimary) {
+    //                     this.billingorInvoiceForm.shipToSiteId = x.customerDomensticShippingId
+    //                     this.changeOfShipSiteName(x.customerDomensticShippingId);
+    //                 }
+    //             }
+    //         )
+    //     },
+    //         err => {
+    //             // this.isSpinnerVisible = false;
+    //             this.errorHandling(err);
+    //         })
+    // }
     changeOfShipSiteName(value) {
         debugger;
         const data = getObjectById('customerDomensticShippingId', value, this.shipCustomerShippingOriginalData);
@@ -915,47 +928,141 @@ export class WorkOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.miscChargesCostPlus = this.billingorInvoiceForm.miscChargesCostPlus.toFixed(2);
         // this.calculateGrandTotal();
     }
+    async getSiteNamesByShipCustomerId(customerId, siteid) {
+        this.clearShipToAddress();
+        const AddressType = 'Ship';
+        const billUsertype = 1;
 
-    
-    getSiteNames(object) {
-        const { customerId } = object;
-        this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
-            this.soldCustomerShippingOriginalData = res[0];
-            this.soldCustomerSiteList = res[0].map(x => {
-                return {
-                    label: x.siteName,
-                    value: x.customerDomensticShippingId
-
+        await this.commonService.getworkorderaddressdetailsbyuser(billUsertype, customerId, AddressType, siteid).subscribe(res => {
+            if (res) {
+                this.shipCustomerShippingOriginalData = res;
+                this.shipCustomerSiteList = res;
+                if (siteid > 0) {
+                    this.shipCustomerShippingOriginalData.forEach(
+                        x => {
+                            if (x.siteID == siteid) {
+                               // this.shippingHeader.shipToSiteId = x.siteID;
+                                this.setShipToAddress();
+                            }
+                        }
+                    )
+                } else {
+                    this.shipCustomerShippingOriginalData.forEach(
+                        x => {
+                            if (x.isPrimary) {
+                               // this.shippingHeader.shipToSiteId = x.siteID;
+                                this.setShipToAddress();
+                            }
+                        }
+                    )
                 }
-            });
-            this.soldCustomerShippingOriginalData.forEach(
-                x => {
-                    if (x.isPrimary) {
-                        this.billingorInvoiceForm.soldToSiteId = x.customerDomensticShippingId;
-                        this.changeOfSoldSiteName(x.customerDomensticShippingId);
-                    }
-                }
-            )
-            this.shipCustomerShippingOriginalData = res[0];
-            this.shipCustomerSiteList = res[0].map(x => {
-                return {
-                    label: x.siteName,
-                    value: x.customerDomensticShippingId
-                }
-            });
-            this.shipCustomerShippingOriginalData.forEach(
-                x => {
-                    if (x.isPrimary) {
-                        this.billingorInvoiceForm.shipToSiteId = x.customerDomensticShippingId
-                        this.changeOfShipSiteName(x.customerDomensticShippingId);
-                    }
-                }
-            )
-        },
-            err => {
-                this.errorHandling(err);
-            })
+            }
+        }, err => {
+            this.errorHandling(err);
+        });
     }
+
+    setShipToAddress() {
+        this.shipCustomerSiteList.forEach(site => {
+            if (site.siteID == this.billingorInvoiceForm.shipToSiteId) {
+
+                this.shipCustomerAddress.line1 = site.address1;
+                this.shipCustomerAddress.line2 = site.address2;
+                this.shipCustomerAddress.country = site.countryName;
+                this.shipCustomerAddress.postalCode = site.postalCode;
+                this.shipCustomerAddress.stateOrProvince = site.stateOrProvince;
+                this.shipCustomerAddress.city = site.city;
+            }
+            else {
+                this.shipCustomerAddress = new AddressModel();
+            }
+        });
+    }
+
+    clearShipToAddress() {
+        this.shipCustomerSiteList = [];
+        this.shipCustomerAddress = new AddressModel();
+    }
+
+    setSoldToAddress() {
+        this.siteList.forEach(site => {
+            if (site.siteID == this.billingorInvoiceForm.soldToSiteId) 
+            {
+                this.soldCustomerAddress.line1 = site.address1;
+                this.soldCustomerAddress.line2 = site.address2;
+                this.soldCustomerAddress.country = site.countryName;
+                this.soldCustomerAddress.postalCode = site.postalCode;
+                this.soldCustomerAddress.stateOrProvince = site.stateOrProvince;
+                this.soldCustomerAddress.city = site.city;
+            }
+            else {
+                this.soldCustomerAddress = new AddressModel();
+            }
+        });
+    }
+
+    getSiteNames(customerId, siteid) {
+        const AddressType = 'Bill';
+        const billUsertype = 1;
+
+        this.commonService.getworkorderaddressdetailsbyuser(billUsertype, customerId, AddressType, siteid)
+            .subscribe(
+                res => {
+                    this.siteList = res;
+
+                    this.siteList.forEach(
+                        x => {
+                            if (x.isPrimary) {
+                                //this.shippingHeader.soldToSiteId = x.siteID;
+
+                                this.setSoldToAddress();
+                            }
+                        }
+                    )
+                }, err => {
+                    this.errorHandling(err);
+                });
+    }
+    
+    // getSiteNames(object) {
+    //     const { customerId } = object;
+    //     this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+    //         this.soldCustomerShippingOriginalData = res[0];
+    //         this.soldCustomerSiteList = res[0].map(x => {
+    //             return {
+    //                 label: x.siteName,
+    //                 value: x.customerDomensticShippingId
+
+    //             }
+    //         });
+    //         this.soldCustomerShippingOriginalData.forEach(
+    //             x => {
+    //                 if (x.isPrimary) {
+    //                     this.billingorInvoiceForm.soldToSiteId = x.customerDomensticShippingId;
+    //                     this.changeOfSoldSiteName(x.customerDomensticShippingId);
+    //                 }
+    //             }
+    //         )
+    //         this.shipCustomerShippingOriginalData = res[0];
+    //         this.shipCustomerSiteList = res[0].map(x => {
+    //             return {
+    //                 label: x.siteName,
+    //                 value: x.customerDomensticShippingId
+    //             }
+    //         });
+    //         this.shipCustomerShippingOriginalData.forEach(
+    //             x => {
+    //                 if (x.isPrimary) {
+    //                     this.billingorInvoiceForm.shipToSiteId = x.customerDomensticShippingId
+    //                     this.changeOfShipSiteName(x.customerDomensticShippingId);
+    //                 }
+    //             }
+    //         )
+    //     },
+    //         err => {
+    //             this.errorHandling(err);
+    //         })
+    // }
 
 
     moduleName: any = '';
