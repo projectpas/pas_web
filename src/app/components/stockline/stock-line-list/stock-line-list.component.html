@@ -140,7 +140,8 @@
                 </tr>
                 <tr>
                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'" *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" 
+                        <input class="text-right" [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'"
+                         *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" 
                         class="table-header-input-width" pInputText [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
                             (input)="dt.filter($event.target.value, col.field, 'contains')" >
                         <input type="date" class="table-header-input-width" *ngIf="col.field == 'receivedDate'"
