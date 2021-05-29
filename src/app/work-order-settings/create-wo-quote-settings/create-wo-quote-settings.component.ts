@@ -40,13 +40,11 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
     isEditMode: boolean = false;
     disablesavebutton: boolean = true;
     private onDestroy$: Subject<void> = new Subject<void>();
-    breadcrumbs: MenuItem[] = [
-        { label: 'Admin' },
-        { label: 'WO Quote Settings' },
-        { label: 'Create WO Quote Settings' }
-    ];
+    setEditArray:any=[]
+    breadcrumbs: MenuItem[];
     workOrderTypes: WorkOrderType[];
     moduleName: string = "WO Quote Settings";    
+
     constructor(private router: Router,
         private commonService: CommonService, private workOrderService: WorkOrderService, private alertService: AlertService, private receivingCustomerWorkOrderService: WorkOrderSettingsService){
     }
@@ -56,29 +54,27 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         if(this.receivingCustomerWorkOrderService.isEditWOQuoteSettingsList){
             this.isEditMode = true;
             this.receivingForm = this.receivingCustomerWorkOrderService.woQuoteSettingsData;
-
             if(this.receivingForm.effectivedate)
             {
                 this.receivingForm.effectivedate= new Date(this.receivingForm.effectivedate);
             }
         }
+        if (!this.isEditMode) 
+        {
+            this.breadcrumbs = [
+                { label: 'WO Quote Settings' },
+                { label: 'Create WO Quote Settings' }
+            ];
+        }
+        else
+        {
+            this.breadcrumbs = [
+                { label: 'WO Quote Settings' },
+                { label: 'Edit WO Quote Settings' }
+            ];
+        }
     }
-
-    // getAllWorkOrderTypes(): void {
-    //     this.workOrderService.getAllWorkOrderTypes().pipe(takeUntil(this.onDestroy$)).subscribe(
-    //         result => {
-    //             this.workOrderTypes = result;
-    //             console.log(this.workOrderTypes);
-    //         },
-    //         err => {
-    //             this.errorHandling(err);
-    //         }
-    //     );
-    // }
-
-
-
-    setEditArray:any=[]
+   
     getAllWorkOrderTypes(): void {
         this.setEditArray = [];
         const strText ='';
@@ -100,8 +96,6 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         }) 
     }
 
-
-
     saveOrUpdateWOQuoteSetting(){
         this.workOrderService.saveOrUpdateWOQuoteSetting(this.receivingForm)
         .subscribe(
@@ -118,6 +112,7 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
             }
         )
     }
+
     enableHeaderSave()
     {
         if(this.receivingForm.isApprovalRule && this.receivingForm.effectivedate == null)
@@ -127,10 +122,8 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         else{
             this.disablesavebutton = false;
         }
-
     }
     
-
     errorHandling(err){
         if(err['error']['errors']){
             err['error']['errors'].forEach(x=>{
@@ -149,9 +142,4 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
             );
         }
     }
-
-
 }
-
-
-
