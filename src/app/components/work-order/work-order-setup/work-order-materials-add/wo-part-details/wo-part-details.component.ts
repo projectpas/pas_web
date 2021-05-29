@@ -338,12 +338,14 @@ export class WoPartDetailsComponent implements OnChanges {
   }
 
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
+    console.log("part",this.selectedParts)
+    console.log("stockLineItem",stockLineItem)
     if (this.selectedParts.length > 0) {
       let sameParts = [];
       if (isStock) {
         sameParts = this.selectedParts.filter(part =>
           part.partNumber == this.formObject.partNumber && part.stockLineId == stockLineItem.stockLineId
-        );
+        ); 
     
         if (stockLineItem.qtyAvailable==0) {
           return true;
@@ -351,15 +353,27 @@ export class WoPartDetailsComponent implements OnChanges {
        else if (sameParts && sameParts.length > 0) { 
           return true;
         }
+      }else{
+        if(!this.isEdit){
+        sameParts = this.selectedParts.filter(part =>
+          part.partNumber == this.formObject.partNumber && part.conditionCodeId == stockLineItem.conditionId
+        );
+        if (sameParts && sameParts.length > 0) {
+          return true;
+        }
       }
-
+    }
     } else {
       this.selectedParts = [];
       return false;
     }
+    if (isStock) {
     if (stockLineItem.qtyAvailable==0) {
       return true;
     }
+  }else{
+    
+  }
   }
 
   getStocklineAccess() {
@@ -513,6 +527,9 @@ export class WoPartDetailsComponent implements OnChanges {
   resetActionButtons() {
   }
   search() {
+    this.roleUpMaterialList=[];
+    this.parts=[];
+    this.hideme=[];
      this.formObject.restrictDER = !this.formObject.restrictDER;
     this.formObject.restrictPMA = !this.formObject.restrictPMA;
     if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
@@ -686,6 +703,16 @@ saveWorkOrderMaterialList(data) {
 }
 updateQuantiry:boolean=false;
 calculateExtendedCost(): void {
+  if(this.editData){
+    if(this.formObject.quantity < this.editData.quantity){
+      this.alertService.showMessage(
+        '',
+        ' Qty Req should be greater than Actual Qty Req',
+        MessageSeverity.warn
+    );
+    this.formObject.quantity= this.editData.quantity;
+    }
+  }
   this.updateQuantiry=true;
   this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
   this.formObject.quantity = this.formObject.quantity ? this.formObject.quantity.toString().replace(/\,/g, '') : 0;

@@ -915,14 +915,14 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getteardownreasonbyid(reasonId));
         });
     }
-    workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId) {
+    workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder,isDetailView, masterCompanyId) {
         if (isSubWorkOrder) {
             return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subwolabouranalysis?subWOPartNoId=${workOrderPartNoId}&masterCompanyId=${masterCompanyId}`).catch(error => {
-                return this.handleErrorCommon(error, () => this.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId));
+                return this.handleErrorCommon(error, () => this.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder,isDetailView, masterCompanyId));
             });
         } else {
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/labouranalysis?workOrderId=${workOrderId}&workOrderPartNoId=${workOrderPartNoId}&masterCompanyId=${masterCompanyId}`).catch(error => {
-                return this.handleErrorCommon(error, () => this.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId));
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/labouranalysis?workOrderId=${workOrderId}&workOrderPartNoId=${workOrderPartNoId}&isDetailView=${isDetailView}&masterCompanyId=${masterCompanyId}`).catch(error => {
+                return this.handleErrorCommon(error, () => this.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder,isDetailView, masterCompanyId));
             });
         }
     }

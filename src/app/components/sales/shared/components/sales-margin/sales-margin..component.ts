@@ -51,8 +51,14 @@ export class SalesMarginComponent implements OnInit {
   }
 
   onSave(event: Event): void {
-    let isInvalid = this.validateInput();
-    if (!isInvalid) {
+    if (!this.isEdit) {
+      let isInvalid = this.validateInput();
+      if (!isInvalid) {
+        event.preventDefault();
+        this.save.emit(this.part);
+      }
+    }
+    else {
       event.preventDefault();
       this.save.emit(this.part);
     }

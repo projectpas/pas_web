@@ -119,7 +119,7 @@ export class WorkOrderSettingsListComponent {
             { field: 'defaultScope', header: 'Default Scope' },
             // { field: 'woListDefaultRB', header: ' WOListDefaultRB' },
             { field: 'defaultPriority', header: 'Priority' },
-            { field: 'laborHoursMedthodId', header: 'Labor Hours Method' },
+            // { field: 'laborHoursMedthodId', header: 'Labor Hours Method' },
             //
         ];
 

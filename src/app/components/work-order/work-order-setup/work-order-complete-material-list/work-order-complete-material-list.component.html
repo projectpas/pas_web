@@ -1,4 +1,4 @@
-﻿<div *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
+<div *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
     <!-- <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary mar-left-5"
         (click)="createNew();" style="min-width: 97px !important;">Add PN</button> -->
     <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
@@ -118,12 +118,13 @@
                                     <th *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)" class="text-center">
                                         Equivalent Parts
                                     </th>
+                                    
+                                    
                                     <th class="text-center" style="min-width: 110px;">PN </th>
                                     <th class="text-center" style="min-width: 130px;">Part Description</th>
                                     <th class="text-center" style="min-width: 110px;" *ngIf="(statusId == 2 || statusId == 4 || statusId == 5) && (showAlternateParts ||showEqParts) ">Alt/Equiv</th>
                                     <th class="text-center" style="min-width: 96px;"> Alternate PN For</th>
                                     <th class="text-center"> Cond Type</th>
-                                    <th class="text-center"> StockLine Number</th>
                                     <th class="text-center width-50"> Stk Type</th>
                                     <th class="text-center width-50" style="width:60px !important">Qty Req</th> 
                                     <th class="text-center width-50" style="width:60px !important">Qty Res</th>
@@ -165,6 +166,8 @@
                                     <td class="text-center">
                                       <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 1 || statusId === 5)"
                                             [(ngModel)]="x.isParentSelected" (change)="selectedParts(x,$event)" [disabled]="x.quantityReserved==0">
+
+
                                             <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)"
                                             [(ngModel)]="x.isParentSelected" (change)="selectedParts(x,$event)" [disabled]="x.quantityIssued==0">
                                         </td>
@@ -183,7 +186,6 @@
                                     <td *ngIf="(statusId == 2 || statusId == 4 || statusId == 5)"></td>
                                     <td></td>
                                     <td>{{x.condition}}</td>
-                                    <td>{{x.stockLineNumber}}</td>
                                     <td>{{x.stockType}}</td>
                                     <td class="tex_end">
                                         {{x.quantity}}
@@ -273,8 +275,9 @@
                                         <span>Alternative</span>
                                     </td>
                                     <td>{{b.parentPartNo}}</td>
+
+
                                     <td>{{b.condition}}</td>
-                                    <td>{{b.stockLineNumber}}</td>
                                     <td>{{b.stockType}}</td>
                                     <td class="tex_end">
                                         {{b.quantity}}
@@ -287,8 +290,10 @@
                                         <input type="number" name="quantity1_{{y}}" [(ngModel)]="b.quantityReserved" (keypress)="restrictMinus($event)"
                                             (keyup)="validatePartsQuantity($event,b)" (input)="childPartValidate($event.target.value, b,1)"
                                             [disabled]="!b.isChildSelected">
+
                                     </td>
                                     <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
+
                                         <input type="number" name="quantity2_{{y}}" [(ngModel)]="b.quantityIssued" (keypress)="restrictMinus($event)"
                                             (keyup)="validatePartsQuantity($event,b)"
                                             (input)="childPartValidate($event.target.value, b,1)"
@@ -315,6 +320,7 @@
                                             #issuedDateAlt="ngModel" [(ngModel)]="b.issuedDate" disabled
                                             [required]="b.isChildSelected">
                                         </p-calendar>
+
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId  != 3 && statusId != 4">
                                         <p-autoComplete field="name"
@@ -327,6 +333,8 @@
                                         [size]="30" [minLength]="1" [dropdown]="true"
                                         class="p-autoComplete-ctsm"   [required]="b.isChildSelected" disabled >
                                     </p-autoComplete>
+                                    <!-- [disabled]="!b.isChildSelected" -->
+
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
                                         <p-autoComplete field="name"
@@ -357,14 +365,13 @@
                                     </td>
                                     <td *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)">
                                     </td>
-                                    <td  *ngIf="statusId == 2 || statusId == 4 || statusId == 5">
+ <td  *ngIf="statusId == 2 || statusId == 4 || statusId == 5">
                                         <span>Equivalent</span>
                                      </td>
                                     <td>{{c.equPartNumber}}</td>
                                     <td>{{c.equPartDescription}}</td>
                                     <td>{{c.parentPartNo}}</td>
                                     <td>{{c.condition}}</td>
-                                    <td>{{c.stockLineNumber}}</td>
                                     <td>{{c.stockType}}</td>
                                     <td class="tex_end">
                                         {{c.quantity}}
@@ -725,93 +732,6 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
         </div>
     </div>
 </div>
-
-<!-- <div *ngIf="!ispickticket" style="display: none;">
-    <p-table class="rpo-table-cstm rro-table-cstm ptable-f10" id="custome_material" [columns]="cols" #materialTble
-        [value]="workOrderMaterialList" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100]"
-        (onPage)="pageIndexChange($event)">
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th class="table-column-icon-width"></th>
-                 <th class="table-column-width" [ngStyle]="{'width': col.width}" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
-                    {{col.header}} 
-                </th>
-                <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
-             <tr>
-                <td class="table-column-icon-width"> 
-                    <span >                     
-                    </span>
-                      <button type="button"  (click)="getRollupMaterialList(rowData,i)"  *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="btn btn-primary roleUpd" [disabled]="rowData.partStatusId==0"   matTooltip="Show stock line details"
-                      matTooltipPosition="above">
-                        <i    class="fa fa-plus mr-0"  
-                        ></i>
-                      </button>
-                      <button type="button" class="btn btn-danger roleUpd" *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false"  matTooltip="Show stock line details" 
-                      matTooltipPosition="above"  (click)="removeRollUpList(rowData,i)">
-                      <i 
-                      class="fa fa-minus mr-0" ></i>  
-                    </button>
-                </td> 
-                <td class="table-column-width" *ngFor="let col of columns">
-                    <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='isFromWorkFlow'"
-                    class="form-control w60 defered-check" [(ngModel)]="rowData.isFromWorkFlow" disabled>
-                    <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered'&& col.field !='isFromWorkFlow' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " style="margin:0px !important"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
-                    <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered'&& col.field !='isFromWorkFlow' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" style="margin:0px !important" class=" p-0 text-right" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.line == undefined ?( i + 1):rowData.line }}</p>
-                    <p *ngIf="col.field =='stockLineNumber' " [matTooltip]="rowData.stockLineNumber"  [matTooltipDisabled]="rowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultipleStockLine== 'Single' ? rowData[col.field] : rowData.isMultipleStockLine}}</p>
-                    <p *ngIf=" col.field =='controlNo'" [matTooltip]="rowData.controlNo"  [matTooltipDisabled]="rowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{rowData.isMultipleControlNo== 'Single' ? rowData[col.field] : rowData.isMultipleControlNo  }}</p>
-                    <p *ngIf=" col.field =='controlId'" [matTooltip]="rowData.controlId"  [matTooltipDisabled]="rowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplecontrolId== 'Single' ? rowData[col.field] : rowData.isMultiplecontrolId }}</p>
-                    <p *ngIf=" col.field =='receiver'" [matTooltip]="rowData.receiver"  [matTooltipDisabled]="rowData.isMultiplereceiver == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplereceiver== 'Single' ? rowData[col.field] : rowData.isMultiplereceiver }}</p>
-                    <p *ngIf="col.field =='altEquiv'" style="margin:0px !important">{{rowData.isAltPart ? 'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
-                    <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='defered'"
-                    class="form-control w60 defered-check" [(ngModel)]="rowData.defered">
-                    <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
-                </td>
-                <td class="action-icons-cstm table-column-width" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
-                    <span data-target="#addNewMaterials" data-toggle="modal"><button class="btn nobg btn-edit-cstm1" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"><i  [ngClass]="{'btn_disabled':rowData.quantityIssued!=0 || rowData.quantityReserved !=0}" class="fa fa-pencil"></i></button></span>
-                    <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"   matTooltip="Create PO" matTooltipPosition="above" ><i class="fa fa-plus"></i></button></span>
-                   
-                    <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
-                        <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId == 0" (click)="subWoClick(rowData)" [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'" matTooltipPosition="above" [disabled]="!(rowData.partStatusId ==2 || rowData.partStatusId ==3)" >
-                        <i class="fa fa-plus grn_clr"   [ngClass]="{'btn_disabled':!(rowData.partStatusId ==2 || rowData.partStatusId ==3)}"></i>
-                    </button>
-                    <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId != 0" (click)="editSubWo(rowData)" [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'" matTooltipPosition="above">
-                        <i class="fa fa-pencil grn_clr"  ></i>
-                    </button>
-                </span> 
-                <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order'">
-                    <button type="button" class="btn nobg btn-pluspo-cstm"  disabled >
-                        <i class="fa fa-plus" style="color: #b7b7b7;" ></i>
-                     </button>
-                </span>
-                <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;" (click)="openDelete(content,rowData)"  [ngClass]="{'btn_disabled': (rowData.quantityIssued!=0 || rowData.quantityReserved!=0)}" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
-               <span data-toggle="modal" data-target="#materialAudit"><a class="btn nobg btn-hist-cstm mr-top5"  (click)="openMaterialAudit(rowData)" matTooltip="Material List History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-            
-            </td>
-            </tr>
-        </ng-template> 
-        <ng-template pTemplate="emptymessage" let-columns>
-            <tr>
-                <td colspan="49" class="no-records-cstm no-records-msg" style="margin-left:-36%">
-                    No records found
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="summary" id="footer">
-            <label id="footer" class="footer" style="background: #fff !important;">Total:</label>
-            <input class="footer-input-width" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
-                type="text" />
-            &nbsp;&nbsp;
-            <label id="footer" class="footer1">Pages Count:</label>
-            <input class="footer-input-width" [ngModel]="
-            getPageCount(materialTble._totalRecords, pageSize)
-          " [disabled]="true" pInputText type="text" />
-        </ng-template>
-    </p-table>
-</div> -->
-<!-- table-actions-column -->
 <div *ngIf="!ispickticket" >
     <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align1 parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
     style="min-height: 130px !important;">
@@ -822,11 +742,9 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
         <tr>
              <th class="table-column-width" [ngStyle]="{'width': col.width}" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
                 {{col.header}} 
-            </th>
-            <!-- <th colspan="17"></th> -->
+            </th> 
              <th></th><th></th><th></th><th></th><th></th> <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-             <!-- <th></th> -->
-            <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
+             <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" style=" width: 140px !important; ">Actions </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
@@ -845,13 +763,19 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                 class="form-control w60 defered-check" [(ngModel)]="rowData.isDeferred">
                 <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
             </td>
-            <!-- <td colspan="17" ></td> -->
-            <!-- <td></td> -->
-            <td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td>
-            <td class="summary-column"></td>
-            <td class="action-icons-cstm  lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
-                <span><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit" matTooltipPosition="above" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"><i  [ngClass]="{'btn_disabled':rowData.quantityIssued!=0 || rowData.quantityReserved !=0}" class="fa fa-pencil"></i></button></span>
+              <td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td>
+            <td class="summary-column"></td>  
+             <td class="action-icons-cstm  lastcol-fix" style="position: sticky !important; min-width: 145px !important;width: 140px !important;" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
+                 <span><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i   class="fa fa-pencil"></i></button></span>
                 <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"   matTooltip="Create PO" matTooltipPosition="above" ><i class="fa fa-plus"></i></button></span>
+                <span>
+                <button class="btn nobg" mat-icon-button
+                (click)="pickticketItemInterface(rowData,pickticketieminterface)" matTooltip="Add PT"
+                matTooltipPosition="above" style="font-weight: bold;"
+                [disabled]="!(rowData.partStatusId >0)">
+                <i class="fa fa-plus" [ngClass]="{'btn_disabled':!(rowData.partStatusId >0)}"></i>
+              </button>
+            </span>
                 <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
                     <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId == 0" (click)="subWoClick(rowData)" [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'" matTooltipPosition="above" [disabled]="!(rowData.partStatusId ==2 || rowData.partStatusId ==3)" >
                     <i class="fa fa-plus grn_clr"   [ngClass]="{'btn_disabled':!(rowData.partStatusId ==2 || rowData.partStatusId ==3)}"></i>
@@ -867,7 +791,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             </span>
             <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;" (click)="openDelete(content,rowData)"  [ngClass]="{'btn_disabled': (rowData.quantityIssued!=0 || rowData.quantityReserved!=0)}" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
            <span data-toggle="modal" data-target="#materialAudit"><a class="btn nobg btn-hist-cstm mr-top5"  (click)="openMaterialAudit(rowData)" matTooltip="Material List History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-        </td>
+          </td>
         </tr>
         <tr class="child-header splitship-head child-header-back">
             <td class="custom_Tdth" *ngFor="let childcol of childColumnsData" [ngStyle]="{'min-width': childcol.width}" style="text-align: center !important;">
@@ -875,26 +799,25 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             </td>
             <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></td>
             </tr>
-            <tr class="child-data splitship-child child-data-back " pReorderableRowHandle  *ngFor="let childRowData of rowData.childParts; let stockIndex1 = index">
+               <tr class="child-data splitship-child child-data-back " pReorderableRowHandle  *ngFor="let childRowData of rowData.childParts; let stockIndex1 = index">
                 <td  *ngFor="let childcol of childColumnsData; let i = index" class="summary-column" pReorderableRowHandle>
                     <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='isFromWorkFlow'"
                     class="form-control w60 defered-check2" [(ngModel)]="childRowData.isFromWorkFlow" disabled>
-                    <p *ngIf="childcol.field !='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver' && childcol.field !='altEquiv' " style="margin:0px !important"  [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">  {{childRowData[childcol.field]}}</p>
-                    <p *ngIf="childcol.field =='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver'" style="margin:0px !important" class=" p-0 text-center" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">{{childRowData[childcol.field]}} </p>
+                    <p *ngIf="childcol.field !='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver' && childcol.field !='altEquiv'  && childcol.field !='showempty'" style="margin:0px !important"  [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">  {{childRowData[childcol.field]}}</p>
+                    <p *ngIf="childcol.field =='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver' && childcol.field !='showempty'" style="margin:0px !important" class=" p-0 text-center" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">{{childRowData[childcol.field]}} </p>
                     <p *ngIf="childcol.field =='stockLineNumber' " [matTooltip]="childRowData.stockLineNumber"  [matTooltipDisabled]="childRowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{ childRowData.isMultipleStockLine== 'Single' ? childRowData[childcol.field] : childRowData.isMultipleStockLine}}</p>
                     <p *ngIf=" childcol.field =='controlNo'" [matTooltip]="childRowData.controlNo"  [matTooltipDisabled]="childRowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{childRowData.isMultipleControlNo== 'Single' ? childRowData[childcol.field] : childRowData.isMultipleControlNo  }}</p>
                     <p *ngIf=" childcol.field =='controlId'" [matTooltip]="childRowData.controlId"  [matTooltipDisabled]="childRowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{ childRowData.isMultiplecontrolId== 'Single' ? childRowData[childcol.field] : childRowData.isMultiplecontrolId }}</p>
                     <p *ngIf=" childcol.field =='receiver'" [matTooltip]="childRowData.receiver"  [matTooltipDisabled]="childRowData.isMultiplereceiver == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{ childRowData.isMultiplereceiver== 'Single' ? childRowData[childcol.field] : childRowData.isMultiplereceiver }}</p>
                     <p *ngIf="childcol.field =='altEquiv'" style="margin:0px !important">{{childRowData.isAltPart ? 'Alternative' : childRowData.isEquPart ? 'Equivalent' : '-'}}</p>
-                    <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='isDeferred'"
+                    <p *ngIf="childcol.field =='showempty'" style="margin:0px !important"> -</p>
+                     <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='isDeferred'"
                     class="form-control w60 defered-check3" [(ngModel)]="childRowData.isDeferred">
                     <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]" class="p_textEditor"></span>
                 </td>
                 <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
-                
                     <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(childRowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
-              
-                    <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,childRowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                  <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,childRowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
                 </td>
             </tr>
             <tr class="child-data splitship-child child-data-back " *ngIf="rowData.childParts && rowData.childParts.length==0">
@@ -920,8 +843,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
         getPageCount(materialTble._totalRecords, pageSize)
       " [disabled]="true" pInputText type="text" />
     </ng-template>
-</p-table>
-<!-- //stocklineEdit -->
+</p-table> 
 <div class="modal fade" id="showStockLineDetails" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -936,99 +858,74 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
       </div>
     </div>
   </div>
-
-    <!-- <table class="table table-bordered" id="so-table">
-        <tr>
-             <th  *ngFor="let col of summaryColumns" [ngStyle]="{'min-width': col.width}"  >
-                {{col.header}} 
-            </th>
-
-            <th colspan="17"></th>
-            <th class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">Actions </th>
-        </tr>
-        <ng-container *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0">
-            <ng-container *ngFor="let rowData of workOrderMaterialList;let rowIndex=index;">
-                <tbody>
-                    <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                  
-                        <td  *ngFor="let col of summaryColumns; let i = index" class="summary-column" pReorderableRowHandle>
-                            <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='isFromWorkFlow'"
-                            class="form-control w60 defered-check" [(ngModel)]="rowData.isFromWorkFlow" disabled>
-                            <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered'&& col.field !='isFromWorkFlow' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " style="margin:0px !important"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
-                            <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered'&& col.field !='isFromWorkFlow' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" style="margin:0px !important" class=" p-0 text-center" [ngClass]="{align_rightset : (col && col.align ==1)}">
-                               </p>
-                            <p *ngIf="col.field =='stockLineNumber' " [matTooltip]="rowData.stockLineNumber"  [matTooltipDisabled]="rowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultipleStockLine== 'Single' ? rowData[col.field] : rowData.isMultipleStockLine}}</p>
-                            <p *ngIf=" col.field =='controlNo'" [matTooltip]="rowData.controlNo"  [matTooltipDisabled]="rowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{rowData.isMultipleControlNo== 'Single' ? rowData[col.field] : rowData.isMultipleControlNo  }}</p>
-                            <p *ngIf=" col.field =='controlId'" [matTooltip]="rowData.controlId"  [matTooltipDisabled]="rowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplecontrolId== 'Single' ? rowData[col.field] : rowData.isMultiplecontrolId }}</p>
-                            <p *ngIf=" col.field =='receiver'" [matTooltip]="rowData.receiver"  [matTooltipDisabled]="rowData.isMultiplereceiver == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplereceiver== 'Single' ? rowData[col.field] : rowData.isMultiplereceiver }}</p>
-                            <p *ngIf="col.field =='altEquiv'" style="margin:0px !important">{{rowData.isAltPart ? 'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
-                            <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='defered'"
-                            class="form-control w60 defered-check" [(ngModel)]="rowData.defered">
-                            <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
-                        </td>
-                        <th colspan="17" class="summary-column"></th>
-                        <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
-                            <span  data-toggle="modal"><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit" matTooltipPosition="above" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"><i  [ngClass]="{'btn_disabled':rowData.quantityIssued!=0 || rowData.quantityReserved !=0}" class="fa fa-pencil"></i></button></span>
-                           <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"   matTooltip="Create PO" matTooltipPosition="above" ><i class="fa fa-plus"></i></button></span>
-                           
-                            <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
-                                <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId == 0" (click)="subWoClick(rowData)" [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'" matTooltipPosition="above" [disabled]="!(rowData.partStatusId ==2 || rowData.partStatusId ==3)" >
-                                <i class="fa fa-plus grn_clr"   [ngClass]="{'btn_disabled':!(rowData.partStatusId ==2 || rowData.partStatusId ==3)}"></i>
-                            </button>
-                            <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId != 0" (click)="editSubWo(rowData)" [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'" matTooltipPosition="above">
-                                <i class="fa fa-pencil grn_clr"  ></i>
-                            </button>
-                        </span> 
-                        <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order'">
-                            <button type="button" class="btn nobg btn-pluspo-cstm"  disabled >
-                                <i class="fa fa-plus" style="color: #b7b7b7;" ></i>
-                             </button>
-                        </span>
-                        <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;" (click)="openDelete(content,rowData)"  [ngClass]="{'btn_disabled': (rowData.quantityIssued!=0 || rowData.quantityReserved!=0)}" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
-                        <span data-toggle="modal" data-target="#materialAudit"><a class="btn nobg btn-hist-cstm mr-top5"  (click)="openMaterialAudit(rowData)" matTooltip="Material List History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                    
-                    </td>
-                    
-                    </tr>
-
-                    <tr class="child-header splitship-head child-header-back">
-<th  *ngFor="let childcol of childColumnsData" [ngStyle]="{'min-width': childcol.width}" >
-    {{childcol.header}} 
-</th>
-<th class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></th>
-</tr>
-
-<tr class="child-data splitship-child child-data-back " pReorderableRowHandle  *ngFor="let childRowData of rowData.childParts; let stockIndex1 = index">
-    <td  *ngFor="let childcol of childColumnsData; let i = index" class="summary-column" pReorderableRowHandle>
-        <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='isFromWorkFlow'"
-        class="form-control w60 defered-check2" [(ngModel)]="childRowData.isFromWorkFlow" disabled>
-        <p *ngIf="childcol.field !='line' && childcol.field !='memo' && childcol.field !='defered'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver' && childcol.field !='altEquiv' " style="margin:0px !important"  [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">  {{childRowData[childcol.field]}}</p>
-        <p *ngIf="childcol.field =='line' && childcol.field !='memo' && childcol.field !='defered'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver'" style="margin:0px !important" class=" p-0 text-right" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> </p>
-        <p *ngIf="childcol.field =='stockLineNumber' " [matTooltip]="childRowData.stockLineNumber"  [matTooltipDisabled]="childRowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{ childRowData.isMultipleStockLine== 'Single' ? childRowData[childcol.field] : childRowData.isMultipleStockLine}}</p>
-        <p *ngIf=" childcol.field =='controlNo'" [matTooltip]="childRowData.controlNo"  [matTooltipDisabled]="childRowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{childRowData.isMultipleControlNo== 'Single' ? childRowData[childcol.field] : childRowData.isMultipleControlNo  }}</p>
-        <p *ngIf=" childcol.field =='controlId'" [matTooltip]="childRowData.controlId"  [matTooltipDisabled]="childRowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{ childRowData.isMultiplecontrolId== 'Single' ? childRowData[childcol.field] : childRowData.isMultiplecontrolId }}</p>
-        <p *ngIf=" childcol.field =='receiver'" [matTooltip]="childRowData.receiver"  [matTooltipDisabled]="childRowData.isMultiplereceiver == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{ childRowData.isMultiplereceiver== 'Single' ? childRowData[childcol.field] : childRowData.isMultiplereceiver }}</p>
-        <p *ngIf="childcol.field =='altEquiv'" style="margin:0px !important">{{childRowData.isAltPart ? 'Alternative' : childRowData.isEquPart ? 'Equivalent' : '-'}}</p>
-        <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='defered'"
-        class="form-control w60 defered-check3" [(ngModel)]="childRowData.defered">
-        <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]" class="p_textEditor"></span>
-    </td>
-    <td class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px"></td>
-</tr>
-
-                </tbody>
-            </ng-container>
-        </ng-container>
-        <ng-container *ngIf="workOrderMaterialList && workOrderMaterialList.length == 0">
-            <tbody>
-                <tr>
-                    <td colspan="48"
-                        style="color: red; font-weight: bold; text-transform: uppercase;margin-left:-15%">
-                        No records found
-                    </td>
-                </tr>
-            </tbody>
-        </ng-container>
-    </table> -->
-    </div>
+ </div>
 </div>
+<ng-template #pickticketieminterface let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <button type="button" class="close font_chck" (click)="dismissModel()">
+        &times;
+      </button>
+      <h4 class="modal-title">Pick Item</h4>
+    </div>
+    <div class="modal-body">
+      <form #ptiteminterface="ngForm" class="form-horizontal">
+        <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom pickticket"
+          [columns]="pickTicketItemInterfaceheader" [scrollable]="true" [resizableColumns]="true" selectionMode="single"
+          [responsive]="true" [metaKeySelection]="true" [style]="{ width: '100%' }">
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col [ngStyle]="{'width': '50px'}" />
+              <col *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}" />
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th class="text-left">
+              </th>
+              <th *ngFor="let col of pickTicketItemInterfaceheader">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
+            <tr pReorderableRowHandle>
+              <td>
+                <span>
+                  <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
+                    (onChange)="onChangeOfPartSelection($event)" binary="true">
+                  </p-checkbox>
+                </span>
+              </td>
+              <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
+                <ng-container *ngIf="col.field != 'qtyToShip'">
+                  {{part[col.field]}}
+                </ng-container>
+                <ng-container *ngIf="col.field =='qtyToShip'">
+                  <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
+                    required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
+                    [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false"
+                    required="col.field =='qtyToShip'" />
+                </ng-container>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns *ngIf="parts.length == 0">
+            <tr>
+              <td [attr.colspan]="18" class="no-records-cstm" style="text-align: left;">
+                No records found
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <div class="modal-footer">
+          <button type="submit" (click)="savepickticketiteminterface(parts)" class="btn btn-primary"
+            [disabled]="!ptiteminterface.valid || disableSubmitButton == true">
+            {{ isEdit ? 'Update' : 'Save' }}
+          </button>
+          <button type="button" (click)="dismissModel()" class="btn btn-danger">
+            Close
+          </button>
+        </div>
+      </form>
+    </div> 
+  </ng-template>

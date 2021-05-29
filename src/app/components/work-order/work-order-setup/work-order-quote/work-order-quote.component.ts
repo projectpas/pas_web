@@ -795,14 +795,19 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveQuoteDetails() {
+        if(this.quoteForm.expirationDateStatus==5){
         if(this.quotationHeader && this.quotationHeader.workOrderQuoteId){
             $('#quoteVer').modal("show");
             this.quoteCreated=true;
         }
         else{
             this.saveQuoteAPI()
-        }        
+        }  
+    } else{
+        this.saveQuoteAPI()
+    }       
     }
+    // this.quoteForm.expirationDateStatus=='Approved'
 
     saveQuoteAPI(){
         this.formQuoteInfo(this.quoteForm);

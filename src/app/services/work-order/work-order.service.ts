@@ -387,8 +387,8 @@ export class WorkOrderService {
     getteardownreasonbyidData(id) {
         return this.workOrderEndpointService.getteardownreasonbyid(id);
     }
-    workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId) {
-        return this.workOrderEndpointService.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId);
+    workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, isDetailView, masterCompanyId) {
+        return this.workOrderEndpointService.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, isDetailView, masterCompanyId);
     }
     workOrderAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId) {
         return this.workOrderEndpointService.workOrderAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder, masterCompanyId);
