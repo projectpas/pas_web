@@ -494,6 +494,7 @@
                                         <th>Certified Date</th>
                                         <th class="date">Certified Due Date</th>
                                         <th>Tagged By </th>
+                                        <th>UOM</th>
                                         <th class="date">Date Tagged </th>
                                         <th class="date">Tag Exp Date </th>
                                         <th>Shipping Ref#/AWB</th>
@@ -925,10 +926,34 @@
                                                     id="certifiedDueDate{{stockline_row_index}}"
                                                     [(ngModel)]="SL.certifiedDueDate"></p-calendar>
                                             </td>
-                                            <td>
-                                                <input class="form-control" [(ngModel)]="SL.certifiedBy" type="text"
-                                                    pInputText [disabled]="!SL.isEnabled" [maxLength]="200">
+                                            <td>                                               
+                                                <p-autoComplete field="Value" class="rpo-acomp"
+                                                    [(ngModel)]="SL.taggedByObject" 
+                                                    appendTo="body"
+                                                    [suggestions]="TagByNames" 
+                                                    (completeMethod)="filterTagEmployees($event,SL)"
+                                                    [size]="32" 
+                                                    [minLength]="1" 
+                                                    [dropdown]="true"                                                             
+                                                    [disabled]="!SL.isEnabled"
+                                                    (onSelect)="onOwnerSelectTag(SL)"
+                                                    name="taggedBy{{stockline_row_index}}"
+                                                    id="taggedBy{{stockline_row_index}}">
+                                                </p-autoComplete>
                                             </td>
+                                            <td>                                                                                     
+                                                <p-dropdown class="rpo-acomp" 
+                                                    [options]="allPurchaseUnitOfMeasureinfo" 
+                                                    filter="true"
+                                                    appendTo="body"
+                                                    [disabled]="!SL.isEnabled"
+                                                    [(ngModel)]="SL.unitOfMeasureId" 
+                                                    [resetFilterOnHide]="true" 
+                                                    placeholder="-- Select --" 
+                                                    [showClear]="true" 
+                                                    name="purchaseUnitOfMeasureId{{stockline_row_index}}"
+                                                    id="purchaseUnitOfMeasureId{{stockline_row_index}}" required>
+                                                </p-dropdown>                                           
                                             <td>
                                                 <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"
