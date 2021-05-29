@@ -52,10 +52,16 @@
                                     </td>
                                     <td colspan="11" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" class="center">
-                                        <a class="btn nobg view-part-eye" (click)="viewPartNumber(summaryPart,rowIndex)"
+                                        <span>
+                                            <a class="btn nobg btn-pluspo-cstm" (click)="createExclusionPN(summaryPart)"
+                                                matTooltip="Add Excls" matTooltipPosition="above">
+                                                <i class="fa fa-plus"> </i>
+                                            </a>
+                                        </span>
+                                        <!-- <a class="btn nobg view-part-eye" (click)="viewPartNumber(summaryPart,rowIndex)"
                                             matTooltip="View Stock Line" matTooltipPosition="above">
                                             <i class="fa fa-eye"></i>
-                                        </a>
+                                        </a> -->
                                         <!-- <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                             [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
                                             class="btn nobg view-part-eye" (click)="addPartNumber(summaryPart,rowIndex)"
@@ -71,16 +77,16 @@
                                         <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                             [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
                                             class="btn nobg"
-                                            (click)="openmultiplepartDelete(summaryPart,rowIndex,deletepartcontent)"
+                                            (click)="openPartDelete(deleteContent,summaryPart)"
                                             matTooltip="Delete" matTooltipPosition="above">
                                             <i class="fa fa-trash"></i>
                                         </a>
-                                        <span>
-                                          <a class="btn nobg btn-pluspo-cstm" (click)="createExclusionPN(summaryPart)"
-                                              matTooltip="Create PO" matTooltipPosition="above">
-                                              <i class="fa fa-plus"> </i>
-                                          </a>
-                                      </span>
+                                        <span data-toggle="modal" data-target="#speedQuotePartHistory">
+                                            <a [ngClass]="{'btn_disabled': !summaryPart.speedQuotePartId}"
+                                                class="btn nobg btn-hist-cstm view-part-eye"
+                                                (click)="getAuditHistoryById(summaryPart)" matTooltip="History"
+                                                matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                        </span>
                                     </td>
                                 </tr>
                               </tbody>
@@ -132,3 +138,136 @@
 <!-- <ng-container tabindex="-1">
   <app-speed-quote-exclusions></app-speed-quote-exclusions>
 </ng-container> -->
+<ng-template #deleteContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="onClosePartDelete()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h6 class="modal-body">Part Number : {{part.partNumber}}</h6>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="deletePart()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="onClosePartDelete()">No</button>
+    </div>
+</ng-template>
+<div id="speedQuotePartHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xlg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
+                <h4 class="modal-title">History of Speed Quote Part</h4>
+            </div>
+            <div class="modal-body" *ngIf="auditHistory">
+                <div class="table-responsive history_hg" style="overflow-x:auto;">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>PN</th>
+                                <th>PN Description</th>
+                                <th>Cond</th>
+                                <th>Qty</th>
+                                <th>Manufacturer</th>
+                                <th>Item Type</th>
+                                <th>Unit Price</th>
+                                <th>Extended Cost</th>
+                                <th>Margin Amt</th>
+                                <th>Margin %</th>
+                                <th>Notes</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                                <th>Is Deleted</th>
+                            </tr>
+                        </thead>
+                        <tbody class="audithistory-cstm">
+                            <!--*ngIf="auditHistory.length> 0"-->
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <!-- auditHistory[i>0 ? i-1 : i] -->
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'partNumber', audit.partNumber)  ? 'black' : 'red'  }">
+                                    {{audit.partNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'partDescription', audit.partDescription)  ? 'black' : 'red'  }">
+                                    {{audit.partDescription}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'conditionDescription', audit.conditionDescription)  ? 'black' : 'red'  }">
+                                    {{audit.conditionDescription}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'quantityRequested', audit.quantityRequested)  ? 'black' : 'red'  }">
+                                    {{audit.quantityRequested}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'manufacturer', audit.manufacturer)  ? 'black' : 'red'  }">
+                                    {{audit.manufacturer}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'type', audit.type)  ? 'black' : 'red'  }">
+                                    {{audit.type}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'unitSalePrice', audit.unitSalePrice)  ? 'black' : 'red'  }">
+                                    {{audit.unitSalePrice | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'unitCostExtended', audit.unitCostExtended)  ? 'black' : 'red'  }">
+                                    {{audit.unitCostExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'marginAmount', audit.marginAmount)  ? 'black' : 'red'  }">
+                                    {{audit.marginAmount | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'marginPercentage', audit.marginPercentage)  ? 'black' : 'red'  }">
+                                    {{audit.marginPercentage}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
+                                    {{audit.notes}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                                    {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                    {{audit.createdBy}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                                    {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                    {{audit.updatedBy}}</td>
+                                <td>
+                                    <p class="background-white"> <input type="checkbox" name="isDeleted"
+                                            [(ngModel)]="audit.isDeleted" disabled></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <!-- <img src="../../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;"> -->
+                            <h4 class="no-history-found-msg">No History Found </h4>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div>
+                        </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

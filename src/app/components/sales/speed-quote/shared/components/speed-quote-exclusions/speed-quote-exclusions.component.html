@@ -7,7 +7,7 @@
           <th class="min-width-30">Line#</th>
           <th class="th-width">PN</th>
           <th>PN Description</th>
-          <th></th>
+          <th *ngIf="isViewMode == false"></th>
           <th>PN</th>
           <th>PN Description</th>
           <th>Item Type</th>
@@ -16,7 +16,7 @@
           <td>Est Price</td>
           <td>Occurance (%)*</td>
           <td>Notes</td>
-          <td>Action</td>
+          <td *ngIf="isViewMode == false">Action</td>
         </tr>
       </thead>
       <tbody>
@@ -26,7 +26,7 @@
             <td>{{row_index + 1}}</td>
             <td class="parts-des-td">{{partList.pn}}</td>
             <td class="parts-des-td">{{partList.description}}</td>
-            <td>
+            <td *ngIf="isViewMode == false">
               <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add PN"
                 matTooltipPosition="above" style="padding: 0px 4px !important;" (click)="addPartNumber(partList)"></i>
             </td>
@@ -35,7 +35,7 @@
                 (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
                 class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
                 (onSelect)="onPartSelect($event,row_index)" [forceSelection]="true" title="PN" required
-                name="pn_{{row_index}}">
+                [disabled]="partList['isEditPart'] == true" name="pn_{{row_index}}">
               </p-autoComplete>
             </td>
             <td class="parts-des-td">{{partList.exPartDescription}}</td>
@@ -43,21 +43,21 @@
             <td>
               <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15"
                 (keyup)="calculateExtendedCost(partList)" [(ngModel)]="partList.exQuantity"
-                value="{{ partList.exQuantity }}" name="exQuantity_{{row_index}}" />
+                [disabled]="partList['isEditPart'] == true" value="{{ partList.exQuantity }}" name="exQuantity_{{row_index}}" />
             </td>
             <td>
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
                 (change)="calculateExtendedCost(partList)" [(ngModel)]="partList.exUnitPrice"
-                value="{{ partList.exUnitPrice }}" name="exUnitPrice_{{row_index}}" maxlength="15" />
+                [disabled]="partList['isEditPart'] == true" value="{{ partList.exUnitPrice }}" name="exUnitPrice_{{row_index}}" maxlength="15" />
             </td>
             <td>
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
                 [(ngModel)]="partList.exExtPrice"
-                value="{{ partList.exExtPrice }}" name="exExtPrice_{{row_index}}" maxlength="15" />
+                value="{{ partList.exExtPrice }}" name="exExtPrice_{{row_index}}" maxlength="15" disabled/>
             </td>
             <td>
               <select class="form-control wf-pub-id full-width" id="ddlEstimatedOccurance"
-                [(ngModel)]="partList.exOccurance" name="exOccurance_{{row_index}}"> Occurance
+                [disabled]="partList['isEditPart'] == true" [(ngModel)]="partList.exOccurance" name="exOccurance_{{row_index}}"> Occurance
                 <option value="-1">--Select--</option>
                 <option value="{{ occurance.label }}" *ngFor="
                                                 let occurance of exclusionEstimatedOccurances;
@@ -69,17 +69,25 @@
                 <div [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
                   [matTooltip]="parsedText(partList.exNotes)"></div>
                 <i class="fa fa-pencil ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
-                  matTooltip="Notes" matTooltipPosition="above" (click)="onAddTextAreaInfo(partList,row_index)"></i>
+                  matTooltip="Notes" matTooltipPosition="above" [class.disabled]="isViewMode"
+                  [ngClass]="{'btn_disabled': isViewMode}" (click)="onAddTextAreaInfo(partList,row_index)"></i>
               </div>
             </td>
-            <td></td>
+            <td *ngIf="isViewMode == false">
+              <a [class.disabled]="isViewMode"
+                                            [ngClass]="{'btn_disabled': isViewMode}"
+                                            class="btn nobg view-part-eye" (click)="editPart(row_index)"
+                                            matTooltip="Edit PN" matTooltipPosition="above">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+            </td>
           </tr>
         </ng-container>
       </tbody>
     </table>
   </div>
-  <div class="float-right">
-    <button class="btn btn-primary m-t-10" (click)="saveSpeedQuoteExclusions()">
+  <div class="float-right" *ngIf="isViewMode == false">
+    <button class="btn btn-primary m-t-10" (click)="saveSpeedQuoteExclusions(errorpopup)">
       Save
     </button>
   </div>
@@ -120,3 +128,25 @@
       </div>
   </div>
 </div>
+<ng-template class="modal fade" #errorpopup let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title">Alert</h4>
+          <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <strong>
+              <span [ngStyle]="{'color':'red'}">
+              <div [innerHTML]="alertText"></div>
+              </span>
+          </strong>
+          
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-danger"
+              (click)="dismissModel();">close</button>
+      </div>
+  </div>
+</ng-template>

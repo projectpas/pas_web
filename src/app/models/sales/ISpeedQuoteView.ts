@@ -8,6 +8,7 @@ import { ISalesProbablity } from './ISalesProbablity';
 import { ILeadSource } from './ILeadSource';
 import { IStatus } from "./IStatus";
 import { ISpeedQte } from './ISpeedQte';
+import { ISpeedQuote } from './ISpeedQuote.model';
 
 export interface ISpeedQuoteView {
     createNewVersion: boolean;

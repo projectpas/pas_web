@@ -55,6 +55,9 @@ export class ExchangeQuotePart implements IExchangeQuotePart {
     qtyAvailable: number;
     customerReference: string;
     itemNo: number;
+    customerRequestDate?: Date;
+    promisedDate?: Date;
+    estimatedShipDate?: Date;
 
     exchangeCurrencyId: number;
     loanCurrencyId: number;
