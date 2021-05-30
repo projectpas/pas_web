@@ -130,7 +130,7 @@ export class PurchaseSetupComponent implements OnInit {
 	purchaseOrderId: any;
 	purchaseOrderPartRecordId: any;
 	addAllMultiPN: boolean = false;
-	disablePOStatus: boolean = true;
+	disablePOStatus: boolean = false;
 	childObject: any = {};
 	parentObject: any = {};
 	childObjectArray: any[] = [];
@@ -1595,24 +1595,36 @@ export class PurchaseSetupComponent implements OnInit {
 
 			if (this.posettingModel.IsEnforceApproval) {
 				this.disablePOStatus = true;
-			}
-			else {
 				if (this.headerInfo.openDate
 					&& this.posettingModel.effectivedate
-					&& new Date(this.headerInfo.openDate) > new Date(this.posettingModel.effectivedate)) {
+					&& new Date(this.headerInfo.openDate) <= new Date(this.posettingModel.effectivedate)
+					&& this.posettingModel.IsEnforceApproval) {
 					this.posettingModel.IsEnforceApproval = false;
 					this.disablePOStatus = false;
 				}
-				else if (this.headerInfo.openDate
-					&& this.posettingModel.effectivedate
-					&& new Date(this.headerInfo.openDate) < new Date(this.posettingModel.effectivedate)) {
-					this.posettingModel.IsEnforceApproval = true;
-					this.disablePOStatus = true;
-				}
-				else {
-					this.disablePOStatus = true;
-				}
 			}
+
+
+			// if (this.posettingModel.IsEnforceApproval) {
+			// 	this.disablePOStatus = true;
+			// }
+			// else {
+			// 	if (this.headerInfo.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(this.headerInfo.openDate) > new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = false;
+			// 		this.disablePOStatus = false;
+			// 	}
+			// 	else if (this.headerInfo.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(this.headerInfo.openDate) < new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = true;
+			// 		this.disablePOStatus = true;
+			// 	}
+			// 	else {
+			// 		this.disablePOStatus = true;
+			// 	}
+			// }
 			this.capvendorId = res.vendorId;
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -2601,26 +2613,39 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 			this.toggle_po_header = false;
 			this.enableHeaderSaveBtn = false;
+
 			if (this.posettingModel.IsEnforceApproval) {
 				this.disablePOStatus = true;
-			}
-			else {
 				if (headerInfoObj.openDate
 					&& this.posettingModel.effectivedate
-					&& new Date(headerInfoObj.openDate) > new Date(this.posettingModel.effectivedate)) {
+					&& new Date(headerInfoObj.openDate) <= new Date(this.posettingModel.effectivedate)
+					&& this.posettingModel.IsEnforceApproval) {
 					this.posettingModel.IsEnforceApproval = false;
 					this.disablePOStatus = false;
 				}
-				else if (headerInfoObj.openDate
-					&& this.posettingModel.effectivedate
-					&& new Date(headerInfoObj.openDate) < new Date(this.posettingModel.effectivedate)) {
-					this.posettingModel.IsEnforceApproval = true;
-					this.disablePOStatus = true;
-				}
-				else {
-					this.disablePOStatus = true;
-				}
 			}
+
+
+			// if (this.posettingModel.IsEnforceApproval) {
+			// 	this.disablePOStatus = true;
+			// }
+			// else {
+			// 	if (headerInfoObj.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(headerInfoObj.openDate) > new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = false;
+			// 		this.disablePOStatus = false;
+			// 	}
+			// 	else if (headerInfoObj.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(headerInfoObj.openDate) < new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = true;
+			// 		this.disablePOStatus = true;
+			// 	}
+			// 	else {
+			// 		this.disablePOStatus = true;
+			// 	}
+			// }
 		}
 	}
 
@@ -2725,6 +2750,11 @@ export class PurchaseSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Management Structure is required."
 			}
+			var Qty = 0;
+			var childQty = 0;
+			if (this.partListData[i].quantityOrdered) {
+				Qty = this.partListData[i].quantityOrdered ? parseInt(this.partListData[i].quantityOrdered.toString().replace(/\,/g, '')) : 0;
+			}
 			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
 				for (let j = 0; j < this.partListData[i].childList.length; j++) {
 
@@ -2768,8 +2798,18 @@ export class PurchaseSetupComponent implements OnInit {
 						this.isSpinnerVisible = false;
 						errmessage = errmessage + '<br />' + "Split Shipment Need By is required."
 					}
+					if (this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered > 0) {
+						childQty = childQty + parseInt(this.partListData[i].childList[j].quantityOrdered.toString().replace(/\,/g, ''));
+					}
 				}
 			}
+			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
+				if (Qty != childQty) {
+					this.isSpinnerVisible = false;
+					errmessage = errmessage + '<br />' + "Part Qty Order and Sum of Split Shipment Qty Ordered Shipment should be same."
+				}
+			}
+
 			if (errmessage != '') {
 				var message = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + errmessage
 				this.alertService.showStickyMessage("Validation failed", message, MessageSeverity.error, 'Please enter Qty');
