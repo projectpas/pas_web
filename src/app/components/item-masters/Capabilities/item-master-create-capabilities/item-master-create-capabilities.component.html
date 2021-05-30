@@ -68,13 +68,13 @@
 			  <ng-template pTemplate="header" let-columns>
 				  <tr>
 					<th class="table-column-width table-header-text" >Capability Type</th>
-					<th class="table-header-text" colspan="4">Managment Structure <span class="clr-red">*</span></th>
+					<th class="table-header-text mgmt-width" colspan="4">Managment Structure <span class="clr-red">*</span></th>
 					<th class="table-column-width table-header-text" *ngFor="let col of columns" pResizableColumn>
 					  {{ col.header }}
 					</th>
 				  </tr>
 				</ng-template>
-				<ng-template
+				<ng-template style="overflow-y:scroll"
 				  pTemplate="body"
 				  let-row_no="rowIndex"
 				  let-rowData
@@ -82,61 +82,61 @@
 				<ng-container> <!--*ngFor="let rowData of aircraftData; let row_no = index;"-->
 				  <tr>            
 					<td >{{ rowData.capailityTypeName }}</td>
-					<td>
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo="body" [baseZIndex]="9999"
 					  name="company{{row_no}}"
 					  #companyId="ngModel"
-					  [options]="  getDynamicVariableData('legalEntityList',row_no)"
-					  class="p-dropdown-custom-sm"
+					  class="p-dropdown-custom-sm" 
+					  [options]="getDynamicVariableData('legalEntityList',row_no)"
 					  (onChange)="selectedLegalEntity($event.value, row_no)"
 					  [(ngModel)]="rowData.companyId" 
 					  filter="true" [resetFilterOnHide]="true"
 					  [required]="true">
 					</p-dropdown>
 					</td>
-					<td>
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
 					  name="bu{{row_no}}"
 					  #bu="ngModel"
 					  [options]="getDynamicVariableData('businessUnitList',row_no)"
-					  class="p-dropdown-custom-sm"
+					  class="p-dropdown-custom-sm" 
 					  (onChange)="selectedBusinessUnit($event.value, row_no)"
 					  [(ngModel)]="rowData.buId"
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td>
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
 					  name="division{{row_no}}"
 					  #division="ngModel"
 					  [options]="getDynamicVariableData('divisionList',row_no)"
-					  class="p-dropdown-custom-sm"
+					  class="p-dropdown-custom-sm" 
 					  (onChange)="selectedDivision($event.value, row_no)"
 					  [(ngModel)]="rowData.divisionId"
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td>
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
 					  name="department{{row_no}}"
 					  #department="ngModel" 
 					  [options]="getDynamicVariableData('departmentList',row_no)"
-					  class="p-dropdown-custom-sm"
+					  class="p-dropdown-custom-sm" 
 					  (onChange)="selectedDepartment($event.value, row_no)"
 					  [(ngModel)]="rowData.departmentId"
 					  filter="true" [resetFilterOnHide]="true"
 					>
 				  </p-dropdown>
 					</td>
-					<td class="table-column-width">
+					<td>
 						<p-calendar
 							class="pcal-item-capes"
 							[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
@@ -146,7 +146,7 @@
 						  [showIcon]="true"
 						></p-calendar>
 					  </td>
-					<td class="table-column-width text-center">
+					<td class="text-center">
 					  <p-checkbox
 					  	class="pcheckbox-cstm"
 						name="isverified{{row_no}}"
@@ -157,7 +157,7 @@
 					</td>
 					<td class="table-width-150">
 					  <p-dropdown
-						class="p-dropdown-custom-sm"
+					  class="p-dropdown-custom-sm" 
 						[options]="employeeList"
 						placeholder="Select"
 						appendTo='body' [baseZIndex]="9999"
@@ -168,7 +168,7 @@
 						filter="true" [resetFilterOnHide]="true"
 					  ></p-dropdown>
 					</td>
-					<td class="table-column-width">
+					<td >
 						<!-- [required]="rowData.isVerified==true" -->
 					  <p-calendar
 					  	class="pcal-item-capes"
@@ -181,7 +181,7 @@
 						[showIcon]="true"
 					  ></p-calendar>
 					</td>
-					   <td class="table-column-width">
+					   <td>
 						<div [innerHTML]="rowData.memo" class="form-control"
 						style="margin-left:10px" 
 						[matTooltip]="parsedText(rowData.memo)" (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
