@@ -364,8 +364,10 @@
           <div class="col-md-3">
             <div class="form-group">
               <label class="input-width-100-percent">WO Open Date</label>
-             <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                [(ngModel)]="woOperDate" disabled appendTo="body">
+             <p-calendar [showIcon]="true" class="calender-cstm"
+              name="openDate" #openDate="ngModel" required
+                [(ngModel)]="woOperDate" [yearNavigator]="true" 
+                [monthNavigator]="true" yearRange="1900:2100" disabled appendTo="body">
               </p-calendar>
             </div>
           </div>
@@ -470,7 +472,9 @@
                           </td>
                           <td class="width-100">
                             <div  *ngIf="assetsform.assetStatus == 'checkOut'">
-                              <p-calendar class="pas-clder" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="row.checkOutDate"
+                              <p-calendar [showIcon]="true" [yearNavigator]="true"
+                               [monthNavigator]="true" yearRange="1900:2100"  
+                               appendTo='body' [baseZIndex]="9999" [(ngModel)]="row.checkOutDate"
                                [showIcon]="true" [disabled]="!row.isChecked"
                                 name="checkOutDate{{i}}"></p-calendar>
                             </div>
@@ -479,7 +483,7 @@
                           <td class="width-135">
                             <div  *ngIf="assetsform.assetStatus == 'checkIn'">
                               <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="row.checkInById" [disabled]="!row.isChecked"
-                                name="checkInBy{{i}}" [suggestions]="employeeList"
+                                name="checkInBy{{i}}" [suggestions]="employeeList"  appendTo='body' [baseZIndex]="9999"
                                 (completeMethod)="filterEmployee($event)" [size]="30" [minLength]="1" [dropdown]="true"
                                 errorMessage="Records not found" [forceSelection]="true">
                               </p-autoComplete>
@@ -488,7 +492,10 @@
                           </td>
                           <td class="width-100"> 
                             <div  *ngIf="assetsform.assetStatus == 'checkIn'">
-                              <p-calendar class="pas-clder" [(ngModel)]="row.checkInDate" [showIcon]="true" [disabled]="!row.isChecked"
+                              <p-calendar [(ngModel)]="row.checkInDate"
+                              [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                               [showIcon]="true" [disabled]="!row.isChecked"
+                               appendTo='body' [baseZIndex]="9999"
                                 name="checkInDate{{i}}"></p-calendar>
                             </div>
                             <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy'}}</div>

@@ -532,7 +532,7 @@
                                 </app-speed-quote-part-number>
                             </p-tabPanel>
                             <p-tabPanel header="Exclusions">
-                                <app-speed-quote-exclusions [salesQuote]="salesQuote">
+                                <app-speed-quote-exclusions [salesQuote]="salesQuote" [SQId]="id" [isViewMode]="false">
                                 </app-speed-quote-exclusions>
                             </p-tabPanel>
                             <!-- <p-tabPanel header="Internal Approvers" *ngIf="enforceApproval">
@@ -547,7 +547,7 @@
                                     (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
                                 </app-sales-customer-approvals>
                             </p-tabPanel> -->
-                            <p-tabPanel header="Address">
+                            <!-- <p-tabPanel header="Address">
                                 <app-address-component [addressType]="addressType" [id]="SalesOrderQuoteId">
                                 </app-address-component>
                             </p-tabPanel>
@@ -580,7 +580,7 @@
                             <p-tabPanel header="Communication">
                                 <app-communication [isViewMode]="false" [type]="1" [moduleName]="moduleName"
                                     [idForContact]="customerId" [referenceId]="id"></app-communication>
-                            </p-tabPanel>
+                            </p-tabPanel> -->
                         </p-tabView>
                     </ng-container>
                     <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled)">

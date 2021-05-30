@@ -321,4 +321,25 @@ export class SpeedQuoteService {
   getExclusionList(id) {
     return this.speedQuoteEndPointSevice.getExclusionList(id);
   }
+  delete(speedQuoteId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.delete(speedQuoteId)
+    );
+  }
+  getSpeedQuoteHistory(speedQuoteId) {
+    return this.speedQuoteEndPointSevice.getSpeedQuoteHistory(speedQuoteId);
+  }
+  getview(speedQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.getview(speedQuoteId)
+    );
+  }
+  deletePart(speedQuotePartId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.deletePart(speedQuotePartId)
+    );
+  }
+  getSpeedQuotePartHistory(speedQuotePartId) {
+    return this.speedQuoteEndPointSevice.getSpeedQuotePartHistory(speedQuotePartId);
+  }
 }

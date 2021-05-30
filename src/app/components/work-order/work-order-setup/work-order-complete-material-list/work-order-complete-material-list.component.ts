@@ -1516,7 +1516,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
       const conditionId = rowData.conditionCodeId;
       const workOrderId = rowData.workOrderId;
       const workOrderMaterialsId = rowData.workOrderMaterialsId;
-      this.qtyToPick = rowData.qtyToPick;
+      this.qtyToPick = rowData.quantity-rowData.qunatityPicked;
+
       this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
       this.workOrderService
         .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId)
@@ -1556,7 +1557,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
           }
         })
         parts = [];
-        parts = tempParts;
+        parts = tempParts; 
         for (let i = 0; i < parts.length; i++) {
           let selectedItem = parts[i];
           var errmessage = '';
@@ -1568,11 +1569,16 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
         if (invalidQty) {
           this.isSpinnerVisible = false;
-          this.alertService.resetStickyMessage();
-          this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
+          this.alertService.showMessage(
+            'Work Order',
+            'You cannot pick more than Qty To Pick',
+            MessageSeverity.warn
+        );
+        //   this.alertService.resetStickyMessage();
+        //   this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
         }
         else {
-        //   this.disableSubmitButton = true;
+          this.disableSubmitButton = true;
           this.workOrderService
             .savepickticketiteminterface(parts)
             .subscribe(data => {
@@ -1590,6 +1596,27 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     onCloseMaterial(data){
         $('#showStockLineDetails').modal("hide");
     }
+    disableSubmitButton:boolean=true;
+    onChangeOfPartSelection(event) {
+        let selectedPartsLength = 0;
+        for (let i = 0; i < this.parts.length; i++) {
+          if (event == true) {
+            selectedPartsLength = selectedPartsLength + 1;
+          }
+          else {
+            if (selectedPartsLength != 0) {
+              selectedPartsLength = selectedPartsLength - 1;
+            }
+          }
+        }
+    
+        if (selectedPartsLength == 0) {
+          this.disableSubmitButton = true;
+        } else {
+          this.disableSubmitButton = false;
+        }
+      }
+
 }
 
 // min-width: 81px !important;

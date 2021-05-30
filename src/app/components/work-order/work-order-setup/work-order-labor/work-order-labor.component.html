@@ -157,9 +157,9 @@
               Billing Amount
             </th>
           </ng-container>
-          <th *ngIf="!isQuote">
+          <!-- <th *ngIf="!isQuote">
             Direct Labor
-          </th>
+          </th> -->
           <th *ngIf="!isQuote">
             Burden Rate %
           </th>
@@ -215,7 +215,7 @@
                 <td></td>
               </ng-container>
               <ng-container *ngIf="!isQuote">
-                <td></td>
+                <!-- <td></td> -->
                 <td></td>
                 <td></td>
                 <td></td>
@@ -392,13 +392,13 @@
                   </td>
                 </ng-container> 
                 <ng-container *ngIf="!isQuote">
-                  <td>
+                  <!-- <td>
                     <input type="text" (change)="modifyDirectLoaborFormat(rec)" pInputText pKeyFilter="money"  class="form-control text-right" (ngModelChange)="checkValid(23)" (blur)="calculateBurderRate(rec);calculateTotalCost(rec)" style="width: 66px;"
                       [(ngModel)]="rec.directLaborOHCost" [disabled]="isView" required/>
-                  </td>
+                  </td> -->
                   <td>
                     <select class="form-control select-markup width-100"  (ngModelChange)="checkValid(24)" (change)="calculateBurderRate(rec);calculateTotalCost(rec)" [(ngModel)]="rec.burdaenRatePercentageId"
-                   [disabled]="isView">
+                   [disabled]="true">
                       <option value="0">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
                     </select>

@@ -2463,7 +2463,7 @@ this.getNewMaterialListByWorkOrderId();
                     // labSubList.directLaborOHCost
                     // labSubList.directLaborOHCost
                     // labSubList.directLaborOHCost
-                    // labSubList.directLaborOHCost
+                    labSubList.burdaenRatePercentageId= labSubList.burdaenRatePercentageId !=0 ? labSubList.burdaenRatePercentageId :null
                     this.result.LaborList.push(labSubList);
                     this.result.expertiseId=labSubList['expertiseId'];
                     this.result.employeeId=labSubList['employeeId'];

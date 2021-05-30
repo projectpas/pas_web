@@ -134,9 +134,9 @@ export class ExchangequoteService {
     partNumberObj.exchangeQuotePartId = selectedPart.exchangeQuotePartId;
     partNumberObj.stockLineId = selectedPart.stockLineId;
     partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
-    // partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
-    // partNumberObj.promisedDate = selectedPart.promisedDate.toDateString();
-    // partNumberObj.estimatedShipDate = selectedPart.estimatedShipDate.toDateString();
+    partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
+    partNumberObj.promisedDate = selectedPart.promisedDate.toDateString();
+    partNumberObj.estimatedShipDate = selectedPart.estimatedShipDate.toDateString();
     //partNumberObj.priorityId = selectedPart.priorityId;
     partNumberObj.itemMasterId = selectedPart.itemMasterId;
     partNumberObj.fxRate = selectedPart.fixRate;
@@ -245,6 +245,9 @@ export class ExchangequoteService {
     // partNumberObj.totalSales = selectedPart.totalSales;
     // partNumberObj.idNumber = selectedPart.idNumber;
     // partNumberObj.isApproved = selectedPart.isApproved;
+    partNumberObj.customerRequestDate = new Date(selectedPart.customerRequestDate);
+    partNumberObj.promisedDate = new Date(selectedPart.promisedDate);
+    partNumberObj.estimatedShipDate = new Date(selectedPart.estimatedShipDate);
     partNumberObj.exchangeCurrencyId=selectedPart.exchangeCurrencyId;
     partNumberObj.loanCurrencyId=selectedPart.loanCurrencyId;
     partNumberObj.exchangeListPrice=formatStringToNumber(selectedPart.exchangeListPrice);

@@ -8,6 +8,7 @@ import { ILeadSource } from './ILeadSource';
 import { IStatus } from "./IStatus";
 import { ISpeedQuoteView } from './ISpeedQuoteView';
 import { ISpeedQte } from './ISpeedQte';
+import { ISpeedQuote } from './ISpeedQuote.model';
 
 export class SpeedQuoteView implements ISpeedQuoteView {
     createNewVersion: boolean;
