@@ -74,7 +74,7 @@ export class PoSettingsComponent implements OnInit {
     }
 
     savePurchaseOrderSetting() {
-        if (!this.posettingModel.IsEnforceApproval) {
+        if (this.posettingModel.IsEnforceApproval) {
             if (this.posettingModel.effectivedate == null || this.posettingModel.effectivedate == '') {
                 this.alertService.showMessage(
                     'Error',

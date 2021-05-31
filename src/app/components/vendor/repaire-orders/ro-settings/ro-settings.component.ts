@@ -75,7 +75,7 @@ export class RoSettingsComponent implements OnInit {
   }
 
   saveRepaireOrderSetting() {
-    if (!this.rosettingModel.IsEnforceApproval) {
+    if (this.rosettingModel.IsEnforceApproval) {
       if (this.rosettingModel.effectivedate == null || this.rosettingModel.effectivedate == '') {
         this.alertService.showMessage(
           'Error',
