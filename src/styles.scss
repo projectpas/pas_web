@@ -15438,7 +15438,8 @@ body .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link.ui-state-active,
 }
 
 .p-dropdown-custom-sm .ui-dropdown {
-  min-width: 126px !important;
+  // width:122px !important;
+   min-width: 126px !important;
 }
 
 .p-dropdown-custom-sm .ui-dropdown-trigger,
