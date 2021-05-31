@@ -46,6 +46,8 @@ export class SalesMarginComponent implements OnInit {
 
   onClose(event: Event): void {
     this.part.quantityFromThis = this.prevQntity;
+    this.part.quantityToBeQuoted = Number(this.part.quantityFromThis);
+    this.part.quantityAlreadyQuoted = Number(this.part.quantityFromThis);
     event.preventDefault();
     this.close.emit(true);
   }
@@ -77,9 +79,11 @@ export class SalesMarginComponent implements OnInit {
   }
 
   calculate() {
-    if (this.part) {
-      this.calculatePart();
-    }
+    setTimeout(() => {
+      if (this.part && !this.invalidQuantityenteredForQuantityFromThis) {
+        this.calculatePart();
+      }
+    }, 1000);
   }
 
   calculatePart() {
