@@ -698,6 +698,7 @@
                                                         </div>
                                                         <div class="form-group"
                                                             *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType != undefined && part.stocklineListObj[part.currentSLIndex].obtainFromType > 0">
+                                                            <label>{{part.stocklineListObj[part.currentSLIndex].obtainFromType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].obtainFromType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].obtainFromType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
                                                             <div class="form-row">
                                                                 <div class="col-sm-12">                                                                    
                                                                     <p-autoComplete
@@ -737,7 +738,7 @@
                                                                         *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == otherModuleId"
                                                                         class="form-control" type="text"
                                                                         [ngModelOptions]="{standalone: true}"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFrom"
+                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFromName"
                                                                         pInputText>
                                                                 </div>
                                                             </div>
@@ -756,6 +757,7 @@
                                                         </div>
                                                         <div class="form-group"
                                                             *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType != undefined && part.stocklineListObj[part.currentSLIndex].ownerType > 0">
+                                                            <label>{{part.stocklineListObj[part.currentSLIndex].ownerType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].ownerType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].ownerType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
                                                             <div class="form-row">
                                                                 <div class="col-sm-12">
                                                                     
@@ -796,7 +798,7 @@
                                                                         *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == otherModuleId"
                                                                         class="form-control" type="text"
                                                                         [ngModelOptions]="{standalone: true}"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].owner"
+                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].ownerName"
                                                                         pInputText>
 
                                                                 </div>
@@ -815,6 +817,7 @@
                                                         </div>
                                                         <div class="form-group"
                                                             *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType != undefined && part.stocklineListObj[part.currentSLIndex].traceableToType > 0">
+                                                            <label>{{part.stocklineListObj[part.currentSLIndex].traceableToType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].traceableToType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].traceableToType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
                                                             <div class="form-row">
                                                                 <div class="col-sm-12">                                                                   
 
@@ -851,7 +854,7 @@
                                                                     <input *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == otherModuleId"
                                                                         class="form-control" type="text"
                                                                         [ngModelOptions]="{standalone: true}"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].traceableTo"
+                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].traceableToName"
                                                                         pInputText>
                                                                 </div>                                                                
                                                             </div>
@@ -900,6 +903,14 @@
                                                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].expirationDate">
                                                             </p-calendar>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>UOM <strong class="clr-red">*</strong></label>
+                                                            <p-dropdown class="p-dropdown-100" 
+                                                                [options]="allPurchaseUnitOfMeasureinfo" filter="true"
+                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].unitOfMeasureId" name="purchaseUnitOfMeasureId"
+                                                                [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required>
+                                                            </p-dropdown>
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Unit Cost <span class="clr-red">*</span></label>
@@ -960,6 +971,16 @@
                                                                    name="tagDate"     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
                                                             </p-calendar>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label>Tag By</label>
+                                                            <p-autoComplete field="label" class="pautocomp-cstm"
+                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedBy" name="taggedBy"
+                                                                [suggestions]="TagByNames" (completeMethod)="filterTagEmployees($event)"
+                                                                [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                                                [forceSelection]="true">
+                                                            </p-autoComplete>
+                                                        </div>
+
                                                         <div class="form-group">
                                                             <label>Engine Serial Number</label>                                                            
                                                             <input class="form-control" type="text"
