@@ -145,6 +145,10 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getbillingCostDataForWoOnly(workOrderWorkflowId, managementStructureId);
     }
 
+    Getbillinginvoicingdetailsfromquote(workOrderWorkflowId, WorkOrderPartNoId) {
+        return this.workOrderEndpointService.Getbillinginvoicingdetailsfromquote(workOrderWorkflowId, WorkOrderPartNoId);
+    }
+
     getWorkOrderBillingByShipping(workOrderId, partId, workOrderShippingId) {
         return this.workOrderEndpointService.getWorkOrderBillingByShipping(workOrderId, partId, workOrderShippingId);
       }
@@ -770,6 +774,27 @@ export class WorkOrderService {
 LockedWorkorderpart(Releasefrom) {
     return this.workOrderEndpointService.LockedWorkorderpart<any>(Releasefrom);
 }
+getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.getWorkOrderBillingInvoicingData(wobillingInvoicingId)
+    );
+  }
+
+  getworkOrderChargesById(id, isDeleted) {
+    return this.workOrderEndpointService.getworkOrderChargesById(id, isDeleted);
+  }
+
+  getWorkOrderBillingInvoicingById(wobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.getWorkOrderBillingInvoicingById(wobillingInvoicingId)
+    );
+  }
+  
+   UpdateWorkOrderBillingInvoicing(wobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.UpdateWorkOrderBillingInvoicing(wobillingInvoicingId, billingInvoicing)
+    );
+  }
 
 
 

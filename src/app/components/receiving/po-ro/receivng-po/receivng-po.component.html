@@ -965,6 +965,14 @@
                                                         </p-calendar>
                                                     </div>
                                                     <div class="form-group">
+                                                        <label>UOM <strong class="clr-red">*</strong></label>
+                                                        <p-dropdown class="p-dropdown-100" 
+                                                            [options]="allPurchaseUnitOfMeasureinfo" filter="true"
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].unitOfMeasureId" name="purchaseUnitOfMeasureId"
+                                                            [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required>
+                                                        </p-dropdown>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label>Unit Cost <span class="clr-red">*</span></label>
                                                         <input type="text" class="form-control text-right" pInputText
                                                             pKeyFilter="pnum"
@@ -1036,6 +1044,19 @@
                                                             [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
                                                         </p-calendar>
                                                     </div>
+
+                                                    <div class="form-group">
+                                                        <label>Tag By</label>
+                                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedBy" name="taggedBy"
+                                                            [suggestions]="TagByNames" (completeMethod)="filterTagEmployees($event)"
+                                                            [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" 
+                                                                                                             
+                                                            [forceSelection]="true">
+                                                        </p-autoComplete>
+                                                    </div>
+                                                    <!-- (onSelect)="onTagbySelect(part.stocklineListObj[part.currentSLIndex])"  -->
+
                                                     <div class="form-group">
                                                         <label>Engine Serial Number</label>
                                                         <!--matTooltip="Engine Serial Number"-->

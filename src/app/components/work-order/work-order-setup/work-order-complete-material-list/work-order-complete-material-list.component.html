@@ -7,8 +7,10 @@
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary" 
         (click)="partsIssueRI(1)" data-toggle="modal" style="min-width: 97px !important;"
         data-target="#reserve">Reserve Stock</button>
+   <span *ngIf="!isSubWorkOrder">
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && (enablePickTicket)" class="btn btn-primary" 
-            (click)="onclickpicktiket()" style="min-width: 97px !important;">Pick Ticket </button>
+        (click)="onclickpicktiket()" style="min-width: 97px !important;">Pick Ticket </button>
+   </span>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
          (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;"> Issue Stock
     </button>
@@ -768,7 +770,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
              <td class="action-icons-cstm  lastcol-fix" style="position: sticky !important; min-width: 145px !important;width: 140px !important;" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
                  <span><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i   class="fa fa-pencil"></i></button></span>
                 <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"   matTooltip="Create PO" matTooltipPosition="above" ><i class="fa fa-plus"></i></button></span>
-                <span>
+                <span *ngIf="!isSubWorkOrder">
                 <button class="btn nobg" mat-icon-button
                 (click)="pickticketItemInterface(rowData,pickticketieminterface)" matTooltip="Add PT"
                 matTooltipPosition="above" style="font-weight: bold;"

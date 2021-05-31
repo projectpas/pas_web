@@ -22,6 +22,8 @@ import { DatePipe } from '@angular/common';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 import { AuthService } from '../../../../services/auth.service';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
 
 @Component({
     selector: 'app-edit-po',
@@ -97,7 +99,7 @@ export class EditPoComponent implements OnInit {
     otherModuleId: number = 0;
     alertText: string = '';
     arrayPostatuslist: any[] = [];
-
+    private onDestroy$: Subject<void> = new Subject<void>();
     /** edit-po ctor */
     constructor(public receivingService: ReceivingService,
         public priority: PriorityService,
@@ -233,6 +235,8 @@ export class EditPoComponent implements OnInit {
                             this.getCustomers();
                             this.getVendors();
                             this.getCompanyList();
+                            this.loadTagByEmployeeData();
+                            this.Purchaseunitofmeasure();
                             if (this.purchaseOrderData.purchaseOderPart) {
                                 for (let i = 0; i < this.purchaseOrderData.purchaseOderPart.length; i++) {
                                     this.getCondIdPart(this.purchaseOrderData.purchaseOderPart[i]);
@@ -620,7 +624,11 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-
+    get currentUserManagementStructureId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.managementStructureId
+			: null;
+	}
 
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser
@@ -807,8 +815,7 @@ export class EditPoComponent implements OnInit {
                     Value: x.vendorName
                 }
             });
-            this.VendorList = data;
-
+            this.VendorList = data;            
             for (let part of this.purchaseOrderData.purchaseOderPart) {
                 for (let SL of part.stockLine) {
 
@@ -1579,6 +1586,7 @@ export class EditPoComponent implements OnInit {
     }
 
     onOwnerSelect(stockLine: StockLine): void {
+        debugger
         stockLine.owner = stockLine.ownerObject.Key;
         if (stockLine.ownerType == AppModuleEnum.Customer) {
             this.arrayCustlist.push(stockLine.ownerObject.Key);
@@ -1647,6 +1655,10 @@ export class EditPoComponent implements OnInit {
                     stockLine.purchaseOrderId = this.receivingService.purchaseOrderId;
                     stockLine.masterCompanyId = this.currentUserMasterCompanyId;
 
+                    if (stockLine.unitOfMeasureId == undefined ||  stockLine.unitOfMeasureId == 0) {
+                        this.alertService.showMessage(this.pageTitle,"Please select Unit Of Measure in Receiving Qty - "  + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                        return
+                    }
                     if (stockLine.conditionId == undefined || stockLine.conditionId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Condition in Part No. " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
@@ -1920,5 +1932,52 @@ export class EditPoComponent implements OnInit {
             SL.managementStructureEntityId = departmentId;
         }
     }
+    
+    TagByNames: DropDownData[] = [];
+    arrayTagEmployeelist: any[] = [];
+    alltagEmployeeList: any = [];
+    allPurchaseUnitOfMeasureinfo: any[] = [];    
+    
+    loadTagByEmployeeData(strText = '') {		
+		if (this.arrayTagEmployeelist.length == 0) {
+			this.arrayTagEmployeelist.push(0);
+		}	
+		this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayTagEmployeelist.join(), this.currentUserManagementStructureId)
+			.subscribe(response => {				               
+                const data = response.map(x => {
+                    return {
+                        Key: x.value.toString(),
+                        Value: x.label
+                    }
+                });                
+                this.TagByNames = data;   
+                for (let part of this.purchaseOrderData.purchaseOderPart) {
+                    for (let SL of part.stockLine) {    
+                        if (SL.taggedBy != null) {
+                            SL.taggedByObject = this.TagByNames.find(x => x.Key == SL.taggedBy);
+                        }                       
+                    }
+                }
+				
+			}, error => {});
+    }
+
+    filterTagEmployees(event,stockLine) {        
+		if (event.query !== undefined && event.query !== null) {
+			this.loadTagByEmployeeData(event.query);
+		}
+    }       
+
+    onOwnerSelectTag(stockLine: StockLine): void {          
+        stockLine.taggedBy = stockLine.taggedByObject.Key;
+        this.arrayTagEmployeelist.push(stockLine.taggedByObject.Key);        
+    } 
+
+    Purchaseunitofmeasure() {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.allPurchaseUnitOfMeasureinfo = res;
+		})
+    }
+
 }
 
