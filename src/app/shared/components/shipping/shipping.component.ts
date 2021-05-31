@@ -288,7 +288,6 @@ PerformShipping()
 }
 
 printShippingLabel(rowData: any) {
- debugger;
     this.workordersingleshipping=true;
     this.workOrderId = rowData.workOrderId;
     this.workOrderPartId = rowData.workOrderPartId;
