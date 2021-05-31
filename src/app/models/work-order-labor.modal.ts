@@ -46,12 +46,12 @@ export class AllTasks {
   taskId: number;
   burdaenRatePercentageId:any=0;
   directLaborOHCost:any=0;
-
+  isDeleted:boolean=false;
 
   constructor() {
     this.workOrderLaborHeaderId = 0;
     this.workOrderLaborId = 0;
-    this.expertiseId = null;
+    this.expertiseId = 0;
     this.employeeId = null;
     this.billableId = 1;
     this.startDate = null;
@@ -63,6 +63,7 @@ export class AllTasks {
     this.adjustedHours = 0;
     this.memo = '';
     this.taskId = 0;
+    this.isDeleted=false;
     this.burdaenRatePercentageId=0;
 this.directLaborOHCost='0.00';
   }
