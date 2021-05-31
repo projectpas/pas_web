@@ -140,8 +140,8 @@
                 <i class="fa fa-eye"></i>
               </a>
             </span>
-            <span data-toggle="modal" *ngIf="isViewMode == false" data-target="#commonaddDocumentDetails">
-              <a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
+            <span  *ngIf="isViewMode == false"  >
+              <a class="btn nobg" (click)="openEdit(rowData,content)" matTooltip="Edit" matTooltipPosition="above"><i
                   class="fa fa-pencil"></i></a> </span>
             <span *ngIf="isViewMode == false">
               <a class="btn nobg" (click)="openDelete(deleteContent, rowData); documents.reset()" matTooltip="Delete"
