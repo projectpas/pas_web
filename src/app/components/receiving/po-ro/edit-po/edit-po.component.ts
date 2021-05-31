@@ -1690,7 +1690,7 @@ export class EditPoComponent implements OnInit {
             }
         }
         if (receiveParts.length > 0) {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.shippingService.updateStockLine(receiveParts).subscribe(data => {
                 this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
                 this.isSpinnerVisible = false;

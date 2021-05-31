@@ -236,7 +236,7 @@
                                 <!-- <th class="min-width-40"></th> -->
                                 <!-- <th class="min-width-60">Line Num</th> -->
                                 <th>PN <span class="clr-red">*</span></th>
-                                <th colspan="4">PN Desc</th>
+                                <th colspan="5">PN Desc</th>
                                 <th>Alt/Equiv</th>
                                 <th>Item Type</th>
                                 <th>Stock Type</th>
@@ -267,7 +267,7 @@
                                     </td> -->
                                     <!-- <td class="text-right">{{row_index+1}}</td> -->
                                     <td>{{part.itemMaster.partNumber}}</td>
-                                    <td colspan="4">{{part.itemMaster.partDescription}}</td>
+                                    <td colspan="5">{{part.itemMaster.partDescription}}</td>
                                     <td>{{part.altEquiPartNumber}}</td>
                                     <td>{{part.itemType}}</td>
                                     <td>{{part.stockType}}</td>
@@ -277,7 +277,7 @@
                                     <td class="text-right">{{part.quantityRejected}}</td>
                                     <td class="text-right">{{part.quantityBackOrdered}}</td>
                                     <td>{{part.quantityRepaired == 0 ? 'Pending' : part.quantityRepaired < part.quantityToRepair ? 'Fulfilling' : 'Received'}}
-                                    </td>
+                                    </td>                                    
                                     <!-- <td>{{part.stockLine.stockLineNumber}}</td> -->
                                     <td>{{part.stockLineNumber}}</td>
                                     <td colspan="4">{{part?.level1}}, {{part?.level2}},{{part?.level3}},
@@ -330,11 +330,12 @@
                                     </td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back" [hidden]="!part.visible"
-                                    *ngIf="!part.isParent">
+                                    *ngIf="!part.isParent"> 
                                     <!-- <th class="min-width-40"></th> -->
                                     <!-- <th class="min-width-60"></th> -->
                                     <th>PN <span class="clr-red">*</span></th>
                                     <th class="min-width-60">Qty to Repair </th>
+                                    <th class="min-width-80">Qty Drafted</th>
                                     <th class="min-width-80">Qty Repaired</th>
                                     <th class="min-width-80">Qty Rejected</th>
                                     <th class="min-width-60">Back Ord</th>

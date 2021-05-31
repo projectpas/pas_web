@@ -86,6 +86,9 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.stockLineNumber = SL.stockLineNumber;
                 stockLine.owner = SL.owner;
                 stockLine.ownerType = SL.ownerType;
+                stockLine.ownerName = SL.ownerName;
+                stockLine.obtainFromName = SL.obtainFromName;
+                stockLine.traceableToName = SL.traceableToName;
                 stockLine.taggedBy = SL.taggedBy;
                 stockLine.unitOfMeasureId = SL.unitOfMeasureId;
                 stockLine.obtainFrom = SL.obtainFrom;
