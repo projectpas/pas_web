@@ -35,6 +35,7 @@ export class WoPartDetailsComponent implements OnChanges {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() isEdit = false;
   @Input() editData;
+  @Input() isView:boolean=false;
   selectedColumns: any[];
   showPaginator: boolean;
   totalRecords: number;
@@ -109,11 +110,14 @@ export class WoPartDetailsComponent implements OnChanges {
   ngOnInit() {    
    if(this.editData){
     this.disableforPartNum=true;
-    this.formObject.restrictPMA= true,
-    this.formObject.restrictDER= true,
+    this.formObject.restrictPMA= false,
+    this.formObject.restrictDER= false,
     this.formObject.customerId= this.customer ? this.customer.customerId:0;
     this.formObject.partId=this.editData.partItem.partId;
     this.formObject.includeMultiplePartNumber= false;
+
+    this.formObject.includeAlternatePartNumber=false;
+    this.formObject.includeEquivalentPartNumber= false;
     this.formObject.conditionId=this.editData.conditionCodeId;
     this.formObject.partNumber=this.editData.partItem.partName;
     this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
@@ -143,6 +147,7 @@ export class WoPartDetailsComponent implements OnChanges {
         this.viewSelectedRow(this.parts[0], 0);
       }
     }
+    this.isView=this.isView;
   }
   initColumns() {
     this.columns = [
@@ -338,8 +343,8 @@ export class WoPartDetailsComponent implements OnChanges {
   }
 
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
-    console.log("part",this.selectedParts)
-    console.log("stockLineItem",stockLineItem)
+    // console.log("part",this.selectedParts)
+    // console.log("stockLineItem",stockLineItem)
     if (this.selectedParts.length > 0) {
       let sameParts = [];
       if (isStock) {
@@ -749,6 +754,7 @@ this.updateMaterialListData.emit(data)
   this.close.emit(true);
 }
 openSalesMargin() {
+
  $("#showMarginDetails").modal("show");
 }
 }
