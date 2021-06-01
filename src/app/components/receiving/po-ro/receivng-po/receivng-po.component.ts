@@ -1304,8 +1304,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     onSubmitToReceive() {
-        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
-        debugger
+        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);        
         for (let part of allParts) {
             if (part.isSameDetailsForAllParts) {
                 if (part.isSameDetailsForAllParts && !part.itemMaster.isSerialized && part.stocklineListObj && part.stocklineListObj.length > 0) {
@@ -1384,7 +1383,7 @@ export class ReceivngPoComponent implements OnInit {
                     item.stocklineListObj[i].gLAccountId = item.itemMaster.glAccountId;
                     item.stocklineListObj[i].conditionId = item.conditionId;
                     item.stocklineListObj[i].quantityRejected = Number(item.quantityRejected);
-                    item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined || item.isSameDetailsForAllParts ? false : item.itemMaster.isSerialized;
+                    item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined ? false : item.itemMaster.isSerialized;
                     item.stocklineListObj[i].isPMA = item.itemMaster.pma;
                     item.stocklineListObj[i].isDER = item.itemMaster.der;
                     item.stocklineListObj[i].purchaseOrderExtendedCost = item.stocklineListObj[i].purchaseOrderExtendedCost == undefined ||
@@ -1413,7 +1412,6 @@ export class ReceivngPoComponent implements OnInit {
                     if (item.stocklineListObj[i].shippingReference == undefined || item.stocklineListObj[i].shippingReference == '') {
                         errorMessages.push("Please select shipping Reference in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
-
 
                     if (item.itemMaster.isSerialized == true) {
                         item.stocklineListObj[i].serialNumber = item.stocklineListObj[i].serialNumber != undefined ? item.stocklineListObj[i].serialNumber.trim() : '';
@@ -1595,7 +1593,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     toggleSameDetailsForAllParts(part: PurchaseOrderPart): void {
-        part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
+        part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;        
         if (part.isSameDetailsForAllParts) {
             if (part.itemMaster.isSerialized) {
                 part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = false;
