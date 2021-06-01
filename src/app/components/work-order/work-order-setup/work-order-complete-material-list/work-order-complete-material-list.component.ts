@@ -389,14 +389,14 @@ this.isViewItem=true;
         this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
         this.modal.componentInstance.stockLineId = rowData.stockLineId;
       }
-    editStockLine(rowData) {
+    editStockLine(rowData,parentRow) {
         this.editData = undefined;
         // this.cdRef.detectChanges();
         this.isEdit = true;
 
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
-        this.editData.method = 'StockLine'
-        // console.log("edit Data",this.editData)
+        this.editData.method = 'StockLine';
+        this.editData.quantity=parentRow.quantity;
         $("#showStockLineDetails").modal("show");
 
         // let contentPart = this.addPart;

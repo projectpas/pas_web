@@ -43,8 +43,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
   }
     ngOnInit() {
 }
-  ngOnChanges()    {
-    console.log("this.part",this.part);
+  ngOnChanges()    { 
     this.formObject=={
       partNumberObj:undefined,
       quantity:0,
@@ -97,8 +96,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
     }
 
 
-this.onChangeQuantityFromThis();
-console.log("this.edit",this.editData)
+this.onChangeQuantityFromThis(); 
     if(this.editData){
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
