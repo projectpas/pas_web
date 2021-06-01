@@ -97,7 +97,7 @@
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="docviewdblclick(rowData)">
           <ng-container *ngFor="let col of columns">
-            <td class="table-column-width" *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+            <td class="table-column-width" *ngIf="col.field != 'fileName' && col.field != 'docMemo' && col.field != 'createdBy' && col.field != 'updatedBy'"
               class="ui-resizable-column" pReorderableRowHandle>
               {{
               col.field == 'createdDate'
@@ -110,11 +110,12 @@
             <td class="table-column-width text-capital" *ngIf="col.field == 'docMemo'">
               <p class="m-0 p-0 p_textEditor float-left text-capital" [innerHTML]="rowData[col.field]"></p>
             </td>
+            <td class="table-column-width text-capital" *ngIf="col.field == 'createdBy' || col.field == 'updatedBy'"></td>
             <td class="table-column-width" *ngIf="col.field == 'fileName'">
-        <tr *ngFor="let x of rowData.attachmentDetails">
-          <a class="filelink" (click)="downloadFile(x)"> {{x.fileName}},</a>
-        </tr>
-        </td>
+            <tr *ngFor="let x of rowData.attachmentDetails">
+              <a class="filelink" (click)="downloadFile(x)"> {{x.fileName}},</a>
+            </tr>
+          </td>
         </ng-container>
         <td class="table-actions-column action-icons-cstm table-column-width" style="width:131px !important"
           *ngIf="isViewMode == false">
@@ -140,8 +141,8 @@
                 <i class="fa fa-eye"></i>
               </a>
             </span>
-            <span data-toggle="modal" *ngIf="isViewMode == false" data-target="#commonaddDocumentDetails">
-              <a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
+            <span  *ngIf="isViewMode == false"  >
+              <a class="btn nobg" (click)="openEdit(rowData,content)" matTooltip="Edit" matTooltipPosition="above"><i
                   class="fa fa-pencil"></i></a> </span>
             <span *ngIf="isViewMode == false">
               <a class="btn nobg" (click)="openDelete(deleteContent, rowData); documents.reset()" matTooltip="Delete"

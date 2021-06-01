@@ -130,7 +130,7 @@ export class PurchaseSetupComponent implements OnInit {
 	purchaseOrderId: any;
 	purchaseOrderPartRecordId: any;
 	addAllMultiPN: boolean = false;
-	disablePOStatus: boolean = true;
+	disablePOStatus: boolean = false;
 	childObject: any = {};
 	parentObject: any = {};
 	childObjectArray: any[] = [];
@@ -379,6 +379,7 @@ export class PurchaseSetupComponent implements OnInit {
 	lsconditionId: number;
 	lsWoId: number;
 	lsSubWoId: number;
+	lsqty: number;
 	partName: string;
 	adddefaultpart: boolean = true;
 	salesOrderId: number;
@@ -388,15 +389,15 @@ export class PurchaseSetupComponent implements OnInit {
 	modal: NgbModalRef;
 	alertText: string;
 
-	openStatusId: number  = 0
-    pendingStatusId: number  = 0
-    fulfillingStatusId: number  = 0
-    closedStatusId: number  = 0
-    canceledStatusId: number  = 0
-    descriptionStatusId: number  = 0
-	closingStatusId: number  = 0
+	openStatusId: number = 0
+	pendingStatusId: number = 0
+	fulfillingStatusId: number = 0
+	closedStatusId: number = 0
+	canceledStatusId: number = 0
+	descriptionStatusId: number = 0
+	closingStatusId: number = 0
 	@ViewChild("purchaseOrderPrintPopup", { static: false }) public purchaseOrderPrintPopup: ElementRef;
-	
+
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		private modalService: NgbModal,
@@ -430,13 +431,14 @@ export class PurchaseSetupComponent implements OnInit {
 		this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
 		this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
 		this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
-		this.openStatusId = StatusEnum.Open;    
-        this.pendingStatusId = StatusEnum.Pending;    
-        this.fulfillingStatusId = StatusEnum.Fulfilling;    
-        this.closedStatusId = StatusEnum.Closed;    
-        this.canceledStatusId = StatusEnum.Canceled;    
-        this.descriptionStatusId = StatusEnum.Description;    
-        this.closingStatusId = StatusEnum.Closing; 
+		this.lsqty = JSON.parse(localStorage.getItem('lsqty'));
+		this.openStatusId = StatusEnum.Open;
+		this.pendingStatusId = StatusEnum.Pending;
+		this.fulfillingStatusId = StatusEnum.Fulfilling;
+		this.closedStatusId = StatusEnum.Closed;
+		this.canceledStatusId = StatusEnum.Canceled;
+		this.descriptionStatusId = StatusEnum.Description;
+		this.closingStatusId = StatusEnum.Closing;
 	}
 
 	ngOnInit() {
@@ -1593,24 +1595,36 @@ export class PurchaseSetupComponent implements OnInit {
 
 			if (this.posettingModel.IsEnforceApproval) {
 				this.disablePOStatus = true;
-			}
-			else {
 				if (this.headerInfo.openDate
 					&& this.posettingModel.effectivedate
-					&& new Date(this.headerInfo.openDate) > new Date(this.posettingModel.effectivedate)) {
+					&& new Date(this.headerInfo.openDate) <= new Date(this.posettingModel.effectivedate)
+					&& this.posettingModel.IsEnforceApproval) {
 					this.posettingModel.IsEnforceApproval = false;
 					this.disablePOStatus = false;
 				}
-				else if (this.headerInfo.openDate
-					&& this.posettingModel.effectivedate
-					&& new Date(this.headerInfo.openDate) < new Date(this.posettingModel.effectivedate)) {
-					this.posettingModel.IsEnforceApproval = true;
-					this.disablePOStatus = true;
-				}
-				else {
-					this.disablePOStatus = true;
-				}
 			}
+
+
+			// if (this.posettingModel.IsEnforceApproval) {
+			// 	this.disablePOStatus = true;
+			// }
+			// else {
+			// 	if (this.headerInfo.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(this.headerInfo.openDate) > new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = false;
+			// 		this.disablePOStatus = false;
+			// 	}
+			// 	else if (this.headerInfo.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(this.headerInfo.openDate) < new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = true;
+			// 		this.disablePOStatus = true;
+			// 	}
+			// 	else {
+			// 		this.disablePOStatus = true;
+			// 	}
+			// }
 			this.capvendorId = res.vendorId;
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -2587,7 +2601,7 @@ export class PurchaseSetupComponent implements OnInit {
 						`Updated PO Header Successfully`,
 						MessageSeverity.success
 					);
-					if(headerInfoObj.statusId == this.fulfillingStatusId) {						
+					if (headerInfoObj.statusId == this.fulfillingStatusId) {
 						this.route.navigate(['/vendorsmodule/vendorpages/app-polist']);
 					}
 
@@ -2599,26 +2613,39 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 			this.toggle_po_header = false;
 			this.enableHeaderSaveBtn = false;
+
 			if (this.posettingModel.IsEnforceApproval) {
 				this.disablePOStatus = true;
-			}
-			else {
 				if (headerInfoObj.openDate
 					&& this.posettingModel.effectivedate
-					&& new Date(headerInfoObj.openDate) > new Date(this.posettingModel.effectivedate)) {
+					&& new Date(headerInfoObj.openDate) <= new Date(this.posettingModel.effectivedate)
+					&& this.posettingModel.IsEnforceApproval) {
 					this.posettingModel.IsEnforceApproval = false;
 					this.disablePOStatus = false;
 				}
-				else if (headerInfoObj.openDate
-					&& this.posettingModel.effectivedate
-					&& new Date(headerInfoObj.openDate) < new Date(this.posettingModel.effectivedate)) {
-					this.posettingModel.IsEnforceApproval = true;
-					this.disablePOStatus = true;
-				}
-				else {
-					this.disablePOStatus = true;
-				}
 			}
+
+
+			// if (this.posettingModel.IsEnforceApproval) {
+			// 	this.disablePOStatus = true;
+			// }
+			// else {
+			// 	if (headerInfoObj.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(headerInfoObj.openDate) > new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = false;
+			// 		this.disablePOStatus = false;
+			// 	}
+			// 	else if (headerInfoObj.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(headerInfoObj.openDate) < new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = true;
+			// 		this.disablePOStatus = true;
+			// 	}
+			// 	else {
+			// 		this.disablePOStatus = true;
+			// 	}
+			// }
 		}
 	}
 
@@ -2723,6 +2750,11 @@ export class PurchaseSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Management Structure is required."
 			}
+			var Qty = 0;
+			var childQty = 0;
+			if (this.partListData[i].quantityOrdered) {
+				Qty = this.partListData[i].quantityOrdered ? parseInt(this.partListData[i].quantityOrdered.toString().replace(/\,/g, '')) : 0;
+			}
 			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
 				for (let j = 0; j < this.partListData[i].childList.length; j++) {
 
@@ -2766,8 +2798,18 @@ export class PurchaseSetupComponent implements OnInit {
 						this.isSpinnerVisible = false;
 						errmessage = errmessage + '<br />' + "Split Shipment Need By is required."
 					}
+					if (this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered > 0) {
+						childQty = childQty + parseInt(this.partListData[i].childList[j].quantityOrdered.toString().replace(/\,/g, ''));
+					}
 				}
 			}
+			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
+				if (Qty != childQty) {
+					this.isSpinnerVisible = false;
+					errmessage = errmessage + '<br />' + "Part Qty Order and Sum of Split Shipment Qty Ordered Shipment should be same."
+				}
+			}
+
 			if (errmessage != '') {
 				var message = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + errmessage
 				this.alertService.showStickyMessage("Validation failed", message, MessageSeverity.error, 'Please enter Qty');
@@ -4631,6 +4673,7 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 		}
 		this.getPNDetailsById(newParentObject, null)
+		newParentObject.quantityOrdered = null ? 0 : this.lsqty;
 
 		//}
 		//this.getRemainingAllQty();
@@ -4645,6 +4688,8 @@ export class PurchaseSetupComponent implements OnInit {
 			localStorage.removeItem("lsconditionId");
 			localStorage.removeItem("lsWoId");
 			localStorage.removeItem("lsSubWoId");
+			localStorage.removeItem("lsqty");
+
 		}
 
 	}
@@ -5043,10 +5088,10 @@ tfoot { display:table-footer-group }
         </head>
         <body onload="window.print();window.close()">${printContents}</body>
       </html>`
-    );
+		);
 		popupWin.document.close();
-	  }
+	}
 
 
-	
+
 }

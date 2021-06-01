@@ -157,9 +157,9 @@
               Billing Amount
             </th>
           </ng-container>
-          <th *ngIf="!isQuote">
+          <!-- <th *ngIf="!isQuote">
             Direct Labor
-          </th>
+          </th> -->
           <th *ngIf="!isQuote">
             Burden Rate %
           </th>
@@ -215,7 +215,7 @@
                 <td></td>
               </ng-container>
               <ng-container *ngIf="!isQuote">
-                <td></td>
+                <!-- <td></td> -->
                 <td></td>
                 <td></td>
                 <td></td>
@@ -255,7 +255,7 @@
                 </td>
                 <td> 
                   <p-dropdown placeholder="Select Billing Type" (ngModelChange)="checkValid(17)" [options]="billableList" class="p-dropdown-1001"
-                  [(ngModel)]="rec.billableId" [disabled]="isView "></p-dropdown>
+                  [(ngModel)]="rec.billableId" [disabled]="isView " appendTo="body"></p-dropdown>
                 </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&
@@ -300,14 +300,14 @@
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px !important;" required/>
+                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px !important;" required/>
                     <span style="font-size: 17px; margin: 0 5px;">:</span>
                     <input type="number" class="form-control" (blur)="
                     calculateHoursDifference(rec);
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
+                    " [(ngModel)]="rec.totalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
                   </div>
                  
                 </td>
@@ -322,14 +322,14 @@
                         calculateTaskHours(task);
                         calculateTotalCost(rec);
                         markupChanged(rec, 'row')
-                        " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px !important;"  />
+                        " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px !important;"  />
                         <span style="font-size: 17px; margin: 0 5px;">:</span>
                         <input type="number" class="form-control" (blur)="
                         calculateHoursDifference(rec);
                         calculateTaskHours(task);
                         calculateTotalCost(rec);
                         markupChanged(rec, 'row')
-                        " [(ngModel)]="rec.ajdtotalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''"  />
+                        " [(ngModel)]="rec.ajdtotalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''"  />
                       </div>
                     </td>
                   <td class="content-to-end" style="width:70px !important;text-align:right !important">
@@ -348,11 +348,12 @@
                 <ng-container *ngIf="isQuote">
                   <td>
                     <input type="number" class="form-control" (ngModelChange)="checkValid(23)" (blur)="calculateBurderRate(rec);calculateTotalCost(rec)"
-                      [(ngModel)]="rec.directLaborOHCost" [disabled]="isView" required/>
+                      [(ngModel)]="rec.directLaborOHCost" [disabled]="isView" required/> 
                   </td>
                   <td>
                     <select class="form-control select-markup width-100"  (ngModelChange)="checkValid(24)" (change)="calculateBurderRate(rec);calculateTotalCost(rec)" [(ngModel)]="rec.burdaenRatePercentageId"
-                   [disabled]="isView">
+                 >
+                 <!-- [disabled]="isView" -->
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
                     </select>
@@ -392,13 +393,13 @@
                   </td>
                 </ng-container> 
                 <ng-container *ngIf="!isQuote">
-                  <td>
+                  <!-- <td>
                     <input type="text" (change)="modifyDirectLoaborFormat(rec)" pInputText pKeyFilter="money"  class="form-control text-right" (ngModelChange)="checkValid(23)" (blur)="calculateBurderRate(rec);calculateTotalCost(rec)" style="width: 66px;"
                       [(ngModel)]="rec.directLaborOHCost" [disabled]="isView" required/>
-                  </td>
+                  </td> -->
                   <td>
                     <select class="form-control select-markup width-100"  (ngModelChange)="checkValid(24)" (change)="calculateBurderRate(rec);calculateTotalCost(rec)" [(ngModel)]="rec.burdaenRatePercentageId"
-                   [disabled]="isView">
+                   [disabled]="true">
                       <option value="0">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
                     </select>

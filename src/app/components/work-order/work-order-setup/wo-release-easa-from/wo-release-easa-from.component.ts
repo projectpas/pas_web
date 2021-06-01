@@ -27,6 +27,8 @@ export class WoReleaseEasaFromComponent implements OnInit {
   ReleaseData : any = {};
   //ReleaseData: any;
   isSpinnerVisible: boolean = true;
+  Issave: boolean = true;
+  isconfirmsave : boolean = true;
   currentDate = new Date();
   Printeddate1 : string;
   Printeddate2 : string;
@@ -64,16 +66,34 @@ get userName(): string {
 get currentUserMasterCompanyId(): number {
     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
 }
-enableSave(date)
+onDate(e)
 {
-  debugger;
-    if(date =='date')
-    {
-      this.Printeddate1 =moment(this.ReleaseData.date).format('D/ MMMM/ YYYY'); 
-    }else
-    {
-      this.Printeddate2 =moment(this.ReleaseData.date2).format('D/ MMMM/ YYYY'); 
-    }
+  console.log(e)
+
+let d = new Date(e);
+let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+console.log(`${da}/${mo}/${ye}`);
+this.Printeddate2 =`${da}/${mo}/${ye}`;
+
+  //this.Printeddate2 =moment(e).format('D/ MMMM/ YYYY'); 
+}
+
+onDate1(e)
+{
+  console.log(e)
+
+let d = new Date(e);
+let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+console.log(`${da}-${mo}-${ye}`);
+  this.Printeddate1 =`${da}/${mo}/${ye}`; //moment(e).format('D/ MMMM/ YYYY'); 
+}
+
+onBlurMethod(e) {
+  console.log(e.target.value)
 }
 
 
@@ -91,8 +111,21 @@ BindData(response)
   var date2formatted = moment(date2).format('D/ MMMM/ YYYY');   
 
   this.ReleaseData.date2=date2;
-  this.Printeddate1 =moment(date).format('D/ MMMM/ YYYY'); 
-  this.Printeddate2 =moment(date2).format('D/ MMMM/ YYYY'); 
+
+let d = new Date(date);
+let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+this.Printeddate1 =`${da}/${mo}/${ye}`;
+
+let d1 = new Date(date);
+let ye1 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d1);
+let mo1 = new Intl.DateTimeFormat('en', { month: 'short' }).format(d1);
+let da1 = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d1);
+this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
+
+  // this.Printeddate1 =moment(date).format('D/ MMMM/ YYYY'); 
+  // this.Printeddate2 =moment(date2).format('D/ MMMM/ YYYY'); 
   this.ReleaseData.printedName=this.userName;
   this.ReleaseData.printedName2=this.userName;
 }
@@ -111,6 +144,43 @@ BindData(response)
         this.isSpinnerVisible = false;
       });
 
+  }
+
+  onsave()
+  {
+ 
+    if(new Date(this.ReleaseData.date) >=  new Date(this.ReleaseData.receivedDate))
+    {
+      this.isconfirmsave = false;
+      this.alertService.showMessage(
+        '',
+        'Please Select Date less than ReceivedDate',
+        MessageSeverity.warn
+    );
+
+    }
+
+    if(new Date(this.ReleaseData.date2) >=  new Date(this.ReleaseData.receivedDate))
+    {
+      this.isconfirmsave = false;
+      this.alertService.showMessage(
+        '',
+        'Please Select Date less than ReceivedDate',
+        MessageSeverity.warn
+    );
+
+    }
+
+    if(this.isconfirmsave)
+    { 
+      this.Issave = false;
+      this.CreateUpdateReleasedata();
+    }
+  }
+
+  close()
+  {
+    this.updateRelreaseList.emit();
   }
 
   CreateUpdateReleasedata()
@@ -137,7 +207,7 @@ BindData(response)
       result => {
           this.isSpinnerVisible = false;
           this.isEdit = true;
-          this.updateRelreaseList.emit();
+       
           this.alertService.showMessage(
               '',
               '9130 from Added Succesfully',
@@ -153,7 +223,9 @@ BindData(response)
     this.isSpinnerVisible = false;
 }
   print(): void {
-    this.CreateUpdateReleasedata();
+   
+    //this.CreateUpdateReleasedata();
+    this.updateRelreaseList.emit();
     let printContents, popupWin;
     printContents = document.getElementById('woReleaseEasaFrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
@@ -457,6 +529,8 @@ table, thead, th {
       </html>`
     );
     popupWin.document.close();
+
+   
   }
 
 }

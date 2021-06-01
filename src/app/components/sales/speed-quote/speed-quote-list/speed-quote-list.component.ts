@@ -12,9 +12,14 @@ import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
+import { SpeedQuote } from "../../../../models/sales/SpeedQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
+import { ISpeedQuote } from "../../../../models/sales/ISpeedQuote.model";
+import { ISpeedQte } from "../../../../models/sales/ISpeedQte";
 import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
+import { ISpeedQuoteView } from "../../../../models/sales/ISpeedQuoteView";
 import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
+import { SpeedQte } from "../../../../models/sales/SpeedQte";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { CommonService } from "../../../../services/common.service";
@@ -54,9 +59,9 @@ export class SpeedQuoteListComponent implements OnInit {
     partColumns: any[];
     currentDeletedstatus = false;
     customerDetails: any;
-    salesQuote: ISalesQuote;
-    salesOrderQuote: ISalesOrderQuote;
-    salesQuoteView: ISalesQuoteView;
+    salesQuote: ISpeedQuote;
+    salesOrderQuote: ISpeedQte;
+    salesQuoteView: ISpeedQuoteView;
     selectedParts: any[] = [];
     creditTerms: any[];
     percents: any[];
@@ -100,8 +105,8 @@ export class SpeedQuoteListComponent implements OnInit {
             { label: 'Speed Quote' },
             { label: 'Speed Quote List' },
         ];
-        this.salesQuote = new SalesQuote();
-        this.salesOrderQuote = new SalesOrderQuote();
+        this.salesQuote = new SpeedQuote();
+        this.salesOrderQuote = new SpeedQte();
         this.searchParameters = new SalesSearchParameters();
 
         this.initColumns();
@@ -240,14 +245,14 @@ export class SpeedQuoteListComponent implements OnInit {
     }
 
     openDelete(content, rowData) {
-        this.selected = rowData.salesOrderQuoteId;
-        this.selectedQuoteToDelete = rowData.salesOrderQuoteNumber;
+        this.selected = rowData.speedQuoteId;
+        this.selectedQuoteToDelete = rowData.speedQuoteNumber;
         this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
     }
 
     deleteQuote(): void {
         this.isSpinnerVisible = true;
-        this.salesQuoteService.delete(this.selected).subscribe(response => {
+        this.speedQuoteService.delete(this.selected).subscribe(response => {
             this.isSpinnerVisible = false;
             this.modal.close();
             this.alertService.showMessage(
@@ -272,7 +277,7 @@ export class SpeedQuoteListComponent implements OnInit {
 
     viewSelectedRow(content, row) {
         this.isSpinnerVisible = true;
-        this.salesQuoteService.getview(row.salesOrderQuoteId).subscribe(res => {
+        this.speedQuoteService.getview(row.speedQuoteId).subscribe(res => {
             this.salesQuoteView = res[0];
             this.modal = this.modalService.open(content, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
             this.isSpinnerVisible = false;
@@ -425,7 +430,7 @@ export class SpeedQuoteListComponent implements OnInit {
 
     getAuditHistoryById(rowData) {
         this.isSpinnerVisible = true;
-        this.salesQuoteService.getSOQHistory(rowData.salesOrderQuoteId).subscribe(res => {
+        this.speedQuoteService.getSpeedQuoteHistory(rowData.speedQuoteId).subscribe(res => {
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
@@ -446,8 +451,8 @@ export class SpeedQuoteListComponent implements OnInit {
     restorerecord: any = {}
 
     restoreRecord() {
-        this.commonservice.updatedeletedrecords('SalesOrderQuote', 'SalesOrderQuoteId', this.restorerecord.salesOrderQuoteId).subscribe(res => {
-            this.getDeleteListByStatus(true)
+        this.commonservice.updatedeletedrecords('SpeedQuote', 'SpeedQuoteId', this.restorerecord.speedQuoteId).subscribe(res => {
+            this.getDeleteListByStatus(true);
             this.modal.close();
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         }, err => {

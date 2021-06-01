@@ -1,20 +1,16 @@
 ﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 <div class="card">
-    <!-- <div class="card-header">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                <li class="breadcrumb-item active" aria-current="page">{{isEditMode ? 'Edit' : 'Create'}} WO Quote settings
-                </li>
-            </ol>
-        </nav>
-    </div> -->
-    <div class="card-header header ">
+    <div class="header">
         <div class="row">
             <div class="col">
-              <h4  class="header-name">
-                {{isEditMode ? 'Edit' : 'Create'}} WO Quote settings</h4>
+                <h4 class="header-name">{{isEditMode ? 'Edit' : 'Create'}} WO Quote settings</h4>
+            </div>
+            <div>
+                <button type="button" class="btn-sm header-button" [routerLink]="['/workordersettingsmodule/workordersettings/app-wo-quote-settings-list']">
+                    WO Quote Settings List
+                </button>
+            </div>
         </div>
-       </div>
     </div>
     <div class="card-body">
         <form #woQuoteSettingsForm="ngForm">
@@ -75,7 +71,6 @@
                               name="isApprovalRule"
                               [(ngModel)]="receivingForm.isApprovalRule"
                               (ngModelChange)="enableHeaderSave()"
-                             
                             />
                             <span class="cr"
                               ><i class="cr-icon pi pi-check"></i
@@ -95,15 +90,11 @@
                   </div>
                   </div>
                 </div>
-
             </div>
-
-
             <div class="form-row pull-right m-t-10">
                 <button type="submit" class="btn btn-primary" (click)="saveOrUpdateWOQuoteSetting()"
                     [disabled]="!woQuoteSettingsForm.valid || disablesavebutton">{{isEditMode ? 'Update' : 'Save'}}</button>
             </div>
         </form>
     </div>
-
 </div>

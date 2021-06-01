@@ -229,13 +229,14 @@ storeVariable:any={};
         $('#commondocView').modal('show');
     }
 
-    openEdit(rowdata) {
+    openEdit(rowdata,content) {
         this.selectedFileAttachment = [];
         this.isEditButton = true;
         this.editMode=true
         this.documentInformation = rowdata;
         this.sourceViewforDocumentList = rowdata.attachmentDetails;
         this.disableSave = true;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.getDocumentTypeList();
     }
 

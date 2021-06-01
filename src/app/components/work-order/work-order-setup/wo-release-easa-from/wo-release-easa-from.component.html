@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xlg">
        <div class="modal-content" id="woReleaseEasaFrom">
           <div class="modal-header">
-             <button type="button" class="close" data-dismiss="modal">&times;</button>
+             <button type="button" class="close" (click)="close()" data-dismiss="modal">&times;</button>
              <h4 class="modal-title warning_color"></h4>
           </div>
           <div class="modal-body">
@@ -97,17 +97,17 @@
              <tr style="height:50px;vertical-align:top">
              <td><b>13d.Name: </b><span style="text-align:center;font-size:15px"> {{ReleaseData.printedName}} </span></td>
              <td><b>13e.Date(dd/mm/yyyy) : </b><span style="text-align:center;font-size:15px"> {{Printeddate1}} </span> 
-               <!-- <p-calendar [showIcon]="true" name ="date" [ngModelOptions]="{standalone: true}"
+               <p-calendar *ngIf="Issave && !isView" [showIcon]="true" name ="date" [ngModelOptions]="{standalone: true}"
                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                   [minDate]="currentDate" (onChange)="enableSave('date')" 
-                   [(ngModel)]="ReleaseData.date" required></p-calendar> -->
+                   (ngModelChange)="onDate1($event)"
+                   [(ngModel)]="ReleaseData.date" required></p-calendar>
                   </td>
              <td><b>14d.Name : </b><span style="text-align:center;font-size:15px"> {{ReleaseData.printedName2}} </span></td>
              <td><b>14e.Date(dd/mm/yyyy): </b> <span style="text-align:center;font-size:15px"> {{Printeddate2}} </span> 
-                <!-- <p-calendar [showIcon]="true" name ="date2" [ngModelOptions]="{standalone: true}"
+                <p-calendar *ngIf="Issave && !isView" [showIcon]="true" name ="date2" [ngModelOptions]="{standalone: true}"
                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                   [minDate]="currentDate" (onChange)="enableSave('date2')" 
-                   [(ngModel)]="ReleaseData.date2" required></p-calendar> -->
+                    (ngModelChange)="onDate($event)"
+                   [(ngModel)]="ReleaseData.date2" required></p-calendar>
                    </td>
              </tr>
              </tbody>
@@ -123,7 +123,8 @@
              </form>
              <div style="height:100px"> &nbsp;</div>
              <div class="modal-footer">
-                <button *ngIf="!isView" type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+                <button *ngIf="!isView && Issave" type="submit" class="btn btn-primary"  (click)="onsave()">Save</button>
+                <button *ngIf="!isView && !Issave" type="submit" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
              </div>
           </div>

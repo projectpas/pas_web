@@ -731,7 +731,16 @@ export class SalesQuoteCreateComponent implements OnInit {
       if (!this.isEdit) {
         this.getEmployeerOnLoad(this.salesQuote.employeeId ? this.salesQuote.employeeId.value : this.employeeId);
       }
-
+      else {
+        if (this.salesQuote != undefined) {
+          this.salesQuote.employeeId = getObjectById('value', this.salesOrderQuoteObj.employeeId, this.allEmployeeList);
+          this.salesQuote.employeeName = getObjectById(
+            "value",
+            this.salesOrderQuoteObj.employeeId,
+            this.allEmployeeList
+          );
+        }
+      }
       this.changeDetector.detectChanges();
     }, err => {
       this.isSpinnerVisible = false;

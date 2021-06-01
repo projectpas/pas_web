@@ -32,7 +32,8 @@ import { AuthService } from '../../../../services/auth.service';
 import { formatNumberAsGlobalSettingsModule, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { RepairOrderService } from '../../../../services/repair-order.service';
-
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
 
 @Component({
     selector: 'app-receiving-ro',
@@ -110,6 +111,7 @@ export class ReceivingRoComponent implements OnInit {
     vendorModuleId: number = 0;
     otherModuleId: number = 0;
     arrayPostatuslist: any[] = [];
+    private onDestroy$: Subject<void> = new Subject<void>();
     constructor(public binservice: BinService,
         public manufacturerService: ManufacturerService,
         public legalEntityService: LegalEntityService,
@@ -148,6 +150,7 @@ export class ReceivingRoComponent implements OnInit {
         this.getTagType();
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
+        this.Purchaseunitofmeasure();
         this.companyModuleId = AppModuleEnum.Company;
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
@@ -345,6 +348,12 @@ export class ReceivingRoComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
 
+    get currentUserManagementStructureId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.managementStructureId
+			: null;
+	}
+
     ngOnInit() {
         this.isSpinnerVisible = true; 
         this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
@@ -366,7 +375,7 @@ export class ReceivingRoComponent implements OnInit {
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
             this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';
             this.repairOrderHeaderData.creditLimit = this.repairOrderHeaderData.creditLimit ? formatNumberAsGlobalSettingsModule(this.repairOrderHeaderData.creditLimit, 2) : '0.00';                 
-            // var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId);                       
+            //var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId);                       
             // if(!shippingVia || shippingVia == undefined) {
             //     var shippingVia = new DropDownData(); 
             //     shippingVia.Key = this.repairOrderHeaderData.shipViaId;
@@ -682,7 +691,7 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.createdDate = new Date();
             stockLine.manufacturerId = part.itemMaster.manufacturerId;
             stockLine.visible = false;
-            stockLine.shippingReference = '';            
+            stockLine.shippingReference = '';
             stockLine.shippingViaId = this.repairOrderHeaderData.shipViaId;
             stockLine.shelfId = 0;
             stockLine.warehouseId = 0;
@@ -726,15 +735,15 @@ export class ReceivingRoComponent implements OnInit {
         }       
     }
 
-    addStockLine(part, visible?: boolean): void {        
-        const stockObj: any = part.stocklineListObj;
+    addStockLine(part, visible?: boolean): void {
+        const stockObj: any = part.stocklineListObj;        
         part.stocklineListObj = stockObj.map(x => {
             return {
                 ...x,
                 //siteId: this.getSiteDetailsOnEdit(part, x),
-                // certifiedBy: 0,                
+                // certifiedBy: 0,
                 shippingViaId: x.shippingViaId ? x.shippingViaId.toLocaleString() : null,
-                shippingAccount: x.shippingAccount,                
+                shippingAccount: x.shippingAccount.toLocaleString(),
                 repairOrderUnitCost: formatNumberAsGlobalSettingsModule(x.repairOrderUnitCost, 2),
                 repairOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2)
             }
@@ -1287,10 +1296,12 @@ export class ReceivingRoComponent implements OnInit {
                     // item.stocklineListObj[i].repairOrderUnitCost = item.stocklineListObj[i].repairOrderUnitCost == undefined ||
                     //     item.stocklineListObj[i].repairOrderUnitCost.toString() == '' ? 0 :
                     //     item.stocklineListObj[i].repairOrderUnitCost;
+                    if (item.stocklineListObj[i].unitOfMeasureId == undefined ||  item.stocklineListObj[i].unitOfMeasureId == 0) {
+                        errorMessages.push("Please select Unit Of Measure in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
                     if (item.stocklineListObj[i].repairOrderUnitCost == undefined || (item.stocklineListObj[i].repairOrderUnitCost != undefined && item.stocklineListObj[i].repairOrderUnitCost.toString() == '')) {
                         errorMessages.push("Please enter Unit Cost in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
-                    }                   
-
+                    }
                     if (item.stocklineListObj[i].managementStructureEntityId == undefined || item.stocklineListObj[i].managementStructureEntityId == 0) {
                         errorMessages.push("Please select Management Structure in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
@@ -1393,7 +1404,10 @@ export class ReceivingRoComponent implements OnInit {
                 } else {
                     sl.tagType = "";
                     sl.tagTypeId = "";
-                }
+                }  
+
+                sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
+                sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
             }
             if (part.isSameDetailsForAllParts) {
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
@@ -2276,10 +2290,48 @@ export class ReceivingRoComponent implements OnInit {
         }
         // }
     }
+    
 
-    public counter: number = 0;
-    rownum() {
-        return this.counter += 1;
+    TagByNames: any[];
+    arrayTagEmployeelist: any[] = [];
+    alltagEmployeeList: any = [];
+    allPurchaseUnitOfMeasureinfo: any[] = [];    
+    
+    loadTagByEmployeeData(strText = '',taggedBy) {
+		if(taggedBy >0){
+			this.arrayTagEmployeelist.push(taggedBy);
+		}
+		if (this.arrayTagEmployeelist.length == 0) {
+			this.arrayTagEmployeelist.push(0);
+		}	
+		this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayTagEmployeelist.join(), this.currentUserManagementStructureId)
+			.subscribe(response => {
+				this.alltagEmployeeList = response;
+				this.TagByNames = this.alltagEmployeeList;
+				if(taggedBy >0){
+					//this.stockLineForm.taggedBy = getObjectById('value', taggedBy, this.alltagEmployeeList);
+				}				
+			}, error => {});
+    }
+
+    filterTagEmployees(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadTagByEmployeeData(event.query,0);
+		}
+    }
+        
+    getValueFromObj(obj) {
+		if (obj.value) {
+			return obj.value;
+		} else {
+			return null;
+		}
+    }
+    
+    Purchaseunitofmeasure() {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.allPurchaseUnitOfMeasureinfo = res;
+		})
     }
 
 }

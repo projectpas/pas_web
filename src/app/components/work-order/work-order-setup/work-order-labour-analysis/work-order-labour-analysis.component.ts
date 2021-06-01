@@ -6,6 +6,7 @@ import { AuthService } from '../../../../services/auth.service';
 declare var $ : any;
 import * as moment from 'moment';
 import { formatNumberAsGlobalSettingsModule, listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
+import { templateJitUrl } from '@angular/compiler';
 @Component({
     selector: 'app-work-order-labour-analysis',
     templateUrl: './work-order-labour-analysis.component.html',
@@ -32,64 +33,53 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     selectedColumn: any[];
     works: any[] = [];
     tempworks: any[] = [];
-    pnViewSelected = false;
     showPaginator: boolean = false;
     isGlobalFilter: boolean = false;
+    isDetailView: boolean = true;
     filterText: any = '';
     private onDestroy$: Subject<void> = new Subject<void>();
-    // headers = [
-    //     { field: 'partNumber', header: 'Main PN' },
-    //     { field: 'revisedPN', header: 'Revised PN' },
-    //     { field: 'partDescription', header: 'PN Description' },
-    //     { field: 'action', header: 'Task' },
-    //     { field: 'expertise', header: 'Expertise' },
-    //     { field: 'employeeName', header: 'Employee' },
-    //     { field: 'hours', header: 'Act Hours',width:"60px" },
-    //     { field: 'stdHours', header: 'Std Hours',width:"60px" },
-    //     { field: 'varHours', header: 'Var. Hours',width:"60px" },
-    //     { field: 'varPercentage', header: 'Var %',width:"60px" },
-    //     { field: 'customer', header: 'Customer' },
-    //     { field: 'workOrderNum', header: 'WO Num' },
-    //     { field: 'stage', header: 'Stage' },
-    //     { field: 'status', header: 'Status' }
-    // ]
-    // selectedColumns = this.headers;
     workOrderId: any;
+    
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, ) { }
+
     ngOnInit() {
         this.workOrderId = this.savedWorkOrderData.workOrderId;
-        this.initColumns();
+        this.initSummaryColumns();
         if (this.data.length != 0) {
             this.totalRecords = this.data.length;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         }
         this.getWorkOrderLabourAnalysisData(this.workOrderId);
     }
+
     ngOnChanges() {
         if (this.data.length != 0) {
             this.totalRecords = this.data.length;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         }
     }
+
     ngOnDestroy(): void {
         this.onDestroy$.next();
     }
+
     getWorkOrderLabourAnalysisData(workOrderId) {
         this.isSpinnerVisible = true;
- const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
-        this.workOrderService.workOrderLabourAnalysisData(workOrderId, id, this.isSubWorkOrder,this.authService.currentUser.masterCompanyId)
-            .pipe(takeUntil(this.onDestroy$)).subscribe(
-                (res: any) => {
-                    this.isSpinnerVisible = false;
-                    if (res) {
-                        this.data = res;
-                    }
-                },
-                err => {
-                    this.isSpinnerVisible = false;
-                }
-            )
+        const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
+              this.workOrderService.workOrderLabourAnalysisData(workOrderId, id, this.isSubWorkOrder, this.isDetailView, this.authService.currentUser.masterCompanyId)
+                  .pipe(takeUntil(this.onDestroy$)).subscribe(
+                      (res: any) => {
+                          this.isSpinnerVisible = false;
+                          if (res) {
+                              this.data = res;
+                          }
+                      },
+                      err => {
+                          this.isSpinnerVisible = false;
+                      }
+                  )
     }
+
     loadData(event) {
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;
@@ -102,78 +92,67 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                 viewType: this.viewType
             }
         }
-
-        // if (!this.isGlobalFilter) {   
-        //     this.getAllWorkOrderList(event);         
-        // } else {
-        //     this.globalSearch(this.filterText)
-        // }
     }
 
     initColumns() {
-        this.headers = [
-            { field: 'partNumber', header: 'Main PN' },
-            { field: 'revisedPN', header: 'Revised PN' },
-            { field: 'partDescription', header: 'PN Description' },
-            { field: 'action', header: 'Task' },
-            { field: 'expertise', header: 'Expertise' },
-            { field: 'employeeName', header: 'Employee' },
-            { field: 'hours', header: 'Act Hours',width:"60px" },
-            { field: 'stdHours', header: 'Std Hours',width:"60px" },
-            { field: 'varHours', header: 'Var. Hours',width:"60px" },
-            { field: 'varPercentage', header: 'Var %',width:"60px" },
-            { field: 'customer', header: 'Customer' },
-            { field: 'workOrderNum', header: 'WO Num' },
-            { field: 'stage', header: 'Stage' },
-            { field: 'status', header: 'Status' }
-        ];
+      this.headers = [
+        { field: "workOrderNum", header: "WO Num" },         
+        { field: "partNumber", header: "PN" },
+        { field: 'revisedPN', header: 'Revised PN'},
+        { field: "partDescription", header: "PN Description" },
+        { field: 'customer', header: 'Customer'  },
+        { field: 'hours', header: 'Act Hours'},
+        { field: 'stdHours', header: 'Std Hours' },
+        { field: 'burdenRateAmount', header: 'Var. Hours' },
+        { field: 'varPercentage', header: 'Var %'},
+        { field: 'stage', header: 'Stage' },
+        { field: 'status', header: 'Status' },
+      ];
         this.selectedColumns = this.headers;
       }
 
       initSummaryColumns() {
         this.headers = [
-          { field: "salesOrderNumber", header: "SO Num", width: "120px" },
-          { field: "versionNumber", header: "Ver Num", width: "80px" },
+          { field: "workOrderNum", header: "WO Num", width: "120px" },         
           { field: "partNumber", header: "PN", width: "130px" },
+          { field: 'revisedPN', header: 'Revised PN' },
           { field: "partDescription", header: "PN Description", width: "180px" },
-          { field: "uomName", header: "UOM", width: "100px" },
-          { field: "currency", header: "Curr", width: "100px" },
-          { field: "qty", header: "Qty", width: "85px" },
-          { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
-          { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
-          { field: "misc", header: "Misc Charges", width: "120px" },
-          { field: "totalSales", header: "Total Revenue", width: "130px" },
-          { field: "unitCost", header: "Unit Cost", width: "130px" },
-          { field: "unitCostExtended", header: "Ext Cost", width: "130px" },
-          { field: "marginAmountExtended", header: "Margin Amt", width: "120px", style: "text-align:right" },
-          { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
-          { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
-          { field: "taxAmount", header: "Tax Amt", width: "120px" },
-          { field: "notes", header: "Notes", width: "120px" }
+          { field: 'customer', header: 'Customer' },
+          { field: 'action', header: 'Task' },
+          { field: 'expertise', header: 'Expertise' },
+          { field: 'employeeName', header: 'Employee' },
+          { field: 'hours', header: 'Act Hours',width:"60px" },
+          { field: 'stdHours', header: 'Std Hours',width:"60px" },
+          { field: 'burdenRateAmount', header: 'Var. Hours',width:"60px" },
+          { field: 'varPercentage', header: 'Var %',width:"60px" },
+          { field: 'stage', header: 'Stage' },
+          { field: 'status', header: 'Status' },
         ];
         this.selectedColumns = this.headers;
       }
 
     changeOfStatus(part, viewType) {
         if (viewType == 'detailedview') {
-          this.initColumns();
+          this.initSummaryColumns();
           this.data = JSON.parse(JSON.stringify(this.tempworks));
-          this.pnViewSelected = false;
+          this.isDetailView = true;
+          this.getWorkOrderLabourAnalysisData(this.workOrderId);
     
         } else {
-          this.initSummaryColumns();
+          this.initColumns();
           this.tempworks = JSON.parse(JSON.stringify(this.data));
-          this.pnViewSelected = true;
-          this.filterParts(this.data);
+          this.isDetailView = false;
+          this.getWorkOrderLabourAnalysisData(this.workOrderId);
+          //this.filterParts(this.data);
         }
       }
 
-      filterParts(tempSales) {
+      filterParts(tempwo) {
         this.data = [];
-        let uniqueParts = this.getUniqueParts(tempSales, 'partNumber');
+        let uniqueParts = this.getUniqueParts(tempwo, 'partNumber');
         if (uniqueParts.length > 0) {
           uniqueParts.forEach((part, i) => {
-            let childParts = tempSales.filter(selectedPart => selectedPart.partNumber == part.partNumber)
+            let childParts = tempwo.filter(selectedPart => selectedPart.partNumber == part.partNumber)
             if (childParts && childParts.length > 0) {
               uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
               uniqueParts[i].childParts = childParts;

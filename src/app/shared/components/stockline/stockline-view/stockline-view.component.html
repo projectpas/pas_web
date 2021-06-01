@@ -107,10 +107,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group stock-top-35"  *ngIf="viewSLInfo.isSerialized">
+                            <!-- <div class="form-group stock-top-35"  *ngIf="viewSLInfo.isSerialized">
                                 <label>Serial Num <span class="clr-red">*</span></label>
                                 <input class="form-control" type="text" name="serialNumber" [(ngModel)]="viewSLInfo.serialNumber" disabled>
-                            </div>
+                            </div> -->
                             <div class="form-group" *ngIf="viewSLInfo.isSerialized">
                                 <label>Stockline Num</label>
                                 <input class="form-control" type="text" name="stockLineNumber" [(ngModel)]="viewSLInfo.stockLineNumber" disabled>
@@ -148,6 +148,16 @@
                                 <input class="form-control text-right" type="text" name="daysReceived" [(ngModel)]="viewSLInfo.daysReceived" disabled>
                             </div> 
                             <div class="form-group">
+                                <label>Mfg. Expiration Date</label>
+                                <input class="form-control text-right" type="text" name="mfgexpirationDate" [(ngModel)]="viewSLInfo.manufacturingDays" disabled>
+                                <!-- <p-calendar class="workflow-clder" [yearNavigator]="true" [monthNavigator]="true"
+                                    yearRange="1900:2100" [showIcon]="true" name="expirationDate"
+                                    [minDate]="minDateValue" [(ngModel)]="stockLineForm.expirationDate"
+                                    #expirationDate="ngModel"
+                                    (onSelect)="onChangeMfgDate(stockLineForm.expirationDate);"
+                                    (ngModelChange)="enableSave()"></p-calendar> -->
+                            </div>
+                            <div class="form-group">
                                 <label>Days Since Mfg</label>
                                 <input class="form-control text-right" type="text" name="manufacturingDays" [(ngModel)]="viewSLInfo.manufacturingDays" disabled>
                             </div>
@@ -159,7 +169,7 @@
                                 <label>Days Opened</label>
                                 <input class="form-control text-right" type="text" name="openDays" [(ngModel)]="viewSLInfo.openDays" disabled>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                                     <label>
                                         <input type="checkbox" name="shelfLife" [(ngModel)]="viewSLInfo.shelfLife" disabled>
@@ -167,7 +177,7 @@
                                         Shelf Life
                                     </label>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group" *ngIf="viewSLInfo.shelfLife">
                                 <label>Shelf Life Exp Date</label>
                                 <input type="text" class="form-control" name="shelfLifeExpirationDate" [(ngModel)]="viewSLInfo.shelfLifeExpirationDate" disabled>
@@ -238,14 +248,11 @@
                                 <label>Entry Date</label>
                                 <input type="text" class="form-control" name="entryDate" [(ngModel)]="viewSLInfo.entryDate" disabled>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Expiration Date</label>
                                 <input type="text" class="form-control" name="expirationDate" [(ngModel)]="viewSLInfo.expirationDate" disabled>
                             </div>
-                            <div class="form-group">
-                                <label>Vendor</label>
-                                <input class="form-control" type="text" name="vendorName" [(ngModel)]="viewSLInfo.vendorName" disabled>
-                            </div>
+                             -->
                             <div class="form-group">
                                 <label>PO Num</label>
                                 <input class="form-control" type="text" name="purchaseOrderNumber" [(ngModel)]="viewSLInfo.purchaseOrderNumber" disabled>
@@ -255,17 +262,22 @@
                                 <input class="form-control" type="text" name="repairOrderNumber" [(ngModel)]="viewSLInfo.repairOrderNumber" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Requestor</label>
-                                <input class="form-control" type="text" name="requestedByName" [(ngModel)]="viewSLInfo.requestedByName" disabled>
+                                <label>Vendor</label>
+                                <input class="form-control" type="text" name="vendorName" [(ngModel)]="viewSLInfo.vendorName" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Received Date <span class="clr-red">*</span></label>
-                                <input type="text" class="form-control" name="receivedDate" [(ngModel)]="viewSLInfo.receivedDate" disabled>
+                                <label>Requestor</label>
+                                <input class="form-control" type="text" name="requestedByName" [(ngModel)]="viewSLInfo.requestedByName" disabled>
                             </div>
                             <div class="form-group">
                                 <label>Receiver Num <span class="clr-red">*</span></label>
                                 <input class="form-control" type="text" name="receiverNumber" [(ngModel)]="viewSLInfo.receiverNumber" disabled>
                             </div>
+                            <div class="form-group">
+                                <label>Received Date <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="receivedDate" [(ngModel)]="viewSLInfo.receivedDate" disabled>
+                            </div>
+                           
                             <div class="form-group">
                                 <label>Reconciliation Num</label>
                                 <input class="form-control" type="text" name="reconciliationNumber" [(ngModel)]="viewSLInfo.reconciliationNumber" disabled>
@@ -331,6 +343,10 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Qty On Hand <span class="clr-red">*</span></label>
+                                <input class="form-control text-right" type="text" name="QuantityOnHand" [(ngModel)]="viewSLInfo.quantityOnHand" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>UOM <span class="clr-red">*</span></label>
                                 <input class="form-control text-right" type="text" name="QuantityOnHand" [(ngModel)]="viewSLInfo.quantityOnHand" disabled>
                             </div>
                             <div class="form-group">
@@ -533,11 +549,11 @@
                                 <input class="form-control" type="text" name="taggedByName" [(ngModel)]="viewSLInfo.taggedByName" disabled />
                             </div>
                             <div class="form-group">
-                                <label>Inspection By</label>
+                                <label>Inspected By</label>
                                 <input class="form-control" type="text" name="inspectionByName" [(ngModel)]="viewSLInfo.inspectionByName" disabled />
                             </div>
                             <div class="form-group">
-                                <label>Inspection Date</label>
+                                <label>Inspected Date</label>
                                 <input type="text" class="form-control" name="inspectionDate" [(ngModel)]="viewSLInfo.inspectionDate" disabled>
                             </div>                                
                         </div>

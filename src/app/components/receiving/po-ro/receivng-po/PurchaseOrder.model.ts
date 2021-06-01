@@ -357,6 +357,7 @@ export class StockLine {
     certifiedDate: Date;
     tagDate: Date;
     tagType: any;
+    taggedBy:any;
     certifiedDueDate: Date;
     calibrationMemo: string;
     orderDate: Date;
@@ -442,6 +443,7 @@ export class StockLine {
     obtainFromObject: DropDownData;
     ownerObject: DropDownData;
     traceableToObject: DropDownData;
+    taggedByObject: DropDownData;
 }
 
 // export class StockLineDraft {
@@ -738,9 +740,9 @@ export class StockLineDraft {
     Condition: string = null;
     Warehouse: string = null;
     Location: string = null;
-    ObtainFromName: string = null;
-    OwnerName: string = null;
-    TraceableToName: string = null;
+    obtainFromName: string = null;
+    ownerName: string = null;
+    traceableToName: string = null;
     GLAccount: string = null;
     AssetName: string = null;
     LegalEntityName: string = null;
@@ -756,6 +758,10 @@ export class StockLineDraft {
     WorkOrder: string = null;
     WorkOrderMaterialsName: string = null;
     tagTypeId: any = null;
+    taggedBy:number = null;
+    taggedByName: string = null;
+    unitOfMeasureId:number = null;
+    unitOfMeasure: string = null;
 }
 
 export class ReceiveParts {

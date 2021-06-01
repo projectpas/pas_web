@@ -997,14 +997,14 @@ export class SalesOrderPartNumberComponent {
   }
 
   getMarginPercentage(part) {
-    return ((((part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended)) / (part.grossSalePrice + Number(part.misc))) * 100).toFixed(2);
+    return ((((part.salesPriceExtended + Number(part.misc)) - (part.unitCostExtended)) / (part.salesPriceExtended + Number(part.misc))) * 100).toFixed(2);
   }
 
   getMarginAmount(part) {
-    return (part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
+    return (part.salesPriceExtended + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
   }
 
   getTotalRevenue(part) {
-    return (part.grossSalePrice + Number(part.misc)).toFixed(2);
+    return (part.salesPriceExtended + Number(part.misc)).toFixed(2);
   }
 }
