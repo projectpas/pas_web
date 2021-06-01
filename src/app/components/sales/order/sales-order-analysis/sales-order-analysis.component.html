@@ -90,6 +90,8 @@
                 || col.field == 'totalSales'
                 || col.field == 'unitCost'
                 || col.field == 'unitCostExtended'
+                || col.field == 'unitSalePrice'
+                || col.field == 'salesPriceExtended'
                 || col.field == 'marginAmountExtended'
                 || col.field == 'freight'
                 || col.field == 'taxAmount'
@@ -113,6 +115,8 @@
                 && col.field != 'totalSales'
                 && col.field != 'unitCost'
                 && col.field != 'unitCostExtended'
+                && col.field != 'unitSalePrice'
+                && col.field != 'salesPriceExtended'
                 && col.field != 'marginAmountExtended'
                 && col.field != 'freight'
                 && col.field != 'taxAmount'
@@ -129,10 +133,10 @@
           <td class="table-column-width"><label>Total</label>
           </td>
           <td class="content-to-end table-column-width"><label
-              class="margin-0">{{getTotalAmount('grossSalePricePerUnit')}}</label>
+              class="margin-0">{{getTotalAmount('unitSalePrice')}}</label>
           </td>
           <td class="table-column-width content-to-end"><label
-              class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
+              class="margin-0">{{getTotalAmount('salesPriceExtended')}}</label>
           </td>
           <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
           </td>
@@ -162,10 +166,10 @@
           <td class="table-column-width"><label>Total</label>
           </td>
           <td class="content-to-end table-column-width"><label
-              class="margin-0">{{getTotalAmount('grossSalePricePerUnit')}}</label>
+              class="margin-0">{{getTotalAmount('unitSalePrice')}}</label>
           </td>
           <td class="table-column-width content-to-end"><label
-              class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
+              class="margin-0">{{getTotalAmount('salesPriceExtended')}}</label>
           </td>
           <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
           </td>
