@@ -148,7 +148,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   onsave()
   {
-    this.Issave = false;
+ 
     if(new Date(this.ReleaseData.date) >=  new Date(this.ReleaseData.receivedDate))
     {
       this.isconfirmsave = false;
@@ -172,7 +172,8 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
     }
 
     if(this.isconfirmsave)
-    {
+    { 
+      this.Issave = false;
       this.CreateUpdateReleasedata();
     }
   }
@@ -224,6 +225,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
   print(): void {
    
     //this.CreateUpdateReleasedata();
+    this.updateRelreaseList.emit();
     let printContents, popupWin;
     printContents = document.getElementById('woReleaseEasaFrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
@@ -528,7 +530,7 @@ table, thead, th {
     );
     popupWin.document.close();
 
-    this.updateRelreaseList.emit();
+   
   }
 
 }

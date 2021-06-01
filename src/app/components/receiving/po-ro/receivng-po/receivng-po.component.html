@@ -243,7 +243,7 @@
                             <!-- <th class="min-width-40"></th> -->
                             <!-- <th class="min-width-60">Line Num</th> -->
                             <th>PN</th>
-                            <th colspan="4">PN Desc</th>
+                            <th colspan="5">PN Desc</th>
                             <th>Alt/Equiv</th>
                             <th>Item Type</th>
                             <th>Stock Type</th>
@@ -277,7 +277,7 @@
                                 <td>
                                     {{part.itemMaster.partNumber}}
                                 </td>
-                                <td colspan="4">{{part.itemMaster.partDescription}}</td>
+                                <td colspan="5">{{part.itemMaster.partDescription}}</td>
                                 <td>{{part.altEquiPartNumber}}</td>
                                 <td>{{part.itemType}}</td>
                                 <td>{{part.stockType}}</td>
@@ -340,6 +340,7 @@
                                 <!-- <th class="min-width-40"></th> -->
                                 <th>PN</th>
                                 <th class="min-width-60">Qty Ord</th>
+                                <th class="min-width-80">Qty Drafted</th>                                 
                                 <th class="min-width-80">Qty Received</th>
                                 <th class="min-width-80">Qty Rejected</th>
                                 <th class="min-width-60">Back Ord</th>
@@ -353,6 +354,8 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
+                              
+                                
                                 <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
                             </tr>
                             <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
@@ -360,6 +363,7 @@
                                 <!-- <td>&nbsp;</td> -->
                                 <td>{{part?.itemMaster?.partNumber}}</td>
                                 <td class="right">{{part?.quantityOrdered}}</td>
+                                <td class="right">{{part?.draftedStockLineCount}}</td>
                                 <td class="right">{{part?.stockLineCount}}</td>
                                 <td class="right">{{part?.quantityRejected}}</td>
                                 <!-- <td class="right">{{part?.quantityBackOrdered}}</td> -->

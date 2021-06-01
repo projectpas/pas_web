@@ -740,9 +740,9 @@ export class StockLineDraft {
     Condition: string = null;
     Warehouse: string = null;
     Location: string = null;
-    ObtainFromName: string = null;
-    OwnerName: string = null;
-    TraceableToName: string = null;
+    obtainFromName: string = null;
+    ownerName: string = null;
+    traceableToName: string = null;
     GLAccount: string = null;
     AssetName: string = null;
     LegalEntityName: string = null;

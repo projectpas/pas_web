@@ -796,6 +796,4 @@ getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> 
     );
   }
 
-
-
 }

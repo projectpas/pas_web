@@ -1584,7 +1584,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
 
     getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> {
-        const URL = `${this.configurations.baseUrl}/api/workOrder/getWorkOrderBillingInvoicingData?wobillingInvoicingId=${wobillingInvoicingId}`;
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderBillingInvoicingData?wobillingInvoicingId=${wobillingInvoicingId}`;
         return this.http
           .get<any>(URL, this.getRequestHeaders())
           .catch(error => {
