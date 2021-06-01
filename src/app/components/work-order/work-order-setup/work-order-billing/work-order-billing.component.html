@@ -743,7 +743,7 @@
                                       (onChange)="selectedLegalEntity(managementStructure.companyId,'html');"
                                       required (ngModelChange)="getActive()" [options]="legalEntityList"
                                       filter="true" [(ngModel)]="managementStructure.companyId"
-                                      name="companyId" [resetFilterOnHide]="true" placeholder="Select">
+                                      name="companyId" [resetFilterOnHide]="true" placeholder="Select" disabled>
                                   </p-dropdown>
                               </div>
                               <div class="form-group">
@@ -751,21 +751,21 @@
                                       (onChange)="selectedBusinessUnit(managementStructure.buId,'html')"
                                       (ngModelChange)="getActive()" [options]="businessUnitList" filter="true"
                                       [(ngModel)]="managementStructure.buId" name="buId"
-                                      [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                      [resetFilterOnHide]="true" placeholder="Select" disabled></p-dropdown>
                               </div>
                               <div class="form-group">
                                   <p-dropdown [showClear]="true" class="p-dropdown-100"
                                       (onChange)="selectedDivision(managementStructure.divisionId,'html')"
                                       (ngModelChange)="getActive()" [options]="divisionList" filter="true"
                                       [(ngModel)]="managementStructure.divisionId" name="divisionId"
-                                      [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                      [resetFilterOnHide]="true" placeholder="Select" disabled></p-dropdown>
                               </div>
                               <div class="form-group">
                                   <p-dropdown [showClear]="true" class="p-dropdown-100"
                                       (onChange)="selectedDepartment(managementStructure.departmentId,'html' )"
                                       (ngModelChange)="getActive()" [options]="departmentList" filter="true"
                                       [(ngModel)]="managementStructure.departmentId" name="departmentId"
-                                      [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                      [resetFilterOnHide]="true" placeholder="Select" disabled></p-dropdown>
                               </div>
                           </div>
                       </div>
@@ -1336,8 +1336,8 @@
       <h4 class="modal-title">Print OR Post Invoice</h4>
   </div>
   <div class="modal-body">
-      <div id="soInvoice">
-          <app-work-order-print-invoice [workOrderbillingInvoicingId]="wObillingInvoicingId"
+      <div id="woInvoice">
+          <app-work-order-print-invoice [workOrderbillingInvoicingId]="WObillingInvoicingId"
               [workOrderId]="workOrderId" (onInvoiceLoad)="onInvoiceLoad($event)"></app-work-order-print-invoice>
       </div>
   </div>
