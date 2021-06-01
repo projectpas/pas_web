@@ -56,7 +56,8 @@ export class WorkOrderBillingComponent implements OnInit {
     @Input() isbillingNotCreated = false;
     modal: NgbModalRef;
     salesOrderBillingInvoiceId: number;
-    SObillingInvoicingId: number;
+    WObillingInvoicingId: number;
+    
     salesOrderId:number;
     @ViewChild("printPost", { static: false }) public printPostModal: ElementRef;
     overAllMarkup: any;
@@ -270,17 +271,20 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     ViewInvoice(rowData) {
-        this.salesOrderId = rowData.workOrderId;
-        this.salesOrderBillingInvoiceId = rowData.woBillingInvoicingId;
+        this.workOrderId = rowData.workOrderId;
+        this.workOrderBillingInvoiceId = rowData.woBillingInvoicingId;
+
+        console.log(rowData);
         this.loadInvoiceView();
     }
 
     loadInvoiceView() {
-        this.SObillingInvoicingId = this.salesOrderBillingInvoiceId;
+        this.WObillingInvoicingId = this.workOrderBillingInvoiceId;
         this.modal = this.modalService.open(this.printPostModal, { size: "lg", backdrop: 'static', keyboard: false });
     }
-    onInvoiceLoad(invoiceStatus) {
-       // this.invoiceStatus = invoiceStatus;
+    onInvoiceLoad(invoiceStatus) 
+    {
+        this.invoiceStatus = invoiceStatus;
     }
 
     close() {
@@ -394,12 +398,15 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     onSelectPartNumber(rowData) {
-        if (rowData.workOrderPartId != 0 && rowData.workOrderPartId != 0) {
+        if (rowData.workOrderPartId != 0 && rowData.workOrderShippingId != 0) {
             this.selectedQtyToBill = rowData.qtyToBill;
             this.partSelected = true;
             this.showBillingForm = true;
             this.isMultipleSelected = false;
             this.workOrderShippingId = rowData.workOrderShippingId;
+            this.partSelected = true;
+            this.showBillingForm = true;
+            this.getbillingCostDataForWoOnly();
             //this.getBillingAndInvoicingForSelectedPart(rowData.salesOrderPartId, rowData.salesOrderShippingId);
         }
     }
@@ -1037,6 +1044,7 @@ export class WorkOrderBillingComponent implements OnInit {
                     if (a.workOrderBillingInvoiceChild[i].selected == true) {
                         var p = new BillingItems;
                         p.workOrderShippingId = a.workOrderBillingInvoiceChild[i].workOrderShippingId;
+                        this.workOrderShippingId=a.workOrderBillingInvoiceChild[i].workOrderShippingId;
                         p.noOfPieces = a.workOrderBillingInvoiceChild[i].qtyToBill;
                         p.workOrderPartId = a.workOrderBillingInvoiceChild[i].workOrderPartId;
 
@@ -1079,6 +1087,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId),
         this.billingorInvoiceForm.employeeId= editValueAssignByCondition('value', this.savedWorkOrderData.employeeId),
         this.billingorInvoiceForm.billingItems = billingItems;
+        this.billingorInvoiceForm.workOrderShippingId = this.workOrderShippingId;
         this.billingorInvoiceForm.invoiceTime =moment(billingorInvoiceFormTemp.invoiceTime, ["h:mm A"]).format("HH:mm")
 
         this.workOrderService.createBillingByWorkOrderId(this.billingorInvoiceForm).subscribe(result => {
@@ -1160,7 +1169,7 @@ export class WorkOrderBillingComponent implements OnInit {
 
     print(): void {
         let printContents, popupWin;
-        printContents = document.getElementById('soInvoice').innerHTML;
+        printContents = document.getElementById('woInvoice').innerHTML;
         popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
         popupWin.document.open();
         popupWin.document.write(`

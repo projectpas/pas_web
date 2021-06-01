@@ -101,7 +101,7 @@ close()
 
 onsave()
 {
-  this.Issave = false;
+
   if(new Date(this.ReleaseData.date) >=  new Date(this.ReleaseData.receivedDate))
   {
     this.isconfirmsave = false;
@@ -126,6 +126,7 @@ onsave()
 
   if(this.isconfirmsave)
   {
+    this.Issave = false;
     this.CreateUpdateReleasedata();
   }
 }

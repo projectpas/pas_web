@@ -25,14 +25,14 @@ export class WorkOrderPrintInvoiceComponent implements OnInit {
 
     ngOnInit() {
         this.endPointURL = environment.baseUrl;
-        this.getSalesInvoiceView();
+        this.getworkInvoiceView();
     }
 
-    getSalesInvoiceView() {
+    getworkInvoiceView() {
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderBillingInvoicingData(this.workOrderbillingInvoicingId).subscribe(res => {
             this.workOrderInvoice = res[0];
-            this.getSalesOrderCharges();
+           // this.getWorkOrderCharges();
             this.onInvoiceLoad.emit(this.workOrderInvoice.invoiceStatus);
             this.isSpinnerVisible = false;
         }, error => {
@@ -40,7 +40,7 @@ export class WorkOrderPrintInvoiceComponent implements OnInit {
         })
     }
 
-    getSalesOrderCharges() {
+    getWorkOrderCharges() {
         this.isSpinnerVisible = true;
         this.workOrderService.getworkOrderChargesById(this.workOrderId, false).subscribe(res => {
             this.workOrderCharges = res;
