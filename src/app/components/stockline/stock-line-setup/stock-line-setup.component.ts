@@ -133,10 +133,8 @@ export class StockLineSetupComponent implements OnInit {
 		{ field: 'fileName', header: 'File Name' },
 		{ field: 'fileSize', header: 'File Size' },
 		{ field: 'createdDate', header: 'Created Date' },
-
 		{ field: 'createdBy', header: 'Created By' },
 		{ field: 'updatedDate', header: 'Updated Date' },
-
 		{ field: 'updatedBy', header: 'Updated By' },
 	];
 	selectedColumnsCertified = this.attachDocumentsColumns;
