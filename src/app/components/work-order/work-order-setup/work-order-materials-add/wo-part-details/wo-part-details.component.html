@@ -1,33 +1,33 @@
-<div class="row">
+<div class="row" *ngIf="!isEdit">
     <div>
       <label>Stock Type</label>
     </div>
     <div>
       <label style="width: 120px;">
-        <input type="checkbox" name="includePMA"   [(ngModel)]="formObject.restrictPMA"/>&nbsp;Include
+        <input type="checkbox" name="includePMA" [disabled]="isEdit"   [(ngModel)]="formObject.restrictPMA"/>&nbsp;Include
         PMA
       </label> 
     </div>
     <div>
       <label style="width: 120px;">
-        <input type="checkbox" name="includeDER"  [(ngModel)]="formObject.restrictDER" />&nbsp;Include
+        <input type="checkbox" name="includeDER"  [disabled]="isEdit" [(ngModel)]="formObject.restrictDER" />&nbsp;Include
         DER
       </label> 
     </div>
     <div>
       <label style="width: 140px;" >
-        <input type="checkbox" name="includeAlternalePN" [(ngModel)]="formObject.includeAlternatePartNumber"/>&nbsp;Include
+        <input type="checkbox" name="includeAlternalePN"  [disabled]="isEdit"[(ngModel)]="formObject.includeAlternatePartNumber"/>&nbsp;Include
         Alternate PN
       </label> 
     </div>
     <div>
       <label style="width: 140px;">
-        <input type="checkbox" name="includeEquivalentPartNumber" [(ngModel)]="formObject.includeEquivalentPartNumber"/>&nbsp;Include
+        <input type="checkbox" name="includeEquivalentPartNumber" [disabled]="isEdit" [(ngModel)]="formObject.includeEquivalentPartNumber"/>&nbsp;Include
         Equivalent PN
       </label> 
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!isView">
     <div class="col-2 column">
       <div class="form-group">
         <label class="width_100per">PN<span class="clr-red">*</span></label>
@@ -57,7 +57,7 @@
       <div class="col-2 column">
         <div class="form-group">
           <label >Qty Req<span class="clr-red">*</span></label>
-          <input class="form-control text-right" type="text" (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
+          <input class="form-control text-right" type="text"  (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
           [(ngModel)]="formObject.quantity" (change)="calculateExtendedCost()" name="quantity" autocomplete="off" />
          </div>
       </div>
@@ -81,9 +81,9 @@
       </div>
     </div>
   </div>
-  <div class="row justify-content-start">
+  <div class="row justify-content-start" *ngIf="!isView">
     <div class="col-1 column" style="margin-right: 8px;">
-      <div class="form-group">
+      <div class="form-group" *ngIf="!isEdit">
         <button class="btn btn-primary"  [disabled]="!disableforPartNum  || formObject.quantity==0 || (formObject.conditionIds ==undefined || formObject.conditionIds ==[])" (click)="search($event)"
           >
      Search PN
@@ -132,9 +132,11 @@
             </span>
                     </td>
                     <td *ngFor="let col of columns" pReorderableRowHandle>
+                      <span *ngIf="!isView">
                         <span *ngIf="col.field == 'select'">
                             <input type="checkbox" *ngIf="!getCheckBoxDisplay(part, rowIndex,false)" (change)="onChange($event, part,rowIndex)" [disabled]="isStockLineViewMode" />
                         </span>
+                      </span>
                         <span *ngIf="col.field == 'partNumber'">
                             {{part.partNumber}}
                             <span class="alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span>
@@ -214,11 +216,13 @@
             <ng-template pTemplate="body" let-part let-rowIndex="rowIndex" let-columns="stockLinecolumns">
                 <tr>
                     <td *ngFor="let col of stockLinecolumns" pReorderableRowHandle>
+                        <span *ngIf="!isView">
                       <span *ngIf="col.field == 'selected'">
                             <span *ngIf="!getCheckBoxDisplay(part, rowIndex,true)">
                                 <input type="checkbox" (change)="onChangeStock($event, part, 0)"
                                     [disabled]="isStockLineViewMode" />
                             </span>
+                        </span>
                         </span>
                           <span class="float-left" *ngIf=" col.field=='partNumber'">{{ part.partNumber }}
                             <span class=" alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span>
