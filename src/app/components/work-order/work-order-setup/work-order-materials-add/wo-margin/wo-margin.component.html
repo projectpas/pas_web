@@ -48,7 +48,7 @@
         <label>Quantity from this <span *ngIf="part.method=='ItemMaster'">PN</span><span
             *ngIf="part.method=='StockLine'">{{part.stockLineNumber}}</span></label>
         <input type="text" class="form-control   text-right" name="stocklineQuantity"
-         [(ngModel)]="formObject.stocklineQuantity" [disabled]="isEdit"
+         [(ngModel)]="formObject.stocklineQuantity" [disabled]="!isStockLine"
           (input)="onChangeQuantityFromThis();calculateExtendedCost()" (ngModelChange)="getActive()"
           name="quantity" autocomplete="off" />
           <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">

@@ -826,7 +826,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                 </td>
                 <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
   
-                    <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(childRowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+                    <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
                     <span>
                         <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                             (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
