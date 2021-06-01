@@ -102,13 +102,12 @@ export class WorkflowListComponent implements OnInit {
     ];
     gridColumns: any[] = [
         { field: 'workOrderNumber', header: 'Workflow ID' },
-        { field: 'version', header: 'Version Number',width:"60px" },
-        { field: 'partNumber', header: 'PN' },
-        { field: 'partDescription', header: 'PN Description' },
+        { field: 'version', header: 'Ver Num',width:"105px" },
+        { field: 'partNumber', header: 'PN' , width:"160px"},
+        { field: 'partDescription', header: 'PN Description', width:"240px"},
         { field: 'description', header: 'Work Scope' },
-        { field: 'name', header: 'Customer Name' },
-        { field: 'workflowCreateDate', header: 'WF Created Date' },
-        { field: 'workflowExpirationDate', header: 'Expiration Date' },
+        { field: 'name', header: 'Customer Name', width:"200px"},
+        { field: 'workflowExpirationDate', header: 'Exp Date' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
