@@ -1,14 +1,4 @@
-<!-- <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" > -->
-    <!-- <div class="panel"> -->
-        <!-- <div class="panel-heading">
-            <h4 class="panel-title">
-                <div></div>
-                <a data-toggle="collapse" class="ac_cs collapsed" href="#stepadd1" (click)="resetParentTab()"> Summary of WO Overview</a>
-            </h4>
-        </div> -->
-        <!-- <div id="stepadd1" class="panel-collapse collapse in">
-            <div class="panel-body"> -->
-                    <div class="card col-md-12" style="background: #ffffff; margin-top: 0px; margin-bottom: 50px;">
+                    <div class="card col-md-12" style="background: #ffffff; margin-top: 0px; ">
                         <ul class="nav nav-pills nav-pills-cstm back_filsd" id="pills-tab" role="tablist"
                             style="margin-top: 2px;background-color: #fff !important;">
                             <li class="nav-item">
@@ -47,8 +37,7 @@
                                     <a class="dropdown-item" style="background-color: #fff;color:black" (click)="selectedCommunicationTab='email'" (click)="gridTabChange('email')">Email</a>
                                     <a class="dropdown-item" style="background-color: #fff;color:black" (click)="selectedCommunicationTab='phone'" (click)="gridTabChange('phone')">Phone</a>
                                     <a class="dropdown-item" style="background-color: #fff;color:black" (click)="selectedCommunicationTab='text'" (click)="gridTabChange('text')">Text</a>
-                                    <!-- <a class="dropdown-item">Chat</a> -->
-                                </div>
+                                  </div>
                             </li>
                             <li class="nav-item">
                                 <a id="pills-home-tab" role="tab" aria-controls="pills-home" aria-selected="true"
@@ -77,28 +66,18 @@
                             </li>
                         </ul>
                         <div *ngIf="workOrderId && (gridActiveTab == 'materialList')"
-                        [ngClass]="{hidedata : gridActiveTab !== 'materialList' }" style="overflow-x: scroll;"> 
-                            <!-- <div>
-                                <button type="button" class="btn btn-primary" (click)="collapseAll('open', 'materialList', materialListMPNs, 'getMaterialListData')">
-                                    Open All
-                                </button>
-                                <button type="button" class="btn btn-secondary" (click)="collapseAll('close','materialList', materialListMPNs, 'getMaterialListData')">
-                                    Close All
-                                </button> 
-                            </div> -->
-                            <!-- <app-materiallist-wo-summarization [value]="materialListMPNs"></app-materiallist-wo-summarization> -->
+                        [ngClass]="{hidedata : gridActiveTab !== 'materialList' }"  > 
                             <div >
                                 <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <div class="panel-title">
                                                     <div></div>
-                                                    <!-- <a data-toggle="collapse" class="ac_cs collapsed" href="#materialList_{{i}}" (click)="getMaterialListData(materialMPN)">  -->
-                                                        <div style="overflow-x: scroll;">
+                                                        <div  >
                                                             <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
-                                                                <thead *ngIf="i == 0">
+                                                                <thead >
                                                                     <tr>
                                                                         <th class="table-column-icon-width"></th>
                                                                         <th *ngFor="let matHeader of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; min-width: 100px !important;;background-color: #4397f7;
@@ -118,7 +97,7 @@
                                                                            </a> 
                                                                         </td>
                                                                     </tr>
-                                                                    <tr *ngIf="materialMPN.workOrderMaterialList && isShowChild==true" class="sub-table no-bg">
+                                                                    <tr *ngIf="materialMPN.workOrderMaterialList && isShowChild==true && materialMPN.isShowPlus ==false" class="sub-table no-bg">
                                                                         <td></td>
                                                                         <td colspan="22" class="p-0">
                                                                                 <app-work-order-complete-material-list [materialStatus]="materialMPN.materialStatus" isWorkOrder="true"
@@ -132,50 +111,28 @@
                                                             </table>
                                                             </div>
                                                             </div>
-                                                        </div>
-                                                    <!-- </a> -->
+                                                        </div> 
                                                 </div>
-                                            </div>
-                                            <!-- <div id="materialList_{{i}}" class="panel-collapse collapse in ">
-                                                <div *ngIf="!materialMPN.workOrderMaterialList">
-                                                    No Record Found
-                                                </div>
-                                                <div *ngIf="materialMPN.workOrderMaterialList">
-                                                    <app-work-order-complete-material-list [materialStatus]="materialMPN.materialStatus" isWorkOrder="true"
-                                                    [workFlowObject]="workFlowObject" [savedWorkOrderData]="savedWorkOrderData" isSubWorkOrder="false" subWOPartNoId="0"
-                                                    [mpnId]="materialMPN.workOrderPartNumberId" [employeesOriginalData]="employeesOriginalData"
-                                                    [workOrderMaterialList]="materialMPN.workOrderMaterialList"[taskList]="taskList" [mpnPartNumbersList]="mpnPartNumbersList" isView="true"></app-work-order-complete-material-list>
-                                                </div>
-                                            </div> -->
+                                            </div> 
                                         </div>
                                 </div>
                             </div>
                         </div>
 
                         <div *ngIf="workOrderId && (gridActiveTab == 'labour')"
-                        [ngClass]="{hidedata : gridActiveTab !== 'labour' }"> 
-                            <!-- <div>
-                                <button type="button" class="btn btn-primary" (click)="collapseAll('open','labour', labourListMPNs, 'getLabourListData')">
-                                    Open All
-                                </button>
-                                <button type="button" class="btn btn-secondary" (click)="collapseAll('close','labour', labourListMPNs, 'getLabourListData')">
-                                    Close All
-                                </button> 
-                            </div> -->
+                        [ngClass]="{hidedata : gridActiveTab !== 'labour' }">  
                             <div style="float: right;" class="m-t-2">
                                 <button type="button" class="btn btn-primary" (click)="collapseAll('open', 'labour', labourListMPNs, 'getLabourListData')">
                                     {{(labourDetailedViewOpened)?'Summary':'Detail View'}}
                                 </button>
                             </div>
-                            <!-- <app-labour-wo-summarization [value]="labourListMPNs"></app-labour-wo-summarization> -->
                             <div >
                                 <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="margin-bottom: -8px;">
                                                 <div class="panel-title">
                                                     <div></div>
-                                                    <!-- <a data-toggle="collapse" class="ac_cs collapsed" href="#labour_{{i}}" (click)="getLabourListData(labourMPN)"> -->
-                                                        <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                                       <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
                                                             <div class="tableFixHead">
                                                             <table *ngFor="let labourMPN of labourListMPNs; let i=index" class="table table-bordered">
                                                                 <thead *ngIf="i == 0">
@@ -204,30 +161,13 @@
                                                                     <tr *ngIf="labourMPN.labor" class="sub-table no-bg">
                                                                         <td></td>
                                                                         <td colspan="9" class="p-0">
-                                                                        <!-- <div id="labour_{{i}}" class="panel-collapse collapse in">
-                                                                        <div *ngIf="!labourMPN.labor">
-                                                                            No Record Found
-                                                                        </div> -->
-                                                                        <!-- <div *ngIf="labourMPN.labor" style="width: 92%;margin-left: 4%;"> -->
-                                                                            <app-labour-wo-summarization [value]="labourMPN.labor" [type]="labourMPN.labourHours" [partNumber]="labourMPN.partNumber"></app-labour-wo-summarization>
-                                                                        <!-- </div> -->
-                                                                    <!-- </div> -->
-                                                                    </tr>
-                                                                </tbody>
+                                                                       <app-labour-wo-summarization [value]="labourMPN.labor" [type]="labourMPN.labourHours" [partNumber]="labourMPN.partNumber"></app-labour-wo-summarization>
+                                                                    </tbody>
                                                             </table>
                                                             </div>
-                                                            </div>
-                                                    <!-- </a> -->
+                                                            </div> 
                                                 </div>
-                                            </div>
-                                            <!-- <div id="labour_{{i}}" class="panel-collapse collapse in">
-                                                <div *ngIf="!labourMPN.labor">
-                                                    No Record Found
-                                                </div>
-                                                <div *ngIf="labourMPN.labor" style="width: 92%;margin-left: 4%;">
-                                                    <app-labour-wo-summarization [value]="labourMPN.labor" [type]="labourMPN.labourHours" [partNumber]="labourMPN.partNumber"></app-labour-wo-summarization>
-                                                </div>
-                                            </div> -->
+                                            </div> 
                                         </div>
                                 </div>
                             </div>
@@ -255,17 +195,17 @@
 
                         <div [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
                             <div *ngIf="(selectedCommunicationTab == 'memo')">
-                                <app-communication-wo-summarization [value]="memoListMPNs" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
                             </div>
                             <div *ngIf="(selectedCommunicationTab == 'email')">
-                                <app-communication-wo-summarization [value]="emailListMPNs" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
                             </div>
                             
                             <div *ngIf="(selectedCommunicationTab == 'text')">
-                                <app-communication-wo-summarization [value]="textListMPNs" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
                             </div>
                             <div *ngIf="(selectedCommunicationTab == 'phone')">
-                                <app-communication-wo-summarization [value]="phoneListMPNs" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
                             </div>
                         </div>
                         
