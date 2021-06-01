@@ -1034,8 +1034,8 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	getEmployeeSelecionOnEdit(requestorId, inspectionBy) {
-		this.arrayWOlist.push(requestorId);
-		this.arrayWOlist.push(inspectionBy);
+		this.arrayEmployeelist.push(requestorId);
+		this.arrayEmployeelist.push(inspectionBy);
 		this.commonService.autoSuggestionSmartDropDownList('Employee', 'employeeId', 'firstName', '', true, 20, this.arrayEmployeelist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allEmployeeList = response;
 			this.certifyByNames = this.allEmployeeList;
