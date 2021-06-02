@@ -23,6 +23,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
     @Input() savedWorkOrderData: any = [];
     @Input() selectedPartNumber: any = {};
     @Input() commonContactId: any;
+    @Input() isSummarizedView: any = false;
     // @Input() ContactList: any;
     @Input() type: any;
     phoneViewData: any = {};
