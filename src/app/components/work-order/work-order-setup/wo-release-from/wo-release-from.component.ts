@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-wo-release-from',
   templateUrl: './wo-release-from.component.html',
@@ -33,6 +34,7 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
   Printeddate2 : string;
   Issave: boolean = true;
   isconfirmsave : boolean = true;
+  endPointURL: any;
   constructor(
     private authService: AuthService,
     private acRouter: ActivatedRoute,
@@ -46,6 +48,7 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#woReleaseFromDiv').modal('show');
     if(this.isEdit || this.isView)
     {

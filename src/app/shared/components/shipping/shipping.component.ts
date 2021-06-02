@@ -211,7 +211,7 @@ printSelectedPackagingSlip()
                 if (ele.selectedToGeneratePackaging && ele.packagingSlipId > 0) {
                     var items = new MultiPackagingSlips;
                     items.WorkOrderId = ele.workOrderId;
-                    items.WOPartNoId = ele.workOrderPartId;
+                    items.WorkOrderPartNumId = ele.workOrderPartId;
                     items.WOPickTicketId = ele.woPickTicketId;
                     items.PackagingSlipId = ele.packagingSlipId;
 
@@ -251,7 +251,7 @@ printSelectedShippingLabel()
             if (ele.selectedToGeneratePackaging) {
                 var items = new MultiShippingLabels;
                 items.WorkOrderId = ele.workOrderId;
-                items.WOPartNoId = ele.workOrderPartId;
+                items.WorkOrderPartId = ele.workOrderPartId;
                 items.WOShippingId = ele.workOrderShippingId;
 
                 shippingItemsToPrint.push(items);
@@ -260,6 +260,8 @@ printSelectedShippingLabel()
     });
 
     let shippingLabels1: any[] = [];
+
+    shippingLabels1 = shippingItemsToPrint;
 
     //shippingLabels['shippingLabels'] = shippingItemsToPrint;
 
@@ -879,13 +881,13 @@ export class PackagingSlipItems {
 
 export class MultiShippingLabels {
     WorkOrderId: number;
-    WOPartNoId: number;
+    WorkOrderPartId: number;
     WOShippingId: number;
 }
 
 export class MultiPackagingSlips {
     WorkOrderId: number;
-    WOPartNoId: number;
+    WorkOrderPartNumId: number;
     WOPickTicketId: number;
     PackagingSlipId: number;
 }

@@ -73,6 +73,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() isListView: boolean = false;
     @Input() subWoMpnGridUpdated = false;
     @Input() triggerSubWoMpn = false;
+    //@Output() onWorkOrderPrintLoad = new EventEmitter();
     technicianOriginalList1: any = [];
     isRecCustomer: boolean;
     selectedCustomer: Customer;
@@ -3780,6 +3781,11 @@ if(res && res.response=='Record not Exist with these details. !' ){
 
     memoValidate() {
         this.disableForMemo = false;
+    }
+
+    onWorkOrderPrintLoadEvent()
+    {
+
     }
 
     doSomething(currentDate,workOrderPart,index){

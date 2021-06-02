@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-wo-part-list-form',
   templateUrl: './wo-part-list-form.component.html',
@@ -19,11 +20,11 @@ export class WoPartlistFromComponent implements OnInit,OnChanges {
 
   @Input() workOrderPartNumberId;
   @Input() workOrderId;
-  @Input() releaseFromId;
-  @Input() isView;
-  @Input() isEdit;
-  @Input() ReleaseDataForm;
-  @Output() updateRelreaseList = new EventEmitter();
+  // @Input() releaseFromId;
+  // @Input() isView;
+  // @Input() isEdit;
+  // @Input() ReleaseDataForm;
+  // @Output() updateRelreaseList = new EventEmitter();
   //ReleaseData: any;
   ReleaseData : any = {};
   isSpinnerVisible: boolean = true;
@@ -33,6 +34,8 @@ export class WoPartlistFromComponent implements OnInit,OnChanges {
   Printeddate2 : string;
   Issave: boolean = true;
   isconfirmsave : boolean = true;
+  endPointURL: any;
+  workOrderprintData: any = [];
   constructor(
     private authService: AuthService,
     private acRouter: ActivatedRoute,
@@ -46,21 +49,28 @@ export class WoPartlistFromComponent implements OnInit,OnChanges {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#woReleaseFromDiv').modal('show');
-    if(this.isEdit || this.isView)
-    {
-      this.BindData(this.ReleaseDataForm);
-    }else
-    {
-      this.GetWorkorderReleaseFromData();
-    }
-    }
+    this.GetWorkOrderPrintFormData();
+  }
     
 
   ngOnChanges() 
   {
   
   }
+
+  GetWorkOrderPrintFormData() {
+    this.isSpinnerVisible = true;
+    this.workOrderService.GetWorkOrderPartlistFormData(this.workOrderId,this.workOrderPartNumberId).subscribe(res => {
+        this.workOrderprintData = res[0];
+       // this.getWorkOrderCharges();
+        //this.onWorkOrderPrintLoad.emit();
+        this.isSpinnerVisible = false;
+    }, error => {
+        this.isSpinnerVisible = false;
+    })
+}
 
   get userName(): string {
     return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -96,128 +106,8 @@ onDate1(e)
 
 close()
 {
-    this.updateRelreaseList.emit();
+    //this.updateRelreaseList.emit();
 }
-
-onsave()
-{
-  this.isconfirmsave = true;
-  if(new Date(this.ReleaseData.date) <=  new Date(this.ReleaseData.receivedDate))
-  {
-    this.isconfirmsave = false;
-    this.alertService.showMessage(
-      '',
-      'Please Select Date greater than ReceivedDate',
-      MessageSeverity.warn
-  );
-
-  }
-
-  if(new Date(this.ReleaseData.date2) <=  new Date(this.ReleaseData.receivedDate))
-  {
-    this.isconfirmsave = false;
-    this.alertService.showMessage(
-      '',
-      'Please Select Date greater than ReceivedDate',
-      MessageSeverity.warn
-  );
-
-  }
-
-  if(this.isconfirmsave)
-  {
-    this.Issave = false;
-    this.CreateUpdateReleasedata();
-  }
-}
-
-
-BindData(response)
-{
-  this.ReleaseData = response;
-
-
-  
-  var date = new Date(this.ReleaseData.date);  
-  var dateformatted = moment(date).format('D/ MMMM/ YYYY');  
-
-  this.ReleaseData.date=date;
-
-  var date2 = new Date(this.ReleaseData.date2);  
-  var date2formatted = moment(date2).format('D/ MMMM/ YYYY');   
-
-  this.ReleaseData.date2=date2;
-
-let d = new Date(date);
-let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
-let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
-let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-this.Printeddate1 =`${da}/${mo}/${ye}`;
-
-let d1 = new Date(date);
-let ye1 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d1);
-let mo1 = new Intl.DateTimeFormat('en', { month: 'short' }).format(d1);
-let da1 = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d1);
-this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
-
-  // this.Printeddate1 =moment(date).format('D/ MMMM/ YYYY'); 
-  // this.Printeddate2 =moment(date2).format('D/ MMMM/ YYYY'); 
-  this.ReleaseData.printedName=this.userName;
-  this.ReleaseData.printedName2=this.userName;
-
-}
-
-  GetWorkorderReleaseFromData()
-  {
-    this.isSpinnerVisible = true;
-    this.workOrderService
-      .GetWorkorderReleaseFromData(this.workOrderId,this.workOrderPartNumberId)
-      .subscribe((response: any) => {
-        this.isSpinnerVisible = false;
-        this.BindData(response);
-
-      }, error => {
-        this.isSpinnerVisible = false;
-      });
-
-  }
-
-  CreateUpdateReleasedata()
-  {
-            this.ReleaseData.masterCompanyId= this.authService.currentUser.masterCompanyId;
-            this.ReleaseData.createdBy= this.userName;
-            this.ReleaseData.updatedBy= this.userName;
-            this.ReleaseData.createdDate= new Date();
-            this.ReleaseData.updatedDate= new Date();
-            this.ReleaseData.isActive= true;
-            this.ReleaseData.isDeleted= false;
-            this.ReleaseData.is8130from= true;
-            this.ReleaseData.isClosed= false;
-            if(this.isEdit)
-            {
-              this.ReleaseData.ReleaseFromId=this.releaseFromId;
-            }
-            else{
-              this.ReleaseData.ReleaseFromId=0;
-            }
-            this.ReleaseData.workOrderPartNoId=this.workOrderPartNumberId;
-            this.ReleaseData.WorkorderId=this.workOrderId;
-    this.workOrderService.CreateUpdateReleasefrom(this.ReleaseData).pipe(takeUntil(this.onDestroy$)).subscribe(
-      result => {
-          this.isSpinnerVisible = false;
-          this.isEdit = true;
-         
-          this.alertService.showMessage(
-              '',
-              '8130 from Added Succesfully',
-              MessageSeverity.success
-          );
-      },
-      err => {
-          this.handleError(err);
-      }
-  );
-  }
 
   handleError(err) {
     this.isSpinnerVisible = false;
@@ -226,9 +116,9 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   print(): void {
     //this.CreateUpdateReleasedata();
-    this.updateRelreaseList.emit();
+   // this.updateRelreaseList.emit();
     let printContents, popupWin;
-    printContents = document.getElementById('woReleaseFrom').innerHTML;
+    printContents = document.getElementById('wopartlistid').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
     popupWin.document.write(`

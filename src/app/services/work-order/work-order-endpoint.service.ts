@@ -1618,4 +1618,23 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.UpdateWorkOrderBillingInvoicing(wobillingInvoicingId, billingInvoicing));
           });
       }
+
+      GetWorkOrderPrintFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderPrintFormData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderPrintFormData(WorkorderId,workOrderPartNoId));
+          });
+      }
+
+      
+      GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderPartlistFormData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId));
+          });
+      }
 }

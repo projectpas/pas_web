@@ -796,4 +796,16 @@ getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> 
     );
   }
 
+  GetWorkOrderPrintFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.GetWorkOrderPrintFormData(WorkorderId,workOrderPartNoId)
+    );
+  }
+
+  GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId)
+    );
+  }
+
 }
