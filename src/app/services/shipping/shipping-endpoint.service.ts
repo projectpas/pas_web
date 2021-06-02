@@ -129,8 +129,12 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.isActive = SL.isActive;   
                 stockLine.createdBy = SL.createdBy;   
                 stockLine.updatedBy = SL.updatedBy;        
+                
+                if (stockLine.stockLineNumber && stockLine.stockLineNumber.length > 0 ) {
 
-                stockLines.push(stockLine);
+                } else {
+                    stockLines.push(stockLine);
+                }
             });
             
             let Obj = {

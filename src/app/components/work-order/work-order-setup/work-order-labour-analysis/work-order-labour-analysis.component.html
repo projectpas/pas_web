@@ -1,5 +1,5 @@
 <div class="card new-card">
-    <div class="card-header header" >
+    <div class="card-header header" *ngIf="!isSummarizedView">
       <div class="row">
         <div class="col">
           <h4 class="header-name"> Labor Analysis Overview</h4>
@@ -24,7 +24,7 @@
     [totalRecords]="totalRecords"
     [scrollable]="true" scrollHeight="450px">
 
-        <ng-template pTemplate="caption">
+        <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
             <div class="row">
                 <div class="col">
                 <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
@@ -116,7 +116,7 @@
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
             </tr>
-            <tr>
+            <tr  *ngIf="!isSummarizedView">
                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <input class="table-header-input-width" pInputText type="text" (input)="
                         dt.filter($event.target.value, col.field, 'contains')

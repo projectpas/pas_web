@@ -10,12 +10,13 @@ import { AuthService } from '../../../../services/auth.service';
 import { Subscription, Subject } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { CommonService } from '../../../../services/common.service';
 import { takeUntil } from 'rxjs/operators';
 // import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 import { workOrderGeneralInfo } from '../../../../models/work-order-generalInformation.model';
 import { Router } from '@angular/router';
+import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
 
 @Component({
     selector: 'app-work-order-complete-material-list',
@@ -215,7 +216,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     workorderSettings: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     enablePickTicket: boolean = false;
-
+    isViewItem:boolean=false;
+    stockLineId:any;
     constructor(
         private workOrderService: WorkOrderService,
         public itemClassService: ItemClassificationService,
@@ -357,6 +359,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
     }
     editNew(rowData) {
+        this.isViewItem=false;
         this.editData = undefined;
         this.cdRef.detectChanges();
         this.isEdit = true;
@@ -368,14 +371,32 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
     }
 
-    editStockLine(rowData) {
+    viewItem(rowData){
+        this.editData = undefined;
+        this.cdRef.detectChanges();
+        this.isEdit = true;
+        this.addNewMaterial = true;
+this.isViewItem=true;
+        this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
+        let contentPart = this.addPart;
+
+        this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+
+    }
+    viewStockSelectedRow(rowData) { 
+        this.stockLineId=undefined;
+        this.stockLineId=rowData.stockLineId;
+        this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+        this.modal.componentInstance.stockLineId = rowData.stockLineId;
+      }
+    editStockLine(rowData,parentRow) {
         this.editData = undefined;
         // this.cdRef.detectChanges();
         this.isEdit = true;
 
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
-        this.editData.method = 'StockLine'
-        // console.log("edit Data",this.editData)
+        this.editData.method = 'StockLine';
+        this.editData.quantity=parentRow.quantity;
         $("#showStockLineDetails").modal("show");
 
         // let contentPart = this.addPart;

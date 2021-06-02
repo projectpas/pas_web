@@ -19,6 +19,7 @@ import * as moment from 'moment';
 export class TextCommonComponent implements OnInit, OnChanges {
     @Input() moduleId;
     @Input() referenceId;
+    @Input() isSummarizedView: any = false;
     @Input() workOrderId: any;
     @Input() isView: boolean = false;
     @Input() savedWorkOrderData: any = [];

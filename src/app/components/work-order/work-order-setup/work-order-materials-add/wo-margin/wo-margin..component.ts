@@ -43,7 +43,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
   }
     ngOnInit() {
 }
-  ngOnChanges()    {
+  ngOnChanges()    { 
     this.formObject=={
       partNumberObj:undefined,
       quantity:0,
@@ -80,10 +80,23 @@ export class WoMarginComponent implements OnInit, OnChanges {
  this.formObject.unitOfMeasure=this.part.unitOfMeasure;
      this.formObject.unitOfMeasureId=this.part.unitOfMeasureId;
 
+     if(this.part.method=='ItemMaster'){
+      if (Number(this.formObject.stocklineQuantity) != 0) {
+        if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+          this.formObject.stocklineQuantity=this.formObject.quantity;
+        } 
+      } 
+    }else{
+      if (Number(this.formObject.stocklineQuantity) != 0) {
+        if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+         this.formObject.stocklineQuantity=this.formObject.quantity;
+          this.disableUpdateButton=true;
+        }
+      } 
+    }
 
-this.calculateExtendedCost();
-this.onChangeQuantityFromThis();
-// console.log("this.edit",this.editData)
+
+this.onChangeQuantityFromThis(); 
     if(this.editData){
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
@@ -117,6 +130,7 @@ this.onChangeQuantityFromThis();
      if(this.enableUpdateBtn==true){
        this.disableUpdateButton=false;
      }
+     this.calculateExtendedCost();
   }
 
   get masterCompanyId(): number {
@@ -298,11 +312,10 @@ onChangeQuantityFromThis() {
         this.invalidQuantityenteredForQuantityFromThis = true;
         this.disableUpdateButton=true;
       }
-      else if (  Number(this.formObject.stocklineQuantity) > Number(this.formObject.qtyAvailable)) {
-        this.invalidQuantityenteredForQuantityFromThis = true;
-        this.disableUpdateButton=true;
-        // this.errorMessage=''; partQuantityAvailable
-      } 
+      // else if (  Number(this.formObject.stocklineQuantity) > Number(this.formObject.qtyAvailable)) {
+      //   this.invalidQuantityenteredForQuantityFromThis = true;
+      //   this.disableUpdateButton=true;
+      // } 
     } else {
       this.invalidQuantityenteredForQuantityFromThis = true;
       this.disableUpdateButton=true;
