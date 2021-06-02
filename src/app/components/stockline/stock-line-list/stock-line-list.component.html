@@ -276,12 +276,12 @@
                 <th>PN <span class="clr-red">*</span></th>
                 <th>PN Description</th>
                 <th>Revised PN</th>
-                <th>OEM</th>
-                <th>PMA</th>
-                <th>DER</th>
+                <th class="min-width-60">OEM</th>
+                <th class="min-width-60">PMA</th>
+                <th class="min-width-60">DER</th>
                 <th>Item Group </th>
                 <th>Cond <span class="clr-red">*</span></th>
-                <th>Is Serialized</th>
+                <th class="min-width-80">Is Serialized</th>
                 <th>Serial Num <span class="clr-red">*</span></th>
                 <th>Stockline Num</th>
                 <th>NSN</th>
@@ -292,7 +292,7 @@
                 <th>Days Since Mfg</th>
                 <th>Days Since Tagged</th>
                 <th>Days Opened</th>
-                <th>Shelf Life</th>
+                <th class="min-width-80">Shelf Life</th>
                 <th>Shelf Life Exp Date</th>
                 <th>NHA <span class="clr-red">*</span></th>
                 <th>TLA <span class="clr-red">*</span></th>
@@ -321,14 +321,14 @@
                 <th>Traceable To</th>
                 <th>ECCN</th>
                 <th>ITAR</th>
-                <th>Qty On Hand <span class="clr-red">*</span></th>
-                <th>Qty Reserved</th>
-                <th>Qty Issued</th>
-                <th>Qty Avail</th>
-                <th>PO Unit Cost</th>
-                <th>RO Unit Cost</th>
-                <th>Unit Sale Price</th>
-                <th>Core Cost/Unit</th>
+                <th class="min-width-90">Qty On Hand <span class="clr-red">*</span></th>
+                <th class="min-width-90">Qty Reserved</th>
+                <th class="min-width-90">Qty Issued</th>
+                <th class="min-width-90">Qty Avail</th>
+                <th class="min-width-90">PO Unit Cost</th>
+                <th class="min-width-90">RO Unit Cost</th>
+                <th class="min-width-90">Unit Sale Price</th>
+                <th class="min-width-90">Core Cost/Unit</th>
                 <th>GL Account</th>
                 <th>Site <span class="clr-red">*</span></th>
                 <th>Warehouse</th>
@@ -338,12 +338,12 @@
                 <th>Lot Num</th>
                 <th>Lot Description</th>
                 <th>Lot Cost</th>
-                <th>Black List</th>
+                <th class="min-width-60">Black List</th>
                 <th>Black List Reason</th>
-                <th>Accident</th>
+                <th class="min-width-60">Accident</th>
                 <th class="min-width-250">Accident Reason</th>
-                <th>Incident</th>
-                <th>Incident Reason</th>
+                <th class="min-width-60">Incident</th>
+                <th class="min-width-250">Incident Reason</th>
                 <th colspan="4"></th>
                 <th>Part Cert Num</th>
                 <th>Certify By</th>
@@ -355,7 +355,7 @@
                 <th>Inspection By</th>
                 <th>Inspection Date</th>
                 <th>Integration With</th>
-                <th>Memo <span class="clr-red">*</span></th>
+                <th class="min-width-250">Memo <span class="clr-red">*</span></th>
                 <th>Cycles Remaining</th>
                 <th>Cycles Since New</th>
                 <th>Cycles Since Ovh</th>
@@ -369,7 +369,7 @@
                 <th>Last Since New</th>
                 <th>Last Since Ovh</th>
                 <th>Last Since Insp</th>
-                <th>Is Active</th>
+                <th class="min-width-60">Is Active</th>
                 <th>Created Date</th>
                 <th>Created By</th>
                 <th>Updated Date</th>
@@ -480,10 +480,10 @@
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'incidentReason', audit.incidentReason) ? 'black' : 'red'}">
                     <p [innerHTML]="audit.incidentReason"></p>    
                 </td>
-                <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">{{ audit.companyName }}</td>
-                <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">{{ audit.buName }}</td>
-                <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'divName', audit.divName) ? 'black' : 'red'}">{{ audit.divName }}</td>
-                <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">{{ audit.deptName }}</td>
+                <td class="min-w-130" [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">{{ audit.companyName }}</td>
+                <td class="min-w-130" [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">{{ audit.buName }}</td>
+                <td class="min-w-130" [ngStyle]="{color: getColorCodeForHistory(i, 'divName', audit.divName) ? 'black' : 'red'}">{{ audit.divName }}</td>
+                <td class="min-w-130" [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">{{ audit.deptName }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'partCertificationNumber', audit.partCertificationNumber) ? 'black' : 'red'}">{{ audit.partCertificationNumber }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedByName', audit.certifiedByName) ? 'black' : 'red'}">{{ audit.certifiedByName }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedDate', audit.certifiedDate) ? 'black' : 'red'}">{{ audit.certifiedDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
