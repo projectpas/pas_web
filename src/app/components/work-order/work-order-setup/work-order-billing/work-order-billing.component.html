@@ -342,7 +342,7 @@
                               <!-- </p-dropdown> -->
                               <p-dropdown  [showClear]="true" class="p-dropdown-100" 
                                 [options]="currencyList" filter="true" [(ngModel)]="billingorInvoiceForm.currencyId" name="currency" [resetFilterOnHide]="true" placeholder="Select" 
-                                [disabled]="isViewMode"  class="p-dropdown-custom-md-Header"
+                                [disabled]="isViewMode"  class="p-dropdown-custom-md-Header" required
                                 ></p-dropdown>
                             </div>
                           </div>
@@ -1363,6 +1363,21 @@
       <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
   </div>
 </ng-template>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
 
 
 

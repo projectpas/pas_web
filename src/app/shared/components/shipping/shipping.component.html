@@ -143,18 +143,18 @@
                                                 matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i
                                                     class="fa fa-print"></i></a>
                                         </span>
-                                        <span>
+                                        <span *ngIf="ship.qtyShipped > 0">
                                             <a class="btn nobg" matTooltip="Print Shipping Label"
                                                 matTooltipPosition="above" (click)="printShippingLabel(ship);"><i
                                                     class="fa fa-print"></i></a>
                                         </span>
-                                        <span>
+                                        <!-- <span>
                                             <button *ngIf="ship.qtyShipped > 0" class="btn nobg font-bold"
                                                 mat-icon-button (click)="viewShippingData(ship)" matTooltip="View Shipping"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
                                             </button>
-                                        </span>
+                                        </span> -->
                                         <span>
                                             <button class="btn nobg font-bold" *ngIf="ship.qtyShipped == 0"
                                                 type="submit" (click)="onSelectPartNumber(ship)"
@@ -201,7 +201,7 @@
     </div>
 </div>
 
-<div class="card align-center" >
+<div class="card align-center" *ngIf="partSelected">
     <div class="card-body">
         <form #shippingForm="ngForm">
             <div class="card-body" style="padding-top: 5px; padding-bottom: 0px;">
@@ -386,6 +386,19 @@
                                         placeholder="Select" [showClear]="true"
                                         [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
                                         (onChange)="btnChange()"></p-dropdown>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="col-md-4">
+                                    <label class="sale-order-shipping-lable">No of Containers</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="display-flex inline-block">
+                                        <input type="number" class="input-field-value" pKeyFilter="num" pInputText
+                                            maxlength="10" [(ngModel)]="shippingHeader.noOfContainer"
+                                            name="noOfContainer" id="noOfContainer" title="No Of Container"
+                                            (keyup)="btnChange()" [disabled]="isViewShipping" required />
+                                    </span>
                                 </div>
                             </div>
                         </div>
