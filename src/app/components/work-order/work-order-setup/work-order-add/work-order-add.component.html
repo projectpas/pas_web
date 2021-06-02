@@ -1155,10 +1155,21 @@
                        
                             </div>
                     </li>
-                    <li class="nav-item"*ngIf="!isSubWorkOrder" >
+                    <li class="nav-item" *ngIf="!isSubWorkOrder" >
                         <a class="nav-link" id="pills-contact-tab" role="tab"
                             [ngClass]="{active : gridActiveTab === 'releasefrom'}"
-                            (click)="gridTabChange('releasefrom')" >8130 Form</a>
+                            (click)="gridTabChange('releasefrom')" >Release Form</a>
+                    </li>
+                    <li class="nav-item dropdown" *ngIf="!isSubWorkOrder">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workorderprint'}">Work Order Print
+                            </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item"
+                            (click)="gridTabChange('workorderfrom')"> Work Order Form</a>
+                            <a class="dropdown-item"
+                            (click)="gridTabChange('workorderpartfrom')">Work Order Part Form</a>
+                            </div>
                     </li>
                 </ul>
                 <div *ngIf="isWorkOrderMainView && mainWorkOrderId !=0"
@@ -1302,6 +1313,14 @@
                         [selectedPartNumber]="selectedPartNumber" [isSubWorkOrder]="isSubWorkOrder"
                         [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails">
                     </app-work-order-analysis>
+                </div>
+                <div *ngIf="(gridActiveTab == 'workorderfrom')" [ngClass]="{hidedata: gridActiveTab !== 'workorderfrom'}">
+                    <app-wo-print-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-print-form>
+                </div>
+                <div *ngIf="(gridActiveTab == 'workorderpartfrom')" [ngClass]="{hidedata: gridActiveTab !== 'workorderpartfrom'}">
+
+                    <!-- <app-woq-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-woq-form> -->
+                    <app-wo-part-list-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-part-list-form>
                 </div>
 
                 <div *ngIf="(gridActiveTab == 'laboranalysis')"

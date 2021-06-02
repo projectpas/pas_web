@@ -26,7 +26,7 @@ export class WoReleaseEasaFromComponent implements OnInit {
   @Output() updateRelreaseList = new EventEmitter();
   ReleaseData : any = {};
   //ReleaseData: any;
-  isSpinnerVisible: boolean = true;
+  isSpinnerVisible: boolean = false;
   Issave: boolean = true;
   isconfirmsave : boolean = true;
   currentDate = new Date();
@@ -148,24 +148,24 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   onsave()
   {
- 
-    if(new Date(this.ReleaseData.date) >=  new Date(this.ReleaseData.receivedDate))
+    this.isconfirmsave = true;
+    if(new Date(this.ReleaseData.date) <=  new Date(this.ReleaseData.receivedDate))
     {
       this.isconfirmsave = false;
       this.alertService.showMessage(
         '',
-        'Please Select Date less than ReceivedDate',
+        'Please Select Date greater than ReceivedDate',
         MessageSeverity.warn
     );
 
     }
 
-    if(new Date(this.ReleaseData.date2) >=  new Date(this.ReleaseData.receivedDate))
+    if(new Date(this.ReleaseData.date2) <=  new Date(this.ReleaseData.receivedDate))
     {
       this.isconfirmsave = false;
       this.alertService.showMessage(
         '',
-        'Please Select Date less than ReceivedDate',
+        'Please Select Date greater than ReceivedDate',
         MessageSeverity.warn
     );
 
@@ -185,6 +185,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   CreateUpdateReleasedata()
   {
+            this.isSpinnerVisible = true;
             this.ReleaseData.masterCompanyId= this.authService.currentUser.masterCompanyId;
             this.ReleaseData.createdBy= this.userName;
             this.ReleaseData.updatedBy= this.userName;
@@ -210,7 +211,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
        
           this.alertService.showMessage(
               '',
-              '9130 from Added Succesfully',
+              '9130 form Added Succesfully',
               MessageSeverity.success
           );
       },
