@@ -191,6 +191,7 @@ export class RepairOrderPart {
     parentDivisionId: number = 0;
     parentDeptId: number = 0;
     quantityDrafted: number = 0;
+    showHeader:boolean
 }
 
 export class TimeLife {

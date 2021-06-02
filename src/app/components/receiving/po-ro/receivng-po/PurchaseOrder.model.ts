@@ -78,6 +78,7 @@ export class PurchaseOrderPart {
     quantityActuallyReceived: number;
     quantityRejected: number;
     uomId: number;
+    unitOfMeasure:string;
     quantityOrdered: number;
     quantityBackOrdered: number;
     unitCost: number;

@@ -2681,7 +2681,26 @@ export class RoSetupComponent implements OnInit {
 		this.getAllACTailNum('');
 	}
 
-	saveRepairOrderHeader() {
+	CloseModel(status){
+		this.modal.close();		
+		if (status){
+			this.saveRepairOrderHeader('');
+		}
+		else{
+			this.headerInfo.statusId = this.openStatusId;
+			this.enableHeaderSaveBtn = true;
+		}
+	}
+
+	saveRepairOrderHeader(roConfirm) {
+
+		if(roConfirm!=''){
+			if (this.headerInfo.statusId == this.fulfillingStatusId) {
+				this.modal = this.modalService.open(roConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
+				return;
+			}
+	    }
+
 		if (this.createROForm.invalid ||
 			this.headerInfo.companyId == 0
 			|| this.headerInfo.companyId == null) {
@@ -2867,10 +2886,10 @@ export class RoSetupComponent implements OnInit {
 
 			if (this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
-				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
+				&& this.partListData[i].quantityOrdered > this.partListData[i].minimumOrderQuantity) {
 				this.partListData[i].quantityOrdered = this.partListData[i].minimumOrderQuantity;
 				this.isSpinnerVisible = false;
-				errmessage = errmessage + '<br />' + 'Minimum Order Qty : ' + this.partListData[i].minimumOrder + '<br /> Order quantity can not be less then Minimum order quantity.'
+				errmessage = errmessage + '<br />' + 'StockLine Qty Available : ' + this.partListData[i].minimumOrder + '<br /> Order quantity can not be more then available quantity.'
 			}
 			if (!this.partListData[i].itemMasterId) {
 				this.isSpinnerVisible = false;
@@ -2907,6 +2926,11 @@ export class RoSetupComponent implements OnInit {
 			if (!this.partListData[i].managementStructureId || this.partListData[i].managementStructureId == 0) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Management Structure is required."
+			}
+			var Qty = 0;
+			var childQty = 0;
+			if (this.partListData[i].quantityOrdered) {
+				Qty = this.partListData[i].quantityOrdered ? parseInt(this.partListData[i].quantityOrdered.toString().replace(/\,/g, '')) : 0;
 			}
 			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
 				for (let j = 0; j < this.partListData[i].childList.length; j++) {
@@ -2951,9 +2975,18 @@ export class RoSetupComponent implements OnInit {
 						this.isSpinnerVisible = false;
 						errmessage = errmessage + '<br />' + "Split Shipment Need By is required."
 					}
-
+					if (this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered > 0) {
+						childQty = childQty + parseInt(this.partListData[i].childList[j].quantityOrdered.toString().replace(/\,/g, ''));
+					}
 				}
 			}
+			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
+				if (Qty != childQty) {
+					this.isSpinnerVisible = false;
+					errmessage = errmessage + '<br />' + "Part Qty Order and Sum of Split Shipment Qty Ordered Shipment should be same."
+				}
+			}
+
 			if (errmessage != '') {
 				var message = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + errmessage
 				this.alertService.showStickyMessage("Validation failed", message, MessageSeverity.error, 'Please enter Qty');
@@ -4386,7 +4419,7 @@ export class RoSetupComponent implements OnInit {
 		this.parentQty = event.target.value;
 		if (partList.minimumOrderQuantity > 0
 			&& this.parentQty > 0
-			&& this.parentQty < partList.minimumOrderQuantity
+			&& this.parentQty > partList.minimumOrderQuantity
 		) {
 			partList.quantityOrdered = partList.minimumOrderQuantity;
 			var childQty = 0;
@@ -4402,7 +4435,7 @@ export class RoSetupComponent implements OnInit {
 
 			this.alertService.showMessage(
 				'Error',
-				'Minimum Order Qty : ' + partList.minimumOrderQuantity + '<br /> Order quantity can not be less then Minimum order quantity.',
+				'StockLine Qty Available : ' + partList.minimumOrderQuantity + '<br /> Order quantity can not be more then available quantity.',
 				MessageSeverity.error
 			);
 			return;

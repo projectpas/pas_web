@@ -379,7 +379,7 @@
                     </div>
                 </div>
                 <div *ngIf="toggle_ro_header">
-                    <button class="btn btn-primary pull-right toggle-btn-align" (click)="saveRepairOrderHeader()"
+                    <button class="btn btn-primary pull-right toggle-btn-align" (click)="saveRepairOrderHeader(roConfirm)"
                         [disabled]="!createROForm.valid" [disabled]="!enableHeaderSaveBtn">{{isEditModeHeader ? 'Update'
                         : 'Save'}}</button>
                 </div>
@@ -2936,6 +2936,28 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
+<ng-template class="modal fade" #roConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="CloseModel(false)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <strong>                
+                Do you want to fulfill this Repair Order? After fullfill you are not able to edit this Repair Order.
+            </strong>            
+        </div>
+        <div class="modal-footer">            
+            <button type="button" class="btn btn-primary"
+                (click)="CloseModel(true);">Yes</button>
+            <button type="button" class="btn btn-danger"
+                (click)="CloseModel(false)">No</button>
+        </div>
     </div>
 </ng-template>
 

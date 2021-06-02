@@ -403,7 +403,7 @@ export class ReceivngPoComponent implements OnInit {
 
     private loadPurchaseOrderData(purchaseOrder: PurchaseOrder, partms) {
         this.purchaseOrderData = purchaseOrder;
-        let parentPart: PurchaseOrderPart;
+        let parentPart: PurchaseOrderPart;        
         var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
         for (let parent of allParentParts) {
             parent.currentSLIndex = 0;
@@ -605,6 +605,8 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     public toggleStockLine(event: any, part: PurchaseOrderPart): void {
+        var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
+        console.log(allParentParts)
         var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
         if (!condtion || condtion == undefined) {
@@ -628,7 +630,13 @@ export class ReceivngPoComponent implements OnInit {
             manufacturer.Key = part.itemMaster.manufacturerId.toString();
             manufacturer.Value = part.itemMaster.manufacturerName.toString();
             this.ManufacturerList.push(manufacturer);
-        }
+        }        
+        
+        // var uom = this.allPurchaseUnitOfMeasureinfo.find(temp => temp.value == part.uomId)
+        // if (!uom || uom == undefined) {
+        //     var dt = { value: allParentParts[0].uomId, label: allParentParts[0].unitOfMeasure }
+        //     this.allPurchaseUnitOfMeasureinfo.push(dt);
+        // }
 
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
@@ -746,6 +754,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.ownerType = AppModuleEnum.Vendor;
             stockLine.owner = this.purchaseOrderData.vendor.vendorId;
 
+            //stockLine.unitOfMeasureId = part.uomId;
 
             stockLine.maincompanylist = part.maincompanylist;
             stockLine.parentCompanyId = part.parentCompanyId;
