@@ -22,6 +22,8 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     @Input() customerContactList: any;
     @Input() subWorkOrderDetails;
     @Input() isSubWorkOrder: any = false;
+    @Input() isSummarizedView: any = false;
+    
     @Input() subWOPartNoId;
     @Input() moduleId;
     @Input() referenceId;
