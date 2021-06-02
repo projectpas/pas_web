@@ -2513,7 +2513,26 @@ export class PurchaseSetupComponent implements OnInit {
 		this.loadModuleListForVendorComp();
 	}
 
-	savePurchaseOrderHeader() {
+	CloseModel(status){
+		this.modal.close();		
+		if (status){
+			this.savePurchaseOrderHeader('');
+		}
+		else{
+			this.headerInfo.statusId = this.openStatusId;
+			this.enableHeaderSaveBtn = true;
+		}
+	}
+
+	savePurchaseOrderHeader(poConfirm) {
+		
+		if(poConfirm!=''){
+			if (this.headerInfo.statusId == this.fulfillingStatusId) {
+				this.modal = this.modalService.open(poConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
+				return;
+			}
+	    }
+
 		if (this.createPOForm.invalid ||
 			this.headerInfo.companyId == 0
 			|| this.headerInfo.companyId == null) {

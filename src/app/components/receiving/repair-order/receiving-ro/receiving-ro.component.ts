@@ -400,6 +400,7 @@ export class ReceivingRoComponent implements OnInit {
             if (splitParts.length > 0) {
                 parent.hasChildren = true;
                 parent.quantityToRepair = 0;
+
                 for (let childPart of splitParts) {
                     parent.stockLineCount += childPart.stockLineCount;       
                     parent.quantityDrafted += childPart.quantityDrafted; 
@@ -415,14 +416,14 @@ export class ReceivingRoComponent implements OnInit {
             }
         }
         for (let part of this.repairOrderData) {
-            part.toggleIcon = false;
+            part.toggleIcon = true;
             part.stocklineListObj = [];
             part.timeLifeList = [];
             part.currentSLIndex = 0;
             part.currentTLIndex = 0;
             part.currentSERIndex = 0;
             part.isDisabledTLboxes = false;
-            part.visible = false;
+            part.visible = true;
             part.showStockLineGrid = false;
             part.isSameDetailsForAllParts = false;
             this.arraySitelist.push(part.itemMaster.siteId);
@@ -440,8 +441,23 @@ export class ReceivingRoComponent implements OnInit {
             }
             this.getManagementStructureForPart(part, partms)
         }
+
         this.isSpinnerVisible = false;
         this.getAllSite();
+        for (let i = 0; i < this.repairOrderData.length; i++) {
+            var K = 0;
+            this.repairOrderData.forEach(p => {
+                if (p.parentId == this.repairOrderData[i].repairOrderPartRecordId) {
+                    if (K == 0) {
+                        p.showHeader = true;
+                        K = 1;
+                    }
+                    else {
+                        p.showHeader = false;
+                    }
+                }
+            });
+        }
     }
 
     getManagementStructureForPart(partList, response) {
