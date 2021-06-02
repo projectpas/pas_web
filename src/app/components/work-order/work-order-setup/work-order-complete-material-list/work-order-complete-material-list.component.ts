@@ -366,6 +366,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.addNewMaterial = true;
 
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
+        // this.editData.totalStocklineQtyReq=10;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
 

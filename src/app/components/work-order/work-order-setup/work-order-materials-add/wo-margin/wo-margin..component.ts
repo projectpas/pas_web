@@ -114,6 +114,7 @@ this.onChangeQuantityFromThis();
       this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
       //this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
     }
+    this.formObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
      this.formObject.taskId=this.editData.taskId;
      this.formObject.provisionId=this.editData.provisionId;
      this.formObject.isDeferred=this.editData.isDeferred;
@@ -288,11 +289,15 @@ calculateExtendedCost(): void {
 // errorMessage:any;
 onChangeQuantityFromThis() {
   // this.errorMessage=''; 
-
   this.invalidQuantityenteredForQuantityFromThis =false;
   if(this.part.method=='ItemMaster'){
     if (Number(this.formObject.stocklineQuantity) != 0) {
       if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
+      }
+      else   if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
@@ -312,6 +317,11 @@ onChangeQuantityFromThis() {
         this.invalidQuantityenteredForQuantityFromThis =true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
         this.disableUpdateButton=true;
+      }
+      else if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
       }
       else if (Number(this.formObject.stocklineQuantity) < 0)
       {

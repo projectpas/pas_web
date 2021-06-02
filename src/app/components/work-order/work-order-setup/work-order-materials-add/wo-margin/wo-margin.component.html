@@ -43,12 +43,12 @@
           disabled="true" [(ngModel)]="part.quantity " style="width: 100%;" />
       </div>
     </div>
-    <div class="col-4 column">
+    <div class="col-2 column">
       <div class="form-group"> 
         <!-- [disabled]="!isStockLine" -->
         <label>Quantity from this <span *ngIf="part.method=='ItemMaster'">PN</span><span
             *ngIf="part.method=='StockLine'">{{part.stockLineNumber}}</span></label>
-        <input type="text" class="form-control   text-right" name="stocklineQuantity"
+        <input type="number" class="form-control   text-right" name="stocklineQuantity"
          [(ngModel)]="formObject.stocklineQuantity" 
           (input)="onChangeQuantityFromThis();calculateExtendedCost()" (ngModelChange)="getActive()"
           name="quantity" autocomplete="off" />
@@ -59,14 +59,14 @@
       </div>
     </div>
      <div class="col-6 column">
-        <div class="col-4 column">
+        <div class="col-2 column">
           <div class="form-group">
             <label>Qty On Hand</label>
             <input type="text" class="form-control text-right" [ngModel]="formObject.qtyOnHand" name="qtyOnHand"
                disabled="true" /> 
           </div>
         </div>
-        <div class="col-4 column">
+        <div class="col-2 column">
           <div class="form-group">
             <label>Qty Available</label>
             <input type="text" class="form-control text-right" [ngModel]="formObject.qtyAvailable" name="qtyAvailable"

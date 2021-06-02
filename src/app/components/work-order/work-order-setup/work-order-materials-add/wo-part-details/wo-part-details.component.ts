@@ -114,6 +114,7 @@ export class WoPartDetailsComponent implements OnChanges {
 
   ngOnInit() {    
    if(this.editData){
+     console.log("wo part edit Data",this.editData)
     this.disableforPartNum=true;
     this.formObject.restrictPMA= false,
     this.formObject.restrictDER= false,
@@ -235,6 +236,9 @@ export class WoPartDetailsComponent implements OnChanges {
       event.srcElement.checked=false;
       part.method='ItemMaster';
       this.materialCreateObject=part;
+      if(this.editData){
+        this.materialCreateObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
+      }
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject.conditionCodeId=part.conditionId;
@@ -292,6 +296,9 @@ export class WoPartDetailsComponent implements OnChanges {
       event.srcElement.checked=false;
   part.method='StockLine';
     part.childPartChecked=true;
+    if(this.editData){
+      this.materialCreateObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
+    }
     this.materialCreateObject=part;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable;
