@@ -41,13 +41,12 @@ export class RepairOrderPrintTemplateComponent implements OnInit {
         ...res[0],
         shippingCost: res[0].shippingCost ? formatNumberAsGlobalSettingsModule(res[0].shippingCost, 2) : '0.00',
         handlingCost: res[0].handlingCost ? formatNumberAsGlobalSettingsModule(res[0].handlingCost, 2) : '0.00',
+        shippingandhandlingCost : res[0].shippingCost + res[0].handlingCost ? formatNumberAsGlobalSettingsModule(res[0].shippingCost + res[0].handlingCost , 2) : '0.00',       
         printdate: new Date(),
         itemcount: res[1].length
-      };
-      console.log(this.roHeaderAdd)
+      };      
       this.vendorInfo = res[2]; 
-      this.managementStructureHeaderData = res[3];  
-      
+      this.managementStructureHeaderData = res[3];
       res[1].map(x => {
         const partList = {
           ...x,
@@ -61,23 +60,30 @@ export class RepairOrderPrintTemplateComponent implements OnInit {
         }
         this.roPartsList.push(partList);
       });
-      console.log(this.roPartsList)
-
+      this.getTotalExtCost();      
+      this.finaltotals(); 
     }, err => {
       this.isSpinnerVisible = false;
     });
   }
-
-  getTotalExtCost(array) {
-    let totalExtCost = 0;
-    if (array) {
-      array.map(x => {
-        x.tempExtCost = x.extendedCost ? parseFloat(x.extendedCost.toString().replace(/\,/g, '')) : 0;
-        totalExtCost += x.tempExtCost;
-      })
-      totalExtCost = totalExtCost ? formatNumberAsGlobalSettingsModule(totalExtCost, 2) : '0.00';
-    }
-    return totalExtCost;
+  
+  totalExtCost: any;
+  getTotalExtCost() {
+		this.totalExtCost = 0;
+		this.roPartsList.map(x => {
+			x.tempExtCost = x.extendedCost ? parseFloat(x.extendedCost.toString().replace(/\,/g, '')) : 0;
+			this.totalExtCost += x.tempExtCost;
+		})
+		this.totalExtCost = this.totalExtCost ? formatNumberAsGlobalSettingsModule(this.totalExtCost, 2) : '0.00';
   }
+  
+  finaltotal:any;
+  finaltotals(){
+    this.finaltotal = 0;
+    let txc  = this.totalExtCost.replace(",", "");
+    let shc = this.roHeaderAdd.shippingandhandlingCost.replace(",",""); 
+    this.finaltotal = (parseFloat(txc) + parseFloat(shc)) ? formatNumberAsGlobalSettingsModule((parseFloat(txc) + parseFloat(shc)),2) : '0.00';   
+  }
+
 
 }

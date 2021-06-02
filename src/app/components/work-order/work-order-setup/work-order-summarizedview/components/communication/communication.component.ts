@@ -9,7 +9,7 @@ import { AlertService, MessageSeverity } from '../../../../../../services/alert.
     selector: 'app-communication-wo-summarization',
     templateUrl: 'communication.component.html',
     styleUrls: ['./communication.component.scss']
-})
+}) 
 
 export class CommunicationComponent implements OnInit, OnChanges {
     @Input() value;
@@ -56,10 +56,10 @@ export class CommunicationComponent implements OnInit, OnChanges {
                         header: 'Part Description',
                         field: 'partDescription'
                     },
-                    {
-                        header: 'Revised PN',
-                        field: 'revisedPN'
-                    },
+                    // {
+                    //     header: 'Revised PN',
+                    //     field: 'revisedPN'
+                    // },
                     {
                         header: 'Memo',
                         field: 'memo'

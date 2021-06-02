@@ -10,12 +10,12 @@ import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 @Component({
-  selector: 'app-wo-release-from',
-  templateUrl: './wo-release-from.component.html',
-  styleUrls: ['./wo-release-from.component.css'],
+  selector: 'app-wo-part-list-form',
+  templateUrl: './wo-part-list-form.component.html',
+  styleUrls: ['./wo-part-list-form.component.scss'],
   providers:[DatePipe]
 })
-export class WoReleaseFromComponent implements OnInit,OnChanges {
+export class WoPartlistFromComponent implements OnInit,OnChanges {
 
   @Input() workOrderPartNumberId;
   @Input() workOrderId;
@@ -26,7 +26,7 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
   @Output() updateRelreaseList = new EventEmitter();
   //ReleaseData: any;
   ReleaseData : any = {};
-  isSpinnerVisible: boolean = false;
+  isSpinnerVisible: boolean = true;
   modal: NgbModalRef;
   private onDestroy$: Subject<void> = new Subject<void>();
   Printeddate1 : string;
@@ -184,7 +184,6 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   CreateUpdateReleasedata()
   {
-           this.isSpinnerVisible = true;
             this.ReleaseData.masterCompanyId= this.authService.currentUser.masterCompanyId;
             this.ReleaseData.createdBy= this.userName;
             this.ReleaseData.updatedBy= this.userName;
@@ -210,7 +209,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
          
           this.alertService.showMessage(
               '',
-              '8130 form Added Succesfully',
+              '8130 from Added Succesfully',
               MessageSeverity.success
           );
       },
