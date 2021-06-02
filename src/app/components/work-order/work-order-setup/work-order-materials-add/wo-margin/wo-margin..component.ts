@@ -107,19 +107,20 @@ this.onChangeQuantityFromThis();
      this.formObject.quantity=this.editData.quantity;
     //  this.formObject.qtyOnHand=this.editData.qtyOnHand;
      if(this.isStockLine){
-      this.formObject.qtyAvailable = this.editData.partQuantityAvailable;
-      this.formObject.qtyOnHand=this.editData.partQuantityOnHand;
-   }
-  //  else{
-    // this.formObject.qtyAvailable=this.editData.qtyAvail;
-  //  }
+      this.formObject.qtyAvailable = this.part.partQuantityAvailable;
+      this.formObject.unitCost= this.editData.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(this.editData.stocklineUnitCost, 2) : '0.00';
+    }else{
+      this.formObject.qtyAvailable=this.editData.qtyAvail;
+      this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
+      //this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+    }
      this.formObject.taskId=this.editData.taskId;
      this.formObject.provisionId=this.editData.provisionId;
      this.formObject.isDeferred=this.editData.isDeferred;
      this.formObject.memo=this.editData.memo;
      this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
      this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
-     this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+     
      this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
       this.getTaskList();
       this.provisionList();
@@ -273,6 +274,7 @@ onCloseTextAreaInfo() {
   $("#textarea-popup2").modal("hide");
 }
 calculateExtendedCost(): void {
+  debugger;
   this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
   this.formObject.stocklineQuantity = this.formObject.stocklineQuantity ? this.formObject.stocklineQuantity.toString().replace(/\,/g, '') : 0;
   if (this.formObject.stocklineQuantity != 0 && this.formObject.unitCost) {

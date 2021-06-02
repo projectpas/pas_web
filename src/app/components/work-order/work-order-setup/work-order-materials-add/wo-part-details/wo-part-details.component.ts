@@ -230,15 +230,17 @@ export class WoPartDetailsComponent implements OnChanges {
     let checked: boolean = event.srcElement.checked;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable; 
- if(checked==true){
+
+    if(checked==true){
       event.srcElement.checked=false;
- part.method='ItemMaster';
+      part.method='ItemMaster';
       this.materialCreateObject=part;
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject.conditionCodeId=part.conditionId;
       this.materialCreateObject.itemMasterId=part.itemMasterId;
       this.materialCreateObject.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
+      //this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
       this.materialCreateObject.partNumber=part.partNumber;
       this.materialCreateObject.itemClassificationId=part.itemClassificationId;
       this.materialCreateObject.itemClassification=part.itemClassification;
@@ -296,6 +298,7 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject.conditionCodeId=part.conditionId;
     this.materialCreateObject.itemMasterId=part.itemMasterId;
     this.materialCreateObject.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
+    //this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
     this.materialCreateObject.partNumber=part.partNumber;
     this.materialCreateObject.itemClassificationId=part.itemClassificationId;
     this.materialCreateObject.itemClassification=part.itemClassification;
