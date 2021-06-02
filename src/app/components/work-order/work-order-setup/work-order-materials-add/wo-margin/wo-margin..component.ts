@@ -108,7 +108,7 @@ this.onChangeQuantityFromThis();
     //  this.formObject.qtyOnHand=this.editData.qtyOnHand;
      if(this.isStockLine){
       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
-      this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
+      this.formObject.unitCost= this.editData.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(this.editData.stocklineUnitCost, 2) : '0.00';
     }else{
       this.formObject.qtyAvailable=this.editData.qtyAvail;
       this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
