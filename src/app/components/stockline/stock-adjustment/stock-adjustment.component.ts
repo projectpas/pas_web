@@ -91,6 +91,7 @@ export class StockAdjustmentComponent implements OnInit {
 	lotCostAllow: boolean = false;
 	timeLifeAllow: boolean = false;
 	sourceTimeLife: any = {};
+	currentItem:any={};
 	timeLifeCyclesId: number;
 	legalEntityId: number;
 	defaultCurrencyId: number;
@@ -168,87 +169,16 @@ export class StockAdjustmentComponent implements OnInit {
             this.itemTypesList = res;
         })
 	}
-	onAddStockMemo(){
-		this.stockMemoInfo=this.stocklineAdjustmentData.item.adjustmentMemo;
+	onAddStockMemo(currentItem){
+this.currentItem=currentItem;
+		// this.stockMemoInfo=this.stocklineAdjustmentData.item.adjustmentMemo;
 		
 	}
 	onSaveStockMemo(){
 	
-				this.stocklineAdjustmentData.item.adjustmentMemo=this.stockMemoInfo;
+				this.currentItem.adjustmentMemo=this.stockMemoInfo;
 		
 			}
-
-	// onAddStockMemo(name){
-	// 	if(name=='ManagementStructureMemo'){
-	// 		this.stockMemoLabel='Management Structure Memo';
-	// 		this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-
-	// 	}
-	// 	else if(name=='siteAdjustmentMemo'){
-	// 		this.stockMemoLabel='Site Adjustment Memo';
-	// 		this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-	// 	}
-	// 	else if(name=='categoryAdjustmentMemo'){
-	// 		this.stockMemoLabel='Category Adjustment Memo';
-    //         this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-	// 	}
-	// 	else if(name=='partNumAdjustmentMemo'){
-	// 		this.stockMemoLabel='Part Num Adjustment Memo';
-	// 		this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-
-	// 	}
-	// 	else if(name='serialNumAdjustmentMemo'){
-	// 		this.stockMemoLabel='Serial Num Adjustment Memo';
-	// 		this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-	// 	}
-	// 	else if(name='onHandAdjustmentMemo'){
-	// 		this.stockMemoLabel='On Hand Adjustment Memo';
-	// 		this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-	// 	}
-	// 	else if(name='unitCostAdjustmentMemo'){
-	// 		this.stockMemoLabel='Unit Cost Adjustment Memo';
-	// 		this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-	// 	}
-	// 	else if(name='unitSalesPriceAdjustmentMemo'){
-	// 		this.stockMemoLabel='Unit Sales Price Adjustment Memo';
-	// 		this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-	// 	}
-	// 	else if(name=='lotCostAdjustmentMemo'){
-	// 		this.stockMemoLabel='Lot Cost Adjustment Memo';
-	// 		this.stockMemoInfo=this.stocklineAdjustmentData.adjustmentMemo;
-	// 	}
-	// }
-
-	// onSaveStockMemo(){
-	// 	if(this.stockMemoLabel =='Management Structure Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	// 	else if(this.stockMemoLabel =='Site Adjustment Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	// 	else if(this.stockMemoLabel =='Category Adjustment Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	// 	else if(this.stockMemoLabel =='Part Num Adjustment Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	// 	else if(this.stockMemoLabel =='Serial Num Adjustment Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	// 	else if(this.stockMemoLabel =='On Hand Adjustment Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	// 	else if(this.stockMemoLabel =='Unit Cost Adjustment Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	// 	else if(this.stockMemoLabel =='Unit Sales Price Adjustment Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	// 	else if(this.stockMemoLabel =='Lot Cost Adjustment Memo'){
-	// 		this.stocklineAdjustmentData.adjustmentMemo=this.stockMemoInfo;
-	// 	}
-	
-	// }
 
 	onClickMemo(value,row_no, obj) {
             this.memoPopupContent = obj;
