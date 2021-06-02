@@ -358,7 +358,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
 
     }
-    editNew(rowData) {
+    editNew(rowData) { 
         this.isViewItem=false;
         this.editData = undefined;
         this.cdRef.detectChanges();
