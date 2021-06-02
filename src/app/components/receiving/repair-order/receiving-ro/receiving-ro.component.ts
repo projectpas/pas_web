@@ -29,7 +29,7 @@ import { ShippingService } from '../../../../services/shipping/shipping-service'
 import { CommonService } from '../../../../services/common.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { AuthService } from '../../../../services/auth.service';
-import { formatNumberAsGlobalSettingsModule, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule, getObjectById,editValueAssignByCondition, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { RepairOrderService } from '../../../../services/repair-order.service';
 import { takeUntil } from 'rxjs/operators';
@@ -151,6 +151,7 @@ export class ReceivingRoComponent implements OnInit {
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
         this.Purchaseunitofmeasure();
+        this.getAllrevisedPart();
         this.companyModuleId = AppModuleEnum.Company;
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
@@ -428,8 +429,7 @@ export class ReceivingRoComponent implements OnInit {
             part.isSameDetailsForAllParts = false;
             this.arraySitelist.push(part.itemMaster.siteId);
             part.eCCNAlreadyExist = part.itemMaster.exportECCN != null && part.itemMaster.exportECCN.length > 0;
-            part.itarNumberExist = part.itemMaster.itarNumber != null && part.itemMaster.itarNumber.length > 0;
-            //part.quantityRejected = 0;
+            part.itarNumberExist = part.itemMaster.itarNumber != null && part.itemMaster.itarNumber.length > 0;           
             if (part.isParent) {
                 parentPart = part;
             }
@@ -561,24 +561,14 @@ export class ReceivingRoComponent implements OnInit {
             if (part.parentId == repairOrderPart.repairOrderPartRecordId) {
                 part.visible = !part.visible;
             }
-        });
-        // const data = this.repairOrderData;
-        // for (var i = 0; i < data.length; i++) {
-        //     if (data[i].isParent == false && data[i].visible == true) {
-        //         this.disableParentSpace = true;
-        //         break;
-        //     } else {
-        //         this.disableParentSpace = false;
-        //     }
-        // }
+        });        
     }
 
     public isSplitShipmentPart(repairOrderPartRecordId: number): boolean {
-        return this.repairOrderData.filter(x => x.parentId == repairOrderPartRecordId && !x.isParent).length > 0;
+        return this.repairOrderData.filter(x => x.parentId == repairOrderPartRecordId).length > 0;        
     }
 
     public toggleStockLine(event: any, part: RepairOrderPart): void {
-
         var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
         if (!condtion || condtion == undefined) {
@@ -603,7 +593,9 @@ export class ReceivingRoComponent implements OnInit {
         }
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
-        }else { this.quantityreceive = false; }
+        } else { 
+            this.quantityreceive = false;
+        }
         if (part.showStockLineGrid) {
             this.addStockLine(part, false);
             return;
@@ -629,17 +621,17 @@ export class ReceivingRoComponent implements OnInit {
         );
 
         if (ROParts.length > 1) {
-            if (quantity > part.quantityToRepair - part.quantityRepaired) {
+            if (quantity > (part.quantityToRepair - part.quantityRepaired - part.quantityDrafted - part.quantityRejected)) {
                 this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than quantity ordered", MessageSeverity.error);
                 return;
             }
         }
         else {
-            if (quantity > part.quantityToRepair - part.quantityRepaired) {
+            if (quantity > (part.quantityToRepair - part.quantityRepaired - part.quantityDrafted - part.quantityRejected)) {
                 this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than quantity ordered", MessageSeverity.error);
                 return;
             }
-        }
+        }       
 
         part.visible = true;
         if (part.stocklineListObj.length != quantity) {
@@ -1403,7 +1395,7 @@ export class ReceivingRoComponent implements OnInit {
             receivePart.quantityRejected = part.quantityRejected;
             receivePart.isSameDetailsForAllParts = part.isSameDetailsForAllParts ? part.isSameDetailsForAllParts : false;
             receivePart.timeLife = this.getTimeLife(part.timeLifeList, part.repairOrderPartRecordId);
-            receiveParts.push(receivePart);
+            receiveParts.push(receivePart);            
         }
         for (let part of allParts) {
             for (let sl of part.stocklineListObj) {
@@ -1420,10 +1412,10 @@ export class ReceivingRoComponent implements OnInit {
                 } else {
                     sl.tagType = "";
                     sl.tagTypeId = "";
-                }  
-
+                }
                 sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
                 sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
+                sl.revisedPartId = sl.revisedPartId ? editValueAssignByCondition('itemMasterId', sl.revisedPartId) : null;
             }
             if (part.isSameDetailsForAllParts) {
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
@@ -2349,5 +2341,27 @@ export class ReceivingRoComponent implements OnInit {
 			this.allPurchaseUnitOfMeasureinfo = res;
 		})
     }
+
+    arrayrevisedPartlist: any = []	
+    revisedPartNumCollection: any = [];
+	getAllrevisedPart(strText = '') {
+		if (this.arrayrevisedPartlist.length == 0) {
+			this.arrayrevisedPartlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20, this.arrayrevisedPartlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.revisedPartNumCollection = [];
+			for (let i = 0; i < res.length; i++) {				
+				this.revisedPartNumCollection.push({ itemMasterId: res[i].value, partNumber: res[i].label });
+			};
+		});
+	}
+
+	filterRevisedPart(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllrevisedPart(event.query);
+		} else {
+			this.getAllrevisedPart('');
+		}
+	}
 
 }

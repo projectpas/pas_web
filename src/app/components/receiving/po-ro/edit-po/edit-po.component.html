@@ -493,7 +493,7 @@
                                         <th>Part Cert Num </th>
                                         <th>Certified Date</th>
                                         <th class="date">Certified Due Date</th>
-                                        <th>Tag Type</th>
+                                        <!-- <th>Tag Type</th> -->
                                         <th>Tagged By </th>
                                         <th>UOM</th>
                                         <th class="date">Date Tagged </th>
@@ -926,13 +926,13 @@
                                                     id="certifiedDueDate{{stockline_row_index}}"
                                                     [(ngModel)]="SL.certifiedDueDate"></p-calendar>
                                             </td>
-                                            <td>                                                
+                                            <!-- <td>                                                
                                                 <p-multiSelect [options]="TagTypeList"
                                                     [(ngModel)]="SL.tagType"
                                                     appendTo="body"
                                                     name="tagType{{stockline_row_index}}">
                                                 </p-multiSelect>
-                                            </td>
+                                            </td> -->
                                             <td>                                               
                                                 <p-autoComplete field="Value" class="rpo-acomp"
                                                     [(ngModel)]="SL.taggedByObject" 

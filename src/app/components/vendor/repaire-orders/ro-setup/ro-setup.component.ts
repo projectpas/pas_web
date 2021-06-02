@@ -2895,6 +2895,18 @@ export class RoSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "PN is required."
 			}
+			if (!this.partListData[i].revisedPartId) {
+				this.isSpinnerVisible = false;
+				errmessage = errmessage + '<br />' + "Revised Part Number is required."
+			}
+			if (!this.partListData[i].workPerformedId) {
+				this.isSpinnerVisible = false;
+				errmessage = errmessage + '<br />' + "Work to Perform is required."
+			}
+			// if (!this.partListData[i].acTailNum) {
+			// 	this.isSpinnerVisible = false;
+			// 	errmessage = errmessage + '<br />' + "Account Tail Number is required."
+			// }
 			if (!this.partListData[i].priorityId) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Priority is required."
@@ -3139,10 +3151,11 @@ export class RoSetupComponent implements OnInit {
 				revisedPartId: this.partListData[i].revisedPartId ? editValueAssignByCondition('itemMasterId', this.partListData[i].revisedPartId) : null,
 				workPerformedId: this.partListData[i].workPerformedId ? this.getValueFromObj(this.partListData[i].workPerformedId) : null,
 				estRecordDate: this.datePipe.transform(this.partListData[i].estRecordDate, "MM/dd/yyyy"),
-				vendorQuoteNoId: this.partListData[i].vendorQuoteNoId ? this.getValueFromObj(this.partListData[i].vendorQuoteNoId) : null,
-				vendorQuoteDate: this.partListData[i].vendorQuoteDate ? this.datePipe.transform(this.partListData[i].vendorQuoteDate, "MM/dd/yyyy") : null,
+				//vendorQuoteNoId: this.partListData[i].vendorQuoteNoId ? this.getValueFromObj(this.partListData[i].vendorQuoteNoId) : null,
+				//vendorQuoteDate: this.partListData[i].vendorQuoteDate ? this.datePipe.transform(this.partListData[i].vendorQuoteDate, "MM/dd/yyyy") : null,
+				vendorQuoteNoId:null,
+				vendorQuoteDate:null,
 				acTailNum: this.partListData[i].acTailNum ? editValueAssignByCondition('label', this.partListData[i].acTailNum) : null,
-
 			}
 
 			if (!this.isEditMode) {
@@ -5075,14 +5088,14 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	arrayrevisedPartlist: any = []
+	arrayrevisedPartlist: any = []	
 	getAllrevisedPart(strText = '') {
 		if (this.arrayrevisedPartlist.length == 0) {
 			this.arrayrevisedPartlist.push(0);
 		}
 		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20, this.arrayrevisedPartlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
 			this.revisedPartNumCollection = [];
-			for (let i = 0; i < res.length; i++) {
+			for (let i = 0; i < res.length; i++) {				
 				this.revisedPartNumCollection.push({ itemMasterId: res[i].value, partNumber: res[i].label });
 			};
 		});
@@ -5539,5 +5552,5 @@ tfoot { display:table-footer-group }
       </html>`
     );
 		popupWin.document.close();
-	  }
+	}
 }
