@@ -23,6 +23,7 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
    @Input() display: boolean;
    @Input() editData: any={};
    @Input() isEdit: boolean;
+   @Input() isView: boolean;
    @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
    @Output() select: EventEmitter<any> = new EventEmitter<any>();
    @Output() setmaterialListForSave: EventEmitter<any> = new EventEmitter<any>();
@@ -52,6 +53,7 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isView=this.isView;
       this.getCustomerDetails();
       this.getConditions();
       this.salesQuoteService.getSearchPartResult().subscribe(data => {

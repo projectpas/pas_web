@@ -390,7 +390,7 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
-                var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
+                //var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
                 this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';
                 // if (!shippingVia || shippingVia == undefined) {
                 //     var shippingVia = new DropDownData();
@@ -630,14 +630,7 @@ export class ReceivngPoComponent implements OnInit {
             manufacturer.Key = part.itemMaster.manufacturerId.toString();
             manufacturer.Value = part.itemMaster.manufacturerName.toString();
             this.ManufacturerList.push(manufacturer);
-        }        
-        
-        // var uom = this.allPurchaseUnitOfMeasureinfo.find(temp => temp.value == part.uomId)
-        // if (!uom || uom == undefined) {
-        //     var dt = { value: allParentParts[0].uomId, label: allParentParts[0].unitOfMeasure }
-        //     this.allPurchaseUnitOfMeasureinfo.push(dt);
-        // }
-
+        }
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
         }
@@ -1029,6 +1022,7 @@ export class ReceivngPoComponent implements OnInit {
 
     onObtainSelect(stockLine: StockLine, type): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;
+        console.log(stockLine.obtainFrom)
         if (type == AppModuleEnum.Customer) {
             this.arrayCustlist.push(stockLine.obtainFromObject.Key);
         } else if (type == AppModuleEnum.Vendor) {

@@ -49,7 +49,7 @@
     </div>
 </div> 
 <ng-template #addPart let-c="close" let-d="dismiss">
-    <app-work-order-materials-add [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder" [isEdit]="isEdit" [editData]="editData" [customerId]="customerId"
+    <app-work-order-materials-add [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder" [isEdit]="isEdit" [isView]="isViewItem" [editData]="editData" [customerId]="customerId"
                 [clearData]="clearData" [display]="show" [selectedParts]="selectedParts"
                 (close)="onClose($event)" [type]="'WO'" (setmaterialListForSave)="setmaterialListForSave($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)">
                 </app-work-order-materials-add >
@@ -361,7 +361,7 @@
 
                                             <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="c.isChildSelected"  [disabled]="c.quantityReserved==0"
                                             name="isChildSelected{{z}}" (change)="selectedParts(c,$event)">
-                                            <span>{{c.quantityReserved}}</span>
+                                            <!-- <span>{{c.quantityReserved}}</span> -->
                                     </td>
                                     <td  *ngIf="isShowAlternatePN && (statusId == 1 || statusId == 3)">
                                     </td>
@@ -746,7 +746,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                 {{col.header}} 
             </th> 
              <th></th><th></th><th></th><th></th><th></th> <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-             <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" style=" width: 140px !important; ">Actions </th>
+             <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" style=" width: 160px !important; ">Actions </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
@@ -767,15 +767,22 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             </td>
               <td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td>
             <td class="summary-column"></td>  
-             <td class="action-icons-cstm  lastcol-fix" style="position: sticky !important; min-width: 145px !important;width: 140px !important;" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
+             <td class="action-icons-cstm  lastcol-fix" style="position: sticky !important; min-width: 145px !important;width: 160px !important;" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
                  <span><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit" matTooltipPosition="above" ><i   class="fa fa-pencil"></i></button></span>
-                <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"   matTooltip="Create PO" matTooltipPosition="above" ><i class="fa fa-plus"></i></button></span>
+                 <span>
+                 <a class="btn nobg btn-view-cstm"
+                                                        (click)="viewItem(rowData)"
+                                                        matTooltip="View Inventory" matTooltipPosition="above">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+               </span>
+                 <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"   matTooltip="Create PO" matTooltipPosition="above" ><i class="fa fa-plus"></i></button></span>
                 <span *ngIf="!isSubWorkOrder">
                 <button class="btn nobg" mat-icon-button
                 (click)="pickticketItemInterface(rowData,pickticketieminterface)" matTooltip="Add PT"
                 matTooltipPosition="above" style="font-weight: bold;"
                 [disabled]="!(rowData.partStatusId >0)">
-                <i class="fa fa-plus" [ngClass]="{'btn_disabled':!(rowData.partStatusId >0)}"></i>
+                <i class="fa fa-plus" [ngClass]="{'btn_disabled':!(rowData.partStatusId >0)}"></i> 
               </button>
             </span>
                 <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
@@ -818,8 +825,15 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                     <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]" class="p_textEditor"></span>
                 </td>
                 <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
-                    <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(childRowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
-                  <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,childRowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+  
+                    <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+                    <span>
+                        <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                            (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        </span>
+                    <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,childRowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
                 </td>
             </tr>
             <tr class="child-data splitship-child child-data-back " *ngIf="rowData.childParts && rowData.childParts.length==0">

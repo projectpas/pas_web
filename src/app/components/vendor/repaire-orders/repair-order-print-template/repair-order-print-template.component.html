@@ -1,3 +1,375 @@
-<p>
-  repair-order-print-template works!
-</p>
+<div class="clear"></div>
+<form id="" name="" action=" #" method="post" onsubmit="return false;">
+  <div class="image">
+    <div style="padding: 0; margin: 0;">
+      <div>
+        <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+          <!-- <div class="logo-block">
+            <img src="http://design.poweraerosuites.com/image/logo.png" width="130" /> 
+          </div>
+          <div class="clear"></div>
+          <hr /> -->
+          <div class="col-sm-12 invoice-border">
+            <div class="very-first-block col-sm-8">
+              <div class="col-sm-12 address-block" style="width:100%;display:flex;">
+                <div class="col-sm-6" style="width:50%"><img class="logo"
+                    src="http://design.poweraerosuites.com/image/logo.png" /></div>
+                <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.companyName ? managementStructureHeaderData.companyName : '' }}</label>
+                  </div>
+                  <!-- <div class="col-sm-12 first-block-name">                     
+                      <label class="col-sm-12 first-block-label"
+                          disabled>Slogan</label>
+                    </div> -->
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.address1 ? managementStructureHeaderData.address1 : ''}}</label>
+                  </div>
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.city ? managementStructureHeaderData.city : ''}}</label>
+                  </div>
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{ managementStructureHeaderData.stateOrProvince ? managementStructureHeaderData.stateOrProvince : '' }}</label>
+                  </div>
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.postalCode ? managementStructureHeaderData.postalCode : ''}}</label>
+                  </div>
+                  <div class="col-sm-12 first-block-name">
+                    <label class="col-sm-12 first-block-label"
+                      disabled>{{managementStructureHeaderData.phoneNumber ? managementStructureHeaderData.phoneNumber : ''}}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <table rules=none class="top-table-alignment print-friendly parttable table-margins">
+                  <thead>
+                    <tr>
+                      <th>ISSUED BY</th>
+                      <th>SHIP TO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="vertical-align: top;border-right:1px solid black;width:30%">
+                        <table class="border-none">
+                          <tr>
+                            <td>{{vendorInfo.vendorName ? vendorInfo.vendorName : ''}}</td>
+                          </tr>
+                          <tr>
+                            <td>{{vendorInfo.address1 ? vendorInfo.address1 : ''}}</td>
+                          </tr>
+                          <tr *ngIf="vendorInfo.address2">
+                            <td>{{vendorInfo.address2 ? vendorInfo.address2 : ''}}</td>
+                          </tr>
+                          <tr>
+                            <td>{{vendorInfo.city ? vendorInfo.city : ''}}
+                              {{vendorInfo.stateOrProvince ? vendorInfo.stateOrProvince : ''}}
+                              {{vendorInfo.postalCode ? vendorInfo.postalCode : ''}}</td>
+                          </tr>
+                          <tr>
+                            <td>{{vendorInfo.vendorPhone ? vendorInfo.vendorPhone : ''}}</td>
+                          </tr>
+                          <tr>
+                            <td>Attention</td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td style="vertical-align: top;border-right:1px solid black;width:30%">
+                        <table class="border-none">
+                          <tr>
+                            <td>{{roHeaderAdd.shipToUser ? roHeaderAdd.shipToUser : ''}}</td>
+                          </tr>
+                          <tr>
+                            <td>{{roHeaderAdd.shipToAddress1 ? roHeaderAdd.shipToAddress1 : ''}}</td>
+                          </tr>
+                          <tr *ngIf="roHeaderAdd.shipToAddress2">
+                            <td>{{roHeaderAdd.shipToAddress2 ? roHeaderAdd.shipToAddress2 : ''}}</td>
+                          </tr>
+                          <tr>
+                            <td>{{roHeaderAdd.shipToCity ? roHeaderAdd.shipToCity : ''}}
+                              {{roHeaderAdd.shipToState ? roHeaderAdd.shipToState : ''}}
+                              {{roHeaderAdd.shipToPostalCode ? roHeaderAdd.shipToPostalCode : ''}}</td>
+                          </tr>
+                          <tr>
+                            <td>{{roHeaderAdd.shipToContactPhone ? roHeaderAdd.shipToContactPhone : ''}}</td>
+                          </tr>
+                          <tr>
+                            <td>Attention</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="second-block col-sm-4">
+              <h3
+                style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
+                REPAIR ORDER</h3>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">RO Num</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.repairOrderNumber ? roHeaderAdd.repairOrderNumber : ''}}</label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">RO Date</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.openDate | date: 'MM/dd/yyyy'}}</label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Vendor Num</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.vendorCode ? roHeaderAdd.vendorCode : ''}}</label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Buyer</label>
+                <label class="col-sm-6 second-block-label" style="width:100%" disabled></label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Prepared By</label>
+                <label class="col-sm-6 second-block-label" style="width:100%" disabled></label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Date Printed</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.printdate | date: 'MM/dd/yyyy'}}</label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Num of Items</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.itemcount ? roHeaderAdd.itemcount : ''}}</label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Num of Packages</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled></label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Credit Terms</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.creditTerm ? roHeaderAdd.creditTerm : ''}}</label>
+              </div>
+              
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Resale</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.resale == true ? 'Yes' : 'No'}}</label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Ship Via</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.shipVia ? roHeaderAdd.shipVia : ''}}</label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Shipping Acct</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{roHeaderAdd.shippingAccountNo ? roHeaderAdd.shippingAccountNo : ''}}</label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">F.O.B</label>
+                <label class="col-sm-6 second-block-label" style="width:100%" disabled></label>
+              </div>
+              <div class="second-block-div">
+                <label class="col-sm-6 second-block-label" style="width:100%">Currency</label>
+                <label class="col-sm-6 second-block-label" style="width:100%"
+                  disabled>{{vendorInfo.currency ? vendorInfo.currency : ''}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="clear"></div>
+          
+          <div class="clear"></div>
+          <div class="col-sm-12">
+            <table rules=none class=" print-friendly border table-border-right parttable print-table table-margins">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>PN</th>
+                  <th colspan="2">PN Description</th>
+                  <th>Priority</th>
+                  <th>Serial Num</th>
+                  <th>Service Requested</th>                  
+                  <th>Need Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let partList of roPartsList; let i = index;">
+                  <tr>
+                    <td class="border-right">{{i+1}}</td>
+                    <td class="border-right">{{partList?.partNumber}}</td>
+                    <td class="border-right" style="border-top:1px solid" colspan="2">{{partList?.partDescription}}</td>
+                    <td class="border-right">{{partList?.priority}}</td>
+                    <td class="border-right"></td>
+                    <td class="border-right"></td>
+                    <td class="border-right">{{partList?.needByDate | date: 'MM/dd/yyyy' }}</td>
+                    <td class="border-right"></td>
+                  </tr>
+                  <tr class="child-table-header">
+                    <th></th>
+                    <th></th>
+                    <th>Qty Ordered</th>
+                    <th>UOM</th>
+                    <th>Unit Price</th>
+                    <th>Ext Amount</th>
+                    <th>Disc Amount</th>
+                    <th>Misc Charge</th>
+                    <th>Total</th>
+                  </tr>
+                  <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom">{{partList?.quantityOrdered}}</td>
+                    <td class="border-bottom">{{partList?.unitOfMeasure}}</td>
+                    <td class="border-bottom">{{partList?.unitCost}}</td>
+                    <td class="border-bottom">{{partList?.extendedCost}}</td>
+                    <td class="border-bottom">{{partList?.discountAmount}}</td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom">{{partList?.extendedCost}}</td>
+                  </tr>
+                </ng-container>
+                <tr>
+                  <td colspan="7" rowspan="9" style="border:1px solid black;vertical-align:top">
+                    Terms and Conditions/Notes: <span class="value">
+                      <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.notes"></p>
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right border-top"><b>SUBTOTAL</b></td>
+                  <td class="border-bottom border-top">{{totalExtCost}}</td>
+                </tr>
+                <tr>
+                  <td class="text-right">Tax(Rate 8.25%)</td>
+                  <td class="border-bottom"></td>
+                </tr>
+                <tr>
+                  <td class="text-right">Other Tax</td>
+                  <td class="border-bottom"></td>
+                </tr>
+                <tr>
+                  <td class="text-right">Shipping & Handling</td>
+                  <td class="border-bottom">{{roHeaderAdd.shippingandhandlingCost}}</td>
+                </tr>
+                <tr>
+                  <td class="text-right">Freight</td>
+                  <td class="border-bottom"></td>
+                </tr>
+                <tr>
+                  <td class="text-right">Misc Charges</td>
+                  <td class="border-bottom"></td>
+                </tr>
+                <tr>
+                  <td class="text-right"><b>Total</b></td>
+                  <td class="border-bottom">{{finaltotal}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- <div style="width:100%;display:flex"> -->
+            <div class="col-sm-12">
+              <table rules=none class="parttable print-table print-friendly table-margins">
+                <thead>
+                  <tr>
+                    <th>RETURN TO</th>
+                    <th>BILL TO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                      <table class="border-none">
+                        <tr>
+                          <td>{{vendorInfo.vendorName ? vendorInfo.vendorName : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{vendorInfo.address1 ? vendorInfo.address1 : ''}}</td>
+                        </tr>
+                        <tr *ngIf="vendorInfo.address2">
+                          <td>{{vendorInfo.address2 ? vendorInfo.address2 : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{vendorInfo.city ? vendorInfo.city : ''}}
+                            {{vendorInfo.stateOrProvince ? vendorInfo.stateOrProvince : ''}}
+                            {{vendorInfo.postalCode ? vendorInfo.postalCode : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{vendorInfo.vendorPhone ? vendorInfo.vendorPhone : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>Attention</td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                      <table class="border-none">
+                        <tr>
+                          <td>{{roHeaderAdd.billToUser ? roHeaderAdd.billToUser : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{roHeaderAdd.billToAddress1 ? roHeaderAdd.billToAddress1 : ''}}</td>
+                        </tr>
+                        <tr *ngIf="roHeaderAdd.billToAddress2">
+                          <td>{{roHeaderAdd.billToAddress2 ? roHeaderAdd.billToAddress2 : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{roHeaderAdd.billToCity ? roHeaderAdd.billToCity : ''}}
+                            {{roHeaderAdd.billToState ? roHeaderAdd.billToState : ''}}
+                            {{roHeaderAdd.billToPostalCode ? roHeaderAdd.billToPostalCode : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{roHeaderAdd.billToContactPhone ? roHeaderAdd.billToContactPhone : ''}}</td>
+                        </tr>
+                        <tr>
+                          <td>Attention </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          <!-- </div> -->
+          <div class="col-sm-12">
+            <table rules=none class="parttable table-border-right print-table print-friendly table-margins">
+              <tbody>
+                <tr>                  
+                  <td class="td-width-25">Barcode
+                    <br /><img src="{{roHeaderAdd.barcode}}" alt="barcode" />
+                  </td>
+                  <td class="align-top td-width-25"> <label class="col-sm-2">Print Name</label></td>
+                  <td class="align-top td-width-25"> <label class="col-sm-2">Signature </label></td>
+                  <td class="align-top td-width-25"><label class="col-sm-2">Date {{roHeaderAdd.printdate | date: 'MM/dd/yyyy'}}</label></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="height:100px"> &nbsp;</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

@@ -130,7 +130,9 @@ hr {
  padding-left: 2px;
  width:50%;
 }
-
+.font-12{
+font-size:12px;
+}
 .address-block {
  position: relative;
  min-height: 1px;
@@ -153,7 +155,8 @@ hr {
  margin-top:-2px;
  float: left;
  padding-right: 2px;
- width: 35%;
+// width: 35%;
+width:29%;
 
   /* border-left:1px solid black;
     margin-left: 16%; */
@@ -300,7 +303,7 @@ hr {
 
 .very-first-block {
  position: relative;
- min-height: 300px;
+ min-height: 200px;
  height:auto;
  border-right:1px solid black;
  float: left;
@@ -354,5 +357,5 @@ hr {
  margin-left:-3px;
 }
 .invoice-border{border-bottom: 1px solid;
-   min-height: 159px;
+   min-height: 200px;
    height: auto;}
