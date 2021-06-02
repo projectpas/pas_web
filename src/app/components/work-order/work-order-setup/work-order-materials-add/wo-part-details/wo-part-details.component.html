@@ -61,14 +61,12 @@
           [(ngModel)]="formObject.quantity" (change)="calculateExtendedCost()" name="quantity" autocomplete="off" />
          </div>
       </div>
-      <div class="col-6 column">
+      <!-- <div class="col-6 column">
         <div class="col-4 column">
           <div class="form-group">
             <label>Qty On Hand</label>
             <input type="text" class="form-control text-right" [ngModel]="formObject.qtyOnHand" name="qtyOnHand"
-               disabled="true" />
-               <!-- [ngModel]="formObject.qtyOnHand | globalNmberFormat"
-              (ngModelChange)="formObject.qtyOnHand=$event" -->
+               disabled="true" /> 
           </div>
         </div>
         <div class="col-4 column">
@@ -78,7 +76,7 @@
                disabled="true" />
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="row justify-content-start" *ngIf="!isView">
@@ -121,10 +119,20 @@
                 <tr [ngClass]="{'row-bg1':part.alternateFor.length==0}" pReorderableRowHandle>
                     <td>
             <span *ngIf="part.qtyAvailable !=0">
-                <a class="expand-row" *ngIf="!hideme[rowIndex]" (click)="viewSelectedRow(part,rowIndex)">
-                    <i class="fa fa-plus btn btn-success poro-plus-cstm btn-xs"
-                        matTooltip="Show stock line details" style="padding: 3px 8px !important;"></i>
-                </a>
+                <span *ngIf="!isEdit">
+                    <span *ngIf="!getCheckBoxDisplay(part, rowIndex,false)">
+                    <a class="expand-row" *ngIf="!hideme[rowIndex]" (click)="viewSelectedRow(part,rowIndex)">
+                        <i class="fa fa-plus btn btn-success poro-plus-cstm btn-xs"
+                            matTooltip="Show stock line details" style="padding: 3px 8px !important;"></i>
+                    </a>
+                </span>
+                </span>
+                <span *ngIf="isEdit">
+                    <a class="expand-row" *ngIf="!hideme[rowIndex]" (click)="viewSelectedRow(part,rowIndex)">
+                        <i class="fa fa-plus btn btn-success poro-plus-cstm btn-xs"
+                            matTooltip="Show stock line details" style="padding: 3px 8px !important;"></i>
+                    </a>
+                </span>
                 <a class="expand-row" *ngIf="hideme[rowIndex]" (click)="hideStockline(rowIndex)">
                     <i class="fa fa-minus btn-danger poro-plus-cstm btn-xs" matTooltip="Hide stock line details"
                         style="padding: 3px 8px !important;"></i>
@@ -295,7 +303,7 @@
     </div>
     <div class="modal-footer" style="width: 100%;"> 
         <button type="button" (click)="onClose()" class="btn btn-danger">
-          Close
+          Close 
         </button>
       </div>
 </div>
@@ -793,10 +801,10 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" (click)="onCloseMaterial()">&times;</button>
-          <h4 class="modal-title">Edit PN Details</h4>
+          <h4 class="modal-title"> {{isEdit ? 'Edit' : 'Add'}} PN Details</h4>
         </div>
-        <div class="modal-body" *ngIf="selectedMaterialPart !=undefined">
-            <app-wo-margin tabindex="-1" [isStockLine]="false" (updateFinalMaterialListData)="upDatePart($event)"   [isSubWorkOrder]="isSubWorkOrder" [enableUpdateBtn]="updateQuantiry" [isEdit]="isEdit" [editData]="editData" (saveFinalMaterialListData)="savePart($event)" [part]="selectedMaterialPart" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+        <div class="modal-body" *ngIf="selectedMaterialPart !=undefined && showMarginPopUp">
+            <app-wo-margin tabindex="-1" [isStockLine]="false" (updateFinalMaterialListData)="upDatePart($event)"   [isSubWorkOrder]="isSubWorkOrder" [enableUpdateBtn]="updateQuantiry" [isEdit]="isEdit" [editData]="editData" (saveFinalMaterialListData)="savePart($event)" [part]="selectedMaterialPart"   (save)="openSalesMarginSave($event)"
             (close)="onCloseMargin($event)" (searchAnotherPN)="onSearchAnotherPN($event)"></app-wo-margin>
         </div>
       </div>

@@ -42,6 +42,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
     private authService: AuthService, ) {
   }
     ngOnInit() {
+      console.log("hello")
 }
   ngOnChanges()    { 
     this.formObject=={
@@ -52,6 +53,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
       stocklineQuantity:0
     };
     this.part=this.part;
+    console.log("part",this.part)
     this.formObject.quantity=this.part.quantity; 
     this.formObject.stocklineQuantity=this.part.stocklineQuantity;
     this.formObject.qtyOnHand = this.part.qtyOnHand;
@@ -98,11 +100,12 @@ export class WoMarginComponent implements OnInit, OnChanges {
 
 this.onChangeQuantityFromThis(); 
     if(this.editData){
+      console.log("edit Data",this.editData);
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
      this.formObject.conditionIds=[this.editData.conditionCodeId];
      this.formObject.quantity=this.editData.quantity;
-     this.formObject.qtyOnHand=this.editData.qtyOnHand;
+    //  this.formObject.qtyOnHand=this.editData.qtyOnHand;
      if(this.isStockLine){
       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
       this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
@@ -123,7 +126,7 @@ this.onChangeQuantityFromThis();
       this.provisionList();
       this.getMaterailMandatories();
      }else{
-
+      this.formObject.provisionId=0;
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();

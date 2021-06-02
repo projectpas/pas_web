@@ -36,7 +36,7 @@
 </div>
 <div class="row margin-row">
   <div class="row">
-    <div class="col-3 column"> 
+    <div class="col-2 column"> 
       <div class="form-group">
         <label>Quantity requested</label> 
         <input type="text" class="form-control   text-right" pInputText pKeyFilter="num" name="quantityRequest"
@@ -58,6 +58,22 @@
         </div>
       </div>
     </div>
+     <div class="col-6 column">
+        <div class="col-4 column">
+          <div class="form-group">
+            <label>Qty On Hand</label>
+            <input type="text" class="form-control text-right" [ngModel]="formObject.qtyOnHand" name="qtyOnHand"
+               disabled="true" /> 
+          </div>
+        </div>
+        <div class="col-4 column">
+          <div class="form-group">
+            <label>Qty Available</label>
+            <input type="text" class="form-control text-right" [ngModel]="formObject.qtyAvailable" name="qtyAvailable"
+               disabled="true" />
+          </div>
+        </div>
+      </div>
   </div>
 </div>
 <div class="row">
