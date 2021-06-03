@@ -104,6 +104,7 @@ this.onChangeQuantityFromThis();
      this.formObject.quantity=this.editData.quantity;
      this.formObject.qtyOnHand=this.editData.qtyOnHand;
      if(this.isStockLine){
+        this.formObject.quantity=this.editData.quantity;
       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
 
    }else{
