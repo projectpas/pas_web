@@ -27,8 +27,8 @@
                             </h4>
                         </div>
                         <button type="button" class="btn-sm header-button pull-right"
-                            [routerLink]="['/receivingmodule/receivingpages/app-purchase-order']">
-                            Receiving PO List
+                            [routerLink]="['/receivingmodule/receivingpages/app-ro']">
+                            Receiving RO List
                         </button>
                     </div>
                 </div>
@@ -307,6 +307,7 @@
                             <th>SO </th>
                             <th>Sub-WO </th>
                             <th colspan="4" style="text-align: center;">Management Structure</th>
+                            <th>Revised PartNumber </th>
                             <th>Site</th>
                             <th>Warehouse</th>
                             <th>Location</th>
@@ -327,6 +328,7 @@
                             <th>Certified Date</th>
                             <th class="date">Certified Due Date</th>
                             <th>Tagged By </th>
+                            <th>UOM </th>
                             <th class="date">Date Tagged </th>
                             <th class="date">Tag Exp Date </th>
                             <th>Shipping Ref#/AWB</th>
@@ -381,6 +383,9 @@
                                 <td style="min-width: 120px;">
                                     <!-- <label style="width:90px;">Dept:</label> -->
                                     {{part.stockLine[stockline_row_index].departmentText}}
+                                </td>
+                                <td>
+                                    {{part.stockLine[stockline_row_index].revisedPartNumber}}
 
                                 </td>
                                 <td>
@@ -435,7 +440,8 @@
                                         [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.certifiedDueDate">
                                     </p-calendar>
                                 </td>
-                                <td>{{SL.certifiedBy}}</td>
+                                <td>{{SL.taggedByName}}</td>
+                                <td>{{SL.unitOfMeasure}}</td>
                                 <td>
                                     <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
                                         [disabled]="!SL.isEnabled" [showIcon]="true"

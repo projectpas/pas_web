@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
 declare var $: any;
 import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-wo-order-multi-Packaging-Label',
   templateUrl: './wo-order-multi-Packaging-Label.component.html',
@@ -38,6 +39,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#PackagingSlipDiv').modal('show');
     this.getPackagingSlipView();
   }

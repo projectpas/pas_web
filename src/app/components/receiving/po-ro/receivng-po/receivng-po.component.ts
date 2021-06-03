@@ -27,12 +27,15 @@ import { CompanyService } from '../../../../services/company.service'; import { 
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
 import { ShippingService } from '../../../../services/shipping/shipping-service';
 import { TagTypeService } from '../../../../services/tagtype.service';
-import { getValueFromObjectByKey, getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+import { getValueFromObjectByKey, getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule,getObjectById } from '../../../../generic/autocomplete';
 import { CommonService } from '../../../../services/common.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { AuthService } from '../../../../services/auth.service';
 import { DatePipe } from '@angular/common';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
+
 
 
 
@@ -113,6 +116,7 @@ export class ReceivngPoComponent implements OnInit {
     otherModuleId: number = 0;
     alertText: string = '';
     modal: NgbModalRef;
+    private onDestroy$: Subject<void> = new Subject<void>();
     constructor(public binservice: BinService,
         private purchaseOrderService: PurchaseOrderService,
         public manufacturerService: ManufacturerService,
@@ -149,6 +153,7 @@ export class ReceivngPoComponent implements OnInit {
         this.getTagType();
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
+        this.Purchaseunitofmeasure();
         this.companyModuleId = AppModuleEnum.Company;
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
@@ -349,6 +354,12 @@ export class ReceivngPoComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
 
+    get currentUserManagementStructureId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.managementStructureId
+			: null;
+	}
+
     ngOnInit() {
         this.isSpinnerVisible = true;
         this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
@@ -379,7 +390,7 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
-                var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
+                //var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
                 this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';
                 // if (!shippingVia || shippingVia == undefined) {
                 //     var shippingVia = new DropDownData();
@@ -392,7 +403,7 @@ export class ReceivngPoComponent implements OnInit {
 
     private loadPurchaseOrderData(purchaseOrder: PurchaseOrder, partms) {
         this.purchaseOrderData = purchaseOrder;
-        let parentPart: PurchaseOrderPart;
+        let parentPart: PurchaseOrderPart;        
         var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
         for (let parent of allParentParts) {
             parent.currentSLIndex = 0;
@@ -593,7 +604,7 @@ export class ReceivngPoComponent implements OnInit {
         return this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == purchaseOrderPartRecordId).length > 0;
     }
 
-    public toggleStockLine(event: any, part: PurchaseOrderPart): void {
+    public toggleStockLine(event: any, part: PurchaseOrderPart): void {               
         var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
         if (!condtion || condtion == undefined) {
@@ -618,6 +629,7 @@ export class ReceivngPoComponent implements OnInit {
             manufacturer.Value = part.itemMaster.manufacturerName.toString();
             this.ManufacturerList.push(manufacturer);
         }
+
 
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
@@ -735,6 +747,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.ownerType = AppModuleEnum.Vendor;
             stockLine.owner = this.purchaseOrderData.vendor.vendorId;
 
+            //stockLine.unitOfMeasureId = { value: part.uomId, label: part.unitOfMeasure },
 
             stockLine.maincompanylist = part.maincompanylist;
             stockLine.parentCompanyId = part.parentCompanyId;
@@ -1008,7 +1021,7 @@ export class ReceivngPoComponent implements OnInit {
 
 
     onObtainSelect(stockLine: StockLine, type): void {
-        stockLine.obtainFrom = stockLine.obtainFromObject.Key;
+        stockLine.obtainFrom = stockLine.obtainFromObject.Key;        
         if (type == AppModuleEnum.Customer) {
             this.arrayCustlist.push(stockLine.obtainFromObject.Key);
         } else if (type == AppModuleEnum.Vendor) {
@@ -1293,7 +1306,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     onSubmitToReceive() {
-        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
+        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);                
         for (let part of allParts) {
             if (part.isSameDetailsForAllParts) {
                 if (part.isSameDetailsForAllParts && !part.itemMaster.isSerialized && part.stocklineListObj && part.stocklineListObj.length > 0) {
@@ -1328,7 +1341,7 @@ export class ReceivngPoComponent implements OnInit {
             return;
         }
         let partsToPost: ReceiveParts[] = this.extractAllAllStockLines();
-        this.isSpinnerVisible = true;
+        this.isSpinnerVisible = true;        
         this.shippingService.receiveParts(partsToPost).subscribe(data => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
@@ -1371,13 +1384,16 @@ export class ReceivngPoComponent implements OnInit {
                     item.stocklineListObj[i].gLAccountId = item.itemMaster.glAccountId;
                     item.stocklineListObj[i].conditionId = item.conditionId;
                     item.stocklineListObj[i].quantityRejected = Number(item.quantityRejected);
-                    item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined || item.isSameDetailsForAllParts ? false : item.itemMaster.isSerialized;
+                    item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined ? false : item.itemMaster.isSerialized;
                     item.stocklineListObj[i].isPMA = item.itemMaster.pma;
                     item.stocklineListObj[i].isDER = item.itemMaster.der;
                     item.stocklineListObj[i].purchaseOrderExtendedCost = item.stocklineListObj[i].purchaseOrderExtendedCost == undefined ||
                         item.stocklineListObj[i].purchaseOrderExtendedCost.toString() == '' ? 0 :
                         item.stocklineListObj[i].purchaseOrderExtendedCost;
 
+                    if (item.stocklineListObj[i].unitOfMeasureId == undefined ||  item.stocklineListObj[i].unitOfMeasureId == 0) {
+                        errorMessages.push("Please select Unit Of Measure in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
                     if (item.stocklineListObj[i].purchaseOrderUnitCost == undefined || (item.stocklineListObj[i].purchaseOrderUnitCost != undefined && item.stocklineListObj[i].purchaseOrderUnitCost.toString() == '')) {
                         errorMessages.push("Please enter Unit Cost in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
@@ -1390,7 +1406,6 @@ export class ReceivngPoComponent implements OnInit {
                         errorMessages.push("Please select Site in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
 
-
                     if (item.stocklineListObj[i].shippingViaId == undefined || item.stocklineListObj[i].shippingViaId == 0) {
                         errorMessages.push("Please select shipping Via in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
@@ -1398,7 +1413,6 @@ export class ReceivngPoComponent implements OnInit {
                     if (item.stocklineListObj[i].shippingReference == undefined || item.stocklineListObj[i].shippingReference == '') {
                         errorMessages.push("Please select shipping Reference in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
-
 
                     if (item.itemMaster.isSerialized == true) {
                         item.stocklineListObj[i].serialNumber = item.stocklineListObj[i].serialNumber != undefined ? item.stocklineListObj[i].serialNumber.trim() : '';
@@ -1478,8 +1492,8 @@ export class ReceivngPoComponent implements OnInit {
                 sl.updatedBy = this.userName;
                 sl.masterCompanyId = this.currentUserMasterCompanyId;
 
-                sl.tagTypeId = "1,2,4,7,9,10,11,12,13,14";
-                sl.tagType = 'FAA,CAAC,EASA,FAA1,test,FAA/EASA,DCA,CAAV,Dual1,Mr';
+                // sl.tagTypeId = "1,2,4,7,9,10,11,12,13,14";
+                // sl.tagType = 'FAA,CAAC,EASA,FAA1,test,FAA/EASA,DCA,CAAV,Dual1,Mr';
                 // if (sl.tagType && sl.tagType.length > 0) {                    
                 //     sl.tagTypeId = sl.tagType.join();                
                 //     sl.tagType = sl.tagTypeId.split(',');
@@ -1491,11 +1505,25 @@ export class ReceivngPoComponent implements OnInit {
                 //     sl.tagType = "";
                 //     sl.tagTypeId = "";
                 // }
-            }
+
+                if (sl.tagType && sl.tagType.length > 0) {
+                    sl.tagTypeId = sl.tagType.join();                
+                    sl.tagType = sl.tagTypeId.split(',');
+                    for (let i = 0; i < sl.tagType.length; i++) {
+                        sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
+                    }
+                    sl.tagType = sl.tagType.join();
+                } else {
+                    sl.tagType = "";
+                    sl.tagTypeId = "";
+                }
+                sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
+                sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
+            }             
             if (part.isSameDetailsForAllParts) {
                 for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                     part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
-                    part.stocklineListObj[part.currentSERIndex].serialNumber = "";
+                    //part.stocklineListObj[part.currentSERIndex].serialNumber = "";
                     var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                     part.stocklineListObj[i] = stockLineToCopy;
                     var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
@@ -1565,7 +1593,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     toggleSameDetailsForAllParts(part: PurchaseOrderPart): void {
-        part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
+        part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;        
         if (part.isSameDetailsForAllParts) {
             if (part.itemMaster.isSerialized) {
                 part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = false;
@@ -1652,4 +1680,49 @@ export class ReceivngPoComponent implements OnInit {
         }
         // }
     }
+
+    TagByNames: any[];
+    arrayTagEmployeelist: any[] = [];
+    alltagEmployeeList: any = [];
+    allPurchaseUnitOfMeasureinfo: any[] = [];    
+    
+    loadTagByEmployeeData(strText = '',taggedBy) {
+		if(taggedBy >0){
+			this.arrayTagEmployeelist.push(taggedBy);
+		}
+		if (this.arrayTagEmployeelist.length == 0) {
+			this.arrayTagEmployeelist.push(0);
+		}	
+		this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayTagEmployeelist.join(), this.currentUserManagementStructureId)
+			.subscribe(response => {
+				this.alltagEmployeeList = response;
+				this.TagByNames = this.alltagEmployeeList;
+				if(taggedBy >0){
+					//this.stockLineForm.taggedBy = getObjectById('value', taggedBy, this.alltagEmployeeList);
+				}
+				
+			}, error => {});
+    }
+
+    filterTagEmployees(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadTagByEmployeeData(event.query,0);
+		}
+    }
+        
+    getValueFromObj(obj) {
+		if (obj.value) {
+			return obj.value;
+		} else {
+			return null;
+		}
+    }
+    
+    Purchaseunitofmeasure() {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.allPurchaseUnitOfMeasureinfo = res;
+		})
+    }
+    
+   
 }

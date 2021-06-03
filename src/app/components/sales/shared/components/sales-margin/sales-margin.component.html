@@ -64,7 +64,7 @@
         <div class="form-group">
           <label>Qty from this <span *ngIf="part.method=='Item Master'">PN</span><span
               *ngIf="part.method=='Stock Line'">{{part.stockLineNumber}}</span></label>
-          <input type="text" (keyup)="onChangeQuantityFromThis($event)" (blur)="onChangeQuantityFromThis($event)"
+          <input type="text" (keyup)="onChangeQuantityFromThis($event)" (blur)="calculate(); onChangeQuantityFromThis($event)"
             class="form-control quantityTextBox text-right" name="quantityFromThis"
             [ngModel]="part.quantityFromThis | globalNmberFormat" [ngModelOptions]="{updateOn:'blur'}"
             (ngModelChange)="part.quantityFromThis=formatStringToNumberGlobal($event)" (change)="calculate()"

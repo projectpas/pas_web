@@ -4,10 +4,10 @@
           <div class="col-md-12 invoice-div">
               <label></label>
               <div class="form-group invoice-button-div">
-                  <button *ngIf="isView == false" type="submit" class="btn  submit-btn btn btn-primary"
-                      [disabled]="disableCreateInvoiceBtn" (click)="PerformBilling()">Invoice</button>
-                      <button *ngIf="isView == false" type="submit" class="btn  submit-btn btn btn-primary"
-                      [disabled]="disableCreateInvoiceBtn" (click)="PerformBilling()">Invoice for Qoute</button>
+                  <button *ngIf="isView == false" type="button" class="btn  submit-btn btn btn-primary"
+                      [disabled]="disableCreateInvoiceBtn" (click)="PerformWorkBilling()">Invoice</button>
+                      <button *ngIf="isView == false && quotestatusofCurrentPart == 'Approved'" type="button" class="btn  submit-btn btn btn-primary"
+                      [disabled]="disableCreateInvoiceBtn" (click)="PerformQouteBilling()">Invoice for Qoute</button>
               </div>
           </div>
       </div>
@@ -106,7 +106,7 @@
                                       {{ formateCurrency(bill.totalSales) }}
                                   </td>
                                   <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
-                                      <span *ngIf="bill.qtyBilled > 0">
+                                      <span>
                                           <a class="btn nobg" matTooltip="Invoice" matTooltipPosition="above"
                                               (click)="ViewInvoice(bill);"><i class="fa fa-print"></i></a>
                                       </span>
@@ -342,7 +342,7 @@
                               <!-- </p-dropdown> -->
                               <p-dropdown  [showClear]="true" class="p-dropdown-100" 
                                 [options]="currencyList" filter="true" [(ngModel)]="billingorInvoiceForm.currencyId" name="currency" [resetFilterOnHide]="true" placeholder="Select" 
-                                [disabled]="isViewMode"  class="p-dropdown-custom-md-Header"
+                                [disabled]="isViewMode"  class="p-dropdown-custom-md-Header" required
                                 ></p-dropdown>
                             </div>
                           </div>
@@ -500,7 +500,7 @@
                                 name="shipcustomerName"
                                 errorMessage="Records not found"
                                 [forceSelection]="true"
-                                (onSelect)="getSiteNamesByShipCustomerId($event)"
+                                (onSelect)="onselectcustomergetsite($event)"
                                 [suggestions]="customerNamesList"
                                 (completeMethod)="filterCustomerName($event)"
                                 (onKeyUp)="clearAddress('ShipTo', $event.target.value)"
@@ -520,35 +520,23 @@
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label for="credit">Site Name</label><span class="clr-red">*</span>
-                            <p-dropdown
-                              placeholder="Select Site Name"
-                              name="scope"
-                              #scope="ngModel"
-                              [options]="soldCustomerSiteList"
-                              class="p-dropdown-custom-md-Header"
-                              (onChange)="changeOfSoldSiteName($event.value)"
-                              [(ngModel)]="billingorInvoiceForm.soldToSiteId"
-                              [disabled]="isViewMode"
-                              required
-                            >
-                            </p-dropdown>
+                                  <select [(ngModel)]="billingorInvoiceForm.soldToSiteId" (change)="setSoldToAddress()"
+                                  [disabled]="isView" name="soldToSite" required>
+                              <option value="">Select</option>
+                              <option *ngFor="let site of siteList" [value]="site.siteID">
+                                  {{site.siteName}}
+                              </option>
+                          </select>
                             </div>
                           </div>
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label for="credit">Site Name</label><span class="clr-red">*</span>
-                            <p-dropdown
-                              placeholder="Select Site Name"
-                              name="scope1"
-                              #scope1="ngModel"
-                              [options]="shipCustomerSiteList"
-                              class="p-dropdown-custom-md-Header"
-                              (onChange)="changeOfShipSiteName($event.value)"
-                              [(ngModel)]="billingorInvoiceForm.shipToSiteId"
-                              [disabled]="isViewMode"
-                              required
-                            >
-                            </p-dropdown>
+                                  <select [(ngModel)]="billingorInvoiceForm.shipToSiteId" (change)="setShipToAddress()"
+                                  [disabled]="isView" name="shipToSite" required>
+                              <option value="">Select</option>
+                              <option *ngFor="let site of shipCustomerSiteList" [value]="site.siteID">{{site.siteName}}</option>
+                          </select>
                             </div>
                           </div>
                         </div>
@@ -742,66 +730,46 @@
                     </div>
                   </div>
                   <div class="col-md-3">
-                    <div class="card">
-                      <div class="card-body">
-                          <h5 class="po-heading">Management Structure</h5>
+                    <div class="card mgmt-card">
+                      <div class="card-header mgmt-card-header">
+                          <h5 class="mgmt-header">
+                              Management Structure <span class="text-danger">*</span>
+                          </h5>
+                      </div>
+                      <div class="card-body mgmt-card-body">
                           <div class="col-md-12">
                               <div class="form-group">
-                            <p-dropdown
-                              placeholder="Select Legal Entity"
-                              name="company"
-                              #companyId="ngModel"
-                              [options]="legalEntityList"
-                              class="p-dropdown-custom-md-2"
-                              (onChange)="selectedLegalEntity($event.value)"
-                              [(ngModel)]="managementStructure.companyId"
-                              [disabled]="true"
-                            >
-                            <!-- [disabled]="isViewMode" -->
-                            </p-dropdown>
-                            </div>
-                            <div class="form-group">
-                                <p-dropdown
-                                  placeholder="Select "
-                                  name="bu"
-                                  #bu="ngModel"
-                                  [options]="businessUnitList"
-                                  class="p-dropdown-custom-md-2"
-                                  (onChange)="selectedBusinessUnit($event.value)"
-                                  [(ngModel)]="managementStructure.buId"
-                                  [disabled]="true"
-                                >
-                                </p-dropdown>
-                                </div>
-                                <div class="form-group">
-                                    <p-dropdown
-                                      placeholder="Select "
-                                      name="division"
-                                      #division="ngModel"
-                                      [options]="divisionList"
-                                      class="p-dropdown-custom-md-2"
-                                      (onChange)="selectedDivision($event.value)"
-                                      [(ngModel)]="managementStructure.divisionId"
-                                      [disabled]="true"
-                                    >
-                                    </p-dropdown>
-                                    </div>
-                                    <div class="form-group">
-                                        <p-dropdown
-                                          placeholder="Select "
-                                          name="department"
-                                          #department="ngModel"
-                                          [options]="departmentList"
-                                          class="p-dropdown-custom-md-2"
-                                          (onChange)="selectedDepartment($event.value)"
-                                          [(ngModel)]="managementStructure.departmentId"
-                                          [disabled]="true"
-                                        >
-                                        </p-dropdown>
-                                        </div>
+                                  <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                      (onChange)="selectedLegalEntity(managementStructure.companyId,'html');"
+                                      required (ngModelChange)="getActive()" [options]="legalEntityList"
+                                      filter="true" [(ngModel)]="managementStructure.companyId"
+                                      name="companyId" [resetFilterOnHide]="true" placeholder="Select" disabled>
+                                  </p-dropdown>
+                              </div>
+                              <div class="form-group">
+                                  <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                      (onChange)="selectedBusinessUnit(managementStructure.buId,'html')"
+                                      (ngModelChange)="getActive()" [options]="businessUnitList" filter="true"
+                                      [(ngModel)]="managementStructure.buId" name="buId"
+                                      [resetFilterOnHide]="true" placeholder="Select" disabled></p-dropdown>
+                              </div>
+                              <div class="form-group">
+                                  <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                      (onChange)="selectedDivision(managementStructure.divisionId,'html')"
+                                      (ngModelChange)="getActive()" [options]="divisionList" filter="true"
+                                      [(ngModel)]="managementStructure.divisionId" name="divisionId"
+                                      [resetFilterOnHide]="true" placeholder="Select" disabled></p-dropdown>
+                              </div>
+                              <div class="form-group">
+                                  <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                      (onChange)="selectedDepartment(managementStructure.departmentId,'html' )"
+                                      (ngModelChange)="getActive()" [options]="departmentList" filter="true"
+                                      [(ngModel)]="managementStructure.departmentId" name="departmentId"
+                                      [resetFilterOnHide]="true" placeholder="Select" disabled></p-dropdown>
+                              </div>
                           </div>
                       </div>
-                    </div>
+                  </div>
                   </div>
                 </div>
           
@@ -1125,7 +1093,9 @@
               </form>
             </div>
           </div>
-          <div class="card m-t-6" *ngIf="workOrderQuoteId !=0 && quotestatusofCurrentPart =='Approved'">
+
+          <div class="card m-t-6" *ngIf="isworkorderdetails">
+          <!-- <div class="card m-t-6" *ngIf="workOrderQuoteId !=0 && quotestatusofCurrentPart =='Approved'"> -->
             <div class="card-body p-10" >
           
                           <p-accordion class="p-accordion-cstm">
@@ -1280,7 +1250,8 @@
             </div>
           </div>
           <!-- // for without quote -billing  -->
-          <div class="card m-t-6" *ngIf="quotestatusofCurrentPart =='NotApproved'">
+          <div class="card m-t-6" *ngIf="isworkorderdetails">
+            <!-- <div class="card m-t-6" *ngIf="quotestatusofCurrentPart =='NotApproved'"> -->
             <div class="card-body p-10">
                           <p-accordion class="p-accordion-cstm">
                               <p-accordionTab  header="Material List" >
@@ -1356,6 +1327,55 @@
           </div>
         </div>
      
+  </div>
+</div>
+
+<ng-template #printPost let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <button type="button" class="close" (click)="close()">&times;</button>
+      <h4 class="modal-title">Print OR Post Invoice</h4>
+  </div>
+  <div class="modal-body">
+      <div id="woInvoice">
+          <app-work-order-print-invoice [workOrderbillingInvoicingId]="WObillingInvoicingId"
+              [workOrderId]="workOrderId" (onInvoiceLoad)="onInvoiceLoad($event)"></app-work-order-print-invoice>
+      </div>
+  </div>
+  <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+      <div class="loading">
+          <div class="lds-roller">
+              <div>
+              </div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+          </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Billed'" (click)="PrintInvoice()">Print</button>
+      <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Invoiced'" (click)="PrintInvoiced()">Print</button>
+      <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Reviewed'" (click)="PrintPostInvoice()">Print And Post</button>
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+  </div>
+</ng-template>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </div>
 

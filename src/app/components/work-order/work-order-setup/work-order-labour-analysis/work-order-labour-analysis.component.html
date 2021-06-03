@@ -1,5 +1,5 @@
 <div class="card new-card">
-    <div class="card-header header" >
+    <div class="card-header header" *ngIf="!isSummarizedView">
       <div class="row">
         <div class="col">
           <h4 class="header-name"> Labor Analysis Overview</h4>
@@ -24,7 +24,7 @@
     [totalRecords]="totalRecords"
     [scrollable]="true" scrollHeight="450px">
 
-        <ng-template pTemplate="caption">
+        <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
             <div class="row">
                 <div class="col">
                 <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
@@ -59,8 +59,8 @@
                     <div class="form-group">
                       <div class="pull-left radio-buttons-align">
                         <label class="radio-cstm wauto">
-                            <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
-                              (click)="changeOfStatus('','pnview')">
+                            <input type="radio" name="viewType" class="form-control" value="summaryview" [(ngModel)]="viewType"
+                              (click)="changeOfStatus('','summaryview')">
                             <span class="checkmark"></span>Summary view
                           </label>
                       </div>
@@ -116,7 +116,7 @@
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
             </tr>
-            <tr>
+            <tr  *ngIf="!isSummarizedView">
                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <input class="table-header-input-width" pInputText type="text" (input)="
                         dt.filter($event.target.value, col.field, 'contains')
@@ -139,8 +139,8 @@
                     </td>                    
                 </tr>
 
-                <tr *ngIf="!pnViewSelected && rowIndex == (data.length-1)" class="footer">
-                    <td class="table-column-width" colspan="5">&nbsp;
+                <tr *ngIf="isDetailView && rowIndex == (data.length-1)" class="footer">
+                    <td class="table-column-width" colspan="7">&nbsp;
                     </td>
                     <td class="table-column-width"><label>Total</label>
                     </td>
@@ -151,7 +151,7 @@
                         <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('stdHours')}}</p>
                     </td>
                     <td class="content-to-end table-column-width">
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('varHours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('burdenRateAmount')}}</p>
                     </td>
                     <td class="content-to-end table-column-width">
                         <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('varPercentage')}}</p>
@@ -159,8 +159,8 @@
                     <td class="content-to-end table-column-width" colspan="4">
                     </td>
                 </tr>
-                <tr *ngIf="pnViewSelected && rowIndex == (data.length-1)" class="footer">
-                    <td class="table-column-width" colspan="5">&nbsp;
+                <tr *ngIf="!isDetailView && rowIndex == (data.length-1)" class="footer">
+                    <td class="table-column-width" colspan="4">&nbsp;
                     </td>
                     <td class="table-column-width"><label>Total</label>
                     </td>
@@ -171,7 +171,7 @@
                         <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('stdHours')}}</p>
                     </td>
                     <td class="content-to-end table-column-width">
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('varHours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('burdenRateAmount')}}</p>
                     </td>
                     <td class="content-to-end table-column-width">
                         <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('varPercentage')}}</p>

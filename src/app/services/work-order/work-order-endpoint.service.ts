@@ -254,6 +254,13 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
     }
 
+    Getbillinginvoicingdetailsfromquote(workOrderWorkflowId, WorkOrderPartNoId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/billinginvoicingdetailsfromquote?workOrderWorkflowId=${workOrderWorkflowId}&WorkOrderPartNoId=${WorkOrderPartNoId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.Getbillinginvoicingdetailsfromquote(workOrderWorkflowId, WorkOrderPartNoId));
+        });
+    }
+
+
     getWorkOrderBillingByShipping(workOrderId: number, partId, workOrderShippingId: number): Observable<any> {
         const URL = `${this.configurations.baseUrl}/api/workorder/getWorkOrderBillingByShipping?workOrderId=${workOrderId}&workOrderPartId=${partId}&workOrderShippingId=${workOrderShippingId}`;
         return this.http
@@ -1575,4 +1582,59 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
 
     }
+
+    getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderBillingInvoicingData?wobillingInvoicingId=${wobillingInvoicingId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getWorkOrderBillingInvoicingData(wobillingInvoicingId));
+          });
+      }
+
+      getworkOrderChargesById(id, isDeleted) {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/getworkOrderChargesById??WorkOrderId=${id}&isDeleted=${isDeleted}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getworkOrderChargesById(id, isDeleted));
+          });
+      }
+
+      getWorkOrderBillingInvoicingById(wobillingInvoicingId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/getWorkOrderBillingInvoicingById?wobillingInvoicingId=${wobillingInvoicingId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getWorkOrderBillingInvoicingById(wobillingInvoicingId));
+          });
+      }
+      
+        UpdateWorkOrderBillingInvoicing(wobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
+        let url: string = `${this.configurations.baseUrl}/api/workOrder/UpdateWorkOrderBillingInvoicingStatus?wobillingInvoicingId=${wobillingInvoicingId}`;
+        return this.http
+          .put(url, JSON.stringify(billingInvoicing), this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.UpdateWorkOrderBillingInvoicing(wobillingInvoicingId, billingInvoicing));
+          });
+      }
+
+      GetWorkOrderPrintFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderPrintFormData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderPrintFormData(WorkorderId,workOrderPartNoId));
+          });
+      }
+
+      
+      GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderPartlistFormData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId));
+          });
+      }
 }

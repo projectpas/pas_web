@@ -29,10 +29,11 @@ import { ShippingService } from '../../../../services/shipping/shipping-service'
 import { CommonService } from '../../../../services/common.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { AuthService } from '../../../../services/auth.service';
-import { formatNumberAsGlobalSettingsModule, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule, getObjectById,editValueAssignByCondition, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { RepairOrderService } from '../../../../services/repair-order.service';
-
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
 
 @Component({
     selector: 'app-receiving-ro',
@@ -110,6 +111,7 @@ export class ReceivingRoComponent implements OnInit {
     vendorModuleId: number = 0;
     otherModuleId: number = 0;
     arrayPostatuslist: any[] = [];
+    private onDestroy$: Subject<void> = new Subject<void>();
     constructor(public binservice: BinService,
         public manufacturerService: ManufacturerService,
         public legalEntityService: LegalEntityService,
@@ -148,6 +150,8 @@ export class ReceivingRoComponent implements OnInit {
         this.getTagType();
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
+        this.Purchaseunitofmeasure();
+        this.getAllrevisedPart();
         this.companyModuleId = AppModuleEnum.Company;
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
@@ -345,6 +349,12 @@ export class ReceivingRoComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
 
+    get currentUserManagementStructureId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.managementStructureId
+			: null;
+	}
+
     ngOnInit() {
         this.isSpinnerVisible = true; 
         this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
@@ -366,13 +376,13 @@ export class ReceivingRoComponent implements OnInit {
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
             this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';
             this.repairOrderHeaderData.creditLimit = this.repairOrderHeaderData.creditLimit ? formatNumberAsGlobalSettingsModule(this.repairOrderHeaderData.creditLimit, 2) : '0.00';                 
-            var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId);                       
-            if(!shippingVia || shippingVia == undefined) {
-                var shippingVia = new DropDownData(); 
-                shippingVia.Key = this.repairOrderHeaderData.shipViaId;
-                shippingVia.Value = this.repairOrderHeaderData.shipVia;
-                this.ShippingViaList.push(shippingVia);
-            }      
+            //var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId);                       
+            // if(!shippingVia || shippingVia == undefined) {
+            //     var shippingVia = new DropDownData(); 
+            //     shippingVia.Key = this.repairOrderHeaderData.shipViaId;
+            //     shippingVia.Value = this.repairOrderHeaderData.shipVia;
+            //     this.ShippingViaList.push(shippingVia);
+            // }      
         });
     }
 
@@ -391,6 +401,7 @@ export class ReceivingRoComponent implements OnInit {
             if (splitParts.length > 0) {
                 parent.hasChildren = true;
                 parent.quantityToRepair = 0;
+
                 for (let childPart of splitParts) {
                     parent.stockLineCount += childPart.stockLineCount;       
                     parent.quantityDrafted += childPart.quantityDrafted; 
@@ -406,20 +417,19 @@ export class ReceivingRoComponent implements OnInit {
             }
         }
         for (let part of this.repairOrderData) {
-            part.toggleIcon = false;
+            part.toggleIcon = true;
             part.stocklineListObj = [];
             part.timeLifeList = [];
             part.currentSLIndex = 0;
             part.currentTLIndex = 0;
             part.currentSERIndex = 0;
             part.isDisabledTLboxes = false;
-            part.visible = false;
+            part.visible = true;
             part.showStockLineGrid = false;
             part.isSameDetailsForAllParts = false;
             this.arraySitelist.push(part.itemMaster.siteId);
             part.eCCNAlreadyExist = part.itemMaster.exportECCN != null && part.itemMaster.exportECCN.length > 0;
-            part.itarNumberExist = part.itemMaster.itarNumber != null && part.itemMaster.itarNumber.length > 0;
-            //part.quantityRejected = 0;
+            part.itarNumberExist = part.itemMaster.itarNumber != null && part.itemMaster.itarNumber.length > 0;           
             if (part.isParent) {
                 parentPart = part;
             }
@@ -431,8 +441,23 @@ export class ReceivingRoComponent implements OnInit {
             }
             this.getManagementStructureForPart(part, partms)
         }
+
         this.isSpinnerVisible = false;
         this.getAllSite();
+        for (let i = 0; i < this.repairOrderData.length; i++) {
+            var K = 0;
+            this.repairOrderData.forEach(p => {
+                if (p.parentId == this.repairOrderData[i].repairOrderPartRecordId) {
+                    if (K == 0) {
+                        p.showHeader = true;
+                        K = 1;
+                    }
+                    else {
+                        p.showHeader = false;
+                    }
+                }
+            });
+        }
     }
 
     getManagementStructureForPart(partList, response) {
@@ -536,24 +561,14 @@ export class ReceivingRoComponent implements OnInit {
             if (part.parentId == repairOrderPart.repairOrderPartRecordId) {
                 part.visible = !part.visible;
             }
-        });
-        // const data = this.repairOrderData;
-        // for (var i = 0; i < data.length; i++) {
-        //     if (data[i].isParent == false && data[i].visible == true) {
-        //         this.disableParentSpace = true;
-        //         break;
-        //     } else {
-        //         this.disableParentSpace = false;
-        //     }
-        // }
+        });        
     }
 
     public isSplitShipmentPart(repairOrderPartRecordId: number): boolean {
-        return this.repairOrderData.filter(x => x.parentId == repairOrderPartRecordId && !x.isParent).length > 0;
+        return this.repairOrderData.filter(x => x.parentId == repairOrderPartRecordId).length > 0;        
     }
 
     public toggleStockLine(event: any, part: RepairOrderPart): void {
-
         var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
         if (!condtion || condtion == undefined) {
@@ -578,7 +593,9 @@ export class ReceivingRoComponent implements OnInit {
         }
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
-        }else { this.quantityreceive = false; }
+        } else { 
+            this.quantityreceive = false;
+        }
         if (part.showStockLineGrid) {
             this.addStockLine(part, false);
             return;
@@ -604,17 +621,17 @@ export class ReceivingRoComponent implements OnInit {
         );
 
         if (ROParts.length > 1) {
-            if (quantity > part.quantityToRepair - part.quantityRepaired) {
+            if (quantity > (part.quantityToRepair - part.quantityRepaired - part.quantityDrafted - part.quantityRejected)) {
                 this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than quantity ordered", MessageSeverity.error);
                 return;
             }
         }
         else {
-            if (quantity > part.quantityToRepair - part.quantityRepaired) {
+            if (quantity > (part.quantityToRepair - part.quantityRepaired - part.quantityDrafted - part.quantityRejected)) {
                 this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than quantity ordered", MessageSeverity.error);
                 return;
             }
-        }
+        }       
 
         part.visible = true;
         if (part.stocklineListObj.length != quantity) {
@@ -727,14 +744,14 @@ export class ReceivingRoComponent implements OnInit {
     }
 
     addStockLine(part, visible?: boolean): void {
-        const stockObj: any = part.stocklineListObj;
+        const stockObj: any = part.stocklineListObj;        
         part.stocklineListObj = stockObj.map(x => {
             return {
                 ...x,
                 //siteId: this.getSiteDetailsOnEdit(part, x),
                 // certifiedBy: 0,
-                //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
-                //shippingAccount: part.shippingAccountInfo,
+                shippingViaId: x.shippingViaId ? x.shippingViaId.toLocaleString() : null,
+                shippingAccount: x.shippingAccount.toLocaleString(),
                 repairOrderUnitCost: formatNumberAsGlobalSettingsModule(x.repairOrderUnitCost, 2),
                 repairOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2)
             }
@@ -1287,10 +1304,12 @@ export class ReceivingRoComponent implements OnInit {
                     // item.stocklineListObj[i].repairOrderUnitCost = item.stocklineListObj[i].repairOrderUnitCost == undefined ||
                     //     item.stocklineListObj[i].repairOrderUnitCost.toString() == '' ? 0 :
                     //     item.stocklineListObj[i].repairOrderUnitCost;
+                    if (item.stocklineListObj[i].unitOfMeasureId == undefined ||  item.stocklineListObj[i].unitOfMeasureId == 0) {
+                        errorMessages.push("Please select Unit Of Measure in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
                     if (item.stocklineListObj[i].repairOrderUnitCost == undefined || (item.stocklineListObj[i].repairOrderUnitCost != undefined && item.stocklineListObj[i].repairOrderUnitCost.toString() == '')) {
                         errorMessages.push("Please enter Unit Cost in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
-                    }                   
-
+                    }
                     if (item.stocklineListObj[i].managementStructureEntityId == undefined || item.stocklineListObj[i].managementStructureEntityId == 0) {
                         errorMessages.push("Please select Management Structure in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
@@ -1376,7 +1395,7 @@ export class ReceivingRoComponent implements OnInit {
             receivePart.quantityRejected = part.quantityRejected;
             receivePart.isSameDetailsForAllParts = part.isSameDetailsForAllParts ? part.isSameDetailsForAllParts : false;
             receivePart.timeLife = this.getTimeLife(part.timeLifeList, part.repairOrderPartRecordId);
-            receiveParts.push(receivePart);
+            receiveParts.push(receivePart);            
         }
         for (let part of allParts) {
             for (let sl of part.stocklineListObj) {
@@ -1394,6 +1413,9 @@ export class ReceivingRoComponent implements OnInit {
                     sl.tagType = "";
                     sl.tagTypeId = "";
                 }
+                sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
+                sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
+                sl.revisedPartId = sl.revisedPartId ? editValueAssignByCondition('itemMasterId', sl.revisedPartId) : null;
             }
             if (part.isSameDetailsForAllParts) {
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
@@ -2276,10 +2298,70 @@ export class ReceivingRoComponent implements OnInit {
         }
         // }
     }
+    
 
-    public counter: number = 0;
-    rownum() {
-        return this.counter += 1;
+    TagByNames: any[];
+    arrayTagEmployeelist: any[] = [];
+    alltagEmployeeList: any = [];
+    allPurchaseUnitOfMeasureinfo: any[] = [];    
+    
+    loadTagByEmployeeData(strText = '',taggedBy) {
+		if(taggedBy >0){
+			this.arrayTagEmployeelist.push(taggedBy);
+		}
+		if (this.arrayTagEmployeelist.length == 0) {
+			this.arrayTagEmployeelist.push(0);
+		}	
+		this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayTagEmployeelist.join(), this.currentUserManagementStructureId)
+			.subscribe(response => {
+				this.alltagEmployeeList = response;
+				this.TagByNames = this.alltagEmployeeList;
+				if(taggedBy >0){
+					//this.stockLineForm.taggedBy = getObjectById('value', taggedBy, this.alltagEmployeeList);
+				}				
+			}, error => {});
     }
+
+    filterTagEmployees(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadTagByEmployeeData(event.query,0);
+		}
+    }
+        
+    getValueFromObj(obj) {
+		if (obj.value) {
+			return obj.value;
+		} else {
+			return null;
+		}
+    }
+    
+    Purchaseunitofmeasure() {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.allPurchaseUnitOfMeasureinfo = res;
+		})
+    }
+
+    arrayrevisedPartlist: any = []	
+    revisedPartNumCollection: any = [];
+	getAllrevisedPart(strText = '') {
+		if (this.arrayrevisedPartlist.length == 0) {
+			this.arrayrevisedPartlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20, this.arrayrevisedPartlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.revisedPartNumCollection = [];
+			for (let i = 0; i < res.length; i++) {				
+				this.revisedPartNumCollection.push({ itemMasterId: res[i].value, partNumber: res[i].label });
+			};
+		});
+	}
+
+	filterRevisedPart(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllrevisedPart(event.query);
+		} else {
+			this.getAllrevisedPart('');
+		}
+	}
 
 }

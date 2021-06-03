@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-wo-release-easa-from',
   templateUrl: './wo-release-easa-from.component.html',
@@ -26,13 +27,14 @@ export class WoReleaseEasaFromComponent implements OnInit {
   @Output() updateRelreaseList = new EventEmitter();
   ReleaseData : any = {};
   //ReleaseData: any;
-  isSpinnerVisible: boolean = true;
+  isSpinnerVisible: boolean = false;
   Issave: boolean = true;
   isconfirmsave : boolean = true;
   currentDate = new Date();
   Printeddate1 : string;
   Printeddate2 : string;
   modal: NgbModalRef;
+  endPointURL: any;
   private onDestroy$: Subject<void> = new Subject<void>();
   constructor(
     private authService: AuthService,
@@ -47,6 +49,7 @@ export class WoReleaseEasaFromComponent implements OnInit {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#woReleaseEasaFromDiv').modal('show');
     
     if(this.isEdit || this.isView)
@@ -148,31 +151,32 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   onsave()
   {
-    this.Issave = false;
-    if(new Date(this.ReleaseData.date) >=  new Date(this.ReleaseData.receivedDate))
+    this.isconfirmsave = true;
+    if(new Date(this.ReleaseData.date) <=  new Date(this.ReleaseData.receivedDate))
     {
       this.isconfirmsave = false;
       this.alertService.showMessage(
         '',
-        'Please Select Date less than ReceivedDate',
+        'Please Select Date greater than ReceivedDate',
         MessageSeverity.warn
     );
 
     }
 
-    if(new Date(this.ReleaseData.date2) >=  new Date(this.ReleaseData.receivedDate))
+    if(new Date(this.ReleaseData.date2) <=  new Date(this.ReleaseData.receivedDate))
     {
       this.isconfirmsave = false;
       this.alertService.showMessage(
         '',
-        'Please Select Date less than ReceivedDate',
+        'Please Select Date greater than ReceivedDate',
         MessageSeverity.warn
     );
 
     }
 
     if(this.isconfirmsave)
-    {
+    { 
+      this.Issave = false;
       this.CreateUpdateReleasedata();
     }
   }
@@ -184,6 +188,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   CreateUpdateReleasedata()
   {
+            this.isSpinnerVisible = true;
             this.ReleaseData.masterCompanyId= this.authService.currentUser.masterCompanyId;
             this.ReleaseData.createdBy= this.userName;
             this.ReleaseData.updatedBy= this.userName;
@@ -209,7 +214,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
        
           this.alertService.showMessage(
               '',
-              '9130 from Added Succesfully',
+              '9130 form Added Succesfully',
               MessageSeverity.success
           );
       },
@@ -224,6 +229,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
   print(): void {
    
     //this.CreateUpdateReleasedata();
+    this.updateRelreaseList.emit();
     let printContents, popupWin;
     printContents = document.getElementById('woReleaseEasaFrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
@@ -528,7 +534,7 @@ table, thead, th {
     );
     popupWin.document.close();
 
-    this.updateRelreaseList.emit();
+   
   }
 
 }

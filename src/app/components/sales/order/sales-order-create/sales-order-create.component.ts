@@ -884,7 +884,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrder.customerCode = this.salesQuote.customerCode;
       this.salesOrder.customerContactId = this.salesQuote.customerContactId;
       this.salesOrder.customerReference = this.salesQuote.customerReferenceName;
-      this.salesOrder.customerReference = "SO";
+      //this.salesOrder.customerReference = "SO";
       this.salesOrder.currencyId = this.salesQuote.currencyId;
       this.salesOrder.totalSalesAmount = this.salesQuote.totalSalesAmount;
       this.salesOrder.customerHold = this.salesQuote.customerHold;

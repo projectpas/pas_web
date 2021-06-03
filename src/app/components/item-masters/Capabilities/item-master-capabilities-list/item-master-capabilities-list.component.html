@@ -398,7 +398,7 @@
                                             disabled></label></span></td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
                                 
-                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }"><p style="width: 80px;">{{audit.verifiedDate | date: 'MM-dd-yyyy'}}</p></td>
+                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }">{{audit.verifiedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red' }">
                                     <p [innerHTML]="audit.memo"></p>
                                 </td>
@@ -434,7 +434,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="capes-memo" style="z-index: 15000 !important;" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="edit-capes-memo" style="z-index: 10000 !important;" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -584,9 +584,9 @@
                                            
                                             data-toggle="modal"
                                             matTooltip="Memo"
-                                            data-target="#capes-memo"
+                                            data-target="#edit-capes-memo"
                                             matTooltipPosition="above"
-                                            (click)="onAddTextAreaInfo('memo', capes-memo)"></i>
+                                            (click)="onAddTextAreaInfo('memo', edit-capes-memo)"></i>
                                             <!-- data-target="#capes-memo" -->
                                         </td>
                                     </tr>

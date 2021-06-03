@@ -133,10 +133,8 @@ export class StockLineSetupComponent implements OnInit {
 		{ field: 'fileName', header: 'File Name' },
 		{ field: 'fileSize', header: 'File Size' },
 		{ field: 'createdDate', header: 'Created Date' },
-
 		{ field: 'createdBy', header: 'Created By' },
 		{ field: 'updatedDate', header: 'Updated Date' },
-
 		{ field: 'updatedBy', header: 'Updated By' },
 	];
 	selectedColumnsCertified = this.attachDocumentsColumns;
@@ -195,7 +193,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.oem = 'true';
 		this.stockLineForm.isCustomerStock = false;
 		this.stockLineForm.isCustomerstockType = false;
-		this.stockLineForm.unitCost=0;
+		this.stockLineForm.unitCost='0.00';
 		
 		this.stockLineForm.customerId = 0;
 		this.stockLineForm.tagType = [];
@@ -817,7 +815,8 @@ export class StockLineSetupComponent implements OnInit {
 					quantityAvailable: (res.quantityAvailable || res.quantityAvailable == 0) ? formatNumberAsGlobalSettingsModule(res.quantityAvailable, 0) : '0',
 					purchaseOrderUnitCost: res.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.purchaseOrderUnitCost, 2) : '0.00',
 					repairOrderUnitCost: res.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.repairOrderUnitCost, 2) : '0.00',
-					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',					
+					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',	
+					unitCost : res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00',
 					coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '0.00',
 					lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '0.00',
 					purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
@@ -1036,8 +1035,8 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	getEmployeeSelecionOnEdit(requestorId, inspectionBy) {
-		this.arrayWOlist.push(requestorId);
-		this.arrayWOlist.push(inspectionBy);
+		this.arrayEmployeelist.push(requestorId);
+		this.arrayEmployeelist.push(inspectionBy);
 		this.commonService.autoSuggestionSmartDropDownList('Employee', 'employeeId', 'firstName', '', true, 20, this.arrayEmployeelist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allEmployeeList = response;
 			this.certifyByNames = this.allEmployeeList;

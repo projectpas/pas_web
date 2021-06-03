@@ -66,6 +66,8 @@ export class StockAdjustmentComponent implements OnInit {
 	shelfAllow: boolean = false;
 	binAllow: boolean = false;
 	showSite: boolean = false;
+	stockMemoInfo:string;
+	stockMemoLabel:string;
 	showWarehouse: boolean = false;
 	showLocation: boolean = false;
 	showShelf: boolean = false;
@@ -89,6 +91,7 @@ export class StockAdjustmentComponent implements OnInit {
 	lotCostAllow: boolean = false;
 	timeLifeAllow: boolean = false;
 	sourceTimeLife: any = {};
+	currentItem:any={};
 	timeLifeCyclesId: number;
 	legalEntityId: number;
 	defaultCurrencyId: number;
@@ -166,6 +169,16 @@ export class StockAdjustmentComponent implements OnInit {
             this.itemTypesList = res;
         })
 	}
+	onAddStockMemo(currentItem){
+this.currentItem=currentItem;
+		// this.stockMemoInfo=this.stocklineAdjustmentData.item.adjustmentMemo;
+		
+	}
+	onSaveStockMemo(){
+	
+				this.currentItem.adjustmentMemo=this.stockMemoInfo;
+		
+			}
 
 	onClickMemo(value,row_no, obj) {
             this.memoPopupContent = obj;

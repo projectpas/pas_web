@@ -129,13 +129,15 @@
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <ng-container *ngFor="let col of columns">
                         <td class="uiTable_td_ovrflw_control table-column-width" class="ui-resizable-column">
-                            {{
+                            <span *ngIf="col.field != 'value' && col.field != 'lowerValue'&& col.field != 'upperValue'">  {{
                             col.field == 'createdDate'
                             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                             : rowData[col.field] && col.field == 'updatedDate'
                             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                             : rowData[col.field]
-                            }}
+                            }}</span>
+                            <span class="float-right" *ngIf="col.field == 'value' || col.field == 'lowerValue' || col.field == 'upperValue'">
+                                {{rowData[col.field]}} </span>
                         </td>
                     </ng-container>
                     <td class="action-icons-cstm table-column-width" *ngIf="!isView">

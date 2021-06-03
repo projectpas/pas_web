@@ -27,6 +27,15 @@ textarea {
 .stock-adjust-check-header{
     margin-left: 20px !important;
 }
+.stock-border{
+    color: #053773;background: #ccc;border:#ccc
+}
+.stock-memo-width{
+    width:90%;
+}
+.memo-td-200{
+    width:200px;
+}
 .remaining-width{
     width: 55% !important;
 }
@@ -47,8 +56,16 @@ table td {
     display: table;
 }
 select {
-    max-width: 200px;
-    min-width: 150px;
+    // max-width: 200px;
+    // min-width: 150px;
+    width:200px;
+}
+.stock-adjust-td-width{
+    width:200px;
+}
+input[type=text], input[type=number], select, textarea {
+    height: 24px !important;
+    border-radius: 5px !important;
 }
 .pull-right {
     float: right !important;

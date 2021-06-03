@@ -9168,7 +9168,7 @@ label.clr-red {
 
 #workflow-attributes-block {
   padding: 5px;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 #workflow-attributes-block .tab-pane.form-bg.active.in {
@@ -12757,6 +12757,7 @@ button.ui-autocomplete-dropdown {
 
 p-autocomplete .ui-autocomplete input.ui-inputtext {
   color: #333 !important;
+  font-size:10.5px !important;
 }
 
 .ui-autocomplete-items li.ui-autocomplete-list-item .ui-helper-clearfix {
@@ -15491,7 +15492,7 @@ body .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link.ui-state-active,
 }
 
 .p-dropdown-custom-sm .ui-dropdown {
-  min-width: 126px !important;
+  width: 110px !important;
 }
 
 .p-dropdown-custom-sm .ui-dropdown-trigger,

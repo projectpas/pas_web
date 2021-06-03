@@ -126,7 +126,7 @@
                                <td><b>18.Date: </b><span style="text-align:center;font-size:15px"> {{Printeddate1}} </span>
                                 <p-calendar *ngIf="Issave && !isView"[showIcon]="true" name ="date" [ngModelOptions]="{standalone: true}"
                                 [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                    [minDate]="currentDate" (ngModelChange)="onDate1($event)"
+                                 (ngModelChange)="onDate1($event)"
                                   
                                     [(ngModel)]="ReleaseData.date"></p-calendar>
                                 </td>
@@ -134,7 +134,7 @@
                                <td><b>23.Date(m/d/y) : </b><span style="text-align:center;font-size:15px"> {{Printeddate2}} </span>
                                 <p-calendar *ngIf="Issave && !isView" [showIcon]="true" name ="date2" [ngModelOptions]="{standalone: true}"
                                 [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                    [minDate]="currentDate" (ngModelChange)="onDate($event)" 
+                                    (ngModelChange)="onDate($event)" 
                                   
                                     [(ngModel)]="ReleaseData.date2"></p-calendar>
                                 </td>
@@ -172,14 +172,29 @@
             </div>
             <div style="height:100px"> &nbsp;</div>
             <div class="modal-footer">
-                <button *ngIf="!isView && Issave" type="button" class="btn btn-primary"  (click)="onsave()">Save</button>
-                <button *ngIf="!isView && !Issave" type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+                <button *ngIf="!isView && Issave" type="submit" class="btn btn-primary"  (click)="onsave()">Save</button>
+                <button *ngIf="!isView && !Issave" type="submit" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
              </div>
           </div>
          
     </div>
 </div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
 
             
 

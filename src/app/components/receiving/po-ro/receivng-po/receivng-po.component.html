@@ -243,7 +243,7 @@
                             <!-- <th class="min-width-40"></th> -->
                             <!-- <th class="min-width-60">Line Num</th> -->
                             <th>PN</th>
-                            <th colspan="4">PN Desc</th>
+                            <th colspan="5">PN Desc</th>
                             <th>Alt/Equiv</th>
                             <th>Item Type</th>
                             <th>Stock Type</th>
@@ -277,7 +277,7 @@
                                 <td>
                                     {{part.itemMaster.partNumber}}
                                 </td>
-                                <td colspan="4">{{part.itemMaster.partDescription}}</td>
+                                <td colspan="5">{{part.itemMaster.partDescription}}</td>
                                 <td>{{part.altEquiPartNumber}}</td>
                                 <td>{{part.itemType}}</td>
                                 <td>{{part.stockType}}</td>
@@ -286,10 +286,7 @@
                                 <td class="text-right">{{part.stockLineCount}}</td>
                                 <td class="text-right">{{part.quantityRejected}}</td>
                                 <td class="text-right">{{part.quantityBackOrdered}}</td>
-                                <td>
-                                    {{
-                                    part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered
-                                        ? 'Fulfilling' : 'Received' }} </td>
+                                <td>{{ part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered ? 'Fulfilling' : 'Received' }} </td>
                                 <td colspan="4">
                                     {{part?.level1}},{{part?.level2}}, {{part?.level3}},{{part?.level4}}
                                 </td>
@@ -340,19 +337,22 @@
                                 <!-- <th class="min-width-40"></th> -->
                                 <th>PN</th>
                                 <th class="min-width-60">Qty Ord</th>
+                                <th class="min-width-80">Qty Drafted</th>                                 
                                 <th class="min-width-80">Qty Received</th>
                                 <th class="min-width-80">Qty Rejected</th>
                                 <th class="min-width-60">Back Ord</th>
                                 <th class="min-width-60">Status</th>
                                 <th class="min-width-60">User Type</th>
                                 <th>User Name</th>
-                                <th colspan="3">Address</th>
+                                <th colspan="4">Address</th>
                                 <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
+                                <!-- <th></th> -->
+                              
+                                
                                 <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
                             </tr>
                             <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
@@ -360,6 +360,7 @@
                                 <!-- <td>&nbsp;</td> -->
                                 <td>{{part?.itemMaster?.partNumber}}</td>
                                 <td class="right">{{part?.quantityOrdered}}</td>
+                                <td class="right">{{part?.draftedStockLineCount}}</td>
                                 <td class="right">{{part?.stockLineCount}}</td>
                                 <td class="right">{{part?.quantityRejected}}</td>
                                 <!-- <td class="right">{{part?.quantityBackOrdered}}</td> -->
@@ -369,7 +370,7 @@
                                         ? 'Fulfilling' : 'Received' }} </td>
                                 <td>{{part.poPartSplitUserTypeName}}</td>
                                 <td>{{part?.poPartSplitUserName}}</td>
-                                <td colspan="3">{{part.addressText }}</td>
+                                <td colspan="4">{{part.addressText }}</td>
                                 <td colspan="4">
                                     {{part.level1}},{{part.level2}}, {{part.level3}},{{part.level4}}
                                 </td>
@@ -377,7 +378,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
+                                <!-- <td></td> -->
                                 <td>
                                     <input type="text" *ngIf="part.stockLineCount < part.quantityOrdered"
                                         [(ngModel)]="part.quantityActuallyReceived" (keyup)="addStockLine(part, false)"
@@ -965,6 +966,14 @@
                                                         </p-calendar>
                                                     </div>
                                                     <div class="form-group">
+                                                        <label>UOM <strong class="clr-red">*</strong></label>
+                                                        <p-dropdown class="p-dropdown-100" 
+                                                            [options]="allPurchaseUnitOfMeasureinfo" filter="true"
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].unitOfMeasureId" name="purchaseUnitOfMeasureId"
+                                                            [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required>
+                                                        </p-dropdown>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label>Unit Cost <span class="clr-red">*</span></label>
                                                         <input type="text" class="form-control text-right" pInputText
                                                             pKeyFilter="pnum"
@@ -1036,6 +1045,19 @@
                                                             [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
                                                         </p-calendar>
                                                     </div>
+
+                                                    <div class="form-group">
+                                                        <label>Tag By</label>
+                                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedBy" name="taggedBy"
+                                                            [suggestions]="TagByNames" (completeMethod)="filterTagEmployees($event)"
+                                                            [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" 
+                                                                                                             
+                                                            [forceSelection]="true">
+                                                        </p-autoComplete>
+                                                    </div>
+                                                    <!-- (onSelect)="onTagbySelect(part.stocklineListObj[part.currentSLIndex])"  -->
+
                                                     <div class="form-group">
                                                         <label>Engine Serial Number</label>
                                                         <!--matTooltip="Engine Serial Number"-->

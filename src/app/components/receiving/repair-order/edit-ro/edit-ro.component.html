@@ -422,7 +422,8 @@
                                             <th>WO </th>
                                             <th>Sub-WO </th>
                                             <th>SO </th>
-                                            <th colspan="4" style="text-align: center;">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
+                                            <th colspan="4" style="text-align: center;">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>                                           
+                                            <th>Revised PN </th>
                                             <th>Owner Type</th>
                                             <th>Owner</th>
                                             <th>Obtain From Type</th>
@@ -442,7 +443,8 @@
                                             <th>Part Cert Num </th>
                                             <th>Certified Date</th>
                                             <th class="date">Certified Due Date</th>
-                                            <th>Tagged By </th>
+                                            <th>Tagged By </th>                                            
+                                            <th>UOM</th>
                                             <th class="date">Date Tagged </th>
                                             <th class="date">Tag Exp Date </th>
                                             <th>Shipping Ref#/AWB</th>
@@ -548,7 +550,22 @@
                                                             {{department.label}}
                                                         </option>
                                                     </select>
-                                                </td>                                                
+                                                </td>   
+                                                <td>
+                                                    <p-autoComplete field="partNumber" 
+                                                        class="autocomplete" 
+                                                        appendTo="body"
+                                                        [(ngModel)]="SL.revisedPartObject"                                                                 
+                                                        [forceSelection]="true"
+                                                        [suggestions]="revisedPartNumCollection"
+                                                        (completeMethod)="filterRevisedPart($event)" 
+                                                        (onSelect)="onOwnerSelectRevise(SL)"
+                                                        [size]="30" 
+                                                        [minLength]="1"
+                                                        [disabled]="!SL.isEnabled"
+                                                        [dropdown]="true" required>
+                                                    </p-autoComplete>
+                                                </td>                                             
                                                 <td>
                                                     <select class="form-control" 
                                                         [disabled]="!SL.isEnabled"
@@ -558,7 +575,7 @@
                                                         <option *ngFor="let item of moduleListDropdown"
                                                             [ngValue]="item.moduleId">{{item.moduleName}}</option>
                                                     </select> 
-                                                </td>
+                                                </td>                                              
                                                 <td>
                                                     <div class="form-group" *ngIf="SL.ownerType != undefined && SL.ownerType > 0">
                                                         <div class="form-row">
@@ -603,7 +620,7 @@
                                                                     type="text" 
                                                                     [ngModelOptions]="{standalone: true}"
                                                                     [disabled]="!SL.isEnabled" 
-                                                                    [(ngModel)]="SL.owner"
+                                                                    [(ngModel)]="SL.ownerName"
                                                                     pInputText> 
                                                             </div>
                                                         </div>
@@ -667,7 +684,7 @@
                                                                     type="text"
                                                                     [disabled]="!SL.isEnabled"
                                                                     [ngModelOptions]="{standalone: true}"
-                                                                    [(ngModel)]="SL.obtainFrom" pInputText>
+                                                                    [(ngModel)]="SL.obtainFromName" pInputText>
 
                                                             </div>
                                                         </div>
@@ -729,7 +746,7 @@
                                                                     class="form-control" type="text"
                                                                     [disabled]="!SL.isEnabled"
                                                                     [ngModelOptions]="{standalone: true}"
-                                                                    [(ngModel)]="SL.traceableTo" pInputText>
+                                                                    [(ngModel)]="SL.traceableToName" pInputText>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -881,11 +898,36 @@
                                                             [(ngModel)]="SL.certifiedDueDate">
                                                         </p-calendar>
                                                 </td>
-                                                <td>
-                                                    <input class="form-control" 
-                                                        [(ngModel)]="SL.certifiedBy" type="text"
-                                                        pInputText [disabled]="!SL.isEnabled" 
-                                                        [maxLength]="200">
+                                                <td>                                               
+                                                    <p-autoComplete field="Value" class="rpo-acomp"
+                                                        [(ngModel)]="SL.taggedByObject" 
+                                                        appendTo="body"
+                                                        [suggestions]="TagByNames" 
+                                                        (completeMethod)="filterTagEmployees($event,SL)"
+                                                        [size]="32" 
+                                                        [minLength]="1" 
+                                                        [dropdown]="true"                                                             
+                                                        [disabled]="!SL.isEnabled"
+                                                        (onSelect)="onOwnerSelectTag(SL)"
+                                                        name="taggedBy{{stockline_row_index}}"
+                                                        id="taggedBy{{stockline_row_index}}">
+                                                    </p-autoComplete>
+                                                </td>
+                                                
+                                                <td>                                                                                     
+                                                    <p-dropdown class="rpo-acomp" 
+                                                        [options]="allPurchaseUnitOfMeasureinfo" 
+                                                        filter="true"
+                                                        appendTo="body"
+                                                        [disabled]="!SL.isEnabled"
+                                                        [(ngModel)]="SL.unitOfMeasureId" 
+                                                        [resetFilterOnHide]="true" 
+                                                        placeholder="-- Select --" 
+                                                        [showClear]="true" 
+                                                        name="purchaseUnitOfMeasureId{{stockline_row_index}}"
+                                                        id="purchaseUnitOfMeasureId{{stockline_row_index}}" required>
+    
+                                                    </p-dropdown>   
                                                 </td>
                                                 <td>
                                                     <!-- <p-calendar class="pas-clder pas-clder-po-table"

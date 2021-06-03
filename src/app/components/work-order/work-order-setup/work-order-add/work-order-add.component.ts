@@ -73,6 +73,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() isListView: boolean = false;
     @Input() subWoMpnGridUpdated = false;
     @Input() triggerSubWoMpn = false;
+    //@Output() onWorkOrderPrintLoad = new EventEmitter();
     technicianOriginalList1: any = [];
     isRecCustomer: boolean;
     selectedCustomer: Customer;
@@ -1667,7 +1668,6 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         }
         else if (this.gridActiveTab === 'documents') {
             this.gridTabChange('documents');
-            // this.getDocumentsByWorkOrderId();/
         }
         else if (this.gridActiveTab === 'workComplete') {
             this.gridTabChange('workComplete');
@@ -2463,6 +2463,8 @@ this.getNewMaterialListByWorkOrderId();
                     // labSubList.directLaborOHCost
                     // labSubList.directLaborOHCost
                     // labSubList.directLaborOHCost
+                    labSubList.directLaborOHCost= labSubList.directLaborOHCost ? labSubList.directLaborOHCost :0;
+                    labSubList.totalCost= labSubList.totalCost ? labSubList.totalCost :0;
                     labSubList.burdaenRatePercentageId= labSubList.burdaenRatePercentageId !=0 ? labSubList.burdaenRatePercentageId :null
                     this.result.LaborList.push(labSubList);
                     this.result.expertiseId=labSubList['expertiseId'];
@@ -2542,38 +2544,6 @@ this.getNewMaterialListByWorkOrderId();
         }
     }
 
-
-    // getDocumentsByWorkOrderId() {
-    //     if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-    //         this.documentsDestructuredData = [];
-    //         this.isSpinnerVisible = true;
-    //         this.workOrderService.getDocumentsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId ? this.subWOPartNoId : 0).subscribe(res => {
-    //             this.isSpinnerVisible = false;
-    //             let arr = [];
-    //             const data = res.map(x => {
-    //                 for (var i = 0; i < x.attachmentDetails.length; i++) {
-    //                     const y = x.attachmentDetails;
-    //                     arr.push({
-    //                         ...x,
-    //                         fileName: y[i].fileName,
-    //                         fileCreatedDate: y[i].createdDate,
-    //                         fileCreatedBy: y[i].createdBy,
-    //                         fileUpdatedBy: y[i].updatedBy,
-    //                         fileUpdatedDate: y[i].updatedDate,
-    //                         fileSize: y[i].fileSize,
-    //                         link: y[i].link,
-    //                         attachmentDetailId: y[i].attachmentDetailId
-    //                     })
-    //                 }
-    //             })
-    //             this.documentsDestructuredData = arr;
-    //         }, err => {
-    //             this.handleError(err);
-    //             this.isSpinnerVisible = false;
-    //             this.documentsDestructuredData = [];
-    //         })
-    //     }
-    // }
     clearLaborList() {
         if (this.taskList && this.taskList.length > 0) {
             for (let task of this.taskList) {
@@ -3811,6 +3781,11 @@ if(res && res.response=='Record not Exist with these details. !' ){
 
     memoValidate() {
         this.disableForMemo = false;
+    }
+
+    onWorkOrderPrintLoadEvent()
+    {
+
     }
 
     doSomething(currentDate,workOrderPart,index){

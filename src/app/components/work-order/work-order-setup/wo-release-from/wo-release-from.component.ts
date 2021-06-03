@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-wo-release-from',
   templateUrl: './wo-release-from.component.html',
@@ -26,13 +27,14 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
   @Output() updateRelreaseList = new EventEmitter();
   //ReleaseData: any;
   ReleaseData : any = {};
-  isSpinnerVisible: boolean = true;
+  isSpinnerVisible: boolean = false;
   modal: NgbModalRef;
   private onDestroy$: Subject<void> = new Subject<void>();
   Printeddate1 : string;
   Printeddate2 : string;
   Issave: boolean = true;
   isconfirmsave : boolean = true;
+  endPointURL: any;
   constructor(
     private authService: AuthService,
     private acRouter: ActivatedRoute,
@@ -46,6 +48,7 @@ export class WoReleaseFromComponent implements OnInit,OnChanges {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#woReleaseFromDiv').modal('show');
     if(this.isEdit || this.isView)
     {
@@ -101,24 +104,24 @@ close()
 
 onsave()
 {
-  this.Issave = false;
-  if(new Date(this.ReleaseData.date) >=  new Date(this.ReleaseData.receivedDate))
+  this.isconfirmsave = true;
+  if(new Date(this.ReleaseData.date) <=  new Date(this.ReleaseData.receivedDate))
   {
     this.isconfirmsave = false;
     this.alertService.showMessage(
       '',
-      'Please Select Date less than ReceivedDate',
+      'Please Select Date greater than ReceivedDate',
       MessageSeverity.warn
   );
 
   }
 
-  if(new Date(this.ReleaseData.date2) >=  new Date(this.ReleaseData.receivedDate))
+  if(new Date(this.ReleaseData.date2) <=  new Date(this.ReleaseData.receivedDate))
   {
     this.isconfirmsave = false;
     this.alertService.showMessage(
       '',
-      'Please Select Date less than ReceivedDate',
+      'Please Select Date greater than ReceivedDate',
       MessageSeverity.warn
   );
 
@@ -126,6 +129,7 @@ onsave()
 
   if(this.isconfirmsave)
   {
+    this.Issave = false;
     this.CreateUpdateReleasedata();
   }
 }
@@ -183,6 +187,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   CreateUpdateReleasedata()
   {
+           this.isSpinnerVisible = true;
             this.ReleaseData.masterCompanyId= this.authService.currentUser.masterCompanyId;
             this.ReleaseData.createdBy= this.userName;
             this.ReleaseData.updatedBy= this.userName;
@@ -208,7 +213,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
          
           this.alertService.showMessage(
               '',
-              '8130 from Added Succesfully',
+              '8130 form Added Succesfully',
               MessageSeverity.success
           );
       },

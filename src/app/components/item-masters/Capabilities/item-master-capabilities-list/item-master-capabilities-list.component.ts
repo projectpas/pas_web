@@ -1345,7 +1345,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     onAddTextAreaInfo(value , content) {
         this.textAreaInfo = this.selectedItemMasterCapData.memo;
         this.disableSaveMemo=true;
-        $('#capes-memo').modal('show');
+        $('#edit-capes-memo').modal('show');
         
         //this.modal = this.modalService.open(content, { size: 'sm' });
 		// if(value == 'memo') {

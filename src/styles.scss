@@ -9161,7 +9161,7 @@ label.clr-red {
 
 #workflow-attributes-block {
   padding: 5px;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 #workflow-attributes-block .tab-pane.form-bg.active.in {
@@ -13679,6 +13679,7 @@ body .ui-paginator .ui-paginator-pages .ui-paginator-page {
 
 .ui-paginator a.ui-paginator-element {
   color: #007bff !important;
+  padding:0px !important;
 }
 
 .ui-paginator a.ui-paginator-element.ui-state-disabled {
@@ -15438,7 +15439,8 @@ body .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link.ui-state-active,
 }
 
 .p-dropdown-custom-sm .ui-dropdown {
-  min-width: 126px !important;
+  // width:122px !important;
+   min-width: 126px !important;
 }
 
 .p-dropdown-custom-sm .ui-dropdown-trigger,
