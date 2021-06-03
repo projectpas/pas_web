@@ -204,7 +204,7 @@
                             <div style="float: right;" class="m-t-2"> 
                             </div>
                             <div >
-                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
+                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="margin-bottom: -8px;">
                                                 <div class="panel-title">
@@ -505,11 +505,11 @@
                             </div>
                         </div>
                         
-                        <div *ngIf="(workOrderId && gridActiveTab == 'woAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'woAnalysis' }" style="overflow-x: scroll;">
+                        <div *ngIf="(workOrderId && gridActiveTab == 'woAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'woAnalysis' }" >
                             <app-analysis-wo-summarization [value]="woAnalysisMPNs" [type]="gridActiveTab" [workOrderId]="workOrderId"></app-analysis-wo-summarization>
                         </div>
 
-                        <div *ngIf="(workOrderId && gridActiveTab == 'quoteAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'quoteAnalysis' }"  style="overflow-x: scroll;">
+                        <div *ngIf="(workOrderId && gridActiveTab == 'quoteAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'quoteAnalysis' }" >
                             <app-analysis-wo-summarization [value]="quoteAnalysisMPNs" [type]="gridActiveTab" [workOrderId]="workOrderId"></app-analysis-wo-summarization>
                         </div>
 

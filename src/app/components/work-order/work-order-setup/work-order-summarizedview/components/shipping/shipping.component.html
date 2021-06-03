@@ -5,11 +5,11 @@
 </div>
 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" style="margin-top: 15px;">
     <div class="tableFixHead">
-<p-treeTable class="table header-table-width" [value]="gridData" (onNodeExpand)="getShippingData($event.node)">
+<p-treeTable class="table header-table-width p-Treetable-view" [value]="gridData" (onNodeExpand)="getShippingData($event.node)">
     <ng-template pTemplate="header">
         <tr>
             <th class="shipping-detail-header">PartNumber</th>
-            <th class="shipping-detail-header">Part Description</th>
+            <th class="shipping-detail-header" style="min-width:250px !important">Part Description</th>
             <th class="shipping-detail-header">Revised PartNo</th>
             <th class="shipping-detail-header">Address Type</th>
             <th class="shipping-detail-header">User</th>
