@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-wo-release-easa-from',
   templateUrl: './wo-release-easa-from.component.html',
@@ -33,6 +34,7 @@ export class WoReleaseEasaFromComponent implements OnInit {
   Printeddate1 : string;
   Printeddate2 : string;
   modal: NgbModalRef;
+  endPointURL: any;
   private onDestroy$: Subject<void> = new Subject<void>();
   constructor(
     private authService: AuthService,
@@ -47,6 +49,7 @@ export class WoReleaseEasaFromComponent implements OnInit {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#woReleaseEasaFromDiv').modal('show');
     
     if(this.isEdit || this.isView)

@@ -9,6 +9,8 @@ import { takeUntil } from 'rxjs/operators';
 import { AlertService,MessageSeverity } from 'src/app/services/alert.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { NavigationExtras } from "@angular/router";
+import { environment } from "../../../../../environments/environment";
 @Component({
   selector: 'app-wo-print-form',
   templateUrl: './wo-print-form.component.html',
@@ -17,13 +19,15 @@ import { DatePipe } from '@angular/common';
 })
 export class WoPrintFromComponent implements OnInit,OnChanges {
 
+  // @Input('modal-reference') modalReference: NgbModalRef;
+  // @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
   @Input() workOrderPartNumberId;
   @Input() workOrderId;
-  @Input() releaseFromId;
-  @Input() isView;
-  @Input() isEdit;
-  @Input() ReleaseDataForm;
-  @Output() updateRelreaseList = new EventEmitter();
+  // @Input() releaseFromId;
+  // @Input() isView;
+  // @Input() isEdit;
+  // @Input() ReleaseDataForm;
+  // @Output() onWorkOrderPrintLoad = new EventEmitter();
   //ReleaseData: any;
   ReleaseData : any = {};
   isSpinnerVisible: boolean = true;
@@ -33,6 +37,8 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
   Printeddate2 : string;
   Issave: boolean = true;
   isconfirmsave : boolean = true;
+  workOrderprintData: any = [];
+  endPointURL : any;
   constructor(
     private authService: AuthService,
     private acRouter: ActivatedRoute,
@@ -46,21 +52,29 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#woReleaseFromDiv').modal('show');
-    if(this.isEdit || this.isView)
-    {
-      this.BindData(this.ReleaseDataForm);
-    }else
-    {
-      this.GetWorkorderReleaseFromData();
-    }
-    }
+     this.GetWorkOrderPrintFormData();
+
+  }
     
 
   ngOnChanges() 
   {
   
   }
+
+  GetWorkOrderPrintFormData() {
+    this.isSpinnerVisible = true;
+    this.workOrderService.GetWorkOrderPrintFormData(this.workOrderId,this.workOrderPartNumberId).subscribe(res => {
+        this.workOrderprintData = res[0];
+       // this.getWorkOrderCharges();
+        //this.onWorkOrderPrintLoad.emit();
+        this.isSpinnerVisible = false;
+    }, error => {
+        this.isSpinnerVisible = false;
+    })
+}
 
   get userName(): string {
     return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -96,39 +110,7 @@ onDate1(e)
 
 close()
 {
-    this.updateRelreaseList.emit();
-}
-
-onsave()
-{
-  this.isconfirmsave = true;
-  if(new Date(this.ReleaseData.date) <=  new Date(this.ReleaseData.receivedDate))
-  {
-    this.isconfirmsave = false;
-    this.alertService.showMessage(
-      '',
-      'Please Select Date greater than ReceivedDate',
-      MessageSeverity.warn
-  );
-
-  }
-
-  if(new Date(this.ReleaseData.date2) <=  new Date(this.ReleaseData.receivedDate))
-  {
-    this.isconfirmsave = false;
-    this.alertService.showMessage(
-      '',
-      'Please Select Date greater than ReceivedDate',
-      MessageSeverity.warn
-  );
-
-  }
-
-  if(this.isconfirmsave)
-  {
-    this.Issave = false;
-    this.CreateUpdateReleasedata();
-  }
+    //this.updateRelreaseList.emit();
 }
 
 
@@ -167,57 +149,9 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
 }
 
-  GetWorkorderReleaseFromData()
-  {
-    this.isSpinnerVisible = true;
-    this.workOrderService
-      .GetWorkorderReleaseFromData(this.workOrderId,this.workOrderPartNumberId)
-      .subscribe((response: any) => {
-        this.isSpinnerVisible = false;
-        this.BindData(response);
 
-      }, error => {
-        this.isSpinnerVisible = false;
-      });
 
-  }
-
-  CreateUpdateReleasedata()
-  {
-            this.ReleaseData.masterCompanyId= this.authService.currentUser.masterCompanyId;
-            this.ReleaseData.createdBy= this.userName;
-            this.ReleaseData.updatedBy= this.userName;
-            this.ReleaseData.createdDate= new Date();
-            this.ReleaseData.updatedDate= new Date();
-            this.ReleaseData.isActive= true;
-            this.ReleaseData.isDeleted= false;
-            this.ReleaseData.is8130from= true;
-            this.ReleaseData.isClosed= false;
-            if(this.isEdit)
-            {
-              this.ReleaseData.ReleaseFromId=this.releaseFromId;
-            }
-            else{
-              this.ReleaseData.ReleaseFromId=0;
-            }
-            this.ReleaseData.workOrderPartNoId=this.workOrderPartNumberId;
-            this.ReleaseData.WorkorderId=this.workOrderId;
-    this.workOrderService.CreateUpdateReleasefrom(this.ReleaseData).pipe(takeUntil(this.onDestroy$)).subscribe(
-      result => {
-          this.isSpinnerVisible = false;
-          this.isEdit = true;
-         
-          this.alertService.showMessage(
-              '',
-              '8130 from Added Succesfully',
-              MessageSeverity.success
-          );
-      },
-      err => {
-          this.handleError(err);
-      }
-  );
-  }
+ 
 
   handleError(err) {
     this.isSpinnerVisible = false;
@@ -226,7 +160,7 @@ this.Printeddate2 =`${da1}/${mo1}/${ye1}`;
 
   print(): void {
     //this.CreateUpdateReleasedata();
-    this.updateRelreaseList.emit();
+    //this.updateRelreaseList.emit();
     let printContents, popupWin;
     printContents = document.getElementById('woReleaseFrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');

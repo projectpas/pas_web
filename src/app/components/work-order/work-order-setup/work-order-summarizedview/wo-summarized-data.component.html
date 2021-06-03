@@ -80,7 +80,7 @@
                                                                 <thead >
                                                                     <tr>
                                                                         <!-- <th class="table-column-icon-width"></th> -->
-                                                                        <th *ngFor="let matHeader of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; min-width: 100px !important;;background-color: #4397f7;
+                                                                        <th *ngFor="let matHeader of materialListHeader" [ngStyle]="{'width': matHeader.width}" style="border: 1px solid #c8c8c8 !important;padding: 8px; min-width: 100px !important;;background-color: #4397f7;
                                                                         color: white;">
                                                                             {{matHeader.header}}
                                                                         </th>
@@ -89,11 +89,11 @@
                                                                 <tbody>
                                                                     <ng-container *ngFor="let materialMPN of materialListMPNs; let i=index" >
                                                                     <tr>
-                                                                        <td *ngFor="let matField of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
+                                                                        <td *ngFor="let matField of materialListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
                                                                           <span *ngIf="matField.field !='plus'"> {{globalizeAmount(materialMPN[matField.field], matField.field)}}</span>
                                                                             <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
-                                                                               <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
-                                                                               <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 7px 8px !important;" (click)="handelPlus(materialMPN)"></i>   
+                                                                               <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 1px 5px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
+                                                                               <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(materialMPN)"></i>   
                                                                            </a> 
                                                                         </td>
                                                                     </tr>
@@ -127,12 +127,13 @@
                                 </button> -->
                             </div>
                             <div >
-                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="margin-bottom: -8px;">
                                                 <div class="panel-title">
                                                     <div></div>
-                                                       <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" style="overflow: hidden !important;">
+                                                       <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                        <!-- style="overflow: hidden !important;" -->
                                                             <div class="tableFixHead">
                                                             <table  class="table table-bordered">
                                                                 <thead  >
@@ -149,11 +150,11 @@
                                                                    
                                                                    <ng-container *ngFor="let labourMPN of labourListMPNs; let i=index" >
                                                                     <tr>
-                                                                        <td *ngFor="let matField of labourListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
+                                                                        <td *ngFor="let matField of labourListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
                                                                           <span *ngIf="matField.field !='plus'"> {{globalizeAmount(labourMPN[matField.field], matField.field)}}</span>
                                                                             <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
-                                                                               <i *ngIf="labourMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 3px 8px !important;color: #fff !important;"  (click)="getLabourListData(labourMPN)"></i>
-                                                                               <i *ngIf="labourMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 7px 8px !important;" (click)="handelPlus(labourMPN)"></i>   
+                                                                               <i *ngIf="labourMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(labourMPN)"></i>
+                                                                               <i *ngIf="labourMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(labourMPN)"></i>   
                                                                            </a> 
                                                                         </td>
                                                                     </tr>
@@ -203,12 +204,13 @@
                             <div style="float: right;" class="m-t-2"> 
                             </div>
                             <div >
-                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="margin-bottom: -8px;">
                                                 <div class="panel-title">
                                                     <div></div>
-                                                       <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" style="overflow: hidden !important;">
+                                                       <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                        <!-- style="overflow: hidden !important;" -->
                                                             <div class="tableFixHead">
                                                             <table  class="table table-bordered">
                                                                 <thead  >
@@ -225,10 +227,10 @@
                                                                    
                                                                    <ng-container *ngFor="let documentMPN of documentNumberList; let i=index">
                                                                     <tr>
-                                                                        <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
+                                                                        <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
                                                                             <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
-                                                                                <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 3px 8px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
-                                                                                <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 7px 8px !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
                                                                             </a> 
                                                                             <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
                                                                         </td>
@@ -264,12 +266,13 @@
                                 <div style="float: right;" class="m-t-2"> 
                                 </div>
                                 <div >
-                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
                                             <div class="panel panel-default">
                                                 <div class="panel-heading" style="margin-bottom: -8px;">
                                                     <div class="panel-title">
                                                         <div></div>
-                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" style="overflow: hidden !important;">
+                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                            <!-- style="overflow: hidden !important;" -->
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
                                                                     <thead  >
@@ -286,10 +289,10 @@
                                                                        
                                                                        <ng-container *ngFor="let documentMPN of memoNumberList; let i=index">
                                                                         <tr>
-                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
+                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;color: black;">
                                                                                 <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
-                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 3px 8px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
-                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 7px 8px !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
                                                                                 </a> 
                                                                                 <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
                                                                             </td>
@@ -318,12 +321,13 @@
                                 <div style="float: right;" class="m-t-2"> 
                                 </div>
                                 <div >
-                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
                                             <div class="panel panel-default">
                                                 <div class="panel-heading" style="margin-bottom: -8px;">
                                                     <div class="panel-title">
                                                         <div></div>
-                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" style="overflow: hidden !important;">
+                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1">
+                                                            <!-- style="overflow: hidden !important;" -->
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
                                                                     <thead  >
@@ -340,10 +344,10 @@
                                                                        
                                                                        <ng-container *ngFor="let documentMPN of emailNumberList; let i=index">
                                                                         <tr>
-                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
+                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
                                                                                 <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
-                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 3px 8px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
-                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 7px 8px !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
                                                                                 </a> 
                                                                                 <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
                                                                             </td>
@@ -383,12 +387,13 @@
                                 <div style="float: right;" class="m-t-2"> 
                                 </div>
                                 <div >
-                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
                                             <div class="panel panel-default">
                                                 <div class="panel-heading" style="margin-bottom: -8px;">
                                                     <div class="panel-title">
                                                         <div></div>
-                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" style="overflow: hidden !important;">
+                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                            <!-- style="overflow: hidden !important;" -->
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
                                                                     <thead  >
@@ -405,10 +410,10 @@
                                                                        
                                                                        <ng-container *ngFor="let documentMPN of textNumberList; let i=index">
                                                                         <tr>
-                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
+                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
                                                                                 <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
-                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 3px 8px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
-                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 7px 8px !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
                                                                                 </a> 
                                                                                 <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
                                                                             </td>
@@ -441,12 +446,13 @@
                                 <div style="float: right;" class="m-t-2"> 
                                 </div>
                                 <div >
-                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
                                             <div class="panel panel-default">
                                                 <div class="panel-heading" style="margin-bottom: -8px;">
                                                     <div class="panel-title">
                                                         <div></div>
-                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" style="overflow: hidden !important;">
+                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                            <!-- style="overflow: hidden !important;" -->
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
                                                                     <thead  >
@@ -463,10 +469,10 @@
                                                                        
                                                                        <ng-container *ngFor="let documentMPN of phoneNumberList; let i=index">
                                                                         <tr>
-                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
+                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
                                                                                 <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
-                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 3px 8px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
-                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 7px 8px !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
                                                                                 </a> 
                                                                                 <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
                                                                             </td>

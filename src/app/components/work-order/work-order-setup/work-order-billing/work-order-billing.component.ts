@@ -1062,7 +1062,7 @@ export class WorkOrderBillingComponent implements OnInit {
             billingItems.push(p);
         }
 
-        this.isSpinnerVisible = true;
+       
         let billingorInvoiceFormTemp = JSON.parse(JSON.stringify(this.billingorInvoiceForm));
         this.billingorInvoiceForm.soldToCustomerId = billingorInvoiceFormTemp.soldToCustomerId['customerId'];
         this.billingorInvoiceForm.shipToCustomerId = billingorInvoiceFormTemp.shipToCustomerId['customerId'];
@@ -1089,7 +1089,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.billingItems = billingItems;
         this.billingorInvoiceForm.workOrderShippingId = this.workOrderShippingId;
         this.billingorInvoiceForm.invoiceTime =moment(billingorInvoiceFormTemp.invoiceTime, ["h:mm A"]).format("HH:mm")
-
+        this.isSpinnerVisible = true;
         this.workOrderService.createBillingByWorkOrderId(this.billingorInvoiceForm).subscribe(result => {
             this.alertService.showMessage(
                 this.moduleName,

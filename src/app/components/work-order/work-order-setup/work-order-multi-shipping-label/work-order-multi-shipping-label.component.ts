@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
 declare var $: any;
 import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-work-order-multi-shipping-label',
   templateUrl: './work-order-multi-shipping-label.component.html',
@@ -11,13 +12,14 @@ import * as moment from 'moment';
 })
 export class WorkOrderMultiShippingLabelComponent implements OnInit,OnChanges {
 
-  @Input() workshippingLabels
+  @Input() shippingLabels
   //workshippingLabels: any = [];
   objWorkOrderShippingLabels: any = [];
   todayDate: Date = new Date();
   salesOrderpartConditionDescription: any;
   endPointURL: any;
   isPrint: boolean = false;
+  isSpinnerVisible: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -29,22 +31,27 @@ export class WorkOrderMultiShippingLabelComponent implements OnInit,OnChanges {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#ShippingSlipDiv').modal('show');
     //this.GetWorkorderReleaseFromData();
-    this.getSalesOrderShippingLabel();
+    this.getWorkOrderShippingLabel();
   }
 
   ngOnChanges()
   {
-    console.log(this.workshippingLabels)
+    console.log(this.shippingLabels)
   }
 
-  getSalesOrderShippingLabel() {
+  getWorkOrderShippingLabel() {
     const data={
-      'shippingLabels' :this.workshippingLabels
+      'shippingLabels' :this.shippingLabels
      }
+     this.isSpinnerVisible= true
     this.workOrderService.getMultiShippingLabelPrint(data).subscribe(res => {
       this.objWorkOrderShippingLabels = res[0];
+      this.isSpinnerVisible= false
+    }, error => {
+      this.isSpinnerVisible = false;
     })
   }
 

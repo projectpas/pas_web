@@ -604,9 +604,7 @@ export class ReceivngPoComponent implements OnInit {
         return this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == purchaseOrderPartRecordId).length > 0;
     }
 
-    public toggleStockLine(event: any, part: PurchaseOrderPart): void {
-        var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
-        console.log(allParentParts)
+    public toggleStockLine(event: any, part: PurchaseOrderPart): void {               
         var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
         if (!condtion || condtion == undefined) {
@@ -631,6 +629,8 @@ export class ReceivngPoComponent implements OnInit {
             manufacturer.Value = part.itemMaster.manufacturerName.toString();
             this.ManufacturerList.push(manufacturer);
         }
+
+
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
         }
@@ -747,7 +747,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.ownerType = AppModuleEnum.Vendor;
             stockLine.owner = this.purchaseOrderData.vendor.vendorId;
 
-            //stockLine.unitOfMeasureId = part.uomId;
+            //stockLine.unitOfMeasureId = { value: part.uomId, label: part.unitOfMeasure },
 
             stockLine.maincompanylist = part.maincompanylist;
             stockLine.parentCompanyId = part.parentCompanyId;
@@ -1021,8 +1021,7 @@ export class ReceivngPoComponent implements OnInit {
 
 
     onObtainSelect(stockLine: StockLine, type): void {
-        stockLine.obtainFrom = stockLine.obtainFromObject.Key;
-        console.log(stockLine.obtainFrom)
+        stockLine.obtainFrom = stockLine.obtainFromObject.Key;        
         if (type == AppModuleEnum.Customer) {
             this.arrayCustlist.push(stockLine.obtainFromObject.Key);
         } else if (type == AppModuleEnum.Vendor) {
@@ -1307,7 +1306,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     onSubmitToReceive() {
-        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);        
+        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);                
         for (let part of allParts) {
             if (part.isSameDetailsForAllParts) {
                 if (part.isSameDetailsForAllParts && !part.itemMaster.isSerialized && part.stocklineListObj && part.stocklineListObj.length > 0) {
@@ -1342,8 +1341,7 @@ export class ReceivngPoComponent implements OnInit {
             return;
         }
         let partsToPost: ReceiveParts[] = this.extractAllAllStockLines();
-        this.isSpinnerVisible = true;
-        console.log(partsToPost)
+        this.isSpinnerVisible = true;        
         this.shippingService.receiveParts(partsToPost).subscribe(data => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
@@ -1520,13 +1518,12 @@ export class ReceivngPoComponent implements OnInit {
                     sl.tagTypeId = "";
                 }
                 sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
-
                 sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
-            } 
+            }             
             if (part.isSameDetailsForAllParts) {
                 for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                     part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
-                    part.stocklineListObj[part.currentSERIndex].serialNumber = "";
+                    //part.stocklineListObj[part.currentSERIndex].serialNumber = "";
                     var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                     part.stocklineListObj[i] = stockLineToCopy;
                     var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };

@@ -124,8 +124,7 @@ export class ViewRoComponent {
 
     getStockDetailsOnLoad() {
         this.receivingService.getReceivingROPartsForViewById(this.repairOrderId).subscribe(
-            results => {
-                console.log(results)
+            results => {               
                 this.repairOrderData = results.map(x => {
                     return {
                         ...x,  

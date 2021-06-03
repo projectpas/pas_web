@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
 declare var $: any;
 import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-work-order-shipping-label',
   templateUrl: './work-order-shipping-label.component.html',
@@ -35,7 +36,7 @@ export class WorkOrderShippingLabelComponent implements OnInit {
 
   ngOnInit() 
   {
-    debugger;
+    this.endPointURL = environment.baseUrl;
     $('#ShippingSlipDiv').modal('show');
     //this.GetWorkorderReleaseFromData();
     this.getSalesOrderShippingLabel();

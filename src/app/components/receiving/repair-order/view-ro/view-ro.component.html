@@ -307,6 +307,7 @@
                             <th>SO </th>
                             <th>Sub-WO </th>
                             <th colspan="4" style="text-align: center;">Management Structure</th>
+                            <th>Revised PartNumber </th>
                             <th>Site</th>
                             <th>Warehouse</th>
                             <th>Location</th>
@@ -382,6 +383,9 @@
                                 <td style="min-width: 120px;">
                                     <!-- <label style="width:90px;">Dept:</label> -->
                                     {{part.stockLine[stockline_row_index].departmentText}}
+                                </td>
+                                <td>
+                                    {{part.stockLine[stockline_row_index].revisedPartNumber}}
 
                                 </td>
                                 <td>

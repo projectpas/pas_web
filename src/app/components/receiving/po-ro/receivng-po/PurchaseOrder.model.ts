@@ -761,7 +761,7 @@ export class StockLineDraft {
     tagTypeId: any = null;
     taggedBy:number = null;
     taggedByName: string = null;
-    unitOfMeasureId:number = null;
+    unitOfMeasureId:any = null;
     unitOfMeasure: string = null;
 }
 
