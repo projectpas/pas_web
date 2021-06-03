@@ -49,7 +49,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     labourDetailedViewOpened: boolean = false;
 
     materialListHeader = [
-        {"header": "", "field": "plus"},
+        {"header": "", "field": "plus",width:"30px"},
         {"header": "Task","field": "task"},
         {"header": "MPN", "field": "partNumber"},
         {"header": "Revised Part No","field": "revisedPartNo"},
