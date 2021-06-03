@@ -808,4 +808,10 @@ getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> 
     );
   }
 
+  GetWorkOrderQoutePrintFormData(WorkorderId: number,workOrderPartNoId : number ,workflowWorkorderId : number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId)
+    );
+  }
+
 }
