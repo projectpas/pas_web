@@ -104,11 +104,11 @@ this.onChangeQuantityFromThis();
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
      this.formObject.conditionIds=[this.editData.conditionCodeId];
-     this.formObject.quantity=this.editData.quantity;
     //  this.formObject.qtyOnHand=this.editData.qtyOnHand;
      if(this.isStockLine){
       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
       this.formObject.unitCost= this.editData.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(this.editData.stocklineUnitCost, 2) : '0.00';
+      this.formObject.quantity=this.editData.quantity;
     }else{
       this.formObject.qtyAvailable=this.editData.qtyAvail;
       this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
