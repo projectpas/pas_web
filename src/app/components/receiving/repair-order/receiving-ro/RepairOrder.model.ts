@@ -375,6 +375,9 @@ export class StockLine {
     taggedByName: string = null;
     unitOfMeasureId:number = null;
     unitOfMeasure: string = null;
+    revisedPartId:any = null;
+    revisedPartNumber: string = null;
+    revisedPartObject: DropDownData;
 }
 
 export class ReceiveParts {

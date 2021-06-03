@@ -623,13 +623,13 @@
                                     <th>Report CUR <span class="clr-red">*</span></th>
                                     <th>Control Id</th>
                                     <th>Control Num</th>
-                                    <th>PO</th>
+                                    <!-- <th>PO</th> -->
                                     <th class="th-width-90">WO Num</th>
                                     <th class="th-width-90">Sub-WO Num</th>
                                     <!-- <th>RO Num</th> -->
                                     <th class="th-width-90">SO Num</th>
-                                    <th class="th-width-90">Vend Qte Num</th>
-                                    <th class="th-width-90">Vend Qte Date</th>
+                                    <!-- <th class="th-width-90">Vend Qte Num</th>
+                                    <th class="th-width-90">Vend Qte Date</th> -->
                                     <th>Item Type</th>
                                     <th>GL Account</th>
                                     <th>AC Tail Num</th>
@@ -702,7 +702,7 @@
                                                 id="revisedPartId{{row_index}}" [forceSelection]="true"
                                                 [suggestions]="revisedPartNumCollection"
                                                 (completeMethod)="filterRevisedPart($event)" [size]="30" [minLength]="1"
-                                                [dropdown]="true" [disabled]="partList.isApproved">
+                                                [dropdown]="true" [disabled]="partList.isApproved" required>
                                             </p-autoComplete>
                                         </td>
                                         <td>{{partList.stockType}}</td>
@@ -876,9 +876,9 @@
                                                 name="controlId{{row_index}}" disabled></td>
                                         <td><input type="text" class="form-control" [(ngModel)]="partList.controlNumber"
                                                 name="controlNumber{{row_index}}" disabled></td>
-                                        <td><input type="text" class="form-control"
+                                        <!-- <td><input type="text" class="form-control"
                                                 [(ngModel)]="partList.purchaseOrderNum"
-                                                name="purchaseOrderNum{{row_index}}" disabled></td>
+                                                name="purchaseOrderNum{{row_index}}" disabled></td> -->
                                         <td>
                                             <p-autoComplete field="label" class="autocomplete" appendTo="body"
                                                 [(ngModel)]="partList.workOrderId" name="workOrderId{{row_index}}"
@@ -922,7 +922,7 @@
                                                 [disabled]="partList.isApproved">
                                             </p-autoComplete>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <p-autoComplete field="label" class="autocomplete" appendTo="body"
                                                 [(ngModel)]="partList.vendorQuoteNoId"
                                                 name="VendorQuoteNoId{{row_index}}" [suggestions]="allSalesOrderDetails"
@@ -947,7 +947,7 @@
                                                     <small> Vend Qte Date is required </small>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> -->
                                         <td *ngIf="partList.itemTypeId==1">Stock</td>
                                         <td *ngIf="partList.itemTypeId==2">Non Stock</td>
                                         <td *ngIf="partList.itemTypeId==3">Equipment</td>
@@ -1063,7 +1063,7 @@
                                                 *ngIf="!partList.isApproved"></i> -->
 
                                             <i class="fa fa-trash parts-list-delete-msg mr-1"
-                                                matTooltip="Delete Part Number" matTooltipPosition="after"
+                                                matTooltip="Remove Inventory" matTooltipPosition="after"
                                                 (click)="onDelPNRow(partList, row_index)"
                                                 *ngIf="!partList.isApproved"></i>
 
@@ -1420,9 +1420,9 @@
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
+                                    <!-- <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td> -->
                                     <!-- <td>&nbsp;</td> -->
                                 </tr>
                                 <tr *ngIf="partListData.length == 0">

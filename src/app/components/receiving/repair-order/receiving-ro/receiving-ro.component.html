@@ -256,8 +256,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let part of repairOrderData; let row_index=index">
-                                <!--this row is for the parent part-->
+                            <ng-container *ngFor="let part of repairOrderData; let row_index=index">                                
                                 <tr class="parent-data parent-td-background" *ngIf="part.isParent">
                                     <!-- <td class="details-control eachcol parent-padding">
                                         <section *ngIf="isSplitShipmentPart(part.repairOrderPartRecordId)">
@@ -277,8 +276,7 @@
                                     <td class="text-right">{{part.quantityRejected}}</td>
                                     <td class="text-right">{{part.quantityBackOrdered}}</td>
                                     <td>{{part.quantityRepaired == 0 ? 'Pending' : part.quantityRepaired < part.quantityToRepair ? 'Fulfilling' : 'Received'}}
-                                    </td>                                    
-                                    <!-- <td>{{part.stockLine.stockLineNumber}}</td> -->
+                                    </td>                                                                        
                                     <td>{{part.stockLineNumber}}</td>
                                     <td colspan="4">{{part?.level1}}, {{part?.level2}},{{part?.level3}},
                                         {{part?.level4}}</td>
@@ -688,7 +686,21 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3">                                                        
+                                                    <div class="col-md-3"> 
+                                                        
+                                                        <div class="form-group">
+                                                        <label>Revised PN </label>
+                                                        <p-autoComplete field="partNumber" 
+                                                                class="autocomplete" appendTo="body"
+                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].revisedPartId"                                                                 
+                                                                [forceSelection]="true"
+                                                                [suggestions]="revisedPartNumCollection"
+                                                                (completeMethod)="filterRevisedPart($event)" 
+                                                                [size]="30" 
+                                                                [minLength]="1"
+                                                                [dropdown]="true" required>
+                                                        </p-autoComplete>
+                                                        </div>
                                                         <div class="form-group">
                                                             <label>Obtain From </label>
                                                             <select class="form-control"
