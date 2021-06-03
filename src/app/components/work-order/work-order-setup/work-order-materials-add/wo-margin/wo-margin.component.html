@@ -36,19 +36,20 @@
 </div>
 <div class="row margin-row">
   <div class="row">
-    <div class="col-3 column"> 
+    <div class="col-2 column"> 
       <div class="form-group">
         <label>Quantity requested</label> 
         <input type="text" class="form-control   text-right" pInputText pKeyFilter="num" name="quantityRequest"
           disabled="true" [(ngModel)]="part.quantity " style="width: 100%;" />
       </div>
     </div>
-    <div class="col-4 column">
-      <div class="form-group">
+    <div class="col-2 column">
+      <div class="form-group"> 
+        <!-- [disabled]="!isStockLine" -->
         <label>Quantity from this <span *ngIf="part.method=='ItemMaster'">PN</span><span
             *ngIf="part.method=='StockLine'">{{part.stockLineNumber}}</span></label>
-        <input type="text" class="form-control   text-right" name="stocklineQuantity"
-         [(ngModel)]="formObject.stocklineQuantity" [disabled]="!isStockLine"
+        <input type="number" class="form-control   text-right" name="stocklineQuantity"
+         [(ngModel)]="formObject.stocklineQuantity" 
           (input)="onChangeQuantityFromThis();calculateExtendedCost()" (ngModelChange)="getActive()"
           name="quantity" autocomplete="off" />
           <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
@@ -57,6 +58,22 @@
         </div>
       </div>
     </div>
+     <div class="col-6 column">
+        <div class="col-2 column">
+          <div class="form-group">
+            <label>Qty On Hand</label>
+            <input type="text" class="form-control text-right" [ngModel]="formObject.qtyOnHand" name="qtyOnHand"
+               disabled="true" /> 
+          </div>
+        </div>
+        <div class="col-2 column">
+          <div class="form-group">
+            <label>Qty Available</label>
+            <input type="text" class="form-control text-right" [ngModel]="formObject.qtyAvailable" name="qtyAvailable"
+               disabled="true" />
+          </div>
+        </div>
+      </div>
   </div>
 </div>
 <div class="row">
@@ -141,10 +158,11 @@
     (click)="savePart($event)">
     Save
   </button>
-  <button class="btn btn-primary" *ngIf="isEdit" [disabled]="disableUpdateButton || formObject.stocklineQuantity==0" (click)="upDatePart($event)">
+  <button class="btn btn-primary" *ngIf="isEdit" [disabled]="formObject.stocklineQuantity==0" (click)="upDatePart($event)">
     Update
   </button>
   <button type="button" (click)="onClose($event)" class="btn btn-danger">
     Close
   </button>
-</div>
+ </div>
+<!--disableUpdateButton ||  -->

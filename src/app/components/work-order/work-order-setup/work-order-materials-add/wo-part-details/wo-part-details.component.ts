@@ -68,7 +68,11 @@ export class WoPartDetailsComponent implements OnChanges {
     partNumberObj:undefined,
     quantity:0,
     conditionIds:undefined,
-    provisionId:0
+    provisionId:0,
+    restrictPMA:false,
+    restrictDER:false,
+    includeAlternatePartNumber:false,
+    includeEquivalentPartNumber:false
   };
   searchQuery={
     first:0,
@@ -90,6 +94,7 @@ export class WoPartDetailsComponent implements OnChanges {
   provisionListData:any=[];
   materialMandatory:any=[];
   selectedMaterialPart:any;
+  showMarginPopUp:boolean=false;
   constructor(private salesQuoteService: SalesQuoteService,
     private service: StocklineService,
     private modalService: NgbModal,
@@ -109,6 +114,7 @@ export class WoPartDetailsComponent implements OnChanges {
 
   ngOnInit() {    
    if(this.editData){
+     console.log("wo part edit Data",this.editData)
     this.disableforPartNum=true;
     this.formObject.restrictPMA= false,
     this.formObject.restrictDER= false,
@@ -225,15 +231,20 @@ export class WoPartDetailsComponent implements OnChanges {
     let checked: boolean = event.srcElement.checked;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable; 
- if(checked==true){
+
+    if(checked==true){
       event.srcElement.checked=false;
- part.method='ItemMaster';
+      part.method='ItemMaster';
       this.materialCreateObject=part;
+      if(this.editData){
+        this.materialCreateObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
+      }
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject.conditionCodeId=part.conditionId;
       this.materialCreateObject.itemMasterId=part.itemMasterId;
       this.materialCreateObject.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
+      //this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
       this.materialCreateObject.partNumber=part.partNumber;
       this.materialCreateObject.itemClassificationId=part.itemClassificationId;
       this.materialCreateObject.itemClassification=part.itemClassification;
@@ -253,9 +264,11 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.memo=this.formObject.memo;
       this.materialCreateObject.stocklineQuantity=part.qtyToOrder;
       this.disableSaveUpdateButton=true;
-      this.selectedMaterialPart={};
+      this.selectedMaterialPart=undefined;
       this.selectedMaterialPart=this.materialCreateObject;
       this.openSalesMargin();
+      console.log("this.hhhhh", this.selectedMaterialPart)
+      console.log("this.hhhhh", this.formObject)
       this.provisionListData.forEach(element => {
         if(element.value==this.formObject.provisionId){
           this.materialCreateObject.provision=element.label;
@@ -273,19 +286,26 @@ export class WoPartDetailsComponent implements OnChanges {
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject={};
     }
+    console.log("this.hhhhh", this.selectedMaterialPart)
+    console.log("this.hhhhh", this.formObject)
   }
   childPartChecked
   onChangeStock(event, part, salesMargin) {
     let checked: boolean = event.srcElement.checked;
     if(checked==true){
+      event.srcElement.checked=false;
   part.method='StockLine';
     part.childPartChecked=true;
+    if(this.editData){
+      this.materialCreateObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
+    }
     this.materialCreateObject=part;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable;
     this.materialCreateObject.conditionCodeId=part.conditionId;
     this.materialCreateObject.itemMasterId=part.itemMasterId;
     this.materialCreateObject.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
+    //this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
     this.materialCreateObject.partNumber=part.partNumber;
     this.materialCreateObject.itemClassificationId=part.itemClassificationId;
     this.materialCreateObject.itemClassification=part.itemClassification;
@@ -485,6 +505,7 @@ export class WoPartDetailsComponent implements OnChanges {
   }
 
   bindPartsDroppdown(query) {
+    console.log("customer",this.customer)
     let partSearchParamters = {
       'partNumber': query,
       "restrictPMA": this.formObject.restrictPMA,
@@ -535,8 +556,8 @@ export class WoPartDetailsComponent implements OnChanges {
     this.roleUpMaterialList=[];
     this.parts=[];
     this.hideme=[];
-     this.formObject.restrictDER = !this.formObject.restrictDER;
-    this.formObject.restrictPMA = !this.formObject.restrictPMA;
+    //  this.formObject.restrictDER = !this.formObject.restrictDER;
+    // this.formObject.restrictPMA = !this.formObject.restrictPMA;
     if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
       this.formObject.conditionIds.push(this.formObject.conditionId);
     }
@@ -738,23 +759,27 @@ editorgetmemo(ev) {
   this.disableEditor = false;
 }
 onCloseMaterial(){
+  this.showMarginPopUp=false;
   $("#showMarginDetails").modal("hide");
 }
 finalSaveMaterial(){
 }
 savePart(data){
 this.saveMaterialListData.emit(data);
+this.showMarginPopUp=false;
   $("#showMarginDetails").modal("hide");
   this.close.emit(true);
 }
 upDatePart(data){ 
 this.updateMaterialListData.emit(data)
   this.disableUpdateButton=true;
+  this.showMarginPopUp=false;
   $("#showMarginDetails").modal("hide");
   this.close.emit(true);
 }
 openSalesMargin() {
-
+  this.showMarginPopUp=false;
+this.showMarginPopUp=true;
  $("#showMarginDetails").modal("show");
 }
 }

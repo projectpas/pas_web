@@ -42,6 +42,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
     private authService: AuthService, ) {
   }
     ngOnInit() {
+      console.log("hello")
 }
   ngOnChanges()    { 
     this.formObject=={
@@ -52,6 +53,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
       stocklineQuantity:0
     };
     this.part=this.part;
+    console.log("part",this.part)
     this.formObject.quantity=this.part.quantity; 
     this.formObject.stocklineQuantity=this.part.stocklineQuantity;
     this.formObject.qtyOnHand = this.part.qtyOnHand;
@@ -98,30 +100,34 @@ export class WoMarginComponent implements OnInit, OnChanges {
 
 this.onChangeQuantityFromThis(); 
     if(this.editData){
+      console.log("edit Data",this.editData);
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
      this.formObject.conditionIds=[this.editData.conditionCodeId];
      this.formObject.quantity=this.editData.quantity;
-     this.formObject.qtyOnHand=this.editData.qtyOnHand;
+    //  this.formObject.qtyOnHand=this.editData.qtyOnHand;
      if(this.isStockLine){
       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
-
-   }else{
-    this.formObject.qtyAvailable=this.editData.qtyAvail;
-   }
+      this.formObject.unitCost= this.editData.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(this.editData.stocklineUnitCost, 2) : '0.00';
+    }else{
+      this.formObject.qtyAvailable=this.editData.qtyAvail;
+      this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
+      //this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+    }
+    this.formObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
      this.formObject.taskId=this.editData.taskId;
      this.formObject.provisionId=this.editData.provisionId;
      this.formObject.isDeferred=this.editData.isDeferred;
      this.formObject.memo=this.editData.memo;
      this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
      this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
-     this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+     
      this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();
      }else{
-
+      this.formObject.provisionId=0;
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();
@@ -269,6 +275,7 @@ onCloseTextAreaInfo() {
   $("#textarea-popup2").modal("hide");
 }
 calculateExtendedCost(): void {
+  debugger;
   this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
   this.formObject.stocklineQuantity = this.formObject.stocklineQuantity ? this.formObject.stocklineQuantity.toString().replace(/\,/g, '') : 0;
   if (this.formObject.stocklineQuantity != 0 && this.formObject.unitCost) {
@@ -282,11 +289,15 @@ calculateExtendedCost(): void {
 // errorMessage:any;
 onChangeQuantityFromThis() {
   // this.errorMessage=''; 
-
   this.invalidQuantityenteredForQuantityFromThis =false;
   if(this.part.method=='ItemMaster'){
     if (Number(this.formObject.stocklineQuantity) != 0) {
       if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
+      }
+      else   if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
@@ -306,6 +317,11 @@ onChangeQuantityFromThis() {
         this.invalidQuantityenteredForQuantityFromThis =true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
         this.disableUpdateButton=true;
+      }
+      else if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
       }
       else if (Number(this.formObject.stocklineQuantity) < 0)
       {

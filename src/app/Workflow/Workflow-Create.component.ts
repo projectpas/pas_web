@@ -168,7 +168,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     ];
     isOnload: any;
     percentBERTh: any;
-    currentActiveTab: string;
+    currentActiveTab: string; 
     isheadUpdate: any;
     originalworkFLow: any = {};
     materialPercentValue:any;
@@ -286,9 +286,11 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             }
             this.isSpinnerVisible=true;
             setTimeout(() => {
-                this.currentPanelId = this.selectedItems[0].Id;
-                this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id)
                 this.isSpinnerVisible=false;
+          if(this.selectedItems && this.selectedItems.length !=0){
+            this.currentPanelId = this.selectedItems[0].Id;
+            this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id)
+          }
             }, 500);
     }
     ngOnInit(): void {

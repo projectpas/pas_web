@@ -358,7 +358,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
 
     }
-    editNew(rowData) {
+    editNew(rowData) { 
         this.isViewItem=false;
         this.editData = undefined;
         this.cdRef.detectChanges();
@@ -366,6 +366,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.addNewMaterial = true;
 
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
+        // this.editData.totalStocklineQtyReq=10;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
 
@@ -1466,28 +1467,24 @@ this.isViewItem=true;
             { field: 'serialNumber', header: 'Serial Num', align: 0, width: "70px" },
             { field: 'partNumber', header: 'PN', align: 0, width: "160px" },
             { field: 'partDescription', header: 'PN Description', align: 0, width: "200px" },
-
-      { field: 'condition', header: 'Cond', align: 0, width: "100px" },
-     
-      { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
-      { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
-      { field: 'showempty', header: ' ', align: 1, width: "60px" },
-      { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
-      { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
-      { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
-      { field: 'stockLineQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
-      { field: 'stockLineQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
-      { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
-      { field: 'uom', header: 'UOM', align: 0, width: "70px" },
-      { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
-      // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
-      { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
-      { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
-
+            { field: 'condition', header: 'Cond', align: 0, width: "100px" },
+            { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
+            { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
+            { field: 'stocklineQuantity', header: 'Qty Req', align: 1, width: "60px" },
+            { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
+            { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
+            { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
+            { field: 'stockLineQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
+            { field: 'stockLineQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
+            { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
+            { field: 'uom', header: 'UOM', align: 0, width: "70px" },
+            { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
+            // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
+            { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
+            { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
-            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
-            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
-
+            { field: 'stocklineUnitCost', header: 'Unit Cost', align: 1, width: "61px" },
+            { field: 'stocklineExtendedCost', header: 'Extended Cost', align: 1, width: "90px" },
             { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
             { field: 'controlId', header: 'Cntl ID', align: 0, width: "70px" },
             { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
