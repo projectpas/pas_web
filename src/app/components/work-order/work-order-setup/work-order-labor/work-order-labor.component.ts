@@ -239,7 +239,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         this.calculateAdjustmentHours(task);
         this.calculateAdjustedHours(task);
       }
-    }
+    } 
     if (this.laborForm.costPlusType) {
       this.laborForm.costPlusType = this.laborForm['markupFixedPrice'];
       this.overAllMarkup = Number(this.laborForm['headerMarkupId']);
