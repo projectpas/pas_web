@@ -106,7 +106,7 @@
                                       {{ formateCurrency(bill.totalSales) }}
                                   </td>
                                   <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
-                                      <span>
+                                      <span *ngIf="bill.qtyBilled > 0">
                                           <a class="btn nobg" matTooltip="Invoice" matTooltipPosition="above"
                                               (click)="ViewInvoice(bill);"><i class="fa fa-print"></i></a>
                                       </span>

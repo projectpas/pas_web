@@ -326,7 +326,8 @@
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'sentForCustomerApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('sentForCustomerApproval');selectall = false;">Sent for Customer Approval</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'submittedCustomerApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('submittedCustomerApproval');selectall = false;">Submitted Customer Approval</button>-->
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteAnalysis'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteAnalysis');">Work Order Quote Analysis</button>
-             </div>
+                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteprint'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteprint');">Work Order Quote Print</button>
+                </div>
          </div>
              <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'mpns'">
                  <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
@@ -837,6 +838,12 @@
                      </table>
                  </div>
              </div>
+
+             <div *ngIf="approvalGridActiveTab === 'workOrderQuoteprint'">
+                <div  *ngIf="!isQuoteListView">
+                    <app-woq-form [workOrderId]="workorderid" [workOrderPartNumberId]="workOrderPartNumberId" [workFlowWorkOrderId]="workFlowWorkOrderId" [isView]="isView" [Workorderprint]="resetqouteprintData()" > </app-woq-form>
+                </div>
+            </div>
          <!-- </div> --> 
          <div>
  
