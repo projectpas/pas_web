@@ -42,7 +42,6 @@ export class WoMarginComponent implements OnInit, OnChanges {
     private authService: AuthService, ) {
   }
     ngOnInit() {
-      console.log("hello")
 }
   ngOnChanges()    { 
     this.formObject=={
@@ -53,7 +52,6 @@ export class WoMarginComponent implements OnInit, OnChanges {
       stocklineQuantity:0
     };
     this.part=this.part;
-    console.log("part",this.part)
     this.formObject.quantity=this.part.quantity; 
     this.formObject.stocklineQuantity=this.part.stocklineQuantity;
     this.formObject.qtyOnHand = this.part.qtyOnHand;
@@ -100,7 +98,6 @@ export class WoMarginComponent implements OnInit, OnChanges {
 
 this.onChangeQuantityFromThis(); 
     if(this.editData){
-      console.log("edit Data",this.editData);
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
      this.formObject.conditionIds=[this.editData.conditionCodeId];
