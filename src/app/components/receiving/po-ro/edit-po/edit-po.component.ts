@@ -17,7 +17,7 @@ import { ShippingService } from '../../../../services/shipping/shipping-service'
 import { CommonService } from '../../../../services/common.service';
 import { CustomerService } from '../../../../services/customer.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
-import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule,getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 import { AuthService } from '../../../../services/auth.service';
@@ -1759,6 +1759,17 @@ export class EditPoComponent implements OnInit {
                             timeLife.push(tl);
                         }
                     }
+                    if (stockLine.tagType && stockLine.tagType.length > 0) {
+                        stockLine.tagTypeId = stockLine.tagType.join();                
+                        stockLine.tagType = stockLine.tagTypeId.split(',');
+                        for (let i = 0; i < stockLine.tagType.length; i++) {
+                            stockLine.tagType[i] = getValueFromArrayOfObjectById('label', 'value', stockLine.tagType[i], this.TagTypeList);
+                        }
+                        stockLine.tagType = stockLine.tagType.join();
+                    } else {
+                        stockLine.tagType = "";
+                        stockLine.tagTypeId = "";
+                    }
                     index += 1;
                 }
 
@@ -2068,16 +2079,15 @@ export class EditPoComponent implements OnInit {
             this.arraytagtypelist.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-            this.TagTypeList = res;
+            this.TagTypeList = res;            
             for (let part of this.purchaseOrderData.purchaseOderPart) {
                 for (let SL of part.stockLine) {    
-                    if (SL.tagType && SL.tagType.length > 0) {
-                        //SL.tagTypeId = SL.tagType.join();                
-                        //SL.tagType = SL.tagTypeId.split(',');
-                        // for (let i = 0; i < sl.tagType.length; i++) {
-                        //     sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
-                        // }
-                        // sl.tagType = sl.tagType.join();
+                    if (SL.tagType && SL.tagType.length > 0) {                                      
+                        SL.tagType = SL.tagTypeId.split(',');
+                        for (let i = 0; i < SL.tagType.length; i++) { 
+                            SL.tagType[i] = parseInt(SL.tagType[i]);
+                        }                       
+
                     } else {
                         SL.tagType = "";
                         SL.tagTypeId = "";

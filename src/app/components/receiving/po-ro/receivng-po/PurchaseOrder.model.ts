@@ -763,6 +763,7 @@ export class StockLineDraft {
     taggedByName: string = null;
     unitOfMeasureId:any = null;
     unitOfMeasure: string = null;
+    tagTypeobject:any=null;
 }
 
 export class ReceiveParts {

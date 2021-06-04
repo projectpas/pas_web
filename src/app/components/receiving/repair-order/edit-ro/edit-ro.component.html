@@ -239,13 +239,13 @@
                                     <th>Location</th>
                                     <th>Shelf</th>
                                     <th>Bin</th>
-                                    <th colspan="37"></th>
+                                    <th colspan="40"></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody *ngIf="repairOrderData != undefined">
                                 <ng-container *ngFor="let part of repairOrderData;let row_index=index">
-                                    <tr class="table-parent-data"
+                                    <tr class="table-parent-data greenbackground"
                                         *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
                                         
                                         <td class="text-right">{{row_index + 1}}</td>
@@ -400,18 +400,18 @@
                                                 </option>
                                             </select>
                                         </td>
-                                        <td colspan="37"></td>
+                                        <td colspan="40"></td>
                                         <td><a matTooltip="Edit" matTooltipPosition="above" class="btn boxed-float-btn nobg edit"><i class="fa fa-edit" (click)="editPart(part)"></i></a></td>
                                     </tr>
 
                                     <ng-container>
                                         <tr class="child-header splitship-head child-header-back"
                                             *ngIf="part.stockLine.length > 0"> 
-                                            <th></th>                                                                                      
+                                            <th>Stk Line Num</th>                                                                                                                             
                                             <th>PN</th>
                                             <th>PN Description</th>
-                                            <th>Ctrl Id</th>
                                             <th>Ctrl Num</th>
+                                            <th>Ctrl Id</th>                                            
                                             <th>Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
                                             <th>Serial Num</th>
                                             <th>Qty Received</th>
@@ -443,6 +443,7 @@
                                             <th>Part Cert Num </th>
                                             <th>Certified Date</th>
                                             <th class="date">Certified Due Date</th>
+                                            <th>Tag Type</th>
                                             <th>Tagged By </th>                                            
                                             <th>UOM</th>
                                             <th class="date">Date Tagged </th>
@@ -458,13 +459,13 @@
                                             <th colspan="5">Last</th>
                                             <th colspan="1"></th> 
                                         </tr>
-                                        <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
-                                            <tr *ngIf="!SL.isDeleted">
-                                                <td></td>                                                                                                   
+                                        <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">                                           
+                                            <tr [ngStyle]="{'background-color': SL.stockLineId > 0 ? '#e9ecef' : 'white'}" *ngIf="!SL.isDeleted">
+                                                <td>{{SL.stockLineNumber}}</td>                                                                                                
                                                 <td>{{part.itemMaster.partNumber}}</td>
                                                 <td>{{part.itemMaster.partDescription}}</td>
-                                                <td>{{SL.idNumber}}</td>
                                                 <td>{{SL.controlNumber}}</td>
+                                                <td>{{SL.idNumber}}</td>                                                
                                                 <td>
                                                     <select class="form-control"
                                                         [(ngModel)]="SL.conditionId"
@@ -898,6 +899,14 @@
                                                             [(ngModel)]="SL.certifiedDueDate">
                                                         </p-calendar>
                                                 </td>
+                                                <td>
+                                                    <p-multiSelect [options]="TagTypeList"
+                                                        [(ngModel)]="SL.tagType"
+                                                        id="tagType{{stockline_row_index}}"
+                                                        name="tagType{{stockline_row_index}}"
+                                                        [disabled]="!SL.isEnabled">
+                                                    </p-multiSelect> 
+                                                </td>
                                                 <td>                                               
                                                     <p-autoComplete field="Value" class="rpo-acomp"
                                                         [(ngModel)]="SL.taggedByObject" 
@@ -1252,12 +1261,14 @@
                                                     <td></td> 
                                                     <td></td>      
                                                     <td>
-                                                        <a href="javascript:void(0);" class="btn boxed-float-btn nobg edit"
-                                                        matTooltip="Edit" matTooltipPosition="above"><i
-                                                            class="fa fa-edit" (click)="editStockLine(SL)"></i></a>
-                                                       <a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL)"
-                                                        matTooltip="Delete" matTooltipPosition="above"><i
-                                                            class="fa fa-trash"></i></a>
+                                                        <div *ngIf="!SL.stockLineId > 0">
+                                                            <a href="javascript:void(0);" class="btn boxed-float-btn nobg edit"
+                                                                matTooltip="Edit" matTooltipPosition="above"><i
+                                                                class="fa fa-edit" (click)="editStockLine(SL)"></i></a>
+                                                            <a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL)"
+                                                                matTooltip="Delete" matTooltipPosition="above"><i
+                                                                class="fa fa-trash"></i></a>
+                                                        </div>
                                                      </td>
                                                  </ng-container>
                                             </tr>
