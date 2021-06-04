@@ -81,8 +81,14 @@ printContent() {
           border: 1px Solid
         }
         
-        h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
-
+        h4 {
+          padding: 5px;
+          display: inline-block;
+          font-size: 14px;
+          font-weight: 600;
+          width: 100%;
+          margin: 0;
+         }
         
         h5 {
           font-family: inherit;
@@ -115,8 +121,6 @@ printContent() {
           padding-left: 2px;
           width: 66.66666667%;
         }
-        .input-width{width:60px !important}
-        .sold-block-div{margin: 0px 0;position: relative;display:flex;min-height: 1px;width: 100%;}
         
         .first-block-label {
           position: relative;
@@ -124,17 +128,10 @@ printContent() {
           float: left;
           padding-right: 2px;
           padding-left: 2px;
-           width: 38.33333333%;
-           font-size:10.5px !important;
-
-           font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-       font-weight:700;
+          // width: 38.33333333%;
           text-transform: capitalize;
           margin-bottom: 0;
           text-align: left;
-        }
-        bold-word{
-          font-size:12.5px !important;
         }
         
         .first-block-4 {
@@ -172,23 +169,23 @@ printContent() {
           padding-left: 2px;
           box-sizing: border-box;
         }
-        .second-block-div{
-          margin-bottom: 0px;
-          position: relative;display:flex;
+        
+        .second-block-div {
+          margin: 2px 0;
+          position: relative;
           min-height: 1px;
-          width: 100%;}
-      
+          float: left;
+          padding-right: 2px;
+          padding-left: 2px;
+          width: 100%;
+        }
         
         .second-block-label {
           position: relative;
           min-height: 1px;
           float: left;
-          font-size:10.5px !important;
-
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
           padding-right: 2px;
           padding-left: 2px;
-          font-weight:700;
           width: 38.33333333%;
           text-transform: capitalize;
           margin-bottom: 0;
@@ -214,15 +211,13 @@ printContent() {
           position: relative;
           font-weight: normal;
           // margin-top: 10px;
-          font-weight: normal;
-          font-size:12.5
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
         
         .image {
           border: 1px solid #000;
           width: 100%;
           display: block;
+        
           // padding: 5px;
           // margin-top:20px;
           // margin-bottom:10px;
@@ -240,8 +235,6 @@ printContent() {
         .pdf-block {
           width: 800px;
           margin: auto;
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-          font-weight:normal;
           border: 1px solid #ccc;
           padding: 25px 15px;
         }
@@ -268,11 +261,9 @@ printContent() {
         .pick-ticket-header {
           border: 1px solid black;
           text-align: left;
+          height:26px;
           // background: #0d57b0 !important;
           color: #000 !important;
-          -webkit-print-color-adjust: exact;
-        }
-       
         }
         
         .div-height {

@@ -1637,4 +1637,13 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId));
           });
       }
+
+      GetWorkOrderQoutePrintFormData(WorkorderId: number,workOrderPartNoId : number,workflowWorkorderId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderQoutePrintData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}&workflowWorkorderId=${workflowWorkorderId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId));
+          });
+      }
 }

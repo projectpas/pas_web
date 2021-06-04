@@ -42,6 +42,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() selectedDisplayType: string = '';
     @Input() isWoTab: boolean = false;
     @Input() isListView: boolean = false;
+    @Output() Workorderprint = new EventEmitter();
     customerName: string;
     creditLimit: any;
     creditTerms: any;
@@ -75,6 +76,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     moduleName: string;
     workOrderPartsDetail: partsDetail[];
     selectedBuildMethod: string = "";
+    workOrderPartNumberId:number;
     buildWorkOrderList: any[];
     buildHistoricalList: any[];
     gridActiveTab: string="materialList";
@@ -2610,6 +2612,12 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     resetApprovalGridData() {
         this.internalApproversList = [];
         this.approvalGridActiveTab = '';
+    }
+
+    resetqouteprintData() {
+        //this.approvalGridActiveTab = '';
+        // this.internalApproversList = [];
+        // this.approvalGridActiveTab = '';
     }
 
     onApprovalSelected(approver, i) {
