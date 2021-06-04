@@ -1053,13 +1053,13 @@
                                 <tr>
                                     <th></th>
                                     <th class="text-center">Cycles</th>
-                                    <th class="text-center">Time</th>
-                                    <th class="text-center">Last</th>
+                                    <th colspan="2" class="text-center">Time</th>
+                                    <th colspan="2" class="text-center">Last</th>
                                 </tr>
                                 <tr>
                                     <td>Remaining</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text" 
+                                        <!-- <input class="form-control width-input" matInput type="text" 
                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="cyclesRemaining"
                                             [(ngModel)]="sourceTimeLife.cyclesRemaining" />
@@ -1070,10 +1070,24 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesRemainingHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesRemainingHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesRemainingHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesRemainingMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesRemainingMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesRemainingMin">
                                     </td>
+                                    <td>Remaining</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeRemaining"
                                             [(ngModel)]="sourceTimeLife.timeRemaining" />
@@ -1084,14 +1098,41 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeRemainingHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeRemainingHrs"
+                                            [(ngModel)]="sourceTimeLife.timeRemainingHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeRemainingMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeRemainingMin"
+                                            [(ngModel)]="sourceTimeLife.timeRemainingMin">
                                     </td>
-                                    <td></td>
+                                    <td style="width:70px!important">Since New</td>
+                                    <td class="clr2">
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #lastSinceNewHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceNewHrs"
+                                            [(ngModel)]="sourceTimeLife.lastSinceNewHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #lastSinceNewMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceNewMin"
+                                            [(ngModel)]="sourceTimeLife.lastSinceNewMin">
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Since New</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceNew"
                                             [(ngModel)]="sourceTimeLife.cyclesSinceNew" />
@@ -1102,10 +1143,25 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesSinceNewHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceNewHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesSinceNewMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceNewMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewMin">
+
                                     </td>
+                                    <td>Since New</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeSinceNew"
                                             [(ngModel)]="sourceTimeLife.timeSinceNew" />
@@ -1116,10 +1172,24 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeSinceNewHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceNewHrs"
+                                            [(ngModel)]="sourceTimeLife.timeSinceNewHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeSinceNewMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceNewMin"
+                                            [(ngModel)]="sourceTimeLife.timeSinceNewMin">
+
                                     </td>
+                                    <td style="width:70px!important">Since Ovh</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="lastSinceNew"
                                             [(ngModel)]="sourceTimeLife.lastSinceNew" />
@@ -1130,13 +1200,25 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #lastSinceOVHHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceOVHHrs"
+                                            [(ngModel)]="sourceTimeLife.lastSinceOVHHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #lastSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceOVHMin"
+                                            [(ngModel)]="sourceTimeLife.lastSinceOVHMin">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Since Ovh</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceOVH"
                                             [(ngModel)]="sourceTimeLife.cyclesSinceOVH" />
@@ -1147,10 +1229,23 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesSinceOVHHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceOVHHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceOVHMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHMin">
                                     </td>
+                                    <td>Since Ovh</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeSinceOVH"
                                             [(ngModel)]="sourceTimeLife.timeSinceOVH" />
@@ -1161,10 +1256,23 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeSinceOVHHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceOVHHrs"
+                                            [(ngModel)]="sourceTimeLife.timeSinceOVHHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceOVHMin"
+                                            [(ngModel)]="sourceTimeLife.timeSinceOVHMin">
                                     </td>
+                                    <td>Since Insp</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="lastSinceOVH"
                                             [(ngModel)]="sourceTimeLife.lastSinceOVH" />
@@ -1175,13 +1283,25 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #lastSinceInspectionHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceInspectionHrs"
+                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #lastSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceInspectionMin"
+                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionMin">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Since Insp</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern"
                                             #cyclesSinceInspection="ngModel" mask="000:00"
                                             (ngModelChange)="enableSave()" name="cyclesSinceInspection"
@@ -1193,10 +1313,23 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesSinceInspectionHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceInspectionHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceInspectionMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin">
                                     </td>
+                                    <td>Since Insp</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeSinceInspection"
                                             [(ngModel)]="sourceTimeLife.timeSinceInspection" />
@@ -1207,9 +1340,23 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeSinceInspectionHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceInspectionHrs"
+                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceInspectionMin"
+                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionMin">
                                     </td>
-                                    <td class="clr2">
+                                    <td></td>
+                                    <td style="background-color: #fff !important;"></td>
+                                    <!-- <td class="clr2">
                                         <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="lastSinceInspection"
@@ -1222,12 +1369,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> -->
                                 </tr>
                                 <tr>
                                     <td>Since Repair</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceRepair"
                                             [(ngModel)]="sourceTimeLife.cyclesSinceRepair" />
@@ -1238,10 +1385,23 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesSinceRepairHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceRepairHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesSinceRepairMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceRepairMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairMin">
                                     </td>
+                                    <td>Since Repair</td>
                                     <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
+                                        <!-- <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeSinceRepair"
                                             [(ngModel)]="sourceTimeLife.timeSinceRepair" />
@@ -1252,9 +1412,22 @@
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeSinceRepairHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceRepairHrs"
+                                            [(ngModel)]="sourceTimeLife.timeSinceRepairHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeSinceRepairMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceRepairMin"
+                                            [(ngModel)]="sourceTimeLife.timeSinceRepairMin">
                                     </td>
                                     <td></td>
+                                    <td style="background-color: #fff !important;"></td>
                                 </tr>
                             </tbody>
                         </table>
