@@ -256,8 +256,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let part of repairOrderData; let row_index=index">
-                                <!--this row is for the parent part-->
+                            <ng-container *ngFor="let part of repairOrderData; let row_index=index">                                
                                 <tr class="parent-data parent-td-background" *ngIf="part.isParent">
                                     <!-- <td class="details-control eachcol parent-padding">
                                         <section *ngIf="isSplitShipmentPart(part.repairOrderPartRecordId)">
@@ -277,8 +276,7 @@
                                     <td class="text-right">{{part.quantityRejected}}</td>
                                     <td class="text-right">{{part.quantityBackOrdered}}</td>
                                     <td>{{part.quantityRepaired == 0 ? 'Pending' : part.quantityRepaired < part.quantityToRepair ? 'Fulfilling' : 'Received'}}
-                                    </td>                                    
-                                    <!-- <td>{{part.stockLine.stockLineNumber}}</td> -->
+                                    </td>                                                                        
                                     <td>{{part.stockLineNumber}}</td>
                                     <td colspan="4">{{part?.level1}}, {{part?.level2}},{{part?.level3}},
                                         {{part?.level4}}</td>
@@ -330,11 +328,11 @@
                                     </td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back" [hidden]="!part.visible"
-                                    *ngIf="!part.isParent"> 
+                                    *ngIf="!part.isParent && part.showHeader"> 
                                     <!-- <th class="min-width-40"></th> -->
                                     <!-- <th class="min-width-60"></th> -->
                                     <th>PN <span class="clr-red">*</span></th>
-                                    <th class="min-width-60">Qty to Repair </th>
+                                    <th class="min-width-80">Qty to Repair </th>
                                     <th class="min-width-80">Qty Drafted</th>
                                     <th class="min-width-80">Qty Repaired</th>
                                     <th class="min-width-80">Qty Rejected</th>
@@ -343,9 +341,11 @@
                                     <th>StockLine Num <span class="clr-red">*</span></th>
                                     <th class="min-width-60">User Type <span class="clr-red">*</span></th>
                                     <th>User Name <span class="clr-red">*</span></th>
-                                    <th colspan="3">Address <span class="clr-red">*</span></th>
+                                    <th colspan="4">Address <span class="clr-red">*</span></th>
                                     <th colspan="4" class="mgmt-structure-td-width">Management Structure <span class="clr-red">*</span></th>
                                     <!-- <th>Receive Quantity</th> -->
+                                    <th></th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
@@ -356,6 +356,7 @@
                                     <!-- <td>&nbsp;</td> -->
                                     <td>{{part?.itemMaster?.partNumber}}</td>
                                     <td class="right">{{part?.quantityToRepair}}</td>
+                                    <td class="right">{{part?.quantityDrafted}}</td>
                                     <td class="right">{{part?.quantityRepaired}}</td>
                                     <td class="right">{{part?.quantityRejected}}</td>
                                     <td class="right">{{part.quantityToRepair - part.quantityRepaired}}</td>
@@ -364,10 +365,12 @@
                                     <td>{{part.stockLineNumber}}</td>
                                     <td>{{part.roPartSplitUserTypeName}}</td>
                                     <td>{{part.roPartSplitUserName}}</td>
-                                    <td colspan="3">{{part?.roPartSplitAddress1}}, {{part?.roPartSplitCity}},
+                                    <td colspan="4">{{part?.roPartSplitAddress1}}, {{part?.roPartSplitCity}},
                                         {{part?.roPartSplitCountry}}, {{part?.roPartSplitPostalCode}}</td>
                                     <td colspan="4">
                                         {{part.level1}}, {{part.level2}},{{part.level3}}, {{part.level4}}</td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td><input type="text" *ngIf="part.quantityRepaired < part.quantityToRepair"
@@ -683,7 +686,21 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3">                                                        
+                                                    <div class="col-md-3"> 
+                                                        
+                                                        <div class="form-group">
+                                                        <label>Revised PN </label>
+                                                        <p-autoComplete field="partNumber" 
+                                                                class="autocomplete" appendTo="body"
+                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].revisedPartId"                                                                 
+                                                                [forceSelection]="true"
+                                                                [suggestions]="revisedPartNumCollection"
+                                                                (completeMethod)="filterRevisedPart($event)" 
+                                                                [size]="30" 
+                                                                [minLength]="1"
+                                                                [dropdown]="true" required>
+                                                        </p-autoComplete>
+                                                        </div>
                                                         <div class="form-group">
                                                             <label>Obtain From </label>
                                                             <select class="form-control"
@@ -961,7 +978,7 @@
                                                         <div class="form-group">
                                                             <label>Tag Type</label>
                                                             <p-multiSelect [options]="TagTypeList"
-                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagType"
+                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagTypeobject"
                                                                 name="tagType{{part.currentSLIndex}}">
                                                             </p-multiSelect>                                                                                                                     
                                                         </div>

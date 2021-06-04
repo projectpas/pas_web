@@ -78,6 +78,7 @@ export class PurchaseOrderPart {
     quantityActuallyReceived: number;
     quantityRejected: number;
     uomId: number;
+    unitOfMeasure:string;
     quantityOrdered: number;
     quantityBackOrdered: number;
     unitCost: number;
@@ -760,8 +761,9 @@ export class StockLineDraft {
     tagTypeId: any = null;
     taggedBy:number = null;
     taggedByName: string = null;
-    unitOfMeasureId:number = null;
+    unitOfMeasureId:any = null;
     unitOfMeasure: string = null;
+    tagTypeobject:any=null;
 }
 
 export class ReceiveParts {

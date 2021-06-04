@@ -235,8 +235,7 @@ if(this.workFlow && this.workFlow.publication !=undefined){
 }
 if(this.setEditArray && this.setEditArray.length==0){
     this.setEditArray.push(0);
-}
-        console.log("current workflow",this.workFlow)
+} 
        
         this._workflowService.getPublicationsByItemMasterIdDetails(itemMasterId,this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
            this.publicationDropdown = res;

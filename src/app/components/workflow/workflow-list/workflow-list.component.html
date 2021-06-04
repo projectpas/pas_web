@@ -231,14 +231,14 @@
                                   matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
                                   matTooltipPosition="above"                                                  
                                   [disabled]="true"></p-inputSwitch>
-                                <span data-toggle="modal" data-target="#view"
-                                  (click)="onViewWFDetails(rowData)">
-                                  <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
-                                      tooltipPosition="bottom" title="" class="btn  nobg"
-                                      data-original-title="View">
-                                      <i class="fa fa-eye"></i>
-                                  </a>
-                                </span>
+                             <span data-toggle="modal" data-target="#view"
+                                (click)="onViewWFDetails(rowData,'html')">
+                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
+                                    tooltipPosition="bottom" title="" class="btn  nobg"
+                                    data-original-title="View">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </span>
                                    
                             <span data-toggle="modal" data-target="#history">
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"
@@ -349,7 +349,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header workflow-view-card-header" style="padding:0px 10px !important">
                             <nav class="pull-left" aria-label="breadcrumb">
                                 <ol class="breadcrumb workflow-breadcrumb">
                                     <li class="breadcrumb-item active workflow-details-label" aria-current="page"
@@ -371,58 +371,58 @@
                                         <div class="form-row m-t-20">
                                             <div class="col-md-6">                                                
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6" >Workflow ID:<span class="clr-red">*</span>
+                                                    <label class="col-md-6" >Workflow ID:<span class="clr-red">*</span>
                                                      </label>
                                                      <span class="value col-md-6"> {{sourceWorkFlow.workOrderNumber}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Workflow Description:
+                                                    <label class="col-md-6">Workflow Description:
                                                     </label> <span class="value col-md-6">{{sourceWorkFlow.workflowDescription}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Version: <span class="clr-red">*</span>
+                                                    <label class="col-md-6">Version: <span class="clr-red">*</span>
                                                     </label><span class="value col-md-6">{{sourceWorkFlow.version}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Create Date: <span class="clr-red">*</span>
+                                                    <label class="col-md-6">Create Date: <span class="clr-red">*</span>
                                                     </label> <span class="value col-md-6">{{sourceWorkFlow.workflowCreateDate}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Expiration Date:
+                                                    <label class="col-md-6">Expiration Date:
                                                     </label> <span class="value col-md-6">{{sourceWorkFlow.workflowExpirationDate}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Currency: <span class="clr-red">*</span></label>
+                                                    <label class="col-md-6">Currency: <span class="clr-red">*</span></label>
                                                     <!-- sourceWorkFlow.currencySymbol + ' (' + -->
                                                     <span class="value col-md-6">  {{ sourceWorkFlow.currencyText }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">PN:<span class="clr-red">*</span> </label>
+                                                    <label class="col-md-6">PN:<span class="clr-red">*</span> </label>
                                                     <span class="value col-md-6">{{sourceWorkFlow.itemMaster.partNumber}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">PN Description:
+                                                    <label class="col-md-6">PN Description:
                                                     </label>
                                                     <span class="value col-md-6">{{sourceWorkFlow.itemMaster.partDescription}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Revised PN: </label>
+                                                    <label class="col-md-6">Revised PN: </label>
                                                     <span class="value col-md-6">{{sourceWorkFlow.revisedPartNumber}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Work Scope: <span class="clr-red">*</span> 
+                                                    <label class="col-md-6">Work Scope: <span class="clr-red">*</span> 
                                                     </label><span class="value col-md-6">{{sourceWorkFlow.workScope.workScopeCode}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Item Group: <span class="clr-red">*</span>
+                                                    <label class="col-md-6">Item Group: <span class="clr-red">*</span>
                                                      </label><span class="value col-md-6">{{sourceWorkFlow.itemGroup}}</span>
                                                 </div>
 
                                                 
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="margin-bottom-10 col-md-6">Customer Name: <span class="clr-red">*</span>
+                                                    <label class="col-md-6">Customer Name: <span class="clr-red">*</span>
                                                     </label><span class="value col-md-6">{{sourceWorkFlow.customerName}}</span>
                                                 </div>
                                             </div>
@@ -431,7 +431,7 @@
                                     <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-header ber-determination-card">
-                                                <h5 class="ber-determination-label">BER Determination</h5>
+                                                <h4 class="ber-determination-label">BER Determination</h4>
                                             </div>
                                             <div class="card-body ber-determination-card-body" >
                                                 <div class="row" *ngIf="sourceWorkFlow && sourceWorkFlow.isFixedAmount">
@@ -537,10 +537,10 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-6"> 
+                                <div class="col-md-6" style="margin-top:10px"> 
                                     <div class="card">
-                                        <div class="card-header total-workflow-card" >
-                                            <h5 class="workflow-cost-label">Total Workflow Cost</h5>
+                                        <div class="card-header workflow-view-card-header" >
+                                            <h4 class="workflow-cost-label">Total Workflow Cost</h4>
                                         </div>
                                         <div class="card-body total-workflow-card-body">
                                             <div class="form-row">
@@ -604,12 +604,12 @@
                                 </h4>
                             </div>
                             <div id="step{{i}}" class="panel-collapse collapse ">
-                                <div class="panel-body">
+                                <div class="panel-body" style="background:#fff !important">
                                     <div *ngIf="task.charges && task.charges.length > 0">
-                                        <h5 class="po-head">Charges</h5>
+                                        <h5 class="po-head-workflow">Charges</h5>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">
-                                            <table class="table table-bordered wfl-table-popup-cstm">
+                                            <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>S.No</th>
@@ -651,7 +651,7 @@
                                         </div>
                                     </div>
                                     <div *ngIf="task.directions && task.directions.length > 0">
-                                        <h5 class="po-head">Directions</h5>
+                                        <h5 class="po-head-workflow">Directions</h5>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">
                                             <table class="table table-bordered">
@@ -680,7 +680,7 @@
                                         </div>
                                     </div>
                                     <div *ngIf="task.equipments && task.equipments.length > 0">
-                                        <h5 class="po-head">Tools</h5>
+                                        <h5 class="po-head-workflow">Tools</h5>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">
                                             <table class="table table-bordered header-table-width">
@@ -713,7 +713,7 @@
                                         </div>
                                     </div>
                                     <div *ngIf="task.exclusions && task.exclusions.length > 0">
-                                        <h5 class="po-head">Exclusions</h5>
+                                        <h5 class="po-head-workflow">Exclusions</h5>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">
                                             <table class="table table-bordered">
@@ -766,7 +766,7 @@
                                         </div>
                                     </div>
                                     <div *ngIf="task.expertise && task.expertise.length > 0">
-                                        <h5 class="po-head">Expertise</h5>
+                                        <h5 class="po-head-workflow">Expertise</h5>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">
                                             <table class="table table-bordered">
@@ -813,7 +813,7 @@
                                         </div>
                                     </div>
                                     <div *ngIf="task.materialList && task.materialList.length > 0">
-                                        <h5 class="po-head">Material List</h5>
+                                        <h5 class="po-head-workflow">Material List</h5>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">
                                             <table class="table table-bordered">
@@ -878,10 +878,10 @@
                                         </div>
                                     </div>
                                     <div *ngIf="task.measurements && task.measurements.length > 0">
-                                        <h5 class="po-head">Measurements</h5>
+                                        <h5 class="po-head-workflow">Measurements</h5>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">
-                                            <table class="table table-bordered header-table-width">
+                                            <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>S.No</th>
@@ -916,10 +916,10 @@
                                         </div>
                                     </div>
                                     <div *ngIf="task.publication && task.publication.length > 0">
-                                        <h5 class="po-head">Publications</h5>
+                                        <h5 class="po-head-workflow">Publications</h5>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">
-                                            <table class="table table-bordered header-table-width wfl-table-popup-cstm">
+                                            <table class="table table-bordered header-table-width">
                                                 <thead>
                                                     <tr>
                                                         <th>S.No</th>
@@ -1235,7 +1235,7 @@
         </div>
     </div>
     <div class="card">
-        <div class="card-header header">
+        <div class="card-header workflow-view-card-header header" >
             <div class="row">
                 <div class="col">
                     <h4 class="header-name">Work Flow Details
@@ -1303,7 +1303,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header" style="padding: 4px 10px;">
+                                <div class="card-header" style="padding: 0px 10px;">
                                     <h5 class="ber-determination-label">BER Determination</h5>
                                 </div>
                                 <div class="card-body ber-determination-card-body" >
@@ -1414,7 +1414,7 @@
                     <div class="col-md-6">
                         <br>
                         <div class="card">
-                            <div class="card-header" style="padding: 4px 10px;">
+                            <div class="card-header" style="padding: 0px 10px;">
                                 <h5 style="margin-bottom: 0;font-size: 15px;">Total Workflow Cost</h5>
                             </div>
                             <div class="card-body" style="padding: 10px 20px 0;">

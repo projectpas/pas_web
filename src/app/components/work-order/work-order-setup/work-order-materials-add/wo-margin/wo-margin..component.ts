@@ -41,9 +41,9 @@ export class WoMarginComponent implements OnInit, OnChanges {
   constructor(private commonService: CommonService,
     private authService: AuthService, ) {
   }
-    ngOnInit() {
+    ngOnInit() { 
 }
-  ngOnChanges()    {
+  ngOnChanges()    { 
     this.formObject=={
       partNumberObj:undefined,
       quantity:0,
@@ -51,7 +51,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
       provisionId:0,
       stocklineQuantity:0
     };
-    this.part=this.part;
+    this.part=this.part; 
     this.formObject.quantity=this.part.quantity; 
     this.formObject.stocklineQuantity=this.part.stocklineQuantity;
     this.formObject.qtyOnHand = this.part.qtyOnHand;
@@ -70,7 +70,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
      this.formObject.workOrderId=this.part.workOrderId;
      this.formObject.workFlowWorkOrderId=this.part.workFlowWorkOrderId;
      this.formObject.qtyOnHand = this.part.qtyOnHand;
-     if(this.isStockLine){
+     if(this.isStockLine){  // from material List stock line edit
        this.formObject.qtyAvailable = this.part.partQuantityAvailable;
     }else{
       this.formObject.qtyAvailable = this.part.qtyAvailable;
@@ -80,43 +80,63 @@ export class WoMarginComponent implements OnInit, OnChanges {
  this.formObject.unitOfMeasure=this.part.unitOfMeasure;
      this.formObject.unitOfMeasureId=this.part.unitOfMeasureId;
 
+     if(this.part.method=='ItemMaster'){
+      if (Number(this.formObject.stocklineQuantity) != 0) {
+        if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+          this.formObject.stocklineQuantity=this.formObject.quantity;
+        } 
+      } 
+    }else{
+      if (Number(this.formObject.stocklineQuantity) != 0) {
+        if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+         this.formObject.stocklineQuantity=this.formObject.quantity;
+          this.disableUpdateButton=true;
+        }
+      } 
+    }
+  
 
-this.calculateExtendedCost();
-this.onChangeQuantityFromThis();
-// console.log("this.edit",this.editData)
-    if(this.editData){
+// this.onChangeQuantityFromThis(); 
+    if(this.editData){ 
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
      this.formObject.conditionIds=[this.editData.conditionCodeId];
-     this.formObject.quantity=this.editData.quantity;
-     this.formObject.qtyOnHand=this.editData.qtyOnHand;
-     if(this.isStockLine){
-      this.formObject.qtyAvailable = this.part.partQuantityAvailable;
-
-   }else{
-    this.formObject.qtyAvailable=this.editData.qtyAvail;
-   }
+     if(this.isStockLine){  // from material List stock line edit
+       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
+       this.formObject.unitCost= this.editData.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(this.editData.stocklineUnitCost, 2) : '0.00';
+       this.formObject.quantity=this.editData.quantity;
+        this.formObject.qtyOnHand=this.editData.stockLineQuantityOnHand;
+      }else{
+      this.formObject.qtyAvailable=this.editData.qtyAvail;
+      this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
+      //this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+    }
+    this.formObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
      this.formObject.taskId=this.editData.taskId;
      this.formObject.provisionId=this.editData.provisionId;
      this.formObject.isDeferred=this.editData.isDeferred;
      this.formObject.memo=this.editData.memo;
      this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
      this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
-     this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+     
      this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();
      }else{
-
+      this.formObject.provisionId=0;
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();
      }
+     this.onChangeQuantityFromThis();
      this.enableUpdateBtn=this.enableUpdateBtn;
      if(this.enableUpdateBtn==true){
        this.disableUpdateButton=false;
      }
+     this.calculateExtendedCost();
+ 
+
   }
 
   get masterCompanyId(): number {
@@ -268,11 +288,15 @@ calculateExtendedCost(): void {
 // errorMessage:any;
 onChangeQuantityFromThis() {
   // this.errorMessage=''; 
-
   this.invalidQuantityenteredForQuantityFromThis =false;
   if(this.part.method=='ItemMaster'){
     if (Number(this.formObject.stocklineQuantity) != 0) {
       if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
+      }
+      else   if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
@@ -293,16 +317,20 @@ onChangeQuantityFromThis() {
         // this.formObject.stocklineQuantity=this.formObject.quantity;
         this.disableUpdateButton=true;
       }
+      else if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
+      }
       else if (Number(this.formObject.stocklineQuantity) < 0)
       {
         this.invalidQuantityenteredForQuantityFromThis = true;
         this.disableUpdateButton=true;
       }
-      else if (  Number(this.formObject.stocklineQuantity) > Number(this.formObject.qtyAvailable)) {
-        this.invalidQuantityenteredForQuantityFromThis = true;
-        this.disableUpdateButton=true;
-        // this.errorMessage=''; partQuantityAvailable
-      } 
+      // else if (  Number(this.formObject.stocklineQuantity) > Number(this.formObject.qtyAvailable)) {
+      //   this.invalidQuantityenteredForQuantityFromThis = true;
+      //   this.disableUpdateButton=true;
+      // } 
     } else {
       this.invalidQuantityenteredForQuantityFromThis = true;
       this.disableUpdateButton=true;

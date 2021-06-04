@@ -17,7 +17,7 @@ import { ShippingService } from '../../../../services/shipping/shipping-service'
 import { CommonService } from '../../../../services/common.service';
 import { CustomerService } from '../../../../services/customer.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
-import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule,getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 import { AuthService } from '../../../../services/auth.service';
@@ -169,7 +169,7 @@ export class EditPoComponent implements OnInit {
                 this.getShippingVia();
                 this.getConditionList();
                 this.getLegalEntity();
-                this.loadModulesNamesForObtainOwnerTraceable();
+                this.loadModulesNamesForObtainOwnerTraceable();                
                 this.isSpinnerVisible = true;
                 setTimeout(() => {
                     this.isSpinnerVisible = true;
@@ -237,6 +237,7 @@ export class EditPoComponent implements OnInit {
                             this.getCompanyList();
                             this.loadTagByEmployeeData();
                             this.Purchaseunitofmeasure();
+                            this.getTagType();
                             if (this.purchaseOrderData.purchaseOderPart) {
                                 for (let i = 0; i < this.purchaseOrderData.purchaseOderPart.length; i++) {
                                     this.getCondIdPart(this.purchaseOrderData.purchaseOderPart[i]);
@@ -360,6 +361,10 @@ export class EditPoComponent implements OnInit {
 
         if (part.stockLine) {
             for (let j = 0; j < part.stockLine.length; j++) {
+                if (part.stockLine[j].stockLineId > 0) {
+
+                }
+                else {                
                 part.stockLine[j].parentCompanyId = part.parentCompanyId;
                 part.stockLine[j].parentBulist = [];
                 part.stockLine[j].parentDivisionlist = [];
@@ -367,6 +372,7 @@ export class EditPoComponent implements OnInit {
                 part.stockLine[j].parentbuId = 0;
                 part.stockLine[j].parentDivisionId = 0;
                 part.stockLine[j].parentDeptId = 0;
+                }
             }
         }
 
@@ -378,9 +384,14 @@ export class EditPoComponent implements OnInit {
                 part.parentBulist = res;
                 if (part.stockLine) {
                     for (let j = 0; j < part.stockLine.length; j++) {
+                        if (part.stockLine[j].stockLineId > 0) {
+
+                        }
+                        else {  
                         part.stockLine[j].parentBulist = part.parentBulist;
                         part.stockLine[j].parentCompanyId = part.parentCompanyId;
                         part.stockLine[j].managementStructureEntityId = part.parentCompanyId;
+                        }
                     }
                 }
             });
@@ -389,7 +400,11 @@ export class EditPoComponent implements OnInit {
             part.managementStructureId = 0;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
-                    part.stockLine[j].managementStructureEntityId = 0;
+                    if (part.stockLine[j].stockLineId > 0) {
+                    }
+                    else {  
+                        part.stockLine[j].managementStructureEntityId = 0;
+                    }
                 }
             }
         }
@@ -404,11 +419,15 @@ export class EditPoComponent implements OnInit {
 
         if (part.stockLine) {
             for (let j = 0; j < part.stockLine.length; j++) {
+                if (part.stockLine[j].stockLineId > 0) {
+                }
+                else {  
                 part.stockLine[j].parentbuId = part.parentbuId;
                 part.stockLine[j].parentDivisionlist = [];
                 part.stockLine[j].parentDepartmentlist = [];
                 part.stockLine[j].parentDivisionId = 0;
                 part.stockLine[j].parentDeptId = 0;
+                }
             }
         }
 
@@ -418,9 +437,14 @@ export class EditPoComponent implements OnInit {
                 part.parentDivisionlist = res;
                 if (part.stockLine) {
                     for (let j = 0; j < part.stockLine.length; j++) {
+                        if (part.stockLine[j].stockLineId > 0) {
+
+                        }
+                        else {  
                         part.stockLine[j].parentDivisionlist = part.parentDivisionlist;
                         part.stockLine[j].parentbuId = part.parentbuId;
                         part.stockLine[j].managementStructureEntityId = part.parentbuId;
+                        }
                     }
                 }
             });
@@ -429,7 +453,12 @@ export class EditPoComponent implements OnInit {
             part.managementStructureId = part.parentCompanyId;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
-                    part.stockLine[j].managementStructureEntityId = part.parentCompanyId;
+                    if (part.stockLine[j].stockLineId > 0) {
+
+                    }
+                    else {  
+                        part.stockLine[j].managementStructureEntityId = part.parentCompanyId;
+                    }
                 }
             }
         }
@@ -441,9 +470,14 @@ export class EditPoComponent implements OnInit {
 
         if (part.stockLine) {
             for (let j = 0; j < part.stockLine.length; j++) {
+                if (part.stockLine[j].stockLineId > 0) {
+
+                }
+                else {  
                 part.stockLine[j].parentDivisionId = part.parentDivisionId;
                 part.stockLine[j].parentDepartmentlist = [];
                 part.stockLine[j].parentDeptId = 0;
+                }
             }
         }
 
@@ -454,9 +488,14 @@ export class EditPoComponent implements OnInit {
                 part.parentDepartmentlist = res;
                 if (part.stockLine) {
                     for (let j = 0; j < part.stockLine.length; j++) {
+                        if (part.stockLine[j].stockLineId > 0) {
+
+                        }
+                        else {  
                         part.stockLine[j].parentDepartmentlist = part.parentDepartmentlist;
                         part.stockLine[j].parentDivisionId = part.parentDivisionId;
                         part.stockLine[j].managementStructureEntityId = part.parentDivisionId;
+                        }
                     }
                 }
             });
@@ -465,7 +504,12 @@ export class EditPoComponent implements OnInit {
             part.managementStructureId = part.parentbuId;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
+                    if (part.stockLine[j].stockLineId > 0) {
+
+                    }
+                    else {  
                     part.stockLine[j].managementStructureEntityId = part.parentbuId;
+                    }
                 }
             }
         }
@@ -476,8 +520,13 @@ export class EditPoComponent implements OnInit {
             part.managementStructureId = part.parentDeptId;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
+                    if (part.stockLine[j].stockLineId > 0) {
+
+                    }
+                    else {  
                     part.stockLine[j].parentDeptId = part.parentDeptId;
                     part.stockLine[j].managementStructureEntityId = part.parentDeptId;
+                    }
                 }
             }
         }
@@ -485,7 +534,12 @@ export class EditPoComponent implements OnInit {
             part.managementStructureId = part.parentDivisionId;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
+                    if (part.stockLine[j].stockLineId > 0) {
+
+                    }
+                    else {  
                     part.stockLine[j].managementStructureEntityId = part.parentDivisionId;
+                    }
                 }
             }
         }
@@ -1244,6 +1298,9 @@ export class EditPoComponent implements OnInit {
 
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }
+                else {
                 SL.siteId = part.siteId;
                 SL.warehouseId = 0;
                 SL.locationId = 0;
@@ -1254,6 +1311,7 @@ export class EditPoComponent implements OnInit {
                 SL.LocationList = [];
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
 
@@ -1267,12 +1325,15 @@ export class EditPoComponent implements OnInit {
 
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
-                            SL.WareHouseList.push(dropdown);
+                            if (SL.stockLineId > 0) {
+
+                            }
+                            else {
+                                SL.WareHouseList.push(dropdown);
+                            }
                         }
                     }
                 }
-
-
             },
             error => this.onDataLoadFailed(error)
         );
@@ -1289,6 +1350,8 @@ export class EditPoComponent implements OnInit {
 
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.warehouseId = part.warehouseId;
                 SL.locationId = 0;
                 SL.shelfId = 0;
@@ -1296,6 +1359,7 @@ export class EditPoComponent implements OnInit {
                 SL.LocationList = [];
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
 
@@ -1309,7 +1373,10 @@ export class EditPoComponent implements OnInit {
 
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
+                            if (SL.stockLineId > 0) {
+                            }else {
                             SL.LocationList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1327,12 +1394,14 @@ export class EditPoComponent implements OnInit {
 
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.locationId = part.locationId;
                 SL.shelfId = 0;
                 SL.binId = 0;
-
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
 
@@ -1346,7 +1415,10 @@ export class EditPoComponent implements OnInit {
 
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
+                            if (SL.stockLineId > 0) {
+                            }else {
                             SL.ShelfList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1361,9 +1433,12 @@ export class EditPoComponent implements OnInit {
 
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.shelfId = part.shelfId;
                 SL.binId = 0;
                 SL.BinList = [];
+                }
             }
         }
 
@@ -1377,7 +1452,10 @@ export class EditPoComponent implements OnInit {
 
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
+                            if (SL.stockLineId > 0) {
+                            }else {
                             SL.BinList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1397,7 +1475,7 @@ export class EditPoComponent implements OnInit {
                 }
             }
         }
-    }
+    } 
 
     public conditionChange(part: PurchaseOrderPart) {
         if (part.stockLine) {
@@ -1470,8 +1548,13 @@ export class EditPoComponent implements OnInit {
 
         if (part.stockLine) {
             for (var SL of part.stockLine) {
-                SL.purchaseOrderUnitCost = part.unitCost;
-                SL.purchaseOrderExtendedCost = part.extendedCost;
+                if (SL.stockLineId > 0) {
+
+                }
+                else {
+                    SL.purchaseOrderUnitCost = part.unitCost;
+                    SL.purchaseOrderExtendedCost = part.extendedCost;
+                }               
             }
         }
     }
@@ -1675,6 +1758,17 @@ export class EditPoComponent implements OnInit {
                         if (tl.stockLineDraftId == stockLine.stockLineDraftId) {
                             timeLife.push(tl);
                         }
+                    }
+                    if (stockLine.tagType && stockLine.tagType.length > 0) {
+                        stockLine.tagTypeId = stockLine.tagType.join();                
+                        stockLine.tagType = stockLine.tagTypeId.split(',');
+                        for (let i = 0; i < stockLine.tagType.length; i++) {
+                            stockLine.tagType[i] = getValueFromArrayOfObjectById('label', 'value', stockLine.tagType[i], this.TagTypeList);
+                        }
+                        stockLine.tagType = stockLine.tagType.join();
+                    } else {
+                        stockLine.tagType = "";
+                        stockLine.tagTypeId = "";
                     }
                     index += 1;
                 }
@@ -1978,6 +2072,30 @@ export class EditPoComponent implements OnInit {
 			this.allPurchaseUnitOfMeasureinfo = res;
 		})
     }
+
+    TagTypeList: any = [];
+    getTagType(strText = '') {
+        if (this.arraytagtypelist.length == 0) {
+            this.arraytagtypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.TagTypeList = res;            
+            for (let part of this.purchaseOrderData.purchaseOderPart) {
+                for (let SL of part.stockLine) {    
+                    if (SL.tagType && SL.tagType.length > 0) {                                      
+                        SL.tagType = SL.tagTypeId.split(',');
+                        for (let i = 0; i < SL.tagType.length; i++) { 
+                            SL.tagType[i] = parseInt(SL.tagType[i]);
+                        }                       
+
+                    } else {
+                        SL.tagType = "";
+                        SL.tagTypeId = "";
+                    }                      
+                }
+            }
+        })
+    }   
 
 }
 

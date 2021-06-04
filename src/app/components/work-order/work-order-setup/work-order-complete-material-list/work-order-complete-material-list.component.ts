@@ -10,12 +10,13 @@ import { AuthService } from '../../../../services/auth.service';
 import { Subscription, Subject } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { CommonService } from '../../../../services/common.service';
 import { takeUntil } from 'rxjs/operators';
 // import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 import { workOrderGeneralInfo } from '../../../../models/work-order-generalInformation.model';
 import { Router } from '@angular/router';
+import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
 
 @Component({
     selector: 'app-work-order-complete-material-list',
@@ -215,7 +216,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     workorderSettings: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     enablePickTicket: boolean = false;
-
+    isViewItem:boolean=false;
+    stockLineId:any;
     constructor(
         private workOrderService: WorkOrderService,
         public itemClassService: ItemClassificationService,
@@ -356,26 +358,46 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
 
     }
-    editNew(rowData) {
+    editNew(rowData) { 
+        this.isViewItem=false;
         this.editData = undefined;
         this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewMaterial = true;
 
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
+        // this.editData.totalStocklineQtyReq=10;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
 
     }
 
-    editStockLine(rowData) {
+    viewItem(rowData){
+        this.editData = undefined;
+        this.cdRef.detectChanges();
+        this.isEdit = true;
+        this.addNewMaterial = true;
+this.isViewItem=true;
+        this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
+        let contentPart = this.addPart;
+
+        this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+
+    }
+    viewStockSelectedRow(rowData) { 
+        this.stockLineId=undefined;
+        this.stockLineId=rowData.stockLineId;
+        this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+        this.modal.componentInstance.stockLineId = rowData.stockLineId;
+      }
+    editStockLine(rowData,parentRow) {
         this.editData = undefined;
         // this.cdRef.detectChanges();
         this.isEdit = true;
 
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
-        this.editData.method = 'StockLine'
-        // console.log("edit Data",this.editData)
+        this.editData.method = 'StockLine';
+        this.editData.quantity=parentRow.quantity;
         $("#showStockLineDetails").modal("show");
 
         // let contentPart = this.addPart;
@@ -1445,28 +1467,24 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'serialNumber', header: 'Serial Num', align: 0, width: "70px" },
             { field: 'partNumber', header: 'PN', align: 0, width: "160px" },
             { field: 'partDescription', header: 'PN Description', align: 0, width: "200px" },
-
-      { field: 'condition', header: 'Cond', align: 0, width: "100px" },
-     
-      { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
-      { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
-      { field: 'showempty', header: ' ', align: 1, width: "60px" },
-      { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
-      { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
-      { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
-      { field: 'stockLineQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
-      { field: 'stockLineQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
-      { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
-      { field: 'uom', header: 'UOM', align: 0, width: "70px" },
-      { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
-      // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
-      { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
-      { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
-
+            { field: 'condition', header: 'Cond', align: 0, width: "100px" },
+            { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
+            { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
+            { field: 'stocklineQuantity', header: 'Qty Req', align: 1, width: "60px" },
+            { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
+            { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
+            { field: 'partQuantityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
+            { field: 'stockLineQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
+            { field: 'stockLineQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
+            { field: 'stocklineQtyRemaining', header: 'Qty Rem', align: 1, width: "60px" },
+            { field: 'uom', header: 'UOM', align: 0, width: "70px" },
+            { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
+            // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
+            { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
+            { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
-            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
-            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
-
+            { field: 'stocklineUnitCost', header: 'Unit Cost', align: 1, width: "61px" },
+            { field: 'stocklineExtendedCost', header: 'Extended Cost', align: 1, width: "90px" },
             { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
             { field: 'controlId', header: 'Cntl ID', align: 0, width: "70px" },
             { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },

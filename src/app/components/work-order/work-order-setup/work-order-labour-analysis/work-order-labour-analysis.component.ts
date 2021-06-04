@@ -19,6 +19,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     @Input() subWorkOrderDetails;
     @Input() isSubWorkOrder:any=false;
     @Input() subWOPartNoId;
+    @Input() isSummarizedView:boolean=false;
     lazyLoadEventData: any;
     pageSize: number = 10;
     pageIndex: number = 0;
@@ -57,6 +58,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
             this.totalRecords = this.data.length;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         }
+        this.isSummarizedView=this.isSummarizedView;
     }
 
     ngOnDestroy(): void {
@@ -66,6 +68,9 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     getWorkOrderLabourAnalysisData(workOrderId) {
         this.isSpinnerVisible = true;
         const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
+        if(this.isSummarizedView==true){
+          this.isDetailView=true;
+        }
               this.workOrderService.workOrderLabourAnalysisData(workOrderId, id, this.isSubWorkOrder, this.isDetailView, this.authService.currentUser.masterCompanyId)
                   .pipe(takeUntil(this.onDestroy$)).subscribe(
                       (res: any) => {

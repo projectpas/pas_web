@@ -102,13 +102,12 @@ export class WorkflowListComponent implements OnInit {
     ];
     gridColumns: any[] = [
         { field: 'workOrderNumber', header: 'Workflow ID' },
-        { field: 'version', header: 'Version Number',width:"60px" },
-        { field: 'partNumber', header: 'PN' },
-        { field: 'partDescription', header: 'PN Description' },
+        { field: 'version', header: 'Ver Num',width:"105px" },
+        { field: 'partNumber', header: 'PN' , width:"160px"},
+        { field: 'partDescription', header: 'PN Description', width:"240px"},
         { field: 'description', header: 'Work Scope' },
-        { field: 'name', header: 'Customer Name' },
-        { field: 'workflowCreateDate', header: 'WF Created Date' },
-        { field: 'workflowExpirationDate', header: 'Expiration Date' },
+        { field: 'name', header: 'Customer Name', width:"200px"},
+        { field: 'workflowExpirationDate', header: 'Exp Date' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
@@ -135,12 +134,10 @@ export class WorkflowListComponent implements OnInit {
         { field: 'workflowExpirationDate', header: 'Expiration Date',isRequired:false },
         { field: 'revisedPartNumber', header: 'Revised PN',isRequired:false },
         { field: 'currency', header: 'Currency',isRequired:false },
-        // { field: 'currency', header: 'Currency',isRequired:false },
         { field: 'berThresholdAmount', header: 'Amount',isRequired:false },
         { field: 'fixedAmount', header: 'Fixed Amount',isRequired:false },
         { field: 'costOfNew', header: 'Cost Of New',isRequired:false },
         { field: 'otherCost', header: 'Other Cost',isRequired:false },
-        // { field: 'amount', header: 'Amount',isRequired:true },
         { field: 'isActive', header: 'Is Active',isRequired:false },
         { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
         { field: 'memo', header: 'Memo',isRequired:false },
@@ -149,32 +146,6 @@ export class WorkflowListComponent implements OnInit {
         { field: 'updatedDate', header: 'Updated Date',isRequired:false },
         { field: 'updatedBy', header: 'Updated By',isRequired:false },
       ]
-
-    //   changedPartNumber: null
-    //   changedPartNumberDescription: null
-    //   changedPartNumberId: 0 
-    //   costOfReplacement: 0
-    //   createdBy: "admin"
-    //   createdDate: "2021-05-03T22:35:00.0812061"
-    //   currency: "USD"
-    //   currencyId: 0
-    //   customerCode: ""
-    //   flatRate: 0
-    //   isCalculatedBERThreshold: false
-    //   isFixedAmount: false
-    //   isPercentageOfNew: false
-    //   isPercentageOfReplacement: false
-    //  otherCost: 500
-    //   percentageOfCharges: 0
-    //   percentageOfExpertise: 0
-    //   percentageOfMaterial: 0
-    //   percentageOfNew: 0
-    //   percentageOfOthers: 0
-    //   percentageOfReplacement: 0
-    //   percentageOfTotal: 8.07
-    //   revisedPartNumber: " 213798/Ddas611"
-    //   workflowDescription: "Sony Work floe"
-
 
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
@@ -444,9 +415,6 @@ export class WorkflowListComponent implements OnInit {
     }
 
     onOpenAllView() {
-        // for (let task of this.addedTasks) {
-        //     task.selected = true;
-        // }
         this.addedTasks.map((x,index)=>{
             let val='#step'+index;
             $(val).collapse('show');
@@ -454,9 +422,6 @@ export class WorkflowListComponent implements OnInit {
     }
 
     onCloseAllView() {
-        // for (let task of this.addedTasks) {
-        //     task.selected = false;
-        // }
         this.addedTasks.map((x,index)=>{
             let val='#step'+index;
             $(val).collapse('hide');
@@ -483,14 +448,11 @@ export class WorkflowListComponent implements OnInit {
                     ...sourceWF,
                     fixedAmount: sourceWF.fixedAmount ? formatNumberAsGlobalSettingsModule(sourceWF.fixedAmount, 2) : null,
                     costOfNew: sourceWF.costOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.costOfNew, 2) : null,
-                    // percentageOfNew: sourceWF.percentageOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfNew, 2) : null,
                     percentOfNew: sourceWF.percentOfNew ? formatNumberAsGlobalSettingsModule(sourceWF.percentOfNew, 2) : null,
                     costOfReplacement: sourceWF.costOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.costOfReplacement, 2) : null,
-                    // percentageOfReplacement: sourceWF.percentageOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.percentageOfReplacement, 2) : null,
                     percentOfReplacement: sourceWF.percentOfReplacement ? formatNumberAsGlobalSettingsModule(sourceWF.percentOfReplacement, 2) : null,
                     otherCost: sourceWF.otherCost ? formatNumberAsGlobalSettingsModule(sourceWF.otherCost, 2) : null,
                     berThresholdAmount: sourceWF.berThresholdAmount ? formatNumberAsGlobalSettingsModule(sourceWF.berThresholdAmount, 2) : null,
-
                 };
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate).toLocaleDateString();
                 this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate != null && this.sourceWorkFlow.workflowExpirationDate != '' ? new Date(this.sourceWorkFlow.workflowExpirationDate).toLocaleDateString() : '';
@@ -508,7 +470,6 @@ export class WorkflowListComponent implements OnInit {
                 this.sourceWorkFlow.percentageOfReplacement=this.sourceWorkFlow.percentageOfReplacement? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.percentageOfReplacement, 2) : null,
                 this.calculatePercentOfNew(workflow[0].costOfNew, this.sourceWorkFlow.percentageOfNew);
                 this.calculatePercentOfReplacement(workflow[0].costOfReplacement, this.sourceWorkFlow.percentageOfReplacement);
-            //   setTimeout(() => {
                 this.calculateTotalWorkFlowCost();
                 this.getAllTasks();
                 this.isSpinnerVisible = false;
@@ -573,7 +534,6 @@ export class WorkflowListComponent implements OnInit {
         if (myValue && percentValue) {
             let afterpercent = myValue / 100;
             this.sourceWorkFlow.percentOfReplacement = formatNumberAsGlobalSettingsModule(afterpercent * percentValue, 2);
-
         }
     }
 
@@ -642,16 +602,11 @@ export class WorkflowListComponent implements OnInit {
         const TotalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
         const val1 = ((TotalExpertiseCost / 100) * this.sourceWorkFlow.percentageOfExpertise) + TotalExpertiseCost;
         this.TotalExpertiseCost = formatNumberAsGlobalSettingsModule(val1, 2);
-
         this.sourceWorkFlow.percentageOfCharges =this.chargesPercentValue;
         const TotalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
         const val2= ((TotalCharges / 100) * this.sourceWorkFlow.percentageOfCharges) + TotalCharges;
         this.TotalCharges = formatNumberAsGlobalSettingsModule(val2, 2);
-
-        // this.sourceWorkFlow.percentageOfOthers
-
         this.sourceWorkFlow.percentageOfOthers =this.othersPercentValue;
-
         this.sourceWorkFlow.otherCost=this.sourceWorkFlow.otherCost? this.sourceWorkFlow.otherCost :0.00;
         const otherCost1 = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
         const val3 = ((otherCost1 / 100) * this.sourceWorkFlow.percentageOfOthers) + otherCost1;
@@ -660,18 +615,10 @@ export class WorkflowListComponent implements OnInit {
         this.Total = total ? formatNumberAsGlobalSettingsModule(total, 2) : 0.00;
 
         if (this.sourceWorkFlow.berThresholdAmount != 0 && this.Total) {
-
            const BRTH = this.sourceWorkFlow.berThresholdAmount ? parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, '')) : 0;
            const Tot = parseFloat(this.Total.toString().replace(/\,/g, ''));
            let percentageofBerThreshold: any = (Tot / BRTH )* 100;
                 this.PercentBERThreshold = percentageofBerThreshold ? formatNumberAsGlobalSettingsModule(percentageofBerThreshold, 2) : 0.00;
-
-        //    const BRTH = this.sourceWorkFlow.berThresholdAmount ? parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, '')) : 0;
-        //    const Tot = parseFloat(this.Total.toString().replace(/\,/g, ''));
-        //     const maxValue = Math.max(0, BRTH, Tot);
-        //     const minValue = Math.min(BRTH, Tot) !== -Infinity ? Math.min(BRTH, Tot) : 0;
-        //     let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
-        //     this.PercentBERThreshold = percentageofBerThreshold ? formatNumberAsGlobalSettingsModule(percentageofBerThreshold, 2) : 0.00;
         }
        this.TotalOtherCost=this.sourceWorkFlow.otherCost;
     }
@@ -684,7 +631,6 @@ export class WorkflowListComponent implements OnInit {
         }
 
         this.MaterialCost = this.MaterialCost ? formatNumberAsGlobalSettingsModule(this.MaterialCost, 2) : 0.00;
-
     }
 
     private getUniqueTask(): any[] {
@@ -792,7 +738,6 @@ export class WorkflowListComponent implements OnInit {
     }
 
     private getAllTasks(): void {
-        // this.isSpinnerVisible = true; 
         this.actionService.getActions().subscribe(
             actions => {
                 this.tasks = [];
@@ -801,7 +746,6 @@ export class WorkflowListComponent implements OnInit {
                 }
                 this.tasks = this.tasks.sort((a, b) => a.Name.localeCompare(b.Name, 'es', {sensitivity: 'base'}))
                 this.organiseTaskAndTaskAttributes();
-                // this.loadPublicationTypes();
             },
             error => { }
         );
@@ -819,7 +763,6 @@ export class WorkflowListComponent implements OnInit {
             var chargesTotalChargesCost = 0;
             task.charges = this.sourceWorkFlow.charges.filter(x => {
                 if (x.taskId == task.Id) {
-                    // this.LoadChargesDropDownValues(x);
                     chargesTotalQty += x.quantity == undefined || x.quantity == '' ? 0 : x.quantity;
                     chargesTotalExtendedCost += x.extendedCost == undefined || x.extendedCost == '' ? 0 : x.extendedCost;
                     chargesTotalChargesCost += x.extendedPrice == undefined || x.extendedPrice == '' ? 0 : x.extendedPrice;
@@ -853,7 +796,6 @@ export class WorkflowListComponent implements OnInit {
             task.exclusionQty = qty;
             task.exclusionextendedQty = extendedQty ? formatNumberAsGlobalSettingsModule(extendedQty, 2) : null;
 
-
             var totalEstimatedHours = 0.00;
             var totalDirectLaborCost = 0;
             var totalOHCost = 0;
@@ -870,11 +812,11 @@ export class WorkflowListComponent implements OnInit {
                 return x.taskId == task.Id;
             });
         
-      task.expertiseTotalEstimatedHours=totalEstimatedHours;
-           task.expertiseTotalDirectLaborCost=totalDirectLaborCost;
-           task.expertiseTotalOHCost=totalOHCost;
-           task.expertiseTotalDirectLabourAndOHCost=totalDirectLabourAndOHCost;
-   task.expertiseTotalDirectLabourAndOHCost = task.expertiseTotalDirectLabourAndOHCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLabourAndOHCost, 2) : 0.00;
+            task.expertiseTotalEstimatedHours=totalEstimatedHours;
+            task.expertiseTotalDirectLaborCost=totalDirectLaborCost;
+            task.expertiseTotalOHCost=totalOHCost;
+            task.expertiseTotalDirectLabourAndOHCost=totalDirectLabourAndOHCost;
+            task.expertiseTotalDirectLabourAndOHCost = task.expertiseTotalDirectLabourAndOHCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLabourAndOHCost, 2) : 0.00;
             var materialTotalQty = 0;
             var materialTotalExtendedCost = 0;
             var materialTotalPrice = 0;
@@ -894,9 +836,6 @@ export class WorkflowListComponent implements OnInit {
             task.materialTotalExtendedCost = materialTotalExtendedCost ? formatNumberAsGlobalSettingsModule(materialTotalExtendedCost, 2) : null;
             task.materialTotalPrice = materialTotalPrice ? formatNumberAsGlobalSettingsModule(materialTotalPrice, 2) : null;
             task.materialTotalExtendedPrice = materialTotalExtendedPrice ? formatNumberAsGlobalSettingsModule(materialTotalExtendedPrice, 2) : null;
-
-     
-
             task.measurements = this.sourceWorkFlow.measurements.filter(x => {
                 return x.taskId == task.Id
             });
@@ -904,8 +843,6 @@ export class WorkflowListComponent implements OnInit {
             task.publication = this.sourceWorkFlow.publication.filter(x => {
                 return x.taskId == task.Id
             });
-
-
         }
              // modify the taks keys
      this.addedTasks.forEach(element => {
@@ -916,7 +853,6 @@ export class WorkflowListComponent implements OnInit {
                     x.extendedCost= x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : null,
                     x.unitPrice= x.unitPrice ? formatNumberAsGlobalSettingsModule(x.unitPrice, 2) : null,
                     x.extendedPrice= x.extendedPrice ? formatNumberAsGlobalSettingsModule(x.extendedPrice, 2) : null
-           
             });
         }
 
@@ -931,29 +867,28 @@ export class WorkflowListComponent implements OnInit {
         }
 
 
-if(element.expertise){
+    if(element.expertise){
+        setTimeout(() => {
+            element.expertise.forEach(x => {
+                x.laborDirectRate= x.laborDirectRate ? formatNumberAsGlobalSettingsModule(x.laborDirectRate, 2) : 0.00,
+                x.directLaborRate= x.directLaborRate ? formatNumberAsGlobalSettingsModule(x.directLaborRate, 2) : 0.00,
+                x.overheadBurden= x.overheadBurden ? formatNumberAsGlobalSettingsModule(x.overheadBurden, 2) : 0.00,
+                x.overheadCost= x.overheadCost ? formatNumberAsGlobalSettingsModule(x.overheadCost, 2) : 0.00,
+                x.laborOverheadCost= x.laborOverheadCost ? formatNumberAsGlobalSettingsModule(x.laborOverheadCost, 2) : 0.00,
+                x.estimatedHours=x.estimatedHours ? formatNumberAsGlobalSettingsModule(x.estimatedHours, 2) : 0.00
+        });
+        }, 1200);
+    }
 
-    
-setTimeout(() => {
-    element.expertise.forEach(x => {
-        x.laborDirectRate= x.laborDirectRate ? formatNumberAsGlobalSettingsModule(x.laborDirectRate, 2) : 0.00,
-        x.directLaborRate= x.directLaborRate ? formatNumberAsGlobalSettingsModule(x.directLaborRate, 2) : 0.00,
-        x.overheadBurden= x.overheadBurden ? formatNumberAsGlobalSettingsModule(x.overheadBurden, 2) : 0.00,
-        x.overheadCost= x.overheadCost ? formatNumberAsGlobalSettingsModule(x.overheadCost, 2) : 0.00,
-        x.laborOverheadCost= x.laborOverheadCost ? formatNumberAsGlobalSettingsModule(x.laborOverheadCost, 2) : 0.00,
-        x.estimatedHours=x.estimatedHours ? formatNumberAsGlobalSettingsModule(x.estimatedHours, 2) : 0.00
-});
-}, 1200);
-}
-if(element.exclusions){
-    element.exclusions.forEach(x => {
-          x.unitCost= x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : null,
-                    x.extendedCost=x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : null,
-                    x.estimtPercentOccurrance= x.estimtPercentOccurrance ? parseFloat(x.estimtPercentOccurrance).toFixed(2) : null
-           
-    });
-}
-    });
+    if(element.exclusions){
+            element.exclusions.forEach(x => {
+                x.unitCost= x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : null,
+                            x.extendedCost=x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : null,
+                            x.estimtPercentOccurrance= x.estimtPercentOccurrance ? parseFloat(x.estimtPercentOccurrance).toFixed(2) : null
+                
+            });
+        }
+            });
     }
 
  
@@ -1013,8 +948,7 @@ if(element.exclusions){
     });
     
 }
-triggerHistory(){
-    console.log("hello",this.historyData)
+triggerHistory(){ 
     this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
     this.modal.componentInstance.auditHistoryHeader=[];
     this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;

@@ -250,7 +250,7 @@
                     <th>SO</th>
                     <th>Sub-WO</th>
                     <th colspan="4" style="text-align: center;">Management Structure</th>
-                    <th colspan="43"></th>
+                    <th colspan="46"></th>
                 </tr>
             </thead>
             <tbody *ngIf="repairOrderData != undefined">
@@ -284,7 +284,7 @@
                         <td style="min-width: 130px;">
                             <!-- <label style="width:90px;">Dept:</label> -->
                             {{part.departmentText}}
-                        <th colspan="43"></th>
+                        <th colspan="46"></th>
                     </tr>
 
                     <ng-container>
@@ -307,6 +307,7 @@
                             <th>SO </th>
                             <th>Sub-WO </th>
                             <th colspan="4" style="text-align: center;">Management Structure</th>
+                            <th>Revised PartNumber </th>
                             <th>Site</th>
                             <th>Warehouse</th>
                             <th>Location</th>
@@ -326,6 +327,7 @@
                             <th>Part Cert Num </th>
                             <th>Certified Date</th>
                             <th class="date">Certified Due Date</th>
+                            <th>Tag Type</th>
                             <th>Tagged By </th>
                             <th>UOM </th>
                             <th class="date">Date Tagged </th>
@@ -382,6 +384,9 @@
                                 <td style="min-width: 120px;">
                                     <!-- <label style="width:90px;">Dept:</label> -->
                                     {{part.stockLine[stockline_row_index].departmentText}}
+                                </td>
+                                <td>
+                                    {{part.stockLine[stockline_row_index].revisedPartNumber}}
 
                                 </td>
                                 <td>
@@ -436,6 +441,7 @@
                                         [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.certifiedDueDate">
                                     </p-calendar>
                                 </td>
+                                <td>{{SL.tagType}}</td>
                                 <td>{{SL.taggedByName}}</td>
                                 <td>{{SL.unitOfMeasure}}</td>
                                 <td>

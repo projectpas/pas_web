@@ -248,7 +248,7 @@
                         <th>SO</th>
                         <th>Sub-WO</th>
                         <th colspan="4" style="text-align: center;">Management Structure</th>
-                        <th colspan="43"></th>
+                        <th colspan="45"></th>
                     </tr>
                 </thead>
                 <tbody *ngIf="purchaseOrderData != undefined">
@@ -287,7 +287,7 @@
                                 <!-- <label style="width:90px;">Dept:</label> -->
                                 {{part.departmentText}}
                             </td>
-                            <td colspan="43"></td>
+                            <td colspan="45"></td>
                         </tr>
 
                         <ng-container>
@@ -329,6 +329,7 @@
                                 <th>Part Cert Num </th>
                                 <th>Certified Date</th>
                                 <th class="date">Certified Due Date</th>
+                                <th>Tag Type</th>
                                 <th>Tagged By </th>
                                 <th>UOM </th>
                                 <th class="date">Date Tagged </th>
@@ -427,6 +428,7 @@
                                             [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.certifiedDueDate">
                                         </p-calendar>
                                     </td>
+                                    <td>{{SL.tagType}}</td>
                                     <td>{{SL.taggedByName}}</td>
                                     <td>{{SL.unitOfMeasure}}</td>
                                     <td>
