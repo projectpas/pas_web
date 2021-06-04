@@ -1395,6 +1395,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.tabQuoteCreated['freight'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteFreightListByWorkOrderQuoteId();
+                this.getBuildMethodDetails();
                 // this.partNumberSelected(this.selectedPartNumber);
                 this.alertService.showMessage(
                     this.moduleName,
@@ -1668,11 +1669,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             res => {
                 this.isSpinnerVisible=false;
                 this.tabQuoteCreated['charges'] = true;
-                this.workOrderChargesList = res.workOrderQuoteCharges;
-                for (let charge in this.workOrderChargesList) {
-                    this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
-                    this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
-                }
+                // this.workOrderChargesList = res.workOrderQuoteCharges;
+                // for (let charge in this.workOrderChargesList) {
+                //     this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
+                //     this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
+                // }
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteChargesListByWorkOrderQuoteId();
                 this.getBuildMethodDetails();
@@ -2615,7 +2616,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     }
 
     resetqouteprintData() {
-        //this.approvalGridActiveTab = '';
+       // this.approvalGridActiveTab = '';
         // this.internalApproversList = [];
         // this.approvalGridActiveTab = '';
     }

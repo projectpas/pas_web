@@ -272,8 +272,8 @@
         <!-- <td>&nbsp;</td> -->
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
-        <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
         <td *ngIf="isQuote">&nbsp;</td>
+        <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
         <td *ngIf=" !isEdit">&nbsp;</td>
     
       </tr>
@@ -301,13 +301,13 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td></td>
+        <td *ngIf="isQuote">&nbsp;</td>
         <ng-container *ngIf="costPlusType != 3">
           <td class="content-to-end"><strong>{{ getTotalBillingAmount()}} </strong></td>
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
             <input type="number" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg()"  [disabled]="isView" />
         </ng-container>
-        <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="!isView">&nbsp;</td>
       </tr>
     </ng-template>

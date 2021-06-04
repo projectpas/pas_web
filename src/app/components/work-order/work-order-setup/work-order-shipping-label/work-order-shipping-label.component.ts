@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
@@ -16,6 +16,7 @@ export class WorkOrderShippingLabelComponent implements OnInit {
   @Input() workOrderId;
   @Input() workOrderPartId;
   @Input() woShippingId;
+  @Output() Updateshippingpopup = new EventEmitter();
 
   workOrderShipping: any = [];
   todayDate: Date = new Date();
@@ -50,7 +51,7 @@ export class WorkOrderShippingLabelComponent implements OnInit {
 
 updateServiceClass() {
   this.workOrderService.updateShipping(this.workOrderShipping.serviceClass, this.woShippingId).subscribe(res => {
-      this.printContent();
+      //this.printContent();
   })
 }
 close()
@@ -58,15 +59,16 @@ close()
   $('#ShippingSlipDiv').modal('hide');
 }
 
-print(): void {
-  this.isPrint = true;
-  setTimeout(() => {
-      this.updateServiceClass();    
-  }, 100);
-}
+// print(): void {
+//   this.isPrint = true;
+//   setTimeout(() => {
+//       this.updateServiceClass();    
+//   }, 100);
+// }
 
-printContent() {
+print() {
   let printContents, popupWin;
+  this.Updateshippingpopup.emit();
   printContents = document.getElementById('soShippingLabel').innerHTML;
   popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
   popupWin.document.open();
@@ -276,7 +278,7 @@ printContent() {
     </html>`
   );
   popupWin.document.close();
-
+ 
   setTimeout(() => {
       this.isPrint = false;  
   }, 2000);

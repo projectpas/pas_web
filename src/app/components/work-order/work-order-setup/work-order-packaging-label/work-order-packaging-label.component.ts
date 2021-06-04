@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
@@ -16,6 +16,7 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
   @Input() workOrderPartId;
   @Input() woPickTicketId;
   @Input() packagingSlipId;
+  @Output() Updateshippingpopup = new EventEmitter();
   workOrderShipping: any = [];
   todayDate: Date = new Date();
   workOrderpartConditionDescription: any;
@@ -432,6 +433,7 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
           </html>`
     );
    popupWin.document.close();
+   this.Updateshippingpopup.emit();
   }
 
 }

@@ -120,7 +120,13 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);
         }
         if(this.buildMethodDetails){
-            this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
+            if(this.buildMethodDetails['freightBuildMethod'] == null || this.buildMethodDetails['freightBuildMethod'] == undefined)
+            {
+                this.costPlusType = 1;
+            }else{
+                this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
+            }
+           
             if(this.buildMethodDetails['freightFlatBillingAmount']){
                 this.freightFlatBillingAmount = this.formateCurrency(this.buildMethodDetails['freightFlatBillingAmount']);
             }
@@ -157,8 +163,15 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                 this.totalPages = 0;
             }
         }
-        if(this.buildMethodDetails){
-            this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
+        
+        if(this.buildMethodDetails)
+        {
+            if(this.buildMethodDetails['freightBuildMethod'] == null || this.buildMethodDetails['freightBuildMethod'] == undefined)
+            {
+                this.costPlusType = 1;
+            }else{
+                this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
+            }
             if(this.buildMethodDetails['freightFlatBillingAmount']){
                 this.freightFlatBillingAmount = this.formateCurrency(this.buildMethodDetails['freightFlatBillingAmount']);
             }
@@ -262,7 +275,13 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.subEditingIndex = subIndex;
         this.isEdit = true;
         rowData.amount=rowData.amount? this.formateCurrency( rowData.amount) : '0.00';
-        this.freightForm = [rowData];
+
+        let newFreight = new Freight();
+        newFreight = { ...rowData }
+        this.freightForm = [newFreight];
+
+
+       // this.freightForm = [rowData];
         this.getCurrencyList('');
        this.getUOMList('');
        this.getTaskList();
@@ -343,8 +362,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                     dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                     currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                     billingAmount: this.formateCurrency(x.amount),
-                    billingMethodId:this.costPlusType? this.costPlusType :0,
-                    markupPercentageId: this.overAllMarkup ? this.overAllMarkup : 0,
+                    //billingMethodId:this.costPlusType? this.costPlusType :0,
+                    //markupPercentageId: this.overAllMarkup ? this.overAllMarkup : 0,
                     // currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                 }
             });
@@ -352,6 +371,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                 this.workOrderFreightList[this.mainEditingIndex][this.subEditingIndex] = this.freightForm[0];
                 $('#addNewFreight').modal('hide');
                 this.isEdit = false;
+                this.markupChanged(this.workOrderFreightList[this.mainEditingIndex][this.subEditingIndex],'row')
             }
             else {    
                 let temp = [];

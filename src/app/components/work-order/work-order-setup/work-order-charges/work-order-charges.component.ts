@@ -107,6 +107,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   originalList:any=[];
   ngOnChanges() { 
     this.originalList=this.workOrderChargesList;
+    console.log(this.originalList)
     // if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId !=0){
     //   this.disableCrg=true;
     // }else{
@@ -147,6 +148,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   ngOnInit() {
     this.getRONumberList();
     this.getTaskList(); 
+    this.originalList=this.workOrderChargesList;
+    console.log(this.originalList)
     if (this.workOrderChargesList && this.workOrderChargesList.length > 0 && this.workOrderChargesList[0].markupFixedPrice) {
       this.costPlusType = Number(this.workOrderChargesList[0].markupFixedPrice);
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
@@ -333,6 +336,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     this.disableCrg=false;
     if (this.isQuote && this.isEdit) {
       this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex] = event.charges[0];
+
+      this.markupChanged(this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex],'row')
       $('#addNewCharges').modal('hide');
       this.isEdit = false;
     }
@@ -404,16 +409,18 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     try {
       this.markupList.forEach((markup) => {
         if (type == 'row' && markup.value == matData.markupPercentageId) {
-          matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost'].toString().split(',').join(''))) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 0);
-          matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity), 0);
+          matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost'].toString().split(',').join(''))) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 2);
+          matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity), 2);
+
         }
         else if (type == 'all' && markup.value == this.overAllMarkup) {
           this.workOrderChargesList.forEach((data) => {
             data.forEach((mData) => {
               if (mData.billingMethodId && Number(mData.billingMethodId) == 1) {
                 mData.markupPercentageId = this.overAllMarkup;
-                mData['billingRate'] = formatNumberAsGlobalSettingsModule(Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 0);
-                mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity), 0);
+                mData['billingRate'] = formatNumberAsGlobalSettingsModule(Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 2);
+                mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity), 2);
+              
               }
             })
           })
@@ -431,7 +438,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         (x) => {
           x.billingMethodId = (billingMethodId == 3) ? '' : billingMethodId;
           x.markupPercentageId = '';
-          x.billingRate = 0;
+          x.billingRate = 0.00;
           x.billingAmount = x.extendedCost;
           if (this.costPlusType == 3) {
             x.billingAmount = 0.00;
@@ -574,7 +581,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
 
   formateCurrency(value) {
-    return value ? formatNumberAsGlobalSettingsModule(value, 0) : '0.00';
+    return value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
   }
   getPageCount(totalNoofRecords, pageSize) {
     return Math.ceil(totalNoofRecords / pageSize)
