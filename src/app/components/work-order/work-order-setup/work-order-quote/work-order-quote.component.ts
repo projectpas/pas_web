@@ -1563,7 +1563,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.laborPayload['workflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.laborPayload['SelectedId'] = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
         this.isSpinnerVisible=true;
-        this.laborPayload.masterCompanyId= this.authService.currentUser.masterCompanyId
+        this.laborPayload.masterCompanyId= this.authService.currentUser.masterCompanyId;
+        console.log("labor",this.laborPayload)
+        // this.laborPayload.laborList.forEach((labor) => {// labor.masterCompanyId=this.authService.currentUser.masterCompanyId;
         this.workOrderService.saveLaborListQuote(this.laborPayload)
             .subscribe(
                 res => {
@@ -1863,6 +1865,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     "masterCompanyId":this.authService.currentUser.masterCompanyId
                 })
             }
+          
         })
         this.saveType = 'labour';
         $('#quoteVer').modal("show");

@@ -171,9 +171,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     if (this.taskList) {
       this.taskListForHeader = this.taskList.map(x => { return { taskId: x.taskId, description: x.description } });
     }
-    if (!this.isQuote) {
+    // if (!this.isQuote) {
       this.getEmployeeData();
-    }
+    // }
     this.selectedItems = [];
     this.laborForm.costPlusType = 'Mark Up'
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
@@ -247,7 +247,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     this.getAllExpertiseType();
 
     this.originalLaborForm = this.laborForm; 
- 
+    this.calculateTotalAdjustedHours()
   }
   checkPercentageData(value?) {
 if(this.markupList && this.markupList.length ==0){
