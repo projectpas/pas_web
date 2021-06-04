@@ -937,6 +937,15 @@ export class AppComponent implements OnInit, AfterViewInit {
                   routerLink: '/exchangemodule/exchangepages/app-exchange-quote-approval-rule',
                 },
               ]
+            },
+            {
+              label: 'Exchange Sales Order',
+              items: [
+                {
+                  label: 'Exchange Sales Order List',
+                  routerLink: '/exchangemodule/exchangepages/exchange-sales-order-list',
+                }
+              ]
             }
           ],
           [

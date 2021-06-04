@@ -1,0 +1,160 @@
+<div class="form-group" #calendarWrap>
+  <div [ngClass]="(isViewMode == false) ? 'row' : 'row ui-tabview-panels'">
+      <button *ngIf="isViewMode == false" type="button" class="btn btn-primary ml-1" (click)="addPartNumber()"
+          [disabled]="IsRestrictOnePN">
+          Add PN
+      </button>
+      <div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'">
+            <div class="tableFixHead">
+                <table class="table table-bordered" id="soq-table">
+                    <tr class="child-header splitship-head child-header-back">
+                      <th class="background-white"></th>
+                      <th>PN</th>
+                      <th>PN Description</th>
+                      <th>Ser Num</th>
+                      <th>Cond</th>
+                      <th colspan="2">Stk Line Num</th>
+                      <th colspan="2">Cust Req Date<span class="clr-red">*</span></th>
+                      <th colspan="2">Cust Prmsd Date<span class="clr-red">*</span></th>
+                      <th colspan="2">Est Ship Date<span class="clr-red">*</span></th>
+                      <th *ngIf="isViewMode == false"
+                            style="min-width: 120px; position: sticky !important">Actions</th>
+                    </tr>
+                    <ng-container *ngIf="summaryParts.length > 0">
+                        <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
+                            <tbody>
+                                <tr class="child-data splitship-child child-data-back"
+                                    *ngFor="let part of summaryPart.childParts; let stockIndex = index">
+                                    <td></td>
+                                    <td>
+                                        {{ part.partNumber }}
+                                    </td>
+                                    <td>
+                                        {{ part.description }}
+                                    </td>
+                                    <td>
+                                      {{ part.serialNumber }}
+                                    </td>
+                                    <td>
+                                      {{ part.conditionDescription }}
+                                    </td>
+                                    <td colspan="2">
+                                      {{ part.stockLineNumber }}
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(exchangeQuote, part)">
+                                        {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(exchangeQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body"
+                                            name="customerRequestDate" [yearNavigator]="true" [monthNavigator]="true"
+                                            yearRange="1900:2100" [(ngModel)]="part.customerRequestDate"
+                                            (ngModelChange)="onCustomerDateChange(stockIndex, rowIndex)"
+                                            #customerRequestDate="ngModel" [minDate]="exchangeQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="customerRequestDate.invalid && (customerRequestDate.dirty || customerRequestDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="customerRequestDate.errors.required">
+                                                <small>Customer Request Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(exchangeQuote, part)">
+                                        {{  part.promisedDate | date: "MM/dd/yyyy"}}
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(exchangeQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body" name="promisedDate"
+                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                            [(ngModel)]="part.promisedDate" (ngModelChange)="onEditPartDetails()"
+                                            #promisedDate="ngModel" [minDate]="exchangeQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="promisedDate.invalid && (promisedDate.dirty || promisedDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="promisedDate.errors.required">
+                                                <small>Promised Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(exchangeQuote, part)">
+                                        {{  part.estimatedShipDate | date: "MM/dd/yyyy" }}
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(exchangeQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body" name="estimatedShipDate"
+                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                            [(ngModel)]="part.estimatedShipDate" (ngModelChange)="onEditPartDetails()"
+                                            #estimatedShipDate="ngModel" [minDate]="exchangeQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="estimatedShipDate.invalid && (estimatedShipDate.dirty || estimatedShipDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="estimatedShipDate.errors.required">
+                                                <small>Estimated Ship Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="width-120"
+                                        *ngIf="isViewMode == false">
+                                        <span *ngIf="!isEditDisabled(exchangeQuote, part)">
+                                            <a [class.disabled]="isEditDisabled(exchangeQuote, part)"
+                                                [ngClass]="{'btn_disabled': isEditDisabled(exchangeQuote, part)}"
+                                                class="btn nobg view-part-eye" (click)="openPartToEdit(part)" matTooltip="Edit Price"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="summaryParts.length == 0">
+                        <tbody>
+                            <tr>
+                                <td colspan="37" class="sales-no-records-found" style="margin-left:-15%" >
+                                    No records found
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ng-container>
+                </table>
+            </div>
+        </div>
+  </div>
+  <div #calendarWrapper>
+  </div>
+</div>
+<div *ngIf="isViewMode == false" class="view-mode-div">
+  <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
+      (click)="approve()">
+      <span>Update</span>
+  </button>
+  <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
+      (click)="approve()">
+      <span>Save</span>
+  </button>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>
+<ng-template #addPart let-c="close" let-d="dismiss">
+  <app-add-exchange-sales-order-part-number [selectedParts]="selectedParts" [exchangeQuote]="exchangeQuote"
+  (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode" 
+  [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'EQ'">
+  </app-add-exchange-sales-order-part-number>
+</ng-template>
+<ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
+  <app-exchange-sales-order-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+      (close)="onCloseMargin($event)"></app-exchange-sales-order-margin>
+</ng-template>
