@@ -841,7 +841,7 @@
 
              <div *ngIf="approvalGridActiveTab === 'workOrderQuoteprint'">
                 <div  *ngIf="!isQuoteListView">
-                    <app-woq-form [workOrderId]="workorderid" [workOrderPartNumberId]="workOrderPartNumberId" [workFlowWorkOrderId]="workFlowWorkOrderId" [isView]="isView" [Workorderprint]="resetqouteprintData()" > </app-woq-form>
+                    <app-woq-form [workOrderId]="workorderid" [workOrderPartNumberId]="workOrderPartNumberId" [workFlowWorkOrderId]="workFlowWorkOrderId" [isView]="isView" (Workorderprint)="resetqouteprintData()" > </app-woq-form>
                 </div>
             </div>
          <!-- </div> --> 

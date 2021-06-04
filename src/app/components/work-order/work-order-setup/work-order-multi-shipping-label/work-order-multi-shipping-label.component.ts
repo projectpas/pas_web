@@ -1,4 +1,4 @@
-import { Component, OnInit,Input, OnChanges } from '@angular/core';
+import { Component, OnInit,Input, OnChanges,Output,EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 export class WorkOrderMultiShippingLabelComponent implements OnInit,OnChanges {
 
   @Input() shippingLabels
+  @Output() Updateshippingpopup = new EventEmitter();
   //workshippingLabels: any = [];
   objWorkOrderShippingLabels: any = [];
   todayDate: Date = new Date();
@@ -268,6 +269,7 @@ export class WorkOrderMultiShippingLabelComponent implements OnInit,OnChanges {
       </html>`
     );
     popupWin.document.close();
+    this.Updateshippingpopup.emit();
   }
 
 }
