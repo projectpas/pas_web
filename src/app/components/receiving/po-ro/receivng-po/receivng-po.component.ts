@@ -604,7 +604,8 @@ export class ReceivngPoComponent implements OnInit {
         return this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == purchaseOrderPartRecordId).length > 0;
     }
 
-    public toggleStockLine(event: any, part: PurchaseOrderPart): void {               
+    public toggleStockLine(event: any, part: PurchaseOrderPart): void {  
+                     
         var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
         if (!condtion || condtion == undefined) {
@@ -630,6 +631,11 @@ export class ReceivngPoComponent implements OnInit {
             this.ManufacturerList.push(manufacturer);
         }
 
+        var unitofmasure = this.allPurchaseUnitOfMeasureinfo.find(temp => temp.value == part.unitOfMeasureId)
+        if (!unitofmasure || unitofmasure == undefined) {
+            var uom = {label:part.unitOfMeasure , value : part.unitOfMeasureId}
+            this.allPurchaseUnitOfMeasureinfo.push(uom);
+        }
 
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
@@ -745,10 +751,8 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.obtainFrom = this.purchaseOrderData.vendor.vendorId;
             stockLine.ownerType = AppModuleEnum.Vendor;
-            stockLine.owner = this.purchaseOrderData.vendor.vendorId;
-
-            //stockLine.unitOfMeasureId = { value: part.uomId, label: part.unitOfMeasure },
-
+            stockLine.owner = this.purchaseOrderData.vendor.vendorId;           
+            stockLine.unitOfMeasureId = part.unitOfMeasureId;
             stockLine.maincompanylist = part.maincompanylist;
             stockLine.parentCompanyId = part.parentCompanyId;
             stockLine.managementStructureEntityId = part.managementStructureId;

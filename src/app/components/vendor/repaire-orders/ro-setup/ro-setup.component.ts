@@ -5154,6 +5154,12 @@ export class RoSetupComponent implements OnInit {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
 			this.modal.componentInstance.stockLineId = row.stockLineId;
 			this.modal.result.then(() => { }, () => { });
+		} else {
+			this.alertService.showMessage(
+				'Error',
+				'StockLineID Not Found',
+				MessageSeverity.error
+			);
 		}
 	}
 
