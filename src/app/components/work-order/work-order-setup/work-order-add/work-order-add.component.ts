@@ -1534,10 +1534,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         });
       }
         currentRecord.disabledForWorkflow=false;
-        this.workOrderGeneralInformation.partNumbers[i].disabledForWorkflow=false;
-        console.log("currentRe",currentRecord);
-        console.log("lfow",this.workOrderGeneralInformation.partNumbers[i].workflowExpirationDate);
-        
+        this.workOrderGeneralInformation.partNumbers[i].disabledForWorkflow=false;   
         if(this.workOrderGeneralInformation.partNumbers && this.workOrderGeneralInformation.partNumbers[i].workflowExpirationDate){
             this.showWaringForWorkflow();
             }
@@ -3918,7 +3915,6 @@ this.woPartId=rowData.id;
     publicatonExpirationDate:any;
     showWaringForWorkflow(){
         if(!this.isView){
-            console.log("materer",this.workOrderGeneralInformation.partNumbers)
             setTimeout(() => { 
                 this.workOrderGeneralInformation.partNumbers.map((x, index) => {
                     if(x.workflowExpirationDate){ 
