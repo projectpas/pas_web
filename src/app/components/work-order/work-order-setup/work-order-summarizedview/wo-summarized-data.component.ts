@@ -149,48 +149,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
         }
     ];
 
-    chargesListHeader = [
-        {
-            "header": "MPN",
-            "field": "partNumber"
-        },
-        {
-            "header": "Revised Part No",
-            "field": "revisedPartNo"
-        },
-        {
-            "header": "Part Description",
-            "field": "partDescription"
-        },
-        {
-            "header": "Item",
-            "field": "chargeType"
-        },
-        {
-            "header": "Vendor",
-            "field": "vendor"
-        },
-        {
-            "header": "QTY",
-            "field": "quantity"
-        },
-        {
-            "header": "RO Num",
-            "field": "roNum"
-        },
-        {
-            "header": "Ref Num",
-            "field": "refNum"
-        },
-        {
-            "header": "Invoice Num",
-            "field": "invoiceNum"
-        },
-        {
-            "header": "Amount",
-            "field": "unitPrice"
-        }
-    ]
+  
 
     documentsListHeader = [
         {"header": "", "field": "plus"},
@@ -217,40 +176,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
         }
     ]
 
-    freightsListHeader = [
-        {
-            "header": "MPN",
-            "field": "partNumber"
-        },
-        {
-            "header": "Revised Part No",
-            "field": "revisedPartNo"
-        },
-        {
-            "header": "Part Description",
-            "field": "partDescription"
-        },
-        {
-            "header": "Ship Via",
-            "field": "shipVia"
-        },
-        {
-            "header": "Dimention",
-            "field": "dimention"
-        },
-        {
-            "header": "Weight",
-            "field": "weight"
-        },
-        {
-            "header": "Memo",
-            "field": "memo"
-        },
-        {
-            "header": "Amount",
-            "field": "amount"
-        }
-    ];
+  
     
     isView = true;
     selectedCommunicationTab = '';
@@ -368,7 +294,7 @@ this.getWorkOrderWorkFlowNos();
                                   if (res) {
                                   res.forEach(element => {
                                         element.isShowPlus=true;
-                                    });;
+                                    });
                                   }
                                   this.labourListMPNs=res;
                                   console.log("res labor",this.labourListMPNs)
@@ -409,23 +335,28 @@ this.getWorkOrderWorkFlowNos();
             case 'charges': {
                 this.gridActiveTab = tabname;
                 this.isSpinnerVisible = true;
+                console.log("mpnPartNumbersList,",this.mpnPartNumbersList);
                 this.workOrderService.getChargesListMPNS(this.workOrderId)
                 .subscribe(
                     (res: any[]) => {
                         this.isSpinnerVisible = false;
                         this.chargesListMPNs = res;
                         this.chargesListMPNs.forEach(
-                            first => {
+                            first => { 
                                 this.mpnPartNumbersList.forEach(
                                     second => {
-                                        if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                                        if(first.workFlowWorkOrderId == second.value){
+                                            first['workOrderPartNumberId'] = second.value;
                                         }
                                     }
                                 )
+
                             }
                         )
-                        console.log(this.chargesListMPNs);
+                      
+                        this.chargesListMPNs.forEach(element => {
+                            element.isShowPlus=true;
+                        });
                     },
                     (err) => {
                         this.isSpinnerVisible = false;
@@ -437,30 +368,30 @@ this.getWorkOrderWorkFlowNos();
 
             case 'documents': {
                 this.gridActiveTab = tabname;
-                this.isSpinnerVisible = true;
-                this.workOrderService.getDocumentsListMPNS(this.workOrderId)
-                .subscribe(
-                    (res: any[]) => {
-                        this.isSpinnerVisible = false;
-                        this.documentsListMPNs = res;
-                        this.documentsListMPNs.forEach(
-                            first => {
-                                this.mpnPartNumbersList.forEach(
-                                    second => {
-                                        if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                        console.log(this.documentsListMPNs);
-                    },
-                    (err) => {
-                        this.isSpinnerVisible = false;
-                        this.errorHandling(err);
-                    }
-                )
+                // this.isSpinnerVisible = true;
+                // this.workOrderService.getDocumentsListMPNS(this.workOrderId)
+                // .subscribe(
+                //     (res: any[]) => {
+                //         this.isSpinnerVisible = false;
+                //         this.documentsListMPNs = res;
+                //         this.documentsListMPNs.forEach(
+                //             first => {
+                //                 this.mpnPartNumbersList.forEach(
+                //                     second => {
+                //                         if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
+                //                             first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         )
+                //         console.log(this.documentsListMPNs);
+                //     },
+                //     (err) => {
+                //         this.isSpinnerVisible = false;
+                //         this.errorHandling(err);
+                //     }
+                // )
                 break;
             }
 
@@ -603,6 +534,9 @@ this.getWorkOrderWorkFlowNos();
                 this.workOrderService.getFreightsListMPNS(this.workOrderId).subscribe((res: any[]) => {
                     this.isSpinnerVisible = false;
                     this.freightsListMPNs = res;
+                    this.freightsListMPNs.forEach(element => {
+                        element.isShowPlus=true;
+                    });
                 },
                 err => {
                     this.isSpinnerVisible = false;
@@ -701,6 +635,9 @@ this.getWorkOrderWorkFlowNos();
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderMaterialList(materialMPN.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
+            this.materialListMPNs.forEach(element => {
+                element.isShowPlus=true;
+            });
             materialMPN.isShowPlus=false;
             this.isShowChild=true;
             if (res.length > 0) {

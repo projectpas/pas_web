@@ -149,6 +149,8 @@
                             {{part.partNumber}}
                             <span class="alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span>
                             <span class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span>
+                            <!-- <span class="alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span> -->
+                            <!-- <span class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span> -->
                         </span>
                         <span *ngIf="col.field == 'itemClassification'">
                             {{part.itemClassification !== null? part.itemClassification: ""}}

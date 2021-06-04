@@ -191,7 +191,7 @@
 
                         <div *ngIf="workOrderId && (gridActiveTab == 'charges')"
                         [ngClass]="{hidedata : gridActiveTab !== 'charges' }"> 
-                            <app-charges-wo-summarization [value]="chargesListMPNs"></app-charges-wo-summarization>
+                            <app-charges-wo-summarization [value]="chargesListMPNs"  [workOrderId]="workOrderId"></app-charges-wo-summarization>
                         </div> 
 
                         <!-- <div *ngIf="workOrderId && (gridActiveTab == 'documents')"
@@ -515,7 +515,7 @@
 
                         <div *ngIf="workOrderId && (gridActiveTab == 'freight')"
                         [ngClass]="{hidedata : gridActiveTab !== 'freight' }">
-                            <app-freight-wo-summarization [value]="freightsListMPNs"></app-freight-wo-summarization>
+                            <app-freight-wo-summarization [value]="freightsListMPNs" [workOrderId]="workOrderId"></app-freight-wo-summarization>
                         </div>
 
                         <div *ngIf="workOrderId && (gridActiveTab == 'shipping')"

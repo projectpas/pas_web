@@ -41,8 +41,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
   constructor(private commonService: CommonService,
     private authService: AuthService, ) {
   }
-    ngOnInit() {
-      console.log("hello")
+    ngOnInit() { 
 }
   ngOnChanges()    { 
     this.formObject=={
@@ -52,8 +51,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
       provisionId:0,
       stocklineQuantity:0
     };
-    this.part=this.part;
-    console.log("part",this.part)
+    this.part=this.part; 
     this.formObject.quantity=this.part.quantity; 
     this.formObject.stocklineQuantity=this.part.stocklineQuantity;
     this.formObject.qtyOnHand = this.part.qtyOnHand;
@@ -72,7 +70,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
      this.formObject.workOrderId=this.part.workOrderId;
      this.formObject.workFlowWorkOrderId=this.part.workFlowWorkOrderId;
      this.formObject.qtyOnHand = this.part.qtyOnHand;
-     if(this.isStockLine){
+     if(this.isStockLine){  // from material List stock line edit
        this.formObject.qtyAvailable = this.part.partQuantityAvailable;
     }else{
       this.formObject.qtyAvailable = this.part.qtyAvailable;
@@ -96,20 +94,19 @@ export class WoMarginComponent implements OnInit, OnChanges {
         }
       } 
     }
+  
 
-
-this.onChangeQuantityFromThis(); 
-    if(this.editData){
-      console.log("edit Data",this.editData);
+// this.onChangeQuantityFromThis(); 
+    if(this.editData){ 
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
      this.formObject.conditionIds=[this.editData.conditionCodeId];
-     this.formObject.quantity=this.editData.quantity;
-    //  this.formObject.qtyOnHand=this.editData.qtyOnHand;
-     if(this.isStockLine){
-      this.formObject.qtyAvailable = this.part.partQuantityAvailable;
-      this.formObject.unitCost= this.editData.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(this.editData.stocklineUnitCost, 2) : '0.00';
-    }else{
+     if(this.isStockLine){  // from material List stock line edit
+       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
+       this.formObject.unitCost= this.editData.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(this.editData.stocklineUnitCost, 2) : '0.00';
+       this.formObject.quantity=this.editData.quantity;
+        this.formObject.qtyOnHand=this.editData.stockLineQuantityOnHand;
+      }else{
       this.formObject.qtyAvailable=this.editData.qtyAvail;
       this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
       //this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
@@ -132,11 +129,14 @@ this.onChangeQuantityFromThis();
       this.provisionList();
       this.getMaterailMandatories();
      }
+     this.onChangeQuantityFromThis();
      this.enableUpdateBtn=this.enableUpdateBtn;
      if(this.enableUpdateBtn==true){
        this.disableUpdateButton=false;
      }
      this.calculateExtendedCost();
+ 
+
   }
 
   get masterCompanyId(): number {
@@ -275,7 +275,6 @@ onCloseTextAreaInfo() {
   $("#textarea-popup2").modal("hide");
 }
 calculateExtendedCost(): void {
-  debugger;
   this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
   this.formObject.stocklineQuantity = this.formObject.stocklineQuantity ? this.formObject.stocklineQuantity.toString().replace(/\,/g, '') : 0;
   if (this.formObject.stocklineQuantity != 0 && this.formObject.unitCost) {
