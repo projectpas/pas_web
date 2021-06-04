@@ -4,7 +4,7 @@
   </button>
 </div> -->
 <div class="header" *ngIf=" !isQuote">
-  <div class="row">
+  <div class="row" *ngIf="!isSummarizedView">
       <div class="col">
           <h4 class="header-name">Work Order Charges List</h4>
       </div>
@@ -15,7 +15,7 @@
       </div>
   </div>
 </div>
-<div id="addNewCharges" class="modal fade" role="dialog" data-backdrop="static" *ngIf="!view">
+<div id="addNewCharges" class="modal fade" role="dialog" data-backdrop="static" *ngIf="!view && !isSummarizedView">
   <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
     <div class="modal-content">
@@ -47,7 +47,7 @@
 
   <p-table #dt1 class="rpo-table-cstm rro-table-cstm lastcol-fix pub-ptable-cstm ptable-f10" [columns]="cols" [value]="workOrderChargesList"  (onPage)="pageIndexChange($event)"
   [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" [rows]="10">
-    <ng-template pTemplate="caption">
+    <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
         <div class="checkbox-cstm pull-right checkbox-align" *ngIf="isQuote==false">
         <label class="checkbox-label-align" >
             <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"

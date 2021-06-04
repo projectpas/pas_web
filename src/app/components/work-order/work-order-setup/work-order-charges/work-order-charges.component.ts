@@ -20,6 +20,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   @Input() workFlowObject;
   @Input() isWorkOrder;
   @Input() isQuote = false;
+  @Input() isSummarizedView: boolean = false;
+  
   @Input() markupList;
   @Output() saveChargesListForWO = new EventEmitter();
   @Output() saveChargesListDeletedStatus = new EventEmitter();
@@ -145,8 +147,10 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     }
   }
   ngOnInit() {
-    this.getRONumberList();
-    this.getTaskList(); 
+if(!this.isSummarizedView){
+  this.getRONumberList();
+  this.getTaskList(); 
+}
     if (this.workOrderChargesList && this.workOrderChargesList.length > 0 && this.workOrderChargesList[0].markupFixedPrice) {
       this.costPlusType = Number(this.workOrderChargesList[0].markupFixedPrice);
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;

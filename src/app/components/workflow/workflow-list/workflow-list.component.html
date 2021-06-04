@@ -231,14 +231,14 @@
                                   matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
                                   matTooltipPosition="above"                                                  
                                   [disabled]="true"></p-inputSwitch>
-                                <span data-toggle="modal" data-target="#view"
-                                  (click)="onViewWFDetails(rowData,'html')">
-                                  <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
-                                      tooltipPosition="bottom" title="" class="btn  nobg"
-                                      data-original-title="View">
-                                      <i class="fa fa-eye"></i>
-                                  </a>
-                                </span>
+                             <span data-toggle="modal" data-target="#view"
+                                (click)="onViewWFDetails(rowData,'html')">
+                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
+                                    tooltipPosition="bottom" title="" class="btn  nobg"
+                                    data-original-title="View">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </span>
                                    
                             <span data-toggle="modal" data-target="#history">
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"

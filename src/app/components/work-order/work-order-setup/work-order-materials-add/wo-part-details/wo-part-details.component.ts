@@ -421,6 +421,12 @@ export class WoPartDetailsComponent implements OnChanges {
     this.isSpinnerVisible = true;
     this.formObject.conditionId = part.conditionId;
     this.formObject.partId = part.partId;
+
+
+    if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
+      this.formObject.conditionIds.push(this.formObject.conditionId);
+    } 
+    this.searchQuery.partSearchParamters=this.formObject;
     this.service.searchstocklinefromsoqpop(this.searchQuery)
       .subscribe(data => {
         this.isSpinnerVisible = false;
@@ -503,18 +509,64 @@ export class WoPartDetailsComponent implements OnChanges {
       // this.searchDisabled = false;
     }
   }
-
+  modifyStockTypes(){
+    this.newFormObject={...this.formObject};
+    if(this.formObject.restrictPMA==false && this.formObject.restrictDER==false){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=true;
+      this.newFormObject.includeAlternatePartNumber=false;
+      this.newFormObject.includeEquivalentPartNumber=false;
+    }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==false){
+      this.newFormObject.restrictPMA=false;
+      this.newFormObject.restrictDER=true;
+      this.newFormObject.includeAlternatePartNumber=false;
+      this.newFormObject.includeEquivalentPartNumber=false;
+    }
+    else if(this.formObject.restrictDER==true && this.formObject.restrictPMA==false){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=false;
+      this.newFormObject.includeAlternatePartNumber=false;
+      this.newFormObject.includeEquivalentPartNumber=false;
+    }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==true){
+      this.newFormObject.restrictPMA=false;
+      this.newFormObject.restrictDER=false;
+      this.newFormObject.includeAlternatePartNumber=false;
+      this.newFormObject.includeEquivalentPartNumber=false;
+    }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==true && this.newFormObject.includeAlternatePartNumber==true && this.newFormObject.includeEquivalentPartNumber==true){
+      this.newFormObject.restrictPMA=false;
+      this.newFormObject.restrictDER=false;
+      this.newFormObject.includeAlternatePartNumber=true;
+      this.newFormObject.includeEquivalentPartNumber=true;
+    }else if(this.formObject.includeAlternatePartNumber==true ){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=true;
+      this.newFormObject.includeAlternatePartNumber=true;
+      this.newFormObject.includeEquivalentPartNumber=false;
+    }
+    else if(this.formObject.includeEquivalentPartNumber==true){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=true;
+      this.newFormObject.includeAlternatePartNumber=false;
+      this.newFormObject.includeEquivalentPartNumber=true;
+    }else if(this.formObject.restrictPMA==false && this.formObject.restrictDER==false && this.newFormObject.includeAlternatePartNumber==true && this.newFormObject.includeEquivalentPartNumber==true){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=true;
+      this.newFormObject.includeAlternatePartNumber=true;
+      this.newFormObject.includeEquivalentPartNumber=true;
+    }
+  }
+newFormObject:any={};
   bindPartsDroppdown(query) {
-    console.log("customer",this.customer)
+ this.modifyStockTypes();
     let partSearchParamters = {
       'partNumber': query,
-      "restrictPMA": this.formObject.restrictPMA,
-      "restrictDER": this.formObject.restrictDER,
+      "restrictPMA": this.newFormObject.restrictPMA,
+      "restrictDER": this.newFormObject.restrictDER,
       "customerId": this.customer.customerId,
       "custRestrictDER": this.customer.restrictDER,
       "custRestrictPMA": this.customer.restrictPMA,
-      "includeAlternatePartNumber": this.formObject.includeAlternatePartNumber,
-      "includeEquivalentPartNumber": this.formObject.includeEquivalentPartNumber,
+      "includeAlternatePartNumber": this.newFormObject.includeAlternatePartNumber,
+      "includeEquivalentPartNumber": this.newFormObject.includeEquivalentPartNumber,
       "idlist": '0',
       "masterCompanyId": this.masterCompanyId
     };
@@ -553,20 +605,27 @@ export class WoPartDetailsComponent implements OnChanges {
   resetActionButtons() {
   }
   search() {
+    this.modifyStockTypes();
     this.roleUpMaterialList=[];
     this.parts=[];
     this.hideme=[];
     //  this.formObject.restrictDER = !this.formObject.restrictDER;
     // this.formObject.restrictPMA = !this.formObject.restrictPMA;
-    if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
-      this.formObject.conditionIds.push(this.formObject.conditionId);
-    }
-    this.searchQuery.partSearchParamters=this.formObject;
+    // if (this.newFormObject.conditionIds !== undefined && this.newFormObject.conditionIds.length == 0) {
+    //   this.newFormObject.conditionIds.push(this.newFormObject.conditionId);
+    // } 
+    // this.searchQuery.partSearchParamters=this.newFormObject;
+
     if (this.formObject.includeMultiplePartNumber) {
    } else {
       switch (this.formObject.itemSearchType) {
         case ItemSearchType.StockLine:
           this.isSpinnerVisible = true;
+          if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
+            this.formObject.conditionIds.push(this.formObject.conditionId);
+          } 
+          this.searchQuery.partSearchParamters=this.formObject;
+          console.log("thisform obj",this.formObject)
           this.service.searchstocklinefromsoqpop(this.searchQuery)
             .subscribe(result => {
               this.isSpinnerVisible = false;
@@ -591,6 +650,10 @@ export class WoPartDetailsComponent implements OnChanges {
           break;
         default:
           this.isSpinnerVisible = true;
+          if (this.newFormObject.conditionIds !== undefined && this.newFormObject.conditionIds.length == 0) {
+            this.newFormObject.conditionIds.push(this.newFormObject.conditionId);
+          } 
+          this.searchQuery.partSearchParamters=this.newFormObject;
           this.itemMasterService.searchitemmasterfromsoqpop(this.searchQuery)
             .subscribe(result => {
               this.isSpinnerVisible = false;
