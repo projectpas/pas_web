@@ -131,9 +131,9 @@
             <th class="text-center" style="width:140px;min-width: 140px;">Data Entered By</th>
           </ng-container>
           <ng-container *ngIf="isQuote">
-            <th>
+            <!-- <th style="min-width: 76px;">
               Direct Labor
-            </th>
+            </th> -->
             <th>
               Burden Rate %
             </th>
@@ -208,7 +208,7 @@
               <td></td>
               <td *ngIf="!isQuote"></td>
               <ng-container *ngIf="isQuote">
-                <td></td>
+                <!-- <td></td> -->
                 <td></td>
                 <td></td>
                 <td></td>
@@ -346,10 +346,10 @@
 
                 </ng-container>
                 <ng-container *ngIf="isQuote">
-                  <td>
+                  <!-- <td>
                     <input type="number" class="form-control" (ngModelChange)="checkValid(23)" (blur)="calculateBurderRate(rec);calculateTotalCost(rec)"
                       [(ngModel)]="rec.directLaborOHCost" [disabled]="isView" required/> 
-                  </td>
+                  </td> -->
                   <td>
                     <select class="form-control select-markup width-100"  (ngModelChange)="checkValid(24)" (change)="calculateBurderRate(rec);calculateTotalCost(rec)" [(ngModel)]="rec.burdaenRatePercentageId"
                  >
@@ -448,21 +448,21 @@
               <td></td>
               <td *ngIf="isQuote"></td>
               <td *ngIf="!isQuote"></td>
-              <td *ngIf="
+              <td style="text-align: right;" *ngIf="
                   laborForm.hoursorClockorScan &&
                   laborForm.hoursorClockorScan !== 1 &&
                   laborForm.hoursorClockorScan !== 3"></td>
-              <td *ngIf="
+              <td style="text-align: right;"*ngIf="
                   laborForm.hoursorClockorScan &&
                   laborForm.hoursorClockorScan !== 1"></td>
-              <td *ngIf="
+              <td style="text-align: right;"*ngIf="
                   laborForm.hoursorClockorScan &&
                   laborForm.hoursorClockorScan !== 1"></td>
             <td *ngIf="!isQuote">
                <!-- <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled /> -->
                <!-- {{laborForm.totalWorkHours}} -->
             </td>
-            <td *ngIf="isQuote" class="content-to-end" style="text-align:right !important">
+            <td style="text-align: right;"*ngIf="isQuote" class="content-to-end" style="text-align:right !important">
               {{laborForm.totalWorkHours}}
             </td>
             <td class="content-to-end" style="text-align:right !important">

@@ -418,9 +418,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
 
     getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallistnew?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
             return this.handleErrorCommon(error, () => this.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId));
         });
+        // workordermateriallist
     }
     getWorkOrderMaterialListNew(workFlowWorkOrderId, workOrderId, masterCompanyId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallistnew?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
