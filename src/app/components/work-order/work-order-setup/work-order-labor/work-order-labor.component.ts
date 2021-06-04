@@ -206,7 +206,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       }
     }
     this.calculateTotalWorkHours();
-    setTimeout(() => {
+    setTimeout(() => { 
       if (this.workOrderLaborList) {
         this.employeeList = this.employeesOriginalData;
         this.laborForm.workFlowWorkOrderId = (this.workOrderLaborList['workFlowWorkOrderId']) ? this.workOrderLaborList['workFlowWorkOrderId'] : this.laborForm.workFlowWorkOrderId;
@@ -392,7 +392,7 @@ setTimeout(() => {
     if (rec.burdaenRatePercentageId && rec.directLaborOHCost) {
       this.markupList.forEach((markup) => {
         if (markup.value == rec.burdaenRatePercentageId) {
-          rec.burdenRateAmount = (rec.directLaborOHCost / 100) * Number(markup.label);
+          rec.burdenRateAmount = (rec.directLaborOHCost.toString().split(',').join('') / 100) * Number(markup.label);
         }
       })
       this.calculateTotalCost(rec);
@@ -1099,12 +1099,15 @@ return true;
     }
   }
   markupChanged(matData, type) {
+    console.log("markup checkd",matData);
+
     try {
       if (this.markupList) {
         this.markupList.forEach((markup) => {
           if (type == 'row' && markup.value == matData.markupPercentageId && matData['totalCostPerHour'] && matData['totalCostPerHour']) {
             matData['billingRate'] = ((matData['totalCostPerHour']) + (((matData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
-            matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate']) * Number(matData.adjustedHours), 0);
+            matData['billingAmount'] = (Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.hours)).toFixed(2);
+            // this.formateCurrency(
           }
           else if (type == 'all' && markup.value == this.overAllMarkup) {
             for (let t in this.laborForm.workOrderLaborList[0]) {
@@ -1113,7 +1116,7 @@ return true;
                   mData.markupPercentageId = this.overAllMarkup;
                   if (mData['totalCostPerHour'] && mData['totalCostPerHour']) {
                     mData['billingRate'] = ((mData['totalCostPerHour']) + (((mData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
-                    mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate']) * Number(mData.hours), 0);
+                    mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
                   }
                 }
               }
@@ -1289,6 +1292,7 @@ return true;
           if (this.laborForm.workOrderLaborList[0][task][0] && this.laborForm.workOrderLaborList[0][task][0]['hours'] != null) {
             for (let taskList of this.laborForm.workOrderLaborList[0][task]) {
               this.laborForm.totalWorkHours += Number(taskList['hours']);
+              // taskList['billingAmount']= taskList['billingAmount'].toFixed(2);
             }
           }
         }
@@ -1494,10 +1498,12 @@ return true;
     } 
   }
   formateCurrency(value) {
+    console.log("value",value)
     if (value) {
       value = (Number(value.toString().split(',').join(''))).toFixed(2);
-      let result = formatNumberAsGlobalSettingsModule(value, 0.00);
-      return `${result}.00`;
+      let result = formatNumberAsGlobalSettingsModule(value, 2);
+      // return `${result}.00`;
+      return result;
     }
     return value;
   }

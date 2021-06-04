@@ -1,6 +1,6 @@
 ﻿import { SalesQuote } from './../../../../models/sales/SalesQuote.model';
 import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { Params, ActivatedRoute } from '@angular/router';
+import { Params, ActivatedRoute,Router } from '@angular/router';
 import {WorkOrderQuote,multiParts,partsDetail} from '../../../../models/work-order-quote.modal';
 import { MenuItem } from 'primeng/api';
 import { WorkOrderQuoteService } from '../../../../services/work-order/work-order-quote.service';
@@ -414,7 +414,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         { field: 'updatedDate', header: 'Updated Date',isRequired:false },
         { field: 'updatedBy', header: 'Updated By',isRequired:false },
       ]
-    constructor(private router: ActivatedRoute,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
+    constructor(private router: ActivatedRoute, private arouter: Router,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     
     ngOnInit() {
         this.employeeName= this.authService.currentEmployee.name;
@@ -648,6 +648,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     this.currentCustomerId = res.customerId
                                     this.isEdit = true;
                                     this.setWorkOrderQuoteId(res['workOrderQuote']['workOrderQuoteId']);
+                                    // this.getWOMaterialList();
+                                    this.getQuoteMaterialListByWorkOrderQuoteId();
                                     this.quoteCreated=true;
                                     this.quotationHeader = this.formQuoteInfo(res.workOrderQuote);
                                     this.quotationHeader['workOrderQuoteId'] = res.workOrderQuote.workOrderQuoteId;
@@ -708,8 +710,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                         )
                                 }
                             },
-                            err => {
-                                // console.log("hello crecords")
+                            err => { 
                                 this.quoteCreated=false;
                                 // this.quotationHeader['workOrderQuoteId']=0
                                 this.isSpinnerVisible = false;
@@ -888,7 +889,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             salesPersonName: this.salesPerson,
             workOrderNumber: this.workOrderNumber,
             workOrderQuoteId: 0,
-            approvedDate: this.approvedDate,
+            approvedDate: this.approvedDate, 
             sentDate: this.sentDate,
             csrId: quoteHeader.csrId,
             creditTermsId: quoteHeader.creditTermsId,
@@ -981,8 +982,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    getMPNList(workOrderId) {   
-        console.log("workorderId",workOrderId)     
+    getMPNList(workOrderId) {     
         if(workOrderId && workOrderId != 0){
             this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {                
                 this.workOrderWorkFlowOriginalData = res;
@@ -1566,8 +1566,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.laborPayload['workflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.laborPayload['SelectedId'] = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
         this.isSpinnerVisible=true;
-        this.laborPayload.masterCompanyId= this.authService.currentUser.masterCompanyId;
-        console.log("labor",this.laborPayload)
+        this.laborPayload.masterCompanyId= this.authService.currentUser.masterCompanyId; 
         // this.laborPayload.laborList.forEach((labor) => {// labor.masterCompanyId=this.authService.currentUser.masterCompanyId;
         this.workOrderService.saveLaborListQuote(this.laborPayload)
             .subscribe(
@@ -2048,24 +2047,26 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    saveMaterialListForWO(data) {
+    saveMaterialListForWO(newdata) {
         this.disableMat=false; 
+const data={...newdata};
         data['materialList'].forEach( 
             mData => {
-                if (mData.billingRate) {
-                    mData.billingRate = Number(mData.billingRate.toString().split(',').join('')).toFixed(2);
-                }
+                // if (mData.billingRate) {
+                //     mData.billingRate = Number(mData.billingRate.toString().split(',').join('')).toFixed(2);
+                // }
                 if (mData.unitCost) {
                     mData.unitCost = Number(mData.unitCost.toString().split(',').join('')).toFixed(2);
                 }
-                mData['billingAmount'] = (mData.quantity * Number(mData.billingRate.toString().split(',').join(''))).toFixed(2);
+                // mData['billingAmount'] = (mData.quantity * Number(mData.billingRate.toString().split(',').join(''))).toFixed(2);
                 mData.partNumber= mData.partItem.partName;
                 mData.taskId=(typeof mData.taskId == 'object')? mData.taskId.taskId:mData.taskId;
                 mData.taskName=(typeof mData.taskId == 'object')?mData.taskId.description:mData.taskName;
-                mData.billingMethodId=this.costPlusType ? this.costPlusType :0;
-                mData.markupPercentageId=this.overAllMarkup ? this.overAllMarkup : 0;
+                // mData.billingMethodId=this.costPlusType ? this.costPlusType :0;
+                // mData.markupPercentageId=this.overAllMarkup ? this.overAllMarkup : 0;
 
                 // (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
+                this.markupChanged(mData, 'row')
             }
         )
         if (!this.editMatData || this.editMatData.length == 0) {
@@ -2136,12 +2137,12 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
     markupChanged(matData, type) {
         try {
-            this.markupList.forEach((markup) => {
+            this.markupList.forEach((markup) => { 
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
-                    matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label))
+                    matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label ? markup.label :0))
 
               
-                    matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost']) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))), 2);
+                    matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost']) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label ? markup.label :0))), 2);
                     matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
                 }
                 else if (type == 'all' && markup.value == this.overAllMarkup) {
@@ -2269,7 +2270,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 totalQuantity += this.getTotalTaskQuantity(material);
             }
         )
-        return totalQuantity;
+        return totalQuantity ? totalQuantity :0;
         }
     }
 
@@ -2282,7 +2283,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
             }
         )
-        return totalQuantity;
+        return totalQuantity ? totalQuantity :0;
     }
 
     getTotalUnitCost() {
@@ -2474,7 +2475,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     onClickBackToWO() {
+        if(this.enableEditBtn && this.selectedDisplayType == ''){
         this.enableBackToWO.emit(true);
+        }else{
+            this.arouter.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-edit/${this.workOrderId}`
+              );
+        } 
     }
 
     noBack(data) {
@@ -2520,8 +2527,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.showAlertMessage(warningMessage, this.restrictMessage);
                 } else if (this.warningID != 0 && this.restrictID != 0) {
                     this.showAlertMessage(warningMessage, this.restrictMessage);
-                } else if (this.warningID == 0 && this.restrictID == 0) {
-                    console.log("hello")
+                } else if (this.warningID == 0 && this.restrictID == 0) { 
                     // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
                 }
             }
@@ -3252,7 +3258,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             let result = formatNumberAsGlobalSettingsModule(value, 0.00);
             return `${result}.00`;
         }
-        return value;
+        return value ? value : 0.00;
     }
 
     calculatebCost(value,material): void {
@@ -3362,17 +3368,18 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             if (res.length > 0) {
                 this.materialListQuotation = res;
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
-                    for (let charge in this.materialListQuotation) {
-                        if (this.materialListQuotation[charge]['unitCost']) {
-                            this.materialListQuotation[charge]['unitCost'] = Number(this.materialListQuotation[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
+                    this.materialListQuotation.forEach(tcharge => {
+                      
+                        if (tcharge.unitCost) {
+                            tcharge.unitCost = Number(tcharge.unitCost.toString().split(',').join('')).toFixed(2);
                         }
-                        if (this.materialListQuotation[charge]['billingRate']) {
-                            this.materialListQuotation[charge]['billingRate'] = Number(this.materialListQuotation[charge]['billingRate'].toString().split(',').join('')).toFixed(2);
+                        if (tcharge.billingRate) {
+                            tcharge.billingRate = Number(tcharge.billingRate.toString().split(',').join('')).toFixed(2);
                         }
-                        if (this.materialListQuotation[charge]['billingAmount']) {
-                            this.materialListQuotation[charge]['billingAmount'] = Number(this.materialListQuotation[charge]['billingAmount'].toString().split(',').join('')).toFixed(2);
+                        if (tcharge.billingAmount) {
+                            tcharge.billingAmount = Number(tcharge.billingAmount.toString().split(',').join('')).toFixed(2);
                         }
-                    }
+                    })
                 }
                 let temp = []
                 let formedData = [];
@@ -3393,6 +3400,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                     this.materialListQuotation.push(temp[x]);
                 }
             }
+            this.tmchange();
         },
         err => {
             this.errorHandling(err);
@@ -3405,6 +3413,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         // false, 0 is For Sub Work Order 
         this.workorderMainService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId,false,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
+         
             let laborList = this.labor.workOrderLaborList;
             this.labor = { ...res, workOrderLaborList: laborList };
             this.labor.hoursorClockorScan = undefined;
@@ -3556,7 +3565,11 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.getWOExclusionsList();
         }
     }
-    
+    loadMaterials(){
+        this.getWOMaterialList();
+
+    }
+    loadworkorderData:boolean=false;
     getQuoteMaterialListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
@@ -3603,22 +3616,27 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                     this.materialListQuotation.push(temp[x]);
                 }
                 if (res.length > 0) {
-                    this.updateWorkOrderQuoteDetailsId(res[0].workOrderQuoteDetailsId)
+                    this.updateWorkOrderQuoteDetailsId(res[0].workOrderQuoteDetailsId);
+                    this.loadworkorderData=false;
                 }
                 else {
-                    this.getWOMaterialList();
+                    // this.getWOMaterialList();
+                    this.loadworkorderData=true;
                 }
                 if(!res){
-                    this.getWOMaterialList();
+                    // this.getWOMaterialList();
+                    this.loadworkorderData=true;
                 }
             },
             err => {
                 this.errorHandling(err);
+                this.loadworkorderData=true;
                 this.isSpinnerVisible = false;
             })
         }
         else {
-            this.getWOMaterialList();
+            // this.getWOMaterialList();
+            this.loadworkorderData=true;
         }
     }
 
@@ -3685,6 +3703,9 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 if (res) {
                     let wowfId = this.labor.workFlowWorkOrderId;
                     if (res) {
+                        res.laborList.forEach(element => {
+                            element.billingAmount= element.billingAmount.toFixed(2);
+                        });
                         this.laborPayload.WorkOrderQuoteLaborHeader = res;
                         this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId)
                         let laborList = this.labor.workOrderLaborList;

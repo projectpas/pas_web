@@ -37,6 +37,7 @@
         this.contractNo='';
         this.workOrderId=0;
         this.partTechnicianId=0;
+        this.disabledForWorkflow=false;
     }
 
     updatedDate: Date;
@@ -73,4 +74,5 @@
     receivedDate: string;
     workOrderId: any;
     partTechnicianId:any;
+    disabledForWorkflow:boolean=false;
 }

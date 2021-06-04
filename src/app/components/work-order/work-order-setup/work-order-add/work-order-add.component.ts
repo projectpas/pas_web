@@ -1525,7 +1525,20 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 })
         }
     }
-
+    onSelectWorkflow(event,currentRecord,i){
+      if(this['dynamicWorkflowList' + i] && this['dynamicWorkflowList' + i].length !=0){
+        this['dynamicWorkflowList' + i].forEach(element => {
+            if(element.value==event.value){
+                this.workOrderGeneralInformation.partNumbers[i].workflowExpirationDate = element.expirationDate; 
+            }
+        });
+      }
+        currentRecord.disabledForWorkflow=false;
+        this.workOrderGeneralInformation.partNumbers[i].disabledForWorkflow=false;   
+        if(this.workOrderGeneralInformation.partNumbers && this.workOrderGeneralInformation.partNumbers[i].workflowExpirationDate){
+            this.showWaringForWorkflow();
+            }
+    }
     getWorkFlowByPNandScope(value,workOrderPart,form,index) {
         if(value !=null && form=='html'){
             workOrderPart.workOrderScopeId=value;
@@ -1544,7 +1557,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     label: x.workFlowNo,
                     value: x.workFlowId
                 }
-            })
+            }) 
             this['dynamicWorkflowList' + index] =[];
             this['dynamicWorkflowList' + index]=this.workFlowList;
             if(this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length!=0){
@@ -2059,11 +2072,13 @@ this.getNewMaterialListByWorkOrderId();
           uniqueParts.map((x,xindex)=>{
              if(x.childParts && x.childParts.length !=0){
                 x.childParts.map((y,yindex)=>{
-                    y.line = (xindex + 1) + '.' + (yindex + 1)
+                    y.line = (xindex + 1) + '.' + (yindex + 1);
+                    y.stocklineUnitCost=y.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(y.stocklineUnitCost, 2) : '0.00';
+                   y.stocklineExtendedCost=y.stocklineExtendedCost ? formatNumberAsGlobalSettingsModule(y.stocklineExtendedCost, 2) : '0.00';
                 })
              } 
           })
-          this.workOrderMaterialList = uniqueParts;
+          this.workOrderMaterialList = uniqueParts; 
         }
         this.totalRecords = this.workOrderMaterialList.length;
         this.pageLinks = Math.ceil(
@@ -3906,6 +3921,7 @@ this.woPartId=rowData.id;
                      //if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
                     if((new Date(x.workflowExpirationDate)) < (new Date())){
                         // this.removeWorkflow(x,index);
+                        x.disabledForWorkflow=true;
                         setTimeout(() => {
                             // x.workflowId=0;
                             this.disableSaveForPart=false;

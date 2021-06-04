@@ -649,7 +649,7 @@
                                                         name="workFlow{{i}}" [autoWidth]="false"
                                                         [style]="pDropdownStyle" #workFlow="ngModel"
                                                         class="p-dropdown-custom-md1 p-dropdown-mh120"
-                                                        (ngModelChange)="getValid()"
+                                                        (ngModelChange)="getValid()" (onChange)="onSelectWorkflow($event,workOrderPartNumber,i)"
                                                         [(ngModel)]="workOrderPartNumber.workflowId"
                                                         [disabled]="isView || quotestatusofCurrentPart =='Approved'"
                                                         appendTo="body">
@@ -673,7 +673,7 @@
                                                         (change)="tranferCheckbox($event,workOrderPartNumber,i)"
                                                         matTooltip="Transfer Workflow To Work Order"
                                                         matTooltipPosition="above"
-                                                        [disabled]="!isEdit">
+                                                        [disabled]="!isEdit || workOrderPartNumber.disabledForWorkflow">
                                                 </span>
                                             </td>
                                             <td>
