@@ -20,7 +20,7 @@ import { CustomerService } from '../../../../services/customer.service';
 import { Dropdown } from 'primeng/dropdown';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
-import { formatNumberAsGlobalSettingsModule,editValueAssignByCondition } from '../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule,editValueAssignByCondition ,getValueFromArrayOfObjectById} from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
 import { RepairOrderService } from '../../../../services/repair-order.service';
@@ -213,8 +213,7 @@ export class EditRoComponent implements OnInit {
                                 else {
                                     parent.hasChildren = false;
                                 }
-                            }
-
+                            }   
                             for (let part of this.repairOrderData) {
                                 part.isEnabled = false;
                                 this.getManagementStructureForPart(part, results[1]);
@@ -235,6 +234,7 @@ export class EditRoComponent implements OnInit {
                             this.loadTagByEmployeeData();
                             this.Purchaseunitofmeasure();
                             this.getAllrevisedPart();
+                            this.getTagType();
                             this.isSpinnerVisible = false;
                             if (this.repairOrderData) {
                                 for (let i = 0; i < this.repairOrderData.length; i++) {
@@ -664,8 +664,7 @@ export class EditRoComponent implements OnInit {
             : null;
     }
 
-    getReceivingROHeaderById(id) {
-        // this.receivingService.getReceivingROHeaderById(id).subscribe(res => {
+    getReceivingROHeaderById(id) {        
         this.repairOrderService.getROViewById(id).subscribe(res => {
             this.repairOrderHeaderData = res;
             this.repairOrderHeaderData.openDate = this.repairOrderHeaderData.openDate ? new Date(this.repairOrderHeaderData.openDate) : '';
@@ -1694,6 +1693,17 @@ export class EditRoComponent implements OnInit {
                             timeLife.push(tl);
                         }
                     }
+                    if (stockLine.tagType && stockLine.tagType.length > 0) {
+                        stockLine.tagTypeId = stockLine.tagType.join();                
+                        stockLine.tagType = stockLine.tagTypeId.split(',');
+                        for (let i = 0; i < stockLine.tagType.length; i++) {
+                            stockLine.tagType[i] = getValueFromArrayOfObjectById('label', 'value', stockLine.tagType[i], this.TagTypeList);
+                        }
+                        stockLine.tagType = stockLine.tagType.join();
+                    } else {
+                        stockLine.tagType = "";
+                        stockLine.tagTypeId = "";
+                    }                    
                     index += 1;
                 }
 
@@ -2029,6 +2039,28 @@ export class EditRoComponent implements OnInit {
         this.revisedPartNumCollection.push(stockLine.revisedPartObject);        
     }      
     
+    TagTypeList: any = [];
+    getTagType(strText = '') {
+        if (this.arraytagtypelist.length == 0) {
+            this.arraytagtypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.TagTypeList = res;            
+            for (let part of this.repairOrderData) {                
+                for (let SL of part.stockLine) {    
+                    if (SL.tagType && SL.tagType.length > 0) {                                      
+                        SL.tagType = SL.tagTypeId.split(',');
+                        for (let i = 0; i < SL.tagType.length; i++) { 
+                            SL.tagType[i] = parseInt(SL.tagType[i]);
+                        }    
+                    } else {
+                        SL.tagType = "";
+                        SL.tagTypeId = "";
+                    }                      
+                }
+            }
+        })
+    }   
     
 
 }

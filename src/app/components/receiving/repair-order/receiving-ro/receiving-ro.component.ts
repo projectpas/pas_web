@@ -1402,8 +1402,8 @@ export class ReceivingRoComponent implements OnInit {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
                 sl.masterCompanyId = this.currentUserMasterCompanyId;
-                if (sl.tagType && sl.tagType.length > 0) {
-                    sl.tagTypeId = sl.tagType.join();                
+                if (sl.tagTypeobject && sl.tagTypeobject.length > 0) {
+                    sl.tagTypeId = sl.tagTypeobject.join();                
                     sl.tagType = sl.tagTypeId.split(',');
                     for (let i = 0; i < sl.tagType.length; i++) {
                         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);

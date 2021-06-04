@@ -1348,7 +1348,7 @@ export class ReceivngPoComponent implements OnInit {
             this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
             return;
         }, err => {
-            this.isSpinnerVisible = false;
+            this.isSpinnerVisible = false;            
         }
         );
 
@@ -1490,24 +1490,9 @@ export class ReceivngPoComponent implements OnInit {
             for (let sl of part.stocklineListObj) {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
-                sl.masterCompanyId = this.currentUserMasterCompanyId;
-
-                // sl.tagTypeId = "1,2,4,7,9,10,11,12,13,14";
-                // sl.tagType = 'FAA,CAAC,EASA,FAA1,test,FAA/EASA,DCA,CAAV,Dual1,Mr';
-                // if (sl.tagType && sl.tagType.length > 0) {                    
-                //     sl.tagTypeId = sl.tagType.join();                
-                //     sl.tagType = sl.tagTypeId.split(',');
-                //     for (let i = 0; i < sl.tagType.length; i++) {                        
-                //         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
-                //     }                    
-                //     sl.tagType = sl.tagType.join();                  
-                // } else {
-                //     sl.tagType = "";
-                //     sl.tagTypeId = "";
-                // }
-
-                if (sl.tagType && sl.tagType.length > 0) {
-                    sl.tagTypeId = sl.tagType.join();                
+                sl.masterCompanyId = this.currentUserMasterCompanyId;                 
+                if (sl.tagTypeobject && sl.tagTypeobject.length > 0) {
+                    sl.tagTypeId = sl.tagTypeobject.join();                
                     sl.tagType = sl.tagTypeId.split(',');
                     for (let i = 0; i < sl.tagType.length; i++) {
                         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
