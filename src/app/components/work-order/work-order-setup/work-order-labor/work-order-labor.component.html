@@ -355,8 +355,8 @@
                   </td> -->
                   <td>
                     <select class="form-control select-markup width-100"  (ngModelChange)="checkValid(24)" (change)="calculateBurderRate(rec);calculateTotalCost(rec)" [(ngModel)]="rec.burdaenRatePercentageId"
-                 >
-                 <!-- [disabled]="isView" -->
+                    [disabled]="true">
+                 <!-- [disabled]="isView || rec.billingMethodId != 1" -->
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
                     </select>
