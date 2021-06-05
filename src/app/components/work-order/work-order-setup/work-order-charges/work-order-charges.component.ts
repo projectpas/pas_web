@@ -21,7 +21,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   @Input() isWorkOrder;
   @Input() isQuote = false;
   @Input() isSummarizedView: boolean = false;
-  
+  @Input() isLoadWoCharges:any=false;
+  @Output() refreshChargesWO = new EventEmitter();
   @Input() markupList;
   @Output() saveChargesListForWO = new EventEmitter();
   @Output() saveChargesListDeletedStatus = new EventEmitter();
@@ -108,6 +109,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
   originalList:any=[];
   ngOnChanges() { 
+    this.isLoadWoCharges=this.isLoadWoCharges;
     this.originalList=this.workOrderChargesList;
     console.log(this.originalList)
     // if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId !=0){
@@ -176,7 +178,9 @@ if(!this.isSummarizedView){
       this.disableCrg=false;
     }
   }
-
+  loadCharges(){
+    this.refreshChargesWO.emit(true);
+  }
   get userName(): string {
     return this.authService.currentUser ? this.authService.currentUser.userName : "";
   }

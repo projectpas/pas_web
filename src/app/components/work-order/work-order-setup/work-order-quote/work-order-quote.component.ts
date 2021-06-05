@@ -3471,6 +3471,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.isSpinnerVisible = true;
         this.workorderMainService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,false,this.authService.currentUser.masterCompanyId).subscribe((res: any[]) => {
             this.isSpinnerVisible = false;
+            this.isLoadWoCharges=false;
             this.workOrderChargesList = res;
             for (let charge in this.workOrderChargesList) {
                 this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
@@ -3666,7 +3667,10 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.loadworkorderData=true;
         }
     }
-
+    loadWoFreights(data){
+        this.getWOFrieghtsList();
+    }
+    isLoadWoFreights:boolean=false;
     getQuoteFreightListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
@@ -3681,10 +3685,12 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 }
 
                 if (res.length > 0) {
+                    this.isLoadWoFreights=false;
                     this.updateWorkOrderQuoteDetailsId(res[0].workOrderQuoteDetailsId)
                 }
                 else{
-                    this.getWOFrieghtsList();
+                    // this.getWOFrieghtsList();
+                    this.isLoadWoFreights=true;
                 }
                 
             },
@@ -3694,25 +3700,33 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             })
         }
         else {
-            this.getWOFrieghtsList();
+            // this.getWOFrieghtsList();
+            this.isLoadWoFreights=true;
         }
     }
 
+    loadCharges(data){
+        this.getWOChargesList();
+    }
+    isLoadWoCharges:boolean=false;
     getQuoteChargesListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
             this.workOrderService.getQuoteChargesList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workOrderChargesList = res;
+              
                 for (let charge in this.workOrderChargesList) {
                     this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
                     this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
                 }
                 if (res.length > 0) {
+                    this.isLoadWoCharges=false;
                     this.updateWorkOrderQuoteDetailsId(res[0].workOrderQuoteDetailsId)
                 }
                 else{
-                    this.getWOChargesList();
+                    this.isLoadWoCharges=true;
+                    // this.getWOChargesList();
                 }
             },
             err => {
@@ -3721,7 +3735,8 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             })
         }
         else {
-            this.getWOChargesList();
+            // this.getWOChargesList();
+            this.isLoadWoCharges=true;
         }
     }
 
@@ -3735,7 +3750,8 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                     let wowfId = this.labor.workFlowWorkOrderId;
                     if (res) {
                         res.laborList.forEach(element => {
-                            element.billingAmount= element.billingAmount.toFixed(2);
+                            // element.billingAmount= element.billingAmount.toFixed(2);
+                            element.billingAmount=    element.billingAmount ? formatNumberAsGlobalSettingsModule( element.billingAmount, 2) : '0.00';
                         });
                         this.laborPayload.WorkOrderQuoteLaborHeader = res;
                         this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId)

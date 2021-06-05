@@ -11,9 +11,13 @@
             <h4 class="header-name">Work Order <span *ngIf="isQuote==true"> Quote</span> Freights List</h4>
         </div>
         <div *ngIf="!isView ">
-            <button type="button" class="btn-sm header-button " data-target="#addNewFreight" data-toggle="modal" (click)="createNew()">
-                Create Freight
-            </button>
+           
+            <button type="button" matTooltipPosition="above" matTooltip="Load Labor From Work Order" *ngIf="isLoadWoFreights" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadFreiht()">
+              Load Work Order Labor
+           </button>
+           <button type="button" class="btn-sm header-button " data-target="#addNewFreight" data-toggle="modal" (click)="createNew()">
+            Create Freight
+        </button>
         </div>
     </div>
   </div>
