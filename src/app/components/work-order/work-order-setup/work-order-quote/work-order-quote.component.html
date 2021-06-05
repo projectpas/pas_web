@@ -968,7 +968,7 @@
                       
                      </tr>
                      <tr>
-                         <th>Task</th>
+                         <th style="width: 100px;">Task</th>
                          <th>PN</th>
                          <th>PN Description</th>
                          <th>Provision</th>
@@ -1172,8 +1172,8 @@
      </div>
  
      <div *ngIf="gridActiveTab == 'labor'">
-         <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData"
-                               (saveworkOrderLabor)="saveworkOrderLabor($event)" [isQuote]="isQuote" [markupList]="markupList" [isView]="isView || isViewForApprovedPart" [isEdit]="isEdit" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
+         <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor"  [isLoadWoLabor]="isLoadWoLabor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData"
+                               (saveworkOrderLabor)="saveworkOrderLabor($event)"  (refreshLaborWO)="loadWoLabor($event)" [isQuote]="isQuote" [markupList]="markupList" [isView]="isView || isViewForApprovedPart" [isEdit]="isEdit" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
                                [selectedPartNumber]="selectedPartNumber"></app-work-order-labor>
  
      </div>

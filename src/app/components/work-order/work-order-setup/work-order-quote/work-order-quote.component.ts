@@ -347,7 +347,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             header: 'Margin %',
             field: 'marginPercentage'
         }
-    ]
+    ];
+    isLoadWoLabor:boolean=false;
     @Output() enableBackToWO = new EventEmitter();
     restrictID: number;
     restrictMessage: any;
@@ -2141,9 +2142,20 @@ const data={...newdata};
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
                     matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label ? markup.label :0))
 
+
+                    const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
+                    const markupValue=  parseFloat(markup.label.toString().replace(/\,/g, ''));
+                    matData['billingRate'] = ((unitCost / 100) * markupValue) + unitCost;
+
+
+                    matData['billingAmount']=matData['billingRate']*Number(matData.quantity)
+
+
               
-                    matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost']) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label ? markup.label :0))), 2);
-                    matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
+                    // matData['billingRate'] = Number(matData['unitCost'].toString().split(',').join('')) + (Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label ? markup.label :0)
+                    // matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
+                    matData['billingRate']= matData['billingRate']>0?  formatNumberAsGlobalSettingsModule(matData['billingRate'],2) :'0.00';
+                    matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
                 }
                 else if (type == 'all' && markup.value == this.overAllMarkup) {
                     this.materialListQuotation.forEach((x) => {
@@ -2151,6 +2163,8 @@ const data={...newdata};
                             mData.markupPercentageId = this.overAllMarkup;
                             mData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))), 2);
                             mData['billingAmount'] = this.formateCurrency(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity));
+                            mData['billingRate']= mData['billingRate']>0?  mData['billingRate'].toFixed(2) :'0.00';
+                            mData['billingAmount']= mData['billingAmount']>0?  mData['billingAmount'].toFixed(2) :'0.00';
                         })
                     })
                 }
@@ -3413,7 +3427,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         // false, 0 is For Sub Work Order 
         this.workorderMainService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId,false,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
-         
+            this.isLoadWoLabor=false;
             let laborList = this.labor.workOrderLaborList;
             this.labor = { ...res, workOrderLaborList: laborList };
             this.labor.hoursorClockorScan = undefined;
@@ -3584,20 +3598,29 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                         ...element,
                         taskName:element.taskName.toLowerCase()
                     }
+                }); 
+                this.materialListQuotation.forEach(element => {
+  
+                element.unitCost=element.unitCost>0 ?formatNumberAsGlobalSettingsModule(element.unitCost, 2) :'0.00';
+                element.billingRate=element.billingRate>0?formatNumberAsGlobalSettingsModule(element.billingRate, 2):'0.00';
+                element.billingAmount=element.billingAmount>0 ? formatNumberAsGlobalSettingsModule(element.billingAmount, 2):'0.00';
                 });
-                if (this.materialListQuotation && this.materialListQuotation.length > 0) {
-                    for (let charge in this.materialListQuotation) {
-                        if (this.materialListQuotation[charge]['unitCost']) {
-                            this.materialListQuotation[charge]['unitCost'] = Number(this.materialListQuotation[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
-                        }
-                        if (this.materialListQuotation[charge]['billingRate']) {
-                            this.materialListQuotation[charge]['billingRate'] = Number(this.materialListQuotation[charge]['billingRate'].toString().split(',').join('')).toFixed(2);
-                        }
-                        if (this.materialListQuotation[charge]['billingAmount']) {
-                            this.materialListQuotation[charge]['billingAmount'] = Number(this.materialListQuotation[charge]['billingAmount'].toString().split(',').join('')).toFixed(2);
-                        }
-                    }
-                }
+                // if (this.materialListQuotation && this.materialListQuotation.length > 0) {
+                //     for (let charge in this.materialListQuotation) {
+                //         if (this.materialListQuotation[charge]['unitCost']) {
+                //             this.materialListQuotation[charge]['unitCost'] =formatNumberAsGlobalSettingsModule(this.materialListQuotation[charge]['unitCost'], 0);
+                //             //  Number(this.materialListQuotation[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
+                //         }
+                //         if (this.materialListQuotation[charge]['billingRate']) {
+                //             this.materialListQuotation[charge]['billingRate'] = formatNumberAsGlobalSettingsModule(this.materialListQuotation[charge]['billingRate'], 0);
+                //             // Number(this.materialListQuotation[charge]['billingRate'].toString().split(',').join('')).toFixed(2);
+                //         }
+                //         if (this.materialListQuotation[charge]['billingAmount']) {
+                //             this.materialListQuotation[charge]['billingAmount'] = formatNumberAsGlobalSettingsModule(this.materialListQuotation[charge]['billingAmount'], 0);
+                //             // Number(this.materialListQuotation[charge]['billingAmount'].toString().split(',').join('')).toFixed(2);
+                //         }
+                //     }
+                // }
                 if (this.materialListQuotation && this.materialListQuotation.length > 0 && this.materialListQuotation[0].headerMarkupId) {
                     this.costPlusType = this.materialListQuotation[0].markupFixedPrice.toString();
                     this.overAllMarkup = Number(this.materialListQuotation[0].headerMarkupId);
@@ -3701,6 +3724,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res) {
+                    this.isLoadWoLabor=false;
                     let wowfId = this.labor.workFlowWorkOrderId;
                     if (res) {
                         res.laborList.forEach(element => {
@@ -3729,14 +3753,16 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                         })
                     }
                     else{
-                        this.getWOLabourList();
+                        this.isLoadWoLabor=true;
+                        // this.getWOLabourList();
                     }
                 }
                 else {
                     this.taskList.forEach((tl) => {
                         this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
                     });
-                    this.getWOLabourList();
+                    this.isLoadWoLabor=true;
+                    // this.getWOLabourList();
                 }
 
             },
@@ -3749,11 +3775,14 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.taskList.forEach((tl) => {
                 this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
             });
-            this.getWOLabourList();
+            this.isLoadWoLabor=true;
+            // this.getWOLabourList();
         }
 
     }
-
+    loadWoLabor(data){
+        this.getWOLabourList();
+    }
     toggleDisplayMode(): void {
         this.isDetailedViewQuote = !this.isDetailedViewQuote;
     }

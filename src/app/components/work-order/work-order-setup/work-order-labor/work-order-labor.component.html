@@ -5,6 +5,9 @@
             Add Labor Hours
           </h4>
       </div>
+      <button type="button" matTooltipPosition="above" matTooltip="Load Labor From Work Order" *ngIf="isLoadWoLabor" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadLabor()">
+        Load Work Order Labor
+     </button>
   </div>
 </div>
 <div class="card">
@@ -436,11 +439,11 @@
               </tr>
             </ng-container>
   </ng-container>
-  <!-- <tr *ngIf="laborForm.workOrderLaborList[0].length==0">
-    <td colspan="12"  class="no-records-msg no-records-cstm">
+  <tr *ngIf="isLoadWoLabor">
+    <td colspan="14"  class="no-records-msg no-records-cstm">
         No records found
     </td> 
-</tr> -->
+</tr>
           <ng-container *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder'">
             <tr class="footer">
               <td><b>Total Labor Hours</b></td>
@@ -473,7 +476,7 @@
             <td *ngIf="!isQuote"></td>
             <td></td>
             <ng-container *ngIf="isQuote">
-              <td></td>
+              <!-- <td></td> -->
               <td class="content-to-end" style="text-align:right !important"><b>{{ formateCurrency(getOverAlltotal('Cost')) }}</b></td>
               <td></td>
               <td></td>

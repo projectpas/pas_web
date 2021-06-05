@@ -21,6 +21,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() workOrderWorkFlowOriginalData: any;
   @Output() saveworkOrderLabor = new EventEmitter();
   @Output() refreshLabor = new EventEmitter();
+  @Output() refreshLaborWO = new EventEmitter();
+  
   @Input() workOrderLaborList: any = {};
   @Input() labortaskList: any;
   @Input() isQuote = false; 
@@ -38,6 +40,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() frombilling: any = false;
   @Input() hideHeader: boolean = false;
   @Input() islaborCreated: boolean = false;
+  @Input() isLoadWoLabor: boolean = false;
   
   totalHours: number;
   disableSaveForEdit: boolean = false;
@@ -144,6 +147,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   laborTaskData: any;
   allTaskList: any = [];
   ngOnChanges() {
+    this.isLoadWoLabor=this.isLoadWoLabor;
     setTimeout(() => {
       this.checkPercentageData();
     }, 1000);
@@ -681,7 +685,6 @@ setTimeout(() => {
   }
   partNumbers:any=[];
   filterExpertiseEmployee(event, index) {
-    console.log("index",index);
     
     this['expertiseEmployee' + index] = this['expertiseEmployeeOriginalData' + index] == undefined ? this.employeesOriginalData : this['expertiseEmployeeOriginalData' + index];
     if (event.query !== undefined && event.query !== null) {
@@ -1099,7 +1102,6 @@ return true;
     }
   }
   markupChanged(matData, type) {
-    console.log("markup checkd",matData);
 
     try {
       if (this.markupList) {
@@ -1107,7 +1109,6 @@ return true;
           if (type == 'row' && markup.value == matData.markupPercentageId && matData['totalCostPerHour'] && matData['totalCostPerHour']) {
             matData['billingRate'] = ((matData['totalCostPerHour']) + (((matData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
             matData['billingAmount'] = (Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.hours)).toFixed(2);
-            // this.formateCurrency(
           }
           else if (type == 'all' && markup.value == this.overAllMarkup) {
             for (let t in this.laborForm.workOrderLaborList[0]) {
@@ -1116,6 +1117,7 @@ return true;
                   mData.markupPercentageId = this.overAllMarkup;
                   if (mData['totalCostPerHour'] && mData['totalCostPerHour']) {
                     mData['billingRate'] = ((mData['totalCostPerHour']) + (((mData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
+                    mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
                     mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
                   }
                 }
@@ -1291,8 +1293,7 @@ return true;
         for (let task in this.laborForm.workOrderLaborList[0]) {
           if (this.laborForm.workOrderLaborList[0][task][0] && this.laborForm.workOrderLaborList[0][task][0]['hours'] != null) {
             for (let taskList of this.laborForm.workOrderLaborList[0][task]) {
-              this.laborForm.totalWorkHours += Number(taskList['hours']);
-              // taskList['billingAmount']= taskList['billingAmount'].toFixed(2);
+              this.laborForm.totalWorkHours += Number(taskList['hours']); 
             }
           }
         }
@@ -1463,14 +1464,6 @@ return true;
               result = true;
             }
           }
-          // if ((data.directLaborOHCost == 0 || data.directLaborOHCost == undefined || data.directLaborOHCost == null || data.directLaborOHCost == '') && !this.isQuote) {
-
-      //    this.alertService.showMessage('',
-      //     'Updated Work Order Billing Succesfully',
-      //     MessageSeverity.success
-      // );
-            // result = true;
-          // }
           if ((data.employeeId == 0 || data.employeeId == undefined || data.employeeId == null || data.employeeId == '') && !this.isQuote) {
             result = true;
           }
@@ -1498,7 +1491,6 @@ return true;
     } 
   }
   formateCurrency(value) {
-    console.log("value",value)
     if (value) {
       value = (Number(value.toString().split(',').join(''))).toFixed(2);
       let result = formatNumberAsGlobalSettingsModule(value, 2);
@@ -1565,6 +1557,9 @@ return true;
   headerMaintanance() {
     // this.refreshLabor.emit(true);
   }
+  loadLabor(){
+    this.refreshLaborWO.emit(true);
+  }
   refreshCall() { 
     this.laborForm.workOrderLaborList[0] = (this.storeFormForBackUp && this.storeFormForBackUp.length != 0) ? this.storeFormForBackUp[0] : {};
     this.calculateTotalAdjustedHours();
@@ -1576,8 +1571,7 @@ return true;
       }
     }
   }
-  historyData: any = [];
-  // auditHistoryHeaders:any=[];
+  historyData: any = []; 
   auditHistoryHeaders = [
     { field: 'taskName', header: 'Task', isRequired: false },
     { field: 'expertise', header: 'Expertise', isRequired: false },
@@ -1603,20 +1597,7 @@ return true;
     if (rowData.workOrderQuoteLaborId) {
       this.workOrderService.getquoteLaborHistory(rowData.workOrderQuoteLaborId).subscribe(res => {
         this.historyData = res;
-        //   this.historyData = res.forEach(element => {
-        //     element.billingAmount=element.billingAmount ?  formatNumberAsGlobalSettingsModule(element.billingAmount, 2) : '0.00';
-        //     element.billingRate=element.billingRate ?  formatNumberAsGlobalSettingsModule(element.billingRate, 2) : '0.00';
-        //     element.markUp=element.markUp ?  formatNumberAsGlobalSettingsModule(element.markUp, 2) : '0.00';
-
-        //     element.burdaenRatePercentage=element.burdaenRatePercentage ?  formatNumberAsGlobalSettingsModule(element.burdaenRatePercentage, 2) : '0.00';
-        //     element.burdenRateAmount=element.burdenRateAmount ?  formatNumberAsGlobalSettingsModule(element.burdenRateAmount, 2) : '0.00';
-        //     element.totalCostPerHour=element.totalCostPerHour ?  formatNumberAsGlobalSettingsModule(element.totalCostPerHour, 2) : '0.00';
-
-        //     element.totalCost=element.totalCost ?  formatNumberAsGlobalSettingsModule(element.totalCost, 2) : '0.00';
-        // });
         this.auditHistoryHeaders = this.auditHistoryHeaders;
-        // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-
         this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
         this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
         this.modal.componentInstance.auditHistory = this.historyData;
@@ -1628,31 +1609,4 @@ return true;
       this.modal.componentInstance.auditHistory = [];
     }
   }
-
-
-  //   getTaskList() {  
-  //     this.setEditArray=[]; 
-
-  //     if(this.isEdit){
-  //       this.setEditArray.push(this.editData.taskId ? this.editData.taskId : 0);
-  //     }else{
-  //       this.setEditArray.push(0)
-  //     }
-  //     const strText = '';
-  //     this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true,  0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-  //      this.taskList = res.map(x => {
-  //             return {
-  //                 id: x.value,
-  //                 description: x.label.toLowerCase(),
-  //                 taskId: x.value,
-  //                 label:x.label.toLowerCase(),
-  //             }
-  //         });
-
-  //     },
-  //         err => { 
-  //         })
-  // }
-
-
 }
