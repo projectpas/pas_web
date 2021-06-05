@@ -2360,7 +2360,6 @@ const data={...newdata};
         }
     }
     formateCurren(value){
-        console.log("value",value)
         formatNumberAsGlobalSettingsModule(value, 2);
     }
     totalTaskMaterialBillingAmount(data) {
