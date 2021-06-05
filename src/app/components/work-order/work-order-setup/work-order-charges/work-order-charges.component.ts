@@ -234,6 +234,8 @@ if(!this.isSummarizedView){
     if (this.isQuote) {
       this.currentRow.isDeleted = true;
       this.modal.close();
+      this.isEdit = false;
+      this.disableCrg=false;
       //this.refreshData.emit();
       // this.workOrderChargesList[i].isDeleted = true;
     } else {

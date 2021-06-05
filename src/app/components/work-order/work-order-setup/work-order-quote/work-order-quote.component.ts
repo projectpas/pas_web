@@ -3476,6 +3476,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             for (let charge in this.workOrderChargesList) {
                 this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
                 this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
+                this.workOrderChargesList[charge]['billingAmount'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
             }
         },
         err => {
@@ -3514,8 +3515,8 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
        this.workorderMainService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId,false,0,false,this.authService.currentUser.masterCompanyId).subscribe((res: any[]) => {
            this.workOrderFreightList = res;
            for (let fre in this.workOrderFreightList) {
-               if (this.workOrderFreightList[fre]['billingAmount']) {
-                   this.workOrderFreightList[fre]['billingAmount'] = Number(this.workOrderFreightList[fre]['billingAmount'].toString().split(',').join('')).toFixed(2);
+               if (this.workOrderFreightList[fre]['amount']) {
+                   this.workOrderFreightList[fre]['billingAmount'] = Number(this.workOrderFreightList[fre]['amount'].toString().split(',').join('')).toFixed(2);
                }
            }
        }) 
