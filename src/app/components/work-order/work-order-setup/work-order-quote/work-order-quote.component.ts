@@ -2359,7 +2359,10 @@ const data={...newdata};
         return total.toFixed(2);
         }
     }
-
+    formateCurren(value){
+        console.log("value",value)
+        formatNumberAsGlobalSettingsModule(value, 2);
+    }
     totalTaskMaterialBillingAmount(data) {
         let total = 0;
         data.forEach(

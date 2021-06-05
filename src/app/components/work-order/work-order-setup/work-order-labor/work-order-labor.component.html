@@ -488,8 +488,8 @@
             </ng-container>
             <ng-container *ngIf="laborForm.costPlusType == 3 && isQuote">
               <td>
-                <input type="number" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount"
-                  [disabled]="isView" />
+                <input type="number" (ngModelChange)="checkValid(28)" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount"
+                  [disabled]="isView" (change)="formateCost(laborForm)"/>
               </td>
             </ng-container>
             <td *ngIf="!isQuote"></td>
