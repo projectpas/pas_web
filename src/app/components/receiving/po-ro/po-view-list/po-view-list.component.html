@@ -1,10 +1,292 @@
-﻿<div class="ro-view-receiving">
-        <div class="x_panel">
+﻿<div class="x_panel">
+    <div class="x_content">
+
+        <div class="table-responsive pas-table-cstm ero-table-cstm">
+            <table class="table table-bordered " id="po-table">
+                <thead>
+                    <tr>
+                        <th>Item Num</th>
+                        <th>PN</th>
+                        <th>Alt PN</th>
+                        <th>PN Description</th>
+                        <th>Manufacturer</th>
+                        <th>Stock Type</th>
+                        <th>Qty Ord</th>
+                        <th>Discount</th>
+                        <th>Unit Cost</th>
+                        <th>Extended Cost</th>
+                        <th>WO</th>
+                        <th>SO</th>
+                        <th>Sub-WO</th>
+                        <th colspan="4" style="text-align: center;">Management Structure</th>
+                        <th colspan="45"></th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="purchaseOrderDatas != undefined">
+                    <ng-container *ngFor="let part of purchaseOrderDatas;let row_index=index">
+                        <tr *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
+                            <td class="text-right">{{row_index + 1}}</td>
+                            <td>{{part.itemMaster.partNumber}}</td>
+                            <td>{{part.altEquiPartNumber}}</td>
+                            <td>{{part.itemMaster.partDescription}}</td>
+                            <td>{{part.manufacturer}}</td>
+                            <!-- <td>{{part.conditionText}}</td>
+                            <td>{{part.uomText}}</td> -->
+                            <td>{{part.itemMaster.isPma ? "PMA," : '' + part.itemMaster.isDer ? "DER" : ''}}</td>
+                            <td class="text-right">{{part.quantityOrdered}}</td>
+                            <td class="text-right">{{part.discountPerUnit}}</td>
+                            <td class="text-right">{{part.unitCost}}</td>
+                            <td class="text-right">{{part.extendedCost}}</td>
+                            <td>{{part.workOrderNo}}</td>
+                            <td>{{part.subWorkOrderNo}}</td>
+                            <td>{{part.salesOrderNo}}</td>
+                            <td style="min-width: 130px;">
+                                <!-- <label style="width:90px;">Company:</label> -->
+                                {{part.companyText}}
+                            </td>
+                            <td style="min-width: 130px;">
+                                <!-- <label style="width:90px;">BU:</label> -->
+                                {{part.businessUnitText}}
+
+                            </td>
+                            <td style="min-width: 130px;">
+                                <!-- <label style="width:90px;">Division:</label> -->
+                                {{part.divisionText}}
+
+                            </td>
+                            <td style="min-width: 130px;">
+                                <!-- <label style="width:90px;">Dept:</label> -->
+                                {{part.departmentText}}
+                            </td>
+                            <td colspan="45"></td>
+                        </tr>
+
+                        <ng-container>
+                            <tr class="child-header splitship-head child-header-back" *ngIf="part.stockLine.length > 0">
+                                <!--part.stockLine != null-->
+                                <!--<th>Stock Line</th>-->
+                                <th>Stk Line Num</th>
+                                <th>PN</th>
+                                <th>PN Description</th>
+                                <th>Ctrl Num</th>
+                                <th>Ctrl Id</th>
+                                <th>Cond</th>
+                                <th>Serial Num</th>
+                                <th>Qty Received</th>
+                                <th>Back Ord</th>
+                                <th>Receiver No.</th>
+                                <th>Unit Cost</th>
+                                <th>Extended Cost</th>
+                                <th>WO </th>
+                                <th>SO </th>
+                                <th>Sub-WO </th>
+                                <th colspan="4" style="text-align: center;">Management Structure</th>
+                                <th>Site</th>
+                                <th>Warehouse</th>
+                                <th>Location</th>
+                                <th>Shelf</th>
+                                <th>Bin</th>
+                                <th>Owner</th>
+                                <th>Name</th>
+                                <th>Obtain From</th>
+                                <th>Name</th>
+                                <th>Traceable to</th>
+                                <th>Name</th>
+                                <th>Trace</th>
+                                <th>Mfg</th>
+                                <th>Mfg Lot Num</th>
+                                <th>Mfg Date</th>
+                                <th>Mfg Batch Num</th>
+                                <th>Part Cert Num </th>
+                                <th>Certified Date</th>
+                                <th class="date">Certified Due Date</th>
+                                <th>Tag Type</th>
+                                <th>Tagged By </th>
+                                <th>UOM </th>
+                                <th class="date">Date Tagged </th>
+                                <th class="date">Tag Exp Date </th>
+                                <th>Shipping Ref#/AWB</th>
+                                <th>Ship Via</th>
+                                <th>Shipping Account</th>
+                                <th>ESN</th>
+                                <th>GL Account</th>
+                                <th>Time Life</th>
+                                <th colspan="5">Cycles</th>
+                                <th colspan="5">Time</th>
+                                <th colspan="5">Last</th>
+                            </tr>
+                            <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
+                                <tr *ngIf="!SL.isDeleted">
+                                    <!--<td>{{SL.stockLineNumber}}</td>-->
+                                    <!-- <td><a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL)"
+                                            matTooltip="Delete" matTooltipPosition="above"><i
+                                                class="fa fa-trash"></i></a></td> -->
+                                    <td>{{SL.stockLineNumber}}</td>    
+                                    <td>{{part.itemMaster.partNumber}}</td>
+                                    <td>{{part.itemMaster.partDescription}}</td>
+                                    <td>{{SL.controlNumber}}</td>
+                                    <td>{{SL.idNumber}}</td>
+                                    <td>{{SL.conditionText}}</td>
+                                    <td>{{SL.serialNumber}}</td>
+                                    <td class="text-right">{{SL.quantity}}</td>
+                                    <td class="text-right">{{part.quantityBackOrdered}}</td>
+                                    <td>{{SL.receiverNumber}}</td>
+                                    <td class="text-right">{{SL.purchaseOrderUnitCost}}</td>
+                                    <td class="text-right">{{SL.purchaseOrderExtendedCost}}</td>
+                                    <td>{{part.workOrderNo}}</td>
+                                    <td>{{part.subWorkOrderNo}}</td>
+                                    <td>{{part.salesOrderNo}}</td>
+                                    <td style="min-width: 120px;">
+                                        <!-- <label style="width:90px;">Company:</label> -->
+                                        {{SL.companyText}}
+                                    </td>
+                                    <td style="min-width: 120px;">
+                                        <!-- <label style="width:90px;">BU:</label> -->
+                                        {{SL.businessUnitText}}
+                                    </td>
+                                    <td style="min-width: 120px;">
+                                        <!-- <label style="width:90px;">Division:</label> -->
+                                        {{SL.divisionText}}
+                                    </td>
+                                    <td style="min-width: 120px;">
+                                        <!-- <label style="width:90px;">Dept:</label> -->
+                                        {{SL.departmentText}}
+                                    </td>
+                                    <td>
+                                        {{part.stockLine[stockline_row_index].siteText}}
+                                    </td>
+                                    <td>
+                                        {{part.stockLine[stockline_row_index].warehouseText}}
+                                    </td>
+                                    <td>
+                                        {{part.stockLine[stockline_row_index].locationText}}
+                                    </td>
+                                    <td>
+                                        {{part.stockLine[stockline_row_index].shelfText}}
+                                    </td>
+                                    <td>
+                                        {{part.stockLine[stockline_row_index].binText}}
+                                    </td>
+                                    <!-- <td>{{SL.ownerType == 3 ? 'Vendor' : SL.ownerType == 1 ? 'Customer' : 'Other' }}</td> -->
+                                    <td>{{SL.ownerTypeName }}</td>
+                                    <td>{{SL.ownerText}}</td>
+                                    <!-- <td>{{SL.obtainFromType == 3 ? 'Vendor' : SL.obtainFromType == 1 ? 'Customer' : 'Other' }}</td> -->
+                                    <td>{{SL.obtainFromTypeName}}</td>
+                                    <td>{{SL.obtainFromText}}</td>
+                                    <!-- <td>{{SL.traceableToType == 3 ? 'Vendor' : SL.traceableToType == 1 ? 'Customer' : 'Other' }}</td> -->
+                                    <td>{{SL.traceableToTypeName }}</td>
+                                    <td>{{SL.traceableToText}}</td>
+                                    <td>{{SL.manufacturingTrace}}</td>
+                                    <td>{{SL.manufacturerText}}</td>
+                                    <!--manufacturerName-->
+                                    <td>{{SL.manufacturerLotNumber}}</td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
+                                            [disabled]="!SL.isEnabled" [showIcon]="true"
+                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.manufacturingDate">
+                                        </p-calendar>
+                                    </td>
+                                    <td>{{SL.manufacturingBatchNumber}}</td>
+                                    <td>{{SL.partCertificationNumber}}</td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
+                                            [disabled]="!SL.isEnabled" [showIcon]="true"
+                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.certifiedDate">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
+                                            [disabled]="!SL.isEnabled" [showIcon]="true"
+                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.certifiedDueDate">
+                                        </p-calendar>
+                                    </td>
+                                    <td>{{SL.tagType}}</td>
+                                    <td>{{SL.taggedByName}}</td>
+                                    <td>{{SL.unitOfMeasure}}</td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
+                                            [disabled]="!SL.isEnabled" [showIcon]="true"
+                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.tagDate"></p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table" [showIcon]="true"
+                                            [disabled]="!SL.isEnabled" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="SL.expirationDate"></p-calendar>
+                                    </td>
+                                    <td>{{SL.shippingReference}}</td>
+                                    <td>{{SL.shippingViaText}}</td>
+                                    <td>{{SL.shippingAccount}}</td>
+                                    <td>{{SL.engineSerialNumber}}</td>
+                                    <td>{{SL.glAccountText}}</td>
+                                    <td>
+                                        <input type="checkbox" disabled
+                                            [checked]="part.itemMaster.isTimeLife != false" />
+                                    </td>
+                                    <td colspan="13" *ngIf="!part.itemMaster.isTimeLife"> </td>
+                                    <ng-container *ngIf="part.itemMaster.isTimeLife">
+                                        <td style="min-width: 120px;">Remaining
+                                            {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
+                                        <td style="min-width: 120px;">Since New
+                                            {{part.timeLife[stockline_row_index].cyclesSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH
+                                            {{part.timeLife[stockline_row_index].cyclesSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp
+                                            {{part.timeLife[stockline_row_index].cyclesSinceInspection}} hrs</td>
+                                        <td style="min-width: 120px;">Since Repair
+                                            {{part.timeLife[stockline_row_index].cyclesSinceRepair}} hrs</td>
+
+                                        <td style="min-width: 120px;">Remaining
+                                            {{part.timeLife[stockline_row_index].timeRemaining}} hrs</td>
+                                        <td style="min-width: 120px;">Since New
+                                            {{part.timeLife[stockline_row_index].timeSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH
+                                            {{part.timeLife[stockline_row_index].timeSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp
+                                            {{part.timeLife[stockline_row_index].timeSinceInspection}} hrs</td>
+                                        <td style="min-width: 120px;">Since Repair
+                                            {{part.timeLife[stockline_row_index].timeSinceRepair}} hrs</td>
+
+                                        <td style="min-width: 120px;">Since New
+                                            {{part.timeLife[stockline_row_index].lastSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH
+                                            {{part.timeLife[stockline_row_index].lastSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp
+                                            {{part.timeLife[stockline_row_index].lastSinceInspection}} hrs</td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="ro-view-receiving">
+    <div class="x_panel">
+        <div>
             <div>
-                <div>
-                    <div id="adminsearchlocationajax">
-                        <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex" >
-                            <div class="tableFixHead"> 
+                <div id="adminsearchlocationajax">
+                    <div
+                        class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
+                        <div class="tableFixHead">
                             <table class="table table-bordered table-wrap">
                                 <thead>
                                     <tr>
@@ -18,174 +300,282 @@
                                 </thead>
                                 <tbody *ngIf="purchaseOrderData != undefined && purchaseOrderPart != undefined">
                                     <ng-container *ngFor="let part of purchaseOrderPart;let row_index=index">
-                                        <tr class="parent-data" *ngIf="part.stockLine != null && part.stockLine.length > 0">
+                                        <tr class="parent-data"
+                                            *ngIf="part.stockLine != null && part.stockLine.length > 0">
                                             <td class="text-right">{{row_index + 1}}</td>
                                             <td>{{part.itemMaster?.partNumber}}</td>
                                             <td class="text-right">{{part.quantityOrdered}}</td>
                                             <td class="text-right">{{part.stockLine.length}}</td>
                                             <td class="text-right">{{part.quantityOrdered - part.stockLine.length}}</td>
                                             <td class="details-control eachcol" style="padding: 4px 6px;">
-                                                <i class="fa fa-{{ part.showStockLineGrid ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs" (click)="toggleExpandIcon(part)"></i>
+                                                <i class="fa fa-{{ part.showStockLineGrid ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
+                                                    (click)="toggleExpandIcon(part)"></i>
                                             </td>
                                         </tr>
-
                                         <tr class="more-info" *ngIf="part.showStockLineGrid">
                                             <td colspan="6">
                                                 <div class="label-value-row">
                                                     <div class="col-sm-3">
-                                                        <p><span class="label"><b>PN: </b></span><span class="value"> {{part.itemMaster?.partNumber}}</span></p>
-                                                        <p><span class="label"><b>Qty Actually Received: </b></span><span class="value">{{part.stockLine?.length}}</span></p>
+                                                        <p><span class="label"><b>PN: </b></span><span class="value">
+                                                                {{part.itemMaster?.partNumber}}</span></p>
+                                                        <p><span class="label"><b>Qty Actually Received:
+                                                                </b></span><span
+                                                                class="value">{{part.stockLine?.length}}</span></p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p><span class="label"><b>PN Description: </b></span><span class="value">{{part.itemMaster?.partDescription}}</span></p>
-                                                        <!-- <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.itemMaster.quantityRejected}}</span></p> -->
-                                                        <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.quantityRejected}}</span></p>
+                                                        <p><span class="label"><b>PN Description: </b></span><span
+                                                                class="value">{{part.itemMaster?.partDescription}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Qty Rejected: </b></span><span
+                                                                class="value">{{part.quantityRejected}}</span></p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p><span class="label"><b>Cond: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].conditionText}}</span></p>
-                                                        <p><span class="label"><b>GL Account: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].glAccountText}}</span></p>
-                                                    </div>                                                   
+                                                        <p><span class="label"><b>Cond: </b></span><span
+                                                                class="value">{{part.stockLine[part.currentSLIndex].conditionText}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>GL Account: </b></span><span
+                                                                class="value">{{part.stockLine[part.currentSLIndex].glAccountText}}</span>
+                                                        </p>
+                                                    </div>
                                                 </div>
+                                                <div class="stockGridpanel2">
+                                                    <h3 class="add-details-heading" style="padding-top: 10px;">
+                                                        {{ part.itemMaster?.partNumber }} receiving Qty
+                                                        {{ (part.currentSLIndex + 1) }} of {{ part.stockLine.length }}
+                                                    </h3>
 
-                                                <div class="stockGridpanel2"> <!--style="margin-left: 6px;clear: both !important;"-->
-                                                    <h3 class="add-details-heading" style="padding-top: 10px;"> {{ part.itemMaster?.partNumber }} receiving Qty  {{ (part.currentSLIndex + 1) }} of {{ part.stockLine.length }}</h3>
-                                                   
-                                                    <div class="pull-right" style="margin-top: -37px;margin-right: 85px;"> <!--*ngIf="part.itemMaster?.isSerialized"-->
-                                                        <i class="fa fa-chevron-left btn btn-primary btn-ad-icons" (click)="moveStockLinePage('stockline', part.currentSLIndex - 1, part)"></i>
-                                                        <input [value]="part.currentSLIndex + 1" type="text" pInputText pKeyFilter="pnum" (keyup)="gotoStockLinePage($event, part)" (focusout)="paginatorFocusOut($event, part)" class="form-control" style="width: 50px;border-radius: 0 !important;" />
-                                                        <i class="fa fa-chevron-right btn btn-primary btn-ad-icons" (click)="moveStockLinePage('stockline', part.currentSLIndex + 1, part)"></i>
-                                                        <p>Page {{part.currentSLIndex + 1}} of {{part.stockLine.length}} Pages</p>
+                                                    <div class="pull-right"
+                                                        style="margin-top: -37px;margin-right: 85px;">
+                                                        <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
+                                                            (click)="moveStockLinePage('stockline', part.currentSLIndex - 1, part)"></i>
+                                                        <input [value]="part.currentSLIndex + 1" type="text" pInputText
+                                                            pKeyFilter="pnum" (keyup)="gotoStockLinePage($event, part)"
+                                                            (focusout)="paginatorFocusOut($event, part)"
+                                                            class="form-control"
+                                                            style="width: 50px;border-radius: 0 !important;" />
+                                                        <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
+                                                            (click)="moveStockLinePage('stockline', part.currentSLIndex + 1, part)"></i>
+                                                        <p>Page {{part.currentSLIndex + 1}} of {{part.stockLine.length}}
+                                                            Pages</p>
                                                     </div>
-                                                
-
                                                     <section class="receiving-stockline-view">
                                                         <div class="label-value-row">
-                                                            <div class="col-sm-3" style="margin-right: 20px;width: 210px !important;">
+                                                            <div class="col-sm-3"
+                                                                style="margin-right: 20px;width: 210px !important;">
                                                                 <div class="card view-management-structure-card">
-                                                                    <div class="card-header view-management-structure-card-header">
-                                                                        <h5 class="view-management-structure-header">Management Structure <span class="text-danger">*</span></h5>
+                                                                    <div
+                                                                        class="card-header view-management-structure-card-header">
+                                                                        <h5 class="view-management-structure-header">
+                                                                            Management Structure <span
+                                                                                class="text-danger">*</span></h5>
                                                                     </div>
-                                                                    <!-- <div class="card-body" style="padding: 0 12px 12px;">
-                                                                        <p><span class="label"><b>Company: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].companyText}}</span></p>
-                                                                        <p><span class="label"><b>BU: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].businessUnitText}}</span></p>
-                                                                        <p><span class="label"><b>Division: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].divisionText}}</span></p>
-                                                                        <p><span class="label"><b>Dept: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].departmentText}}</span></p>
-                                                                    </div> -->
                                                                     <div class="card-body view-structure-card-body">
-                                                                        <div class="form-group view-structure-body-alignment">
-                                                                          <input class="form-control" type="text" name="companyName" 
-                                                                               [(ngModel)]="part.stockLine[currentStockLineShowIndex].level1" disabled>
+                                                                        <div
+                                                                            class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text"
+                                                                                name="companyName"
+                                                                                [(ngModel)]="part.stockLine[currentStockLineShowIndex].level1"
+                                                                                disabled>
                                                                         </div>
-                                                                        <div class="form-group view-structure-body-alignment">
-                                                                          <input class="form-control" type="text" name="BUName"
-                                                                               [(ngModel)]="part.stockLine[currentStockLineShowIndex].level2" disabled>
+                                                                        <div
+                                                                            class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text"
+                                                                                name="BUName"
+                                                                                [(ngModel)]="part.stockLine[currentStockLineShowIndex].level2"
+                                                                                disabled>
                                                                         </div>
-                                                                        <div class="form-group view-structure-body-alignment">
-                                                                          <input class="form-control" type="text" name="divisionName"
-                                                                               [(ngModel)]="part.stockLine[currentStockLineShowIndex].level3" disabled>
+                                                                        <div
+                                                                            class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text"
+                                                                                name="divisionName"
+                                                                                [(ngModel)]="part.stockLine[currentStockLineShowIndex].level3"
+                                                                                disabled>
                                                                         </div>
-                                                                        <div class="form-group view-structure-body-alignment">
-                                                                          <input class="form-control" type="text" name="deptName"
-                                                                               [(ngModel)]="part.stockLine[currentStockLineShowIndex].level4" disabled>
+                                                                        <div
+                                                                            class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text"
+                                                                                name="deptName"
+                                                                                [(ngModel)]="part.stockLine[currentStockLineShowIndex].level4"
+                                                                                disabled>
                                                                         </div>
-                                                                      </div>
+                                                                    </div>
                                                                 </div>
-                                                               
-                                                                <p><span class="label"><b>Site: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].siteText}}</span></p>
-                                                                <p><span class="label"><b>Warehouse: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].warehouseText}}</span></p>
-                                                                <p><span class="label"><b>Location: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].locationText}}</span></p>
-                                                                <p><span class="label"><b>Shelf: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].shelfText}}</span></p>
+                                                                <p><span class="label"><b>Site: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].siteText}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Warehouse: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].warehouseText}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Location: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].locationText}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Shelf: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].shelfText}}</span>
+                                                                </p>
                                                             </div>
                                                             <div class="col-sm-3">
-                                                                <p><span class="label"><b>Bin: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].binText}}</span></p>
-                                                                <p><span class="label"><b>Obtain From: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].obtainFrom}}</span></p>
-                                                                <p><span class="label"><b>Owner: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].owner}}</span></p>
-                                                                <p><span class="label"><b>Traceable To: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].traceableTo}}</span></p>
-                                                                <p><span class="label"><b>MFG: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturerName}}</span></p>
-                                                                <p><span class="label"><b>MFG Lot Num: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturerLotNumber}}</span></p>
-                                                                <p><span class="label"><b>MFG Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturingDate}}</span></p>
-                                                                <p><span class="label"><b>MFG Trace: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturingTrace}}</span></p>
+                                                                <p><span class="label"><b>Bin: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].binText}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Obtain From: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].obtainFrom}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Owner: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].owner}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Traceable To: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].traceableTo}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>MFG: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].manufacturerName}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>MFG Lot Num: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].manufacturerLotNumber}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>MFG Date: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].manufacturingDate}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>MFG Trace: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].manufacturingTrace}}</span>
+                                                                </p>
                                                             </div>
                                                             <div class="col-sm-3">
-                                                                <p><span class="label"><b>MFG Batch Num: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturingBatchNumber}}</span></p>
-                                                                <p><span class="label"><b>Expiration Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].expirationDate}}</span></p>
-                                                                <p><span class="label"><b>Unit Cost: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].purchaseOrderUnitCost}}</span></p>
-                                                                <p><span class="label"><b>Extended Cost: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].purchaseOrderExtendedCost}}</span></p>
-                                                                <p><span class="label"><b>Parts Cert Num: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].partCertificationNumber}}</span></p>
-                                                                <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].certifiedBy}}</span></p>
-                                                                <p><span class="label"><b>Certified Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].certifiedDate}}</span></p>
-                                                                <p><span class="label"><b>Certified Due Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].certifiedDueDate}}</span></p>
+                                                                <p><span class="label"><b>MFG Batch Num:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].manufacturingBatchNumber}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Expiration Date:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].expirationDate}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Unit Cost: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].purchaseOrderUnitCost}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Extended Cost:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].purchaseOrderExtendedCost}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Parts Cert Num:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].partCertificationNumber}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Cert By: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].certifiedBy}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Certified Date:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].certifiedDate}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Certified Due Date:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].certifiedDueDate}}</span>
+                                                                </p>
                                                             </div>
                                                             <div class="col-sm-3">
-                                                                <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].tageTypeName}}</span></p>
-                                                                <p><span class="label"><b>Tag Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].tagDate}}</span></p>
-                                                                <p><span class="label"><b>Engine Serial Number: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].engineSerialNumber}}</span></p>
-                                                                <p><span class="label"><b>Aircraft Tail Num: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].aircraftTailNumber}}</span></p>
-                                                                <p><span class="label"><b>Ship Via: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].shippingViaText}}</span></p>
-                                                                <p><span class="label"><b>Shipping Ref#/AWB: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].shippingReference}}</span></p>
-                                                                <p><span class="label"><b>Shipping Account: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].shippingAccount}}</span></p>
+                                                                <p><span class="label"><b>Tag Type: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].tageTypeName}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Tag Date: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].tagDate}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Engine Serial Number:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].engineSerialNumber}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Aircraft Tail Num:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].aircraftTailNumber}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Ship Via: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].shippingViaText}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Shipping Ref#/AWB:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].shippingReference}}</span>
+                                                                </p>
+                                                                <p><span class="label"><b>Shipping Account:
+                                                                        </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].shippingAccount}}</span>
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </section>
-
                                                     <section style="clear: both;" *ngIf="part.stockLine">
-                                                        <h3 class="add-details-heading" style="text-align: left;padding-top: 30px;">Serialized</h3>
+                                                        <h3 class="add-details-heading"
+                                                            style="text-align: left;padding-top: 30px;">Serialized</h3>
                                                         <div class="form-row">
                                                             <div class="col-md-3">
-                                                                <p><span class="label"><b>Serial Num: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].serialNumber ? part.stockLine[part.currentSLIndex].serialNumber : '-'}}</span></p>
+                                                                <p><span class="label"><b>Serial Num: </b></span><span
+                                                                        class="value">{{part.stockLine[part.currentSLIndex].serialNumber ? part.stockLine[part.currentSLIndex].serialNumber : '-'}}</span>
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </section>
-
                                                     <section *ngIf="part.timeLife">
-                                                        <h3 class="add-details-heading" style="text-align: left;">Time Life</h3>
+                                                        <h3 class="add-details-heading" style="text-align: left;">Time
+                                                            Life</h3>
                                                         <div class="time-remaining">
                                                             <table class="table table-bordered timelife-table">
                                                                 <thead>
                                                                     <tr class="po-table-tr">
                                                                         <th colspan="2" class="text-center">Cycles</th>
-                                                                        <th colspan="2" class="text-center">Time (in hours)</th>
-                                                                        <th colspan="2" class="text-center">Last (in hours)</th>
+                                                                        <th colspan="2" class="text-center">Time (in
+                                                                            hours)</th>
+                                                                        <th colspan="2" class="text-center">Last (in
+                                                                            hours)</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody *ngIf="part.timeLife[part.currentSLIndex]">
                                                                     <tr>
                                                                         <td>Remaining</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesRemaining}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesRemaining}}
+                                                                        </td>
                                                                         <td>Remaining</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].timeRemaining}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].timeRemaining}}
+                                                                        </td>
                                                                         <td>Since New</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].lastSinceNew}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].lastSinceNew}}
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Since New</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesSinceNew}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesSinceNew}}
+                                                                        </td>
                                                                         <td>Since New</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].timeSinceNew}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].timeSinceNew}}
+                                                                        </td>
                                                                         <td>Since Ovh</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].lastSinceOVH}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].lastSinceOVH}}
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Since Ovh</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesSinceOVH}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesSinceOVH}}
+                                                                        </td>
                                                                         <td>Since Ovh</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].timeSinceOVH}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].timeSinceOVH}}
+                                                                        </td>
                                                                         <td>Since Insp</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].lastSinceInspection}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].lastSinceInspection}}
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Since Insp</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesSinceInspection}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesSinceInspection}}
+                                                                        </td>
                                                                         <td>Since Insp</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].timeSinceInspection}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].timeSinceInspection}}
+                                                                        </td>
                                                                         <td></td>
                                                                         <td></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Since Repair</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesSinceRepair}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].cyclesSinceRepair}}
+                                                                        </td>
                                                                         <td>Since Repair</td>
-                                                                        <td>{{part.timeLife[part.currentSLIndex].timeSinceRepair}}</td>
+                                                                        <td>{{part.timeLife[part.currentSLIndex].timeSinceRepair}}
+                                                                        </td>
                                                                         <td></td>
                                                                         <td></td>
                                                                     </tr>
@@ -193,29 +583,17 @@
                                                             </table>
                                                         </div>
                                                     </section>
-
-                                                    <!--<section>
-                                                        <h3 class="add-details-heading" style="text-align: left;">Calibrated Equipment</h3>
-                                                        <div class="form-row">
-                                                            <div class="col-md-3">
-                                                                <p><span class="label"><b>Inspection Date: </b></span><span class="value">-</span></p>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <p><span class="label"><b>Frequency: </b></span><span class="value">-</span></p>
-                                                            </div>
-                                                        </div>
-                                                    </section>-->
                                                 </div>
                                             </td>
                                         </tr>
                                     </ng-container>
                                 </tbody>
                             </table>
-                            </div>
-                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div> -->
+

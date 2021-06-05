@@ -1071,6 +1071,7 @@
                                                             <div class="checkbox-cstm m-t-4">
                                                                 <label class="width-200">
                                                                     <input type="checkbox" class="form-control"
+                                                                        disabled="part.itemMaster.isSerialized"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided"
                                                                         (click)="onSerialNumberNotProvided(part.stocklineListObj[part.currentSERIndex])">
                                                                     <span class="cr"><i
@@ -1111,7 +1112,8 @@
                                                                     <input type="checkbox"
                                                                         [(ngModel)]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                         class="form-control"
-                                                                        (click)="onChangeTimeLife(part)">
+                                                                        (click)="onChangeTimeLife(part)"
+                                                                        disabled="part.itemMaster.isTimeLife">
                                                                     <span class="cr"><i
                                                                             class="cr-icon pi pi-check"></i></span> Time
                                                                     Life details not provided
