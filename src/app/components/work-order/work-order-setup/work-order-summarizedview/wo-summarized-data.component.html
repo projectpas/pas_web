@@ -1,14 +1,4 @@
-<!-- <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" > -->
-    <!-- <div class="panel"> -->
-        <!-- <div class="panel-heading">
-            <h4 class="panel-title">
-                <div></div>
-                <a data-toggle="collapse" class="ac_cs collapsed" href="#stepadd1" (click)="resetParentTab()"> Summary of WO Overview</a>
-            </h4>
-        </div> -->
-        <!-- <div id="stepadd1" class="panel-collapse collapse in">
-            <div class="panel-body"> -->
-                    <div class="card col-md-12" style="background: #ffffff; margin-top: 0px; margin-bottom: 50px;">
+                    <div class="card col-md-12" style="background: #ffffff; margin-top: 0px; ">
                         <ul class="nav nav-pills nav-pills-cstm back_filsd" id="pills-tab" role="tablist"
                             style="margin-top: 2px;background-color: #fff !important;">
                             <li class="nav-item">
@@ -47,8 +37,7 @@
                                     <a class="dropdown-item" style="background-color: #fff;color:black" (click)="selectedCommunicationTab='email'" (click)="gridTabChange('email')">Email</a>
                                     <a class="dropdown-item" style="background-color: #fff;color:black" (click)="selectedCommunicationTab='phone'" (click)="gridTabChange('phone')">Phone</a>
                                     <a class="dropdown-item" style="background-color: #fff;color:black" (click)="selectedCommunicationTab='text'" (click)="gridTabChange('text')">Text</a>
-                                    <!-- <a class="dropdown-item">Chat</a> -->
-                                </div>
+                                  </div>
                             </li>
                             <li class="nav-item">
                                 <a id="pills-home-tab" role="tab" aria-controls="pills-home" aria-selected="true"
@@ -77,31 +66,21 @@
                             </li>
                         </ul>
                         <div *ngIf="workOrderId && (gridActiveTab == 'materialList')"
-                        [ngClass]="{hidedata : gridActiveTab !== 'materialList' }" style="overflow-x: scroll;"> 
-                            <!-- <div>
-                                <button type="button" class="btn btn-primary" (click)="collapseAll('open', 'materialList', materialListMPNs, 'getMaterialListData')">
-                                    Open All
-                                </button>
-                                <button type="button" class="btn btn-secondary" (click)="collapseAll('close','materialList', materialListMPNs, 'getMaterialListData')">
-                                    Close All
-                                </button> 
-                            </div> -->
-                            <!-- <app-materiallist-wo-summarization [value]="materialListMPNs"></app-materiallist-wo-summarization> -->
+                        [ngClass]="{hidedata : gridActiveTab !== 'materialList' }"  > 
                             <div >
                                 <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <div class="panel-title">
                                                     <div></div>
-                                                    <!-- <a data-toggle="collapse" class="ac_cs collapsed" href="#materialList_{{i}}" (click)="getMaterialListData(materialMPN)">  -->
-                                                        <div style="overflow-x: scroll;">
+                                                        <div  >
                                                             <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
-                                                                <thead *ngIf="i == 0">
+                                                                <thead >
                                                                     <tr>
-                                                                        <th class="table-column-icon-width"></th>
-                                                                        <th *ngFor="let matHeader of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; min-width: 100px !important;;background-color: #4397f7;
+                                                                        <!-- <th class="table-column-icon-width"></th> -->
+                                                                        <th *ngFor="let matHeader of materialListHeader" [ngStyle]="{'width': matHeader.width}" style="border: 1px solid #c8c8c8 !important;padding: 8px; min-width: 100px !important;;background-color: #4397f7;
                                                                         color: white;">
                                                                             {{matHeader.header}}
                                                                         </th>
@@ -110,15 +89,15 @@
                                                                 <tbody>
                                                                     <ng-container *ngFor="let materialMPN of materialListMPNs; let i=index" >
                                                                     <tr>
-                                                                        <td *ngFor="let matField of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;min-width: 100px !important;;color: black;">
+                                                                        <td *ngFor="let matField of materialListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
                                                                           <span *ngIf="matField.field !='plus'"> {{globalizeAmount(materialMPN[matField.field], matField.field)}}</span>
                                                                             <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
-                                                                               <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
-                                                                               <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 7px 8px !important;" (click)="handelPlus(materialMPN)"></i>   
+                                                                               <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 1px 5px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
+                                                                               <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(materialMPN)"></i>   
                                                                            </a> 
                                                                         </td>
                                                                     </tr>
-                                                                    <tr *ngIf="materialMPN.workOrderMaterialList && isShowChild==true" class="sub-table no-bg">
+                                                                    <tr *ngIf="materialMPN.workOrderMaterialList && isShowChild==true && materialMPN.isShowPlus ==false" class="sub-table no-bg">
                                                                         <td></td>
                                                                         <td colspan="22" class="p-0">
                                                                                 <app-work-order-complete-material-list [materialStatus]="materialMPN.materialStatus" isWorkOrder="true"
@@ -132,55 +111,34 @@
                                                             </table>
                                                             </div>
                                                             </div>
-                                                        </div>
-                                                    <!-- </a> -->
+                                                        </div> 
                                                 </div>
-                                            </div>
-                                            <!-- <div id="materialList_{{i}}" class="panel-collapse collapse in ">
-                                                <div *ngIf="!materialMPN.workOrderMaterialList">
-                                                    No Record Found
-                                                </div>
-                                                <div *ngIf="materialMPN.workOrderMaterialList">
-                                                    <app-work-order-complete-material-list [materialStatus]="materialMPN.materialStatus" isWorkOrder="true"
-                                                    [workFlowObject]="workFlowObject" [savedWorkOrderData]="savedWorkOrderData" isSubWorkOrder="false" subWOPartNoId="0"
-                                                    [mpnId]="materialMPN.workOrderPartNumberId" [employeesOriginalData]="employeesOriginalData"
-                                                    [workOrderMaterialList]="materialMPN.workOrderMaterialList"[taskList]="taskList" [mpnPartNumbersList]="mpnPartNumbersList" isView="true"></app-work-order-complete-material-list>
-                                                </div>
-                                            </div> -->
+                                            </div> 
                                         </div>
                                 </div>
                             </div>
                         </div>
 
                         <div *ngIf="workOrderId && (gridActiveTab == 'labour')"
-                        [ngClass]="{hidedata : gridActiveTab !== 'labour' }"> 
-                            <!-- <div>
-                                <button type="button" class="btn btn-primary" (click)="collapseAll('open','labour', labourListMPNs, 'getLabourListData')">
-                                    Open All
-                                </button>
-                                <button type="button" class="btn btn-secondary" (click)="collapseAll('close','labour', labourListMPNs, 'getLabourListData')">
-                                    Close All
-                                </button> 
-                            </div> -->
+                        [ngClass]="{hidedata : gridActiveTab !== 'labour' }">  
                             <div style="float: right;" class="m-t-2">
-                                <button type="button" class="btn btn-primary" (click)="collapseAll('open', 'labour', labourListMPNs, 'getLabourListData')">
+                                <!-- <button type="button" class="btn btn-primary" (click)="collapseAll('open', 'labour', labourListMPNs, 'getLabourListData')">
                                     {{(labourDetailedViewOpened)?'Summary':'Detail View'}}
-                                </button>
+                                </button> -->
                             </div>
-                            <!-- <app-labour-wo-summarization [value]="labourListMPNs"></app-labour-wo-summarization> -->
                             <div >
-                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="margin-bottom: -8px;">
                                                 <div class="panel-title">
                                                     <div></div>
-                                                    <!-- <a data-toggle="collapse" class="ac_cs collapsed" href="#labour_{{i}}" (click)="getLabourListData(labourMPN)"> -->
-                                                        <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                                       <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                        <!-- style="overflow: hidden !important;" -->
                                                             <div class="tableFixHead">
-                                                            <table *ngFor="let labourMPN of labourListMPNs; let i=index" class="table table-bordered">
-                                                                <thead *ngIf="i == 0">
+                                                            <table  class="table table-bordered">
+                                                                <thead  >
                                                                     <tr>
-                                                                        <th class="table-column-icon-width"></th>
+                                                                        <!-- <th class="table-column-icon-width"></th> -->
                                                                         <th *ngFor="let matHeader of labourListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
                                                                         color: white;">
                                                                             {{matHeader.header}}
@@ -188,46 +146,34 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody >
-                                                                    <tr >
-                                                                        <td class="table-column-icon-width">
-                                                                            <a data-toggle="collapse" style="padding-right:7px;padding-left:7px" class="btn btn-primary roleUpd" href="#labour_{{i}}" (click)="getLabourListData(labourMPN)">
-                                                                                <i 
-                                                                                class="fa fa-minus mr-0" ></i>
-                                                                            </a>
-                                                                            </td>
-                                                                        <td *ngFor="let matField of labourListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px;width: 11%;color: black;">
-                                                                            <div [ngClass]="matField.field == 'totalHours'?'float-right':''">
-                                                                                {{labourMPN[matField.field]}}
-                                                                            </div>
+                        
+                                                                   
+                                                                   <ng-container *ngFor="let labourMPN of labourListMPNs; let i=index" >
+                                                                    <tr>
+                                                                        <td *ngFor="let matField of labourListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
+                                                                          <span *ngIf="matField.field !='plus'"> {{globalizeAmount(labourMPN[matField.field], matField.field)}}</span>
+                                                                            <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                                                               <i *ngIf="labourMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(labourMPN)"></i>
+                                                                               <i *ngIf="labourMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(labourMPN)"></i>   
+                                                                           </a> 
                                                                         </td>
                                                                     </tr>
-                                                                    <tr *ngIf="labourMPN.labor" class="sub-table no-bg">
+                                                                    <tr *ngIf="labourMPN.isShowPlus ==false" class="sub-table no-bg">
                                                                         <td></td>
                                                                         <td colspan="9" class="p-0">
-                                                                        <!-- <div id="labour_{{i}}" class="panel-collapse collapse in">
-                                                                        <div *ngIf="!labourMPN.labor">
-                                                                            No Record Found
-                                                                        </div> -->
-                                                                        <!-- <div *ngIf="labourMPN.labor" style="width: 92%;margin-left: 4%;"> -->
-                                                                            <app-labour-wo-summarization [value]="labourMPN.labor" [type]="labourMPN.labourHours" [partNumber]="labourMPN.partNumber"></app-labour-wo-summarization>
-                                                                        <!-- </div> -->
-                                                                    <!-- </div> -->
-                                                                    </tr>
-                                                                </tbody>
+                                                                            <app-work-order-labour-analysis [isSummarizedView]="true" [savedWorkOrderData]="selectedPartNumber"
+                                                                            [selectedPartNumber]="selectedPartNumber"   >
+                                                                        </app-work-order-labour-analysis>
+                                                                          </td>
+                                                                        </tr>
+                                                                        </ng-container>
+                                                                   
+                                                                    </tbody>
                                                             </table>
                                                             </div>
-                                                            </div>
-                                                    <!-- </a> -->
+                                                            </div> 
                                                 </div>
-                                            </div>
-                                            <!-- <div id="labour_{{i}}" class="panel-collapse collapse in">
-                                                <div *ngIf="!labourMPN.labor">
-                                                    No Record Found
-                                                </div>
-                                                <div *ngIf="labourMPN.labor" style="width: 92%;margin-left: 4%;">
-                                                    <app-labour-wo-summarization [value]="labourMPN.labor" [type]="labourMPN.labourHours" [partNumber]="labourMPN.partNumber"></app-labour-wo-summarization>
-                                                </div>
-                                            </div> -->
+                                            </div> 
                                         </div>
                                 </div>
                             </div>
@@ -245,41 +191,331 @@
 
                         <div *ngIf="workOrderId && (gridActiveTab == 'charges')"
                         [ngClass]="{hidedata : gridActiveTab !== 'charges' }"> 
-                            <app-charges-wo-summarization [value]="chargesListMPNs"></app-charges-wo-summarization>
-                        </div>
+                            <app-charges-wo-summarization [value]="chargesListMPNs"  [workOrderId]="workOrderId"></app-charges-wo-summarization>
+                        </div> 
 
-                        <div *ngIf="workOrderId && (gridActiveTab == 'documents')"
+                        <!-- <div *ngIf="workOrderId && (gridActiveTab == 'documents')"
                         [ngClass]="{hidedata : gridActiveTab !== 'documents' }"> 
                             <app-document-wo-summarization [value]="documentsListMPNs"></app-document-wo-summarization>
+                        </div> -->
+
+                        <div *ngIf="workOrderId && (gridActiveTab == 'documents')"
+                        [ngClass]="{hidedata : gridActiveTab !== 'documents' }">  
+                            <div style="float: right;" class="m-t-2"> 
+                            </div>
+                            <div >
+                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" style="margin-bottom: -8px;">
+                                                <div class="panel-title">
+                                                    <div></div>
+                                                       <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                        <!-- style="overflow: hidden !important;" -->
+                                                            <div class="tableFixHead">
+                                                            <table  class="table table-bordered">
+                                                                <thead  >
+                                                                    <tr>
+                                                                        <!-- <th class="table-column-icon-width"></th> -->
+                                                                        <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
+                                                                        color: white;">
+                                                                            {{matHeader.header}}
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody >
+                        
+                                                                   
+                                                                   <ng-container *ngFor="let documentMPN of documentNumberList; let i=index">
+                                                                    <tr>
+                                                                        <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
+                                                                            <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                                                                <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                            </a> 
+                                                                            <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr *ngIf="documentMPN.isShowPlus ==false" class="sub-table no-bg">
+                                                                        <td></td>
+                                                                        <td colspan="9" class="p-0">
+                                                                        <div> 
+                                                                            <app-common-documents [moduleName]="'WorkOrder'"
+                                                                                [referenceId]="documentMPN.value" [isSummarizedView]="true"
+                                                                                [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                                                                        </div>
+                                                                          </td>
+                                                                        </tr>
+                                                                        </ng-container>
+                                                                   
+                                                                    </tbody>
+                                                            </table>
+                                                            </div>
+                                                            </div> 
+                                                </div>
+                                            </div> 
+                                        </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
-                            <div *ngIf="(selectedCommunicationTab == 'memo')">
-                                <app-communication-wo-summarization [value]="memoListMPNs" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
-                            </div>
-                            <div *ngIf="(selectedCommunicationTab == 'email')">
-                                <app-communication-wo-summarization [value]="emailListMPNs" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
-                            </div>
+                            <!-- <div *ngIf="(selectedCommunicationTab == 'memo')">
+                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                            </div> -->
+                            <div *ngIf="(selectedCommunicationTab == 'memo')">  
+                                <div style="float: right;" class="m-t-2"> 
+                                </div>
+                                <div >
+                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" style="margin-bottom: -8px;">
+                                                    <div class="panel-title">
+                                                        <div></div>
+                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                            <!-- style="overflow: hidden !important;" -->
+                                                                <div class="tableFixHead">
+                                                                <table  class="table table-bordered">
+                                                                    <thead  >
+                                                                        <tr>
+                                                                            <!-- <th class="table-column-icon-width"></th> -->
+                                                                            <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
+                                                                            color: white;">
+                                                                                {{matHeader.header}}
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody >
                             
-                            <div *ngIf="(selectedCommunicationTab == 'text')">
-                                <app-communication-wo-summarization [value]="textListMPNs" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                                                                       
+                                                                       <ng-container *ngFor="let documentMPN of memoNumberList; let i=index">
+                                                                        <tr>
+                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;color: black;">
+                                                                                <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                </a> 
+                                                                                <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr *ngIf="documentMPN.isShowPlus ==false" class="sub-table no-bg">
+                                                                            <td></td>
+                                                                            <td colspan="9" class="p-0">
+                                                                            <div>
+                                                                             <app-common-memo [isView]="true" [isSummarizedView]="true" [moduleId]="15" [referenceId]="documentMPN.value"></app-common-memo>
+                                                                            </div>
+                                                                              </td>
+                                                                            </tr>
+                                                                            </ng-container>
+                                                                       
+                                                                        </tbody> 
+                                                                </table>
+                                                                </div>
+                                                                </div> 
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div *ngIf="(selectedCommunicationTab == 'phone')">
-                                <app-communication-wo-summarization [value]="phoneListMPNs" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                            <div *ngIf="(selectedCommunicationTab == 'email')">  
+                                <div style="float: right;" class="m-t-2"> 
+                                </div>
+                                <div >
+                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" style="margin-bottom: -8px;">
+                                                    <div class="panel-title">
+                                                        <div></div>
+                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1">
+                                                            <!-- style="overflow: hidden !important;" -->
+                                                                <div class="tableFixHead">
+                                                                <table  class="table table-bordered">
+                                                                    <thead  >
+                                                                        <tr>
+                                                                            <!-- <th class="table-column-icon-width"></th> -->
+                                                                            <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
+                                                                            color: white;">
+                                                                                {{matHeader.header}}
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody >
+                            
+                                                                       
+                                                                       <ng-container *ngFor="let documentMPN of emailNumberList; let i=index">
+                                                                        <tr>
+                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
+                                                                                <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                </a> 
+                                                                                <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr *ngIf="documentMPN.isShowPlus ==false" class="sub-table no-bg">
+                                                                            <td></td>
+                                                                            <td colspan="9" class="p-0">
+                                                                            <div> 
+                                                                                <!-- <app-common-documents [moduleName]="'WorkOrder'"
+                                                                                    [referenceId]="documentMPN.value" [isSummarizedView]="true"
+                                                                                    [isViewMode]="true" [offLineUpload]="false"></app-common-documents> -->
+                                                                                    <app-common-email [isView]="true"  [type]="1" [isSummarizedView]="true"  [moduleId]="15" [referenceId]="documentMPN.value"></app-common-email>
+                                                                                </div>
+                                                                              </td>
+                                                                            </tr>
+                                                                            </ng-container>
+                                                                       
+                                                                        </tbody>
+                                                                </table>
+                                                                </div>
+                                                                </div> 
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div *ngIf="(selectedCommunicationTab == 'email')">
+                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                            </div> -->
+                            
+                            <!-- <div *ngIf="(selectedCommunicationTab == 'text')">
+                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                            </div> -->
+                            <div *ngIf="(selectedCommunicationTab == 'text')">  
+                                <div style="float: right;" class="m-t-2"> 
+                                </div>
+                                <div >
+                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" style="margin-bottom: -8px;">
+                                                    <div class="panel-title">
+                                                        <div></div>
+                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                            <!-- style="overflow: hidden !important;" -->
+                                                                <div class="tableFixHead">
+                                                                <table  class="table table-bordered">
+                                                                    <thead  >
+                                                                        <tr>
+                                                                            <!-- <th class="table-column-icon-width"></th> -->
+                                                                            <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
+                                                                            color: white;">
+                                                                                {{matHeader.header}}
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody >
+                            
+                                                                       
+                                                                       <ng-container *ngFor="let documentMPN of textNumberList; let i=index">
+                                                                        <tr>
+                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
+                                                                                <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                </a> 
+                                                                                <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr *ngIf="documentMPN.isShowPlus ==false" class="sub-table no-bg">
+                                                                            <td></td>
+                                                                            <td colspan="9" class="p-0">
+                                                                            <div> 
+                                                                                  <app-common-text [isView]="true"  [type]="1" [referenceId]="documentMPN.value" [isSummarizedView]="true" [moduleId]="15" ></app-common-text>
+                                                                         
+                                                                                </div>
+                                                                              </td>
+                                                                            </tr>
+                                                                            </ng-container>
+                                                                       
+                                                                        </tbody>
+                                                                </table>
+                                                                </div>
+                                                                </div> 
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div *ngIf="(selectedCommunicationTab == 'phone')">
+                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
+                            </div> -->
+                            <div *ngIf="(selectedCommunicationTab == 'phone')">  
+                                <div style="float: right;" class="m-t-2"> 
+                                </div>
+                                <div >
+                                    <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" style="margin-bottom: -8px;">
+                                                    <div class="panel-title">
+                                                        <div></div>
+                                                           <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
+                                                            <!-- style="overflow: hidden !important;" -->
+                                                                <div class="tableFixHead">
+                                                                <table  class="table table-bordered">
+                                                                    <thead  >
+                                                                        <tr>
+                                                                            <!-- <th class="table-column-icon-width"></th> -->
+                                                                            <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
+                                                                            color: white;">
+                                                                                {{matHeader.header}}
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody >
+                            
+                                                                       
+                                                                       <ng-container *ngFor="let documentMPN of phoneNumberList; let i=index">
+                                                                        <tr>
+                                                                            <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
+                                                                                <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
+                                                                                    <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
+                                                                                </a> 
+                                                                                <span *ngIf="matField.field !='plus'"> {{globalizeAmount(documentMPN[matField.field], matField.field)}}</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr *ngIf="documentMPN.isShowPlus ==false" class="sub-table no-bg">
+                                                                            <td></td>
+                                                                            <td colspan="9" class="p-0">
+                                                                            <div> 
+                                                                                <!-- <app-common-documents [moduleName]="'WorkOrder'"
+                                                                                    [referenceId]="documentMPN.value" [isSummarizedView]="true"
+                                                                                    [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                                                                          -->
+                                                                         
+                                                                          <app-common-phone [isView]="true"  [type]="1" [referenceId]="documentMPN.value" [isSummarizedView]="true"  [moduleId]="15"  ></app-common-phone>
+                                                                         
+                                                                                </div>
+                                                                              </td>
+                                                                            </tr>
+                                                                            </ng-container>
+                                                                       
+                                                                        </tbody>
+                                                                </table>
+                                                                </div>
+                                                                </div> 
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
-                        <div *ngIf="(workOrderId && gridActiveTab == 'woAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'woAnalysis' }" style="overflow-x: scroll;">
+                        <div *ngIf="(workOrderId && gridActiveTab == 'woAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'woAnalysis' }" >
                             <app-analysis-wo-summarization [value]="woAnalysisMPNs" [type]="gridActiveTab" [workOrderId]="workOrderId"></app-analysis-wo-summarization>
                         </div>
 
-                        <div *ngIf="(workOrderId && gridActiveTab == 'quoteAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'quoteAnalysis' }"  style="overflow-x: scroll;">
+                        <div *ngIf="(workOrderId && gridActiveTab == 'quoteAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'quoteAnalysis' }" >
                             <app-analysis-wo-summarization [value]="quoteAnalysisMPNs" [type]="gridActiveTab" [workOrderId]="workOrderId"></app-analysis-wo-summarization>
                         </div>
 
                         <div *ngIf="workOrderId && (gridActiveTab == 'freight')"
                         [ngClass]="{hidedata : gridActiveTab !== 'freight' }">
-                            <app-freight-wo-summarization [value]="freightsListMPNs"></app-freight-wo-summarization>
+                            <app-freight-wo-summarization [value]="freightsListMPNs" [workOrderId]="workOrderId"></app-freight-wo-summarization>
                         </div>
 
                         <div *ngIf="workOrderId && (gridActiveTab == 'shipping')"

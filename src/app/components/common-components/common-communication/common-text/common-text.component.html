@@ -1,5 +1,5 @@
 ﻿<div class="card new-card">
-    <div class="card-header header">
+    <div class="card-header header" *ngIf="!isSummarizedView">
         <div class="row">
             <div class="col">
                 <h4 class="header-name"> Text </h4>
@@ -24,7 +24,7 @@
             [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
             [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true"
             scrollHeight="450px"> -->
-            <ng-template pTemplate="caption">
+            <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
                 <div class="row">
                     <div class="col">
                         <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"

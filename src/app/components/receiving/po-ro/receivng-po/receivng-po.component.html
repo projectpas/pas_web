@@ -286,10 +286,7 @@
                                 <td class="text-right">{{part.stockLineCount}}</td>
                                 <td class="text-right">{{part.quantityRejected}}</td>
                                 <td class="text-right">{{part.quantityBackOrdered}}</td>
-                                <td>
-                                    {{
-                                    part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered
-                                        ? 'Fulfilling' : 'Received' }} </td>
+                                <td>{{ part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered ? 'Fulfilling' : 'Received' }} </td>
                                 <td colspan="4">
                                     {{part?.level1}},{{part?.level2}}, {{part?.level3}},{{part?.level4}}
                                 </td>
@@ -347,13 +344,13 @@
                                 <th class="min-width-60">Status</th>
                                 <th class="min-width-60">User Type</th>
                                 <th>User Name</th>
-                                <th colspan="3">Address</th>
+                                <th colspan="4">Address</th>
                                 <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
+                                <!-- <th></th> -->
                               
                                 
                                 <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
@@ -373,7 +370,7 @@
                                         ? 'Fulfilling' : 'Received' }} </td>
                                 <td>{{part.poPartSplitUserTypeName}}</td>
                                 <td>{{part?.poPartSplitUserName}}</td>
-                                <td colspan="3">{{part.addressText }}</td>
+                                <td colspan="4">{{part.addressText }}</td>
                                 <td colspan="4">
                                     {{part.level1}},{{part.level2}}, {{part.level3}},{{part.level4}}
                                 </td>
@@ -381,7 +378,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
+                                <!-- <td></td> -->
                                 <td>
                                     <input type="text" *ngIf="part.stockLineCount < part.quantityOrdered"
                                         [(ngModel)]="part.quantityActuallyReceived" (keyup)="addStockLine(part, false)"
@@ -1030,7 +1027,7 @@
                                                     <div class="form-group">
                                                         <label>Tag Type</label>
                                                         <p-multiSelect [options]="TagTypeList"
-                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagType"
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagTypeobject"
                                                             name="tagType{{part.currentSLIndex}}">
                                                         </p-multiSelect>
                                                         <!-- <select class="form-control" name="tagType{{part.currentSLIndex}}" [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagType">

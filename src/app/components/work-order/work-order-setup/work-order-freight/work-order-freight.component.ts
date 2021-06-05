@@ -24,6 +24,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     @Output() refreshData = new EventEmitter();
     @Output() saveFreightsListDeletedStatus = new EventEmitter();
     @Input() view: boolean = false;
+    @Input() isSummarizedView: boolean = false;
     @Input() subWorkOrderDetails;
     @Input() isWorkOrder;
     @Input() isQuote = false;
@@ -108,13 +109,16 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         if (this.freightForm) {
             this.freightForm = [...this.freightForm, new Freight()];
         }
+        if(this.savedWorkOrderData){
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
+        }
        // this.getShipViaByCustomerId();
+     if(!this.isSummarizedView){
         this.getshipvia();
         this.getUOMList('');
-        this.getCurrencyList('');
-        // this.getCarrierList();
+        this.getCurrencyList(''); 
         this.getTaskList();
+     }
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);

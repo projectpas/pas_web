@@ -833,7 +833,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 const isDefaultContact = this.customerContactList.filter(x => {
                     if (x.isDefaultContact === true) {
                         return x;
-                    } else return x;
+                    }; //else return x;
                 })
                 if(from !="formEditapi"){
 
@@ -841,11 +841,12 @@ export class CustomerWorkSetupComponent implements OnInit {
                     this.receivingForm.customerPhone = isDefaultContact[0];
                 }
                 else{
-                    if(this.customerContactList && this.customerContactList.length !=0){
-                        this.receivingForm.customerContactId = isDefaultContact[0];
-                        this.receivingForm.customerPhone = isDefaultContact[0];
-                    }else{
+                    if(this.receivingForm.customerContactId != undefined && this.receivingForm.customerContactId != '' && this.receivingForm.customerContactId != null){
                         this.receivingForm.customerPhone={'workPhone':this.receivingForm.contactPhone,'customerContactId':this.receivingForm.customerContactId}
+                    }else{
+                        this.receivingForm.customerContactId = this.customerContactList[0];
+                        this.receivingForm.customerPhone = this.customerContactList[0];
+                        
                     }
                 }
             });
