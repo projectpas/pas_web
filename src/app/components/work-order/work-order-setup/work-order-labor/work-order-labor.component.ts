@@ -681,7 +681,6 @@ setTimeout(() => {
   }
   partNumbers:any=[];
   filterExpertiseEmployee(event, index) {
-    console.log("index",index);
     
     this['expertiseEmployee' + index] = this['expertiseEmployeeOriginalData' + index] == undefined ? this.employeesOriginalData : this['expertiseEmployeeOriginalData' + index];
     if (event.query !== undefined && event.query !== null) {
@@ -1099,7 +1098,6 @@ return true;
     }
   }
   markupChanged(matData, type) {
-    console.log("markup checkd",matData);
 
     try {
       if (this.markupList) {
@@ -1107,7 +1105,6 @@ return true;
           if (type == 'row' && markup.value == matData.markupPercentageId && matData['totalCostPerHour'] && matData['totalCostPerHour']) {
             matData['billingRate'] = ((matData['totalCostPerHour']) + (((matData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
             matData['billingAmount'] = (Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.hours)).toFixed(2);
-          console.log("billing1",matData['billingAmount'])
           }
           else if (type == 'all' && markup.value == this.overAllMarkup) {
             for (let t in this.laborForm.workOrderLaborList[0]) {
@@ -1118,7 +1115,6 @@ return true;
                     mData['billingRate'] = ((mData['totalCostPerHour']) + (((mData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
                     mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
                     mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
-                    console.log("billing1",mData['billingAmount'])
                   }
                 }
               }
@@ -1491,7 +1487,6 @@ return true;
     } 
   }
   formateCurrency(value) {
-    console.log("value",value)
     if (value) {
       value = (Number(value.toString().split(',').join(''))).toFixed(2);
       let result = formatNumberAsGlobalSettingsModule(value, 2);
