@@ -844,6 +844,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         `Quote ${isCreateQuote ? 'Created' : 'Updated'}  Succesfully`,
                         MessageSeverity.success
                     );
+                    if(isCreateQuote){
+                        this.getQuoteMaterialListByWorkOrderQuoteId();
+                    }
                     this.upDateDisabeldbutton=true;
                 },
                 err => {
@@ -3590,6 +3593,9 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
+                if(res && res.length ==0){
+                    this.loadworkorderData=true;
+                }
                 this.originlaMlist=res;
                 this.disableMat=true;
               this.getCondition('');
