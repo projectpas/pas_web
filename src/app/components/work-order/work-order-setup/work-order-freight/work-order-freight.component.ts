@@ -155,10 +155,13 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
               r[a.taskId].push(a);
               return r;
             }, Object.create(null));
+
+
             this.workOrderFreightList = [];
             for(let x in this.workOrderFreightLists){
               this.workOrderFreightList.push(this.workOrderFreightLists[x]);
             }
+            
             if (this.workOrderFreightList && this.workOrderFreightList.length > 0) {
                 this.totalRecords = this.workOrderFreightList.length;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -415,8 +418,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                       "FreightBilling":this.getTotalTaskBillingAmount(taskCharge),
                       "FreightRevenue":this.getTotalTaskBillingAmount(taskCharge),
                       "masterCompanyId":this.authService.currentUser.masterCompanyId,
-                      "CreatedBy":"admin",
-                      "UpdatedBy":"admin",
+                      "CreatedBy":this.userName,
+                      "UpdatedBy":this.userName,
                       "CreatedDate":new Date().toDateString(),
                       "UpdatedDate":new Date().toDateString(),
                       "IsActive":true,
@@ -441,6 +444,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         let result = {'data': sendData, 'taskSum': WorkOrderQuoteTask, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType}
 
         this.saveFreightListForWO.emit(result);
+        this.buildMethodDetails['freightBuildMethod'] =this.costPlusType;
+        this.buildMethodDetails['freightFlatBillingAmount']=this.freightFlatBillingAmount;
         this.disableFrt=true;
     }
     currentRow:any={};
@@ -450,6 +455,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
       this.modal.result.then(() => { 
       }, () => {  })
   }
+
+  
   dismissModel() {
     this.modal.close();
   }
@@ -458,8 +465,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
 // if(this.currentRow.workOrderFreightId !=null){
     this.currentRow.isDeleted = true;
 // }
-this.refreshData.emit();
-            $('#addNewFreight').modal('hide');
+           //this.refreshData.emit();
+           this.modal.close();
             this.isEdit = false;
             this.disableFrt=false;
         }
@@ -509,16 +516,18 @@ this.refreshData.emit();
                 x.billingMethodId = this.costPlusType;
                 x.markupPercentageId = '';
                 x.billingAmount = this.formateCurrency(Number(x.amount.toString().replace(/\,/g,'')));
-                if(this.costPlusType == 3){
-                    x.billingAmount = '0.00';
-                    this.freightFlatBillingAmount = '0.00';
-                }
+                // if(this.costPlusType == 3){
+                //     x.billingAmount = '0.00';
+                //     this.freightFlatBillingAmount = '0.00';
+                // }
                 if(Number(this.costPlusType) == 1){
                     this.overAllMarkup = '';
                 }
               }
             )
         }
+
+        this.getTotalBillingAmount();
     }
 
     getTotalAmount() {
@@ -538,7 +547,7 @@ this.refreshData.emit();
         if (tData) {
             tData.forEach(
                 (material) => {
-                    if (material.amount) {
+                    if (material.amount && !material.isDeleted) {
                         total += Number(material.amount.toString().replace(/\,/g,''));
                     }
                 }

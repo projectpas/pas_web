@@ -872,8 +872,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             SalesPersonId: quoteHeader.salesPersonId,
             EmployeeId: quoteHeader.employeeId,
             masterCompanyId: this.authService.currentUser.masterCompanyId,
-            createdBy: "admin",
-            updatedBy: "admin",
+            createdBy: this.userName,
+            updatedBy: this.userName,
             IsActive: true,
             IsDeleted: false,
             DSO: this.dso,
@@ -1351,10 +1351,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "markupPercentageId": fre.markupPercentageId ? fre.markupPercentageId: 0,
                 "freightCostPlus": fre.freightCostPlus,
                 "taskId": fre.taskId,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
-                "CreatedDate": "2019-10-31T09:06:59.68",
-                "UpdatedDate": "2019-10-31T09:06:59.68",
+                "CreatedBy": this.userName,
+                "UpdatedBy":  this.userName,
+                "CreatedDate": new Date().toDateString(),
+                "UpdatedDate": new Date().toDateString(),
                 "IsActive": true,
                 "IsDeleted": fre.isDeleted,
                 "billingMethodId": Number(fre.billingMethodId),
@@ -1396,7 +1396,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.tabQuoteCreated['freight'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteFreightListByWorkOrderQuoteId();
-                this.getBuildMethodDetails();
+                // this.buildMethodDetails['freightBuildMethod'] = this.quoteFreightListPayload['freightBuildMethod'];
+                // this.buildMethodDetails['freightFlatBillingAmount']=this.quoteFreightListPayload['freightFlatBillingAmount'];
+   
+                //this.getBuildMethodDetails();
                 // this.partNumberSelected(this.selectedPartNumber);
                 this.alertService.showMessage(
                     this.moduleName,
@@ -1446,8 +1449,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     "MaterialBilling": this.totalTaskMaterialBillingAmount(taskCharge),
                                     "MaterialRevenue": this.totalTaskMaterialBillingAmount(taskCharge),
                                     "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                                    "CreatedBy": "admin",
-                                    "UpdatedBy": "admin",
+                                    "CreatedBy": this.userName,
+                                    "UpdatedBy": this.userName,
                                     "CreatedDate": new Date().toDateString(),
                                     "UpdatedDate": new Date().toDateString(),
                                     "IsActive": true,
@@ -1498,8 +1501,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "BillingAmount": mList.billingAmount,
                 "headerMarkupId": this.overAllMarkup,
                 "markupFixedPrice": this.costPlusType,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
+                "CreatedBy": this.userName,
+                "UpdatedBy": this.userName,
                 "IsActive": true,
                 "IsDeleted": mList.isDeleted
             } 
@@ -1631,8 +1634,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "HeaderMarkupId": charge.headerMarkupId,
                 "masterCompanyId": this.authService.currentUser.masterCompanyId,
                 "taskId": (typeof charge.taskId === 'object')?charge.taskId.taskId :charge.taskId,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
+                "CreatedBy": this.userName,
+                "UpdatedBy": this.userName,
                 "IsActive": true,
                 "IsDeleted": charge.isDeleted,
                 "BillingMethodId": charge.billingMethodId,
@@ -1671,14 +1674,14 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             res => {
                 this.isSpinnerVisible=false;
                 this.tabQuoteCreated['charges'] = true;
-                // this.workOrderChargesList = res.workOrderQuoteCharges;
-                // for (let charge in this.workOrderChargesList) {
-                //     this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
-                //     this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
-                // }
+                this.workOrderChargesList = res.workOrderQuoteCharges;
+                for (let charge in this.workOrderChargesList) {
+                    this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
+                    this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
+                }
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteChargesListByWorkOrderQuoteId();
-                this.getBuildMethodDetails();
+               // this.getBuildMethodDetails();
                 // this.partNumberSelected(this.selectedPartNumber);
                 this.alertService.showMessage(
                     this.moduleName,
@@ -1804,8 +1807,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.laborPayload.WorkOrderQuoteLaborHeader.masterCompanyId = this.authService.currentUser.masterCompanyId;
         this.laborPayload.WorkOrderQuoteLaborHeader['headerMarkupId'] = data.headerMarkupId;
         this.laborPayload.WorkOrderQuoteLaborHeader['markupFixedPrice'] = data.markupFixedPrice;
-        this.laborPayload.WorkOrderQuoteLaborHeader.CreatedBy = "admin"
-        this.laborPayload.WorkOrderQuoteLaborHeader.UpdatedBy = "admin"
+        this.laborPayload.WorkOrderQuoteLaborHeader.CreatedBy = this.userName,
+        this.laborPayload.WorkOrderQuoteLaborHeader.UpdatedBy = this.userName,
         this.laborPayload.WorkOrderQuoteLaborHeader.IsActive = true
         this.laborPayload.WorkOrderQuoteLaborHeader.IsDeleted = false;
         this.laborPayload['createdDate'] = (data.createdDate) ? data.createdDate : new Date();
@@ -1853,8 +1856,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     "directLaborOHCost": labor.directLaborOHCost,
                     "headerMarkupId": labor.headerMarkupId,
                     // "fixedAmount": labor.fixedAmount,
-                    "CreatedBy": "admin",
-                    "UpdatedBy": "admin",
+                    "CreatedBy": this.userName,
+                    "UpdatedBy": this.userName,
                     "IsActive": true,
                     "IsDeleted": labor.isDeleted,
                     "BurdaenRatePercentageId": labor.burdaenRatePercentageId,
@@ -1926,8 +1929,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "FixedAmount": ex.fixedAmount,
                 "taskId": ex.taskId,
                 "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
+                "CreatedBy": this.userName,
+                "UpdatedBy": this.userName,
                 "IsActive": true,
                 "IsDeleted": ex.isDeleted,
                 "BillingMethodId": Number(ex.billingMethodId),
@@ -2037,7 +2040,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    saveWorkOrderChargesList(data) {
+    saveWorkOrderChargesList(data) 
+    {
         if (!this.workOrderChargesList) {
             this.workOrderChargesList = [];
         }
@@ -3668,18 +3672,21 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.isSpinnerVisible = true;
             this.workOrderService.getQuoteFreightsList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
+
                 this.workOrderFreightList = res;
                 for (let fre in this.workOrderFreightList) {
                     if (this.workOrderFreightList[fre]['billingAmount']) {
                         this.workOrderFreightList[fre]['billingAmount'] = Number(this.workOrderFreightList[fre]['billingAmount'].toString().split(',').join('')).toFixed(2);
                     }
                 }
+
                 if (res.length > 0) {
                     this.updateWorkOrderQuoteDetailsId(res[0].workOrderQuoteDetailsId)
                 }
                 else{
                     this.getWOFrieghtsList();
                 }
+                
             },
             err => {
                 this.errorHandling(err);

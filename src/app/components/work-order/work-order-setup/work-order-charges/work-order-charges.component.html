@@ -176,12 +176,90 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns" let-mainIndex="rowIndex">
       <ng-container *ngFor="let dt of rowData; let subIndex = index">
         <!-- *ngIf="!dt['isDeleted']" --> 
-          <tr >
+          <tr  *ngIf="!dt['isDeleted'] && isQuote">
             <td style="width:180px !important">
               <!-- <select class="form-control select-read-only" [(ngModel)]="dt.taskId" disabled>
                 <option value="">Select</option>
                 <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
               </select> -->
+              <p class="mr_o">{{dt.taskName}}</p>
+            </td>
+            <ng-container *ngFor="let col of columns">
+              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
+                <!-- {{ (col.field == 'unitPrice' || col.field == 'extendedPrice' || col.field == 'unitCost' || col.field == 'extendedCost')?formateCurrency(dt[col.field]):dt[col.field] }} -->
+                {{dt[col.field]}}
+              </td>
+              <td class="table-column-width" *ngIf="col.field == 'roNumberId'">
+                <select class="form-control select-read-only width-130" id="roNum_{{mainIndex}}" [(ngModel)]="dt[col.field]"
+                 name="roNum_{{mainIndex}}" disabled>
+                  <option [value]="0">Select</option>
+                  <option [value]="ctype.value" *ngFor="let ctype of roNumList">{{
+                    ctype.label
+                  }}</option>
+                </select>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="isQuote">
+              <td class="table-column-width">
+                <select class="form-control" (ngModelChange)="getValidCrg()"  [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingRate = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.extendedCost:'';">
+                  <option value="">Select</option>
+                  <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
+                    [value]="bm.value">{{bm.label}}</option>
+                </select>
+              </td>
+              <td class="table-column-width">
+                <select class="form-control select-markup" (ngModelChange)="getValidCrg()"  (change)="markupChanged(dt, 'row')"
+                  [(ngModel)]="dt.markupPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
+                  <option value="">Select</option>
+                  <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
+                </select>
+              </td>
+              <!-- <td>{{ dt.tmAmount }}</td>
+              <td>
+                <input type="number" [(ngModel)]="dt.flateRate" [disabled]="dt.billingMethodId != 2"/>
+              </td> -->
+              <td class="content-to-end table-column-width">{{ formateCurrency(dt.billingRate) }}</td>
+              <td class="table-column-width">
+                <input type="text" class="form-control text-right" (ngModelChange)="getValidCrg()"  pInputText pKeyFilter="money" (change)="calculatebCost($event.target.value,dt)" [(ngModel)]="dt.billingAmount"
+                  [disabled]="isView || dt.billingMethodId != '2'" />
+              </td>
+            </ng-container>
+            <td class="table-column-width action-icons-cstm" >
+              <div *ngIf="currentDeletedstatus == false">
+              <span data-target="#addNewCharges" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
+                (click)="edit(dt, mainIndex, subIndex)" *ngIf="!isView" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
+            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
+                  class="fa fa-trash"></i></a> </span> 
+                  <span *ngIf="!isQuote">
+                    <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
+                        matTooltip="History" matTooltipPosition="above"><i
+                            class="fa fa-history"></i></a>
+                </span>
+              </div>
+                  <div *ngIf="currentDeletedstatus == true">
+                    <!-- <span data-toggle="modal" data-target="#viewWorkOrder">
+                        <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
+                            matTooltipPosition="above">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </span> -->
+                 
+                    <span *ngIf="!isView">
+                        <a class="btn nobg" (click)="restore(restoreIdWo,dt); "
+                            matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
+                                aria-hidden="true"></i></a>
+                    </span>
+                       <span>
+                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
+                            matTooltip="History" matTooltipPosition="above"><i
+                                class="fa fa-history"></i></a>
+                    </span>
+                </div>
+            </td>
+          </tr>
+
+          <tr  *ngIf="!isQuote">
+            <td style="width:180px !important">
               <p class="mr_o">{{dt.taskName}}</p>
             </td>
             <ng-container *ngFor="let col of columns">
@@ -306,7 +384,7 @@
           <td class="content-to-end"><strong>{{ getTotalBillingAmount()}} </strong></td>
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
-            <input type="number" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg()"  [disabled]="isView" />
+            <input type="text" pInputText pKeyFilter="money"  (blur)="chargesFlatRateBillingAmount = (chargesFlatRateBillingAmount)?formateCurrency(chargesFlatRateBillingAmount):'0.00'" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg();"  [disabled]="isView" />
         </ng-container>
         <td *ngIf="!isView">&nbsp;</td>
       </tr>
