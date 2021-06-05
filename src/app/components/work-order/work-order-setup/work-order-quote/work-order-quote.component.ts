@@ -2139,10 +2139,21 @@ const data={...newdata};
             this.markupList.forEach((markup) => { 
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
                     matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label ? markup.label :0))
+debugger;
+
+                    const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
+                    const markupValue=  parseFloat(markup.label.toString().replace(/\,/g, ''));
+                    matData['billingRate'] = ((unitCost / 100) * markupValue) + unitCost;
+
+
+                    matData['billingAmount']=matData['billingRate']*Number(matData.quantity)
+
 
               
-                    matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost']) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label ? markup.label :0))), 2);
-                    matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
+                    // matData['billingRate'] = Number(matData['unitCost'].toString().split(',').join('')) + (Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label ? markup.label :0)
+                    // matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
+                    matData['billingRate']= matData['billingRate']>0?  formatNumberAsGlobalSettingsModule(matData['billingRate'],2) :'0.00';
+                    matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
                 }
                 else if (type == 'all' && markup.value == this.overAllMarkup) {
                     this.materialListQuotation.forEach((x) => {
@@ -2150,6 +2161,8 @@ const data={...newdata};
                             mData.markupPercentageId = this.overAllMarkup;
                             mData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))), 2);
                             mData['billingAmount'] = this.formateCurrency(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity));
+                            mData['billingRate']= mData['billingRate']>0?  mData['billingRate'].toFixed(2) :'0.00';
+                            mData['billingAmount']= mData['billingAmount']>0?  mData['billingAmount'].toFixed(2) :'0.00';
                         })
                     })
                 }
@@ -3583,24 +3596,35 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                         ...element,
                         taskName:element.taskName.toLowerCase()
                     }
+                }); 
+                this.materialListQuotation.forEach(element => {
+  
+                element.unitCost=element.unitCost>0 ?formatNumberAsGlobalSettingsModule(element.unitCost, 2) :'0.00';
+                element.billingRate=element.billingRate>0?formatNumberAsGlobalSettingsModule(element.billingRate, 2):'0.00';
+                element.billingAmount=element.billingAmount>0 ? formatNumberAsGlobalSettingsModule(element.billingAmount, 2):'0.00';
                 });
-                if (this.materialListQuotation && this.materialListQuotation.length > 0) {
-                    for (let charge in this.materialListQuotation) {
-                        if (this.materialListQuotation[charge]['unitCost']) {
-                            this.materialListQuotation[charge]['unitCost'] = Number(this.materialListQuotation[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
-                        }
-                        if (this.materialListQuotation[charge]['billingRate']) {
-                            this.materialListQuotation[charge]['billingRate'] = Number(this.materialListQuotation[charge]['billingRate'].toString().split(',').join('')).toFixed(2);
-                        }
-                        if (this.materialListQuotation[charge]['billingAmount']) {
-                            this.materialListQuotation[charge]['billingAmount'] = Number(this.materialListQuotation[charge]['billingAmount'].toString().split(',').join('')).toFixed(2);
-                        }
-                    }
-                }
+                // if (this.materialListQuotation && this.materialListQuotation.length > 0) {
+                //     for (let charge in this.materialListQuotation) {
+                //         if (this.materialListQuotation[charge]['unitCost']) {
+                //             this.materialListQuotation[charge]['unitCost'] =formatNumberAsGlobalSettingsModule(this.materialListQuotation[charge]['unitCost'], 0);
+                //             //  Number(this.materialListQuotation[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
+                //         }
+                //         if (this.materialListQuotation[charge]['billingRate']) {
+                //             this.materialListQuotation[charge]['billingRate'] = formatNumberAsGlobalSettingsModule(this.materialListQuotation[charge]['billingRate'], 0);
+                //             // Number(this.materialListQuotation[charge]['billingRate'].toString().split(',').join('')).toFixed(2);
+                //         }
+                //         if (this.materialListQuotation[charge]['billingAmount']) {
+                //             this.materialListQuotation[charge]['billingAmount'] = formatNumberAsGlobalSettingsModule(this.materialListQuotation[charge]['billingAmount'], 0);
+                //             // Number(this.materialListQuotation[charge]['billingAmount'].toString().split(',').join('')).toFixed(2);
+                //         }
+                //     }
+                // }
+                console.log("ggfgfdgfdgfdg",this.materialListQuotation)
                 if (this.materialListQuotation && this.materialListQuotation.length > 0 && this.materialListQuotation[0].headerMarkupId) {
                     this.costPlusType = this.materialListQuotation[0].markupFixedPrice.toString();
                     this.overAllMarkup = Number(this.materialListQuotation[0].headerMarkupId);
                 }
+                console.log("material list quotation",this.materialListQuotation)
                 let temp = []
                 let formedData = [];
                 formedData=[...this.materialListQuotation]
@@ -3709,6 +3733,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                         this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId)
                         let laborList = this.labor.workOrderLaborList;
                         this.labor = { ...res, workOrderLaborList: laborList };
+                        console.log("labor list added",this.labor)
                         this.labor.dataEnteredBy = getObjectById('value', res.dataEnteredBy, this.employeeList);
                         this.labor.workFlowWorkOrderId = wowfId;
                         this.taskList.forEach((tl) => {
