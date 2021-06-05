@@ -89,7 +89,7 @@
                                                                 <tbody>
                                                                     <ng-container *ngFor="let materialMPN of materialListMPNs; let i=index" >
                                                                     <tr>
-                                                                        <td *ngFor="let matField of materialListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
+                                                                        <td *ngFor="let matField of materialListHeader" style="border: 1px solid #c8c8c8 !important;color: black;">
                                                                           <span *ngIf="matField.field !='plus'"> {{globalizeAmount(materialMPN[matField.field], matField.field)}}</span>
                                                                             <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
                                                                                <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 1px 5px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
@@ -127,7 +127,7 @@
                                 </button> -->
                             </div>
                             <div >
-                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" style="overflow: scroll !important;" id="accordion" >
+                                <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="margin-bottom: -8px;">
                                                 <div class="panel-title">
@@ -139,6 +139,7 @@
                                                                 <thead  >
                                                                     <tr>
                                                                         <!-- <th class="table-column-icon-width"></th> -->
+                                                                        
                                                                         <th *ngFor="let matHeader of labourListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
                                                                         color: white;">
                                                                             {{matHeader.header}}
