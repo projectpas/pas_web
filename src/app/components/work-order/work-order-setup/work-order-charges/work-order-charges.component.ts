@@ -119,6 +119,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
     }
     if (this.workOrderChargesList) {
+      this.workOrderChargesLists =[];
       this.workOrderChargesLists = this.workOrderChargesList.reduce(function (r, a) {
         r[a.taskId] = r[a.taskId] || [];
         r[a.taskId].push(a);
@@ -225,6 +226,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     if (this.isQuote) {
       this.currentRow.isDeleted = true;
       this.modal.close();
+      //this.refreshData.emit();
       // this.workOrderChargesList[i].isDeleted = true;
     } else {
       const chargesId = this.isSubWorkOrder == true ? this.currentRow.subWorkOrderChargesId : this.currentRow.workOrderChargesId;
@@ -378,8 +380,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
                   "ChargesBilling": this.getTotalTaskBillingAmount(taskCharge),
                   "ChargesRevenue": this.getTotalTaskBillingAmount(taskCharge),
                   "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                  "CreatedBy": "admin",
-                  "UpdatedBy": "admin",
+                  "CreatedBy": this.userName,
+                  "UpdatedBy": this.userName,
                   "CreatedDate": new Date().toDateString(),
                   "UpdatedDate": new Date().toDateString(),
                   "IsActive": true,
@@ -402,6 +404,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     })
     let result = { 'data': sendData, 'taskSum': WorkOrderQuoteTask, 'chargesFlatRateBillingAmount': this.chargesFlatRateBillingAmount, 'ChargesBuildMethod': this.costPlusType }
     this.createQuote.emit(result);
+    this.buildMethodDetails['chargesBuildMethod'] =this.costPlusType;
+    this.buildMethodDetails['chargesFlatBillingAmount']=this.chargesFlatRateBillingAmount;
     this.disableCrg=true;
   }
 
@@ -440,16 +444,18 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
           x.markupPercentageId = '';
           x.billingRate = 0.00;
           x.billingAmount = x.extendedCost;
-          if (this.costPlusType == 3) {
-            x.billingAmount = 0.00;
-            this.chargesFlatRateBillingAmount = 0.00;
-          }
+          // if (this.costPlusType == 3) {
+          //   x.billingAmount = 0.00;
+          //   this.chargesFlatRateBillingAmount = 0.00;
+          // }
           if (Number(this.costPlusType) == 1) {
             this.overAllMarkup = '';
           }
         }
       )
     }
+
+    this.getTotalBillingAmount();
   }
 
   getTotalQuantity() {
@@ -497,7 +503,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
      
       tData.forEach(
         (material) => {
-          if (material.extendedCost) {
+          if (material.extendedCost && !material.isDeleted) {
             total +=parseFloat(material.extendedCost)
             // total +=   parseFloat(material.extendedCost.toString().replace(/\,/g, ''));
             // total += Number(material.extendedCost.toString().split(',').join(''));
@@ -515,7 +521,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
      
       tData.forEach(
         (material) => {
-          if (material.extendedCost) {
+          if (material.extendedCost && !material.isDeleted) {
             // total +=parseFloat(material.extendedCost)
             total +=   parseFloat(material.extendedCost.toString().replace(/\,/g, ''));
             // total += Number(material.extendedCost.toString().split(',').join(''));
@@ -548,9 +554,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         }
       )
     }
-    this.chargesFlatRateBillingAmount = total.toFixed(2);
-    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
-    return newTotal + '.00'
+    this.chargesFlatRateBillingAmount = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
+    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
+    return newTotal;
   }
 
   getTotalTaskBillingAmount(tData) {
@@ -564,9 +570,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         }
       )
     }
-    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
+    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
 
-    return newTotal + '.00';
+    return newTotal;
   }
 
   getRONumberList() {
