@@ -74,7 +74,7 @@ export class RoSetupComponent implements OnInit {
 	childDataList: any[] = [];
 	allCurrencyData: any[] = [];
 	allconditioninfo: any[] = [];
-	disableROStatus: boolean = true;
+	disableROStatus: boolean = false;
 	itemTypeId: number;
 	partWithId: any;
 	allPartDetails: any[] = [];
@@ -2681,12 +2681,12 @@ export class RoSetupComponent implements OnInit {
 		this.getAllACTailNum('');
 	}
 
-	CloseModel(status){
-		this.modal.close();		
-		if (status){
+	CloseModel(status) {
+		this.modal.close();
+		if (status) {
 			this.saveRepairOrderHeader('');
 		}
-		else{
+		else {
 			this.headerInfo.statusId = this.openStatusId;
 			this.enableHeaderSaveBtn = true;
 		}
@@ -2694,12 +2694,12 @@ export class RoSetupComponent implements OnInit {
 
 	saveRepairOrderHeader(roConfirm) {
 
-		if(roConfirm!=''){
+		if (roConfirm != '') {
 			if (this.headerInfo.statusId == this.fulfillingStatusId) {
 				this.modal = this.modalService.open(roConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
 				return;
 			}
-	    }
+		}
 
 		if (this.createROForm.invalid ||
 			this.headerInfo.companyId == 0
@@ -3153,8 +3153,8 @@ export class RoSetupComponent implements OnInit {
 				estRecordDate: this.datePipe.transform(this.partListData[i].estRecordDate, "MM/dd/yyyy"),
 				//vendorQuoteNoId: this.partListData[i].vendorQuoteNoId ? this.getValueFromObj(this.partListData[i].vendorQuoteNoId) : null,
 				//vendorQuoteDate: this.partListData[i].vendorQuoteDate ? this.datePipe.transform(this.partListData[i].vendorQuoteDate, "MM/dd/yyyy") : null,
-				vendorQuoteNoId:null,
-				vendorQuoteDate:null,
+				vendorQuoteNoId: null,
+				vendorQuoteDate: null,
 				acTailNum: this.partListData[i].acTailNum ? editValueAssignByCondition('label', this.partListData[i].acTailNum) : null,
 			}
 
@@ -5088,14 +5088,14 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	arrayrevisedPartlist: any = []	
+	arrayrevisedPartlist: any = []
 	getAllrevisedPart(strText = '') {
 		if (this.arrayrevisedPartlist.length == 0) {
 			this.arrayrevisedPartlist.push(0);
 		}
 		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20, this.arrayrevisedPartlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
 			this.revisedPartNumCollection = [];
-			for (let i = 0; i < res.length; i++) {				
+			for (let i = 0; i < res.length; i++) {
 				this.revisedPartNumCollection.push({ itemMasterId: res[i].value, partNumber: res[i].label });
 			};
 		});
@@ -5154,6 +5154,12 @@ export class RoSetupComponent implements OnInit {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
 			this.modal.componentInstance.stockLineId = row.stockLineId;
 			this.modal.result.then(() => { }, () => { });
+		} else {
+			this.alertService.showMessage(
+				'Error',
+				'StockLineID Not Found',
+				MessageSeverity.error
+			);
 		}
 	}
 
@@ -5550,7 +5556,7 @@ tfoot { display:table-footer-group }
         </head>
         <body onload="window.print();window.close()">${printContents}</body>
       </html>`
-    );
+		);
 		popupWin.document.close();
 	}
 }
