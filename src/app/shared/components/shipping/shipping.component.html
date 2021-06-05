@@ -826,17 +826,17 @@
     </div>
 </div>
 <div *ngIf="workorderpackage">
-    <app-wo-order-multi-Packaging-Label [packagingSlips]="packagingSlips"></app-wo-order-multi-Packaging-Label>
+    <app-wo-order-multi-Packaging-Label (Updateshippingpopup)="hideShippingPopup()"  [packagingSlips]="packagingSlips"></app-wo-order-multi-Packaging-Label>
 </div>
 <div *ngIf="workordershipping">
-    <app-work-order-multi-shipping-label [shippingLabels]="shippingLabels" ></app-work-order-multi-shipping-label>
+    <app-work-order-multi-shipping-label (Updateshippingpopup)="hideShippingPopup()" [shippingLabels]="shippingLabels" ></app-work-order-multi-shipping-label>
 </div>
 
 <div *ngIf="workordersinglepacking">
-    <app-work-order-packaging-label [workOrderId]="workOrderId" [workOrderPartId]="workOrderPartId" [woPickTicketId]="woPickTicketId"  [packagingSlipId]="packagingSlipId"></app-work-order-packaging-label>
+    <app-work-order-packaging-label (Updateshippingpopup)="hideShippingPopup()" [workOrderId]="workOrderId" [workOrderPartId]="workOrderPartId" [woPickTicketId]="woPickTicketId"  [packagingSlipId]="packagingSlipId"></app-work-order-packaging-label>
 </div>
 <div *ngIf="workordersingleshipping">
-    <app-work-order-shipping-label [workOrderId]="workOrderId" [workOrderPartId]="workOrderPartId" [woShippingId]="woShippingId"></app-work-order-shipping-label>
+    <app-work-order-shipping-label  (Updateshippingpopup)="hideShippingPopup()" [workOrderId]="workOrderId" [workOrderPartId]="workOrderPartId" [woShippingId]="woShippingId"></app-work-order-shipping-label>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

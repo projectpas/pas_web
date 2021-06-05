@@ -177,7 +177,7 @@
           </td> -->
           <ng-container *ngIf="isQuote">
             <td class="table-column-width">
-              <select class="form-control" (ngModelChange)="getValidFrt()" [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingAmount = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.amount:'';">
+              <select class="form-control" (ngModelChange)="getValidFrt()" [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';(dt.billingMethodId == '2')?dt.billingAmount = dt.amount:'';">
                 <option value="">Select</option>
                 <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
                   [value]="bm.value">{{bm.label}}</option>
@@ -448,7 +448,7 @@
                       </p-dropdown>
                     </td>
                     <td>
-                      <input type="text"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount{{ i }}" #amount="ngModel" [(ngModel)]="f.amount"
+                      <input type="text"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount_{{ i }}"  [(ngModel)]="f.amount"
                         class="form-control w50 text_right" (change)="f.amount = formateCurrency(f.amount);" required />
                     </td>
                     <!-- <td>

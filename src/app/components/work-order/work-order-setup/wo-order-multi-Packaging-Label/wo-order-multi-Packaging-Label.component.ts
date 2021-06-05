@@ -1,4 +1,4 @@
-import { Component, OnInit,Input ,OnChanges} from '@angular/core';
+import { Component, OnInit,Input ,OnChanges,Output,EventEmitter} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
 
   @Input() packagingSlips
+  @Output() Updateshippingpopup = new EventEmitter();
   workOrderId:number;
   workOrderShipping: any = [];
   todayDate: Date = new Date();
@@ -28,6 +29,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
   isSpinnerVisible: boolean = false;
   //packagingSlips: any = [];
   objpackagingSlips: any = [];
+
 
   constructor(
     private authService: AuthService,
@@ -765,6 +767,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
           </html>`
     );
     popupWin.document.close();
+    this.Updateshippingpopup.emit();
   }
 
 }
