@@ -17097,3 +17097,8 @@ ng-multiselect-dropdown{
   position: relative !important;
   top: -6px;
 }
+.ui-treetable table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto !important;
+}
