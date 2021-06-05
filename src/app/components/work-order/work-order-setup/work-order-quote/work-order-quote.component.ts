@@ -347,7 +347,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             header: 'Margin %',
             field: 'marginPercentage'
         }
-    ]
+    ];
+    isLoadWoLabor:boolean=false;
     @Output() enableBackToWO = new EventEmitter();
     restrictID: number;
     restrictMessage: any;
@@ -3425,7 +3426,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         // false, 0 is For Sub Work Order 
         this.workorderMainService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId,false,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
-         
+            this.isLoadWoLabor=false;
             let laborList = this.labor.workOrderLaborList;
             this.labor = { ...res, workOrderLaborList: laborList };
             this.labor.hoursorClockorScan = undefined;
@@ -3722,6 +3723,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res) {
+                    this.isLoadWoLabor=false;
                     let wowfId = this.labor.workFlowWorkOrderId;
                     if (res) {
                         res.laborList.forEach(element => {
@@ -3750,14 +3752,16 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                         })
                     }
                     else{
-                        this.getWOLabourList();
+                        this.isLoadWoLabor=true;
+                        // this.getWOLabourList();
                     }
                 }
                 else {
                     this.taskList.forEach((tl) => {
                         this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
                     });
-                    this.getWOLabourList();
+                    this.isLoadWoLabor=true;
+                    // this.getWOLabourList();
                 }
 
             },
@@ -3770,11 +3774,14 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.taskList.forEach((tl) => {
                 this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
             });
-            this.getWOLabourList();
+            this.isLoadWoLabor=true;
+            // this.getWOLabourList();
         }
 
     }
-
+    loadWoLabor(data){
+        this.getWOLabourList();
+    }
     toggleDisplayMode(): void {
         this.isDetailedViewQuote = !this.isDetailedViewQuote;
     }

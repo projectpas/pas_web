@@ -21,6 +21,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() workOrderWorkFlowOriginalData: any;
   @Output() saveworkOrderLabor = new EventEmitter();
   @Output() refreshLabor = new EventEmitter();
+  @Output() refreshLaborWO = new EventEmitter();
+  
   @Input() workOrderLaborList: any = {};
   @Input() labortaskList: any;
   @Input() isQuote = false; 
@@ -38,6 +40,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() frombilling: any = false;
   @Input() hideHeader: boolean = false;
   @Input() islaborCreated: boolean = false;
+  @Input() isLoadWoLabor: boolean = false;
   
   totalHours: number;
   disableSaveForEdit: boolean = false;
@@ -144,6 +147,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   laborTaskData: any;
   allTaskList: any = [];
   ngOnChanges() {
+    this.isLoadWoLabor=this.isLoadWoLabor;
     setTimeout(() => {
       this.checkPercentageData();
     }, 1000);
@@ -1552,6 +1556,9 @@ return true;
   }
   headerMaintanance() {
     // this.refreshLabor.emit(true);
+  }
+  loadLabor(){
+    this.refreshLaborWO.emit(true);
   }
   refreshCall() { 
     this.laborForm.workOrderLaborList[0] = (this.storeFormForBackUp && this.storeFormForBackUp.length != 0) ? this.storeFormForBackUp[0] : {};
