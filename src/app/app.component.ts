@@ -1220,7 +1220,9 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               label: 'General',
               items: [
-                { label: 'Bulk Emails', routerLink: '/#' },
+                { 
+                  label: 'Bulk Emails', 
+                  routerLink: 'admin/bulk-email' },
                 { label: 'Code Prefixes', routerLink: '/#' },
                 { label: 'Customer CRM', routerLink: '/#' },
                 { label: 'Email Config', routerLink: '/#' },

@@ -1,13 +1,13 @@
-﻿<div class="card new-card">
+<div class="card new-card">
     <div class="card-header header" *ngIf="!isSummarizedView">
         <div class="row">
             <div class="col">
-                <h4 class="header-name"> Email </h4>
+                <h4 class="header-name"> Bulk Emails </h4>
             </div>
             <div>
                 <button *ngIf="!isView" type="button" class="btn-sm header-button" data-toggle="modal"
                     data-target="#addNewMemo" (click)="addMemo()">
-                    Add Email
+                    Add Bulk Email
                 </button>
             </div>
         </div>
@@ -296,70 +296,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Email</h4>
+                <h4 class="modal-title">Send Bulk Emails</h4>
             </div>
             <form #attachDocForm="ngForm" class="form-horizontal" ngNativeValidate>
                 <div class="modal-body">
                     <div class="form-row">
-                        <div class="col-md-12">
-                            <div class="col-md-6">
-                                <div class="form-group col-md-12">
-                                    <label>Email Type <span class="clr-red">*</span></label>
-                                    <select [(ngModel)]="emailType" class="form-control" name="emailType" required>
-                                        <option value="">Select</option>
-                                        <option *ngFor="let emailTy of emailTypes" [value]="emailTy.value">
-                                            {{emailTy.label}}</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <!-- <label class="col-md-12"><span *ngIf="type==1">Customer</span> <span
-                                            *ngIf="type==2">Vendor</span> Contact <span class="clr-red">*</span></label> -->
-                                    <label class="col-md-12">To <span class="clr-red">*</span></label>
-                                    <p-autoComplete field="firstName" [(ngModel)]="customerContact" required
-                                        name="cusContact" #cusContact="ngModel" errorMessage="Records not found"
-                                        [forceSelection]="true" [dropdown]="true" [suggestions]="cusContactList"
-                                        (completeMethod)="filterCustomerContact($event)" [size]="30" [minLength]="1"
-                                        (onSelect)="contactSelected($event)" class="p-autoComplete-ctsm">
-                                    </p-autoComplete>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label>BCC</label>
-                                    <input class="form-control" type="email" [pattern]="emailPattern"
-                                        #bccEmail="ngModel" name="bcc" [(ngModel)]="bcc" multiple="true">
-                                    <div *ngIf="bccEmail.errors" [ngClass]="'error'">
-                                        <div *ngIf="bccEmail.errors.pattern">
-                                            <span class="clr-red">Email not valid</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group col-md-12">
-                                    <label class="col-md-12">Sent By <span class="clr-red">*</span></label>
-                                    <p-autoComplete field="name" [(ngModel)]="contactBy" required name="employees"
-                                        #employees="ngModel" errorMessage="Records not found" [forceSelection]="true"
-                                        [dropdown]="true" [suggestions]="employeeList"
-                                        (completeMethod)="filterEmployee($event)" [size]="30" [minLength]="1"
-                                        [dropdown]="true" class="p-autoComplete-ctsm">
-                                    </p-autoComplete>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label class="col-md-12">Email Address <span class="clr-red">*</span></label>
-                                    <input class="form-control" type="email" name="email" [(ngModel)]="toEmail" required
-                                        disabled>
-                                </div>
-                                <div class="form-group col-md-12" style="margin-top:-7px">
-                                    <label>CC</label>
-                                    <input class="form-control" type="email" name="cc" [pattern]="emailPattern"
-                                        #ccEmail="ngModel" [(ngModel)]="cc" multiple="true">
-                                    <div *ngIf="ccEmail.errors" [ngClass]="'error'">
-                                        <div *ngIf="ccEmail.errors.pattern">
-                                            <span class="clr-red">Email not valid</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-12 ">
                             <div class="form-group email-margin">
                                 <label class="col-md-12">Email Subject <span class="clr-red">*</span></label>
@@ -563,7 +504,6 @@
         </h6>
         <a style="padding:0px" class="filelink btn btn-link" (click)="downloadFileUpload(pdfPath)" target="_blank"
             download>Preview {{CurrentModuleName == 'SalesQuote' ? 'Quote' : 'Sales Order'}}</a>
-        <!-- <a href="{{pdfPath}}" class="btn btn-link" target="_blank" >Preview Quote</a> -->
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
