@@ -2139,23 +2139,22 @@ const data={...newdata};
         }
     }
     markupChanged(matData, type) {
+        if(type == 'row' && matData && matData.markupPercentageId==""){
+            const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
+            matData['billingRate'] =  unitCost;
+            matData['billingAmount']=matData['billingRate']*Number(matData.quantity)
+            matData['billingRate']= matData['billingRate']>0?  formatNumberAsGlobalSettingsModule(matData['billingRate'],2) :'0.00';
+            matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
+       
+        }
         try {
             this.markupList.forEach((markup) => { 
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
                     matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label ? markup.label :0))
-
-
                     const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
                     const markupValue=  parseFloat(markup.label.toString().replace(/\,/g, ''));
                     matData['billingRate'] = ((unitCost / 100) * markupValue) + unitCost;
-
-
                     matData['billingAmount']=matData['billingRate']*Number(matData.quantity)
-
-
-              
-                    // matData['billingRate'] = Number(matData['unitCost'].toString().split(',').join('')) + (Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label ? markup.label :0)
-                    // matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
                     matData['billingRate']= matData['billingRate']>0?  formatNumberAsGlobalSettingsModule(matData['billingRate'],2) :'0.00';
                     matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
                 }
