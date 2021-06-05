@@ -2139,7 +2139,7 @@ const data={...newdata};
             this.markupList.forEach((markup) => { 
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
                     matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label ? markup.label :0))
-debugger;
+
 
                     const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
                     const markupValue=  parseFloat(markup.label.toString().replace(/\,/g, ''));
@@ -3619,12 +3619,10 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 //         }
                 //     }
                 // }
-                console.log("ggfgfdgfdgfdg",this.materialListQuotation)
                 if (this.materialListQuotation && this.materialListQuotation.length > 0 && this.materialListQuotation[0].headerMarkupId) {
                     this.costPlusType = this.materialListQuotation[0].markupFixedPrice.toString();
                     this.overAllMarkup = Number(this.materialListQuotation[0].headerMarkupId);
                 }
-                console.log("material list quotation",this.materialListQuotation)
                 let temp = []
                 let formedData = [];
                 formedData=[...this.materialListQuotation]
@@ -3733,7 +3731,6 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                         this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId)
                         let laborList = this.labor.workOrderLaborList;
                         this.labor = { ...res, workOrderLaborList: laborList };
-                        console.log("labor list added",this.labor)
                         this.labor.dataEnteredBy = getObjectById('value', res.dataEnteredBy, this.employeeList);
                         this.labor.workFlowWorkOrderId = wowfId;
                         this.taskList.forEach((tl) => {
