@@ -5,7 +5,7 @@
             Add Labor Hours
           </h4>
       </div>
-      <button type="button" matTooltipPosition="above" matTooltip="Load Labor From Work Order" *ngIf="isLoadWoLabor" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadLabor()">
+      <button type="button" matTooltipPosition="above" matTooltip="Load Labor From Work Order" *ngIf="isLoadWoLabor && !isView" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadLabor()">
         Load Work Order Labor
      </button>
   </div>

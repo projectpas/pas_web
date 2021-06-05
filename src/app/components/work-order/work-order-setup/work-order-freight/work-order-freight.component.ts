@@ -34,6 +34,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     @Input() buildMethodDetails: any = {};
     @Input() isSubWorkOrder:any=false;
     @Input() subWOPartNoId;
+    @Input() isLoadWoFreights:any=false;
+    @Output() refreshFreightsWO = new EventEmitter();
     customerId: any;
     shipViaList: any;
     carrierList: any;
@@ -132,6 +134,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     originalList:any=[]
     ngOnChanges() {
+        this.isLoadWoFreights=this.isLoadWoFreights;
+        console.log("changes friehgts",this.isLoadWoFreights)
         this.originalList=this.workOrderFreightList;
         // console.log("hello",this.originalList)
         // if(this.originalList && this.originalList[0] && this.originalList[0].workOrderQuoteDetailsId !=undefined){
@@ -318,6 +322,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     onCloseTextAreaInfo() {
         $("#textarea-popupFreight").modal("hide");
+    }
+    loadFreiht(){
+        this.refreshFreightsWO.emit(true);
     }
     saveFreightList() {
         if (!this.isQuote) {

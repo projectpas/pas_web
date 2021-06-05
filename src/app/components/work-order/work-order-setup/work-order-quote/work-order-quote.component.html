@@ -1165,8 +1165,8 @@
                                  (saveFreightListForWO)="saveWorkOrderFreightsList($event)"
                                  (updateFreightListForWo)="updateWorkOrderFreightsList($event)"
                                  (refreshData)="getFreightListByWorkOrderId()"
-                                 [taskList]="taskList"
-                                 [markupList]="markupList"
+                                 [taskList]="taskList"  [isLoadWoFreights]="isLoadWoFreights"
+                                 [markupList]="markupList"  (refreshFreightsWO)="loadWoFreights($event)"
                                  [isView]="isView || isViewForApprovedPart"
                                  [buildMethodDetails]="buildMethodDetails"></app-work-order-freight>
      </div>
@@ -1194,6 +1194,9 @@
                      <h4 class="header-name">Work Order Quote Charges List</h4>
                  </div>
                  <div *ngIf="!isView">
+                    <button type="button" matTooltipPosition="above" matTooltip="Load Labor From Work Order" *ngIf="isLoadWoCharges && !isView" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadCharges()">
+                        Load Work Order Charges
+                     </button>
                      <button type="button" class="btn-sm header-button "data-target="#addNewCharges"
                      data-toggle="modal" (click)="createNew('add')">
                          Create Charge
@@ -1207,14 +1210,14 @@
                                  (saveChargesListForWO)="saveWorkOrderChargesList($event)"
                                  (updateChargesListForWO)="updateWorkOrderChargesList($event)"
                                  (createQuote)="createChargeQuote($event)"
-                                 (refreshData)="getChargesListByWorkOrderId()"
-                                 [isQuote]="isQuote"
+                                 (refreshData)="getChargesListByWorkOrderId()"  (refreshChargesWO)="loadWoCharges($event)"
+                                 [isQuote]="isQuote"   [isLoadWoCharges]="isLoadWoCharges"
                                  [markupList]="markupList"
                                  [isView]="isView || isViewForApprovedPart"
                                 
                                  [fromquote]="fromquote"
                                  [buildMethodDetails]="buildMethodDetails"></app-work-order-charges>
-     </div>
+     </div> 
  
  
      <div class="modal fade " id="viewcustomerDetailsinQuote" role="dialog" data-backdrop="static">
