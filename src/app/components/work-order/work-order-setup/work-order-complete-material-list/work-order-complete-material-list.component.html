@@ -81,7 +81,7 @@
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 4">Unissue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 5">Unreserve Parts</h4>
-                <p id="clockdiv" *ngIf="(statusId === 1 || statusId === 3 || statusId === 2) && counter" class="clockdiv"> Session Expire in {{counter | formatTime}}</p>
+                <p id="clockdiv" *ngIf="(statusId === 1 || statusId === 3) && counter" class="clockdiv"> Session Expire in {{counter | formatTime}}</p>
             </div>
             <div class="form-row mar-left-15" *ngIf="statusId !== 2 && statusId !== 4 && statusId !== 5">
                 <div class="col-md-2">
