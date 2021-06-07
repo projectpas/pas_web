@@ -427,6 +427,8 @@ export class WoPartDetailsComponent implements OnChanges {
         if (resultdata && resultdata.length > 0) {
           this.roleUpMaterialList = resultdata;
           this.roleUpMaterialList.forEach((part, i) => {
+            part.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
+
             part.childPartChecked=false;
             this.roleUpMaterialList[i]['qtyRemainedToQuote'] = this.roleUpMaterialList[i].qtyAvailable;
           });
