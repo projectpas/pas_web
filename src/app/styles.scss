@@ -9174,7 +9174,8 @@ label.clr-red {
 
 #workflow-attributes-block {
   padding: 5px;
-  overflow: scroll;
+  // overflow: scroll;
+  overflow:auto;
 }
 
 #workflow-attributes-block .tab-pane.form-bg.active.in {
