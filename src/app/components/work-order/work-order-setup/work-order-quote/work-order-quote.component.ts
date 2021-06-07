@@ -1742,6 +1742,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.labor.workOrderLaborList = [];
         this.labor.workOrderLaborList.push({})
         const strText = value ? value : '';
+        if( this.woqLaborList &&  this.woqLaborList.length!=0){
+            this.woqLaborList.forEach(element => {
+                this.setEditArray.push(element.taskId)
+            });
+        }
         this.commonService.autoSuggestionSmartDropDownList('task', 'taskId', 'description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(taskList => {
                     taskList = taskList.map(x=>{
                     return {
@@ -1779,9 +1784,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     formTaskList() {
-        this.taskList.forEach(task => {
-            this.labor.workOrderLaborList[0][task.description] = [];
-        });
+        // this.taskList.forEach(task => {
+        //     this.labor.workOrderLaborList[0][task.description] = [];
+        // });
     }
 
     saveworkOrderLabor(data) {
@@ -3446,41 +3451,47 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.isSpinnerVisible = false;
         })
     }
-
+    woqLaborList:any=[];
     getWOLabourList(){
         this.isSpinnerVisible = true;
         // false, 0 is For Sub Work Order 
         this.workorderMainService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId,false,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
+         this.woqLaborList=res.laborList
+            this.getTaskList('');
             this.isLoadWoLabor=false;
+
             let laborList = this.labor.workOrderLaborList;
             this.labor = { ...res, workOrderLaborList: laborList };
             this.labor.hoursorClockorScan = undefined;
             this.labor.workFlowWorkOrderId = this.workFlowWorkOrderId; 
-            this.taskList.forEach(task => {
-                this.labor.workOrderLaborList[0][task.description] = [];
-            });
-            this.taskList.forEach((tl) => {
-                if (res) {
 
-                    res.laborList.forEach((rt) => {
+       setTimeout(() => {
+        this.taskList.forEach(task => {
+            this.labor.workOrderLaborList[0][task.description] = [];
+        });
+        this.taskList.forEach((tl) => {
+            if (res) {
 
-                        if (rt['taskId'] == tl['taskId']) {
-                            if (this.labor.workOrderLaborList[0][tl['description']][0] && this.labor.workOrderLaborList[0][tl['description']][0]['expertiseId'] == null && this.labor.workOrderLaborList[0][tl['description']][0]['employeeId'] == null) {
-                                this.labor.workOrderLaborList[0][tl['description']] = [];
-                            }
-                            let labor = {}
-                            if(rt.hours){
-                                let hours = rt.hours.toFixed(2);
-                                rt.totalHours = hours.toString().split('.')[0];
-                                rt.totalMinutes = hours.toString().split('.')[1];
-                            }
-                            labor = { ...rt, employeeId: { 'label': rt.employeeName, 'value': rt.employeeId } }
-                            this.labor.workOrderLaborList[0][tl['description']].push(labor);
+                res.laborList.forEach((rt) => {
+
+                    if (rt['taskId'] == tl['taskId']) {
+                        if (this.labor.workOrderLaborList[0][tl['description']][0] && this.labor.workOrderLaborList[0][tl['description']][0]['expertiseId'] == null && this.labor.workOrderLaborList[0][tl['description']][0]['employeeId'] == null) {
+                            this.labor.workOrderLaborList[0][tl['description']] = [];
                         }
-                    })
-                }
-            })
+                        let labor = {}
+                        if(rt.hours){
+                            let hours = rt.hours.toFixed(2);
+                            rt.totalHours = hours.toString().split('.')[0];
+                            rt.totalMinutes = hours.toString().split('.')[1];
+                        }
+                        labor = { ...rt, employeeId: { 'label': rt.employeeName, 'value': rt.employeeId } }
+                        this.labor.workOrderLaborList[0][tl['description']].push(labor);
+                    }
+                })
+            }
+        })
+       }, 1000);
         },
         err => {
             this.errorHandling(err);
@@ -3770,6 +3781,9 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                     this.isLoadWoLabor=false;
                     let wowfId = this.labor.workFlowWorkOrderId;
                     if (res) {
+                        this.woqLaborList=res.laborList;
+                        this.getTaskList('');
+                     setTimeout(() => {
                         res.laborList.forEach(element => {
                             // element.billingAmount= element.billingAmount.toFixed(2);
                             element.billingAmount=    element.billingAmount ? formatNumberAsGlobalSettingsModule( element.billingAmount, 2) : '0.00';
@@ -3795,6 +3809,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                                 }
                             })
                         })
+                     }, 1000);
                     }
                     else{
                         this.isLoadWoLabor=true;

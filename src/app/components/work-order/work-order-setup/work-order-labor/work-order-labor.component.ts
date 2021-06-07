@@ -24,7 +24,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Output() refreshLaborWO = new EventEmitter();
   
   @Input() workOrderLaborList: any = {};
-  @Input() labortaskList: any;
+  @Input() labortaskList: any=[];
   @Input() isQuote = false; 
   @Input() markupList;
   @Input() employeesOriginalData;
@@ -91,15 +91,28 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     }; 
     this.taskList = [];
     this.allTaskList = [];
+    console.log("labortaskList",this.labortaskList)
     this.allTaskList = [...this.labortaskList];
     this.taskList = [...this.labortaskList];
-    this.taskList.forEach(
-      (task) => {
-        if (task['description'] == "all task") {
-          this.taskList.splice(task, 1);
-        }
+ if(!this.isQuote){
+  this.taskList.forEach(
+    (task) => {
+      if (task['description'] == "all task") {
+        this.taskList.splice(task, 1);
       }
-    ) 
+    }
+  ) 
+ }else{
+  this.taskList=[];
+  this.labortaskList.forEach(
+    (task) => {
+      if (task['description'] != "all task") {
+        // this.taskList=[];
+        this.taskList.push(task);
+      }
+    }
+  ) 
+ }
 
     if (this.taskList) {
       this.taskListForHeader = this.taskList.map(x => { return { taskId: x.taskId, description: x.description } })
@@ -162,6 +175,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     //     }
     //   }
     // )
+    console.log("labortaskList",this.labortaskList)
     this.islaborCreated=this.islaborCreated;
     if (this.workOrderLaborList != undefined) {
       this.laborTaskData = this.workOrderLaborList;
@@ -329,7 +343,7 @@ this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'Pe
           }
 setTimeout(() => {
   if(!this.islaborCreated){
-  if(this.basicLabourDetail.laborHoursIdText=='Assign Total Hours To Work Order'){
+  if(this.basicLabourDetail && this.basicLabourDetail.laborHoursIdText=='Assign Total Hours To Work Order'){
     this.laborForm.workFloworSpecificTaskorWorkOrder = 'workOrder';
     this.assignAllTask();
   }
