@@ -916,7 +916,6 @@ return true;
         })
       }
     }
-console.log("this.laborfor",this.laborForm)
     this.saveFormdata = {
       ...this.laborForm,
       hoursorClockorScan: this.laborForm.hoursorClockorScan,

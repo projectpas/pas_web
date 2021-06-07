@@ -2139,6 +2139,7 @@ const data={...newdata};
         }
     }
     markupChanged(matData, type) {
+        console.log("this.materialListQuotation",this.overAllMarkup); 
         if(type == 'row' && matData && matData.markupPercentageId==""){
             const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
             matData['billingRate'] =  unitCost;
@@ -2147,7 +2148,7 @@ const data={...newdata};
             matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
        
         }
-        try {
+        // try {
             this.markupList.forEach((markup) => { 
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
                     matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label ? markup.label :0))
@@ -2161,18 +2162,39 @@ const data={...newdata};
                 else if (type == 'all' && markup.value == this.overAllMarkup) {
                     this.materialListQuotation.forEach((x) => {
                         x.forEach((mData) => {
+                            console.log("this.materialListQuotation",this.overAllMarkup); 
                             mData.markupPercentageId = this.overAllMarkup;
-                            mData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))), 2);
-                            mData['billingAmount'] = this.formateCurrency(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity));
-                            mData['billingRate']= mData['billingRate']>0?  mData['billingRate'].toFixed(2) :'0.00';
-                            mData['billingAmount']= mData['billingAmount']>0?  mData['billingAmount'].toFixed(2) :'0.00';
+                            // mData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label))), 2);
+                            // mData['billingAmount'] = this.formateCurrency(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity));
+                            // mData['billingRate']= mData['billingRate']>0?  mData['billingRate']:'0.00';
+                            // mData['billingAmount']= mData['billingAmount']>0?  mData['billingAmount']:'0.00';
+                      
+                      
+                      
+                            const unitCost = parseFloat(mData['unitCost'].toString().replace(/\,/g, ''));
+                            const markupValue=  parseFloat(markup.label.toString().replace(/\,/g, ''));
+                            mData['billingRate'] = ((unitCost / 100) * markupValue) + unitCost;
+                            mData['billingAmount']=mData['billingRate']*Number(mData.quantity)
+                            mData['billingRate']= mData['billingRate']>0?  formatNumberAsGlobalSettingsModule(mData['billingRate'],2) :'0.00';
+                            mData['billingAmount']= mData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(mData['billingAmount'],2) :'0.00';
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
                         })
                     })
                 }
             })
-        }
-        catch (e) {
-        }
+            console.log("this.materialListQuotation",this.materialListQuotation);
+            console.log("this.materialListQuotation",this.overAllMarkup); 
+            
+        // }
+        // catch (e) {
+        // }
     }
 
     saveBuildFromScratch(data) {
