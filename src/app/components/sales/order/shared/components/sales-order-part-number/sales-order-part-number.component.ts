@@ -538,7 +538,7 @@ export class SalesOrderPartNumberComponent {
           this.query.partSearchParamters.quantityToQuote = parentLine[0].quantityToBeQuoted;
           this.query.partSearchParamters.quantityAlreadyQuoted = parentLine[0].quantityAlreadyQuoted;
           this.part['quantityToQuote'] = parentLine[0].quantityToBeQuoted;
-          
+
           if ((parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis'])) > 0)
             this.part['quantityAlreadyQuoted'] = parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis']);
           else
@@ -1006,5 +1006,15 @@ export class SalesOrderPartNumberComponent {
 
   getTotalRevenue(part) {
     return (part.salesPriceExtended + Number(part.misc)).toFixed(2);
+  }
+
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
   }
 }
