@@ -5149,10 +5149,11 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	StockLinePopup(row) {
-		if (row.stockLineId > 0) {
+	StockLinePopup(row) {		
+		debugger
+		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-			this.modal.componentInstance.stockLineId = row.stockLineId;
+			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;
 			this.modal.result.then(() => { }, () => { });
 		} else {
 			this.alertService.showMessage(
