@@ -862,8 +862,7 @@ export class StockLineSetupComponent implements OnInit {
 				}
 				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {
 					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;
-					//this.sourceTimeLife = res.timelIfeData;
-					debugger					
+					//this.sourceTimeLife = res.timelIfeData;										
 				    this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
 				}
 				if (this.stockLineForm.tagType && this.stockLineForm.tagType != '0') {
@@ -1319,7 +1318,7 @@ export class StockLineSetupComponent implements OnInit {
 				this.disableQtyOnHand = false;
 			}
 			this.stockLineForm.isDER = partDetails.isDER;
-			this.stockLineForm.oem = partDetails.isOEM.toString();
+			this.stockLineForm.oem = partDetails.isOEM.toString();			
 			this.sourceTimeLife.timeLife = partDetails.isTimeLife;
 			this.disableManufacturer = false;
 			this.stockLineForm.locationId = this.getInactiveObjectOnEdit('value', partDetails.locationId, this.allLocations, 'Location', 'LocationId', 'Name');
@@ -2257,34 +2256,34 @@ export class StockLineSetupComponent implements OnInit {
 
 	getTimeLifeDetails(x) {		
 		let timeLife: TimeLifeDraftData = new TimeLifeDraftData();                      
-			timeLife.timeLifeCyclesId = x.timeLifeCyclesId;
-            timeLife.cyclesRemainingHrs = x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null;
-			timeLife.cyclesRemainingMin = x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null;				
-            timeLife.cyclesSinceInspectionHrs = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null;
-			timeLife.cyclesSinceInspectionMin = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null;				
-            timeLife.cyclesSinceNewHrs = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null;
-			timeLife.cyclesSinceNewMin = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null;				
-            timeLife.cyclesSinceOVHHrs = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null;
-			timeLife.cyclesSinceOVHMin = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null;				
-            timeLife.cyclesSinceRepairHrs = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null;
-			timeLife.cyclesSinceRepairMin = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null;			
-            timeLife.timeRemainingHrs = x.timeRemaining ? x.timeRemaining.split(':')[0] : null;
-			timeLife.timeRemainingMin = x.timeRemaining ? x.timeRemaining.split(':')[1] : null;
-            timeLife.timeSinceInspectionHrs = x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null;
-			timeLife.timeSinceInspectionMin = x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null;				
-            timeLife.timeSinceNewHrs = x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null;
-			timeLife.timeSinceNewMin = x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null;				
-            timeLife.timeSinceOVHHrs = x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null;
-			timeLife.timeSinceOVHMin = x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null;				
-            timeLife.timeSinceRepairHrs = x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null;
-			timeLife.timeSinceRepairMin = x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null;	
-            timeLife.lastSinceInspectionHrs = x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null;
-			timeLife.lastSinceInspectionMin = x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null;				
-            timeLife.lastSinceNewHrs = x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null;
-			timeLife.lastSinceNewMin = x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null;				
-            timeLife.lastSinceOVHHrs = x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null;
-            timeLife.lastSinceOVHMin = x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null;           
-            return timeLife;
+		timeLife.timeLifeCyclesId = x.timeLifeCyclesId;
+        timeLife.cyclesRemainingHrs = x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null;
+		timeLife.cyclesRemainingMin = x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null;				
+        timeLife.cyclesSinceInspectionHrs = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null;
+		timeLife.cyclesSinceInspectionMin = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null;				
+        timeLife.cyclesSinceNewHrs = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null;
+		timeLife.cyclesSinceNewMin = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null;				
+        timeLife.cyclesSinceOVHHrs = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null;
+		timeLife.cyclesSinceOVHMin = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null;				
+        timeLife.cyclesSinceRepairHrs = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null;
+		timeLife.cyclesSinceRepairMin = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null;			
+        timeLife.timeRemainingHrs = x.timeRemaining ? x.timeRemaining.split(':')[0] : null;
+		timeLife.timeRemainingMin = x.timeRemaining ? x.timeRemaining.split(':')[1] : null;
+        timeLife.timeSinceInspectionHrs = x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null;
+		timeLife.timeSinceInspectionMin = x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null;				
+        timeLife.timeSinceNewHrs = x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null;
+		timeLife.timeSinceNewMin = x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null;				
+        timeLife.timeSinceOVHHrs = x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null;
+		timeLife.timeSinceOVHMin = x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null;				
+        timeLife.timeSinceRepairHrs = x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null;
+		timeLife.timeSinceRepairMin = x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null;	
+        timeLife.lastSinceInspectionHrs = x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null;
+		timeLife.lastSinceInspectionMin = x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null;				
+        timeLife.lastSinceNewHrs = x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null;
+		timeLife.lastSinceNewMin = x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null;				
+        timeLife.lastSinceOVHHrs = x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null;
+        timeLife.lastSinceOVHMin = x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null;           
+        return timeLife;
 	}
 
 	getTimeLife(x) {
