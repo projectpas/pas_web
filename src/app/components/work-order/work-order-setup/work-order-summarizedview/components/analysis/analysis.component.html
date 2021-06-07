@@ -1,9 +1,9 @@
 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" style="margin-top: 15px;">
     <div class="tableFixHead">
-<p-treeTable class=" table header-table-width p-Treetable-view" [value]="gridData">
+<p-treeTable class="table header-table-width p-Treetable-view" [style]="{ 'overflow':'scroll'}" [value]="gridData">
     <ng-template pTemplate="header">
         <tr>
-            <th class="analysis-detail-header table-column-width" *ngFor="let f of fields">{{f.header}}</th>
+            <th class="analysis-detail-header table-column-width" [ngStyle]="{'width': f.width}" *ngFor="let f of fields">{{f.header}}</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
@@ -13,11 +13,20 @@
                 {{rowData.partNumber}}
             </td>
             <ng-container *ngFor="let f of fields" >
-                <td *ngIf="f.header != 'Part Number'" class="table-column-width" >
+                <td *ngIf="f.header != 'Part Number'&& f.header != 'Part Description'&& f.field != 'revenue' && f.field != 'materialRevenue' && f.field != 'materialCost' && f.field != 'materialRevenuePercentage' && f.field != 'totalLaborCost' && f.field != 'laborRevenuePercentage' && f.field != 'overHeadCost' && f.field != 'overHeadCostRevenuePercentage' && f.field != 'chargesCost' && f.field != 'freightCost' && f.field != 'otherCost' && f.field != 'directCost' && f.field != 'directCostRevenuePercentage' && f.field != 'margin' && f.field != 'marginPercentage'" class="table-column-width" >
                     <div [ngClass]="(f.field == 'adjustedHours' || f.field == 'hours' || f.field == 'directCost' || f.field == 'directCostRevenuePercentage' || f.field == 'freightCost' || f.field == 'chargesCost' || f.field == 'laborCost' || f.field == 'laborRevenuePercentage' || f.field == 'margin' || f.field == 'marginPercentage' || f.field == 'materialCost' || f.field == 'materialRevenue' || f.field == 'materialRevenuePercentage' || f.field == 'otherCost' || f.field == 'overHeadCost' || f.field == 'overHeadCostRevenuePercentage' || f.field == 'revenue' || f.field == 'totalLaborCost' || f.field == 'margin' || f.field == 'marginPercentage')?'float-right':''">
                         {{(f.field == 'contactDate')?getDate(rowData[f.field]):globalizeAmount(rowData[f.field], f.field)}}
                     </div>
                 </td>
+                <td *ngIf="f.header == 'Part Description'" style="min-width:250px !important" >
+
+                 {{rowData[f.field]}}
+                </td>
+                <td style="min-width:100px !important;text-align:right" *ngIf="f.field == 'revenue' || f.field == 'materialRevenue' || f.field == 'materialCost' || f.field == 'materialRevenuePercentage' || f.field == 'totalLaborCost' || f.field == 'laborRevenuePercentage' || f.field == 'overHeadCost' || f.field == 'overHeadCostRevenuePercentage' || f.field == 'chargesCost' || f.field == 'freightCost' || f.field == 'otherCost' || f.field == 'directCost' || f.field == 'directCostRevenuePercentage' || f.field == 'margin' || f.field == 'marginPercentage'">
+
+                    {{rowData[f.field]}}
+                   </td>
+
             </ng-container>
         </tr>
     </ng-template>

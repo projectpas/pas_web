@@ -77,7 +77,7 @@ export class PurchaseOrderPart {
     conditionCode: string;
     quantityActuallyReceived: number;
     quantityRejected: number;
-    uomId: number;
+    unitOfMeasureId: number;
     unitOfMeasure:string;
     quantityOrdered: number;
     quantityBackOrdered: number;

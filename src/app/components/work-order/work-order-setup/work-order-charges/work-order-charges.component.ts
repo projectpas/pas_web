@@ -20,6 +20,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   @Input() workFlowObject;
   @Input() isWorkOrder;
   @Input() isQuote = false;
+  @Input() isSummarizedView: boolean = false;
+  @Input() isLoadWoCharges:any=false;
+  @Output() refreshChargesWO = new EventEmitter();
   @Input() markupList;
   @Output() saveChargesListForWO = new EventEmitter();
   @Output() saveChargesListDeletedStatus = new EventEmitter();
@@ -106,7 +109,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
   originalList:any=[];
   ngOnChanges() { 
+    this.isLoadWoCharges=this.isLoadWoCharges;
     this.originalList=this.workOrderChargesList;
+    console.log(this.originalList)
     // if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId !=0){
     //   this.disableCrg=true;
     // }else{
@@ -118,6 +123,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
     }
     if (this.workOrderChargesList) {
+      this.workOrderChargesLists =[];
       this.workOrderChargesLists = this.workOrderChargesList.reduce(function (r, a) {
         r[a.taskId] = r[a.taskId] || [];
         r[a.taskId].push(a);
@@ -145,8 +151,12 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     }
   }
   ngOnInit() {
-    this.getRONumberList();
-    this.getTaskList(); 
+if(!this.isSummarizedView){
+  this.getRONumberList();
+  this.getTaskList(); 
+  this.originalList=this.workOrderChargesList;
+}
+
     if (this.workOrderChargesList && this.workOrderChargesList.length > 0 && this.workOrderChargesList[0].markupFixedPrice) {
       this.costPlusType = Number(this.workOrderChargesList[0].markupFixedPrice);
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
@@ -168,7 +178,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       this.disableCrg=false;
     }
   }
-
+  loadCharges(){
+    this.refreshChargesWO.emit(true);
+  }
   get userName(): string {
     return this.authService.currentUser ? this.authService.currentUser.userName : "";
   }
@@ -222,6 +234,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     if (this.isQuote) {
       this.currentRow.isDeleted = true;
       this.modal.close();
+      this.isEdit = false;
+      this.disableCrg=false;
+      //this.refreshData.emit();
       // this.workOrderChargesList[i].isDeleted = true;
     } else {
       const chargesId = this.isSubWorkOrder == true ? this.currentRow.subWorkOrderChargesId : this.currentRow.workOrderChargesId;
@@ -333,6 +348,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     this.disableCrg=false;
     if (this.isQuote && this.isEdit) {
       this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex] = event.charges[0];
+
+      this.markupChanged(this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex],'row')
       $('#addNewCharges').modal('hide');
       this.isEdit = false;
     }
@@ -373,8 +390,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
                   "ChargesBilling": this.getTotalTaskBillingAmount(taskCharge),
                   "ChargesRevenue": this.getTotalTaskBillingAmount(taskCharge),
                   "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                  "CreatedBy": "admin",
-                  "UpdatedBy": "admin",
+                  "CreatedBy": this.userName,
+                  "UpdatedBy": this.userName,
                   "CreatedDate": new Date().toDateString(),
                   "UpdatedDate": new Date().toDateString(),
                   "IsActive": true,
@@ -397,6 +414,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     })
     let result = { 'data': sendData, 'taskSum': WorkOrderQuoteTask, 'chargesFlatRateBillingAmount': this.chargesFlatRateBillingAmount, 'ChargesBuildMethod': this.costPlusType }
     this.createQuote.emit(result);
+    this.buildMethodDetails['chargesBuildMethod'] =this.costPlusType;
+    this.buildMethodDetails['chargesFlatBillingAmount']=this.chargesFlatRateBillingAmount;
     this.disableCrg=true;
   }
 
@@ -404,16 +423,18 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     try {
       this.markupList.forEach((markup) => {
         if (type == 'row' && markup.value == matData.markupPercentageId) {
-          matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost'].toString().split(',').join(''))) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 0);
-          matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity), 0);
+          matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost'].toString().split(',').join(''))) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 2);
+          matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity), 2);
+
         }
         else if (type == 'all' && markup.value == this.overAllMarkup) {
           this.workOrderChargesList.forEach((data) => {
             data.forEach((mData) => {
               if (mData.billingMethodId && Number(mData.billingMethodId) == 1) {
                 mData.markupPercentageId = this.overAllMarkup;
-                mData['billingRate'] = formatNumberAsGlobalSettingsModule(Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 0);
-                mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity), 0);
+                mData['billingRate'] = formatNumberAsGlobalSettingsModule(Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 2);
+                mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity), 2);
+              
               }
             })
           })
@@ -431,18 +452,20 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         (x) => {
           x.billingMethodId = (billingMethodId == 3) ? '' : billingMethodId;
           x.markupPercentageId = '';
-          x.billingRate = 0;
+          x.billingRate = 0.00;
           x.billingAmount = x.extendedCost;
-          if (this.costPlusType == 3) {
-            x.billingAmount = 0.00;
-            this.chargesFlatRateBillingAmount = 0.00;
-          }
+          // if (this.costPlusType == 3) {
+          //   x.billingAmount = 0.00;
+          //   this.chargesFlatRateBillingAmount = 0.00;
+          // }
           if (Number(this.costPlusType) == 1) {
             this.overAllMarkup = '';
           }
         }
       )
     }
+
+    this.getTotalBillingAmount();
   }
 
   getTotalQuantity() {
@@ -490,7 +513,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
      
       tData.forEach(
         (material) => {
-          if (material.extendedCost) {
+          if (material.extendedCost && !material.isDeleted) {
             total +=parseFloat(material.extendedCost)
             // total +=   parseFloat(material.extendedCost.toString().replace(/\,/g, ''));
             // total += Number(material.extendedCost.toString().split(',').join(''));
@@ -508,7 +531,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
      
       tData.forEach(
         (material) => {
-          if (material.extendedCost) {
+          if (material.extendedCost && !material.isDeleted) {
             // total +=parseFloat(material.extendedCost)
             total +=   parseFloat(material.extendedCost.toString().replace(/\,/g, ''));
             // total += Number(material.extendedCost.toString().split(',').join(''));
@@ -541,9 +564,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         }
       )
     }
-    this.chargesFlatRateBillingAmount = total.toFixed(2);
-    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
-    return newTotal + '.00'
+    this.chargesFlatRateBillingAmount = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
+    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
+    return newTotal;
   }
 
   getTotalTaskBillingAmount(tData) {
@@ -557,9 +580,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         }
       )
     }
-    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
+    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
 
-    return newTotal + '.00';
+    return newTotal;
   }
 
   getRONumberList() {
@@ -574,7 +597,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
 
   formateCurrency(value) {
-    return value ? formatNumberAsGlobalSettingsModule(value, 0) : '0.00';
+    return value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
   }
   getPageCount(totalNoofRecords, pageSize) {
     return Math.ceil(totalNoofRecords / pageSize)

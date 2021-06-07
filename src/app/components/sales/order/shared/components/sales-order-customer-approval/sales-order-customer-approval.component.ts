@@ -703,4 +703,14 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
 
     return result;
   }
+
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
 }

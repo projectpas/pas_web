@@ -569,6 +569,7 @@ export class ReceivingRoComponent implements OnInit {
     }
 
     public toggleStockLine(event: any, part: RepairOrderPart): void {
+               
         var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
         if (!condtion || condtion == undefined) {
@@ -591,6 +592,12 @@ export class ReceivingRoComponent implements OnInit {
             manufacturer.Value = part.itemMaster.manufacturerName.toString();
             this.manufacturerList.push(manufacturer);
         }
+        var unitofmasure = this.allPurchaseUnitOfMeasureinfo.find(temp => temp.value == part.uomId)
+        if (!unitofmasure || unitofmasure == undefined) {
+            var uom = {label:part.UOMText , value : part.uomId}
+            this.allPurchaseUnitOfMeasureinfo.push(uom);
+        }
+        
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
         } else { 
@@ -726,11 +733,11 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.parentDepartmentlist = part.parentDepartmentlist;
             stockLine.parentbuId = part.parentbuId;
             stockLine.parentDivisionId = part.parentDivisionId;
-            stockLine.parentDeptId = part.parentDeptId;                      
-
+            stockLine.parentDeptId = part.parentDeptId;                 
+            stockLine.unitOfMeasureId = part.uomId;                 
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
-            stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
-            
+            stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());            
+            stockLine.revisedPartId = this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId);            
             if (part.itemMaster != undefined) {
                 stockLine.repairOrderUnitCost = part.unitCost;
                 if (!part.itemMaster.isSerialized) {

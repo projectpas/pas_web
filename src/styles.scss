@@ -15845,6 +15845,7 @@ width:100%;
 
 .p-Treetable-view .ui-treetable .ui-treetable-tbody>tr>td {
   font-size: 11px;
+  padding: .25em .5em !important;
 }
 
 .p-Tree-checkbox .ui-chkbox .ui-chkbox-box {
@@ -17095,4 +17096,9 @@ ng-multiselect-dropdown{
 .pickticket .ui-chkbox .ui-chkbox-box {
   position: relative !important;
   top: -6px;
+}
+.ui-treetable table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto !important;
 }

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+﻿import { Component, OnInit, Input, SimpleChanges,Output,EventEmitter } from '@angular/core';
 import { CustomerService } from '../../../services/customer.service';
 import { CommonService } from '../../../services/common.service';
 import { WorkOrderService } from '../../../services/work-order/work-order.service';
@@ -21,6 +21,7 @@ export class ShippingComponent implements OnInit {
     @Input() workOrderPartNumberId: any = 0;
     @Input() isView: boolean = false;
     @Input() managementStructureId: any;
+    @Output() Updateshippingpopup = new EventEmitter();
     quoteForm: any = {};
     orignSiteNames: any = [];
     validFor: any;
@@ -678,6 +679,14 @@ checkedToGenerate(evt, ship) {
                 this.shippingHeader['soldToCountryId'] = site.countryId;
             }
         });
+    }
+    hideShippingPopup()
+    {
+        this.workorderpackage = false;
+        this.workordershipping = false;
+        this.workordersinglepacking = false;
+        this.workordersingleshipping = false;
+
     }
 
     getShippingData() {

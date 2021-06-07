@@ -113,7 +113,7 @@
                             {{ col.header }}
                         </span>
                     </th>
-                </tr>
+                </tr> 
             </ng-template>
             <ng-template pTemplate="body" let-part let-columns="columns" let-rowIndex="rowIndex">
                 <tr [ngClass]="{'row-bg1':part.alternateFor.length==0}" pReorderableRowHandle>
@@ -149,6 +149,8 @@
                             {{part.partNumber}}
                             <span class="alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span>
                             <span class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span>
+                            <!-- <span class="alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span> -->
+                            <!-- <span class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span> -->
                         </span>
                         <span *ngIf="col.field == 'itemClassification'">
                             {{part.itemClassification !== null? part.itemClassification: ""}}

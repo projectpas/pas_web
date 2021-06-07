@@ -393,7 +393,6 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                     this.isSpinnerVisible = false;
                     this.emailViewData = res;
                     this.attachmentDetails = res.attachmentDetails;
-                    console.log("res ", res);;
                 }, err => {
                     this.errorMessageHandler();
                 }

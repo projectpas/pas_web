@@ -937,6 +937,15 @@ export class AppComponent implements OnInit, AfterViewInit {
                   routerLink: '/exchangemodule/exchangepages/app-exchange-quote-approval-rule',
                 },
               ]
+            },
+            {
+              label: 'Exchange Sales Order',
+              items: [
+                {
+                  label: 'Exchange Sales Order List',
+                  routerLink: '/exchangemodule/exchangepages/exchange-sales-order-list',
+                }
+              ]
             }
           ],
           [
@@ -1211,7 +1220,9 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               label: 'General',
               items: [
-                { label: 'Bulk Emails', routerLink: '/#' },
+                { 
+                  label: 'Bulk Emails', 
+                  routerLink: 'admin/bulk-email' },
                 { label: 'Code Prefixes', routerLink: '/#' },
                 { label: 'Customer CRM', routerLink: '/#' },
                 { label: 'Email Config', routerLink: '/#' },

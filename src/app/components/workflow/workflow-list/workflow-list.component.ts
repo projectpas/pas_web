@@ -948,8 +948,7 @@ export class WorkflowListComponent implements OnInit {
     });
     
 }
-triggerHistory(){
-    console.log("hello",this.historyData)
+triggerHistory(){ 
     this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
     this.modal.componentInstance.auditHistoryHeader=[];
     this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;

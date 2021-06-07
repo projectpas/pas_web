@@ -72,9 +72,11 @@ export class AllViewComponent implements OnInit {
   id: number;
 
   //showPartListtab: boolean = false;
+  showreceived : boolean = false;
   showVendorCaptab: boolean = false;
   purchaseOrderData: PurchaseOrder;
   repairOrderData: RepairOrderPart[] = [];
+  repairOrderId:number = 0;
 
   approvalProcessHeader = [
     {
@@ -227,13 +229,16 @@ export class AllViewComponent implements OnInit {
     }
     if (event.index == 7 && this.isReceivingro == true) {
       //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){        
-      this.viewRepairOrder(this.id);
+      //if(this.repairOrderData.length>0){  
+      this.repairOrderId = this.id;                
+      this.viewRepairOrder(this.id);      
     }
     if (event.index == 8 && this.isReceivingro == true) {
       //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){        
-      this.viewRepairOrder(this.id);
+      //if(this.repairOrderData.length>0){   
+        this.showreceived = true;
+        this.repairOrderId = this.id;      
+      //this.viewRepairOrder(this.id);
     }
     //} 
   }
@@ -381,8 +386,6 @@ export class AllViewComponent implements OnInit {
         }        
         //this.getStatus();               
         this.isSpinnerVisible = false;
-        console.log(this.repairOrderData);
-
       }, error => {
         this.alertService.showMessage("", "Something went wrong while loading the Repair Order detail", MessageSeverity.error);
       }

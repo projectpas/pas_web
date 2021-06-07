@@ -31,6 +31,12 @@ import {DropdownModule} from 'primeng/dropdown';
 import { AccountService } from "../services/account.service";
 import { POApprovalService } from "../services/po-approval.service";
 import { GlAccountEndpointService } from "../services/glAccount/glAccount-endpoint.service";
+import { BulkEmailComponent } from "./bulk-email/bulk-email.component";
+import { FileUploadModule } from "primeng/fileupload";
+import { EditorModule } from "primeng/editor";
+import { DatePipe } from "@angular/common";
+import { SalesQuoteService } from "../services/salesquote.service";
+import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.service";
 
 @NgModule({
     imports: [
@@ -47,7 +53,9 @@ import { GlAccountEndpointService } from "../services/glAccount/glAccount-endpoi
         CheckboxModule,
         AutoCompleteModule,
         BreadcrumbModule,
-        DropdownModule
+        DropdownModule,
+        FileUploadModule,
+        EditorModule
     ],
     declarations: [
         AdminComponent,
@@ -57,12 +65,16 @@ import { GlAccountEndpointService } from "../services/glAccount/glAccount-endpoi
         UserListComponent,
         EditUserDialogComponent,
         GlobalSettingsComponent,
+        BulkEmailComponent,
         PoApprovalComponent,
     ],
     providers: [
         GlAccountEndpointService,
         AccountService,
-        POApprovalService
+        POApprovalService,
+        DatePipe,
+        SalesQuoteService,
+        SalesQuoteEndpointService
     ],
     entryComponents: [
         EditUserDialogComponent,

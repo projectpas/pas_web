@@ -418,9 +418,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
 
     getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallistnew?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
             return this.handleErrorCommon(error, () => this.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId));
         });
+        // workordermateriallist
     }
     getWorkOrderMaterialListNew(workFlowWorkOrderId, workOrderId, masterCompanyId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallistnew?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
@@ -532,10 +533,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
 
 
-    GetWorkflowtranserData(workOrderId) {
+    GetWorkflowtranserData(partNumberId) {
         // &masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkflowtranserData?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.GetWorkflowtranserData(workOrderId));
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkflowtranserData?partNumberId=${partNumberId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkflowtranserData(partNumberId));
         });
     }
 
@@ -1635,6 +1636,15 @@ export class WorkOrderEndpointService extends EndpointFactory {
           .get<any>(URL, this.getRequestHeaders())
           .catch(error => {
             return this.handleErrorCommon(error, () => this.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId));
+          });
+      }
+
+      GetWorkOrderQoutePrintFormData(WorkorderId: number,workOrderPartNoId : number,workflowWorkorderId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderQoutePrintData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}&workflowWorkorderId=${workflowWorkorderId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId));
           });
       }
 }
