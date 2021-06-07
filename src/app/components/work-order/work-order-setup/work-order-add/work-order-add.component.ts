@@ -3849,7 +3849,7 @@ this.woPartId=rowData.id;
         this.workFlowId=currentRecord.workflowId;
         this.workOrderId=this.workOrderId ? this.workOrderId :currentRecord.workOrderId;
 
-        this.workOrderService.GetWorkflowtranserData(this.workOrderId,).pipe(takeUntil(this.onDestroy$)).subscribe(res => 
+        this.workOrderService.GetWorkflowtranserData(currentRecord.itemMasterId).pipe(takeUntil(this.onDestroy$)).subscribe(res => 
         {
            this.workflowTransfer.Material =res.material 
            this.workflowTransfer.Labor =res.labor 

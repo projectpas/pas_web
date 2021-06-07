@@ -844,6 +844,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         `Quote ${isCreateQuote ? 'Created' : 'Updated'}  Succesfully`,
                         MessageSeverity.success
                     );
+                    if(isCreateQuote){
+                        this.getQuoteMaterialListByWorkOrderQuoteId();
+                    }
                     this.upDateDisabeldbutton=true;
                 },
                 err => {
@@ -2141,23 +2144,22 @@ const data={...newdata};
         }
     }
     markupChanged(matData, type) {
+        if(type == 'row' && matData && matData.markupPercentageId==""){
+            const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
+            matData['billingRate'] =  unitCost;
+            matData['billingAmount']=matData['billingRate']*Number(matData.quantity)
+            matData['billingRate']= matData['billingRate']>0?  formatNumberAsGlobalSettingsModule(matData['billingRate'],2) :'0.00';
+            matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
+       
+        }
         try {
             this.markupList.forEach((markup) => { 
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
                     matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label ? markup.label :0))
-
-
                     const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
                     const markupValue=  parseFloat(markup.label.toString().replace(/\,/g, ''));
                     matData['billingRate'] = ((unitCost / 100) * markupValue) + unitCost;
-
-
                     matData['billingAmount']=matData['billingRate']*Number(matData.quantity)
-
-
-              
-                    // matData['billingRate'] = Number(matData['unitCost'].toString().split(',').join('')) + (Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label ? markup.label :0)
-                    // matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
                     matData['billingRate']= matData['billingRate']>0?  formatNumberAsGlobalSettingsModule(matData['billingRate'],2) :'0.00';
                     matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
                 }
@@ -2362,7 +2364,9 @@ const data={...newdata};
         return total.toFixed(2);
         }
     }
-
+    formateCurren(value){
+        formatNumberAsGlobalSettingsModule(value, 2);
+    }
     totalTaskMaterialBillingAmount(data) {
         let total = 0;
         data.forEach(
@@ -3596,6 +3600,9 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
+                if(res && res.length ==0){
+                    this.loadworkorderData=true;
+                }
                 this.originlaMlist=res;
                 this.disableMat=true;
               this.getCondition('');

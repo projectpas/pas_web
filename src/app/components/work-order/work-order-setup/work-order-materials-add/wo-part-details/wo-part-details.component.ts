@@ -114,7 +114,6 @@ export class WoPartDetailsComponent implements OnChanges {
 
   ngOnInit() {    
    if(this.editData){
-     console.log("wo part edit Data",this.editData)
     this.disableforPartNum=true;
     this.formObject.restrictPMA= false,
     this.formObject.restrictDER= false,
@@ -267,8 +266,6 @@ export class WoPartDetailsComponent implements OnChanges {
       this.selectedMaterialPart=undefined;
       this.selectedMaterialPart=this.materialCreateObject;
       this.openSalesMargin();
-      console.log("this.hhhhh", this.selectedMaterialPart)
-      console.log("this.hhhhh", this.formObject)
       this.provisionListData.forEach(element => {
         if(element.value==this.formObject.provisionId){
           this.materialCreateObject.provision=element.label;
@@ -286,8 +283,6 @@ export class WoPartDetailsComponent implements OnChanges {
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject={};
     }
-    console.log("this.hhhhh", this.selectedMaterialPart)
-    console.log("this.hhhhh", this.formObject)
   }
   childPartChecked
   onChangeStock(event, part, salesMargin) {
@@ -363,8 +358,6 @@ export class WoPartDetailsComponent implements OnChanges {
   }
 
   getCheckBoxDisplay(stockLineItem, rowIndex, isStock) {
-    // console.log("part",this.selectedParts)
-    // console.log("stockLineItem",stockLineItem)
     if (this.selectedParts.length > 0) {
       let sameParts = [];
       if (isStock) {
@@ -625,7 +618,6 @@ newFormObject:any={};
             this.formObject.conditionIds.push(this.formObject.conditionId);
           } 
           this.searchQuery.partSearchParamters=this.formObject;
-          console.log("thisform obj",this.formObject)
           this.service.searchstocklinefromsoqpop(this.searchQuery)
             .subscribe(result => {
               this.isSpinnerVisible = false;

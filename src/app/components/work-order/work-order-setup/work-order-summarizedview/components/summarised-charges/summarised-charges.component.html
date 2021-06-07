@@ -78,12 +78,6 @@
         <tr *ngIf="materialMPN && materialMPN.isShowPlus ==false" class="sub-table no-bg">
             <td></td>
             <td colspan="22" class="p-0">
-                 <app-work-order-freight  [isSummarizedView]="true" 
-                      [workOrderFreightList]="workOrderFreightList"
-                    [isSubWorkOrder]="false" [isView]="true">
-                </app-work-order-freight> 
-                
-                
                 <app-work-order-charges [isSummarizedView]="true"  [isWorkOrder]="true"
                 [workOrderChargesList]="workOrderChargesList"
                 [isSubWorkOrder]="false" [isView]="true">

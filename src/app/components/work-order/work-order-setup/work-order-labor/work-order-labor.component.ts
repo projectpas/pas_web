@@ -916,7 +916,7 @@ return true;
         })
       }
     }
-
+console.log("this.laborfor",this.laborForm)
     this.saveFormdata = {
       ...this.laborForm,
       hoursorClockorScan: this.laborForm.hoursorClockorScan,
@@ -945,6 +945,9 @@ return true;
       this.saveFormdata.headerMarkupId = Number(this.overAllMarkup);
       this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
     } 
+    if(this.saveFormdata.costPlusType==3){
+      this.saveFormdata.laborFlatBillingAmount= this.flatAmount ? this.flatAmount : '0.00'
+    }
     this.saveworkOrderLabor.emit(this.saveFormdata);
     this.disabledUpdatebtn = true;
     this.isEdit = true;
@@ -1085,14 +1088,42 @@ return true;
     }
   }
   tmchange() {
+    if(this.laborForm.costPlusType==2){
+      if (this.markupList) {
+        this.markupList.forEach((markup) => {
+        for (let t in this.laborForm.workOrderLaborList[0]) {
+          for (let mData of this.laborForm.workOrderLaborList[0][t]) {
+            if (mData['billingMethodId'] == 1) {
+              this.overAllMarkup="";
+              this.overAllMarkup=0;
+              mData.markupPercentageId = this.overAllMarkup;
+              if (mData['totalCostPerHour'] && mData['totalCostPerHour']) {
+
+                if(this.overAllMarkup==0){
+                  mData['billingRate'] = ((mData['totalCostPerHour'])).toFixed(2)
+                  mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
+                  mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
+                }else{
+                  mData['billingRate'] = ((mData['totalCostPerHour']) + (((mData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
+                  mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
+                  mData['billingAmount'] =   (Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.hours)).toFixed(2);
+                }
+                
+              }
+            }
+          }
+        }
+    })
+  }
+}
     this.overAllMarkup = '';
     let billingMethodId = Number(this.laborForm.costPlusType);
     for (let t in this.laborForm.workOrderLaborList[0]) {
       for (let mData of this.laborForm.workOrderLaborList[0][t]) {
         if (this.laborForm.costPlusType && this.laborForm.costPlusType == 3) {
-          mData.billingAmount = 0.00;
-          mData.billingRate = 0.00;
-          this.laborForm['laborFlatBillingAmount'] = 0.00;
+          mData.billingAmount = '0.00';
+          mData.billingRate = '0.00';
+          this.laborForm['laborFlatBillingAmount'] = '0.00';
         }
         mData.billingMethodId = (billingMethodId == 3) ? '' : billingMethodId;
         if (billingMethodId == 2 || billingMethodId == 3) {
@@ -1102,7 +1133,10 @@ return true;
     }
   }
   markupChanged(matData, type) {
-
+    if(type == 'row' && matData && matData.markupPercentageId==""){
+      matData['billingRate'] = ((matData['totalCostPerHour'])).toFixed(2)
+      matData['billingAmount'] = (Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.hours)).toFixed(2);
+  }
     try {
       if (this.markupList) {
         this.markupList.forEach((markup) => {
@@ -1489,6 +1523,11 @@ return true;
         }
       )
     } 
+  }
+  flatAmount:any
+  formateCost(lForm){
+    this.laborForm.laborFlatBillingAmount = this.laborForm.laborFlatBillingAmount ? formatNumberAsGlobalSettingsModule(this.laborForm.laborFlatBillingAmount, 2) : '0.00';
+    this.flatAmount=this.laborForm.laborFlatBillingAmount;
   }
   formateCurrency(value) {
     if (value) {

@@ -51,7 +51,7 @@
         <input type="number" class="form-control   text-right" name="stocklineQuantity"
          [(ngModel)]="formObject.stocklineQuantity" 
           (input)="onChangeQuantityFromThis();calculateExtendedCost()" (ngModelChange)="getActive()"
-          name="quantity" autocomplete="off" />
+          name="quantity" autocomplete="off" [disabled]="part.method=='ItemMaster'" />
           <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
           <span style="color:red" *ngIf="part.method=='ItemMaster'">Value cannot be greater than qty to be required </span>
           <span style="color:red" *ngIf="part.method=='StockLine'">Value cannot be greater than qty to be required and qty available</span>

@@ -6,7 +6,7 @@
           </h4>
       </div>
       <button type="button" matTooltipPosition="above" matTooltip="Load Labor From Work Order" *ngIf="isLoadWoLabor && !isView" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadLabor()">
-        Load Work Order Labor
+        Load WO Labor
      </button>
   </div>
 </div>
@@ -355,8 +355,8 @@
                   </td> -->
                   <td>
                     <select class="form-control select-markup width-100"  (ngModelChange)="checkValid(24)" (change)="calculateBurderRate(rec);calculateTotalCost(rec)" [(ngModel)]="rec.burdaenRatePercentageId"
-                 >
-                 <!-- [disabled]="isView" -->
+                    [disabled]="true">
+                 <!-- [disabled]="isView || rec.billingMethodId != 1" -->
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
                     </select>
@@ -439,11 +439,11 @@
               </tr>
             </ng-container>
   </ng-container>
-  <tr *ngIf="isLoadWoLabor">
+  <!-- <tr *ngIf="isLoadWoLabor">
     <td colspan="14"  class="no-records-msg no-records-cstm">
         No records found
     </td> 
-</tr>
+</tr> -->
           <ng-container *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder'">
             <tr class="footer">
               <td><b>Total Labor Hours</b></td>
@@ -488,8 +488,8 @@
             </ng-container>
             <ng-container *ngIf="laborForm.costPlusType == 3 && isQuote">
               <td>
-                <input type="number" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount"
-                  [disabled]="isView" />
+                <input type="number" (ngModelChange)="checkValid(28)" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount"
+                  [disabled]="isView" (change)="formateCost(laborForm)"/>
               </td>
             </ng-container>
             <td *ngIf="!isQuote"></td>

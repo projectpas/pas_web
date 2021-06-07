@@ -94,22 +94,19 @@ export class WoMarginComponent implements OnInit, OnChanges {
         }
       } 
     }
-  
-
-// this.onChangeQuantityFromThis(); 
     if(this.editData){ 
+      this.formObject.newStocklineqty=this.formObject.stocklineQuantity;
      this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
      this.formObject.partDescription=this.editData.partDescription;
      this.formObject.conditionIds=[this.editData.conditionCodeId];
      if(this.isStockLine){  // from material List stock line edit
-       this.formObject.qtyAvailable = this.part.partQuantityAvailable;
+       this.formObject.qtyAvailable = this.part.stockLineQuantityAvailable;
        this.formObject.unitCost= this.editData.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(this.editData.stocklineUnitCost, 2) : '0.00';
        this.formObject.quantity=this.editData.quantity;
         this.formObject.qtyOnHand=this.editData.stockLineQuantityOnHand;
       }else{
       this.formObject.qtyAvailable=this.editData.qtyAvail;
       this.formObject.unitCost= this.part.unitCost ? formatNumberAsGlobalSettingsModule(this.part.unitCost, 2) : '0.00';
-      //this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
     }
     this.formObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
      this.formObject.taskId=this.editData.taskId;
@@ -123,6 +120,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();
+      
      }else{
       this.formObject.provisionId=0;
       this.getTaskList();
@@ -155,10 +153,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
         .subscribe(res => {
             this.isSpinnerVisible = false;
             this.provisionListData = [];
-                // this.provisionListData = res;
-
-
-                if (this.isSubWorkOrder) {
+              if (this.isSubWorkOrder) {
                   res.forEach(element => {
                       if (element.label != "Sub Work Order") {
                           this.provisionListData.push(element);
@@ -282,34 +277,30 @@ calculateExtendedCost(): void {
   }
   else {
       this.formObject.extendedCost = "";
-  }
-  // this.calculateExtendedCostSummation();
-}
-// errorMessage:any;
+  } 
+} 
 onChangeQuantityFromThis() {
-  // this.errorMessage=''; 
+
   this.invalidQuantityenteredForQuantityFromThis =false;
   if(this.part.method=='ItemMaster'){
-    if (Number(this.formObject.stocklineQuantity) != 0) {
-      if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
-        this.invalidQuantityenteredForQuantityFromThis =true;
-        this.disableUpdateButton=true;
-        // this.formObject.stocklineQuantity=this.formObject.quantity;
-      }
-      else   if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
-        this.invalidQuantityenteredForQuantityFromThis =true;
-        this.disableUpdateButton=true;
-        // this.formObject.stocklineQuantity=this.formObject.quantity;
-      }
-      else if (Number(this.formObject.stocklineQuantity) < 0)
-      {
-        this.invalidQuantityenteredForQuantityFromThis = true;
-        this.disableUpdateButton=true;
-      } 
-    } else {
-      this.invalidQuantityenteredForQuantityFromThis = true;
-      this.disableUpdateButton=true;
-    }
+    // if (Number(this.formObject.stocklineQuantity) != 0) {
+    //   if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+    //     this.invalidQuantityenteredForQuantityFromThis =true;
+    //     this.disableUpdateButton=true; 
+    //   }
+    //   else   if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
+    //     this.invalidQuantityenteredForQuantityFromThis =true;
+    //     this.disableUpdateButton=true; 
+    //   }
+    //   else if (Number(this.formObject.stocklineQuantity) < 0)
+    //   {
+    //     this.invalidQuantityenteredForQuantityFromThis = true;
+    //     this.disableUpdateButton=true;
+    //   } 
+    // } else {
+    //   this.invalidQuantityenteredForQuantityFromThis = true;
+    //   this.disableUpdateButton=true;
+    // }
   }else{
     if (Number(this.formObject.stocklineQuantity) != 0) {
       if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
@@ -317,7 +308,12 @@ onChangeQuantityFromThis() {
         // this.formObject.stocklineQuantity=this.formObject.quantity;
         this.disableUpdateButton=true;
       }
-      else if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
+   
+      else if ( this.isStockLine && Number(this.formObject.stocklineQuantity-this.formObject.newStocklineqty ) > Number(this.part.quantity-this.formObject.totalStocklineQtyReq)) {
+        this.invalidQuantityenteredForQuantityFromThis =true;
+        this.disableUpdateButton=true;
+        // this.formObject.stocklineQuantity=this.formObject.quantity;
+      }else if ( !this.isStockLine && Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
