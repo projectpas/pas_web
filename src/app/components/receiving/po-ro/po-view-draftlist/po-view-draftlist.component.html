@@ -219,8 +219,17 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    </ng-container>
+                                    </ng-container>                                    
                                 </tbody>
+                                <tfoot>
+                                    <ng-container>                                        
+                                        <tr *ngIf="purchaseOrderPart.length == 0">
+                                            <td [attr.colspan]="29" class="no-records-cstm no-records-msg">
+                                              No records found
+                                            </td>	
+                                        </tr>
+                                    </ng-container>
+                                </tfoot>
                             </table>
                             </div>
                         </div>

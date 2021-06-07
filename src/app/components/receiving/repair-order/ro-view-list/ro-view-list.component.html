@@ -53,8 +53,7 @@
                                 <!-- <label style="width:90px;">Dept:</label> -->
                                 {{part.departmentText}}
                             <th colspan="46"></th>
-                        </tr>
-    
+                        </tr>    
                         <ng-container>
                             <tr class="child-header splitship-head child-header-back" *ngIf="part.stockLine.length > 0">
                                 <!--<th>Stock Line</th>-->
@@ -261,6 +260,13 @@
                                 </tr>
                             </ng-container>    
                         </ng-container>
+                    </ng-container>
+                    <ng-container>
+                        <tr *ngIf="repairOrderDatas.length == 0">
+                            <td [attr.colspan]="29" class="no-records-cstm no-records-msg">
+                              No records found
+                            </td>	
+                        </tr>
                     </ng-container>
                 </tbody>
             </table>

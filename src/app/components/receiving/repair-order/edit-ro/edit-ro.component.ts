@@ -1322,6 +1322,9 @@ export class EditRoComponent implements OnInit {
         part.binId = 0;
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }
+                else {
                 SL.siteId = part.siteId;
                 SL.warehouseId = 0;
                 SL.locationId = 0;
@@ -1331,6 +1334,7 @@ export class EditRoComponent implements OnInit {
                 SL.LocationList = [];
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
         this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', part.siteId).subscribe(
@@ -1343,7 +1347,11 @@ export class EditRoComponent implements OnInit {
 
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
-                            SL.WareHouseList.push(dropdown);
+                            if (SL.stockLineId > 0) {
+                            }
+                            else {
+                                SL.WareHouseList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1360,6 +1368,8 @@ export class EditRoComponent implements OnInit {
         part.binId = 0;
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.warehouseId = part.warehouseId;
                 SL.locationId = 0;
                 SL.shelfId = 0;
@@ -1367,6 +1377,7 @@ export class EditRoComponent implements OnInit {
                 SL.LocationList = [];
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
         this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', part.warehouseId).subscribe(
@@ -1379,7 +1390,10 @@ export class EditRoComponent implements OnInit {
 
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
-                            SL.LocationList.push(dropdown);
+                            if (SL.stockLineId > 0) {
+                            }else {
+                                SL.LocationList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1393,11 +1407,14 @@ export class EditRoComponent implements OnInit {
         part.binId = 0;
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.locationId = part.locationId;
                 SL.shelfId = 0;
                 SL.binId = 0;
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
         this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', part.locationId).subscribe(
@@ -1409,7 +1426,10 @@ export class EditRoComponent implements OnInit {
                     part.ShelfList.push(dropdown);
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
-                            SL.ShelfList.push(dropdown);
+                            if (SL.stockLineId > 0) {
+                            }else {
+                                SL.ShelfList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1422,9 +1442,12 @@ export class EditRoComponent implements OnInit {
         part.binId = 0;
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.shelfId = part.shelfId;
                 SL.binId = 0;
                 SL.BinList = [];
+                }
             }
         }
         this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', part.shelfId).subscribe(
@@ -1436,7 +1459,10 @@ export class EditRoComponent implements OnInit {
                     part.BinList.push(dropdown);
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
+                            if (SL.stockLineId > 0) {
+                            }else {
                             SL.BinList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1447,7 +1473,10 @@ export class EditRoComponent implements OnInit {
     public setPartBinIdToStockline(part: RepairOrderPart): void {
         if (part.stockLine) {
             for (var SL of part.stockLine) {
-                SL.binId = part.binId;
+                if (SL.stockLineId > 0) {
+                } else {
+                    SL.binId = part.binId;
+                }
             }
         }
     }
@@ -1456,7 +1485,6 @@ export class EditRoComponent implements OnInit {
         if (part.stockLine) {
             for (var SL of part.stockLine) {
                 if (SL.stockLineId > 0) {
-
                 }
                 else {
                     SL.conditionId = part.conditionId;
