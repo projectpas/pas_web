@@ -818,10 +818,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
         this.quotationHeader.masterCompanyId = this.authService.currentUser.masterCompanyId,
-        this.quotationHeader.CreatedBy= this.userName
         this.quotationHeader.UpdatedBy= this.userName
         if(isCreateQuote)
         {
+            this.quotationHeader.CreatedBy= this.userName
             this.quotationHeader.CreatedDate= new Date().toDateString()
             this.quotationHeader.UpdatedDate= new Date().toDateString()
         }else
@@ -875,7 +875,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             SalesPersonId: quoteHeader.salesPersonId,
             EmployeeId: quoteHeader.employeeId,
             masterCompanyId: this.authService.currentUser.masterCompanyId,
-            createdBy: this.userName,
+            createdBy: quoteHeader.createdBy ? quoteHeader.createdBy :this.userName,
             updatedBy: this.userName,
             IsActive: true,
             IsDeleted: false,
@@ -1355,9 +1355,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "freightCostPlus": fre.freightCostPlus,
                 "taskId": fre.taskId,
                 "CreatedBy": this.userName,
-                "UpdatedBy":  this.userName,
-                "CreatedDate": new Date().toDateString(),
-                "UpdatedDate": new Date().toDateString(),
+                "UpdatedBy": this.userName,
+                "CreatedDate": "2019-10-31T09:06:59.68",
+                "UpdatedDate": "2019-10-31T09:06:59.68",
                 "IsActive": true,
                 "IsDeleted": fre.isDeleted,
                 "billingMethodId": Number(fre.billingMethodId),
@@ -1399,10 +1399,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.tabQuoteCreated['freight'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteFreightListByWorkOrderQuoteId();
-                // this.buildMethodDetails['freightBuildMethod'] = this.quoteFreightListPayload['freightBuildMethod'];
-                // this.buildMethodDetails['freightFlatBillingAmount']=this.quoteFreightListPayload['freightFlatBillingAmount'];
-   
-                //this.getBuildMethodDetails();
                 // this.partNumberSelected(this.selectedPartNumber);
                 this.alertService.showMessage(
                     this.moduleName,
@@ -1505,7 +1501,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "headerMarkupId": this.overAllMarkup,
                 "markupFixedPrice": this.costPlusType,
                 "CreatedBy": this.userName,
-                "UpdatedBy": this.userName,
+                "UpdatedBy":this.userName,
                 "IsActive": true,
                 "IsDeleted": mList.isDeleted
             } 
@@ -1684,7 +1680,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteChargesListByWorkOrderQuoteId();
-               // this.getBuildMethodDetails();
+                this.getBuildMethodDetails();
                 // this.partNumberSelected(this.selectedPartNumber);
                 this.alertService.showMessage(
                     this.moduleName,
@@ -1815,8 +1811,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.laborPayload.WorkOrderQuoteLaborHeader.masterCompanyId = this.authService.currentUser.masterCompanyId;
         this.laborPayload.WorkOrderQuoteLaborHeader['headerMarkupId'] = data.headerMarkupId;
         this.laborPayload.WorkOrderQuoteLaborHeader['markupFixedPrice'] = data.markupFixedPrice;
-        this.laborPayload.WorkOrderQuoteLaborHeader.CreatedBy = this.userName,
-        this.laborPayload.WorkOrderQuoteLaborHeader.UpdatedBy = this.userName,
+        this.laborPayload.WorkOrderQuoteLaborHeader.CreatedBy = this.userName;
+        this.laborPayload.WorkOrderQuoteLaborHeader.UpdatedBy = this.userName;
         this.laborPayload.WorkOrderQuoteLaborHeader.IsActive = true
         this.laborPayload.WorkOrderQuoteLaborHeader.IsDeleted = false;
         this.laborPayload['createdDate'] = (data.createdDate) ? data.createdDate : new Date();
@@ -2048,8 +2044,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    saveWorkOrderChargesList(data) 
-    {
+    saveWorkOrderChargesList(data) {
         if (!this.workOrderChargesList) {
             this.workOrderChargesList = [];
         }
@@ -2586,7 +2581,7 @@ const data={...newdata};
     showAlertMessage(warningMessage, restrictMessage) {
         if(!this.isView)
         {
-            // $('#warnRestrictMesg').modal("show");
+            $('#warnRestrictMesg').modal("show");
         }
     
         //   this.modal.close();
@@ -2674,7 +2669,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     }
 
     resetqouteprintData() {
-       // this.approvalGridActiveTab = '';
+        //this.approvalGridActiveTab = '';
         // this.internalApproversList = [];
         // this.approvalGridActiveTab = '';
     }
@@ -3513,7 +3508,6 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             for (let charge in this.workOrderChargesList) {
                 this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
                 this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
-                this.workOrderChargesList[charge]['billingAmount'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
             }
         },
         err => {
@@ -3552,8 +3546,8 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
        this.workorderMainService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId,false,0,false,this.authService.currentUser.masterCompanyId).subscribe((res: any[]) => {
            this.workOrderFreightList = res;
            for (let fre in this.workOrderFreightList) {
-               if (this.workOrderFreightList[fre]['amount']) {
-                   this.workOrderFreightList[fre]['billingAmount'] = Number(this.workOrderFreightList[fre]['amount'].toString().split(',').join('')).toFixed(2);
+               if (this.workOrderFreightList[fre]['billingAmount']) {
+                   this.workOrderFreightList[fre]['billingAmount'] = Number(this.workOrderFreightList[fre]['billingAmount'].toString().split(',').join('')).toFixed(2);
                }
            }
        }) 
@@ -3717,14 +3711,12 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.isSpinnerVisible = true;
             this.workOrderService.getQuoteFreightsList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
-
                 this.workOrderFreightList = res;
                 for (let fre in this.workOrderFreightList) {
                     if (this.workOrderFreightList[fre]['billingAmount']) {
                         this.workOrderFreightList[fre]['billingAmount'] = Number(this.workOrderFreightList[fre]['billingAmount'].toString().split(',').join('')).toFixed(2);
                     }
                 }
-
                 if (res.length > 0) {
                     this.isLoadWoFreights=false;
                     this.updateWorkOrderQuoteDetailsId(res[0].workOrderQuoteDetailsId)
@@ -3733,7 +3725,6 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                     // this.getWOFrieghtsList();
                     this.isLoadWoFreights=true;
                 }
-                
             },
             err => {
                 this.errorHandling(err);

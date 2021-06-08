@@ -23,7 +23,8 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="purchaseOrderDatas != undefined">
-                    <ng-container *ngFor="let part of purchaseOrderDatas;let row_index=index">
+                    
+                    <ng-container *ngFor="let part of purchaseOrderDatas;let row_index=index">                        
                         <tr *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
                             <td class="text-right">{{row_index + 1}}</td>
                             <td>{{part.itemMaster.partNumber}}</td>
@@ -60,7 +61,6 @@
                             </td>
                             <td colspan="45"></td>
                         </tr>
-
                         <ng-container>
                             <tr class="child-header splitship-head child-header-back" *ngIf="part.stockLine.length > 0">
                                 <!--part.stockLine != null-->
@@ -255,8 +255,16 @@
                                     </ng-container>
                                 </tr>
                             </ng-container>
-                        </ng-container>
+                        </ng-container>                        
+                    </ng-container>                   
+                    <ng-container>
+                        <tr *ngIf="purchaseOrderDatas.length == 0">
+                            <td [attr.colspan]="29" class="no-records-cstm no-records-msg">
+                              No records found
+                            </td>	
+                        </tr>
                     </ng-container>
+
                 </tbody>
             </table>
         </div>

@@ -126,12 +126,19 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);
         }
         if(this.buildMethodDetails){
-            if(this.buildMethodDetails['freightBuildMethod'] == null || this.buildMethodDetails['freightBuildMethod'] == undefined)
+            if(this.buildMethodDetails['freightBuildMethod'] == null || this.buildMethodDetails['freightBuildMethod'] == 0 || this.buildMethodDetails['freightBuildMethod'] == undefined)
             {
                 this.costPlusType = 1;
+                this.tmchange();
             }else{
                 this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
             }
+
+              if(this.isLoadWoFreights)
+            {
+                this.tmchange();
+            }
+            
            
             if(this.buildMethodDetails['freightFlatBillingAmount']){
                 this.freightFlatBillingAmount = this.formateCurrency(this.buildMethodDetails['freightFlatBillingAmount']);
@@ -177,12 +184,19 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         
         if(this.buildMethodDetails)
         {
-            if(this.buildMethodDetails['freightBuildMethod'] == null || this.buildMethodDetails['freightBuildMethod'] == undefined)
+            if(this.buildMethodDetails['freightBuildMethod'] == null || this.buildMethodDetails['freightBuildMethod'] == 0  || this.buildMethodDetails['freightBuildMethod'] == undefined)
             {
                 this.costPlusType = 1;
+                
             }else{
                 this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
             }
+
+            if(this.isLoadWoFreights)
+            {
+                this.tmchange();
+            }
+          
             if(this.buildMethodDetails['freightFlatBillingAmount']){
                 this.freightFlatBillingAmount = this.formateCurrency(this.buildMethodDetails['freightFlatBillingAmount']);
             }
@@ -517,10 +531,12 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
 
     tmchange() {
+        let billingMethodId = Number(this.costPlusType);
         for (let mData of this.workOrderFreightList) {
             mData.forEach(
               (x)=>{
-                x.billingMethodId = this.costPlusType;
+                x.billingMethodId = (billingMethodId == 3) ? '' : billingMethodId;
+               // x.billingMethodId = this.costPlusType;
                 x.markupPercentageId = '';
                 x.billingAmount = this.formateCurrency(Number(x.amount.toString().replace(/\,/g,'')));
                 // if(this.costPlusType == 3){

@@ -286,7 +286,8 @@
                                 <td class="text-right">{{part.stockLineCount}}</td>
                                 <td class="text-right">{{part.quantityRejected}}</td>
                                 <td class="text-right">{{part.quantityBackOrdered}}</td>
-                                <td>{{ part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered ? 'Fulfilling' : 'Received' }} </td>
+                                <td>{{ part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered
+                                        ? 'Fulfilling' : 'Received' }} </td>
                                 <td colspan="4">
                                     {{part?.level1}},{{part?.level2}}, {{part?.level3}},{{part?.level4}}
                                 </td>
@@ -337,7 +338,7 @@
                                 <!-- <th class="min-width-40"></th> -->
                                 <th>PN</th>
                                 <th class="min-width-60">Qty Ord</th>
-                                <th class="min-width-80">Qty Drafted</th>                                 
+                                <th class="min-width-80">Qty Drafted</th>
                                 <th class="min-width-80">Qty Received</th>
                                 <th class="min-width-80">Qty Rejected</th>
                                 <th class="min-width-60">Back Ord</th>
@@ -351,8 +352,8 @@
                                 <th></th>
                                 <th></th>
                                 <!-- <th></th> -->
-                              
-                                
+
+
                                 <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
                             </tr>
                             <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
@@ -725,7 +726,13 @@
                                                     </div>
                                                     <div class="form-group"
                                                         *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType != undefined && part.stocklineListObj[part.currentSLIndex].obtainFromType > 0">
-                                                        <label>{{part.stocklineListObj[part.currentSLIndex].obtainFromType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].obtainFromType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].obtainFromType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
+                                                        <label>{{part.stocklineListObj[part.currentSLIndex].obtainFromType
+                                                            == customerModuleId ? 'Select Customer' :
+                                                            part.stocklineListObj[part.currentSLIndex].obtainFromType ==
+                                                            vendorModuleId ? 'Select Vendor' :
+                                                            part.stocklineListObj[part.currentSLIndex].obtainFromType ==
+                                                            companyModuleId ? 'Select Company' : 'Enter Other'
+                                                            }}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete
@@ -793,8 +800,14 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group"
-                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType != undefined && part.stocklineListObj[part.currentSLIndex].ownerType > 0">                                                        
-                                                        <label>{{part.stocklineListObj[part.currentSLIndex].ownerType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].ownerType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].ownerType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
+                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType != undefined && part.stocklineListObj[part.currentSLIndex].ownerType > 0">
+                                                        <label>{{part.stocklineListObj[part.currentSLIndex].ownerType ==
+                                                            customerModuleId ? 'Select Customer' :
+                                                            part.stocklineListObj[part.currentSLIndex].ownerType ==
+                                                            vendorModuleId ? 'Select Vendor' :
+                                                            part.stocklineListObj[part.currentSLIndex].ownerType ==
+                                                            companyModuleId ? 'Select Company' : 'Enter Other'
+                                                            }}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete
@@ -860,8 +873,14 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group"
-                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType != undefined && part.stocklineListObj[part.currentSLIndex].traceableToType > 0">                                                        
-                                                        <label>{{part.stocklineListObj[part.currentSLIndex].traceableToType == customerModuleId ? 'Select Customer' : part.stocklineListObj[part.currentSLIndex].traceableToType == vendorModuleId ? 'Select Vendor' : part.stocklineListObj[part.currentSLIndex].traceableToType == companyModuleId ? 'Select Company' : 'Enter Other' }}</label>
+                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType != undefined && part.stocklineListObj[part.currentSLIndex].traceableToType > 0">
+                                                        <label>{{part.stocklineListObj[part.currentSLIndex].traceableToType
+                                                            == customerModuleId ? 'Select Customer' :
+                                                            part.stocklineListObj[part.currentSLIndex].traceableToType
+                                                            == vendorModuleId ? 'Select Vendor' :
+                                                            part.stocklineListObj[part.currentSLIndex].traceableToType
+                                                            == companyModuleId ? 'Select Company' : 'Enter Other'
+                                                            }}</label>
                                                         <div class="form-row">
                                                             <div class="col-sm-12">
                                                                 <p-autoComplete
@@ -967,10 +986,11 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label>UOM <strong class="clr-red">*</strong></label>
-                                                        <p-dropdown class="p-dropdown-100" 
+                                                        <p-dropdown class="p-dropdown-100"
                                                             [options]="allPurchaseUnitOfMeasureinfo" filter="true"
-                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].unitOfMeasureId" name="purchaseUnitOfMeasureId"
-                                                            [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required>
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].unitOfMeasureId"
+                                                            name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true"
+                                                            placeholder="-- Select --" [showClear]="true" required>
                                                         </p-dropdown>
                                                     </div>
                                                     <div class="form-group">
@@ -1049,11 +1069,11 @@
                                                     <div class="form-group">
                                                         <label>Tag By</label>
                                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedBy" name="taggedBy"
-                                                            [suggestions]="TagByNames" (completeMethod)="filterTagEmployees($event)"
-                                                            [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" 
-                                                                                                             
-                                                            [forceSelection]="true">
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedBy"
+                                                            name="taggedBy" [suggestions]="TagByNames"
+                                                            (completeMethod)="filterTagEmployees($event)" [size]="30"
+                                                            [minLength]="1" [dropdown]="true"
+                                                            errorMessage="Records not found" [forceSelection]="true">
                                                         </p-autoComplete>
                                                     </div>
                                                     <!-- (onSelect)="onTagbySelect(part.stocklineListObj[part.currentSLIndex])"  -->
@@ -1137,7 +1157,9 @@
                                                                     [hidden]="part.itemMaster.isSerialized"
                                                                     [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided"
                                                                     (click)="onSerialNumberNotProvided(part.stocklineListObj[part.currentSERIndex])">
-                                                                <span class="cr">
+                                                                <span class="cr"
+                                                                    [ngStyle]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided ?{'background-color':'#a9a9a9'} : {'background-color': 'white'}">
+
                                                                     <i class="cr-icon pi pi-check"></i>
                                                                 </span>
                                                                 Serial Number not provided
