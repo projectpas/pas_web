@@ -818,10 +818,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
         this.quotationHeader.masterCompanyId = this.authService.currentUser.masterCompanyId,
-        this.quotationHeader.CreatedBy= this.userName
         this.quotationHeader.UpdatedBy= this.userName
         if(isCreateQuote)
         {
+            this.quotationHeader.CreatedBy= this.userName
             this.quotationHeader.CreatedDate= new Date().toDateString()
             this.quotationHeader.UpdatedDate= new Date().toDateString()
         }else
@@ -844,9 +844,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         `Quote ${isCreateQuote ? 'Created' : 'Updated'}  Succesfully`,
                         MessageSeverity.success
                     );
-                    if(isCreateQuote){
-                        this.getQuoteMaterialListByWorkOrderQuoteId();
-                    }
                     this.upDateDisabeldbutton=true;
                 },
                 err => {
@@ -875,7 +872,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             SalesPersonId: quoteHeader.salesPersonId,
             EmployeeId: quoteHeader.employeeId,
             masterCompanyId: this.authService.currentUser.masterCompanyId,
-            createdBy: this.userName,
+            createdBy: quoteHeader.createdBy,
             updatedBy: this.userName,
             IsActive: true,
             IsDeleted: false,
@@ -2149,6 +2146,7 @@ const data={...newdata};
         }
     }
     markupChanged(matData, type) {
+        try {
         console.log("this.materialListQuotation",this.overAllMarkup); 
         if(type == 'row' && matData && matData.markupPercentageId==""){
             const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
@@ -2158,14 +2156,22 @@ const data={...newdata};
             matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
        
         }
-        // try {
             this.markupList.forEach((markup) => { 
                 if (type == 'row' && markup.value == matData.markupPercentageId) {
                     matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label ? markup.label :0))
+
+
                     const unitCost = parseFloat(matData['unitCost'].toString().replace(/\,/g, ''));
                     const markupValue=  parseFloat(markup.label.toString().replace(/\,/g, ''));
                     matData['billingRate'] = ((unitCost / 100) * markupValue) + unitCost;
+
+
                     matData['billingAmount']=matData['billingRate']*Number(matData.quantity)
+
+
+              
+                    // matData['billingRate'] = Number(matData['unitCost'].toString().split(',').join('')) + (Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label ? markup.label :0)
+                    // matData['billingAmount'] = this.formateCurrency(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity));
                     matData['billingRate']= matData['billingRate']>0?  formatNumberAsGlobalSettingsModule(matData['billingRate'],2) :'0.00';
                     matData['billingAmount']= matData['billingAmount']>0?  formatNumberAsGlobalSettingsModule(matData['billingAmount'],2) :'0.00';
                 }
@@ -2391,9 +2397,7 @@ const data={...newdata};
         return total.toFixed(2);
         }
     }
-    formateCurren(value){
-        formatNumberAsGlobalSettingsModule(value, 2);
-    }
+
     totalTaskMaterialBillingAmount(data) {
         let total = 0;
         data.forEach(
@@ -3508,11 +3512,12 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.isSpinnerVisible = true;
         this.workorderMainService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,false,this.authService.currentUser.masterCompanyId).subscribe((res: any[]) => {
             this.isSpinnerVisible = false;
-            this.isLoadWoCharges=false;
+            this.isLoadWoCharges=true;
             this.workOrderChargesList = res;
             for (let charge in this.workOrderChargesList) {
                 this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
                 this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
+                //this.workOrderChargesList[charge]['billingRate'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
                 this.workOrderChargesList[charge]['billingAmount'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
             }
         },
@@ -3633,9 +3638,6 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
-                if(res && res.length ==0){
-                    this.loadworkorderData=true;
-                }
                 this.originlaMlist=res;
                 this.disableMat=true;
               this.getCondition('');
@@ -3760,6 +3762,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 for (let charge in this.workOrderChargesList) {
                     this.workOrderChargesList[charge]['unitCost'] = Number(this.workOrderChargesList[charge]['unitCost'].toString().split(',').join('')).toFixed(2);
                     this.workOrderChargesList[charge]['extendedCost'] = Number(this.workOrderChargesList[charge]['extendedCost'].toString().split(',').join('')).toFixed(2);
+                    
                 }
                 if (res.length > 0) {
                     this.isLoadWoCharges=false;
