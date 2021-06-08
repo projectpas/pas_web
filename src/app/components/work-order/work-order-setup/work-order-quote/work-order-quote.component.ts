@@ -844,7 +844,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         `Quote ${isCreateQuote ? 'Created' : 'Updated'}  Succesfully`,
                         MessageSeverity.success
                     );
+                    console.log("quote createddd",isCreateQuote)
                     if(isCreateQuote){
+                        console.log("quote createddd",)
                         this.getQuoteMaterialListByWorkOrderQuoteId();
                     }
                     this.upDateDisabeldbutton=true;
@@ -3461,15 +3463,16 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.getTaskList('');
             this.isLoadWoLabor=false;
 
-            let laborList = this.labor.workOrderLaborList;
-            this.labor = { ...res, workOrderLaborList: laborList };
-            this.labor.hoursorClockorScan = undefined;
-            this.labor.workFlowWorkOrderId = this.workFlowWorkOrderId; 
 
-       setTimeout(() => {
-        this.taskList.forEach(task => {
-            this.labor.workOrderLaborList[0][task.description] = [];
-        });
+
+            setTimeout(() => {
+                let laborList = this.labor.workOrderLaborList;
+                this.labor = { ...res, workOrderLaborList: laborList };
+                this.labor.hoursorClockorScan = undefined;
+                this.labor.workFlowWorkOrderId = this.workFlowWorkOrderId; 
+            this.taskList.forEach(task => {
+                this.labor.workOrderLaborList[0][task.description] = [];
+            });
         this.taskList.forEach((tl) => {
             if (res) {
 
@@ -3627,7 +3630,9 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
             this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
+                console.log('res 3')
                 if(res && res.length ==0){
+                    console.log('res 0')
                     this.loadworkorderData=true;
                 }
                 this.originlaMlist=res;
