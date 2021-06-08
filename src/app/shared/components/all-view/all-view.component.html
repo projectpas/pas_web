@@ -575,7 +575,7 @@
         </p-tabPanel>
         
         <p-tabPanel header="Receiving Draft" *ngIf="this.isReceivingpo">
-          <app-po-view-draftlist *ngIf="showreceiveddraftpo" [purchaseOrderData]="purchaseOrderData"></app-po-view-draftlist>
+          <app-po-view-draftlist *ngIf="purchaseOrderData" [purchaseOrderData]="purchaseOrderData"></app-po-view-draftlist>
         </p-tabPanel>
 
        <p-tabPanel header="Receiving" *ngIf="this.isReceivingpo">
@@ -594,13 +594,11 @@
                 <tr class="header-table-width">
                   <th>PN <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>ALT/Equiv PN</th>
-                  <th>PN Description</th>	
-                  <th>Revised PN <span _ngcontent-c22="" class="clr-red">*</span></th>											
+                  <th>PN Description</th>												
                   <th>Stock Type</th>
                   <th>Mfr</th>												
                   <th class="min-width-70">Priority<span _ngcontent-c22="" class="clr-red">*</span></th>												
                   <th class="min-width-70">Need By <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th class="min-width-70">Est. Rec'd Date <span _ngcontent-c22="" class="clr-red">*</span></th>                  
                   <th class="min-width-70">Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th class="min-width-70">Order Qty <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th class="min-width-70">Vend List Price<span _ngcontent-c22="" class="clr-red">*</span></th>												
@@ -613,7 +611,6 @@
                   <th class="min-width-70">FX Rate <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>Report CUR <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>Stk Line Num <span class="clr-red">*</span></th>
-                  <th>Work to Perform <span class="clr-red">*</span></th>                  
 							    <th>Control Id</th>
 							    <th>Control Num</th>
 							    <th class="min-width-80">PO Num</th>
@@ -622,7 +619,6 @@
                   <th class="min-width-80">SO Num</th>
                   <th>Item Type</th>
                   <th>GL Account</th>
-                  <th>AC Tail Num <span class="clr-red">*</span></th>                  
                   <th>UOM</th>
                   <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>Notes</th>
@@ -633,13 +629,11 @@
                   <tr class="parent-data purchase-td-back">
                     <td>{{partList?.partNumber}}</td>
                     <td>{{partList?.altEquiPartNumber}}</td>
-                    <td>{{partList?.partDescription}}</td>
-                    <td>{{partList?.revisedPartNumber}}</td>														
+                    <td>{{partList?.partDescription}}</td>												
                     <td>{{partList?.stockType}}</td>
                     <td>{{partList?.manufacturer}}</td>													
                     <td>{{partList?.priority}}</td>
                     <td>{{partList?.needByDate | date: 'MM/dd/yyyy' }}</td>
-                    <td>{{partList?.estRecordDate | date: 'MM/dd/yyyy' }}</td>
                     <td>{{partList?.condition}}</td>
                     <td class="text-right">{{partList?.quantityOrdered}}</td>
                     <td class="text-right">{{partList?.vendorListPrice}}</td>
@@ -652,7 +646,6 @@
                     <td class="text-right">{{partList?.foreignExchangeRate}}</td>
                     <td>{{partList?.reportCurrency}}</td>
                     <td>{{partList?.stockLineNumber}}</td>
-                    <td>{{partList?.workPerformed}}</td>
                     <td>{{partList?.controlId}}</td>
                     <td>{{partList?.controlNumber}}</td>
                     <td>{{partList?.purchaseOrderNumber}}</td>
@@ -662,7 +655,6 @@
                     <td>{{partList?.salesOrderNo}}</td>
                     <td>{{partList?.itemType}}</td>
                     <td>{{partList?.glAccount}}</td>
-                    <td>{{partList?.acTailNum}}</td>                    
                     <td>{{partList?.unitOfMeasure}}</td>
                     <td colspan="4">{{partList?.level1}}, {{partList?.level2}}, {{partList?.level3}}, {{partList?.level4}}</td>
                     <td>
@@ -681,7 +673,7 @@
                     <th>Order Qty<span _ngcontent-c22="" class="clr-red">*</span></th>
                     <th>Need By<span _ngcontent-c22="" class="clr-red">*</span></th>
                     <th colspan="4" class="table-child-header-mgmt">Management Structure</th>
-                    <th colspan="19"></th>
+                    <th colspan="15"></th>
                   </tr>
                   <tr class="child-data child-data-back" *ngFor="let partChild of partList.repairOrderSplitParts">
                     <td></td>													
@@ -702,7 +694,7 @@
                     <td class="text-right">{{partChild?.quantityOrdered}}</td>
                     <td>{{partChild?.needByDate | date: 'MM/dd/yyyy' }}</td>
                     <td colspan="4">{{partChild?.level1}}, {{partChild?.level2}}, {{partChild?.level3}}, {{partChild?.level4}}</td>
-                    <td colspan="19"></td>
+                    <td colspan="15"></td>
                   </tr>												
                 </ng-container>
 
@@ -736,11 +728,9 @@
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
+    <td>&nbsp;</td>
+   
+                  
                 </tr>
                 <tr  *ngIf="roPartsList.length == 0" >
                   <td [attr.colspan]="29"   class="no-records-cstm no-records-msg">
@@ -981,7 +971,8 @@
         </p-tabPanel> 
 
         <p-tabPanel header="Receiving Draft" *ngIf="this.isReceivingro">
-          <app-ro-view-draftlist *ngIf="showreceiveddraft" [repairOrderData]="repairOrderData"></app-ro-view-draftlist>
+          <app-ro-view-draftlist *ngIf="repairOrderData.length > 0" [repairOrderData]="repairOrderData"></app-ro-view-draftlist>
+          
         </p-tabPanel>
 
         <p-tabPanel header="Receiving" *ngIf="this.isReceivingro">
