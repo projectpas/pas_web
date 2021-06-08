@@ -466,6 +466,9 @@ export class WorkOrderService {
     createSubWorkOrderMaterialList(data) {
         return this.workOrderEndpointService.createSubWorkOrderMaterialList(data)
     }
+    updatesubworkordermaterials(data) {
+        return this.workOrderEndpointService.updatesubworkordermaterials(data)
+    }
     // createWorkOrderMaterialListNew(data) {
     //     return this.workOrderEndpointService.createWorkOrderMaterialListNew(data)
     // }

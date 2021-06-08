@@ -89,9 +89,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       itemsShowLimit: 2,
       allowSearchFilter: false
     }; 
-    this.taskList = [];
+    this.taskList = []; 
     this.allTaskList = [];
-    console.log("labortaskList",this.labortaskList)
     this.allTaskList = [...this.labortaskList];
     this.taskList = [...this.labortaskList];
  if(!this.isQuote){
@@ -107,7 +106,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   this.labortaskList.forEach(
     (task) => {
       if (task['description'] != "all task") {
-        // this.taskList=[];
         this.taskList.push(task);
       }
     }
@@ -175,7 +173,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     //     }
     //   }
     // )
-    console.log("labortaskList",this.labortaskList)
     this.islaborCreated=this.islaborCreated;
     if (this.workOrderLaborList != undefined) {
       this.laborTaskData = this.workOrderLaborList;
@@ -388,6 +385,7 @@ setTimeout(() => {
   }
   onPartSelect(event, currentRecord) {  
     // currentRecord.directLaborOHCost=event.overHeadBurden; 
+    debugger;
     if(this.basicLabourDetail){
       // currentRecord.burdaenRatePercentageId=
       if(this.basicLabourDetail.laborRateId==2){
@@ -396,10 +394,13 @@ setTimeout(() => {
         currentRecord.directLaborOHCost=event.hourlyPay; 
       }
     
+    }else{
+      currentRecord.directLaborOHCost=event.hourlyPay; 
     }
     // currentRecord.burdaenRatePercentageId = this.basicLabourDetail['flatAmount'];
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
     // if(this.basicLabourDetail){
+      
     this.calculateBurderRate(currentRecord);
     // }
   }
