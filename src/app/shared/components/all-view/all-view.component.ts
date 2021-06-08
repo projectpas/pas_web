@@ -72,7 +72,9 @@ export class AllViewComponent implements OnInit {
   id: number;
 
   //showPartListtab: boolean = false;
+  showreceiveddraftpo : boolean = false;
   showreceived : boolean = false;
+  showreceiveddraft : boolean = false;
   showVendorCaptab: boolean = false;
   purchaseOrderData: PurchaseOrder;
   repairOrderData: RepairOrderPart[] = [];
@@ -217,6 +219,7 @@ export class AllViewComponent implements OnInit {
 
     if (event.index == 7 && this.isReceivingpo == true) {
       //this.isSpinnerVisible = true;
+      this.showreceiveddraftpo = true;  
       if (!this.purchaseOrderData) {
         this.viewPurchaseOrder(this.id);
       }
@@ -230,7 +233,8 @@ export class AllViewComponent implements OnInit {
     if (event.index == 7 && this.isReceivingro == true) {
       //this.isSpinnerVisible = true;      
       //if(this.repairOrderData.length>0){  
-      this.repairOrderId = this.id;                
+      this.repairOrderId = this.id;   
+      this.showreceiveddraft = true;             
       this.viewRepairOrder(this.id);      
     }
     if (event.index == 8 && this.isReceivingro == true) {

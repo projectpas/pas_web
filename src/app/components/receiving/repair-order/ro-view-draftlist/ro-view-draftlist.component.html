@@ -15,7 +15,7 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody *ngIf="repairOrderPart != undefined">
+                                <tbody *ngIf="repairOrderPart != undefined">                                    
                                     <ng-container *ngFor="let part of repairOrderPart;let row_index=index">
                                         <tr class="basic-info" *ngIf="part.stockLine != null && part.stockLine.length > 0">
                                             <td>{{row_index + 1}}</td>
@@ -222,8 +222,17 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    </ng-container>
+                                    </ng-container>                                    
                                 </tbody>
+                                <tfoot> 
+                                    <ng-container>
+                                        <tr *ngIf="repairOrderPart.length == 0">
+                                            <td [attr.colspan]="29" class="no-records-cstm no-records-msg">
+                                              No records found
+                                            </td>	
+                                        </tr>
+                                    </ng-container>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
