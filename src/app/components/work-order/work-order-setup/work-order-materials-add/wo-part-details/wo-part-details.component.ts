@@ -131,6 +131,13 @@ export class WoPartDetailsComponent implements OnChanges {
     this.formObject.quantity=this.editData.quantity;
     this.formObject.qtyOnHand=this.editData.qtyOnHand;
     this.formObject.qtyAvailable=this.editData.qtyAvail;
+    if(this.isSubWorkOrder){
+      this.materialCreateObject.subWorkOrderMaterialsId=this.editData.subWorkOrderMaterialsId;
+      this.materialCreateObject.workOrderMaterialsId=0;
+     }else{
+      this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+      this.materialCreateObject.subWorkOrderMaterialsId=0;
+     }
     this.search();
    }else{
    }
@@ -253,7 +260,15 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.taskId=this.formObject.taskId;
       this.materialCreateObject.qtyOnHand = part.qtyOnHand;
       this.materialCreateObject.qtyAvailable = part.qtyAvailable;
-      this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
+      this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :0;
+      
+      if(this.isSubWorkOrder){
+        this.materialCreateObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId ?this.formObject.subWorkOrderMaterialsId :0;
+        this.materialCreateObject.workOrderMaterialsId=0;
+       }else{
+        this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId ? this.formObject.workOrderMaterialsId :0;
+        this.materialCreateObject.subWorkOrderMaterialsId=0;
+       }
       this.materialCreateObject.stockLineId= null;
       this.materialCreateObject.quantity=this.formObject.quantity;
       this.materialCreateObject.provisionId=this.formObject.provisionId;
@@ -311,6 +326,13 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject.qtyOnHand = part.qtyOnHand;
     this.materialCreateObject.qtyAvailable = part.qtyAvailable;
     this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :1;
+    if(this.isSubWorkOrder){
+      this.materialCreateObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId ?this.formObject.subWorkOrderMaterialsId :null;
+      this.materialCreateObject.workOrderMaterialsId=0;
+     }else{
+      this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId ? this.formObject.workOrderMaterialsId :null;
+      this.materialCreateObject.subWorkOrderMaterialsId=0;
+     }
     this.materialCreateObject.stockLineId= part.stockLineId;
     this.materialCreateObject.quantity=this.formObject.quantity
     this.materialCreateObject.provisionId=this.formObject.provisionId;
