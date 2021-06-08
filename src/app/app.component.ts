@@ -155,602 +155,202 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       },
       {
-        label: 'Master',
+        label: 'CRM/Customer',
         icon: 'fa fa-fw fa-group',
         items: [
           [
             {
-              label: 'Customers',
+              label: 'Customer',
               items: [
                 {
-                  label: 'Customers List',
+                  label: 'Customer/Account List',
                   routerLink:
                     '/customersmodule/customerpages/app-customers-list',
                 },
+               
+              ],
+            },
+            {
+              label: 'Sales Order Quote',
+              items: [
                 {
-                  label: 'Create Customer',
+                  label: 'Sales Order Quote List',
+                  routerLink: '/salesmodule/salespages/sales-quote-list',
+                },
+                {
+                label: 'Sales Order Speed Quote List',
+                routerLink: '/salesmodule/salespages/speed-quote-list',
+                },
+               
+              ],
+            },
+            {
+              label: 'Work Order Quote',
+              items: [
+                {
+                  label: 'Work Order Quote List',
                   routerLink:
-                    '/customersmodule/customerpages/app-customer-create',
-                },
-              ],
-            },
-            {
-              label: 'Invoice',
-              items: [
-                { label: 'Invoice List', routerLink: '/#' },
-                { label: 'Create Invoice', routerLink: '/#' },
-                { label: 'Customer RMA', routerLink: '/#' },
-              ],
-            },
-            {
-              label: 'Reports & Forms',
-              items: [
-                { label: 'Invoice Register', routerLink: '' },
-                { label: 'Invoice Batches', routerLink: '' },
-                {
-                  label: 'Customer Statement Report', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
-                  }
-                }
-              ],
-            },
-          ],
-          [
-            {
-              label: 'Vendor',
-              items: [
-                {
-                  label: 'Vendor List',
-                  routerLink: '/vendorsmodule/vendorpages/app-vendors-list',
+                    '/workordersmodule/workorderspages/app-work-order-quote-list',
                 },
                 {
-                  label: 'Create Vendor',
-                  command: (event?: any) => {
-                    this.newVendorClick();
-                  },
+                label: 'Work Order Speed Quote',
+                routerLink: '/#',
                 },
+               
               ],
             },
             {
-              label: 'Vendor Capabilities',
+              label: 'Reports ',
               items: [
-                {
-                  label: 'Vendor Capes List',
-                  routerLink:
-                    '/vendorsmodule/vendorpages/app-vendor-capabilities-list',
-                },
-                {
-                  label: 'Create Vendor Capes',
-                  routerLink:
-                    '/vendorsmodule/vendorpages/app-add-vendor-capabilities',
-                },
-                {
-                  label: 'Capes Report', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/Reports/report/Report%20Project1/Capabilities');
-                  }
-                }
+                { label: 'Revenue Trends', routerLink: '' },
+                { label: 'Accounts Receivable', routerLink: '' },
+                // {
+                //   label: 'Customer Statement Report', command: (event?: any) => {
+                //     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
+                //   }
+                // }
               ],
             },
-            {
-              label: 'Reports & Forms',
-              items: [
-                { label: 'Open RO Report', routerLink: '/#' },
-                // { label: 'Repair Order WO/SO', routerLink: '/#' },
-              ],
-            },
-          ],
-          [
-            {
-              label: 'Employees',
-              items: [
-                {
-                  label: 'Employee List',
-                  routerLink:
-                    '/employeesmodule/employeepages/app-employees-list',
-                },
-                // { label: 'Create Employee', routerLink: '/employeesmodule/employeepages/app-employee-general-information' },
-                {
-                  label: 'Create Employee',
-                  command: (event?: any) => {
-                    this.newEmployeeClick();
-                  },
-                },
-              ],
-            },
-            {
-              label: 'Expense Reports',
-              items: [
-                { label: 'Expense List', routerLink: '/#' },
-                { label: 'Create', routerLink: '/#' },
-                { label: 'Approval', routerLink: '/#' },
-              ],
-            },
-            {
-              label: 'Reports & Forms',
-              items: [
-                { label: 'Employee List Report', routerLink: '/#' },
-                { label: 'Productivity', routerLink: '/#' },
-                { label: 'Commission', routerLink: '/#' },
-              ],
-            },
-          ],
-          [
-            {
-              label: 'Publications',
-              icon: 'fa fa-fw fa-newspaper-o',
-              items: [
-                {
-                  label: 'Publications List',
-                  routerLink: '/singlepages/singlepages/app-publication',
-                },
-                {
-                  label: 'Create Publications',
-                  routerLink: '/singlepages/singlepages/app-create-publication',
-                },
-              ],
-            },
-            {
-              label: 'Reports & Forms',
-              items: [{ label: 'CMM by PIN', routerLink: '/#' },
-              {
-                label: 'Publication Tracking', command: (event?: any) => {
-                  this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPublication+Tracking&rs:Command=Render');
-                }
-              }],
-            },
-
-          ],
-          [
             {
               label: 'CRM',
-              icon: 'fa fa-funnel-dollar',
               items: [
                 {
-                  label: 'CRM List',
+                  label: 'Account List',
                   routerLink: '/customersmodule/customerpages/app-crm-list',
                 },
                 {
-                  label: 'Deals List',
-                  routerLink: '/customersmodule/customerpages/app-deals-list',
+                  label: 'Account Assignment',
+                  routerLink: '',
+                },
+               
+                {
+                  label: 'Lead List',
+                  routerLink: '/customersmodule/customerpages/app-leads-list',
                 },
                 {
-                  label: 'Leads List',
-                  routerLink: '/customersmodule/customerpages/app-leads-list',
+                  label: 'Deal List',
+                  routerLink: '/customersmodule/customerpages/app-deals-list',
                 },
                 {
                   label: 'Opportunity List',
                   routerLink: '/customersmodule/customerpages/app-opportunity-list',
                 },
+                {
+                  label: 'Conversion',
+                  routerLink: '',
+                },
               ],
             },
-
+            {
+              label: 'Reports',
+              items: [
+                {
+                  label: 'Actual vs Quota',
+                  routerLink: '',
+                },
+                {
+                  label: 'Salesperson Performance',
+                  routerLink: '',
+                },
+               
+                {
+                  label: 'Revenue Trends',
+                  routerLink: '',
+                },
+                {
+                  label: 'Accounts Receivable',
+                  routerLink: '',
+                },
+                
+                {
+                  label: 'Win Loss Ratio',
+                  routerLink: '',
+                },
+              ],
+            },
           ],
+        
         ],
       },
       {
-        label: 'Accounts',
+        label: 'Inventory Management',
         icon: 'fa fa-fw fa-list-alt',
         items: [
           [
             {
-              label: 'General Ledger',
+              label: 'Item Master',
               items: [
                 {
-                  label: 'GL Account List',
+                  label: 'Item List',
                   routerLink:
-                    '/generalledgermodule/generalledgerpage/app-account-listing',
+                    '/itemmastersmodule/itemmasterpages/app-item-master-list',
                 },
                 {
-                  label: 'Create GL Account',
+                  label: 'PN Capabilities List',
                   routerLink:
-                    '/generalledgermodule/generalledgerpage/app-account-listing-create',
-                },
-                {
-                  label: 'Create Accounting Calendar',
-                  routerLink:
-                    '/generalledgermodule/generalledgerpage/app-accounting-calendar',
-                },
-                {
-                  label: 'Accounting Calendar List',
-                  routerLink:
-                    '/generalledgermodule/generalledgerpage/app-accounting-listing-calendar',
-                },
-                {
-                  label: 'Open/Close Ledger',
-                  routerLink:
-                    '/generalledgermodule/generalledgerpage/app-open-close-ledger',
-                },
-                { label: 'Intercompany', routerLink: '/#' },
+                  '/itemmastersmodule/itemmasterpages/app-item-master-capabilities-list',
+              },
+                { label: 'Purchase and Sales By PN', routerLink: '/#' },
 
-                // {
-                //   label: 'PO-RO Category',
-                //   routerLink:
-                //     '/generalledgermodule/generalledgerpage/app-po-ro-category',
-                // },
               ],
             },
             {
-              label: 'Payment Description',
+              label: 'Inventory',
               items: [
-                { label: 'Cutomer', routerLink: '/#' },
-                { label: 'Vendor', routerLink: '/#' },
+                {
+                  label: 'Stockline List',
+                  routerLink:
+                    '/stocklinemodule/stocklinepages/app-stock-line-list',
+                },
+                { label: 'Non Stock List', routerLink: '/#' },
+              ],
+            },
+            {
+              label: 'Consignment',
+              items: [
+                { label: 'Consignment List', routerLink: '/#' },
+               
+              ],
+            },
+            {
+              label: 'LOT Management',
+              items: [
+                { label: 'LOT List', routerLink: '/#' },
+                { label: 'Lost Summary', routerLink: '/#' },
+              ],
+            },
+            {
+              label: 'Cycle Count',
+              items: [
+                { label: 'Cycle Count List', routerLink: '/#' },
+               
               ],
             },
           ],
-          [
-            {
-              label: 'Financial Statement',
-              items: [
-                {
-                  label: 'Node List',
-                  routerLink:
-                    '/generalledgermodule/generalledgerpage/app-node-setup',
-                },
-                { label: 'Income Statement', routerLink: '/#' },
-                { label: 'Balance Sheet', routerLink: '/#' },
-                { label: 'Statement of CashFlows', routerLink: '/#' },
-                { label: 'Other Structures', routerLink: '/#' },
-              ],
-            },
-            {
-              label: 'Reports and Forms',
-              items: [
-                // { label: 'Trial Balance', routerLink: '/#' },
-                {
-                  label: 'Trial Balance', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTrial+Bal&rs:Command=Render');
-                  }
-                },
-                {
-                  label: 'Trial Bal Trends', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTrial+Bal+Trends&rs:Command=Render');
-                  }
-                },
-                { label: 'Income Statement', routerLink: '/#' },
-                { label: 'Balance Sheet', routerLink: '/#' },
-              ],
-            },
-          ],
-          [
-            {
-              label: 'Journals',
-              items: [
-                {
-                  label: 'Journal List',
-                  routerLink: '/accountmodule/accountpages/app-list-journel',
-                },
-                {
-                  label: 'Create Journal Entry',
-                  routerLink: '/accountmodule/accountpages/app-create-journel',
-                },
-                {
-                  label: 'Schedule',
-                  routerLink: '/accountmodule/accountpages/app-schedule',
-                },
-              ],
-            },
-            {
-              label: 'Organization',
-              items: [
-                {
-                  label: 'Legal Entity List',
-                  routerLink:
-                    '/generalledgermodule/generalledgerpage/app-legal-entity-list',
-                },
-                {
-                  label: 'Create Legal Entity',
-                  command: (event?: any) => {
-                    this.newLegalEntityClick();
-                  },
-                },
-                //{ label: 'Legal Structure', routerLink: '/#' },
-                {
-                  label: 'Management Structure',
-                  routerLink:
-                    '/generalledgermodule/generalledgerpage/app-managemententity-structure',
-                },
-              ],
-            },
-          ],
-          [
-            {
-              label: 'Accounts Receivable',
-              items: [
-                { label: 'Customer Invoice List', routerLink: '/accountreceivable/accountreceivablepages/app-customer-invoice-list' },
-                { label: 'Process Customer Receipt', routerLink: '/accountreceivable/accountreceivablepages/app-customer-payment-list' },
-                { label: 'Process Customer Credit', routerLink: '/#' },
-                {
-                  label: 'AR Settings List',
-                  routerLink:
-                    '/accountreceivablesettingsmodule/arsettings/app-account-receivable-settings-list',
-                }
-              ],
-            },
-            {
-              label: 'Reports and Forms',
-              items: [
-                // { label: 'AR Aging', routerLink: '/#' },
-                {
-                  label: 'AR Aging', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fAR+Invoice+Aging&rs:Command=Render ');
-                  }
-                },
-                { label: 'History By Customer', routerLink: '/#' },
-                { label: 'History By Payment', routerLink: '/#' },
-                { label: 'Customer Statement', routerLink: '/#' },
-              ],
-            },
-            {
-              label: 'Customer Receipts',
-              items: [
-                { label: 'Customer Accounts', routerLink: '/#' },
-                { label: 'Customer Payments', routerLink: '/#' },
-                { label: 'Print Deposit', routerLink: '/#' },
-                { label: 'Payment History', routerLink: '/#' },
-              ],
-            },
-          ],
-          [
-            {
-              label: 'Accounts Payable',
-              items: [
-                { label: 'Vendor Invoice List', routerLink: '/#' },
-                { label: 'Enter Invoices', routerLink: '/#' },
-                { label: 'Vendor Credit', routerLink: '/#' },
-                {
-                  label: 'Open/Close AP Subledger',
-                  routerLink:
-                    '/accountpayble/accountpayble/app-open-close-ap-subledger',
-                },
-                { label: 'Print Checks', routerLink: '/#' },
-                {
-                  label: 'Open/Close AP Subledger',
-                  routerLink:
-                    '/accountpayble/accountpayble/app-open-close-ap-subledger',
-                },
-              ],
-            },
-            {
-              label: 'Reports and Forms',
-              items: [
-                { label: 'AP Register', routerLink: '/#' },
-                { label: 'AR Aging', routerLink: '/#' },
-                { label: 'History By Invoice', routerLink: '/#' },
-                { label: 'History By Payment', routerLink: '/#' },
-                { label: 'Open Vendor Invoice', routerLink: '/#' },
-                { label: 'Check Register', routerLink: '/#' },
-              ],
-            },
-            {
-              label: 'Vendor Payments',
-              items: [
-                { label: 'Vendor Accounts', routerLink: '/#' },
-                { label: 'Process Checks', routerLink: '/#' },
-                { label: 'Reconcile', routerLink: '/#' },
-                { label: 'Print Check', routerLink: '/#' },
-                { label: 'Print Check Batch', routerLink: '/#' },
-                { label: 'Print Check Register', routerLink: '/#' },
-              ],
-            },
-          ],
+         
         ],
       },
       {
-        label: 'Order',
+        label: 'Work Order Management',
         icon: 'fa fa-fw fa-shopping-cart',
         items: [
           [
             {
-              label: 'Purchase Order',
+              label: 'Work Order Quote',
               items: [
                 {
-                  label: 'PO List',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-polist',
-                },
-                {
-                  label: 'Create PO',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-create-po',
-                },
-                {
-                  label: 'PO Approval',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-po-approval',
-                },
-                {
-                  label: 'PO Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-po-approval-rule',
-                },
-                {
-                  label: 'PO Setting',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-po-settings',
-                },
-                { label: 'Create Vendor RMA', routerLink: '/#' },
-              ],
-            },
-            {
-              label: 'Reports & Forms',
-              items: [
-                {
-                  label: 'PO Report',
-                  // routerLink:
-                  //   '/workordersmodule/workorderspages/app-purchase-order-report',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order&rs:Command=Render');
-                  },
-
-                },
-                {
-                  label: 'Purchase order Dashboard', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order+Dashboard&rs:Command=Render');
-                  }
-                },
-                {
-                  label: 'PO TO WO-SO', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPO+to+WO-SO&rs:Command=Render');
-                  }
-                }
-              ],
-            },
-          ],
-          [
-  {
-              label: 'Repair Order',
-              items: [
-                {
-                  label: 'RO List',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-ro-list',
-                },
-                {
-                  label: 'Create RO',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-create-ro',
-                },
-                {
-                  label: 'RO Approval',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-ro-approval',
-                },
-                {
-                  label: 'RO Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-ro-approval-rule',
-                },
-                {
-                  label: 'RO Settings',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-ro-settings',
-                }
-              ],
-            },
-            {
-              label: 'Reports & forms',
-              items: [
-                {
-                  label: 'Repair order by WO & SO', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fRepair+Order+by+WO+and+SO&rs:Command=Render');
-                  }
-                },
-              ]
-            }
-          ],
-          [
-            {
-              label: 'Sales Order',
-              items: [
-                {
-                  label: 'SO List',
-                  routerLink: '/salesmodule/salespages/sales-order-list',
-                },
-                {
-                  label: 'Create Sales Order',
-                  routerLink: '/salesmodule/salespages/sales-order',
-                },
-                { label: 'SO Shipping', routerLink: '/#' },
-                { label: 'SO Billing', routerLink: '/#' },
-                { label: 'SO Confirmation List', routerLink: '/salesmodule/salespages/sales-order-confirmation-list' },
-                {
-                  label: 'Sales Order Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/salesmodule/salespages/app-so-approval-rule',
-                }
-              ],
-            },
-            {
-              label: 'SO Quote',
-              items: [
-                {
-                  label: 'SO Quote List',
-                  routerLink: '/salesmodule/salespages/sales-quote-list',
-                },
-                {
-                  label: 'Create Sales Order Quote',
-                  routerLink: '/salesmodule/salespages/sales-quote',
-                },
-                { label: 'Open SO Quotes', routerLink: '/#' },
-                { label: 'Approved SO Quotes', routerLink: '/#' },
-                {
-                  label: 'Sales Order Quote Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/salesmodule/salespages/app-soq-approval-rule',
-                },
-              ],
-            },
-            {
-              label: 'Sales Order Settings',
-              items: [
-                {
-                  label: 'SO Quote Settings List',
+                  label: 'Work Order Quote List',
                   routerLink:
-                    '/salesordersettingsmodule/salesordersettings/app-sales-quote-settings-list',
-                }, {
-                  label: 'SO Settings List',
-                  routerLink:
-                    '/salesordersettingsmodule/salesordersettings/app-sales-order-settings-list',
-                },
+                  '/workordersmodule/workorderspages/app-work-order-quote-list',
+              },
+              {
+                label: 'Work Order Quote Pending Approval',
+                command: () => this.clearStocklineAndSOStorageReference(),
+                routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
+              },
+               
               ],
             },
-            {
-              label: 'Reports & forms',
-              items: [
-                { label: 'Open Sales list', routerLink: '/#' },
-                { label: 'SO Backlog', routerLink: '/#' },
-                {
-                  label: 'SO On Time Perfomance', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+On+Time+Performance&rs:Command=Render');
-                  },
-                },
-                {
-                  label: 'SO Quotes',
-                  // routerLink: '/#',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Report&rs:Command=Render');
-                  },
-                },
-                {
-                  label: 'SO Quote Conversion',
-                  // routerLink: '/#',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Conversion&rs:Command=Render');
-                  },
-                }, {
-                  label: 'SO Quote History',
-                  // routerLink: '/#',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+History&rs:Command=Render');
-                  },
-                }, {
-                  label: 'SO Billing',
-                  // routerLink: '/#',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Billing&rs:Command=Render');
-                  },
-                }, {
-                  label: 'SO Gross Margin',
-                  // routerLink: '/#',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Gross+Margin&rs:Command=Render');
-                  },
-                }, {
-                  label: 'Salesperson Report',
-                  // routerLink: '/#',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSalesperson+Report&rs:Command=Render');
-                  },
-                },
-                {
-                  label: 'SO Turn Around Time (TAT)', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+-+Turn+Around+Time+(TAT)&rs:Command=Render');
-                  }
-                }
-              ],
-            },
-          ],
-          [
             {
               label: 'Work Order',
               items: [
@@ -759,38 +359,39 @@ export class AppComponent implements OnInit, AfterViewInit {
                   routerLink:
                     '/workordersmodule/workorderspages/app-work-order-list',
                 },
-                {
-                  label: 'Create Work Order',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-add',
-                },
-                { label: 'WO Shipping', routerLink: '/#' },
-                { label: 'WO Billing', routerLink: '/#' },
-                // {
-                //   label: 'Work Order Approval Rule',
-                //   command: () => this.clearStocklineAndSOStorageReference(),
-                //   routerLink: '/workordersmodule/workorderspages/app-wo-approval-rule',
-                // },
-              
+               
               ],
             },
+
             {
-              label: 'Direct Labour',
+              label: 'Work Order Assignment',
               items: [
                 {
-                  label: 'Direct Labour and OH Cost',
+                  label: 'Work Order in Process List',
                   routerLink:
-                    '/workordersmodule/workorderspages/app-direct-labour',
+                    '/workordersmodule/workorderspages/app-work-order-list',
                 },
                 {
-                  label: 'Direct Labour Add',
+                  label: 'Assign WO to Tech',
                   routerLink:
-                    '/workordersmodule/workorderspages/app-direct-labour-add',
+                    '/workordersmodule/workorderspages/app-work-order-list',
                 },
+               
               ],
             },
             {
-              label: 'Reports and Forms',
+              label: 'Work Flow',
+              items: [
+                {
+                  label: 'Workflow List',
+                  routerLink: '/workflowmodule/workflowpages/app-workflow-list',
+                },
+              
+               
+              ],
+            },
+            {
+              label: 'Work Order Reports',
               items: [
                 {
                   label: 'WIP Summary',
@@ -807,21 +408,67 @@ export class AppComponent implements OnInit, AfterViewInit {
                   },
                 },
                 {
-                  label: 'WO On Time Performance',
+                  label: 'WO Billing',
+                  // routerLink: '/#',
+                  command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Billing&rs:Command=Render');
+                  },
+                },
+                {
+                  label: 'WO Gross Margin',
+                  // routerLink: '/#',
+                  command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Gross+Margin&rs:Command=Render');
+                  },
+
+                },
+                {
+                  label: 'WO-On Time Performance',
                   // routerLink: '/#',
                   command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+On+Time+Performance&rs:Command=Render');
                   },
                 },
                 {
-                  label: 'Work Order Tracking',
+                  label: 'WO Turn Around Time', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+-Turn+Around+Time+(TAT)&rs:Command=Render');
+                  }
+                },
+                {
+                  label: 'WO Status Tracking',
                   // routerLink: '/#',
                   command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Tracking&rs:Command=Render');
                   },
                 },
                 {
-                  label: 'WO Quotes',
+                  label: ' WO Labor Tracking', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fLabor+Tracking&rs:Command=Render');
+                  }
+                },
+               
+    
+              
+               
+              ],
+            },
+            {
+              label: 'WO Warranty',
+              items: [
+                {
+                  label: 'Technician Productivity', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
+                  }
+                },
+              
+               
+              ],
+            },
+            {
+              label: 'Work Order Quote Reports',
+              items: [
+                {
+                  label: 'WO Quote',
                   // routerLink: '/#',
                   command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quotes&rs:Command=Render');
@@ -841,218 +488,159 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+History&rs:Command=Render');
                   },
                 },
-                {
-                  label: 'WO Billing',
-                  // routerLink: '/#',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Billing&rs:Command=Render');
-                  },
-                },
-                {
-                  label: 'WO Gross Margin',
-                  // routerLink: '/#',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Gross+Margin&rs:Command=Render');
-                  },
-
-                },
-                {
-                  label: 'Labor Tracking', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fLabor+Tracking&rs:Command=Render');
-                  }
-                },
-                {
-                  label: 'Tech Productivity', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
-                  }
-                },
-                {
-                  label: 'Turn Around Time (TAT)', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+-Turn+Around+Time+(TAT)&rs:Command=Render');
-                  }
-                }
+                
+               
+              
+               
               ],
             },
-
-          
-          ],
-          [
-            {
-              label: 'Work-order Quote',
-              items: [
-                {
-                  label: 'WO Quote List',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-quote-list',
-                },
-                {
-                  label: 'Create  WO Quote',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-quote',
-                },
-                {
-                  label: 'Work Order Quote Approval Rule',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
-                }
-              ],
-            },
-            {
-              label: 'Reports and Forms',
-              items: [
-                {
-                  label: 'Open WO Quote',
-                  routerLink: '/#',
-                },
-                {
-                  label: 'Approved WO Quote',
-                  routerLink: '/#',
-                },
-                {
-                  label: 'Work Order Report',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-workorder-report',
-                },
-
-                {
-                  label: 'Inventory Report',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-inventory-report',
-                },
-              ],
-            },
-          
-
-          ],
-          [
-            {
-              label: 'Exchange',
-              items: [
-                {
-                  label: 'Exchange Quote List',
-                  routerLink: '/exchangemodule/exchangepages/exchange-quote-list',
-                },
-                {
-                  label: 'Exchange Quote Approval Rule',
-                  routerLink: '/exchangemodule/exchangepages/app-exchange-quote-approval-rule',
-                },
-              ]
-            },
-            {
-              label: 'Exchange Sales Order',
-              items: [
-                {
-                  label: 'Exchange Sales Order List',
-                  routerLink: '/exchangemodule/exchangepages/exchange-sales-order-list',
-                }
-              ]
-            }
-          ],
-          [
-            {
-              label: 'Speed Quote',
-              items: [
-                {
-                  label: 'Speed Quote List',
-                  routerLink: '/salesmodule/salespages/speed-quote-list',
-                }
-              ]
-            }
           ],
         ],
       },
       {
-        label: 'Stock',
-        icon: 'fa fa-fw fa-folder-open',
+        label: 'Sales Order',
+        icon: 'fa fa-fw fa-shopping-cart',
         items: [
-          // [
-          //   {
-          //     label: 'Asset Management',
-          //     items: [
-          //       {
-          //         label: 'Asset Inventory List',
-          //         routerLink:
-          //           '/assetmodule/assetpages/app-asset-inventory-listing',
-          //       },
-          //       {
-          //         label: 'Create Asset Inventory',
-          //         routerLink:
-          //           '/assetmodule/assetpages/app-create-asset-inventory',
-          //       },
-          //       {
-          //         label: 'Disposal Sale',
-          //         routerLink: '/assetmodule/assetpages/app-asset-disposal-sale',
-          //       },
-          //       { label: 'Periodic Depreciation', routerLink: '/#' },
-          //       { label: 'Asset Adjustment', routerLink: '/#' },
-          //       { label: 'Calibration Management', routerLink: '/#' },
-          //       { label: 'Leases & Insurance', routerLink: '/#' },
-          //       { label: 'Asset Maintenance', routerLink: '/#' },
-          //       { label: 'Depreciation Forecast', routerLink: '/#' },
-          //     ],
-          //   },
-          //   {
-          //     label: 'Assets',
-          //     items: [
-          //       {
-          //         label: 'Asset List',
-          //         routerLink: '/assetmodule/assetpages/app-asset-listing',
-          //       },
-          //       {
-          //         label: 'Create Asset',
-          //         routerLink: '/assetmodule/assetpages/app-create-asset',
-          //       },
-          //     ],
-          //   },
-          //   {
-          //     label: 'Report & Forms',
-          //     items: [
-          //       { label: 'List Report', routerLink: '/#' },
-          //       { label: 'Depreciation', routerLink: '/#' },
-          //       { label: 'Additons', routerLink: '/#' },
-          //       { label: 'Disposal', routerLink: '/#' },
-          //       {
-          //         label: 'Tools', command: (event?: any) => {
-          //           this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
-          //         }
-          //       }
-          //     ],
-          //   },
-
-          // ],
+          
           [
             {
-              label: 'Stock Line',
+              label: 'Sales Order Quote',
               items: [
                 {
-                  label: 'Stock Line List',
-                  routerLink:
-                    '/stocklinemodule/stocklinepages/app-stock-line-list',
-                },
-                {
-                  label: 'Create Stock Line',
-                  routerLink:
-                    '/stocklinemodule/stocklinepages/app-stock-line-setup',
-                },
+                  label: 'Sales Order Quote List',
+                  routerLink: '/salesmodule/salespages/sales-quote-list',
+                  },
+                  {
+                   label: 'SO Quote Pending Approval',
+                   command: () => this.clearStocklineAndSOStorageReference(),
+                    routerLink: '/salesmodule/salespages/app-soq-approval-rule',
+                  },
               ],
             },
             {
-              label: 'Reports and Forms',
+              label: 'Sales Order',
               items: [
-                { label: 'Item Aging', routerLink: '/#' },
-                { label: 'Slow Moving Stock', routerLink: '/#' },
-                { label: 'Hot List', routerLink: '/#' },
-                // {
-                //   label: 'Stock Line Report',
-                //   routerLink:
-                //     '/stocklinemodule/stocklinepages/app-stock-line-report-view',
-                //     http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render
-                // },
                 {
-                  label: 'Stock Line', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render');
-                  }
-                }
+                  label: 'Sales Order List',
+                   routerLink: '/salesmodule/salespages/sales-order-list',
+                 },
+                 { label: 'SO Confirmation List', routerLink: '/salesmodule/salespages/sales-order-confirmation-list' },
+                               {
+                                 label: 'Sales Order Pending Approval',
+                                 command: () => this.clearStocklineAndSOStorageReference(),
+                                 routerLink: '/salesmodule/salespages/app-so-approval-rule',
+                               },
+              
+              ],
+            },
+            {
+              label: 'Exchanges',
+              items: [
+                {
+                  label: 'Exchange Sales Order List',
+                   routerLink: '/exchangemodule/exchangepages/exchange-sales-order-list',
+                  },
+                 { 
+                   label: 'Create Exch Sales Order Quote', routerLink: '' },
+                 
+              ],
+            },
+
+            {
+              label: 'Core Exch Management',
+              items: [
+                {
+                   label: 'Core Exch Listing',
+                  routerLink: '/exchangemodule/exchangepages/exchange-quote-list',
+                   },
+                 
+              ],
+            },
+            {
+              label: 'Loans',
+              items: [
+                {
+                  label: 'Sales Order Loan List',
+                 routerLink: '',
+                  },
+                  {
+                    label: 'Sales Order Loan Quote',
+                   routerLink: '',
+                    },
+                 
+              ],
+            },
+
+            {
+              label: 'RMA and Credits',
+              items: [
+                {
+                  label: 'Sales Order RMA List',
+                 routerLink: '',
+                  },
+                  {
+                    label: 'Sales Order Credit List',
+                   routerLink: '',
+                    },
+                 
+              ],
+            },
+
+            {
+              label: 'Reports',
+              items: [
+                {
+                  label: 'Open SO Report',
+                 routerLink: '',
+                  },
+                  {
+                    label: 'SO Billing',
+                   routerLink: '',
+                    },
+                    {
+                      label: 'SO Gross Margin',
+                     routerLink: '',
+                      },
+                      {
+                        label: 'SO Sales Performance',
+                       routerLink: '',
+                        },
+                        {
+                          label: 'SO-On Time Delivery',
+                         routerLink: '',
+                          },
+                          {
+                            label: 'SO Turn Around Time',
+                           routerLink: '',
+                            },
+                            {
+                              label: 'SO Quote Conversion Report',
+                             routerLink: '',
+                              },
+                              {
+                                label: 'SO Quote History',
+                               routerLink: '',
+                                },
+                                {
+                                  label: 'SO Exchange Margin',
+                                 routerLink: '',
+                                  },
+                                  {
+                                    label: 'SO Exchange History',
+                                   routerLink: '',
+                                    },
+                                    {
+                                      label: 'Open Core Report',
+                                     routerLink: '',
+                                      },
+                                      {
+                                        label: 'RMA Report',
+                                       routerLink: '',
+                                        },
+                                        {
+                                          label: 'SO Credit',
+                                         routerLink: '',
+                                          },   
               ],
             },
           ],
@@ -1114,7 +702,6 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               label: 'Reports & Forms',
               items: [
-                // { label: 'Capabilities List', routerLink: '/#' },
                 {
                   label: 'Capabilities List Report', command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCapabilities&rs:Command=Render');
@@ -1158,14 +745,9 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'Calibration Mgmt',
                   routerLink: '/assetmodule/assetpages/app-calibration-mgmt-listing',
                 },
-                //{ label: 'Calibration Mgmt', routerLink: '/#' },
                 { label: 'Asset Maintenance', routerLink: '/#' },
                 { label: 'Leases and Insurance', routerLink: '/#' },
-                // {
-                //   label: 'Disposal Sale',
-                //   routerLink: '/assetmodule/assetpages/app-asset-disposal-sale',
-                
-                // },
+               
               ],
             },
             {
@@ -1196,18 +778,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
               ],
             },
-            // {
-            //   label: 'Tools',
-            //   items: [
-            //     {
-            //       label: 'Tools List', command: (event?: any) => {
-            //         this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
-            //       }
-            //     },
-            //     { label: 'Calibration List ', routerLink: '/#' },
-            //     { label: 'Calibration Due Report', routerLink: '/#' }
-            //   ],
-            // },
+           
           ],
 
         ],
@@ -1272,10 +843,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                   routerLink:
                     '/workordersettingsmodule/workordersettings/app-wo-quote-settings-list',
                 },
-                // {
-                //   label: 'Teardown Reason',
-                //   routerLink: '/singlepages/singlepages/app-teardown-reason',
-                // },
+              
               ],
             }
           ],
@@ -1323,11 +891,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fReceiving+Log&rs:Command=Render');
                   }
                 },
-                // {
-                //   label: 'Receiving Log Report',
-                //   routerLink:
-                //     '/workordersmodule/workorderspages/app-receiving-log-report',
-                // },
+              
                 {
                   label: 'Receive customer work', command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Work&rs:Command=Render');
@@ -1342,356 +906,1126 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 { label: 'Contract List', routerLink: '/#' },
                 { label: 'Contract Setup', routerLink: '/#' },
-                // {
-                //   label: 'Reasons',
-                //   routerLink: '/singlepages/singlepages/app-reason',
-                // },
-                // {
-                //   label: 'Teardown Reason',
-                //   routerLink: '/singlepages/singlepages/app-teardown-reason',
-                // },
-                // { label: 'Findings', routerLink: '/#' },
-                // {
-                //   label: 'Work Performed',
-                //   routerLink: '/singlepages/singlepages/app-work-performed',
-                // },
+              
               ],
             },
 
           ],
         ],
       },
-      //{
-      //  label: 'Master Maintenance',
-      //  icon: 'fa fa-fw fa-cogs',
-      //  items: [
-      //    [
-      //      {
-      //        label: 'Item Master',
-      //        items: [
-      //          {
-      //            label: 'Unit of Measure',
-      //            routerLink: '/singlepages/singlepages/app-unit-of-measure',
-      //          },
-      //          {
-      //            label: 'Item Group',
-      //            routerLink: '/singlepages/singlepages/app-item-group',
-      //          },
-      //          {
-      //            label: 'Item Classification',
-      //            routerLink: '/singlepages/singlepages/app-item-classification',
-      //          },
-      //          {
-      //            label: 'Manufacturer',
-      //            routerLink: '/singlepages/singlepages/app-manufacturer',
-      //          },
-      //          {
-      //            label: 'Site',
-      //            routerLink: '/singlepages/singlepages/app-site',
-      //          },
-      //          {
-      //            label: 'Warehouse',
-      //            routerLink: '/singlepages/singlepages/app-warehouse',
-      //          },
-      //          {
-      //            label: 'Location',
-      //            routerLink: '/singlepages/singlepages/app-location',
-      //          },
-      //          {
-      //            label: 'Shelf',
-      //            routerLink: '/singlepages/singlepages/app-shelf',
-      //          },
-      //          { label: 'Bin', routerLink: '/singlepages/singlepages/app-bin' },
-      //        ],
-      //      },
-      //      {
-      //        label: 'Work Orders',
-      //        items: [
-      //          {
-      //            label: 'Stage Code and Status',
-      //            routerLink: '/singlepages/singlepages/app-stage-code',
-      //          },
-      //          {
-      //            label: 'Charges',
-      //            routerLink: '/singlepages/singlepages/app-charges',
-      //          },
-      //          {
-      //            label: 'Reasons',
-      //            routerLink: '/singlepages/singlepages/app-reason',
-      //          },
-      //          {
-      //            label: 'Teardown Reason',
-      //            routerLink: '/singlepages/singlepages/app-teardown-reason',
-      //          },
-      //          { label: 'Findings', routerLink: '/#' },
-      //          {
-      //            label: 'Work Performed',
-      //            routerLink: '/singlepages/singlepages/app-work-performed',
-      //          },
-      //        ],
-      //      },
-      //    ],
-      //    [
-      //      {
-      //        label: 'Accounting/Finance',
-      //        items: [
-      //          {
-      //            label: 'Currency',
-      //            routerLink: '/singlepages/singlepages/app-currency',
-      //          },
-      //          {
-      //            label: 'GL Account Type',
-      //            routerLink: '/singlepages/singlepages/app-gl-account-class',
-      //          },
-      //          {
-      //            label: 'GL Cash Flow Classification',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-gl-cash-flow-classification',
-      //          },
-      //          {
-      //            label: 'GL Account Category',
-      //            routerLink: '/singlepages/singlepages/app-gl-account-category',
-      //          },
-      //          {
-      //            label: 'Expenditure Category',
-      //            routerLink: '/singlepages/singlepages/app-expenditure-category',
-      //          },
-      //          {
-      //            label: 'Credit Terms',
-      //            routerLink: '/singlepages/singlepages/app-credit-terms',
-      //          },
-      //          {
-      //            label: 'Tax Rate',
-      //            routerLink: '/singlepages/singlepages/app-tax-rate',
-      //          },
-      //          {
-      //            label: 'Tax Type',
-      //            routerLink: '/singlepages/singlepages/app-tax-type',
-      //          },
-      //          {
-      //            label: 'Node Type',
-      //            routerLink: '/singlepages/singlepages/app-node-type',
-      //          },
-      //        ],
-      //      },
-      //    ],
-      //    [
-      //      {
-      //        label: 'General',
-      //        items: [
-      //          {
-      //            label: 'Ata Chapter',
-      //            routerLink: '/singlepages/singlepages/app-ata-main',
-      //          },
-      //          {
-      //            label: 'Ata Sub-Chapter',
-      //            routerLink: '/singlepages/singlepages/app-ata-sub-chapter1',
-      //          },
-      //          {
-      //            label: 'Aircraft Manufacturer',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-aircraft-manufacturer',
-      //          },
-      //          {
-      //            label: 'Aircraft Model',
-      //            routerLink: '/singlepages/singlepages/app-aircraft-model',
-      //          },
-      //          {
-      //            label: 'Acquisition Type',
-      //            routerLink: '/singlepages/singlepages/acquisition-type',
-      //          },
-      //          {
-      //            label: 'Conditions',
-      //            routerLink: '/singlepages/singlepages/app-conditions',
-      //          },
-      //          {
-      //            label: 'Customer Classification',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-customer-classification',
-      //          },
-      //          {
-      //            label: 'Dash Numbers',
-      //            routerLink: '/singlepages/singlepages/app-dashnumber',
-      //          },
-      //          {
-      //            label: 'Default Messages',
-      //            routerLink: '/singlepages/singlepages/app-defaultmessage',
-      //          },
-      //          {
-      //            label: 'Documents',
-      //            routerLink: '/singlepages/singlepages/app-documents',
-      //          },
-      //          {
-      //            label: 'Integration',
-      //            routerLink: '/singlepages/singlepages/app-integration',
-      //          },
-
-      //          {
-      //            label: 'Lead Source',
-      //            routerLink: '/singlepages/singlepages/app-lead-source',
-      //          },
-      //          {
-      //            label: 'Master 1099',
-      //            routerLink: '/singlepages/singlepages/app-master-1099',
-      //          },
-      //          {
-      //            label: 'Percent',
-      //            routerLink: '/singlepages/singlepages/app-percent',
-      //          },
-      //          {
-      //            label: 'Priority',
-      //            routerLink: '/singlepages/singlepages/app-priority',
-      //          },
-      //          {
-      //            label: 'Process 1099',
-      //            routerLink: '/singlepages/singlepages/app-vendor-process1099',
-      //          },
-      //          {
-      //            label: 'Provision',
-      //            routerLink: '/singlepages/singlepages/app-provision',
-      //          },
-      //          {
-      //            label: 'Shipvia',
-      //            routerLink: '/singlepages/singlepages/app-shipvia',
-      //          },
-      //          {
-      //            label: 'Document Type',
-      //            routerLink: '/singlepages/singlepages/app-document-type',
-      //          },
-      //          // { label: 'Site', routerLink: '/singlepages/singlepages/app-site' },
-      //          {
-      //            label: 'Tag Type',
-      //            routerLink: '/singlepages/singlepages/app-tag-type',
-      //          },
-
-      //          {
-      //            label: 'Publication Type',
-      //            routerLink: '/singlepages/singlepages/app-publication-type',
-      //          },
-      //          {
-      //            label: 'Vendor Classification',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-vendor-classification',
-      //          },
-      //          {
-      //            label: 'Work Scope',
-      //            routerLink: '/singlepages/singlepages/app-work-scope',
-      //          },
-
-      //          {
-      //            label: 'Vendor Capability Type',
-      //            routerLink: '/singlepages/singlepages/app-capability-type',
-      //          },
-      //        ],
-      //      },
-      //    ],
-      //    [
-      //      {
-      //        label: 'Asset Mgmt Maintenance',
-      //        items: [
-      //          {
-      //            label: 'Asset Class',
-      //            routerLink: '/singlepages/singlepages/app-asset-type',
-      //          },
-      //          //changed for asset attribute type and intangible attribute type
-      //          {
-      //            label: 'Asset Attribute Type',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-asset-attribute-type',
-      //          },
-      //          // {
-      //          //   label: 'Asset Attributes',
-      //          //   items: [
-      //          //     {
-      //          //       label: 'Asset Attribute Type',
-      //          //       routerLink:
-      //          //         '/singlepages/singlepages/app-asset-attribute-type',
-      //          //     },
-      //          //     {
-      //          //       label: 'Intangible Attribute Type',
-      //          //       routerLink:
-      //          //         '/singlepages/singlepages/app-asset-intangible-attribute-type',
-      //          //     },
-      //          //     { label: 'Depreciation - Book', routerLink: '/#' },
-      //          //     { label: 'Depreciation - Tax', routerLink: '/#' },
-      //          //     { label: 'Depreciation Date', routerLink: '/#' },
-      //          //   ],
-      //          // },
-      //          {
-      //            label: 'Asset Status',
-      //            routerLink: '/singlepages/singlepages/asset-status',
-      //          },
-      //          {
-      //            label: 'Asset Location',
-      //            routerLink: '/singlepages/singlepages/asset-location',
-      //          },
-      //          {
-      //            label: 'Depreciation Method',
-      //            routerLink: '/singlepages/singlepages/app-depriciation-method',
-      //          },
-      //          {
-      //            label: 'Depreciation Convention',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-asset-dep-convention-type',
-      //          },
-      //          {
-      //            label: 'Depreciation Intervals',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-depreciation-intervals',
-      //          },
-      //          {
-      //            label: 'Asset Disposal Type',
-      //            routerLink: '/singlepages/singlepages/app-disposal-type',
-      //          },
-      //          {
-      //            label: 'Asset Intangible Class',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-asset-intangible-class',
-      //          },
-      //          {
-      //            label: 'Asset Intangible Attribute Type',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-asset-intangible-attribute-type',
-      //          }
-      //        ],
-      //      },
-
-
-      //      {
-      //        label: 'Stockline',
-      //        items: [
-      //          {
-      //            label: 'Adjustment Reason',
-      //            routerLink: '/singlepages/singlepages/app-adjustment-reason',
-      //          },
-      //        ],
-      //      },
-      //      {
-      //        label: 'Employees',
-      //        items: [
-      //          {
-      //            label: 'Job Titles',
-      //            routerLink: '/singlepages/singlepages/app-job-title',
-      //          },
-      //          {
-      //            label: 'Employee Expertise',
-      //            routerLink: '/singlepages/singlepages/app-employee-expertise',
-      //          },
-      //          {
-      //            label: 'Certification Type',
-      //            routerLink: '/singlepages/singlepages/app-certification-type',
-      //          },
-      //          {
-      //            label: 'Employee Training Type',
-      //            routerLink:
-      //              '/singlepages/singlepages/app-employee-training-type',
-      //          },
-      //        ],
-      //      },
-      //    ],
-      //  ],
-      //},
+      
     ];
+  //   this.megaMenuItems = [
+  //     {
+  //       label: 'Dashboard',
+  //       icon: 'fa fa-fw fa-home',
+  //       routerLink: '/home',
+
+  //     },
+  //     {
+  //       label: 'Master',
+  //       icon: 'fa fa-fw fa-group',
+  //       items: [
+  //         [
+  //           {
+  //             label: 'Customers',
+  //             items: [
+  //               {
+  //                 label: 'Customers List',
+  //                 routerLink:
+  //                   '/customersmodule/customerpages/app-customers-list',
+  //               },
+  //               {
+  //                 label: 'Create Customer',
+  //                 routerLink:
+  //                   '/customersmodule/customerpages/app-customer-create',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Invoice',
+  //             items: [
+  //               { label: 'Invoice List', routerLink: '/#' },
+  //               { label: 'Create Invoice', routerLink: '/#' },
+  //               { label: 'Customer RMA', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports & Forms',
+  //             items: [
+  //               { label: 'Invoice Register', routerLink: '' },
+  //               { label: 'Invoice Batches', routerLink: '' },
+  //               {
+  //                 label: 'Customer Statement Report', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
+  //                 }
+  //               }
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Vendor',
+  //             items: [
+  //               {
+  //                 label: 'Vendor List',
+  //                 routerLink: '/vendorsmodule/vendorpages/app-vendors-list',
+  //               },
+  //               {
+  //                 label: 'Create Vendor',
+  //                 command: (event?: any) => {
+  //                   this.newVendorClick();
+  //                 },
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Vendor Capabilities',
+  //             items: [
+  //               {
+  //                 label: 'Vendor Capes List',
+  //                 routerLink:
+  //                   '/vendorsmodule/vendorpages/app-vendor-capabilities-list',
+  //               },
+  //               {
+  //                 label: 'Create Vendor Capes',
+  //                 routerLink:
+  //                   '/vendorsmodule/vendorpages/app-add-vendor-capabilities',
+  //               },
+  //               {
+  //                 label: 'Capes Report', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/Reports/report/Report%20Project1/Capabilities');
+  //                 }
+  //               }
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports & Forms',
+  //             items: [
+  //               { label: 'Open RO Report', routerLink: '/#' },
+               
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Employees',
+  //             items: [
+  //               {
+  //                 label: 'Employee List',
+  //                 routerLink:
+  //                   '/employeesmodule/employeepages/app-employees-list',
+  //               },
+               
+  //               {
+  //                 label: 'Create Employee',
+  //                 command: (event?: any) => {
+  //                   this.newEmployeeClick();
+  //                 },
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Expense Reports',
+  //             items: [
+  //               { label: 'Expense List', routerLink: '/#' },
+  //               { label: 'Create', routerLink: '/#' },
+  //               { label: 'Approval', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports & Forms',
+  //             items: [
+  //               { label: 'Employee List Report', routerLink: '/#' },
+  //               { label: 'Productivity', routerLink: '/#' },
+  //               { label: 'Commission', routerLink: '/#' },
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Publications',
+  //             icon: 'fa fa-fw fa-newspaper-o',
+  //             items: [
+  //               {
+  //                 label: 'Publications List',
+  //                 routerLink: '/singlepages/singlepages/app-publication',
+  //               },
+  //               {
+  //                 label: 'Create Publications',
+  //                 routerLink: '/singlepages/singlepages/app-create-publication',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports & Forms',
+  //             items: [{ label: 'CMM by PIN', routerLink: '/#' },
+  //             {
+  //               label: 'Publication Tracking', command: (event?: any) => {
+  //                 this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPublication+Tracking&rs:Command=Render');
+  //               }
+  //             }],
+  //           },
+
+  //         ],
+  //         [
+  //           {
+  //             label: 'CRM',
+  //             icon: 'fa fa-funnel-dollar',
+  //             items: [
+  //               {
+  //                 label: 'CRM List',
+  //                 routerLink: '/customersmodule/customerpages/app-crm-list',
+  //               },
+  //               {
+  //                 label: 'Deals List',
+  //                 routerLink: '/customersmodule/customerpages/app-deals-list',
+  //               },
+  //               {
+  //                 label: 'Leads List',
+  //                 routerLink: '/customersmodule/customerpages/app-leads-list',
+  //               },
+  //               {
+  //                 label: 'Opportunity List',
+  //                 routerLink: '/customersmodule/customerpages/app-opportunity-list',
+  //               },
+  //             ],
+  //           },
+
+  //         ],
+  //       ],
+  //     },
+  //     {
+  //       label: 'Accounts',
+  //       icon: 'fa fa-fw fa-list-alt',
+  //       items: [
+  //         [
+  //           {
+  //             label: 'General Ledger',
+  //             items: [
+  //               {
+  //                 label: 'GL Account List',
+  //                 routerLink:
+  //                   '/generalledgermodule/generalledgerpage/app-account-listing',
+  //               },
+  //               {
+  //                 label: 'Create GL Account',
+  //                 routerLink:
+  //                   '/generalledgermodule/generalledgerpage/app-account-listing-create',
+  //               },
+  //               {
+  //                 label: 'Create Accounting Calendar',
+  //                 routerLink:
+  //                   '/generalledgermodule/generalledgerpage/app-accounting-calendar',
+  //               },
+  //               {
+  //                 label: 'Accounting Calendar List',
+  //                 routerLink:
+  //                   '/generalledgermodule/generalledgerpage/app-accounting-listing-calendar',
+  //               },
+  //               {
+  //                 label: 'Open/Close Ledger',
+  //                 routerLink:
+  //                   '/generalledgermodule/generalledgerpage/app-open-close-ledger',
+  //               },
+  //               { label: 'Intercompany', routerLink: '/#' },
+
+  //             ],
+  //           },
+  //           {
+  //             label: 'Payment Description',
+  //             items: [
+  //               { label: 'Cutomer', routerLink: '/#' },
+  //               { label: 'Vendor', routerLink: '/#' },
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Financial Statement',
+  //             items: [
+  //               {
+  //                 label: 'Node List',
+  //                 routerLink:
+  //                   '/generalledgermodule/generalledgerpage/app-node-setup',
+  //               },
+  //               { label: 'Income Statement', routerLink: '/#' },
+  //               { label: 'Balance Sheet', routerLink: '/#' },
+  //               { label: 'Statement of CashFlows', routerLink: '/#' },
+  //               { label: 'Other Structures', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports and Forms',
+  //             items: [
+  //               // { label: 'Trial Balance', routerLink: '/#' },
+  //               {
+  //                 label: 'Trial Balance', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTrial+Bal&rs:Command=Render');
+  //                 }
+  //               },
+  //               {
+  //                 label: 'Trial Bal Trends', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTrial+Bal+Trends&rs:Command=Render');
+  //                 }
+  //               },
+  //               { label: 'Income Statement', routerLink: '/#' },
+  //               { label: 'Balance Sheet', routerLink: '/#' },
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Journals',
+  //             items: [
+  //               {
+  //                 label: 'Journal List',
+  //                 routerLink: '/accountmodule/accountpages/app-list-journel',
+  //               },
+  //               {
+  //                 label: 'Create Journal Entry',
+  //                 routerLink: '/accountmodule/accountpages/app-create-journel',
+  //               },
+  //               {
+  //                 label: 'Schedule',
+  //                 routerLink: '/accountmodule/accountpages/app-schedule',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Organization',
+  //             items: [
+  //               {
+  //                 label: 'Legal Entity List',
+  //                 routerLink:
+  //                   '/generalledgermodule/generalledgerpage/app-legal-entity-list',
+  //               },
+  //               {
+  //                 label: 'Create Legal Entity',
+  //                 command: (event?: any) => {
+  //                   this.newLegalEntityClick();
+  //                 },
+  //               },
+               
+  //               {
+  //                 label: 'Management Structure',
+  //                 routerLink:
+  //                   '/generalledgermodule/generalledgerpage/app-managemententity-structure',
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Accounts Receivable',
+  //             items: [
+  //               { label: 'Customer Invoice List', routerLink: '/accountreceivable/accountreceivablepages/app-customer-invoice-list' },
+  //               { label: 'Process Customer Receipt', routerLink: '/accountreceivable/accountreceivablepages/app-customer-payment-list' },
+  //               { label: 'Process Customer Credit', routerLink: '/#' },
+  //               {
+  //                 label: 'AR Settings List',
+  //                 routerLink:
+  //                   '/accountreceivablesettingsmodule/arsettings/app-account-receivable-settings-list',
+  //               }
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports and Forms',
+  //             items: [
+               
+  //               {
+  //                 label: 'AR Aging', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fAR+Invoice+Aging&rs:Command=Render ');
+  //                 }
+  //               },
+  //               { label: 'History By Customer', routerLink: '/#' },
+  //               { label: 'History By Payment', routerLink: '/#' },
+  //               { label: 'Customer Statement', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Customer Receipts',
+  //             items: [
+  //               { label: 'Customer Accounts', routerLink: '/#' },
+  //               { label: 'Customer Payments', routerLink: '/#' },
+  //               { label: 'Print Deposit', routerLink: '/#' },
+  //               { label: 'Payment History', routerLink: '/#' },
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Accounts Payable',
+  //             items: [
+  //               { label: 'Vendor Invoice List', routerLink: '/#' },
+  //               { label: 'Enter Invoices', routerLink: '/#' },
+  //               { label: 'Vendor Credit', routerLink: '/#' },
+  //               {
+  //                 label: 'Open/Close AP Subledger',
+  //                 routerLink:
+  //                   '/accountpayble/accountpayble/app-open-close-ap-subledger',
+  //               },
+  //               { label: 'Print Checks', routerLink: '/#' },
+  //               {
+  //                 label: 'Open/Close AP Subledger',
+  //                 routerLink:
+  //                   '/accountpayble/accountpayble/app-open-close-ap-subledger',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports and Forms',
+  //             items: [
+  //               { label: 'AP Register', routerLink: '/#' },
+  //               { label: 'AR Aging', routerLink: '/#' },
+  //               { label: 'History By Invoice', routerLink: '/#' },
+  //               { label: 'History By Payment', routerLink: '/#' },
+  //               { label: 'Open Vendor Invoice', routerLink: '/#' },
+  //               { label: 'Check Register', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Vendor Payments',
+  //             items: [
+  //               { label: 'Vendor Accounts', routerLink: '/#' },
+  //               { label: 'Process Checks', routerLink: '/#' },
+  //               { label: 'Reconcile', routerLink: '/#' },
+  //               { label: 'Print Check', routerLink: '/#' },
+  //               { label: 'Print Check Batch', routerLink: '/#' },
+  //               { label: 'Print Check Register', routerLink: '/#' },
+  //             ],
+  //           },
+  //         ],
+  //       ],
+  //     },
+  //     {
+  //       label: 'Order',
+  //       icon: 'fa fa-fw fa-shopping-cart',
+  //       items: [
+  //         [
+  //           {
+  //             label: 'Purchase Order',
+  //             items: [
+  //               {
+  //                 label: 'PO List',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-polist',
+  //               },
+  //               {
+  //                 label: 'Create PO',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-create-po',
+  //               },
+  //               {
+  //                 label: 'PO Approval',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-po-approval',
+  //               },
+  //               {
+  //                 label: 'PO Approval Rule',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-po-approval-rule',
+  //               },
+  //               {
+  //                 label: 'PO Setting',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-po-settings',
+  //               },
+  //               { label: 'Create Vendor RMA', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports & Forms',
+  //             items: [
+  //               {
+  //                 label: 'PO Report',
+                 
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order&rs:Command=Render');
+  //                 },
+
+  //               },
+  //               {
+  //                 label: 'Purchase order Dashboard', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order+Dashboard&rs:Command=Render');
+  //                 }
+  //               },
+  //               {
+  //                 label: 'PO TO WO-SO', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPO+to+WO-SO&rs:Command=Render');
+  //                 }
+  //               }
+  //             ],
+  //           },
+  //         ],
+  //         [
+  // {
+  //             label: 'Repair Order',
+  //             items: [
+  //               {
+  //                 label: 'RO List',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-ro-list',
+  //               },
+  //               {
+  //                 label: 'Create RO',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-create-ro',
+  //               },
+  //               {
+  //                 label: 'RO Approval',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-ro-approval',
+  //               },
+  //               {
+  //                 label: 'RO Approval Rule',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-ro-approval-rule',
+  //               },
+  //               {
+  //                 label: 'RO Settings',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/vendorsmodule/vendorpages/app-ro-settings',
+  //               }
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports & forms',
+  //             items: [
+  //               {
+  //                 label: 'Repair order by WO & SO', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fRepair+Order+by+WO+and+SO&rs:Command=Render');
+  //                 }
+  //               },
+  //             ]
+  //           }
+  //         ],
+  //         [
+  //           {
+  //             label: 'Sales Order',
+  //             items: [
+  //               {
+  //                 label: 'SO List',
+  //                 routerLink: '/salesmodule/salespages/sales-order-list',
+  //               },
+  //               {
+  //                 label: 'Create Sales Order',
+  //                 routerLink: '/salesmodule/salespages/sales-order',
+  //               },
+  //               { label: 'SO Shipping', routerLink: '/#' },
+  //               { label: 'SO Billing', routerLink: '/#' },
+  //               { label: 'SO Confirmation List', routerLink: '/salesmodule/salespages/sales-order-confirmation-list' },
+  //               {
+  //                 label: 'Sales Order Approval Rule',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/salesmodule/salespages/app-so-approval-rule',
+  //               }
+  //             ],
+  //           },
+  //           {
+  //             label: 'SO Quote',
+  //             items: [
+  //               {
+  //                 label: 'SO Quote List',
+  //                 routerLink: '/salesmodule/salespages/sales-quote-list',
+  //               },
+  //               {
+  //                 label: 'Create Sales Order Quote',
+  //                 routerLink: '/salesmodule/salespages/sales-quote',
+  //               },
+  //               { label: 'Open SO Quotes', routerLink: '/#' },
+  //               { label: 'Approved SO Quotes', routerLink: '/#' },
+  //               {
+  //                 label: 'Sales Order Quote Approval Rule',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/salesmodule/salespages/app-soq-approval-rule',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Sales Order Settings',
+  //             items: [
+  //               {
+  //                 label: 'SO Quote Settings List',
+  //                 routerLink:
+  //                   '/salesordersettingsmodule/salesordersettings/app-sales-quote-settings-list',
+  //               }, {
+  //                 label: 'SO Settings List',
+  //                 routerLink:
+  //                   '/salesordersettingsmodule/salesordersettings/app-sales-order-settings-list',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports & forms',
+  //             items: [
+  //               { label: 'Open Sales list', routerLink: '/#' },
+  //               { label: 'SO Backlog', routerLink: '/#' },
+  //               {
+  //                 label: 'SO On Time Perfomance', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+On+Time+Performance&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'SO Quotes',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Report&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'SO Quote Conversion',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Conversion&rs:Command=Render');
+  //                 },
+  //               }, {
+  //                 label: 'SO Quote History',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+History&rs:Command=Render');
+  //                 },
+  //               }, {
+  //                 label: 'SO Billing',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Billing&rs:Command=Render');
+  //                 },
+  //               }, {
+  //                 label: 'SO Gross Margin',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Gross+Margin&rs:Command=Render');
+  //                 },
+  //               }, {
+  //                 label: 'Salesperson Report',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSalesperson+Report&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'SO Turn Around Time (TAT)', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+-+Turn+Around+Time+(TAT)&rs:Command=Render');
+  //                 }
+  //               }
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Work Order',
+  //             items: [
+  //               {
+  //                 label: 'Work Order List',
+  //                 routerLink:
+  //                   '/workordersmodule/workorderspages/app-work-order-list',
+  //               },
+  //               {
+  //                 label: 'Create Work Order',
+  //                 routerLink:
+  //                   '/workordersmodule/workorderspages/app-work-order-add',
+  //               },
+  //               { label: 'WO Shipping', routerLink: '/#' },
+  //               { label: 'WO Billing', routerLink: '/#' },
+               
+              
+  //             ],
+  //           },
+  //           {
+  //             label: 'Direct Labour',
+  //             items: [
+  //               {
+  //                 label: 'Direct Labour and OH Cost',
+  //                 routerLink:
+  //                   '/workordersmodule/workorderspages/app-direct-labour',
+  //               },
+  //               {
+  //                 label: 'Direct Labour Add',
+  //                 routerLink:
+  //                   '/workordersmodule/workorderspages/app-direct-labour-add',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports and Forms',
+  //             items: [
+  //               {
+  //                 label: 'WIP Summary',
+  //                 routerLink: '/#',
+  //               },
+  //               {
+  //                 label: 'WIP Details',
+  //                 routerLink: '/#',
+  //               },
+  //               {
+  //                 label: 'WO Backlog',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Backlog&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'WO On Time Performance',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+On+Time+Performance&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'Work Order Tracking',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Tracking&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'WO Quotes',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quotes&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'WO Quote Conversion',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+Conversion&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'WO Quote History',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+History&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'WO Billing',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Billing&rs:Command=Render');
+  //                 },
+  //               },
+  //               {
+  //                 label: 'WO Gross Margin',
+  //                 // routerLink: '/#',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Gross+Margin&rs:Command=Render');
+  //                 },
+
+  //               },
+  //               {
+  //                 label: 'Labor Tracking', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fLabor+Tracking&rs:Command=Render');
+  //                 }
+  //               },
+  //               {
+  //                 label: 'Tech Productivity', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
+  //                 }
+  //               },
+  //               {
+  //                 label: 'Turn Around Time (TAT)', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+-Turn+Around+Time+(TAT)&rs:Command=Render');
+  //                 }
+  //               }
+  //             ],
+  //           },
+
+          
+  //         ],
+  //         [
+  //           {
+  //             label: 'Work-order Quote',
+  //             items: [
+  //               {
+  //                 label: 'WO Quote List',
+  //                 routerLink:
+  //                   '/workordersmodule/workorderspages/app-work-order-quote-list',
+  //               },
+  //               {
+  //                 label: 'Create  WO Quote',
+  //                 routerLink:
+  //                   '/workordersmodule/workorderspages/app-work-order-quote',
+  //               },
+  //               {
+  //                 label: 'Work Order Quote Approval Rule',
+  //                 command: () => this.clearStocklineAndSOStorageReference(),
+  //                 routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
+  //               }
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports and Forms',
+  //             items: [
+  //               {
+  //                 label: 'Open WO Quote',
+  //                 routerLink: '/#',
+  //               },
+  //               {
+  //                 label: 'Approved WO Quote',
+  //                 routerLink: '/#',
+  //               },
+  //               {
+  //                 label: 'Work Order Report',
+  //                 routerLink:
+  //                   '/workordersmodule/workorderspages/app-workorder-report',
+  //               },
+
+  //               {
+  //                 label: 'Inventory Report',
+  //                 routerLink:
+  //                   '/workordersmodule/workorderspages/app-inventory-report',
+  //               },
+  //             ],
+  //           },
+          
+
+  //         ],
+  //         [
+  //           {
+  //             label: 'Exchange',
+  //             items: [
+  //               {
+  //                 label: 'Exchange Quote List',
+  //                 routerLink: '/exchangemodule/exchangepages/exchange-quote-list',
+  //               },
+  //               {
+  //                 label: 'Exchange Quote Approval Rule',
+  //                 routerLink: '/exchangemodule/exchangepages/app-exchange-quote-approval-rule',
+  //               },
+  //             ]
+  //           },
+  //           {
+  //             label: 'Exchange Sales Order',
+  //             items: [
+  //               {
+  //                 label: 'Exchange Sales Order List',
+  //                 routerLink: '/exchangemodule/exchangepages/exchange-sales-order-list',
+  //               }
+  //             ]
+  //           }
+  //         ],
+  //         [
+  //           {
+  //             label: 'Speed Quote',
+  //             items: [
+  //               {
+  //                 label: 'Speed Quote List',
+  //                 routerLink: '/salesmodule/salespages/speed-quote-list',
+  //               }
+  //             ]
+  //           }
+  //         ],
+  //       ],
+  //     },
+  //     {
+  //       label: 'Stock',
+  //       icon: 'fa fa-fw fa-folder-open',
+  //       items: [
+          
+  //         [
+  //           {
+  //             label: 'Stock Line',
+  //             items: [
+  //               {
+  //                 label: 'Stock Line List',
+  //                 routerLink:
+  //                   '/stocklinemodule/stocklinepages/app-stock-line-list',
+  //               },
+  //               {
+  //                 label: 'Create Stock Line',
+  //                 routerLink:
+  //                   '/stocklinemodule/stocklinepages/app-stock-line-setup',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports and Forms',
+  //             items: [
+  //               { label: 'Item Aging', routerLink: '/#' },
+  //               { label: 'Slow Moving Stock', routerLink: '/#' },
+  //               { label: 'Hot List', routerLink: '/#' },
+              
+  //               {
+  //                 label: 'Stock Line', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render');
+  //                 }
+  //               }
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Workflow',
+  //             items: [
+  //               {
+  //                 label: 'Workflow List',
+  //                 routerLink: '/workflowmodule/workflowpages/app-workflow-list',
+  //               },
+  //               {
+  //                 label: 'Create Workflow',
+  //                 routerLink: '/workflowmodule/workflowpages/wf-create',
+  //               },
+  //               {
+  //                 label: 'Task',
+  //                 routerLink: '/singlepages/singlepages/app-tasks',
+  //               },
+  //               {
+  //                 label: 'Task Attribute',
+  //                 routerLink: '/singlepages/singlepages/app-task-attributes',
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Item Master',
+  //             icon: 'fa fa-fw fa-vcard-o ',
+  //             items: [
+  //               {
+  //                 label: 'Item List',
+  //                 routerLink:
+  //                   '/itemmastersmodule/itemmasterpages/app-item-master-list',
+  //               },
+  //               {
+  //                 label: 'Create Item Master',
+  //                 routerLink:
+  //                   '/itemmastersmodule/itemmasterpages/app-item-master-stock',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: ' Capabilities',
+  //             items: [
+  //               {
+  //                 label: 'Capabilities List',
+  //                 routerLink:
+  //                   '/itemmastersmodule/itemmasterpages/app-item-master-capabilities-list',
+  //               },
+  //               {
+  //                 label: 'Create Capabilities',
+  //                 routerLink:
+  //                   '/itemmastersmodule/itemmasterpages/app-item-master-create-capabilities',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports & Forms',
+  //             items: [
+  //               {
+  //                 label: 'Capabilities List Report', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCapabilities&rs:Command=Render');
+  //                 }
+  //               }
+
+
+
+  //             ],
+  //           },
+  //         ],
+  //       ],
+  //     },
+  //     {
+  //       label: 'Asset Management',
+  //       icon: 'fa fa-fw fa-folder-open',
+  //       items: [
+  //         [
+  //           {
+  //             label: 'Asset Management',
+  //             items: [
+  //               {
+  //                 label: 'Asset Inventory List',
+  //                 routerLink:
+  //                   '/assetmodule/assetpages/app-asset-inventory-listing',
+  //               },
+  //               {
+  //                 label: 'Add Asset Inventory',
+  //                 routerLink:
+  //                   '/assetmodule/assetpages/app-create-asset-inventory',
+  //               },
+  //               {
+  //                 label: 'Asset List',
+  //                 routerLink: '/assetmodule/assetpages/app-asset-listing',
+  //               },
+  //               {
+  //                 label: 'Create Asset',
+  //                 routerLink: '/assetmodule/assetpages/app-create-asset',
+  //               },
+  //               {
+  //                 label: 'Calibration Mgmt',
+  //                 routerLink: '/assetmodule/assetpages/app-calibration-mgmt-listing',
+  //               },
+  //               { label: 'Asset Maintenance', routerLink: '/#' },
+  //               { label: 'Leases and Insurance', routerLink: '/#' },
+               
+  //             ],
+  //           },
+  //           {
+  //             label: 'Accounting',
+  //             items: [
+  //               { label: 'Process Depreciation', routerLink: '/#' },
+  //               { label: 'Asset Adjustment', routerLink: '/#' },
+
+  //               { label: 'Asset Sale, Write Off, Write Down', routerLink: '/#' },
+
+  //               { label: 'Depreciation Forecast', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Report & Forms',
+  //             items: [
+  //               { label: 'Reports List ', routerLink: '/#' },
+  //               { label: 'Depreciation', routerLink: '/#' },
+  //               { label: 'Additons', routerLink: '/#' },
+  //               { label: 'Disposal', routerLink: '/#' },
+  //               {
+  //                 label: 'Tools List', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+  //                 }
+  //               },
+  //               { label: 'Calibration List ', routerLink: '/#' },
+  //               { label: 'Calibration Due Report', routerLink: '/#' }
+
+  //             ],
+  //           },
+           
+  //         ],
+
+  //       ],
+  //     },
+  //     {
+  //       label: 'Admin',
+  //       icon: 'fa fa-fw fa-user',
+  //       items: [
+  //         [
+  //           {
+  //             label: 'General',
+  //             items: [
+  //               { 
+  //                 label: 'Bulk Emails', 
+  //                 routerLink: 'admin/bulk-email' },
+  //               { label: 'Code Prefixes', routerLink: '/#' },
+  //               { label: 'Customer CRM', routerLink: '/#' },
+  //               { label: 'Email Config', routerLink: '/#' },
+  //               {
+  //                 label: 'Global Settings',
+  //                 routerLink: 'admin/global-settings',
+  //               },
+  //               { label: 'Approval Rule', routerLink: 'admin/po-approvals' },
+  //               { label: 'Notifications', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Employee',
+  //             items: [
+  //               { label: 'Employee List Approval', routerLink: '/#' },
+  //               { label: 'Employee Management', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Roles',
+  //             items: [
+  //               {
+  //                 label: 'Roles List',
+  //                 routerLink: '/rolesmodule/rolespages/edit-app-roles',
+  //               },
+  //               {
+  //                 label: 'Roles List by Module',
+  //                 routerLink:
+  //                   '/rolesmodule/rolespages/app-roles-list-by-module',
+  //               },
+  //               {
+  //                 label: 'Create Role',
+  //                 routerLink: '/rolesmodule/rolespages/app-roles-setup',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Work Order Settings',
+  //             items: [
+  //               {
+  //                 label: 'Work Order Settings List',
+  //                 routerLink:
+  //                   '/workordersettingsmodule/workordersettings/app-work-order-settings-list',
+  //               },
+  //               {
+  //                 label: 'WO Quote Settings List',
+  //                 routerLink:
+  //                   '/workordersettingsmodule/workordersettings/app-wo-quote-settings-list',
+  //               },
+              
+  //             ],
+  //           }
+  //         ],
+  //         [
+  //           {
+  //             label: 'Receivable',
+  //             items: [
+  //               {
+  //                 label: 'Purchase Order',
+  //                 routerLink:
+  //                   '/receivingmodule/receivingpages/app-purchase-order',
+  //               },
+  //               {
+  //                 label: 'Repair Order',
+  //                 routerLink: '/receivingmodule/receivingpages/app-ro',
+  //               },
+  //               {
+  //                 label: 'Shipping Receiver',
+  //                 routerLink: '/receivingmodule/receivingpages/app-shipping',
+  //               },
+  //               { label: 'Work Order', routerLink: '/#' },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Customer Work List ',
+  //             items: [
+  //               {
+  //                 label: 'Receive Customer List',
+  //                 routerLink:
+  //                   '/receivingmodule/receivingpages/app-customer-works-list',
+  //               },
+  //               {
+  //                 label: 'Receive Customer',
+  //                 routerLink:
+  //                   '/receivingmodule/receivingpages/app-customer-work-setup',
+  //               },
+  //             ],
+  //           },
+  //           {
+  //             label: 'Reports and forms',
+  //             items: [
+  //               {
+  //                 label: 'Receiving Log',
+  //                 command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fReceiving+Log&rs:Command=Render');
+  //                 }
+  //               },
+              
+  //               {
+  //                 label: 'Receive customer work', command: (event?: any) => {
+  //                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Work&rs:Command=Render');
+  //                 }
+  //               }
+  //             ],
+  //           },
+  //         ],
+  //         [
+  //           {
+  //             label: 'Contract Management',
+  //             items: [
+  //               { label: 'Contract List', routerLink: '/#' },
+  //               { label: 'Contract Setup', routerLink: '/#' },
+              
+  //             ],
+  //           },
+
+  //         ],
+  //       ],
+  //     },
+      
+  //   ];
 
 
 
