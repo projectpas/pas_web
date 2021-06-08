@@ -1998,7 +1998,8 @@ this.getNewMaterialListByWorkOrderId();
             this.isSpinnerVisible = true;
             this.workOrderService.getWorkOrderMaterialListNew(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
-                if (res.length > 0) {
+                this.salesQuoteService.selectedParts =[];
+                if (res && res.length > 0) {
                     res.forEach(element => {
                         this.getValues(element)
                         element.isShowPlus = true;
@@ -2018,10 +2019,12 @@ this.getNewMaterialListByWorkOrderId();
                         this.quoteMaterialList = res;
                     }
                     this.materialStatus = res[0].partStatusId;
+                    this.salesQuoteService.selectedParts =[];
                     this.salesQuoteService.selectedParts = this.workOrderMaterial;
+ 
                     this.filterParts();
                 }
-            },
+           },
                 err => {
                     this.handleError(err);
                 })
@@ -3470,7 +3473,7 @@ if(res && res.response=='Record not Exist with these details. !' ){
     validateWarnings(customerId, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
         this.commonService.customerWarnings(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
-            if (res) {
+            if (res) { 
                 this.currentWarningMessage=res.warningMessage;
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
@@ -3527,7 +3530,7 @@ if(res && res.response=='Record not Exist with these details. !' ){
     }
 
     showAlertMessage() {
-        if(!this.isView && !this.isEdit){
+        if(!this.isView &&  !this.workOrderQuoteId){
         $('#warnRestrictMesg').modal("show");
         }
     }
