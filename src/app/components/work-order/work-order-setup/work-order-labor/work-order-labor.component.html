@@ -43,7 +43,7 @@
                   <div class="form-group task-detail text_pad">
                       <label class="pad_labr">Select Task</label>
                       <ng-multiselect-dropdown 
-                          class="form-control multiple-custom-select capitalizer setCaps" [placeholder]="'Select Task'"
+                          class="form-control multiple-custom-select capitalizer setCaps" style="width:250px" [placeholder]="'Select Task'"
                           [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
                           [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"
                           (onSelect)="onItemSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
@@ -72,7 +72,7 @@
                  <div class="form-group task-detail text_pad">
                      <label class="pad_labr">Select Task</label>
                      <ng-multiselect-dropdown  appendTo="body"
-                         class="form-control multiple-custom-select capitalizer setCaps" [placeholder]="'Select Task'"
+                         class="form-control multiple-custom-select capitalizer setCaps" style="width:250px" [placeholder]="'Select Task'"
                          [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
                          [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"
                          (onSelect)="onItemSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
