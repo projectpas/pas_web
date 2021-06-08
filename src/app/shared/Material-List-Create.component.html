@@ -1,5 +1,6 @@
-<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table "
   style="overflow: hidden;">
+  <!-- column-r1-fixed -->
   <div>
     <span class="cat-heading cat4" *ngIf="!isEdit">
       Add {{ isWorkOrder ? 'PN' : ' Material' }}<i (click)="addRow()" class="fa fa-plus"></i>
@@ -9,7 +10,7 @@
     </span>
   </div>
   <form #materialCreateForm="ngForm">
-    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+    <div [ngClass]="(isEdit == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'">
     <div class="tableFixHead">
     <table class="table table-bordered" style="height:auto;max-height:350px !important">
       <thead>
@@ -29,7 +30,7 @@
           <th style="min-width:60px">Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th style="min-width:60px">Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th style="width:60px">Deferred</th>
-          <th style="z-index:1">Memo</th>
+          <th >Memo</th>
           <th *ngIf="!isEdit">Actions</th>
         </tr>
       </thead>
@@ -162,6 +163,11 @@
           <td *ngIf="!isQuote"></td>
           <td>&nbsp;</td> 
           <td>&nbsp;</td>
+          <td *ngIf="isQuote">&nbsp;</td>
+          
+          <td *ngIf="!isEdit" style="background: #f1efef !important;">&nbsp;</td>
+       
+
         </tr>
       </tfoot>
     </table>

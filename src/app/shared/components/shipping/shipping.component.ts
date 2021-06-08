@@ -815,7 +815,8 @@ checkedToGenerate(evt, ship) {
                         'Work Order Shipping created Succesfully',
                         MessageSeverity.success
                     );
-                    this.getShippingData();
+                    this.getShippingList();
+                   // this.getShippingData();
                 }, err => {
                     this.isSpinnerVisible = false;
                     this.errorHandling(err)

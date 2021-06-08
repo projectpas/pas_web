@@ -461,7 +461,6 @@ export class SalesPartNumberComponent {
   }
 
   openSalesMarginSave(event) {
-    debugger;
     if (event.isApproved == true) {
       this.isApprovedPartUpdated = true;
     }

@@ -202,7 +202,7 @@
             </ng-container>
             <ng-container *ngIf="isQuote">
               <td class="table-column-width">
-                <select class="form-control" (ngModelChange)="getValidCrg()"  [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingRate = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.extendedCost:'';">
+                <select class="form-control" (ngModelChange)="getValidCrg()"  [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingRate = dt.unitCost ;dt.billingAmount = dt.extendedCost;">
                   <option value="">Select</option>
                   <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
                     [value]="bm.value">{{bm.label}}</option>

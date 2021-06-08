@@ -1828,7 +1828,8 @@ export class StockLineSetupComponent implements OnInit {
 	POValue : number = 0;
 	ROValue : number = 0;
 	UnitPrice : number = 0;
-	changeUnitPrice(){	
+	changeUnitPrice()
+	{
 		var ROValue = 0
 		if (this.stockLineForm.purchaseOrderUnitCost != "" && this.stockLineForm.purchaseOrderUnitCost != null && this.stockLineForm.purchaseOrderUnitCost != undefined) {
 			this.POValue = this.stockLineForm.purchaseOrderUnitCost.replace(/,/g, '');

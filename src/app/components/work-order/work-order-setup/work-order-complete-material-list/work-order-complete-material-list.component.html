@@ -81,7 +81,7 @@
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 4">Unissue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 5">Unreserve Parts</h4>
-                <p id="clockdiv" class="clockdiv" *ngIf="counter"> Session Expire in {{counter | formatTime}}</p>
+                <p id="clockdiv" *ngIf="(statusId === 1 || statusId === 3) && counter" class="clockdiv"> Session Expire in {{counter | formatTime}}</p>
             </div>
             <div class="form-row mar-left-15" *ngIf="statusId !== 2 && statusId !== 4 && statusId !== 5">
                 <div class="col-md-2">
@@ -149,13 +149,13 @@
                                     <th class="text-center" style="width:60px !important"> Qty on Order </th>
                                     <th class="text-center" style="width: 110px !important;"  *ngIf="statusId === 1 || statusId === 5 ">
                                         {{statusId == 1 ? 'Reserved' : 'UnReserved'  }} Date <span class="clr-red">*</span></th>
-                                    <th class="text-center" style="width: 110px !important;"  *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
+                                    <th class="text-center" style="width: 130px !important;"  *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
                                             {{statusId === 2  ? 'Issued'  : 
                                         statusId === 3 ? 'Reserved & Issued'  
                                         : 'UnIssued' 
                                          }}
                                             Date <span class="clr-red">*</span></th>
-                                    <th class="text-center" style="width: 110px !important;" *ngIf="statusId === 1 || statusId === 5">
+                                    <th class="text-center" style="width: 130px !important;" *ngIf="statusId === 1 || statusId === 5">
                                         {{statusId === 1 ? 'Reserved' : 'UnReserved'}} By <span class="clr-red">*</span></th>
                                     <th class="text-center" style="width: 110px !important;" *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
                                         {{statusId === 2  ? 'Issued' : statusId === 3 ? 'Reserved & Issued'  :'UnIssued'  }}
@@ -594,32 +594,32 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                   <thead>
                       <tr>
                         <th rowspan="2">Task</th> 
-                        <th rowspan="2">PN </th>
-                        <th rowspan="2">PN Description</th>
+                        <th rowspan="2" style="min-width:200px !important">PN </th>
+                        <th rowspan="2" style="min-width:200px !important">PN Description</th>
                         <th rowspan="2">Serial Num</th>
                         <th rowspan="2">Cond</th>
                         <th rowspan="2">Stk Line Num</th>
                         <th rowspan="2">Request Type</th>
                         <th rowspan="2">Provision</th>
                         <!-- <th rowspan="2">PO Num </th> -->
-                        <th rowspan="2">Qty Req</th>
-                        <th rowspan="2">Qty Res </th>
-                        <th rowspan="2">Qty Iss</th>
-                        <th rowspan="2">Qty Turned In</th>
-                        <th rowspan="2">Qty OH</th>
-                        <th rowspan="2">Qty Avail</th>
-                        <th rowspan="2">Qty Rem</th>
+                        <th rowspan="2" style="min-width:80px !important">Qty Req</th>
+                        <th rowspan="2" style="min-width:80px !important">Qty Res </th>
+                        <th rowspan="2" style="min-width:80px !important">Qty Iss</th>
+                        <th rowspan="2" style="min-width:80px !important">Qty Turned In</th>
+                        <th rowspan="2" style="min-width:80px !important">Qty OH</th>
+                        <th rowspan="2" style="min-width:80px !important" >Qty Avail</th>
+                        <th rowspan="2" style="min-width:80px !important">Qty Rem</th>
                         <th rowspan="2">UOM</th>
                         <th rowspan="2">Stk Type</th> 
                         <th rowspan="2">Classification</th>
-                        <th rowspan="2">Qty On Order</th>
-                        <th rowspan="2">Qty on BK Order</th>
+                        <th rowspan="2" style="min-width:80px !important">Qty On Order</th>
+                        <th rowspan="2" style="min-width:100px !important">Qty on BK Order</th>
                         <th rowspan="2">Need Date</th>
                         <th rowspan="2">Cntl Num</th>
                         <th rowspan="2">Cntl ID</th>
                         <th rowspan="2">Cur</th>
-                        <th rowspan="2">Unit Cost</th>
-                        <th rowspan="2">Extended Cost </th>
+                        <th rowspan="2" style="min-width:100px !important">Unit Cost</th>
+                        <th rowspan="2" style="min-width:100px !important">Extended Cost </th>
                         <th rowspan="2">Cost Date</th>
                         <th rowspan="2">PO Num </th>
                         <th rowspan="2">RO Num</th>
@@ -632,8 +632,8 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                         <th rowspan="2">Location</th>
                         <th rowspan="2">Shelf</th> 
                         <th rowspan="2">Bin</th>
-                        <th rowspan="2">Is Active</th>
-                        <th rowspan="2">Is Deleted</th>
+                        <th rowspan="2" style="min-width:70px !important">Is Active</th>
+                        <th rowspan="2" style="min-width:70px !important">Is Deleted</th>
                         <th rowspan="2" class="min-width-250">Memo</th>
                         <th rowspan="2">Created Date</th>
                         <th rowspan="2">Created By</th>
@@ -652,25 +652,25 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'mandatoryOrSupplemental', audit.mandatoryOrSupplemental) ? 'black' : 'red'}">{{ audit.mandatoryOrSupplemental }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'provision', audit.provision) ? 'black' : 'red'}">{{ audit.provision }}</td>
                           <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'provision', audit.provision) ? 'black' : 'red'}">{{ audit.provision }}</td> -->
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityRequried', audit.qunatityRequried) ? 'black' : 'red'}">{{ audit.qunatityRequried }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityReserved', audit.qunatityReserved) ? 'black' : 'red'}">{{ audit.qunatityReserved }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'quantityIssued', audit.quantityIssued) ? 'black' : 'red'}">{{ audit.quantityIssued }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityTurnIn', audit.qunatityTurnIn) ? 'black' : 'red'}">{{ audit.qunatityTurnIn }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityOnHand', audit.partQuantityOnHand) ? 'black' : 'red'}">{{ audit.partQuantityOnHand }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityAvailable', audit.partQuantityAvailable) ? 'black' : 'red'}">{{ audit.partQuantityAvailable }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityRemaining', audit.qunatityRemaining) ? 'black' : 'red'}">{{ audit.qunatityRemaining }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityRequried', audit.qunatityRequried) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityRequried }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityReserved', audit.qunatityReserved) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityReserved }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'quantityIssued', audit.quantityIssued) ? 'black' : 'red'}" class="text-right">{{ audit.quantityIssued }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityTurnIn', audit.qunatityTurnIn) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityTurnIn }}</td>
+                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityOnHand', audit.partQuantityOnHand) ? 'black' : 'red'}" class="text-right">{{ audit.partQuantityOnHand }}</td>
+                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityAvailable', audit.partQuantityAvailable) ? 'black' : 'red'}" class="text-right">{{ audit.partQuantityAvailable }}</td>
+                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityRemaining', audit.qunatityRemaining) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityRemaining }}</td>
                           <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'uom', audit.uom) ? 'black' : 'red'}">{{ audit.uom }}</td>
                             <td [ngStyle]="{color: getColorCodeForHistory(i, 'stockType', audit.stockType) ? 'black' : 'red'}">{{ audit.stockType }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'itemClassification', audit.itemClassification) ? 'black' : 'red'}">{{ audit.itemClassification }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityOnOrder', audit.partQuantityOnOrder) ? 'black' : 'red'}">{{ audit.partQuantityOnOrder }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityBackOrder', audit.qunatityBackOrder) ? 'black' : 'red'}">{{ audit.qunatityBackOrder }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'needDate', audit.needDate) ? 'black' : 'red'}">{{  audit.needDate | date: 'MM/dd/yyyy' }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityOnOrder', audit.partQuantityOnOrder) ? 'black' : 'red'}" class="text-right">{{ audit.partQuantityOnOrder }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityBackOrder', audit.qunatityBackOrder) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityBackOrder }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'needDate', audit.needDate) ? 'black' : 'red'}">{{  audit.needDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'controlNo', audit.controlNo) ? 'black' : 'red'}">{{ audit.controlNo }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'controlId', audit.controlId) ? 'black' : 'red'}">{{ audit.controlId }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'currency', audit.currency) ? 'black' : 'red'}">{{ audit.currency }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'unitCost', audit.unitCost) ? 'black' : 'red'}">{{ audit.unitCost }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'extendedCost', audit.extendedCost) ? 'black' : 'red'}">{{ audit.extendedCost }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'costDate', audit.costDate) ? 'black' : 'red'}">{{ audit.costDate | date: 'MM/dd/yyyy'}}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'unitCost', audit.unitCost) ? 'black' : 'red'}" class="text-right">{{ audit.unitCost }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'extendedCost', audit.extendedCost) ? 'black' : 'red'}" class="text-right">{{ audit.extendedCost }}</td>
+                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'costDate', audit.costDate) ? 'black' : 'red'}">{{ audit.costDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderNumber', audit.purchaseOrderNumber) ? 'black' : 'red'}">{{ audit.purchaseOrderNumber }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderNumber', audit.repairOrderNumber) ? 'black' : 'red'}">{{ audit.repairOrderNumber }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'receiver', audit.receiver) ? 'black' : 'red'}">{{ audit.receiver }}</td>
@@ -693,9 +693,9 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                         <td class="min-width-250" [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
                             <p class="p_editor" [innerHTML]="audit.memo"></p>
                         </td>
-                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>
+                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
                         <td>{{ audit.createdBy }}</td>
-                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'updatedDate', audit.updatedDate) ? 'black' : 'red'}">{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm:ss a'}}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'updatedDate', audit.updatedDate) ? 'black' : 'red'}">{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                           <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy) ? 'black' : 'red'}">{{ audit.updatedBy }}</td>
                       </tr>
                       </tbody>
