@@ -1598,7 +1598,8 @@ export class RoSetupComponent implements OnInit {
 			}
 			if (this.headerInfo.statusId == this.roFulfillingstatusID) {
 				this.disableAddPart = true;
-			} else {
+			}
+			else {
 				this.disableAddPart = false;
 			}
 			this.enableHeaderSaveBtn = false;
@@ -4656,8 +4657,8 @@ export class RoSetupComponent implements OnInit {
 			this.disableAddPart = true;
 			this.enableHeaderSaveBtn = true;
 		} else {
-			this.disableAddPart = false;
 			this.enableHeaderSaveBtn = false;
+			this.disableAddPart = false;
 		}
 		if (this.headerInfo.statusId == this.roOpenstatusID) {
 			this.disableHeaderInfo = false;
@@ -4844,7 +4845,8 @@ export class RoSetupComponent implements OnInit {
 				this.enableHeaderSaveBtn = false;
 				if (this.headerInfo.statusId == this.roFulfillingstatusID) {
 					this.disableAddPart = true;
-				} else {
+				}
+				else {
 					this.disableAddPart = false;
 				}
 				this.isSpinnerVisible = false;
@@ -5149,7 +5151,7 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	StockLinePopup(row) {		
+	StockLinePopup(row) {
 		debugger
 		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
