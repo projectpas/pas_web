@@ -146,8 +146,21 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       this.addNewCharges = true;
     }
     if (this.buildMethodDetails) {
-      this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
+
+      if(this.buildMethodDetails['chargesBuildMethod'] == null || this.buildMethodDetails['chargesBuildMethod'] == 0|| this.buildMethodDetails['chargesBuildMethod'] == undefined)
+      {
+          this.costPlusType = 1;
+          this.tmchange();
+      }else{
+          this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
+      }
+
+      if(this.isLoadWoCharges)
+      {
+        this.tmchange();
+      }
       this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'];
+    
     }
   }
   ngOnInit() {
@@ -166,7 +179,19 @@ if(!this.isSummarizedView){
     // }
     if (this.buildMethodDetails) {
       this.workOrderQuoteDetailsId=this.buildMethodDetails['workOrderQuoteDetailsId'];
-      this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
+      if(this.buildMethodDetails['chargesBuildMethod'] == null || this.buildMethodDetails['chargesBuildMethod'] == 0|| this.buildMethodDetails['chargesBuildMethod'] == undefined)
+      {
+          this.costPlusType = 1;
+          this.tmchange();
+      }else{
+          this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
+      }
+
+      if(this.isLoadWoCharges)
+      {
+        this.tmchange();
+      }
+    
       this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'];
       if(this.buildMethodDetails.workOrderQuoteDetailsId !=0){
       this.disableCrg=true;
@@ -414,8 +439,10 @@ if(!this.isSummarizedView){
     })
     let result = { 'data': sendData, 'taskSum': WorkOrderQuoteTask, 'chargesFlatRateBillingAmount': this.chargesFlatRateBillingAmount, 'ChargesBuildMethod': this.costPlusType }
     this.createQuote.emit(result);
+
     this.buildMethodDetails['chargesBuildMethod'] =this.costPlusType;
     this.buildMethodDetails['chargesFlatBillingAmount']=this.chargesFlatRateBillingAmount;
+
     this.disableCrg=true;
   }
 
@@ -452,7 +479,7 @@ if(!this.isSummarizedView){
         (x) => {
           x.billingMethodId = (billingMethodId == 3) ? '' : billingMethodId;
           x.markupPercentageId = '';
-          x.billingRate = 0.00;
+          x.billingRate = x.unitCost;
           x.billingAmount = x.extendedCost;
           // if (this.costPlusType == 3) {
           //   x.billingAmount = 0.00;

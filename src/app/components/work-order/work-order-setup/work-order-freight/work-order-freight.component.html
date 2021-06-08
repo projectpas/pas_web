@@ -181,7 +181,7 @@
           </td> -->
           <ng-container *ngIf="isQuote">
             <td class="table-column-width">
-              <select class="form-control" (ngModelChange)="getValidFrt()" [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';(dt.billingMethodId == '2')?dt.billingAmount = dt.amount:'';">
+              <select class="form-control" (ngModelChange)="getValidFrt()" [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingAmount = dt.amount">
                 <option value="">Select</option>
                 <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
                   [value]="bm.value">{{bm.label}}</option>
@@ -657,8 +657,8 @@
   </div>
   <div class="modal-body">
     <strong>
-      Ship Via :
-        <span class="new-label">{{currentRow.shipVia}}</span>
+      Task Name :
+        <span class="new-label">{{currentRow.taskName}}</span>
     </strong>
 </div>
   <div class="modal-footer">
