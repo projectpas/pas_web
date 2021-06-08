@@ -798,6 +798,7 @@ export class TimeLifeDraftData {
     cyclesSinceOVH: string = null;
     cyclesSinceInspection: string = null;
     cyclesSinceRepair: string = null;
+    
     timeRemaining: string = null;
     timeSinceNew: string = null;
     timeSinceOVH: string = null;
@@ -806,6 +807,7 @@ export class TimeLifeDraftData {
     lastSinceNew: string = null;
     lastSinceOVH: string = null;
     lastSinceInspection: string = null;
+    
     masterCompanyId: number = 0;
     isActive: boolean;
     StockLineDraftId: number = 0;

@@ -859,8 +859,8 @@ export class StockLineSetupComponent implements OnInit {
 				}
 				else {
 					this.hideSerialNumber = true;
-				}
-				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {
+				}				
+				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {					
 					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;
 					//this.sourceTimeLife = res.timelIfeData;										
 				    this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
