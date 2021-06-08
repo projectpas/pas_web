@@ -48,6 +48,7 @@ export class SalesMarginComponent implements OnInit {
     this.part.quantityFromThis = this.prevQntity;
     this.part.quantityToBeQuoted = Number(this.part.quantityFromThis);
     this.part.quantityAlreadyQuoted = Number(this.part.quantityFromThis);
+    this.isEdit = false;
     event.preventDefault();
     this.close.emit(true);
   }
@@ -129,7 +130,7 @@ export class SalesMarginComponent implements OnInit {
         this.invalidQuantityenteredForQuantityFromThis = true;
       }
       else {
-        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted || this.part.quantityFromThis > this.part.qtyAvailable;
+        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted || (this.part.stockLineId != null && this.part.quantityFromThis > this.part.qtyAvailable);
       }
     } else {
       this.invalidQuantityenteredForQuantityFromThis = true;
@@ -148,7 +149,7 @@ export class SalesMarginComponent implements OnInit {
         this.invalidQuantityenteredForQuantityFromThis = true;
       }
       else {
-        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted || this.part.quantityFromThis > this.part.qtyAvailable;
+        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted || (this.part.stockLineId != null && this.part.quantityFromThis > this.part.qtyAvailable);
       }
     } else {
       this.invalidQuantityenteredForQuantityFromThis = true;
