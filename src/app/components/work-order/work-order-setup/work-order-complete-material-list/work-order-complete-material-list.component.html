@@ -779,7 +779,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                  <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"   matTooltip="Create PO" matTooltipPosition="above" ><i class="fa fa-plus"></i></button></span>
                 <span *ngIf="!isSubWorkOrder">
                 <button class="btn nobg" mat-icon-button
-                (click)="pickticketItemInterface(rowData,pickticketieminterface)" matTooltip="Add PT"
+                (click)="pickticketItemInterface(rowData,pickticketieminterface)" matTooltip="Add Pick Ticket"
                 matTooltipPosition="above" style="font-weight: bold;"
                 [disabled]="!(rowData.partStatusId >0)">
                 <i class="fa fa-plus" [ngClass]="{'btn_disabled':!(rowData.partStatusId >0)}"></i> 
