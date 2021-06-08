@@ -818,10 +818,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
         this.quotationHeader.masterCompanyId = this.authService.currentUser.masterCompanyId,
-        this.quotationHeader.CreatedBy= this.userName
         this.quotationHeader.UpdatedBy= this.userName
         if(isCreateQuote)
         {
+            this.quotationHeader.CreatedBy= this.userName
             this.quotationHeader.CreatedDate= new Date().toDateString()
             this.quotationHeader.UpdatedDate= new Date().toDateString()
         }else
@@ -872,7 +872,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             SalesPersonId: quoteHeader.salesPersonId,
             EmployeeId: quoteHeader.employeeId,
             masterCompanyId: this.authService.currentUser.masterCompanyId,
-            createdBy: this.userName,
+            createdBy: quoteHeader.createdBy,
             updatedBy: this.userName,
             IsActive: true,
             IsDeleted: false,

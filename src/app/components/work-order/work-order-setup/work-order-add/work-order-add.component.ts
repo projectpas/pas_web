@@ -315,6 +315,12 @@ export class WorkOrderAddComponent implements OnInit {
                     this.handleError(err);
                 }) 
         }
+        
+        if(this.isEdit == undefined)
+        {
+            this.isEdit=false;
+        }
+
         if (this.isEdit == true) {
             this.disableSaveForEdit = true;
             this.isDetailedView = false;
@@ -397,6 +403,10 @@ setTimeout(() => {
         
         if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
             this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : '0.00';
+        }
+        if(this.isEdit == undefined)
+        {
+            this.isEdit=false;
         }
         if (!this.isEdit && this.workOrderGeneralInformation) {
             this.workOrderGeneralInformation.partNumbers.forEach(
@@ -1125,6 +1135,7 @@ setTimeout(() => {
         currentRecord.tatDaysStandard=0;
     } 
    isValidationfailed:boolean=false;
+
     saveWorkOrder(): void {
         this.mpnPartNumbersList = [];
         const generalInfo = this.workOrderGeneralInformation;
@@ -1184,6 +1195,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         this.isValidationfailed= true;
     }
 })
+debugger;
  if(this.isValidationfailed==false){
         const data1 = {
             ...generalInfo,
@@ -1195,7 +1207,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
             customerContact: getValueFromObjectByKey('contactName', this.myCustomerContact),
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             customerContactId: getValueFromObjectByKey('customerContactId', this.myCustomerContact),
-            createdBy: this.userName,
+            createdBy: this.isEdit == false ? this.userName : generalInfo.createdBy,
             updatedBy: this.userName,
             revisedPartId: this.revisedPartId == 0 ? null :  this.revisedPartId,
           
@@ -1207,7 +1219,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     workOrderStageId: editValueAssignByCondition('workOrderStageId', x.workOrderStageId),
                     mappingItemMasterId: editValueAssignByCondition('mappingItemMasterId', x.mappingItemMasterId),
                     technicianId: editValueAssignByCondition('employeeId', x.partTechnicianId),
-                    createdBy: this.userName,
+                    createdBy: this.isEdit == false ? this.userName : x.createdBy,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
                     cMMId:x.cMMId==0 ? null :x.cMMId,
