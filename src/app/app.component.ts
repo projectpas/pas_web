@@ -644,137 +644,93 @@ export class AppComponent implements OnInit, AfterViewInit {
               ],
             },
           ],
-          [
-            {
-              label: 'Workflow',
-              items: [
-                {
-                  label: 'Workflow List',
-                  routerLink: '/workflowmodule/workflowpages/app-workflow-list',
-                },
-                {
-                  label: 'Create Workflow',
-                  routerLink: '/workflowmodule/workflowpages/wf-create',
-                },
-                {
-                  label: 'Task',
-                  routerLink: '/singlepages/singlepages/app-tasks',
-                },
-                {
-                  label: 'Task Attribute',
-                  routerLink: '/singlepages/singlepages/app-task-attributes',
-                },
-              ],
-            },
-          ],
-          [
-            {
-              label: 'Item Master',
-              icon: 'fa fa-fw fa-vcard-o ',
-              items: [
-                {
-                  label: 'Item List',
-                  routerLink:
-                    '/itemmastersmodule/itemmasterpages/app-item-master-list',
-                },
-                {
-                  label: 'Create Item Master',
-                  routerLink:
-                    '/itemmastersmodule/itemmasterpages/app-item-master-stock',
-                },
-              ],
-            },
-            {
-              label: ' Capabilities',
-              items: [
-                {
-                  label: 'Capabilities List',
-                  routerLink:
-                    '/itemmastersmodule/itemmasterpages/app-item-master-capabilities-list',
-                },
-                {
-                  label: 'Create Capabilities',
-                  routerLink:
-                    '/itemmastersmodule/itemmasterpages/app-item-master-create-capabilities',
-                },
-              ],
-            },
-            {
-              label: 'Reports & Forms',
-              items: [
-                {
-                  label: 'Capabilities List Report', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCapabilities&rs:Command=Render');
-                  }
-                }
-
-
-
-              ],
-            },
-          ],
+         
         ],
       },
+
       {
-        label: 'Asset Management',
-        icon: 'fa fa-fw fa-folder-open',
+        label: 'Procurement',
+        icon: '',
         items: [
           [
             {
-              label: 'Asset Management',
+              label: 'Vendor',
               items: [
                 {
-                  label: 'Asset Inventory List',
-                  routerLink:
-                    '/assetmodule/assetpages/app-asset-inventory-listing',
-                },
-                {
-                  label: 'Add Asset Inventory',
-                  routerLink:
-                    '/assetmodule/assetpages/app-create-asset-inventory',
-                },
-                {
-                  label: 'Asset List',
-                  routerLink: '/assetmodule/assetpages/app-asset-listing',
-                },
-                {
-                  label: 'Create Asset',
-                  routerLink: '/assetmodule/assetpages/app-create-asset',
-                },
-                {
-                  label: 'Calibration Mgmt',
-                  routerLink: '/assetmodule/assetpages/app-calibration-mgmt-listing',
-                },
-                { label: 'Asset Maintenance', routerLink: '/#' },
-                { label: 'Leases and Insurance', routerLink: '/#' },
+                  label: 'Vendor List',
+                  routerLink: '/vendorsmodule/vendorpages/app-vendors-list',
+                 },
+                 {
+                   label: 'Vendor Capes List',
+                   routerLink: '/vendorsmodule/vendorpages/app-vendor-capabilities-list',
+                 },
+               
                
               ],
             },
             {
-              label: 'Accounting',
+              label: 'Vendor Quote',
               items: [
-                { label: 'Process Depreciation', routerLink: '/#' },
-                { label: 'Asset Adjustment', routerLink: '/#' },
-
-                { label: 'Asset Sale, Write Off, Write Down', routerLink: '/#' },
-
-                { label: 'Depreciation Forecast', routerLink: '/#' },
+                { label: 'Vendor Quote List', routerLink: '/#' },
+                
               ],
             },
             {
-              label: 'Report & Forms',
+              label: 'Purchase Order',
               items: [
-                { label: 'Reports List ', routerLink: '/#' },
-                { label: 'Depreciation', routerLink: '/#' },
-                { label: 'Additons', routerLink: '/#' },
-                { label: 'Disposal', routerLink: '/#' },
                 {
-                  label: 'Tools List', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
-                  }
-                },
-                { label: 'Calibration List ', routerLink: '/#' },
-                { label: 'Calibration Due Report', routerLink: '/#' }
+                 label: 'PO List',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-polist',
+                 },
+                 {
+                   label: 'PO Pending Approval',
+                   command: () => this.clearStocklineAndSOStorageReference(),
+                    routerLink: '/vendorsmodule/vendorpages/app-po-approval',
+                   },
+
+              
+              ],
+            }, 
+            {
+              label: 'Repair Order',
+              items: [
+                {
+                 label: 'RO List',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-ro-list',
+                  },
+                  {
+                    label: 'RO Pending Approval',
+                    command: () => this.clearStocklineAndSOStorageReference(),
+                     routerLink: '/vendorsmodule/vendorpages/app-ro-approval',
+                    },
+
+              
+              ],
+            },
+            {
+              label: 'RMA and Returns',
+              items: [
+                { label: 'RMA List', routerLink: '/#' },
+                { label: 'Return List', routerLink: '/#' },
+                { label: 'Process Return', routerLink: '/#' },
+
+              
+              ],
+            },
+            {
+              label: 'Reports',
+              items: [
+                { label: 'Open Vendor PO/RO Report ', routerLink: '/#' },
+                { label: 'Open Vendor RFQ Report', routerLink: '/#' },
+                { label: 'Payment History', routerLink: '/#' },
+                {
+                 label: 'Vendor Capabilities', command: (event?: any) => {
+                 this.navigateToURL(environment.reportUrl + '/Reports/report/Report%20Project1/Capabilities');
+                 }
+                }
+               
 
               ],
             },
@@ -783,65 +739,636 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         ],
       },
+
+      {
+        label: 'Shipping & Receiving',
+        icon: '',
+        items: [
+          [
+            {
+              label: 'Receive Purchase Order',
+              items: [
+                
+                { label: 'PO Fulfilling List', routerLink: '/#' },
+                
+              ],
+            },
+            {
+              label: 'Receive RO',
+              items: [
+                { label: 'RO Fulfilling List', routerLink: '/#' },
+              
+              ],
+            },
+            {
+              label: 'Receive Customer Work',
+              items: [
+                {
+                  label: 'List of Customer Work',
+                  routerLink:
+                  '/receivingmodule/receivingpages/app-customer-works-list',
+              },
+               
+              ],
+            },
+            {
+              label: 'Shipping',
+              items: [
+                {
+                  label: 'Shipping List',
+                  routerLink: '',
+              },
+              {
+                label: 'Return to Vendor',
+                routerLink: '',
+            },
+               
+              ],
+            },
+
+            {
+              label: 'Reports',
+              items: [
+                {
+                  label: 'PO/RO Receiving Log',
+                  routerLink: '',
+              },
+              {
+                label: 'Receive Customer Work Log',
+                routerLink: '',
+            },
+            {
+              label: 'WO/SO Shipping Log',
+              routerLink: '',
+          },
+          {
+            label: 'Return to Vendor Shipping Log',
+            routerLink: '',
+        },
+               
+              ],
+            },
+          
+          ],
+          [
+            {
+              label: 'Journals',
+              items: [
+                {
+                 label: 'Journal List',
+                routerLink: '/accountmodule/accountpages/app-list-journel',
+                 },
+                 {
+                  label: 'Schedule Journals',
+                 routerLink: '/accountmodule/accountpages/app-schedule',
+                 },
+              
+              ],
+            },
+            {
+              label: 'GL Accounts ',
+              items: [
+                {
+                 label: ' List of GL Accounts',
+                  routerLink:
+                '/generalledgermodule/generalledgerpage/app-account-listing',
+                },
+               
+              ],
+            },
+
+            {
+              label: 'Accounting Calendar ',
+              items: [
+                {
+                  label: 'Accounting Calendar List',
+                   routerLink:
+                   '/generalledgermodule/generalledgerpage/app-accounting-listing-calendar',
+                  },
+                  {
+                   label: 'Open/Close Ledger',
+                   routerLink:
+                   '/generalledgermodule/generalledgerpage/app-open-close-ledger',
+                    },
+               
+              ],
+            },
+
+            {
+              label: 'Financial Statement Maintenance ',
+              items: [
+                {
+                  label: 'List of FS Nodes',
+                   routerLink:
+                   '/generalledgermodule/generalledgerpage/app-accounting-listing-calendar',
+                  },
+               
+               
+              ],
+            },
+            {
+              label: 'Vendor',
+              items: [
+                {
+                  label: 'Vendor List',
+                  routerLink: '/vendorsmodule/vendorpages/app-vendors-list',
+                  },
+                  {
+                    label: 'Vendor Capes',
+                     routerLink:
+                     '/vendorsmodule/vendorpages/app-vendor-capabilities-list',
+                    },
+               
+               
+              ],
+            },
+
+            {
+              label: 'Organization',
+              items: [
+                {
+                  label: 'Legal Entity List',
+                  routerLink: '/generalledgermodule/generalledgerpage/app-legal-entity-list',
+                  },
+                  {
+                    label: 'Management Structure',
+                     routerLink:
+                     '/generalledgermodule/generalledgerpage/app-managemententity-structure',
+                    },
+               
+               
+              ],
+            },
+
+            {
+              label: 'Currency',
+              items: [
+                {
+                  label: 'Currency List',
+                  routerLink: '',
+                  },
+                  {
+                    label: 'FX Rates',
+                     routerLink:
+                     '',
+                    },
+               
+               
+              ],
+            },
+
+            {
+              label: 'Reports',
+              items: [
+                {
+                   label: 'Trial Balance', command: (event?: any) => {
+                   this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTrial+Bal&rs:Command=Render');
+                   }
+                  },
+              
+                  { label: 'Income Statement', routerLink: '/#' },
+                  { label: 'Balance Sheet', routerLink: '/#' },
+              ],
+            },
+
+            {
+              label: 'Inventory Adjustment',
+              items: [
+                {
+                  label: 'Inventory Adjustment List',
+                  routerLink: '',
+                  },
+                 
+               
+              ],
+            },
+
+          ],
+         
+        ],
+      },
+
+
+      {
+        label: 'Accounting',
+        icon: '',
+        items: [
+          [
+            {
+              label: 'Accounts Receivable',
+              items: [
+                
+                { label: 'Customer Invoice List', routerLink: '/#' },
+                { label: 'Process Customer Receipt', routerLink: '/#' },
+                { label: 'Print Statements', routerLink: '/#' },
+                
+              ],
+            },
+            {
+              label: 'AR Admin',
+              items: [
+                { label: 'AR Ledger List', routerLink: '/#' },
+                { label: 'Open/Close AR Ledger', routerLink: '/#' },
+              
+              ],
+            },
+            {
+              label: 'Reports',
+              items: [
+                {
+                  label: 'AR Aging',
+                  routerLink:'',
+              },
+              {
+                label: 'Payment History',
+                routerLink:'',
+              },
+              {
+              label: 'Customer Statement',
+              routerLink:'',
+              },
+              {
+                label: 'Deposit',
+                routerLink:'',
+              },
+              {
+                label: 'Credit/Write Off History',
+                routerLink:'',
+              },
+              {
+                label: 'Payment Discount',
+                routerLink:'',
+              },
+               
+              ],
+            },
+          
+          ],
+          [
+            {
+              label: 'Accounts Payable',
+              items: [
+                {
+                 label: 'Vendor Invoice List',
+                routerLink: '',
+                 },
+                 {
+                  label: 'Enter Vendor Invoice',
+                 routerLink: '',
+                 },
+                 {
+                  label: 'Vendor Chargebacks List',
+                 routerLink: '',
+                 },
+                 {
+                  label: 'Generate Check Register',
+                 routerLink: '',
+                 },
+                 {
+                  label: 'Print Checks',
+                 routerLink: '',
+                 },
+              
+              ],
+            },
+            {
+              label: 'AP Admin ',
+              items: [
+                {
+                 label: 'AP Ledger List',
+                  routerLink: '',
+                },
+                {
+                  label: 'Open/Close AP Ledger',
+                   routerLink: '',
+                 },
+               
+              ],
+            },
+
+            {
+              label: 'Reports ',
+              items: [
+                {
+                  label: 'AP Aging',
+                   routerLink:'',
+                  },
+                  {
+                    label: 'AP Register',
+                     routerLink:'',
+                    },
+                    {
+                      label: 'Payment History',
+                       routerLink:'',
+                      },
+                      {
+                        label: 'Open Vendor Invoice',
+                         routerLink:'',
+                        },
+                        {
+                          label: 'Check Register',
+                           routerLink:'',
+                          },
+               
+              ],
+            },
+
+          ],
+         
+        ],
+      },
+
+      {
+        label: 'Asset Management',
+        icon: '',
+        items: [
+          [
+            {
+              label: 'Asset Master',
+              items: [
+                {
+                  label: 'Asset List',
+                  routerLink: '/assetmodule/assetpages/app-asset-listing',
+                },
+                
+               
+              ],
+            },
+            {
+              label: 'Asset Inventory',
+              items: [
+                {
+                   label: 'Asset Inventory List',
+                   routerLink:
+                 '/assetmodule/assetpages/app-asset-inventory-listing',
+                 },
+                
+              ],
+            },
+            {
+              label: 'Asset Maintenance',
+              items: [
+                {
+                 label: 'Calibration,Certification',
+                  
+                  routerLink: '',
+                 },
+                 {
+                   label: 'Lease and Insurance',
+                    routerLink: '',
+                   },
+                   {
+                    label: 'Asset Maintenance',
+                     routerLink: '',
+                    },
+              ],
+            }, 
+            {
+              label: 'Asset Accounting',
+              items: [
+                {
+                 label: 'Process Depreciation',                  
+                  routerLink: '',
+                 },
+                 {
+                   label: 'Sale/Write off/Write Down ',
+                    routerLink: '',
+                   },
+                   {
+                    label: 'Depreciation Forecast',
+                     routerLink: '',
+                    },
+              ],
+            }, 
+            {
+              label: 'Reports',
+              items: [
+                {
+                 label: 'Tool List',                  
+                  routerLink: '',
+                 },
+                 {
+                   label: 'Calibration List ',
+                    routerLink: '',
+                   },
+                   {
+                    label: 'Calibration Tracking',
+                     routerLink: '',
+                    },
+                    {
+                      label: 'Asset Register',
+                       routerLink: '',
+                      },
+                      {
+                        label: 'Depreciation',
+                         routerLink: '',
+                        },
+              ],
+            }, 
+          ],
+
+        ],
+      },
+
+      {
+        label: 'Invoice Management',
+        icon: 'fa fa-fw fa-folder-open',
+        items: [
+          [
+            {
+              label: 'Invoice',
+              items: [
+                {
+                  label: 'Invoice Listing',
+                  routerLink: '',
+                },
+                {
+                  label: 'Create Invoice',
+                  routerLink: '',
+                },
+                {
+                  label: 'Print Invoice',
+                  routerLink: '',
+                },
+                {
+                  label: 'Print Pick Ticket',
+                  routerLink: '',
+                },
+                {
+                  label: 'Print/Post',
+                  routerLink: '',
+                },
+                { label: 'RMA List', routerLink: '/#' },
+                { label: 'Credit List', routerLink: '/#' },
+               
+              ],
+            },
+            {
+              label: 'Sales Order Invoicing',
+              items: [
+                { label: 'SO Invoice List', routerLink: '/#' },
+                { label: 'Process SO Invoice', routerLink: '/#' },
+              ],
+            },
+            {
+              label: 'Work Order Invoicing',
+              items: [
+                { label: 'WO Invoice List', routerLink: '/#' },
+                { label: 'Process WO Invoice', routerLink: '/#' },
+              ],
+            },
+            {
+              label: 'Reports',
+              items: [
+                { label: 'Invoice Journal Summary ', routerLink: '/#' },
+                { label: 'Invoice Journal Details', routerLink: '/#' },
+                { label: 'Invoice Register', routerLink: '/#' },
+                { label: 'Customer Statement', routerLink: '/#' },
+                { label: 'Customer Returns/Credit', routerLink: '/#' },
+              ],
+            },
+           
+          ],
+
+        ],
+      },
+
+
+
+      {
+        label: 'Other',
+        icon: '',
+        items: [
+          [
+            {
+              label: 'Publication',
+              items: [
+                {
+                  label: 'Publication list',
+                  routerLink: '/singlepages/singlepages/app-publication',
+                },               
+              ],
+            },
+            {
+              label: 'Reports',
+              items: [
+                { label: 'Publication by PN', routerLink: '/#' },
+                { label: 'Publication Tracking', routerLink: '/#' },
+              ],
+            },
+            {
+              label: 'Contract Management',
+              items: [
+                { label: 'Contract List', routerLink: '/#' },
+              ],
+            },
+            {
+              label: 'Expence Report Management',
+              items: [
+                { label: 'Expense Report List ', routerLink: '/#' },
+                { label: 'Expense Report Pending Approval', routerLink: '/#' },
+               
+              ],
+            },
+           
+          ],
+
+        ],
+      },
+
+      {
+        label: 'Reports',
+        icon: '',
+        items: [
+         
+           
+                {
+                  label: 'Capabilities',
+                  routerLink: '',
+                },
+                {
+                  label: 'CMM',
+                  routerLink: '',
+                },
+                {
+                  label: 'Tools',
+                  routerLink: '',
+                },               
+          
+
+        ],
+      },
+
+      {
+        label: 'Business Analytics',
+        icon: '',
+        // items: [
+        //   [
+           
+        //         {
+        //           label: '',
+        //           routerLink: '',
+        //         },
+                      
+        //   ],
+
+        // ],
+      },
       {
         label: 'Admin',
         icon: 'fa fa-fw fa-user',
         items: [
+         
           [
+            { label: 'Roles ', routerLink: '/#' },
+            { label: 'Global Settings ', routerLink: '/#' },
             {
-              label: 'General',
+              label: 'Single Screen',
               items: [
-                { 
-                  label: 'Bulk Emails', 
-                  routerLink: 'admin/bulk-email' },
-                { label: 'Code Prefixes', routerLink: '/#' },
-                { label: 'Customer CRM', routerLink: '/#' },
-                { label: 'Email Config', routerLink: '/#' },
-                {
-                  label: 'Global Settings',
-                  routerLink: 'admin/global-settings',
-                },
-                { label: 'Approval Rule', routerLink: 'admin/po-approvals' },
-                { label: 'Notifications', routerLink: '/#' },
+                { label: '', routerLink: '/#' },
+               
               ],
             },
             {
-              label: 'Employee',
-              items: [
-                { label: 'Employee List Approval', routerLink: '/#' },
-                { label: 'Employee Management', routerLink: '/#' },
-              ],
-            },
-            {
-              label: 'Roles',
+              label: 'CRM/Customer',
               items: [
                 {
-                  label: 'Roles List',
-                  routerLink: '/rolesmodule/rolespages/edit-app-roles',
+                  label: 'CRM Setting List',
+                  routerLink: '',
                 },
                 {
-                  label: 'Roles List by Module',
+                  label: 'Speed Quote',
                   routerLink:
-                    '/rolesmodule/rolespages/app-roles-list-by-module',
+                    '',
                 },
                 {
-                  label: 'Create Role',
-                  routerLink: '/rolesmodule/rolespages/app-roles-setup',
+                  label: 'Bulk Mail',
+                  routerLink: '',
                 },
               ],
             },
             {
-              label: 'Work Order Settings',
+              label: 'Item Master',
+              items: [
+                { label: 'Itemmaster setup List ', routerLink: '/#' },
+                { label: 'Inventory setup List ', routerLink: '/#' },
+               
+              ],
+            },
+            {
+              label: 'Work Order Setting',
               items: [
                 {
-                  label: 'Work Order Settings List',
-                  routerLink:
-                    '/workordersettingsmodule/workordersettings/app-work-order-settings-list',
+                  label: 'Work Order Quote Setup List',
+                  routerLink: '',
                 },
                 {
-                  label: 'WO Quote Settings List',
-                  routerLink:
-                    '/workordersettingsmodule/workordersettings/app-wo-quote-settings-list',
+                  label: 'Workflow Setting Setup List',
+                  routerLink:'',
+                },
+                {
+                  label: 'Workorder Setup List',
+                  routerLink:'',
                 },
               
               ],
@@ -849,68 +1376,159 @@ export class AppComponent implements OnInit, AfterViewInit {
           ],
           [
             {
-              label: 'Receivable',
+              label: 'SO Quote, SO/Exch SO Admin',
               items: [
                 {
-                  label: 'Purchase Order',
-                  routerLink:
-                    '/receivingmodule/receivingpages/app-purchase-order',
+                  label: 'Sales Order Quote Setup List',
+                  routerLink:'',
                 },
                 {
-                  label: 'Repair Order',
-                  routerLink: '/receivingmodule/receivingpages/app-ro',
+                  label: 'Sales Order Setup List',
+                  routerLink: '',
                 },
                 {
-                  label: 'Shipping Receiver',
-                  routerLink: '/receivingmodule/receivingpages/app-shipping',
+                  label: 'Sales Order Exch Setup List',
+                  routerLink: '',
                 },
-                { label: 'Work Order', routerLink: '/#' },
+                
               ],
             },
             {
-              label: 'Customer Work List ',
+              label: 'PO/RO Setting',
               items: [
                 {
-                  label: 'Receive Customer List',
-                  routerLink:
-                    '/receivingmodule/receivingpages/app-customer-works-list',
+                  label: 'PO Setup List',
+                  routerLink:'',
                 },
                 {
-                  label: 'Receive Customer',
-                  routerLink:
-                    '/receivingmodule/receivingpages/app-customer-work-setup',
+                  label: 'RO Setup List',
+                  routerLink:'',
                 },
               ],
             },
             {
-              label: 'Reports and forms',
+              label: 'Shipping & Receiving',
               items: [
                 {
-                  label: 'Receiving Log',
-                  command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fReceiving+Log&rs:Command=Render');
-                  }
+                  label: 'Shipping Setup Setup List',
+                  routerLink:'',
                 },
-              
                 {
-                  label: 'Receive customer work', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Work&rs:Command=Render');
-                  }
-                }
-              ],
-            },
-          ],
-          [
-            {
-              label: 'Contract Management',
-              items: [
-                { label: 'Contract List', routerLink: '/#' },
-                { label: 'Contract Setup', routerLink: '/#' },
-              
+                  label: 'Receiving Setup List',
+                  routerLink:'',
+                },
               ],
             },
 
+            {
+              label: 'Billing/Invoicing',
+              items: [
+                {
+                  label: 'Invoice Setup List',
+                  routerLink:'',
+                },
+              
+              ],
+            },
+            {
+              label: 'Assets',
+              items: [
+                {
+                  label: 'Asset Setup List',
+                  routerLink:'',
+                },
+                {
+                  label: 'Tools Setup List',
+                  routerLink:'',
+                },
+              
+              ],
+            },
+            {
+              label: 'Publication',
+              items: [
+                {
+                  label: 'Publication Setup List',
+                  routerLink:'',
+                },              
+              ],
+            },
+
+            {
+              label: 'Contract Management(Customers)',
+              items: [
+                {
+                  label: 'Customer Contract Setup List',
+                  routerLink:'',
+                },              
+              ],
+            },
+
+            {
+              label: 'Accounting',
+              items: [
+                {
+                  label: 'General Accounting Setup List',
+                  routerLink:'',
+                }, 
+                {
+                  label: 'Accounts Receivables Setup List',
+                  routerLink:'',
+                }, 
+                {
+                  label: 'Accounts Payables Setup List',
+                  routerLink:'',
+                },              
+              ],
+            },
+
+            {
+              label: 'Employees',
+              items: [
+                {
+                  label: 'Employees Setup List',
+                  routerLink:'',
+                }, 
+                            
+              ],
+            },
+            {
+              label: 'Forms Maintenance',
+              items: [
+                {
+                  label: '',
+                  routerLink:'',
+                }, 
+                            
+              ],
+            },
+            {
+              label: 'Integration Management',
+              items: [
+                {
+                  label: 'ILS',
+                  routerLink:'',
+                }, 
+                {
+                  label: 'AEX',
+                  routerLink:'',
+                }, 
+                {
+                  label: 'Parts Base',
+                  routerLink:'',
+                }, 
+                {
+                  label: '145.com',
+                  routerLink:'',
+                }, 
+                            
+              ],
+            },
+
+            
+           
           ],
+         
         ],
       },
       
