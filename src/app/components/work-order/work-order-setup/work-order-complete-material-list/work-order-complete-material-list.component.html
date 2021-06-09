@@ -203,10 +203,10 @@
                                     </td>
                                     <td *ngIf="(statusId === 1 || statusId === 5)">
                                         <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityReserved"  (keypress)="restrictMinus($event)"
-                                            (keyup)="validatePartsQuantity($event,x)" [disabled]="!x.isParentSelected">
+                                            (keyup)="validatePartsQuantity($event,x)" (change)="handleQty(x)" [disabled]="!x.isParentSelected">
                                     </td>
                                     <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
-                                        <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued" (keypress)="restrictMinus($event)"
+                                        <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued" (change)="handleQty(x)" (keypress)="restrictMinus($event)"
                                             (keyup)="validatePartsQuantity($event,x)" 
                                             [disabled]="!x.isParentSelected">
                                     </td>
@@ -291,15 +291,16 @@
                                     <td *ngIf="(statusId === 1 || statusId === 5)">
                                         <input type="number" name="quantity1_{{y}}" [(ngModel)]="b.quantityReserved" (keypress)="restrictMinus($event)"
                                             (keyup)="validatePartsQuantity($event,b)" (input)="childPartValidate($event.target.value, b,1)"
-                                            [disabled]="!b.isChildSelected">
-
+                                             [disabled]="b.quantityReserved==0">
+                                             <!-- [disabled]="!b.isChildSelected" -->
                                     </td>
                                     <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
 
                                         <input type="number" name="quantity2_{{y}}" [(ngModel)]="b.quantityIssued" (keypress)="restrictMinus($event)"
                                             (keyup)="validatePartsQuantity($event,b)"
                                             (input)="childPartValidate($event.target.value, b,1)"
-                                            [disabled]="!b.isChildSelected">
+                                            [disabled]="b.quantityIssued==0">
+                                            <!-- [disabled]="!b.isChildSelected" -->
                                     </td>
                                     <td class="tex_end">{{b.quantityAlreadyIssued}}</td>
                                     <td class="tex_end">{{b.qtyToBeIssued}}</td>
@@ -356,10 +357,11 @@
                                 <ng-container *ngIf="x.showEqParts==true" >
                                 <tr *ngFor="let c of x.woReservedIssuedEquParts; let z=index; ">
                                     <td class="text-center">
+                                        <!-- {{c.quantityReserved}}--qty -->
                                         <input type="checkbox" *ngIf="(statusId === 1 || statusId === 5)" [(ngModel)]="c.isChildSelected" [disabled]="c.quantityReserved==0"
                                             name="isChildSelected{{z}}" (change)="selectedParts(c,$event)">
 
-                                            <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="c.isChildSelected"  [disabled]="c.quantityReserved==0"
+                                            <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="c.isChildSelected"  [disabled]="c.quantityIssued==0"
                                             name="isChildSelected{{z}}" (change)="selectedParts(c,$event)">
                                             <!-- <span>{{c.quantityReserved}}</span> -->
                                     </td>
@@ -457,9 +459,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!-- || checkActiveStatus || checkIsSeclected()-->
+                    <!-- !savebutonDisabled  || checkActiveStatus || checkIsSeclected()-->
                     <button class="btn btn-primary" data-dismiss="modal" (click)="saveRIPart()"
-                        [disabled]="!savebutonDisabled ">
+                        [disabled]="!savebutonDisabled">
                     <span *ngIf="statusId === 1">Reserve</span>
                     <span *ngIf="statusId === 2">Issue</span>
                     <span *ngIf="statusId === 3">Reserve & Issue</span>

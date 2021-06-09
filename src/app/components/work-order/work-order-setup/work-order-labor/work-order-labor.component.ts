@@ -455,7 +455,7 @@ setTimeout(() => {
             this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
               this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
                 ...x,
-                 value: x.employeeId, label: x.name } });
+                 value: x.employeeId, label: x.name ,slabel: x.name.toLowerCase()} });
             },
               err => {
               })
@@ -467,7 +467,7 @@ setTimeout(() => {
       this.commonService.getExpertiseEmployeesByCategory(this.laborForm.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
         this.employeesOriginalData = res.map(x => { return {
           ...x,
-           value: x.employeeId, label: x.name } });
+           value: x.employeeId, label: x.name ,slabel: x.name.toLowerCase()} });
       },
         err => {
         })
@@ -675,12 +675,8 @@ setTimeout(() => {
         object.directLaborOHCost=0.00;
         object.totalCostPerHour=0.00;
         object.totalCost=0;
-
-        
       }
-    // }
   }
-
   getExpertiseEmployeeByExpertiseIdForHeader(value) {
     this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
       this.employeesOriginalData = res.map(x => {
@@ -700,24 +696,20 @@ setTimeout(() => {
   }
   partNumbers:any=[];
   filterExpertiseEmployee(event, index) {
-    
     this['expertiseEmployee' + index] = this['expertiseEmployeeOriginalData' + index] == undefined ? this.employeesOriginalData : this['expertiseEmployeeOriginalData' + index];
     if (event.query !== undefined && event.query !== null) {
       this.partNumbers=[];
-      // if(this['expertiseEmployeeOriginalData' + index]){
+      this.partNumbers = [...this['expertiseEmployeeOriginalData' + index]]
+      if(this['expertiseEmployeeOriginalData' + index]){
        this.partNumbers = [...this['expertiseEmployeeOriginalData' + index].filter(x => {
-        return x.label.includes(event.query)
+        return x.label.toLowerCase().includes(event.query.toLowerCase())
       })]
-    // }
+    }
       this['expertiseEmployee' + index] = this.partNumbers;
     }
   }
-
   addNewTask(taskName) {
-    // debugger;
     let taskData = new AllTasks();
-    // taskData.expertiseId = Number(this.laborForm.expertiseId);
-    // taskData.employeeId = this.laborForm.employeeId;
     this.allTaskList.forEach(
       task => {
         if (task.description == "Assemble") {
@@ -769,7 +761,7 @@ setTimeout(() => {
             this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
               this['expertiseEmployeeOriginalData' + index1] = res.map(x => { return {
                 ...x,
-                value: x.employeeId, label: x.name } });
+                value: x.employeeId, label: x.name,slabel: x.name.toLowerCase() } });
 
                 if(this.basicLabourDetail){
                   // taskData['burdaenRatePercentageId'] = this.basicLabourDetail['flatAmount'];
@@ -1082,7 +1074,7 @@ return true;
         this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
           this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
             ...x,
-             value: x.employeeId, label: x.name } });
+             value: x.employeeId, label: x.name,slabel: x.name.toLowerCase() } });
         },
           err => {
           })
