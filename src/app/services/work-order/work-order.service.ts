@@ -482,6 +482,9 @@ export class WorkOrderService {
     deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy) {
         return this.workOrderEndpointService.deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy)
     }
+    deletesubWorkOrderMaterialStocklineById(subWorkOrderMaterialId,stocklineId, updatedBy) {
+        return this.workOrderEndpointService.deletesubWorkOrderMaterialStocklineById(subWorkOrderMaterialId,stocklineId, updatedBy)
+    }
     reservereleaseSubWostoclineqty(data) {
         return this.workOrderEndpointService.reservereleaseSubWostoclineqty(data);
     }

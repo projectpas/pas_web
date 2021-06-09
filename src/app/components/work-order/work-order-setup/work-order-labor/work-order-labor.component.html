@@ -338,7 +338,7 @@
                         calculateHoursDifference(rec);
                         calculateTaskHours(task);
                         calculateTotalCost(rec);
-                        markupChanged(rec, 'row')
+                        markupChanged(rec, 'row') 
                         " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px !important;"  />
                         <span style="font-size: 17px; margin: 0 5px;">:</span>
                         <input type="number" class="form-control" (blur)="
@@ -434,8 +434,8 @@
                   </ng-container>
                 <td *ngIf="!isQuote">
                    <div class="align_adh" >
-                    <div [innerHTML]="rec.memo" 
-                        matTooltipPosition="above" [ngStyle]="{'border':rec.adjustments > 0 ? '1px solid red' : 'inherent'}"
+                    <div [innerHTML]="rec.memo"  
+                        matTooltipPosition="above" [ngStyle]="{'border':(rec.adjtotalHours > 0  || rec.ajdtotalMinutes > 0 )? '1px solid red' : 'inherent'}"
                         [matTooltip]="parsedText(rec.memo)"
                         class="text_editor_box col-sm-10"></div>
                         <!-- data-target="#textarea-popup5"  data-toggle="modal" -->
