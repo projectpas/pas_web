@@ -162,17 +162,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.checkPercentageData();
     }, 1000);
-    // this.taskList=[];
-    // this.allTaskList=[];
-    // this.allTaskList=this.labortaskList;
-    // this.taskList=this.labortaskList;
-    // this.taskList.forEach(
-    //   (task) => {
-    //     if (task['description'] == "all task") {
-    //       this.taskList.splice(task, 1);
-    //     }
-    //   }
-    // )
     this.islaborCreated=this.islaborCreated;
     if (this.workOrderLaborList != undefined) {
       this.laborTaskData = this.workOrderLaborList;
@@ -384,18 +373,17 @@ setTimeout(() => {
     }
   }
   onPartSelect(event, currentRecord) {  
-    // currentRecord.directLaborOHCost=event.overHeadBurden; 
-    debugger;
+    // currentRecord.directLaborOHCost=event.overHeadBurden;
     if(this.basicLabourDetail){
       // currentRecord.burdaenRatePercentageId=
       if(this.basicLabourDetail.laborRateId==2){
         currentRecord.directLaborOHCost=this.basicLabourDetail.averageRate; 
       }else{
-        currentRecord.directLaborOHCost=event.hourlyPay; 
+        currentRecord.directLaborOHCost=event.isHourly? event.hourlyPay:0; 
       }
     
     }else{
-      currentRecord.directLaborOHCost=event.hourlyPay; 
+      currentRecord.directLaborOHCost=event.isHourly? event.hourlyPay:0; 
     }
     // currentRecord.burdaenRatePercentageId = this.basicLabourDetail['flatAmount'];
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
@@ -563,6 +551,7 @@ setTimeout(() => {
     }
   }
   getLenghtOfTask(taskList) {
+// console.log("taskList",taskList)
     if (taskList && taskList.length == 0 && !this.isView) {
       return true;
     }
@@ -770,7 +759,6 @@ setTimeout(() => {
                   // }else{
                   //   currentRecord.directLaborOHCost=event.hourlyPay; 
                   // }
-                  // debugger;
 //                   this['expertiseEmployeeOriginalData' + index].forEach(element => {
 //                     if(taskData.employeeId==element.employeeId){
 //                       taskData.directLaborOHCost=element.hourlyPay; 
@@ -1053,8 +1041,11 @@ return true;
   }
   deleteLabor(taskName, index) {
     this.laborForm.workOrderLaborList[0][taskName][index].isDeleted = true;
-    let temp = this.laborForm.workOrderLaborList[0][taskName].splice(index, 1);
-    this.laborForm.workOrderLaborList[0][taskName].push(temp[0]);
+    // let temp = 
+     this.laborForm.workOrderLaborList[0][taskName].splice(index, 1);
+    // console.log("temp",temp)
+    // 
+    // this.laborForm.workOrderLaborList[0][taskName].push(temp[0]);
     this.disabledUpdatebtn = false;
     this.commonfunctionHandler();
   }
@@ -1293,10 +1284,9 @@ return true;
     }
     return total.toFixed(2);
 
-  }
+  } 
 
   calculateHoursDifference(obj) {
-    // debugger;
     if (obj.hours != null && obj.adjustments != null) {
       this.totalWorkHours = 0;
       if (!obj.totalMinutes) {
