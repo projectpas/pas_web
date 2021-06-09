@@ -2573,7 +2573,7 @@ const data={...newdata};
     showAlertMessage(warningMessage, restrictMessage) {
         if(!this.isView)
         {
-            $('#warnRestrictMesg').modal("show");
+            // $('#warnRestrictMesg').modal("show");
         }
     
         //   this.modal.close();
