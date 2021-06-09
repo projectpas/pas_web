@@ -57,7 +57,9 @@ updateServiceClass() {
 close()
 {
   $('#ShippingSlipDiv').modal('hide');
+  this.Updateshippingpopup.emit();
 }
+
 
 // print(): void {
 //   this.isPrint = true;

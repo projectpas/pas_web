@@ -55,6 +55,11 @@ export class WorkOrderMultiShippingLabelComponent implements OnInit,OnChanges {
       this.isSpinnerVisible = false;
     })
   }
+  close()
+  {
+    $('#ShippingSlipDiv').modal('hide');
+    this.Updateshippingpopup.emit();
+  }
 
 
   print(): void {

@@ -120,6 +120,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(): void {
+        debugger;
         if (this.workFlow) {
             if (this.workFlow.charges.length > 0) {
                 this.workFlow.charges = this.workFlow.charges.map(x => {
