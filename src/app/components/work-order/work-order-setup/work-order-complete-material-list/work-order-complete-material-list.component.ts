@@ -129,7 +129,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
         { field: 'memo', header: 'Memo', align: 0, width: "250px" }
     ]
-
     auditHistory = [
         { field: 'taskName', header: 'Task' },
         { field: 'partNumber', header: 'PN' },
@@ -176,7 +175,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'defered', header: 'Deferred' },
         { field: 'memo', header: 'Memo' }
     ]
-
      pickTicketItemInterfaceheader = [
         { field: "partNumber", header: "PN", width: "100px" },
         { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
@@ -188,7 +186,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: "stockType", header: "Stock Type", width: "100px" },
         { field: "tracableToName", header: "Tracable To", width: "100px" },
       ];
-
     isStockLine:boolean=true;
     isStockView:boolean=true;
     savebutonDisabled: boolean = false;
@@ -233,7 +230,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
-
     ngOnInit() {
         this.initColumns();
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
@@ -250,17 +246,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         } else {
             this.workFlowWorkOrderId = this.subWOPartNoId;
         }
-
         this.getWorkOrderDefaultSetting();
         this.setStatusForSubWo();
     }
-
     getWorkOrderDefaultSetting(value?) {
         const value1 = value ? value : this.workOrderGeneralInformation.workOrderTypeId;
         this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             if (res.length > 0) {
                 this.workorderSettings = res[0];
-
                 let pickTicketAllowed = this.workorderSettings.enforcePickTicket;
                 let pickTicketDate = new Date(this.workorderSettings.pickTicketEffectiveDate);
                 let todayDate: Date = new Date();
@@ -268,7 +261,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         })
     }
-
     ngOnChanges(changes: SimpleChanges) {
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
@@ -285,18 +277,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.workFlowWorkOrderId = this.subWOPartNoId;
         }
     }
-
     ngOnDestroy() {
         this.countDown = null;
-        // this.counter = 600;
-        // this.tick = 1000;
-        // this.countDown.unsubscribe();
     }
-
     closeAddNew() {
         this.addNewMaterial = false;
     }
-
     onClosePartSearchPopUp() {
         this.close.emit(true);
         this.show = false;
@@ -304,15 +290,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     setmaterialListForSave(data) {
         this.saveMaterialsData.emit(data)
         this.show = false;
-        // this.addPartModal.close();
-        // $('#addPart').modal("hide");
     }
     setmaterialListForUpdate(data) {
         this.show = false;
         this.updateMaterialsData.emit(data)
-        this.isSubWorkorder.emit(this.isSubWorkOrder)
-        // this.addPartModal.close();
-        // $('#addPart').modal("hide");
+        this.isSubWorkorder.emit(this.isSubWorkOrder);
     }
     createNew() {
         this.ispickticket = false;
@@ -322,7 +304,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.taskList = this.taskList;
         this.workFlowObject.materialList = [];
         const newRow: any = {}
-
         newRow.conditionCodeId = 1;
         newRow.extendedCost = "0.00";
         newRow.extraCost = "0.00";
@@ -354,9 +335,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewMaterial = true;
-
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
-
     }
     editNew(rowData) { 
         this.isViewItem=false;
@@ -364,14 +343,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewMaterial = true;
-
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
-        // this.editData.totalStocklineQtyReq=10;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-
     }
-
     viewItem(rowData){
         this.editData = undefined;
         this.cdRef.detectChanges();
@@ -380,9 +355,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 this.isViewItem=true;
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
         let contentPart = this.addPart;
-
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-
     }
     viewStockSelectedRow(rowData) { 
         this.stockLineId=undefined;
@@ -392,18 +365,12 @@ this.isViewItem=true;
       }
     editStockLine(rowData,parentRow) {
         this.editData = undefined;
-        // this.cdRef.detectChanges();
         this.isEdit = true;
-
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
         this.editData.method = 'StockLine';
         this.editData.quantity=parentRow.quantity;
         $("#showStockLineDetails").modal("show");
-
-        // let contentPart = this.addPart;
-        // this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-
-    }
+ }
     openPartNumber() {
         this.isEdit = false;
         this.editData = undefined;
@@ -411,7 +378,6 @@ this.isViewItem=true;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     }
-
     openDelete(content, row) {
         this.currentRow = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
@@ -422,7 +388,7 @@ this.isViewItem=true;
     }
     deleteStock() {
         if (this.isSubWorkOrder == true) {
-            this.workOrderService.deleteSubWorkOrderMaterialList(this.currentRow.subWorkOrderMaterialsId, this.userName).subscribe(res => {
+            this.workOrderService.deletesubWorkOrderMaterialStocklineById(this.currentRow.subWorkOrderMaterialsId, this.currentRow.stockLineId, this.userName).subscribe(res => {
                 this.refreshData.emit();
                 this.alertService.showMessage(
                     '',
@@ -472,7 +438,6 @@ this.isViewItem=true;
         }
         this.modal.close();
     }
-
     getRollupMaterialList(currentRecord, materialindex) {
         currentRecord.isShowPlus = false;
         if (this.isSubWorkOrder == true) {
@@ -508,7 +473,6 @@ this.isViewItem=true;
                     element.line = (materialindex + 1) + '.' + (index + 1)
                     this.getValues(element);
                 });
-
                 this.roleUpMaterialList = res;
                 for (var i = 0; i < this.roleUpMaterialList.length; i++) {
                     this.workOrderMaterialList.splice(materialindex + i + 1, 0, this.roleUpMaterialList[i])
@@ -520,12 +484,10 @@ this.isViewItem=true;
                 })
         }
     }
-
     onClose(event) {
         this.show = false;
         this.addPartModal.close();
     }
-
     removeRollUpList(currentRecord, index) {
         currentRecord.isShowPlus = true;
         if (this.isSubWorkOrder == true) {
@@ -542,7 +504,6 @@ this.isViewItem=true;
                 })
         }
     }
-
     getValues(element) {
         if (element.stockLineNumber) {
             if (element.stockLineNumber.indexOf(',') > -1) {
@@ -573,7 +534,6 @@ this.isViewItem=true;
             }
         }
     }
-
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
@@ -583,20 +543,17 @@ this.isViewItem=true;
         this.saveMaterialListForWO.emit(event);
         $('#addNewMaterials').modal('hide');
     }
-
     updateMaterialList(event) {
         this.updateMaterialListForWO.emit(event);
         $('#addNewMaterials').modal('hide');
         this.isEdit = false;
     }
-
     restrictMinus(e) {
         var inputKeyCode = e.keyCode ? e.keyCode : e.which;
         if (inputKeyCode != null) {
             if (inputKeyCode == 45) e.preventDefault();
         }
     }
-
     validatePartsQuantity(event, data) {
         if (event.target.value == null || event.target.value == '' || event.target.value == undefined || event.target.value == 0) {
             this.savebutonDisabled = false;
@@ -605,7 +562,6 @@ this.isViewItem=true;
         }
         if (this.statusId === 1) {
             if (data.quantityReserved > data.quantityAvailable) {
-
                 this.alertService.showMessage(
                     '',
                     ' Qty Actually Reserving Cant be greater than Qty Available',
@@ -672,7 +628,6 @@ this.isViewItem=true;
             }
         }
     }
-
     childPartValidate(value, currentRecord, type) {
         if (this.statusId == 1 || this.statusId == 3) {
             this.parentInputvalue = 0;
@@ -715,28 +670,28 @@ this.isViewItem=true;
             }
         }
     }
-    // checkActiveStatus() {  
-    //     // this.savebutonDisabled = false;
-    //     var result = false;
-    //       this.reservedList.forEach(
-    //         data => { 
-    //             if ( data.isParentSelected==true) {
-    //               result = false;
-    //             }  
-    //         }
-    //       )
-    //     return result;
-    //   }
     allowAll(value) {
         if (value == true) {
             this.reservedList = this.reservedList.map(x => {
                 if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                     x.woReservedIssuedAltParts.map(x => {
-                        x.isChildSelected = true;
+                        // x.isChildSelected = true;
+                        if (value == true && (this.statusId === 1 || this.statusId === 5) && x.quantityReserved != 0) {
+                            x.isChildSelected = true;
+                        }
+                        if (value == true && (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) && x.quantityIssued != 0) {
+                            x.isChildSelected = true;
+                        }
                     })
                 } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
                     x.woReservedIssuedEquParts.map(x => {
-                        x.isChildSelected = true;
+                        // x.isChildSelected = true;
+                        if (value == true && (this.statusId === 1 || this.statusId === 5) && x.quantityReserved != 0) {
+                            x.isChildSelected = true;
+                        }
+                        if (value == true && (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) && x.quantityIssued != 0) {
+                            x.isChildSelected = true;
+                        }
                     })
                 }
                 if (value == true && (this.statusId === 1 || this.statusId === 5) && x.quantityReserved != 0) {
@@ -752,7 +707,6 @@ this.isViewItem=true;
             });
 
             this.isAllow = value;
-            // this.savebutonDisabled = true;
             if (this.reservedList && this.reservedList.length != 0) {
                 this.reservedList.forEach(element => {
                     if (element.isParentSelected) {
@@ -1050,7 +1004,37 @@ this.isViewItem=true;
             this.uncheckAltEqlPartCall(childPart)
         }
     }
-
+    handleQty(currentRecord){
+    //     console.log("current recor",currentRecord)
+    //     if (this.statusId === 1 || this.statusId === 5) {
+    //         if(currentRecord.quantityReserved==null){
+    //     if (this.statusId === 1) {
+    //     if(currentRecord.quantityAvailable > currentRecord.qtyToBeReserved){
+    
+    //         currentRecord.quantityReserved=currentRecord.qtyToBeReserved;
+    //     }else{
+    //         currentRecord.quantityReserved=currentRecord.quantityAvailable;
+    //     }
+    // }else if ( this.statusId === 5) {
+    //     currentRecord.quantityReserved=currentRecord.quantityAlreadyReserved;
+    // }
+    //         }
+    //     }
+    //   if (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) {
+    //             if(currentRecord.quantityIssued==null){
+    //                 if (this.statusId === 2) {
+    //                 if(currentRecord.quantityAvailable > currentRecord.quantityAlreadyReserved){
+                
+    //                     currentRecord.quantityIssued=currentRecord.quantityAlreadyReserved;
+    //                 }else{
+    //                     currentRecord.quantityIssued=currentRecord.quantityAvailable;
+    //                 }
+    //             }else if ( this.statusId === 4) {
+    //                 currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued;
+    //             }
+    //                     }
+    //         }
+    }
     selectedParts(currentRecord, event) {
         if (this.statusId === 1 || this.statusId === 5) {
             if (currentRecord.isParentSelected == true && currentRecord.quantityReserved != 0) {
@@ -1098,17 +1082,48 @@ this.isViewItem=true;
 
         })
         if (event.target.checked == false) {
-            if (this.statusId == 1) {
-                currentRecord.quantityReserved = currentRecord.qtyToBeReserved;
-                // currentRecord.quantityReserved = currentRecord.quantityAvailable;
-            } else if (this.statusId == 2) {
-                currentRecord.quantityIssued = currentRecord.quantityAlreadyReserved;
-            } else if (this.statusId == 3) {
-            } else if (this.statusId == 4) {
-                currentRecord.quantityIssued = currentRecord.quantityAlreadyIssued;
-            } else if (this.statusId == 5) {
-                currentRecord.quantityReserved = currentRecord.quantityAlreadyReserved;
+            // if (this.statusId == 1) {
+            //     currentRecord.quantityReserved = 0
+            //     // currentRecord.qtyToBeReserved;
+            // } else if (this.statusId == 2) {
+            //     currentRecord.quantityIssued =0
+            //     //  currentRecord.quantityAlreadyReserved;
+            // } else if (this.statusId == 3) {
+            // } else if (this.statusId == 4) {
+            //     currentRecord.quantityIssued = 0
+            //     // currentRecord.quantityAlreadyIssued;
+            // } else if (this.statusId == 5) {
+            //     currentRecord.quantityReserved = 0
+            //     currentRecord.quantityAlreadyReserved;
+            // }
+            if (this.statusId === 1 || this.statusId === 5) {
+                if(currentRecord.quantityReserved==null){
+            if (this.statusId === 1) {
+            if(currentRecord.quantityAvailable > currentRecord.qtyToBeReserved){
+        
+                currentRecord.quantityReserved=currentRecord.qtyToBeReserved;
+            }else{
+                currentRecord.quantityReserved=currentRecord.quantityAvailable;
             }
+        }else if ( this.statusId === 5) {
+            currentRecord.quantityReserved=currentRecord.quantityAlreadyReserved;
+        }
+                }
+            }
+          if (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) {
+                    if(currentRecord.quantityIssued==null){
+                        if (this.statusId === 2) {
+                        if(currentRecord.quantityAvailable > currentRecord.quantityAlreadyReserved){
+                    
+                            currentRecord.quantityIssued=currentRecord.quantityAlreadyReserved;
+                        }else{
+                            currentRecord.quantityIssued=currentRecord.quantityAvailable;
+                        }
+                    }else if ( this.statusId === 4) {
+                        currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued;
+                    }
+                            }
+                }
         }
     }
 
@@ -1447,7 +1462,7 @@ this.isViewItem=true;
             // { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0 },
             // { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
             { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
-            { field: 'subWorkOrder', header: 'Sub-WO Num', align: 0, width: "100px" },
+            { field: 'subWorkOrderNo', header: 'Sub-WO Num', align: 0, width: "100px" },
             // { field: 'salesOrder', header: 'SO Num', align: 0, width: "100px" },
             // { field: 'figure', header: 'Figure', align: 0 },
             // { field: 'site', header: 'Site', align: 0 },
@@ -1501,7 +1516,7 @@ this.isViewItem=true;
             { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0, width: "120px" },
             { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
             { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
-            { field: 'subWorkOrder', header: 'Sub-WO Num', align: 0, width: "100px" },
+            { field: 'subWorkOrderNo', header: 'Sub-WO Num', align: 0, width: "100px" },
             { field: 'salesOrder', header: 'SO Num', align: 0, width: "100px" },
             { field: 'figure', header: 'Figure', align: 0, width: "70px" },
             { field: 'site', header: 'Site', align: 0, width: "100px" },

@@ -89,9 +89,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       itemsShowLimit: 2,
       allowSearchFilter: false
     }; 
-    this.taskList = [];
+    this.taskList = []; 
     this.allTaskList = [];
-    console.log("labortaskList",this.labortaskList)
     this.allTaskList = [...this.labortaskList];
     this.taskList = [...this.labortaskList];
  if(!this.isQuote){
@@ -107,7 +106,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   this.labortaskList.forEach(
     (task) => {
       if (task['description'] != "all task") {
-        // this.taskList=[];
         this.taskList.push(task);
       }
     }
@@ -175,7 +173,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     //     }
     //   }
     // )
-    console.log("labortaskList",this.labortaskList)
     this.islaborCreated=this.islaborCreated;
     if (this.workOrderLaborList != undefined) {
       this.laborTaskData = this.workOrderLaborList;
@@ -388,6 +385,7 @@ setTimeout(() => {
   }
   onPartSelect(event, currentRecord) {  
     // currentRecord.directLaborOHCost=event.overHeadBurden; 
+    debugger;
     if(this.basicLabourDetail){
       // currentRecord.burdaenRatePercentageId=
       if(this.basicLabourDetail.laborRateId==2){
@@ -396,10 +394,13 @@ setTimeout(() => {
         currentRecord.directLaborOHCost=event.hourlyPay; 
       }
     
+    }else{
+      currentRecord.directLaborOHCost=event.hourlyPay; 
     }
     // currentRecord.burdaenRatePercentageId = this.basicLabourDetail['flatAmount'];
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
     // if(this.basicLabourDetail){
+      
     this.calculateBurderRate(currentRecord);
     // }
   }
@@ -454,7 +455,7 @@ setTimeout(() => {
             this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
               this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
                 ...x,
-                 value: x.employeeId, label: x.name } });
+                 value: x.employeeId, label: x.name ,slabel: x.name.toLowerCase()} });
             },
               err => {
               })
@@ -466,7 +467,7 @@ setTimeout(() => {
       this.commonService.getExpertiseEmployeesByCategory(this.laborForm.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
         this.employeesOriginalData = res.map(x => { return {
           ...x,
-           value: x.employeeId, label: x.name } });
+           value: x.employeeId, label: x.name ,slabel: x.name.toLowerCase()} });
       },
         err => {
         })
@@ -674,12 +675,8 @@ setTimeout(() => {
         object.directLaborOHCost=0.00;
         object.totalCostPerHour=0.00;
         object.totalCost=0;
-
-        
       }
-    // }
   }
-
   getExpertiseEmployeeByExpertiseIdForHeader(value) {
     this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
       this.employeesOriginalData = res.map(x => {
@@ -699,24 +696,20 @@ setTimeout(() => {
   }
   partNumbers:any=[];
   filterExpertiseEmployee(event, index) {
-    
     this['expertiseEmployee' + index] = this['expertiseEmployeeOriginalData' + index] == undefined ? this.employeesOriginalData : this['expertiseEmployeeOriginalData' + index];
     if (event.query !== undefined && event.query !== null) {
       this.partNumbers=[];
-      // if(this['expertiseEmployeeOriginalData' + index]){
+      this.partNumbers = [...this['expertiseEmployeeOriginalData' + index]]
+      if(this['expertiseEmployeeOriginalData' + index]){
        this.partNumbers = [...this['expertiseEmployeeOriginalData' + index].filter(x => {
-        return x.label.includes(event.query)
+        return x.label.toLowerCase().includes(event.query.toLowerCase())
       })]
-    // }
+    }
       this['expertiseEmployee' + index] = this.partNumbers;
     }
   }
-
   addNewTask(taskName) {
-    // debugger;
     let taskData = new AllTasks();
-    // taskData.expertiseId = Number(this.laborForm.expertiseId);
-    // taskData.employeeId = this.laborForm.employeeId;
     this.allTaskList.forEach(
       task => {
         if (task.description == "Assemble") {
@@ -768,7 +761,7 @@ setTimeout(() => {
             this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
               this['expertiseEmployeeOriginalData' + index1] = res.map(x => { return {
                 ...x,
-                value: x.employeeId, label: x.name } });
+                value: x.employeeId, label: x.name,slabel: x.name.toLowerCase() } });
 
                 if(this.basicLabourDetail){
                   // taskData['burdaenRatePercentageId'] = this.basicLabourDetail['flatAmount'];
@@ -1081,7 +1074,7 @@ return true;
         this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
           this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
             ...x,
-             value: x.employeeId, label: x.name } });
+             value: x.employeeId, label: x.name,slabel: x.name.toLowerCase() } });
         },
           err => {
           })
@@ -1145,6 +1138,18 @@ return true;
       }
     }
   }
+
+  billingChanged(matData, type) 
+  {
+    try 
+    {
+        matData['markupPercentageId'] = '';
+        matData['billingRate'] = ((matData['totalCostPerHour'])).toFixed(2)
+        matData['billingAmount'] = (Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.hours)).toFixed(2);
+    }
+    catch (e) {
+    }
+}
   markupChanged(matData, type) {
     if(type == 'row' && matData && matData.markupPercentageId==""){
       matData['billingRate'] = ((matData['totalCostPerHour'])).toFixed(2)

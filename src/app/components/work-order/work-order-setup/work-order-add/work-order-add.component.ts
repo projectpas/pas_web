@@ -1099,6 +1099,10 @@ setTimeout(() => {
     clearautoCompleteInput(currentRecord, field) {
         // currentRecord[field] = null;
     }
+    clearautoCompleteTechinician(currentRecord, field){
+        currentRecord[field] = null;
+        currentRecord.partTechnicianId=0;
+    }
     clearautoCompletePartNum(currentRecord, field) {
         // currentRecord[field] = null;
         currentRecord.itemMasterId=undefined;
@@ -1195,7 +1199,6 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         this.isValidationfailed= true;
     }
 })
-debugger;
  if(this.isValidationfailed==false){
         const data1 = {
             ...generalInfo,
@@ -1207,7 +1210,7 @@ debugger;
             customerContact: getValueFromObjectByKey('contactName', this.myCustomerContact),
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             customerContactId: getValueFromObjectByKey('customerContactId', this.myCustomerContact),
-            createdBy: this.isEdit == false ? this.userName : generalInfo.createdBy,
+            createdBy: generalInfo.createdBy? generalInfo.createdBy :this.userName ,
             updatedBy: this.userName,
             revisedPartId: this.revisedPartId == 0 ? null :  this.revisedPartId,
           
@@ -1219,7 +1222,7 @@ debugger;
                     workOrderStageId: editValueAssignByCondition('workOrderStageId', x.workOrderStageId),
                     mappingItemMasterId: editValueAssignByCondition('mappingItemMasterId', x.mappingItemMasterId),
                     technicianId: editValueAssignByCondition('employeeId', x.partTechnicianId),
-                    createdBy: this.isEdit == false ? this.userName : x.createdBy,
+                    createdBy: generalInfo.createdBy? generalInfo.createdBy :this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
                     cMMId:x.cMMId==0 ? null :x.cMMId,
@@ -1840,13 +1843,14 @@ debugger;
     }
     //new form for material list
     saveMaterials(data){
+        console.log('data',data)
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;
             const newData={...data,
                 workOrderId: this.subWorkOrderDetails.workOrderId,
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 subWOPartNoId: this.subWOPartNoId,
-                subWorkOrderMaterialsId: 0,
+                subWorkOrderMaterialsId: data.subWorkOrderMaterialsId? data.subWorkOrderMaterialsId :0,
                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                 extendedCost:data.extendedCost? data.extendedCost : 0,
                 unitCost:data.unitCost?  data.unitCost: 0,
@@ -1924,7 +1928,7 @@ if(data==true){
                 workOrderId: this.subWorkOrderDetails.workOrderId,
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 subWOPartNoId: this.subWOPartNoId,
-                subWorkOrderMaterialsId: 0,
+                subWorkOrderMaterialsId: data.subWorkOrderMaterialsId? data.subWorkOrderMaterialsId :0,
                 masterCompanyId: this.authService.currentUser.masterCompanyId,
                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                 extendedCost:data.extendedCost? data.extendedCost : 0,
@@ -1939,7 +1943,7 @@ if(data==true){
                 taskId:(typeof data.taskId == 'object')? data.taskId.taskId :data.taskId 
             }
             this.isSpinnerVisible = true;
-            this.workOrderService.createSubWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.updatesubworkordermaterials([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
@@ -2034,14 +2038,7 @@ this.getNewMaterialListByWorkOrderId();
     getMaterialListByWorkOrderIdForSubWO() {
         this.workOrderMaterialList = [];
         this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            // if (res.length > 0) {
-            //     res.forEach(element => {
-            //         this.getValues(element)
-            //         element.isShowPlus = true;
-            //     });
-            //     this.workOrderMaterialList = res;
-            //     this.materialStatus = res[0].partStatusId;
-            // }
+            this.salesQuoteService.selectedParts =[];
             if (res && res.length > 0) {
                 res.forEach(element => {
                     this.getValues(element)
@@ -2060,6 +2057,8 @@ this.getNewMaterialListByWorkOrderId();
                    element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
                 });
                 this.materialStatus = res[0].partStatusId;
+                // this.salesQuoteService.selectedParts = this.workOrderMaterial;
+                this.salesQuoteService.selectedParts =[];
                 this.salesQuoteService.selectedParts = this.workOrderMaterial;
                 this.filterParts();
             }

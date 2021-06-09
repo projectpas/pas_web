@@ -40,6 +40,7 @@ export class ShippingComponent implements OnInit {
     shipCustomerAddress: any = new AddressModel();
     addCustomerInfo: boolean = false;
     isMultipleSelected: boolean = false;
+    isgeneratelable: boolean = true;
     customerDetails:any;
     workOrderPartId:number;
     woShippingId:number;
@@ -204,6 +205,7 @@ export class ShippingComponent implements OnInit {
 
 printSelectedPackagingSlip()
 {
+   this.workorderpackage=false;
    this.workorderpackage=true;
 
     let packagingSlipsToPrint: MultiPackagingSlips[] = [];
@@ -244,6 +246,7 @@ printSelectedPackagingSlip()
 
 printSelectedShippingLabel()
 {
+    this.workordershipping=false;
     this.workordershipping=true;
 
     let shippingItemsToPrint: MultiShippingLabels[] = [];
@@ -293,6 +296,7 @@ PerformShipping()
 }
 
 printShippingLabel(rowData: any) {
+    this.workordersingleshipping=false;
     this.workordersingleshipping=true;
     this.workOrderId = rowData.workOrderId;
     this.workOrderPartId = rowData.workOrderPartId;
@@ -301,6 +305,7 @@ printShippingLabel(rowData: any) {
 
 printPackagingLabel(rowData: any) 
 {
+    this.workordersinglepacking=false;
     this.workordersinglepacking=true;
     this.workOrderId = rowData.workOrderId;
     this.workOrderPartId = rowData.workOrderPartId;
@@ -393,9 +398,22 @@ checkedToGenerate(evt, ship) {
         this.shippingList.forEach(a => {
             a.woshippingchildviewlist.forEach(ele => {
                 if (ele.selected)
+                {
+                    if(ele.qtyShipped > 0)
+                    {
+                        this.isgeneratelable = false;
+                    }
+                    else
+                    {
+                        this.isgeneratelable = true;
+                    }
                     this.disableCreateShippingBtn = false;
+                }
+                   
+                    
                 else
                     this.disableCreateShippingBtn = true;
+                    this.isgeneratelable = true;
             });
         });
     }
@@ -404,12 +422,26 @@ checkedToGenerate(evt, ship) {
         this.shippingList.forEach(a => {
             a.woshippingchildviewlist.forEach(ele => {
                 if (keepGoing) {
-                    if (ele.selectedToGeneratePackaging) {
+                    if (ele.selectedToGeneratePackaging) 
+                    {
                         this.disableGeneratePackagingBtn = false;
+                        if(ele.qtyShipped > 0)
+                        {
+                            this.isgeneratelable = false;
+                        }
+                        else
+                        {
+                            this.isgeneratelable = true;
+                        }
                         keepGoing = false;
                     }
                     else
+                    {
+                     
                         this.disableGeneratePackagingBtn = true;
+                        this.isgeneratelable = true;
+                    }
+                       
                 }
             });
         });

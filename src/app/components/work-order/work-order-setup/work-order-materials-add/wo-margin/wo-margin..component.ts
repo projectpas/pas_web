@@ -113,9 +113,22 @@ export class WoMarginComponent implements OnInit, OnChanges {
      this.formObject.provisionId=this.editData.provisionId;
      this.formObject.isDeferred=this.editData.isDeferred;
      this.formObject.memo=this.editData.memo;
-     this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+    //  this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+    if(this.isSubWorkOrder){
+      this.formObject.subWorkOrderMaterialsId=this.editData.subWorkOrderMaterialsId;
+      this.formObject.workOrderMaterialsId=0;
+     }else{
+      this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+      this.formObject.subWorkOrderMaterialsId=0;
+     }
      this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
-     
+    //  if(this.isSubWorkOrder){
+    //   this.formObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId;
+    //   this.formObject.materialMandatoriesId=0;
+    //  }else{
+    //   this.formObject.materialMandatoriesId=this.formObject.materialMandatoriesId;
+    //   this.formObject.subWorkOrderMaterialsId=0;
+    //  }
      this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
       this.getTaskList();
       this.provisionList();
@@ -349,10 +362,15 @@ savePart(){
  this.materialCreateObject.unitCost=this.materialCreateObject.unitCost ? formatNumberAsGlobalSettingsModule(this.materialCreateObject.unitCost, 2) : '0.00';
  this.materialCreateObject.extendedCost=this.materialCreateObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.materialCreateObject.extendedCost, 2) : '0.00';
  this.materialCreateObject.memo=this.materialCreateObject.memo;
- 
-
  this.materialCreateObject.isDeferred=this.formObject.isDeferred;
  this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId;
+ if(this.isSubWorkOrder){
+  this.materialCreateObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId;
+  this.materialCreateObject.workOrderMaterialsId=0;
+ }else{
+  this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId;
+  this.materialCreateObject.subWorkOrderMaterialsId=0;
+ }
   this.saveFinalMaterialListData.emit(this.materialCreateObject);
   this.close.emit(true);
   // $("#showMarginDetails").modal("hide");
@@ -377,6 +395,13 @@ upDatePart(){
   this.materialCreateObject.extendedCost=this.materialCreateObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.materialCreateObject.extendedCost, 2) : '0.00';
   // this.materialCreateObject.quantity=this.materialCreateObject.quantity;
   this.materialCreateObject.quantity=this.part.quantity;
+  if(this.isSubWorkOrder){
+    this.materialCreateObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId;
+    this.materialCreateObject.workOrderMaterialsId=0;
+   }else{
+    this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId;
+    this.materialCreateObject.subWorkOrderMaterialsId=0;
+   }
 if(this.isStockLine==true){
   this.materialCreateObject.conditionCodeId=this.materialCreateObject.conditionIds[0];
   this.materialCreateObject.conditionId=this.materialCreateObject.conditionIds[0];
