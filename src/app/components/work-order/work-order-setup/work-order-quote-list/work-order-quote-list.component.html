@@ -8,6 +8,8 @@
 		</div>
       </div>
       <div class="header-body"> 
+     
+    
     <p-table #dt
     class="rpo-table-cstm rro-table-cstm"
     [value]="woQuoteList"
@@ -28,7 +30,7 @@
     [scrollable]="true"
     [metaKeySelection]="true"
     scrollHeight="450px"
-    (onPage)="pageIndexChange($event)">
+    (onPage)="pageIndexChange($event)"> 
     <ng-template pTemplate="caption">
         <div class="row">
           <div class="col">
@@ -164,7 +166,7 @@
                      let-rowIndex="rowIndex"
                      let-expanded="expanded"
                      let-columns="columns">
-            <tr class="ui-widget-header">
+            <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle>
                 <td class="table-column-width" *ngFor="let col of columns" style="text-overflow: ellipsis; overflow: hidden; " [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above" 
                 [ngStyle]="{'color': getColorCodeForMultiple(rowData)}"
                 > 

@@ -244,9 +244,11 @@
                 let rec of laborForm.workOrderLaborList[0][
                   task.description];let i = index">
                <tr *ngIf="rec  && !rec['isDeleted'] ">
-                <td *ngIf="i < 1" class="capitalizer">
+                <td *ngIf="i==0" class="capitalizer">
                   {{ task.description}}
-                   <i *ngIf=" !isView && i<1  &&  laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder'"
+                  <!-- &&  laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' -->
+                  <!-- *ngIf=" !isView && i<1  " -->
+                   <i  *ngIf="!isView  "
                   class="float-right float-right fa fa-plus-circle fa-lg labor_ico "
                   (click)="addNewTask(task.description)"></i>
                 </td>
@@ -338,7 +340,7 @@
                         calculateHoursDifference(rec);
                         calculateTaskHours(task);
                         calculateTotalCost(rec);
-                        markupChanged(rec, 'row')
+                        markupChanged(rec, 'row') 
                         " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px !important;"  />
                         <span style="font-size: 17px; margin: 0 5px;">:</span>
                         <input type="number" class="form-control" (blur)="
@@ -385,9 +387,9 @@
                     {{ formateCurrency(rec.totalCost) }}
                   </td>
                   <td>
-                    <select class="form-control min-width-130" (ngModelChange)="checkValid(25)" (change)="markupChanged(rec, 'row')"  [(ngModel)]="rec.billingMethodId"
+                    <select class="form-control min-width-130" (ngModelChange)="checkValid(25)" (change)="billingChanged(rec, 'row')"  [(ngModel)]="rec.billingMethodId"
                      
-                      [disabled]="isView || laborForm.costPlusType == 3" (change)="rec.markupPercentageId = '';rec.billingRate = 0;">
+                      [disabled]="isView || laborForm.costPlusType == 3">
                       <option value="">Select</option>
                       <option *ngFor="
                           let bm of [
@@ -434,8 +436,8 @@
                   </ng-container>
                 <td *ngIf="!isQuote">
                    <div class="align_adh" >
-                    <div [innerHTML]="rec.memo" 
-                        matTooltipPosition="above" [ngStyle]="{'border':rec.adjustments > 0 ? '1px solid red' : 'inherent'}"
+                    <div [innerHTML]="rec.memo"  
+                        matTooltipPosition="above" [ngStyle]="{'border':(rec.adjtotalHours > 0  || rec.ajdtotalMinutes > 0 )? '1px solid red' : 'inherent'}"
                         [matTooltip]="parsedText(rec.memo)"
                         class="text_editor_box col-sm-10"></div>
                         <!-- data-target="#textarea-popup5"  data-toggle="modal" -->
