@@ -5,6 +5,7 @@
 }
 .padding-10{
   padding: 10px !important;
+  padding-bottom: 0px !important;
 }
 .padtp{
   padding-top: 0px;
@@ -12,6 +13,10 @@
 }
 .ht_ad{
   height: 22px;
+}
+.wd-p{
+  width: 265px !important;
+
 }
 .employee-autocomplete .ui-autocomplete{
   width:100% !important;
@@ -150,7 +155,7 @@ input[type=radio] {
   width: 16px !important;
 }
 .task-detail{
-  display: grid;
+  display: inline-flex;
   p-checkbox {
     width: 240px;
     label{
@@ -158,8 +163,16 @@ input[type=radio] {
     }
   }
 }
-
-
+.text_pad{
+  padding-left: 27px !important;
+  margin: 0px;
+}
+.pad_labr{
+  padding-top: 11px;
+}
+.setCaps {
+  margin-top: 4px;
+}
 .task-hours-type {
   display: grid;
   .p-radiobutton-label-horizontal label{

@@ -407,6 +407,7 @@ this.isViewItem=true;
     openPartNumber() {
         this.isEdit = false;
         this.editData = undefined;
+        this.isViewItem=false;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     }

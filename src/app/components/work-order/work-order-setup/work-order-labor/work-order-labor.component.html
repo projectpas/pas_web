@@ -15,8 +15,8 @@
     <div class="form-row" >
       <div class="col-md-12">
         <div class="col-md-12 display-flex" *ngIf="!hideHeader">
-          <div class="col-md-3 col-offset-1 task-detail" *ngIf="!isQuote">
-            <div class="form-group task-hours-type1">
+          <div class="col-md-4  " *ngIf="!isQuote">
+            <div class="form-group task-hours-type1 task-detail">
               <p-radioButton (ngModelChange)="checkValid(9)" class="p-radiobutton-label-horizontal p-radiobutton-cstm pointerEvents" name="WorkFloworSpecificTaskorWorkOrder" label="Assign hours by specific tasks" value="specificTasks"
                   [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder"  disabled (click)="laborForm.totalWorkHours = 0;refreshCall();"></p-radioButton>
                   <br>
@@ -24,7 +24,8 @@
                   label="Assign total hours to workorder" [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" disabled (click)="assignHoursToToalWorkOrder()"></p-radioButton>
               </div>
          </div>
-          <div class="col-md-3 col-offset-1 task-detail" [ngClass]="{'col-offset-1' :!isQuote}">
+         <!-- [ngClass]="{'col-offset-1' :!isQuote}" -->
+          <div class="col-md-8  task-detail" >
               <div class="form-row ht_ad1" *ngIf="!isQuote  && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
                 <div class="padtp">  
             <p-radioButton (ngModelChange)="checkValid(4)" (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}"  class="p-radiobutton-label-horizontal p-radiobutton-cstm adj" name="HoursorClockorScan"
@@ -35,12 +36,12 @@
               [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
             <p-radioButton (ngModelChange)="checkValid(6)" disabled [ngClass]="{pointerEvents :isView}"  (change)="headerMaintanance()" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" [value]="3"
               label="Scan" [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
- </div> 
+ </div>  
               </div>
-                <div class="col-sm-8" 
-               *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView">
-                  <div class="form-group">
-                      <label>Select Task</label>
+                <div class="col-sm-3 text_pad" 
+               *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView && !isQuote" >
+                  <div class="form-group task-detail text_pad">
+                      <label class="pad_labr">Select Task</label>
                       <ng-multiselect-dropdown 
                           class="form-control multiple-custom-select capitalizer setCaps" [placeholder]="'Select Task'"
                           [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
@@ -66,6 +67,19 @@
                 !laborForm.hoursorClockorScan || laborForm.hoursorClockorScan == 1
               ">
               &nbsp;
+              <div class="col-sm-3 text_pad wd-p" 
+              *ngIf=" !isView && isQuote" >
+                 <div class="form-group task-detail text_pad">
+                     <label class="pad_labr">Select Task</label>
+                     <ng-multiselect-dropdown  appendTo="body"
+                         class="form-control multiple-custom-select capitalizer setCaps" [placeholder]="'Select Task'"
+                         [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
+                         [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"
+                         (onSelect)="onItemSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                         (onSelectAll)="onSelectAll($event)">
+                     </ng-multiselect-dropdown>
+                 </div>
+             </div> 
             </td>
             <td colspan="7" class="table-header-col2" *ngIf="laborForm.hoursorClockorScan == 2">
               &nbsp;
@@ -80,7 +94,7 @@
               <div class="display-flex">
                 <div class="form-group labour-radio-buttons-align" >
                   <p-radioButton (ngModelChange)="checkValid(11)" class="p-radiobutton-label-horizontal p-radiobutton-label-w125 radio-margin-top" name="costPlusType"
-                    label="T&M - Markup %/Unit" value="1" [(ngModel)]="laborForm.costPlusType" [disabled]="isView"
+                    label="T&M - Markup" value="1" [(ngModel)]="laborForm.costPlusType" [disabled]="isView"
                     (click)="(!isView)?tmchange():''"></p-radioButton>
                   <div>
                     <select  (ngModelChange)="checkValid(12)" class="form-control select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || laborForm.costPlusType != 1"
