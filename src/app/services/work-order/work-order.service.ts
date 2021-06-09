@@ -403,6 +403,10 @@ export class WorkOrderService {
     worOrderTearDownReasonListById(tearDownTypeId) {
         return this.workOrderEndpointService.worOrderTearDownReasonListById(tearDownTypeId);
     }
+
+    AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId) {
+        return this.workOrderEndpointService.AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId);
+    }
     getworblist() {
         return this.workOrderEndpointService.getworblist()
     }

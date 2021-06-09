@@ -958,6 +958,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.worOrderTearDownReasonListById(tearDownTypeId));
         });
     }
+
+    AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/getteardownreasons?teardownTypeId=${tearDownTypeId}&Idlist=${Idlist}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId));
+        });
+    }
     getworblist() {
         return this.http.get(`${this.configurations.baseUrl}/api/workOrder/getworblist`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getworblist());
