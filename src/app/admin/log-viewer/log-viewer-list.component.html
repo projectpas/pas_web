@@ -1,0 +1,224 @@
+<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+<div class="card new-card">
+    <div class="card-header header">
+        <div class="row">
+            <div class="col">
+                <h4 class="header-name">Log List</h4>
+            </div>
+        </div>
+    </div>
+    <div class="card-body header-body">
+        <p-table #dt [value]="logs" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
+            [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
+            selectionMode="multiple" [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true"
+            (onLazyLoad)="loadData($event)" [resizableColumns]="true" [reorderableColumns]="true"
+            [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col">
+                        <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns" optionLabel="header"
+                            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                            defaultLabel="Choose Columns" style="float:left">
+                        </p-multiSelect>
+                    </div>
+                    <div class="col">
+                        <div style="width: auto !important; float: right;"
+                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                            <i class="fa fa-search"></i>
+                            <input type="text" pInputText size="50" class="form-control"
+                                (input)="globalSearch($event.target.value)" placeholder="Filter">
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="pull-right buttons-div-align">
+                        <div class="col" style="padding-left: 2px">
+                            <div class="col buttons-top-padding" style="padding-right: 0px;">
+                                <div class="form-group">
+                                    <div class="pull-left radio-buttons-align" *ngFor="let status of statusList">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="currentStatus" class="form-control"
+                                                value="{{status.value}}" [(ngModel)]="currentStatus"
+                                                (change)="changeOfStatus(status.value, '')">
+                                            <span class="checkmark"></span>{{status.label}}
+                                        </label>
+                                    </div>
+                                    <div class="pull-left radio-buttons-align">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="currentStatusSo" class="form-control" value="0"
+                                                [(ngModel)]="currentStatus" checked="{{currentStatus == 0}}"
+                                                (change)="changeOfStatus(0, '')">
+                                            <span class="checkmark"></span>All
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </ng-template>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                        [pSortableColumn]="col.field">
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                    <th class="table-actions-column" style="max-width: 30px;">
+                        Actions
+                    </th>
+                </tr>
+                <tr>
+                    <th class="table-column-width" [ngStyle]="{'width': col.width}" *ngFor="let col of columns"
+                        [ngSwitch]="col.field">
+                        <input *ngIf="col.field !== 'timestamp'" style="width:100%;" pInputText type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input type="date" *ngIf="col.field == 'timestamp'" name="timestamp"
+                            class="table-header-input-width"
+                            (change)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                    <th class="table-actions-column" style="max-width: 30px;"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded"
+                let-columns="columns">
+                <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle
+                    [pSelectableRowDblClick]="rowData">
+                    <td *ngFor="let col of columns" class="table-column-width"
+                        [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
+                        <span *ngIf="col.field != 'timestamp'">
+                            {{convertDate(col.field , rowData) == '01/01/0001' ? '' : convertDate(col.field , rowData)}}
+                        </span>
+                        <span *ngIf="col.field == 'timestamp'">
+                            {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy hh:mm a' }}
+                        </span>
+                    </td>
+                    <td class="action-icons-cstm table-column-width" style="max-width: 30px !important;">
+                        <div>
+                            <!-- <span>
+                                <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
+                                    matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                            </span> -->
+                            <span data-toggle="modal" data-target="#viewText"><a class="btn nobg btn-view-cstm"
+                                    (click)="getViewData(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                                        class="fa fa-eye"></i></a> </span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns *ngIf="logs.length == 0">
+                <tr>
+                    <td [attr.colspan]="19" class="no-records-cstm no-records-msg">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer">Total:</label>
+                <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText
+                    type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+                <input class="footer-input-width" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+            </div>
+            <div class="modal-body" *ngIf="targetData && !selectedOnly">
+                <strong>
+                    <span>
+                        You are attempting to export {{targetData.totalRecords}} of records.
+                    </span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+                <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #viewOrder let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" (click)="dismissModel()">
+            &times;
+        </button>
+        <h4 class="modal-title">Details of Sales Order</h4>
+    </div>
+    <div class="modal-body">
+        <!-- <app-sales-order-view [customerId]="customerId" [salesOrderId]="salesOrderId" [salesOrderView]="salesOrderView">
+        </app-sales-order-view> -->
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+    </div>
+</ng-template>
+<div id="viewText" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close btn-font" (click)="closePopupmodel('viewText')">&times;</button>
+                <h4 class="modal-title"> Log Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <p class="memo-margin-bottom">
+                        <span class="label"><strong> Exception: </strong></span><span class="value">
+                            <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.exception></p>
+                        </span>
+                    </p>
+                    <p class="memo-margin-bottom">
+                        <span class="label"><strong> Message: </strong></span><span class="value">
+                            <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.message></p>
+                        </span>
+                    </p>
+                    <p class="memo-margin-bottom">
+                        <span class="label"><strong> Message Template: </strong></span><span class="value">
+                            <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.messageTemplate></p>
+                        </span>
+                    </p>
+                    <p class="memo-margin-bottom">
+                        <span class="label"><strong> Level: </strong></span><span class="value">
+                            <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.level></p>
+                        </span>
+                    </p>
+                    <p><span class="label"><b>Properties: </b></span><span
+                        class="value">{{viewdata.properties}}</span></p>
+                    <p><span class="label"><b>Timestamp: </b></span><span
+                            class="value">{{viewdata.timestamp | date: 'MM/dd/yyyy h:mm a'}}</span></p>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closePopupmodel('viewText')">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
