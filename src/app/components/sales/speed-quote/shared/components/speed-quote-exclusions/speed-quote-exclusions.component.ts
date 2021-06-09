@@ -41,8 +41,11 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     //this.id = this.speedQuoteId = this._actRoute.snapshot.params['id'];
     this.speedQuoteId = this.SQId;
     this.getExclusionList();
+    //this.bindPartsDroppdown('');
   }
   refresh(rowdata){
+    //this.loapartItems();
+    this.bindPartsDroppdown('');
     this.getExclusionList();
   }
   addPartNumber(rowdata) {
@@ -54,6 +57,22 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
       pn: rowdata.partNumber ? rowdata.partNumber : rowdata.pn,
       description: rowdata.description,
       speedQuotePartId: rowdata.speedQuotePartId,
+      itemNo:rowdata.itemNo,
+      isEditPart :false,
+		}
+    this.partListData.push(newParentObject);
+  }
+  addNewPartNumber(rowdata) {
+		let newParentObject = new SpeedQuoteExclusion();
+		newParentObject = {
+			...newParentObject,
+			itemMasterId: rowdata.itemMasterId,
+      //partNumber: rowdata.partNumber,
+      //pn: rowdata.partNumber.partNumber,
+      pn: rowdata.pn,
+      description: rowdata.description,
+      speedQuotePartId: rowdata.speedQuotePartId,
+      itemNo:rowdata.itemNo,
       isEditPart :false,
 		}
     this.partListData.push(newParentObject);
@@ -113,6 +132,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
         if (result && result.length > 0) {
           this.partDetailsList = result;
           this.partCollection = [...this.partDetailsList];
+          console.log("partCollection",this.partCollection);
           // this.partCollection = result.map(x => {
           //   return {
           //     exPartDescription: x.partDescription,
@@ -210,6 +230,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
 				//isDeleted: this.partListData[i].isDeleted,
 				createdBy: this.userName,
         updatedBy: this.userName,
+        itemNo: this.partListData[i].itemNo,
       }
       this.parentObjectArray.push(this.parentObject);
     }
@@ -224,7 +245,8 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
 				'Success',
 				`Saved Exclusion PartsList Successfully`,
 				MessageSeverity.success
-			);
+      );
+      this.getExclusionList();
 		}, err => {
 			this.isSpinnerVisible = false;
 		});
@@ -232,19 +254,23 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   formateCurrency(amount) {
     return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
   }
-
+  partNumberObj: {};
   getExclusionList(){
     this.speedQuoteService.getExclusionList(this.speedQuoteId).subscribe(res => {
       //this.isSpinnerVisible = false;
+      console.log("exclusionEstimatedOccurances",this.exclusionEstimatedOccurances);
       if (res) {
         this.partListData = res.map(x => {
                 return {
                     ...x,
                     //exOccurance: getObjectByValue('value',x.exOccurance,this.exclusionEstimatedOccurances),
-                    exOccurance: x.exOccurance ? parseInt(x.exOccurance) : 0,
+                    exOccurance: getValueFromArrayOfObjectById('label', 'value', x.exOccurance, this.exclusionEstimatedOccurances),
+                    //exOccurance: x.exOccurance,
+                    partNumber: { partId: x.exItemMasterId, partNumber: x.exPartNumber, stockType:x.exStockType,partDescription:x.exPartDescription },
                 }
             });
           }
+          console.log("partlistdetail" , this.partListData);
       //this.partListData = res;
       console.log("partlist",this.partListData);
     }, error => this.isSpinnerVisible = false);
