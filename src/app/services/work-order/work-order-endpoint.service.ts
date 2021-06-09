@@ -1073,6 +1073,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.createSubWorkOrderMaterialList(data));
         });
     }
+        //update sub workorder materials
+    updatesubworkordermaterials(data) {
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/updatesubworkordermaterials`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.updatesubworkordermaterials(data));
+        });
+    }
     //sub work order material roleups list api
     getSubWoMaterialRoleUps(subWorkOrderMaterialId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subworollupmateriallist?subWorkOrderMaterialId=${subWorkOrderMaterialId}`, this.getRequestHeaders()).catch(error => {

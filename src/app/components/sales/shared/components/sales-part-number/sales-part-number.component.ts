@@ -267,7 +267,7 @@ export class SalesPartNumberComponent {
     this.salesMarginModal.close();
     if (!this.isEdit) {
       this.selectedPart.selected = false;
-      this.openPartNumber(false);
+      this.openPartNumber(false, true);
     }
   }
 
@@ -295,7 +295,7 @@ export class SalesPartNumberComponent {
       this.selectedSummaryRow = null;
       this.selectedSummaryRowIndex = null;
     }
-    this.openPartNumber(false);
+    this.openPartNumber(false, false);
     if (summaryRow == "") {
       this.isEditMode = false;
     }
@@ -342,14 +342,17 @@ export class SalesPartNumberComponent {
       this.selectedSummaryRow = null;
       this.selectedSummaryRowIndex = null;
     }
-    this.openPartNumber(true);
+    this.openPartNumber(true, false);
     this.isEditMode = false;
   }
 
-  openPartNumber(viewMode) {
+  openPartNumber(viewMode, close) {
     this.isStockLineViewMode = viewMode;
     let contentPart = this.addPart;
-    this.isEditMode = true;
+    if (close)
+      this.isEditMode = false;
+    else
+      this.isEditMode = true;
     this.isQtyAdjust = false;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
@@ -461,7 +464,6 @@ export class SalesPartNumberComponent {
   }
 
   openSalesMarginSave(event) {
-    debugger;
     if (event.isApproved == true) {
       this.isApprovedPartUpdated = true;
     }
@@ -490,7 +492,7 @@ export class SalesPartNumberComponent {
         })
         this.combineParts(this.summaryParts);
       }
-      this.openPartNumber(false);
+      this.openPartNumber(false, true);
       const partsList = this.selectedParts;
       partsList.push(partObj);
       this.salesQuoteService.selectedParts = partsList;

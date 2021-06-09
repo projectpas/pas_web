@@ -131,6 +131,13 @@ export class WoPartDetailsComponent implements OnChanges {
     this.formObject.quantity=this.editData.quantity;
     this.formObject.qtyOnHand=this.editData.qtyOnHand;
     this.formObject.qtyAvailable=this.editData.qtyAvail;
+    if(this.isSubWorkOrder){
+      this.materialCreateObject.subWorkOrderMaterialsId=this.editData.subWorkOrderMaterialsId;
+      this.materialCreateObject.workOrderMaterialsId=0;
+     }else{
+      this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+      this.materialCreateObject.subWorkOrderMaterialsId=0;
+     }
     this.search();
    }else{
    }
@@ -171,26 +178,26 @@ export class WoPartDetailsComponent implements OnChanges {
     ]
     this.stockLinecolumns = [
       { field: 'selected', header: '', width: '30px', textalign: 'left' },
-      { field: 'stockLineNumber', header: 'Stk Line Num', width: '80px', textalign: 'left' },
+      { field: 'stockLineNumber', header: 'Stk Line Num', width: '100px', textalign: 'left' },
       { field: 'serialNumber', header: 'Ser Num', width: '80px', textalign: 'left' },
-      { field: 'controlNumber', header: 'Cntrl Num', width: '80px', textalign: 'left' },
-      { field: 'idNumber', header: 'Cntrl ID Num', width: '80px', textalign: 'left' },
-      { field: 'partNumber', header: 'PN', width: '80px', textalign: 'left' },
-      { field: 'description', header: 'PN Description', width: '100px', textalign: 'left' },
+      { field: 'controlNumber', header: 'Cntrl Num', width: '100px', textalign: 'left' },
+      { field: 'idNumber', header: 'Cntrl ID Num', width: '100px', textalign: 'left' },
+      { field: 'partNumber', header: 'PN', width: '200px', textalign: 'left' },
+      { field: 'description', header: 'PN Description', width: '250px', textalign: 'left' },
       { field: 'stockType', header: 'Stk Type', width: '100px', textalign: 'left' },
       { field: 'stkLineManufacturer', header: 'Manufacturer', width: '100px', textalign: 'left' },
       { field: 'uomDescription', header: 'UOM', width: '80px', textalign: 'left' },
       { field: 'qtyAvailable', header: 'Qty Avail', width: '100px', textalign: 'right' },
       { field: 'qtyOnHand', header: 'Qty On Hand', width: '100px', textalign: 'right' },
       { field: 'unitCost', header: 'Unit Cost', width: '80px', textalign: 'left' },
-      { field: 'tracableToName', header: 'Traceable to', width: '80px', textalign: 'left' },
+      { field: 'tracableToName', header: 'Traceable to', width: '100px', textalign: 'left' },
       { field: 'ownerName', header: 'Owner', width: '100px', textalign: 'left' },
       { field: 'obtainFromName', header: 'Obtain From', width: '100px', textalign: 'left' },
       { field: 'tagDate', header: 'Tag Date', width: '80px', textalign: 'left' },
       { field: 'tagType', header: 'Tag Type', width: '80px', textalign: 'left' },
       { field: 'certifiedBy', header: 'Cert By', width: '80px', textalign: 'left' },
       { field: 'certifiedDate', header: 'Cert Date', width: '80px', textalign: 'left' },
-      { field: 'memo', header: 'Memo', width: '80px', textalign: 'left' }
+      { field: 'memo', header: 'Memo', width: '250px', textalign: 'left' }
     ]
   }
   parsedText(text) {
@@ -253,7 +260,15 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.taskId=this.formObject.taskId;
       this.materialCreateObject.qtyOnHand = part.qtyOnHand;
       this.materialCreateObject.qtyAvailable = part.qtyAvailable;
-      this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
+      this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :0;
+      
+      if(this.isSubWorkOrder){
+        this.materialCreateObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId ?this.formObject.subWorkOrderMaterialsId :0;
+        this.materialCreateObject.workOrderMaterialsId=0;
+       }else{
+        this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId ? this.formObject.workOrderMaterialsId :0;
+        this.materialCreateObject.subWorkOrderMaterialsId=0;
+       }
       this.materialCreateObject.stockLineId= null;
       this.materialCreateObject.quantity=this.formObject.quantity;
       this.materialCreateObject.provisionId=this.formObject.provisionId;
@@ -311,6 +326,13 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject.qtyOnHand = part.qtyOnHand;
     this.materialCreateObject.qtyAvailable = part.qtyAvailable;
     this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :1;
+    if(this.isSubWorkOrder){
+      this.materialCreateObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId ?this.formObject.subWorkOrderMaterialsId :null;
+      this.materialCreateObject.workOrderMaterialsId=0;
+     }else{
+      this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId ? this.formObject.workOrderMaterialsId :null;
+      this.materialCreateObject.subWorkOrderMaterialsId=0;
+     }
     this.materialCreateObject.stockLineId= part.stockLineId;
     this.materialCreateObject.quantity=this.formObject.quantity
     this.materialCreateObject.provisionId=this.formObject.provisionId;

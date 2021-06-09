@@ -587,8 +587,8 @@
                             id="mpn-list-table">
                          <thead>
                              <tr class="pad_workflo">
-                                 <th class="approver-th-align th-width min-width-80">
-                                     <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot() || isView"/> Select All
+                                 <th class="approver-th-align th-width">
+                                     <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot() || isView"/>
                                  </th>
                                  <th style="z-index: 1;" *ngFor="let header of woQuoteListHeader">{{header.header}}</th>
                              </tr>
