@@ -264,7 +264,7 @@
                                 <th>Location</th>
                                 <th>Shelf</th>
                                 <th>Bin</th>
-                                <th colspan="40"></th>
+                                <th colspan="41"></th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -446,7 +446,7 @@
                                             </option>
                                         </select>
                                     </td>
-                                    <td colspan="40"></td>
+                                    <td colspan="41"></td>
                                     <td><a matTooltip="Edit" matTooltipPosition="above"
                                             class="btn boxed-float-btn nobg edit"><i class="fa fa-edit"
                                                 (click)="editPart(part)"></i></a></td>
@@ -494,6 +494,8 @@
                                         <th>Certified Date</th>
                                         <th class="date">Certified Due Date</th>
                                         <th>Tag Type</th>
+                                        <th>TaggedBy Type</th>
+                                        
                                         <th>Tagged By </th>
                                         <th>UOM</th>
                                         <th class="date">Date Tagged </th>
@@ -935,7 +937,67 @@
                                                     [disabled]="!SL.isEnabled">
                                                 </p-multiSelect>
                                             </td>
-                                            <td>                                               
+                                            <td>
+                                                <select class="form-control" [(ngModel)]="SL.taggedByType"
+                                                    #selects="ngModel" [disabled]="!SL.isEnabled"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    (change)="onTaggedTypeChange($event, SL)">
+                                                    <option value="0">Select</option>
+                                                    <option *ngFor="let item of moduleListDropdown"
+                                                        [ngValue]="item.moduleId">{{item.moduleName}}</option>
+
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <div class="form-group"
+                                                    *ngIf="SL.taggedByType != undefined && SL.taggedByType > 0">
+                                                    <div class="form-row">
+                                                        <div class="col-sm-11">
+
+                                                            <p-autoComplete
+                                                                *ngIf="SL.taggedByType == customerModuleId"
+                                                                [(ngModel)]="SL.taggedByObject"
+                                                                [suggestions]="CustomerList" appendTo="body"
+                                                                [disabled]="!SL.isEnabled"
+                                                                (completeMethod)="onFilter($event, SL, SL.taggedByType)"
+                                                                (onSelect)="ontagTypeSelect(SL)" [dropdown]="true"
+                                                                [size]="32" [minLength]="1" field="Value"
+                                                                class="rpo-acomp">
+
+                                                            </p-autoComplete>
+
+                                                            <p-autoComplete *ngIf="SL.taggedByType == vendorModuleId"
+                                                                [(ngModel)]="SL.taggedByObject"
+                                                                [suggestions]="VendorList" [disabled]="!SL.isEnabled"
+                                                                appendTo="body"
+                                                                (completeMethod)="onFilter($event, SL, SL.taggedByType)"
+                                                                (onSelect)="ontagTypeSelect(SL)" [dropdown]="true"
+                                                                [size]="32" [minLength]="1" field="Value"
+                                                                class="rpo-acomp">
+
+                                                            </p-autoComplete>
+
+                                                            <p-autoComplete *ngIf="SL.taggedByType == companyModuleId"
+                                                                [(ngModel)]="SL.taggedByObject"
+                                                                [suggestions]="CompanyList" [disabled]="!SL.isEnabled"
+                                                                appendTo="body"
+                                                                (completeMethod)="onFilter($event, SL, SL.taggedByType)"
+                                                                (onSelect)="ontagTypeSelect(SL)" [dropdown]="true"
+                                                                [size]="32" [minLength]="1" field="Value"
+                                                                class="rpo-acomp">
+                                                            </p-autoComplete>
+
+                                                            <input *ngIf="SL.taggedByType == otherModuleId"
+                                                                class="form-control" type="text"
+                                                                [disabled]="!SL.isEnabled"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                [(ngModel)]="SL.taggedByName" pInputText>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <!-- <td>                                               
                                                 <p-autoComplete field="Value" class="rpo-acomp"
                                                     [(ngModel)]="SL.taggedByObject" 
                                                     appendTo="body"
@@ -949,7 +1011,22 @@
                                                     name="taggedBy{{stockline_row_index}}"
                                                     id="taggedBy{{stockline_row_index}}">
                                                 </p-autoComplete>
-                                            </td>
+                                            </td> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                             <td>                                                                                     
                                                 <p-dropdown class="rpo-acomp" 
                                                     [options]="allPurchaseUnitOfMeasureinfo" 

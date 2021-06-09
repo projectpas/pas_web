@@ -651,6 +651,9 @@ export class StockLineDraft {
     obtainFromType: number = null;
     ownerType: number = null;
     traceableToType: number = null;
+
+    taggedByType : number = null;    //-----------------------------------------
+
     unitCostAdjustmentReasonTypeId: number = null;
     unitSalePriceAdjustmentReasonTypeId: number = null;
     idNumber: string = null;
@@ -723,6 +726,9 @@ export class StockLineDraft {
     obtainFromObject: DropDownData = null;
     ownerObject: DropDownData = null;
     traceableToObject: DropDownData = null;
+
+    taggedByObject: DropDownData = null;   //------------------------------
+
     createdBy: string = null;
     updatedBy: string = null;
 
@@ -753,13 +759,16 @@ export class StockLineDraft {
     ObtainFromTypeName: string = null;
     OwnerTypeName: string = null;
     TraceableToTypeName: string = null;
+
+    taggedByTypeName: string = null;   // ---------------------------------------
+
     UnitCostAdjustmentReasonType: string = null;
     UnitSalePriceAdjustmentReasonType: string = null;
     ShippingVia: string = null;
     WorkOrder: string = null;
     WorkOrderMaterialsName: string = null;
     tagTypeId: any = null;
-    taggedBy:number = null;
+    taggedBy:number = null;         // ---------------------------------------  
     taggedByName: string = null;
     unitOfMeasureId:any = null;
     unitOfMeasure: string = null;
