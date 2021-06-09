@@ -244,7 +244,8 @@
                             <!-- <p><span class="label"><b>Contacted by<span class="clr-red">*</span> :   </b></span><span class="value">{{viewdata.contactBy}}</span></p> -->
                             <p class="memo-margin-bottom">
                                 <span class="label"><strong> Memo: </strong></span><span class="value">
-                                    <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.description></p>
+                                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(viewdata.description)"
+                                     [innerHTML]=viewdata.description></p>
                                 </span>
                             </p>
                             <p><span class="label"><b>Created Date: </b></span><span
@@ -466,7 +467,7 @@
                                         <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'memoId', audit.memoId)  ? 'black' : 'red'  }">{{audit.memoId}}</td> -->
                                         <td
                                             [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
-                                            <p class="m-0 p-0" [innerHTML]="audit.description"></p>
+                                            <p class="m-0 p-0 truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.description)" [innerHTML]="audit.description"></p>
                                         </td>
                                         <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                         <td>{{audit.createdBy}}</td>

@@ -1116,7 +1116,15 @@ this.isViewItem=true;
         this.pageIndex = parseInt(event.first) / event.rows;
         this.pageSize = event.rows;
     }
-
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     releaseStock() {
         if (this.statusId == 1 || this.statusId == 3) {
             this.releasePartsList = [];

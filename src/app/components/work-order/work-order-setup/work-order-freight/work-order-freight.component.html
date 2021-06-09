@@ -112,14 +112,14 @@
       </tr>
       <tr>
         <th class="table-column-width" rowspan="2">Task</th>
-        <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns" rowspan="2">
+        <th [ngStyle]="{'width': col.width}" style="width:200px !important" *ngFor="let col of columns" rowspan="2">
           {{ col.header }} <span style="color: #ff0000;" *ngIf="col.isRequired == true">*</span>
         </th>
         <th class="table-column-width" colspan="3">Dimensions</th>
         <th class="table-column-width" rowspan="2">Dimension UOM</th>
         <th class="table-column-width" rowspan="2">Currency</th>
-        <th rowspan="2" style="min-width:60px !important">Amount  <span style="color: #ff0000;">*</span></th>
-        <th class="table-column-width" rowspan="2">Memo</th>
+        <th rowspan="2" style="width:60px !important">Amount  <span style="color: #ff0000;">*</span></th>
+        <th class="table-column-width" style="width:200px !important" rowspan="2">Memo</th>
         <ng-container *ngIf="isQuote">
           <th class="table-column-width" rowspan="2">Billing Method</th>
           <th class="table-column-width" rowspan="2">Mark Up</th>
@@ -128,7 +128,7 @@
           <!-- <th tooltip="Time & Materials">T&M Amount</th>
           <th>Fixed Amount</th> -->
         </ng-container>
-        <th rowspan="2" style="width:130px" class="table-actions-column" >Actions</th>
+        <th rowspan="2" style="width:80px !important" class="table-actions-column" >Actions</th>
       </tr>
       <tr>
         <th>L</th>
