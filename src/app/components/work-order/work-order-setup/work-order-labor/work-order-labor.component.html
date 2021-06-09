@@ -385,9 +385,9 @@
                     {{ formateCurrency(rec.totalCost) }}
                   </td>
                   <td>
-                    <select class="form-control min-width-130" (ngModelChange)="checkValid(25)" (change)="markupChanged(rec, 'row')"  [(ngModel)]="rec.billingMethodId"
+                    <select class="form-control min-width-130" (ngModelChange)="checkValid(25)" (change)="billingChanged(rec, 'row')"  [(ngModel)]="rec.billingMethodId"
                      
-                      [disabled]="isView || laborForm.costPlusType == 3" (change)="rec.markupPercentageId = '';rec.billingRate = 0;">
+                      [disabled]="isView || laborForm.costPlusType == 3">
                       <option value="">Select</option>
                       <option *ngFor="
                           let bm of [

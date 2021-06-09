@@ -1146,6 +1146,18 @@ return true;
       }
     }
   }
+
+  billingChanged(matData, type) 
+  {
+    try 
+    {
+        matData['markupPercentageId'] = '';
+        matData['billingRate'] = ((matData['totalCostPerHour'])).toFixed(2)
+        matData['billingAmount'] = (Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.hours)).toFixed(2);
+    }
+    catch (e) {
+    }
+}
   markupChanged(matData, type) {
     if(type == 'row' && matData && matData.markupPercentageId==""){
       matData['billingRate'] = ((matData['totalCostPerHour'])).toFixed(2)

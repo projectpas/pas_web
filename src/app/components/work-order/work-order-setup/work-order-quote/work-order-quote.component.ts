@@ -2125,21 +2125,11 @@ const data={...newdata};
     }
 
     billingChanged(matData, type) {
-        try {
-            if(matData.billingMethodId ==2)
-            {
-                //matData['billingMethodId']  = this.costPlusType;
-                matData['markupPercentageId'] = '';
-                matData['billingRate'] = 0;
-                matData['billingAmount'] = (matData.quantity * Number(matData.unitCost.toString().split(',').join(''))).toFixed(2);
-                // if(this.costPlusType == 3){
-                //     matData.billingAmount = 0.00;
-                //     this.materialFlatBillingAmount = 0.00;
-                // }
-                // if (Number(this.costPlusType) == 1) {
-                //     this.overAllMarkup = '';
-                // }
-            }
+        try 
+        {
+            matData['markupPercentageId'] = '';
+            matData['billingRate'] = matData['unitCost']>0?  formatNumberAsGlobalSettingsModule(matData['unitCost'],2) :'0.00';
+            matData['billingAmount'] = (matData.quantity * Number(matData.unitCost.toString().split(',').join(''))).toFixed(2);
          
         }
         catch (e) {
