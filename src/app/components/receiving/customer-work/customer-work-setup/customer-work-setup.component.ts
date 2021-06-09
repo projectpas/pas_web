@@ -18,7 +18,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { timePattern } from '../../../../validations/validation-pattern';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { TimeLifeDraftData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
-import { time } from 'console';
+// import { time } from 'console';
 
 @Component({
     selector: 'app-customer-work-setup',
