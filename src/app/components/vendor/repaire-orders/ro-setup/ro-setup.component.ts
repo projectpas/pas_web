@@ -1665,6 +1665,7 @@ export class RoSetupComponent implements OnInit {
 			data[0].map((x, pindex) => {
 				this.newPartsList = {
 					...x,
+					quantityReserved: x.quantityReserved,
 					partNumberId: { value: x.itemMasterId, label: x.partNumber },
 					ifSplitShip: x.roPartSplits.length > 0 ? true : false,
 					partNumber: x.partNumber,
@@ -3103,6 +3104,7 @@ export class RoSetupComponent implements OnInit {
 			this.parentObject = {
 				repairOrderId: this.roId,
 				isParent: true,
+				quantityReserved: this.partListData[i].quantityReserved,
 				itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				//partNumber : this.partListData[i].itemMasterId ? this.getPartnumber(this.partListData[i].itemMasterId) : null,
 				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getValueFromObj(this.partListData[i].altEquiPartNumberId) : null,
