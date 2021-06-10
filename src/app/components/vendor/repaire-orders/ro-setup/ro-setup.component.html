@@ -525,11 +525,11 @@
                                         <td>{{obj.purchaseOrderUnitCost === null ? '-':obj.purchaseOrderUnitCost}}</td>
                                         <td>{{obj.traceableToName === null ? '-':obj.traceableToName}}</td>
                                         <td>{{obj.ownerName === null ? '-':obj.ownerName}}</td>
-                                        <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
-                                        <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
+                                        <td>{{obj.obtainFromName === null ? '-':obj.obtainFromName}}</td>
+                                        <td>{{obj.tagDate === null ? '-':obj.tagDate | date: 'MM/dd/yyyy'}}</td>
                                         <td>{{obj.certifiedBy === null ? '-':obj.certifiedBy}}</td>
-                                        <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate}}</td>
-                                        <td>{{obj.memo === null ? '-':obj.memo}}</td>
+                                        <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate | date: 'MM/dd/yyyy'}}</td>                                        
+                                        <td><p class="p-0 m-0 p_textEditor" [innerHTML]="obj.memo"></p></td>
                                     </tr>
                                     <tr *ngIf="stocklineData.length == 0">
                                         <td [attr.colspan]="10" class="no-records-cstm no-records-msg">

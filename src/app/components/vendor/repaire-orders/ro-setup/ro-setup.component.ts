@@ -2679,7 +2679,7 @@ export class RoSetupComponent implements OnInit {
 		this.loadModuleListForVendorComp();
 		this.getAllrevisedPart();
 		this.getAllworkPerformed();
-		this.getAllACTailNum('');
+		//this.getAllACTailNum('');
 	}
 
 	CloseModel(status) {
@@ -3620,6 +3620,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	addStockLineView(itmeMasterID, Condtionid) {
+		
 		this.stocklineData = [];
 		this.stocklineconditionId = null;
 		this.stocklinepartNumberId = null;
@@ -3648,12 +3649,15 @@ export class RoSetupComponent implements OnInit {
 						}
 					}
 				}
-			}
+			}			
+			this.stocklinepartNumberId = this.partCollection.find((x: any) => x.value == itmeMasterID);		
+			var conditiondata = this.allconditioninfo.find((x: any) => x.value == Condtionid);
+			this.stocklineconditionId = [parseInt(conditiondata["value"])];
+
 		}, err => {
 			this.isSpinnerVisible = false;
 			this.stocklineData = []
 		});
-
 	}
 
 
@@ -5191,7 +5195,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	StockLinePopup(row) {
-		debugger
+		
 		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
 			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;
