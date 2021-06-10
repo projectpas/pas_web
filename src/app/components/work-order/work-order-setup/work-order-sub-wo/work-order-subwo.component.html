@@ -12,7 +12,7 @@
 </div>
 <div class="clear"></div> 
 <div class="card card-border">
-  <div class="card-body" *ngIf="subWorkOrderHeader">
+  <div class="card-body" *ngIf="subWorkOrderHeader" style="padding-top:5px;padding-bottom:5px">
     <div class="row labels-ctsm-align">
       <div class="col-md-3">
         <label class="fs12">WorkOrderNumber : </label>
@@ -56,8 +56,8 @@
 </div>
 <!-- </div> -->
 <div *ngIf="workOrderDetails">
-  <div class="card" style="margin-top:10px;margin-bottom: 10px;">
-    <div class="card-body sub-buttons-margin" *ngIf="subWorkOrderGeneralInformation">
+  <div class="card" style="margin-top:5px;margin-bottom: 5px;">
+    <div class="card-body sub-buttons-margin" style="padding-bottom:5px" *ngIf="subWorkOrderGeneralInformation">
       <form #subWoHeader="ngForm">
         <div class="form-row">
           <div class="col-md-3">
@@ -286,6 +286,7 @@
           </tbody>
         </table>
       </div>
+      
       <div *ngIf="!isView">
         <button class="btn btn-primary pull-right" *ngIf="!activeGridUpdateButton" type="button"
           [disabled]="!workOrderForm.valid" (click)="saveSubWorkOrderParts()">

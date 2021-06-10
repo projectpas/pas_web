@@ -189,16 +189,16 @@
                                     <td></td>
                                     <td>{{x.condition}}</td>
                                     <td>{{x.stockType}}</td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{x.quantity}}
                                     </td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{x.quantityAlreadyReserved}}
                                     </td>
-                                    <td class="tex_end" *ngIf="(statusId === 1 || statusId === 5)">
+                                    <td class="tex_end text-right" *ngIf="(statusId === 1 || statusId === 5)">
                                         {{ statusId !=5  ? x.qtyToBeReserved : x.qtyToBeReserved}}
                                     </td>
-                                    <td class="tex_end" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
+                                    <td class="tex_end text-right" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
                                         {{x.qtyToBeReserved}}  
                                     </td>
                                     <td *ngIf="(statusId === 1 || statusId === 5)">
@@ -210,15 +210,15 @@
                                             (keyup)="validatePartsQuantity($event,x)" 
                                             [disabled]="!x.isParentSelected">
                                     </td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{x.quantityAlreadyIssued}} 
                                     </td>
-                                    <td  class="tex_end">
+                                    <td  class="tex_end text-right">
                                         {{x.qtyToBeIssued}} 
                                     </td>
-                                    <td class="tex_end">{{x.quantityOnHand}}</td>
-                                    <td class="tex_end">{{x.quantityAvailable}}</td>
-                                    <td class="tex_end">{{x.quantityOnOrder}}</td>
+                                    <td class="tex_end text-right">{{x.quantityOnHand}}</td>
+                                    <td class="tex_end text-right">{{x.quantityAvailable}}</td>
+                                    <td class="tex_end text-right">{{x.quantityOnOrder}}</td>
                                     <td *ngIf="statusId != 2 && statusId != 3 && statusId != 4">
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="reservedDate{{i}}"
                                             #reservedDate="ngModel" [required]="x.isParentSelected" [maxDate]="minDateValue"
@@ -281,11 +281,11 @@
 
                                     <td>{{b.condition}}</td>
                                     <td>{{b.stockType}}</td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{b.quantity}}
                                     </td>
-                                    <td class="tex_end"> {{b.quantityAlreadyReserved}}</td> 
-                                   <td class="tex_end">
+                                    <td class="tex_end text-right"> {{b.quantityAlreadyReserved}}</td> 
+                                   <td class="tex_end text-right">
                                         {{b.qtyToBeReserved}}   
                                     </td>
                                     <td *ngIf="(statusId === 1 || statusId === 5)">
@@ -302,15 +302,15 @@
                                             [disabled]="b.quantityIssued==0">
                                             <!-- [disabled]="!b.isChildSelected" -->
                                     </td>
-                                    <td class="tex_end">{{b.quantityAlreadyIssued}}</td>
-                                    <td class="tex_end">{{b.qtyToBeIssued}}</td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">{{b.quantityAlreadyIssued}}</td>
+                                    <td class="tex_end text-right">{{b.qtyToBeIssued}}</td>
+                                    <td class="tex_end text-right">
                                         {{b.quantityOnHand}}
                                    </td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{b.quantityAvailable}}
                                     </td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{b.quantityOnOrder}}
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId != 3 && statusId != 4">
@@ -377,11 +377,11 @@
                                     <td>{{c.parentPartNo}}</td>
                                     <td>{{c.condition}}</td>
                                     <td>{{c.stockType}}</td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{c.quantity}}
                                     </td>
-                                    <td class="tex_end">{{c.quantityAlreadyReserved}}</td>
-                                   <td class="tex_end">
+                                    <td class="tex_end text-right">{{c.quantityAlreadyReserved}}</td>
+                                   <td class="tex_end text-right">
                                         {{c.qtyToBeReserved}}  
                                     </td>
                                     <td *ngIf="(statusId === 1 || statusId === 5)">
@@ -395,15 +395,15 @@
                                              (input)="childPartValidate($event.target.value, c,2)"
                                             [disabled]="!c.isChildSelected">
                                     </td>
-                                    <td class="tex_end">{{c.quantityAlreadyIssued}}</td>
-                                  <td class="tex_end">{{c.qtyToBeIssued}}</td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">{{c.quantityAlreadyIssued}}</td>
+                                  <td class="tex_end text-right">{{c.qtyToBeIssued}}</td>
+                                    <td class="tex_end text-right">
                                         {{c.quantityOnHand}}
                                     </td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{c.quantityAvailable}}
                                     </td>
-                                    <td class="tex_end">
+                                    <td class="tex_end text-right">
                                         {{c.quantityOnOrder}}
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId != 3 && statusId != 4">
@@ -693,7 +693,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                                    style="margin: 0px auto; display: block;" />
                         </td>
                         <td class="min-width-250" [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
-                            <p class="p_editor" [innerHTML]="audit.memo"></p>
+                            <p class="p_editor  truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
                         </td>
                         <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
                         <td>{{ audit.createdBy }}</td>
@@ -765,7 +765,8 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                 <p *ngIf="col.field =='altEquiv'" style="margin:0px !important">{{rowData.isAltPart ? 'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
                 <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='isDeferred'"
                 class="form-control w60 defered-check" [(ngModel)]="rowData.isDeferred">
-                <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
+                <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" 
+                class="p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(rowData[col.field])"></span>
             </td>
               <td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td> <td class="summary-column"></td> <td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td><td class="summary-column"></td>
             <td class="summary-column"></td>  
@@ -824,7 +825,8 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                     <p *ngIf="childcol.field =='showempty'" style="margin:0px !important"> -</p>
                      <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='isDeferred'"
                     class="form-control w60 defered-check3" [(ngModel)]="childRowData.isDeferred">
-                    <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]" class="p_textEditor"></span>
+                    <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]"
+                     class="p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(childRowData[childcol.field])"></span>
                 </td>
                 <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
   

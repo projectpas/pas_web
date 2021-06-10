@@ -118,18 +118,18 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
 
       initSummaryColumns() {
         this.headers = [
-          { field: "workOrderNum", header: "WO Num", width: "120px" },         
-          { field: "partNumber", header: "PN", width: "130px" },
+          { field: "workOrderNum", header: "WO Num", width: "140px" },         
+          { field: "partNumber", header: "PN", width: "200px" },
           { field: 'revisedPN', header: 'Revised PN' },
-          { field: "partDescription", header: "PN Description", width: "180px" },
+          { field: "partDescription", header: "PN Description", width: "250px" },
           { field: 'customer', header: 'Customer' },
           { field: 'action', header: 'Task' },
           { field: 'expertise', header: 'Expertise' },
           { field: 'employeeName', header: 'Employee' },
-          { field: 'hours', header: 'Act Hours',width:"60px" },
-          { field: 'stdHours', header: 'Std Hours',width:"60px" },
-          { field: 'burdenRateAmount', header: 'Var. Hours',width:"60px" },
-          { field: 'varPercentage', header: 'Var %',width:"60px" },
+          { field: 'hours', header: 'Act Hours',width:"100px" },
+          { field: 'stdHours', header: 'Std Hours',width:"100px" },
+          { field: 'burdenRateAmount', header: 'Var. Hours',width:"100px" },
+          { field: 'varPercentage', header: 'Var %',width:"100px" },
           { field: 'stage', header: 'Stage' },
           { field: 'status', header: 'Status' },
         ];
