@@ -232,10 +232,12 @@ export class AllViewComponent implements OnInit {
     }
     if (event.index == 7 && this.isReceivingro == true) {
       //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){  
+      //if(this.repairOrderData.length>0){          
       this.repairOrderId = this.id;   
-      this.showreceiveddraft = true;             
-      this.viewRepairOrder(this.id);      
+      this.showreceiveddraft = true;  
+      if(this.repairOrderData.length == 0){         
+        this.viewRepairOrder(this.id);   
+      }   
     }
     if (event.index == 8 && this.isReceivingro == true) {
       //this.isSpinnerVisible = true;      
@@ -287,6 +289,7 @@ export class AllViewComponent implements OnInit {
     this.receivingService.getPurchaseOrderDataForViewById(purchaseOrderId).subscribe(
       results => {        
         this.purchaseOrderData = results[0];
+        debugger
         this.purchaseOrderData.openDate = new Date(results[0].openDate).toLocaleDateString();
         this.purchaseOrderData.needByDate = new Date(results[0].needByDate);
         this.purchaseOrderData.dateApproved = new Date(results[0].dateApproved).toLocaleDateString();

@@ -1342,7 +1342,7 @@
                                                     <a href="javascript:void(0);" class="btn boxed-float-btn nobg edit"
                                                         matTooltip="Edit" matTooltipPosition="above"><i
                                                             class="fa fa-edit" (click)="editStockLine(SL)"></i></a>
-                                                    <a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL)"
+                                                    <a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL,deletepoConfirm)"
                                                         matTooltip="Delete" matTooltipPosition="above"><i
                                                             class="fa fa-trash"></i></a>
                                                 </div>
@@ -1461,6 +1461,28 @@
         </div>
     </div>
 </div>
+
+<ng-template class="modal fade" #deletepoConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="CloseModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <strong>                
+                Stock Line will be deleted after save/update. Do you still want to continue?
+            </strong>            
+        </div>
+        <div class="modal-footer">            
+            <button type="button" class="btn btn-primary"
+                (click)="DeleteStockLineCloseModel(SL);">Yes</button>
+            <button type="button" class="btn btn-danger"
+                (click)="CloseModel()">No</button>
+        </div>
+    </div>
+</ng-template>
 
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

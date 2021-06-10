@@ -23,4 +23,5 @@ export interface ISpeedQuoteView {
     leadSources: ILeadSource[];
     status: IStatus[];
     verificationResult;
+    managementStructureHeaderData: any[];
 }

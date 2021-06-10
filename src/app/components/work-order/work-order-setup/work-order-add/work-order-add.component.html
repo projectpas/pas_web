@@ -634,7 +634,7 @@
                                             <td>
                                                 <p-dropdown filter="true" class="min_selct_height" name="cmm{{i}}"
                                                     #cmm="ngModel" (ngModelChange)="getValid()" [autoWidth]="false"
-                                                    [style]="pDropdownStyle"
+                                                    [style]="pDropdownStyle" (onChange)="onSelectPublication($event,workOrderPartNumber,i)"
                                                     [options]="getDynamicVariableData('cmmPublicationList',i)"
                                                     class="p-dropdown-custom-md1 p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.cMMId"
@@ -1460,7 +1460,7 @@
                     <h4 class="modal-title warning_color">Warning</h4>
                 </div>
                 <div class="pad_msf">
-                    <p class="mar_o warning_color"> workflow is expired </p>
+                    <p class="mar_o warning_color"> workflow Number <strong style="color: #007ad9;">{{workflowNumber}}</strong> is expired </p>
                     <!-- <input type="checkbox" name="contract" #contract="ngModel"  (ngModelChange)="getValid()" 
                 class="form-control w60 width-100"> -->
 
@@ -1482,9 +1482,9 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title warning_color">Warning</h4>
-                </div>
+                </div> 
                 <div class="pad_msf">
-                    <p class="mar_o warning_color"> Publication is expired </p>
+                    <p class="mar_o warning_color"> Publication Number  <strong style="color: #007ad9;">{{publicationNo}}</strong> is expired </p>
                 </div>
                 <div class="modal-footer footer-padding">
                     <!-- <button type="button" class="btn btn-primary" data-dismiss="modal"

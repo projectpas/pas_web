@@ -13,6 +13,7 @@ import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
 import{ExchangeQUoteMarginSummary} from '../models/exchange/ExchangeQUoteMarginSummary';
 import { IExchangeQuoteCharge } from '../models/exchange/IExchangeQuoteCharge';
 import { IExchangeQuoteFreight } from '../models/exchange/IExchangeQuoteFreight';
+import { ExchangeSalesOrderConversionCritera } from "../components/exchange-quote/models/exchange-sales-order-conversion-criteria";
 @Injectable()
 export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getNewExchangeQuoteInstanceUrl: string = environment.baseUrl + "/api/exchangequote/new";
@@ -33,6 +34,7 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getFreightAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-freight-history';
     private readonly getChargesAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-charges-history';
     private readonly getExchangeQuoteViewDetails: string = environment.baseUrl + "/api/exchangequote/getview";
+    private readonly getConvertfromquoteEndPoint: string = environment.baseUrl + "/api/exchangesalesorder/convertfromquote"
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -246,6 +248,14 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
       return this.http.get<any>(`${this.configurations.baseUrl}/api/exchangeQuote/getleasingCompany/?masterCompanyId=${masterCompanyId}`)
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getleasingCompany(masterCompanyId));
+        });
+    }
+    convertfromquoteEndPoint(salesQuoteConversionCriteria: ExchangeSalesOrderConversionCritera, currentEmployeeId: number): Observable<any> {
+      const URL = `${this.getConvertfromquoteEndPoint}?currentEmployeeId=${currentEmployeeId}`;
+      return this.http
+        .post(URL, salesQuoteConversionCriteria, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.convertfromquoteEndPoint(salesQuoteConversionCriteria, currentEmployeeId));
         });
     }
 }

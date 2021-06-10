@@ -220,15 +220,16 @@ if(!this.isSummarizedView){
     this.editData = undefined;
     this.addNewCharges = true;
     this.workFlowObject.charges = [{}];
-    if (this.taskList) {
-      this.taskList.forEach(
-        task => {
-          if (task.description == "Assemble") {
-            this.workFlowObject.charges[0]['taskId'] = task.taskId;
-          }
-        }
-      )
-    }
+    this.workFlowObject.charges[0]['taskId']="";
+    // if (this.taskList) {
+    //   this.taskList.forEach(
+    //     task => {
+    //       if (task.description == "Assemble") {
+    //         this.workFlowObject.charges[0]['taskId'] = task.taskId;
+    //       }
+    //     }
+    //   )
+    // }
   }
   edit(rowData, mainInd, subInd) {
     rowData.workflowChargeTypeId = rowData.chargesTypeId;

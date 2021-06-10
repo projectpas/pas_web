@@ -23,7 +23,8 @@ import { PurchaseOrderService } from '../../../../services/purchase-order.servic
 import { AuthService } from '../../../../services/auth.service';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs';
+import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-edit-po',
@@ -100,6 +101,7 @@ export class EditPoComponent implements OnInit {
     alertText: string = '';
     arrayPostatuslist: any[] = [];
     private onDestroy$: Subject<void> = new Subject<void>();
+    modal: NgbModalRef;
     /** edit-po ctor */
     constructor(public receivingService: ReceivingService,
         public priority: PriorityService,
@@ -121,6 +123,7 @@ export class EditPoComponent implements OnInit {
         private datePipe: DatePipe,
         private purchaseOrderService: PurchaseOrderService,
         private authService: AuthService,
+        private modalService: NgbModal,
     ) {
 
         this.localPoData = this.vendorService.selectedPoCollection;
@@ -1743,16 +1746,27 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    deleteStockLine(stockLine: StockLine) {
+    deletestockline : any
+    deleteStockLine(stockLine: StockLine,deletepoConfirm) {
         if (stockLine) {
-            var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
-            if (OkCancel == true) {
-                stockLine.isEnabled = true;
-                stockLine.isDeleted = true;
-                this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
-                return;
-            }
+            this.modal = this.modalService.open(deletepoConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
+            this.deletestockline = stockLine;
+            return;
+            //var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
+            // if (OkCancel == true) {
+            //     stockLine.isEnabled = true;
+            //     stockLine.isDeleted = true;
+            //     this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
+            //     return;
+            // }
         }
+    }
+
+    DeleteStockLineCloseModel(){        
+        this.deletestockline.isEnabled = true;
+        this.deletestockline.isDeleted = true;
+        this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
+        this.modal.close();		
     }
 
     editStockLine(stockLine: StockLine) {
@@ -2132,6 +2146,10 @@ export class EditPoComponent implements OnInit {
             }
         })
     }   
+
+    CloseModel(status) {
+		this.modal.close();		
+	}
 
 }
 

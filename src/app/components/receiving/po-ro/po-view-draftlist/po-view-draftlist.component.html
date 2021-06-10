@@ -16,8 +16,8 @@
                                         <th class="width-60"></th>
                                     </tr>
                                 </thead>
-                                <tbody *ngIf="purchaseOrderData != undefined && purchaseOrderPart != undefined">
-                                    <ng-container *ngFor="let part of purchaseOrderPart;let row_index=index">
+                                <tbody *ngIf="purchaseOrderData != undefined && purchaseOrderPart != undefined">                                    
+                                    <ng-container *ngFor="let part of purchaseOrderPart;let row_index=index">                                        
                                         <tr class="parent-data" *ngIf="part.stockLine != null && part.stockLine.length > 0">
                                             <td class="text-right">{{row_index + 1}}</td>
                                             <td>{{part.itemMaster?.partNumber}}</td>
@@ -28,22 +28,21 @@
                                                 <i class="fa fa-{{ part.showStockLineGridDraft ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs" (click)="toggleExpandIcon(part)"></i>
                                             </td>
                                         </tr>
-
                                         <tr class="more-info" *ngIf="part.showStockLineGridDraft">
 
                                             <td colspan="6">
                                                 <div class="label-value-row">
                                                     <div class="col-sm-3">
-                                                        <p><span class="label"><b>PN: </b></span><span class="value"> {{part.itemMaster?.partNumber}}</span></p>
+                                                        <p><span class="label"><b>PN <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value"> {{part.itemMaster?.partNumber}}</span></p>
                                                         <p><span class="label"><b>Qty Actually Received: </b></span><span class="value">{{part.stockLine?.length}}</span></p>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p><span class="label"><b>PN Description: </b></span><span class="value">{{part.itemMaster?.partDescription}}</span></p>
-                                                        <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.quantityRejected}}</span></p>
+                                                        <p><span class="label"><b>Qty Rejected <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.quantityRejected}}</span></p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p><span class="label"><b>Cond: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].conditionText}}</span></p>
-                                                        <p><span class="label"><b>GL Account: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].glAccountText}}</span></p>
+                                                        <p><span class="label"><b>Cond <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].conditionText}}</span></p>
+                                                        <p><span class="label"><b>GL Account <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].glAccountText}}</span></p>
                                                     </div>                                                   
                                                 </div>
 
@@ -75,7 +74,7 @@
                                                                     </div> -->
                                                                     <div class="card-body view-structure-card-body">
                                                                         <div class="form-group view-structure-body-alignment">
-                                                                          <input class="form-control" type="text" name="companyName" 
+                                                                          <input class="form-control" type="text" name="companyName" class="text-danger"
                                                                                [(ngModel)]="part.stockLine[currentStockLineShowIndex].level1" disabled>
                                                                         </div>
                                                                         <div class="form-group view-structure-body-alignment">
@@ -93,7 +92,7 @@
                                                                       </div>
                                                                 </div>
                                                                
-                                                                <p><span class="label"><b>Site: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].siteText}}</span></p>
+                                                                <p><span class="label"><b>Site <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].siteText}}</span></p>
                                                                 <p><span class="label"><b>Warehouse: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].warehouseText}}</span></p>
                                                                 <p><span class="label"><b>Location: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].locationText}}</span></p>
                                                                 <p><span class="label"><b>Shelf: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shelfText}}</span></p>
@@ -114,8 +113,8 @@
 
                                                                 <p><span class="label"><b>MFG Batch Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturingBatchNumber}}</span></p>
                                                                 <p><span class="label"><b>Expiration Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].expirationDate}}</span></p>
-                                                                <p><span class="label"><b>Unit Cost: </b></span><span class="value">
-                                                                    {{part.stockLine[currentStockLineShowIndex].purchaseOrderUnitCost}}</span></p>
+                                                                <p><span class="label"><b>UOM <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].unitOfMeasure}}</span></p>
+                                                                <p><span class="label"><b>Unit Cost <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].purchaseOrderUnitCost}}</span></p>
                                                                 <p><span class="label"><b>Extended Cost: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].purchaseOrderExtendedCost}}</span></p>
                                                                 <p><span class="label"><b>Parts Cert Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].partCertificationNumber}}</span></p>
                                                                 <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedBy}}</span></p>
@@ -125,10 +124,11 @@
                                                             <div class="col-sm-3">
                                                                 <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagType}}</span></p>
                                                                 <p><span class="label"><b>Tag Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagDate}}</span></p>
+                                                                <p><span class="label"><b>Tag By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].taggedByName}}</span></p>
                                                                 <p><span class="label"><b>Engine Serial Number: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].engineSerialNumber}}</span></p>
                                                                 <p><span class="label"><b>Aircraft Tail Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].aircraftTailNumber}}</span></p>
-                                                                <p><span class="label"><b>Ship Via: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingViaText}}</span></p>
-                                                                <p><span class="label"><b>Shipping Ref#/AWB: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingReference}}</span></p>
+                                                                <p><span class="label"><b>Ship Via <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingViaText}}</span></p>
+                                                                <p><span class="label"><b>Shipping Ref#/AWB <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingReference}}</span></p>
                                                                 <p><span class="label"><b>Shipping Account: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingAccount}}</span></p>
                                                             </div>
                                                         </div>
@@ -218,18 +218,14 @@
                                                     </section>-->
                                                 </div>
                                             </td>
-                                        </tr>
-                                    </ng-container>                                    
-                                </tbody>
-                                <tfoot>
-                                    <ng-container>                                        
-                                        <tr *ngIf="purchaseOrderPart.length == 0">
-                                            <td [attr.colspan]="29" class="no-records-cstm no-records-msg">
-                                              No records found
+                                        </tr> 
+                                        <tr *ngIf="part.stockLine.length == 0">
+                                            <td *ngIf="row_index == 0" [attr.colspan]="29" class="no-records-cstm no-records-msg">
+                                                No records found
                                             </td>	
                                         </tr>
-                                    </ng-container>
-                                </tfoot>
+                                    </ng-container>                                                                         
+                                </tbody>                                                               
                             </table>
                             </div>
                         </div>

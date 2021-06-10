@@ -534,7 +534,7 @@
                     {{audit.name}}
                   </td>
                   <td [ngStyle]="{'color': getColorCodeForHistory(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }">
-                    <p [innerHTML]="audit.docMemo"></p>
+                    <p class="truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.docMemo)" [innerHTML]="audit.docMemo"></p>
                   </td>
                   <td>
                 <tr *ngFor="let x of audit.attachmentDetails">

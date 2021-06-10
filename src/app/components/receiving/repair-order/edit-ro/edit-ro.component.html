@@ -440,7 +440,7 @@
                                             <th colspan="5">Cycles</th>
                                             <th colspan="5">Time</th>
                                             <th colspan="5">Last</th>
-                                            <th colspan="3"></th>
+                                            <th colspan="4"></th>
                                         </tr>
                                         <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
                                             <tr [ngStyle]="{'background-color': SL.stockLineId > 0 ? '#e9ecef' : 'white'}"
@@ -1230,19 +1230,19 @@
                                                     </td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>
-                                                        <div *ngIf="!SL.stockLineId > 0">
-                                                            <a href="javascript:void(0);"
-                                                                class="btn boxed-float-btn nobg edit" matTooltip="Edit"
-                                                                matTooltipPosition="above"><i class="fa fa-edit"
-                                                                    (click)="editStockLine(SL)"></i></a>
-                                                            <a class="btn nobg btn-delete-cstm"
-                                                                (click)="deleteStockLine(SL)" matTooltip="Delete"
-                                                                matTooltipPosition="above"><i
-                                                                    class="fa fa-trash"></i></a>
-                                                        </div>
-                                                    </td>
                                                 </ng-container>
+                                                <td>
+                                                    <div *ngIf="!SL.stockLineId > 0">
+                                                        <a href="javascript:void(0);"
+                                                            class="btn boxed-float-btn nobg edit" matTooltip="Edit"
+                                                            matTooltipPosition="above"><i class="fa fa-edit"
+                                                                (click)="editStockLine(SL)"></i></a>
+                                                        <a class="btn nobg btn-delete-cstm"
+                                                            (click)="deleteStockLine(SL,deleteroConfirm)" matTooltip="Delete"
+                                                            matTooltipPosition="above"><i
+                                                                class="fa fa-trash"></i></a>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </ng-container>
                                     </ng-container>
@@ -1355,6 +1355,29 @@
         </div>
     </div>
 </div>
+
+<ng-template class="modal fade" #deleteroConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="CloseModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <strong>                
+                Stock Line will be deleted after save/update. Do you still want to continue?
+            </strong>            
+        </div>
+        <div class="modal-footer">            
+            <button type="button" class="btn btn-primary"
+                (click)="DeleteStockLineCloseModel(SL);">Yes</button>
+            <button type="button" class="btn btn-danger"
+                (click)="CloseModel()">No</button>
+        </div>
+    </div>
+</ng-template>
+
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">

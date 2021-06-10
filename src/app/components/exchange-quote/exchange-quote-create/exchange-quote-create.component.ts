@@ -41,6 +41,7 @@ import {ExchangeQuoteChargesComponent} from "../../exchange-quote/shared/compone
 import {ExchangeQuoteFreightComponent} from "../../exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
 import { VerifyExchangeQuoteModel } from "../models/verify-exchange-quote-model";
 import { ExchangeSalesOrderConversionCritera } from "../models/exchange-sales-order-conversion-criteria";
+import { ExchangeSalesOrderView } from "../../../models/exchange/ExchangeSalesOrderView";
 @Component({
   selector: 'app-exchange-quote-create',
   templateUrl: './exchange-quote-create.component.html',
@@ -126,6 +127,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   managementValidCheck: boolean;
   tempMemo: any;
   tempMemoLabel: any;
+  salesOrderView: ExchangeSalesOrderView;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -1358,5 +1360,31 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuote.memo = this.tempMemo;
     }
     this.enableUpdateButton = false;
+  }
+
+  convertSalesOrderQuote() {
+    //this.conversionStarted = true;
+    this.isSpinnerVisible = true;
+    this.exchangeSalesOrderConversionCriteriaObj.exchangeQuoteId = this.id;
+
+    this.exchangequoteService.convertfromquote(this.exchangeSalesOrderConversionCriteriaObj, this.employeeId).subscribe(
+      results => {
+        this.alertService.showMessage(
+          "Success",
+          `Quote coverted to Order successfully.`,
+          MessageSeverity.success
+        );
+        this.isSpinnerVisible = false;
+        this.salesOrderView = results[0];
+
+        this.closeModal();
+
+        this.router.navigateByUrl(`exchangemodule/exchangepages/exchange-sales-order-edit/${this.salesOrderView.salesOrder.customerId}/${this.salesOrderView.salesOrder.exchangeSalesOrderId}`);
+      }, error => {
+        this.isSpinnerVisible = false;
+      }
+    );
+
+    this.isSpinnerVisible = false;
   }
 }

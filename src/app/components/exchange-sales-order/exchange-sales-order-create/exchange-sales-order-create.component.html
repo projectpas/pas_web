@@ -13,7 +13,7 @@
                   </div>
                   <div>
                       <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
-                          matTooltip="Exchange Sales Order List" [routerLink]="['/salesmodule/salespages/sales-order-list']">
+                          matTooltip="Exchange Sales Order List" [routerLink]="['/exchangemodule/exchangepages/exchange-sales-order-list']">
                           Exchange Sales Order List
                       </button>
                   </div>
@@ -64,7 +64,7 @@
                   <div class="col-md-3">
                       <div class="form-group">
                           <label>SO Quote Num</label>
-                          <input type="text" class="form-control" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
+                          <input type="text" class="form-control" [(ngModel)]="salesQuote.exchangeQuoteNumber"
                               name="salesOrderQuoteNumber" [disabled]="true" />
                       </div>
                   </div>
@@ -122,8 +122,8 @@
                                           <div class="form-group">
                                               <label>Exch Quote Num</label>
                                               <input type="text" class="form-control"
-                                                  [(ngModel)]="salesQuote.salesOrderQuoteNumber"
-                                                  name="salesOrderQuoteNumber" [disabled]="true" />
+                                                  [(ngModel)]="salesQuote.exchangeQuoteNumber"
+                                                  name="exchangeQuoteNumber" [disabled]="true" />
                                           </div>
                                           <div class="form-group" *ngIf="salesQuote.salesOrderQuoteNumber">
                                               <label>Version Num</label>

@@ -814,6 +814,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     // this.quoteForm.expirationDateStatus=='Approved'
 
     saveQuoteAPI(){
+        debugger;
         this.formQuoteInfo(this.quoteForm);
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
@@ -844,9 +845,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         `Quote ${isCreateQuote ? 'Created' : 'Updated'}  Succesfully`,
                         MessageSeverity.success
                     );
-                    console.log("quote createddd",isCreateQuote)
                     if(isCreateQuote){
-                        console.log("quote createddd",)
                         this.getQuoteMaterialListByWorkOrderQuoteId();
                     }
                     this.upDateDisabeldbutton=true;
@@ -2573,7 +2572,7 @@ const data={...newdata};
     showAlertMessage(warningMessage, restrictMessage) {
         if(!this.isView)
         {
-            $('#warnRestrictMesg').modal("show");
+            // $('#warnRestrictMesg').modal("show");
         }
     
         //   this.modal.close();
@@ -3174,7 +3173,12 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     }
 
     errorHandling(err){
-        this.isSpinnerVisible=false
+        this.isSpinnerVisible=false;
+        this.alertService.showStickyMessage(
+            this.moduleName,
+            err.error.errors[0].message,
+            MessageSeverity.error
+        );
     }
 
     checkValidEmails(){
