@@ -2660,10 +2660,16 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.approvalGridActiveTab = '';
     }
 
-    resetqouteprintData() {
-        //this.approvalGridActiveTab = '';
+    resetqouteprintData() 
+    {
+        this.approvalGridActiveTab = '';
         // this.internalApproversList = [];
         // this.approvalGridActiveTab = '';
+
+        let a = document.getElementById('approvalTabs');
+        if(a){
+            a.scrollIntoView();
+        }
     }
 
     onApprovalSelected(approver, i) {
