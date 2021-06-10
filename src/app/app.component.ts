@@ -156,7 +156,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       },
       {
         label: 'CRM/Customer',
-        icon: 'fa fa-fw fa-group',
+        // icon: 'fa fa-fw fa-group',
         items: [
           [
             {
@@ -274,7 +274,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       },
       {
         label: 'Inventory Management',
-        icon: 'fa fa-fw fa-list-alt',
+        // icon: 'fa fa-fw fa-list-alt',
         items: [
           [
             {
@@ -332,7 +332,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       },
       {
         label: 'Work Order Management',
-        icon: 'fa fa-fw fa-shopping-cart',
+        // icon: 'fa fa-fw fa-shopping-cart',
         items: [
           [
             {
@@ -499,7 +499,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       },
       {
         label: 'Sales Order',
-        icon: 'fa fa-fw fa-shopping-cart',
+        // icon: 'fa fa-fw fa-shopping-cart',
         items: [
           
           [
@@ -650,7 +650,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       {
         label: 'Procurement',
-        icon: '',
+        // icon: '',
         items: [
           [
             {
@@ -742,7 +742,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       {
         label: 'Shipping & Receiving',
-        icon: '',
+        // icon: '',
         items: [
           [
             {
@@ -951,7 +951,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       {
         label: 'Accounting',
-        icon: '',
+        // icon: '',
         items: [
           [
             {
@@ -1080,7 +1080,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       {
         label: 'Asset Management',
-        icon: '',
+        // icon: '',
         items: [
           [
             {
@@ -1172,7 +1172,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       {
         label: 'Invoice Management',
-        icon: 'fa fa-fw fa-folder-open',
+        // icon: 'fa fa-fw fa-folder-open',
         items: [
           [
             {
@@ -1233,11 +1233,47 @@ export class AppComponent implements OnInit, AfterViewInit {
         ],
       },
 
+      {
+        label: 'Reports',
+        // icon: '',
+        items: [
+         
+           
+                {
+                  label: 'Capabilities',
+                  routerLink: '',
+                },
+                {
+                  label: 'CMM',
+                  routerLink: '',
+                },
+                {
+                  label: 'Tools',
+                  routerLink: '',
+                },               
+          
 
+        ],
+      },
 
       {
+        label: 'Business Analytics',
+        // icon: '',
+        // items: [
+        //   [
+           
+        //         {
+        //           label: '',
+        //           routerLink: '',
+        //         },
+                      
+        //   ],
+
+        // ],
+      },
+      {
         label: 'Other',
-        icon: '',
+        // icon: '',
         items: [
           [
             {
@@ -1274,45 +1310,6 @@ export class AppComponent implements OnInit, AfterViewInit {
           ],
 
         ],
-      },
-
-      {
-        label: 'Reports',
-        icon: '',
-        items: [
-         
-           
-                {
-                  label: 'Capabilities',
-                  routerLink: '',
-                },
-                {
-                  label: 'CMM',
-                  routerLink: '',
-                },
-                {
-                  label: 'Tools',
-                  routerLink: '',
-                },               
-          
-
-        ],
-      },
-
-      {
-        label: 'Business Analytics',
-        icon: '',
-        // items: [
-        //   [
-           
-        //         {
-        //           label: '',
-        //           routerLink: '',
-        //         },
-                      
-        //   ],
-
-        // ],
       },
       {
         label: 'Admin',

@@ -15152,7 +15152,19 @@ body .ui-megamenu .ui-megamenu-submenu-header {
   font-weight: 400;
   border: 0 none;
 }
-
+.ui-megamenu .ui-menuitem-link {
+  /* padding: .25em; */
+  padding: 0px 10px 0px 10px !important;
+  
+}
+body .ui-megamenu {
+  padding: 0;
+  background-color: #ffffff;
+  // border: 1px solid #c8c8c8;
+  white-space: normal;
+  margin-top:30px;
+  border:none !important;
+}
 /* ./css for sidenav */
 .add-details-dialog .ui-widget.ui-widget-content {
   left: 0% !important;

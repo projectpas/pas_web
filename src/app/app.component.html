@@ -20,11 +20,16 @@
         <div  *ngIf="isUserLoggedIn" class="title-logo-login">
           <p>
             <a routerLink="/">
-              <img src="assets/images/PAS-logo.png" id="logo" style="padding-left:0px !important" />
+              <img src="assets/images/PAS-logo.png" id="logo" style="padding-left:0px !important;width:100%" />
             </a>
           </p>
           
         </div>
+        <p-megaMenu
+        [model]="megaMenuItems"
+        *ngIf="isUserLoggedIn"
+        [ngClass]="{ sticky: isSticky }"
+      ></p-megaMenu>
         <span class="app-toolbar-spacer"></span>
         <span  *ngIf="isUserLoggedIn" matTooltip="Dashboard">
         <i class="fa fa-sitemap entity-block-btn" (click)="showthis()"></i>
@@ -91,11 +96,11 @@
         <i class="fa fa-chevron-circle-left"></i> Back
       </button>
     </mat-toolbar> -->
-    <p-megaMenu
+    <!-- <p-megaMenu
       [model]="megaMenuItems"
       *ngIf="isUserLoggedIn"
       [ngClass]="{ 'mat-elevation-z5': true, sticky: isSticky }"
-    ></p-megaMenu>
+    ></p-megaMenu> -->
     <div id="mainContent">
       <router-outlet></router-outlet>
     </div>
