@@ -963,6 +963,55 @@
                                     (ngModelChange)="enableSave()"></p-calendar>
                             </div>
                             <div class="form-group">
+                                <label>Tagged Type</label>
+                                <select [(ngModel)]="stockLineForm.taggedByType" name="taggedByType"
+                                    (change)="onSelectTaggedType()" (ngModelChange)="enableSave()">
+                                    <option value="0">-- Select --</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row" *ngIf="stockLineForm.taggedByType == 1">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.taggedBy" name="taggedByCustomer"
+                                            [suggestions]="customerNames" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true"></p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.taggedByType == 2">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.taggedBy" name="taggedByVendor"
+                                            [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.taggedByType == 9">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.taggedBy" name="taggedByCompany"
+                                            [suggestions]="companyNames" (completeMethod)="filterCompanyNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.taggedByType == 4">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" name="taggedByOther"
+                                            [(ngModel)]="stockLineForm.taggedByName" (ngModelChange)="enableSave()">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
                                 <label>Tagged By</label>
                                 <p-autoComplete field="label" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.taggedBy" name="taggedBy"
@@ -971,7 +1020,7 @@
                                     (ngModelChange)="enableSave()" 
                                     [forceSelection]="true">
                                 </p-autoComplete>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label>Inspected By</label>
                                 <p-autoComplete field="label" class="pautocomp-cstm"

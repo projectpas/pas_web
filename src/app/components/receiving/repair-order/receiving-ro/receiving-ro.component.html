@@ -1033,6 +1033,72 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Tag By</label>
+                                                            <select class="form-control"
+                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedByType"
+                                                                #selects="ngModel" [ngModelOptions]="{standalone: true}"
+                                                                (change)="onTaggedTypeChange($event, part.stocklineListObj[part.currentSLIndex])">
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let item of moduleListDropdown"
+                                                                    [ngValue]="item.moduleId">
+                                                                    {{item.moduleName}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group"
+                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].taggedByType != undefined && part.stocklineListObj[part.currentSLIndex].taggedByType > 0">
+                                                        <label>{{part.stocklineListObj[part.currentSLIndex].taggedByType
+                                                            == customerModuleId ? 'Select Customer' :
+                                                            part.stocklineListObj[part.currentSLIndex].taggedByType ==
+                                                            vendorModuleId ? 'Select Vendor' :
+                                                            part.stocklineListObj[part.currentSLIndex].taggedByType ==
+                                                            companyModuleId ? 'Select Company' : 'Enter Other'
+                                                            }}</label>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12">
+                                                                <p-autoComplete
+                                                                    *ngIf="part.stocklineListObj[part.currentSLIndex].taggedByType == customerModuleId"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedByObject"
+                                                                    [suggestions]="CustomerList"
+                                                                    (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].taggedByType)"
+                                                                    (onSelect)="ontagTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].taggedByType)"
+                                                                    [dropdown]="true" [size]="32" [minLength]="1"
+                                                                    field="Value" class="autocomp-customer-cstm"
+                                                                    [forceSelection]="true">
+                                                                </p-autoComplete>
+
+                                                                <p-autoComplete
+                                                                    *ngIf="part.stocklineListObj[part.currentSLIndex].taggedByType == vendorModuleId"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedByObject"
+                                                                    [suggestions]="VendorList"
+                                                                    (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].taggedByType)"
+                                                                    (onSelect)="ontagTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].taggedByType)"
+                                                                    [dropdown]="true" [size]="32" [minLength]="1"
+                                                                    field="Value" class="autocomp-customer-cstm"
+                                                                    [forceSelection]="true">
+                                                                </p-autoComplete>
+
+                                                                <p-autoComplete
+                                                                    *ngIf="part.stocklineListObj[part.currentSLIndex].taggedByType == companyModuleId"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedByObject"
+                                                                    [suggestions]="CompanyList"
+                                                                    (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].taggedByType)"
+                                                                    (onSelect)="ontagTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].taggedByType)"
+                                                                    [dropdown]="true" [size]="32" [minLength]="1"
+                                                                    field="Value" class="autocomp-customer-cstm"
+                                                                    [forceSelection]="true">
+                                                                </p-autoComplete>
+
+                                                                <input
+                                                                    *ngIf="part.stocklineListObj[part.currentSLIndex].taggedByType == otherModuleId"
+                                                                    class="form-control" type="text"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedByName"
+                                                                    pInputText>
+                                                            </div>                                                           
+                                                        </div>
+                                                    </div>
+                                                        <!-- <div class="form-group">
+                                                            <label>Tag By</label>
                                                             <p-autoComplete field="label" class="pautocomp-cstm"
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedBy"
                                                                 name="taggedBy" [suggestions]="TagByNames"
@@ -1041,7 +1107,7 @@
                                                                 errorMessage="Records not found"
                                                                 [forceSelection]="true">
                                                             </p-autoComplete>
-                                                        </div>
+                                                        </div> -->
 
                                                         <div class="form-group">
                                                             <label>Engine Serial Number</label>

@@ -85,6 +85,9 @@ export class ReceivingRoComponent implements OnInit {
     ownercustomer: boolean = false;
     ownerother: boolean = false;
     ownervendor: boolean = false;
+    taggedbycustomer : boolean = false;
+    taggedbyother : boolean = false;
+    taggedbyvendor : boolean = false;
     headerNotes: any;
     traceabletocustomer: boolean = false;
     traceabletoother: boolean = false;
@@ -723,6 +726,9 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.currentDate = new Date();
             stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.obtainFrom = this.repairOrderHeaderData.vendorId;
+            stockLine.taggedByType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
+            stockLine.taggedBy = this.repairOrderHeaderData.vendorId;
+
             stockLine.ownerType = AppModuleEnum.Vendor;
             stockLine.owner = this.repairOrderHeaderData.vendorId; 
             stockLine.maincompanylist = part.maincompanylist;
@@ -983,6 +989,27 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
+    onTaggedTypeChange(event, stockLine) {
+        stockLine.taggedBy = '';
+        stockLine.taggedByObject = {};
+
+        if (event.target.value === AppModuleEnum.Customer) {
+            this.taggedbycustomer = true;
+            this.taggedbyother = false;
+            this.taggedbyvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Vendor) {
+            this.taggedbyother = true;
+            this.taggedbycustomer = false;
+            this.taggedbyvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Company) {
+            this.taggedbyvendor = true;
+            this.taggedbycustomer = false;
+            this.taggedbyother = false;
+        }
+    }
+
     onObtainSelect(stockLine: StockLine, type): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;
         if (type == AppModuleEnum.Customer) {
@@ -1013,6 +1040,17 @@ export class ReceivingRoComponent implements OnInit {
             this.arrayVendlsit.push(stockLine.traceableToObject.Key);
         } else if (type == AppModuleEnum.Company) {
             this.arrayComplist.push(stockLine.traceableToObject.Key);
+        }
+    }
+
+    ontagTypeSelect(stockLine: StockLine, type): void {
+        stockLine.taggedBy = stockLine.taggedByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.taggedByObject.Key);
         }
     }
 
@@ -1420,7 +1458,7 @@ export class ReceivingRoComponent implements OnInit {
                     sl.tagType = "";
                     sl.tagTypeId = "";
                 }
-                sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
+                //sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
                 sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
                 sl.revisedPartId = sl.revisedPartId ? editValueAssignByCondition('itemMasterId', sl.revisedPartId) : null;
             }
@@ -1459,42 +1497,7 @@ export class ReceivingRoComponent implements OnInit {
         })
         return tmLife;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
+  
     private getItemMasterById(type: string, part: RepairOrderPart) {
         this.itemmaster.getItemMasterByItemMasterId(part.itemMaster.itemMasterId).subscribe(
             result => {
@@ -1561,11 +1564,7 @@ export class ReceivingRoComponent implements OnInit {
         return this.roUserType.filter(function (status) {
             return status.Key == userTypeId;
         })[0].Value;
-    }
-
-      
-
-    
+    }    
 
     getManagementStructureCodesForPart(part) {
         part.managementStructureName = [];
@@ -2052,47 +2051,6 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-
-
-
-
-    
-
-   
-
-    
-
-    
-
-    
-
-
-
-
-
-
-
-    // filterVendorNames(event) {
-    //     if (event.query !== undefined && event.query !== null) {
-    //         this.getVendors(event.query);
-    //     }
-    // }
-
-
-
-
-
-
-
-    
-
-    
-
-    
-
-    
-    
-
     // onObtainFromChange(event, stockLine) {
     //     stockLine.obtainFrom = '';
     //     stockLine.obtainFromObject = {};
@@ -2157,55 +2115,11 @@ export class ReceivingRoComponent implements OnInit {
     //         this.traceabletocustomer = false;
     //         this.traceabletoother = false;
     //     }
-    // }
-
-    
+    // }    
 
     addPageCustomer() {
         this.route.navigateByUrl('/customersmodule/customerpages/app-customer-general-information');
     }
-
-    // onFilter(event, stockLine, type): void {
-    //     stockLine.filteredRecords = [];
-    //     // var dropdownSource = type == 1 ? this.CustomerList : this.VendorList;
-    //     if (type == 1) {
-    //         var dropdownSource = this.CustomerList;
-    //     } else if (type == 2) {
-    //         var dropdownSource = this.VendorList;
-    //     } else if (type == 9) {
-    //         var dropdownSource = this.CompanyList;
-    //     }
-    //     if (dropdownSource != undefined && dropdownSource.length > 0) {
-    //         for (let row of dropdownSource) {
-    //             if (row.Value != undefined && row.Value.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-    //                 stockLine.filteredRecords.push(row);
-    //             }
-    //         }
-    //     }
-    // }
-
-    
-
-    // onObtainSelect(stockLine: StockLine): void {
-    //     stockLine.obtainFrom = stockLine.obtainFromObject.Key;
-    // }
-    
-
-    // onOwnerSelect(stockLine: StockLine): void {
-    //     stockLine.owner = stockLine.ownerObject.Key;
-    // }
-
-    
-
-    // onTraceableToSelect(stockLine: StockLine): void {
-    //     stockLine.traceableTo = stockLine.traceableToObject.Key;
-    // }
-
-    
-
-
-
-
 
     toggleSameDetailsForAllParts(part: RepairOrderPart): void {
         part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
@@ -2222,16 +2136,7 @@ export class ReceivingRoComponent implements OnInit {
             }
         }
     }
-
-    // isCheckedSameDetailsForAllParts(part: RepairOrderPart) {
-    //     if (part.isSameDetailsForAllParts) {
-    //         for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
-    //             var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
-    //             part.stocklineListObj[i] = stockLineToCopy;
-    //         }
-    //     }
-    // }
-
+    
     isCheckedSameDetailsForAllParts(part: RepairOrderPart) {
         if (part.isSameDetailsForAllParts) {
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
@@ -2242,11 +2147,7 @@ export class ReceivingRoComponent implements OnInit {
                 part.timeLifeList[i] = timeLifeToCopy;
             }
         }
-    }
-
-    
-
-    
+    }   
 
     quantityRejectedFocusOut(event, part) {
         if (event.target.value == "") {

@@ -358,7 +358,7 @@ export class StockLine {
     certifiedDate: Date;
     tagDate: Date;
     tagType: any;
-    taggedBy:any;
+    taggedBy: string;
     certifiedDueDate: Date;
     calibrationMemo: string;
     orderDate: Date;

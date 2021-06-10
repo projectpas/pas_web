@@ -238,7 +238,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.loadRevicePnPartNumData('',0);
 			this.loadEmployeeData();
 			this.loadWorkOrderList();
-			this.loadTagByEmployeeData('',0)
+			//this.loadTagByEmployeeData('',0)
 		}
 	}
 
@@ -850,7 +850,7 @@ export class StockLineSetupComponent implements OnInit {
 				this.getPOSelecionOnEdit('',res.purchaseOrderId);
 				this.getROSelecionOnEdit('',res.repairOrderId);
 				this.loadRevicePnPartNumData('',res.revicedPNId);
-				this.loadTagByEmployeeData('',res.taggedBy);
+				//this.loadTagByEmployeeData('',res.taggedBy);
 				
 				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);
 
@@ -1053,17 +1053,19 @@ export class StockLineSetupComponent implements OnInit {
 		if (res.obtainFrom != null) { this.arrayCustlist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayCustlist.push(res.owner); }
 		if (res.traceableTo != null) this.arrayCustlist.push(res.traceableTo);
+		if (res.taggedBy != null) this.arrayCustlist.push(res.taggedBy);
 
 		//Add Vendor Id to Array list
 		if (res.obtainFrom != null) { this.arrayVendorlist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayVendorlist.push(res.owner); }
 		if (res.traceableTo != null) { this.arrayVendorlist.push(res.traceableTo); }
+		if (res.taggedBy != null) { this.arrayVendorlist.push(res.taggedBy); }
 
 		//Add Company Id to Array list
 		if (res.obtainFrom != null) { this.arrayCompanylist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayCompanylist.push(res.owner); }
 		if (res.traceableTo != null) { this.arrayCompanylist.push(res.traceableTo); }
-
+		if (res.taggedBy != null) { this.arrayCompanylist.push(res.taggedBy); }
 
 		//obtain from
 		if (res.obtainFromType == this.customerModuleId) {
@@ -1141,6 +1143,32 @@ export class StockLineSetupComponent implements OnInit {
 		}
 		else if (res.traceableToType == this.otherModuleId) {
 			this.stockLineForm.traceableTo = res.tracableToName;
+		}
+
+		//Tegged by
+		if (res.taggedByType == this.customerModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCustomersList = response;
+				this.customerNames = this.allCustomersList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allCustomersList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.vendorModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allVendorsList = response;
+				this.vendorNames = this.allVendorsList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allVendorsList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.companyModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCompanyList = response;
+				this.companyNames = this.allCompanyList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allCompanyList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.otherModuleId) {
+			this.stockLineForm.taggedByName = res.taggedByName;
 		}
 	}
 
@@ -1518,6 +1546,12 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.traceableTo = undefined;
 	}
 
+	onSelectTaggedType() {
+		this.stockLineForm.taggedBy = undefined;
+	}
+
+
+
 	onChangePONum(selected) {
 		this.stocklineser.getPurchaseOrderUnitCost(selected.value).subscribe(res => {
 			const resp: any = res;
@@ -1676,10 +1710,13 @@ export class StockLineSetupComponent implements OnInit {
 			itemMasterId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId),
 			revicedPNId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.revicedPNId),
 			vendorId: this.stockLineForm.vendorId ? editValueAssignByCondition('value', this.stockLineForm.vendorId) : '',
-			customerId: this.stockLineForm.customerId ? editValueAssignByCondition('value', this.stockLineForm.customerId) : '',
+			customerId: this.stockLineForm.customerId ? editValueAssignByCondition('value', this.stockLineForm.customerId) : '',			
 			obtainFromName: this.stockLineForm.obtainFromType == 4 ? this.stockLineForm.obtainFrom : (this.stockLineForm.obtainFrom ? getValueFromObjectByKey('label', this.stockLineForm.obtainFrom) : ''),
 			obtainFrom: this.stockLineForm.obtainFromType == 4 ? null : (this.stockLineForm.obtainFrom ? editValueAssignByCondition('value', this.stockLineForm.obtainFrom) : ''),
-			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,
+			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,			
+			taggedBy : this.stockLineForm.taggedByType == 4 ? null : (this.stockLineForm.taggedBy ? editValueAssignByCondition('value', this.stockLineForm.taggedBy) : ''),
+			taggedByName: this.stockLineForm.taggedByType == 4 ? this.stockLineForm.taggedByName : (this.stockLineForm.taggedBy ? getValueFromObjectByKey('label', this.stockLineForm.taggedBy) : ''),
+			taggedByType: this.stockLineForm.taggedByType > 0 ? this.stockLineForm.taggedByType : null,			
 			ownerType: this.stockLineForm.ownerType > 0 ? this.stockLineForm.ownerType : null,
 			traceableToType: this.stockLineForm.traceableToType > 0 ? this.stockLineForm.traceableToType : null,
 			manufacturerId: this.stockLineForm.manufacturerId > 0 ? this.stockLineForm.manufacturerId : null,
@@ -1698,13 +1735,11 @@ export class StockLineSetupComponent implements OnInit {
 			binId: this.stockLineForm.binId > 0 ? this.stockLineForm.binId : null,
 			isCustomerStock: this.stockLineForm.isCustomerStock,
 			isCustomerstockType: this.stockLineForm.isCustomerstockType,
-
 			ownerName: this.stockLineForm.ownerType == 4 ? this.stockLineForm.owner : (this.stockLineForm.owner ? getValueFromObjectByKey('label', this.stockLineForm.owner) : ''),
 			owner: this.stockLineForm.ownerType == 4 ? null : (this.stockLineForm.owner ? editValueAssignByCondition('value', this.stockLineForm.owner) : ''),
-
 			traceableToName: this.stockLineForm.traceableToType == 4 ? this.stockLineForm.traceableTo : (this.stockLineForm.traceableTo ? getValueFromObjectByKey('label', this.stockLineForm.traceableTo) : ''),
 			traceableTo: this.stockLineForm.traceableToType == 4 ? null : (this.stockLineForm.traceableTo ? editValueAssignByCondition('value', this.stockLineForm.traceableTo) : ''),
-			taggedBy: this.stockLineForm.taggedBy ? getValueFromObjectByKey('value', this.stockLineForm.taggedBy) : '',
+			//taggedBy: this.stockLineForm.taggedBy ? getValueFromObjectByKey('value', this.stockLineForm.taggedBy) : '',
 			requestorId: this.stockLineForm.requestorId ? getValueFromObjectByKey('value', this.stockLineForm.requestorId) : '',
 			inspectionBy: this.stockLineForm.inspectionBy ? getValueFromObjectByKey('value', this.stockLineForm.inspectionBy) : '',
 			workOrderId: this.stockLineForm.workOrderId && this.getValueFromObj(this.stockLineForm.workOrderId) != 0 ? this.getValueFromObj(this.stockLineForm.workOrderId) : null,

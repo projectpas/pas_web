@@ -494,8 +494,7 @@
                                         <th>Certified Date</th>
                                         <th class="date">Certified Due Date</th>
                                         <th>Tag Type</th>
-                                        <th>TaggedBy Type</th>
-                                        
+                                        <th>Tagged By Type</th>                                        
                                         <th>Tagged By </th>
                                         <th>UOM</th>
                                         <th class="date">Date Tagged </th>
@@ -945,7 +944,6 @@
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let item of moduleListDropdown"
                                                         [ngValue]="item.moduleId">{{item.moduleName}}</option>
-
                                                 </select>
                                             </td>
                                             <td>
@@ -953,7 +951,6 @@
                                                     *ngIf="SL.taggedByType != undefined && SL.taggedByType > 0">
                                                     <div class="form-row">
                                                         <div class="col-sm-11">
-
                                                             <p-autoComplete
                                                                 *ngIf="SL.taggedByType == customerModuleId"
                                                                 [(ngModel)]="SL.taggedByObject"
@@ -963,7 +960,6 @@
                                                                 (onSelect)="ontagTypeSelect(SL)" [dropdown]="true"
                                                                 [size]="32" [minLength]="1" field="Value"
                                                                 class="rpo-acomp">
-
                                                             </p-autoComplete>
 
                                                             <p-autoComplete *ngIf="SL.taggedByType == vendorModuleId"
@@ -974,7 +970,6 @@
                                                                 (onSelect)="ontagTypeSelect(SL)" [dropdown]="true"
                                                                 [size]="32" [minLength]="1" field="Value"
                                                                 class="rpo-acomp">
-
                                                             </p-autoComplete>
 
                                                             <p-autoComplete *ngIf="SL.taggedByType == companyModuleId"
@@ -992,7 +987,6 @@
                                                                 [disabled]="!SL.isEnabled"
                                                                 [ngModelOptions]="{standalone: true}"
                                                                 [(ngModel)]="SL.taggedByName" pInputText>
-
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1012,21 +1006,6 @@
                                                     id="taggedBy{{stockline_row_index}}">
                                                 </p-autoComplete>
                                             </td> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                             <td>                                                                                     
                                                 <p-dropdown class="rpo-acomp" 
                                                     [options]="allPurchaseUnitOfMeasureinfo" 

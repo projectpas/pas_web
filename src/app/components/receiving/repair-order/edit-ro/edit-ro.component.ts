@@ -231,7 +231,7 @@ export class EditRoComponent implements OnInit {
                             this.getCustomers();
                             this.getVendors();
                             this.getCompanyList();
-                            this.loadTagByEmployeeData();
+                            //this.loadTagByEmployeeData();
                             this.Purchaseunitofmeasure();
                             this.getAllrevisedPart();
                             this.getTagType();
@@ -819,6 +819,9 @@ export class EditRoComponent implements OnInit {
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 1) {
                         SL.traceableToObject = this.CustomerList.find(x => x.Key == SL.traceableTo);
                     }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 1) {
+                        SL.taggedByObject = this.CustomerList.find(x => x.Key == SL.taggedBy);
+                    }
                 }
             }
         });
@@ -847,6 +850,9 @@ export class EditRoComponent implements OnInit {
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 2) {
                         SL.traceableToObject = this.VendorList.find(x => x.Key == SL.traceableTo);
                     }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 2) {
+                        SL.taggedByObject = this.VendorList.find(x => x.Key == SL.taggedBy);
+                    }
                 }
             }
         });
@@ -874,6 +880,9 @@ export class EditRoComponent implements OnInit {
                     }
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 9) {
                         SL.traceableToObject = this.CompanyList.find(x => x.Key == SL.traceableTo);
+                    }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 9) {
+                        SL.taggedByObject = this.CompanyList.find(x => x.Key == SL.taggedBy);
                     }
                 }
             }
@@ -1581,6 +1590,27 @@ export class EditRoComponent implements OnInit {
         }
     }
 
+    onTaggedTypeChange(event, stockLine) {
+        stockLine.taggedBy = '';
+        stockLine.taggedByObject = {};
+
+        if (event.target.value === AppModuleEnum.Customer) {
+            this.obtainfromcustomer = true;
+            this.obtainfromother = false;
+            this.obtainfromvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Vendor) {
+            this.obtainfromother = true;
+            this.obtainfromcustomer = false;
+            this.obtainfromvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Company) {
+            this.obtainfromvendor = true;
+            this.obtainfromcustomer = false;
+            this.obtainfromother = false;
+        }
+    }
+
     onOwnerChange(event, stockLine) {
         stockLine.ownerObject = {};
         stockLine.owner = '';
@@ -1652,6 +1682,17 @@ export class EditRoComponent implements OnInit {
             this.arrayVendlsit.push(stockLine.traceableToObject.Key);
         } else if (stockLine.ownerType == AppModuleEnum.Company) {
             this.arrayComplist.push(stockLine.traceableToObject.Key);
+        }
+    }
+
+    ontagTypeSelect(stockLine: StockLine, type): void {
+        stockLine.taggedBy = stockLine.taggedByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.taggedByObject.Key);
         }
     }
 

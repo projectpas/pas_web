@@ -1694,8 +1694,7 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    onOwnerSelect(stockLine: StockLine): void {
-        debugger
+    onOwnerSelect(stockLine: StockLine): void {        
         stockLine.owner = stockLine.ownerObject.Key;
         if (stockLine.ownerType == AppModuleEnum.Customer) {
             this.arrayCustlist.push(stockLine.ownerObject.Key);
