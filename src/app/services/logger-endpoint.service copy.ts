@@ -30,7 +30,6 @@ export class LoggerEndpointService extends EndpointFactory {
   }
 
   search(logSearchParameters: ILogSearchParameters): Observable<any> {
-    debugger;
     let params = JSON.stringify(logSearchParameters);
     return this.http.post(this.searchlogs, params, this.getRequestHeaders())
       .catch(error => {
