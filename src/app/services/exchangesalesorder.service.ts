@@ -16,6 +16,8 @@ import { formatStringToNumber } from "../generic/autocomplete";
 import { ExchangeSalesOrderPart } from '../models/exchange/ExchangeSalesOrderPart';
 import { IExchangeSalesSearchParameters } from "../models/exchange/IExchangeSalesSearchParameters";
 import { IExchangeSalesOrderListView } from "../models/exchange/IExchangeSalesOrderListView";
+import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
+import { ExchangeOrderQuote } from "../models/exchange/ExchangeOrderQuote";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
     roles: Role[] | string[];
@@ -25,7 +27,7 @@ export type RolesChangedEventArg = {
     providedIn: 'root'
 })
 export class ExchangeSalesOrderService {
-    //salesOrderQuote: ISalesOrderQuote;
+    salesOrderQuote: IExchangeOrderQuote;
     //salesOrderReference: SalesOrderReference;
     parts: IPartJson[];
     selectedParts: PartDetail[];
@@ -250,4 +252,13 @@ export class ExchangeSalesOrderService {
           this.exchangeSalesOrderEndpointService.search(exchangeSalesOrderSearchParameters)
         );
       }
+
+    //   resetSalesOrderQuote() {
+    //     // this.approvers = [];
+    //     // this.initializeApprovals();
+    //     this.selectedParts = [];
+    //     this.totalFreights = 0;
+    //     this.totalCharges = 0;
+    //     this.salesOrderQuote = new ExchangeOrderQuote();
+    //   }
 }

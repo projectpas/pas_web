@@ -166,6 +166,7 @@ export class SpeedQuoteService {
     partNumberObj.oempmader = selectedPart.type;
     partNumberObj.tat = selectedPart.tat;
     partNumberObj.isEditPart = true;
+    partNumberObj.itemNo = selectedPart.itemNo;
     return partNumberObj;
   }
 
@@ -207,7 +208,7 @@ export class SpeedQuoteService {
     partNumberObj.grossSalePricePerUnit = selectedPart.grossSalePricePerUnit;
     partNumberObj.grossSalePrice = selectedPart.grossSalePrice + selectedPart.misc;
     partNumberObj.notes = selectedPart.notes;
-    //partNumberObj.itemNo = selectedPart.itemNo;
+    partNumberObj.itemNo = selectedPart.itemNo;
     partNumberObj.manufacturerId = selectedPart.manufacturerId;
     partNumberObj.manufacturer = selectedPart.manufacturer;
     partNumberObj.type = selectedPart.oempmader;
@@ -341,5 +342,15 @@ export class SpeedQuoteService {
   }
   getSpeedQuotePartHistory(speedQuotePartId) {
     return this.speedQuoteEndPointSevice.getSpeedQuotePartHistory(speedQuotePartId);
+  }
+  getPrintview(speedQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.getPrintview(speedQuoteId)
+    );
+  }
+  getExclusionPrintview(speedQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.getExclusionPrintview(speedQuoteId)
+    );
   }
 }

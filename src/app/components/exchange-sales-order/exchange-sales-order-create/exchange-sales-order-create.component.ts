@@ -11,6 +11,7 @@ import { ActivatedRoute } from "@angular/router";
 import { SalesQuoteService } from "../../../services/salesquote.service";
 import { SalesOrderService } from "../../../services/salesorder.service";
 import { ExchangeSalesOrderService } from "../../../services/exchangesalesorder.service";
+import { ExchangequoteService } from "../../../services/exchangequote.service";
 //import { ISalesOrder } from "../../../models/sales/ISalesOrder.model";
 import { IExchangeSalesOrder } from "../../../models/exchange/IExchangeSalesOrder.model";
 //import { SalesOrder } from "../../../models/sales/SalesOrder.model";
@@ -186,6 +187,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     private salesQuoteService: SalesQuoteService,
     private salesOrderService: SalesOrderService,
     private exchangeSalesOrderService: ExchangeSalesOrderService,
+    private exchangequoteService: ExchangequoteService,
     private commonservice: CommonService,
     public currencyService: CurrencyService,
     public employeeService: EmployeeService,
@@ -217,15 +219,15 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       }
     });
 
-    this.salesQuoteService.resetSalesOrderQuote();
+    this.exchangequoteService.resetSalesOrderQuote();
 
-    this.salesQuoteService.getSalesOrderQuteInstance().subscribe(data => {
+    this.exchangequoteService.getSalesOrderQuteInstance().subscribe(data => {
       this.salesOrderQuote = data;
     });
 
-    this.salesQuoteService.getSelectedParts().subscribe(data => {
+    this.exchangequoteService.getSelectedParts().subscribe(data => {
       this.selectedParts = data;
-      this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.selectedParts, this.marginSummary);
+      //this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.selectedParts, this.marginSummary);
     });
 
     this.managementStructureId = this.currentUserManagementStructureId;
