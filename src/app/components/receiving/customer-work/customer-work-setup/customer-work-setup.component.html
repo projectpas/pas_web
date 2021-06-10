@@ -799,8 +799,86 @@
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="inspectedDate"
                                     (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [(ngModel)]="receivingForm.inspectedDate"></p-calendar>
-                            </div>     
+                            </div>
+
+
+
+
+                            
                             <div class="form-group">
+                                <label>Tagged Type</label>
+                                <select [(ngModel)]="receivingForm.taggedByType" name="taggedByType"
+                                    (change)="onSelectTaggedType(receivingForm.taggedByType)" (ngModelChange)="getActive()">
+                                    <option value="0">-- Select --</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row" *ngIf="receivingForm.taggedByType == customerModuleId">
+                                    <div class="col-sm-12">
+                                        <!-- <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByCustomer"
+                                            [suggestions]="customerNames" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="getActive()"
+                                            [forceSelection]="true"></p-autoComplete> -->
+
+                                        <p-autoComplete field="name" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()"                                            
+                                            (keyup)="getCustomers($event.target.value, 2)"
+                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByCustomer"
+                                            [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.taggedByType == vendorModuleId">
+                                    <div class="col-sm-12">
+                                        <!-- <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByVendor"
+                                            [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="getActive()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete> -->
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()"                                           
+                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByVendor"
+                                            [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.taggedByType == companyModuleId">
+                                    <div class="col-sm-12">
+                                        <!-- <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByCompany"
+                                            [suggestions]="companyNames" (completeMethod)="filterCompanyNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="getActive()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete> -->
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()" 
+                                            [(ngModel)]="receivingForm.taggedBy"
+                                            name="taggedByCompany" [suggestions]="companyList"
+                                            (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
+                                            [dropdown]="true" errorMessage="Records not found"
+                                             [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.taggedByType == otherModuleId">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" name="taggedByOther"
+                                            [(ngModel)]="receivingForm.taggedByName" (ngModelChange)="getActive()">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
                                 <label>
                                     Tagged By
                                 </label>
@@ -811,7 +889,7 @@
                                     [(ngModel)]="receivingForm.taggedById"
                                     (ngModelChange)="getActive()">             
                                 </p-dropdown>
-                            </div>      
+                            </div>       -->
                             <div class="form-group">
                                 <label>Tag Type</label>
                                 <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
