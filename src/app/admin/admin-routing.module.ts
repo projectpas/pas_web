@@ -14,6 +14,7 @@ import { AuthGuard } from '../services/auth-guard.service';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { PoApprovalComponent } from './po-approval/po-approval.component';
 import { BulkEmailComponent } from './bulk-email/bulk-email.component';
+import { LogViewerListComponent } from './log-viewer/log-viewer-list.component';
 
 const adminRoutes: Routes = [
     {
@@ -34,6 +35,11 @@ const adminRoutes: Routes = [
                 path: 'bulk-email',
                 component: BulkEmailComponent,
                 data: { title: "Admin | Bulk Email" }
+            },
+            {
+                path: 'log-viewer',
+                component: LogViewerListComponent,
+                data: { title: "Admin | Log Viewer" }
             },
             {
                 path: 'global-settings',
