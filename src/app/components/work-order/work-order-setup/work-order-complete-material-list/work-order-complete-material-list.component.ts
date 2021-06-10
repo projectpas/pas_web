@@ -1243,7 +1243,9 @@ this.isViewItem=true;
         this.savebutonDisabled = false;
         this.isAllow = false;
         this.releaseStock();
-        this.refreshData.emit();
+   setTimeout(() => {
+    this.refreshData.emit();
+   }, 1000);
     }
 
     startTimerplus() {
