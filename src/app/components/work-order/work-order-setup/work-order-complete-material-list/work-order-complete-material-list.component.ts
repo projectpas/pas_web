@@ -1245,7 +1245,7 @@ this.isViewItem=true;
         this.releaseStock();
    setTimeout(() => {
     this.refreshData.emit();
-   }, 1000);
+   }, 2000);
     }
 
     startTimerplus() {
