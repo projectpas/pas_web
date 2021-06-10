@@ -101,6 +101,30 @@ close()
         <head>
           <title>Print tab</title>
           <style>
+          div {
+            white-space: normal;
+          }
+          table { page-break-after:auto }
+tr    { page-break-inside:avoid; page-break-after:auto }
+td    { page-break-inside:avoid; page-break-after:auto }
+thead { display: table-row-group; }
+tfoot { display:table-footer-group }
+             @media print
+             {
+               @page {
+               margin-top: 0;
+               margin-bottom: 0;
+               size: auto;  margin: 0mm; 
+               size: landscape
+               }
+             
+             } 
+             span {
+               /* font-weight: normal; */
+               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+               font-size: 10.5px !important;
+               font-weight: 700;
+             }
           table {
             width: 100.6%;
            overflow: auto !important;

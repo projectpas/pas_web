@@ -62,7 +62,7 @@
     <ng-template pTemplate="header" let-columns>
       <tr class="tr-color" *ngIf="isQuote">
         <th colspan="9" class="th-color">&nbsp;</th>
-            <th colspan="5" class="freight-isview-th" *ngIf="isView">
+            <th colspan="4" class="freight-isview-th" *ngIf="isView">
                 <!-- <div class="form-group" style="text-align: center;">
                       <p-radioButton
                         class="p-radiobutton-label-horizontal p-radio-custom"
@@ -170,7 +170,7 @@
             Billing Amount
           </th>
         </ng-container>
-        <th class="table-actions-column" >Actions</th>
+        <th class="table-actions-column" *ngIf="!isView">Actions</th>
         <!-- <th colspan="4" class="text-center" *ngIf="!isView"></th> -->
       </tr>
     </ng-template>
@@ -186,9 +186,12 @@
               <p class="mr_o">{{dt.taskName}}</p>
             </td>
             <ng-container *ngFor="let col of columns">
-              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
+              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId' && col.field != 'description'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
                 <!-- {{ (col.field == 'unitPrice' || col.field == 'extendedPrice' || col.field == 'unitCost' || col.field == 'extendedCost')?formateCurrency(dt[col.field]):dt[col.field] }} -->
                 {{dt[col.field]}}
+              </td>
+              <td class="truncate-text" *ngIf="col.field == 'description'" matTooltipPosition="above"
+              [matTooltip]="parsedText(dt[col.field])"> {{dt[col.field]}}
               </td>
               <td class="table-column-width" *ngIf="col.field == 'roNumberId'">
                 <select class="form-control select-read-only width-130" id="roNum_{{mainIndex}}" [(ngModel)]="dt[col.field]"
@@ -353,7 +356,7 @@
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
-        <td *ngIf=" !isEdit">&nbsp;</td>
+        <td *ngIf=" !isEdit || !isView">&nbsp;</td>
     
       </tr>
     </ng-template>
@@ -362,9 +365,12 @@
           <td *ngIf="!isQuote"colspan="10" class="no-records-msg no-records-cstm">
               No records found
           </td>
-          <td *ngIf="isQuote" colspan="14" class="no-records-msg no-records-cstm">
+          <!-- <td *ngIf="isQuote" colspan="14" class="no-records-msg no-records-cstm">
             No records found
-        </td>
+        </td> -->
+        <td *ngIf="isQuote && isView" colspan="13" class="no-records-msg no-records-cstm">
+          No records found
+      </td>
       </tr>
   </ng-template>
     <ng-template pTemplate="footer" *ngIf="isQuote">
