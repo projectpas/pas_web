@@ -70,6 +70,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
   close()
   {
     $('#PackagingSlipDiv').modal('hide');
+    this.Updateshippingpopup.emit();
   }
 
   get userName(): string {

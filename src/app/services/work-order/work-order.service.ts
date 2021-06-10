@@ -403,6 +403,10 @@ export class WorkOrderService {
     worOrderTearDownReasonListById(tearDownTypeId) {
         return this.workOrderEndpointService.worOrderTearDownReasonListById(tearDownTypeId);
     }
+
+    AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId) {
+        return this.workOrderEndpointService.AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId);
+    }
     getworblist() {
         return this.workOrderEndpointService.getworblist()
     }
@@ -477,6 +481,9 @@ export class WorkOrderService {
     }
     deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy) {
         return this.workOrderEndpointService.deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy)
+    }
+    deletesubWorkOrderMaterialStocklineById(subWorkOrderMaterialId,stocklineId, updatedBy) {
+        return this.workOrderEndpointService.deletesubWorkOrderMaterialStocklineById(subWorkOrderMaterialId,stocklineId, updatedBy)
     }
     reservereleaseSubWostoclineqty(data) {
         return this.workOrderEndpointService.reservereleaseSubWostoclineqty(data);

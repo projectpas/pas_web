@@ -27,6 +27,7 @@ import { RepairOrderService } from '../../../../services/repair-order.service';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs'
+import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-edit-ro',
@@ -103,6 +104,7 @@ export class EditRoComponent implements OnInit {
     customerModuleId: number = 0;
     otherModuleId: number = 0;
     private onDestroy$: Subject<void> = new Subject<void>();
+    modal: NgbModalRef;
     /** edit-ro ctor */
     constructor(public receivingService: ReceivingService,
         public priority: PriorityService,
@@ -124,6 +126,7 @@ export class EditRoComponent implements OnInit {
         private datePipe: DatePipe,
         private authService: AuthService,
         private repairOrderService: RepairOrderService,
+        private modalService: NgbModal,
     ) {
         this.localPoData = this.vendorService.selectedPoCollection;
         this.editPoData = this.localData[0];
@@ -1672,16 +1675,39 @@ export class EditRoComponent implements OnInit {
         }
     }
 
-    deleteStockLine(stockLine: StockLine) {
+    // deleteStockLine(stockLine: StockLine) {
+    //     if (stockLine) {
+    //         var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
+    //         if (OkCancel == true) {
+    //             stockLine.isEnabled = true;
+    //             stockLine.isDeleted = true;
+    //             this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
+    //             return;
+    //         }
+    //     }
+    // }
+
+    deletestockline : any
+    deleteStockLine(stockLine: StockLine,deletepoConfirm) {
         if (stockLine) {
-            var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
-            if (OkCancel == true) {
-                stockLine.isEnabled = true;
-                stockLine.isDeleted = true;
-                this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
-                return;
-            }
+            this.modal = this.modalService.open(deletepoConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
+            this.deletestockline = stockLine;
+            return;
+            //var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
+            // if (OkCancel == true) {
+            //     stockLine.isEnabled = true;
+            //     stockLine.isDeleted = true;
+            //     this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
+            //     return;
+            // }
         }
+    }
+
+    DeleteStockLineCloseModel(){        
+        this.deletestockline.isEnabled = true;
+        this.deletestockline.isDeleted = true;
+        this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
+        this.modal.close();		
     }
 
     editStockLine(stockLine: StockLine) {
@@ -2095,6 +2121,9 @@ export class EditRoComponent implements OnInit {
         })
     }
 
+    CloseModel(status) {
+		this.modal.close();		
+	}
 
 }
 

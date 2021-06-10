@@ -814,6 +814,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     // this.quoteForm.expirationDateStatus=='Approved'
 
     saveQuoteAPI(){
+        debugger;
         this.formQuoteInfo(this.quoteForm);
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
@@ -844,9 +845,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         `Quote ${isCreateQuote ? 'Created' : 'Updated'}  Succesfully`,
                         MessageSeverity.success
                     );
-                    console.log("quote createddd",isCreateQuote)
                     if(isCreateQuote){
-                        console.log("quote createddd",)
                         this.getQuoteMaterialListByWorkOrderQuoteId();
                     }
                     this.upDateDisabeldbutton=true;
@@ -2125,21 +2124,11 @@ const data={...newdata};
     }
 
     billingChanged(matData, type) {
-        try {
-            if(matData.billingMethodId ==2)
-            {
-                //matData['billingMethodId']  = this.costPlusType;
-                matData['markupPercentageId'] = '';
-                matData['billingRate'] = 0;
-                matData['billingAmount'] = (matData.quantity * Number(matData.unitCost.toString().split(',').join(''))).toFixed(2);
-                // if(this.costPlusType == 3){
-                //     matData.billingAmount = 0.00;
-                //     this.materialFlatBillingAmount = 0.00;
-                // }
-                // if (Number(this.costPlusType) == 1) {
-                //     this.overAllMarkup = '';
-                // }
-            }
+        try 
+        {
+            matData['markupPercentageId'] = '';
+            matData['billingRate'] = matData['unitCost']>0?  formatNumberAsGlobalSettingsModule(matData['unitCost'],2) :'0.00';
+            matData['billingAmount'] = (matData.quantity * Number(matData.unitCost.toString().split(',').join(''))).toFixed(2);
          
         }
         catch (e) {
@@ -2583,7 +2572,7 @@ const data={...newdata};
     showAlertMessage(warningMessage, restrictMessage) {
         if(!this.isView)
         {
-            $('#warnRestrictMesg').modal("show");
+            // $('#warnRestrictMesg').modal("show");
         }
     
         //   this.modal.close();
@@ -3184,7 +3173,12 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     }
 
     errorHandling(err){
-        this.isSpinnerVisible=false
+        this.isSpinnerVisible=false;
+        this.alertService.showStickyMessage(
+            this.moduleName,
+            err.error.errors[0].message,
+            MessageSeverity.error
+        );
     }
 
     checkValidEmails(){

@@ -257,5 +257,12 @@ export class ExchangeSalesOrderListComponent implements OnInit {
       this.filterText.nativeElement.value = '';
     }
   }
-
+  openExchangeQuoteToEdit(row) {
+    this.isSpinnerVisible = true;
+    const { exchangeSalesOrderId } = row;
+    let customerId = row.customerId;
+    this.router.navigateByUrl(
+      `exchangemodule/exchangepages/exchange-sales-order-edit/${customerId}/${exchangeSalesOrderId}`
+    );
+  }
 }

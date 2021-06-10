@@ -366,14 +366,16 @@ export class CustomerATAInformationComponent implements OnInit {
 
     nextClick() {
         this.stopmulticlicks = true;
-        this.tab.emit('Financial');
-       
+        //this.tab.emit('Financial');
+        this.tab.emit('AircraftInfo' );
         setTimeout(() => {
             this.stopmulticlicks = false;
         }, 500)
     }
+
     backClick() {
-        this.tab.emit('AircraftInfo');
+       //this.tab.emit('AircraftInfo');
+       this.tab.emit('Contacts');       
     }
 
 

@@ -18,8 +18,8 @@
             <button type="submit" class="btn  submit-btn btn btn-primary"
                 [disabled]="disableGeneratePackagingBtn" (click)="generatePackagingSlip()">Generate Packaging
                 Label</button>&nbsp;
-            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedPackagingSlip()">Print Packaging Label</button>&nbsp;
-            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedShippingLabel()">Print Shipping
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="isgeneratelable" (click)="printSelectedPackagingSlip()">Print Packaging Label</button>&nbsp;
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="isgeneratelable" (click)="printSelectedShippingLabel()">Print Shipping
                 Label</button>&nbsp;
             <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
                 (click)="PerformShipping()">Perform Shipping</button>

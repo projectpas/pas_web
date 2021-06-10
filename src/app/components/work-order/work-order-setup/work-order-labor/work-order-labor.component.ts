@@ -162,17 +162,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.checkPercentageData();
     }, 1000);
-    // this.taskList=[];
-    // this.allTaskList=[];
-    // this.allTaskList=this.labortaskList;
-    // this.taskList=this.labortaskList;
-    // this.taskList.forEach(
-    //   (task) => {
-    //     if (task['description'] == "all task") {
-    //       this.taskList.splice(task, 1);
-    //     }
-    //   }
-    // )
     this.islaborCreated=this.islaborCreated;
     if (this.workOrderLaborList != undefined) {
       this.laborTaskData = this.workOrderLaborList;
@@ -384,18 +373,17 @@ setTimeout(() => {
     }
   }
   onPartSelect(event, currentRecord) {  
-    // currentRecord.directLaborOHCost=event.overHeadBurden; 
-    debugger;
+    // currentRecord.directLaborOHCost=event.overHeadBurden;
     if(this.basicLabourDetail){
       // currentRecord.burdaenRatePercentageId=
       if(this.basicLabourDetail.laborRateId==2){
         currentRecord.directLaborOHCost=this.basicLabourDetail.averageRate; 
       }else{
-        currentRecord.directLaborOHCost=event.hourlyPay; 
+        currentRecord.directLaborOHCost=event.isHourly? event.hourlyPay:0; 
       }
     
     }else{
-      currentRecord.directLaborOHCost=event.hourlyPay; 
+      currentRecord.directLaborOHCost=event.isHourly? event.hourlyPay:0; 
     }
     // currentRecord.burdaenRatePercentageId = this.basicLabourDetail['flatAmount'];
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
@@ -455,7 +443,7 @@ setTimeout(() => {
             this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
               this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
                 ...x,
-                 value: x.employeeId, label: x.name } });
+                 value: x.employeeId, label: x.name ,slabel: x.name.toLowerCase()} });
             },
               err => {
               })
@@ -467,7 +455,7 @@ setTimeout(() => {
       this.commonService.getExpertiseEmployeesByCategory(this.laborForm.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
         this.employeesOriginalData = res.map(x => { return {
           ...x,
-           value: x.employeeId, label: x.name } });
+           value: x.employeeId, label: x.name ,slabel: x.name.toLowerCase()} });
       },
         err => {
         })
@@ -563,6 +551,7 @@ setTimeout(() => {
     }
   }
   getLenghtOfTask(taskList) {
+// console.log("taskList",taskList)
     if (taskList && taskList.length == 0 && !this.isView) {
       return true;
     }
@@ -675,12 +664,8 @@ setTimeout(() => {
         object.directLaborOHCost=0.00;
         object.totalCostPerHour=0.00;
         object.totalCost=0;
-
-        
       }
-    // }
   }
-
   getExpertiseEmployeeByExpertiseIdForHeader(value) {
     this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
       this.employeesOriginalData = res.map(x => {
@@ -700,24 +685,20 @@ setTimeout(() => {
   }
   partNumbers:any=[];
   filterExpertiseEmployee(event, index) {
-    
     this['expertiseEmployee' + index] = this['expertiseEmployeeOriginalData' + index] == undefined ? this.employeesOriginalData : this['expertiseEmployeeOriginalData' + index];
     if (event.query !== undefined && event.query !== null) {
       this.partNumbers=[];
-      // if(this['expertiseEmployeeOriginalData' + index]){
+      this.partNumbers = [...this['expertiseEmployeeOriginalData' + index]]
+      if(this['expertiseEmployeeOriginalData' + index]){
        this.partNumbers = [...this['expertiseEmployeeOriginalData' + index].filter(x => {
-        return x.label.includes(event.query)
+        return x.label.toLowerCase().includes(event.query.toLowerCase())
       })]
-    // }
+    }
       this['expertiseEmployee' + index] = this.partNumbers;
     }
   }
-
   addNewTask(taskName) {
-    // debugger;
     let taskData = new AllTasks();
-    // taskData.expertiseId = Number(this.laborForm.expertiseId);
-    // taskData.employeeId = this.laborForm.employeeId;
     this.allTaskList.forEach(
       task => {
         if (task.description == "Assemble") {
@@ -769,7 +750,7 @@ setTimeout(() => {
             this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
               this['expertiseEmployeeOriginalData' + index1] = res.map(x => { return {
                 ...x,
-                value: x.employeeId, label: x.name } });
+                value: x.employeeId, label: x.name,slabel: x.name.toLowerCase() } });
 
                 if(this.basicLabourDetail){
                   // taskData['burdaenRatePercentageId'] = this.basicLabourDetail['flatAmount'];
@@ -778,7 +759,6 @@ setTimeout(() => {
                   // }else{
                   //   currentRecord.directLaborOHCost=event.hourlyPay; 
                   // }
-                  // debugger;
 //                   this['expertiseEmployeeOriginalData' + index].forEach(element => {
 //                     if(taskData.employeeId==element.employeeId){
 //                       taskData.directLaborOHCost=element.hourlyPay; 
@@ -1061,8 +1041,11 @@ return true;
   }
   deleteLabor(taskName, index) {
     this.laborForm.workOrderLaborList[0][taskName][index].isDeleted = true;
-    let temp = this.laborForm.workOrderLaborList[0][taskName].splice(index, 1);
-    this.laborForm.workOrderLaborList[0][taskName].push(temp[0]);
+    // let temp = 
+     this.laborForm.workOrderLaborList[0][taskName].splice(index, 1);
+    // console.log("temp",temp)
+    // 
+    // this.laborForm.workOrderLaborList[0][taskName].push(temp[0]);
     this.disabledUpdatebtn = false;
     this.commonfunctionHandler();
   }
@@ -1082,7 +1065,7 @@ return true;
         this.commonService.getExpertiseEmployeesByCategory(value.expertiseId, this.currentUserMasterCompanyId).subscribe(res => {
           this['expertiseEmployeeOriginalData' + index] = res.map(x => { return {
             ...x,
-             value: x.employeeId, label: x.name } });
+             value: x.employeeId, label: x.name,slabel: x.name.toLowerCase() } });
         },
           err => {
           })
@@ -1146,6 +1129,18 @@ return true;
       }
     }
   }
+
+  billingChanged(matData, type) 
+  {
+    try 
+    {
+        matData['markupPercentageId'] = '';
+        matData['billingRate'] = ((matData['totalCostPerHour'])).toFixed(2)
+        matData['billingAmount'] = (Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.hours)).toFixed(2);
+    }
+    catch (e) {
+    }
+}
   markupChanged(matData, type) {
     if(type == 'row' && matData && matData.markupPercentageId==""){
       matData['billingRate'] = ((matData['totalCostPerHour'])).toFixed(2)
@@ -1301,10 +1296,9 @@ return true;
     }
     return total.toFixed(2);
 
-  }
+  } 
 
   calculateHoursDifference(obj) {
-    // debugger;
     if (obj.hours != null && obj.adjustments != null) {
       this.totalWorkHours = 0;
       if (!obj.totalMinutes) {

@@ -133,7 +133,7 @@
  
                  <div class="form-group ">
                      <label> DSO </label>
-                     <input class="form-control" type="text"  (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
+                     <input class="form-control" type="text"  maxlength="50" (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
                  </div>
                  <div class="form-group memo-popup-cstm">
                      <label>
@@ -310,7 +310,7 @@
      </div>
  </div>
  
- <br>
+ <!-- <br> -->
   
  <div *ngIf="quoteCreated">
  <div class="card" *ngIf="quoteForm.quoteNumber && quoteForm.quoteNumber != '' && !isQuoteListView">
@@ -335,7 +335,7 @@
             
                 </div>
          </div>
-             <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'mpns'">
+             <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" style="margin-bottom:0px !important" *ngIf="approvalGridActiveTab === 'mpns'">
                  <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
                      <table class="table table-bordered lastcol-fix mpn-list-table"
                             id="mpn-list-table">
@@ -344,7 +344,7 @@
                                  <th rowspan="2">MPN <span class="clr-red">*</span></th>
                                  <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
                                  <th rowspan="2">Revised MPN</th>
-                                 <th rowspan="2">Serial Number</th>
+                                 <th rowspan="2" style="min-width:100px">Serial Number</th>
                                  <th rowspan="2">QTY</th>
                                  <th rowspan="2">Rec'd Date</th>
                                  <th rowspan="2">Cust Req Date <span class="clr-red">*</span></th>
@@ -352,17 +352,17 @@
                                  <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
                                  <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
                                  <th rowspan="2">WO Stage <span class="clr-red">*</span></th>
-                                 <th rowspan="2">WO Status <span class="clr-red">*</span></th>
+                                 <th rowspan="2" style="min-width:100px">WO Status <span class="clr-red">*</span></th>
                                  <th rowspan="2">Tech Name <span class="clr-red">*</span></th>
                                  <th rowspan="2">Station ID</th>
-                                 <th rowspan="2">Work Scope <span class="clr-red">*</span></th>
+                                 <th rowspan="2" style="min-width:80px">Work Scope <span class="clr-red">*</span></th>
                                  <th rowspan="2">Priority <span class="clr-red">*</span></th>
                                  <th rowspan="2">Condition <span class="clr-red">*</span></th>
                                  <th rowspan="2">CMM/Pub Ref</th>
                                  <th rowspan="2">Workflow ID </th>
                                  <th rowspan="2">Item Group</th>
                        
-                                 <th rowspan="2">Cust Ref</th>
+                                 <th rowspan="2" style="min-width:200px">Cust Ref</th>
                                  <th rowspan="2">Contract</th>
                                  <th rowspan="2">Contract No</th>
                                  <th rowspan="2">Stk Line</th>
@@ -555,7 +555,8 @@
                                      <label>{{approver.rule}}</label>
                                  </td>
                                  <td>
-                                     <p class="m-0 p-0 p_textEditor memo-left" [innerHTML]="approver['memo']"></p>
+                                     <p class="m-0 p-0 p_textEditor memo-left truncate-text" matTooltipPosition="above"
+                                      [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                                  </td>
                                  <!-- <td>
                                      <label>{{approver.lowerValue}}</label>
@@ -969,21 +970,21 @@
                      </tr>
                      <tr>
                          <th style="width: 100px;">Task</th>
-                         <th>PN</th>
-                         <th>PN Description</th>
+                         <th style="width: 200px;">PN</th>
+                         <th style="width: 200px;">PN Description</th>
                          <th>Provision</th>
                          <th>Qty</th>
                          <th>UOM</th>
                          <th>Cond Type</th>
                          <th>Stock Type</th>
                          <th>Unit Cost</th>
-                         <th>Total Part Cost</th>
-                         <th>Billing Method</th>
+                         <th style="width: 90px;">Total Part Cost</th>
+                         <th style="width: 100px;">Billing Method</th>
                          <th style="width: 70px !important;">Mark Up</th>
                          <th>
                              Billing Rate
                          </th>
-                         <th>
+                         <th style="width: 90px;">
                              Billing Amount
                          </th>
                          <th class="width-100" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
@@ -1178,7 +1179,7 @@
  
      </div>
  
-     <div class="table-responsive" *ngIf="gridActiveTab === 'charges' && workOrderChargesList">
+     <div class="table-responsive" *ngIf="gridActiveTab === 'charges'">
          <!-- <div *ngIf="!isView">
              <button data-target="#addNewCharges"
                      data-toggle="modal"

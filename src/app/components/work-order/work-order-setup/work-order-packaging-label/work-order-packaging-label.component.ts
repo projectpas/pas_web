@@ -65,6 +65,7 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
   close()
   {
     $('#PackagingSlipDiv').modal('hide');
+    this.Updateshippingpopup.emit();
   }
 
   get userName(): string {

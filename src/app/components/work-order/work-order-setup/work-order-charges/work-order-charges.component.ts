@@ -220,15 +220,16 @@ if(!this.isSummarizedView){
     this.editData = undefined;
     this.addNewCharges = true;
     this.workFlowObject.charges = [{}];
-    if (this.taskList) {
-      this.taskList.forEach(
-        task => {
-          if (task.description == "Assemble") {
-            this.workFlowObject.charges[0]['taskId'] = task.taskId;
-          }
-        }
-      )
-    }
+    this.workFlowObject.charges[0]['taskId']="";
+    // if (this.taskList) {
+    //   this.taskList.forEach(
+    //     task => {
+    //       if (task.description == "Assemble") {
+    //         this.workFlowObject.charges[0]['taskId'] = task.taskId;
+    //       }
+    //     }
+    //   )
+    // }
   }
   edit(rowData, mainInd, subInd) {
     rowData.workflowChargeTypeId = rowData.chargesTypeId;
@@ -358,6 +359,7 @@ if(!this.isSummarizedView){
         x.billingAmount = Number(x.extendedCost.toString().split(',').join('')).toFixed(2);
         x.billingMethodId=this.costPlusType? this.costPlusType :0;
         x.markupPercentageId= this.overAllMarkup ? this.overAllMarkup : 0;
+        x.chargesTypeId= x.workflowChargeTypeId;
       }
     )
     this.saveChargesListForWO.emit(event);
@@ -372,6 +374,7 @@ if(!this.isSummarizedView){
   updateChargesList(event) {
     this.disableCrg=false;
     if (this.isQuote && this.isEdit) {
+      event.charges[0].chargesTypeId=event.charges[0].workflowChargeTypeId;
       this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex] = event.charges[0];
 
       this.markupChanged(this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex],'row')

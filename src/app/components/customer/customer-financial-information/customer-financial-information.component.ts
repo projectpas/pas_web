@@ -1157,7 +1157,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.tab.emit('Billing');
     }
     if (this.nextOrPreviousTab == 'Previous') {
-      this.tab.emit('Atachapter');
+      this.tab.emit('AircraftInfo');
     }
   }
 
@@ -1186,7 +1186,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         this.tab.emit('Billing');
       }
       if (this.nextOrPreviousTab == 'Previous') {
-        this.tab.emit('Atachapter');
+        this.tab.emit('AircraftInfo');
       }
       setTimeout(() => {
         this.stopmulticlicks = false;
@@ -1204,7 +1204,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.tab.emit('Billing');
     }
     if (this.nextOrPreviousTab == 'Previous') {
-      this.tab.emit('Atachapter');
+      this.tab.emit('AircraftInfo');
     }
   }
 

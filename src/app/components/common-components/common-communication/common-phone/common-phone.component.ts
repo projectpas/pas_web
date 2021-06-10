@@ -296,6 +296,15 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         // Retrieve the text property of the element (cross-browser support)
         return temporalDivElement.textContent || temporalDivElement.innerText || "";
     }
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
 
     dismissModel() {
         this.activeModal.close();

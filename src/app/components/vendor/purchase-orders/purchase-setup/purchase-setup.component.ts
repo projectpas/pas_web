@@ -2513,25 +2513,25 @@ export class PurchaseSetupComponent implements OnInit {
 		this.loadModuleListForVendorComp();
 	}
 
-	CloseModel(status){
-		this.modal.close();		
-		if (status){
+	CloseModel(status) {
+		this.modal.close();
+		if (status) {
 			this.savePurchaseOrderHeader('');
 		}
-		else{
+		else {
 			this.headerInfo.statusId = this.openStatusId;
 			this.enableHeaderSaveBtn = true;
 		}
 	}
 
 	savePurchaseOrderHeader(poConfirm) {
-		
-		if(poConfirm!=''){
+
+		if (poConfirm != '') {
 			if (this.headerInfo.statusId == this.fulfillingStatusId) {
 				this.modal = this.modalService.open(poConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
 				return;
 			}
-	    }
+		}
 
 		if (this.createPOForm.invalid ||
 			this.headerInfo.companyId == 0
@@ -4616,6 +4616,7 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	addPartNumbers(partNumberId, partName, conditionid) {
+		debugger;
 		this.inputValidCheck = false;
 		//if (this.vendorService.isEditMode == false) {
 		let newParentObject = new CreatePOPartsList();
@@ -4693,6 +4694,8 @@ export class PurchaseSetupComponent implements OnInit {
 		}
 		this.getPNDetailsById(newParentObject, null)
 		newParentObject.quantityOrdered = null ? 0 : this.lsqty;
+		newParentObject.conditionId = conditionid > 0 ? conditionid : this.defaultCondtionId;
+		this.enablePartSave();
 
 		//}
 		//this.getRemainingAllQty();

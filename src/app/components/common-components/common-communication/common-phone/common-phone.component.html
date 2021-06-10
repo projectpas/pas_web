@@ -283,7 +283,7 @@
                         class="value">{{phoneViewData.contactBy}}</span></p>
                 <p class="memo-margin-bottom">
                     <span class="label"><strong> Notes: </strong></span><span class="value">
-                        <p class="m-0 p-0 p_textEditor" [innerHTML]=phoneViewData.notes></p>
+                        <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(phoneViewData.notes)" [innerHTML]=phoneViewData.notes></p>
                     </span>
                 </p>
                 <p><span class="label"><b>Created Date: </b></span><span
@@ -382,7 +382,7 @@
                                         {{audit.contactBy}}</td>
                                     <td
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
-                                        <p class="m-0 p-0" [innerHTML]="audit.notes"></p>
+                                        <p class="m-0 p-0 truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p>
                                     </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.createdBy}}</td>
