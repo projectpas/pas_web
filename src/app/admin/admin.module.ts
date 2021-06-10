@@ -37,6 +37,9 @@ import { EditorModule } from "primeng/editor";
 import { DatePipe } from "@angular/common";
 import { SalesQuoteService } from "../services/salesquote.service";
 import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.service";
+import { LogViewerListComponent } from "./log-viewer/log-viewer-list.component";
+import { LoggerService } from "../services/logger.service";
+import { LoggerEndpointService } from "../services/logger-endpoint.service copy";
 
 @NgModule({
     imports: [
@@ -67,6 +70,7 @@ import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.servi
         GlobalSettingsComponent,
         BulkEmailComponent,
         PoApprovalComponent,
+        LogViewerListComponent,
     ],
     providers: [
         GlAccountEndpointService,
@@ -74,7 +78,9 @@ import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.servi
         POApprovalService,
         DatePipe,
         SalesQuoteService,
-        SalesQuoteEndpointService
+        SalesQuoteEndpointService,
+        LoggerService,
+        LoggerEndpointService
     ],
     entryComponents: [
         EditUserDialogComponent,

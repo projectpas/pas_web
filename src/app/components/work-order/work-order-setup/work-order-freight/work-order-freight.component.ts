@@ -395,6 +395,15 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                     // currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                 }
             });
+
+            this.taskList.forEach(
+                (task)=>{
+                  if(task.taskId == this.freightForm[0].taskId)
+                  {
+                    this.freightForm[0].taskName = task.description ? task.description :task.label
+                  }
+                }
+              )
             if (this.isEdit) {
                 this.workOrderFreightList[this.mainEditingIndex][this.subEditingIndex] = this.freightForm[0];
                 $('#addNewFreight').modal('hide');

@@ -23,4 +23,5 @@ export class SpeedQuoteView implements ISpeedQuoteView {
     leadSources: ILeadSource[];
     status: IStatus[];
     verificationResult;
+    managementStructureHeaderData: any[];
 }

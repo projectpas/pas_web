@@ -23,6 +23,9 @@ import { ExchangeQuotePart } from '../models/exchange/ExchangeQuotePart';
 import { ExchangeQUoteMarginSummary } from '../models/exchange/ExchangeQUoteMarginSummary';
 import { IExchangeQuoteCharge } from '../models/exchange/IExchangeQuoteCharge';
 import { IExchangeQuoteFreight } from '../models/exchange/IExchangeQuoteFreight';
+import { ExchangeSalesOrderConversionCritera } from "../components/exchange-quote/models/exchange-sales-order-conversion-criteria";
+import { ExchangeOrderQuote } from "../models/exchange/ExchangeOrderQuote";
+import { ExchangeSalesOrderView } from "../models/exchange/ExchangeSalesOrderView";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
   operation: RolesChangedOperation;
@@ -442,5 +445,24 @@ export class ExchangequoteService {
   }
   getleasingCompany(masterCompanyId?) {
     return this.exchangeQuoteEndpointService.getleasingCompany(masterCompanyId);
+  }
+  convertfromquote(salesQuoteConversionCriteria: ExchangeSalesOrderConversionCritera, currentEmployeeId: number): Observable<ExchangeSalesOrderView[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.convertfromquoteEndPoint(salesQuoteConversionCriteria, currentEmployeeId)
+    );
+  }
+  resetSalesOrderQuote() {
+    // this.approvers = [];
+    // this.initializeApprovals();
+    this.selectedParts = [];
+    this.totalFreights = 0;
+    this.totalCharges = 0;
+    this.exchangeOrderQuote = new ExchangeOrderQuote();
+  }
+  getSalesOrderQuteInstance() {
+    return Observable.create(observer => {
+      observer.next(this.exchangeOrderQuote);
+      observer.complete();
+    });
   }
 }

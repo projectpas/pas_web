@@ -26,6 +26,8 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly getSpeedQuoteViewDetails: string = environment.baseUrl + "/api/speedquote/getview";
   private readonly speedQuoteDeletePart: string = environment.baseUrl + "/api/speedquote/deletepart";
   private readonly getSpeedQuotePartDateHistory: string = environment.baseUrl + "/api/speedquote/getSpeedQuotePartHistory";
+  private readonly getSpeedQuotePrintViewDetails: string = environment.baseUrl + "/api/speedquote/getprintview";
+  private readonly getSpeedQuoteExclusionPrintViewDetails: string = environment.baseUrl + "/api/speedquote/getexclusionprintview";
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
@@ -199,6 +201,22 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
     return this.http.get<any>(URL)
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getSpeedQuotePartHistory(speedQuotePartId));
+      });
+  }
+  getPrintview(speedQuoteId: number): Observable<any> {
+    const URL = `${this.getSpeedQuotePrintViewDetails}/${speedQuoteId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getPrintview(speedQuoteId));
+      });
+  }
+  getExclusionPrintview(speedQuoteId: number): Observable<any> {
+    const URL = `${this.getSpeedQuoteExclusionPrintViewDetails}/${speedQuoteId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getExclusionPrintview(speedQuoteId));
       });
   }
 }

@@ -988,7 +988,8 @@ export class CustomerContactsComponent implements OnInit {
 
 	nextClick() {
 		this.stopmulticlicks = true;
-		this.tab.emit('AircraftInfo');
+		//this.tab.emit('AircraftInfo');
+		this.tab.emit('Atachapter');		
 		setTimeout(() => {
 			this.stopmulticlicks = false;
 		}, 500)

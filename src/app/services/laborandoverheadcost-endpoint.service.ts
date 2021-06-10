@@ -12,6 +12,7 @@ export class laborAndOverheadCostEndpointservice extends EndpointFactory {
     private readonly _auditUrl: string = '/api/LaborAndOverheadCost/audits';
     private readonly _laborOHSettingsUrl: string = '/api/LaborOHSettings/Get';
     private readonly _createLaborOHSettingsUrl: string = '/api/LaborOHSettings/LaborOHSettings';
+    private readonly _RestoreLaborOHSettings: string = '/api/LaborOHSettings/RestoreLaborOHSettings';
     private readonly _getLaborOHSettingsByIdUrl: string = '/api/LaborOHSettings/GetLaborOHSettingsDataById';
     private readonly _getLaborOHSettingsAuditUrl: string = '/api/LaborOHSettings/GetLaborOHSettingsAuditDataById';
     private readonly _getLaborOHSettingsStatusUrl: string = '/api/LaborOHSettings/chargestatus';
@@ -74,11 +75,11 @@ export class laborAndOverheadCostEndpointservice extends EndpointFactory {
     }
 
     // Direct LaborOHSettings APIs
-    getLaborOHSettings<T>(): Observable<T> {
-        let endpointUrl = `${this.configurations.baseUrl}/${this._laborOHSettingsUrl}`;
+    getLaborOHSettings<T>(isDeleted: boolean,isActive: boolean,masterCompanyId :number): Observable<T> {
+        let endpointUrl = `${this.configurations.baseUrl}/${this._laborOHSettingsUrl}?isDeleted=${isDeleted}&isActive=${isActive}&masterCompanyId=${masterCompanyId}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getLaborOHSettings());
+                return this.handleErrorCommon(error, () => this.getLaborOHSettings(isDeleted,isActive,masterCompanyId));
             });
     }
     createLaborOHSettings<T>(userObject: any): Observable<T> {
@@ -115,6 +116,14 @@ export class laborAndOverheadCostEndpointservice extends EndpointFactory {
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.deleteLaborOHSettings(id, updatedBy));
+            });
+    }
+
+    restoreLaborOHSettings<T>(id: number, updatedBy: string): Observable<T> {
+        let endpointUrl = `${this.configurations.baseUrl}/${this._RestoreLaborOHSettings}/${id}?updatedBy=${updatedBy}`;
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.restoreLaborOHSettings(id, updatedBy));
             });
     }
     getLaborOHSettingsAuditById<T>(id): Observable<T> {

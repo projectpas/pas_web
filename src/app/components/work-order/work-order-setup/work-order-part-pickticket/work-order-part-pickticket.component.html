@@ -19,9 +19,32 @@
                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                   <td *ngFor="let summaryColumn of headers" style="width:auto; background-color: #EAF2C5 !important;"
                     pReorderableRowHandle>
-                    <span>
+                    <!-- <span>
                       {{summaryPart[summaryColumn.field]}}
-                    </span>
+                    </span> -->
+
+                    <div style="width:220px !important" *ngIf="summaryColumn.field == 'partNumber'
+                    || summaryColumn.field == 'partDescription'">
+                    {{summaryPart[summaryColumn.field]}}
+                  </div>
+                  <div class="text-right" *ngIf="summaryColumn.field == 'qty'
+                  || summaryColumn.field == 'qtyToShip'
+                   || summaryColumn.field == 'qtyToPick'
+                  || summaryColumn.field == 'quantityAvailable'
+                  || summaryColumn.field == 'qtyToShip'
+                  || summaryColumn.field == 'qtyToShip'">
+                  {{summaryPart[summaryColumn.field]}}
+                </div>
+                <div *ngIf="summaryColumn.field != 'qty'
+                && summaryColumn.field != 'qtyToShip'
+                && summaryColumn.field != 'qtyToPick'
+                && summaryColumn.field != 'quantityAvailable'
+                && summaryColumn.field != 'qtyToShip'
+                && summaryColumn.field != 'qtyToShip' 
+                && summaryColumn.field != 'partNumber'
+                && summaryColumn.field != 'partDescription'">
+                {{summaryPart[summaryColumn.field]}}
+              </div>
                   </td>
                   <td *ngIf="isView == false" style="position:sticky; width:80px">
                     <span>

@@ -23,19 +23,19 @@
         <ng-container *ngFor="let partList of partListData;let row_index=index;">
           <tr class="table-parent-data purchase-td-back" *ngIf="!partList.isDeleted">
 
-            <td>{{row_index + 1}}</td>
+            <td>{{partList.itemNo}}</td>
             <td class="parts-des-td">{{partList.pn}}</td>
             <td class="parts-des-td">{{partList.description}}</td>
             <td *ngIf="isViewMode == false">
               <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add PN"
-                matTooltipPosition="above" style="padding: 0px 4px !important;" (click)="addPartNumber(partList)"></i>
+                matTooltipPosition="above" style="padding: 0px 4px !important;" (click)="addNewPartNumber(partList)"></i>
             </td>
             <td>
               <p-autoComplete appendTo="body" [(ngModel)]="partList.partNumber" [suggestions]="partCollection"
                 (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
                 class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
                 (onSelect)="onPartSelect($event,row_index)" [forceSelection]="true" title="PN" required
-                [disabled]="partList['isEditPart'] == true" name="pn_{{row_index}}">
+                name="pn_{{row_index}}">
               </p-autoComplete>
             </td>
             <td class="parts-des-td">{{partList.exPartDescription}}</td>

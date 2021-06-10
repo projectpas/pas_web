@@ -1,0 +1,292 @@
+<!-- <div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title"></h4>
+  <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
+
+</div> -->
+<div class="modal-content pdf-block " style="width:90%">
+  <div class="modal-body">
+
+
+    <div class="clear"></div>
+    <form id="" name="" action="#" method="post" onsubmit="return false;">
+      <div class="image">
+        <div style="padding: 0; margin: 0;">
+
+          <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+            <!-- <hr /> -->
+            <div class="col-sm-12 invoice-border">
+              <div class="col-sm-8 very-first-block">
+                <div class="col-sm-12 address-block" style="width:100%;display:flex;">
+                  <div class="col-sm-6" style="width:50%"><img class="logo"
+                      src="{{this.endPointURL + this.management.logo}}" /></div>
+                  <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>Tagline :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.companyName}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>Address-1 :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.address1}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>Address-2 :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.address2}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>City :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.city}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>State :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.stateOrProvince}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>Postal Code :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.postalCode}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="second-block col-sm-4">
+                <h3
+                  style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
+                  SPEED QUOTE</h3>
+                <div class="second-block-div">
+                  <label class="col-sm-6 second-block-label" style="width:100%">Speed Qte Num</label>
+                  <label class="col-sm-6 second-block-label" style="width:100%"
+                    disabled>{{this.speedQuote.speedQuoteNumber}}</label>
+                </div>
+                <div class="second-block-div">
+                  <label class="col-sm-6 second-block-label" style="width:100%"> Quote Date</label>
+                  <label class="col-sm-6 second-block-label" style="width:100%"
+                    disabled>{{this.speedQuote.createdDate  | date: 'MM/dd/yyyy'}}</label>
+                </div>
+                <div class="second-block-div">
+                  <label class="col-sm-6 second-block-label" style="width:100%">Valid Until</label>
+                  <label class="col-sm-6 second-block-label" style="width:100%"
+                    disabled>{{this.speedQuote.validForDays}} Days</label>
+                </div>
+                <div class="second-block-div">
+                  <label class="col-sm-6 second-block-label" style="width:100%">Prepared By</label>
+                  <label class="col-sm-6 second-block-label" style="width:100%"
+                    disabled>{{this.speedQuote.createdBy}}</label>
+                </div>
+                <div class="second-block-div">
+                  <label class="col-sm-6 second-block-label" style="width:100%">Date Printed</label>
+                  <label class="col-sm-6 second-block-label" style="width:100%"
+                    disabled>{{todayDate | date: 'MM/dd/yyyy'}}</label>
+                </div>
+                <!-- <div class="second-block-div">
+                      <label class="col-sm-4 second-block-label">Page</label>
+                      <input type="text" placeholder="1 of 1" value="" disabled />
+                  </div> -->
+              </div>
+            </div>
+            <div class="col-sm-12 first-block-sold-bottom">
+              <div class="first-block-sold col-sm-6">
+                <label class="label-margin"><b>Quote For:</b></label>
+                <div class="first-block-sold-to">
+
+                  <div class="sold-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{this.speedQuote.customerName}}</label>
+                  </div>
+                  <div class="sold-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{customerAddress.address1}},
+                      {{customerAddress.address2}}</label>
+                  </div>
+                  <div class="sold-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{customerAddress.stateOrProvince}}</label>
+                  </div>
+                  <div class="sold-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{customerAddress.city}}</label>
+                  </div>
+                  <div class="sold-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{customerAddress.countryName}}</label>
+                  </div>
+                  <div class="sold-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{customerAddress.postalCode}}</label>
+                  </div>
+                  <div class="sold-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{customerAddress.email}}</label>
+                  </div>
+
+                </div>
+              </div>
+              <div class="first-block-ship col-sm-6">
+                <label class="label-margin"><b> Ship To:</b></label>
+                <div class="first-block-ship-to">
+
+                  <div class="ship-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{this.speedQuote.line1}}</label>
+                  </div>
+                  <div class="ship-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{this.speedQuote.line2}}</label>
+                  </div>
+                  <div class="ship-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{this.speedQuote.line3}}</label>
+                  </div>
+                  <div class="ship-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{this.speedQuote.city}}</label>
+                  </div>
+                  <div class="ship-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{this.speedQuote.stateOrProvince}}</label>
+                  </div>
+                  <div class="ship-block-div">
+                    <label class="col-sm-12 first-block-label" disabled>{{this.speedQuote.postalCode}}</label>
+                  </div>
+                  <!-- <div class="ship-block-div">
+                    <label class="col-sm-12 first-block-label" disabled></label>
+                  </div>
+                  <div class="ship-block-div">
+                    <label class="col-sm-12 first-block-label" disabled></label>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            <div class="clear"></div>
+            <!-- <hr /> -->
+            <div class="clear"></div>
+            <div class="col-sm-12">
+              <table rules=none class=" print-friendly parttable print-table table-margins">
+                <thead>
+                  <tr>
+
+                    <th colspan="2">Buyer</th>
+                    <th>Reference</th>
+                    <th>Credit Terms</th>
+                    <th>Cust VAT Num</th>
+                    <th>Sales Person</th>
+                    <th colspan="2">Exclusions</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="2">{{this.speedQuote.firstName}}</td>
+                    <td></td>
+                    <td>{{this.speedQuote.creditTerms}}</td>
+                    <td></td>
+                    <td>{{this.speedQuote.salesPersonName}}</td>
+                    <td colspan="2">On Following Page</td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- <div class="clear"></div>
+              <hr /> -->
+            <div class="col-sm-12">
+              <table rules=none *ngFor="let part of this.parts let i=index"
+                class="parttable print-table print-friendly table-margins" style="margin-top:10px">
+                <thead>
+                  <tr>
+                    <th>Item Num</th>
+                    <th>PN</th>
+                    <th>PN Description</th>
+                    <th>UOM</th>
+                    <th></th>
+                    <th>Rep</th>
+                    <th>OH</th>
+                    <th>BC</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container>
+                    <tr>
+                      <td>{{part.itemNo}}</td>
+                      <td>{{part.partNumber}}</td>
+                      <td>{{part.partDescription}}</td>
+                      <td>{{part.uomName}}</td>
+                      <td> Qty</td>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Repair' ">{{price.quantityRequested}}</td>
+                      </ng-container>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Overhaul' ">{{price.quantityRequested}}</td>
+                      </ng-container>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Bench Check' ">{{price.quantityRequested}}</td>
+                      </ng-container>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td> </td>
+                      <td></td>
+                      <td></td>
+                      <td>Unit Price</td>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Repair' ">{{price.unitPrice}}</td>
+                      </ng-container>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Overhaul' ">{{price.unitPrice}}</td>
+                      </ng-container>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Bench Check' ">{{price.unitPrice}}</td>
+                      </ng-container>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td> </td>
+                      <td></td>
+                      <td></td>
+                      <td>Ext Price</td>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Repair' ">{{price.salesPriceExtended}}</td>
+                      </ng-container>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Overhaul' ">{{price.salesPriceExtended}}</td>
+                      </ng-container>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Bench Check' ">{{price.salesPriceExtended}}</td>
+                      </ng-container>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td> </td>
+                      <td></td>
+                      <td></td>
+                      <td>TAT</td>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Repair' ">{{price.tat}}</td>
+                      </ng-container>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Overhaul' ">{{price.tat}}</td>
+                      </ng-container>
+                      <ng-container *ngFor="let price of part.unitPriceData let i=index">
+                        <td *ngIf="price.conditionDescription == 'Bench Check' ">{{price.tat}}</td>
+                      </ng-container>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td colspan="3" rowspan="3" style="border:1px solid black">Notes:</td>
+                    </tr>
+                    <tr></tr>
+                    <tr> </tr>
+                    <tr>
+                      <td colspan="8" rowspan="3">Notes</td>
+                    </tr>
+                  </ng-container>
+
+
+                  <tr></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="clear"></div>
+            <!-- <hr /> -->
+            <div class="clear"></div>
+          </form>
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+  <div style="height:100px"> &nbsp;</div>
+</div>
+<!-- </div> -->
+<!-- </div> -->
+
+<!-- </body> -->
