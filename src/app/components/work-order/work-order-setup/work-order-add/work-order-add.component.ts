@@ -1470,7 +1470,8 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
             this.cmmList = res.map(x => {
                 return {
                     value: x.publicationRecordId,
-                    label: x.publicationId
+                    label: x.publicationId,
+                    expirationDate:x.expirationDate
                 }
             });
             this['cmmPublicationList'+index]=[]
@@ -1482,7 +1483,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 if(this.cmmListNew && this.cmmListNew[0].expirationDate)
                 {
                 this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmListNew[0].expirationDate;
-                this.showWaringForPublication();
+                // this.showWaringForPublication();
                 }
             }
         },
@@ -1490,7 +1491,19 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 this.handleError(err);
             })
     }
-
+    onSelectPublication(event,currentRecord,i){
+        if(this['cmmPublicationList' + i] && this['cmmPublicationList' + i].length !=0){
+            this['cmmPublicationList' + i].forEach(element => {
+                if(element.value==event.value){
+                    this.workOrderGeneralInformation.partNumbers[i].publicatonExpirationDate = element.expirationDate; 
+                    this.workOrderGeneralInformation.partNumbers[i].publicationNo = element.label; 
+                }
+            });
+          }    
+          if(this.workOrderGeneralInformation.partNumbers && this.workOrderGeneralInformation.partNumbers[i].publicatonExpirationDate){
+              this.showWaringForPublication();
+              }
+    }
     selectedCondition(value, currentRecord, index,) {
         this.conditionList.forEach(element => {
             if (element.value == value) {
@@ -1540,11 +1553,13 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                 })
         }
     }
+
     onSelectWorkflow(event,currentRecord,i){
       if(this['dynamicWorkflowList' + i] && this['dynamicWorkflowList' + i].length !=0){
         this['dynamicWorkflowList' + i].forEach(element => {
             if(element.value==event.value){
                 this.workOrderGeneralInformation.partNumbers[i].workflowExpirationDate = element.expirationDate; 
+                this.workOrderGeneralInformation.partNumbers[i].workFlowNo = element.label; 
             }
         });
       }
@@ -1842,8 +1857,7 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
         this.disableSaveForEdit = false;
     }
     //new form for material list
-    saveMaterials(data){
-        console.log('data',data)
+    saveMaterials(data){ 
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;
             const newData={...data,
@@ -3939,6 +3953,7 @@ this.woPartId=rowData.id;
                         setTimeout(() => {
                             // x.workflowId=0;
                             this.disableSaveForPart=false;
+                            this.workflowNumber=x.workFlowNo;
                         }, 2000);
                         $('#warningForCmmWorkflow').modal('show');
                         // this.expriryarray.push(x);
@@ -3953,24 +3968,18 @@ this.woPartId=rowData.id;
       summaryShow(){
     this.isShowSummary=true;
 }
+publicationNo:any;
+workflowNumber:any;
       showWaringForPublication(){
         if(!this.isView){
             setTimeout(() => { 
                 this.workOrderGeneralInformation.partNumbers.map((x, index) => {
                     if(x.publicatonExpirationDate){ 
-
-                        
-                       //if(moment(new Date(x.publicatonExpirationDate)).format('MM/DD/YYYY') < moment(new Date()).format('MM/DD/YYYY')){
-
                         if((new Date(x.publicatonExpirationDate)) < (new Date())){
                         setTimeout(() => {
-                            // x.cMMId=0;
                             this.disableSaveForPart=false;
                         }, 2000);
-                        // this.removePublication(x,index);
-                       
-                        // this.expriryarray.push(x);
-                 
+                 this.publicationNo=x.publicationNo;
                         $('#warningForCmmPublication').modal('show');
                        }
                     }
