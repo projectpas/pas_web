@@ -260,8 +260,8 @@ export class EmployeeService {
         return this.employeeEndpoint.downloadAllEmployeeList(employeeId);
     }
 
-    updateEmployeePassword(password,employeeID){
-        return this.employeeEndpoint.getUpdateEmployeePasswordEndpoint(password,employeeID);
+    updateEmployeePassword(password,employeeID,currentpassword){
+        return this.employeeEndpoint.getUpdateEmployeePasswordEndpoint(password,employeeID,currentpassword);
     }
 
 }

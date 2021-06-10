@@ -24,6 +24,7 @@ export class UpdatepasswordComponent implements OnInit {
     this.updatePasswordForm = fb.group({
       'newpassword': [null, Validators.compose([Validators.required, Validators.minLength(8),Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}$')])],
       'confpassword': [null, Validators.compose([Validators.required, Validators.minLength(8),Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}$')])],
+      'currentpassword': [null, Validators.compose([Validators.required, Validators.minLength(8),Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}$')])],
   },{
     validators:this.ConfirmedValidator('newpassword','confpassword')
   });
@@ -32,8 +33,12 @@ export class UpdatepasswordComponent implements OnInit {
   ngOnInit() {
     this.updatePasswordForm.setValue({
       newpassword: '',
-      confpassword: ''
+      confpassword: '',
+      currentpassword:''
     });
+  }
+  get currentpassword(){
+    return this.updatePasswordForm.get('currentpassword');
   }
 
   get newpassword(){
@@ -45,15 +50,16 @@ export class UpdatepasswordComponent implements OnInit {
   }
 
   UpdatePassword(){
+    var currentpassword=this.updatePasswordForm.value.currentpassword;
     var password=this.updatePasswordForm.value.newpassword;
     var employeeId=this.authService.currentUser.employeeId;
     console.log(this.authService.currentUser.employeeId);
     var data ={
       password:password,
       employeeId:employeeId
-    };
+    };    
     this.alertService.startLoadingMessage();
-    this.employeeService.updateEmployeePassword(password,employeeId).subscribe(res=>{
+    this.employeeService.updateEmployeePassword(password,employeeId,currentpassword).subscribe(res=>{
       this.alertService.stopLoadingMessage();
       this.alertService.showMessage("Update Password", `Password Updated Successfully`, MessageSeverity.success);
       this.authService.logout();

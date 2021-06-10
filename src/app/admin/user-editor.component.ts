@@ -17,6 +17,8 @@ import { UserEdit } from '../models/user-edit.model';
 import { Role } from '../models/role.model';
 import { Permission } from '../models/permission.model';
 import { EqualValidator } from '../shared/validators/equal.validator';
+import { UserRole } from '../components/user-role/ModuleHierarchyMaster.model';
+import { AuthService } from '../services/auth.service';
 
 @Component({
     selector: 'user-editor',
@@ -34,14 +36,22 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
     private onUserSaved = new Subject<User>();
 
     @Input() user: User = new User();
-    @Input() roles: Role[] = [];
+    @Input() roles: UserRole[] = [];
     @Input() isEditMode: boolean = false;
 
     userProfileForm: FormGroup;
     userSaved$ = this.onUserSaved.asObservable();
 
+    roleAssign:string[]=[];
+
     get userName() {
         return this.userProfileForm.get('userName');
+    }
+    get firstName() {
+        return this.userProfileForm.get('firstName');
+    }
+    get lastName() {
+        return this.userProfileForm.get('lastName');
     }
 
     get email() {
@@ -80,7 +90,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         return this.accountService.currentUser ? this.user.id == this.accountService.currentUser.id : false;
     }
 
-    get assignableRoles(): Role[] {
+    get assignableRoles(): UserRole[] {
         return this.roles;
     }
 
@@ -92,9 +102,13 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         private alertService: AlertService,
         private translationService: AppTranslationService,
         private accountService: AccountService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private authService:AuthService
     ) {
         this.buildForm();
+        if(this.authService.currentUser!=null && this.authService.currentUser.roleName!=undefined){
+            this.roleAssign=this.authService.currentUser.roleName.split(',');
+        }
     }
 
     ngOnChanges() {
@@ -107,7 +121,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             this.user.isEnabled = true;
         }
 
-        this.setRoles();
+        //this.setRoles();
 
         this.resetForm();
     }
@@ -116,10 +130,12 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         this.passwordWatcher.unsubscribe();
     }
 
-    public setUser(user?: User, roles?: Role[]) {
+    public setUser(user?: User, roles?: UserRole[]) {
         this.user = user;
+        
         if (roles) {
             this.roles = [...roles];
+            this.roles.map(i=>i.name==this.user.roleName);
         }
 
         this.ngOnChanges();
@@ -129,6 +145,8 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         this.userProfileForm = this.formBuilder.group({
             jobTitle: '',
             userName: ['', Validators.required],
+            firstName:['',Validators.required],
+            lastName:['',Validators.required],
             email: ['', [Validators.required, Validators.email]],
             password: this.formBuilder.group({
                 currentPassword: ['', Validators.required],
@@ -165,7 +183,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         }
 
         this.currentPassword.clearValidators();
-
+        
         this.userProfileForm.reset({
             jobTitle: this.user.jobTitle || '',
             userName: this.user.userName || '',
@@ -178,19 +196,21 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             roles: this.user.roles || [],
             fullName: this.user.fullName || '',
             phoneNumber: this.user.phoneNumber || '',
+            firstName: this.user.firstName || '',
+            lastName: this.user.lastName || '',
             isEnabled: this.user.isEnabled
         });
     }
 
-    private setRoles() {
-        if (this.user.roles) {
-            for (let role of this.user.roles) {
-                if (!this.roles.some(r => r.name == role)) {
-                    this.roles.unshift(new Role(role));
-                }
-            }
-        }
-    }
+    // private setRoles() {
+    //     if (this.user.roles) {
+    //         for (let role of this.user.roles) {
+    //             if (!this.roles.some(r => r.name == role)) {
+    //                 this.roles.unshift(new Role(role));
+    //             }
+    //         }
+    //     }
+    // }
 
     public beginEdit() {
         this.isEditMode = true;
@@ -198,16 +218,16 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
     }
 
     public save() {
-        if (!this.form.submitted) {
-            // Causes validation to update.
-            this.form.onSubmit(null);
-            return;
-        }
+        // if (!this.form.submitted) {
+        //     // Causes validation to update.
+        //     this.form.onSubmit(null);
+        //     return;
+        // }
 
-        if (!this.userProfileForm.valid) {
-            this.alertService.showValidationError();
-            return;
-        }
+        // if (!this.userProfileForm.valid) {
+        //     this.alertService.showValidationError();
+        //     return;
+        // }
 
         this.isSaving = true;
         this.alertService.startLoadingMessage("Saving changes...");
@@ -258,6 +278,8 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             roleName:"",
             permissionName:[],
             roleID:"",
+            firstName:formModel.firstName,
+            lastName:formModel.lastName
         };        
     }
 

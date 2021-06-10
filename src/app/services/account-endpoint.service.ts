@@ -45,7 +45,7 @@ export class AccountEndpoint extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    getUserEndpoint<T>(userId?: string): Observable<T> {
+    getUserEndpoint<T>(userId?: string): Observable<T> {        
         let endpointUrl = userId ? `${this.usersUrl}/${userId}` : this.currentUserUrl;
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
