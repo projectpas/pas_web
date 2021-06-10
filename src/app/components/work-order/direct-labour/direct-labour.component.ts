@@ -36,6 +36,9 @@ export class DirectLabourComponent implements OnInit {
 	auditHistory: any = [];
 	directLaborData: any = {};
 	headerManagementStructure: any = {};
+    currentDeletedstatus: boolean = false;
+    currentActivestatus: boolean = true;
+    currentStatus = 'active';
 
 	constructor(private laborOHService: LaborAndOverheadCostService, private _route: Router, private alertService: AlertService, private authService: AuthService, private commonService: CommonService) {}
 
@@ -48,7 +51,7 @@ export class DirectLabourComponent implements OnInit {
 	}
 
 	loadData() {
-		this.laborOHService.getLaborOHSettings().subscribe(res => {
+		this.laborOHService.getLaborOHSettings(this.currentDeletedstatus,this.currentActivestatus,this.authService.currentUser.masterCompanyId).subscribe(res => {
 			console.log(res);
 			this.directLaborList = res.map(x => {
                 return {
@@ -62,6 +65,27 @@ export class DirectLabourComponent implements OnInit {
 	getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
 	}
+
+    getDeleteListByStatus(value) {
+        if (value == true) {
+          this.currentDeletedstatus = true;
+        } else {
+          this.currentDeletedstatus = false;
+        }
+        this.loadData();
+      }
+      changeOfStatus(value)
+      {
+        if (value == 'active') 
+        {
+            this.currentActivestatus = true;
+        } else 
+        {
+            this.currentActivestatus = false;
+        }
+        this.loadData();
+
+      }
 
 	viewSelectedRow(rowData) { 
 		this.laborOHService.getLaborOHSettingsById(rowData.laborOHSettingsId).subscribe(res => {
@@ -129,6 +153,19 @@ export class DirectLabourComponent implements OnInit {
             this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
         })
 	}
+
+    restore(rowData) {
+        this.rowDataToDelete = rowData;
+	}
+
+    restoreRecord() 
+    {
+        const { laborOHSettingsId } = this.rowDataToDelete;
+        this.laborOHService.restoreLaborOHSettings(laborOHSettingsId, this.userName).subscribe(res => {
+            this.loadData();
+            this.alertService.showMessage("Success", `Record was Restored Successfully`, MessageSeverity.success);
+        })
+    }
 	
 	getAuditHistoryById(rowData) {
         this.laborOHService.getLaborOHSettingsAuditById(rowData.laborOHSettingsId).subscribe(res => {

@@ -141,11 +141,11 @@
         <!-- *ngIf="!dt['isDeleted']" -->
         <tr *ngIf="!dt['isDeleted'] && isQuote">
           <td class="table-column-width">
-            <!-- <p  class="mrg_0">{{dt.taskName}}</p> -->
-            <select class="form-control select-read-only" style="background: #fff !important;" [(ngModel)]="dt.taskId" disabled>
+            <p  class="mrg_0">{{dt.taskName}}</p>
+            <!-- <select class="form-control select-read-only" style="background: #fff !important;" [(ngModel)]="dt.taskId" disabled>
               <option value="">Select</option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
-            </select>
+            </select> -->
           </td>
           <ng-container *ngFor="let col of columns">
             <!-- <td *ngIf="col.field != 'shipVia' && col.field != 'carrierName'">

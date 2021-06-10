@@ -66,8 +66,8 @@ export class LaborAndOverheadCostService {
 	}
 	
 	// Direct LaborOHSettings APIs
-    getLaborOHSettings() {
-        return this.laborandoverheadcostEndpoint.getLaborOHSettings<any>();
+    getLaborOHSettings(isDeleted: boolean,isActive: boolean,masterCompanyId :number) {
+        return this.laborandoverheadcostEndpoint.getLaborOHSettings<any>(isDeleted,isActive,masterCompanyId);
 	}
 
 	createLaborOHSettings(action: any) {
@@ -88,6 +88,9 @@ export class LaborAndOverheadCostService {
 
 	deleteLaborOHSettings(id: number, updatedBy: string) {
         return this.laborandoverheadcostEndpoint.deleteLaborOHSettings<any>(id, updatedBy);
+	}
+	restoreLaborOHSettings(id: number, updatedBy: string) {
+        return this.laborandoverheadcostEndpoint.restoreLaborOHSettings<any>(id, updatedBy);
 	}
 
 	getLaborOHSettingsAuditById(id: number) {
