@@ -292,7 +292,7 @@
                   ">
                   <p-calendar [(ngModel)]="rec.startDate" (ngModelChange)="checkValid(18)" [showIcon]="true" appendTo="body"
                     showTime="true" hourFormat="12" [minDate]="minDateValue" (onSelect)="resetEndDateandTime(rec)" 
-                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);markupChanged(rec, 'row');calculateTotalCost(rec);" class="w150 pcalendar-wo-labor model_view" [disabled]="isView || !rec.startDate">
+                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);" class="w150 pcalendar-wo-labor model_view" [disabled]="isView || !rec.startDate">
                   </p-calendar>
                 </td>
                 <td *ngIf="
@@ -301,7 +301,7 @@
                   ">
                   <p-calendar [(ngModel)]="rec.endDate" [showIcon]="true" (ngModelChange)="checkValid(19)"  appendTo="body"
                     showTime="true" hourFormat="12" class="w150 pcalendar-wo-labor model_view" [minDate]="rec.endDate"
-                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);markupChanged(rec, 'row');calculateTotalCost(rec);" [disabled]="isView || !rec.endDate"></p-calendar>
+                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);" [disabled]="isView || !rec.endDate"></p-calendar>
                 </td>
                 <td style="width:70px !important;text-align:right !important" *ngIf="
                     laborForm.hoursorClockorScan &&
