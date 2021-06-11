@@ -814,7 +814,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     // this.quoteForm.expirationDateStatus=='Approved'
 
     saveQuoteAPI(){
-        debugger;
         this.formQuoteInfo(this.quoteForm);
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
@@ -3415,9 +3414,9 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 this.materialListQuotation = res;
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
                     this.materialListQuotation.forEach(tcharge => {
-                      
+                        tcharge.quantity= tcharge.stocklineQuantity;
                         if (tcharge.unitCost) {
-                            tcharge.unitCost = Number(tcharge.unitCost.toString().split(',').join('')).toFixed(2);
+                            tcharge.unitCost = Number(tcharge.stocklineUnitCost.toString().split(',').join('')).toFixed(2);
                         }
                         if (tcharge.billingRate) {
                             tcharge.billingRate = Number(tcharge.billingRate.toString().split(',').join('')).toFixed(2);

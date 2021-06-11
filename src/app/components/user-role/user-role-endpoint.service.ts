@@ -52,9 +52,10 @@ export class UserRoleEndPointService extends EndpointFactory {
         });
     }
 
-    getAllUserRole<T>(): Observable<T> {
-        return this.http.get<T>(this.getAllUserRolesURL, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getAllUserRole());
+    getAllUserRole<T>(masterCompanyId?): Observable<T> {
+        let endpointUrl = `${this.getAllUserRolesURL}/${masterCompanyId !== undefined ? masterCompanyId : 1}`;
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getAllUserRole(masterCompanyId));
         });
     }
 
