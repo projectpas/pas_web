@@ -264,7 +264,7 @@
                                 <th>Location</th>
                                 <th>Shelf</th>
                                 <th>Bin</th>
-                                <th colspan="38"></th>
+                                <th colspan="40"></th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -446,7 +446,7 @@
                                             </option>
                                         </select>
                                     </td>
-                                    <td colspan="38"></td>
+                                    <td colspan="40"></td>
                                     <td><a matTooltip="Edit" matTooltipPosition="above"
                                             class="btn boxed-float-btn nobg edit"><i class="fa fa-edit"
                                                 (click)="editPart(part)"></i></a></td>
@@ -493,6 +493,7 @@
                                         <th>Part Cert Num </th>
                                         <th>Certified Date</th>
                                         <th class="date">Certified Due Date</th>
+                                        <th>Tag Type</th>
                                         <th>Tagged By </th>
                                         <th>UOM</th>
                                         <th class="date">Date Tagged </th>
@@ -918,13 +919,21 @@
 
                                             </td>
                                             <td>
-
                                                 <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100"
                                                     [maxDate]="currentDate" [disabled]="!SL.isEnabled" appendTo="body"
                                                     [showIcon]="true" name="certifiedDueDate{{stockline_row_index}}"
                                                     id="certifiedDueDate{{stockline_row_index}}"
                                                     [(ngModel)]="SL.certifiedDueDate"></p-calendar>
+                                            </td>
+                                            <td>                                                
+                                                <p-multiSelect [options]="TagTypeList"
+                                                    [(ngModel)]="SL.tagType"
+                                                    appendTo="body"
+                                                    id="tagType{{stockline_row_index}}"
+                                                    name="tagType{{stockline_row_index}}"
+                                                    [disabled]="!SL.isEnabled">
+                                                </p-multiSelect>
                                             </td>
                                             <td>                                               
                                                 <p-autoComplete field="Value" class="rpo-acomp"
@@ -1277,7 +1286,7 @@
                                                     <a href="javascript:void(0);" class="btn boxed-float-btn nobg edit"
                                                         matTooltip="Edit" matTooltipPosition="above"><i
                                                             class="fa fa-edit" (click)="editStockLine(SL)"></i></a>
-                                                    <a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL)"
+                                                    <a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL,deletepoConfirm)"
                                                         matTooltip="Delete" matTooltipPosition="above"><i
                                                             class="fa fa-trash"></i></a>
                                                 </div>
@@ -1396,6 +1405,28 @@
         </div>
     </div>
 </div>
+
+<ng-template class="modal fade" #deletepoConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="CloseModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <strong>                
+                Stock Line will be deleted after save/update. Do you still want to continue?
+            </strong>            
+        </div>
+        <div class="modal-footer">            
+            <button type="button" class="btn btn-primary"
+                (click)="DeleteStockLineCloseModel(SL);">Yes</button>
+            <button type="button" class="btn btn-danger"
+                (click)="CloseModel()">No</button>
+        </div>
+    </div>
+</ng-template>
 
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

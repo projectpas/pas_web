@@ -322,7 +322,19 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
 
     }
+    //delete sub wo materialist
+    deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/deletesubworkordermaterials?subWorkOrderMaterialId=${subWorkOrderMaterialId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy));
+        });
+    }
 
+
+    deletesubWorkOrderMaterialStocklineById(subWorkOrderMaterialId,stocklineId, updatedBy) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/deletesubworkordermaterialsstockline?subWorkOrderMaterialId=${subWorkOrderMaterialId}&stocklineId=${stocklineId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.deletesubWorkOrderMaterialStocklineById(subWorkOrderMaterialId, stocklineId,updatedBy));
+        });
+    }
     deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deleteworkordermaterialStockline?workOrderMaterialsId=${workOrderMaterialId}&stocklineId=${stocklineId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.deleteWorkOrderMaterialStocklineById(workOrderMaterialId, stocklineId, updatedBy));
@@ -418,9 +430,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
 
     getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallistnew?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
             return this.handleErrorCommon(error, () => this.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId));
         });
+        // workordermateriallist
     }
     getWorkOrderMaterialListNew(workFlowWorkOrderId, workOrderId, masterCompanyId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallistnew?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId}`).catch(error => {
@@ -532,10 +545,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
 
 
-    GetWorkflowtranserData(workOrderId) {
+    GetWorkflowtranserData(partNumberId) {
         // &masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkflowtranserData?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.GetWorkflowtranserData(workOrderId));
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkflowtranserData?partNumberId=${partNumberId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkflowtranserData(partNumberId));
         });
     }
 
@@ -957,6 +970,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.worOrderTearDownReasonListById(tearDownTypeId));
         });
     }
+
+    AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/getteardownreasons?teardownTypeId=${tearDownTypeId}&Idlist=${Idlist}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId));
+        });
+    }
     getworblist() {
         return this.http.get(`${this.configurations.baseUrl}/api/workOrder/getworblist`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getworblist());
@@ -1066,18 +1085,19 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.createSubWorkOrderMaterialList(data));
         });
     }
+        //update sub workorder materials
+    updatesubworkordermaterials(data) {
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/updatesubworkordermaterials`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.updatesubworkordermaterials(data));
+        });
+    }
     //sub work order material roleups list api
     getSubWoMaterialRoleUps(subWorkOrderMaterialId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subworollupmateriallist?subWorkOrderMaterialId=${subWorkOrderMaterialId}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getSubWoMaterialRoleUps(subWorkOrderMaterialId));
         });
     }
-    //delete sub wo materialist
-    deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy) {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/deletesubworkordermaterials?subWorkOrderMaterialId=${subWorkOrderMaterialId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy));
-        });
-    }
+
     // Release sub wo reserve quantity 
     reservereleaseSubWostoclineqty(data) {
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workorder/releasesubwostocklineqty`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
@@ -1616,6 +1636,34 @@ export class WorkOrderEndpointService extends EndpointFactory {
           .put(url, JSON.stringify(billingInvoicing), this.getRequestHeaders())
           .catch(error => {
             return this.handleErrorCommon(error, () => this.UpdateWorkOrderBillingInvoicing(wobillingInvoicingId, billingInvoicing));
+          });
+      }
+
+      GetWorkOrderPrintFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderPrintFormData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderPrintFormData(WorkorderId,workOrderPartNoId));
+          });
+      }
+
+      
+      GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderPartlistFormData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId));
+          });
+      }
+
+      GetWorkOrderQoutePrintFormData(WorkorderId: number,workOrderPartNoId : number,workflowWorkorderId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderQoutePrintData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}&workflowWorkorderId=${workflowWorkorderId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId));
           });
       }
 }

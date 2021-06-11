@@ -390,7 +390,7 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
-                var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
+                //var shippingVia = this.ShippingViaList.find(temp => temp.Key == this.poDataHeader.shipViaId);
                 this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';
                 // if (!shippingVia || shippingVia == undefined) {
                 //     var shippingVia = new DropDownData();
@@ -403,7 +403,7 @@ export class ReceivngPoComponent implements OnInit {
 
     private loadPurchaseOrderData(purchaseOrder: PurchaseOrder, partms) {
         this.purchaseOrderData = purchaseOrder;
-        let parentPart: PurchaseOrderPart;
+        let parentPart: PurchaseOrderPart;        
         var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
         for (let parent of allParentParts) {
             parent.currentSLIndex = 0;
@@ -604,7 +604,8 @@ export class ReceivngPoComponent implements OnInit {
         return this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == purchaseOrderPartRecordId).length > 0;
     }
 
-    public toggleStockLine(event: any, part: PurchaseOrderPart): void {
+    public toggleStockLine(event: any, part: PurchaseOrderPart): void {  
+                     
         var condtion = this.ConditionList.find(temp => temp.Key == part.conditionId.toString())
         /// For InActive condtion
         if (!condtion || condtion == undefined) {
@@ -628,6 +629,12 @@ export class ReceivngPoComponent implements OnInit {
             manufacturer.Key = part.itemMaster.manufacturerId.toString();
             manufacturer.Value = part.itemMaster.manufacturerName.toString();
             this.ManufacturerList.push(manufacturer);
+        }
+
+        var unitofmasure = this.allPurchaseUnitOfMeasureinfo.find(temp => temp.value == part.unitOfMeasureId)
+        if (!unitofmasure || unitofmasure == undefined) {
+            var uom = {label:part.unitOfMeasure , value : part.unitOfMeasureId}
+            this.allPurchaseUnitOfMeasureinfo.push(uom);
         }
 
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
@@ -744,9 +751,8 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.obtainFrom = this.purchaseOrderData.vendor.vendorId;
             stockLine.ownerType = AppModuleEnum.Vendor;
-            stockLine.owner = this.purchaseOrderData.vendor.vendorId;
-
-
+            stockLine.owner = this.purchaseOrderData.vendor.vendorId;           
+            stockLine.unitOfMeasureId = part.unitOfMeasureId;
             stockLine.maincompanylist = part.maincompanylist;
             stockLine.parentCompanyId = part.parentCompanyId;
             stockLine.managementStructureEntityId = part.managementStructureId;
@@ -1019,7 +1025,7 @@ export class ReceivngPoComponent implements OnInit {
 
 
     onObtainSelect(stockLine: StockLine, type): void {
-        stockLine.obtainFrom = stockLine.obtainFromObject.Key;
+        stockLine.obtainFrom = stockLine.obtainFromObject.Key;        
         if (type == AppModuleEnum.Customer) {
             this.arrayCustlist.push(stockLine.obtainFromObject.Key);
         } else if (type == AppModuleEnum.Vendor) {
@@ -1304,7 +1310,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     onSubmitToReceive() {
-        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);        
+        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);                
         for (let part of allParts) {
             if (part.isSameDetailsForAllParts) {
                 if (part.isSameDetailsForAllParts && !part.itemMaster.isSerialized && part.stocklineListObj && part.stocklineListObj.length > 0) {
@@ -1339,15 +1345,14 @@ export class ReceivngPoComponent implements OnInit {
             return;
         }
         let partsToPost: ReceiveParts[] = this.extractAllAllStockLines();
-        this.isSpinnerVisible = true;
-        console.log(partsToPost)
+        this.isSpinnerVisible = true;        
         this.shippingService.receiveParts(partsToPost).subscribe(data => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
             this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
             return;
         }, err => {
-            this.isSpinnerVisible = false;
+            this.isSpinnerVisible = false;            
         }
         );
 
@@ -1489,24 +1494,9 @@ export class ReceivngPoComponent implements OnInit {
             for (let sl of part.stocklineListObj) {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
-                sl.masterCompanyId = this.currentUserMasterCompanyId;
-
-                // sl.tagTypeId = "1,2,4,7,9,10,11,12,13,14";
-                // sl.tagType = 'FAA,CAAC,EASA,FAA1,test,FAA/EASA,DCA,CAAV,Dual1,Mr';
-                // if (sl.tagType && sl.tagType.length > 0) {                    
-                //     sl.tagTypeId = sl.tagType.join();                
-                //     sl.tagType = sl.tagTypeId.split(',');
-                //     for (let i = 0; i < sl.tagType.length; i++) {                        
-                //         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
-                //     }                    
-                //     sl.tagType = sl.tagType.join();                  
-                // } else {
-                //     sl.tagType = "";
-                //     sl.tagTypeId = "";
-                // }
-
-                if (sl.tagType && sl.tagType.length > 0) {
-                    sl.tagTypeId = sl.tagType.join();                
+                sl.masterCompanyId = this.currentUserMasterCompanyId;                 
+                if (sl.tagTypeobject && sl.tagTypeobject.length > 0) {
+                    sl.tagTypeId = sl.tagTypeobject.join();                
                     sl.tagType = sl.tagTypeId.split(',');
                     for (let i = 0; i < sl.tagType.length; i++) {
                         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
@@ -1517,13 +1507,12 @@ export class ReceivngPoComponent implements OnInit {
                     sl.tagTypeId = "";
                 }
                 sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
-
                 sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
-            } 
+            }             
             if (part.isSameDetailsForAllParts) {
                 for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                     part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
-                    part.stocklineListObj[part.currentSERIndex].serialNumber = "";
+                    //part.stocklineListObj[part.currentSERIndex].serialNumber = "";
                     var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                     part.stocklineListObj[i] = stockLineToCopy;
                     var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };

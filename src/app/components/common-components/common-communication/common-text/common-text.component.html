@@ -1,5 +1,5 @@
 ﻿<div class="card new-card">
-    <div class="card-header header">
+    <div class="card-header header" *ngIf="!isSummarizedView">
         <div class="row">
             <div class="col">
                 <h4 class="header-name"> Text </h4>
@@ -24,7 +24,7 @@
             [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
             [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true"
             scrollHeight="450px"> -->
-            <ng-template pTemplate="caption">
+            <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
                 <div class="row">
                     <div class="col">
                         <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
@@ -108,7 +108,8 @@
                     <ng-container *ngFor="let col of columns">
                         <td class="table-column-width text-capital" *ngIf="col.field == 'notesData'" class="ui-resizable-column"
                             pReorderableRowHandle>
-                            <p class="p_textEditor p-0 m-0 text-capital" [innerHTML]=rowData[col.field]></p>
+                            <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                            [matTooltip]="parsedText(rowData[col.field])" [innerHTML]=rowData[col.field]></p>
                         </td>
                         <td class="table-column-width" *ngIf=" col.field!='notesData'">
                             {{ col.field == 'createdDate'
@@ -317,7 +318,7 @@
                             class="value">{{viewdata.contactBy}}</span></p>
                     <p class="memo-margin-bottom">
                         <span class="label"><strong> Notes: </strong></span><span class="value">
-                            <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.notes></p>
+                            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(viewdata.notes)" [innerHTML]=viewdata.notes></p>
                         </span>
                     </p>
                     <p><span class="label"><b>Created Date: </b></span><span
@@ -414,9 +415,9 @@
                                     <td
                                         [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactBy', audit.contactBy)  ? 'black' : 'red'  }">
                                         {{audit.contactBy}}</td>
-                                    <td style="margin-bottom:-10px !important"
+                                    <td 
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
-                                        <p class="margin-tb m-0 p-0" [innerHTML]="audit.notes"></p>
+                                        <p class="truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p>
                                     </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.createdBy}}</td>

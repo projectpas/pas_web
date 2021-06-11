@@ -429,7 +429,9 @@
                                     </td>
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         <span class="value">
-                                            <p class="p-0 m-0 p_textEditor" [innerHTML]="part.notes"></p>
+                                            <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                [matTooltip]="parsedText(part.notes)"
+                                                [innerHTML]="part.notes"></p>
                                         </span>
                                     </td>
                                     <td class="zui-sticky-col width-107" *ngIf="isViewMode == false">

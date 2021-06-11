@@ -1,9 +1,10 @@
-import { Component, OnInit,Input ,OnChanges} from '@angular/core';
+import { Component, OnInit,Input ,OnChanges,Output,EventEmitter} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
 declare var $: any;
 import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-wo-order-multi-Packaging-Label',
   templateUrl: './wo-order-multi-Packaging-Label.component.html',
@@ -12,6 +13,7 @@ import * as moment from 'moment';
 export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
 
   @Input() packagingSlips
+  @Output() Updateshippingpopup = new EventEmitter();
   workOrderId:number;
   workOrderShipping: any = [];
   todayDate: Date = new Date();
@@ -28,6 +30,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
   //packagingSlips: any = [];
   objpackagingSlips: any = [];
 
+
   constructor(
     private authService: AuthService,
     private acRouter: ActivatedRoute,
@@ -38,6 +41,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#PackagingSlipDiv').modal('show');
     this.getPackagingSlipView();
   }
@@ -66,6 +70,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
   close()
   {
     $('#PackagingSlipDiv').modal('hide');
+    this.Updateshippingpopup.emit();
   }
 
   get userName(): string {
@@ -423,6 +428,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
           </html>`
     );
     popupWin.document.close();
+    this.Updateshippingpopup.emit();
   }
 
 }

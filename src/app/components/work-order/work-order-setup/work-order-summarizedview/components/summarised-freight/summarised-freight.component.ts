@@ -5,6 +5,7 @@ import { getObjectById } from '../../../../../../generic/autocomplete';
 declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../../../generic/autocomplete';
+import { AuthService } from '../../../../../../services/auth.service';
 
 @Component({
     selector: 'app-freight-wo-summarization',
@@ -14,10 +15,47 @@ import { formatNumberAsGlobalSettingsModule } from '../../../../../../generic/au
 
 export class SummarizedFreightComponent implements OnInit, OnChanges {
     @Input() value;
+    @Input() workOrderId
     gridData: any[] = [];
     isOpenedAll: boolean = false;
     isSpinnerVisible: boolean = false;
-    constructor(private workOrderService: WorkOrderService){
+    workOrderFreightList:any=[];
+    freightsListHeader = [
+        {"header": "", "field": "plus",width:"30px"},
+        {
+            "header": "MPN",
+            "field": "partNumber"
+        },
+        {
+            "header": "Revised Part No",
+            "field": "revisedPartNo"
+        },
+        {
+            "header": "Part Description",
+            "field": "partDescription"
+        },
+        {
+            "header": "Ship Via",
+            "field": "shipVia"
+        },
+        // {
+        //     "header": "Dimention",
+        //     "field": "dimention"
+        // },
+        // {
+        //     "header": "Weight",
+        //     "field": "weight"
+        // },
+        // {
+        //     "header": "Memo",
+        //     "field": "memo"
+        // },
+        {
+            "header": "Amount",
+            "field": "amount"
+        }
+    ];
+    constructor(private workOrderService: WorkOrderService, private authService: AuthService){
 
     }
     ngOnInit(){
@@ -74,10 +112,13 @@ export class SummarizedFreightComponent implements OnInit, OnChanges {
         )
     }
 
-    globalizeAmount(data){
-        if(data){
+    globalizeAmount(data, field){
+        if(data && (field == 'amount')){
             let result = formatNumberAsGlobalSettingsModule(data, '0')
             return result+".00"
+        }
+        else{
+            return data;
         }
     }
 
@@ -96,5 +137,22 @@ export class SummarizedFreightComponent implements OnInit, OnChanges {
             }
         )
     }
-
+    getMaterialListData(materialMPN){
+        this.workOrderFreightList=[];
+            this.isSpinnerVisible = true;
+            this.value.forEach(element => {
+                element.isShowPlus=true;
+            });
+            materialMPN.isShowPlus=false;
+            this.workOrderService.getWorkOrderFrieghtsList(materialMPN.workFlowWorkOrderId, this.workOrderId, false, 0,false,this.authService.currentUser.masterCompanyId).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workOrderFreightList = res; 
+            })
+    }
+    handelPlus(materialMPN){
+        materialMPN.isShowPlus=true;
+    }
+    // get currentUserMasterCompanyId(): number {
+    //     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    // }
 }

@@ -4,8 +4,8 @@
         <div class="modal-content" id="PackagingSlip">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title warning_color"></h4>
+                <button type="button" (click)="close()" class="close" data-dismiss="modal">&times;</button>
+                <!-- <h4 class="modal-title warning_color"></h4> -->
             </div>
             <div class="modal-body">
                 <form id="" name="" action="#" method="post" onsubmit="return false;">
@@ -281,7 +281,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <img src="{{part.partBarcode}}" style="width: 100px;" alt="barcode" width="98%" />
+                                                                    <img src="{{part.partBarcode}}" alt="barcode" width="98%" />
                                                                 </td>
                                                             </tr>
                                                         </table>

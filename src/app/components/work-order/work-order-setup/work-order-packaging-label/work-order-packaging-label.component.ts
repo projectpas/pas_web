@@ -1,9 +1,10 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { WorkOrderService } from 'src/app/services/work-order/work-order.service';
 declare var $: any;
 import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-work-order-packaging-label',
   templateUrl: './work-order-packaging-label.component.html',
@@ -15,6 +16,7 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
   @Input() workOrderPartId;
   @Input() woPickTicketId;
   @Input() packagingSlipId;
+  @Output() Updateshippingpopup = new EventEmitter();
   workOrderShipping: any = [];
   todayDate: Date = new Date();
   workOrderpartConditionDescription: any;
@@ -40,6 +42,7 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
 
   ngOnInit() 
   {
+    this.endPointURL = environment.baseUrl;
     $('#PackagingSlipDiv').modal('show');
     this.getSalesPickTicketView();
   }
@@ -62,6 +65,7 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
   close()
   {
     $('#PackagingSlipDiv').modal('hide');
+    this.Updateshippingpopup.emit();
   }
 
   get userName(): string {
@@ -418,7 +422,8 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
         <body onload="window.print();window.close()">${printContents}</body>
           </html>`
     );
-    popupWin.document.close();
+   popupWin.document.close();
+   this.Updateshippingpopup.emit();
   }
 
 }

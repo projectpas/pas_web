@@ -14,7 +14,7 @@ export class WorkOrderPrintInvoiceComponent implements OnInit {
     @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
     @Input() workOrderId: number;
     @Input() workOrderbillingInvoicingId: number;
-    @Output() onInvoiceLoad: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onWorkOrderPrintLoad = new EventEmitter();
     workOrderInvoice: any = [];
     endPointURL: any;
     isSpinnerVisible: boolean = false;
@@ -33,7 +33,7 @@ export class WorkOrderPrintInvoiceComponent implements OnInit {
         this.workOrderService.getWorkOrderBillingInvoicingData(this.workOrderbillingInvoicingId).subscribe(res => {
             this.workOrderInvoice = res[0];
            // this.getWorkOrderCharges();
-            this.onInvoiceLoad.emit(this.workOrderInvoice.invoiceStatus);
+            this.onWorkOrderPrintLoad.emit();
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;

@@ -107,10 +107,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <!-- <div class="form-group stock-top-35"  *ngIf="viewSLInfo.isSerialized">
+                            <div class="form-group stock-top-35"  *ngIf="viewSLInfo.isSerialized">
                                 <label>Serial Num <span class="clr-red">*</span></label>
                                 <input class="form-control" type="text" name="serialNumber" [(ngModel)]="viewSLInfo.serialNumber" disabled>
-                            </div> -->
+                            </div>
                             <div class="form-group" *ngIf="viewSLInfo.isSerialized">
                                 <label>Stockline Num</label>
                                 <input class="form-control" type="text" name="stockLineNumber" [(ngModel)]="viewSLInfo.stockLineNumber" disabled>
@@ -149,7 +149,7 @@
                             </div> 
                             <div class="form-group">
                                 <label>Mfg. Expiration Date</label>
-                                <input class="form-control text-right" type="text" name="mfgexpirationDate" [(ngModel)]="viewSLInfo.manufacturingDays" disabled>
+                                <input class="form-control text-right" type="text" name="expirationDate" [(ngModel)]="viewSLInfo.expirationDate" disabled>
                                 <!-- <p-calendar class="workflow-clder" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [showIcon]="true" name="expirationDate"
                                     [minDate]="minDateValue" [(ngModel)]="stockLineForm.expirationDate"
@@ -263,7 +263,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Vendor</label>
-                                <input class="form-control" type="text" name="vendorName" [(ngModel)]="viewSLInfo.vendorName" disabled>
+                                <input class="form-control" type="text" name="vendorId" [(ngModel)]="viewSLInfo.vendorId" disabled>
                             </div>
                             <div class="form-group">
                                 <label>Requestor</label>
@@ -347,7 +347,8 @@
                             </div>
                             <div class="form-group">
                                 <label>UOM <span class="clr-red">*</span></label>
-                                <input class="form-control text-right" type="text" name="QuantityOnHand" [(ngModel)]="viewSLInfo.quantityOnHand" disabled>
+                                <input class="form-control text-right" type="text" name="purchaseUnitOfMeasureId"
+                                 [(ngModel)]="viewSLInfo.purchaseUnitOfMeasureId" disabled>
                             </div>
                             <div class="form-group">
                                 <label>Qty Reserved</label>

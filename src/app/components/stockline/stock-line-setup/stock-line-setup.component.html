@@ -25,27 +25,46 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <div class="checkbox-cstm m-t-10">
+                                    <div class="checkbox-cstm m-t-10 display-flex">
                                         <label>
                                             <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" (ngModelChange)="enableSave()" [disabled]="isEditMode">
                                             <span class="cr"><i class="cr-icon pi pi-check"(click)="ChekisCustomerStock(stockLineForm.isCustomerStock)"></i></span>
                                             Customer Stock 
                                         </label>
+                                        <div class="display-flex m-l-10"  *ngIf="stockLineForm.isCustomerStock">
+                                            <div>
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                                    [checked]="stockLineForm.isCustomerstockType == true"
+                                                    (change)="getStockStatus(1)" [disabled]="isEditMode">
+                                                    <span class="checkmark"></span>  Rotable
+                                                    <!-- Rotable Customer Stock -->
+                                                </label>
+                                            </div> 
+                                            <div class="m-l-10">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" value="0" name="assetRadio" class="form-check-inline"
+                                                    [checked]="stockLineForm.isCustomerstockType == false"
+                                                    (change)="getStockStatus(0)"  [disabled]="isEditMode">
+                                                    <span class="checkmark"></span>  Piece Parts
+                                                </label>
+                                            </div> 
+                                        </div>
                                     </div>
+
+                                    
                                 </div>
 
-                                <div class="form-group m-t-10" *ngIf="stockLineForm.isCustomerStock">
+                                <!-- <div class="form-group m-t-10" *ngIf="stockLineForm.isCustomerStock">
                                     <div>
                                         <label class="radio-cstm wauto">
                                             <input type="radio" value="1" name="assetRadio" class="form-check-inline"
                                             [checked]="stockLineForm.isCustomerstockType == true"
                                             (change)="getStockStatus(1)" [disabled]="isEditMode">
-                                            <span class="checkmark"></span>  Rotable Customer Stock
+                                            <span class="checkmark"></span>  Rotable
+                                          
                                         </label>
                                     </div> 
-                                </div>
-
-                                <div class="form-group m-t-10" *ngIf="stockLineForm.isCustomerStock">
                                     <div>
                                         <label class="radio-cstm wauto">
                                             <input type="radio" value="0" name="assetRadio" class="form-check-inline"
@@ -54,7 +73,8 @@
                                             <span class="checkmark"></span>  Piece Parts
                                         </label>
                                     </div> 
-                                </div>
+                                </div> -->
+
                                 <div class="form-group" *ngIf="stockLineForm.isCustomerStock">
                                     <label>Customer</label>
                                     <p-autoComplete field="label" class="pautocomp-cstm"
@@ -780,7 +800,7 @@
                                     <span>
                                         <div [innerHTML]="stockLineForm.blackListedReason"
                                             [matTooltip]="parsedText(stockLineForm.blackListedReason)"
-                                            class="form-control " class="text_editor_box memo-width"></div>
+                                            class="form-control " class="text_editor_box stock-line-memo-width"></div>
                                     </span>
                                 </div>
                                 <div class="col-sm-1 black-reason">
@@ -806,7 +826,7 @@
                                         <div [innerHTML]="stockLineForm.accidentReason"
                                             [matTooltip]="parsedText(stockLineForm.accidentReason)"
                                              class="form-control"
-                                             class="text_editor_box memo-width"></div>
+                                             class="text_editor_box stock-line-memo-width"></div>
                                     </span>
                                 </div>
                                 <div class="col-sm-1 black-reason">
@@ -831,7 +851,7 @@
                                         <div [innerHTML]="stockLineForm.incidentReason" class="form-control"
                                             (ngModelChange)="enableSave()"
                                             [matTooltip]="parsedText(stockLineForm.incidentReason)"
-                                            matTooltipPosition="above" class="text_editor_box  memo-width">
+                                            matTooltipPosition="above" class="text_editor_box  stock-line-memo-width">
                                         </div>
                                     </span>
                                 </div>
@@ -1003,7 +1023,7 @@
                                     <span>
                                         <div [innerHTML]="stockLineForm.memo "
                                             [matTooltip]="parsedText(stockLineForm.memo)" class="form-control"
-                                            class="text_editor_box  memo-width" [ngStyle]="{'border':'1px solid red'}"></div>
+                                            class="text_editor_box  stock-line-memo-width" [ngStyle]="{'border':'1px solid red'}"></div>
                                     </span>
                                 </div>
                                 <div class="col-sm-1 black-reason">

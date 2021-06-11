@@ -129,13 +129,15 @@
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <ng-container *ngFor="let col of columns">
                         <td class="uiTable_td_ovrflw_control table-column-width" class="ui-resizable-column">
-                            {{
+                            <span *ngIf="col.field != 'value' && col.field != 'lowerValue'&& col.field != 'upperValue'">  {{
                             col.field == 'createdDate'
                             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                             : rowData[col.field] && col.field == 'updatedDate'
                             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                             : rowData[col.field]
-                            }}
+                            }}</span>
+                            <span class="float-right" *ngIf="col.field == 'value' || col.field == 'lowerValue' || col.field == 'upperValue'">
+                                {{rowData[col.field]}} </span>
                         </td>
                     </ng-container>
                     <td class="action-icons-cstm table-column-width" *ngIf="!isView">
@@ -235,7 +237,7 @@
                 <h4 class="modal-title">{{ isEdit ? 'Edit' : 'Add' }} Approval Rule</h4>
             </div>
             <div class="modal-body">
-                <form #poApprovalForm="ngForm">
+                <form #poApprovalForm1="ngForm">
                     <div class="col-md-3 all-approval-div">
                         <div class="form-group">
                             <label style="width:auto">Approval Rule<span class="clr-red">*</span></label>
@@ -304,7 +306,7 @@
                                 name="value" (change)="onChangevalue('value');" required />
                         </div>
                         <div class="form-group">
-                            <label>Approver </label>
+                            <label>Approver</label>
                             <div class="inner-addon right-addon inline-block">
                                 <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="employeelist"
                                     title="Add Approver" name="approverId" [suggestions]="approverList"
@@ -481,10 +483,11 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer"> 
+                <!-- || creatingData.ruleNumberId == 0  !poApprovalForm1.valid ||-->
                 <button class="btn btn-primary" (click)="savePoApproval()"
-                    [disabled]="!poApprovalForm.valid || employeeNames.length == 0 || creatingData.managementStructureId == 0 || creatingData.approvalTaskId == 0 || creatingData.ruleNumberId == 0 || !enableSaveBtn">
-                    {{(isEdit)?'Update':'Save'}}
+                    [disabled]=" employeeNames.length == 0 || creatingData.managementStructureId == 0 || creatingData.approvalTaskId == 0 || !enableSaveBtn">
+                    {{(isEdit)?'Update':'Save'}} 
                 </button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal"
                     (click)="isEdit = false;">Close</button>

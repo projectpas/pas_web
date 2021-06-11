@@ -78,6 +78,9 @@ export class StocklineViewComponent implements OnInit {
                 tagDate: res.tagDate ? this.datePipe.transform(res.tagDate, "MM/dd/yyyy") : '',
                 shelfLifeExpirationDate: res.shelfLifeExpirationDate ? this.datePipe.transform(res.shelfLifeExpirationDate, "MM/dd/yyyy") : '',
                 receiverNumber: res.receiver,
+                purchaseUnitOfMeasureId:res.purchaseUnitOfMeasureId ,
+                vendorId:res.vendorId,
+                serialNumber:res.serialNumber,
                 quantityOnHand: (res.quantityOnHand || res.quantityOnHand == 0) ? formatNumberAsGlobalSettingsModule(res.quantityOnHand, 0) : '',
                 quantityReserved: (res.quantityReserved || res.quantityReserved == 0) ? formatNumberAsGlobalSettingsModule(res.quantityReserved, 0) : '',
                 quantityIssued: (res.quantityIssued || res.quantityIssued == 0) ? formatNumberAsGlobalSettingsModule(res.quantityIssued, 0) : '',
@@ -87,6 +90,7 @@ export class StocklineViewComponent implements OnInit {
                 unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',
                 coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '0.00',
                 lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '0.00',
+                unitCost: res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00',
             }
 
             this.onPartNumberSelectedOnEdit(res.itemMasterId);

@@ -3,7 +3,7 @@
        <div class="modal-content" id="woReleaseEasaFrom">
           <div class="modal-header">
              <button type="button" class="close" (click)="close()" data-dismiss="modal">&times;</button>
-             <h4 class="modal-title warning_color"></h4>
+             <!-- <h4 class="modal-title warning_color"></h4> -->
           </div>
           <div class="modal-body">
              <div class="clear"></div>
@@ -100,14 +100,14 @@
                <p-calendar *ngIf="Issave && !isView" [showIcon]="true" name ="date" [ngModelOptions]="{standalone: true}"
                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                    (ngModelChange)="onDate1($event)"
-                   [(ngModel)]="ReleaseData.date" required></p-calendar>
+                   [(ngModel)]="ReleaseData.date"></p-calendar>
                   </td>
              <td><b>14d.Name : </b><span style="text-align:center;font-size:15px"> {{ReleaseData.printedName2}} </span></td>
              <td><b>14e.Date(dd/mm/yyyy): </b> <span style="text-align:center;font-size:15px"> {{Printeddate2}} </span> 
                 <p-calendar *ngIf="Issave && !isView" [showIcon]="true" name ="date2" [ngModelOptions]="{standalone: true}"
                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                     (ngModelChange)="onDate($event)"
-                   [(ngModel)]="ReleaseData.date2" required></p-calendar>
+                   [(ngModel)]="ReleaseData.date2"></p-calendar>
                    </td>
              </tr>
              </tbody>
@@ -129,4 +129,19 @@
              </div>
           </div>
        </div>
+    </div>
+
+    <div class="preloader" *ngIf="isSpinnerVisible">
+      <div class="loading">
+        <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
     </div>

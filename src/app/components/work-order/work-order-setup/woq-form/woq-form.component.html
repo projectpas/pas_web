@@ -1,0 +1,147 @@
+            
+   <div id="woReleaseFromDiv" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xlg">
+        <div class="modal-content" id="woReleaseFrom">
+
+            <div class="modal-header">
+                <button type="button" class="close" (click)="close()" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title warning_color"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear"></div>
+                <form id="" name="" action="#" method="post" onsubmit="return false;">
+                  <div class="image" style="min-height:500px;height:auto">
+                    <div style="padding: 0; margin: 0;">
+                      <div>
+            
+                        <form id="" name="" action=" #" method="post" onsubmit="return false;">
+                            <div class="image">
+                              <div style="padding: 0; margin: 0;">
+                                <div>
+                                  <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                                  
+                                   
+                          <div style="display:flex;width:100%" class="col-sm-12">
+                          <div style="width:30%"><label class="col-sm-6">Cust Name& Cust Code:</label>
+                           <label class="col-sm-4" disabled>{{this.workOrderprintData.clientName}}  {{this.workOrderprintData.customercode}}</label></div>
+                          
+                          <div style="width:30%"><label class="col-sm-4">Quotation ID:</label>
+                           <label class="col-sm-2" disabled>{{this.workOrderprintData.quoteNumber}}</label></div>
+                          
+                          <div style="width:30%"><label class="col-sm-2">WO Num:</label>
+                           <label class="col-sm-4" disabled>{{this.workOrderprintData.workOrderNum}}</label></div>
+                          </div>
+                             <div  class="col-sm-12" style="margin-top:20px">
+                                <table rules=none class=" print-friendly border table-border-right parttable print-table table-margins">
+                            <thead>
+                              <tr>
+                                                  
+                              <th>MPN</th>                        
+                              <th colspan="2">MPN Desc</th>
+                              <th colspan="2" >Quote Method</th>
+                                                 
+                                                
+                             </tr>
+                         </thead>
+                                     
+                                        
+                          <tbody>
+                          <tr>
+                          <td class="border-right">{{this.workOrderprintData.partnumber}}</td>
+                          <td class="border-right" colspan="2">{{this.workOrderprintData.partDescription}}</td>
+                          <td class="border-right" colspan="2">{{this.workOrderprintData.quoteMethod}}</td>
+                          
+                          </tr>
+                          
+                          <tr>
+                          
+                          
+                          <th class="font-12"><u>Parts/Material List PN </u></th>
+                          <th class="font-12"><u>PN Description</u></th>
+                          <th class="font-12"><u>UOM</u></th>
+                          <th class="font-12"><u>Qty</u></th>
+                          <th class="font-12"><u>Unit Price</u></th>
+                          <th class="font-12"><u>Ext price</u></th>
+                          
+                          </tr>
+
+                          <ng-container *ngFor="let part of this.workOrderprintData.materialPartsList; let i = index;">
+                            <tr>
+                            <td class="border-right">{{part.partnumber}}</td>
+                            <td class="border-right">{{part.partDescription}}</td>
+                            <td class="border-right">{{part.uomName}}</td>
+                            <td class="border-right">{{part.quantity}}</td>
+                            <td class="border-right">{{part.unitCost}}</td>
+                            <td class="border-right">{{part.extCost}}</td>
+                            
+                            </tr>
+                          </ng-container>
+                          <tr style="border:1px solid black"><td colspan="5" ><b>Total Material </b></td>
+                          <td class="text-right">{{this.workOrderprintData.materialBilling}}</td>
+                          
+                          </tr>
+                          
+                          <tr style="border:1px solid black"><td colspan="5"><b>Labor Cost </b> </td>
+                          <td class="text-right">{{this.workOrderprintData.laborBilling}}</td>
+                          
+                          </tr>
+                          
+                          
+                          <tr style="border:1px solid black"><td colspan="5"><b>Misc Charges </b></td>
+                          <td class="text-right">{{this.workOrderprintData.chargesBilling}}</td>
+                          
+                          </tr>
+                          
+                          
+                          <tr style="border:1px solid black"><td colspan="5"><b>Total Amount PN </b></td>
+                          <td class="text-right"><b>{{this.workOrderprintData.totalAmountPN}}</b></td>
+                          
+                          </tr>
+
+                          </tbody>
+                                        
+                        </table>   
+                               
+                            </div> 
+                                    <div class="clear"></div>
+                                    
+                                    <div class="clear"></div>
+                          
+                          
+                                  
+                                    <div style="height:100px"> &nbsp;</div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+    </div>
+    </div>
+                    </div>
+                </form>
+            </div>
+            <div style="height:100px"> &nbsp;</div>
+            <div class="modal-footer">
+                <button *ngIf="!isView" type="submit" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+             </div>
+          </div>
+         
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+            
+

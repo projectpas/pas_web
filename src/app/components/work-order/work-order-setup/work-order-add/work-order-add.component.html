@@ -473,7 +473,7 @@
                                                     [size]="30" [minLength]="1"
                                                     class="p-autoComplete-ctsm custome_automo p-autocomplete-mh120"
                                                     required
-                                                    [disabled]="isView || quotestatusofCurrentPart =='Approved' || isEdit"
+                                                    [disabled]="isView || quotestatusofCurrentPart =='Approved' || (isEdit && workOrderPartNumber.itemMasterId)"
                                                     appendTo="body">
                                                 </p-autoComplete>
                                             </td>
@@ -579,7 +579,7 @@
                                                     [suggestions]="technicianList" required
                                                     (onSelect)="onSelectedTechnician($event, workOrderPartNumber);"
                                                     (completeMethod)="filterTechnician($event)"
-                                                    (onClear)="clearautoCompletePartNum(workOrderPartNumber, 'partTechnicianId' )"
+                                                    (onClear)="clearautoCompleteTechinician(workOrderPartNumber, 'partTechnicianId' )"
                                                     [size]="30" [minLength]="1"
                                                     class="p-autoComplete-ctsm custome_automo p-autocomplete-mh120"
                                                     [disabled]="isView || quotestatusofCurrentPart =='Approved'"
@@ -634,7 +634,7 @@
                                             <td>
                                                 <p-dropdown filter="true" class="min_selct_height" name="cmm{{i}}"
                                                     #cmm="ngModel" (ngModelChange)="getValid()" [autoWidth]="false"
-                                                    [style]="pDropdownStyle"
+                                                    [style]="pDropdownStyle" (onChange)="onSelectPublication($event,workOrderPartNumber,i)"
                                                     [options]="getDynamicVariableData('cmmPublicationList',i)"
                                                     class="p-dropdown-custom-md1 p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.cMMId"
@@ -649,7 +649,7 @@
                                                         name="workFlow{{i}}" [autoWidth]="false"
                                                         [style]="pDropdownStyle" #workFlow="ngModel"
                                                         class="p-dropdown-custom-md1 p-dropdown-mh120"
-                                                        (ngModelChange)="getValid()"
+                                                        (ngModelChange)="getValid()" (onChange)="onSelectWorkflow($event,workOrderPartNumber,i)"
                                                         [(ngModel)]="workOrderPartNumber.workflowId"
                                                         [disabled]="isView || quotestatusofCurrentPart =='Approved'"
                                                         appendTo="body">
@@ -673,7 +673,7 @@
                                                         (change)="tranferCheckbox($event,workOrderPartNumber,i)"
                                                         matTooltip="Transfer Workflow To Work Order"
                                                         matTooltipPosition="above"
-                                                        [disabled]="!isEdit">
+                                                        [disabled]="!isEdit || workOrderPartNumber.disabledForWorkflow">
                                                 </span>
                                             </td>
                                             <td>
@@ -754,16 +754,18 @@
                                                     {{workOrderPartNumber.level4}}</p>
                                             </td>
                                             <td *ngIf="!isView" class="table-column-icon-width width100">
-                                                <span><button class="btn nobg btn-plusro-cstm"
-                                                        (click)="createNewRoWorkOrder(workOrderPartNumber)"
-                                                        matTooltip="Create RO" matTooltipPosition="above" [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null"><i
+                                                <span>
+                                                    <!-- [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null" -->
+                                                    <button class="btn nobg btn-plusro-cstm"
+                                                        (click)="createNewRoWorkOrder(workOrderPartNumber)" [disabled]="true"
+                                                        matTooltip="Create RO" matTooltipPosition="above" ><i
                                                             class="fa fa-plus" style="color: #259e08;"></i></button> </span>
                                                 <button matTooltip="Add to an  Existing RO" matTooltipPosition="above"
                                                     data-toggle="modal" data-target="#reserveRo"
                                                     (click)="addToExitRoWorkOrder(workOrderPartNumber)"
-                                                    class="btn nobg btn-plusro-cstm" [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null"> 
+                                                    class="btn nobg btn-plusro-cstm" [disabled]="true" > 
                                                     <span><i class="fa fa-plus clr-red"></i></span></button>
-
+                                                    <!-- [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null" -->
                                                 <span *ngIf="!workOrderGeneralInformation.isSinglePN "
                                                     class="delete-row-btn">
                                                     <button type="button" class="btn nobg btn-delete-cstm"
@@ -1155,10 +1157,21 @@
                        
                             </div>
                     </li>
-                    <li class="nav-item"*ngIf="!isSubWorkOrder" >
+                    <li class="nav-item" *ngIf="!isSubWorkOrder" >
                         <a class="nav-link" id="pills-contact-tab" role="tab"
                             [ngClass]="{active : gridActiveTab === 'releasefrom'}"
-                            (click)="gridTabChange('releasefrom')" >8130 Form</a>
+                            (click)="gridTabChange('releasefrom')" >Release Form</a>
+                    </li>
+                    <li class="nav-item dropdown" *ngIf="!isSubWorkOrder">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workorderprint'}">Work Order Print
+                            </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item"
+                            (click)="gridTabChange('workorderfrom')"> Work Order Form</a>
+                            <a class="dropdown-item"
+                            (click)="gridTabChange('workorderpartfrom')">Work Order Part Form</a>
+                            </div>
                     </li>
                 </ul>
                 <div *ngIf="isWorkOrderMainView && mainWorkOrderId !=0"
@@ -1303,6 +1316,14 @@
                         [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails">
                     </app-work-order-analysis>
                 </div>
+                <div *ngIf="(gridActiveTab == 'workorderfrom')" [ngClass]="{hidedata: gridActiveTab !== 'workorderfrom'}">
+                    <app-wo-print-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-print-form>
+                </div>
+                <div *ngIf="(gridActiveTab == 'workorderpartfrom')" [ngClass]="{hidedata: gridActiveTab !== 'workorderpartfrom'}">
+
+                    <!-- <app-woq-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-woq-form> -->
+                    <app-wo-part-list-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-part-list-form>
+                </div>
 
                 <div *ngIf="(gridActiveTab == 'laboranalysis')"
                     [ngClass]="{hidedata: gridActiveTab !== 'laboranalysis'}">
@@ -1424,9 +1445,9 @@
                     <h5>Continue ?</h5>
                     <button type="button" class="btn btn-primary" data-dismiss="modal"
                         (click)="WarnRescticModel()">Yes</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal"
-                        (click)="movetoworkorderlist()">No</button>
-                    <!-- <button class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="WarnRescticModel()"
+                    <button type="button" class="close" data-dismiss="modal" class="btn btn-danger" data-dismiss="modal"
+                        >No</button>
+                    <!-- <button (click)="movetoworkorderlist()" class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="WarnRescticModel()"
                   >Ok </button> -->
                 </div>
             </div>
@@ -1441,7 +1462,7 @@
                     <h4 class="modal-title warning_color">Warning</h4>
                 </div>
                 <div class="pad_msf">
-                    <p class="mar_o warning_color"> workflow is expired </p>
+                    <p class="mar_o warning_color"> workflow Number <strong style="color: #007ad9;">{{workflowNumber}}</strong> is expired </p>
                     <!-- <input type="checkbox" name="contract" #contract="ngModel"  (ngModelChange)="getValid()" 
                 class="form-control w60 width-100"> -->
 
@@ -1463,9 +1484,9 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title warning_color">Warning</h4>
-                </div>
+                </div> 
                 <div class="pad_msf">
-                    <p class="mar_o warning_color"> Publication is expired </p>
+                    <p class="mar_o warning_color"> Publication Number  <strong style="color: #007ad9;">{{publicationNo}}</strong> is expired </p>
                 </div>
                 <div class="modal-footer footer-padding">
                     <!-- <button type="button" class="btn btn-primary" data-dismiss="modal"

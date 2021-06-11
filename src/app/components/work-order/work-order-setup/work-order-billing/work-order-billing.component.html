@@ -106,7 +106,7 @@
                                       {{ formateCurrency(bill.totalSales) }}
                                   </td>
                                   <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
-                                      <span>
+                                      <span *ngIf="bill.qtyBilled > 0">
                                           <a class="btn nobg" matTooltip="Invoice" matTooltipPosition="above"
                                               (click)="ViewInvoice(bill);"><i class="fa fa-print"></i></a>
                                       </span>
@@ -342,7 +342,7 @@
                               <!-- </p-dropdown> -->
                               <p-dropdown  [showClear]="true" class="p-dropdown-100" 
                                 [options]="currencyList" filter="true" [(ngModel)]="billingorInvoiceForm.currencyId" name="currency" [resetFilterOnHide]="true" placeholder="Select" 
-                                [disabled]="isViewMode"  class="p-dropdown-custom-md-Header"
+                                [disabled]="isViewMode"  class="p-dropdown-custom-md-Header" required
                                 ></p-dropdown>
                             </div>
                           </div>
@@ -474,9 +474,9 @@
                                 name="soldcustomerName"
                                 errorMessage="Records not found"
                                 [forceSelection]="true"
-                                (onSelect)="getSiteNamesBySoldCustomerId($event)"
+                                (onSelect)="onselectcustomergetSoldsite($event)"
                                 [suggestions]="customerNamesList"
-                                (completeMethod)="filterCustomerName($event)"
+                                (completeMethod)="filterCustomerNames($event)"
                                 (onKeyUp)="clearAddress('SoldTo' , $event.target.value)"
                                 [size]="30"
                                 [minLength]="1"
@@ -502,7 +502,7 @@
                                 [forceSelection]="true"
                                 (onSelect)="onselectcustomergetsite($event)"
                                 [suggestions]="customerNamesList"
-                                (completeMethod)="filterCustomerName($event)"
+                                (completeMethod)="filterCustomerNames($event)"
                                 (onKeyUp)="clearAddress('ShipTo', $event.target.value)"
                                 [size]="30"
                                 [minLength]="1"
@@ -1037,7 +1037,7 @@
                                     [(ngModel)]="billingorInvoiceForm.shipViaId"
                                      (onChange)="changeOfShipVia($event.value)"
                                      [disabled]="isViewMode"
-                                  >
+                                  required >
                                   </p-dropdown>
                                   </div>
                                   <div class="form-group ">
@@ -1087,8 +1087,8 @@
                 </div>
           
                 <div class="float-right" *ngIf="!isViewMode">
-                  <button class="btn btn-primary pull-right"  *ngIf="!isEditBilling" (click)="GenerateInvoice()" >Save</button>
-                  <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button>
+                  <button class="btn btn-primary pull-right"  (click)="GenerateInvoice()" [disabled]="!billinForm.valid">Save</button>
+                  <!-- <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button> -->
                 </div>
               </form>
             </div>
@@ -1363,6 +1363,21 @@
       <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
   </div>
 </ng-template>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
 
 
 

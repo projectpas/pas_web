@@ -72,9 +72,13 @@ export class AllViewComponent implements OnInit {
   id: number;
 
   //showPartListtab: boolean = false;
+  showreceiveddraftpo : boolean = false;
+  showreceived : boolean = false;
+  showreceiveddraft : boolean = false;
   showVendorCaptab: boolean = false;
   purchaseOrderData: PurchaseOrder;
   repairOrderData: RepairOrderPart[] = [];
+  repairOrderId:number = 0;
 
   approvalProcessHeader = [
     {
@@ -215,6 +219,7 @@ export class AllViewComponent implements OnInit {
 
     if (event.index == 7 && this.isReceivingpo == true) {
       //this.isSpinnerVisible = true;
+      this.showreceiveddraftpo = true;  
       if (!this.purchaseOrderData) {
         this.viewPurchaseOrder(this.id);
       }
@@ -227,13 +232,19 @@ export class AllViewComponent implements OnInit {
     }
     if (event.index == 7 && this.isReceivingro == true) {
       //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){        
-      this.viewRepairOrder(this.id);
+      //if(this.repairOrderData.length>0){          
+      this.repairOrderId = this.id;   
+      this.showreceiveddraft = true;  
+      if(this.repairOrderData.length == 0){         
+        this.viewRepairOrder(this.id);   
+      }   
     }
     if (event.index == 8 && this.isReceivingro == true) {
       //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){        
-      this.viewRepairOrder(this.id);
+      //if(this.repairOrderData.length>0){   
+        this.showreceived = true;
+        this.repairOrderId = this.id;      
+      //this.viewRepairOrder(this.id);
     }
     //} 
   }
@@ -278,6 +289,7 @@ export class AllViewComponent implements OnInit {
     this.receivingService.getPurchaseOrderDataForViewById(purchaseOrderId).subscribe(
       results => {        
         this.purchaseOrderData = results[0];
+        debugger
         this.purchaseOrderData.openDate = new Date(results[0].openDate).toLocaleDateString();
         this.purchaseOrderData.needByDate = new Date(results[0].needByDate);
         this.purchaseOrderData.dateApproved = new Date(results[0].dateApproved).toLocaleDateString();
@@ -381,8 +393,6 @@ export class AllViewComponent implements OnInit {
         }        
         //this.getStatus();               
         this.isSpinnerVisible = false;
-        console.log(this.repairOrderData);
-
       }, error => {
         this.alertService.showMessage("", "Something went wrong while loading the Repair Order detail", MessageSeverity.error);
       }

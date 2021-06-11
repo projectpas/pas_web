@@ -191,6 +191,9 @@ export class RepairOrderPart {
     parentDivisionId: number = 0;
     parentDeptId: number = 0;
     quantityDrafted: number = 0;
+    showHeader:boolean;
+    revisedPartId:number=0;
+    acTailNum: string;
 }
 
 export class TimeLife {
@@ -268,6 +271,7 @@ export class StockLine {
     tagDate: Date;
     tagType: any;
     tagTypeId:any;
+    tagTypeobject:any;
     certifiedDueDate: Date;
     calibrationMemo: string;
     orderDate: Date;
@@ -374,6 +378,9 @@ export class StockLine {
     taggedByName: string = null;
     unitOfMeasureId:number = null;
     unitOfMeasure: string = null;
+    revisedPartId:any = null;
+    revisedPartNumber: string = null;
+    revisedPartObject: DropDownData;
 }
 
 export class ReceiveParts {

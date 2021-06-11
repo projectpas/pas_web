@@ -679,4 +679,14 @@ export class SalesCustomerApprovalsComponent {
     getcustomerStatusIdEnableStatus(approver) {
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
     }
+
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
 }

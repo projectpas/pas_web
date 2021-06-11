@@ -212,8 +212,7 @@
                 <!-- <hr /> -->
                 <div class="clear"></div>
                 <div class="col-sm-12">
-                    <table rules=none class="parttable print-table print-friendly table-margins"
-                        style="margin-top:10px">
+                    <table rules=none class="parttable print-table print-friendly table-margins">
                         <thead>
                             <tr>
                                 <th>Wo NUM</th>
@@ -292,7 +291,7 @@
                                     </tr> -->
                                 <tr></tr>
                             </ng-container>
-                            <ng-container *ngFor="let child of this.salesOrderCharges; let i = index;">
+                            <ng-container *ngFor="let child of this.workOrderCharges; let i = index;">
                                 <tr>
                                     <td>NA</td>
                                     <td colspan="3"> MISC: {{child.chargeType}}

@@ -1,4 +1,4 @@
-
+<!-- 
 <div class="charges-detail-view">
     <button type="button" class="btn btn-primary" (click)="detailView()">
         {{(isOpenedAll)?'Summary':'Detail View'}}
@@ -51,7 +51,48 @@
     </ng-template>
 </p-treeTable>
 </div>
+</div> -->
+
+<div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+    <div class="tableFixHead">
+    <table  class="table table-bordered">
+    <thead >
+        <tr>
+           <th *ngFor="let matHeader of chargesListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; min-width: 100px !important;;background-color: #4397f7;
+            color: white;">
+                {{matHeader.header}}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let materialMPN of value; let i=index" >
+        <tr>
+            <td *ngFor="let matField of chargesListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
+              <span *ngIf="matField.field !='plus'"> {{globalizeAmount(materialMPN[matField.field], matField.field)}}</span>
+                <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                   <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 1px 5px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
+                   <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 5px !important;" (click)="handelPlus(materialMPN)"></i>   
+               </a> 
+            </td>
+        </tr>
+        <tr *ngIf="materialMPN && materialMPN.isShowPlus ==false" class="sub-table no-bg">
+            <td></td>
+            <td colspan="22" class="p-0">
+                <app-work-order-charges [isSummarizedView]="true"  [isWorkOrder]="true"
+                [workOrderChargesList]="workOrderChargesList"
+                [isSubWorkOrder]="false" [isView]="true">
+            </app-work-order-charges>
+
+
+                </td>
+            </tr>
+            </ng-container>
+    </tbody>
+</table>
 </div>
+</div>
+
+
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>

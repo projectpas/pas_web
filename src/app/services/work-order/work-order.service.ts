@@ -403,6 +403,10 @@ export class WorkOrderService {
     worOrderTearDownReasonListById(tearDownTypeId) {
         return this.workOrderEndpointService.worOrderTearDownReasonListById(tearDownTypeId);
     }
+
+    AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId) {
+        return this.workOrderEndpointService.AutoCompleteDropdownsTeardownReasons(tearDownTypeId,Idlist,masterCompanyId);
+    }
     getworblist() {
         return this.workOrderEndpointService.getworblist()
     }
@@ -466,6 +470,9 @@ export class WorkOrderService {
     createSubWorkOrderMaterialList(data) {
         return this.workOrderEndpointService.createSubWorkOrderMaterialList(data)
     }
+    updatesubworkordermaterials(data) {
+        return this.workOrderEndpointService.updatesubworkordermaterials(data)
+    }
     // createWorkOrderMaterialListNew(data) {
     //     return this.workOrderEndpointService.createWorkOrderMaterialListNew(data)
     // }
@@ -474,6 +481,9 @@ export class WorkOrderService {
     }
     deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy) {
         return this.workOrderEndpointService.deleteSubWorkOrderMaterialList(subWorkOrderMaterialId, updatedBy)
+    }
+    deletesubWorkOrderMaterialStocklineById(subWorkOrderMaterialId,stocklineId, updatedBy) {
+        return this.workOrderEndpointService.deletesubWorkOrderMaterialStocklineById(subWorkOrderMaterialId,stocklineId, updatedBy)
     }
     reservereleaseSubWostoclineqty(data) {
         return this.workOrderEndpointService.reservereleaseSubWostoclineqty(data);
@@ -793,6 +803,24 @@ getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> 
    UpdateWorkOrderBillingInvoicing(wobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
     return Observable.forkJoin(
       this.workOrderEndpointService.UpdateWorkOrderBillingInvoicing(wobillingInvoicingId, billingInvoicing)
+    );
+  }
+
+  GetWorkOrderPrintFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.GetWorkOrderPrintFormData(WorkorderId,workOrderPartNoId)
+    );
+  }
+
+  GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId)
+    );
+  }
+
+  GetWorkOrderQoutePrintFormData(WorkorderId: number,workOrderPartNoId : number ,workflowWorkorderId : number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId)
     );
   }
 

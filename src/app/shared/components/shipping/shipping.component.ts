@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+﻿import { Component, OnInit, Input, SimpleChanges,Output,EventEmitter } from '@angular/core';
 import { CustomerService } from '../../../services/customer.service';
 import { CommonService } from '../../../services/common.service';
 import { WorkOrderService } from '../../../services/work-order/work-order.service';
@@ -21,6 +21,7 @@ export class ShippingComponent implements OnInit {
     @Input() workOrderPartNumberId: any = 0;
     @Input() isView: boolean = false;
     @Input() managementStructureId: any;
+    @Output() Updateshippingpopup = new EventEmitter();
     quoteForm: any = {};
     orignSiteNames: any = [];
     validFor: any;
@@ -39,6 +40,8 @@ export class ShippingComponent implements OnInit {
     shipCustomerAddress: any = new AddressModel();
     addCustomerInfo: boolean = false;
     isMultipleSelected: boolean = false;
+    isgeneratelable: boolean = true;
+    ispackagegeneratelable: boolean = true;
     customerDetails:any;
     workOrderPartId:number;
     woShippingId:number;
@@ -95,28 +98,29 @@ export class ShippingComponent implements OnInit {
 
     ngOnInit(): void {
         this.disableGeneratePackagingBtn = true;
-        if (this.workOrderGeneralInformation) {
+        if (this.workOrderGeneralInformation) 
+        {
             this.workOrderId = this.workOrderGeneralInformation.workOrderId;
             this.CustomerId = this.workOrderGeneralInformation['customerDetails']['customerId'];
         }
         this.initColumns();
         this.getShippingList();
-        this.getShipVia();
-        this.getCountriesList();
-        this.getShippingData();
-        this.loadcustomerData('');
-        this.getUnitOfMeasure();
+        // this.getShipVia();
+        // this.getCountriesList();
+        // this.getShippingData();
+        // this.loadcustomerData('');
+        // this.getUnitOfMeasure();
 
-        if (this.workOrderGeneralInformation) {
-            this.workOrderId = this.workOrderGeneralInformation.workOrderId;
-            this.CustomerId = this.workOrderGeneralInformation.customerId;
-        }
+        // if (this.workOrderGeneralInformation) {
+        //     this.workOrderId = this.workOrderGeneralInformation.workOrderId;
+        //     this.CustomerId = this.workOrderGeneralInformation.customerId;
+        // }
 
-        if (this.workOrderGeneralInformation) {
-            this.shippingHeader['soldToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
-            this.shippingHeader['shipToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
-            this.shippingHeader['customerId'] = this.workOrderGeneralInformation['customerDetails']['customerId'];
-        }
+        // if (this.workOrderGeneralInformation) {
+        //     this.shippingHeader['soldToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
+        //     this.shippingHeader['shipToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
+        //     this.shippingHeader['customerId'] = this.workOrderGeneralInformation['customerDetails']['customerId'];
+        // }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -164,7 +168,7 @@ export class ShippingComponent implements OnInit {
                 if (a.woshippingchildviewlist[i].selectedToGeneratePackaging == true) {
                     if (a.woshippingchildviewlist[i].packagingSlipId === undefined || a.woshippingchildviewlist[i].packagingSlipId == 0) {
                         var p = new PackagingSlipItems;
-                        p.WOPickTicketId = a.woshippingchildviewlist[i].wOPickTicketId;
+                        p.WOPickTicketId = a.woshippingchildviewlist[i].woPickTicketId;
                         p.currQtyToShip = a.woshippingchildviewlist[i].qtyToShip;
                         p.WOPartNoId = a.woshippingchildviewlist[i].workOrderPartId;
                         p.WorkOrderId = this.workOrderId;
@@ -199,8 +203,10 @@ export class ShippingComponent implements OnInit {
                     this.isSpinnerVisible = false;
                 });
     }
+
 printSelectedPackagingSlip()
 {
+   this.workorderpackage=false;
    this.workorderpackage=true;
 
     let packagingSlipsToPrint: MultiPackagingSlips[] = [];
@@ -209,7 +215,7 @@ printSelectedPackagingSlip()
                 if (ele.selectedToGeneratePackaging && ele.packagingSlipId > 0) {
                     var items = new MultiPackagingSlips;
                     items.WorkOrderId = ele.workOrderId;
-                    items.WOPartNoId = ele.workOrderPartId;
+                    items.WorkOrderPartNumId = ele.workOrderPartId;
                     items.WOPickTicketId = ele.woPickTicketId;
                     items.PackagingSlipId = ele.packagingSlipId;
 
@@ -241,6 +247,7 @@ printSelectedPackagingSlip()
 
 printSelectedShippingLabel()
 {
+    this.workordershipping=false;
     this.workordershipping=true;
 
     let shippingItemsToPrint: MultiShippingLabels[] = [];
@@ -249,7 +256,7 @@ printSelectedShippingLabel()
             if (ele.selectedToGeneratePackaging) {
                 var items = new MultiShippingLabels;
                 items.WorkOrderId = ele.workOrderId;
-                items.WOPartNoId = ele.workOrderPartId;
+                items.WorkOrderPartId = ele.workOrderPartId;
                 items.WOShippingId = ele.workOrderShippingId;
 
                 shippingItemsToPrint.push(items);
@@ -258,6 +265,8 @@ printSelectedShippingLabel()
     });
 
     let shippingLabels1: any[] = [];
+
+    shippingLabels1 = shippingItemsToPrint;
 
     //shippingLabels['shippingLabels'] = shippingItemsToPrint;
 
@@ -288,6 +297,7 @@ PerformShipping()
 }
 
 printShippingLabel(rowData: any) {
+    this.workordersingleshipping=false;
     this.workordersingleshipping=true;
     this.workOrderId = rowData.workOrderId;
     this.workOrderPartId = rowData.workOrderPartId;
@@ -296,6 +306,7 @@ printShippingLabel(rowData: any) {
 
 printPackagingLabel(rowData: any) 
 {
+    this.workordersinglepacking=false;
     this.workordersinglepacking=true;
     this.workOrderId = rowData.workOrderId;
     this.workOrderPartId = rowData.workOrderPartId;
@@ -315,19 +326,37 @@ onSelectPartNumber(rowData) {
 }
 
 bindData() {
+    // this.getShippingList();
+    // this.getShipVia();
+    // this.getCountriesList();
+    // this.getOriginSiteNames();
+    // this.getUnitOfMeasure();
+    //this.getAddressById(this.salesOrderId);
+
     this.getShippingList();
     this.getShipVia();
     this.getCountriesList();
-    this.getOriginSiteNames();
+    this.getShippingData();
+    this.loadcustomerData('');
     this.getUnitOfMeasure();
-    //this.getAddressById(this.salesOrderId);
-
-    if (this.customerDetails) {
-        this.shippingHeader['soldToName'] = this.customerDetails['name'];
-        this.shippingHeader['shipToName'] = this.customerDetails['name'];
-        this.shippingHeader['customerId'] = this.customerDetails['customerId'];
+    if (this.managementStructureId != undefined) {
+        this.getOriginSiteNames();
     }
-    this.shippingHeader['soShippingNum'] = 'Creating';
+
+  
+
+    if (this.workOrderGeneralInformation) {
+        this.shippingHeader['soldToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
+        this.shippingHeader['shipToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
+        this.shippingHeader['customerId'] = this.workOrderGeneralInformation['customerDetails']['customerId'];
+    }
+
+    // if (this.customerDetails) {
+    //     this.shippingHeader['soldToName'] = this.customerDetails['name'];
+    //     this.shippingHeader['shipToName'] = this.customerDetails['name'];
+    //     this.shippingHeader['customerId'] = this.customerDetails['customerId'];
+    // }
+    this.shippingHeader['woShippingNum'] = 'Creating';
 }
 
 clearData() {
@@ -343,18 +372,18 @@ clearData() {
     this.shippingHeader.shipSizeWidth = 0;
     this.shippingHeader.shipSizeHeight = 0;
     this.shippingHeader.shipSizeUnitOfMeasureId = 0;
-    this.shippingHeader.salesOrderShippingId = 0;
-    this.shippingHeader['salesOrderCustomsInfo']['entryType'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['entryNumber'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['commodityCode'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['epu'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['ucr'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['masterUCR'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['movementRefNo'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['customsValue'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['netMass'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['vatValue'] = '';
-    this.shippingHeader['salesOrderCustomsInfo']['salesOrderCustomsInfoId'] = 0;
+    this.shippingHeader.workOrderShippingId = 0;
+    this.shippingHeader['workOrderCustomsInfo']['entryType'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['entryNumber'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['commodityCode'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['epu'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['ucr'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['masterUCR'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['movementRefNo'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['customsValue'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['netMass'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['vatValue'] = '';
+    this.shippingHeader['workOrderCustomsInfo']['workOrderCustomsInfoId'] = 0;
     this.addCustomerInfo = false;
 }
 
@@ -370,9 +399,22 @@ checkedToGenerate(evt, ship) {
         this.shippingList.forEach(a => {
             a.woshippingchildviewlist.forEach(ele => {
                 if (ele.selected)
+                {
+                    if(ele.qtyShipped > 0)
+                    {
+                        this.isgeneratelable = false;
+                    }
+                    else
+                    {
+                        this.isgeneratelable = true;
+                    }
                     this.disableCreateShippingBtn = false;
+                }
+                   
+                    
                 else
                     this.disableCreateShippingBtn = true;
+                    this.isgeneratelable = true;
             });
         });
     }
@@ -381,12 +423,36 @@ checkedToGenerate(evt, ship) {
         this.shippingList.forEach(a => {
             a.woshippingchildviewlist.forEach(ele => {
                 if (keepGoing) {
-                    if (ele.selectedToGeneratePackaging) {
+                    if (ele.selectedToGeneratePackaging) 
+                    {
                         this.disableGeneratePackagingBtn = false;
+                        if(ele.packagingSlipId > 0)
+                        {
+                            this.ispackagegeneratelable = false;
+                        }
+                        else
+                        {
+                            this.ispackagegeneratelable = true;
+                        }
+
+                        if(ele.qtyShipped > 0)
+                        {
+                            this.isgeneratelable = false;
+                        }
+                        else
+                        {
+                            this.isgeneratelable = true;
+                        }
                         keepGoing = false;
                     }
                     else
+                    {
+                     
                         this.disableGeneratePackagingBtn = true;
+                        this.ispackagegeneratelable = true;
+                        this.isgeneratelable = true;
+                    }
+                       
                 }
             });
         });
@@ -657,6 +723,14 @@ checkedToGenerate(evt, ship) {
             }
         });
     }
+    hideShippingPopup()
+    {
+        this.workorderpackage = false;
+        this.workordershipping = false;
+        this.workordersinglepacking = false;
+        this.workordersingleshipping = false;
+
+    }
 
     getShippingData() {
         this.isSpinnerVisible = true;
@@ -720,8 +794,37 @@ checkedToGenerate(evt, ship) {
     }
 
     save() {
+
+        let shippingItems: ShippingItems[] = [];
+
+        if (this.isMultipleSelected) {
+            this.shippingList.filter(a => {
+                for (let i = 0; i < a.woshippingchildviewlist.length; i++) {
+                    if (a.woshippingchildviewlist[i].selected == true) {
+                        var p = new ShippingItems;
+                        p.WOPickTicketId = a.woshippingchildviewlist[i].woPickTicketId;
+                        p.currQtyToShip = a.woshippingchildviewlist[i].qtyToShip;
+                        p.workOrderPartId = a.woshippingchildviewlist[i].workOrderPartId;
+                        this.currwOPickTicketId=a.woshippingchildviewlist[i].woPickTicketId;
+                        this.workOrderPartNumberId=a.woshippingchildviewlist[i].workOrderPartNumberId;
+                        shippingItems.push(p);
+                    }
+                }
+            });
+        }
+        else {
+            var p = new ShippingItems;
+            p.WOPickTicketId = this.currwOPickTicketId;
+            p.currQtyToShip = this.currQtyToShip;
+            p.workOrderPartId = this.workOrderPartId;
+
+            shippingItems.push(p);
+        }
+
+
         this.shippingHeader['workOrderId'] = this.workOrderGeneralInformation['workOrderId'];
         this.shippingHeader['workOrderPartNoId'] = this.workOrderPartNumberId;
+        this.shippingHeader['pickTicketid'] = this.currwOPickTicketId;
         this.shippingHeader['masterCompanyId'] = this.workOrderGeneralInformation['masterCompanyId'];
         this.shippingHeader['workOrderCustomsInfo']['masterCompanyId'] = this.workOrderGeneralInformation['masterCompanyId'];
         this.shippingHeader['createdBy'] = this.userName;
@@ -730,12 +833,16 @@ checkedToGenerate(evt, ship) {
         this.shippingHeader['updatedDate'] = new Date().toDateString();
         this.shippingHeader['workOrderCustomsInfo']['createdDate'] = new Date().toDateString();
         this.shippingHeader['workOrderCustomsInfo']['updatedDate'] = new Date().toDateString();
+        this.shippingHeader['shipToName'] = editValueAssignByCondition('customerName', this.shippingHeader['shipToCustomerId']);
         this.shippingHeader['shipToCustomerId'] = editValueAssignByCondition('customerId', this.shippingHeader['shipToCustomerId']);
+
+        this.shippingHeader['shippingItems'] = shippingItems;
         this.isSpinnerVisible = true;
         this.workorderService.saveWorkOrderShipping(this.shippingHeader)
             .subscribe(
                 res => {
                     this.isSpinnerVisible = false;
+                    this.partSelected = false;
                     this.getEditSiteData(res.shipToCustomerId);
                     this.shippingHeader = res;
                     this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
@@ -753,7 +860,8 @@ checkedToGenerate(evt, ship) {
                         'Work Order Shipping created Succesfully',
                         MessageSeverity.success
                     );
-                    this.getShippingData();
+                    this.getShippingList();
+                   // this.getShippingData();
                 }, err => {
                     this.isSpinnerVisible = false;
                     this.errorHandling(err)
@@ -809,9 +917,9 @@ checkedToGenerate(evt, ship) {
 }
 
 export class ShippingItems {
-    SOPickTicketId: number;
+    WOPickTicketId: number;
     currQtyToShip: number;
-    salesOrderPartId: number;
+    workOrderPartId: number;
 }
 
 export class PackagingSlipItems {
@@ -828,13 +936,13 @@ export class PackagingSlipItems {
 
 export class MultiShippingLabels {
     WorkOrderId: number;
-    WOPartNoId: number;
+    WorkOrderPartId: number;
     WOShippingId: number;
 }
 
 export class MultiPackagingSlips {
     WorkOrderId: number;
-    WOPartNoId: number;
+    WorkOrderPartNumId: number;
     WOPickTicketId: number;
     PackagingSlipId: number;
 }

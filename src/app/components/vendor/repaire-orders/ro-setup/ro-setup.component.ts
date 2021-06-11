@@ -74,7 +74,7 @@ export class RoSetupComponent implements OnInit {
 	childDataList: any[] = [];
 	allCurrencyData: any[] = [];
 	allconditioninfo: any[] = [];
-	disableROStatus: boolean = true;
+	disableROStatus: boolean = false;
 	itemTypeId: number;
 	partWithId: any;
 	allPartDetails: any[] = [];
@@ -1598,7 +1598,8 @@ export class RoSetupComponent implements OnInit {
 			}
 			if (this.headerInfo.statusId == this.roFulfillingstatusID) {
 				this.disableAddPart = true;
-			} else {
+			}
+			else {
 				this.disableAddPart = false;
 			}
 			this.enableHeaderSaveBtn = false;
@@ -1664,6 +1665,7 @@ export class RoSetupComponent implements OnInit {
 			data[0].map((x, pindex) => {
 				this.newPartsList = {
 					...x,
+					quantityReserved: x.quantityReserved,
 					partNumberId: { value: x.itemMasterId, label: x.partNumber },
 					ifSplitShip: x.roPartSplits.length > 0 ? true : false,
 					partNumber: x.partNumber,
@@ -1694,10 +1696,9 @@ export class RoSetupComponent implements OnInit {
 					estRecordDate: x.estRecordDate ? new Date(x.estRecordDate) : '',
 					vendorQuoteDate: x.vendorQuoteDate ? new Date(x.vendorQuoteDate) : '',
 					//acTailNum : x.acTailNum ? getObjectByValue ('label', x.acTailNum, this.acTailNumCollection) : null,	
-					acTailNum: { value: 0, label: x.acTailNum },
+					acTailNum: x.acTailNum,
 				}
 
-				console.log(this.newPartsList)
 				this.getManagementStructureForParentPart(this.newPartsList, data[1], data[3]);
 
 				if (this.newPartsList.childList && this.newPartsList.childList.length > 0) {
@@ -2678,10 +2679,29 @@ export class RoSetupComponent implements OnInit {
 		this.loadModuleListForVendorComp();
 		this.getAllrevisedPart();
 		this.getAllworkPerformed();
-		this.getAllACTailNum('');
+		//this.getAllACTailNum('');
 	}
 
-	saveRepairOrderHeader() {
+	CloseModel(status) {
+		this.modal.close();
+		if (status) {
+			this.saveRepairOrderHeader('');
+		}
+		else {
+			this.headerInfo.statusId = this.openStatusId;
+			this.enableHeaderSaveBtn = true;
+		}
+	}
+
+	saveRepairOrderHeader(roConfirm) {
+
+		if (roConfirm != '') {
+			if (this.headerInfo.statusId == this.fulfillingStatusId) {
+				this.modal = this.modalService.open(roConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
+				return;
+			}
+		}
+
 		if (this.createROForm.invalid ||
 			this.headerInfo.companyId == 0
 			|| this.headerInfo.companyId == null) {
@@ -2867,15 +2887,27 @@ export class RoSetupComponent implements OnInit {
 
 			if (this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
-				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
+				&& this.partListData[i].quantityOrdered > this.partListData[i].minimumOrderQuantity) {
 				this.partListData[i].quantityOrdered = this.partListData[i].minimumOrderQuantity;
 				this.isSpinnerVisible = false;
-				errmessage = errmessage + '<br />' + 'Minimum Order Qty : ' + this.partListData[i].minimumOrder + '<br /> Order quantity can not be less then Minimum order quantity.'
+				errmessage = errmessage + '<br />' + 'StockLine Qty Available : ' + this.partListData[i].minimumOrder + '<br /> Order quantity can not be more then available quantity.'
 			}
 			if (!this.partListData[i].itemMasterId) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "PN is required."
 			}
+			if (!this.partListData[i].revisedPartId) {
+				this.isSpinnerVisible = false;
+				errmessage = errmessage + '<br />' + "Revised Part Number is required."
+			}
+			if (!this.partListData[i].workPerformedId) {
+				this.isSpinnerVisible = false;
+				errmessage = errmessage + '<br />' + "Work to Perform is required."
+			}
+			// if (!this.partListData[i].acTailNum) {
+			// 	this.isSpinnerVisible = false;
+			// 	errmessage = errmessage + '<br />' + "Account Tail Number is required."
+			// }
 			if (!this.partListData[i].priorityId) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Priority is required."
@@ -2907,6 +2939,11 @@ export class RoSetupComponent implements OnInit {
 			if (!this.partListData[i].managementStructureId || this.partListData[i].managementStructureId == 0) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Management Structure is required."
+			}
+			var Qty = 0;
+			var childQty = 0;
+			if (this.partListData[i].quantityOrdered) {
+				Qty = this.partListData[i].quantityOrdered ? parseInt(this.partListData[i].quantityOrdered.toString().replace(/\,/g, '')) : 0;
 			}
 			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
 				for (let j = 0; j < this.partListData[i].childList.length; j++) {
@@ -2951,9 +2988,18 @@ export class RoSetupComponent implements OnInit {
 						this.isSpinnerVisible = false;
 						errmessage = errmessage + '<br />' + "Split Shipment Need By is required."
 					}
-
+					if (this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered > 0) {
+						childQty = childQty + parseInt(this.partListData[i].childList[j].quantityOrdered.toString().replace(/\,/g, ''));
+					}
 				}
 			}
+			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
+				if (Qty != childQty) {
+					this.isSpinnerVisible = false;
+					errmessage = errmessage + '<br />' + "Part Qty Order and Sum of Split Shipment Qty Ordered Shipment should be same."
+				}
+			}
+
 			if (errmessage != '') {
 				var message = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + errmessage
 				this.alertService.showStickyMessage("Validation failed", message, MessageSeverity.error, 'Please enter Qty');
@@ -3057,6 +3103,7 @@ export class RoSetupComponent implements OnInit {
 			this.parentObject = {
 				repairOrderId: this.roId,
 				isParent: true,
+				quantityReserved: this.partListData[i].quantityReserved,
 				itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				//partNumber : this.partListData[i].itemMasterId ? this.getPartnumber(this.partListData[i].itemMasterId) : null,
 				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getValueFromObj(this.partListData[i].altEquiPartNumberId) : null,
@@ -3106,10 +3153,11 @@ export class RoSetupComponent implements OnInit {
 				revisedPartId: this.partListData[i].revisedPartId ? editValueAssignByCondition('itemMasterId', this.partListData[i].revisedPartId) : null,
 				workPerformedId: this.partListData[i].workPerformedId ? this.getValueFromObj(this.partListData[i].workPerformedId) : null,
 				estRecordDate: this.datePipe.transform(this.partListData[i].estRecordDate, "MM/dd/yyyy"),
-				vendorQuoteNoId: this.partListData[i].vendorQuoteNoId ? this.getValueFromObj(this.partListData[i].vendorQuoteNoId) : null,
-				vendorQuoteDate: this.partListData[i].vendorQuoteDate ? this.datePipe.transform(this.partListData[i].vendorQuoteDate, "MM/dd/yyyy") : null,
-				acTailNum: this.partListData[i].acTailNum ? editValueAssignByCondition('label', this.partListData[i].acTailNum) : null,
-
+				//vendorQuoteNoId: this.partListData[i].vendorQuoteNoId ? this.getValueFromObj(this.partListData[i].vendorQuoteNoId) : null,
+				//vendorQuoteDate: this.partListData[i].vendorQuoteDate ? this.datePipe.transform(this.partListData[i].vendorQuoteDate, "MM/dd/yyyy") : null,
+				vendorQuoteNoId: null,
+				vendorQuoteDate: null,
+				acTailNum: this.partListData[i].acTailNum ? this.partListData[i].acTailNum : null,
 			}
 
 			if (!this.isEditMode) {
@@ -3373,6 +3421,43 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
+	addAvailableStocklineAddPArt() {
+		this.tempNewPNArray = [];
+		let newParentObject = new CreatePOPartsList()
+		if (this.stocklineData) {
+			const data = this.stocklineData.map(x => {
+				const newObject = {
+					...newParentObject,
+					partNumberId: { value: x.itemMasterId, label: x.partNumber },
+					needByDate: this.headerInfo.needByDate,
+					estRecordDate: this.headerInfo.needByDate,
+					conditionId: x.conditionId,
+					priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+					discountPercent: 0,
+					itemMasterId: x.itemMasterId,
+					controlId: x.idNumber,
+					controlNumber: x.controlNumber,
+					acTailNum: x.aircraftTailNumber,
+					stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
+					x
+				}
+				this.getManagementStructureForParentEdit(newObject);
+				this.getPNDetailsByStocklineId(newObject);
+				//this.getStockLineByItemMasterId(newObject);
+				this.partListData = [...this.partListData, newObject]
+				this.enablePartSave();
+			})
+			for (let i = 0; i < this.partListData.length; i++) {
+				if (!this.partListData[i].ifSplitShip) {
+					this.partListData[i].childList = [];
+				}
+			}
+		}
+		this.partNumbers = null;
+		this.addAllMultiPN = false;
+		this.addAllMultiStockline = false;
+	}
+
 	addAvailableStockline() {
 		this.tempNewPNArray = [];
 		let newParentObject = new CreatePOPartsList()
@@ -3390,6 +3475,7 @@ export class RoSetupComponent implements OnInit {
 						itemMasterId: x.itemMasterId,
 						controlId: x.idNumber,
 						controlNumber: x.controlNumber,
+						acTailNum: x.aircraftTailNumber,
 						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
 						x
 					}
@@ -3534,6 +3620,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	addStockLineView(itmeMasterID, Condtionid) {
+		
 		this.stocklineData = [];
 		this.stocklineconditionId = null;
 		this.stocklinepartNumberId = null;
@@ -3562,12 +3649,15 @@ export class RoSetupComponent implements OnInit {
 						}
 					}
 				}
-			}
+			}			
+			this.stocklinepartNumberId = this.partCollection.find((x: any) => x.value == itmeMasterID);		
+			var conditiondata = this.allconditioninfo.find((x: any) => x.value == Condtionid);
+			this.stocklineconditionId = [parseInt(conditiondata["value"])];
+
 		}, err => {
 			this.isSpinnerVisible = false;
 			this.stocklineData = []
 		});
-
 	}
 
 
@@ -4386,7 +4476,7 @@ export class RoSetupComponent implements OnInit {
 		this.parentQty = event.target.value;
 		if (partList.minimumOrderQuantity > 0
 			&& this.parentQty > 0
-			&& this.parentQty < partList.minimumOrderQuantity
+			&& this.parentQty > partList.minimumOrderQuantity
 		) {
 			partList.quantityOrdered = partList.minimumOrderQuantity;
 			var childQty = 0;
@@ -4402,7 +4492,7 @@ export class RoSetupComponent implements OnInit {
 
 			this.alertService.showMessage(
 				'Error',
-				'Minimum Order Qty : ' + partList.minimumOrderQuantity + '<br /> Order quantity can not be less then Minimum order quantity.',
+				'StockLine Qty Available : ' + partList.minimumOrderQuantity + '<br /> Order quantity can not be more then available quantity.',
 				MessageSeverity.error
 			);
 			return;
@@ -4610,8 +4700,8 @@ export class RoSetupComponent implements OnInit {
 			this.disableAddPart = true;
 			this.enableHeaderSaveBtn = true;
 		} else {
-			this.disableAddPart = false;
 			this.enableHeaderSaveBtn = false;
+			this.disableAddPart = false;
 		}
 		if (this.headerInfo.statusId == this.roOpenstatusID) {
 			this.disableHeaderInfo = false;
@@ -4798,7 +4888,8 @@ export class RoSetupComponent implements OnInit {
 				this.enableHeaderSaveBtn = false;
 				if (this.headerInfo.statusId == this.roFulfillingstatusID) {
 					this.disableAddPart = true;
-				} else {
+				}
+				else {
 					this.disableAddPart = false;
 				}
 				this.isSpinnerVisible = false;
@@ -5104,10 +5195,17 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	StockLinePopup(row) {
-		if (row.stockLineId > 0) {
+		
+		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-			this.modal.componentInstance.stockLineId = row.stockLineId;
+			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;
 			this.modal.result.then(() => { }, () => { });
+		} else {
+			this.alertService.showMessage(
+				'Error',
+				'StockLineID Not Found',
+				MessageSeverity.error
+			);
 		}
 	}
 
@@ -5118,5 +5216,393 @@ export class RoSetupComponent implements OnInit {
 
 	closeModal() {
 		this.modal.close();
+	}
+
+	print(): void {
+		let printContents, popupWin;
+		printContents = document.getElementById('repair_order_print_content').innerHTML;
+		popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+		popupWin.document.open();
+		popupWin.document.write(`
+      <html>
+        <head>
+           <title>Repair Order</title>
+		   <style>
+		   div {
+            white-space: normal;
+          }
+          table { page-break-after:auto }
+tr    { page-break-inside:avoid; page-break-after:auto }
+td    { page-break-inside:avoid; page-break-after:auto }
+thead { display: table-row-group; }
+tfoot { display:table-footer-group }
+		   @page { size: auto;  margin: 0mm; }
+		   
+						 @media print
+			   {
+				   @page {
+				   margin-top: 0;
+				   margin-bottom: 0;
+				   }
+			   
+			   @page {size: landscape}
+			   } 
+			 span {
+			   /* font-weight: normal; */
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+						 table {font-size:12px !important,border-left:-1px !important}        
+			 table thead { background: #808080;}    
+			  
+			 table, thead, td {
+			 border: 1px solid black;
+			 border-collapse: collapse;
+		   } 
+		   table, thead, th {
+			 border: 1px solid black;
+			 border-collapse: collapse;
+		   } 
+		   .border-none{
+			 border:none;
+		   }
+		   .td-width-25{
+			width:25%;
+		  }
+		  
+		   .table-border-right tr td{
+			   border-right:1px solid black;
+		   }
+		   .border{
+			   border:1px solid black !important;
+		   }
+		   .top-table-alignment{
+			   width:100.3% !important;
+		   }
+		   .child-table-header th{
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12.5px;text-transform: capitalize;font-weight:bold;
+		   }
+			 table thead tr th 
+			 {
+			   //   background: #0d57b0 !important;
+				 padding: 5px!important;color: #fff;letter-spacing: 0.3px;font-weight:bold;
+				 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				  font-size: 12.5px;text-transform: capitalize; z-index: 1;} 
+			 table tbody{   overflow-y: auto; max-height: 500px;  }
+			 table tbody tr td{ background: #fff;
+				padding: 2px;line-height: 22px;
+				height:22px;color: #333;
+			    //  border-right:1px solid black !important;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight;normal;
+			   font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
+			 h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
+			 
+			//    .very-first-block {
+			// 	position: relative;
+			// 	min-height: 250px;
+			// 	float: left;
+			// 	height:auto;
+			//    border-right:1px solid black;
+			// 	padding-right: 2px;
+			// 	padding-left: 2px;
+			// 	width: 50% !important;
+			//   }
+			 .first-block-name{margin-right: 20px} 
+			 .first-block-sold-to {
+			   position: relative;
+			   min-height: 82px;
+			   height: auto;
+			   float: left;
+			   padding-bottom:5px;
+			   padding-right: 2px;
+			   border-right: 1px solid black;
+			   background: #fff;
+			   width: 100%;
+			   margin-top:-2px
+			  
+			 }
+			 
+			 .first-block-ship-to {
+			   position: relative;
+			   min-height: 80px;
+			   padding-bottom:5px;
+			   height: auto;
+			   padding-right: 2px;
+			   border-right: 1px solid black;
+			   background: #fff;
+			   width: 100%;
+			 
+			 }
+			 
+			 .first-block-sold {
+			   position: relative;
+			   min-height: 120px;
+			   height:auto;
+			   float: left;
+			   border-right:1px solid black;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   margin-left:-1px;
+			   width: 50%;
+			 }
+			 
+			 .first-block-ship {
+			   position: relative;
+			   min-height: 1px;
+			   float: right;
+			   padding-right: 2px;
+			  
+			   width: 49%;
+			 }
+			 
+			 .address-block {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   height:auto;
+			   padding-right: 2px;
+			   // border: 1px solid black;
+			   width: 100%;
+			   padding-left: 2px;
+			 }
+			 
+			 .first-block-address {
+			   margin-right: 20px;
+			   text-align: left
+			 }
+			 
+			 
+			 .second-block {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   width: 42%;
+			 height:auto;
+			   // border-left:1px solid black;
+				 // margin-left: 16%;
+			   padding-left: 2px;
+			   box-sizing: border-box;
+			 }
+			 
+			 .second-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			 
+			   min-height: 1px;
+			   height:auto
+			  
+			   width: 100%;
+			 }
+			 .label{
+			   font-weight:500;
+			 }
+			 
+			 .second-block-label {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				   font-size: 10.5px !important;
+				   font-weight: 700;
+			   
+				   width: 38.33333333%;
+				   text-transform: capitalize;
+				   margin-bottom: 0;
+				   text-align: left;
+			 }
+			 
+			 .clear {
+			   clear: both;
+			 }
+			 
+			 .form-div {
+			   // top: 6px;
+			   position: relative;
+			   font-weight: normal;
+			   font-size:12.5
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   // margin-top: 10px;
+			  
+			 }
+			 span {
+			   font-weight: normal;
+			   font-size: 12.5px !important;
+		   }
+			 
+			 .image {
+			   border: 1px solid #000;
+			   // padding: 5px;
+			   width: 100%;
+			   display: block;
+			 }
+			 
+			 .logo-block {
+			   margin: auto;
+			   text-align: center
+			 }
+			 
+			 .pdf-block {
+			   width: 800px;
+			   margin: auto;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-weight:normal;
+			   border: 1px solid #ccc;
+			   padding: 25px 15px;
+			 }
+			 
+			 .picked-by {
+			   position: relative;
+			   float: left;
+			   width: 48%;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+			 
+			 .confirmed-by {
+			   position: relative;
+			   float: right;
+			   width: 48%;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+			 
+			 .first-part {
+			   position: relative;
+			   display: inline;
+			   float: left;
+			   width: 50%
+			 }
+			 
+			 .seond-part {
+			   position: relative;
+			   display: flex;
+			   float: right;
+			   width: 24%
+			 }
+			 
+			 .input-field-border {
+			   width: 88px;
+			   border-radius: 0px !important;
+			   border: none;
+			   border-bottom: 1px solid black;
+			 }
+			 
+			 .border-transparent {
+			   border-block-color: white;
+			 }
+			 
+			 .pick-ticket-header {
+			   border: 1px solid black;
+			   text-align: center;
+			   background: #0d57b0 !important;
+			   color: #fff !important;
+			   -webkit-print-color-adjust: exact;
+			 }
+			 
+			 .first-block-label {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   // width: 38.33333333%;
+			   font-size:10.5px !important;
+			 
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-weight: 700;
+		   
+			   text-transform: capitalize;
+			   margin-bottom: 0;
+			   text-align: left;
+			 }
+			 
+			 .very-first-block {
+			   position: relative;
+			   min-height: 200px;
+			   float: left;
+			   height:auto;
+			  border-right:1px solid black;
+			//    padding-right: 2px;
+			//    padding-left: 2px;
+			   width: 57% !important;
+			 }
+			 
+			 .logo {
+			   padding-top: 10px;
+				   // height:70px;
+				   // width:220px;
+				   height:auto;
+				   max-width:100%;
+				   padding-bottom:10px;
+			 }
+			 
+			 .sold-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			   min-height: 1px;
+			   width: 100%;
+			 }
+			 
+			 .ship-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			   min-height: 1px;
+			   width: 100%;
+			 }
+			 .first-block-sold-bottom{
+			   border-bottom: 1px solid black;
+				   position:relative;
+				   min-height:1px;
+				   height:auto;
+				   width:100%;
+				   float:left;
+					 // margin-top: -2px;
+					// min-height: 120px;
+			 }
+			 
+			
+				.parttable th {
+					// background: #fff !important;
+					background: #f4f4f4 !important;
+					color: #000 !important;
+					-webkit-print-color-adjust: exact;
+				}
+			 table thead {
+				background: #808080;
+			   }
+			 .print-table{
+				width:100%;
+			  }
+			 .border-bottom{
+			   border-bottom:1px solid black !important;
+			 }
+			 .table-margins{
+				   margin-top:-1px;margin-left:0px
+				 }
+			 .invoice-border{
+			   border-bottom: 1px solid;
+				   position:relative;
+					 // min-height: 119px;
+					 min-height:1px;
+					 height: auto;
+					 width:100%;
+				   float:left;}
+			 
+						 </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+		);
+		popupWin.document.close();
 	}
 }

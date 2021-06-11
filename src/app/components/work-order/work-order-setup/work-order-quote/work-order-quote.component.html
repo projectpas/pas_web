@@ -133,7 +133,7 @@
  
                  <div class="form-group ">
                      <label> DSO </label>
-                     <input class="form-control" type="text"  (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
+                     <input class="form-control" type="text"  maxlength="50" (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
                  </div>
                  <div class="form-group memo-popup-cstm">
                      <label>
@@ -271,14 +271,14 @@
                  </div>
                  </div>
          </div>
-         <div class="form-row pull-right back-to-wo" *ngIf="enableEditBtn && selectedDisplayType == ''">
+         <!-- <div class="form-row pull-right back-to-wo">
              <button class="btn btn-primary" (click)="createQuote()" *ngIf="!isView || (isWoTab && !isListView)">
-                 Edit Quote
+                 Edit Quote  
              </button>
-             <button class="btn btn-primary" (click)="onClickBackToWO()">
+             <button class="btn btn-primary"  *ngIf="enableEditBtn && selectedDisplayType == ''" (click)="onClickBackToWO()">
                  Back To Work Order
              </button>
-         </div>
+         </div> -->
  
      </div>
  </div>
@@ -310,7 +310,7 @@
      </div>
  </div>
  
- <br>
+ <!-- <br> -->
   
  <div *ngIf="quoteCreated">
  <div class="card" *ngIf="quoteForm.quoteNumber && quoteForm.quoteNumber != '' && !isQuoteListView">
@@ -326,9 +326,16 @@
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'sentForCustomerApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('sentForCustomerApproval');selectall = false;">Sent for Customer Approval</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'submittedCustomerApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('submittedCustomerApproval');selectall = false;">Submitted Customer Approval</button>-->
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteAnalysis'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteAnalysis');">Work Order Quote Analysis</button>
-             </div>
+                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteprint'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteprint');">Work Order Quote Print</button>
+            
+              
+                <button class="btn btn-primary"  style="float: right;" (click)="onClickBackToWO()">
+                    Back To Work Order
+                </button>
+            
+                </div>
          </div>
-             <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'mpns'">
+             <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" style="margin-bottom:0px !important" *ngIf="approvalGridActiveTab === 'mpns'">
                  <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
                      <table class="table table-bordered lastcol-fix mpn-list-table"
                             id="mpn-list-table">
@@ -337,7 +344,7 @@
                                  <th rowspan="2">MPN <span class="clr-red">*</span></th>
                                  <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
                                  <th rowspan="2">Revised MPN</th>
-                                 <th rowspan="2">Serial Number</th>
+                                 <th rowspan="2" style="min-width:100px">Serial Number</th>
                                  <th rowspan="2">QTY</th>
                                  <th rowspan="2">Rec'd Date</th>
                                  <th rowspan="2">Cust Req Date <span class="clr-red">*</span></th>
@@ -345,17 +352,17 @@
                                  <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
                                  <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
                                  <th rowspan="2">WO Stage <span class="clr-red">*</span></th>
-                                 <th rowspan="2">WO Status <span class="clr-red">*</span></th>
+                                 <th rowspan="2" style="min-width:100px">WO Status <span class="clr-red">*</span></th>
                                  <th rowspan="2">Tech Name <span class="clr-red">*</span></th>
                                  <th rowspan="2">Station ID</th>
-                                 <th rowspan="2">Work Scope <span class="clr-red">*</span></th>
+                                 <th rowspan="2" style="min-width:80px">Work Scope <span class="clr-red">*</span></th>
                                  <th rowspan="2">Priority <span class="clr-red">*</span></th>
                                  <th rowspan="2">Condition <span class="clr-red">*</span></th>
                                  <th rowspan="2">CMM/Pub Ref</th>
                                  <th rowspan="2">Workflow ID </th>
                                  <th rowspan="2">Item Group</th>
                        
-                                 <th rowspan="2">Cust Ref</th>
+                                 <th rowspan="2" style="min-width:200px">Cust Ref</th>
                                  <th rowspan="2">Contract</th>
                                  <th rowspan="2">Contract No</th>
                                  <th rowspan="2">Stk Line</th>
@@ -548,7 +555,8 @@
                                      <label>{{approver.rule}}</label>
                                  </td>
                                  <td>
-                                     <p class="m-0 p-0 p_textEditor memo-left" [innerHTML]="approver['memo']"></p>
+                                     <p class="m-0 p-0 p_textEditor memo-left truncate-text" matTooltipPosition="above"
+                                      [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                                  </td>
                                  <!-- <td>
                                      <label>{{approver.lowerValue}}</label>
@@ -580,8 +588,8 @@
                             id="mpn-list-table">
                          <thead>
                              <tr class="pad_workflo">
-                                 <th class="approver-th-align th-width min-width-80">
-                                     <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot() || isView"/> Select All
+                                 <th class="approver-th-align th-width">
+                                     <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot() || isView"/>
                                  </th>
                                  <th style="z-index: 1;" *ngFor="let header of woQuoteListHeader">{{header.header}}</th>
                              </tr>
@@ -837,6 +845,12 @@
                      </table>
                  </div>
              </div>
+
+             <div *ngIf="approvalGridActiveTab === 'workOrderQuoteprint'">
+                <div  *ngIf="!isQuoteListView">
+                    <app-woq-form [workOrderId]="workorderid" [workOrderPartNumberId]="workOrderPartNumberId" [workFlowWorkOrderId]="workFlowWorkOrderId" [isView]="isView" (Workorderprint)="resetqouteprintData()" > </app-woq-form>
+                </div>
+            </div>
          <!-- </div> --> 
          <div>
  
@@ -900,9 +914,9 @@
                      <h4 class="header-name">{{isQuote? 'Work Order Quote' :'Work Order'}} Material list</h4>
                  </div>
                  <div *ngIf="!isView &&  !isViewForApprovedPart">
-                     <!-- <button type="button" class="btn-sm header-button " data-target="#addNewCharges" data-toggle="modal" (click)="createNew()">
-                         Create Charge
-                     </button> -->
+                     <button type="button" matTooltipPosition="above" matTooltip="Load Materials From Work Order" *ngIf="loadworkorderData" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadMaterials()">
+                        Load WO Materials
+                     </button>
                      <button data-target="#addNewMaterials" data-toggle="modal"class="btn-sm header-button" >Add Part No</button>
                  </div>
              </div>
@@ -955,25 +969,25 @@
                       
                      </tr>
                      <tr>
-                         <th>Task</th>
-                         <th>PN</th>
-                         <th>PN Description</th>
+                         <th style="width: 100px;">Task</th>
+                         <th style="width: 200px;">PN</th>
+                         <th style="width: 200px;">PN Description</th>
                          <th>Provision</th>
                          <th>Qty</th>
                          <th>UOM</th>
                          <th>Cond Type</th>
                          <th>Stock Type</th>
                          <th>Unit Cost</th>
-                         <th>Total Part Cost</th>
-                         <th>Billing Method</th>
-                         <th>Mark Up</th>
+                         <th style="width: 90px;">Total Part Cost</th>
+                         <th style="width: 100px;">Billing Method</th>
+                         <th style="width: 70px !important;">Mark Up</th>
                          <th>
                              Billing Rate
                          </th>
-                         <th>
+                         <th style="width: 90px;">
                              Billing Amount
                          </th>
-                         <th class="width-130" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
+                         <th class="width-100" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
                          <!-- <th *ngIf="!isView"></th> -->
                      </tr>
                  </thead>
@@ -1066,7 +1080,7 @@
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
-                             <td class="content-to-end">{{ formateCurrency(totalTaskMaterialBillingAmount(mData))}}</td>
+                             <td class="content-to-end">{{ formateCurren(totalTaskMaterialBillingAmount(mData))}}</td>
                              <td *ngIf="!isView && !isViewForApprovedPart"></td>
                              <!-- <td *ngIf="!isView"></td> -->
                          </tr>
@@ -1152,20 +1166,20 @@
                                  (saveFreightListForWO)="saveWorkOrderFreightsList($event)"
                                  (updateFreightListForWo)="updateWorkOrderFreightsList($event)"
                                  (refreshData)="getFreightListByWorkOrderId()"
-                                 [taskList]="taskList"
-                                 [markupList]="markupList"
+                                 [taskList]="taskList"  [isLoadWoFreights]="isLoadWoFreights"
+                                 [markupList]="markupList"  (refreshFreightsWO)="loadWoFreights($event)"
                                  [isView]="isView || isViewForApprovedPart"
                                  [buildMethodDetails]="buildMethodDetails"></app-work-order-freight>
      </div>
  
      <div *ngIf="gridActiveTab == 'labor'">
-         <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData"
-                               (saveworkOrderLabor)="saveworkOrderLabor($event)" [isQuote]="isQuote" [markupList]="markupList" [isView]="isView || isViewForApprovedPart" [isEdit]="isEdit" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
+         <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor"  [isLoadWoLabor]="isLoadWoLabor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData"
+                               (saveworkOrderLabor)="saveworkOrderLabor($event)"  (refreshLaborWO)="loadWoLabor($event)" [isQuote]="isQuote" [markupList]="markupList" [isView]="isView || isViewForApprovedPart" [isEdit]="isEdit" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
                                [selectedPartNumber]="selectedPartNumber"></app-work-order-labor>
  
      </div>
  
-     <div class="table-responsive" *ngIf="gridActiveTab === 'charges' && workOrderChargesList">
+     <div class="table-responsive" *ngIf="gridActiveTab === 'charges'">
          <!-- <div *ngIf="!isView">
              <button data-target="#addNewCharges"
                      data-toggle="modal"
@@ -1181,6 +1195,9 @@
                      <h4 class="header-name">Work Order Quote Charges List</h4>
                  </div>
                  <div *ngIf="!isView">
+                    <button type="button" matTooltipPosition="above" matTooltip="Load Labor From Work Order" *ngIf="isLoadWoCharges && !isView" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadCharges()">
+                        Load WO Charges
+                     </button>
                      <button type="button" class="btn-sm header-button "data-target="#addNewCharges"
                      data-toggle="modal" (click)="createNew('add')">
                          Create Charge
@@ -1194,14 +1211,14 @@
                                  (saveChargesListForWO)="saveWorkOrderChargesList($event)"
                                  (updateChargesListForWO)="updateWorkOrderChargesList($event)"
                                  (createQuote)="createChargeQuote($event)"
-                                 (refreshData)="getChargesListByWorkOrderId()"
-                                 [isQuote]="isQuote"
+                                 (refreshData)="getChargesListByWorkOrderId()"  (refreshChargesWO)="loadWoCharges($event)"
+                                 [isQuote]="isQuote"   [isLoadWoCharges]="isLoadWoCharges"
                                  [markupList]="markupList"
                                  [isView]="isView || isViewForApprovedPart"
                                 
                                  [fromquote]="fromquote"
                                  [buildMethodDetails]="buildMethodDetails"></app-work-order-charges>
-     </div>
+     </div> 
  
  
      <div class="modal fade " id="viewcustomerDetailsinQuote" role="dialog" data-backdrop="static">

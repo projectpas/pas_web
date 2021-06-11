@@ -47,6 +47,7 @@ export class AllTasks {
   burdaenRatePercentageId:any=0;
   directLaborOHCost:any=0;
   isDeleted:boolean=false;
+  markupPercentageId:any="";
 
   constructor() {
     this.workOrderLaborHeaderId = 0;

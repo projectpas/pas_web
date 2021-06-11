@@ -379,8 +379,9 @@
                     </div>
                 </div>
                 <div *ngIf="toggle_ro_header">
-                    <button class="btn btn-primary pull-right toggle-btn-align" (click)="saveRepairOrderHeader()"
-                        [disabled]="!createROForm.valid" [disabled]="!enableHeaderSaveBtn">{{isEditModeHeader ? 'Update'
+                    <button class="btn btn-primary pull-right toggle-btn-align"
+                        (click)="saveRepairOrderHeader(roConfirm)" [disabled]="!createROForm.valid"
+                        [disabled]="!enableHeaderSaveBtn">{{isEditModeHeader ? 'Update'
                         : 'Save'}}</button>
                 </div>
             </div>
@@ -524,11 +525,11 @@
                                         <td>{{obj.purchaseOrderUnitCost === null ? '-':obj.purchaseOrderUnitCost}}</td>
                                         <td>{{obj.traceableToName === null ? '-':obj.traceableToName}}</td>
                                         <td>{{obj.ownerName === null ? '-':obj.ownerName}}</td>
-                                        <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
-                                        <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
+                                        <td>{{obj.obtainFromName === null ? '-':obj.obtainFromName}}</td>
+                                        <td>{{obj.tagDate === null ? '-':obj.tagDate | date: 'MM/dd/yyyy'}}</td>
                                         <td>{{obj.certifiedBy === null ? '-':obj.certifiedBy}}</td>
-                                        <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate}}</td>
-                                        <td>{{obj.memo === null ? '-':obj.memo}}</td>
+                                        <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate | date: 'MM/dd/yyyy'}}</td>                                        
+                                        <td><p class="p-0 m-0 p_textEditor" [innerHTML]="obj.memo"></p></td>
                                     </tr>
                                     <tr *ngIf="stocklineData.length == 0">
                                         <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
@@ -623,13 +624,13 @@
                                     <th>Report CUR <span class="clr-red">*</span></th>
                                     <th>Control Id</th>
                                     <th>Control Num</th>
-                                    <th>PO</th>
+                                    <!-- <th>PO</th> -->
                                     <th class="th-width-90">WO Num</th>
                                     <th class="th-width-90">Sub-WO Num</th>
                                     <!-- <th>RO Num</th> -->
                                     <th class="th-width-90">SO Num</th>
-                                    <th class="th-width-90">Vend Qte Num</th>
-                                    <th class="th-width-90">Vend Qte Date</th>
+                                    <!-- <th class="th-width-90">Vend Qte Num</th>
+                                    <th class="th-width-90">Vend Qte Date</th> -->
                                     <th>Item Type</th>
                                     <th>GL Account</th>
                                     <th>AC Tail Num</th>
@@ -702,7 +703,7 @@
                                                 id="revisedPartId{{row_index}}" [forceSelection]="true"
                                                 [suggestions]="revisedPartNumCollection"
                                                 (completeMethod)="filterRevisedPart($event)" [size]="30" [minLength]="1"
-                                                [dropdown]="true" [disabled]="partList.isApproved">
+                                                [dropdown]="true" [disabled]="partList.isApproved" required>
                                             </p-autoComplete>
                                         </td>
                                         <td>{{partList.stockType}}</td>
@@ -876,9 +877,9 @@
                                                 name="controlId{{row_index}}" disabled></td>
                                         <td><input type="text" class="form-control" [(ngModel)]="partList.controlNumber"
                                                 name="controlNumber{{row_index}}" disabled></td>
-                                        <td><input type="text" class="form-control"
+                                        <!-- <td><input type="text" class="form-control"
                                                 [(ngModel)]="partList.purchaseOrderNum"
-                                                name="purchaseOrderNum{{row_index}}" disabled></td>
+                                                name="purchaseOrderNum{{row_index}}" disabled></td> -->
                                         <td>
                                             <p-autoComplete field="label" class="autocomplete" appendTo="body"
                                                 [(ngModel)]="partList.workOrderId" name="workOrderId{{row_index}}"
@@ -922,7 +923,7 @@
                                                 [disabled]="partList.isApproved">
                                             </p-autoComplete>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <p-autoComplete field="label" class="autocomplete" appendTo="body"
                                                 [(ngModel)]="partList.vendorQuoteNoId"
                                                 name="VendorQuoteNoId{{row_index}}" [suggestions]="allSalesOrderDetails"
@@ -947,7 +948,7 @@
                                                     <small> Vend Qte Date is required </small>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> -->
                                         <td *ngIf="partList.itemTypeId==1">Stock</td>
                                         <td *ngIf="partList.itemTypeId==2">Non Stock</td>
                                         <td *ngIf="partList.itemTypeId==3">Equipment</td>
@@ -960,14 +961,15 @@
                                         </p-autoComplete>   -->
                                         </td>
                                         <td>
-                                            <p-autoComplete class="autocomplete" appendTo="body"
+                                            <!-- <p-autoComplete class="autocomplete" appendTo="body"
                                                 name="aCTailNum{{row_index}}" id="aCTailNum{{row_index}}"
                                                 [(ngModel)]="partList.acTailNum" [suggestions]="acTailNumCollection"
                                                 [forceSelection]="false" field="label"
                                                 (completeMethod)="filterACTailNum($event)"
                                                 (ngModelChange)="enablePartSave()" [size]="30" [minLength]="1"
                                                 [dropdown]="true" required>
-                                            </p-autoComplete>
+                                            </p-autoComplete> -->
+                                            {{partList.acTailNum}}
                                         </td>
                                         <td>
                                             {{partList.UOMShortName}}
@@ -1063,7 +1065,7 @@
                                                 *ngIf="!partList.isApproved"></i> -->
 
                                             <i class="fa fa-trash parts-list-delete-msg mr-1"
-                                                matTooltip="Delete Part Number" matTooltipPosition="after"
+                                                matTooltip="Remove Inventory" matTooltipPosition="after"
                                                 (click)="onDelPNRow(partList, row_index)"
                                                 *ngIf="!partList.isApproved"></i>
 
@@ -1112,7 +1114,7 @@
                                             <th>Order Qty <span class="clr-red">*</span></th>
                                             <th>Need By <span class="clr-red">*</span></th>
                                             <th colspan="4">Management Structure <span class="clr-red">*</span></th>
-                                            <th colspan="21"></th>
+                                            <th colspan="18"></th>
                                             <th style="min-width: 120px; position: sticky !important">
                                                 <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs"
                                                     matTooltip="Add Split Shipment" matTooltipPosition="above"
@@ -1346,7 +1348,7 @@
                                                             value="{{department.value}}">{{department.label}}</option>
                                                     </select>
                                                 </td>
-                                                <td colspan="21"></td>
+                                                <td colspan="18"></td>
                                                 <td class="zui-sticky-col width-107">
                                                     <span> <i class="fa fa-trash parts-list-delete-msg"
                                                             matTooltip="Delete Split Shipment"
@@ -1375,7 +1377,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td colspan="23"></td>
+                                            <td colspan="20"></td>
                                             <td style="position: sticky !important;"></td>
                                         </tr>
                                     </ng-container>
@@ -1385,7 +1387,6 @@
                                     <td class="child-td-align"><b>Total: </b></td>
                                     <td></td>
                                     <td></td>
-
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
@@ -1420,9 +1421,9 @@
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
+                                    <!-- <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td> -->
                                     <!-- <td>&nbsp;</td> -->
                                 </tr>
                                 <tr *ngIf="partListData.length == 0">
@@ -2929,13 +2930,33 @@
         <h4 class="modal-title">Print Repair Order</h4>
     </div>
     <div class="modal-content" id="repair_order_print_content">
-        <div class="modal-body">            
-            <app-repair-order-print-template [referenceId]="id"></app-repair-order-print-template>  
+        <div class="modal-body">
+            <app-repair-order-print-template [referenceId]="id"></app-repair-order-print-template>
         </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
+<ng-template class="modal fade" #roConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="CloseModel(false)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <strong>
+                Do you want to fulfill this Repair Order? After fullfill you are not able to edit this Repair Order.
+            </strong>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="CloseModel(true);">Yes</button>
+            <button type="button" class="btn btn-danger" (click)="CloseModel(false)">No</button>
+        </div>
     </div>
 </ng-template>
 

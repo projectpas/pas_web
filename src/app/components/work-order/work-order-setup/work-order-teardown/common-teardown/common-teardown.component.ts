@@ -59,6 +59,7 @@ export class CommonTeardownComponent implements OnInit {
     arrayTechnicianlist:any[] = [];
     technicianList: any = [];
     inspectionList: any = [];
+    reasonarryList: any = [];
     TearDownReasons: any;
     moduleNameeRemoval:any='RemovalReasons';
     moduleNameePrellinary:any='PreliinaryReview';
@@ -108,31 +109,113 @@ export class CommonTeardownComponent implements OnInit {
     }
 
     getReasonsByChecked() {
-        if (this.getsaveTearDownData) {
-            if (this.getsaveTearDownData.isRemovalReasons) {
+        if (this.getsaveTearDownData) 
+        {
+            if(this.reasonarryList.length == 0) {			
+                this.reasonarryList.push(0); 
+            }	
+            if (this.getsaveTearDownData.isRemovalReasons) 
+            {
+                if(this.getsaveTearDownData.workOrderRemovalReasons.reasonId >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderRemovalReasons.reasonId); 
+                }
                 this.worOrderTearDownReasonListById(1);
             } 
-         if (this.getsaveTearDownData.isPmaDerBulletins) {
-                this.worOrderTearDownReasonListById(2);
-            }  if (this.getsaveTearDownData.isPreliinaryReview) {
+            if (this.getsaveTearDownData.isPmaDerBulletins) 
+            {
+                // if(this.saveTearDownData.workOrderRemovalReasons.reasonId)
+                // {
+                //     this.reasonarryList.push(this.saveTearDownData.workOrderRemovalReasons.reasonId); 
+                // }
+
+                //this.worOrderTearDownReasonListById(2);
+            }  if (this.getsaveTearDownData.isPreliinaryReview) 
+            {
+
+                if(this.getsaveTearDownData.workOrderPreliinaryReview.reasonId >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreliinaryReview.reasonId); 
+                }
                 this.worOrderTearDownReasonListById(3);
-            }  if (this.getsaveTearDownData.isPreAssmentResults) {
+            }  
+            if (this.getsaveTearDownData.isPreAssmentResults) 
+            {
+                if(this.getsaveTearDownData.workOrderPreAssmentResults.reasonId >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreAssmentResults.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(4);
-            }  if (this.getsaveTearDownData.isDiscovery) {
+            }  
+            if (this.getsaveTearDownData.isDiscovery) 
+            {
+                if(this.getsaveTearDownData.workOrderDiscovery.reasonId >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderDiscovery.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(5);
-            }  if (this.getsaveTearDownData.isPreAssemblyInspection) {
+            }  
+            if (this.getsaveTearDownData.isPreAssemblyInspection) 
+            {
+                if(this.getsaveTearDownData.workOrderPreAssemblyInspection.reasonId  >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(6);
-            }  if (this.getsaveTearDownData.isWorkPerformed) {
+            }  
+            if (this.getsaveTearDownData.isWorkPerformed) 
+            {
+                if(this.getsaveTearDownData.workOrderWorkPerformed.reasonId>0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderWorkPerformed.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(7);
-            }  if (this.getsaveTearDownData.isTestDataUsed) {
+            }  
+            if (this.getsaveTearDownData.isTestDataUsed) 
+            {
+                if(this.getsaveTearDownData.workOrderTestDataUsed.reasonId >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderTestDataUsed.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(8);
-            }  if (this.getsaveTearDownData.isBulletinsModification) {
+            }  
+            if (this.getsaveTearDownData.isBulletinsModification) 
+            {
+                if(this.getsaveTearDownData.workOrderBulletinsModification.reasonId >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderBulletinsModification.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(9);
-            } if (this.getsaveTearDownData.isFinalTest) {
+            } 
+            if (this.getsaveTearDownData.isFinalTest) 
+            {
+                if(this.getsaveTearDownData.workOrderFinalTest.reasonId >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderFinalTest.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(10);
-            } if (this.getsaveTearDownData.isFinalInspection) {
+            } if (this.getsaveTearDownData.isFinalInspection) 
+            {
+                if(this.getsaveTearDownData.workOrderFinalInspection.reasonId >0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderFinalInspection.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(11);
-            } if (this.getsaveTearDownData.isAdditionalComments) {
+            } if (this.getsaveTearDownData.isAdditionalComments) 
+            {
+                if(this.getsaveTearDownData.workOrderAdditionalComments.reasonId>0)
+                {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderAdditionalComments.reasonId); 
+                }
+
                 this.worOrderTearDownReasonListById(12);
             } 
         }
@@ -404,7 +487,7 @@ export class CommonTeardownComponent implements OnInit {
     }
 
     worOrderTearDownReasonListById(id) {
-        this.workOrderService.worOrderTearDownReasonListById(id).subscribe(res => {
+        this.workOrderService.AutoCompleteDropdownsTeardownReasons(id,this.reasonarryList.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.deStructureReasonsData(id, res);
         })
     }
@@ -413,8 +496,8 @@ export class CommonTeardownComponent implements OnInit {
         const dataForReasons = data.map(x => {
             return {
                 ...x,
-                value: x.teardownReasonId,
-                label: x.reason
+                value: x.value,
+                label: x.label
             }
         });
         if (id === 1) {

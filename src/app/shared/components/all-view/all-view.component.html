@@ -972,10 +972,11 @@
 
         <p-tabPanel header="Receiving Draft" *ngIf="this.isReceivingro">
           <app-ro-view-draftlist *ngIf="repairOrderData.length > 0" [repairOrderData]="repairOrderData"></app-ro-view-draftlist>
+          
         </p-tabPanel>
 
         <p-tabPanel header="Receiving" *ngIf="this.isReceivingro">
-          <app-ro-view-list  *ngIf="repairOrderData.length > 0" [repairOrderData]="repairOrderData" ></app-ro-view-list>
+          <app-ro-view-list *ngIf="showreceived" [repairOrderId]="selectedRepairOrderId"></app-ro-view-list>
         </p-tabPanel>
 
       </p-tabView>

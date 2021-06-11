@@ -39,14 +39,15 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     isSpinnerVisible: boolean = true;
     private onDestroy$: Subject<void> = new Subject<void>();
     headers = [
+        { field: 'formType', header: 'Form Type' },
         { field: 'trackingNo', header: 'Trackin No' },
         { field: 'organizationName', header: 'Organization Name' },
         { field: 'invoiceNo', header: 'InvoiceNo' },
-        { field: 'description', header: 'Description' },
+        { field: 'description', header: 'Description' ,width:"200px"},
         { field: 'partNumber', header: 'PartNumber' },
         { field: 'eligibility', header: 'Eligibility',width:"80px" },
         { field: 'quantity', header: 'Quantity' ,width:"80px"},
-        { field: 'batchnumber', header: 'Batchnumber' ,width:"80px"},
+        { field: 'batchnumber', header: 'Batch Number' ,width:"100px"},
         { field: 'status', header: 'Status',width:"80px" }
         
     ]

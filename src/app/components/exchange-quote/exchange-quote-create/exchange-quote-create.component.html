@@ -438,8 +438,9 @@
           </div>
           <div class="card" style="padding: 5px; margin: 5px;" *ngIf="isEdit">
             <div class="x_panel">
+              <!-- [disabled]="verifyExchangeSalesOrderQuoteObj.canCovertToSalesOrder == false" -->
               <button type="button" (click)="initiateExchangeSalesOrderCoversion()"
-                [disabled]="verifyExchangeSalesOrderQuoteObj.canCovertToSalesOrder == false" class="btn btn-primary"
+                class="btn btn-primary"
                 style="width: 92px;">
                 Create SO
               </button>

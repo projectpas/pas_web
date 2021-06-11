@@ -23,6 +23,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     @Input() moduleId;
     @Input() CurrentModuleName;
     @Input() referenceId;
+    @Input() isSummarizedView: any = false;
     @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
     @Input() workOrderId: any;
     @Input() isView: boolean = false;
@@ -392,7 +393,6 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                     this.isSpinnerVisible = false;
                     this.emailViewData = res;
                     this.attachmentDetails = res.attachmentDetails;
-                    console.log("res ", res);;
                 }, err => {
                     this.errorMessageHandler();
                 }

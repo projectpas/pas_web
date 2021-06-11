@@ -22,6 +22,8 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     @Input() customerContactList: any;
     @Input() subWorkOrderDetails;
     @Input() isSubWorkOrder: any = false;
+    @Input() isSummarizedView: any = false;
+    
     @Input() subWOPartNoId;
     @Input() moduleId;
     @Input() referenceId;
@@ -309,7 +311,15 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     pageIndexChange(event) {
         this.pageSize = event.rows;
     }
-
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     getHtml(data, field) {
         if (field == 'description') {
             return $.parseHTML(data)[0];

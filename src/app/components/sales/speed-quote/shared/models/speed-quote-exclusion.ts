@@ -18,6 +18,8 @@ export class SpeedQuoteExclusion {
     exCurr:number;
     exNotes:string;
     isEditPart:boolean;
+    itemNo:number;
+    // partNumberObj: {};
 
 
     constructor() {
@@ -40,5 +42,6 @@ export class SpeedQuoteExclusion {
         this.exCurr = null;
         this.exNotes = null;
         this.isEditPart = false;
+        this.itemNo = 0;
     }
 }

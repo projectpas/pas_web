@@ -105,7 +105,7 @@ export class PartDetailsComponent implements OnChanges {
     this.columns = [
       { field: 'select', header: '', width: '30px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: '40px', textalign: 'left' },
-      { field: 'description', header: 'PN Description', width: '100px', textalign: 'left' },
+      { field: 'description', header: 'PN Description', width: '200px', textalign: 'left' },
       { field: 'conditionDescription', header: 'Cond', width: '90px', textalign: 'left' },
       { field: 'itemGroup', header: 'Item Group', width: '100px', textalign: 'left' },
       { field: 'manufacturer', header: 'Manufacturer', width: '90px', textalign: 'left' },

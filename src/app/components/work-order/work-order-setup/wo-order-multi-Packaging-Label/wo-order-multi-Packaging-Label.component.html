@@ -4,8 +4,8 @@
         <div class="modal-content" id="PackagingSlipmodel">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title warning_color"></h4>
+                <button type="button" (click)="close()" class="close" data-dismiss="modal">&times;</button>
+                <!-- <h4 class="modal-title warning_color"></h4> -->
             </div>
             <div class="modal-body"  id="PackagingSlip">
                 <ng-container *ngFor="let packagingSlip of objpackagingSlips; let i = index;">
@@ -85,9 +85,9 @@
                                                     disabled>{{packagingSlip.packagingLabelViewModel.invoiceDate | date:'medium'}}</label>
                                             </div>
                                             <div class="second-block-div">
-                                                <label class="col-sm-6 second-block-label" style="width:100%">SO Num</label>
+                                                <label class="col-sm-6 second-block-label" style="width:100%">WO Num</label>
                                                 <label class="col-sm-6 second-block-label" style="width:100%"
-                                                    disabled>{{packagingSlip.packagingLabelViewModel.salesOrderNumber}}</label>
+                                                    disabled>{{packagingSlip.packagingLabelViewModel.workOrderNumber}}</label>
                                             </div>
                                             <div class="second-block-div">
                                                 <label class="col-sm-6 second-block-label" style="width:100%">Num of Items</label>
@@ -220,7 +220,7 @@
                                             <table rules=none class="parttable table-margins packing-slip-table">
                                                 <thead>
                                                     <tr>
-                                                        <th>PO/RO NUM</th>
+                                                        <th>WO NUM</th>
                                                         <th>Salesperson</th>
                                                         <th>Buyer</th>
                                                         <th>Credit Terms</th>
@@ -233,7 +233,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td style="vertical-align: top;border-right:1px solid black;">{{packagingSlip.packagingLabelViewModel.poroNum}}</td>
+                                                        <td style="vertical-align: top;border-right:1px solid black;">{{packagingSlip.packagingLabelViewModel.workOrderNumber}}</td>
                                                         <td style="vertical-align: top;border-right:1px solid black;">{{packagingSlip.packagingLabelViewModel.salesPersonName}}
                                                         </td>
                                                         <td style="vertical-align: top;border-right:1px solid black;">
@@ -299,7 +299,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <img src="{{part.partBarcode}}" style="width: 100px;" alt="barcode" width="98%" />
+                                                                            <img src="{{part.partBarcode}}"  alt="barcode" width="98%" />
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -453,7 +453,16 @@
 
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
-        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 </div>
             

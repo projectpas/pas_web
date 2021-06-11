@@ -19,6 +19,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     @Input() subWorkOrderDetails;
     @Input() isSubWorkOrder:any=false;
     @Input() subWOPartNoId;
+    @Input() isSummarizedView:boolean=false;
     lazyLoadEventData: any;
     pageSize: number = 10;
     pageIndex: number = 0;
@@ -57,6 +58,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
             this.totalRecords = this.data.length;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         }
+        this.isSummarizedView=this.isSummarizedView;
     }
 
     ngOnDestroy(): void {
@@ -66,6 +68,9 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     getWorkOrderLabourAnalysisData(workOrderId) {
         this.isSpinnerVisible = true;
         const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
+        if(this.isSummarizedView==true){
+          this.isDetailView=true;
+        }
               this.workOrderService.workOrderLabourAnalysisData(workOrderId, id, this.isSubWorkOrder, this.isDetailView, this.authService.currentUser.masterCompanyId)
                   .pipe(takeUntil(this.onDestroy$)).subscribe(
                       (res: any) => {
@@ -113,18 +118,18 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
 
       initSummaryColumns() {
         this.headers = [
-          { field: "workOrderNum", header: "WO Num", width: "120px" },         
-          { field: "partNumber", header: "PN", width: "130px" },
+          { field: "workOrderNum", header: "WO Num", width: "140px" },         
+          { field: "partNumber", header: "PN", width: "200px" },
           { field: 'revisedPN', header: 'Revised PN' },
-          { field: "partDescription", header: "PN Description", width: "180px" },
+          { field: "partDescription", header: "PN Description", width: "250px" },
           { field: 'customer', header: 'Customer' },
           { field: 'action', header: 'Task' },
           { field: 'expertise', header: 'Expertise' },
           { field: 'employeeName', header: 'Employee' },
-          { field: 'hours', header: 'Act Hours',width:"60px" },
-          { field: 'stdHours', header: 'Std Hours',width:"60px" },
-          { field: 'burdenRateAmount', header: 'Var. Hours',width:"60px" },
-          { field: 'varPercentage', header: 'Var %',width:"60px" },
+          { field: 'hours', header: 'Act Hours',width:"100px" },
+          { field: 'stdHours', header: 'Std Hours',width:"100px" },
+          { field: 'burdenRateAmount', header: 'Var. Hours',width:"100px" },
+          { field: 'varPercentage', header: 'Var %',width:"100px" },
           { field: 'stage', header: 'Stage' },
           { field: 'status', header: 'Status' },
         ];

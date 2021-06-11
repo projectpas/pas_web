@@ -144,30 +144,8 @@ export class SpeedQuotePartNumberComponent {
       { field: 'openDate', header: "Quote Date", width: "100px" },
       // { header: "UOM", width: "70px" },
       { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
-      // { field: 'qtyAvailable', header: "Qty Req", width: "90px" },
-      // { field: 'quantityToBeQuoted', header: "Qty to Quote", width: "70px" },
-      // { field: 'quantityAlreadyQuoted', header: "Qty Prev Quoted", width: "70px" },
-      // { field: 'customerRequestDate', header: "Cust Request Date", width: "155px" },
-      // { field: 'promisedDate', header: "Cust Promised Date", width: "155px" },
-      // { field: 'estimatedShipDate', header: "Est.Ship Date", width: "155px" },
-      // { field: 'statusName', header: "Status", width: "70px" },
-      // // { header: "Curr", width: "60px" },
-      // { header: "FX Rate", width: "80px" },
       { field: 'unitCostPerUnit', header: "Unit Cost", width: "90px" },
-      // { field: 'markUpPercentage', header: "MarkUp %", width: "70px" },
-      // { field: 'markupPerUnit', header: "MarkUp Amt/Unit", width: "110px" },
-      // { field: 'grossSalePricePerUnit', header: "Gross Price/Unit", width: "110px" },
-      // { field: 'salesDiscount', header: "Disc. %", width: "60px" },
-      // { field: 'salesDiscountPerUnit', header: "Disc. Amt/Unit", width: "110px" },
-      // { field: 'markupExtended', header: "MarkUp Amt", width: "100px" },
-      // { field: 'grossSalePrice', header: "Gross Sales Amt", width: "110px" },
-      // { field: 'salesDiscountExtended', header: "Disc. Amt", width: "90px" },
       { field: 'netSalesPriceExtended', header: "Net Sales Amt", width: "100px" },
-      // { header: "Misc Amt", width: "90px" },
-      // // { header: "Freight", width: "90px" },
-      // { field: 'taxType', header: "Tax Type", width: "90px" },
-      // { field: 'taxAmount', header: "Tax Amt", width: "90px" },
-      // { field: 'totalSales', header: "Total", width: "90px" },
       { field: 'unitCostExtended', header: "Ext Cost", width: "100px" },
       { field: 'marginAmountExtended', header: "Product Margin", width: "100px" },
       { field: 'marginPercentageExtended', header: "Product Margin (%)", width: "120px" },
@@ -180,31 +158,15 @@ export class SpeedQuotePartNumberComponent {
 
     this.summaryColumns = [
       // { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
-      // { field: 'itemNo', header: 'Line #', width: '42px', textalign: 'center' },
+      { field: 'itemNo', header: 'Line #', width: '42px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: "140px" },
       // { field: 'partDescription', header: 'PN Description', width: '200px' },
       { field: 'description', header: 'PN Description', width: '200px' },
-      // { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
       { field: 'quantityRequested', header: 'Qty', width: "60px" },
       { field: 'manufacturer', header: 'Manufacturer', width: "84px" },
       { field: 'oempmader', header: 'Item Type', width: "60px" },
-      // { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "84px" },
-      // { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "84px" },
-      // { field: 'quantityAvailable', header: 'Qty Avail', width: "75px" },
-      // { field: 'qtyOnHand', header: 'Qty on Hand', width: "75px" },
-      // { field: 'currencyDescription', header: 'Curr', width: "80px" },
-      // { field: 'fixRate', header: 'FX Rate', width: "80px" },
-      // { field: 'uom', header: 'UOM', width: "58px" },
-      // { field: 'customerRef', header: 'Cust Ref', width: "120px" },
       { field: 'unitSalePrice', header: 'Unit Price', width: "90px" },
-      // { field: 'grossSalePrice', header: 'Gross Sale Amt', width: "90px" },
-      // { field: 'salesDiscountExtended', header: 'Disc Amt', width: "90px" },
-      // { field: 'netSalesPriceExtended', header: 'Net Sale Amt', width: "84px" },
-      // { field: 'misc', header: 'Misc', width: "79px" },
-      // { field: 'freight', header: 'Freight', width: "84px" },
-      // { field: 'taxAmount', header: 'Tax Amt', width: "84px" },
-      // { field: 'totalSales', header: 'Total', width: "95px" },
       { field: 'unitCostExtended', header: 'Extended Cost', width: "90px" },
       { field: 'marginAmountExtended', header: 'Margin Amt', width: "103px" },
       { field: 'marginPercentageExtended', header: 'Margin%', width: "102px" },
@@ -321,7 +283,7 @@ export class SpeedQuotePartNumberComponent {
     });
     this.part.quantityToBeQuoted = Number(event.quantityFromThis);
     this.part.quantityAlreadyQuoted = Number(event.quantityFromThis);
-    //this.part.itemNo = this.countItemNo + 1;
+    this.part.itemNo = this.countItemNo + 1;
     this.speedQuoteService.updateSearchPartObject(this.query);
     //let partObj = { ...this.part };
     let partObj = { ...event };
@@ -340,6 +302,7 @@ export class SpeedQuotePartNumberComponent {
       for(let i=0;i<event.length;i++)
       {
         event[i].quantityRequested = this.query.partSearchParamters.quantityRequested;
+        event[i].itemNo = this.countItemNo + 1;
         partsList.push(event[i]);
       }
       //partsList.push(partObj);
@@ -374,6 +337,7 @@ export class SpeedQuotePartNumberComponent {
       // });
       uniqueParts.forEach((part, i) => {
         uniqueParts[i].isEditPart = true;
+        this.countItemNo = uniqueParts[i].itemNo
       });
       this.summaryParts = uniqueParts;
     }
@@ -673,5 +637,27 @@ export class SpeedQuotePartNumberComponent {
         return data[i + 1][field] === value
       }
     }
+  }
+  notesIndex;
+  notesSummaryRowIndex;
+  textAreaInfo: any;
+  onAddTextAreaInfo(material, index, summaryIndex) {
+    this.notesIndex = index;
+    this.notesSummaryRowIndex = summaryIndex;
+    this.textAreaInfo = material.notes;
+  }
+  onSaveTextAreaInfo(notes) {
+    if (notes) {
+      this.textAreaInfo = notes;
+      //this.summaryParts[this.notesSummaryRowIndex].childParts[this.notesIndex].notes = this.textAreaInfo;
+      this.summaryParts[this.notesSummaryRowIndex].notes = this.textAreaInfo;
+      this.combineParts(this.summaryParts);
+    }
+    this.canSaveParts = false;
+    $("#textarea-popupNotes").modal("hide");
+  }
+
+  onCloseTextAreaInfo() {
+    $("#textarea-popupNotes").modal("hide");
   }
 }
