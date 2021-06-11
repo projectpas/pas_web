@@ -332,8 +332,14 @@ export class WorkOrderPickticketComponent implements OnInit {
     }
     if (invalidQty) {
       this.isSpinnerVisible = false;
-      this.alertService.resetStickyMessage();
-      this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
+      this.alertService.stopLoadingMessage();
+      this.alertService.showMessage(
+        "",
+        errmessage,
+        MessageSeverity.warn
+      );
+      // this.alertService.resetStickyMessage();
+      // this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
     }
     else {
       this.disableSubmitButton = true;

@@ -41,6 +41,7 @@ export class ShippingComponent implements OnInit {
     addCustomerInfo: boolean = false;
     isMultipleSelected: boolean = false;
     isgeneratelable: boolean = true;
+    ispackagegeneratelable: boolean = true;
     customerDetails:any;
     workOrderPartId:number;
     woShippingId:number;
@@ -425,6 +426,15 @@ checkedToGenerate(evt, ship) {
                     if (ele.selectedToGeneratePackaging) 
                     {
                         this.disableGeneratePackagingBtn = false;
+                        if(ele.packagingSlipId > 0)
+                        {
+                            this.ispackagegeneratelable = false;
+                        }
+                        else
+                        {
+                            this.ispackagegeneratelable = true;
+                        }
+
                         if(ele.qtyShipped > 0)
                         {
                             this.isgeneratelable = false;
@@ -439,6 +449,7 @@ checkedToGenerate(evt, ship) {
                     {
                      
                         this.disableGeneratePackagingBtn = true;
+                        this.ispackagegeneratelable = true;
                         this.isgeneratelable = true;
                     }
                        
@@ -822,7 +833,9 @@ checkedToGenerate(evt, ship) {
         this.shippingHeader['updatedDate'] = new Date().toDateString();
         this.shippingHeader['workOrderCustomsInfo']['createdDate'] = new Date().toDateString();
         this.shippingHeader['workOrderCustomsInfo']['updatedDate'] = new Date().toDateString();
+        this.shippingHeader['shipToName'] = editValueAssignByCondition('customerName', this.shippingHeader['shipToCustomerId']);
         this.shippingHeader['shipToCustomerId'] = editValueAssignByCondition('customerId', this.shippingHeader['shipToCustomerId']);
+
         this.shippingHeader['shippingItems'] = shippingItems;
         this.isSpinnerVisible = true;
         this.workorderService.saveWorkOrderShipping(this.shippingHeader)
