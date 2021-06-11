@@ -113,7 +113,7 @@
         <td  class="text-right"><b>{{ workFlow.extendedCostSummation }}</b></td>
         <td>&nbsp;</td>
         <td *ngIf="isWorkFlow">&nbsp;</td>
-        <td *ngIf="!isEdit"></td> 
+        <td *ngIf="!isEdit || isWorkFlow"></td> 
       </tr>
       </tbody>
     </table>

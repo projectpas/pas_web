@@ -108,7 +108,8 @@
                     <ng-container *ngFor="let col of columns">
                         <td class="table-column-width text-capital" *ngIf="col.field == 'notesData'" class="ui-resizable-column"
                             pReorderableRowHandle>
-                            <p class="p_textEditor p-0 m-0 text-capital" [innerHTML]=rowData[col.field]></p>
+                            <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                            [matTooltip]="parsedText(rowData[col.field])" [innerHTML]=rowData[col.field]></p>
                         </td>
                         <td class="table-column-width" *ngIf=" col.field!='notesData'">
                             {{ col.field == 'createdDate'

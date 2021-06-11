@@ -1225,9 +1225,9 @@ this.workOrderGeneralInformation.partNumbers.map(x => {
                     createdBy: generalInfo.createdBy? generalInfo.createdBy :this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
-                    cMMId:x.cMMId==0 ? null :x.cMMId,
+                    cMMId:x.cMMId==0  || x.cMMId==undefined ? null :x.cMMId,
                     masterCompanyId : this.currentUserMasterCompanyId,
-                    workflowId: x.workflowId == 0 ? null : x.workflowId,
+                    workflowId: x.workflowId == 0 || x.workflowId == undefined ? null : x.workflowId,
                     revisedPartId: this.workOrderGeneralInformation.revisedPartId ? this.workOrderGeneralInformation.revisedPartId : null,
                 }
             })

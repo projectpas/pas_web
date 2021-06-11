@@ -977,13 +977,13 @@ this.isViewItem=true;
         this.eqPartData = [];
         this.eqPartData = childPart;
         childPart.forEach(element => {
-            element.reservedById = this.authService.currentEmployee,
+                element.reservedById = this.authService.currentEmployee,
                 element.issuedById = this.authService.currentEmployee,
                 element.createdBy = this.authService.currentUser.userName,
                 element.updatedBy = this.authService.currentUser.userName
         });
         this.eqPartData.map(element => {
-            element.reservedById = this.authService.currentEmployee.value,
+                element.reservedById = this.authService.currentEmployee.value,
                 element.issuedById = this.authService.currentEmployee.value
         });
         if ((isChecked === true) && (this.statusId == 1 || this.statusId == 3)) {
@@ -999,6 +999,13 @@ this.isViewItem=true;
                     })
             }
         }
+        childPart.forEach(element => {
+            element.reservedById = this.authService.currentEmployee,
+                element.issuedById = this.authService.currentEmployee,
+                element.createdBy = this.authService.currentUser.userName,
+                element.updatedBy = this.authService.currentUser.userName
+        });
+        this.eqPartData = childPart;
         if (isChecked === false) {
             this.eqPartData = [];
             this.uncheckAltEqlPartCall(childPart)
@@ -1239,7 +1246,7 @@ this.isViewItem=true;
             );
 
 
-        }
+        } 
     }
     checkActiveStatus: boolean = false;
     closeMaterial() {

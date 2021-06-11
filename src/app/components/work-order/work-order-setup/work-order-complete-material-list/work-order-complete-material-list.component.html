@@ -1,7 +1,5 @@
 ﻿<div *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
-    <!-- <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary mar-left-5"
-        (click)="createNew();" style="min-width: 97px !important;">Add PN</button> -->
-    <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
+   <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
         Add PN  
     </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary" 
@@ -24,8 +22,6 @@
          (click)="partsIssueRI(5)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
         Unreserve </button>
 </div>
-
-
 <div id="addNewMaterials" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg"> 
         <div class="modal-content">
@@ -53,19 +49,12 @@
                 [clearData]="clearData" [display]="show" [selectedParts]="selectedParts"
                 (close)="onClose($event)" [type]="'WO'" (setmaterialListForSave)="setmaterialListForSave($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)">
                 </app-work-order-materials-add >
-    <!-- <app-work-order-materials-add [display]="show" [selectedParts]="selectedParts" 
-         [clearData]="clearData" [isWorkOrder]="isWorkOrder" [customerId]="customerId"
-         (close)="onClose($event)" [type]="'WO'">
-        (select)="openSalesMargin($event)" [salesQuote]="salesQuote" [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow"
-    </app-work-order-materials-add> -->
-    
-</ng-template>
+ </ng-template>
 <div *ngIf="ispickticket">
     <app-work-order-pickticket [referenceId]="this.savedWorkOrderData.workOrderId"></app-work-order-pickticket>
 </div> 
 <div id="reserve" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog modal-xlg">
-        <!-- Modal content-->
+    <div class="modal-dialog modal-xlg"> 
         <div class="modal-content">
             <div class="preloader" *ngIf="isSpinnerVisibleReserve">
                 <div class="loading">
@@ -88,7 +77,7 @@
                     <p-checkbox class="p-checkbox-label-womaterial" name="task" binary="false" 
                         label="Include Alternate PN" (onChange)="resetAlternateParts($event)" [(ngModel)]="isShowAlternatePN">
                     </p-checkbox> 
-                </div>
+                </div> 
                 <div class="col-md-4" style="margin-left:-50px !important">
                     <p-checkbox class="p-checkbox-label-womaterial" name="task" binary="false" label="Include Eq PN"
                         (onChange)="resetEqParts($event)" [(ngModel)]="isShowEqPN"></p-checkbox>
@@ -120,9 +109,7 @@
                                     <th *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)" class="text-center">
                                         Equivalent Parts
                                     </th>
-                                    
-                                    
-                                    <th class="text-center" style="min-width: 110px;">PN </th>
+                                     <th class="text-center" style="min-width: 110px;">PN </th>
                                     <th class="text-center" style="min-width: 130px;">Part Description</th>
                                     <th class="text-center" style="min-width: 110px;" *ngIf="(statusId == 2 || statusId == 4 || statusId == 5) && (showAlternateParts ||showEqParts) ">Alt/Equiv</th>
                                     <th class="text-center" style="min-width: 96px;"> Alternate PN For</th>
@@ -164,23 +151,21 @@
                             </thead>
                             <tbody>
                                 <ng-container *ngFor="let x of reservedList; let i=index;" >
-                                <tr>
+                                <tr> 
                                     <td class="text-center">
                                       <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 1 || statusId === 5)"
                                             [(ngModel)]="x.isParentSelected" (change)="selectedParts(x,$event)" [disabled]="x.quantityReserved==0">
-
-
-                                            <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)"
+ <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)"
                                             [(ngModel)]="x.isParentSelected" (change)="selectedParts(x,$event)" [disabled]="x.quantityIssued==0">
                                         </td>
                                     <td *ngIf="isShowAlternatePN && (statusId == 1 || statusId == 3)" class="text-center">
                                        <input type="checkbox" name="showAlternateParts{{i}}" 
-                                            (ngModelChange)="showAlternateParts($event , x.woReservedIssuedAltParts)"
+                                            (change)="showAlternateParts($event , x.woReservedIssuedAltParts)"
                                             [(ngModel)]="x.showAlternateParts" >
                                     </td>
                                     <td *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)" class="text-center">
                                         <input type="checkbox" name="showEqParts{{i}}"
-                                            (ngModelChange)="showEquantParts($event , x.woReservedIssuedEquParts)" 
+                                            (change)="showEquantParts($event , x.woReservedIssuedEquParts)" 
                                             [(ngModel)]="x.showEqParts">
                                     </td>
                                     <td>{{x.partNumber}}</td>
@@ -255,16 +240,14 @@
                                         [size]="30" [minLength]="1" [dropdown]="true"
                                         class="p-autoComplete-ctsm" disabled  [required]="x.isParentSelected">
                                     </p-autoComplete>
-                                    <!-- [disabled]="!x.isParentSelected" -->
-                                    </td> 
+                                   </td> 
                                 </tr>
                                 <ng-container *ngIf="x.showAlternateParts==true" >
                                 <tr *ngFor="let b of x.woReservedIssuedAltParts; let y=index;">
                                     <td class="text-center">
                                         <input type="checkbox" *ngIf="(statusId === 1 || statusId === 5)" [(ngModel)]="b.isChildSelected" [disabled]="b.quantityReserved==0"
                                             name="isChildSelected{{y}}" (change)="selectedParts(b,$event)">
-
-                                            <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="b.isChildSelected" [disabled]="b.quantityReserved==0"
+ <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="b.isChildSelected"  
                                             name="isChildSelected{{y}}" (change)="selectedParts(b,$event)" [disabled]="x.quantityIssued==0">  
                                     </td>
                                     <td  *ngIf="isShowAlternatePN && (statusId == 1 || statusId == 3)">
@@ -277,9 +260,7 @@
                                         <span>Alternative</span>
                                     </td>
                                     <td>{{b.parentPartNo}}</td>
-
-
-                                    <td>{{b.condition}}</td>
+ <td>{{b.condition}}</td>
                                     <td>{{b.stockType}}</td>
                                     <td class="tex_end text-right">
                                         {{b.quantity}}
@@ -292,7 +273,6 @@
                                         <input type="number" name="quantity1_{{y}}" [(ngModel)]="b.quantityReserved" (keypress)="restrictMinus($event)"
                                             (keyup)="validatePartsQuantity($event,b)" (input)="childPartValidate($event.target.value, b,1)"
                                              [disabled]="b.quantityReserved==0">
-                                             <!-- [disabled]="!b.isChildSelected" -->
                                     </td>
                                     <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
 
@@ -300,7 +280,6 @@
                                             (keyup)="validatePartsQuantity($event,b)"
                                             (input)="childPartValidate($event.target.value, b,1)"
                                             [disabled]="b.quantityIssued==0">
-                                            <!-- [disabled]="!b.isChildSelected" -->
                                     </td>
                                     <td class="tex_end text-right">{{b.quantityAlreadyIssued}}</td>
                                     <td class="tex_end text-right">{{b.qtyToBeIssued}}</td>
@@ -336,8 +315,6 @@
                                         [size]="30" [minLength]="1" [dropdown]="true"
                                         class="p-autoComplete-ctsm"   [required]="b.isChildSelected" disabled >
                                     </p-autoComplete>
-                                    <!-- [disabled]="!b.isChildSelected" -->
-
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
                                         <p-autoComplete field="name"
@@ -350,20 +327,17 @@
                                          [size]="30" [minLength]="1" [dropdown]="true"
                                          class="p-autoComplete-ctsm"  appendTo='body' [baseZIndex]="9999"  [required]="b.isChildSelected" disabled  >
                                      </p-autoComplete>
-                                     <!-- [disabled]="!b.isChildSelected" -->
                                     </td>
                                 </tr>
                                 </ng-container>
                                 <ng-container *ngIf="x.showEqParts==true" >
                                 <tr *ngFor="let c of x.woReservedIssuedEquParts; let z=index; ">
                                     <td class="text-center">
-                                        <!-- {{c.quantityReserved}}--qty -->
                                         <input type="checkbox" *ngIf="(statusId === 1 || statusId === 5)" [(ngModel)]="c.isChildSelected" [disabled]="c.quantityReserved==0"
-                                            name="isChildSelected{{z}}" (change)="selectedParts(c,$event)">
+                                            name="isChildSelected{{z}}" (change)="selectedParts(c,$event)"> 
 
                                             <input type="checkbox" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)" [(ngModel)]="c.isChildSelected"  [disabled]="c.quantityIssued==0"
                                             name="isChildSelected{{z}}" (change)="selectedParts(c,$event)">
-                                            <!-- <span>{{c.quantityReserved}}</span> -->
                                     </td>
                                     <td  *ngIf="isShowAlternatePN && (statusId == 1 || statusId == 3)">
                                     </td>
@@ -428,8 +402,7 @@
                                          [size]="30" [minLength]="1" [dropdown]="true"
                                          class="p-autoComplete-ctsm"  [required]="c.isChildSelected"  disabled>
                                      </p-autoComplete>
-                                     <!-- [disabled]="!c.isChildSelected" -->
-                                    </td>
+                                   </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
                                       <p-autoComplete field="name" appendTo='body' [baseZIndex]="9999"
                                         [(ngModel)]="c.issuedById"
@@ -441,7 +414,6 @@
                                          [size]="30" [minLength]="1" [dropdown]="true"
                                          class="p-autoComplete-ctsm"   [required]="c.isChildSelected" disabled >
                                      </p-autoComplete> 
-                                     <!-- [disabled]="!c.isChildSelected" -->
                                     </td>
                                 </tr>
                             </ng-container>
