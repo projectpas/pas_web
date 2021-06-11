@@ -215,6 +215,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     enablePickTicket: boolean = false;
     isViewItem: boolean = false;
     stockLineId: any;
+    
     constructor(
         private workOrderService: WorkOrderService,
         public itemClassService: ItemClassificationService,
@@ -225,7 +226,15 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private alertService: AlertService,
         public router: Router,
         private commonService: CommonService
-    ) { this.show = true; }
+    ) { this.show = true; 
+        // enum partStatus {
+        //     Reserve=1,
+        //     Issued=2,
+        //     Reserveandissued=3,
+        //     Unissued=4,
+        //     Unreserved=5
+        // }
+    }
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
