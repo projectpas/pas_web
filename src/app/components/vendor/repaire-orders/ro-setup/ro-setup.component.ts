@@ -528,7 +528,9 @@ export class RoSetupComponent implements OnInit {
 						setTimeout(() => {
 							if (this.itemMasterId > 0 && this.adddefaultpart) {
 								this.isSpinnerVisible = true;
-								this.addPartNumbers(this.itemMasterId, this.partName)
+								//this.addPartNumbers(this.itemMasterId, this.partName)
+								this.addAvailableStocklineAddPArt('stocklindi', 'qty')
+
 								this.adddefaultpart = false;
 								this.isSpinnerVisible = false;
 							}
@@ -2679,7 +2681,7 @@ export class RoSetupComponent implements OnInit {
 		this.loadModuleListForVendorComp();
 		this.getAllrevisedPart();
 		this.getAllworkPerformed();
-		//this.getAllACTailNum('');
+		this.getAllACTailNum('');
 	}
 
 	CloseModel(status) {
@@ -3421,9 +3423,25 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	addAvailableStocklineAddPArt() {
+	addAvailableStocklineAddPArt(stocklindi, qty) {
 		this.tempNewPNArray = [];
 		let newParentObject = new CreatePOPartsList()
+
+		///New Api
+
+
+		// this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId, this.includeAlternatePartNumber, this.includeEquivalentPartNumber, this.includeRevicePartNumber, this.currentUserMasterCompanyId).subscribe(res => {
+		// 	this.stocklineData = res.map(x => {
+		// 		return {
+		// 			...x,
+		// 			addAllMultiStocklineRows: false,
+		// 			disableStockline: false,
+		// 		}
+		// 	})
+
+		// stocklineData
+
+
 		if (this.stocklineData) {
 			const data = this.stocklineData.map(x => {
 				const newObject = {
@@ -3439,7 +3457,10 @@ export class RoSetupComponent implements OnInit {
 					controlNumber: x.controlNumber,
 					acTailNum: x.aircraftTailNumber,
 					stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
-					x
+					x,
+					//workOrderId: getObjectById('value', this.lsWoId == null ? 0 : this.lsWoId, this.allWorkOrderDetails),
+					//subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allSalesOrderInfo),
+					//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
 				}
 				this.getManagementStructureForParentEdit(newObject);
 				this.getPNDetailsByStocklineId(newObject);
@@ -3452,6 +3473,7 @@ export class RoSetupComponent implements OnInit {
 					this.partListData[i].childList = [];
 				}
 			}
+			this.partListData[0].quantityOrdered = qty;
 		}
 		this.partNumbers = null;
 		this.addAllMultiPN = false;
@@ -3620,7 +3642,6 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	addStockLineView(itmeMasterID, Condtionid) {
-		
 		this.stocklineData = [];
 		this.stocklineconditionId = null;
 		this.stocklinepartNumberId = null;
@@ -3649,15 +3670,12 @@ export class RoSetupComponent implements OnInit {
 						}
 					}
 				}
-			}			
-			this.stocklinepartNumberId = this.partCollection.find((x: any) => x.value == itmeMasterID);		
-			var conditiondata = this.allconditioninfo.find((x: any) => x.value == Condtionid);
-			this.stocklineconditionId = [parseInt(conditiondata["value"])];
-
+			}
 		}, err => {
 			this.isSpinnerVisible = false;
 			this.stocklineData = []
 		});
+
 	}
 
 
@@ -5195,7 +5213,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	StockLinePopup(row) {
-		
+		debugger
 		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
 			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;
