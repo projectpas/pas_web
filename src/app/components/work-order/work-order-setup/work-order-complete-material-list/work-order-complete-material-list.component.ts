@@ -79,7 +79,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     addPartModal: NgbModalRef;
     show: boolean;
     clearData = false;
-
+    isVisible:boolean=false;
     cols = [
         { field: 'taskName', header: 'Task', align: 0 },
         { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
@@ -149,8 +149,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'stockType', header: 'Stk Type' }, //oem
         { field: 'altEquiv', header: 'Alt/Equiv' },
         { field: 'itemClassification', header: 'Classification' },
-        { field: 'partQuantityOnOrder', header: 'Qty On Order' },
-        { field: 'qunatityBackOrder', header: 'Qty on BK Order' },
+        // { field: 'partQuantityOnOrder', header: 'Qty On Order' },
+        // { field: 'qunatityBackOrder', header: 'Qty on BK Order' },
         { field: 'needDate', header: 'Need Date' },
         { field: 'controlNo', header: 'Cntl Num' },
         { field: 'controlId', header: 'Cntl ID' },
@@ -158,10 +158,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'unitCost', header: 'Unit Cost' },
         { field: 'extendedCost', header: 'Extended Cost' },
         { field: 'costDate', header: 'Cost Date' },
-        { field: 'purchaseOrderNumber', header: 'PO Num' },
-        { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date' },
-        { field: 'repairOrderNumber', header: 'RO Num' },
-        { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' },
+        // { field: 'purchaseOrderNumber', header: 'PO Num' },
+        // { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date' },
+        // { field: 'repairOrderNumber', header: 'RO Num' },
+        // { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' },
         { field: 'receiver', header: 'Rec Num' },
         { field: 'workOrderNumber', header: 'WO Num' },
         { field: 'subWorkOrderNo', header: 'Sub-WO Num' },
@@ -1162,13 +1162,17 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
 
             if (this.isSubWorkOrder == true) {
                 this.workOrderService.reservereleaseSubWostoclineqty(this.releasePartsList).subscribe((res: any[]) => {
+                    this.refreshData.emit();
                 },
                     err => {
+                        this.refreshData.emit();
                     })
             } else {
                 this.workOrderService.reservereleasestoclineqty(this.releasePartsList).subscribe((res: any[]) => {
+                    this.refreshData.emit();
                 },
                     err => {
+                        this.refreshData.emit();
                     })
             }
         }
@@ -1286,9 +1290,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.savebutonDisabled = false;
         this.isAllow = false;
         this.releaseStock();
-        setTimeout(() => {
-            this.refreshData.emit();
-        }, 2000);
     }
 
     startTimerplus() {
@@ -1484,25 +1485,23 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
             { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
             { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
-            { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
+            { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "90px" },
             { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
-            { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
+            { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "66px" },
             { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
+          
             { field: 'uom', header: 'UOM', align: 0, width: "70px" },
             { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
             // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
             { field: 'itemClassification', header: 'Classification', align: 0, width: "150px" },
-            // { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
-            // { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
             { field: 'needDate', header: 'Need Date', align: 0 },
             // { field: 'controlNo', header: 'Cntl Num', align: 0 },
             // { field: 'controlId', header: 'Cntl ID', align: 0 },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
-            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
-            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
+            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "68px" },
+            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "96px" },
             // { field: 'costDate', header: 'Cost Date', align: 0 },
-            // { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
-            // { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0 },
+   
             // { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
             // { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0 },
             // { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
@@ -1518,6 +1517,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
             { field: 'memo', header: 'Memo', align: 0, width: "250px" },
             { field: 'isDeferred', header: 'Deferred', align: 0, width: "90px" },
+            { field: 'qtyOnOrder', header: 'Qty On Order', align: 1, width: "86px" },
+            { field: 'qtyOnBkOrder', header: 'Qty on BK Order', align: 1, width: "110px" },
+            { field: 'poNum', header: 'PO Num' },
+            { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date',width: "115px" },
         ]
 
         this.childColumnsData = [
@@ -1541,8 +1544,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'uom', header: 'UOM', align: 0, width: "70px" },
             { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
             // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
-            { field: 'itemClassification', header: 'Classification', align: 0, width: "150px" },
-            { field: 'needDate', header: 'Need Date', align: 0, width: "70px" },
+            { field: 'itemClassification', header: 'Classification', align: 0,width: "200px" },
+            { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
             { field: 'stocklineUnitCost', header: 'Unit Cost', align: 1, width: "61px" },
             { field: 'stocklineExtendedCost', header: 'Extended Cost', align: 1, width: "90px" },
@@ -1551,12 +1554,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
             //   { field: 'defered', header: 'Deferred', align: 0, width: "60px" },
             { field: 'memo', header: 'Memo', align: 0, width: "250px" },
-            { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
-            { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
+            // { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1, width: "82px" },
+            // { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1, width: "100px" },
 
             { field: 'costDate', header: 'Cost Date', align: 0, width: "70px" },
-            { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
-            { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0, width: "120px" },
+            // { field: 'purchaseOrderNumber', header: 'PO Num', align: 0, width: "100px" },
+            // { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', align: 0, width: "120px" },
             { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
             { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0, width: "120px" },
             { field: 'receiver', header: 'Rec Num', align: 0, width: "100px" },
@@ -1569,7 +1572,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'location', header: 'Location', align: 0, width: "100px" },
             { field: 'shelf', header: 'Shelf', align: 0, width: "100px" },
             { field: 'bin', header: 'Bin', align: 0, width: "100px" },
-
+         
+            // { field: 'repairOrderNumber', header: 'RO Num' },
+            // { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' },
 
         ]
 
