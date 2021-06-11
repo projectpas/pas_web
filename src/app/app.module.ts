@@ -277,6 +277,8 @@ import { InvoicePaymentService } from './services/invoice-payment-service';
 import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoint-service';
 import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
 import { ForgotPassComponent } from './components/login/forgot-password-ui/forgotpassword.component';
+import { ResetPasswordComponent } from './components/login/reset-password/reset-password.component';
+import { ResetPassComponent } from './components/login/reset-password-ui/resetpassword.component';
 @NgModule({
   imports: [
     CardModule,
@@ -342,7 +344,9 @@ import { ForgotPassComponent } from './components/login/forgot-password-ui/forgo
     SafePipe,
     AuditComponentComponent,
     ForgotPasswordComponent,
-    ForgotPassComponent
+    ForgotPassComponent,
+    ResetPasswordComponent,
+    ResetPassComponent
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },

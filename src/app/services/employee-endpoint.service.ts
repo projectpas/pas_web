@@ -64,6 +64,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	private readonly _employeeUpdatePasswordUrl: string = environment.baseUrl + "/api/Employee/updateemployeepassword";
 	private readonly _employeeGlobalSrchUrl: string = "/api/Employee/employeeglobalsearch";
 	private readonly _forgotpasswordUrl: string = "/api/employee/forgotpassword";
+	private readonly _resetpasswordUrl: string = "/api/employee/resetpassword";
 
 	get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 	get getEmployeeCommonDataUrl() { return this.configurations.baseUrl + this._employeeCommonDatatUrl; }
@@ -100,6 +101,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	get createnewemployeeCerti() { return this.configurations.baseUrl + this._certifiUrlNew; }
 	get createnewemployeetrining() { return this.configurations.baseUrl + this._trainingUrlNew; }
 	get forgotpasswordUrl() { return this.configurations.baseUrl + this._forgotpasswordUrl; }
+	get resetpasswordUrl() { return this.configurations.baseUrl + this._resetpasswordUrl; }
 
 	constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 		super(http, configurations, injector);
@@ -517,6 +519,13 @@ export class EmployeeEndpoint extends EndpointFactory {
 		return this.http.post<T>(this.forgotpasswordUrl, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleError(error, () => this.forgotPasswordEndpoint(userObject));
+			});
+	}
+
+	resetPasswordEndpoint<T>(userObject: any): Observable<T> {
+		return this.http.post<T>(this.resetpasswordUrl, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleError(error, () => this.resetPasswordEndpoint(userObject));
 			});
 	}
 }

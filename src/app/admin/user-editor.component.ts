@@ -85,6 +85,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         private authService: AuthService
     ) {
         this.buildForm();
+        debugger;
         if (this.authService.currentUser != null && this.authService.currentUser.roleName != undefined) {
             this.roleAssign = this.authService.currentUser.roleName.split(',');
         }

@@ -25,6 +25,7 @@ import { UserListComponent } from './admin/user-list.component';
 import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
 import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 import { ForgotPassComponent } from './components/login/forgot-password-ui/forgotpassword.component';
+import { ResetPassComponent } from './components/login/reset-password-ui/resetpassword.component';
 
 @NgModule({
     imports: [
@@ -32,6 +33,7 @@ import { ForgotPassComponent } from './components/login/forgot-password-ui/forgo
             { path: "", component: HomeComponent, canActivate: [AuthGuard], data: { title: "Home" } },
             { path: "login", component: LoginComponent, data: { title: "Login" } },
             { path: "forgotpassword", component: ForgotPassComponent, data: { title: "Forgot Password" } },
+            { path: "resetpassword", component: ResetPassComponent, data: { title: "Reset Password" } },
             { path: "registration", component: UserEditorComponent, data: { title: "Registration" } },
             { path: "userlist", component: UserListComponent, data: { title: "User List" } },
             { path: "products", component: ProductsComponent, canActivate: [AuthGuard], data: { title: "Products" } },
