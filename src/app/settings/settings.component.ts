@@ -6,17 +6,14 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
-
 import 'rxjs/add/operator/switchMap';
-
 import { UserEditorComponent } from '../admin/user-editor.component';
 import { UserPreferencesComponent } from './user-preferences.component';
 import { AppTranslationService } from "../services/app-translation.service";
 import { Permission } from '../models/permission.model';
-//import { Role } from '../models/role.model';
 import { User } from '../models/user.model';
-import { AccountService, RolesChangedEventArg } from "../services/account.service";
-import { AlertService, DialogType, MessageSeverity } from '../services/alert.service';
+import { AccountService } from "../services/account.service";
+import { AlertService, MessageSeverity } from '../services/alert.service';
 import { fadeInOut } from '../services/animations';
 import { Utilities } from '../services/utilities';
 import { UserRoleService } from '../components/user-role/user-role-service';
@@ -30,21 +27,16 @@ import { UserRole } from '../components/user-role/ModuleHierarchyMaster.model';
 })
 export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
     fragmentSubscription: any;
-
-    @ViewChild('profile',{static:false}) profilePanel: MatExpansionPanel
-    @ViewChild('preferences',{static:false}) preferencesPanel: MatExpansionPanel
-
-    @ViewChild(UserEditorComponent,{static:false}) userProfile: UserEditorComponent;
-
-    @ViewChild(UserPreferencesComponent,{static:false}) userPreferences: UserPreferencesComponent;
+    @ViewChild('profile', { static: false }) profilePanel: MatExpansionPanel
+    @ViewChild('preferences', { static: false }) preferencesPanel: MatExpansionPanel
+    @ViewChild(UserEditorComponent, { static: false }) userProfile: UserEditorComponent;
+    @ViewChild(UserPreferencesComponent, { static: false }) userPreferences: UserPreferencesComponent;
 
     constructor(
         private alertService: AlertService,
         private router: Router,
-        private route: ActivatedRoute,
-        private translationService: AppTranslationService,
         private accountService: AccountService,
-        private userService:UserRoleService
+        private userService: UserRoleService
     ) { }
 
     ngOnInit() {
@@ -61,14 +53,12 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit() {
         this.loadCurrentUserData();
-
         this.userProfile.userSaved$.subscribe(user => {
             this.alertService.showMessage("Success", "Changes to your User Profile was saved successfully", MessageSeverity.success);
         });
     }
 
     ngOnDestroy() {
-        //this.fragmentSubscription.unsubscribe();
     }
 
     public navigateToFragment(fragment: string) {
@@ -79,21 +69,18 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private loadCurrentUserData() {
         this.alertService.startLoadingMessage();
-        //var userId=this.authService.currentUser.userName;
         if (this.canViewRoles) {
-            this.userService.getAllUserRole().subscribe(roles=>{
-                
+            this.userService.getAllUserRole().subscribe(roles => {
                 this.accountService.getUserAndRoles().subscribe(
                     results => this.onCurrentUserDataLoadSuccessful(results[0], roles[0]),
                     error => this.onCurrentUserDataLoadFailed(error)
                 );
             });
-            
         }
         else {
             this.accountService.getUser().subscribe(
                 user => {
-                    let role=user.roleName;
+                    let role = user.roleName;
                     this.onCurrentUserDataLoadSuccessful(user)
                 },
                 error => {
@@ -102,8 +89,7 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-
-    private onCurrentUserDataLoadSuccessful(user: User, roles: UserRole[]=[]) {
+    private onCurrentUserDataLoadSuccessful(user: User, roles: UserRole[] = []) {
         this.alertService.stopLoadingMessage();
         this.userProfile.setUser(user, roles);
     }

@@ -3,18 +3,14 @@
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
-import { Component, OnDestroy, ViewChild, Input, Output, OnChanges, EventEmitter } from '@angular/core';
-import { NgForm, FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
-
-import {Subject,  Subscription } from 'rxjs';
-
+import { Component, OnDestroy, ViewChild, Input, OnChanges } from '@angular/core';
+import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject, Subscription } from 'rxjs';
 import { AccountService } from "../services/account.service";
 import { AlertService, MessageSeverity } from '../services/alert.service';
 import { AppTranslationService } from '../services/app-translation.service';
-import { Utilities } from '../services/utilities';
 import { User } from '../models/user.model';
 import { UserEdit } from '../models/user-edit.model';
-import { Role } from '../models/role.model';
 import { Permission } from '../models/permission.model';
 import { EqualValidator } from '../shared/validators/equal.validator';
 import { UserRole } from '../components/user-role/ModuleHierarchyMaster.model';
@@ -26,24 +22,19 @@ import { AuthService } from '../services/auth.service';
     styleUrls: ['./user-editor.component.scss']
 })
 export class UserEditorComponent implements OnChanges, OnDestroy {
-    @ViewChild('form',{static:false})
+    @ViewChild('form', { static: false })
     private form: NgForm;
-
     isNewUser = false;
     isChangePassword = false;
     public isSaving = false;
     private passwordWatcher: Subscription;
     private onUserSaved = new Subject<User>();
-
     @Input() user: User = new User();
     @Input() roles: UserRole[] = [];
     @Input() isEditMode: boolean = false;
-
     userProfileForm: FormGroup;
     userSaved$ = this.onUserSaved.asObservable();
-
-    roleAssign:string[]=[];
-
+    roleAssign: string[] = [];
     get userName() {
         return this.userProfileForm.get('userName');
     }
@@ -53,61 +44,49 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
     get lastName() {
         return this.userProfileForm.get('lastName');
     }
-
     get email() {
         return this.userProfileForm.get('email');
     }
-
     get password() {
         return this.userProfileForm.get('password');
     }
-
     get currentPassword() {
         return this.password.get('currentPassword');
     }
-
     get newPassword() {
         return this.password.get('newPassword');
     }
-
     get confirmPassword() {
         return this.password.get('confirmPassword');
     }
-
     get assignedRoles() {
         return this.userProfileForm.get('roles');
     }
-
     get canViewRoles() {
         return this.accountService.userHasPermission(Permission.viewRolesPermission);
     }
-
     get canAssignRoles() {
         return this.accountService.userHasPermission(Permission.assignRolesPermission);
     }
-
     get isEditingSelf() {
         return this.accountService.currentUser ? this.user.id == this.accountService.currentUser.id : false;
     }
-
     get assignableRoles(): UserRole[] {
         return this.roles;
     }
-
     get floatLabels(): string {
         return this.isEditMode ? 'auto' : 'always';
     }
 
     constructor(
         private alertService: AlertService,
-        private translationService: AppTranslationService,
         private accountService: AccountService,
         private formBuilder: FormBuilder,
-        private authService:AuthService
+        private authService: AuthService
     ) {
         this.buildForm();
-        if(this.authService.currentUser!=null && this.authService.currentUser.roleName!=undefined){
-            this.roleAssign=this.authService.currentUser.roleName.split(',');
+        if (this.authService.currentUser != null && this.authService.currentUser.roleName != undefined) {
+            this.roleAssign = this.authService.currentUser.roleName.split(',');
         }
     }
 
@@ -121,8 +100,6 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             this.user.isEnabled = true;
         }
 
-        //this.setRoles();
-
         this.resetForm();
     }
 
@@ -132,10 +109,10 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
 
     public setUser(user?: User, roles?: UserRole[]) {
         this.user = user;
-        
+
         if (roles) {
             this.roles = [...roles];
-            this.roles.map(i=>i.name==this.user.roleName);
+            this.roles.map(i => i.name == this.user.roleName);
         }
 
         this.ngOnChanges();
@@ -145,8 +122,8 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         this.userProfileForm = this.formBuilder.group({
             jobTitle: '',
             userName: ['', Validators.required],
-            firstName:['',Validators.required],
-            lastName:['',Validators.required],
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             password: this.formBuilder.group({
                 currentPassword: ['', Validators.required],
@@ -183,7 +160,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         }
 
         this.currentPassword.clearValidators();
-        
+
         this.userProfileForm.reset({
             jobTitle: this.user.jobTitle || '',
             userName: this.user.userName || '',
@@ -270,17 +247,17 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             confirmPassword: this.isChangePassword ? formModel.password.confirmPassword : null,
             isEnabled: formModel.isEnabled,
             isLockedOut: this.user.isLockedOut,
-            employeeId:this.user.employeeId,
+            employeeId: this.user.employeeId,
             managementStructureId: this.user.managementStructureId,
             masterCompanyId: this.user.masterCompanyId,
             legalEntityId: this.user.legalEntityId,
-            isResetPassword:this.user.isResetPassword,
-            roleName:"",
-            permissionName:[],
-            roleID:"",
-            firstName:formModel.firstName,
-            lastName:formModel.lastName
-        };        
+            isResetPassword: this.user.isResetPassword,
+            roleName: "",
+            permissionName: [],
+            roleID: "",
+            firstName: formModel.firstName,
+            lastName: formModel.lastName
+        };
     }
 
     private saveCompleted(user?: User) {
@@ -344,11 +321,11 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
                 this.alertService.stopLoadingMessage();
                 this.alertService.showMessage("Success", "User has been successfully unlocked", MessageSeverity.success);
             },
-            error => {
-                this.isSaving = false;
-                this.alertService.stopLoadingMessage();
-                this.alertService.showStickyMessage("Unblock Error", "The below errors occured whilst unlocking the user:", MessageSeverity.error, error);
-                this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-            });
+                error => {
+                    this.isSaving = false;
+                    this.alertService.stopLoadingMessage();
+                    this.alertService.showStickyMessage("Unblock Error", "The below errors occured whilst unlocking the user:", MessageSeverity.error, error);
+                    this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+                });
     }
 }

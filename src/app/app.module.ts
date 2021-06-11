@@ -275,6 +275,8 @@ import { AuditComponentComponent } from './shared/components/audit-component/aud
 import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 import { InvoicePaymentService } from './services/invoice-payment-service';
 import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoint-service';
+import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
+import { ForgotPassComponent } from './components/login/forgot-password-ui/forgotpassword.component';
 @NgModule({
   imports: [
     CardModule,
@@ -338,7 +340,9 @@ import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoi
     UpdatepasswordComponent,
     AssetInventoryViewComponent,
     SafePipe,
-    AuditComponentComponent
+    AuditComponentComponent,
+    ForgotPasswordComponent,
+    ForgotPassComponent
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },

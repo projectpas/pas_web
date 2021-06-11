@@ -42,7 +42,7 @@
     <div class="card-body new-card-body">
         <user-editor #userProfile></user-editor>
         <mat-action-row style="background: #fff !important;" >
-            <button  class="btn btn-primary" *ngIf="!userProfile.isEditMode" (click)="userProfile.beginEdit()" >Update</button>
+            <button style="margin-left: 21px" class="btn btn-primary" *ngIf="!userProfile.isEditMode" (click)="userProfile.beginEdit()" >Update</button>
             <button  class="btn btn-primary" *ngIf="userProfile.isEditMode" (click)="userProfile.save()"  style="margin-right: 1em;">Save</button>
             <button class="btn btn-danger" *ngIf="userProfile.isEditMode" (click)="userProfile.cancel()" >Cancel</button>
         </mat-action-row>
