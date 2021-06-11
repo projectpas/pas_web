@@ -394,6 +394,8 @@ export class RoSetupComponent implements OnInit {
 	modal: NgbModalRef;
 	alertText: string
 	salesOrderId: number;
+	qty: number;
+	stocklineId: number;
 	msgflag: number = 0;
 	openStatusId: number = 0
 	pendingStatusId: number = 0
@@ -433,6 +435,8 @@ export class RoSetupComponent implements OnInit {
 		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
 		this.partName = (localStorage.getItem('partNumber'));
 		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		this.qty = JSON.parse(localStorage.getItem('lsqty'));
+		this.stocklineId = JSON.parse(localStorage.getItem('lsstocklineId'));
 		this.openStatusId = StatusEnum.Open;
 		this.pendingStatusId = StatusEnum.Pending;
 		this.fulfillingStatusId = StatusEnum.Fulfilling;
@@ -529,8 +533,9 @@ export class RoSetupComponent implements OnInit {
 							if (this.itemMasterId > 0 && this.adddefaultpart) {
 								this.isSpinnerVisible = true;
 								//this.addPartNumbers(this.itemMasterId, this.partName)
-								this.addAvailableStocklineAddPArt('stocklindi', 'qty')
-
+								if(this.stocklineId > 0 && this.qty > 0){
+									this.addAvailableStocklineAddPArt(this.stocklineId, this.qty)
+								}
 								this.adddefaultpart = false;
 								this.isSpinnerVisible = false;
 							}
@@ -3423,61 +3428,56 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	addAvailableStocklineAddPArt(stocklindi, qty) {
+	addAvailableStocklineAddPArt(stocklineId, qty) {
 		this.tempNewPNArray = [];
 		let newParentObject = new CreatePOPartsList()
-
 		///New Api
-
-
-		// this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId, this.includeAlternatePartNumber, this.includeEquivalentPartNumber, this.includeRevicePartNumber, this.currentUserMasterCompanyId).subscribe(res => {
-		// 	this.stocklineData = res.map(x => {
-		// 		return {
-		// 			...x,
-		// 			addAllMultiStocklineRows: false,
-		// 			disableStockline: false,
-		// 		}
-		// 	})
-
-		// stocklineData
-
-
-		if (this.stocklineData) {
-			const data = this.stocklineData.map(x => {
-				const newObject = {
-					...newParentObject,
-					partNumberId: { value: x.itemMasterId, label: x.partNumber },
-					needByDate: this.headerInfo.needByDate,
-					estRecordDate: this.headerInfo.needByDate,
-					conditionId: x.conditionId,
-					priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
-					discountPercent: 0,
-					itemMasterId: x.itemMasterId,
-					controlId: x.idNumber,
-					controlNumber: x.controlNumber,
-					acTailNum: x.aircraftTailNumber,
-					stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
-					x,
-					//workOrderId: getObjectById('value', this.lsWoId == null ? 0 : this.lsWoId, this.allWorkOrderDetails),
-					//subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allSalesOrderInfo),
-					//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
+		this.stocklineService.GetAllStocklineByPartCondtionAndStockline(stocklineId,this.currentUserMasterCompanyId).subscribe(res => {			
+			this.stocklineData = res.map(x => {
+				return {
+					...x,
+					addAllMultiStocklineRows: false,
+					disableStockline: false,
 				}
-				this.getManagementStructureForParentEdit(newObject);
-				this.getPNDetailsByStocklineId(newObject);
-				//this.getStockLineByItemMasterId(newObject);
-				this.partListData = [...this.partListData, newObject]
-				this.enablePartSave();
-			})
-			for (let i = 0; i < this.partListData.length; i++) {
-				if (!this.partListData[i].ifSplitShip) {
-					this.partListData[i].childList = [];
-				}
+			})		
+		
+			if (this.stocklineData) {
+				const data = this.stocklineData.map(x => {
+					const newObject = {
+						...newParentObject,
+						partNumberId: { value: x.itemMasterId, label: x.partNumber },
+						needByDate: this.headerInfo.needByDate,
+						estRecordDate: this.headerInfo.needByDate,
+						conditionId: x.conditionId,
+						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+						discountPercent: 0,
+						itemMasterId: x.itemMasterId,
+						controlId: x.idNumber,
+						controlNumber: x.controlNumber,
+						acTailNum: x.aircraftTailNumber,
+						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
+						x,
+						//workOrderId: getObjectById('value', this.lsWoId == null ? 0 : this.lsWoId, this.allWorkOrderDetails),
+						//subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allSalesOrderInfo),
+						//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
+					}
+					this.getManagementStructureForParentEdit(newObject);
+					this.getPNDetailsByStocklineId(newObject);
+					//this.getStockLineByItemMasterId(newObject);
+					this.partListData = [...this.partListData, newObject]
+					this.enablePartSave();
+				})
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (!this.partListData[i].ifSplitShip) {
+						this.partListData[i].childList = [];
+					}
+				}			
+				this.partListData[0].quantityOrdered = qty;
 			}
-			this.partListData[0].quantityOrdered = qty;
-		}
-		this.partNumbers = null;
-		this.addAllMultiPN = false;
-		this.addAllMultiStockline = false;
+			this.partNumbers = null;
+			this.addAllMultiPN = false;
+			this.addAllMultiStockline = false;
+		})
 	}
 
 	addAvailableStockline() {
