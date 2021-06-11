@@ -2,18 +2,15 @@
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
-
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 
 @Injectable()
 export class AccountEndpoint extends EndpointFactory {
-
     private readonly _usersUrl: string = "/api/account/users";
     private readonly _userByUserNameUrl: string = "/api/account/users/username";
     private readonly _currentUserUrl: string = "/api/account/users/me";
@@ -23,11 +20,9 @@ export class AccountEndpoint extends EndpointFactory {
     private readonly _roleByRoleNameUrl: string = "/api/account/roles/name";
     private readonly _permissionsUrl: string = "/api/account/permissions";
     private readonly _countriesListURL: string = "/api/globalsettings/getcultureinfos";
-    private readonly _getCountrySpecificDataUrl : string = "/api/globalsettings/globalsettingsinfo?culture="
-    
-    private readonly _getSavedCountryDataUrl : string = "/api/globalsettings/globalsettings?masterCompanyId="
+    private readonly _getCountrySpecificDataUrl: string = "/api/globalsettings/globalsettingsinfo?culture="
+    private readonly _getSavedCountryDataUrl: string = "/api/globalsettings/globalsettings?masterCompanyId="
     private readonly _saveCountryLevelGlobalSettingsUrl: string = "/api/globalsettings/createglobalsettings"
-
     get usersUrl() { return this.configurations.baseUrl + this._usersUrl; }
     get userByUserNameUrl() { return this.configurations.baseUrl + this._userByUserNameUrl; }
     get currentUserUrl() { return this.configurations.baseUrl + this._currentUserUrl; }
@@ -40,8 +35,8 @@ export class AccountEndpoint extends EndpointFactory {
     get getCountrySpecificDataUrl() { return this.configurations.baseUrl + this._getCountrySpecificDataUrl; }
     get getSavedCountryDataUrl() { return this.configurations.baseUrl + this._getSavedCountryDataUrl; }
     get saveCountryLevelGlobalSettingsUrl() { return this.configurations.baseUrl + this._saveCountryLevelGlobalSettingsUrl; }
-    constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 
+    constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
     }
 
@@ -215,19 +210,21 @@ export class AccountEndpoint extends EndpointFactory {
             });
     }
 
-    getCountrySpecificDataEndPoint<T>(countryId): Observable<T>{
-        return this.http.get<T>(`${this.getCountrySpecificDataUrl}${countryId}` , this.getRequestHeaders())
+    getCountrySpecificDataEndPoint<T>(countryId): Observable<T> {
+        return this.http.get<T>(`${this.getCountrySpecificDataUrl}${countryId}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getCountrySpecificDataEndPoint(countryId))
             })
     }
-    getSavedCountryDataEndPoint<T>(masterCompanyId): Observable<T>{
-        return this.http.get<T>(`${this.getSavedCountryDataUrl}${masterCompanyId}` , this.getRequestHeaders())
+
+    getSavedCountryDataEndPoint<T>(masterCompanyId): Observable<T> {
+        return this.http.get<T>(`${this.getSavedCountryDataUrl}${masterCompanyId}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getSavedCountryDataEndPoint(masterCompanyId))
             })
     }
-    saveCountryLevelGlobalSettingsEndPoint<T>(data): Observable<T>{
+
+    saveCountryLevelGlobalSettingsEndPoint<T>(data): Observable<T> {
         return this.http.post<T>(this.saveCountryLevelGlobalSettingsUrl, JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.saveCountryLevelGlobalSettingsEndPoint(data));

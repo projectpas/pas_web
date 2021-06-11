@@ -233,7 +233,6 @@ export class StocklineService {
 		return this.stocklineEndpoint.GetAllStocklineByPartAndCondtion(itemMasterId, condtionids,includeAlternatePartNumber,includeEquivalentPartNumber,includeRevicePartNumber, mastecompanyId);
 	}
 
-
 	getWareHouseDataBySiteId(siteId) {
 		return this.stocklineEndpoint.getWareHouseDataBySiteId(siteId);
 	}
@@ -292,5 +291,9 @@ export class StocklineService {
 
 	searchstocklinefromExchangeQuotepop(searchParameters: any) {
 		return this.stocklineEndpoint.searchstocklinefromExchangeQuotepop(searchParameters);
+	}
+
+	GetAllStocklineByPartCondtionAndStockline(stocklineId, mastecompanyId) {
+		return this.stocklineEndpoint.GetAllStocklineByPartCondtionAndStockline(stocklineId,mastecompanyId);
 	}
 }

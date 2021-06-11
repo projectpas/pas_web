@@ -394,6 +394,10 @@ export class RoSetupComponent implements OnInit {
 	modal: NgbModalRef;
 	alertText: string
 	salesOrderId: number;
+	qty: number;
+	stocklineId: number;
+	workOrderId:number;
+	subWorkOrderId:number;
 	msgflag: number = 0;
 	openStatusId: number = 0
 	pendingStatusId: number = 0
@@ -433,6 +437,11 @@ export class RoSetupComponent implements OnInit {
 		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
 		this.partName = (localStorage.getItem('partNumber'));
 		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		this.qty = JSON.parse(localStorage.getItem('lsqty'));
+		this.stocklineId = JSON.parse(localStorage.getItem('lsstocklineId'));
+		this.subWorkOrderId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		this.workOrderId = JSON.parse(localStorage.getItem('lsWoId'));
+		
 		this.openStatusId = StatusEnum.Open;
 		this.pendingStatusId = StatusEnum.Pending;
 		this.fulfillingStatusId = StatusEnum.Fulfilling;
@@ -528,7 +537,10 @@ export class RoSetupComponent implements OnInit {
 						setTimeout(() => {
 							if (this.itemMasterId > 0 && this.adddefaultpart) {
 								this.isSpinnerVisible = true;
-								this.addPartNumbers(this.itemMasterId, this.partName)
+								//this.addPartNumbers(this.itemMasterId, this.partName)
+								if(this.stocklineId > 0 && this.qty > 0){
+									this.addAvailableStocklineAddPArt(this.stocklineId, this.qty)
+								}
 								this.adddefaultpart = false;
 								this.isSpinnerVisible = false;
 							}
@@ -2679,7 +2691,7 @@ export class RoSetupComponent implements OnInit {
 		this.loadModuleListForVendorComp();
 		this.getAllrevisedPart();
 		this.getAllworkPerformed();
-		//this.getAllACTailNum('');
+		this.getAllACTailNum('');
 	}
 
 	CloseModel(status) {
@@ -3421,41 +3433,56 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	addAvailableStocklineAddPArt() {
+	addAvailableStocklineAddPArt(stocklineId, qty) {
 		this.tempNewPNArray = [];
 		let newParentObject = new CreatePOPartsList()
-		if (this.stocklineData) {
-			const data = this.stocklineData.map(x => {
-				const newObject = {
-					...newParentObject,
-					partNumberId: { value: x.itemMasterId, label: x.partNumber },
-					needByDate: this.headerInfo.needByDate,
-					estRecordDate: this.headerInfo.needByDate,
-					conditionId: x.conditionId,
-					priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
-					discountPercent: 0,
-					itemMasterId: x.itemMasterId,
-					controlId: x.idNumber,
-					controlNumber: x.controlNumber,
-					acTailNum: x.aircraftTailNumber,
-					stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
-					x
+		///New Api
+		this.stocklineService.GetAllStocklineByPartCondtionAndStockline(stocklineId,this.currentUserMasterCompanyId).subscribe(res => {			
+			this.stocklineData = res.map(x => {
+				return {
+					...x,
+					addAllMultiStocklineRows: false,
+					disableStockline: false,
 				}
-				this.getManagementStructureForParentEdit(newObject);
-				this.getPNDetailsByStocklineId(newObject);
-				//this.getStockLineByItemMasterId(newObject);
-				this.partListData = [...this.partListData, newObject]
-				this.enablePartSave();
-			})
-			for (let i = 0; i < this.partListData.length; i++) {
-				if (!this.partListData[i].ifSplitShip) {
-					this.partListData[i].childList = [];
-				}
+			})		
+		
+			if (this.stocklineData) {
+				const data = this.stocklineData.map(x => {
+					const newObject = {
+						...newParentObject,
+						partNumberId: { value: x.itemMasterId, label: x.partNumber },
+						needByDate: this.headerInfo.needByDate,
+						estRecordDate: this.headerInfo.needByDate,
+						conditionId: x.conditionId,
+						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+						discountPercent: 0,
+						itemMasterId: x.itemMasterId,
+						controlId: x.idNumber,
+						controlNumber: x.controlNumber,
+						acTailNum: x.aircraftTailNumber,
+						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },						
+						workOrderId: getObjectById('value', this.workOrderId == null ? 0 : this.workOrderId, this.allWorkOrderDetails),											
+						subWorkOrderId: getObjectById('value', this.subWorkOrderId == null ? 0 : this.subWorkOrderId, this.allSalesOrderInfo),
+						//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
+						x,
+					}
+					this.getManagementStructureForParentEdit(newObject);
+					this.getPNDetailsByStocklineId(newObject);
+					//this.getStockLineByItemMasterId(newObject);
+					this.partListData = [...this.partListData, newObject]
+					this.enablePartSave();
+				})
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (!this.partListData[i].ifSplitShip) {
+						this.partListData[i].childList = [];
+					}
+				}			
+				this.partListData[0].quantityOrdered = qty;
 			}
-		}
-		this.partNumbers = null;
-		this.addAllMultiPN = false;
-		this.addAllMultiStockline = false;
+			this.partNumbers = null;
+			this.addAllMultiPN = false;
+			this.addAllMultiStockline = false;
+		})
 	}
 
 	addAvailableStockline() {
@@ -3620,7 +3647,6 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	addStockLineView(itmeMasterID, Condtionid) {
-		
 		this.stocklineData = [];
 		this.stocklineconditionId = null;
 		this.stocklinepartNumberId = null;
@@ -3649,15 +3675,13 @@ export class RoSetupComponent implements OnInit {
 						}
 					}
 				}
-			}			
-			this.stocklinepartNumberId = this.partCollection.find((x: any) => x.value == itmeMasterID);		
-			var conditiondata = this.allconditioninfo.find((x: any) => x.value == Condtionid);
-			this.stocklineconditionId = [parseInt(conditiondata["value"])];
-
+			}
+			
 		}, err => {
 			this.isSpinnerVisible = false;
 			this.stocklineData = []
 		});
+
 	}
 
 
@@ -5130,6 +5154,10 @@ export class RoSetupComponent implements OnInit {
 			localStorage.removeItem("itemMasterId");
 			localStorage.removeItem("partNumber");
 			localStorage.removeItem("salesOrderId");
+			localStorage.removeItem("lsqty");
+			localStorage.removeItem("lsstocklineId");
+			localStorage.removeItem("lsWoId");
+			localStorage.removeItem("lsSubWoId");
 		}
 	}
 
@@ -5195,7 +5223,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	StockLinePopup(row) {
-		
+		debugger
 		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
 			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;
