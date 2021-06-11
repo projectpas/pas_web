@@ -246,7 +246,7 @@ export class WorkOrderBillingComponent implements OnInit {
     getBillingList() {
         this.isSpinnerVisible = true;
         this.workOrderService
-            .getBillingInvoiceList(this.workOrderId)
+            .getBillingInvoiceList(this.workOrderId,this.workOrderPartNumberId)
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
                 this.billingList = response[0];
