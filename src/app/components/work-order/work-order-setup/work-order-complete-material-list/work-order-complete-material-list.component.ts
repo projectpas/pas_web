@@ -1485,7 +1485,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'quantity', header: 'Qty Req', align: 1, width: "60px" },
             { field: 'quantityReserved', header: 'Qty Res', align: 1, width: "60px" },
             { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
-            { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
+            { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "90px" },
             { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
             { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "66px" },
             { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
