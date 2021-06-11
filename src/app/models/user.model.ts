@@ -6,7 +6,7 @@
 export class User
 {
     // Note: Using only optional constructor properties without backing store disables typescript's type checking for the type
-    constructor(id?: string, userName?: string, fullName?: string, email?: string, jobTitle?: string, phoneNumber?: string, roles?: string[],employeeId?:number, managementStructureId?: number, masterCompanyId?: number, legalEntityId?: number)
+    constructor(id?: string, userName?: string, fullName?: string, email?: string, jobTitle?: string, phoneNumber?: string, roles?: string[],employeeId?:number, managementStructureId?: number, masterCompanyId?: number, legalEntityId?: number,firstName?:string,lastName?:string)
     {
 
         this.id = id;
@@ -20,6 +20,8 @@ export class User
         this.managementStructureId = managementStructureId; 
         this.masterCompanyId = masterCompanyId; 
         this.legalEntityId = legalEntityId; 
+        this.firstName=firstName;
+        this.lastName=lastName;
     }
 
     get friendlyName(): string
@@ -50,4 +52,6 @@ export class User
     public roleName:string;
     public permissionName:string[];
     public roleID:string;
+    public firstName:string;
+    public lastName:string;
 }

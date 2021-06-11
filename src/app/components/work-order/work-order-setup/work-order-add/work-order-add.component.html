@@ -473,7 +473,7 @@
                                                     [size]="30" [minLength]="1"
                                                     class="p-autoComplete-ctsm custome_automo p-autocomplete-mh120"
                                                     required
-                                                    [disabled]="isView || quotestatusofCurrentPart =='Approved' || isEdit"
+                                                    [disabled]="isView || quotestatusofCurrentPart =='Approved' || (isEdit && workOrderPartNumber.itemMasterId)"
                                                     appendTo="body">
                                                 </p-autoComplete>
                                             </td>
@@ -754,16 +754,18 @@
                                                     {{workOrderPartNumber.level4}}</p>
                                             </td>
                                             <td *ngIf="!isView" class="table-column-icon-width width100">
-                                                <span><button class="btn nobg btn-plusro-cstm"
-                                                        (click)="createNewRoWorkOrder(workOrderPartNumber)"
-                                                        matTooltip="Create RO" matTooltipPosition="above" [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null"><i
+                                                <span>
+                                                    <!-- [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null" -->
+                                                    <button class="btn nobg btn-plusro-cstm"
+                                                        (click)="createNewRoWorkOrder(workOrderPartNumber)" [disabled]="true"
+                                                        matTooltip="Create RO" matTooltipPosition="above" ><i
                                                             class="fa fa-plus" style="color: #259e08;"></i></button> </span>
                                                 <button matTooltip="Add to an  Existing RO" matTooltipPosition="above"
                                                     data-toggle="modal" data-target="#reserveRo"
                                                     (click)="addToExitRoWorkOrder(workOrderPartNumber)"
-                                                    class="btn nobg btn-plusro-cstm" [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null"> 
+                                                    class="btn nobg btn-plusro-cstm" [disabled]="true" > 
                                                     <span><i class="fa fa-plus clr-red"></i></span></button>
-
+                                                    <!-- [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null" -->
                                                 <span *ngIf="!workOrderGeneralInformation.isSinglePN "
                                                     class="delete-row-btn">
                                                     <button type="button" class="btn nobg btn-delete-cstm"

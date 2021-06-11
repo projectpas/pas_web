@@ -379,8 +379,9 @@
                     </div>
                 </div>
                 <div *ngIf="toggle_ro_header">
-                    <button class="btn btn-primary pull-right toggle-btn-align" (click)="saveRepairOrderHeader(roConfirm)"
-                        [disabled]="!createROForm.valid" [disabled]="!enableHeaderSaveBtn">{{isEditModeHeader ? 'Update'
+                    <button class="btn btn-primary pull-right toggle-btn-align"
+                        (click)="saveRepairOrderHeader(roConfirm)" [disabled]="!createROForm.valid"
+                        [disabled]="!enableHeaderSaveBtn">{{isEditModeHeader ? 'Update'
                         : 'Save'}}</button>
                 </div>
             </div>
@@ -524,11 +525,11 @@
                                         <td>{{obj.purchaseOrderUnitCost === null ? '-':obj.purchaseOrderUnitCost}}</td>
                                         <td>{{obj.traceableToName === null ? '-':obj.traceableToName}}</td>
                                         <td>{{obj.ownerName === null ? '-':obj.ownerName}}</td>
-                                        <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
-                                        <td>{{obj.tagDate === null ? '-':obj.tagDate}}</td>
+                                        <td>{{obj.obtainFromName === null ? '-':obj.obtainFromName}}</td>
+                                        <td>{{obj.tagDate === null ? '-':obj.tagDate | date: 'MM/dd/yyyy'}}</td>
                                         <td>{{obj.certifiedBy === null ? '-':obj.certifiedBy}}</td>
-                                        <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate}}</td>
-                                        <td>{{obj.memo === null ? '-':obj.memo}}</td>
+                                        <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate | date: 'MM/dd/yyyy'}}</td>                                        
+                                        <td><p class="p-0 m-0 p_textEditor" [innerHTML]="obj.memo"></p></td>
                                     </tr>
                                     <tr *ngIf="stocklineData.length == 0">
                                         <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
@@ -960,14 +961,15 @@
                                         </p-autoComplete>   -->
                                         </td>
                                         <td>
-                                            <p-autoComplete class="autocomplete" appendTo="body"
+                                            <!-- <p-autoComplete class="autocomplete" appendTo="body"
                                                 name="aCTailNum{{row_index}}" id="aCTailNum{{row_index}}"
                                                 [(ngModel)]="partList.acTailNum" [suggestions]="acTailNumCollection"
                                                 [forceSelection]="false" field="label"
                                                 (completeMethod)="filterACTailNum($event)"
                                                 (ngModelChange)="enablePartSave()" [size]="30" [minLength]="1"
                                                 [dropdown]="true" required>
-                                            </p-autoComplete>
+                                            </p-autoComplete> -->
+                                            {{partList.acTailNum}}
                                         </td>
                                         <td>
                                             {{partList.UOMShortName}}
@@ -2928,8 +2930,8 @@
         <h4 class="modal-title">Print Repair Order</h4>
     </div>
     <div class="modal-content" id="repair_order_print_content">
-        <div class="modal-body">            
-            <app-repair-order-print-template [referenceId]="id"></app-repair-order-print-template>  
+        <div class="modal-body">
+            <app-repair-order-print-template [referenceId]="id"></app-repair-order-print-template>
         </div>
     </div>
     <div class="modal-footer">
@@ -2947,15 +2949,13 @@
             </button>
         </div>
         <div class="modal-body">
-            <strong>                
+            <strong>
                 Do you want to fulfill this Repair Order? After fullfill you are not able to edit this Repair Order.
-            </strong>            
+            </strong>
         </div>
-        <div class="modal-footer">            
-            <button type="button" class="btn btn-primary"
-                (click)="CloseModel(true);">Yes</button>
-            <button type="button" class="btn btn-danger"
-                (click)="CloseModel(false)">No</button>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="CloseModel(true);">Yes</button>
+            <button type="button" class="btn btn-danger" (click)="CloseModel(false)">No</button>
         </div>
     </div>
 </ng-template>

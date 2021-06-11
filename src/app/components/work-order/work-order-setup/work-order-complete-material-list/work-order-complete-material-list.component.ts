@@ -175,7 +175,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'defered', header: 'Deferred' },
         { field: 'memo', header: 'Memo' }
     ]
-     pickTicketItemInterfaceheader = [
+    pickTicketItemInterfaceheader = [
         { field: "partNumber", header: "PN", width: "100px" },
         { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
         { field: "qtyOnHand", header: "Qty On Hand", width: "50px" },
@@ -185,9 +185,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: "stkLineManufacturer", header: "Manufacturer", width: "100px" },
         { field: "stockType", header: "Stock Type", width: "100px" },
         { field: "tracableToName", header: "Tracable To", width: "100px" },
-      ];
-    isStockLine:boolean=true;
-    isStockView:boolean=true;
+    ];
+    isStockLine: boolean = true;
+    isStockView: boolean = true;
     savebutonDisabled: boolean = false;
     roleUpMaterialList: any = [];
     isAllow: any = false;
@@ -213,8 +213,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     workorderSettings: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     enablePickTicket: boolean = false;
-    isViewItem:boolean=false;
-    stockLineId:any;
+    isViewItem: boolean = false;
+    stockLineId: any;
     constructor(
         private workOrderService: WorkOrderService,
         public itemClassService: ItemClassificationService,
@@ -337,8 +337,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.addNewMaterial = true;
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
     }
-    editNew(rowData) { 
-        this.isViewItem=false;
+    editNew(rowData) {
+        this.isViewItem = false;
         this.editData = undefined;
         this.cdRef.detectChanges();
         this.isEdit = true;
@@ -347,34 +347,34 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     }
-    viewItem(rowData){
+    viewItem(rowData) {
         this.editData = undefined;
         this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewMaterial = true;
-this.isViewItem=true;
+        this.isViewItem = true;
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     }
-    viewStockSelectedRow(rowData) { 
-        this.stockLineId=undefined;
-        this.stockLineId=rowData.stockLineId;
+    viewStockSelectedRow(rowData) {
+        this.stockLineId = undefined;
+        this.stockLineId = rowData.stockLineId;
         this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
         this.modal.componentInstance.stockLineId = rowData.stockLineId;
-      }
-    editStockLine(rowData,parentRow) {
+    }
+    editStockLine(rowData, parentRow) {
         this.editData = undefined;
         this.isEdit = true;
         this.editData = { ...rowData, unitOfMeasure: rowData.uom, partItem: { partId: rowData.itemMasterId, partName: rowData.partNumber } };
         this.editData.method = 'StockLine';
-        this.editData.quantity=parentRow.quantity;
+        this.editData.quantity = parentRow.quantity;
         $("#showStockLineDetails").modal("show");
- }
+    }
     openPartNumber() {
         this.isEdit = false;
         this.editData = undefined;
-        this.isViewItem=false;
+        this.isViewItem = false;
         let contentPart = this.addPart;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     }
@@ -977,13 +977,13 @@ this.isViewItem=true;
         this.eqPartData = [];
         this.eqPartData = childPart;
         childPart.forEach(element => {
-            element.reservedById = this.authService.currentEmployee,
+                element.reservedById = this.authService.currentEmployee,
                 element.issuedById = this.authService.currentEmployee,
                 element.createdBy = this.authService.currentUser.userName,
                 element.updatedBy = this.authService.currentUser.userName
         });
         this.eqPartData.map(element => {
-            element.reservedById = this.authService.currentEmployee.value,
+                element.reservedById = this.authService.currentEmployee.value,
                 element.issuedById = this.authService.currentEmployee.value
         });
         if ((isChecked === true) && (this.statusId == 1 || this.statusId == 3)) {
@@ -999,41 +999,48 @@ this.isViewItem=true;
                     })
             }
         }
+        childPart.forEach(element => {
+            element.reservedById = this.authService.currentEmployee,
+                element.issuedById = this.authService.currentEmployee,
+                element.createdBy = this.authService.currentUser.userName,
+                element.updatedBy = this.authService.currentUser.userName
+        });
+        this.eqPartData = childPart;
         if (isChecked === false) {
             this.eqPartData = [];
             this.uncheckAltEqlPartCall(childPart)
         }
     }
-    handleQty(currentRecord){
-    //     console.log("current recor",currentRecord)
-    //     if (this.statusId === 1 || this.statusId === 5) {
-    //         if(currentRecord.quantityReserved==null){
-    //     if (this.statusId === 1) {
-    //     if(currentRecord.quantityAvailable > currentRecord.qtyToBeReserved){
-    
-    //         currentRecord.quantityReserved=currentRecord.qtyToBeReserved;
-    //     }else{
-    //         currentRecord.quantityReserved=currentRecord.quantityAvailable;
-    //     }
-    // }else if ( this.statusId === 5) {
-    //     currentRecord.quantityReserved=currentRecord.quantityAlreadyReserved;
-    // }
-    //         }
-    //     }
-    //   if (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) {
-    //             if(currentRecord.quantityIssued==null){
-    //                 if (this.statusId === 2) {
-    //                 if(currentRecord.quantityAvailable > currentRecord.quantityAlreadyReserved){
-                
-    //                     currentRecord.quantityIssued=currentRecord.quantityAlreadyReserved;
-    //                 }else{
-    //                     currentRecord.quantityIssued=currentRecord.quantityAvailable;
-    //                 }
-    //             }else if ( this.statusId === 4) {
-    //                 currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued;
-    //             }
-    //                     }
-    //         }
+    handleQty(currentRecord) {
+        //     console.log("current recor",currentRecord)
+        //     if (this.statusId === 1 || this.statusId === 5) {
+        //         if(currentRecord.quantityReserved==null){
+        //     if (this.statusId === 1) {
+        //     if(currentRecord.quantityAvailable > currentRecord.qtyToBeReserved){
+
+        //         currentRecord.quantityReserved=currentRecord.qtyToBeReserved;
+        //     }else{
+        //         currentRecord.quantityReserved=currentRecord.quantityAvailable;
+        //     }
+        // }else if ( this.statusId === 5) {
+        //     currentRecord.quantityReserved=currentRecord.quantityAlreadyReserved;
+        // }
+        //         }
+        //     }
+        //   if (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) {
+        //             if(currentRecord.quantityIssued==null){
+        //                 if (this.statusId === 2) {
+        //                 if(currentRecord.quantityAvailable > currentRecord.quantityAlreadyReserved){
+
+        //                     currentRecord.quantityIssued=currentRecord.quantityAlreadyReserved;
+        //                 }else{
+        //                     currentRecord.quantityIssued=currentRecord.quantityAvailable;
+        //                 }
+        //             }else if ( this.statusId === 4) {
+        //                 currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued;
+        //             }
+        //                     }
+        //         }
     }
     selectedParts(currentRecord, event) {
         if (this.statusId === 1 || this.statusId === 5) {
@@ -1097,33 +1104,33 @@ this.isViewItem=true;
             //     currentRecord.quantityAlreadyReserved;
             // }
             if (this.statusId === 1 || this.statusId === 5) {
-                if(currentRecord.quantityReserved==null){
-            if (this.statusId === 1) {
-            if(currentRecord.quantityAvailable > currentRecord.qtyToBeReserved){
-        
-                currentRecord.quantityReserved=currentRecord.qtyToBeReserved;
-            }else{
-                currentRecord.quantityReserved=currentRecord.quantityAvailable;
-            }
-        }else if ( this.statusId === 5) {
-            currentRecord.quantityReserved=currentRecord.quantityAlreadyReserved;
-        }
-                }
-            }
-          if (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) {
-                    if(currentRecord.quantityIssued==null){
-                        if (this.statusId === 2) {
-                        if(currentRecord.quantityAvailable > currentRecord.quantityAlreadyReserved){
-                    
-                            currentRecord.quantityIssued=currentRecord.quantityAlreadyReserved;
-                        }else{
-                            currentRecord.quantityIssued=currentRecord.quantityAvailable;
+                if (currentRecord.quantityReserved == null) {
+                    if (this.statusId === 1) {
+                        if (currentRecord.quantityAvailable > currentRecord.qtyToBeReserved) {
+
+                            currentRecord.quantityReserved = currentRecord.qtyToBeReserved;
+                        } else {
+                            currentRecord.quantityReserved = currentRecord.quantityAvailable;
                         }
-                    }else if ( this.statusId === 4) {
-                        currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued;
+                    } else if (this.statusId === 5) {
+                        currentRecord.quantityReserved = currentRecord.quantityAlreadyReserved;
                     }
-                            }
                 }
+            }
+            if (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) {
+                if (currentRecord.quantityIssued == null) {
+                    if (this.statusId === 2) {
+                        if (currentRecord.quantityAvailable > currentRecord.quantityAlreadyReserved) {
+
+                            currentRecord.quantityIssued = currentRecord.quantityAlreadyReserved;
+                        } else {
+                            currentRecord.quantityIssued = currentRecord.quantityAvailable;
+                        }
+                    } else if (this.statusId === 4) {
+                        currentRecord.quantityIssued = currentRecord.quantityAlreadyIssued;
+                    }
+                }
+            }
         }
     }
 
@@ -1133,13 +1140,13 @@ this.isViewItem=true;
     }
     parsedText(text) {
         if (text) {
-          const dom = new DOMParser().parseFromString(
-            '<!doctype html><body>' + text,
-            'text/html');
-          const decodedString = dom.body.textContent;
-          return decodedString;
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
         }
-      }
+    }
     releaseStock() {
         if (this.statusId == 1 || this.statusId == 3) {
             this.releasePartsList = [];
@@ -1239,8 +1246,36 @@ this.isViewItem=true;
             );
 
 
+        } 
+    }
+    createNewROWorkOrder(childRowData, rowData) {
+        localStorage.setItem("itemMasterId", rowData.itemMasterId);
+        localStorage.setItem("partNumber", rowData.partNumber);
+        localStorage.setItem("lsWoId", this.workOrderId);
+        localStorage.setItem("lsconditionId", rowData.conditionCodeId);
+        localStorage.setItem("lsqty", rowData.quantity);
+        localStorage.setItem("lsstocklineId", childRowData.stockLineId);
+        if (this.isSubWorkOrder == true) {
+            localStorage.setItem("lsSubWoId", this.subWOPartNoId);
+            // this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);```
+            //window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
+            // window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
+            this.router.navigateByUrl(
+                `/vendorsmodule/vendorpages/app-ro-setup`
+            );
+
+        } else {
+            // window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${rowData.workOrderMaterialsId}`)
+            // window.open(`/vendorsmodule/vendorpages/app-purchase-setup`);
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/app-ro-setup`
+            );
+
+
         }
     }
+
+
     checkActiveStatus: boolean = false;
     closeMaterial() {
         this.checkActiveStatus = true;
@@ -1251,9 +1286,9 @@ this.isViewItem=true;
         this.savebutonDisabled = false;
         this.isAllow = false;
         this.releaseStock();
-   setTimeout(() => {
-    this.refreshData.emit();
-   }, 2000);
+        setTimeout(() => {
+            this.refreshData.emit();
+        }, 2000);
     }
 
     startTimerplus() {
@@ -1494,8 +1529,8 @@ this.isViewItem=true;
             { field: 'partNumber', header: 'PN', align: 0, width: "160px" },
             { field: 'partDescription', header: 'PN Description', align: 0, width: "200px" },
             { field: 'condition', header: 'Cond', align: 0, width: "100px" },
-            { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0 , width: "110px"},
-            { field: 'provision', header: 'Provision', align: 0 ,width: "100px"},
+            { field: 'mandatoryOrSupplemental', header: 'Request Type', align: 0, width: "110px" },
+            { field: 'provision', header: 'Provision', align: 0, width: "100px" },
             { field: 'stocklineQuantity', header: 'Qty Req', align: 1, width: "60px" },
             { field: 'stocklineQtyReserved', header: 'Qty Res', align: 1, width: "60px" },
             { field: 'stocklineQtyIssued', header: 'Qty Iss', align: 1, width: "60px" },
@@ -1506,8 +1541,8 @@ this.isViewItem=true;
             { field: 'uom', header: 'UOM', align: 0, width: "70px" },
             { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
             // { field: 'altEquiv', header: 'Alt/Equiv', align: 0 },
-            { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
-            { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
+            { field: 'itemClassification', header: 'Classification', align: 0, width: "150px" },
+            { field: 'needDate', header: 'Need Date', align: 0, width: "70px" },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
             { field: 'stocklineUnitCost', header: 'Unit Cost', align: 1, width: "61px" },
             { field: 'stocklineExtendedCost', header: 'Extended Cost', align: 1, width: "90px" },
@@ -1556,110 +1591,110 @@ this.isViewItem=true;
     parts: any[] = [];
     qtyToPick: number = 0;
     pickticketItemInterface(rowData, pickticketieminterface) {
-      const itemMasterId = rowData.itemMasterId;
-      const conditionId = rowData.conditionCodeId;
-      const workOrderId = rowData.workOrderId;
-      const workOrderMaterialsId = rowData.workOrderMaterialsId;
-      this.qtyToPick = rowData.quantity-rowData.qunatityPicked;
+        const itemMasterId = rowData.itemMasterId;
+        const conditionId = rowData.conditionCodeId;
+        const workOrderId = rowData.workOrderId;
+        const workOrderMaterialsId = rowData.workOrderMaterialsId;
+        this.qtyToPick = rowData.quantity - rowData.qunatityPicked;
 
-      this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
-      this.workOrderService
-        .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId)
-        .subscribe((response: any) => {
-          this.isSpinnerVisible = false;
-          this.parts = response;
-          for (let i = 0; i < this.parts.length; i++) {
-            if (this.parts[i].oemDer == null)
-              this.parts[i].oemDer = this.parts[i].stockType;
-            this.parts[i]['isSelected'] = false;
-            this.parts[i]['workOrderId'] = workOrderId;
-            this.parts[i]['workOrderMaterialsId'] = workOrderMaterialsId;
-            this.parts[i].qtyToShip = this.qtyToPick;
-            if (this.parts[i].qtyToReserve == 0) {
-              this.parts[i].qtyToReserve = null
-            }
-          }
-        }, error => {
-          this.isSpinnerVisible = false;
-        });
+        this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
+        this.workOrderService
+            .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId)
+            .subscribe((response: any) => {
+                this.isSpinnerVisible = false;
+                this.parts = response;
+                for (let i = 0; i < this.parts.length; i++) {
+                    if (this.parts[i].oemDer == null)
+                        this.parts[i].oemDer = this.parts[i].stockType;
+                    this.parts[i]['isSelected'] = false;
+                    this.parts[i]['workOrderId'] = workOrderId;
+                    this.parts[i]['workOrderMaterialsId'] = workOrderMaterialsId;
+                    this.parts[i].qtyToShip = this.qtyToPick;
+                    if (this.parts[i].qtyToReserve == 0) {
+                        this.parts[i].qtyToReserve = null
+                    }
+                }
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
     get employeeId() {
         return this.authService.currentUser
-          ? this.authService.currentUser.employeeId
-          : "";
-      }
+            ? this.authService.currentUser.employeeId
+            : "";
+    }
     savepickticketiteminterface(parts) {
         let tempParts = [];
         let invalidQty = false;
         parts.filter(x => {
-          x.createdBy = this.userName;
-          x.updatedBy = this.userName;
-          x.pickedById = this.employeeId;
-          x.masterCompanyId = this.currentUserMasterCompanyId;
-          if (x.isSelected == true) {
-            tempParts.push(x)
-          }
+            x.createdBy = this.userName;
+            x.updatedBy = this.userName;
+            x.pickedById = this.employeeId;
+            x.masterCompanyId = this.currentUserMasterCompanyId;
+            if (x.isSelected == true) {
+                tempParts.push(x)
+            }
         })
         parts = [];
-        parts = tempParts; 
+        parts = tempParts;
         for (let i = 0; i < parts.length; i++) {
-          let selectedItem = parts[i];
-          var errmessage = '';
-          if (selectedItem.qtyToShip > this.qtyToPick) {
-            this.isSpinnerVisible = false;
-            invalidQty = true;
-            errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
-          }
+            let selectedItem = parts[i];
+            var errmessage = '';
+            if (selectedItem.qtyToShip > this.qtyToPick) {
+                this.isSpinnerVisible = false;
+                invalidQty = true;
+                errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+            }
         }
         if (invalidQty) {
-          this.isSpinnerVisible = false;
-          this.alertService.showMessage(
-            'Work Order',
-            'You cannot pick more than Qty To Pick',
-            MessageSeverity.warn
-        );
-        //   this.alertService.resetStickyMessage();
-        //   this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
+            this.isSpinnerVisible = false;
+            this.alertService.showMessage(
+                'Work Order',
+                'You cannot pick more than Qty To Pick',
+                MessageSeverity.warn
+            );
+            //   this.alertService.resetStickyMessage();
+            //   this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
         }
         else {
-          this.disableSubmitButton = true;
-          this.workOrderService
-            .savepickticketiteminterface(parts)
-            .subscribe(data => {
-              this.alertService.stopLoadingMessage();
-              this.alertService.showMessage(
-                "Success",
-                `Item Picked Successfully..`,
-                MessageSeverity.success
-              );
-              this.dismissModel();
-            //   this.onSearch();
-            }, error => this.isSpinnerVisible = false);
+            this.disableSubmitButton = true;
+            this.workOrderService
+                .savepickticketiteminterface(parts)
+                .subscribe(data => {
+                    this.alertService.stopLoadingMessage();
+                    this.alertService.showMessage(
+                        "Success",
+                        `Item Picked Successfully..`,
+                        MessageSeverity.success
+                    );
+                    this.dismissModel();
+                    //   this.onSearch();
+                }, error => this.isSpinnerVisible = false);
         }
-      }
-    onCloseMaterial(data){
+    }
+    onCloseMaterial(data) {
         $('#showStockLineDetails').modal("hide");
     }
-    disableSubmitButton:boolean=true;
+    disableSubmitButton: boolean = true;
     onChangeOfPartSelection(event) {
         let selectedPartsLength = 0;
         for (let i = 0; i < this.parts.length; i++) {
-          if (event == true) {
-            selectedPartsLength = selectedPartsLength + 1;
-          }
-          else {
-            if (selectedPartsLength != 0) {
-              selectedPartsLength = selectedPartsLength - 1;
+            if (event == true) {
+                selectedPartsLength = selectedPartsLength + 1;
             }
-          }
+            else {
+                if (selectedPartsLength != 0) {
+                    selectedPartsLength = selectedPartsLength - 1;
+                }
+            }
         }
-    
+
         if (selectedPartsLength == 0) {
-          this.disableSubmitButton = true;
+            this.disableSubmitButton = true;
         } else {
-          this.disableSubmitButton = false;
+            this.disableSubmitButton = false;
         }
-      }
+    }
 
 }
 
