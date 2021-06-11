@@ -41,7 +41,7 @@
           &nbsp;
         </th>
         <ng-container *ngIf="isView">
-            <th colspan="6" class="freight-isview-th">
+            <th colspan="5" class="freight-isview-th">
               <div class="display-flex">
                 <div class="form-group freight-isview-div">
                   <p-radioButton  class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top" name="costPlusType"
@@ -128,7 +128,7 @@
           <!-- <th tooltip="Time & Materials">T&M Amount</th>
           <th>Fixed Amount</th> -->
         </ng-container>
-        <th rowspan="2" style="width:80px !important" class="table-actions-column" >Actions</th>
+        <th rowspan="2" style="width:80px !important" *ngIf="!isView" class="table-actions-column" >Actions</th>
       </tr>
       <tr>
         <th>L</th>
@@ -206,7 +206,7 @@
             </td>
             <!-- <td>{{ dt.billingAmount }}</td> -->
           </ng-container>
-          <td class="action-icons-cstm table-column-width" >
+          <td class="action-icons-cstm table-column-width" *ngIf="!isView">
             <div *ngIf="currentDeletedstatus == false">
             <span data-target="#addNewFreight" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
@@ -309,7 +309,7 @@
             </td>
             <!-- <td>{{ dt.billingAmount }}</td> -->
           </ng-container>
-          <td class="action-icons-cstm table-column-width" >
+          <td class="action-icons-cstm table-column-width">
             <div *ngIf="currentDeletedstatus == false">
             <span data-target="#addNewFreight" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
@@ -371,7 +371,7 @@
           <td colspan="12" *ngIf="!isQuote" class="no-records-msg no-records-cstm">
               No records found
           </td>
-          <td *ngIf="isQuote" colspan="15" class="no-records-msg no-records-cstm">
+          <td *ngIf="isQuote && isView" colspan="14" class="no-records-msg no-records-cstm">
             No records found
         </td>
       </tr>
