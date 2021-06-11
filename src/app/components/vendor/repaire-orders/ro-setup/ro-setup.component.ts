@@ -396,6 +396,8 @@ export class RoSetupComponent implements OnInit {
 	salesOrderId: number;
 	qty: number;
 	stocklineId: number;
+	workOrderId:number;
+	subWorkOrderId:number;
 	msgflag: number = 0;
 	openStatusId: number = 0
 	pendingStatusId: number = 0
@@ -437,6 +439,9 @@ export class RoSetupComponent implements OnInit {
 		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
 		this.qty = JSON.parse(localStorage.getItem('lsqty'));
 		this.stocklineId = JSON.parse(localStorage.getItem('lsstocklineId'));
+		this.subWorkOrderId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		this.workOrderId = JSON.parse(localStorage.getItem('lsWoId'));
+		
 		this.openStatusId = StatusEnum.Open;
 		this.pendingStatusId = StatusEnum.Pending;
 		this.fulfillingStatusId = StatusEnum.Fulfilling;
@@ -3455,11 +3460,11 @@ export class RoSetupComponent implements OnInit {
 						controlId: x.idNumber,
 						controlNumber: x.controlNumber,
 						acTailNum: x.aircraftTailNumber,
-						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
-						x,
-						//workOrderId: getObjectById('value', this.lsWoId == null ? 0 : this.lsWoId, this.allWorkOrderDetails),
-						//subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allSalesOrderInfo),
+						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },						
+						workOrderId: getObjectById('value', this.workOrderId == null ? 0 : this.workOrderId, this.allWorkOrderDetails),											
+						subWorkOrderId: getObjectById('value', this.subWorkOrderId == null ? 0 : this.subWorkOrderId, this.allSalesOrderInfo),
 						//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
+						x,
 					}
 					this.getManagementStructureForParentEdit(newObject);
 					this.getPNDetailsByStocklineId(newObject);
@@ -3671,6 +3676,7 @@ export class RoSetupComponent implements OnInit {
 					}
 				}
 			}
+			
 		}, err => {
 			this.isSpinnerVisible = false;
 			this.stocklineData = []
@@ -5148,6 +5154,10 @@ export class RoSetupComponent implements OnInit {
 			localStorage.removeItem("itemMasterId");
 			localStorage.removeItem("partNumber");
 			localStorage.removeItem("salesOrderId");
+			localStorage.removeItem("lsqty");
+			localStorage.removeItem("lsstocklineId");
+			localStorage.removeItem("lsWoId");
+			localStorage.removeItem("lsSubWoId");
 		}
 	}
 
