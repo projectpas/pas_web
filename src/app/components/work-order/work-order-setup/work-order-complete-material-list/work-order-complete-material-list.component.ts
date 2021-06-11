@@ -1487,7 +1487,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'quantityIssued', header: 'Qty Iss', align: 1, width: "60px" },
             { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "83px" },
             { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
-            { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "60px" },
+            { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "66px" },
             { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
           
             { field: 'uom', header: 'UOM', align: 0, width: "70px" },
@@ -1498,8 +1498,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             // { field: 'controlNo', header: 'Cntl Num', align: 0 },
             // { field: 'controlId', header: 'Cntl ID', align: 0 },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
-            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "61px" },
-            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "90px" },
+            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "68px" },
+            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "96px" },
             // { field: 'costDate', header: 'Cost Date', align: 0 },
    
             // { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
