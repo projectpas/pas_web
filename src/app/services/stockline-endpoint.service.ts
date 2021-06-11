@@ -528,4 +528,11 @@ export class StocklineEndpoint extends EndpointFactory {
 			})
 	}
 
+	GetAllStocklineByPartCondtionAndStockline(stocklineId,mastecompanyId) {
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/GetAllStocklineByPartCondtionAndStockline?stocklineId=${stocklineId}&&mastecompanyId=${mastecompanyId}`, this.getRequestHeaders())
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.GetAllStocklineByPartCondtionAndStockline(stocklineId, mastecompanyId));
+		})
+	}
+
 }

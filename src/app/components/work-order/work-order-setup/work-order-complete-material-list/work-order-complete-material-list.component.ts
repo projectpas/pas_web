@@ -1253,11 +1253,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         } 
     }
     createNewROWorkOrder(childRowData, rowData) {
+        debugger
         localStorage.setItem("itemMasterId", rowData.itemMasterId);
         localStorage.setItem("partNumber", rowData.partNumber);
-        localStorage.setItem("lsWoId", this.workOrderId);
+        localStorage.setItem("lsWoId", this.workOrderId);        
         localStorage.setItem("lsconditionId", rowData.conditionCodeId);
-        localStorage.setItem("lsqty", rowData.quantity);
+        
+        localStorage.setItem("lsqty", childRowData.stocklineQuantity);
         localStorage.setItem("lsstocklineId", childRowData.stockLineId);
         if (this.isSubWorkOrder == true) {
             localStorage.setItem("lsSubWoId", this.subWOPartNoId);
