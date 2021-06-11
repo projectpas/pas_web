@@ -1611,7 +1611,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         const conditionId = rowData.conditionCodeId;
         const workOrderId = rowData.workOrderId;
         const workOrderMaterialsId = rowData.workOrderMaterialsId;
-        this.qtyToPick = rowData.quantity - rowData.qunatityPicked;
+        this.qtyToPick = rowData.quantityReserved - rowData.qunatityPicked; 
 
         this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
         this.workOrderService
