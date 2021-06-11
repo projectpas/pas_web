@@ -5,9 +5,9 @@
               <label></label>
               <div class="form-group invoice-button-div">
                   <button *ngIf="isView == false" type="button" class="btn  submit-btn btn btn-primary"
-                      [disabled]="disableCreateInvoiceBtn" (click)="PerformWorkBilling()">Invoice</button>
+                       (click)="PerformWorkBilling()">Invoice</button>
                       <button *ngIf="isView == false && quotestatusofCurrentPart == 'Approved'" type="button" class="btn  submit-btn btn btn-primary"
-                      [disabled]="disableCreateInvoiceBtn" (click)="PerformQouteBilling()">Invoice for Qoute</button>
+                       (click)="PerformQouteBilling()">Invoice for Qoute</button>
               </div>
           </div>
       </div>

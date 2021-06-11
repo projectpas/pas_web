@@ -17,6 +17,8 @@ import { AlertService, MessageSeverity } from '../../../../services/alert.servic
 import { InvoiceTypeEnum } from 'src/app/components/sales/order/models/sales-order-invoice-type-enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
 
  
 @Component({
@@ -60,8 +62,10 @@ export class WorkOrderBillingComponent implements OnInit {
     soldCustomerSiteList = [];
     shipCustomerSiteList = [];
     arrayCustlist: any[] = [];
+    private onDestroy$: Subject<void> = new Subject<void>();
     siteList: any = [];
     shipToAttention;
+    billing: Billing;
     soldCustomerAddress: any = new AddressModel();
     shipCustomerAddress: any = new AddressModel();
     showBillingForm: boolean = false;
@@ -214,6 +218,31 @@ export class WorkOrderBillingComponent implements OnInit {
         this.loadInvoiceView();
     }
 
+    billingCreateOrEdit() {
+        this.isSpinnerVisible = true;
+        this.workOrderService.getBillingEditData(this.workOrderId, this.workOrderPartNumberId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.isSpinnerVisible = false;
+            this.billing = new Billing();
+            this.billing = {
+                ...res,
+                shipDate: new Date(res.shipDate),
+                printDate: new Date(res.printDate),
+                woOpenDate: new Date(res.openDate),
+                invoiceDate: new Date(res.invoiceDate),
+                soldToCustomerId: { customerId: res.soldToCustomerId, customerName: res.soldToCustomer },
+                shipToCustomerId: { customerId: res.shipToCustomerId, customerName: res.shipToCustomer },
+                customerRef: res.customerReference,
+                woType: res.workOrderType,
+                shipAccountInfo: res.shippingAccountinfo,
+            }
+
+            this.billingorInvoiceForm=this.billing;
+        }, error => {
+            this.isSpinnerVisible = false;
+            this.errorHandling(error);
+        })
+    }
+
     loadInvoiceView() {
         this.WObillingInvoicingId = this.workOrderBillingInvoiceId;
         this.modal = this.modalService.open(this.printPostModal, { size: "lg", backdrop: 'static', keyboard: false });
@@ -229,8 +258,8 @@ export class WorkOrderBillingComponent implements OnInit {
 
     CommonMethod()
     {
+            
             this.loadcustomerData('');
-
             if (this.billingorInvoiceForm.soldToCustomerId) 
             {
                 this.getSiteNames(this.customerId,this.billingorInvoiceForm.soldToSiteId);
@@ -308,6 +337,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.showBillingForm = true;
+        this.billingCreateOrEdit();
         this.getbillingCostDataForWoOnly();
     }
 
@@ -316,6 +346,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.showBillingForm = true;
+        this.billingCreateOrEdit();
 
         if (this.quotestatusofCurrentPart == 'Approved') {
             this.Getbillinginvoicingdetailsfromquote();
@@ -336,6 +367,7 @@ export class WorkOrderBillingComponent implements OnInit {
             this.workOrderShippingId = rowData.workOrderShippingId;
             this.partSelected = true;
             this.showBillingForm = true;
+            this.billingCreateOrEdit();
             this.getbillingCostDataForWoOnly();
         }
     }

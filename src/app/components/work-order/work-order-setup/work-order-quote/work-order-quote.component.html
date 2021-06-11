@@ -641,7 +641,7 @@
                                          <select class="width-150" [(ngModel)]="approver.internalStatusId"
                                            [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)||isView"
                                            *ngIf="field.field == 'internalStatusId'">
-                                           <option value='' selected>--Select</option>
+                                           <!-- <option value='' selected>--Select</option> -->
                                            <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
                                              {{status.name}}
                                            </option>
@@ -726,7 +726,7 @@
                                          <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                                            [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)||isView"
                                            *ngIf="field.field == 'customerStatusId'">
-                                           <option value='' selected>--Select</option>
+                                           <!-- <option value='' selected>--Select</option> -->
                                            <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
                                              {{status.name}}
                                            </option>
