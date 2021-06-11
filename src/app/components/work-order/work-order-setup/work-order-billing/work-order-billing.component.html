@@ -474,9 +474,9 @@
                                 name="soldcustomerName"
                                 errorMessage="Records not found"
                                 [forceSelection]="true"
-                                (onSelect)="getSiteNamesBySoldCustomerId($event)"
+                                (onSelect)="onselectcustomergetSoldsite($event)"
                                 [suggestions]="customerNamesList"
-                                (completeMethod)="filterCustomerName($event)"
+                                (completeMethod)="filterCustomerNames($event)"
                                 (onKeyUp)="clearAddress('SoldTo' , $event.target.value)"
                                 [size]="30"
                                 [minLength]="1"
@@ -502,7 +502,7 @@
                                 [forceSelection]="true"
                                 (onSelect)="onselectcustomergetsite($event)"
                                 [suggestions]="customerNamesList"
-                                (completeMethod)="filterCustomerName($event)"
+                                (completeMethod)="filterCustomerNames($event)"
                                 (onKeyUp)="clearAddress('ShipTo', $event.target.value)"
                                 [size]="30"
                                 [minLength]="1"
@@ -1037,7 +1037,7 @@
                                     [(ngModel)]="billingorInvoiceForm.shipViaId"
                                      (onChange)="changeOfShipVia($event.value)"
                                      [disabled]="isViewMode"
-                                  >
+                                  required >
                                   </p-dropdown>
                                   </div>
                                   <div class="form-group ">
@@ -1087,8 +1087,8 @@
                 </div>
           
                 <div class="float-right" *ngIf="!isViewMode">
-                  <button class="btn btn-primary pull-right"  *ngIf="!isEditBilling" (click)="GenerateInvoice()" >Save</button>
-                  <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button>
+                  <button class="btn btn-primary pull-right"  (click)="GenerateInvoice()" [disabled]="!billinForm.valid">Save</button>
+                  <!-- <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button> -->
                 </div>
               </form>
             </div>

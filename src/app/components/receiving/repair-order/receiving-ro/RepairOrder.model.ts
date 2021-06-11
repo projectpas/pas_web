@@ -193,6 +193,7 @@ export class RepairOrderPart {
     quantityDrafted: number = 0;
     showHeader:boolean;
     revisedPartId:number=0;
+    acTailNum: string;
 }
 
 export class TimeLife {

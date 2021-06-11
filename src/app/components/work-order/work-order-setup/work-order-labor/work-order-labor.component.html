@@ -97,7 +97,8 @@
                     label="T&M - Markup" value="1" [(ngModel)]="laborForm.costPlusType" [disabled]="isView"
                     (click)="(!isView)?tmchange():''"></p-radioButton>
                   <div>
-                    <select  (ngModelChange)="checkValid(12)" class="form-control select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || laborForm.costPlusType != 1"
+                    <select  (ngModelChange)="checkValid(12)"
+                     class="form-control select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || laborForm.costPlusType != 1"
                       name="markupheader">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>

@@ -133,7 +133,7 @@
  
                  <div class="form-group ">
                      <label> DSO </label>
-                     <input class="form-control" type="text"  (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
+                     <input class="form-control" type="text"  maxlength="50" (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
                  </div>
                  <div class="form-group memo-popup-cstm">
                      <label>
@@ -319,7 +319,7 @@
          <div class="card col-md-12 list_caps" id="approvalTabs">
              <div class="form-group margin-0">
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'mpns'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('mpns');">MPNs</button>
-                 <button *ngIf="!IsApprovalBypass" type="button" class="btn" [ngClass]="approvalGridActiveTab === 'internalApprovers'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('internalApprovers');">Internal Approvers</button>
+                 <button *ngIf="IsApprovalBypass" type="button" class="btn" [ngClass]="approvalGridActiveTab === 'internalApprovers'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('internalApprovers');">Internal Approvers</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'approvalProcess'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('approvalProcess');selectall = false;">Approval Process</button>
                  <!--<button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'setForInternalApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('setForInternalApproval');selectall = false;">Sent for Internal Approval</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'submittedInternalApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('submittedInternalApproval');selectall = false;">Submitted Internal Approval</button>

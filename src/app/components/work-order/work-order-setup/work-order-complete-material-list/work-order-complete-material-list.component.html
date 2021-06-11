@@ -2,48 +2,54 @@
    <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
         Add PN  
     </button>
-    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary" 
-        (click)="partsIssueRI(1)" data-toggle="modal" style="min-width: 97px !important;"
-        data-target="#reserve">Reserve Stock</button>
-   <span *ngIf="!isSubWorkOrder">
-    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && (enablePickTicket)" class="btn btn-primary" 
-        (click)="onclickpicktiket()" style="min-width: 97px !important;">Pick Ticket </button>
-   </span>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
-         (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;"> Issue Stock
+        (click)="partsIssueRI(1)" data-toggle="modal" style="min-width: 97px !important;" data-target="#reserve">Reserve
+        Stock</button>
+    <span *ngIf="!isSubWorkOrder">
+        <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && (enablePickTicket)"
+            class="btn btn-primary" (click)="onclickpicktiket()" style="min-width: 97px !important;">Pick Ticket
+        </button>
+    </span>
+    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
+        (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;"> Issue
+        Stock
     </button>
-    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && !enablePickTicket" class="btn btn-primary"
-         (click)="partsIssueRI(3)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
+    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && !enablePickTicket"
+        class="btn btn-primary" (click)="partsIssueRI(3)" data-toggle="modal" data-target="#reserve"
+        style="min-width: 97px !important;">
         Reserve & Issue </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
-         (click)="partsIssueRI(4)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
+        (click)="partsIssueRI(4)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
         Unissue </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
-         (click)="partsIssueRI(5)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
+        (click)="partsIssueRI(5)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
         Unreserve </button>
 </div>
 <div id="addNewMaterials" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog modal-xlg"> 
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">{{ isEdit ? 'Edit' : 'Add'  }} PN</h4>
+                <h4 class="modal-title">{{ isEdit ? 'Edit' : 'Add' }} PN</h4>
             </div>
             <div class="modal-body">
-                <div *ngIf="!isEdit && addNewMaterial"> 
-                    <grd-material [isWorkOrder]="isWorkOrder" [customerId]="customerId" [isSubWorkOrder]="isSubWorkOrder" [workFlow]="workFlowObject" [taskList]="taskList"
-                        (saveMaterialListForWO)="saveMaterialList($event)"  [mpnPartNumbersList]="mpnPartNumbersList"></grd-material>
+                <div *ngIf="!isEdit && addNewMaterial">
+                    <grd-material [isWorkOrder]="isWorkOrder" [customerId]="customerId"
+                        [isSubWorkOrder]="isSubWorkOrder" [workFlow]="workFlowObject" [taskList]="taskList"
+                        (saveMaterialListForWO)="saveMaterialList($event)" [mpnPartNumbersList]="mpnPartNumbersList">
+                    </grd-material>
                 </div>
-                <div *ngIf="isEdit && editData && addNewMaterial"> 
-                    <grd-material [isEdit]="isEdit" [editData]="editData" [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder"
-                        [workFlow]="workFlowObject"  
-                        (updateMaterialListForWO)="updateMaterialList($event)" [mpnPartNumbersList]="mpnPartNumbersList">
-                    </grd-material> 
+                <div *ngIf="isEdit && editData && addNewMaterial">
+                    <grd-material [isEdit]="isEdit" [editData]="editData" [isWorkOrder]="isWorkOrder"
+                        [isSubWorkOrder]="isSubWorkOrder" [workFlow]="workFlowObject"
+                        (updateMaterialListForWO)="updateMaterialList($event)"
+                        [mpnPartNumbersList]="mpnPartNumbersList">
+                    </grd-material>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
-</div> 
+</div>
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-work-order-materials-add [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder" [isEdit]="isEdit" [isView]="isViewItem" [editData]="editData" [customerId]="customerId"
                 [clearData]="clearData" [display]="show" [selectedParts]="selectedParts"
@@ -52,14 +58,21 @@
  </ng-template>
 <div *ngIf="ispickticket">
     <app-work-order-pickticket [referenceId]="this.savedWorkOrderData.workOrderId"></app-work-order-pickticket>
-</div> 
+</div>
 <div id="reserve" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg"> 
         <div class="modal-content">
             <div class="preloader" *ngIf="isSpinnerVisibleReserve">
                 <div class="loading">
                     <div class="lds-roller">
-                        <div></div><div></div> <div></div><div></div><div></div> <div></div><div></div><div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
                     </div>
                 </div>
             </div>
@@ -70,7 +83,8 @@
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 4">Unissue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 5">Unreserve Parts</h4>
-                <p id="clockdiv" *ngIf="(statusId === 1 || statusId === 3) && counter" class="clockdiv"> Session Expire in {{counter | formatTime}}</p>
+                <p id="clockdiv" *ngIf="(statusId === 1 || statusId === 3) && counter" class="clockdiv"> Session Expire
+                    in {{counter | formatTime}}</p>
             </div>
             <!-- <div class="form-row mar-left-15" *ngIf="statusId !== 2 && statusId !== 4 && statusId !== 5">
                 <div class="col-md-2">
@@ -85,7 +99,8 @@
             </div> -->
             <form #reserveData="ngForm">
                 <div class="modal-body" *ngIf="reservedList">
-                    <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                    <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align"
+                        id="workflow-attributes-block">
                         <div class="tableFixHead">
                         <table class="table table-bordered">
                             <thead> 
@@ -434,13 +449,14 @@
                     <!-- !savebutonDisabled  || checkActiveStatus || checkIsSeclected()-->
                     <button class="btn btn-primary" data-dismiss="modal" (click)="saveRIPart()"
                         [disabled]="!savebutonDisabled">
-                    <span *ngIf="statusId === 1">Reserve</span>
-                    <span *ngIf="statusId === 2">Issue</span>
-                    <span *ngIf="statusId === 3">Reserve & Issue</span>
-                    <span *ngIf="statusId === 4"> Unissue</span>
-                    <span *ngIf="statusId === 5">Unreserve</span>
+                        <span *ngIf="statusId === 1">Reserve</span>
+                        <span *ngIf="statusId === 2">Issue</span>
+                        <span *ngIf="statusId === 3">Reserve & Issue</span>
+                        <span *ngIf="statusId === 4"> Unissue</span>
+                        <span *ngIf="statusId === 5">Unreserve</span>
                     </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterial()">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        (click)="closeMaterial()">Cancel</button>
                 </div>
             </form>
         </div>
@@ -448,48 +464,42 @@
 </div>
 <ng-template #timerAlertNotfi let-c="close" let-d="dismiss">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" (click)="dismissTimerAlert()">&times;</button>
-      <h4 class="modal-title">Confirmation</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="dismissTimerAlert()">&times;</button>
+        <h4 class="modal-title">Confirmation</h4>
     </div>
     <div class="modal-body">
-      <h6 class="text-center">
-        your session getting timeout do you want to reset the time
-      </h6>
+        <h6 class="text-center">
+            your session getting timeout do you want to reset the time
+        </h6>
     </div>
     <div class="modal-footer">
-  
-      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissTimerAlert()">No</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="actionTimerReset()">Yes</button>
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissTimerAlert()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="actionTimerReset()">Yes</button>
     </div>
-  </ng-template>
-  <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+</ng-template>
+<ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
     <div class="modal-header">
-      <button
-        type="button"
-        class="close"
-        data-dismiss="modal"
-        (click)="dismissModel()"
-      >
-        &times;
-      </button>
-      <h4 class="modal-title">Confirmation</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">
+            &times;
+        </button>
+        <h4 class="modal-title">Confirmation</h4>
     </div>
     <div class="modal-body">
-      <h6 class="text-center">
-Do you  to  create new Sub Work Order  or Add to existing Work Order ?
-      </h6>
+        <h6 class="text-center">
+            Do you to create new Sub Work Order or Add to existing Work Order ?
+        </h6>
     </div>
     <div class="modal-footer">
-      <button  type="button"  class="btn btn-danger" data-target="#existingSubWo" data-toggle="modal" data-dismiss="modal"   (click)="addToExistingSubWo()">
-        Add to Existing Record
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary" data-dismiss="modal" (click)="createNewSubWo()">
-        Create New </button>
+        <button type="button" class="btn btn-danger" data-target="#existingSubWo" data-toggle="modal"
+            data-dismiss="modal" (click)="addToExistingSubWo()">
+            Add to Existing Record
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="createNewSubWo()">
+            Create New </button>
     </div>
-  </ng-template>
-  <div id="existingSubWo" class="modal fade" role="dialog" data-backdrop="static" >
+</ng-template>
+<div id="existingSubWo" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
@@ -497,204 +507,289 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                 <h4 class="modal-title">Sub Work Order List</h4>
             </div>
             <div class="modal-body" *ngIf="subWoRecord && subWoRecord.workOrderMaterialsId !=0 && viewSubWolist==true">
-                <app-sub-work-orderlist [workOrderId]="workOrderId" [mpnId]="mpnId" [forSubWorkOrder]="true" [workOrderMaterialsId]="subWoRecord.workOrderMaterialsId" >
+                <app-sub-work-orderlist [workOrderId]="workOrderId" [mpnId]="mpnId" [forSubWorkOrder]="true"
+                    [workOrderMaterialsId]="subWoRecord.workOrderMaterialsId">
                 </app-sub-work-orderlist>
-           </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-height" data-dismiss="modal" (click)="dismissModel2()">Close</button>
             </div>
-            </div> 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-height" data-dismiss="modal"
+                    (click)="dismissModel2()">Close</button>
+            </div>
+        </div>
     </div>
-  </div> 
-  <ng-template #content let-c="close" let-d="dismiss">
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
-        
+
         <h4 class="modal-title">Are You Sure Want to Delete?</h4>
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
-   </button>
-    </div> 
+        </button>
+    </div>
     <div class="modal-body">
         <strong>
             PN:
             <span class="new-label">{{currentRow.partNumber}}</span>
         </strong>
-    </div>  
+    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="delete()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
-  </ng-template>
-  <ng-template #Stockcontent let-c="close" let-d="dismiss">
+</ng-template>
+<ng-template #Stockcontent let-c="close" let-d="dismiss">
     <div class="modal-header">
-        
+
         <h4 class="modal-title">Are You Sure Want to Delete?</h4>
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
-   </button>
-    </div> 
+        </button>
+    </div>
     <div class="modal-body">
         <strong>
             PN:
             <span class="new-label">{{currentRow.partNumber}}</span>
         </strong>
-    </div>  
+    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="deleteStock()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
-  </ng-template>
-  <div id="materialAudit" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+</ng-template>
+<div id="materialAudit" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xlg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">
-            &times;
-          </button>
-          <h4 class="modal-title">Material History </h4>
-        </div>
-        <div class="modal-body">
-          <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
-              <div class="loading">
-                  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-              </div>
-          </div>
-          <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-              <div class="tableFixHead history_hg"> 
-            <table class="table table-bordered header-table-width"   >
- 
-                <!-- <span class="clr-red">*</span> -->
-                <ng-container  >
-                  <thead>
-                      <tr>
-                        <th rowspan="2">Task</th> 
-                        <th rowspan="2" style="min-width:200px !important">PN </th>
-                        <th rowspan="2" style="min-width:200px !important">PN Description</th>
-                        <th rowspan="2">Serial Num</th>
-                        <th rowspan="2">Cond</th>
-                        <th rowspan="2">Stk Line Num</th>
-                        <th rowspan="2">Request Type</th>
-                        <th rowspan="2">Provision</th>
-                        <!-- <th rowspan="2">PO Num </th> -->
-                        <th rowspan="2" style="min-width:80px !important">Qty Req</th>
-                        <th rowspan="2" style="min-width:80px !important">Qty Res </th>
-                        <th rowspan="2" style="min-width:80px !important">Qty Iss</th>
-                        <th rowspan="2" style="min-width:80px !important">Qty Turned In</th>
-                        <th rowspan="2" style="min-width:80px !important">Qty OH</th>
-                        <th rowspan="2" style="min-width:80px !important" >Qty Avail</th>
-                        <th rowspan="2" style="min-width:80px !important">Qty Rem</th>
-                        <th rowspan="2">UOM</th>
-                        <th rowspan="2">Stk Type</th> 
-                        <th rowspan="2">Classification</th>
-                        <th rowspan="2" style="min-width:80px !important">Qty On Order</th>
-                        <th rowspan="2" style="min-width:100px !important">Qty on BK Order</th>
-                        <th rowspan="2">Need Date</th>
-                        <th rowspan="2">Cntl Num</th>
-                        <th rowspan="2">Cntl ID</th>
-                        <th rowspan="2">Cur</th>
-                        <th rowspan="2" style="min-width:100px !important">Unit Cost</th>
-                        <th rowspan="2" style="min-width:100px !important">Extended Cost </th>
-                        <th rowspan="2">Cost Date</th>
-                        <th rowspan="2">PO Num </th>
-                        <th rowspan="2">RO Num</th>
-                        <th rowspan="2">Rec Num </th>
-                        <th rowspan="2">WO Num</th>
-                        <th rowspan="2">Sub-WO Num</th>
-                        <th rowspan="2">SO Num</th>
-                        <th rowspan="2">Site</th>
-                        <th rowspan="2">Warehouse</th>
-                        <th rowspan="2">Location</th>
-                        <th rowspan="2">Shelf</th> 
-                        <th rowspan="2">Bin</th>
-                        <th rowspan="2" style="min-width:70px !important">Is Active</th>
-                        <th rowspan="2" style="min-width:70px !important">Is Deleted</th>
-                        <th rowspan="2" class="min-width-250">Memo</th>
-                        <th rowspan="2">Created Date</th>
-                        <th rowspan="2">Created By</th>
-                        <th rowspan="2">Updated Date</th>
-                        <th rowspan="2">Updated By</th>
-                      </tr>
-                  </thead>
-                  <tbody *ngIf="auditHistoryList && auditHistoryList.length > 0">
-                      <tr *ngFor="let audit of auditHistoryList; let i = index">
-                         <td [ngStyle]="{color: getColorCodeForHistory(i, 'taskName', audit.taskName) ? 'black' : 'red'}">{{ audit.taskName }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'partNumber', audit.partNumber) ? 'black' : 'red'}">{{ audit.partNumber }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'partDescription', audit.partDescription) ? 'black' : 'red'}">{{ audit.partDescription }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'serialNumber', audit.serialNumber) ? 'black' : 'red'}">{{ audit.serialNumber }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'condition', audit.condition) ? 'black' : 'red'}">{{ audit.condition }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'stockLineNumber', audit.stockLineNumber) ? 'black' : 'red'}">{{ audit.stockLineNumber }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'mandatoryOrSupplemental', audit.mandatoryOrSupplemental) ? 'black' : 'red'}">{{ audit.mandatoryOrSupplemental }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'provision', audit.provision) ? 'black' : 'red'}">{{ audit.provision }}</td>
-                          <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'provision', audit.provision) ? 'black' : 'red'}">{{ audit.provision }}</td> -->
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityRequried', audit.qunatityRequried) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityRequried }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityReserved', audit.qunatityReserved) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityReserved }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'quantityIssued', audit.quantityIssued) ? 'black' : 'red'}" class="text-right">{{ audit.quantityIssued }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityTurnIn', audit.qunatityTurnIn) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityTurnIn }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityOnHand', audit.partQuantityOnHand) ? 'black' : 'red'}" class="text-right">{{ audit.partQuantityOnHand }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityAvailable', audit.partQuantityAvailable) ? 'black' : 'red'}" class="text-right">{{ audit.partQuantityAvailable }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityRemaining', audit.qunatityRemaining) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityRemaining }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'uom', audit.uom) ? 'black' : 'red'}">{{ audit.uom }}</td>
-                            <td [ngStyle]="{color: getColorCodeForHistory(i, 'stockType', audit.stockType) ? 'black' : 'red'}">{{ audit.stockType }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'itemClassification', audit.itemClassification) ? 'black' : 'red'}">{{ audit.itemClassification }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityOnOrder', audit.partQuantityOnOrder) ? 'black' : 'red'}" class="text-right">{{ audit.partQuantityOnOrder }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityBackOrder', audit.qunatityBackOrder) ? 'black' : 'red'}" class="text-right">{{ audit.qunatityBackOrder }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'needDate', audit.needDate) ? 'black' : 'red'}">{{  audit.needDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'controlNo', audit.controlNo) ? 'black' : 'red'}">{{ audit.controlNo }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'controlId', audit.controlId) ? 'black' : 'red'}">{{ audit.controlId }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'currency', audit.currency) ? 'black' : 'red'}">{{ audit.currency }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'unitCost', audit.unitCost) ? 'black' : 'red'}" class="text-right">{{ audit.unitCost }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'extendedCost', audit.extendedCost) ? 'black' : 'red'}" class="text-right">{{ audit.extendedCost }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'costDate', audit.costDate) ? 'black' : 'red'}">{{ audit.costDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderNumber', audit.purchaseOrderNumber) ? 'black' : 'red'}">{{ audit.purchaseOrderNumber }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderNumber', audit.repairOrderNumber) ? 'black' : 'red'}">{{ audit.repairOrderNumber }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'receiver', audit.receiver) ? 'black' : 'red'}">{{ audit.receiver }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'workOrderNumber', audit.workOrderNumber) ? 'black' : 'red'}">{{ audit.workOrderNumber }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'subWorkOrderNo', audit.subWorkOrderNo) ? 'black' : 'red'}">{{ audit.subWorkOrderNo }}</td> 
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'salesOrder', audit.salesOrder) ? 'black' : 'red'}">{{ audit.salesOrder }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'site', audit.site) ? 'black' : 'red'}">{{ audit.site }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'wareHouse', audit.wareHouse) ? 'black' : 'red'}">{{ audit.wareHouse }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'location', audit.location) ? 'black' : 'red'}">{{ audit.location }}</td>
-                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'shelf', audit.shelf) ? 'black' : 'red'}">{{ audit.shelf }}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'bin', audit.bin) ? 'black' : 'red'}">{{ audit.bin }}</td>
-                          <td>
-                            <input type="checkbox" disabled [checked]="audit.isActive == true"
-                            style="margin: 0px auto; display: block;" />
-                             </td>
-                             <td>
-                            <input type="checkbox" disabled [checked]="audit.isDeferred == true"
-                                   style="margin: 0px auto; display: block;" />
-                        </td>
-                        <td class="min-width-250" [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
-                            <p class="p_editor  truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
-                        </td>
-                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
-                        <td>{{ audit.createdBy }}</td>
-                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'updatedDate', audit.updatedDate) ? 'black' : 'red'}">{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                          <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy) ? 'black' : 'red'}">{{ audit.updatedBy }}</td>
-                      </tr>
-                      </tbody>
-                </ng-container>
-            </table>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+                <h4 class="modal-title">Material History </h4>
             </div>
-            <ng-template *ngIf="auditHistoryList && auditHistoryList.length==0">
-              <div class="text-center">
-                  <div class="text-center">
-                      <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
-                      <h4 class="no-history-found-msg">No History Found </h4>
-                  </div>
-              </div>
-            </ng-template>
-          </div>
+            <div class="modal-body">
+                <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
+                    <div class="loading">
+                        <div class="lds-roller">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                    <div class="tableFixHead history_hg">
+                        <table class="table table-bordered header-table-width">
+
+                            <!-- <span class="clr-red">*</span> -->
+                            <ng-container>
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Task</th>
+                                        <th rowspan="2" style="min-width:200px !important">PN </th>
+                                        <th rowspan="2" style="min-width:200px !important">PN Description</th>
+                                        <th rowspan="2">Serial Num</th>
+                                        <th rowspan="2">Cond</th>
+                                        <th rowspan="2">Stk Line Num</th>
+                                        <th rowspan="2">Request Type</th>
+                                        <th rowspan="2">Provision</th>
+                                        <!-- <th rowspan="2">PO Num </th> -->
+                                        <th rowspan="2" style="min-width:80px !important">Qty Req</th>
+                                        <th rowspan="2" style="min-width:80px !important">Qty Res </th>
+                                        <th rowspan="2" style="min-width:80px !important">Qty Iss</th>
+                                        <th rowspan="2" style="min-width:80px !important">Qty Turned In</th>
+                                        <th rowspan="2" style="min-width:80px !important">Qty OH</th>
+                                        <th rowspan="2" style="min-width:80px !important">Qty Avail</th>
+                                        <th rowspan="2" style="min-width:80px !important">Qty Rem</th>
+                                        <th rowspan="2">UOM</th>
+                                        <th rowspan="2">Stk Type</th>
+                                        <th rowspan="2">Classification</th>
+                                        <th rowspan="2" style="min-width:80px !important">Qty On Order</th>
+                                        <th rowspan="2" style="min-width:100px !important">Qty on BK Order</th>
+                                        <th rowspan="2">Need Date</th>
+                                        <th rowspan="2">Cntl Num</th>
+                                        <th rowspan="2">Cntl ID</th>
+                                        <th rowspan="2">Cur</th>
+                                        <th rowspan="2" style="min-width:100px !important">Unit Cost</th>
+                                        <th rowspan="2" style="min-width:100px !important">Extended Cost </th>
+                                        <th rowspan="2">Cost Date</th>
+                                        <th rowspan="2">PO Num </th>
+                                        <th rowspan="2">RO Num</th>
+                                        <th rowspan="2">Rec Num </th>
+                                        <th rowspan="2">WO Num</th>
+                                        <th rowspan="2">Sub-WO Num</th>
+                                        <th rowspan="2">SO Num</th>
+                                        <th rowspan="2">Site</th>
+                                        <th rowspan="2">Warehouse</th>
+                                        <th rowspan="2">Location</th>
+                                        <th rowspan="2">Shelf</th>
+                                        <th rowspan="2">Bin</th>
+                                        <th rowspan="2" style="min-width:70px !important">Is Active</th>
+                                        <th rowspan="2" style="min-width:70px !important">Is Deleted</th>
+                                        <th rowspan="2" class="min-width-250">Memo</th>
+                                        <th rowspan="2">Created Date</th>
+                                        <th rowspan="2">Created By</th>
+                                        <th rowspan="2">Updated Date</th>
+                                        <th rowspan="2">Updated By</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="auditHistoryList && auditHistoryList.length > 0">
+                                    <tr *ngFor="let audit of auditHistoryList; let i = index">
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'taskName', audit.taskName) ? 'black' : 'red'}">
+                                            {{ audit.taskName }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'partNumber', audit.partNumber) ? 'black' : 'red'}">
+                                            {{ audit.partNumber }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'partDescription', audit.partDescription) ? 'black' : 'red'}">
+                                            {{ audit.partDescription }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'serialNumber', audit.serialNumber) ? 'black' : 'red'}">
+                                            {{ audit.serialNumber }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'condition', audit.condition) ? 'black' : 'red'}">
+                                            {{ audit.condition }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'stockLineNumber', audit.stockLineNumber) ? 'black' : 'red'}">
+                                            {{ audit.stockLineNumber }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'mandatoryOrSupplemental', audit.mandatoryOrSupplemental) ? 'black' : 'red'}">
+                                            {{ audit.mandatoryOrSupplemental }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'provision', audit.provision) ? 'black' : 'red'}">
+                                            {{ audit.provision }}</td>
+                                        <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'provision', audit.provision) ? 'black' : 'red'}">{{ audit.provision }}</td> -->
+                                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityRequried', audit.qunatityRequried) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.qunatityRequried }}</td>
+                                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityReserved', audit.qunatityReserved) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.qunatityReserved }}</td>
+                                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'quantityIssued', audit.quantityIssued) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.quantityIssued }}</td>
+                                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityTurnIn', audit.qunatityTurnIn) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.qunatityTurnIn }}</td>
+                                        <td class="min-w-100"
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityOnHand', audit.partQuantityOnHand) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.partQuantityOnHand }}</td>
+                                        <td class="min-w-100"
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityAvailable', audit.partQuantityAvailable) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.partQuantityAvailable }}</td>
+                                        <td class="min-w-100"
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityRemaining', audit.qunatityRemaining) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.qunatityRemaining }}</td>
+                                        <td class="min-w-100"
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'uom', audit.uom) ? 'black' : 'red'}">
+                                            {{ audit.uom }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'stockType', audit.stockType) ? 'black' : 'red'}">
+                                            {{ audit.stockType }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'itemClassification', audit.itemClassification) ? 'black' : 'red'}">
+                                            {{ audit.itemClassification }}</td>
+                                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'partQuantityOnOrder', audit.partQuantityOnOrder) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.partQuantityOnOrder }}</td>
+                                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'qunatityBackOrder', audit.qunatityBackOrder) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.qunatityBackOrder }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'needDate', audit.needDate) ? 'black' : 'red'}">
+                                            {{ audit.needDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'controlNo', audit.controlNo) ? 'black' : 'red'}">
+                                            {{ audit.controlNo }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'controlId', audit.controlId) ? 'black' : 'red'}">
+                                            {{ audit.controlId }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'currency', audit.currency) ? 'black' : 'red'}">
+                                            {{ audit.currency }}</td>
+                                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'unitCost', audit.unitCost) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.unitCost }}</td>
+                                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'extendedCost', audit.extendedCost) ? 'black' : 'red'}"
+                                            class="text-right">{{ audit.extendedCost }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'costDate', audit.costDate) ? 'black' : 'red'}">
+                                            {{ audit.costDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderNumber', audit.purchaseOrderNumber) ? 'black' : 'red'}">
+                                            {{ audit.purchaseOrderNumber }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderNumber', audit.repairOrderNumber) ? 'black' : 'red'}">
+                                            {{ audit.repairOrderNumber }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'receiver', audit.receiver) ? 'black' : 'red'}">
+                                            {{ audit.receiver }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'workOrderNumber', audit.workOrderNumber) ? 'black' : 'red'}">
+                                            {{ audit.workOrderNumber }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'subWorkOrderNo', audit.subWorkOrderNo) ? 'black' : 'red'}">
+                                            {{ audit.subWorkOrderNo }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'salesOrder', audit.salesOrder) ? 'black' : 'red'}">
+                                            {{ audit.salesOrder }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'site', audit.site) ? 'black' : 'red'}">
+                                            {{ audit.site }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'wareHouse', audit.wareHouse) ? 'black' : 'red'}">
+                                            {{ audit.wareHouse }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'location', audit.location) ? 'black' : 'red'}">
+                                            {{ audit.location }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'shelf', audit.shelf) ? 'black' : 'red'}">
+                                            {{ audit.shelf }}</td>
+                                        <td class="min-w-100"
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'bin', audit.bin) ? 'black' : 'red'}">
+                                            {{ audit.bin }}</td>
+                                        <td>
+                                            <input type="checkbox" disabled [checked]="audit.isActive == true"
+                                                style="margin: 0px auto; display: block;" />
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" disabled [checked]="audit.isDeferred == true"
+                                                style="margin: 0px auto; display: block;" />
+                                        </td>
+                                        <td class="min-width-250"
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
+                                            <p class="p_editor  truncate-text" matTooltipPosition="above"
+                                                [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
+                                        </td>
+                                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+                                        <td>{{ audit.createdBy }}</td>
+                                        <td
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'updatedDate', audit.updatedDate) ? 'black' : 'red'}">
+                                            {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                        <td class="min-w-100"
+                                            [ngStyle]="{color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy) ? 'black' : 'red'}">
+                                            {{ audit.updatedBy }}</td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
+                        </table>
+                    </div>
+                    <ng-template *ngIf="auditHistoryList && auditHistoryList.length==0">
+                        <div class="text-center">
+                            <div class="text-center">
+                                <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
+                                <h4 class="no-history-found-msg">No History Found </h4>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">
-            Close
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="preloader" *ngIf="isSpinnerVisible">
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">
             <div></div>
@@ -708,7 +803,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
         </div>
     </div>
 </div>
-<div *ngIf="!ispickticket" >
+<div *ngIf="!ispickticket">
     <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align1 parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
     style="min-height: 130px !important;">
     <p-table class=" rpo-table-cstm1 rro-table-cstm materialListTable" id="custome_material" [columns]="summaryColumns" #materialTble
@@ -822,115 +917,240 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                             <i class="fa fa-eye"></i>
                         </a>
                         </span>
-                    <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,childRowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
-                </td>
-            </tr>
-            <tr class="child-data splitship-child child-data-back " *ngIf="rowData.childParts && rowData.childParts.length==0">
-                <td colspan="49" class="no-recordscusMsg" style="background: #fff !important;padding: 3px !important;padding-left:13%  !important;text-transform: capitalize;" >
-                    No Stockline Available
-                </td>
-            </tr>
-    </ng-template> 
-    <ng-template pTemplate="emptymessage" let-columns>
-        <tr>
-            <td colspan="49" class="no-records-cstm no-records-msg" style="margin-left:-36%">
-                No records found
-            </td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="summary" id="footer" >
-        <label id="footer" class="footer" style="background: #fff !important;">Total:</label>
-        <input class="footer-input-width" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
-            type="text" />
-        &nbsp;&nbsp;
-        <label id="footer" class="footer1">Pages Count:</label>
-        <input class="footer-input-width" [ngModel]="
+                        <span><button type="button" class="btn nobg btn-pluspo-cstm"
+                                (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"
+                                matTooltip="Create PO" matTooltipPosition="above"><i
+                                    class="fa fa-plus"></i></button></span>
+                        <span *ngIf="!isSubWorkOrder">
+                            <button class="btn nobg" mat-icon-button
+                                (click)="pickticketItemInterface(rowData,pickticketieminterface)"
+                                matTooltip="Add Pick Ticket" matTooltipPosition="above" style="font-weight: bold;"
+                                [disabled]="!(rowData.partStatusId >0)">
+                                <i class="fa fa-plus" [ngClass]="{'btn_disabled':!(rowData.partStatusId >0)}"></i>
+                            </button>
+                        </span>
+                        <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
+                            <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId == 0"
+                                (click)="subWoClick(rowData)"
+                                [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'"
+                                matTooltipPosition="above"
+                                [disabled]="!(rowData.partStatusId ==2 || rowData.partStatusId ==3)">
+                                <i class="fa fa-plus grn_clr"
+                                    [ngClass]="{'btn_disabled':!(rowData.partStatusId ==2 || rowData.partStatusId ==3)}"></i>
+                            </button>
+                            <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId != 0"
+                                (click)="editSubWo(rowData)"
+                                [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'"
+                                matTooltipPosition="above">
+                                <i class="fa fa-pencil grn_clr"></i>
+                            </button>
+                        </span>
+                        <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order'">
+                            <button type="button" class="btn nobg btn-pluspo-cstm" disabled>
+                                <i class="fa fa-plus" style="color: #b7b7b7;"></i>
+                            </button>
+                        </span>
+                        <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;"
+                                (click)="openDelete(content,rowData)"
+                                [ngClass]="{'btn_disabled': (rowData.quantityIssued!=0 || rowData.quantityReserved!=0)}"
+                                [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"
+                                matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button>
+                        </span>
+                        <span data-toggle="modal" data-target="#materialAudit"><a class="btn nobg btn-hist-cstm mr-top5"
+                                (click)="openMaterialAudit(rowData)" matTooltip="Material List History"
+                                matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                    </td>
+                </tr>
+                <tr class="child-header splitship-head child-header-back">
+                    <td class="custom_Tdth" *ngFor="let childcol of childColumnsData"
+                        [ngStyle]="{'min-width': childcol.width}" style="text-align: center !important;">
+                        {{childcol.header}}
+                    </td>
+                    <td *ngIf="!isView" class="lastcol-fix"
+                        style="position: sticky !important; min-width: 145px !important; width:80px"></td>
+                </tr>
+                <tr class="child-data splitship-child child-data-back " pReorderableRowHandle
+                    *ngFor="let childRowData of rowData.childParts; let stockIndex1 = index">
+                    <td *ngFor="let childcol of childColumnsData; let i = index" class="summary-column"
+                        pReorderableRowHandle>
+                        <input type="checkbox" name="contract" #contract="ngModel"
+                            *ngIf="childcol.field =='isFromWorkFlow'" class="form-control w60 defered-check2"
+                            [(ngModel)]="childRowData.isFromWorkFlow" disabled>
+                        <p *ngIf="childcol.field !='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver' && childcol.field !='altEquiv'  && childcol.field !='showempty'"
+                            style="margin:0px !important"
+                            [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">
+                            {{childRowData[childcol.field]}}</p>
+                        <p *ngIf="childcol.field =='line' && childcol.field !='memo' && childcol.field !='isDeferred'&& childcol.field !='isFromWorkFlow' && childcol.field !='stockLineNumber' && childcol.field !='controlNo' && childcol.field !='controlId' && childcol.field !='receiver' && childcol.field !='showempty'"
+                            style="margin:0px !important" class=" p-0 text-center"
+                            [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">
+                            {{childRowData[childcol.field]}} </p>
+                        <p *ngIf="childcol.field =='stockLineNumber' " [matTooltip]="childRowData.stockLineNumber"
+                            [matTooltipDisabled]="childRowData.isMultipleStockLine == 'Single'"
+                            matTooltipPosition="above" style="margin:0px !important"
+                            [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{
+                            childRowData.isMultipleStockLine== 'Single' ? childRowData[childcol.field] :
+                            childRowData.isMultipleStockLine}}</p>
+                        <p *ngIf=" childcol.field =='controlNo'" [matTooltip]="childRowData.controlNo"
+                            [matTooltipDisabled]="childRowData.isMultipleControlNo == 'Single'"
+                            matTooltipPosition="above" style="margin:0px !important"
+                            [ngClass]="{align_rightset : (childcol && childcol.align ==1)}">
+                            {{childRowData.isMultipleControlNo== 'Single' ? childRowData[childcol.field] :
+                            childRowData.isMultipleControlNo }}</p>
+                        <p *ngIf=" childcol.field =='controlId'" [matTooltip]="childRowData.controlId"
+                            [matTooltipDisabled]="childRowData.isMultiplecontrolId == 'Single'"
+                            matTooltipPosition="above" style="margin:0px !important"
+                            [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{
+                            childRowData.isMultiplecontrolId== 'Single' ? childRowData[childcol.field] :
+                            childRowData.isMultiplecontrolId }}</p>
+                        <p *ngIf=" childcol.field =='receiver'" [matTooltip]="childRowData.receiver"
+                            [matTooltipDisabled]="childRowData.isMultiplereceiver == 'Single'"
+                            matTooltipPosition="above" style="margin:0px !important"
+                            [ngClass]="{align_rightset : (childcol && childcol.align ==1)}"> {{
+                            childRowData.isMultiplereceiver== 'Single' ? childRowData[childcol.field] :
+                            childRowData.isMultiplereceiver }}</p>
+                        <p *ngIf="childcol.field =='altEquiv'" style="margin:0px !important">{{childRowData.isAltPart ?
+                            'Alternative' : childRowData.isEquPart ? 'Equivalent' : '-'}}</p>
+                        <p *ngIf="childcol.field =='showempty'" style="margin:0px !important"> -</p>
+                        <input type="checkbox" name="contract" #contract="ngModel" *ngIf="childcol.field =='isDeferred'"
+                            class="form-control w60 defered-check3" [(ngModel)]="childRowData.isDeferred">
+                        <span *ngIf="childcol.field =='memo'" [innerHTML]="childRowData[childcol.field]"
+                            class="p_textEditor truncate-text" matTooltipPosition="above"
+                            [matTooltip]="parsedText(childRowData[childcol.field])"></span>
+                    </td>
+                    <td *ngIf="!isView" class="lastcol-fix"
+                        style="position: sticky !important; min-width: 145px !important; width:80px">
+
+                        <span><button class="btn nobg btn-edit-cstm1"
+                                [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"
+                                (click)="editStockLine(childRowData,rowData)" matTooltip="Edit"
+                                matTooltipPosition="above"><i class="fa fa-pencil"></i></button></span>
+                        <span>
+                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </span>
+                        <span><button type="button" class="btn nobg btn-delete-cstm"
+                                [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"
+                                (click)="deleteStockLine(Stockcontent,childRowData)" matTooltip="Remove"
+                                matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                        <span><button type="button" class="btn nobg btn-pluspo-cstm"
+                                (click)="createNewROWorkOrder(childRowData,rowData)" *ngIf="rowData.isRoleUp==false"
+                                matTooltip="Create RO" matTooltipPosition="above"><i
+                                    class="fa fa-plus"></i></button></span>
+                    </td>
+                </tr>
+                <tr class="child-data splitship-child child-data-back "
+                    *ngIf="rowData.childParts && rowData.childParts.length==0">
+                    <td colspan="49" class="no-recordscusMsg"
+                        style="background: #fff !important;padding: 3px !important;padding-left:13%  !important;text-transform: capitalize;">
+                        No Stockline Available
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td colspan="49" class="no-records-cstm no-records-msg" style="margin-left:-36%">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer" style="background: #fff !important;">Total:</label>
+                <input class="footer-input-width" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
+                    type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+                <input class="footer-input-width" [ngModel]="
         getPageCount(materialTble._totalRecords, pageSize)
       " [disabled]="true" pInputText type="text" />
-    </ng-template>
-</p-table> 
-<div class="modal fade" id="showStockLineDetails" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header" style="text-align: start;">
-          <button type="button" class="close" (click)="onCloseMaterial(1)">&times;</button>
-          <h4 class="modal-title">Edit PN Details</h4>
+            </ng-template>
+        </p-table>
+        <div class="modal fade" id="showStockLineDetails" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header" style="text-align: start;">
+                        <button type="button" class="close" (click)="onCloseMaterial(1)">&times;</button>
+                        <h4 class="modal-title">Edit PN Details</h4>
+                    </div>
+                    <div class="modal-body" *ngIf="editData !=undefined">
+                        <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isSubWorkOrder]="isSubWorkOrder"
+                            [isStockLine]="isStockLine" (close)="onCloseMaterial($event)"
+                            (setmaterialListForUpdate)="setmaterialListForUpdate($event)" [isEdit]="isEdit"
+                            [editData]="editData" [part]="editData" [isEdit]="isEdit"
+                            (save)="openSalesMarginSave($event)"></app-wo-margin>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body" *ngIf="editData !=undefined">
-            <app-wo-margin tabindex="-1" [isStockView]="isStockView" [isSubWorkOrder]="isSubWorkOrder" [isStockLine]="isStockLine"  (close)="onCloseMaterial($event)"  (setmaterialListForUpdate)="setmaterialListForUpdate($event)" [isEdit]="isEdit" [editData]="editData"  [part]="editData" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
-           ></app-wo-margin> 
-        </div>
-      </div>
     </div>
-  </div>
- </div>
 </div>
 <ng-template #pickticketieminterface let-c="close" let-d="dismiss">
     <div class="modal-header">
-      <button type="button" class="close font_chck" (click)="dismissModel()">
-        &times;
-      </button>
-      <h4 class="modal-title">Pick Item</h4>
+        <button type="button" class="close font_chck" (click)="dismissModel()">
+            &times;
+        </button>
+        <h4 class="modal-title">Pick Item</h4>
     </div>
     <div class="modal-body">
-      <form #ptiteminterface="ngForm" class="form-horizontal">
-        <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom pickticket"
-          [columns]="pickTicketItemInterfaceheader" [scrollable]="true" [resizableColumns]="true" selectionMode="single"
-          [responsive]="true" [metaKeySelection]="true" [style]="{ width: '100%' }">
-          <ng-template pTemplate="colgroup" let-columns>
-            <colgroup>
-              <col [ngStyle]="{'width': '50px'}" />
-              <col *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}" />
-            </colgroup>
-          </ng-template>
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th class="text-left">
-              </th>
-              <th *ngFor="let col of pickTicketItemInterfaceheader">
-                {{col.header}}
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
-            <tr pReorderableRowHandle>
-              <td>
-                <span>
-                  <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
-                    (onChange)="onChangeOfPartSelection($event)" binary="true">
-                  </p-checkbox>
-                </span>
-              </td>
-              <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
-                <ng-container *ngIf="col.field != 'qtyToShip'">
-                  {{part[col.field]}}
-                </ng-container>
-                <ng-container *ngIf="col.field =='qtyToShip'">
-                  <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
-                    required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
-                    [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false"
-                    required="col.field =='qtyToShip'" />
-                </ng-container>
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage" let-columns *ngIf="parts.length == 0">
-            <tr>
-              <td [attr.colspan]="18" class="no-records-cstm" style="text-align: left;">
-                No records found
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-        <div class="modal-footer">
-          <button type="submit" (click)="savepickticketiteminterface(parts)" class="btn btn-primary"
-            [disabled]="!ptiteminterface.valid || disableSubmitButton == true">
-            {{ isEdit ? 'Update' : 'Save' }}
-          </button>
-          <button type="button" (click)="dismissModel()" class="btn btn-danger">
-            Close
-          </button>
-        </div>
-      </form>
-    </div> 
-  </ng-template>
+        <form #ptiteminterface="ngForm" class="form-horizontal">
+            <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom pickticket"
+                [columns]="pickTicketItemInterfaceheader" [scrollable]="true" [resizableColumns]="true"
+                selectionMode="single" [responsive]="true" [metaKeySelection]="true" [style]="{ width: '100%' }">
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col [ngStyle]="{'width': '50px'}" />
+                        <col *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}" />
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="text-left">
+                        </th>
+                        <th *ngFor="let col of pickTicketItemInterfaceheader">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
+                    <tr pReorderableRowHandle>
+                        <td>
+                            <span>
+                                <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
+                                    (onChange)="onChangeOfPartSelection($event)" binary="true">
+                                </p-checkbox>
+                            </span>
+                        </td>
+                        <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
+                            <ng-container *ngIf="col.field != 'qtyToShip'">
+                                {{part[col.field]}}
+                            </ng-container>
+                            <ng-container *ngIf="col.field =='qtyToShip'">
+                                <input type="number" class="form-control quantityTextBox text-right" pInputText
+                                    pKeyFilter="num" required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}"
+                                    value="{{part.qtyToReserve}}" [(ngModel)]="part.qtyToShip"
+                                    [disabled]="rowData.isSelected == false" required="col.field =='qtyToShip'" />
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns *ngIf="parts.length == 0">
+                    <tr>
+                        <td [attr.colspan]="18" class="no-records-cstm" style="text-align: left;">
+                            No records found
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="modal-footer">
+                <button type="submit" (click)="savepickticketiteminterface(parts)" class="btn btn-primary"
+                    [disabled]="!ptiteminterface.valid || disableSubmitButton == true">
+                    {{ isEdit ? 'Update' : 'Save' }}
+                </button>
+                <button type="button" (click)="dismissModel()" class="btn btn-danger">
+                    Close
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

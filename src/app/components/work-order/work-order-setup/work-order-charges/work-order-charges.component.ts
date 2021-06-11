@@ -536,7 +536,15 @@ if(!this.isSummarizedView){
     const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0';
     return newTotal;
   }
-
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
   getTotalTaskUnitCost(tData) {
     let total = 0;
     if (tData) {
