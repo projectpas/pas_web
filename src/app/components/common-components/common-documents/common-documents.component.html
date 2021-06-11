@@ -108,7 +108,8 @@
               }}
             </td>
             <td class="table-column-width text-capital" *ngIf="col.field == 'docMemo'">
-              <p class="m-0 p-0 p_textEditor float-left text-capital" [innerHTML]="rowData[col.field]"></p>
+              <p class="m-0 p-0 p_textEditor float-left text-capital truncate-text" matTooltipPosition="above"
+              [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
             </td>
             <td class="table-column-width text-capital" *ngIf="col.field == 'createdBy' || col.field == 'updatedBy'"></td>
             <td class="table-column-width" *ngIf="col.field == 'fileName'">
@@ -273,7 +274,7 @@
           <p class="view-text-editor" style="margin-bottom:8px">
             <span class="label view-text-editor"><b>Memo: </b></span>
             <span class="value">
-              <p class="p-0 m-0 p_textEditor" style="margin-bottom:-4px !important"
+              <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(sourceViewforDocument.docMemo)" style="margin-bottom:-4px !important"
                 [innerHTML]="sourceViewforDocument.docMemo">
               </p>
             </span>
@@ -534,7 +535,7 @@
                     {{audit.name}}
                   </td>
                   <td [ngStyle]="{'color': getColorCodeForHistory(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }">
-                    <p class="truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.docMemo)" [innerHTML]="audit.docMemo"></p>
+                    <p style="margin:0px;padding:0px !important" class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.docMemo)" [innerHTML]="audit.docMemo"></p>
                   </td>
                   <td>
                 <tr *ngFor="let x of audit.attachmentDetails">
