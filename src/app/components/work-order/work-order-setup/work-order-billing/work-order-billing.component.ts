@@ -143,6 +143,7 @@ export class WorkOrderBillingComponent implements OnInit {
     ) {
     }
 
+    ngOnInit() {
         this.initColumns();
         if (this.workOrderQuoteId == 0) {
         }
@@ -163,6 +164,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.getInvoiceList();
         this.resetOtherOptions();
         this.BindManagementStructure();
+        this.getCurrencyList();
         if (this.isEditBilling) {
             if (data.soldToCustomerId.customerId == data.shipToCustomerId.customerId) {
                 this.getSiteNames(this.customerId,data.soldToCustomerId);
