@@ -1254,7 +1254,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         localStorage.setItem("partNumber", rowData.partNumber);
         localStorage.setItem("lsWoId", this.workOrderId);        
         localStorage.setItem("lsconditionId", rowData.conditionCodeId);
-        
+        localStorage.setItem("lsSubWoId", rowData.subWorkOrderId);        
         localStorage.setItem("lsqty", childRowData.stocklineQuantity);
         localStorage.setItem("lsstocklineId", childRowData.stockLineId);
         if (this.isSubWorkOrder == true) {
