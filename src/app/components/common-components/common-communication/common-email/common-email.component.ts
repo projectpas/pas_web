@@ -51,11 +51,11 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     emailType: number;
     data: any = [];
     headers = [
-        { field: 'emailType', header: 'Email Type' },
-        { field: 'toEmail', header: 'To Email' },
-        { field: 'subject', header: 'Subject' },
-        { field: 'contactBy', header: 'Contacted By' },
-        { field: 'contactDate', header: 'Contact Date' }
+        { field: 'emailType', header: 'Email Type',width:"90px" },
+        { field: 'toEmail', header: 'To Email',width:"200px" },
+        { field: 'subject', header: 'Subject' ,width:"200px"},
+        { field: 'contactBy', header: 'Contacted By',width:"90px" },
+        { field: 'contactDate', header: 'Contact Date',width:"90px" }
     ]
     selectedColumns = this.headers;
     addList: any = [];
@@ -85,10 +85,10 @@ export class EmailCommonComponent implements OnInit, OnChanges {
 
     ngOnInit(): void {
         if (this.type == 1) {
-            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
+            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact',width:"100px" })
         } else {
 
-            this.headers.unshift({ field: 'vendorContact', header: 'Vendor Contact' })
+            this.headers.unshift({ field: 'vendorContact', header: 'Vendor Contact' ,width:"100px"})
         }
     }
 
@@ -169,7 +169,15 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.pageSize = event.rows;
         event.first = pageIndex;
     }
-
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     addMemo() {
         this.isEditMode = false;
         this.formData = new FormData();

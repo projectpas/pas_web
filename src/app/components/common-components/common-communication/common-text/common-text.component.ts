@@ -54,13 +54,13 @@ export class TextCommonComponent implements OnInit, OnChanges {
         { field: 'updatedBy', header: 'Updated By' },
     ]
     selectedColumns = [
-        { field: 'mobile', header: 'Mobile' },
-        { field: 'contactBy', header: 'Contacted By' },
-        { field: 'notesData', header: 'Notes' },
-        { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        { field: 'mobile', header: 'Mobile',width:"70px" },
+        { field: 'contactBy', header: 'Contacted By',width:"90px" },
+        { field: 'notesData', header: 'Notes' ,width:"200px"},
+        { field: 'createdDate', header: 'Created Date',width:"90px" },
+        { field: 'createdBy', header: 'Created By',width:"70px" },
+        { field: 'updatedDate', header: 'Updated Date',width:"90px" },
+        { field: 'updatedBy', header: 'Updated By',width:"90px"},
     ];
     addList: any = [];
     moduleName: any = "Communication";
@@ -94,7 +94,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
         // this.getAllEmployees('');
         // this.getAllTextList();
          this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
-         this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' }) 
+         this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' ,width:"100px"}) 
     }
 
     ngOnChanges(): void {
