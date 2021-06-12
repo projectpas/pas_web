@@ -270,12 +270,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
           });
       }
 
-      getBillingInvoiceList(workOrderId: number): Observable<any> {
-        const URL = `${this.configurations.baseUrl}/api/workorder/getBillingInvoiceList?workOrderId=${workOrderId}`;
+      getBillingInvoiceList(workOrderId: number,workOrderPartNumberId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workorder/getBillingInvoiceList?workOrderId=${workOrderId}&workOrderPartNumberId=${workOrderPartNumberId}`;
         return this.http
           .get<any>(URL, this.getRequestHeaders())
           .catch(error => {
-            return this.handleErrorCommon(error, () => this.getBillingInvoiceList(workOrderId));
+            return this.handleErrorCommon(error, () => this.getBillingInvoiceList(workOrderId,workOrderPartNumberId));
           });
       }
 

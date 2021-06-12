@@ -595,16 +595,21 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     getApprovalActionInternalStatus(approver) {
         if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+            
+            approver.internalStatusId=2;
             return true;
         } else {
+            //approver.internalStatusId=4;
             return false;
         }
     }
 
     getApprovalActionCustomerStatus(approver) {
         if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+            approver.customerStatusId=2;
             return true;
         } else {
+           // approver.customerStatusId=4;
             return false;
         }
     }
@@ -1680,7 +1685,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteChargesListByWorkOrderQuoteId();
-                this.getBuildMethodDetails();
+               // this.getBuildMethodDetails();
                 // this.partNumberSelected(this.selectedPartNumber);
                 this.alertService.showMessage(
                     this.moduleName,
@@ -2615,7 +2620,9 @@ const data={...newdata};
 if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.isSpinnerVisible = true;
 		this.purchaseOrderService.approverslistbyTaskId(2, this.quotationHeader['workOrderQuoteId']).subscribe(res => {
-                         this.internalApproversList = res;
+                        
+            debugger;
+                        this.internalApproversList = res;
                          this.approvers = res;
 						 this.internalApproversList.map(x => {
                             if(currentUser && currentUser['email'] == x.approverEmails && !x.isExceeded){

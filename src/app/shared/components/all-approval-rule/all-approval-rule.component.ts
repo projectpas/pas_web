@@ -104,6 +104,8 @@ export class AllApprovalRuleComponent implements OnInit {
     selectedColumns = this.headers;
     isEdit: boolean = false;
     isApproverlist: boolean;
+    enableheaderSaveBtn : boolean = true;
+    isdisable : boolean = true;
 
     constructor(private poapprovalService: POApprovalService,
         private datePipe: DatePipe,
@@ -114,7 +116,50 @@ export class AllApprovalRuleComponent implements OnInit {
     }
 
     onSaveChange() {
+
         this.enableSaveBtn = true;
+        this.isdisable = true;
+
+
+        if(this.creatingData.ruleNumberId ==0)
+        {
+            this.isdisable  = false
+        }
+
+        if(this.creatingData.amountId =="null")
+        {
+            this.isdisable  = false
+        }
+
+        if(this.creatingData.amountId ==5)
+        {
+            if(this.creatingData.lowerValue == null)
+            {
+                this.isdisable  = false
+            }
+            if(this.creatingData.upperValue == null)
+            {
+                this.isdisable  = false
+            }
+        }
+
+        if(this.creatingData.amountId !=5)
+        {
+            if(this.creatingData.value == null)
+            {
+                this.isdisable  = false
+            }
+        }
+
+        if(this.isdisable == true)
+        {
+            this.enableheaderSaveBtn = false;
+        }
+        else
+        {
+            this.enableheaderSaveBtn = true;
+        }
+        
     }
 
     onSavecleardata() {
@@ -124,6 +169,7 @@ export class AllApprovalRuleComponent implements OnInit {
         this.creatingData.lowerValue = 0
         this.creatingData.value = 0
         this.employeelist = null
+        this.enableheaderSaveBtn = true;
         // if (this.employeelist && this.employeelist.value && this.employeelist.value > 0) 
         // {
         //     this.employeelist.value =0;
@@ -295,6 +341,7 @@ export class AllApprovalRuleComponent implements OnInit {
                 'Employee Added Successfully',
                 MessageSeverity.success
             );
+           
             this.onSaveChange();
             // Do not Comment This Method
             this.onSavecleardata();
@@ -563,6 +610,7 @@ export class AllApprovalRuleComponent implements OnInit {
         this.arrayEmplsit = [];
         this.employeedata('', this.currentUserManagementStructureId);
         this.employeeNames = [];
+        this.enableheaderSaveBtn = true;
 
     }
 
@@ -841,6 +889,7 @@ export class AllApprovalRuleComponent implements OnInit {
                 this.creatingData.upperValue = 0.00
             }
         }
+        this.onSaveChange();
         //   var lowerValue = this.creatingData.lowerValue.replace(/,/g, '');
         //   var upperValue = this.creatingData.upperValue.replace(/,/g, '');
         //   if(str == 'upperValue' &&  

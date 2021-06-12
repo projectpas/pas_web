@@ -315,7 +315,7 @@
                                     #approverId="ngModel">
                                 </p-autoComplete>
                                 <button type="button" class="btn btn-primary m-t-10 pull-right but_stl"
-                                    (click)="onAddApprover();">Add</button>
+                                [disabled]="enableheaderSaveBtn" (click)="onAddApprover();">Add</button>
                             </div>
                         </div>
                     </div>
