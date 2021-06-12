@@ -56,13 +56,13 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
     ]
     selectedColumns = [
         //{ field: 'customerContact', header: 'Customer Contact' },
-        { field: 'phoneNo', header: 'Phone' },
-        { field: 'contactBy', header: 'Contacted By' },
-        { field: 'notesData', header: 'Notes' },
-        { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        { field: 'phoneNo', header: 'Phone',width:"90px" },
+        { field: 'contactBy', header: 'Contacted By',width:"90px" },
+        { field: 'notesData', header: 'Notes',width:"200px" },
+        { field: 'createdDate', header: 'Created Date',width:"90px" },
+        { field: 'createdBy', header: 'Created By' ,width:"90px"},
+        { field: 'updatedDate', header: 'Updated Date',width:"90px" },
+        { field: 'updatedBy', header: 'Updated By',width:"90px"},
     ];
 
     addList: any = [];
@@ -82,9 +82,9 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         if (this.type == 1) {
             this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
-            this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' })
+            this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact',width:"100px" })
         } else {
-            this.selectedColumns.unshift({ field: 'vendorContact', header: 'Vendor Contact' })
+            this.selectedColumns.unshift({ field: 'vendorContact', header: 'Vendor Contact',width:"100px" })
             this.headers.unshift({ field: 'vendorContact', header: 'Vendor Contact' })
         }
 
