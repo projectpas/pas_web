@@ -10,7 +10,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
-import { log } from 'console';
 
 @Component({
     selector: 'app-direct-labour-add',
