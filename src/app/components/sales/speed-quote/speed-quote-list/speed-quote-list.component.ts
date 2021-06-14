@@ -130,18 +130,23 @@ export class SpeedQuoteListComponent implements OnInit {
     initColumns() {
         this.headers = [
             { field: "customerName", header: "Customer Name", width: "160px" },
-            { field: "speedQuoteNumber", header: "Quote Num", width: "120px" },
-            { field: "quoteDate", header: "Quote Date", width: "120px" },
+            { field: "customerCode", header: "Customer Code", width: "160px" },
+            { field: "accountTypeName", header: "Acct Type", width: "160px" },
             { field: "partNumberType", header: "PN", width: "130px" },
             { field: "partDescriptionType", header: "PN Description", width: "200px" },
+            { field: "speedQuoteNumber", header: "Quote Num", width: "120px" },
+            { field: "leadSourceName", header: "Lead Source", width: "160px" },
+            { field: "probability", header: "Probability", width: "80px" },
+            { field: "quoteDate", header: "Quote Date", width: "120px" },
+            { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
+            { field: "quoteExpireDate", header: "Valid Until", width: "120px" },
+            { field: "salesPerson", header: "Salesperson", width: "150px" },
             //{ field: "salesOrderNumber", header: "SO Num", width: "120px" },
             { field: "status", header: "Qte Status", width: "100px" },
-            { field: "customerType", header: "Customer Type", width: "120px" },
-            { field: "versionNumber", header: "Quote Ver Num", width: "120px" },
-            { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
+            //{ field: "customerType", header: "Customer Type", width: "120px" },
+            //{ field: "versionNumber", header: "Quote Ver Num", width: "120px" },
             //{ field: "priorityType", header: "Priority", width: "100px" },
-            { field: "customerReference", header: "Cust Ref", width: "130px" },
-            { field: "salesPerson", header: "Salesperson", width: "150px" },
+            //{ field: "customerReference", header: "Cust Ref", width: "130px" },            
             { field: "createdDate", header: "Created Date", width: "120px" },
             { field: "createdBy", header: "CreatedBy", width: "130px" },
             { field: "updatedDate", header: "Updated Date", width: "120px" },
@@ -399,7 +404,7 @@ export class SpeedQuoteListComponent implements OnInit {
             PagingData.filters[x] = dt.filters[x].value;
         });
 
-        this.salesQuoteService
+        this.speedQuoteService
             .search(PagingData).subscribe(res => {
                 const vList = res[0]['results'].map(x => {
                     return {
