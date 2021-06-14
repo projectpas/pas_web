@@ -89,6 +89,7 @@ export class WorkOrderAssetsComponent implements OnInit {
         checkInQty: null,
         checkOutQty: null,
     }
+    todaysDate= new Date();
     assetsform = { ...this.assets }
     status: any;
     currentRecord: any;

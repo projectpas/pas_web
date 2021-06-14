@@ -28,7 +28,7 @@ export class ConfigurationService {
     public static readonly appVersion: string = "1.0.1";
 
     public baseUrl: string = environment.baseUrl; //Utilities.baseUrl();
-    public loginUrl: string = "/Login";
+    public loginUrl: string = "/login";
 
     public static readonly defaultLanguage: string = "en";
     public static readonly defaultHomeUrl: string = "/";

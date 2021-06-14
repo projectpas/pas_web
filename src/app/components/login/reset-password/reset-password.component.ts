@@ -15,18 +15,20 @@ import { EmployeeService } from "../../../services/employee.service";
 
 declare var $: any;
 @Component({
-    selector: "app-forgot-password",
-    templateUrl: './forgot-password.component.html',
-    styleUrls: ['./forgot-password.component.scss']
+    selector: "app-reset-password",
+    templateUrl: './reset-password.component.html',
+    styleUrls: ['./reset-password.component.scss']
 })
-export class ForgotPasswordComponent implements OnInit, OnDestroy {
-    forgotPasswordForm: FormGroup;
+export class ResetPasswordComponent implements OnInit, OnDestroy {
+    resetPasswordForm: FormGroup;
     isLoading = false;
     formResetToggle = true;
     modalClosedCallback: () => void;
     loginStatusSubscription: any;
     masterCompanyList: MasterCompany[] = [];
     @Input() isModal = false;
+    userId: string;
+    token: string;
 
     constructor(
         private alertService: AlertService,
@@ -38,8 +40,9 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.forgotPasswordForm.setValue({
-            email: ''
+        this.resetPasswordForm.setValue({
+            password: '',
+            cpassword: ''
         });
     }
 
@@ -50,12 +53,32 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     }
 
     buildForm() {
-        this.forgotPasswordForm = this.formBuilder.group({
-            email: ['', Validators.required]
+        this.resetPasswordForm = this.formBuilder.group({
+            'password': [null, Validators.compose([Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}$')])],
+            'cpassword': [null, Validators.compose([Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}$')])]
+        }, {
+            validators: this.ConfirmedValidator('password', 'cpassword')
         });
     }
 
-    get email() { return this.forgotPasswordForm.get('email'); }
+    ConfirmedValidator(controlName: string, matchingControlName: string) {
+        debugger;
+        return (formGroup: FormGroup) => {
+            const control = formGroup.controls[controlName];
+            const matchingControl = formGroup.controls[matchingControlName];
+            if (matchingControl.errors && !matchingControl.errors.confirmedValidator) {
+                return;
+            }
+            if (control.value !== matchingControl.value) {
+                matchingControl.setErrors({ confirmedValidator: true });
+            } else {
+                matchingControl.setErrors(null);
+            }
+        }
+    }
+
+    get password() { return this.resetPasswordForm.get('password'); }
+    get cpassword() { return this.resetPasswordForm.get('cpassword'); }
 
     getShouldRedirect() {
         return !this.isModal && this.authService.isLoggedIn && !this.authService.isSessionExpired;
@@ -72,23 +95,27 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     }
 
     getUserLogin(): ForgotPassword {
-        const formModel = this.forgotPasswordForm.value;
-        return new ForgotPassword(formModel.email);
+        const formModel = this.resetPasswordForm.value;
+        return new ForgotPassword(formModel.password);
     }
 
-    sendForgetPasswordLink() {
+    resetPassword() {
         this.isLoading = true;
-        this.alertService.startLoadingMessage("", "Attempting login...");
-        var email = this.forgotPasswordForm.value.email;
+        var data = {
+            password: this.resetPasswordForm.value.password,
+            userId: this.userId,
+            code: this.token
+        }
+
         this.alertService.startLoadingMessage();
-        this.employeeService.forgotPassword(email).subscribe(res => {
+        this.employeeService.resetPassword(data).subscribe(res => {
             this.alertService.stopLoadingMessage();
-            this.isLoading = false;
-            this.alertService.showMessage("Reset Password", `The link has been sent, please check your email to reset your password.`, MessageSeverity.success);
-            //this.router.navigateByUrl('/Login');
+            this.alertService.showMessage("Reset Password", `Your password has been reset.`, MessageSeverity.success);
+            this.isLoading = true;
+            this.router.navigateByUrl('/login');
         }, error => {
+            this.isLoading = true;
             this.alertService.stopLoadingMessage();
-            this.isLoading = false;
             this.alertService.showStickyMessage("Load Error", `Unable to reset password.\r\nErrors: "${Utilities.getHttpResponseMessage(error)}"`,
                 MessageSeverity.error, error);
         });

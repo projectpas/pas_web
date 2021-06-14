@@ -266,4 +266,8 @@ export class EmployeeService {
     forgotPassword(user: any) {
         return this.employeeEndpoint.forgotPasswordEndpoint<any>(user);
     }
+
+    resetPassword(user: any) {
+        return this.employeeEndpoint.resetPasswordEndpoint<any>(user);
+    }
 }
