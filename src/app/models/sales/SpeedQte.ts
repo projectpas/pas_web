@@ -46,6 +46,7 @@ export class SpeedQte implements ISpeedQte {
     qtyRequested: number;
     qtyToBeQuoted: number;
     status: string;
+    statusName: string;
     isApproved: boolean;
     buId: number;
     divisionId: number;

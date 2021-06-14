@@ -53,6 +53,7 @@ import { SpeedQuoteView } from "../../../../models/sales/SpeedQuoteView";
 import { SpeedQuoteMarginSummary } from "../../../../models/sales/SpeedQuoteMarginSummary";
 import { SpeedQuoteTypeEnum } from "../models/speed-auote-type-enum";
 import { SpeedQuoteExclusionsComponent } from "../shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
+import { SpeedQuotePrintCritera } from "../models/speed-quote-print-criteria";
 @Component({
   selector: "app-speed-quote-create",
   templateUrl: "./speed-quote-create.component.html",
@@ -124,6 +125,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   bulist: any[] = [];
   divisionlist: any[] = [];
   SpeedQuoteType: SpeedQuoteTypeEnum;
+  speedQuotePrintCriteraObj: SpeedQuotePrintCritera;
   private onDestroy$: Subject<void> = new Subject<void>();
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
   @ViewChild("closeQuotePopup", { static: false }) public closeQuotePopup: ElementRef;
@@ -134,6 +136,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   @ViewChild("emailQuotePopup", { static: false }) public emailQuotePopup: ElementRef;
   @ViewChild("salesQuotePrintPopup", { static: false }) public salesQuotePrintPopup: ElementRef;
   @ViewChild("speedQuoteExclusionePrintPopup", { static: false }) public speedQuoteExclusionePrintPopup: ElementRef;
+  @ViewChild("speedQuotePrintCritariaPopup", { static: false }) public speedQuotePrintCritariaPopup: ElementRef;
   @ViewChild(SalesApproveComponent, { static: false }) public salesApproveComponent: SalesApproveComponent;
   @ViewChild(SalesCustomerApprovalsComponent, { static: false }) public salesCustomerApprovalsComponent: SalesCustomerApprovalsComponent;
   @ViewChild(SalesOrderQuoteFreightComponent, { static: false }) public salesOrderQuoteFreightComponent: SalesOrderQuoteFreightComponent;
@@ -182,6 +185,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
   moduleName: any = "SpeedQuote";
   enforceApproval: boolean;
   selectedIndex: number = 0;
+  exclusionCount:number = 0;
+  exclusionSelectDisable:boolean=false;
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -202,6 +207,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     this.salesOrderConversionCriteriaObj = new SalesOrderConversionCritera();
     this.globalCustomerWarningId = DBkeys.GLOBAL_CUSTOMER_WARNING_ID_FOR_SALES_ORDER;
     this.conversionStarted = false;
+    this.speedQuotePrintCriteraObj = new SpeedQuotePrintCritera();
   }
 
   ngOnInit() {
@@ -933,7 +939,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.salesQuote.warningId = this.salesOrderQuoteObj.customerWarningId;
       this.salesQuote.memo = this.salesOrderQuoteObj.memo;
       this.salesQuote.notes = this.salesOrderQuoteObj.notes;
-      this.salesQuote.statusName = this.speedQuoteView.speedQuote.status;
+      this.salesQuote.statusName = this.speedQuoteView.speedQuote.statusName;
       this.salesQuote.isApproved = this.speedQuoteView.speedQuote.isApproved;
       this.salesQuote.customerServiceRepId = this.salesOrderQuoteObj.customerSeviceRepId;
       this.salesQuote.salesPersonId = this.salesOrderQuoteObj.salesPersonId;
@@ -1981,5 +1987,26 @@ export class SpeedQuoteCreateComponent implements OnInit {
   initiateExclusionPrintProcess() {
     let content = this.speedQuoteExclusionePrintPopup;
     this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  initiateSpeedQuotePrint() {
+    this.speedQuotePrintCriteraObj.printQuote = true;
+    if(this.exclusionCount > 0){
+      this.speedQuotePrintCriteraObj.printExclusion = true;
+    }else{
+      this.speedQuotePrintCriteraObj.printExclusion = false;
+      this.exclusionSelectDisable = true;
+    }
+    //let content = this.salesQuoteConvertPopup;
+    let content = this.speedQuotePrintCritariaPopup;
+    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+  printQuoteAndExclusion(){
+      let content = this.salesQuotePrintPopup;
+      this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  onExlusionLoad(count){
+    this.exclusionCount = count;
   }
 }
