@@ -130,35 +130,34 @@
                                 </label> -->
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].name : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.siteName : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].address1 : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.addressLine1 : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].address2 : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.addressLine2 : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].city : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.city : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].stateOrProvince : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.state : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].postalCode : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.postalCode : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].countryName : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.country : ''}}</label>
                             </div>
                             <div class="sold-block-div">
-                                <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].email : ''}}</label>
+                                <label class="col-sm-12 first-block-label" disabled></label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label" disabled></label>
@@ -212,8 +211,7 @@
                 <!-- <hr /> -->
                 <div class="clear"></div>
                 <div class="col-sm-12">
-                    <table rules=none class="parttable print-table print-friendly table-margins"
-                        style="margin-top:10px">
+                    <table rules=none class="parttable print-table print-friendly table-margins">
                         <thead>
                             <tr>
                                 <th>Wo NUM</th>
@@ -263,7 +261,7 @@
                         </thead>
                         <tbody>
                             <ng-container
-                                *ngFor="let child of this.workOrderInvoice.salesOrderListToPrint; let i = index;">
+                                *ngFor="let child of this.workOrderInvoice.workOrderListToPrint; let i = index;">
                                 <tr>
                                     <td rowspan="3">{{i+1}}</td>
                                     <td colspan="3" rowspan="3"> PN: {{child.pNumber}}
@@ -344,17 +342,17 @@
                             <tr>
                                 <td class="border-transparent" colspan="2">Material Cost</td>
                                 <td style="text-align: right;">
-                                    {{this.workOrderInvoice.materialCost | number : '1.2-2'}}</td>
+                                    {{this.workOrderInvoice.materialCostPlus | number : '1.2-2'}}</td>
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2">MISC CHARGES</td>
                                 <td style="text-align: right;">
-                                    {{this.workOrderInvoice.miscCharges | number : '1.2-2'}}</td>
+                                    {{this.workOrderInvoice.miscChargesCostPlus | number : '1.2-2'}}</td>
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2">Labor Over HeadCost</td>
                                 <td style="text-align: right;">
-                                    {{this.workOrderInvoice.laborOverHeadCost | number : '1.2-2'}}</td>
+                                    {{this.workOrderInvoice.laborOverHeadCostPlus | number : '1.2-2'}}</td>
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2">

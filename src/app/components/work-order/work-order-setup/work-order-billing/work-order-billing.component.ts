@@ -17,6 +17,8 @@ import { AlertService, MessageSeverity } from '../../../../services/alert.servic
 import { InvoiceTypeEnum } from 'src/app/components/sales/order/models/sales-order-invoice-type-enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
 
  
 @Component({
@@ -25,15 +27,11 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     styleUrls: ['./work-order-billing.component.scss'],
     animations: [fadeInOut]
 })
-/** WorkOrderBilling component*/
-
 export class WorkOrderBillingComponent implements OnInit {
-    // @Input() workOrderMaterialList;
     @Input() quotestatusofCurrentPart;
     @Input() employeesOriginalData;
     @Input() billingorInvoiceForm;
     @Input() savedWorkOrderData;
-    // @Input() currencyList;
     @Input() isEditBilling = false;
     @Input() workOrderQuoteId = 0;
     @Input() taskList: any = [];
@@ -42,9 +40,7 @@ export class WorkOrderBillingComponent implements OnInit {
     @Input() quoteFreightsList;
     @Input() quoteChargesList;
     @Input() workOrderChargesList;
-
     @Input() quoteLaborList;
-    // @Input() legalEntityList;
     @Input() buildMethodDetails: any = {};
     @Input() isViewMode: boolean = false;
     @Output() saveWOBilling = new EventEmitter();
@@ -57,7 +53,6 @@ export class WorkOrderBillingComponent implements OnInit {
     modal: NgbModalRef;
     salesOrderBillingInvoiceId: number;
     WObillingInvoicingId: number;
-    
     salesOrderId:number;
     @ViewChild("printPost", { static: false }) public printPostModal: ElementRef;
     overAllMarkup: any;
@@ -66,8 +61,11 @@ export class WorkOrderBillingComponent implements OnInit {
     customerNamesList: Object;
     soldCustomerSiteList = [];
     shipCustomerSiteList = [];
+    arrayCustlist: any[] = [];
+    private onDestroy$: Subject<void> = new Subject<void>();
     siteList: any = [];
     shipToAttention;
+    billing: Billing;
     soldCustomerAddress: any = new AddressModel();
     shipCustomerAddress: any = new AddressModel();
     showBillingForm: boolean = false;
@@ -96,10 +94,10 @@ export class WorkOrderBillingComponent implements OnInit {
     divisionList: any;
     departmentList: any;
     markUpList: any;
-    // numberData = [{ label: 1, value: 1 }];
     invoiceTypeList: any;
     shipViaData: any;
     isView: boolean = false;
+    id: number;
     workFlowObject = {
         materialList: [],
         equipments: [],
@@ -134,15 +132,11 @@ export class WorkOrderBillingComponent implements OnInit {
         { field: 'taskName', header: 'Task' },
         { field: 'vendorName', header: 'Vendor Name' },
         { field: 'quantity', header: 'Qty' },
-        // { field: 'roNumberId', header: 'RO Num' },
         { field: 'refNum', header: 'Ref Num' },
-        // { field: 'invoiceNum', header: 'Invoice Num' },
         { field: 'chargeType', header: 'Charge Type' },
         { field: 'description', header: 'Description' },
         { field: 'unitCost', header: 'Unit Cost' },
         { field: 'extendedCost', header: 'Extented Cost' },
-        // { field: 'unitPrice', header: 'Unit Price' },
-        // { field: 'extendedPrice', header: 'Extended Price' },
     ];
     unitOfMeasuresList: any;
     conditions: any;
@@ -150,16 +144,12 @@ export class WorkOrderBillingComponent implements OnInit {
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService,
         private customerService: CustomerService, private quoteService: WorkOrderQuoteService, private alertService: AlertService,   private authService: AuthService,
         private modalService: NgbModal
-
     ) {
-
     }
-    ngOnInit() {
 
-        console.log("status", this.quotestatusofCurrentPart)
+    ngOnInit() {
         this.initColumns();
         if (this.workOrderQuoteId == 0) {
-            // this.workOrderChargesList();
         }
         if (this.buildMethodDetails) {
             if (this.buildMethodDetails['materialBuildMethod'] != undefined || this.buildMethodDetails['materialBuildMethod'] != null) {
@@ -173,15 +163,12 @@ export class WorkOrderBillingComponent implements OnInit {
         this.getEmployeeList(this.workOrderId);
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
         this.employeeId= editValueAssignByCondition('value', this.savedWorkOrderData.employeeId),
-        // this.getCustomerDetailsFromHeader();
         this.getShipViaByCustomerId();
-        // this.getLegalEntity();
-        // this.generateNumbers();
         this.getPercentageList();
         this.getInvoiceList();
-        this.calculateGrandTotal();
         this.resetOtherOptions();
         this.BindManagementStructure();
+        this.getCurrencyList();
         if (this.isEditBilling) {
             if (data.soldToCustomerId.customerId == data.shipToCustomerId.customerId) {
                 this.getSiteNames(this.customerId,data.soldToCustomerId);
@@ -190,26 +177,6 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.getSiteNames(this.customerId,data.soldToCustomerId);
                 this.getSiteNamesByShipCustomerId(this.customerId,data.shipToCustomerId);
             }
-            // if (this.billingorInvoiceForm.soldToCustomerId) {
-            //     this.soldCustomerAddress = {
-            //         city: data.city,
-            //         country: data.country,
-            //         line1: data.line1,
-            //         line2: data.line2,
-            //         postalCode: parseInt(data.postalCode),
-            //         stateOrProvince: data.stateOrProvince
-            //     }
-            // }
-            // if (this.billingorInvoiceForm.shipToCustomerId) {
-            //     this.shipCustomerAddress = {
-            //         city: data.shipToCity,
-            //         country: data.country,
-            //         line1: data.line1,
-            //         line2: data.shipToLine2,
-            //         postalCode: parseInt(data.shipToPostalCode),
-            //         stateOrProvince: data.shipToState
-            //     }
-            // }
         } else {
             if (this.billingorInvoiceForm.soldToCustomerId && this.billingorInvoiceForm.shipToCustomerId && (this.billingorInvoiceForm.soldToCustomerId.customerId == this.billingorInvoiceForm.shipToCustomerId.customerId)) {
                 this.getSiteNames(this.customerId,data.soldToCustomerId);
@@ -217,65 +184,63 @@ export class WorkOrderBillingComponent implements OnInit {
             else {
                 if (this.billingorInvoiceForm.soldToCustomerId) {
                     this.getSiteNames(this.customerId,this.billingorInvoiceForm.soldToCustomerId);
-                   // this.getSiteNamesBySoldCustomerId(this.billingorInvoiceForm.soldToCustomerId);
                 }
                 if (this.billingorInvoiceForm.shipToCustomerId) {
                     this.getSiteNamesByShipCustomerId(this.customerId,this.billingorInvoiceForm.shipToCustomerId);
                 }
             }
-            // this.resetMisCharges();
-            // this.resetMaterial();
-            // this.resetLaborOverHead();
-            // this.calculateTotalWorkOrderCost();
-            //this.bindManagementStructure(this.billingorInvoiceForm);
-          
         }
-
-        
 
         this.getManagementStructureDetails(this.billingorInvoiceForm
             ? this.billingorInvoiceForm.managementStructureId
             : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
-        this.getCurrencyList();
-    
     }
     ngOnChanges(changes: SimpleChanges) {
         if (this.quoteMaterialList && this.quoteMaterialList.length > 0) {
             this.overAllMarkup = Number(this.quoteMaterialList[0].headerMarkupId);
         }
         this.billingorInvoiceForm = this.billingorInvoiceForm;
-        //this.calculateGrandTotal();
         if (this.buildMethodDetails && this.quotestatusofCurrentPart == 'Approved') {
-            console.log("material build")
             if (this.buildMethodDetails['materialBuildMethod'] != undefined || this.buildMethodDetails['materialBuildMethod'] != null) {
                 this.costPlusType = this.buildMethodDetails['materialBuildMethod'].toString();
             }
-            // this.billingorInvoiceForm.materialCost = this.buildMethodDetails['materialFlatBillingAmount'] != null ? this.buildMethodDetails['materialFlatBillingAmount'].toFixed(2) : '';
-            // this.billingorInvoiceForm.laborOverHeadCost = this.buildMethodDetails['laborFlatBillingAmount'] != null ? this.buildMethodDetails['laborFlatBillingAmount'].toFixed(2) : '';
-
-            // let flatbillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'] ? this.buildMethodDetails['chargesFlatBillingAmount'] : '';
-            // let freightFlatBillingAmount = this.buildMethodDetails['freightFlatBillingAmount'] ? this.buildMethodDetails['freightFlatBillingAmount'] : '';
-            // this.billingorInvoiceForm.miscChargesCost = (this.buildMethodDetails['chargesFlatBillingAmount'] + this.buildMethodDetails['freightFlatBillingAmount']);
-            // this.billingorInvoiceForm.miscChargesCost = this.billingorInvoiceForm.miscChargesCost ? this.billingorInvoiceForm.miscChargesCost.toFixed(2) : '';
         }
-        // if (!this.isEditBilling) {
-        //     this.resetMisCharges();
-        //     this.resetMaterial();
-        //     this.resetLaborOverHead();
-        //     this.calculateTotalWorkOrderCost();
-        // }
     }
+
     getActive()
     {
-
     }
 
     ViewInvoice(rowData) {
         this.workOrderId = rowData.workOrderId;
         this.workOrderBillingInvoiceId = rowData.woBillingInvoicingId;
         this.invoiceStatus = rowData.invoiceStatus;
-        console.log(rowData);
         this.loadInvoiceView();
+    }
+
+    billingCreateOrEdit() {
+        this.isSpinnerVisible = true;
+        this.workOrderService.getBillingEditData(this.workOrderId, this.workOrderPartNumberId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.isSpinnerVisible = false;
+            this.billing = new Billing();
+            this.billing = {
+                ...res,
+                shipDate: new Date(res.shipDate),
+                printDate: new Date(res.printDate),
+                woOpenDate: new Date(res.openDate),
+                invoiceDate: new Date(res.invoiceDate),
+                soldToCustomerId: { customerId: res.soldToCustomerId, customerName: res.soldToCustomer },
+                shipToCustomerId: { customerId: res.shipToCustomerId, customerName: res.shipToCustomer },
+                customerRef: res.customerReference,
+                woType: res.workOrderType,
+                shipAccountInfo: res.shippingAccountinfo,
+            }
+
+            this.billingorInvoiceForm=this.billing;
+        }, error => {
+            this.isSpinnerVisible = false;
+            this.errorHandling(error);
+        })
     }
 
     loadInvoiceView() {
@@ -293,19 +258,23 @@ export class WorkOrderBillingComponent implements OnInit {
 
     CommonMethod()
     {
+            
+            this.loadcustomerData('');
+            if (this.billingorInvoiceForm.soldToCustomerId) 
+            {
+                this.getSiteNames(this.customerId,this.billingorInvoiceForm.soldToSiteId);
+            }
 
+            if (this.billingorInvoiceForm.shipToCustomerId) 
+            {
+                this.getSiteNamesByShipCustomerId(this.billingorInvoiceForm.shipToCustomerId.customerId,this.billingorInvoiceForm.shipToSiteId);
+            }
+       
         this.resetMisCharges();
         this.resetMaterial();
         this.resetLaborOverHead();
         this.calculateTotalWorkOrderCost();
         this.calculateGrandTotal();
-
-        // if (!this.isEditBilling) {
-        //     this.resetMisCharges();
-        //     this.resetMaterial();
-        //     this.resetLaborOverHead();
-        //     this.calculateTotalWorkOrderCost();
-        // }
     }
     
     initColumns() {
@@ -323,7 +292,7 @@ export class WorkOrderBillingComponent implements OnInit {
     getBillingList() {
         this.isSpinnerVisible = true;
         this.workOrderService
-            .getBillingInvoiceList(this.workOrderId)
+            .getBillingInvoiceList(this.workOrderId,this.workOrderPartNumberId)
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
                 this.billingList = response[0];
@@ -343,6 +312,7 @@ export class WorkOrderBillingComponent implements OnInit {
             });
         });
     }
+
     PerformBilling() {
         this.isMultipleSelected = true;
         this.partSelected = true;
@@ -359,7 +329,6 @@ export class WorkOrderBillingComponent implements OnInit {
                 }
             });
         }
-       // this.getBillingAndInvoicingForSelectedPart(lastworkOrderPartId, lastworkOrderShippingId);
         this.showBillingForm = true;
     }
 
@@ -368,9 +337,8 @@ export class WorkOrderBillingComponent implements OnInit {
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.showBillingForm = true;
-
+        this.billingCreateOrEdit();
         this.getbillingCostDataForWoOnly();
-        
     }
 
     PerformQouteBilling()
@@ -378,23 +346,16 @@ export class WorkOrderBillingComponent implements OnInit {
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.showBillingForm = true;
+        this.billingCreateOrEdit();
 
         if (this.quotestatusofCurrentPart == 'Approved') {
-            console.log("material build ngoninit")
             this.Getbillinginvoicingdetailsfromquote();
-            
-            // this.billingorInvoiceForm.materialCost = this.buildMethodDetails['materialFlatBillingAmount'] != null ? this.buildMethodDetails['materialFlatBillingAmount'].toFixed(2) : '';
-            // this.billingorInvoiceForm.laborOverHeadCost = this.buildMethodDetails['laborFlatBillingAmount'] != null ? this.buildMethodDetails['laborFlatBillingAmount'].toFixed(2) : '';
-            // // this.billingorInvoiceForm.miscChargesCost = (this.buildMethodDetails['chargesFlatBillingAmount'] + this.buildMethodDetails['freightFlatBillingAmount']).toFixed(2);
-            // this.billingorInvoiceForm.miscChargesCost = (this.buildMethodDetails['chargesFlatBillingAmount'] + this.buildMethodDetails['freightFlatBillingAmount']);
-            // this.billingorInvoiceForm.miscChargesCost = this.billingorInvoiceForm.miscChargesCost ? this.billingorInvoiceForm.miscChargesCost.toFixed(2) : '';
         }
 
         this.billingorInvoiceForm.totalWorkOrderValue = 4;
         if (this.quoteMaterialList && this.quoteMaterialList.length > 0) {
             this.overAllMarkup = Number(this.quoteMaterialList[0].headerMarkupId);
         }
-    
     }
 
     onSelectPartNumber(rowData) {
@@ -406,8 +367,8 @@ export class WorkOrderBillingComponent implements OnInit {
             this.workOrderShippingId = rowData.workOrderShippingId;
             this.partSelected = true;
             this.showBillingForm = true;
+            this.billingCreateOrEdit();
             this.getbillingCostDataForWoOnly();
-            //this.getBillingAndInvoicingForSelectedPart(rowData.salesOrderPartId, rowData.salesOrderShippingId);
         }
     }
 
@@ -426,16 +387,14 @@ export class WorkOrderBillingComponent implements OnInit {
             } else {
                 this.billingorInvoiceForm = new WorkOrderBillingAndInvoicing();
             }
-            //this.getAddressById(this.salesOrderId);
             this.getCurrencyList();
             this.getInvoiceList();
-           // this.getRevisionTypeList();
             this.getShipViaByCustomerId();
-            //this.getCustomerDetails();
         }, error => {
             this.isSpinnerVisible = false;
         })
     }
+
     formateCurrency(amount) {
         return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
     }
@@ -451,58 +410,26 @@ export class WorkOrderBillingComponent implements OnInit {
             }
         },
             err => {
-                // this.isSpinnerVisible = false;
+                 this.isSpinnerVisible = false;
                 this.errorHandling(err);
             })
     }
 
     Getbillinginvoicingdetailsfromquote() {
-        debugger;
         this.workOrderService.Getbillinginvoicingdetailsfromquote(this.workFlowWorkOrderId, this.workOrderPartNumberId).subscribe(res => {
             if (res) {
                 this.QouteDetails =res;
-                this.billingorInvoiceForm.materialCost = res.materialCost;
-                this.billingorInvoiceForm.laborOverHeadCost = res.laborCost;
-                this.billingorInvoiceForm.miscChargesCost = res.chargesCost;
+                this.billingorInvoiceForm.materialCost = res.materialBilling;
+                this.billingorInvoiceForm.laborOverHeadCost = res.laborBilling;
+                this.billingorInvoiceForm.miscChargesCost = res.chargesBilling;
                 this.isWorkOrder=false;
                 this.CommonMethod();
-                // this.billingorInvoiceForm.miscCharges=true;
-                // this.billingorInvoiceForm.laborOverHead=true;
-                // this.billingorInvoiceForm.material=true;
-
-                // this.billingorInvoiceForm.materialValue=res.materialMarkupId;
-                // this.billingorInvoiceForm.laborOverHeadValue=res.laborMarkupId;
-                // this.billingorInvoiceForm.miscChargesValue=res.chargesMarkupId;
-                //this.billingorInvoiceForm.materialValue=res.materialMarkupId;
-               // this.billingorInvoiceForm.totalWorkOrderCost = res.totalCost;
             }
         },
             err => {
-                // this.isSpinnerVisible = false;
                 this.errorHandling(err);
             })
     }
-    // async bindManagementStructure(data) {
-    //     if (data) {
-    //         await this.commonService.getManagementStructureDetails(data.managementStructureId).subscribe(res => {
-    //             this.selectedLegalEntity(res.Level1);
-    //             this.selectedBusinessUnit(res.Level2);
-    //             this.selectedDivision(res.Level3);
-    //             this.selectedDepartment(res.Level4);
-    //             this.managementStructure = {
-    //                 companyId: res.Level1 !== undefined ? res.Level1 : null,
-    //                 buId: res.Level2 !== undefined ? res.Level2 : null,
-    //                 divisionId: res.Level3 !== undefined ? res.Level3 : null,
-    //                 departmentId: res.Level4 !== undefined ? res.Level4 : null,
-    //             }
-
-    //         },
-    //             err => {
-    //                 // this.isSpinnerVisible = false;
-    //                 this.errorHandling(err);
-    //             })
-    //     }
-    // }
 
     getCurrencyList() {
         this.commonService.smartDropDownList('Currency', 'CurrencyId', 'code', '', '').subscribe(
@@ -510,7 +437,7 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.currencyList = results
             },
             err => {
-                // this.isSpinnerVisible = false;
+                this.isSpinnerVisible = false;
                 this.errorHandling(err);
             }
         );
@@ -525,7 +452,6 @@ export class WorkOrderBillingComponent implements OnInit {
                     this.employeesOriginalData = employeeList;
                 },
                 err => {
-                    // this.isSpinnerVisible = false;
                     this.errorHandling(err);
                 }
             )
@@ -537,7 +463,6 @@ export class WorkOrderBillingComponent implements OnInit {
             this.markUpList = res;
         },
             err => {
-                // this.isSpinnerVisible = false;
                 this.errorHandling(err);
             })
     }
@@ -547,7 +472,6 @@ export class WorkOrderBillingComponent implements OnInit {
             this.invoiceTypeList = res;
         },
             err => {
-                // this.isSpinnerVisible = false;
                 this.errorHandling(err);
             })
     }
@@ -559,7 +483,6 @@ export class WorkOrderBillingComponent implements OnInit {
                     this.shipViaList = res;
                 },
                 err => {
-                    // this.isSpinnerVisible = false;
                     this.errorHandling(err);
                 }
             )
@@ -577,16 +500,46 @@ export class WorkOrderBillingComponent implements OnInit {
         }
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
 
-    filterCustomerName(event) {
-        const value = event.query.toLowerCase()
-        this.commonService.getCustomerNameandCode(value, 1).subscribe(res => {
-            this.customerNamesList = res;
-        },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
-            })
+
+    filterCustomerNames(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.loadcustomerData(event.query);
+        }
+    }
+
+    async loadcustomerData(strText = '') 
+    {
+        if (this.arrayCustlist.length == 0) {
+            this.arrayCustlist.push(0);
+        }
+
+        if (this.customerId >0) 
+        {
+            this.arrayCustlist.push(this.customerId);
+        }
+
+        if (this.billingorInvoiceForm.shipToCustomerId) 
+        {
+            this.arrayCustlist.push(this.billingorInvoiceForm.shipToCustomerId.customerId);
+        }
+      
+        this.isSpinnerVisible = true;
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+            this.isSpinnerVisible = false;
+            this.customerNamesList = response.map(x => {
+                return {
+                    customerName: x.label, customerId: x.value
+                }
+            });
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
     onselectcustomergetsite(object) {
         const { customerId } = object;
@@ -621,13 +574,11 @@ export class WorkOrderBillingComponent implements OnInit {
             )
         },
             err => {
-                // this.isSpinnerVisible = false;
                 this.errorHandling(err);
             })
     }
 
     changeOfSoldSiteName(value) {
-        debugger;
         const data = getObjectById('customerDomensticShippingId', value, this.soldCustomerShippingOriginalData);
         if (data) {
             this.soldCustomerAddress.line1 = data.address1;
@@ -646,32 +597,7 @@ export class WorkOrderBillingComponent implements OnInit {
             this.billingorInvoiceForm.shipAccountInfo = data.shippingAccountInfo;
         }
     }
-    // async getSiteNamesByShipCustomerId(object) {
-    //     const { customerId } = object;
-    //     await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
-    //         this.shipCustomerShippingOriginalData = res[0];
-    //         this.shipCustomerSiteList = res[0].map(x => {
-    //             return {
-    //                 label: x.siteName,
-    //                 value: x.customerDomensticShippingId
-    //             }
-    //         });
-    //         this.shipCustomerShippingOriginalData.forEach(
-    //             x => {
-    //                 if (x.isPrimary) {
-    //                     this.billingorInvoiceForm.shipToSiteId = x.customerDomensticShippingId
-    //                     this.changeOfShipSiteName(x.customerDomensticShippingId);
-    //                 }
-    //             }
-    //         )
-    //     },
-    //         err => {
-    //             // this.isSpinnerVisible = false;
-    //             this.errorHandling(err);
-    //         })
-    // }
     changeOfShipSiteName(value) {
-        debugger;
         const data = getObjectById('customerDomensticShippingId', value, this.shipCustomerShippingOriginalData);
 
         if (data) {
@@ -694,7 +620,6 @@ export class WorkOrderBillingComponent implements OnInit {
         }
     }
     BindManagementStructure() {
-       // this.billingorInvoiceForm.employeeId = this.authService.currentEmployee;
         this.selectedLegalEntity(this.authService.currentManagementStructure.levelId1,'onLoad');
         this.selectedBusinessUnit(this.authService.currentManagementStructure.levelId2,'onLoad');
         this.selectedDivision(this.authService.currentManagementStructure.levelId3,'onLoad');
@@ -825,51 +750,6 @@ export class WorkOrderBillingComponent implements OnInit {
         }
     }
 
-    // selectedLegalEntity(legalEntityId) {
-    //     if (legalEntityId) {
-    //         this.billingorInvoiceForm.managementStructureId = legalEntityId;
-    //         this.commonService.getBusinessUnitListByLegalEntityId(legalEntityId).subscribe(res => {
-    //             this.businessUnitList = res;
-    //         },
-    //             err => {
-    //                 // this.isSpinnerVisible = false;
-    //                 this.errorHandling(err);
-    //             })
-    //     }
-
-    // }
-    // selectedBusinessUnit(businessUnitId) {
-    //     if (businessUnitId) {
-    //         this.billingorInvoiceForm.managementStructureId = businessUnitId;
-    //         this.commonService.getDivisionListByBU(businessUnitId).subscribe(res => {
-    //             this.divisionList = res;
-    //         },
-    //             err => {
-    //                 // this.isSpinnerVisible = false;
-    //                 this.errorHandling(err);
-    //             })
-    //     }
-
-    // }
-    // selectedDivision(divisionUnitId) {
-    //     if (divisionUnitId) {
-    //         this.billingorInvoiceForm.managementStructureId = divisionUnitId;
-    //         this.commonService.getDepartmentListByDivisionId(divisionUnitId).subscribe(res => {
-    //             this.departmentList = res;
-    //         },
-    //             err => {
-    //                 // this.isSpinnerVisible = false;
-    //                 this.errorHandling(err);
-    //             })
-    //     }
-
-    // }
-    // selectedDepartment(departmentId) {
-    //     if (departmentId) {
-    //         this.billingorInvoiceForm.managementStructureId = departmentId;
-    //     }
-    // }
-
     resetOtherOptions() {
         this.billingorInvoiceForm.totalWorkOrderValue = null;
         this.billingorInvoiceForm.totalWorkOrderCostPlus = 0.00;
@@ -899,7 +779,6 @@ export class WorkOrderBillingComponent implements OnInit {
         const misChargeCostPlus = Number(this.billingorInvoiceForm.miscChargesCost) + ((Number(this.billingorInvoiceForm.miscChargesCost) * Number(value)) / 100)
         const laborOverHeadCostPlus = Number(this.billingorInvoiceForm.laborOverHeadCost) + ((Number(this.billingorInvoiceForm.laborOverHeadCost) * Number(value)) / 100);
         this.billingorInvoiceForm.totalWorkOrderCostPlus = Math.round(Math.round(materialCostPlus) + Math.round(misChargeCostPlus) + Math.round(laborOverHeadCostPlus)).toFixed(2);
-        // this.calculateGrandTotal();
     }
 
     resetMaterial() {
@@ -946,31 +825,20 @@ export class WorkOrderBillingComponent implements OnInit {
 
 
     sumOfMaterialList() {
-        console.log("material build sumOfMaterialList", this.billingorInvoiceForm)
-        // this.billingorInvoiceForm.materialCost = this.quoteMaterialList.reduce((acc, x) => acc + x.billingAmount, 0).toFixed(2);
         if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
             this.billingorInvoiceForm.materialCost = (this.QouteDetails) ? this.QouteDetails.materialCost : 0.00;
         }
-
-        // if (this.billingorInvoiceForm && this.quotestatusofCurrentPart == 'Approved') {
-        //     this.billingorInvoiceForm.materialCost = (this.buildMethodDetails) ? this.buildMethodDetails['materialFlatBillingAmount'] : 0.00;
-        // }
     }
     calculateMaterialCostPlus(value) {
         if (this.billingorInvoiceForm) {
             this.billingorInvoiceForm.materialCostPlus = Math.round(Number(this.billingorInvoiceForm.materialCost) + ((Number(this.billingorInvoiceForm.materialCost) * Number(value)) / 100)).toFixed(2);
         }
-        // this.calculateGrandTotal();
     }
     sumofLaborOverHead() {
 
         if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
             this.billingorInvoiceForm.laborOverHeadCost = (this.QouteDetails) ? this.QouteDetails.laborCost : 0.00;
         }
-
-        // if (this.billingorInvoiceForm && this.quotestatusofCurrentPart == 'Approved') {
-        //     this.billingorInvoiceForm.laborOverHeadCost = (this.buildMethodDetails) ? this.buildMethodDetails['laborFlatBillingAmount'] : 0.00;
-        // }
     }
     calculateLaborOverHeadCostPlus(value) {
         if (this.billingorInvoiceForm) {
@@ -984,9 +852,6 @@ export class WorkOrderBillingComponent implements OnInit {
         if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
             this.billingorInvoiceForm.miscChargesCost = (this.QouteDetails) ? this.QouteDetails.chargesCost : 0.00;
         }
-        // if (this.billingorInvoiceForm && this.quotestatusofCurrentPart == 'Approved') {
-        //     this.billingorInvoiceForm.miscChargesCost = (this.buildMethodDetails) ? this.buildMethodDetails.chargesFlatBillingAmount : 0.00;
-        // }
     }
     calculateMiscChargesCostPlus(value) {
         if (this.billingorInvoiceForm) {
@@ -1015,14 +880,6 @@ export class WorkOrderBillingComponent implements OnInit {
 
     }
 
-
-
-    // saveWorkOrderBilling() {
-    //     this.saveWOBilling.emit(this.billingorInvoiceForm);
-
-    //     // this.getQuoteCostingData();
-    // }
-
     get userName(): string {
         return this.authService.currentUser
             ? this.authService.currentUser.userName
@@ -1035,7 +892,6 @@ export class WorkOrderBillingComponent implements OnInit {
 
 
     saveWorkOrderBilling(invoiceStatus: InvoiceTypeEnum) {
-        debugger;
         let billingItems: BillingItems[] = [];
 
         if (this.isMultipleSelected) {
@@ -1066,8 +922,6 @@ export class WorkOrderBillingComponent implements OnInit {
         let billingorInvoiceFormTemp = JSON.parse(JSON.stringify(this.billingorInvoiceForm));
         this.billingorInvoiceForm.soldToCustomerId = billingorInvoiceFormTemp.soldToCustomerId['customerId'];
         this.billingorInvoiceForm.shipToCustomerId = billingorInvoiceFormTemp.shipToCustomerId['customerId'];
-       //this.billingorInvoiceForm.billToCustomerId = billingorInvoiceFormTemp.billToCustomerId['userID'];
-        //this.billingorInvoiceForm.billToSiteId = billingorInvoiceFormTemp.billToSiteId;
         this.billingorInvoiceForm.shipToSiteId = billingorInvoiceFormTemp.shipToSiteId;
         this.billingorInvoiceForm.soldToSiteId = billingorInvoiceFormTemp.soldToSiteId;
         this.billingorInvoiceForm.createdDate = new Date();
@@ -1122,10 +976,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderBillingInvoicingById(this.workOrderBillingInvoiceId).subscribe(result => {
             let billingInvoiceData = result[0];
-            // let pdfPath = billingInvoiceData[0].invoiceFilePath;
-            // this.commonService.toDownLoadFile(pdfPath);
             this.print();
-
             billingInvoiceData[0].invoiceStatus = 'Reviewed';
             this.workOrderService.UpdateWorkOrderBillingInvoicing(this.workOrderBillingInvoiceId, billingInvoiceData[0]).subscribe(result => {
                 this.getBillingList();
@@ -1141,8 +992,6 @@ export class WorkOrderBillingComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderBillingInvoicingById(this.workOrderBillingInvoiceId).subscribe(result => {
             let billingInvoiceData = result[0];
-            // let pdfPath = billingInvoiceData[0].invoiceFilePath;
-            // this.commonService.toDownLoadFile(pdfPath);
             this.print();
 
             billingInvoiceData[0].invoiceStatus = 'Invoiced';
@@ -1167,434 +1016,23 @@ export class WorkOrderBillingComponent implements OnInit {
         });
     }
 
-    print(): void {
-        let printContents, popupWin;
-        printContents = document.getElementById('woInvoice').innerHTML;
-        popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-        popupWin.document.open();
-        popupWin.document.write(`
-          <html>
-            <head>
-               <title>Print tab</title>        
-               <style>
-               table {
-                width: 100.6%;
-               overflow: auto !important;
-              }
-              
-              table thead {
-               background: #808080;
-              }
-              
-              table thead tr {
-               /* background: #0d57b0 !important; */
-              
-              }
-              
-              table,
-              thead,
-              td {
-               border: 1px solid black;
-               border-collapse: collapse;
-              }
-              
-              table,
-              thead,
-              th {
-               border: 1px solid black;
-               border-collapse: collapse;
-              }
-              
-              table thead tr th {
-                /* background: #0d57b0 !important; */
-               padding: 5px !important;
-               color: #000;
-               letter-spacing: 0.3px;
-               font-size: 10.5px;
-               text-transform: capitalize;
-               z-index: 1;
-              }
-              
-              table tbody {
-               overflow-y: auto;
-               max-height: 500px;
-              }
-              
-              table tbody tr td {
-               background: #fff;
-               padding: 2px;
-               line-height: 22px;
-               height: 22px;
-               color: #333;
-                border-right: 1px solid black !important;
-               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                 font-size: 10.5px !important;
-                 font-weight: 700;
-               max-width: 100px;
-               letter-spacing: 0.1px;
-               border: 0
-              }
-              
-              h4 {
-               padding: 5px;
-               display: inline-block;
-               font-size: 14px;
-               font-weight: 600;
-               width: 100%;
-               margin: 0;
-              }
-              
-              hr {
-               margin-top: 10px;
-               margin-bottom: 10px;
-               border: 0;
-               border-top: 1px solid #e0e0e0;
-               height: 0;
-               box-sizing: content-box;
-              }
-              
-              .first-block-name {
-               margin-right: 20px
-              }
-              
-              .first-block-sold-to {
-               position: relative;
-               min-height: 142px;
-               height: auto;
-               float: left;
-               padding-right: 2px;
-                /* border-right: 1px solid black; */
-               background: #fff;
-               width: 100%;
-              
-              }
-              
-              .first-block-ship-to {
-               position: relative;
-               min-height: 140px;
-               height: auto;
-               padding-right: 2px;
-                /* border-right: 1px solid black; */
-               background: #fff;
-               width: 100%;
-              
-              }
-              .border-none{
-               border:none;
-              }
-              .label-margin{
-               margin-left:-25px;
-              }
-              
-              .first-block-sold {
-               position: relative;
-               min-height: 140px;
-               height:auto;
-               float: left;
-               border-right:1px solid black;
-               padding-right: 2px;
-               padding-left: 2px;
-               width: 50%;
-              }
-              
-              .first-block-ship {
-               position: relative;
-               min-height: 1px;
-               float: right;
-               padding-right: 2px;
-               padding-left: 2px;
-               width:50%;
-              }
-              
-              .address-block {
-               position: relative;
-               min-height: 1px;
-               float: left;
-               padding-right: 2px;
-                /* border: 1px solid black; */
-               width: 100%;
-               padding-left: 2px;
-              }
-              
-              .first-block-address {
-               margin-right: 20px;
-               text-align: left
-              }
-              
-              
-              .second-block {
-               position: relative;
-               height:auto;min-height:161px;
-               margin-top:-2px;
-               float: left;
-               padding-right: 2px;
-               width: 35%;
-              
-                /* border-left:1px solid black;
-                  margin-left: 16%; */
-               padding-left: 2px;
-               box-sizing: border-box;
-              }
-              
-              .second-block-div {
-               margin: 2px 0;
-               position: relative;
-               display: flex;
-              
-               min-height: 1px;
-              
-               width: 100%;
-              }
-              
-              .second-block-label {
-               position: relative;
-               min-height: 1px;
-               float: left;
-               padding-right: 2px;
-               padding-left: 2px;
-               width: 38.33333333%;
-               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                 font-size: 10.5px !important;
-                 font-weight: 700;
-               text-transform: capitalize;
-               margin-bottom: 0;
-               text-align: left;
-              }
-              
-              .clear {
-               clear: both;
-              }
-              
-              .form-div {
-                /* top: 6px; */
-               position: relative;
-               font-weight: normal;
-               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                /* margin-top: 10px; */
-              }
-              
-              .image {
-               border: 1px solid #000;
-                /* padding: 5px; */
-               width: 100%;
-               display: block;
-              }
-              
-              .logo-block {
-               margin: auto;
-               text-align: center
-              }
-              
-              .pdf-block {
-               width: 800px;
-               margin: auto;
-               border: 1px solid #ccc;
-               padding: 25px 15px;
-              }
-              
-              .picked-by {
-               position: relative;
-               float: left;
-               width: 48%;
-               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                 font-size: 10.5px !important;
-                 font-weight: 700;
-              }
-              
-              .confirmed-by {
-               position: relative;
-               float: right;
-               width: 48%;
-               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                 font-size: 10.5px !important;
-                 font-weight: 700;
-              }
-              
-              .first-part {
-               position: relative;
-               display: inline;
-               float: left;
-               width: 50%
-              }
-              
-              .seond-part {
-               position: relative;
-               display: flex;
-               float: right;
-               width: 24%
-              }
-              
-              .input-field-border {
-               width: 88px;
-               border-radius: 0px !important;
-               border: none;
-               border-bottom: 1px solid black;
-              }
-              
-              .border-transparent {
-               border-block-color: white;
-              }
-              
-              .pick-ticket-header {
-               border: 1px solid black;
-               text-align: center;
-               background: #0d57b0 !important;
-               color: #fff !important;
-               -webkit-print-color-adjust: exact;
-              }
-              
-              .first-block-label {
-               position: relative;
-               min-height: 1px;
-               float: left;
-               width:100%;
-               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                 font-size: 10.5px !important;
-                 font-weight: 700;
-               padding-right: 2px;
-               padding-left: 2px;
-                /* width: 38.33333333%; */
-               text-transform: capitalize;
-               margin-bottom: 0;
-               text-align: left;
-              }
-              
-              .very-first-block {
-               position: relative;
-               min-height: 1px;
-               height:auto;
-               border-right:1px solid black;
-               float: left;
-               padding-right: 2px;
-               padding-left: 2px;
-               width: 70% !important;
-              }
-              
-              .logo {
-               padding-top: 10px;
-                /* height:110px;
-                width:300px; */
-               height:auto;
-               max-width:100%;
-              }
-              
-              .sold-block-div {
-               margin: 2px 0;
-               position: relative;
-               display: flex;
-               min-height: 1px;
-               width: 100%;
-              }
-              
-              .ship-block-div {
-               margin: 2px 0;
-               position: relative;
-               display: flex;
-               min-height: 1px;
-               width: 100%;
-              }
-              .first-block-sold-bottom{
-               border-bottom: 1px solid black;
-                 margin-top: -2px;
-                 height: auto;
-                 min-height: 140px;
-              }
-              
-              .parttable th {
-               background: #fff !important;
-               color: #000 !important;
-               -webkit-print-color-adjust: exact;
-              }
-              .border-bottom{
-               border-bottom:1px solid black !important;
-              }
-              .table-margins{
-                /* margin-top:20px; */
-               margin-top:-5px;
-               margin-left:-3px;
-              }
-              .invoice-border{border-bottom: 1px solid;
-                 min-height: 159px;
-                 height: auto;}
-              
-                             </style>
+  
 
-
-            </head>
-        <body onload="window.print();window.close()">${printContents}</body>
-          </html>`
-        );
-        popupWin.document.close();
-    }
-
-    // saveWorkOrderBilling(object) {
-    //     const data = {
-    //         ...object,
-    //         ...this.loginDetailsForCreate,
-    //         workOrderId: this.workOrderId,
-    //         workFlowWorkOrderId: this.workFlowWorkOrderId,
-    //         workOrderPartNoId: this.workOrderPartNumberId,
-    //         itemMasterId: this.workOrderPartNumberId,
-    //         customerId: editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId),
-    //         employeeId: editValueAssignByCondition('value', this.savedWorkOrderData.employeeId),
-    //         soldToCustomerId: editValueAssignByCondition('customerId', object.soldToCustomerId),
-    //         shipToCustomerId: editValueAssignByCondition('customerId', object.shipToCustomerId),
-    //         invoiceTime: moment(object.invoiceTime, ["h:mm A"]).format("HH:mm")
-    //     }
-
-    //     if (this.isEditBilling) {
-    //         this.isSpinnerVisible = true;
-    //         this.workOrderService.updateBillingByWorkOrderId(data).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //             this.isSpinnerVisible = false;
-    //             this.alertService.showMessage(
-    //                 this.moduleName,
-    //                 'Updated Work Order Billing Succesfully',
-    //                 MessageSeverity.success
-    //             );
-    //         },
-    //             err => {
-    //                 this.isSpinnerVisible = false;
-    //                 this.errorHandling(err)
-    //             })
-    //     } else {
-    //         this.isSpinnerVisible = true;
-    //         this.workOrderService.createBillingByWorkOrderId(data).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //             this.isSpinnerVisible = false;
-    //             this.alertService.showMessage(
-    //                 this.moduleName,
-    //                 'Saved Work Order Billing Succesfully',
-    //                 MessageSeverity.success
-    //             );
-    //         },
-    //             err => {
-    //                 this.isSpinnerVisible = false;
-    //                 this.errorHandling(err)
-    //             })
-    //     }
-    // }
-    // updateWorkOrderBilling() {
-    //     this.updateWOBilling.emit(this.billingorInvoiceForm);
-    //     // this.getQuoteCostingData();
-    // }
 
     onChangeWOCostPlus() {
         if (this.billingorInvoiceForm.totalWorkOrder) {
             this.billingorInvoiceForm.grandTotal = Math.round(this.billingorInvoiceForm.totalWorkOrderCostPlus).toFixed(2);
         }
         this.billingorInvoiceForm.totalWorkOrderCostPlus = this.billingorInvoiceForm.totalWorkOrderCostPlus.toFixed(2);
-        // this.calculateGrandTotal();
     }
     onChangeMaterialCostPlus() {
         this.billingorInvoiceForm.materialCostPlus = this.billingorInvoiceForm.materialCostPlus.toFixed(2);
-        // this.calculateGrandTotal();
     }
     onChangeLaborOHCostPlus() {
         this.billingorInvoiceForm.laborOverHeadCostPlus = this.billingorInvoiceForm.laborOverHeadCostPlus.toFixed(2);
-        // this.calculateGrandTotal();
     }
     onChangeMiscChCostPlus() {
         this.billingorInvoiceForm.miscChargesCostPlus = this.billingorInvoiceForm.miscChargesCostPlus.toFixed(2);
-        // this.calculateGrandTotal();
     }
     async getSiteNamesByShipCustomerId(customerId, siteid) {
         this.clearShipToAddress();
@@ -1609,7 +1047,7 @@ export class WorkOrderBillingComponent implements OnInit {
                     this.shipCustomerShippingOriginalData.forEach(
                         x => {
                             if (x.siteID == siteid) {
-                               // this.shippingHeader.shipToSiteId = x.siteID;
+                                 this.billingorInvoiceForm.shipToSiteId = x.siteID;
                                 this.setShipToAddress();
                             }
                         }
@@ -1618,7 +1056,7 @@ export class WorkOrderBillingComponent implements OnInit {
                     this.shipCustomerShippingOriginalData.forEach(
                         x => {
                             if (x.isPrimary) {
-                               // this.shippingHeader.shipToSiteId = x.siteID;
+                                this.billingorInvoiceForm.shipToSiteId = x.siteID;
                                 this.setShipToAddress();
                             }
                         }
@@ -1633,16 +1071,13 @@ export class WorkOrderBillingComponent implements OnInit {
     setShipToAddress() {
         this.shipCustomerSiteList.forEach(site => {
             if (site.siteID == this.billingorInvoiceForm.shipToSiteId) {
-
+                this.shipCustomerAddress = new AddressModel();
                 this.shipCustomerAddress.line1 = site.address1;
                 this.shipCustomerAddress.line2 = site.address2;
                 this.shipCustomerAddress.country = site.countryName;
                 this.shipCustomerAddress.postalCode = site.postalCode;
                 this.shipCustomerAddress.stateOrProvince = site.stateOrProvince;
                 this.shipCustomerAddress.city = site.city;
-            }
-            else {
-                this.shipCustomerAddress = new AddressModel();
             }
         });
     }
@@ -1655,16 +1090,13 @@ export class WorkOrderBillingComponent implements OnInit {
     setSoldToAddress() {
         this.siteList.forEach(site => {
             if (site.siteID == this.billingorInvoiceForm.soldToSiteId) 
-            {
+            {this.soldCustomerAddress = new AddressModel();
                 this.soldCustomerAddress.line1 = site.address1;
                 this.soldCustomerAddress.line2 = site.address2;
                 this.soldCustomerAddress.country = site.countryName;
                 this.soldCustomerAddress.postalCode = site.postalCode;
                 this.soldCustomerAddress.stateOrProvince = site.stateOrProvince;
                 this.soldCustomerAddress.city = site.city;
-            }
-            else {
-                this.soldCustomerAddress = new AddressModel();
             }
         });
     }
@@ -1678,61 +1110,34 @@ export class WorkOrderBillingComponent implements OnInit {
                 res => {
                     this.siteList = res;
 
-                    this.siteList.forEach(
-                        x => {
-                            if (x.isPrimary) {
-                                //this.shippingHeader.soldToSiteId = x.siteID;
-
-                                this.setSoldToAddress();
+                    if (siteid > 0) 
+                    {
+                        this.siteList.forEach(
+                            x => {
+                                if (x.siteID == siteid) {
+                                     this.billingorInvoiceForm.soldToSiteId = x.siteID;
+                                    this.setSoldToAddress();
+                                }
                             }
-                        }
-                    )
+                        )
+                    } 
+                    else 
+                    {
+                        this.siteList.forEach(
+                            x => {
+                                if (x.isPrimary) {
+                                    this.billingorInvoiceForm.soldToSiteId = x.siteID;
+
+                                    this.setSoldToAddress();
+                                }
+                            }
+                        )
+                    }
                 }, err => {
                     this.errorHandling(err);
                 });
     }
     
-    // getSiteNames(object) {
-    //     const { customerId } = object;
-    //     this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
-    //         this.soldCustomerShippingOriginalData = res[0];
-    //         this.soldCustomerSiteList = res[0].map(x => {
-    //             return {
-    //                 label: x.siteName,
-    //                 value: x.customerDomensticShippingId
-
-    //             }
-    //         });
-    //         this.soldCustomerShippingOriginalData.forEach(
-    //             x => {
-    //                 if (x.isPrimary) {
-    //                     this.billingorInvoiceForm.soldToSiteId = x.customerDomensticShippingId;
-    //                     this.changeOfSoldSiteName(x.customerDomensticShippingId);
-    //                 }
-    //             }
-    //         )
-    //         this.shipCustomerShippingOriginalData = res[0];
-    //         this.shipCustomerSiteList = res[0].map(x => {
-    //             return {
-    //                 label: x.siteName,
-    //                 value: x.customerDomensticShippingId
-    //             }
-    //         });
-    //         this.shipCustomerShippingOriginalData.forEach(
-    //             x => {
-    //                 if (x.isPrimary) {
-    //                     this.billingorInvoiceForm.shipToSiteId = x.customerDomensticShippingId
-    //                     this.changeOfShipSiteName(x.customerDomensticShippingId);
-    //                 }
-    //             }
-    //         )
-    //     },
-    //         err => {
-    //             this.errorHandling(err);
-    //         })
-    // }
-
-
     moduleName: any = '';
     errorHandling(err) {
         if (err['error']['errors']) {
@@ -1780,16 +1185,372 @@ export class WorkOrderBillingComponent implements OnInit {
     parseToInt(str : any) {
         return Number(str);
     }
+
+    print(): void {
+        let printContents, popupWin;
+        printContents = document.getElementById('woInvoice').innerHTML;
+        popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+        popupWin.document.open();
+        popupWin.document.write(`
+          <html>
+            <head>
+               <title>Print tab</title>        
+               <style>
+               div {
+                white-space: normal;
+              }
+              table { page-break-after:auto }
+    tr    { page-break-inside:avoid; page-break-after:auto }
+    td    { page-break-inside:avoid; page-break-after:auto }
+    thead { display: table-row-group; }
+    tfoot { display:table-footer-group }
+                 @media print
+                 {
+                   @page {
+                   margin-top: 0;
+                   margin-bottom: 0;
+                   size: auto;  margin: 0mm; 
+                   size: landscape
+                   }
+                 
+                 } 
+                 span {
+                   /* font-weight: normal; */
+                   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   font-size: 10.5px !important;
+                   font-weight: 700;
+                 }
+                             table {font-size:12px !important}        
+                 table thead { background: #808080;}    
+                  
+                 table, thead, td {
+                 border: 1px solid black;
+                 border-collapse: collapse;
+               } 
+               table, thead, th {
+                 border: 1px solid black;
+                 border-collapse: collapse;
+               } 
+               .border-none{
+                 border:none;
+               }
+                 table thead tr th 
+                 {
+                   //   background: #0d57b0 !important;
+                     padding: 5px!important;color: #fff;letter-spacing: 0.3px;font-weight:bold;
+                     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                      font-size: 12.5px;text-transform: capitalize; z-index: 1;} 
+                 table tbody{   overflow-y: auto; max-height: 500px;  }
+                 table tbody tr td{ background: #fff;
+                    padding: 2px;line-height: 22px;
+                    height:22px;color: #333;
+                    border-right:1px solid black !important;
+                   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight;normal;
+                   font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
+                 h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
+                 
+                 .very-first-block {position: relative; height:auto;border-right:1px solid black; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
+                   width: 50%;}
+                 .first-block-name{margin-right: 20px} 
+                 .first-block-sold-to {
+                   position: relative;
+                   min-height: 82px;
+                   height: auto;
+                   float: left;
+                   padding-bottom:5px;
+                   padding-right: 2px;
+                   border-right: 1px solid black;
+                   background: #fff;
+                   width: 100%;
+                   margin-top:-2px
+                  
+                 }
+                 
+                 .first-block-ship-to {
+                   position: relative;
+                   min-height: 80px;
+                   padding-bottom:5px;
+                   height: auto;
+                   padding-right: 2px;
+                   border-right: 1px solid black;
+                   background: #fff;
+                   width: 100%;
+                 
+                 }
+                 
+                 .first-block-sold {
+                   position: relative;
+                   min-height: 120px;
+                   height:auto;
+                   float: left;
+                   border-right:1px solid black;
+                   padding-right: 2px;
+                   padding-left: 2px;
+                   margin-left:-1px;
+                   width: 50%;
+                 }
+                 
+                 .first-block-ship {
+                   position: relative;
+                   min-height: 1px;
+                   float: right;
+                   padding-right: 2px;
+                  
+                   width: 49%;
+                 }
+                 .print-border-bottom{
+                     border-bottom:1px solid black;
+                 }
+                 .address-block {
+                   position: relative;
+                   min-height: 1px;
+                   float: left;
+                   height:auto;
+                   padding-right: 2px;
+                   // border: 1px solid black;
+                   width: 100%;
+                   padding-left: 2px;
+                 }
+                 
+                 .first-block-address {
+                   margin-right: 20px;
+                   text-align: left
+                 }
+                 
+                 
+                 .second-block {
+                   position: relative;
+                   min-height: 1px;
+                   float: left;
+                   padding-right: 2px;
+                   width: 42%;
+                 height:auto;
+                   // border-left:1px solid black;
+                     // margin-left: 16%;
+                   padding-left: 2px;
+                   box-sizing: border-box;
+                 }
+                 
+                 .second-block-div {
+                   margin: 2px 0;
+                   position: relative;
+                   display: flex;
+                 
+                   min-height: 1px;
+                   height:auto
+                  
+                   width: 100%;
+                 }
+                 .label{
+                   font-weight:500;
+                 }
+                 
+                 .second-block-label {
+                   position: relative;
+                   min-height: 1px;
+                   float: left;
+                   padding-right: 2px;
+                   padding-left: 2px;
+                   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                       font-size: 10.5px !important;
+                       font-weight: 700;
+                   
+                       width: 38.33333333%;
+                       text-transform: capitalize;
+                       margin-bottom: 0;
+                       text-align: left;
+                 }
+                 
+                 .clear {
+                   clear: both;
+                 }
+                 
+                 .form-div {
+                   // top: 6px;
+                   position: relative;
+                   font-weight: normal;
+                   font-size:12.5
+                   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   // margin-top: 10px;
+                  
+                 }
+                 span {
+                   font-weight: normal;
+                   font-size: 12.5px !important;
+               }
+                 
+                 .image {
+                   border: 1px solid #000;
+                   // padding: 5px;
+                   width: 100%;
+                   display: block;
+                 }
+                 
+                 .logo-block {
+                   margin: auto;
+                   text-align: center
+                 }
+                 
+                 .pdf-block {
+                   width: 800px;
+                   margin: auto;
+                   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   font-weight:normal;
+                   border: 1px solid #ccc;
+                   padding: 25px 15px;
+                 }
+                 
+                 .picked-by {
+                   position: relative;
+                   float: left;
+                   width: 48%;
+                   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   font-size: 10.5px !important;
+                   font-weight: 700;
+                 }
+                 
+                 .confirmed-by {
+                   position: relative;
+                   float: right;
+                   width: 48%;
+                   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   font-size: 10.5px !important;
+                   font-weight: 700;
+                 }
+                 
+                 .first-part {
+                   position: relative;
+                   display: inline;
+                   float: left;
+                   width: 50%
+                 }
+                 
+                 .seond-part {
+                   position: relative;
+                   display: flex;
+                   float: right;
+                   width: 24%
+                 }
+                 
+                 .input-field-border {
+                   width: 88px;
+                   border-radius: 0px !important;
+                   border: none;
+                   border-bottom: 1px solid black;
+                 }
+                 
+                 .border-transparent {
+                   border-block-color: white;
+                 }
+                 
+                 .pick-ticket-header {
+                   border: 1px solid black;
+                   text-align: center;
+                   background: #0d57b0 !important;
+                   color: #fff !important;
+                   -webkit-print-color-adjust: exact;
+                 }
+                 
+                 .first-block-label {
+                   position: relative;
+                   min-height: 1px;
+                   float: left;
+                   padding-right: 2px;
+                   padding-left: 2px;
+                   // width: 38.33333333%;
+                   font-size:10.5px !important;
+                 
+                   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   font-weight: 700;
+               
+                   text-transform: capitalize;
+                   margin-bottom: 0;
+                   text-align: left;
+                 }
+                 
+                 .very-first-block {
+                   position: relative;
+                   min-height: 159px;
+                   float: left;
+                   height:auto;
+                  border-right:1px solid black;
+                   padding-right: 2px;
+                   padding-left: 2px;
+                   width: 57% !important;
+                 }
+                 
+                 .logo {
+                   padding-top: 10px;
+                       // height:70px;
+                       // width:220px;
+                       height:auto;
+                       max-width:100%;
+                       padding-bottom:10px;
+                 }
+                 
+                 .sold-block-div {
+                   margin: 2px 0;
+                   position: relative;
+                   display: flex;
+                   min-height: 1px;
+                   width: 100%;
+                 }
+                 
+                 .ship-block-div {
+                   margin: 2px 0;
+                   position: relative;
+                   display: flex;
+                   min-height: 1px;
+                   width: 100%;
+                 }
+                 .first-block-sold-bottom{
+                   border-bottom: 1px solid black !important;
+                       position:relative;
+                       min-height:1px;
+                       height:auto;
+                       width:100%;
+                       float:left;
+                         // margin-top: -2px;
+                        // min-height: 120px;
+                 }
+                 .print-table{
+                   width:100%;
+                 }
+                 .parttable th {
+                   background: #fff !important;
+                   color: #000 !important;
+                   -webkit-print-color-adjust: exact;
+                 }
+                 .border-bottom{
+                   border-bottom:1px solid black !important;
+                 }
+                 .table-margins{
+                       margin-top:-1px;margin-left:0px
+                     }
+                 .invoice-border{
+                   border-bottom: 1px solid;
+                       position:relative;
+                         // min-height: 119px;
+                         min-height:1px;
+                         height: auto;
+                         width:100%;
+                       float:left;}
+                 
+                             </style>
+
+
+            </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+          </html>`
+        );
+        popupWin.document.close();
+    }
     setEditArray:any=[];
     private CurrencyData() {
  
         this.setEditArray=[];
-        // if(this.assetService.isEditMode==true){
-        //     this.setEditArray.push(this.currentCalibration.certificationCurrencyId,this.currentCalibration.inspectionCurrencyId,this.currentCalibration.calibrationCurrencyId,this.currentCalibration.verificationCurrencyId); 
-        // }else{
-            this.setEditArray.push(0);
-        // }
-            const strText='';
+        this.setEditArray.push(0);
+        const strText='';
         this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join()).subscribe(res => {
             this.currencyList = res;
         

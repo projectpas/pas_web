@@ -471,14 +471,14 @@
                             <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutBy}}</div>
                           </td>
                           <td class="width-100">
-                            <div  *ngIf="assetsform.assetStatus == 'checkOut'">
+                            <div  *ngIf="assetsform.assetStatus == 'checkOut'"> 
                               <p-calendar [showIcon]="true" [yearNavigator]="true"
-                               [monthNavigator]="true" yearRange="1900:2100"  
+                               [monthNavigator]="true" yearRange="1900:2100"   [showTime]="true" 
                                appendTo='body' [baseZIndex]="9999" [(ngModel)]="row.checkOutDate"
-                               [showIcon]="true" [disabled]="!row.isChecked"
+                               [showIcon]="true" [disabled]="!row.isChecked" [maxDate]="todaysDate"
                                 name="checkOutDate{{i}}"></p-calendar>
                             </div>
-                            <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutDate | date: 'MM/dd/yyyy'}}</div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutDate | date: 'MM/dd/yyyy , h:mm a'}}</div>
                           </td>
                           <td class="width-135">
                             <div  *ngIf="assetsform.assetStatus == 'checkIn'">
@@ -492,13 +492,13 @@
                           </td>
                           <td class="width-100"> 
                             <div  *ngIf="assetsform.assetStatus == 'checkIn'">
-                              <p-calendar [(ngModel)]="row.checkInDate"
+                              <p-calendar [(ngModel)]="row.checkInDate" [showTime]="true" 
                               [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                               [showIcon]="true" [disabled]="!row.isChecked"
+                               [showIcon]="true" [disabled]="!row.isChecked" [maxDate]="todaysDate"
                                appendTo='body' [baseZIndex]="9999"
                                 name="checkInDate{{i}}"></p-calendar>
                             </div>
-                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy'}}</div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy , h:mm a'}}</div>
                           </td>
                           <td>
                             <div class="align_adh">

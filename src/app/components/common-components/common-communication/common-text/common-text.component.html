@@ -71,8 +71,8 @@
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup> 
                     <ng-container *ngFor="let col of columns">
-                        <col *ngIf="col.field == 'mobile' || col.field == 'contactBy'" class="table-column-width">
-                        <col *ngIf="col.field != 'mobile' && col.field != 'contactBy'" class="table-column-width">
+                        <col *ngIf="col.field == 'mobile' || col.field == 'contactBy'" [ngStyle]="{'width': col.width}" class="table-column-width">
+                        <col *ngIf="col.field != 'mobile' && col.field != 'contactBy'" [ngStyle]="{'width': col.width}" class="table-column-width">
                     </ng-container>
                 </colgroup>
             </ng-template>
@@ -83,7 +83,7 @@
                         {{ col.header }}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th class="table-actions-column">
+                    <th class="width-100">
                         Actions
                     </th>
                 </tr>
@@ -100,7 +100,7 @@
                             *ngIf="col.field == 'updatedDate'" name="updatedDate"
                             (change)="dateFilterForTable($event.target.value,col.field)" />
                     </th>
-                    <th class="table-actions-column"></th>
+                    <th class="width-100"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -108,7 +108,8 @@
                     <ng-container *ngFor="let col of columns">
                         <td class="table-column-width text-capital" *ngIf="col.field == 'notesData'" class="ui-resizable-column"
                             pReorderableRowHandle>
-                            <p class="p_textEditor p-0 m-0 text-capital" [innerHTML]=rowData[col.field]></p>
+                            <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                            [matTooltip]="parsedText(rowData[col.field])" [innerHTML]=rowData[col.field]></p>
                         </td>
                         <td class="table-column-width" *ngIf=" col.field!='notesData'">
                             {{ col.field == 'createdDate'
@@ -118,7 +119,7 @@
                                       : rowData[col.field] }}
                         </td>
                     </ng-container>
-                    <td class="action-icons-cstm table-column-width">
+                    <td class="width-100">
                         <span data-toggle="modal" data-target="#viewText"><a class="btn nobg btn-view-cstm"
                                 (click)="getViewData(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                     class="fa fa-eye"></i></a> </span>
@@ -316,8 +317,8 @@
                     <p><span class="label"><b>Contacted by <span class="clr-red">*</span> : </b></span><span
                             class="value">{{viewdata.contactBy}}</span></p>
                     <p class="memo-margin-bottom">
-                        <span class="label"><strong> Notes: </strong></span><span class="value">
-                            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(viewdata.notes)" [innerHTML]=viewdata.notes></p>
+                        <span class="label"><strong> Notes: </strong></span><span class="value m-0 p-0 p_textEditor truncate-text"
+                             matTooltipPosition="above" [matTooltip]="parsedText(viewdata.notes)" [innerHTML]=viewdata.notes>
                         </span>
                     </p>
                     <p><span class="label"><b>Created Date: </b></span><span
@@ -414,9 +415,9 @@
                                     <td
                                         [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactBy', audit.contactBy)  ? 'black' : 'red'  }">
                                         {{audit.contactBy}}</td>
-                                    <td 
+                                    <td class="m-0 p-0 p_textEditor"
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
-                                        <p class="truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p>
+                                        <p style="padding:0px !important;margin:0px" class="truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p>
                                     </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.createdBy}}</td>

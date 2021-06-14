@@ -96,7 +96,7 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" class="table-column-width">
+                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
@@ -106,7 +106,7 @@
                         {{ col.header }}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th class="table-actions-column">
+                    <th class=" width-100">
                         Actions
                     </th>
                 </tr>
@@ -130,7 +130,7 @@
                         <!-- <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"
                             (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
                     </th>
-                    <th class="table-actions-column"></th>
+                    <th class="width-100"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -143,7 +143,8 @@
                         </td>
                         <td class="table-column-width ui-resizable-column text-capital" *ngIf="col.field == 'descriptionData'"
                             pReorderableRowHandle>
-                            <p class="p_textEditor p-0 m-0 text-capital" [innerHTML]=rowData[col.field]></p>
+                            <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                             [matTooltip]="parsedText(rowData[col.field])" [innerHTML]=rowData[col.field]></p>
                         </td>
                         <td class="table-column-width" *ngIf="col.field !='SERIAL_NO' && col.field!='descriptionData'">
                             {{
@@ -155,7 +156,7 @@
                                       }}
                         </td>
                     </ng-container>
-                    <td class="action-icons-cstm table-column-width">
+                    <td class="action-icons-cstm width-100">
                         <!-- <button class="btn-edit ptable-wo-btns buton_back_bordernon" mat-icon-button data-target="#addNewMemo" data-toggle="modal"
                             (click)="edit(rowData, i)" matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
@@ -243,9 +244,9 @@
                             <!-- <p><span class="label"><b>Mobile<span class="clr-red">*</span> : </b></span><span class="value">{{viewdata.mobile}}</span></p> -->
                             <!-- <p><span class="label"><b>Contacted by<span class="clr-red">*</span> :   </b></span><span class="value">{{viewdata.contactBy}}</span></p> -->
                             <p class="memo-margin-bottom">
-                                <span class="label"><strong> Memo: </strong></span><span class="value">
-                                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(viewdata.description)"
-                                     [innerHTML]=viewdata.description></p>
+                                <span class="label"><strong> Memo: </strong></span>
+                                <span class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(viewdata.description)"
+                                     [innerHTML]=viewdata.description>
                                 </span>
                             </p>
                             <p><span class="label"><b>Created Date: </b></span><span
@@ -467,7 +468,7 @@
                                         <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'memoId', audit.memoId)  ? 'black' : 'red'  }">{{audit.memoId}}</td> -->
                                         <td
                                             [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
-                                            <p class="m-0 p-0 truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.description)" [innerHTML]="audit.description"></p>
+                                            <p style="margin:0px;padding:0px !important" class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.description)" [innerHTML]="audit.description"></p>
                                         </td>
                                         <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                         <td>{{audit.createdBy}}</td>

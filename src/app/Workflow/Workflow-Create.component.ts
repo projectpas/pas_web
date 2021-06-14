@@ -350,7 +350,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 this.sourceWorkFlow.percentageOfTotal = this.sourceWorkFlow.percentageOfTotal > 0 ? this.sourceWorkFlow.percentageOfTotal : 0;
                 this.isSpinnerVisible = false;
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate);
-                this.sourceWorkFlow.workflowExpirationDate = new Date(this.sourceWorkFlow.workflowExpirationDate);
+                this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate != null ? new Date(this.sourceWorkFlow.workflowExpirationDate) : null;
                 this.itemMasterId = this.sourceWorkFlow.itemMasterId;
 
                 if (this.sourceWorkFlow.isFixedAmount == true) {

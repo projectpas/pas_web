@@ -697,7 +697,7 @@ setTimeout(() => {
       this['expertiseEmployee' + index] = this.partNumbers;
     }
   }
-  addNewTask(taskName) {
+  addNewTask(taskName) { 
     let taskData = new AllTasks();
     this.allTaskList.forEach(
       task => {

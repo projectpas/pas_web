@@ -97,7 +97,8 @@
                     label="T&M - Markup" value="1" [(ngModel)]="laborForm.costPlusType" [disabled]="isView"
                     (click)="(!isView)?tmchange():''"></p-radioButton>
                   <div>
-                    <select  (ngModelChange)="checkValid(12)" class="form-control select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || laborForm.costPlusType != 1"
+                    <select  (ngModelChange)="checkValid(12)"
+                     class="form-control select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || laborForm.costPlusType != 1"
                       name="markupheader">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -271,7 +272,7 @@
                       (completeMethod)="filterExpertiseEmployee($event, i)" emptyMessage="No Match Found" [size]="30"
                     [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required [disabled]="isView " appendTo="body">
                   </p-autoComplete>
-                </td>
+                </td> 
                 <td> 
                   <p-dropdown placeholder="Select Billing Type" (ngModelChange)="checkValid(17)" [options]="billableList" class="p-dropdown-1001"
                   [(ngModel)]="rec.billableId" [disabled]="isView " appendTo="body"></p-dropdown>
@@ -292,7 +293,7 @@
                   ">
                   <p-calendar [(ngModel)]="rec.startDate" (ngModelChange)="checkValid(18)" [showIcon]="true" appendTo="body"
                     showTime="true" hourFormat="12" [minDate]="minDateValue" (onSelect)="resetEndDateandTime(rec)" 
-                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);" class="w150 pcalendar-wo-labor model_view" [disabled]="isView || !rec.startDate">
+                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);" class="w150 pcalendar-wo-labor model_view" [disabled]="isView || !rec.startDate">
                   </p-calendar>
                 </td>
                 <td *ngIf="
@@ -301,7 +302,7 @@
                   ">
                   <p-calendar [(ngModel)]="rec.endDate" [showIcon]="true" (ngModelChange)="checkValid(19)"  appendTo="body"
                     showTime="true" hourFormat="12" class="w150 pcalendar-wo-labor model_view" [minDate]="rec.endDate"
-                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);" [disabled]="isView || !rec.endDate"></p-calendar>
+                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);" [disabled]="isView || !rec.endDate"></p-calendar>
                 </td>
                 <td style="width:70px !important;text-align:right !important" *ngIf="
                     laborForm.hoursorClockorScan &&

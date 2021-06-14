@@ -743,7 +743,8 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.unitOfMeasureId = part.uomId;                 
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());            
-            stockLine.revisedPartId = this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId);            
+            stockLine.revisedPartId = this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId);   
+            stockLine.aircraftTailNumber = part.acTailNum;
             if (part.itemMaster != undefined) {
                 stockLine.repairOrderUnitCost = part.unitCost;
                 if (!part.itemMaster.isSerialized) {

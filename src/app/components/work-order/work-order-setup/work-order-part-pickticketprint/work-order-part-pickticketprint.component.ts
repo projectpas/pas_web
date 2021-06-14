@@ -69,6 +69,17 @@ export class WorkOrderPartPickticketprintComponent implements OnInit {
         <head>
           <title>Print tab</title>
           <style>
+          @page { size: auto;  margin: 0mm; }
+              
+          @media print
+{
+@page {
+margin-top: 0;
+margin-bottom: 0;
+}
+
+@page {size: landscape}
+} 
               table {font-size:12px !important}        
   table thead { background: #808080;}    
    
