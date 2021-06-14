@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
+import { log } from 'console';
 
 @Component({
     selector: 'app-direct-labour-add',
@@ -84,17 +85,23 @@ export class DirectLabourAddComponent implements OnInit {
             this.currencyData();
             this.percentData();
 setTimeout(() => {
+
     this.isSpinnerVisible= false;
+    debugger;
     if(this.directLaborData.burdenRateId==1){
         this.allPercentList.forEach(element => {
-            if(this.directLaborData.flatAmount.toString()==element.value.toString()){
+            console.log("value", this.allPercentList)
+            if(this.directLaborData.flatAmount==element.label){
                 this.directLaborData.flatAmount=element.value;
+                console.log("falt amount",this.directLaborData.flatAmount)
             }
         });
     }
+    console.log('yyyyy', this.directLaborData.flatAmount)
+ 
 }, 1000);
 
-  
+console.log('yyyyy', this.directLaborData.flatAmount)
             // this.getManagementStructureOnEdit(res.managementStructureId);
             this.getManagementStructureDetails(this.directLaborData
                 ? this.directLaborData.managementStructureId
@@ -181,7 +188,15 @@ setTimeout(() => {
             return this.directLaborData.averageRate;
         }
     }
-
+    onChangeFlatCost(val) {
+       if (val) {
+            if (isNaN(val) == true) {
+                val = Number(val.replace(/[^0-9.-]+/g, ""));
+            }
+            this.directLaborData.flatAmount = new Intl.NumberFormat(this.global_lang, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val)
+            return this.directLaborData.flatAmount;
+        }
+    }
     onChangeBurdenCost(val) {
         if (val) {
             if (isNaN(val) == true) {
@@ -206,6 +221,7 @@ setTimeout(() => {
             masterCompanyId: this.currentUserMasterCompanyId
         };
         if(data.burdenRateId==1){
+   
             this.allPercentList.forEach(element => {
                 if(data.flatAmount==element.value){
                     data.flatAmount=element.label;

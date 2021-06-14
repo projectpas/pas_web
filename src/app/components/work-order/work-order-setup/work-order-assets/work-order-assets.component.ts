@@ -103,8 +103,7 @@ export class WorkOrderAssetsComponent implements OnInit {
     masterPartData:any={};
     ngOnInit(): void {
       // this.customerName="A Pusapkraj";
-     this.masterPartData= this.workOrderService.partNumberData;
-     console.log("helo mast",this.masterPartData)
+     this.masterPartData= this.workOrderService.partNumberData; 
     }
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, private datePipe: DatePipe, private commonService: CommonService,
         private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef) {
@@ -231,8 +230,7 @@ viewAsstesInventory(rowData){
             employeeId: editValueAssignByCondition('value', this.assetsform.employeeId),
         }
         this.quantitySelected = 0;
-       if(this.isSubWorkOrder){
-           console.log("check in ")
+       if(this.isSubWorkOrder){ 
         if (this.status === 'checkIn') {
             formData.forEach(element => {
                 element.checkInById = element.checkInById.value;

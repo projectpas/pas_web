@@ -1215,7 +1215,7 @@
                         [savedWorkOrderData]="savedWorkOrderData" (saveworkOrderLabor)="saveworkOrderLabor($event)"
                         (refreshLabor)="refreshLabor($event)" [workFlowId]="workFlowId"
                         [isView]="isView || isViewForApprovedPart">
-                    </app-work-order-labor>
+                    </app-work-order-labor> 
                 </div>
                 <div *ngIf="(gridActiveTab == 'equipment')" [ngClass]="{hidedata : gridActiveTab !== 'equipment'}">
                     <app-work-order-assets (saveEquipmentListForWO)="saveWorkOrderEquipmentList($event)"
