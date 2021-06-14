@@ -827,7 +827,7 @@
                                         <p-autoComplete field="name" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()"                                            
                                             (keyup)="getCustomers($event.target.value, 2)"
-                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByCustomer"
+                                            [(ngModel)]="receivingForm.taggedById" name="taggedByCustomer"
                                             [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
                                             [size]="30" [minLength]="1" [dropdown]="true"
                                             errorMessage="Records not found" [forceSelection]="true">
@@ -845,7 +845,7 @@
                                         </p-autoComplete> -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()"                                           
-                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByVendor"
+                                            [(ngModel)]="receivingForm.taggedById" name="taggedByVendor"
                                             [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
                                             [size]="30" [minLength]="1" [dropdown]="true"
                                             errorMessage="Records not found" [forceSelection]="true">
@@ -863,7 +863,7 @@
                                         </p-autoComplete> -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" 
-                                            [(ngModel)]="receivingForm.taggedBy"
+                                            [(ngModel)]="receivingForm.taggedById"
                                             name="taggedByCompany" [suggestions]="companyList"
                                             (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
                                             [dropdown]="true" errorMessage="Records not found"
@@ -874,7 +874,7 @@
                                 <div class="form-row" *ngIf="receivingForm.taggedByType == otherModuleId">
                                     <div class="col-sm-12">
                                         <input class="form-control" type="text" name="taggedByOther"
-                                            [(ngModel)]="receivingForm.taggedByName" (ngModelChange)="getActive()">
+                                            [(ngModel)]="receivingForm.taggedBy" (ngModelChange)="getActive()">
                                     </div>
                                 </div>
                             </div>
