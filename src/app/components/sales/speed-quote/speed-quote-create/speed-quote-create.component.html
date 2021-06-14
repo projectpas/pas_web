@@ -145,6 +145,29 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label>Contract Ref</label>
+                                            <input type="text" class="form-control" name="contractReferenceName"
+                                                [(ngModel)]="salesQuote.contractReferenceName"
+                                                (change)="onChangeInput()" [disabled]="true" />
+                                        </div>
+                                        <div class="form-group memo-popup-cstm">
+                                            <label>
+                                                Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                    data-target="#add-description" matTooltipPosition="above"
+                                                    matTooltip="Memo" (click)="onAddDescription('memo')"></i>
+                                            </label>
+                                            <span>
+                                                <div class="form-group memo-popup-cstm mat_emo">
+                                                    <div [innerHTML]="salesQuote.memo"
+                                                        [matTooltip]="parsedText(salesQuote.memo)"
+                                                        class="form-control" matTooltipPosition="above"
+                                                        style="height: 25px !important;width:100%"
+                                                        class="text_editor_box">
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
                                         <!-- <div class="form-group">
                                             <label>Employee<span class="clr-red">*</span></label>
                                             <p-autoComplete field="label" class="autocomp-customer-cstm"
@@ -223,12 +246,12 @@
                                                 name="customerEmail" class="form-control" [disabled]="true"
                                                 id="customerEmail" #customerEmail="ngModel" />
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label>Contract Ref</label>
                                             <input type="text" class="form-control" name="contractReferenceName"
                                                 [(ngModel)]="salesQuote.contractReferenceName"
                                                 (change)="onChangeInput()" [disabled]="true" />
-                                        </div>
+                                        </div> -->
                                         <div class="form-group">
                                             <label>Credit Limit &amp; terms</label>
                                             <div class="col-md-5">
@@ -245,6 +268,32 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label style="margin-top:14px">Probability (%)</label>
+                                            <select name="probability" [(ngModel)]="salesQuote.probabilityId"
+                                                (change)="onChangeInput()">
+                                                <option value="null" selected>--Select</option>
+                                                <option *ngFor="let p of percents" [ngValue]="p.value">
+                                                    {{ p.label }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group memo-popup-cstm">
+                                            <label style="margin-top:0px">
+                                                Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                                    matTooltipPosition="above" matTooltip="Notes"
+                                                    (click)="onAddDescription('notes')"></i>
+                                            </label>
+                                            <span>
+                                                <div class="form-group memo-popup-cstm mat_emo">
+                                                    <div [innerHTML]="salesQuote.notes" matTooltipPosition="above"
+                                                        [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
+                                                        style="height: 25px !important; width:100% !important"
+                                                        class="text_editor_box">
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        
                                         <!-- <div class="form-group" style="padding-top: 24px">
                                             <label>Valid For (Days)<span class="clr-red">*</span></label>
                                             <input type="number" name="validForDays"
@@ -284,7 +333,7 @@
                                             <!-- <div class="col-md-3">
                                                 
                                             </div> -->
-                                            <div class="col-md-7">
+                                            <div class="col-md-7 m-t-10">
                                                 <label>Employee<span class="clr-red">*</span></label>
                                                 <p-autoComplete field="label" class="autocomp-customer-cstm"
                                                     name="employeeId" [(ngModel)]="salesQuote.employeeId"
@@ -324,7 +373,7 @@
                                             </p-autoComplete>
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" style="padding-left:0px">
                                                 <label>Lead Source<span class="clr-red">*</span></label>
                                                 <select name="leadSource" [(ngModel)]="salesQuote.leadSourceId"
                                                     (change)="onChangeInput()" required>
@@ -340,18 +389,10 @@
                                                     (change)="onChangeInput()" required />
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Probability (%)</label>
-                                            <select name="probability" [(ngModel)]="salesQuote.probabilityId"
-                                                (change)="onChangeInput()">
-                                                <option value="null" selected>--Select</option>
-                                                <option *ngFor="let p of percents" [ngValue]="p.value">
-                                                    {{ p.label }}</option>
-                                            </select>
-                                        </div>
+                                       
                                         <div class="form-group">
                                             <label>Speed Quote Status<span class="clr-red">*</span></label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" style="padding-left:0px">
                                                 <input type="text" class="form-control"
                                                     [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
                                                     [disabled]="true" />
@@ -365,6 +406,7 @@
                                                 </p-calendar>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class="col-md-6 padding-10" style="padding-bottom: 0px !important;">
                                         <div>
@@ -425,7 +467,16 @@
                                             </div>
                                         </div>
                                         <div class=" main_ar" style="padding-top:10px">
-                                            <div class="form-group memo-popup-cstm">
+
+                                            <!-- <div class="col-md-4 main_ar"> -->
+                                                <div class="form-group" style="padding-left: 5px;">
+                                                    <label>Customer Warning</label>
+                                                    <textarea name="warningId" class="form-control customer-warning-msg"
+                                                        disabled
+                                                        value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
+                                                </div>
+                                            <!-- </div> -->
+                                            <!-- <div class="form-group memo-popup-cstm">
                                                 <label>
                                                     Memo<i class=" fa fa-pencil" data-toggle="modal"
                                                         data-target="#add-description" matTooltipPosition="above"
@@ -441,14 +492,14 @@
                                                         </div>
                                                     </div>
                                                 </span>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-row mb-2">
-                            <div class="col-md-4 main_ar">
+                            <!-- <div class="col-md-4 main_ar">
                                 <div class="form-group" style="padding-left: 5px;">
                                     <label>Customer Warning</label>
                                     <textarea name="warningId" class="form-control"
@@ -456,8 +507,8 @@
                                         disabled
                                         value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
                                 </div>
-                            </div>
-                            <div class="col-md-4 main_ar">
+                            </div> -->
+                            <!-- <div class="col-md-4 main_ar">
                                 <div class="form-group memo-popup-cstm">
                                     <label>
                                         Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
@@ -466,16 +517,16 @@
                                     </label>
                                     <span>
                                         <div class="form-group memo-popup-cstm mat_emo">
-                                            <div [innerHTML]="salesQuote.notes"
+                                            <div [innerHTML]="salesQuote.notes" matTooltipPosition="above"
                                                 [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
-                                                style="height: 100px !important; width:90% !important"
+                                                style="height: 25px !important; width:100% !important"
                                                 class="text_editor_box">
                                             </div>
                                         </div>
                                     </span>
                                 </div>
-                            </div>
-                            <div class="col-md-4 main_ar">
+                            </div> -->
+                            <div class="col-md-12 main_ar">
                                 <div class="form-group" style="position: absolute; right: 10px; bottom: 0;">
                                     <button type="submit" *ngIf="!isEdit && !isCreateModeHeader"
                                         (click)="onSubmit(true)" [disabled]="!newSalesQuoteForm.form.valid"

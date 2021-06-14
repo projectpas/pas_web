@@ -138,7 +138,7 @@ export class SpeedQuotePartNumberComponent {
       { field: 'description', header: "PN Description", width: "250px" },
       { field: 'stockLineNumber', header: "Stk Line Num", width: "100px" },
       { field: 'serialNumber', header: "Ser Num", width: "70px" },
-      { field: 'conditionDescription', header: "Cond", width: "70px" },
+      { field: 'conditionDescription', header: "Cond", width: "130px" },
       // { header: "Customer Ref", width: "100px" },
       { field: 'priorityName', header: "Priority", width: "100px" },
       { field: 'openDate', header: "Quote Date", width: "100px" },
@@ -158,11 +158,11 @@ export class SpeedQuotePartNumberComponent {
 
     this.summaryColumns = [
       // { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
-      { field: 'itemNo', header: 'Line #', width: '42px', textalign: 'center' },
+      { field: 'itemNo', header: 'Line #', width: '30px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: "140px" },
       // { field: 'partDescription', header: 'PN Description', width: '200px' },
-      { field: 'description', header: 'PN Description', width: '200px' },
-      { field: 'conditionDescription', header: 'Cond', width: "70px" },
+      { field: 'description', header: 'PN Description', width: '150px' },
+      { field: 'conditionDescription', header: 'Cond', width: "130px" },
       { field: 'quantityRequested', header: 'Qty', width: "60px" },
       { field: 'manufacturer', header: 'Manufacturer', width: "84px" },
       { field: 'oempmader', header: 'Item Type', width: "60px" },

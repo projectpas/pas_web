@@ -1262,11 +1262,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         } 
     }
     createNewROWorkOrder(childRowData, rowData) {
+        debugger
         localStorage.setItem("itemMasterId", rowData.itemMasterId);
         localStorage.setItem("partNumber", rowData.partNumber);
-        localStorage.setItem("lsWoId", this.workOrderId);
+        localStorage.setItem("lsWoId", this.workOrderId);        
         localStorage.setItem("lsconditionId", rowData.conditionCodeId);
-        localStorage.setItem("lsqty", rowData.quantity);
+        
+        localStorage.setItem("lsqty", childRowData.stocklineQuantity);
         localStorage.setItem("lsstocklineId", childRowData.stockLineId);
         if (this.isSubWorkOrder == true) {
             localStorage.setItem("lsSubWoId", this.subWOPartNoId);
@@ -1609,7 +1611,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         const conditionId = rowData.conditionCodeId;
         const workOrderId = rowData.workOrderId;
         const workOrderMaterialsId = rowData.workOrderMaterialsId;
-        this.qtyToPick = rowData.quantity - rowData.qunatityPicked;
+        this.qtyToPick = rowData.quantityReserved - rowData.qunatityPicked; 
 
         this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
         this.workOrderService

@@ -38,19 +38,19 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     modal: NgbModalRef;
     headers = [
         // { field: 'SERIAL_NO', header: 'Serial Num' },
-        { field: 'descriptionData', header: 'Memo' },
-        { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        { field: 'descriptionData', header: 'Memo' ,width:"200px"},
+        { field: 'createdDate', header: 'Created Date',width:"100px" },
+        { field: 'createdBy', header: 'Created By',width:"100px" },
+        { field: 'updatedDate', header: 'Updated Date',width:"100px" },
+        { field: 'updatedBy', header: 'Updated By',width:"100px" },
     ]
     selectedColumns = [
         // { field: 'SERIAL_NO', header: 'Serial Num' },
-        { field: 'descriptionData', header: 'Memo' },
-        { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        { field: 'descriptionData', header: 'Memo',width:"200px" },
+        { field: 'createdDate', header: 'Created Date' ,width:"100px" },
+        { field: 'createdBy', header: 'Created By',width:"100px" },
+        { field: 'updatedDate', header: 'Updated Date',width:"100px" },
+        { field: 'updatedBy', header: 'Updated By',width:"100px" },
     ];
     addList: any = [];
     isEdit: any;

@@ -20,3 +20,12 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.mat-action-row {
+    border-top-style: solid;
+    border-top-width: 1px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 16px 8px 16px 24px;
+}
