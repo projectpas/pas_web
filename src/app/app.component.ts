@@ -1233,26 +1233,23 @@ export class AppComponent implements OnInit, AfterViewInit {
         ],
       },
 
+
       {
         label: 'Reports',
-        // icon: '',
+        // icon: 'fa fa-fw fa-list-alt',
         items: [
-         
+          [
+            // {
+              // label: '',
+              // items: [
+                { label: 'Capabilities ', routerLink: '/#' },
+          { label: 'CMM', routerLink: '/#' },
+          { label: 'Tools', routerLink: '/#' },
+              // ],
+            // },
            
-                {
-                  label: 'Capabilities',
-                  routerLink: '',
-                },
-                {
-                  label: 'CMM',
-                  routerLink: '',
-                },
-                {
-                  label: 'Tools',
-                  routerLink: '',
-                },               
-          
-
+          ],
+         
         ],
       },
 
@@ -1528,7 +1525,6 @@ export class AppComponent implements OnInit, AfterViewInit {
          
         ],
       },
-      
     ];
   //   this.megaMenuItems = [
   //     {
