@@ -3978,8 +3978,6 @@ this.woPartId=rowData.id;
         data.workOrderPartNumberId = this.workOrderPartNumberId;
         data.createdBy = this.userName;
         data.createdById=this.authService.currentEmployee.employeeId;
-console.log("tranfere",this.authService.currentEmployee.employeeId)
-console.log("tranfere data",data)
         this.workOrderService.transferWorkflow(data).subscribe(res => {
             this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = true;
             this.showWaringForWorkflow();
@@ -4001,7 +3999,8 @@ this.reloadPageForWorkflow();
         this.getWorkFlowLaborList(); 
 }
 else if(this.gridActiveTab == 'equipment'){
-    this.getWorkFlowLaborList(); 
+    this.gridActiveTab = '';
+    this.gridActiveTab = 'equipment';
 }else if(this.gridActiveTab == 'charges'){
     this.getChargesListByWorkOrderId();
 } 

@@ -86,21 +86,16 @@ export class DirectLabourAddComponent implements OnInit {
 setTimeout(() => {
 
     this.isSpinnerVisible= false;
-    debugger;
     if(this.directLaborData.burdenRateId==1){
         this.allPercentList.forEach(element => {
-            console.log("value", this.allPercentList)
             if(this.directLaborData.flatAmount==element.label){
                 this.directLaborData.flatAmount=element.value;
-                console.log("falt amount",this.directLaborData.flatAmount)
             }
         });
     }
-    console.log('yyyyy', this.directLaborData.flatAmount)
  
 }, 1000);
 
-console.log('yyyyy', this.directLaborData.flatAmount)
             // this.getManagementStructureOnEdit(res.managementStructureId);
             this.getManagementStructureDetails(this.directLaborData
                 ? this.directLaborData.managementStructureId
