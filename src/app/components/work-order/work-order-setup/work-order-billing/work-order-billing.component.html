@@ -465,7 +465,7 @@
                   </div>
                   <div class="col-md-4">
                     <div class="card" *ngIf="billingorInvoiceForm">
-                      <div class="card-body">
+                      <div class="card-body" style="padding-bottom:0px !important">
                         <div class="row">
                         
                           <div class="col-md-6">
@@ -718,7 +718,7 @@
           
                           </div>
                           <div class="col-md-6">
-                              <div class="form-group ">
+                              <div class="form-group " style="margin-bottom:4px">
                                   <label>Attention </label>
                                   <input
                                     type="text"
@@ -735,8 +735,8 @@
                     </div>
                   </div>
                   <div class="col-md-3">
-                    <div class="card mgmt-card">
-                      <div class="card-header mgmt-card-header">
+                    <div class="card">
+                      <div class="card-header mgmt-card-header" style="padding-top:10px !important">
                           <h5 class="mgmt-header">
                               Management Structure <span class="text-danger">*</span>
                           </h5>
@@ -828,7 +828,7 @@
                           <tbody>
                           <tr> 
                             <td>
-                                <div class="form-group">
+                                <!-- <div class="form-group"> -->
                                     <p-checkbox
                                       class="p-checkbox-label-2"
                                       name="totalworkOrder"
@@ -838,13 +838,13 @@
                                       [(ngModel)]="billingorInvoiceForm.totalWorkOrder"
                                       [disabled]="isViewMode"
                                     ></p-checkbox>
-                                  </div>
+                                  <!-- </div> -->
                               </td>
                               <td class="text-right">
                                {{ formateCurrency(billingorInvoiceForm.totalWorkOrderCost)}}
                               </td>
                               <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
-                                  <div class="form-group" *ngIf="billingorInvoiceForm.totalWorkOrder">
+                                  <div *ngIf="billingorInvoiceForm.totalWorkOrder">
                                       <p-dropdown
                                         placeholder="Select "
                                      name="totalWOMarkup"
@@ -869,7 +869,7 @@
           
                           <tr>
                             <td>
-                                <div class="form-group">
+                                <!-- <div class="form-group"> -->
                                     <p-checkbox
                                     (onChange)="resetMaterial(); calculateGrandTotal();"
                                       class="p-checkbox-label-2"
@@ -879,13 +879,13 @@
                                       [(ngModel)]="billingorInvoiceForm.material"
                                       [disabled]="billingorInvoiceForm.totalWorkOrder || isViewMode"
                                     ></p-checkbox>
-                                  </div>
+                                  <!-- </div> -->
                             </td>
                             <td class="text-right">
                                 {{formateCurrency(billingorInvoiceForm.materialCost)}}
                             </td>
                             <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'"  >
-                                <div class="form-group" *ngIf="billingorInvoiceForm.material">
+                                <div  *ngIf="billingorInvoiceForm.material">
                                     <p-dropdown
                                       placeholder="Select "
                                       name="materialValue"
@@ -909,7 +909,7 @@
           
                           <tr>
                             <td>
-                                <div class="form-group">
+                                <!-- <div class="form-group"> -->
                                     <p-checkbox
                                       class="p-checkbox-label-2"
                                       name="laborOverHead"
@@ -919,14 +919,14 @@
                                       [(ngModel)]="billingorInvoiceForm.laborOverHead"
                                       [disabled]="billingorInvoiceForm.totalWorkOrder || isViewMode"
                                     ></p-checkbox>
-                                  </div>
+                                  <!-- </div> -->
                             </td>
                             <td class="text-right">
                                 {{formateCurrency(billingorInvoiceForm.laborOverHeadCost)}}
                             </td>   
           
                             <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
-                                <div class="form-group" *ngIf="billingorInvoiceForm.laborOverHead">
+                                <div *ngIf="billingorInvoiceForm.laborOverHead">
                                     <p-dropdown
                                       placeholder="Select "
                                       name="head"
@@ -950,7 +950,7 @@
                           </tr>
                           <tr>
                             <td>
-                                <div class="form-group">
+                                <!-- <div class="form-group"> -->
                                     <p-checkbox
                                       class="p-checkbox-label-2"
                                       (onChange)="resetMisCharges(); calculateGrandTotal();"
@@ -960,13 +960,13 @@
                                       [(ngModel)]="billingorInvoiceForm.miscCharges"
                                       [disabled]="billingorInvoiceForm.totalWorkOrder || isViewMode"
                                     ></p-checkbox>
-                                  </div>
+                                  <!-- </div> -->
                               </td>
                               <td  class="text-right">
                                   {{formateCurrency(billingorInvoiceForm.miscChargesCost)}}
                               </td>
                               <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
-                                  <div class="form-group" *ngIf="billingorInvoiceForm.miscCharges">
+                                  <div *ngIf="billingorInvoiceForm.miscCharges">
                                       <p-dropdown
                                         placeholder="Select "
                                         name="misc"
@@ -992,7 +992,7 @@
 
                           <tr>
                             <td>
-                                <div class="form-group">
+                                <!-- <div class="form-group"> -->
                                     <p-checkbox
                                       class="p-checkbox-label-2"
                                       (onChange)="resetFreight(); calculateGrandTotal();"
@@ -1002,13 +1002,13 @@
                                       [(ngModel)]="billingorInvoiceForm.freight"
                                       [disabled]="billingorInvoiceForm.totalWorkOrder || isViewMode"
                                     ></p-checkbox>
-                                  </div>
+                                  <!-- </div> -->
                               </td>
                               <td  class="text-right">
                                   {{formateCurrency(billingorInvoiceForm.freightCost)}}
                               </td>
                               <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
-                                  <div class="form-group" *ngIf="billingorInvoiceForm.freight">
+                                  <div *ngIf="billingorInvoiceForm.freight">
                                       <p-dropdown
                                         placeholder="Select "
                                         name="freightVal"
@@ -1133,7 +1133,7 @@
                   </div>
                 </div>
           
-                <div class="float-right" *ngIf="!isViewMode">
+                <div class="float-right m-t-10" *ngIf="!isViewMode">
                   <button class="btn btn-primary pull-right"  (click)="GenerateInvoice()" [disabled]="!billinForm.valid">Save</button>
                   <!-- <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button> -->
                 </div>

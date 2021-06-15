@@ -822,10 +822,13 @@
          </div>
         </form>
     </div>
+    <div class="col-sm-12">
     <div class="row float-right">
         <button *ngIf="!isView" class="btn btn-primary pull-right btn-width-100" (click)="save()" [disabled]="!shippingForm.valid">Save</button>
     </div>
+    </div>
 </div>
+
 <div *ngIf="workorderpackage">
     <app-wo-order-multi-Packaging-Label (Updateshippingpopup)="hideShippingPopup()"  [packagingSlips]="packagingSlips"></app-wo-order-multi-Packaging-Label>
 </div>

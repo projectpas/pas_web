@@ -42,7 +42,7 @@
                *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView && !isQuote" >
                   <div class="form-group task-detail text_pad">
                       <label class="pad_labr">Select Task</label>
-                      <ng-multiselect-dropdown 
+                      <ng-multiselect-dropdown  appendTo='body' [baseZIndex]="9999"
                           class="form-control multiple-custom-select capitalizer setCaps" style="width:250px" [placeholder]="'Select Task'"
                           [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
                           [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"
@@ -58,7 +58,7 @@
     </div>   
   </div>
   <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" 
-    [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''">
+    [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''" [ngClass]="isQuote?'min-height-300': ''">
     <div class="tableFixHead">
     <table class="table table-bordered  lastcol-fix mpn-list-table">
       <thead>
@@ -71,7 +71,7 @@
               *ngIf=" !isView && isQuote" >
                  <div class="form-group task-detail text_pad">
                      <label class="pad_labr">Select Task</label>
-                     <ng-multiselect-dropdown  appendTo="body"
+                     <ng-multiselect-dropdown  appendTo='body' [baseZIndex]="9999"
                          class="form-control multiple-custom-select capitalizer setCaps" style="width:250px" [placeholder]="'Select Task'"
                          [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
                          [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"

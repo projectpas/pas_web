@@ -1,3 +1,7 @@
 .all-approval-div{
     padding-left: 6px; padding-right: 6px;
 }
+.disablecheckbox{
+    background-color: #a9a9a9;
+    color: white;
+}
