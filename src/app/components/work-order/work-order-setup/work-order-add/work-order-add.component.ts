@@ -3993,18 +3993,25 @@ this.reloadPageForWorkflow();
         });
     }
     reloadPageForWorkflow(){
+        this.transferWorkflowData=false;
         if(this.gridActiveTab == 'materialList'){
             this.getNewMaterialListByWorkOrderId();   
     }else if(this.gridActiveTab == 'labor'){
         this.getWorkFlowLaborList(); 
 }
 else if(this.gridActiveTab == 'equipment'){
+  
+    this.transferWorkflowData=true;
     this.gridActiveTab = '';
+    this.isSubWorkOrder=true;
+    this.isSubWorkOrder=false;
     this.gridActiveTab = 'equipment';
-}else if(this.gridActiveTab == 'charges'){
+}else if(this.subTabOtherOptions && this.subTabOtherOptions == 'charges'){
+    console.log('equpppppp')
     this.getChargesListByWorkOrderId();
 } 
     }
+    transferWorkflowData:boolean=false;
     closeTranferFlow(){
 
         if(this.workflowTransfer.Material ||  this.workflowTransfer.Labor ||  this.workflowTransfer.Tools|| this.workflowTransfer.Charges)

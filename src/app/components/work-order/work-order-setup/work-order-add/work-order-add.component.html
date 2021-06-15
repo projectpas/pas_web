@@ -1219,7 +1219,7 @@
                 </div>
                 <div *ngIf="(gridActiveTab == 'equipment')" [ngClass]="{hidedata : gridActiveTab !== 'equipment'}">
                     <app-work-order-assets (saveEquipmentListForWO)="saveWorkOrderEquipmentList($event)"
-                        [workOrderPartNumberId]="workOrderPartNumberId"
+                        [workOrderPartNumberId]="workOrderPartNumberId" [transferWorkflow]="transferWorkflowData"
                         (updateEquipmentListForWO)="updateWorkOrderEquipmentList($event)"
                         [woNumber]="isSubWorkOrder? subWorkOrderDetails.workOrderNum : workOrderGeneralInformation.workOrderNum"
                         [customerName]="isSubWorkOrder?subWorkOrderDetails.customerName:  workOrderGeneralInformation.customerDetails.customerName"
