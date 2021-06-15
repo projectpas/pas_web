@@ -362,7 +362,7 @@ export class ReceivngPoComponent implements OnInit {
 
     ngOnInit() {
         this.isSpinnerVisible = true;
-        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
+        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseOrderId'];        
         this.getReceivingPOHeaderById(this.receivingService.purchaseOrderId);
         this.receivingService.getPurchaseOrderDataById(this.receivingService.purchaseOrderId, this.employeeId).subscribe(
             results => {

@@ -98,7 +98,7 @@ export class ViewPoComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
+        this.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseOrderId'];
         this.getReceivingPOHeaderById(this.purchaseOrderId);
         this.getStockDetailsOnLoad();
         this.localData = [
