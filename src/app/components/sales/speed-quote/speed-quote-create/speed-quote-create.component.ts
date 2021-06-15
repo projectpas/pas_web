@@ -1990,6 +1990,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   }
 
   initiateSpeedQuotePrint() {
+    this.speedQuotePrintCriteraObj.speedQuoteId = this.id;
     this.speedQuotePrintCriteraObj.printQuote = true;
     if(this.exclusionCount > 0){
       this.speedQuotePrintCriteraObj.printExclusion = true;
@@ -2008,5 +2009,30 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
   onExlusionLoad(count){
     this.exclusionCount = count;
+  }
+  sendSpeedQuoteEMail() {
+    this.conversionStarted = true;
+    this.isSpinnerVisible = true;
+    this.speedQuotePrintCriteraObj.speedQuoteId = this.id;
+
+    this.speedQuoteService.sendSppedQuoteEmail(this.speedQuotePrintCriteraObj).subscribe(
+      results => {
+        this.alertService.showMessage(
+          "Success",
+          `Quote coverted to Order successfully.`,
+          MessageSeverity.success
+        );
+        this.isSpinnerVisible = false;
+        //this.salesOrderView = results[0];
+
+        this.closeModal();
+
+        //this.router.navigateByUrl(`salesmodule/salespages/sales-order-edit/${this.salesOrderView.salesOrder.customerId}/${this.salesOrderView.salesOrder.salesOrderId}`);
+      }, error => {
+        this.isSpinnerVisible = false;
+      }
+    );
+
+    this.isSpinnerVisible = false;
   }
 }
