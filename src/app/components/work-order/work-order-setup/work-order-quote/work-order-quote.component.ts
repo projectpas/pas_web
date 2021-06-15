@@ -492,6 +492,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         this.isViewMode = isView;
     }
+
+    checkEnforceInternalApproval() {
+        return this.woqsettingModel != null &&
+          this.woqsettingModel.IsApprovalRule &&
+          new Date(this.quoteForm.openDate) >= new Date(this.woqsettingModel.effectivedate);
+      }
+
     getWOQSettingMasterData(currentUserMasterCompanyId) {
 		this.workOrderService.getWOQSettingMasterData(currentUserMasterCompanyId).subscribe(res => {
 			if (res) {
@@ -1029,9 +1036,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.selectedPartNumber = data;
         this.quotestatusofCurrentPart=data.quoteStatus;
         this.isViewForApprovedPart = false;
-        if(this.quotestatusofCurrentPart == 'Approved'){
-            this.isViewForApprovedPart = true;
-        }
+        // if(this.quotestatusofCurrentPart == 'Approved'){
+        //     this.isViewForApprovedPart = true;
+        // }
         this.clearQuoteData();
         let msId = 0;
         if (data) {
@@ -2721,10 +2728,11 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     }
 
     getWOQuoteApprovalList() {
+        debugger;
         this.getApproversList();
         this.getApproverStatusList();
-        if(this.quotationHeader && this.quotationHeader['CustomerId']){
-        this.commonService.getCustomerContactsById(this.quotationHeader['CustomerId'],this.authService.currentUser.masterCompanyId).subscribe(res => {      
+        if(this.quoteForm['customerId']){
+        this.commonService.getCustomerContactsById(this.quoteForm['customerId'],this.authService.currentUser.masterCompanyId).subscribe(res => {      
             this.customerContactList = res;
             if(this.customerContactList.length > 0){
 

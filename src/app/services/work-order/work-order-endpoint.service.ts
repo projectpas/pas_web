@@ -1374,10 +1374,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
             });
         }
     }
-    getShippingDataList(WorkOrderId: number): Observable<any> {
+    getShippingDataList(WorkOrderId: number,workOrderPartNumberId:number): Observable<any> {
 
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getShippingDataList(WorkOrderId));
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}&WorkOrderPartId=${workOrderPartNumberId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getShippingDataList(WorkOrderId,workOrderPartNumberId));
 
         });
 
@@ -1459,7 +1459,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
 
     transferWorkflow(data) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/copyworkflowdetailstoworkorder?workOrderId=${data.workOrderId}&workflowId=${data.workflowId}&masterCompanyId=${data.masterCompanyId}&workOrderPartNumberId=${data.workOrderPartNumberId}&createdBy=${data.createdBy}&listItem=${data.list}`).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/copyworkflowdetailstoworkorder?workOrderId=${data.workOrderId}&workflowId=${data.workflowId}&masterCompanyId=${data.masterCompanyId}&workOrderPartNumberId=${data.workOrderPartNumberId}&createdBy=${data.createdBy}&listItem=${data.list}&createdById=${data.createdById}`).catch(error => {
             return this.handleErrorCommon(error, () => this.transferWorkflow(data));
         });
     }

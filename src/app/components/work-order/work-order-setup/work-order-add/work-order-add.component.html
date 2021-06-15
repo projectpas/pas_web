@@ -1215,11 +1215,11 @@
                         [savedWorkOrderData]="savedWorkOrderData" (saveworkOrderLabor)="saveworkOrderLabor($event)"
                         (refreshLabor)="refreshLabor($event)" [workFlowId]="workFlowId"
                         [isView]="isView || isViewForApprovedPart">
-                    </app-work-order-labor>
+                    </app-work-order-labor> 
                 </div>
                 <div *ngIf="(gridActiveTab == 'equipment')" [ngClass]="{hidedata : gridActiveTab !== 'equipment'}">
                     <app-work-order-assets (saveEquipmentListForWO)="saveWorkOrderEquipmentList($event)"
-                        [workOrderPartNumberId]="workOrderPartNumberId"
+                        [workOrderPartNumberId]="workOrderPartNumberId" [transferWorkflow]="transferWorkflowData"
                         (updateEquipmentListForWO)="updateWorkOrderEquipmentList($event)"
                         [woNumber]="isSubWorkOrder? subWorkOrderDetails.workOrderNum : workOrderGeneralInformation.workOrderNum"
                         [customerName]="isSubWorkOrder?subWorkOrderDetails.customerName:  workOrderGeneralInformation.customerDetails.customerName"

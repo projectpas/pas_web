@@ -146,7 +146,7 @@ export class ShippingComponent implements OnInit {
     getShippingList() {
         this.isSpinnerVisible = true;
         this.workorderService
-            .getShippingDataList(this.workOrderId)
+            .getShippingDataList(this.workOrderId,this.workOrderPartNumberId)
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
                 this.shippingList = response[0];

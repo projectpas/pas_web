@@ -373,7 +373,6 @@ setTimeout(() => {
     }
   }
   onPartSelect(event, currentRecord) {  
-    // currentRecord.directLaborOHCost=event.overHeadBurden;
     if(this.basicLabourDetail){
       // currentRecord.burdaenRatePercentageId=
       if(this.basicLabourDetail.laborRateId==2){
@@ -388,7 +387,6 @@ setTimeout(() => {
     // currentRecord.burdaenRatePercentageId = this.basicLabourDetail['flatAmount'];
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
     // if(this.basicLabourDetail){
-      
     this.calculateBurderRate(currentRecord);
     // }
   }
@@ -551,7 +549,6 @@ setTimeout(() => {
     }
   }
   getLenghtOfTask(taskList) {
-// console.log("taskList",taskList)
     if (taskList && taskList.length == 0 && !this.isView) {
       return true;
     }
@@ -811,13 +808,17 @@ setTimeout(() => {
     }
   }
   restrictUserToSave:any;
+  enableToSave:boolean=false;
   saveLabor() {
+    this.enableToSave=false;
     this.restrictUserToSave=true;
 for (let task in this.laborForm.workOrderLaborList[0]) {
   this.laborForm.workOrderLaborList[0][task].forEach(
     data => {
-     if (data.isDeleted==false && (data.directLaborOHCost == 0 || data.directLaborOHCost == undefined || data.directLaborOHCost == null || data.directLaborOHCost == '' || data.totalCost <= 0 || data.totalCost== undefined) && !this.isQuote) {
+     if (data.isDeleted==false && (Number(data.directLaborOHCost.toString().split(',').join(''))== 0 || data.directLaborOHCost == undefined || data.directLaborOHCost == null || data.directLaborOHCost == '') && !this.isQuote) {
+      // || data.totalCost <= 0 || data.totalCost== undefined
          this.restrictUserToSave=false;
+         this.enableToSave=true;
        setTimeout(() => {
         this.alertService.showMessage(data.employeeId ? data.employeeId.name : '',
           'Hourly pay is not set',
@@ -828,123 +829,126 @@ for (let task in this.laborForm.workOrderLaborList[0]) {
     }
     })
   }
+if(this.enableToSave==false){
   if(this.restrictUserToSave==false){
-return true;
-  }
-    var wolHeaderId = 0;
-    let WorkOrderQuoteTask = [];
-    this.allTaskList.forEach(
-      (task) => {
-        if (this.laborForm.workOrderLaborList[0][task.description] && this.laborForm.workOrderLaborList[0][task.description].length > 0) {
-          if (this.isSubWorkOrder == true) {
-            const data = {
-              "subWorkOrderLaborId": 0,
-              "subWorkOrderLaborHeaderId": 0,
-              "WorkOrderQuoteTaskId": 0,
-              "TaskId": task.taskId,
-              "LaborHours": task.totalHours,
-              "OverHeadCost": this.getOverHeadCost(this.laborForm.workOrderLaborList[0][task.description]),
-              "AdjustmentHours": 0,
-              "AdjustedHours": 0,
-              "LaborCost": this.getTotalLabourCost(this.laborForm.workOrderLaborList[0][task.description]),
-              "LaborBilling": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
-              "LaborRevenue": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
-              "masterCompanyId": this.authService.currentUser.masterCompanyId,
-              "CreatedBy": this.userName,
-              "UpdatedBy": this.userName,
-              "CreatedDate": new Date().toDateString(),
-              "UpdatedDate": new Date().toDateString(),
-              "IsActive": true,
-              "isDeleted": false
+    return true;
+      }
+        var wolHeaderId = 0;
+        let WorkOrderQuoteTask = [];
+        this.allTaskList.forEach(
+          (task) => {
+            if (this.laborForm.workOrderLaborList[0][task.description] && this.laborForm.workOrderLaborList[0][task.description].length > 0) {
+              if (this.isSubWorkOrder == true) {
+                const data = {
+                  "subWorkOrderLaborId": 0,
+                  "subWorkOrderLaborHeaderId": 0,
+                  "WorkOrderQuoteTaskId": 0,
+                  "TaskId": task.taskId,
+                  "LaborHours": task.totalHours,
+                  "OverHeadCost": this.getOverHeadCost(this.laborForm.workOrderLaborList[0][task.description]),
+                  "AdjustmentHours": 0,
+                  "AdjustedHours": 0,
+                  "LaborCost": this.getTotalLabourCost(this.laborForm.workOrderLaborList[0][task.description]),
+                  "LaborBilling": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
+                  "LaborRevenue": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
+                  "masterCompanyId": this.authService.currentUser.masterCompanyId,
+                  "CreatedBy": this.userName,
+                  "UpdatedBy": this.userName,
+                  "CreatedDate": new Date().toDateString(),
+                  "UpdatedDate": new Date().toDateString(),
+                  "IsActive": true,
+                  "isDeleted": false
+                }
+                WorkOrderQuoteTask.push(data)
+                this.authService.currentUser.masterCompanyId
+              } else {
+                const data = {
+                  "WorkOrderQuoteTaskId": 0,
+                  "TaskId": task.taskId,
+                  "LaborHours": task.totalHours,
+                  "OverHeadCost": this.getOverHeadCost(this.laborForm.workOrderLaborList[0][task.description]),
+                  "AdjustmentHours": 0,
+                  "AdjustedHours": 0,
+                  "LaborCost": this.getTotalLabourCost(this.laborForm.workOrderLaborList[0][task.description]),
+                  "LaborBilling": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
+                  "LaborRevenue": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
+                  "masterCompanyId": this.authService.currentUser.masterCompanyId,
+                  "CreatedBy": this.userName,
+                  "UpdatedBy": this.userName,
+                  "CreatedDate": new Date().toDateString(),
+                  "UpdatedDate": new Date().toDateString(),
+                  "IsActive": true,
+                  "isDeleted": false
+                }
+                WorkOrderQuoteTask.push(data)
+              }
             }
-            WorkOrderQuoteTask.push(data)
-            this.authService.currentUser.masterCompanyId
-          } else {
-            const data = {
-              "WorkOrderQuoteTaskId": 0,
-              "TaskId": task.taskId,
-              "LaborHours": task.totalHours,
-              "OverHeadCost": this.getOverHeadCost(this.laborForm.workOrderLaborList[0][task.description]),
-              "AdjustmentHours": 0,
-              "AdjustedHours": 0,
-              "LaborCost": this.getTotalLabourCost(this.laborForm.workOrderLaborList[0][task.description]),
-              "LaborBilling": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
-              "LaborRevenue": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
-              "masterCompanyId": this.authService.currentUser.masterCompanyId,
-              "CreatedBy": this.userName,
-              "UpdatedBy": this.userName,
-              "CreatedDate": new Date().toDateString(),
-              "UpdatedDate": new Date().toDateString(),
-              "IsActive": true,
-              "isDeleted": false
-            }
-            WorkOrderQuoteTask.push(data)
+          }
+        )
+        if (this.workOrderLaborList !== undefined && this.workOrderLaborList !== null) {
+          wolHeaderId = this.workOrderLaborList.workOrderLaborHeaderId;
+        }
+        const excessParams = {
+          createdBy: this.userName,
+          updatedBy: this.userName,
+          createdate: new Date(),
+          updatdate: new Date(),
+          isActive: true,
+        }
+    
+    
+        let tasksData = this.laborForm.workOrderLaborList[0];
+        let formedData = {}
+        for (let tdata in tasksData) {
+          if (tdata != 'length') {
+    
+    
+            formedData[tdata] = tasksData[tdata].map(x => {
+              return {
+                ...x,
+                ...excessParams,
+                taskId: this.getTaksId(tdata),
+                employeeId: getValueFromObjectByKey('value', x.employeeId)
+              }
+            })
           }
         }
-      }
-    )
-    if (this.workOrderLaborList !== undefined && this.workOrderLaborList !== null) {
-      wolHeaderId = this.workOrderLaborList.workOrderLaborHeaderId;
-    }
-    const excessParams = {
-      createdBy: this.userName,
-      updatedBy: this.userName,
-      createdate: new Date(),
-      updatdate: new Date(),
-      isActive: true,
-    }
-
-
-    let tasksData = this.laborForm.workOrderLaborList[0];
-    let formedData = {}
-    for (let tdata in tasksData) {
-      if (tdata != 'length') {
-
-
-        formedData[tdata] = tasksData[tdata].map(x => {
-          return {
-            ...x,
-            ...excessParams,
-            taskId: this.getTaksId(tdata),
-            employeeId: getValueFromObjectByKey('value', x.employeeId)
-          }
-        })
-      }
-    }
-    this.saveFormdata = {
-      ...this.laborForm,
-      hoursorClockorScan: this.laborForm.hoursorClockorScan,
-      dataEnteredBy: getValueFromObjectByKey('value', this.laborForm.dataEnteredBy),
-      employeeId: getValueFromObjectByKey('value', this.laborForm.employeeId),
-      masterCompanyId: this.authService.currentUser.masterCompanyId,
-      ...excessParams,
-      workOrderId: this.id,
-      workFlowWorkOrderId: getValueFromObjectByKey('value', this.laborForm.workFlowWorkOrderId),
-      workOrderLaborHeaderId: wolHeaderId,
-      workOrderLaborList: formedData,
-      totalWorkHours: this.laborForm.totalWorkHours,
-      WorkOrderQuoteTask: WorkOrderQuoteTask,
-      LaborBuildMethod: this.laborForm.costPlusType
-    }
-    if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'workFlow') {
-      this.saveFormdata['workOrderHoursType'] = 1;
-    }
-    else if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks') {
-      this.saveFormdata['workOrderHoursType'] = 2;
-    }
-    else if (this.laborForm.workFloworSpecificTaskorWorkOrder == "workOrder") {
-      this.saveFormdata['workOrderHoursType'] = 3;
-    }
-    if (this.isQuote) {
-      this.saveFormdata.headerMarkupId = Number(this.overAllMarkup);
-      this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
-    } 
-    if(this.saveFormdata.costPlusType==3){
-      this.saveFormdata.laborFlatBillingAmount= this.flatAmount ? this.flatAmount : '0.00'
-    }
-    this.saveworkOrderLabor.emit(this.saveFormdata);
-    this.disabledUpdatebtn = true;
-    this.isEdit = true;
+        this.saveFormdata = {
+          ...this.laborForm,
+          hoursorClockorScan: this.laborForm.hoursorClockorScan,
+          dataEnteredBy: getValueFromObjectByKey('value', this.laborForm.dataEnteredBy),
+          employeeId: getValueFromObjectByKey('value', this.laborForm.employeeId),
+          masterCompanyId: this.authService.currentUser.masterCompanyId,
+          ...excessParams,
+          workOrderId: this.id,
+          workFlowWorkOrderId: getValueFromObjectByKey('value', this.laborForm.workFlowWorkOrderId),
+          workOrderLaborHeaderId: wolHeaderId,
+          workOrderLaborList: formedData,
+          totalWorkHours: this.laborForm.totalWorkHours,
+          WorkOrderQuoteTask: WorkOrderQuoteTask,
+          LaborBuildMethod: this.laborForm.costPlusType
+        }
+        if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'workFlow') {
+          this.saveFormdata['workOrderHoursType'] = 1;
+        }
+        else if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks') {
+          this.saveFormdata['workOrderHoursType'] = 2;
+        }
+        else if (this.laborForm.workFloworSpecificTaskorWorkOrder == "workOrder") {
+          this.saveFormdata['workOrderHoursType'] = 3;
+        }
+        if (this.isQuote) {
+          this.saveFormdata.headerMarkupId = Number(this.overAllMarkup);
+          this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
+        } 
+        if(this.saveFormdata.costPlusType==3){
+          this.saveFormdata.laborFlatBillingAmount= this.flatAmount ? this.flatAmount : '0.00'
+        }
+        this.saveworkOrderLabor.emit(this.saveFormdata);
+        this.enableToSave=false;
+        this.disabledUpdatebtn = true;
+        this.isEdit = true;
+}
   }
   getOverHeadCost(taskList) {
     let total = 0;
@@ -1043,7 +1047,6 @@ return true;
     this.laborForm.workOrderLaborList[0][taskName][index].isDeleted = true;
     // let temp = 
      this.laborForm.workOrderLaborList[0][taskName].splice(index, 1);
-    // console.log("temp",temp)
     // 
     // this.laborForm.workOrderLaborList[0][taskName].push(temp[0]);
     this.disabledUpdatebtn = false;

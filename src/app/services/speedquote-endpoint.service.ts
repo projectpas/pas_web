@@ -8,7 +8,7 @@ import { environment } from "../../environments/environment";
 import { ISpeedQuoteView } from "../models/sales/ISpeedQuoteView";
 import { ISpeedQuote } from "../models/sales/ISpeedQuote.model";
 import { SpeedQuoteMarginSummary } from "../models/sales/SpeedQuoteMarginSummary";
-
+import { SpeedQuotePrintCritera } from "../components/sales/speed-quote/models/speed-quote-print-criteria";
 @Injectable()
 export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly getNewSpeedQuoteInstanceUrl: string = environment.baseUrl + "/api/speedquote/new";
@@ -28,6 +28,7 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly getSpeedQuotePartDateHistory: string = environment.baseUrl + "/api/speedquote/getSpeedQuotePartHistory";
   private readonly getSpeedQuotePrintViewDetails: string = environment.baseUrl + "/api/speedquote/getprintview";
   private readonly getSpeedQuoteExclusionPrintViewDetails: string = environment.baseUrl + "/api/speedquote/getexclusionprintview";
+  private readonly sendSpeedQuoteEmailURL: string = environment.baseUrl + "/api/speedquote/sendspeedquoteemail"
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
@@ -217,6 +218,14 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getExclusionPrintview(speedQuoteId));
+      });
+  }
+  sendSppedQuoteEmail(speedQuotePrintCritera: SpeedQuotePrintCritera): Observable<any> {
+    const URL = `${this.sendSpeedQuoteEmailURL}`;
+    return this.http
+      .post(URL, speedQuotePrintCritera, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.sendSppedQuoteEmail(speedQuotePrintCritera));
       });
   }
 }

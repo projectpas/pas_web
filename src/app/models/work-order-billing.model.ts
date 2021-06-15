@@ -31,6 +31,8 @@ export class Billing {
     laborOverHeadValue: number;
     miscCharges: boolean;
     miscChargesValue: number;
+    freight: boolean;
+    freightValue: number;
     proForma: boolean;
     partialInvoice: boolean;
     costPlusRateCombo: boolean;
@@ -50,6 +52,8 @@ export class Billing {
     laborOverHeadCostPlus: number;
     miscChargesCost: number;
     miscChargesCostPlus: number;
+    freightCostPlus: number;
+    freightCost: number;
     grandtotal: number;
     constructor() {
         this.woOpenDate = null;

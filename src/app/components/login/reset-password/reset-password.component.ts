@@ -62,7 +62,6 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     }
 
     ConfirmedValidator(controlName: string, matchingControlName: string) {
-        debugger;
         return (formGroup: FormGroup) => {
             const control = formGroup.controls[controlName];
             const matchingControl = formGroup.controls[matchingControlName];

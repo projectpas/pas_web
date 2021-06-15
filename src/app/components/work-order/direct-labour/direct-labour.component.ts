@@ -5,6 +5,7 @@ import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { LaborAndOverheadCostService } from '../../../services/laborandoverheadcost.service';
 import { AuthService } from '../../../services/auth.service';
 import { CommonService } from '../../../services/common.service';
+import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
 declare var $ : any;
 
 @Component({
@@ -95,8 +96,9 @@ export class DirectLabourComponent implements OnInit {
                 laborRateId: res.laborRateId.toString(),
                 laborHoursId: res.laborHoursId.toString(),
                 burdenRateId: res.burdenRateId.toString(),
+                flatAmount:res.flatAmount ? formatNumberAsGlobalSettingsModule(res.flatAmount, 2) : '0.00'
             };
-            this.getManagementStructureCodes(res.managementStructureId);
+            // this.getManagementStructureCodes(res.managementStructureId);
         });		
 	}
 	

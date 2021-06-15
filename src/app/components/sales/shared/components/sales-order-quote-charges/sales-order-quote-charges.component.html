@@ -27,7 +27,6 @@
     <div class="card-body header-body" style="overflow:auto">
       <p-table [columns]="cols" [value]="salesOrderChargesList" [lazy]="false" [paginator]="true" [rows]="10"
         class="rpo-table-cstm rro-table-cstm ptable-f10" [paginator]="true">
-        <!--chargess-->
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th colspan="7" class="quote-freight-colspan">
@@ -62,7 +61,6 @@
                   </div>
                 </div>
               </th>
-              <!-- <th class="quote-th"></th> -->
             </ng-container>
             <ng-container *ngIf="!isView">
               <th colspan="5" class="freight-notview">
@@ -94,7 +92,6 @@
                   </div>
                 </div>
               </th>
-              <!-- <th class="quote-th"></th> -->
             </ng-container>
           </tr>
           <tr>
@@ -117,13 +114,6 @@
         <ng-template pTemplate="body" let-charge let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td class="table-column-width">
-              <!-- <select class="form-control custom-select wf-pub-id" id="hideDisabled" [(ngModel)]="charge.chargesTypeId"
-                name="type_{{rowIndex}}" [disabled]="true">
-                <option value="0">Select</option>
-                <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
-                ctype.chargeType
-              }}</option>
-              </select> -->
               {{charge.chargeType}}
             </td>
             <td class="table-column-width">
@@ -261,7 +251,6 @@
 </div>
 <div id="addNewCharges" class="modal fade" role="dialog" *ngIf="!view" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xlg">
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">
@@ -277,7 +266,6 @@
           </span>
         </div>
         <div class="tab-content">
-          <!-- <div class="table-responsive table-overflow" style="height: 300px;"> -->
           <form #chargesCreateForm="ngForm">
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
               <div class="tableFixHead">
@@ -291,7 +279,6 @@
                       <th rowspan="2">Ext Cost<span class="clr-red">*</span></th>
                       <th rowspan="2">Ref</th>
                       <th rowspan="2">Vendor Name</th>
-                      <!-- <th rowspan="2">Actions</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -301,9 +288,8 @@
                           [(ngModel)]="charge.chargesTypeId" (ngModelChange)="enableUpdate()" name="type_{{i}}"
                           required>
                           <option [value]="">Select</option>
-                          <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
-                          ctype.chargeType
-                        }}</option>
+                          <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{ctype.chargeType}}
+                          </option>
                         </select>
                       </td>
                       <td>
@@ -339,19 +325,12 @@
                           [dropdown]="true">
                         </p-autoComplete>
                       </td>
-                      <!-- <td>
-                        <button class="btn btn-danger nobg" [disabled]="isEdit==true" matTooltipPosition="above"
-                          matTooltip="above" data-target="#deleteConfirmationCharges" data-toggle="modal">
-                          <i class="fa fa-trash"></i>
-                        </button>
-                      </td> -->
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
           </form>
-          <!-- </div> -->
         </div>
       </div>
       <div class="modal-footer">
@@ -376,12 +355,6 @@
         </button>
       </div>
       <div class="modal-body">
-        <!-- <strong style="display: inline-flex;">
-                  Charge Type:
-                  <span class="new-label">
-                      {{selectedRowForDelete.chargeType}}
-                  </span>
-              </strong> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal"
@@ -389,7 +362,6 @@
         <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
       </div>
     </div>
-
   </div>
 </div>
 <ng-template #content let-c="close" let-d="dismiss">

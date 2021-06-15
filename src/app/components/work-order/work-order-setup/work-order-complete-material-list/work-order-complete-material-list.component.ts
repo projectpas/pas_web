@@ -215,7 +215,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     enablePickTicket: boolean = false;
     isViewItem: boolean = false;
     stockLineId: any;
-    
+     enumPartStatus:any= {
+        Reserve:1,
+        Issued:2,
+        Reserveandissued:3,
+        Unissued:4,
+        Unreserved:5
+    }
     constructor(
         private workOrderService: WorkOrderService,
         public itemClassService: ItemClassificationService,
@@ -227,19 +233,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         public router: Router,
         private commonService: CommonService
     ) { this.show = true; 
-        // enum partStatus {
-        //     Reserve=1,
-        //     Issued=2,
-        //     Reserveandissued=3,
-        //     Unissued=4,
-        //     Unreserved=5
-        // }
+    
     }
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
     ngOnInit() {
+ this.enumPartStatus=this.enumPartStatus;
         this.initColumns();
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
@@ -271,6 +272,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         })
     }
     ngOnChanges(changes: SimpleChanges) {
+        this.enumPartStatus=this.enumPartStatus;
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -385,6 +387,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.editData = undefined;
         this.isViewItem = false;
         let contentPart = this.addPart;
+        this.ispickticket=false;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     }
     openDelete(content, row) {
@@ -1712,11 +1715,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
     }
 
+    onFocusOutEvent(objPickTicket: any){
+        let invalidQty = false;
+        let selectedItem = objPickTicket;
+        var errmessage = '';
+        if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
+            invalidQty = true;
+            errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+        }            
+        if (invalidQty) {
+            this.alertService.showMessage(
+                'Work Order',
+                'You cannot pick more than Qty To Pick',
+                MessageSeverity.warn
+            );
+        }
+     }
 }
-
-// min-width: 81px !important;
-// min-width: 91px !important;
-// min-width: 88px !important;
-// min-width: 84px !important;
-// min-width: 72px !important;
-// min-width: 78px !important;
