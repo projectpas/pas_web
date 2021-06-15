@@ -357,7 +357,7 @@ export class ReceivingRoComponent implements OnInit {
 
     ngOnInit() {
         this.isSpinnerVisible = true; 
-        this.repairOrderId = this._actRoute.snapshot.queryParams['repairOrderId'];
+        this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];        
         this.getROViewById(this.repairOrderId);
         this.receivingService.getReceivingROPartById(this.repairOrderId, this.employeeId).subscribe(res => {
             this.loadRepairOrderData(res[0], res[1])

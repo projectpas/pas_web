@@ -138,7 +138,7 @@ export class EditRoComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.repairOrderId = this._actRoute.snapshot.queryParams['repairOrderId'];
+        this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
         if (this.repairOrderId == undefined && this.repairOrderId == null) {
             this.alertService.showMessage(this.pageTitle, "No Repair order is selected to edit.", MessageSeverity.error);
             return this.route.navigate(['/receivingmodule/receivingpages/app-ro']);
