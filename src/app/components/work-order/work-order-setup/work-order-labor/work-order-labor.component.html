@@ -356,7 +356,7 @@
                       {{ rec.adjustedHours }}
                   </td>
 
-                  <td>
+                  <td> 
                   <p-autoComplete class="p-autoComplete-ctsm employee-autocomplete" field="label" (ngModelChange)="checkValid(3)" disabled name="dataEnteredBy" [dropdown]="true"
                   errorMessage="Records not found" [forceSelection]="true" [suggestions]="dataEnteredByList"
                   (completeMethod)="filterDataEnteredBy($event)" [size]="30" [minLength]="1" appendTo="body"
