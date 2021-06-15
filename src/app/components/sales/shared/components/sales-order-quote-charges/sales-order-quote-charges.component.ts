@@ -144,6 +144,9 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       if (Number(this.costPlusType) == 3) {
         this.chargesFlatBillingAmount = res[0].markupFixedPrice;
       }
+      this.salesOrderChargesList.forEach(ele => {
+        ele.billingAmount = this.formateCurrency(ele.billingAmount);
+      });
       this.isUpdate = true;
     } else {
       this.salesOrderChargesList = [];
@@ -599,6 +602,21 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
   }
   storedData: any = [];
+
+  onChangeBillingMethod(changes) {
+    changes.markupPercentageId = '';
+    changes.billingRate = this.formateCurrency(0);
+    changes.billingAmount = this.formateCurrency(0);
+    if (changes.billingMethodId == '2') {
+      changes.billingAmount = this.formateCurrency(changes.extendedCost);
+    } else {
+      changes.billingAmount = '';
+    }
+  }
+
+  onChangeAmount(charge) {
+    charge.billingAmount = charge.billingAmount ? formatNumberAsGlobalSettingsModule(charge.billingAmount, 2) : 0.00;
+  }
 
   refreshOnDataSaveOrEditORDelete(fromDelete = false) {
     this.isSpinnerVisible = true;
