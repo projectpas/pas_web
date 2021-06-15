@@ -1374,10 +1374,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
             });
         }
     }
-    getShippingDataList(WorkOrderId: number): Observable<any> {
+    getShippingDataList(WorkOrderId: number,workOrderPartNumberId:number): Observable<any> {
 
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getShippingDataList(WorkOrderId));
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}&WorkOrderPartId=${workOrderPartNumberId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getShippingDataList(WorkOrderId,workOrderPartNumberId));
 
         });
 
