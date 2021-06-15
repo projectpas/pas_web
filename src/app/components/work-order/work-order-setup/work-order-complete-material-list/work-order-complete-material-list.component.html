@@ -1053,8 +1053,15 @@
                                 (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            </span>
-                        <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="childRowData.quantityIssued!=0 || childRowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,childRowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                        </span>
+                        <span><button type="button" class="btn nobg btn-delete-cstm"
+                                [disabled]="childRowData.quantityIssued!=0 || childRowData.quantityReserved !=0"
+                                (click)="deleteStockLine(Stockcontent,childRowData)" matTooltip="Remove"
+                                matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                        <span><button type="button" class="btn nobg btn-pluspo-cstm"
+                                (click)="createNewROWorkOrder(childRowData,rowData)" *ngIf="rowData.isRoleUp == false && rowData.provision == 'REPAIR'"
+                                matTooltip="Create RO" matTooltipPosition="above"><i
+                                    class="fa fa-plus"></i></button></span>
                     </td>
                 </tr>
                 <tr class="child-data splitship-child child-data-back "

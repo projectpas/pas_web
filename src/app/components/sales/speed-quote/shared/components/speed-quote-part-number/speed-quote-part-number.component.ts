@@ -651,7 +651,8 @@ export class SpeedQuotePartNumberComponent {
       this.textAreaInfo = notes;
       //this.summaryParts[this.notesSummaryRowIndex].childParts[this.notesIndex].notes = this.textAreaInfo;
       this.summaryParts[this.notesSummaryRowIndex].notes = this.textAreaInfo;
-      this.combineParts(this.summaryParts);
+      this.selectedParts[this.notesSummaryRowIndex].notes = this.textAreaInfo;
+      //this.combineParts(this.summaryParts);
     }
     this.canSaveParts = false;
     $("#textarea-popupNotes").modal("hide");

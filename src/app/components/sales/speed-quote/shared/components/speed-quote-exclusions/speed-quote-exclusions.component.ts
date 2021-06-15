@@ -29,6 +29,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   alertText: string;
   @Input() SQId:number;
   @Input() isViewMode: Boolean;
+  @Output('on-exclusion-load') onExclusionLoad: EventEmitter<number> = new EventEmitter<number>();
   constructor(private commonService: CommonService,
     private authService: AuthService,private itemMasterService: ItemMasterService,
     private changeDetector: ChangeDetectorRef,private _actRoute: ActivatedRoute,
@@ -36,7 +37,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     private modalService: NgbModal,) { }
 
   ngOnInit() {
-    this.loapartItems();
+    //this.loapartItems();
     this.getPercentage();
     //this.id = this.speedQuoteId = this._actRoute.snapshot.params['id'];
     this.speedQuoteId = this.SQId;
@@ -273,6 +274,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
           console.log("partlistdetail" , this.partListData);
       //this.partListData = res;
       console.log("partlist",this.partListData);
+      this.onExclusionLoad.emit(this.partListData.length);
     }, error => this.isSpinnerVisible = false);
   }
   calculateExtendedCost(exclusion): void {

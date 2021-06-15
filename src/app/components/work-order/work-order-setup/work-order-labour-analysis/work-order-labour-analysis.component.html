@@ -130,10 +130,10 @@
                     *ngFor="let col of columns"
                     class="ui-resizable-column"
                     pReorderableRowHandle>
-                    <ng-container *ngIf="col.field!='hours'">
+                    <ng-container *ngIf="col.field !='hours' && col.field !='adjustedHours' && col.field !='adjustments' && col.field !='burdenRateAmount'">
                         {{rowData[col.field]}}
                     </ng-container>
-                    <ng-container *ngIf="col.field=='hours'">
+                    <ng-container *ngIf="col.field=='hours' || col.field=='adjustedHours' || col.field=='adjustments' || col.field=='burdenRateAmount'">
                         <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                     </ng-container> 
                     </td>                    

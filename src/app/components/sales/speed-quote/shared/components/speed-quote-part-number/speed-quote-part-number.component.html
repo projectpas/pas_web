@@ -47,7 +47,7 @@
                                      
                                         <ng-container *ngIf="summaryColumn.field == 'unitSalePrice'">
                                         
-                                          <input class="table-header-input-width" name="unitSalePricetext{{i}}"
+                                          <input class="table-header-input-width text-right" name="unitSalePricetext{{i}}"
                                           [disabled]="summaryPart['isEditPart'] == true"
                                           [ngModel]="summaryPart[summaryColumn.field]"
                                           (ngModelChange)="onChangeUnitSalesPrice(rowIndex,$event)" pInputText type="text"/>
@@ -57,7 +57,7 @@
                                             <td class="width-120" *ngIf="isViewMode == false">
                                             <div class="form-group notes-popup-cstm mat_emo"
                                             style="width: 120px; margin-bottom: 0;">
-                                            <div [innerHTML]="part.notes" class="text_editor_box"></div>
+                                            <div [innerHTML]="summaryPart.notes" class="text_editor_box"></div>
                                             <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
                                                 data-toggle="modal" data-target="#textarea-popupNotes"
                                                 matTooltip="Notes" matTooltipPosition="above"

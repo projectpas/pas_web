@@ -1742,10 +1742,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       if (event instanceof NavigationStart) {
         let url = (<NavigationStart>event).url;
 
-        //if (url !== url.toLowerCase()) {
-        if (url !== url) {
-          //this.router.navigateByUrl((<NavigationStart>event).url.toLowerCase());
-          this.router.navigateByUrl((<NavigationStart>event).url);
+        if (url !== url.toLowerCase()) {
+          //if (url !== url) {
+          this.router.navigateByUrl((<NavigationStart>event).url.toLowerCase());
+          //this.router.navigateByUrl((<NavigationStart>event).url);
         }
 
         if (this.adminExpander && url.indexOf('admin') > 0) {
