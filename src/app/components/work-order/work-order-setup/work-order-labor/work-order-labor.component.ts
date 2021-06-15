@@ -1525,12 +1525,14 @@ if(this.enableToSave==false){
     var result = false;
     for (let task in this.laborForm.workOrderLaborList[0]) {
       this.laborForm.workOrderLaborList[0][task].forEach(
+  
         data => {
-          if (!data.isDeleted && this.isQuote) {
-            if (!data.hours || !data.directLaborOHCost) {
-              result = true;
-            }
-          }
+                // console.log("data",data)
+          // if (!data.isDeleted && this.isQuote) {
+          //   if (!data.hours || !data.directLaborOHCost) {
+          //     result = true;
+          //   }
+          // }
           if (data.adjustments > 0 && !this.isQuote) {
             if (data.memo == '' || !data.memo || data.memo == undefined || data.memo == null) {
               result = true;
@@ -1543,7 +1545,7 @@ if(this.enableToSave==false){
           if ((data.expertiseId == 0 || data.expertiseId == undefined || data.expertiseId == null || data.expertiseId == '') && !this.isQuote) {
             result = true;
           }
-          if (this.laborForm.hoursorClockorScan == this.laborMethods.ClockInOut && data.hours == 0  ) {
+          if (!this.isQuote && this.laborForm.hoursorClockorScan == this.laborMethods.ClockInOut && data.hours == 0  ) {
             result = true;
           }
         }
