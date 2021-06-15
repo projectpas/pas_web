@@ -2298,6 +2298,7 @@ this.getNewMaterialListByWorkOrderId();
     //     return this.result;
     // }
     saveworkOrderLabor(data) {
+        console.log("hours",data);
         this.isAllowLaberSave=false;
         if (this.isSubWorkOrder) {
             data.subWorkOrderLaborHeaderId = 0;
@@ -2400,6 +2401,18 @@ this.getNewMaterialListByWorkOrderId();
                     this.isAllowLaberSave=true;
                     return;
                 }
+                if((element.burdaenRatePercentageId ==0 || element.burdaenRatePercentageId ==undefined || element.burdaenRatePercentageId ==null || element.burdaenRatePercentageId =='') && element.burdenRateAmount==0){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Set Burdaen Rate Percentage or Burden Rate Amount From Settings',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+
+
+
                 if(element.employeeId ==undefined || element.employeeId ==null || element.employeeId ==''){
                     this.alertService.showMessage(
                         this.taskName,
