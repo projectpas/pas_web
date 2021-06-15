@@ -1234,20 +1234,28 @@ export class AppComponent implements OnInit, AfterViewInit {
       },
 
 
+
       {
         label: 'Reports',
-        // icon: 'fa fa-fw fa-list-alt',
+        // icon: 'fa fa-fw fa-user',
         items: [
+         
           [
-            // {
-              // label: '',
-              // items: [
-                { label: 'Capabilities ', routerLink: '/#' },
-          { label: 'CMM', routerLink: '/#' },
-          { label: 'Tools', routerLink: '/#' },
-              // ],
-            // },
-           
+            {
+              label: 'Reports',
+              items: [
+                { label: 'Capabilities', command: (event?: any) => {
+                  this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCapabilities&rs:Command=Render');
+                } },
+{ label: 'CMM', routerLink: '/#' },
+{
+          label: 'Tools', command: (event?: any) => {
+            this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+          }
+        },
+              ],
+            },
+          
           ],
          
         ],
@@ -1523,6 +1531,34 @@ export class AppComponent implements OnInit, AfterViewInit {
            
           ],
          
+        ],
+      },
+
+      {
+        label: 'Account',
+        // icon: '',
+        items: [
+          [
+            {
+              label: 'Account',
+              items: [
+                { label: 'Profile', command: (event?: any) => {
+                  this.router.navigateByUrl('/settings');
+                } }, 
+                { label: 'Update Password', command: (event?: any) => {
+                  this.router.navigateByUrl('/updatepassword');
+                } }, 
+                { label: 'Settings', command: (event?: any) => {
+                  this.router.navigateByUrl('/settings#preferences');
+                } },  
+                { label: 'Logout', command: (event?: any) => {
+                  this.router.navigateByUrl('/');
+                } },          
+              ],
+            },
+           
+          ],
+
         ],
       },
     ];
