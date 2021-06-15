@@ -418,7 +418,7 @@
                                     <td class="table-column-width" *ngFor="let col of columns">
                                         {{ col.field != 'isPrimary' ? rowData[col.field] : ''}}
                                     </td>
-                                    <td class="table-column-width">
+                                    <td class="table-column-width text-center">
                                         <input *ngIf="rowData.isPrimary" disabled type="checkbox" name="isPrimary"
                                             checked>
                                         <input *ngIf="!rowData.isPrimary" (click)="makePrimary(rowData.employeeId)"
