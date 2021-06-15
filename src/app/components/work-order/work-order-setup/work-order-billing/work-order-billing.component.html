@@ -5,9 +5,9 @@
               <label></label>
               <div class="form-group invoice-button-div">
                   <button *ngIf="isView == false" type="button" class="btn  submit-btn btn btn-primary"
-                      [disabled]="disableCreateInvoiceBtn" (click)="PerformWorkBilling()">Invoice</button>
+                       (click)="PerformWorkBilling()">Create Invoice</button>
                       <button *ngIf="isView == false && quotestatusofCurrentPart == 'Approved'" type="button" class="btn  submit-btn btn btn-primary"
-                      [disabled]="disableCreateInvoiceBtn" (click)="PerformQouteBilling()">Invoice for Qoute</button>
+                       (click)="PerformQouteBilling()">Create Invoice for Qoute</button>
               </div>
           </div>
       </div>
@@ -43,6 +43,7 @@
                                   <th>Ready?</th>
                                   <th>Invoice Date</th>
                                   <th>Invoice Num </th>
+                                  <th>Version No </th>
                                   <th>Shipping Ref</th>
                                   <th>Line #</th>
                                   <th>PN</th>
@@ -75,6 +76,9 @@
                                   <td>
                                       {{ bill.invoiceNo }}
                                   </td>
+                                  <td>
+                                    {{ bill.versionNo }}
+                                </td>
                                   <td>
                                       {{ bill.woShippingNum }}
                                   </td>
@@ -110,20 +114,21 @@
                                           <a class="btn nobg" matTooltip="Invoice" matTooltipPosition="above"
                                               (click)="ViewInvoice(bill);"><i class="fa fa-print"></i></a>
                                       </span>
-                                      <span>
+                                      <!-- <span>
                                           <button class="btn nobg" *ngIf="bill.qtyBilled == 0" type="submit"
                                               (click)="onSelectPartNumber(bill)" matTooltip="Create Billing"
                                               matTooltipPosition="above" style="font-weight: bold;"
                                               [disabled]="!bill.selected">
                                               <i class="fa fa-plus"></i></button>
                                       </span>
-                                      <span>
-                                          <button [hidden]="true" class="btn nobg" mat-icon-button
-                                              (click)="shippingEdit(bill, pickticketieminterface)" matTooltip="Edit"
-                                              matTooltipPosition="above" style="font-weight: bold;">
-                                              <i class="fa fa-pencil"></i>
-                                          </button>
-                                      </span>
+
+                                      <span *ngIf="bill.qtyBilled > 0">
+                                        <button class="btn nobg" type="submit"
+                                            (click)="onSelectPartNumber(bill)" matTooltip="Create Billing"
+                                            matTooltipPosition="above" style="font-weight: bold;"
+                                            >
+                                            <i class="fa fa-plus"></i></button>
+                                    </span> -->
                                   </td>
                               </tr>
                           </tbody>
@@ -474,9 +479,9 @@
                                 name="soldcustomerName"
                                 errorMessage="Records not found"
                                 [forceSelection]="true"
-                                (onSelect)="getSiteNamesBySoldCustomerId($event)"
+                                (onSelect)="onselectcustomergetSoldsite($event)"
                                 [suggestions]="customerNamesList"
-                                (completeMethod)="filterCustomerName($event)"
+                                (completeMethod)="filterCustomerNames($event)"
                                 (onKeyUp)="clearAddress('SoldTo' , $event.target.value)"
                                 [size]="30"
                                 [minLength]="1"
@@ -502,7 +507,7 @@
                                 [forceSelection]="true"
                                 (onSelect)="onselectcustomergetsite($event)"
                                 [suggestions]="customerNamesList"
-                                (completeMethod)="filterCustomerName($event)"
+                                (completeMethod)="filterCustomerNames($event)"
                                 (onKeyUp)="clearAddress('ShipTo', $event.target.value)"
                                 [size]="30"
                                 [minLength]="1"
@@ -836,7 +841,7 @@
                                   </div>
                               </td>
                               <td class="text-right">
-                               {{billingorInvoiceForm.totalWorkOrderCost}}
+                               {{ formateCurrency(billingorInvoiceForm.totalWorkOrderCost)}}
                               </td>
                               <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
                                   <div class="form-group" *ngIf="billingorInvoiceForm.totalWorkOrder">
@@ -855,7 +860,7 @@
                               </td>
                               
                               <td class="text-right" *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'" >
-                                  {{billingorInvoiceForm.totalWorkOrderCostPlus }}
+                                  {{formateCurrency(billingorInvoiceForm.totalWorkOrderCostPlus) }}
                               </td>
                               <td  *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus'" >
                                 <input type="number" name="totalWorkOrderCostPlus" (change)="onChangeWOCostPlus();" class="form-control wo-input" [(ngModel)]="billingorInvoiceForm.totalWorkOrderCostPlus " [disabled]="isViewMode" />
@@ -877,7 +882,7 @@
                                   </div>
                             </td>
                             <td class="text-right">
-                                {{billingorInvoiceForm.materialCost}}
+                                {{formateCurrency(billingorInvoiceForm.materialCost)}}
                             </td>
                             <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'"  >
                                 <div class="form-group" *ngIf="billingorInvoiceForm.material">
@@ -895,7 +900,7 @@
                                     </div>
                             </td>
                             <td class="text-right" *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'" >
-                                {{billingorInvoiceForm.materialCostPlus  }}
+                                {{formateCurrency(billingorInvoiceForm.materialCostPlus)  }}
                             </td>
                             <td  *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus' && !billingorInvoiceForm.totalWorkOrder" >
                                 <input type="number" name="materialCostPlus" (change)="onChangeMaterialCostPlus(); calculateGrandTotal();" class="form-control wo-input" [(ngModel)]="billingorInvoiceForm.materialCostPlus"  [disabled]="isViewMode"/>
@@ -917,7 +922,7 @@
                                   </div>
                             </td>
                             <td class="text-right">
-                                {{billingorInvoiceForm.laborOverHeadCost}}
+                                {{formateCurrency(billingorInvoiceForm.laborOverHeadCost)}}
                             </td>   
           
                             <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
@@ -936,7 +941,7 @@
                                     </div>
                             </td>
                             <td class="text-right" *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
-                                {{billingorInvoiceForm.laborOverHeadCostPlus   }}
+                                {{formateCurrency(billingorInvoiceForm.laborOverHeadCostPlus)   }}
                             </td>
                             <td  *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus' && !billingorInvoiceForm.totalWorkOrder" >
                                 <input type="number" name="laborOverHeadCostPlus" (change)="onChangeLaborOHCostPlus(); calculateGrandTotal();" class="form-control wo-input" [(ngModel)]="billingorInvoiceForm.laborOverHeadCostPlus"  
@@ -958,7 +963,7 @@
                                   </div>
                               </td>
                               <td  class="text-right">
-                                  {{billingorInvoiceForm.miscChargesCost}}
+                                  {{formateCurrency(billingorInvoiceForm.miscChargesCost)}}
                               </td>
                               <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
                                   <div class="form-group" *ngIf="billingorInvoiceForm.miscCharges">
@@ -976,10 +981,52 @@
                                       </div>
                               </td>
                               <td class="text-right" *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
-                                  {{billingorInvoiceForm.miscChargesCostPlus}}
+                                  {{formateCurrency(billingorInvoiceForm.miscChargesCostPlus)}}
                               </td>
                               <td  *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus' && !billingorInvoiceForm.totalWorkOrder" >
                                   <input type="number" name="miscChargesCostPlus" (change)="onChangeMiscChCostPlus(); calculateGrandTotal();" class="form-control wo-input" [(ngModel)]="billingorInvoiceForm.miscChargesCostPlus" 
+                                  [disabled]="isViewMode" />
+                                </td>
+          
+                          </tr>
+
+                          <tr>
+                            <td>
+                                <div class="form-group">
+                                    <p-checkbox
+                                      class="p-checkbox-label-2"
+                                      (onChange)="resetFreight(); calculateGrandTotal();"
+                                      name="freight"
+                                      binary="false"
+                                      label="freight"
+                                      [(ngModel)]="billingorInvoiceForm.freight"
+                                      [disabled]="billingorInvoiceForm.totalWorkOrder || isViewMode"
+                                    ></p-checkbox>
+                                  </div>
+                              </td>
+                              <td  class="text-right">
+                                  {{formateCurrency(billingorInvoiceForm.freightCost)}}
+                              </td>
+                              <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                  <div class="form-group" *ngIf="billingorInvoiceForm.freight">
+                                      <p-dropdown
+                                        placeholder="Select "
+                                        name="freightVal"
+                                        #freightVal="ngModel"
+                                        [options]="markUpList"
+                                        class="p-dropdown-custom-md"
+                                        (onChange)="calculateFreightCostPlus($event.value); calculateGrandTotal();"
+                                        [(ngModel)]="billingorInvoiceForm.freightValue"
+                                        [disabled]="isViewMode"
+                                      >
+                                      </p-dropdown>
+                                      </div>
+                              </td>
+                              <td class="text-right" *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                  {{formateCurrency(billingorInvoiceForm.freightCostPlus)}}
+                              </td>
+                              <td  *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus' && !billingorInvoiceForm.totalWorkOrder" >
+                                  <input type="number" name="freightCostPlus" (change)="onChangeFreightCostPlus(); calculateGrandTotal();" class="form-control wo-input" [(ngModel)]="billingorInvoiceForm.freightCostPlus" 
                                   [disabled]="isViewMode" />
                                 </td>
           
@@ -1037,7 +1084,7 @@
                                     [(ngModel)]="billingorInvoiceForm.shipViaId"
                                      (onChange)="changeOfShipVia($event.value)"
                                      [disabled]="isViewMode"
-                                  >
+                                  required >
                                   </p-dropdown>
                                   </div>
                                   <div class="form-group ">
@@ -1087,8 +1134,8 @@
                 </div>
           
                 <div class="float-right" *ngIf="!isViewMode">
-                  <button class="btn btn-primary pull-right"  *ngIf="!isEditBilling" (click)="GenerateInvoice()" >Save</button>
-                  <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button>
+                  <button class="btn btn-primary pull-right"  (click)="GenerateInvoice()" [disabled]="!billinForm.valid">Save</button>
+                  <!-- <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button> -->
                 </div>
               </form>
             </div>

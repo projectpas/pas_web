@@ -63,7 +63,7 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" class="table-column-width">
+                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="table-column-width">
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
@@ -73,7 +73,7 @@
                         {{ col.header }}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th class="table-actions-column">
+                    <th class="width-100">
                         Actions
                     </th>
                 </tr>
@@ -86,7 +86,7 @@
                             *ngIf="col.field == 'contactDate'" name="contactDate"
                             (change)="dateFilterForTable($event.target.value, col.field)" />
                     </th>
-                    <th class="table-actions-column"></th>
+                    <th class="width-100"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -108,7 +108,7 @@
                           }}
                     </td>
                     </ng-container>
-                    <td class="action-icons-cstm table-column-width">
+                    <td class="width-100">
                         <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#viewEmail"
                                 (click)="emailView(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                     class="fa fa-eye"></i></a> </span>
@@ -236,7 +236,7 @@
                                         {{audit.vendorContact}}</td>
                                     <td 
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'emailBody', audit.emailBody)  ? 'black' : 'red'  }">
-                                        <p class="m-0 p-0" [innerHTML]="audit.emailBody"></p>
+                                        <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.emailBody)" [innerHTML]="audit.emailBody"></p>
                                     </td>
                                     <td>
                                 <tr *ngFor="let x of audit.attachmentDetails">
@@ -481,7 +481,8 @@
                     </p>
                     <p class="email-content">
                         <span class="label" style="float: left;"><strong> Email Content: </strong></span>
-                        <span class="value m-0 p-0 p_textEditor" [innerHTML]="emailViewData.emailBody"></span>
+                        <span class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                         [matTooltip]="parsedText(emailViewData.emailBody)" [innerHTML]="emailViewData.emailBody"></span>
                     </p>
                     <!-- <div>
                         <label class="label attachments-label-width">Attachments:</label>

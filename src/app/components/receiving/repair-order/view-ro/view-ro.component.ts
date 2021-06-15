@@ -103,7 +103,7 @@ export class ViewRoComponent {
     }
 
     ngOnInit() {
-        this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
+        this.repairOrderId = this._actRoute.snapshot.queryParams['repairOrderId'];
         this.getReceivingROHeaderById(this.repairOrderId);
         this.getStockDetailsOnLoad();
         this.localData = [

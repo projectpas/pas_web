@@ -269,6 +269,8 @@ export class WorkOrderAddComponent implements OnInit {
     wflowitems:any=[];
     showWorkflowLabel:any='View WF';
     currentDate=new Date();
+    taskName:any;
+    isAllowLaberSave:boolean=false;
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -285,6 +287,7 @@ export class WorkOrderAddComponent implements OnInit {
         private salesQuoteService: SalesQuoteService,
     ) {
         this.moduleName = 'Work Order';
+        
     }
 
   ngOnInit() {
@@ -2290,27 +2293,161 @@ this.getNewMaterialListByWorkOrderId();
         }
     }
 
+    // formWorkerOrderLaborJson(data) {
 
+    //     return this.result;
+    // }
     saveworkOrderLabor(data) {
-        this.isSpinnerVisible = true;
+        this.isAllowLaberSave=false;
         if (this.isSubWorkOrder) {
             data.subWorkOrderLaborHeaderId = 0;
             data.subWOPartNoId = this.subWOPartNoId,
                 data.workOrderId = this.subWorkOrderDetails.workOrderId,
                 data.subWorkOrderId = this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
         }
-        this.workOrderService.createWorkOrderLabor(this.formWorkerOrderLaborJson(data), this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.islaborCreated=true;
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saved Work Order Labor Succesfully',
-                MessageSeverity.success
-            );
-        },
-            err => {
-                this.handleError(err);
-            })
+        if (this.isSubWorkOrder == true) {
+            this.result = {
+                "subWorkOrderLaborHeaderId": data['subWorkOrderLaborHeaderId'] ? data['subWorkOrderLaborHeaderId'] : 0,
+                "subWorkOrderId": data['subWorkOrderId'] ? data['subWorkOrderId'] : this.subWorkOrderDetails.subWorkOrderId,
+                "subWOPartNoId": data['subWOPartNoId'] ? data['subWOPartNoId'] : this.subWorkOrderDetails.subWOPartNoId,
+                "workFlowWorkOrderId": this.workFlowWorkOrderId,
+                "workOrderId": data['workOrderId'],
+                "dataEnteredBy": data['dataEnteredBy'],
+                "expertiseId": data['expertiseId'],
+                "employeeId": data['employeeId'],
+                "isTaskCompletedByOne": data['isTaskCompletedByOne'],
+                "workFloworSpecificTaskorWorkOrder": data['workFloworSpecificTaskorWorkOrder'],
+                "workOrderHoursType": (data['workFloworSpecificTaskorWorkOrder'] == 'workFlow') ? 1 : (data['workFloworSpecificTaskorWorkOrder'] == 'specificTasks') ? 2 : 3,
+                "hoursorClockorScan": data['hoursorClockorScan'],
+                "masterCompanyId": this.authService.currentUser.masterCompanyId,
+                "CreatedBy": "admin",
+                "UpdatedBy": "admin",
+                "IsActive": true,
+                "isDeleted": data['IsDeleted'],
+                "workOrderLaborHeaderId": data['workOrderLaborHeaderId'],
+                "totalWorkHours": data['totalWorkHours'],
+                "labourMemo": data['labourMemo'],
+                "LaborList": [
+                ],
+                "WorkOrderQuoteTask": data['WorkOrderQuoteTask'],
+
+            }
+            data.WorkOrderQuoteTask.forEach(element => {
+                element.subWorkOrderLaborId = element.subWorkOrderLaborId ? element.subWorkOrderLaborId : 0;
+                element.subWorkOrderLaborHeaderId = element.subWorkOrderLaborHeaderId ? element.subWorkOrderLaborHeaderId : 0;
+            });
+        } else {
+            this.result = {
+                "workFlowWorkOrderId": this.workFlowWorkOrderId,
+                "workOrderId": data['workOrderId'],
+                "dataEnteredBy": data['dataEnteredBy'],
+                "expertiseId": data['expertiseId'],
+                "employeeId": data['employeeId'],
+                "isTaskCompletedByOne": data['isTaskCompletedByOne'],
+                "workFloworSpecificTaskorWorkOrder": data['workFloworSpecificTaskorWorkOrder'],
+                "workOrderHoursType": (data['workFloworSpecificTaskorWorkOrder'] == 'workFlow') ? 1 : (data['workFloworSpecificTaskorWorkOrder'] == 'specificTasks') ? 2 : 3,
+                "hoursorClockorScan": data['hoursorClockorScan'],
+                "masterCompanyId": this.authService.currentUser.masterCompanyId,
+                "CreatedBy": "admin",
+                "UpdatedBy": "admin",
+                "IsActive": true,
+                "isDeleted": data['IsDeleted'],
+                "workOrderLaborHeaderId": data['workOrderLaborHeaderId'],
+                "totalWorkHours": data['totalWorkHours'],
+                "labourMemo": data['labourMemo'],
+                "LaborList": [
+
+                ],
+                "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
+            }
+        }
+        for (let labList in data.workOrderLaborList) {
+            for (let labSubList of data.workOrderLaborList[labList]) {
+                if (labSubList && labSubList['expertiseId'] != null){
+                    labSubList.masterCompanyId=this.currentUserMasterCompanyId;
+                    labSubList.directLaborOHCost= labSubList.directLaborOHCost ? labSubList.directLaborOHCost :0;
+                    labSubList.totalCost= labSubList.totalCost ? labSubList.totalCost :0;
+                    labSubList.burdaenRatePercentageId= labSubList.burdaenRatePercentageId !=0 ? labSubList.burdaenRatePercentageId :null
+                    this.result.LaborList.push(labSubList);
+                    this.result.expertiseId=labSubList['expertiseId'];
+                    this.result.employeeId=labSubList['employeeId'];
+                }
+            }
+        }
+        if(this.result &&  this.result.LaborList && this.result.LaborList.length==0){
+ this.alertService.showMessage(
+            this.moduleName,
+            'Add Atleast one Task',
+            MessageSeverity.warn
+        );
+        return;
+        }
+        if(this.result &&  this.result.LaborList && this.result.LaborList.length!=0){
+            this.isAllowLaberSave=false;
+            this.taskName='';
+            this.result.LaborList.forEach(element => {
+                this.taskList.forEach(subel => {
+    if(subel.taskId==element.taskId){
+        this.taskName=subel.description;
+    }
+});
+                if(element.expertiseId ==undefined || element.expertiseId ==null || element.expertiseId ==''){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Expertise',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+                if(element.employeeId ==undefined || element.employeeId ==null || element.employeeId ==''){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Employee Name',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+                if( Number(element.hours.toString().split(',').join('')) ==undefined || Number(element.hours.toString().split(',').join('')) ==null ||  element.hours ==''   || Number(element.hours.toString().split(',').join('')) <=0){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Hours',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+                if( Number(element.adjustments.toString().split(',').join('')) >0 &&  element.memo ==''){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Memo',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                } 
+            });
+        }
+       
+      
+        // this.formWorkerOrderLaborJson(data)
+   if(this.isAllowLaberSave==false){
+    this.isSpinnerVisible = true;
+    this.workOrderService.createWorkOrderLabor(this.result, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.isSpinnerVisible = false;
+        this.isAllowLaberSave=false;
+        this.islaborCreated=true;
+        this.alertService.showMessage(
+            this.moduleName,
+            'Saved Work Order Labor Succesfully',
+            MessageSeverity.success
+        );
+    },
+        err => {
+            this.handleError(err);
+        })
+   }
     }
 
     openCurrency(content) {
@@ -2441,82 +2578,7 @@ this.getNewMaterialListByWorkOrderId();
         }
     } 
 
-    formWorkerOrderLaborJson(data) {
-        if (this.isSubWorkOrder == true) {
-            this.result = {
-                "subWorkOrderLaborHeaderId": data['subWorkOrderLaborHeaderId'] ? data['subWorkOrderLaborHeaderId'] : 0,
-                "subWorkOrderId": data['subWorkOrderId'] ? data['subWorkOrderId'] : this.subWorkOrderDetails.subWorkOrderId,
-                "subWOPartNoId": data['subWOPartNoId'] ? data['subWOPartNoId'] : this.subWorkOrderDetails.subWOPartNoId,
-                "workFlowWorkOrderId": this.workFlowWorkOrderId,
-                "workOrderId": data['workOrderId'],
-                "dataEnteredBy": data['dataEnteredBy'],
-                "expertiseId": data['expertiseId'],
-                "employeeId": data['employeeId'],
-                "isTaskCompletedByOne": data['isTaskCompletedByOne'],
-                "workFloworSpecificTaskorWorkOrder": data['workFloworSpecificTaskorWorkOrder'],
-                "workOrderHoursType": (data['workFloworSpecificTaskorWorkOrder'] == 'workFlow') ? 1 : (data['workFloworSpecificTaskorWorkOrder'] == 'specificTasks') ? 2 : 3,
-                "hoursorClockorScan": data['hoursorClockorScan'],
-                "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
-                "IsActive": true,
-                "isDeleted": data['IsDeleted'],
-                "workOrderLaborHeaderId": data['workOrderLaborHeaderId'],
-                "totalWorkHours": data['totalWorkHours'],
-                "labourMemo": data['labourMemo'],
-                "LaborList": [
-                ],
-                "WorkOrderQuoteTask": data['WorkOrderQuoteTask'],
 
-            }
-            data.WorkOrderQuoteTask.forEach(element => {
-                element.subWorkOrderLaborId = element.subWorkOrderLaborId ? element.subWorkOrderLaborId : 0;
-                element.subWorkOrderLaborHeaderId = element.subWorkOrderLaborHeaderId ? element.subWorkOrderLaborHeaderId : 0;
-            });
-        } else {
-            this.result = {
-                "workFlowWorkOrderId": this.workFlowWorkOrderId,
-                "workOrderId": data['workOrderId'],
-                "dataEnteredBy": data['dataEnteredBy'],
-                "expertiseId": data['expertiseId'],
-                "employeeId": data['employeeId'],
-                "isTaskCompletedByOne": data['isTaskCompletedByOne'],
-                "workFloworSpecificTaskorWorkOrder": data['workFloworSpecificTaskorWorkOrder'],
-                "workOrderHoursType": (data['workFloworSpecificTaskorWorkOrder'] == 'workFlow') ? 1 : (data['workFloworSpecificTaskorWorkOrder'] == 'specificTasks') ? 2 : 3,
-                "hoursorClockorScan": data['hoursorClockorScan'],
-                "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
-                "IsActive": true,
-                "isDeleted": data['IsDeleted'],
-                "workOrderLaborHeaderId": data['workOrderLaborHeaderId'],
-                "totalWorkHours": data['totalWorkHours'],
-                "labourMemo": data['labourMemo'],
-                "LaborList": [
-
-                ],
-                "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
-            }
-        }
-        for (let labList in data.workOrderLaborList) {
-            for (let labSubList of data.workOrderLaborList[labList]) {
-                if (labSubList && labSubList['expertiseId'] != null){
-                    labSubList.masterCompanyId=this.currentUserMasterCompanyId;
-                    // labSubList.burdenRateAmount=
-                    // labSubList.directLaborOHCost
-                    // labSubList.directLaborOHCost
-                    // labSubList.directLaborOHCost
-                    labSubList.directLaborOHCost= labSubList.directLaborOHCost ? labSubList.directLaborOHCost :0;
-                    labSubList.totalCost= labSubList.totalCost ? labSubList.totalCost :0;
-                    labSubList.burdaenRatePercentageId= labSubList.burdaenRatePercentageId !=0 ? labSubList.burdaenRatePercentageId :null
-                    this.result.LaborList.push(labSubList);
-                    this.result.expertiseId=labSubList['expertiseId'];
-                    this.result.employeeId=labSubList['employeeId'];
-                }
-            }
-        }
-        return this.result;
-    }
     saveReservedPartorIssue(alternatePartData) {  
         alternatePartData.masterCompanyId=alternatePartData.masterCompanyId ? alternatePartData.masterCompanyId : this.currentUserMasterCompanyId;
         this.gridActiveTab == '';
@@ -3870,7 +3932,7 @@ this.woPartId=rowData.id;
         this.currentRowIndex=currentIndex;
         if (ev.target.checked) {
             $('#workFlowTransfer').modal('show'); 
-
+ 
         }else{
             $('#workFlowTransfer').modal('show');   
         }
@@ -3915,11 +3977,14 @@ this.woPartId=rowData.id;
         data.masterCompanyId = this.currentUserMasterCompanyId;
         data.workOrderPartNumberId = this.workOrderPartNumberId;
         data.createdBy = this.userName;
-
+        data.createdById=this.authService.currentEmployee.employeeId;
         this.workOrderService.transferWorkflow(data).subscribe(res => {
             this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = true;
             this.showWaringForWorkflow();
             
+this.reloadPageForWorkflow();
+
+
             this.alertService.showMessage(
                 this.moduleName,
                 'Transfered WorkflowData to Work Order',
@@ -3927,6 +3992,26 @@ this.woPartId=rowData.id;
             ); 
         });
     }
+    reloadPageForWorkflow(){
+        this.transferWorkflowData=false;
+        if(this.gridActiveTab == 'materialList'){
+            this.getNewMaterialListByWorkOrderId();   
+    }else if(this.gridActiveTab == 'labor'){
+        this.getWorkFlowLaborList(); 
+}
+else if(this.gridActiveTab == 'equipment'){
+  
+    this.transferWorkflowData=true;
+    this.gridActiveTab = '';
+    this.isSubWorkOrder=true;
+    this.isSubWorkOrder=false;
+    this.gridActiveTab = 'equipment';
+}else if(this.subTabOtherOptions && this.subTabOtherOptions == 'charges'){
+    console.log('equpppppp')
+    this.getChargesListByWorkOrderId();
+} 
+    }
+    transferWorkflowData:boolean=false;
     closeTranferFlow(){
 
         if(this.workflowTransfer.Material ||  this.workflowTransfer.Labor ||  this.workflowTransfer.Tools|| this.workflowTransfer.Charges)

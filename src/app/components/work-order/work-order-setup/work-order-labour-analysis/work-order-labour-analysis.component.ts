@@ -76,7 +76,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                       (res: any) => {
                           this.isSpinnerVisible = false;
                           if (res) {
-                              this.data = res;
+                            this.data = res;
                           }
                       },
                       err => {
@@ -107,9 +107,9 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
         { field: "partDescription", header: "PN Description" },
         { field: 'customer', header: 'Customer'  },
         { field: 'hours', header: 'Act Hours'},
-        { field: 'stdHours', header: 'Std Hours' },
-        { field: 'burdenRateAmount', header: 'Var. Hours' },
-        { field: 'varPercentage', header: 'Var %'},
+        { field: 'adjustedHours', header: 'Adj Hours' },
+        { field: 'adjustments', header: 'Var. Hours' },
+        { field: 'burdenRateAmount', header: 'Burden Rate'},
         { field: 'stage', header: 'Stage' },
         { field: 'status', header: 'Status' },
       ];
@@ -126,10 +126,13 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
           { field: 'action', header: 'Task' },
           { field: 'expertise', header: 'Expertise' },
           { field: 'employeeName', header: 'Employee' },
-          { field: 'hours', header: 'Act Hours',width:"100px" },
-          { field: 'stdHours', header: 'Std Hours',width:"100px" },
-          { field: 'burdenRateAmount', header: 'Var. Hours',width:"100px" },
-          { field: 'varPercentage', header: 'Var %',width:"100px" },
+          { field: 'billableOrNonBillable', header: 'Billable /NonBillable' },
+          { field: 'hours', header: 'Act Hours', width:"100px"},
+          { field: 'adjustedHours', header: 'Adj Hours', width:"100px" },
+          { field: 'adjustments', header: 'Var. Hours', width:"100px" },
+          { field: 'burdenRateAmount', header: 'Burden Rate' ,width:"100px"},
+          // { field: 'burdenRateAmount', header: 'Var. Hours',width:"100px" },
+          // { field: 'varPercentage', header: 'Var %',width:"100px" },
           { field: 'stage', header: 'Stage' },
           { field: 'status', header: 'Status' },
         ];

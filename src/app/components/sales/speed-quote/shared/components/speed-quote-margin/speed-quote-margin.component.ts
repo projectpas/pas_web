@@ -86,6 +86,7 @@ export class SpeedQuoteMarginComponent implements OnInit {
   calculate() {
     if (this.part) {
       this.calculatePart();
+      
     }
   }
 

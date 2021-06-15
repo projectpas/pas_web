@@ -39,10 +39,10 @@ input[type=number], input[type=text], input[type=email], select {
 }
 .email-content{
     max-height: 300px;
-    overflow: scroll;
-    span p{
-        overflow: scroll;
-    }
+    // overflow: scroll;
+    // span p{
+    //     overflow: scroll;
+    // }
 }
 .communication-buttons-align{
     margin-bottom: 12px !important;

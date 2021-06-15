@@ -315,7 +315,7 @@
                                     #approverId="ngModel">
                                 </p-autoComplete>
                                 <button type="button" class="btn btn-primary m-t-10 pull-right but_stl"
-                                    (click)="onAddApprover();">Add</button>
+                                [disabled]="enableheaderSaveBtn" (click)="onAddApprover();">Add</button>
                             </div>
                         </div>
                     </div>
@@ -418,7 +418,7 @@
                                     <td class="table-column-width" *ngFor="let col of columns">
                                         {{ col.field != 'isPrimary' ? rowData[col.field] : ''}}
                                     </td>
-                                    <td class="table-column-width">
+                                    <td class="table-column-width text-center">
                                         <input *ngIf="rowData.isPrimary" disabled type="checkbox" name="isPrimary"
                                             checked>
                                         <input *ngIf="!rowData.isPrimary" (click)="makePrimary(rowData.employeeId)"

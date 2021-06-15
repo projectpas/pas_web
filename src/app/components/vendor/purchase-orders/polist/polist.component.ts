@@ -1043,7 +1043,7 @@ export class PolistComponent implements OnInit {
     }
 
     public getSelectedRow(rowData) {
-        this.receivingService.purchaseOrderId = rowData.purchaseOrderId;
+        this.receivingService.purchaseOrderId = rowData.purchaseOrderId;        
         this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receivng-po?purchaseOrderId=${rowData.purchaseOrderId}`);
     }
 

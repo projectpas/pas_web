@@ -130,35 +130,34 @@
                                 </label> -->
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].name : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.siteName : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].address1 : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.addressLine1 : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].address2 : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.addressLine2 : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].city : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.city : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].stateOrProvince : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.state : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].postalCode : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.postalCode : ''}}</label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].countryName : ''}}</label>
+                                    disabled>{{this.workOrderInvoice.billToAddress ? this.workOrderInvoice.billToAddress.country : ''}}</label>
                             </div>
                             <div class="sold-block-div">
-                                <label class="col-sm-12 first-block-label"
-                                    disabled>{{this.workOrderInvoice.soldToDetails ? this.workOrderInvoice.soldToDetails[0].email : ''}}</label>
+                                <label class="col-sm-12 first-block-label" disabled></label>
                             </div>
                             <div class="sold-block-div">
                                 <label class="col-sm-12 first-block-label" disabled></label>
@@ -262,7 +261,7 @@
                         </thead>
                         <tbody>
                             <ng-container
-                                *ngFor="let child of this.workOrderInvoice.salesOrderListToPrint; let i = index;">
+                                *ngFor="let child of this.workOrderInvoice.workOrderListToPrint; let i = index;">
                                 <tr>
                                     <td rowspan="3">{{i+1}}</td>
                                     <td colspan="3" rowspan="3"> PN: {{child.pNumber}}
@@ -343,26 +342,25 @@
                             <tr>
                                 <td class="border-transparent" colspan="2">Material Cost</td>
                                 <td style="text-align: right;">
-                                    {{this.workOrderInvoice.materialCost | number : '1.2-2'}}</td>
-                            </tr>
-                            <tr>
-                                <td class="border-transparent" colspan="2">MISC CHARGES</td>
-                                <td style="text-align: right;">
-                                    {{this.workOrderInvoice.miscCharges | number : '1.2-2'}}</td>
+                                    {{this.workOrderInvoice.materialCostPlus | number : '1.2-2'}}</td>
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2">Labor Over HeadCost</td>
                                 <td style="text-align: right;">
-                                    {{this.workOrderInvoice.laborOverHeadCost | number : '1.2-2'}}</td>
+                                    {{this.workOrderInvoice.laborOverHeadCostPlus | number : '1.2-2'}}</td>
                             </tr>
                             <tr>
-                                <td class="border-transparent" colspan="2">
-                                    <b>TOTAL</b>
-                                </td>
+                                <td class="border-transparent" colspan="2">MISC CHARGES</td>
                                 <td style="text-align: right;">
-                                    <b> {{this.workOrderInvoice.grandTotal | number : '1.2-2'}}</b>
-                                </td>
+                                    {{this.workOrderInvoice.miscChargesCostPlus | number : '1.2-2'}}</td>
                             </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2">FREIGHT Cost</td>
+                                <td style="text-align: right;">
+                                    {{this.workOrderInvoice.freightCostPlus | number : '1.2-2'}}</td>
+                            </tr>
+                            
+
                             <tr></tr>
                             <tr>
                                 <td class="border-transparent" colspan="2"></td>
@@ -372,8 +370,13 @@
                                 <td class="border-transparent" colspan="3">
                                     <b>Payment by check Mail Wire:</b>
                                 </td>
-                                <td class="border-transparent" colspan="2">DEPOSIT</td>
-                                <td style="text-align: right;"> 0.00 </td>
+                                <td class="border-transparent" colspan="2">
+                                    <b>TOTAL</b>
+                                </td>
+                                <td style="text-align: right;">
+                                    <b> {{this.workOrderInvoice.grandTotal | number : '1.2-2'}}</b>
+                                </td>
+                            
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2"></td>
@@ -385,29 +388,32 @@
                                     <div style="width: 100%; height: 100%;"
                                         [innerHTML]="this.workOrderInvoice.wireTransferBankingInformation"></div>
                                 </td>
-                                <td class="border-transparent" colspan="2">
-                                    <b>BALANCE DUE</b>
-                                </td>
-                                <td style="text-align: right;">
-                                    <b>{{this.workOrderInvoice.balanceDue | number : '1.2-2'}}</b>
-                                </td>
+                                <td class="border-transparent" colspan="2">DEPOSIT</td>
+                                <td style="text-align: right;"> 0.00 </td>
+                               
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2"></td>
                                 <!-- <td class="border-transparent" colspan="2">Box 145478</td> -->
                                 <!-- <td class="border-transparent" colspan="3">1454 New York Ave - Suites 1000
                                     </td> -->
-                                <td class="border-transparent" style="border-bottom:1px solid black" colspan="2">
-                                    CURRENCY</td>
-                                <td style="text-align: right;">
-                                    <b>{{this.workOrderInvoice.currency}}</b>
-                                </td>
+                                    <td class="border-transparent" colspan="2">
+                                        <b>BALANCE DUE</b>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <b>{{this.workOrderInvoice.balanceDue | number : '1.2-2'}}</b>
+                                    </td>
+                             
                             </tr>
                             <tr>
                                 <td colspan="2"></td>
                                 <!-- <td class="border-transparent" colspan="2">Grapevine, TX 74584</td> -->
                                 <!-- <td class="border-transparent" colspan="3">New York, 12487, USA</td> -->
-                                <td class="border-transparent" colspan="3"></td>
+                                <td class="border-transparent" style="border-bottom:1px solid black" colspan="2">
+                                    CURRENCY</td>
+                                <td style="text-align: right;">
+                                    <b>{{this.workOrderInvoice.currency}}</b>
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="2" rowspan="3">Barcode

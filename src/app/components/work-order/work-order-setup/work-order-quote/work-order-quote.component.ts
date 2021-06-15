@@ -492,6 +492,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         this.isViewMode = isView;
     }
+
+    checkEnforceInternalApproval() {
+        return this.woqsettingModel != null &&
+          this.woqsettingModel.IsApprovalRule &&
+          new Date(this.quoteForm.openDate) >= new Date(this.woqsettingModel.effectivedate);
+      }
+
     getWOQSettingMasterData(currentUserMasterCompanyId) {
 		this.workOrderService.getWOQSettingMasterData(currentUserMasterCompanyId).subscribe(res => {
 			if (res) {
@@ -590,11 +597,12 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         else {
             return true;
         }
-        //return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
     }
 
     getApprovalActionInternalStatus(approver) {
         if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+            
+            approver.internalStatusId=ApprovalStatusEnum.Approved;
             return true;
         } else {
             return false;
@@ -603,6 +611,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     getApprovalActionCustomerStatus(approver) {
         if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+            approver.customerStatusId= ApprovalStatusEnum.Approved;
             return true;
         } else {
             return false;
@@ -649,7 +658,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     this.currentCustomerId = res.customerId
                                     this.isEdit = true;
                                     this.setWorkOrderQuoteId(res['workOrderQuote']['workOrderQuoteId']);
-                                    // this.getWOMaterialList();
                                     this.getQuoteMaterialListByWorkOrderQuoteId();
                                     this.quoteCreated=true;
                                     this.quotationHeader = this.formQuoteInfo(res.workOrderQuote);
@@ -664,10 +672,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     this.employeeName=res.employeeName ?  res.employeeName : this.authService.currentEmployee.name;
                                     this.quoteForm['versionNo'] = 'V1';
                                     if (res.workOrderQuote['versionNo']) {
-                                        // let vNo = Number(res.workOrderQuote['versionNo'].split('V')[1]) + 1;
                                         this.quoteForm['versionNo'] = res.workOrderQuote['versionNo'];
-                                        // this.increaseVer();
-                                        // $('#versionNoModel').modal("show");
                                     }
                                     this.IsApprovalBypass =res.workOrderQuote.isApprovalBypass;
                                     this.quoteDueDate = new Date(res.workOrderQuote.quoteDueDate);
@@ -814,7 +819,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     // this.quoteForm.expirationDateStatus=='Approved'
 
     saveQuoteAPI(){
-        debugger;
         this.formQuoteInfo(this.quoteForm);
         let isCreateQuote = (this.quotationHeader.workOrderQuoteId == undefined || this.quotationHeader.workOrderQuoteId == 0);
         this.isSpinnerVisible = true;
@@ -1032,9 +1036,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.selectedPartNumber = data;
         this.quotestatusofCurrentPart=data.quoteStatus;
         this.isViewForApprovedPart = false;
-        if(this.quotestatusofCurrentPart == 'Approved'){
-            this.isViewForApprovedPart = true;
-        }
+        // if(this.quotestatusofCurrentPart == 'Approved'){
+        //     this.isViewForApprovedPart = true;
+        // }
         this.clearQuoteData();
         let msId = 0;
         if (data) {
@@ -1681,7 +1685,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteChargesListByWorkOrderQuoteId();
-                this.getBuildMethodDetails();
+               // this.getBuildMethodDetails();
                 // this.partNumberSelected(this.selectedPartNumber);
                 this.alertService.showMessage(
                     this.moduleName,
@@ -2616,7 +2620,9 @@ const data={...newdata};
 if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.isSpinnerVisible = true;
 		this.purchaseOrderService.approverslistbyTaskId(2, this.quotationHeader['workOrderQuoteId']).subscribe(res => {
-                         this.internalApproversList = res;
+                        
+            debugger;
+                        this.internalApproversList = res;
                          this.approvers = res;
 						 this.internalApproversList.map(x => {
                             if(currentUser && currentUser['email'] == x.approverEmails && !x.isExceeded){
@@ -2659,10 +2665,16 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         this.approvalGridActiveTab = '';
     }
 
-    resetqouteprintData() {
-        //this.approvalGridActiveTab = '';
+    resetqouteprintData() 
+    {
+        this.approvalGridActiveTab = '';
         // this.internalApproversList = [];
         // this.approvalGridActiveTab = '';
+
+        let a = document.getElementById('approvalTabs');
+        if(a){
+            a.scrollIntoView();
+        }
     }
 
     onApprovalSelected(approver, i) {
@@ -2716,10 +2728,11 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     }
 
     getWOQuoteApprovalList() {
+        debugger;
         this.getApproversList();
         this.getApproverStatusList();
-        if(this.quotationHeader && this.quotationHeader['CustomerId']){
-        this.commonService.getCustomerContactsById(this.quotationHeader['CustomerId'],this.authService.currentUser.masterCompanyId).subscribe(res => {      
+        if(this.quoteForm['customerId']){
+        this.commonService.getCustomerContactsById(this.quoteForm['customerId'],this.authService.currentUser.masterCompanyId).subscribe(res => {      
             this.customerContactList = res;
             if(this.customerContactList.length > 0){
 
@@ -3409,9 +3422,9 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 this.materialListQuotation = res;
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
                     this.materialListQuotation.forEach(tcharge => {
-                      
+                        tcharge.quantity= tcharge.stocklineQuantity;
                         if (tcharge.unitCost) {
-                            tcharge.unitCost = Number(tcharge.unitCost.toString().split(',').join('')).toFixed(2);
+                            tcharge.unitCost = Number(tcharge.stocklineUnitCost.toString().split(',').join('')).toFixed(2);
                         }
                         if (tcharge.billingRate) {
                             tcharge.billingRate = Number(tcharge.billingRate.toString().split(',').join('')).toFixed(2);
@@ -3834,7 +3847,6 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
             });
             this.isLoadWoLabor=true;
-            // this.getWOLabourList();
         }
 
     }

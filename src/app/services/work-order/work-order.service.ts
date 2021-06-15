@@ -153,9 +153,9 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getWorkOrderBillingByShipping(workOrderId, partId, workOrderShippingId);
       }
 
-      getBillingInvoiceList(workOrderId: number): Observable<any> {
+      getBillingInvoiceList(workOrderId: number,workOrderPartNumberId: number): Observable<any> {
         return Observable.forkJoin(
-          this.workOrderEndpointService.getBillingInvoiceList(workOrderId)
+          this.workOrderEndpointService.getBillingInvoiceList(workOrderId,workOrderPartNumberId)
         );
       }
 
@@ -648,9 +648,9 @@ export class WorkOrderService {
     getFreightHistory(isSubworkOrder, freightId) {
         return this.workOrderEndpointService.getFreightHistory(isSubworkOrder, freightId);
     }
-    getShippingDataList(WorkOrderId: number): Observable<any> {
+    getShippingDataList(WorkOrderId: number,workOrderPartNumberId :number): Observable<any> {
         return Observable.forkJoin(
-            this.workOrderEndpointService.getShippingDataList(WorkOrderId)
+            this.workOrderEndpointService.getShippingDataList(WorkOrderId,workOrderPartNumberId)
         );
     }
 
