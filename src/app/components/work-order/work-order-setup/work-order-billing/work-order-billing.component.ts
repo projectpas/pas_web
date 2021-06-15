@@ -59,6 +59,8 @@ export class WorkOrderBillingComponent implements OnInit {
     employeeList: any;
     workOrderPartNumberId:number
     customerNamesList: Object;
+    soldToCustomername:string;
+    shipToCustomername:string;
     soldCustomerSiteList = [];
     shipCustomerSiteList = [];
     arrayCustlist: any[] = [];
@@ -107,9 +109,10 @@ export class WorkOrderBillingComponent implements OnInit {
     isQuote: boolean = true;
     isWorkOrder: boolean = false;
     labor = new WorkOrderLabor();
-    markupList: any;
     employeeId:number;
+    ItemMasterId:number;
     costPlusType: any;
+    billingorInvoiceFormNew :any;
     workOrderBillingInvoiceId:number;
     workOrderMaterialList: any[];
     selectedColumns;
@@ -157,6 +160,7 @@ export class WorkOrderBillingComponent implements OnInit {
             }
         }
         const data = this.billingorInvoiceForm;
+        this.billingorInvoiceFormNew = this.billingorInvoiceForm;
         this.workOrderId = this.savedWorkOrderData.workOrderId;
         this.workOrderPartNumberId = this.savedWorkOrderData.woPartNoId;
         this.getBillingList();
@@ -169,27 +173,6 @@ export class WorkOrderBillingComponent implements OnInit {
         this.resetOtherOptions();
         this.BindManagementStructure();
         this.getCurrencyList();
-        if (this.isEditBilling) {
-            if (data.soldToCustomerId.customerId == data.shipToCustomerId.customerId) {
-                this.getSiteNames(this.customerId,data.soldToCustomerId);
-            }
-            else {
-                this.getSiteNames(this.customerId,data.soldToCustomerId);
-                this.getSiteNamesByShipCustomerId(this.customerId,data.shipToCustomerId);
-            }
-        } else {
-            if (this.billingorInvoiceForm.soldToCustomerId && this.billingorInvoiceForm.shipToCustomerId && (this.billingorInvoiceForm.soldToCustomerId.customerId == this.billingorInvoiceForm.shipToCustomerId.customerId)) {
-                this.getSiteNames(this.customerId,data.soldToCustomerId);
-            }
-            else {
-                if (this.billingorInvoiceForm.soldToCustomerId) {
-                    this.getSiteNames(this.customerId,this.billingorInvoiceForm.soldToCustomerId);
-                }
-                if (this.billingorInvoiceForm.shipToCustomerId) {
-                    this.getSiteNamesByShipCustomerId(this.customerId,this.billingorInvoiceForm.shipToCustomerId);
-                }
-            }
-        }
 
         this.getManagementStructureDetails(this.billingorInvoiceForm
             ? this.billingorInvoiceForm.managementStructureId
@@ -200,6 +183,7 @@ export class WorkOrderBillingComponent implements OnInit {
             this.overAllMarkup = Number(this.quoteMaterialList[0].headerMarkupId);
         }
         this.billingorInvoiceForm = this.billingorInvoiceForm;
+        this.billingorInvoiceFormNew = this.billingorInvoiceForm;
         if (this.buildMethodDetails && this.quotestatusofCurrentPart == 'Approved') {
             if (this.buildMethodDetails['materialBuildMethod'] != undefined || this.buildMethodDetails['materialBuildMethod'] != null) {
                 this.costPlusType = this.buildMethodDetails['materialBuildMethod'].toString();
@@ -218,30 +202,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.loadInvoiceView();
     }
 
-    billingCreateOrEdit() {
-        this.isSpinnerVisible = true;
-        this.workOrderService.getBillingEditData(this.workOrderId, this.workOrderPartNumberId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.billing = new Billing();
-            this.billing = {
-                ...res,
-                shipDate: new Date(res.shipDate),
-                printDate: new Date(res.printDate),
-                woOpenDate: new Date(res.openDate),
-                invoiceDate: new Date(res.invoiceDate),
-                soldToCustomerId: { customerId: res.soldToCustomerId, customerName: res.soldToCustomer },
-                shipToCustomerId: { customerId: res.shipToCustomerId, customerName: res.shipToCustomer },
-                customerRef: res.customerReference,
-                woType: res.workOrderType,
-                shipAccountInfo: res.shippingAccountinfo,
-            }
-
-            this.billingorInvoiceForm=this.billing;
-        }, error => {
-            this.isSpinnerVisible = false;
-            this.errorHandling(error);
-        })
-    }
+ 
 
     loadInvoiceView() {
         this.WObillingInvoicingId = this.workOrderBillingInvoiceId;
@@ -267,12 +228,13 @@ export class WorkOrderBillingComponent implements OnInit {
 
             if (this.billingorInvoiceForm.shipToCustomerId) 
             {
-                this.getSiteNamesByShipCustomerId(this.billingorInvoiceForm.shipToCustomerId.customerId,this.billingorInvoiceForm.shipToSiteId);
+                this.getSiteNamesByShipCustomerId(this.billingorInvoiceForm.shipToCustomerId.customerId,this.billingorInvoiceFormNew.shipToSiteId);
             }
        
         this.resetMisCharges();
         this.resetMaterial();
         this.resetLaborOverHead();
+        this.resetFreight();
         this.calculateTotalWorkOrderCost();
         this.calculateGrandTotal();
     }
@@ -332,13 +294,47 @@ export class WorkOrderBillingComponent implements OnInit {
         this.showBillingForm = true;
     }
 
+    billingCreateOrEdit(type) {
+        this.isSpinnerVisible = true;
+        this.workOrderService.getBillingEditData(this.workOrderId, this.workOrderPartNumberId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.isSpinnerVisible = false;
+            this.billing = new Billing();
+            this.billing = {
+                ...res,
+                shipDate: new Date(res.shipDate),
+                printDate: new Date(res.printDate),
+                woOpenDate: new Date(res.openDate),
+                invoiceDate: new Date(res.invoiceDate),
+                soldToCustomerId: { customerId: res.soldToCustomerId, customerName: res.soldToCustomer },
+                shipToCustomerId: { customerId: res.shipToCustomerId, customerName: res.shipToCustomer },
+                customerRef: res.customerReference,
+                woType: res.workOrderType,
+                shipAccountInfo: res.shippingAccountinfo,
+            }
+
+            this.billingorInvoiceForm=this.billing;
+            if(type =="workorder")
+            {
+                this.getbillingCostDataForWoOnly();
+            }
+            else
+            {
+                this.Getbillinginvoicingdetailsfromquote();
+            }
+
+        }, error => {
+            this.isSpinnerVisible = false;
+            this.errorHandling(error);
+        })
+    }
+
     PerformWorkBilling()
     {   
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.showBillingForm = true;
-        this.billingCreateOrEdit();
-        this.getbillingCostDataForWoOnly();
+        this.billingCreateOrEdit("workorder");
+       
     }
 
     PerformQouteBilling()
@@ -346,16 +342,14 @@ export class WorkOrderBillingComponent implements OnInit {
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.showBillingForm = true;
-        this.billingCreateOrEdit();
+        this.billingCreateOrEdit("qoute");
 
-        if (this.quotestatusofCurrentPart == 'Approved') {
-            this.Getbillinginvoicingdetailsfromquote();
-        }
+        this.Getbillinginvoicingdetailsfromquote();
 
-        this.billingorInvoiceForm.totalWorkOrderValue = 4;
-        if (this.quoteMaterialList && this.quoteMaterialList.length > 0) {
-            this.overAllMarkup = Number(this.quoteMaterialList[0].headerMarkupId);
-        }
+        //this.billingorInvoiceForm.totalWorkOrderValue = 4;
+        // if (this.quoteMaterialList && this.quoteMaterialList.length > 0) {
+        //     this.overAllMarkup = Number(this.quoteMaterialList[0].headerMarkupId);
+        // }
     }
 
     onSelectPartNumber(rowData) {
@@ -367,8 +361,8 @@ export class WorkOrderBillingComponent implements OnInit {
             this.workOrderShippingId = rowData.workOrderShippingId;
             this.partSelected = true;
             this.showBillingForm = true;
-            this.billingCreateOrEdit();
-            this.getbillingCostDataForWoOnly();
+            //this.billingCreateOrEdit();
+            //this.getbillingCostDataForWoOnly();
         }
     }
 
@@ -404,6 +398,7 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.billingorInvoiceForm.materialCost = res.materialCost;
                 this.billingorInvoiceForm.laborOverHeadCost = res.labourCost;
                 this.billingorInvoiceForm.miscChargesCost = res.miscCharges;
+                this.billingorInvoiceForm.freightCost = res.freightCost;
                 this.billingorInvoiceForm.totalWorkOrderCost = res.totalCost;
                 this.isWorkOrder=true;
                 this.CommonMethod();
@@ -418,10 +413,12 @@ export class WorkOrderBillingComponent implements OnInit {
     Getbillinginvoicingdetailsfromquote() {
         this.workOrderService.Getbillinginvoicingdetailsfromquote(this.workFlowWorkOrderId, this.workOrderPartNumberId).subscribe(res => {
             if (res) {
+                this.QouteDetails ={};
                 this.QouteDetails =res;
-                this.billingorInvoiceForm.materialCost = res.materialBilling;
-                this.billingorInvoiceForm.laborOverHeadCost = res.laborBilling;
-                this.billingorInvoiceForm.miscChargesCost = res.chargesBilling;
+                this.billingorInvoiceForm.materialCost = res.materialFlatBillingAmount;
+                this.billingorInvoiceForm.laborOverHeadCost = res.laborFlatBillingAmount;
+                this.billingorInvoiceForm.miscChargesCost = res.chargesFlatBillingAmount;
+                this.billingorInvoiceForm.freightCost = res.freightFlatBillingAmount;
                 this.isWorkOrder=false;
                 this.CommonMethod();
             }
@@ -752,12 +749,13 @@ export class WorkOrderBillingComponent implements OnInit {
 
     resetOtherOptions() {
         this.billingorInvoiceForm.totalWorkOrderValue = null;
-        this.billingorInvoiceForm.totalWorkOrderCostPlus = 0.00;
+        this.billingorInvoiceForm.totalWorkOrderCostPlus = this.billingorInvoiceForm.totalWorkOrderCost;;
 
         if (this.billingorInvoiceForm.totalWorkOrder === true) {
             this.resetMisCharges();
             this.resetMaterial();
             this.resetLaborOverHead();
+            this.resetFreight();
             this.calculateTotalWorkOrderCost();
 
         }
@@ -768,17 +766,39 @@ export class WorkOrderBillingComponent implements OnInit {
         this.sumOfMaterialList();
         this.sumofCharges();
         this.sumofLaborOverHead();
+        this.sumofFreight();
         if (this.billingorInvoiceForm) {
-            this.billingorInvoiceForm.totalWorkOrderCost = (Math.round(this.billingorInvoiceForm.materialCost) + Math.round(this.billingorInvoiceForm.miscChargesCost) + Math.round(this.billingorInvoiceForm.laborOverHeadCost)).toFixed(2);
+            this.billingorInvoiceForm.totalWorkOrderCost = (Math.round(this.billingorInvoiceForm.materialCost) + Math.round(this.billingorInvoiceForm.miscChargesCost) + Math.round(this.billingorInvoiceForm.laborOverHeadCost) + Math.round(this.billingorInvoiceForm.freightCost)).toFixed(2);
             this.calculateTotalWorkOrderCostPlus(0);
         }
     }
 
     calculateTotalWorkOrderCostPlus(value) {
-        const materialCostPlus = Number(this.billingorInvoiceForm.materialCost) + ((Number(this.billingorInvoiceForm.materialCost) * Number(value)) / 100)
-        const misChargeCostPlus = Number(this.billingorInvoiceForm.miscChargesCost) + ((Number(this.billingorInvoiceForm.miscChargesCost) * Number(value)) / 100)
-        const laborOverHeadCostPlus = Number(this.billingorInvoiceForm.laborOverHeadCost) + ((Number(this.billingorInvoiceForm.laborOverHeadCost) * Number(value)) / 100);
-        this.billingorInvoiceForm.totalWorkOrderCostPlus = Math.round(Math.round(materialCostPlus) + Math.round(misChargeCostPlus) + Math.round(laborOverHeadCostPlus)).toFixed(2);
+        // const materialCostPlus = Number(this.billingorInvoiceForm.materialCost) + ((Number(this.billingorInvoiceForm.materialCost) * Number(value)) / 100)
+        // const misChargeCostPlus = Number(this.billingorInvoiceForm.miscChargesCost) + ((Number(this.billingorInvoiceForm.miscChargesCost) * Number(value)) / 100)
+        // const laborOverHeadCostPlus = Number(this.billingorInvoiceForm.laborOverHeadCost) + ((Number(this.billingorInvoiceForm.laborOverHeadCost) * Number(value)) / 100);
+        // const freightCostPlus = Number(this.billingorInvoiceForm.freightCost) + ((Number(this.billingorInvoiceForm.freightCost) * Number(value)) / 100);
+        
+        if(value ==0)
+        {
+            this.billingorInvoiceForm.totalWorkOrderCostPlus = this.billingorInvoiceForm.totalWorkOrderCost;
+        }
+        else
+        {
+            try {
+                this.markUpList.forEach((markup) => {
+                    if (markup.value == value) {
+                        this.billingorInvoiceForm.totalWorkOrderCostPlus =  this.formateCurrency(Number(this.billingorInvoiceForm.totalWorkOrderCost.toString().replace(/\,/g,'')) + ((Number(this.billingorInvoiceForm.totalWorkOrderCost.toString().replace(/\,/g,'')) / 100) * Number(markup.label)))
+                        //this.billingorInvoiceForm.totalWorkOrderCostPlus = this.formateCurrency(Number(this.billingorInvoiceForm.totalWorkOrderCost) + ((Number(this.billingorInvoiceForm.totalWorkOrderCost) * Number(markup.label)) / 100));
+                    }
+                })
+            }
+            catch (e) {
+            }
+        }
+     
+
+      //  this.billingorInvoiceForm.totalWorkOrderCostPlus = Math.round(Math.round(materialCostPlus) + Math.round(misChargeCostPlus) + Math.round(laborOverHeadCostPlus) + Math.round(freightCostPlus)).toFixed(2);
     }
 
     resetMaterial() {
@@ -822,27 +842,65 @@ export class WorkOrderBillingComponent implements OnInit {
 
     }
 
+    resetFreight() {
+        debugger;
+        if (this.billingorInvoiceForm) {
+            if (this.billingorInvoiceForm.freight === false || this.billingorInvoiceForm.totalWorkOrder === true) {
+                this.billingorInvoiceForm.freight = false
+                this.billingorInvoiceForm.freightValue = null;
+                this.billingorInvoiceForm.freightCostPlus = this.billingorInvoiceForm.freightCost;
+            } else {
+                this.sumofFreight();
+                this.calculateFreightCostPlus(0);
+            }
+        }
+
+    }
+
 
 
     sumOfMaterialList() {
         if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
-            this.billingorInvoiceForm.materialCost = (this.QouteDetails) ? this.QouteDetails.materialCost : 0.00;
+            this.billingorInvoiceForm.materialCost = (this.QouteDetails) ? this.QouteDetails.materialFlatBillingAmount : 0.00;
         }
     }
     calculateMaterialCostPlus(value) {
         if (this.billingorInvoiceForm) {
-            this.billingorInvoiceForm.materialCostPlus = Math.round(Number(this.billingorInvoiceForm.materialCost) + ((Number(this.billingorInvoiceForm.materialCost) * Number(value)) / 100)).toFixed(2);
+
+            try {
+                this.markUpList.forEach((markup) => {
+                    if (markup.value == value) {
+                        this.billingorInvoiceForm.materialCostPlus =  this.formateCurrency(Number(this.billingorInvoiceForm.materialCost.toString().replace(/\,/g,'')) + ((Number(this.billingorInvoiceForm.materialCost.toString().replace(/\,/g,'')) / 100) * Number(markup.label)))
+                        //this.billingorInvoiceForm.materialCostPlus = this.formateCurrency(Number(this.billingorInvoiceForm.materialCost) + ((Number(this.billingorInvoiceForm.materialCost) * Number(markup.label)) / 100));
+                    }
+                })
+            }
+            catch (e) {
+            }
+           
+            //this.billingorInvoiceForm.materialCostPlus = this.formateCurrency(Number(this.billingorInvoiceForm.materialCost) + ((Number(this.billingorInvoiceForm.materialCost) * Number(value)) / 100));
         }
     }
     sumofLaborOverHead() {
 
         if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
-            this.billingorInvoiceForm.laborOverHeadCost = (this.QouteDetails) ? this.QouteDetails.laborCost : 0.00;
+            this.billingorInvoiceForm.laborOverHeadCost = (this.QouteDetails) ? this.QouteDetails.laborFlatBillingAmount : 0.00;
         }
     }
     calculateLaborOverHeadCostPlus(value) {
         if (this.billingorInvoiceForm) {
-            this.billingorInvoiceForm.laborOverHeadCostPlus = Math.round(Number(this.billingorInvoiceForm.laborOverHeadCost) + ((Number(this.billingorInvoiceForm.laborOverHeadCost) * Number(value)) / 100)).toFixed(2);
+
+            try {
+                this.markUpList.forEach((markup) => {
+                    if (markup.value == value) {
+                        this.billingorInvoiceForm.laborOverHeadCostPlus =  this.formateCurrency(Number(this.billingorInvoiceForm.laborOverHeadCost.toString().replace(/\,/g,'')) + ((Number(this.billingorInvoiceForm.laborOverHeadCost.toString().replace(/\,/g,'')) / 100) * Number(markup.label)))
+                        //this.billingorInvoiceForm.laborOverHeadCostPlus = this.formateCurrency(Number(this.billingorInvoiceForm.laborOverHeadCost) + ((Number(this.billingorInvoiceForm.laborOverHeadCost) * Number(markup.label)) / 100));
+                    }
+                })
+            }
+            catch (e) {
+            }
+            //this.billingorInvoiceForm.laborOverHeadCostPlus = Math.round(Number(this.billingorInvoiceForm.laborOverHeadCost) + ((Number(this.billingorInvoiceForm.laborOverHeadCost) * Number(value)) / 100)).toFixed(2);
         }
     }
 
@@ -850,12 +908,48 @@ export class WorkOrderBillingComponent implements OnInit {
     sumofCharges() {
 
         if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
-            this.billingorInvoiceForm.miscChargesCost = (this.QouteDetails) ? this.QouteDetails.chargesCost : 0.00;
+            this.billingorInvoiceForm.miscChargesCost = (this.QouteDetails) ? this.QouteDetails.chargesFlatBillingAmount : 0.00;
+        }
+    }
+
+    sumofFreight() {
+
+        if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
+            this.billingorInvoiceForm.freightCost = (this.QouteDetails) ? this.QouteDetails.freightFlatBillingAmount : 0.00;
         }
     }
     calculateMiscChargesCostPlus(value) {
         if (this.billingorInvoiceForm) {
-            this.billingorInvoiceForm.miscChargesCostPlus = Math.round(Number(this.billingorInvoiceForm.miscChargesCost) + ((Number(this.billingorInvoiceForm.miscChargesCost) * Number(value)) / 100)).toFixed(2);
+
+            try {
+                this.markUpList.forEach((markup) => {
+                    if (markup.value == value) {
+                        this.billingorInvoiceForm.miscChargesCostPlus =  this.formateCurrency(Number(this.billingorInvoiceForm.miscChargesCost.toString().replace(/\,/g,'')) + ((Number(this.billingorInvoiceForm.miscChargesCost.toString().replace(/\,/g,'')) / 100) * Number(markup.label)))
+                       // this.billingorInvoiceForm.miscChargesCostPlus = this.formateCurrency(Number(this.billingorInvoiceForm.miscChargesCost) + ((Number(this.billingorInvoiceForm.miscChargesCost) * Number(markup.label)) / 100));
+                    }
+                })
+            }
+            catch (e) {
+            }
+           // this.billingorInvoiceForm.miscChargesCostPlus = Math.round(Number(this.billingorInvoiceForm.miscChargesCost) + ((Number(this.billingorInvoiceForm.miscChargesCost) * Number(value)) / 100)).toFixed(2);
+        }
+    }
+
+    calculateFreightCostPlus(value) {
+        if (this.billingorInvoiceForm) {
+
+            try {
+                this.markUpList.forEach((markup) => {
+                    if (markup.value == value) {
+
+                        this.billingorInvoiceForm.freightCostPlus =  this.formateCurrency(Number(this.billingorInvoiceForm.freightCost.toString().replace(/\,/g,'')) + ((Number(this.billingorInvoiceForm.freightCost.toString().replace(/\,/g,'')) / 100) * Number(markup.label)))
+                       // this.billingorInvoiceForm.freightCostPlus = this.formateCurrency(Number(this.billingorInvoiceForm.freightCost) + ((Number(this.billingorInvoiceForm.freightCost) * Number(markup.label)) / 100));
+                    }
+                })
+            }
+            catch (e) {
+            }
+            //this.billingorInvoiceForm.freightCostPlus = Math.round(Number(this.billingorInvoiceForm.freightCost) + ((Number(this.billingorInvoiceForm.freightCost) * Number(value)) / 100)).toFixed(2);
         }
     }
     calculateGrandTotal() {
@@ -865,12 +959,14 @@ export class WorkOrderBillingComponent implements OnInit {
                     const materialAmount = this.billingorInvoiceForm.materialValue === null ? this.billingorInvoiceForm.materialCost : this.billingorInvoiceForm.materialCostPlus;
                     const misChargesAmount = this.billingorInvoiceForm.miscChargesValue === null ? this.billingorInvoiceForm.miscChargesCost : this.billingorInvoiceForm.miscChargesCostPlus;
                     const laborOverHeadAmount = this.billingorInvoiceForm.laborOverHeadValue === null ? this.billingorInvoiceForm.laborOverHeadCost : this.billingorInvoiceForm.laborOverHeadCostPlus;
-                    this.billingorInvoiceForm.grandTotal = (Math.round(materialAmount) + Math.round(misChargesAmount) + Math.round(laborOverHeadAmount)).toFixed(2);
+                    const freightCostPlusAmount = this.billingorInvoiceForm.freightValue === null ? this.billingorInvoiceForm.freightCost : this.billingorInvoiceForm.freightCostPlus;
+                    this.billingorInvoiceForm.grandTotal = (Math.round(Number(materialAmount.toString().replace(/\,/g,''))) + Math.round(Number(misChargesAmount.toString().replace(/\,/g,''))) + Math.round(Number(laborOverHeadAmount.toString().replace(/\,/g,''))) + Math.round(Number(freightCostPlusAmount.toString().replace(/\,/g,'')))).toFixed(2);
                 } else {
                     const materialAmount = this.billingorInvoiceForm.material ? this.billingorInvoiceForm.materialCostPlus : this.billingorInvoiceForm.materialCost;
                     const misChargesAmount = this.billingorInvoiceForm.laborOverHead ? this.billingorInvoiceForm.miscChargesCostPlus : this.billingorInvoiceForm.miscChargesCost;
                     const laborOverHeadAmount = this.billingorInvoiceForm.miscCharges ? this.billingorInvoiceForm.laborOverHeadCostPlus : this.billingorInvoiceForm.laborOverHeadCost;
-                    this.billingorInvoiceForm.grandTotal = (Math.round(materialAmount) + Math.round(misChargesAmount) + Math.round(laborOverHeadAmount)).toFixed(2);
+                    const freightCostPlusAmount = this.billingorInvoiceForm.freight === null ? this.billingorInvoiceForm.freightCostPlus : this.billingorInvoiceForm.freightCost;
+                    this.billingorInvoiceForm.grandTotal = (Math.round(Number(materialAmount.toString().replace(/\,/g,''))) + Math.round(Number(misChargesAmount.toString().replace(/\,/g,''))) + Math.round(Number(laborOverHeadAmount.toString().replace(/\,/g,''))) + Math.round(Number(freightCostPlusAmount.toString().replace(/\,/g,'')))).toFixed(2);
                 }
             } else {
                 const totalWorkOrderCostPlus = this.billingorInvoiceForm.totalWorkOrder === null ? this.billingorInvoiceForm.totalWorkOrderCost : this.billingorInvoiceForm.totalWorkOrderCostPlus;
@@ -894,34 +990,56 @@ export class WorkOrderBillingComponent implements OnInit {
     saveWorkOrderBilling(invoiceStatus: InvoiceTypeEnum) {
         let billingItems: BillingItems[] = [];
 
-        if (this.isMultipleSelected) {
-            this.billingList.filter(a => {
-                for (let i = 0; i < a.workOrderBillingInvoiceChild.length; i++) {
-                    if (a.workOrderBillingInvoiceChild[i].selected == true) {
-                        var p = new BillingItems;
-                        p.workOrderShippingId = a.workOrderBillingInvoiceChild[i].workOrderShippingId;
-                        this.workOrderShippingId=a.workOrderBillingInvoiceChild[i].workOrderShippingId;
-                        p.noOfPieces = a.workOrderBillingInvoiceChild[i].qtyToBill;
-                        p.workOrderPartId = a.workOrderBillingInvoiceChild[i].workOrderPartId;
+         
 
-                        billingItems.push(p);
-                    }
+        this.billingList.filter(a => {
+            for (let i = 0; i < a.workOrderBillingInvoiceChild.length; i++) {
+                if (i==0) 
+                {
+                    var p = new BillingItems;
+                    p.workOrderShippingId = a.workOrderBillingInvoiceChild[i].workOrderShippingId;
+                    this.workOrderShippingId=a.workOrderBillingInvoiceChild[i].workOrderShippingId;
+                    p.noOfPieces = a.workOrderBillingInvoiceChild[i].qtyToBill;
+                    this.ItemMasterId = a.workOrderBillingInvoiceChild[i].itemMasterId;
+                    p.workOrderPartId = a.workOrderBillingInvoiceChild[i].workOrderPartId;
+
+                    billingItems.push(p);
                 }
-            });
-        }
-        else {
-            var p = new BillingItems;
-            p.workOrderShippingId = this.workOrderShippingId;
-            p.noOfPieces = this.selectedQtyToBill;
-            p.workOrderPartId = this.selectedPartNumber;
+            }
+        });
 
-            billingItems.push(p);
-        }
+        // if (this.isMultipleSelected) {
+        //     this.billingList.filter(a => {
+        //         for (let i = 0; i < a.workOrderBillingInvoiceChild.length; i++) {
+        //             if (i==0) 
+        //             {
+        //                 var p = new BillingItems;
+        //                 p.workOrderShippingId = a.workOrderBillingInvoiceChild[i].workOrderShippingId;
+        //                 this.workOrderShippingId=a.workOrderBillingInvoiceChild[i].workOrderShippingId;
+        //                 p.noOfPieces = a.workOrderBillingInvoiceChild[i].qtyToBill;
+        //                 p.workOrderPartId = a.workOrderBillingInvoiceChild[i].workOrderPartId;
+
+        //                 billingItems.push(p);
+        //             }
+        //         }
+        //     });
+        // }
+        // else {
+        //     var p = new BillingItems;
+        //     p.workOrderShippingId = this.workOrderShippingId;
+        //     p.noOfPieces = this.selectedQtyToBill;
+        //     p.workOrderPartId = this.selectedPartNumber;
+
+        //     billingItems.push(p);
+        // }
 
        
+        
         let billingorInvoiceFormTemp = JSON.parse(JSON.stringify(this.billingorInvoiceForm));
         this.billingorInvoiceForm.soldToCustomerId = billingorInvoiceFormTemp.soldToCustomerId['customerId'];
         this.billingorInvoiceForm.shipToCustomerId = billingorInvoiceFormTemp.shipToCustomerId['customerId'];
+       // this.soldToCustomername = billingorInvoiceFormTemp.soldToCustomerId['customerName'];
+        //this.shipToCustomername = billingorInvoiceFormTemp.shipToCustomerId['customerName'];
         this.billingorInvoiceForm.shipToSiteId = billingorInvoiceFormTemp.shipToSiteId;
         this.billingorInvoiceForm.soldToSiteId = billingorInvoiceFormTemp.soldToSiteId;
         this.billingorInvoiceForm.createdDate = new Date();
@@ -931,7 +1049,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.workOrderId = this.workOrderId;
         this.billingorInvoiceForm.workFlowWorkOrderId= this.workFlowWorkOrderId;
         this.billingorInvoiceForm.workOrderPartNoId =this.workOrderPartNumberId;
-        this.billingorInvoiceForm.itemMasterId =this.workOrderPartNumberId;
+        this.billingorInvoiceForm.itemMasterId =this.ItemMasterId;
         this.billingorInvoiceForm.masterCompanyId= this.authService.currentUser.masterCompanyId;
         this.billingorInvoiceForm.isActive= true;
         this.billingorInvoiceForm.isDeleted= false;
@@ -1033,6 +1151,9 @@ export class WorkOrderBillingComponent implements OnInit {
     }
     onChangeMiscChCostPlus() {
         this.billingorInvoiceForm.miscChargesCostPlus = this.billingorInvoiceForm.miscChargesCostPlus.toFixed(2);
+    }
+    onChangeFreightCostPlus() {
+        this.billingorInvoiceForm.freightCostPlus = this.billingorInvoiceForm.freightCostPlus.toFixed(2);
     }
     async getSiteNamesByShipCustomerId(customerId, siteid) {
         this.clearShipToAddress();
