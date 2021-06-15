@@ -97,8 +97,8 @@ export class ViewPoComponent implements OnInit {
         this.currentDate = new Date();
     }
 
-    ngOnInit() {
-        this.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseOrderId'];
+    ngOnInit() {        
+        this.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
         this.getReceivingPOHeaderById(this.purchaseOrderId);
         this.getStockDetailsOnLoad();
         this.localData = [

@@ -135,8 +135,8 @@ export class EditPoComponent implements OnInit {
         this.otherModuleId = AppModuleEnum.Others;
     }
 
-    ngOnInit() {
-        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseOrderId'];
+    ngOnInit() {        
+        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];        
         if (this.receivingService.purchaseOrderId == undefined && this.receivingService.purchaseOrderId == null) {
             this.alertService.showMessage(this.pageTitle, "No purchase order is selected to edit.", MessageSeverity.error);
             return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
