@@ -947,7 +947,97 @@ export class AppComponent implements OnInit, AfterViewInit {
          
         ],
       },
+      {
+        label: 'Asset Management',
+        // icon: '',
+        items: [
+          [
+            {
+              label: 'Asset Master',
+              items: [
+                {
+                  label: 'Asset List',
+                  routerLink: '/assetmodule/assetpages/app-asset-listing',
+                },
+                
+               
+              ],
+            },
+            {
+              label: 'Asset Inventory',
+              items: [
+                {
+                   label: 'Asset Inventory List',
+                   routerLink:
+                 '/assetmodule/assetpages/app-asset-inventory-listing',
+                 },
+                
+              ],
+            },
+            {
+              label: 'Asset Maintenance',
+              items: [
+                {
+                 label: 'Calibration,Certification',
+                  
+                  routerLink: '',
+                 },
+                 {
+                   label: 'Lease and Insurance',
+                    routerLink: '',
+                   },
+                   {
+                    label: 'Asset Maintenance',
+                     routerLink: '',
+                    },
+              ],
+            }, 
+            {
+              label: 'Asset Accounting',
+              items: [
+                {
+                 label: 'Process Depreciation',                  
+                  routerLink: '',
+                 },
+                 {
+                   label: 'Sale/Write off/Write Down ',
+                    routerLink: '',
+                   },
+                   {
+                    label: 'Depreciation Forecast',
+                     routerLink: '',
+                    },
+              ],
+            }, 
+            {
+              label: 'Reports',
+              items: [
+                {
+                 label: 'Tool List',                  
+                  routerLink: '',
+                 },
+                 {
+                   label: 'Calibration List ',
+                    routerLink: '',
+                   },
+                   {
+                    label: 'Calibration Tracking',
+                     routerLink: '',
+                    },
+                    {
+                      label: 'Asset Register',
+                       routerLink: '',
+                      },
+                      {
+                        label: 'Depreciation',
+                         routerLink: '',
+                        },
+              ],
+            }, 
+          ],
 
+        ],
+      },
 
       {
         label: 'Accounting',
@@ -1078,97 +1168,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         ],
       },
 
-      {
-        label: 'Asset Management',
-        // icon: '',
-        items: [
-          [
-            {
-              label: 'Asset Master',
-              items: [
-                {
-                  label: 'Asset List',
-                  routerLink: '/assetmodule/assetpages/app-asset-listing',
-                },
-                
-               
-              ],
-            },
-            {
-              label: 'Asset Inventory',
-              items: [
-                {
-                   label: 'Asset Inventory List',
-                   routerLink:
-                 '/assetmodule/assetpages/app-asset-inventory-listing',
-                 },
-                
-              ],
-            },
-            {
-              label: 'Asset Maintenance',
-              items: [
-                {
-                 label: 'Calibration,Certification',
-                  
-                  routerLink: '',
-                 },
-                 {
-                   label: 'Lease and Insurance',
-                    routerLink: '',
-                   },
-                   {
-                    label: 'Asset Maintenance',
-                     routerLink: '',
-                    },
-              ],
-            }, 
-            {
-              label: 'Asset Accounting',
-              items: [
-                {
-                 label: 'Process Depreciation',                  
-                  routerLink: '',
-                 },
-                 {
-                   label: 'Sale/Write off/Write Down ',
-                    routerLink: '',
-                   },
-                   {
-                    label: 'Depreciation Forecast',
-                     routerLink: '',
-                    },
-              ],
-            }, 
-            {
-              label: 'Reports',
-              items: [
-                {
-                 label: 'Tool List',                  
-                  routerLink: '',
-                 },
-                 {
-                   label: 'Calibration List ',
-                    routerLink: '',
-                   },
-                   {
-                    label: 'Calibration Tracking',
-                     routerLink: '',
-                    },
-                    {
-                      label: 'Asset Register',
-                       routerLink: '',
-                      },
-                      {
-                        label: 'Depreciation',
-                         routerLink: '',
-                        },
-              ],
-            }, 
-          ],
-
-        ],
-      },
+    
 
       {
         label: 'Invoice Management',
@@ -1536,7 +1536,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       {
         label: 'Account',
-        // icon: '',
+         icon: 'fa fa-user-circle',
         items: [
           [
             {
@@ -1552,7 +1552,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                   this.router.navigateByUrl('/settings#preferences');
                 } },  
                 { label: 'Logout', command: (event?: any) => {
-                  this.router.navigateByUrl('/');
+                  this.logout();
                 } },          
               ],
             },
