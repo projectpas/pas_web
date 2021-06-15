@@ -1715,11 +1715,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
     }
 
+    onFocusOutEvent(objPickTicket: any){
+        let invalidQty = false;
+        let selectedItem = objPickTicket;
+        var errmessage = '';
+        if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
+            invalidQty = true;
+            errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+        }            
+        if (invalidQty) {
+            this.alertService.showMessage(
+                'Work Order',
+                'You cannot pick more than Qty To Pick',
+                MessageSeverity.warn
+            );
+        }
+     }
 }
-
-// min-width: 81px !important;
-// min-width: 91px !important;
-// min-width: 88px !important;
-// min-width: 84px !important;
-// min-width: 72px !important;
-// min-width: 78px !important;
