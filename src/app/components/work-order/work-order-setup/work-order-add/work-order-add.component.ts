@@ -2298,7 +2298,6 @@ this.getNewMaterialListByWorkOrderId();
     //     return this.result;
     // }
     saveworkOrderLabor(data) {
-        console.log("hours",data);
         this.isAllowLaberSave=false;
         if (this.isSubWorkOrder) {
             data.subWorkOrderLaborHeaderId = 0;
@@ -4020,7 +4019,7 @@ else if(this.gridActiveTab == 'equipment'){
     this.isSubWorkOrder=false;
     this.gridActiveTab = 'equipment';
 }else if(this.subTabOtherOptions && this.subTabOtherOptions == 'charges'){
-    console.log('equpppppp')
+
     this.getChargesListByWorkOrderId();
 } 
     }
