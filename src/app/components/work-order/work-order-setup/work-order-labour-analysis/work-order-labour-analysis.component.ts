@@ -76,7 +76,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                       (res: any) => {
                           this.isSpinnerVisible = false;
                           if (res) {
-                              this.data = res;
+                            this.data = res;
                           }
                       },
                       err => {
