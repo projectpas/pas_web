@@ -495,7 +495,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     checkEnforceInternalApproval() {
         return this.woqsettingModel != null &&
-          this.woqsettingModel.isApprovalRule &&
+          this.woqsettingModel.IsApprovalRule &&
           new Date(this.quoteForm.openDate) >= new Date(this.woqsettingModel.effectivedate);
       }
 
