@@ -76,7 +76,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                       (res: any) => {
                           this.isSpinnerVisible = false;
                           if (res) {
-                              this.data = res;
+                            this.data = res;
                           }
                       },
                       err => {
@@ -126,6 +126,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
           { field: 'action', header: 'Task' },
           { field: 'expertise', header: 'Expertise' },
           { field: 'employeeName', header: 'Employee' },
+          { field: 'billableOrNonBillable', header: 'Billable /NonBillable' },
           { field: 'hours', header: 'Act Hours', width:"100px"},
           { field: 'adjustedHours', header: 'Adj Hours', width:"100px" },
           { field: 'adjustments', header: 'Var. Hours', width:"100px" },
