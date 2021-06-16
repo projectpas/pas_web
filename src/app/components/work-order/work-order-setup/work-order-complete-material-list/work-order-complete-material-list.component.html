@@ -110,7 +110,7 @@
                                         <th class="text-center" colspan="1"></th>
                                         <!-- <th *ngIf="isShowAlternatePN  " class="text-center" colspan="1"> </th> -->
                                         <!-- <th *ngIf=" isShowEqPN" class="text-center" colspan="1"> </th> -->
-                                        <th colspan="11" class="text-center"> Materials</th>
+                                        <th colspan="12" class="text-center"> Materials</th>
                                         <th colspan="2" class="text-center"> Stock</th>
                                         <th class="text-center" colspan="4"></th>
                                     </tr>
@@ -136,6 +136,7 @@
                                         <th class="text-center width-50"> Stk Type</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Req</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Res</th>
+                                        <th *ngIf="!isSubWorkOrder" class="text-center width-50" style="width:60px !important">Qty Picked</th>
                                         <th class="text-center" style="width:60px !important"> Qty To Be Reserved</th>
                                         <th class="text-center" style="width:60px !important">
                                             <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
@@ -216,6 +217,9 @@
                                             <td class="tex_end text-right">
                                                 {{x.quantityAlreadyReserved}}
                                             </td>
+                                            <td *ngIf="!isSubWorkOrder" class="tex_end text-right">
+                                                {{x.quantityPicked}}
+                                            </td>
                                             <td class="tex_end text-right" *ngIf="(statusId === 1 || statusId === 5)">
                                                 {{ statusId !=5 ? x.qtyToBeReserved : x.qtyToBeReserved}}
                                             </td>
@@ -229,7 +233,13 @@
                                                     (keyup)="validatePartsQuantity($event,x)" (change)="handleQty(x)"
                                                     [disabled]="!x.isParentSelected">
                                             </td>
-                                            <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
+                                            <td *ngIf="(( statusId === 2 && !enablePickTicket) || statusId === 3 || statusId === 4)">
+                                                <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
+                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
+                                                    (keyup)="validatePartsQuantity($event,x)"
+                                                    [disabled]="!x.isParentSelected">
+                                            </td>
+                                            <td *ngIf="!isSubWorkOrder && (statusId === 2 && enablePickTicket)">
                                                 <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
                                                     (change)="handleQty(x)" (keypress)="restrictMinus($event)"
                                                     (keyup)="validatePartsQuantity($event,x)"
