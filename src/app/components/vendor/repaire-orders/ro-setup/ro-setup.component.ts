@@ -2908,10 +2908,10 @@ export class RoSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "PN is required."
 			}
-			if (!this.partListData[i].revisedPartId) {
-				this.isSpinnerVisible = false;
-				errmessage = errmessage + '<br />' + "Revised Part Number is required."
-			}
+			// if (!this.partListData[i].revisedPartId) {
+			// 	this.isSpinnerVisible = false;
+			// 	errmessage = errmessage + '<br />' + "Revised Part Number is required."
+			// }
 			if (!this.partListData[i].workPerformedId) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Work to Perform is required."
@@ -5226,8 +5226,7 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	StockLinePopup(row) {
-		debugger
+	StockLinePopup(row) {		
 		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
 			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;
