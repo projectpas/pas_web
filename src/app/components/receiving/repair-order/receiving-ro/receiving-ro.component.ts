@@ -597,6 +597,12 @@ export class ReceivingRoComponent implements OnInit {
             var uom = {label:part.UOMText , value : part.uomId}
             this.allPurchaseUnitOfMeasureinfo.push(uom);
         }
+
+        var revisedpn = this.revisedPartNumCollection.find(temp => temp.itemMasterId == part.revisedPartId)
+        if (!revisedpn || revisedpn == undefined) {
+            var rpn = { itemMasterId : part.revisedPartId , partNumber : part.revisedPartNumber }           
+            this.revisedPartNumCollection.push(rpn);
+        }
         
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
@@ -734,7 +740,8 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.parentbuId = part.parentbuId;
             stockLine.parentDivisionId = part.parentDivisionId;
             stockLine.parentDeptId = part.parentDeptId;                 
-            stockLine.unitOfMeasureId = part.uomId;                 
+            stockLine.unitOfMeasureId = part.uomId;              
+            stockLine.serialNumber = part.serialNumber;         
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());            
             stockLine.revisedPartId = part.revisedPartId > 0 ? this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId) : 0;   

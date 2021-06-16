@@ -168,7 +168,7 @@ export class EditRoComponent implements OnInit {
                     }
                     else if (x.label == "MANUFACTURER") {
                         this.arraymanufacturerlist.push(x.value);
-                    }
+                    }                   
                 });
                 this.getShippingVia();
                 this.getConditionList();
@@ -2077,7 +2077,12 @@ export class EditRoComponent implements OnInit {
             };
             for (let part of this.repairOrderData) {
                 for (let SL of part.stockLine) {
-                    if (SL.revisedPartId != null) {
+                    if (SL.revisedPartId != null) {                        
+                        var revisedpn = this.revisedPartNumCollection.find(temp => temp.itemMasterId == SL.revisedPartId)
+                        if (!revisedpn || revisedpn == undefined) {
+                            var rpn = { itemMasterId : SL.revisedPartId , partNumber : SL.revisedPartNumber }           
+                            this.revisedPartNumCollection.push(rpn);
+                        }
                         SL.revisedPartObject = this.revisedPartNumCollection.find(x => x.itemMasterId == SL.revisedPartId);
                     }
                 }
