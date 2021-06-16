@@ -26,7 +26,7 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
   workOrder: any = [];
   parts: any = [];
   management: any = {};
-  isSpinnerVisible: boolean = false;
+  isSpinnerVisible1: boolean = false;
   //packagingSlips: any = [];
   objpackagingSlips: any = [];
 
@@ -52,16 +52,16 @@ export class WorkOrderMultiPackagingLabelComponent implements OnInit,OnChanges {
   }
 
   getPackagingSlipView() {
-    this.isSpinnerVisible = true;
+    this.isSpinnerVisible1 = true;
     const data={
      'packagingSlips' :this.packagingSlips
     }
     
     this.workOrderService.getMultiPackagingSlipPrint(data).subscribe(res => {
       this.objpackagingSlips = res[0];
-      this.isSpinnerVisible = false;
+      this.isSpinnerVisible1 = false;
     }, error => {
-      this.isSpinnerVisible = false;
+      this.isSpinnerVisible1 = false;
     })
   }
 

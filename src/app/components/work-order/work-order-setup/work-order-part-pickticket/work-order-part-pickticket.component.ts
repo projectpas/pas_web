@@ -134,6 +134,7 @@ export class WorkOrderPartPickticketComponent implements OnInit {
   }
 
   onSearch() {
+    
     this.isSpinnerVisible = true;
     this.workOrderService
       .getPickTicketListMainPart(this.referenceId, this.workFlowWorkOrderId)
