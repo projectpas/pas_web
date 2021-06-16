@@ -38,8 +38,6 @@ import { MenuItem } from "primeng/api";
 import { SalesApproveComponent } from "../../quotes/shared/components/sales-approve/sales-approve.component";
 import { SalesCustomerApprovalsComponent } from "../../quotes/shared/components/sales-customer-approvals/sales-customer-approvals.component";
 import { forkJoin } from "rxjs/observable/forkJoin";
-import { SalesOrderQuoteFreightComponent } from "../../shared/components/sales-order-quote-freight/sales-order-quote-freight.component";
-import { SalesOrderQuoteChargesComponent } from "../../shared/components/sales-order-quote-charges/sales-order-quote-charges.component";
 import { SalesPartNumberComponent } from "../../shared/components/sales-part-number/sales-part-number.component";
 import { SpeedQuotePartNumberComponent } from "../shared/components/speed-quote-part-number/speed-quote-part-number.component";
 import { SalesQuoteDocumentsComponent } from "../../quotes/sales-document/salesQuote-document.component";
@@ -54,6 +52,7 @@ import { SpeedQuoteMarginSummary } from "../../../../models/sales/SpeedQuoteMarg
 import { SpeedQuoteTypeEnum } from "../models/speed-auote-type-enum";
 import { SpeedQuoteExclusionsComponent } from "../shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
 import { SpeedQuotePrintCritera } from "../models/speed-quote-print-criteria";
+declare var $: any;
 @Component({
   selector: "app-speed-quote-create",
   templateUrl: "./speed-quote-create.component.html",
@@ -94,6 +93,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   accountTypes: any[] = [];
   selectedParts: any[] = [];
   modal: NgbModalRef;
+  printmodal: NgbModalRef;
   errorModal: NgbModalRef;
   tempMemo: any;
   tempMemoLabel: any;
@@ -138,10 +138,6 @@ export class SpeedQuoteCreateComponent implements OnInit {
   @ViewChild("speedQuoteExclusionePrintPopup", { static: false }) public speedQuoteExclusionePrintPopup: ElementRef;
   @ViewChild("speedQuotePrintCritariaPopup", { static: false }) public speedQuotePrintCritariaPopup: ElementRef;
   @ViewChild(SalesApproveComponent, { static: false }) public salesApproveComponent: SalesApproveComponent;
-  @ViewChild(SalesCustomerApprovalsComponent, { static: false }) public salesCustomerApprovalsComponent: SalesCustomerApprovalsComponent;
-  @ViewChild(SalesOrderQuoteFreightComponent, { static: false }) public salesOrderQuoteFreightComponent: SalesOrderQuoteFreightComponent;
-  @ViewChild(SalesOrderQuoteChargesComponent, { static: false }) public salesOrderQuoteChargesComponent: SalesOrderQuoteChargesComponent;
-  @ViewChild(SalesPartNumberComponent, { static: false }) public salesPartNumberComponent: SalesPartNumberComponent;
   @ViewChild(SpeedQuotePartNumberComponent, { static: false }) public speedQuotePartNumberComponent: SpeedQuotePartNumberComponent;
   @ViewChild(SalesQuoteDocumentsComponent, { static: false }) public salesQuoteDocumentsComponent: SalesQuoteDocumentsComponent;
   @ViewChild(SalesQuoteAnalysisComponent, { static: false }) public salesQuoteAnalysisComponent: SalesQuoteAnalysisComponent;
@@ -1845,6 +1841,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
   closeModal() {
     this.modal.close();
   }
+  closePrintModal() {
+    this.printmodal.close()
+  }
 
   openConfirmationModal(submitType: boolean) {
     this.submitType = submitType;
@@ -2000,7 +1999,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     }
     //let content = this.salesQuoteConvertPopup;
     let content = this.speedQuotePrintCritariaPopup;
-    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    this.printmodal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
   }
   printQuoteAndExclusion(){
       let content = this.salesQuotePrintPopup;

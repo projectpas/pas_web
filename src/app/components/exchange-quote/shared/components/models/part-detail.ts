@@ -117,6 +117,13 @@ export class PartDetail {
       this.estOfFeeBilling = 0;
       this.billingIntervalDays = 0;
      }
+
+     get ExchangeCorePrice(): number {
+      return this.exchangeCorePrice;
+    }
+    set ExchangeCorePrice(value: number) {
+      this.exchangeCorePrice = value;
+    }
   
     get QuantityToBeQuoted(): number {
       return this.quantityToBeQuoted;
