@@ -37,7 +37,7 @@
                     [(ngModel)]="measurement.min" value="{{measurement.min}}"></td>
             <td><input class="form-control text-right" type="text" pInputText pKeyFilter="num"
                     [(ngModel)]="measurement.max" (input)="validateMaxMin($event,measurement)" value="{{measurement.max}}"></td>
-            <td><input class="form-control" type="text" [(ngModel)]="measurement.expected"
+            <td><input class="form-control" type="text" pInputText pKeyFilter="num" [(ngModel)]="measurement.expected"
                     value="{{measurement.expected}}"></td>
             <td><input class="form-control" type="text" [(ngModel)]="measurement.diagramURL"
                     value="{{measurement.diagramURL}}"></td>
