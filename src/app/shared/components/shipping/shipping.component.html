@@ -18,9 +18,9 @@
             <button type="submit" class="btn  submit-btn btn btn-primary"
                 [disabled]="disableGeneratePackagingBtn" (click)="generatePackagingSlip()">Generate Packaging
                 Label</button>&nbsp;
-                <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
-                (click)="PerformShipping()">Perform Shipping</button>
             <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedPackagingSlip()">Print Packaging Label</button>&nbsp;
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
+            (click)="PerformShipping()">Perform Shipping</button>
             <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="isgeneratelable" (click)="printSelectedShippingLabel()">Print Shipping
                 Label</button>&nbsp;
           
@@ -52,7 +52,16 @@
                                         <!-- <span *ngIf="summaryColumn.field == 'itemNo'">
                                             Item {{summaryPart[summaryColumn.field] }}
                                         </span> -->
-                                        <span *ngIf="summaryColumn.field != 'itemNo'">
+                                        <span class="float-left"  *ngIf="summaryColumn.field != 'itemNo' &&  summaryColumn.field != 'qtyToShip' &&  summaryColumn.field != 'qtyShipped' &&  summaryColumn.field != 'qtyRemaining'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span  class="float-right" *ngIf="summaryColumn.field == 'qtyToShip'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span  class="float-right" *ngIf="summaryColumn.field == 'qtyShipped'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span  class="float-right" *ngIf="summaryColumn.field == 'qtyRemaining'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
                                     </td>
@@ -128,13 +137,13 @@
                                     <td>
                                         {{ ship.serialNumber }}
                                     </td>
-                                    <td>
+                                    <td  class="number-text-align">
                                         {{ ship.qtyToShip}}
                                     </td>
-                                    <td>
+                                    <td  class="number-text-align">
                                         {{ ship.customsValue }}
                                     </td>
-                                    <td>
+                                    <td >
                                         {{ ship.commodityCode }}
                                     </td>
 
@@ -593,7 +602,7 @@
                                     <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToCountryName" name="soldToCountryName" [disabled]="isView" required disabled />
                                 </div>
                             </div>
-                            <div class="checkbox-cstm sipto-ceck-div">
+                            <div *ngIf="ishidesame"  class="checkbox-cstm sipto-ceck-div">
                                 <label class="shipto-ceck-label">
                                   <!--  -->
                                   <input type="checkbox" [(ngModel)]="shippingHeader.isSameForShipTo" name="cparent" id="cparent"  (click)="assignDetails($event.target.checked)"
@@ -829,6 +838,8 @@
 <div *ngIf="workorderpackage">
     <app-wo-order-multi-Packaging-Label (Updateshippingpopup)="hideShippingPopup()"  [packagingSlips]="packagingSlips"></app-wo-order-multi-Packaging-Label>
 </div>
+
+
 <div *ngIf="workordershipping">
     <app-work-order-multi-shipping-label (Updateshippingpopup)="hideShippingPopup()" [shippingLabels]="shippingLabels" ></app-work-order-multi-shipping-label>
 </div>
