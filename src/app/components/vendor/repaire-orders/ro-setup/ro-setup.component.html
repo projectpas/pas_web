@@ -703,7 +703,7 @@
                                                 id="revisedPartId{{row_index}}" [forceSelection]="true"
                                                 [suggestions]="revisedPartNumCollection"
                                                 (completeMethod)="filterRevisedPart($event)" [size]="30" [minLength]="1"
-                                                [dropdown]="true" [disabled]="partList.isApproved" required>
+                                                [dropdown]="true" [disabled]="partList.isApproved">
                                             </p-autoComplete>
                                         </td>
                                         <td>{{partList.stockType}}</td>
