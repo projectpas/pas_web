@@ -20,7 +20,7 @@
         <div  *ngIf="isUserLoggedIn" class="title-logo-login">
           <p>
             <a routerLink="/">
-              <img src="assets/images/PAS-logo.png" id="logo" style="padding-left:0px !important;width:100%" />
+              <img src="assets/images/PAS-logo.png" id="logo" style="padding-left:0px !important;" />
             </a>
           </p>
           
@@ -31,9 +31,9 @@
         [ngClass]="{ sticky: isSticky }"
       ></p-megaMenu>
         <span class="app-toolbar-spacer"></span>
-        <span  *ngIf="isUserLoggedIn" matTooltip="Dashboard">
+        <!-- <span  *ngIf="isUserLoggedIn" matTooltip="Dashboard">
         <i class="fa fa-sitemap entity-block-btn" (click)="showthis()"></i>
-        </span>
+        </span> -->
         <!-- <app-theme-picker
           tooltip="{{ 'mainMenu.Theme' | translate }}"
         ></app-theme-picker> -->

@@ -1535,8 +1535,40 @@ export class AppComponent implements OnInit, AfterViewInit {
       },
 
       {
-        label: 'Account',
+        label: 'Dashboard',
          icon: 'fa fa-user-circle',
+        items: [
+          [
+            {
+              label: 'Dashboard',
+              items: [
+                {
+                  label: 'Comp',
+                  routerLink:'',
+                },  
+                {
+                  label: 'BU',
+                  routerLink:'',
+                }, 
+                {
+                  label: 'Div',
+                  routerLink:'',
+                },  
+                {
+                  label: 'Dept',
+                  routerLink:'',
+                },          
+              ],
+            },
+           
+          ],
+
+        ],
+      },
+
+      {
+        label: 'Account',
+         icon: 'fa fa-user-circle-o',
         items: [
           [
             {
