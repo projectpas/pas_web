@@ -648,9 +648,9 @@ export class WorkOrderService {
     getFreightHistory(isSubworkOrder, freightId) {
         return this.workOrderEndpointService.getFreightHistory(isSubworkOrder, freightId);
     }
-    getShippingDataList(WorkOrderId: number): Observable<any> {
+    getShippingDataList(WorkOrderId: number,workOrderPartNumberId :number): Observable<any> {
         return Observable.forkJoin(
-            this.workOrderEndpointService.getShippingDataList(WorkOrderId)
+            this.workOrderEndpointService.getShippingDataList(WorkOrderId,workOrderPartNumberId)
         );
     }
 

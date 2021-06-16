@@ -8,7 +8,6 @@
             style="min-height: 130px !important;">
             <div class="tableFixHead">
                 <table class="table table-bordered" id="soq-table">
-                    <!-- <tr class="header-table-width" style="font-size: 10px"> -->
                     <tr class="font-size-10">
                         <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'min-width': summaryColumn.width}">
                             <ng-container *ngIf="summaryColumn.field == 'quantityToBeQuoted'
@@ -32,9 +31,6 @@
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of summaryColumns" class="summary-column"
                                         pReorderableRowHandle>
-                                        <!-- <span *ngIf="summaryColumn.field == 'count'">
-                                            Item {{ rowIndex + 1 }}
-                                        </span> -->
                                         <span *ngIf="summaryColumn.field == 'itemNo'">
                                             {{summaryPart[summaryColumn.field] }}
                                         </span>
@@ -250,7 +246,7 @@
                                         {{ part.qtyAvailable | globalNmberFormat}}
                                     </td>
                                     <td class="text-right">
-                                        {{ part.quantityOnHand| globalNmberFormat}}
+                                        {{ part.quantityOnHand | globalNmberFormat}}
                                     </td>
                                     <td class="text-right">
                                         {{ part.quantityToBeQuoted | globalNmberFormat}}
@@ -265,7 +261,7 @@
                                         {{ salesQuote.status }}
                                     </td>
                                     <td class="text-right">
-                                        {{ part.grossSalePricePerUnit  | twoDecimalGlobalNumberFormatPipe}}
+                                        {{ part.grossSalePricePerUnit | twoDecimalGlobalNumberFormatPipe}}
                                     </td>
                                     <td class="text-right">
                                         {{ part.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}
@@ -289,10 +285,10 @@
                                         {{ getMarginPercentage(part) | twoDecimalGlobalNumberFormatPipe}}
                                         %</td>
                                     <td class="text-right">
-                                        {{ part.freight  | twoDecimalGlobalNumberFormatPipe }}
+                                        {{ part.freight | twoDecimalGlobalNumberFormatPipe }}
                                     </td>
                                     <td class="text-right">
-                                        {{ part.taxAmount  | twoDecimalGlobalNumberFormatPipe }}
+                                        {{ part.taxAmount | twoDecimalGlobalNumberFormatPipe }}
                                     </td>
                                     <!-- <td class="text-right">
                                         {{ part.unitCostPerUnit  | twoDecimalGlobalNumberFormatPipe }}

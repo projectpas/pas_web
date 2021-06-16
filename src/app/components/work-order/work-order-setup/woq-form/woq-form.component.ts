@@ -24,7 +24,7 @@ export class WoqFromComponent implements OnInit,OnChanges {
   @Output() Workorderprint = new EventEmitter();
   //ReleaseData: any;
   workOrderprintData: any = [];
-  isSpinnerVisible: boolean = true;
+  isSpinnerVisibleNew: boolean = true;
   modal: NgbModalRef;
   private onDestroy$: Subject<void> = new Subject<void>();
   Printeddate1 : string;
@@ -71,30 +71,28 @@ close()
 }
 
 GetWorkOrderQoutePrintFormData() {
-  this.isSpinnerVisible = true;
+  this.isSpinnerVisibleNew = true;
   this.workOrderService.GetWorkOrderQoutePrintFormData(this.workOrderId,this.workOrderPartNumberId,this.workFlowWorkOrderId).subscribe(res => {
       this.workOrderprintData = res[0];
      // this.getWorkOrderCharges();
       //this.onWorkOrderPrintLoad.emit();
-      this.isSpinnerVisible = false;
+      this.isSpinnerVisibleNew = false;
   }, error => {
-      this.isSpinnerVisible = false;
+      this.isSpinnerVisibleNew = false;
   })
 }
 
 
 
   handleError(err) {
-    this.isSpinnerVisible = false;
+    this.isSpinnerVisibleNew = false;
 }
   
 
   print(): void {
     this.Workorderprint.emit();
-    //this.CreateUpdateReleasedata();
-   // this.updateRelreaseList.emit();
     let printContents, popupWin;
-    printContents = document.getElementById('woReleaseFrom').innerHTML;
+    printContents = document.getElementById('woqprintform').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
     popupWin.document.write(`

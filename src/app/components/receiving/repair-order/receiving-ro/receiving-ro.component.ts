@@ -357,7 +357,7 @@ export class ReceivingRoComponent implements OnInit {
 
     ngOnInit() {
         this.isSpinnerVisible = true; 
-        this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
+        this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];        
         this.getROViewById(this.repairOrderId);
         this.receivingService.getReceivingROPartById(this.repairOrderId, this.employeeId).subscribe(res => {
             this.loadRepairOrderData(res[0], res[1])
@@ -737,7 +737,7 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.unitOfMeasureId = part.uomId;                 
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());            
-            stockLine.revisedPartId = this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId);   
+            stockLine.revisedPartId = part.revisedPartId > 0 ? this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId) : 0;   
             stockLine.aircraftTailNumber = part.acTailNum;
             if (part.itemMaster != undefined) {
                 stockLine.repairOrderUnitCost = part.unitCost;

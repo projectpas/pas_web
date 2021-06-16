@@ -42,6 +42,7 @@ export class ShippingComponent implements OnInit {
     isMultipleSelected: boolean = false;
     isgeneratelable: boolean = true;
     ispackagegeneratelable: boolean = true;
+    ishidesame: boolean = false;
     customerDetails:any;
     workOrderPartId:number;
     woShippingId:number;
@@ -146,7 +147,7 @@ export class ShippingComponent implements OnInit {
     getShippingList() {
         this.isSpinnerVisible = true;
         this.workorderService
-            .getShippingDataList(this.workOrderId)
+            .getShippingDataList(this.workOrderId,this.workOrderPartNumberId)
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
                 this.shippingList = response[0];
@@ -227,11 +228,8 @@ printSelectedPackagingSlip()
         let packagingSlips1: any[] = [];
 
         packagingSlips1 = packagingSlipsToPrint;
-        //const packagingSlip
-
         this.packagingSlips =[];
         this.packagingSlips =[...packagingSlips1];
-        console.log(this.packagingSlips);
         // this.modal = this.modalService.open(SalesOrderMultiPackagingLabelComponent, { size: "lg" });
         // let instance: SalesOrderMultiPackagingLabelComponent = (<SalesOrderMultiPackagingLabelComponent>this.modal.componentInstance)
         // instance.modalReference = this.modal;
@@ -293,6 +291,7 @@ PerformShipping()
     this.isViewShipping = false;
     this.isMultipleSelected = true;
     this.partSelected = true;
+    this.shippingHeader.isSameForShipTo=false;
     this.bindData();
 }
 
@@ -321,6 +320,7 @@ onSelectPartNumber(rowData) {
     this.partSelected = true;
     this.isMultipleSelected = false;
     this.isViewShipping = false;
+    this.shippingHeader.isSameForShipTo=false;
     this.clearData();
     this.bindData();
 }
@@ -333,12 +333,23 @@ bindData() {
     // this.getUnitOfMeasure();
     //this.getAddressById(this.salesOrderId);
 
-    this.getShippingList();
+    //this.getShippingList();
     this.getShipVia();
     this.getCountriesList();
-    this.getShippingData();
-    this.loadcustomerData('');
+
+ 
+
+   // this.getShippingData();
+  
     this.getUnitOfMeasure();
+    if (this.workOrderGeneralInformation) 
+    {
+        this.shippingHeader.shipToCustomerId = this.workOrderGeneralInformation['customerDetails'];
+        this.id= this.workOrderGeneralInformation['customerDetails']['customerId']
+        this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']['customerId'], 0);
+        this.getSiteName(this.workOrderGeneralInformation['customerDetails']['customerId'], 0)
+    }
+    this.loadcustomerData('');
     if (this.managementStructureId != undefined) {
         this.getOriginSiteNames();
     }
@@ -510,7 +521,20 @@ checkedToGenerate(evt, ship) {
             .subscribe(
                 res => {
                     this.siteList = res;
-                    if (!this.shippingHeader.soldToSiteId) {
+
+                    if (siteid > 0) 
+                    {
+                        this.siteList.forEach(
+                            x => {
+                                if (x.siteID == siteid) {
+                                    this.shippingHeader.soldToSiteId = x.siteID;
+                                    this.setSoldToAddress();
+                                }
+                            }
+                        )
+                    } 
+                    else 
+                    {
                         this.siteList.forEach(
                             x => {
                                 if (x.isPrimary) {
@@ -518,9 +542,8 @@ checkedToGenerate(evt, ship) {
 
                                     this.setSoldToAddress();
                                 }
-                            }
-                        )
-                    }
+                            })
+                 }
                 }, err => {
                     this.errorHandling(err);
                 });
@@ -600,8 +623,9 @@ checkedToGenerate(evt, ship) {
 
     assignDetails(value) {
         if (value == true) {
+            debugger;
             this.shippingHeader.shipToCustomerId = this.workOrderGeneralInformation['customerDetails'];
-            this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails'], 0);
+            this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']['customerId'], this.shippingHeader.soldToSiteId);
             this.shippingHeader['shipToSiteId'] = this.shippingHeader.soldToSiteId;
             this.shippingHeader['shipToAddress1'] = this.shippingHeader.soldToAddress1;
             this.shippingHeader['shipToAddress2'] = this.shippingHeader.soldToAddress2;
@@ -806,7 +830,7 @@ checkedToGenerate(evt, ship) {
                         p.currQtyToShip = a.woshippingchildviewlist[i].qtyToShip;
                         p.workOrderPartId = a.woshippingchildviewlist[i].workOrderPartId;
                         this.currwOPickTicketId=a.woshippingchildviewlist[i].woPickTicketId;
-                        this.workOrderPartNumberId=a.woshippingchildviewlist[i].workOrderPartNumberId;
+                        //this.workOrderPartNumberId=this.workOrderPartNumberId;
                         shippingItems.push(p);
                     }
                 }

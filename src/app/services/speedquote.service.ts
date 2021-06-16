@@ -21,6 +21,7 @@ import { ISpeedQuoteView } from "../models/sales/ISpeedQuoteView";
 import { SpeedQuoteEndpointService } from "./speedquote-endpoint.service";
 import { SpeedQuoteMarginSummary } from "../models/sales/SpeedQuoteMarginSummary";
 import { ISpeedQuoteListView } from "../models/sales/ISpeedQuoteListView";
+import { SpeedQuotePrintCritera } from "../components/sales/speed-quote/models/speed-quote-print-criteria";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
@@ -351,6 +352,11 @@ export class SpeedQuoteService {
   getExclusionPrintview(speedQuoteId: number): Observable<any> {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.getExclusionPrintview(speedQuoteId)
+    );
+  }
+  sendSppedQuoteEmail(speedQuotePrintCritera: SpeedQuotePrintCritera): Observable<SalesOrderView[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.sendSppedQuoteEmail(speedQuotePrintCritera)
     );
   }
 }

@@ -79,6 +79,7 @@ export class StocklineViewComponent implements OnInit {
                 shelfLifeExpirationDate: res.shelfLifeExpirationDate ? this.datePipe.transform(res.shelfLifeExpirationDate, "MM/dd/yyyy") : '',
                 receiverNumber: res.receiver,
                 purchaseUnitOfMeasureId:res.purchaseUnitOfMeasureId ,
+                unitOfMeasure:res.unitOfMeasure,
                 vendorId:res.vendorId,
                 serialNumber:res.serialNumber,
                 quantityOnHand: (res.quantityOnHand || res.quantityOnHand == 0) ? formatNumberAsGlobalSettingsModule(res.quantityOnHand, 0) : '',

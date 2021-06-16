@@ -427,6 +427,8 @@ export class ExchangeQuotePartNumberComponent {
   }
   enableUpdateButton: boolean = false;
   approve() {
+    alert()
+    debugger;
     console.log("selectedParts",this.selectedParts);
     this.enableUpdateButton = true;
     let partList: any = [];

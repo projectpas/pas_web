@@ -1,13 +1,13 @@
             
    <div id="woReleaseFromDiv" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
-        <div class="modal-content" id="woReleaseFrom">
+        <div class="modal-content" >
 
             <div class="modal-header">
                 <button type="button" class="close" (click)="close()" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title warning_color"></h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="woqprintform">
                 <div class="clear"></div>
                 <form id="" name="" action="#" method="post" onsubmit="return false;">
                   <div class="image" style="min-height:500px;height:auto">
@@ -70,31 +70,35 @@
                             <td class="border-right">{{part.partnumber}}</td>
                             <td class="border-right">{{part.partDescription}}</td>
                             <td class="border-right">{{part.uomName}}</td>
-                            <td class="border-right">{{part.quantity}}</td>
-                            <td class="border-right">{{part.unitCost}}</td>
-                            <td class="border-right">{{part.extCost}}</td>
+                            <td class="border-right text-right">{{part.quantity}}</td>
+                            <td class="border-right text-right">{{part.unitCost | number : '1.2-2'}}</td>
+                            <td class="border-right text-right">{{part.extCost | number : '1.2-2'}}</td>
                             
                             </tr>
                           </ng-container>
                           <tr style="border:1px solid black"><td colspan="5" ><b>Total Material </b></td>
-                          <td class="text-right">{{this.workOrderprintData.materialBilling}}</td>
+                          <td class="text-right">{{this.workOrderprintData.materialFlatBillingAmount | number : '1.2-2'}}</td>
                           
                           </tr>
                           
                           <tr style="border:1px solid black"><td colspan="5"><b>Labor Cost </b> </td>
-                          <td class="text-right">{{this.workOrderprintData.laborBilling}}</td>
+                          <td class="text-right">{{this.workOrderprintData.laborFlatBillingAmount | number : '1.2-2'}}</td>
                           
                           </tr>
                           
                           
                           <tr style="border:1px solid black"><td colspan="5"><b>Misc Charges </b></td>
-                          <td class="text-right">{{this.workOrderprintData.chargesBilling}}</td>
+                          <td class="text-right">{{this.workOrderprintData.chargesFlatBillingAmount | number : '1.2-2'}}</td>
                           
                           </tr>
+                          <tr style="border:1px solid black"><td colspan="5"><b>FREIGHT Cost </b></td>
+                            <td class="text-right">{{this.workOrderprintData.freightFlatBillingAmount | number : '1.2-2'}}</td>
+                            
+                            </tr>
                           
                           
                           <tr style="border:1px solid black"><td colspan="5"><b>Total Amount PN </b></td>
-                          <td class="text-right"><b>{{this.workOrderprintData.totalAmountPN}}</b></td>
+                          <td class="text-right"><b>{{this.workOrderprintData.totalAmountPN | number : '1.2-2'}}</b></td>
                           
                           </tr>
 
@@ -125,23 +129,25 @@
                 <button *ngIf="!isView" type="submit" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
              </div>
+        </div>
+
+        <div class="preloader" *ngIf="isSpinnerVisibleNew">
+          <div class="loading">
+            <div class="lds-roller">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
+        </div>
          
     </div>
 </div>
-<div class="preloader" *ngIf="isSpinnerVisible">
-    <div class="loading">
-      <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-  </div>
+
             
 

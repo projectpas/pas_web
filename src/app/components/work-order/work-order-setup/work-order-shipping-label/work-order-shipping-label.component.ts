@@ -26,6 +26,7 @@ export class WorkOrderShippingLabelComponent implements OnInit {
   // woShippingId: number;
   endPointURL: any;
   isPrint: boolean = false;
+  isSpinnerVisibleNew : boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -44,8 +45,14 @@ export class WorkOrderShippingLabelComponent implements OnInit {
   }
 
   getSalesOrderShippingLabel() {
+    this.isSpinnerVisibleNew= true;
     this.workOrderService.getShippingLabelPrint(this.workOrderId, this.workOrderPartId, this.woShippingId).subscribe(res => {
-        this.workOrderShipping = res[0].woShippingLabelViewModel;
+      this.isSpinnerVisibleNew= false;
+      this.workOrderShipping = res[0].woShippingLabelViewModel;
+      
+    }
+    , error => {
+      this.isSpinnerVisibleNew = false;
     })
 }
 
@@ -70,8 +77,8 @@ close()
 
 print() {
   let printContents, popupWin;
-  this.Updateshippingpopup.emit();
-  printContents = document.getElementById('soShippingLabel').innerHTML;
+
+  printContents = document.getElementById('woShippingLabel').innerHTML;
   popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
   popupWin.document.open();
   popupWin.document.write(`
@@ -300,6 +307,7 @@ margin-bottom: 0;
     </html>`
   );
   popupWin.document.close();
+  this.Updateshippingpopup.emit();
  
   setTimeout(() => {
       this.isPrint = false;  

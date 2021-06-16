@@ -30,17 +30,16 @@
                   <div class="text-right" *ngIf="summaryColumn.field == 'qty'
                   || summaryColumn.field == 'qtyToShip'
                    || summaryColumn.field == 'qtyToPick'
+                   || summaryColumn.field == 'readyToPick'
                   || summaryColumn.field == 'quantityAvailable'
-                  || summaryColumn.field == 'qtyToShip'
-                  || summaryColumn.field == 'qtyToShip'">
+                  ">
                   {{summaryPart[summaryColumn.field]}}
                 </div>
                 <div *ngIf="summaryColumn.field != 'qty'
                 && summaryColumn.field != 'qtyToShip'
                 && summaryColumn.field != 'qtyToPick'
                 && summaryColumn.field != 'quantityAvailable'
-                && summaryColumn.field != 'qtyToShip'
-                && summaryColumn.field != 'qtyToShip' 
+                && summaryColumn.field != 'readyToPick'
                 && summaryColumn.field != 'partNumber'
                 && summaryColumn.field != 'partDescription'">
                 {{summaryPart[summaryColumn.field]}}
@@ -84,7 +83,7 @@
                   <td>
                     {{ part.stockLineNumber }}
                   </td>
-                  <td>
+                  <td style="text-align: right;">
                     {{ part.qtyToShip }}
                   </td>
                   <td>

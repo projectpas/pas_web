@@ -28,7 +28,7 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
   workOrder: any = [];
   parts: any = [];
   management: any = {};
-  isSpinnerVisible: boolean = false;
+  isSpinnerVisibleNew: boolean = false;
   packagingSlips: any = [];
   objpackagingSlips: any = [];
 
@@ -49,14 +49,14 @@ export class WorkOrderPackagingLabelComponent implements OnInit {
 
  
   getSalesPickTicketView() {
-    this.isSpinnerVisible = true;
+    this.isSpinnerVisibleNew = true;
     this.workOrderService.getPackagingSlipPrint(this.workOrderId, this.workOrderPartId, this.woPickTicketId, this.packagingSlipId).subscribe(res => {
       this.workOrder = res[0].packagingLabelViewModel;
       this.parts = res[0].packagingLabelPartViewModel;
       this.management = res[0].managementStructureHeaderData;
-      this.isSpinnerVisible = false;
+      this.isSpinnerVisibleNew = false;
     }, error => {
-      this.isSpinnerVisible = false;
+      this.isSpinnerVisibleNew = false;
     })
   }
 
