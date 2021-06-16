@@ -22,7 +22,7 @@
                                             <td>{{part.itemMaster?.partNumber}}</td>
                                             <td>{{part.quantityToRepair}}</td>
                                             <td>{{part.stockLine.length}}</td>
-                                            <td>{{part.quantityToRepair - part.stockLine.length}}</td>
+                                            <td>{{part.quantityBackOrdered}}</td>
                                             <td class="details-control eachcol" style="padding: 4px 6px;">
                                                 <i class="fa fa-{{ part.showStockLineGridDraft ? 'minus':'plus'}} btn btn-success btn-cstm btn-xs margin0 btn-receiving-toggle" (click)="toggleExpandIcon(part)"></i>
                                             </td>

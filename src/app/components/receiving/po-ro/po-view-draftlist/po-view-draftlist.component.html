@@ -23,7 +23,8 @@
                                             <td>{{part.itemMaster?.partNumber}}</td>
                                             <td class="text-right">{{part.quantityOrdered}}</td>
                                             <td class="text-right">{{part.stockLine.length}}</td>
-                                            <td class="text-right">{{part.quantityOrdered - part.stockLine.length}}</td>
+                                            <!-- <td class="text-right">{{part.quantityOrdered - part.stockLine.length}}</td> -->
+                                            <td class="text-right">{{part.quantityBackOrdered}}</td>
                                             <td class="details-control eachcol" style="padding: 4px 6px;">
                                                 <i class="fa fa-{{ part.showStockLineGridDraft ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs" (click)="toggleExpandIcon(part)"></i>
                                             </td>

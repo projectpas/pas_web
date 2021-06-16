@@ -132,7 +132,7 @@
                                     <td class="text-right">{{part.quantityBackOrdered}}</td>
                                     <td>{{SL.receiverNumber}}</td>
                                     <td class="text-right">{{SL.unitCost}}</td>
-                                    <td class="text-right">{{SL.purchaseOrderExtendedCost}}</td>
+                                    <td class="text-right">{{SL.quantity * SL.unitCost | number : '1.2-2'}}</td>
                                     <td>{{part.workOrderNo}}</td>
                                     <td>{{part.subWorkOrderNo}}</td>
                                     <td>{{part.salesOrderNo}}</td>

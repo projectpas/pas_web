@@ -240,7 +240,7 @@
                                     <th>Location</th>
                                     <th>Shelf</th>
                                     <th>Bin</th>
-                                    <th colspan="43"></th>
+                                    <th colspan="40"></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -379,7 +379,7 @@
                                                 </option>
                                             </select>
                                         </td>
-                                        <td colspan="43"></td>
+                                        <td colspan="40"></td>
                                         <td><a matTooltip="Edit" matTooltipPosition="above"
                                                 class="btn boxed-float-btn nobg edit"><i class="fa fa-edit"
                                                     (click)="editPart(part)"></i></a></td>
@@ -439,7 +439,8 @@
                                             <th colspan="5">Cycles</th>
                                             <th colspan="5">Time</th>
                                             <th colspan="5">Last</th>
-                                            <th colspan="4"></th>
+                                            <!-- <th colspan="4"></th> -->
+                                            <th></th>
                                         </tr>
                                         <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
                                             <tr [ngStyle]="{'background-color': SL.stockLineId > 0 ? '#e9ecef' : 'white'}"
@@ -911,7 +912,7 @@
                                                     <input type="checkbox" disabled
                                                         [checked]="part.timeLife[stockline_row_index].stockLineDraftId > 0" />
                                                 </td>
-                                                <td colspan="17"
+                                                <td colspan="15"
                                                     *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)">
                                                 </td>
                                                 <td *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)">
@@ -1175,6 +1176,7 @@
                                                     </td>
                                                     <td></td>
                                                     <td></td>
+                                                   
                                                 </ng-container>
                                                 <td>
                                                     <div *ngIf="!SL.stockLineId > 0">
@@ -1192,7 +1194,6 @@
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>
-
                             </tbody>
                             <tbody *ngIf="!isROStockline">
                                 <tr>

@@ -72,9 +72,11 @@ export class ROViewListComponent implements OnInit {
         stockline = stockline.map(x => {
             return {
                 ...x,
-                unitCost : x.unitCost.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost.unitCost, 2) : '0.00',
+                unitCost : x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
                 repairOrderUnitCost: x.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.repairOrderUnitCost, 2) : '0.00',
+                //repairOrderExtendedCost: x.unitCost ? formatNumberAsGlobalSettingsModule(( x.quantityToRepair * x.unitCost) , 2) : '0.00'
                 repairOrderExtendedCost: x.repairOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2) : '0.00'
+
             }
         })
         return stockline;

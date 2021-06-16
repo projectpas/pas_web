@@ -122,10 +122,9 @@
                                     <td>{{SL.serialNumber}}</td>
                                     <td>{{SL.receiverNumber}}</td>
                                     <td class="text-right">{{SL.quantity}}</td>
-                                    <td class="text-right">{{part.quantityBackOrdered}}</td>
-    
+                                    <td class="text-right">{{part.quantityBackOrdered}}</td>    
                                     <td class="text-right">{{SL.unitCost}}</td>
-                                    <td class="text-right">{{SL.repairOrderExtendedCost}}</td>
+                                    <td class="text-right">{{SL.quantity * SL.unitCost | number : '1.2-2'}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
