@@ -236,7 +236,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.getPercentageList();
         this.getInvoiceList();
         this.resetOtherOptions();
-        this.BindManagementStructure();
+        //this.BindManagementStructure();
         this.getCurrencyList();
         this.resetMisCharges();
         this.resetMaterial();
@@ -1237,6 +1237,7 @@ resetallcost()
                 this.shipCustomerAddress.postalCode = site.postalCode;
                 this.shipCustomerAddress.stateOrProvince = site.stateOrProvince;
                 this.shipCustomerAddress.city = site.city;
+                this.billingorInvoiceForm.shipToAttention =site.attention;
             }
         });
     }
