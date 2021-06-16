@@ -490,9 +490,9 @@ setTimeout(() => {
   onItemSelect(item: any) {
     if (!this.laborForm.workOrderLaborList[0][item.description]) {
       this.laborForm.workOrderLaborList[0][item.description] = [];
-      if (this.laborForm.isTaskCompletedByOne) {
-        this.addNewTask(item.description);
-      }
+      // if (this.laborForm.isTaskCompletedByOne) {
+        this.addNewTask(item.description); 
+      // }
     }
     this.disabledUpdatebtn = false;
   }
@@ -719,7 +719,7 @@ setTimeout(() => {
 
         }
       }
-    )
+    ) 
     // this.isQuote && 
     if (this.basicLabourDetail) {
       // burdenRateId
