@@ -299,10 +299,11 @@
                                         {{ part.qtyToShip | globalNmberFormat }}
                                     </td>
                                     <td>
-                                        {{  part.altOrEqType }}
+                                        {{ part.altOrEqType }}
                                     </td>
                                     <td>
-                                        {{ part.statusName }}
+                                        <!-- {{ part.statusName }} -->
+                                        {{ salesQuote.status }}
                                     </td>
                                     <td>
                                         {{ part.salesQuoteNumber }}
@@ -430,8 +431,7 @@
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         <span class="value">
                                             <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
-                                                [matTooltip]="parsedText(part.notes)"
-                                                [innerHTML]="part.notes"></p>
+                                                [matTooltip]="parsedText(part.notes)" [innerHTML]="part.notes"></p>
                                         </span>
                                     </td>
                                     <td class="zui-sticky-col width-107" *ngIf="isViewMode == false">

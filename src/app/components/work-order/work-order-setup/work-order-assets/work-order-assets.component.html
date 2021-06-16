@@ -398,9 +398,9 @@
                           <i class="fa fa-plus btn btn-success btn-cstm1 btn-xs1 step2-padding" matTooltip="Show Asset Inventory list"
                             matTooltipPosition="above"  (click)="openGrid()"></i> 
                         </a>
-                      </span>
+                      </span> 
 
-                      <button type="button" (click)="CloseGrid()" class="btn btn-danger roleUpd" *ngIf="togglePlus ==true"  matTooltip="Show stock line details"  matTooltipPosition="above"  style="font-size: 10px !important;" >
+                      <button type="button" (click)="CloseGrid();releaseInventory()" class="btn btn-danger roleUpd" *ngIf="togglePlus ==true"  matTooltip="Show stock line details"  matTooltipPosition="above"  style="font-size: 10px !important;" >
                       <i 
                       class="fa fa-minus mr-0" ></i>  
                     </button>
@@ -472,9 +472,10 @@
                           </td>
                           <td class="width-100">
                             <div  *ngIf="assetsform.assetStatus == 'checkOut'"> 
+                              <!-- row.checkOutDate -->
                               <p-calendar [showIcon]="true" [yearNavigator]="true"
-                               [monthNavigator]="true" yearRange="1900:2100"   [showTime]="true" 
-                               appendTo='body' [baseZIndex]="9999" [(ngModel)]="row.checkOutDate"
+                               [monthNavigator]="true" yearRange="1900:2100"   [showTime]="true"  hourFormat="24"
+                               appendTo='body' [baseZIndex]="9999" [(ngModel)]="todaysDate"
                                [showIcon]="true" [disabled]="!row.isChecked" [maxDate]="todaysDate"
                                 name="checkOutDate{{i}}"></p-calendar>
                             </div>
@@ -492,10 +493,11 @@
                           </td>
                           <td class="width-100"> 
                             <div  *ngIf="assetsform.assetStatus == 'checkIn'">
-                              <p-calendar [(ngModel)]="row.checkInDate" [showTime]="true" 
+                              <!-- row.checkInDate -->
+                              <p-calendar [(ngModel)]="todaysDate" [showTime]="true" 
                               [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                [showIcon]="true" [disabled]="!row.isChecked" [maxDate]="todaysDate"
-                               appendTo='body' [baseZIndex]="9999"
+                               appendTo='body' [baseZIndex]="9999" hourFormat="24"
                                 name="checkInDate{{i}}"></p-calendar>
                             </div>
                             <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy , h:mm a'}}</div>

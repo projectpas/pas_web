@@ -396,7 +396,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Internal Approvers">
+        <p-tabPanel header="Internal Approvers" *ngIf="!poHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
             <table class="table table-bordered " id="po-table">
@@ -439,7 +439,7 @@
           </div>
         </p-tabPanel>   
 
-        <p-tabPanel header="Approver Process">
+        <p-tabPanel header="Approver Process" *ngIf="!poHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
                 <table class="table table-bordered">
@@ -792,7 +792,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Internal Approvers">
+        <p-tabPanel header="Internal Approvers" *ngIf="!roHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
             <table class="table table-bordered " id="po-table">
@@ -835,7 +835,7 @@
           </div>
         </p-tabPanel>   
 
-        <p-tabPanel header="Approver Process">
+        <p-tabPanel header="Approver Process"  *ngIf="!roHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
                 <table class="table table-bordered">

@@ -41,7 +41,10 @@
                                         <!-- <span *ngIf="summaryColumn.field == 'itemNo'">
                                             {{summaryPart[summaryColumn.field] }}
                                         </span> -->
-                                        <span class="float-right" *ngIf="summaryColumn.field != 'partNumber' && summaryColumn.field != 'conditionDescription' && summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes'">
+                                        <!-- <span class="float-right" *ngIf="summaryColumn.field != 'partNumber' && summaryColumn.field != 'conditionDescription' && summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span> -->
+                                        <span class="float-right" *ngIf="summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
                                      

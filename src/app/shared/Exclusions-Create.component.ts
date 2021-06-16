@@ -153,10 +153,8 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
 
     getConditionsList() { 
         this.isSpinnerVisible = true;
-        let consitionIds = [];
-        // console.log("this.edi",this.isEdit,this.UpdateMode)
-        if (this.UpdateMode) {
-            // console.log("edit Data",this.workFlow.exclusions)
+        let consitionIds = []; 
+        if (this.UpdateMode) { 
             // consitionIds = this.workFlow.exclusions.reduce((acc, x) => {
             //  consitionIds.push(this.editData? this.editData.conditionId:0);
             // }, 0)
@@ -260,11 +258,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         object.partNumber = null;
     }
 
-    onPartSelect(event, exclusion, index) {
-                console.log("this.workFlow.materialList",this.workFlow.exclusions)
-        console.log("evvvv",event)
-        console.log("this.workFlow",this.workFlow)
-        console.log("exclusion",exclusion)
+    onPartSelect(event, exclusion, index) { 
         var isEpnExist = this.workFlow.exclusions.find(x => x.isDeleted==false && x.itemMasterId == event.partId && x.taskId == this.workFlow.taskId);
         if (isEpnExist != undefined) {
             exclusion.partName=undefined;

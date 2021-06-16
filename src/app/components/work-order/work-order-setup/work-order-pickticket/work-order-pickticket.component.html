@@ -280,7 +280,7 @@
               <ng-container *ngIf="col.field =='qtyToShip'">
                 <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
                   required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
-                  [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false"
+                  [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false" (focusout)="onFocusOutEvent(rowData)"
                   required="col.field =='qtyToShip'" />
               </ng-container>
             </td>

@@ -241,9 +241,13 @@
 							<span>
 								<a class="btn nobg btn-view-cstm" (click)="viewSelectedRow(viewRO,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>                
                             </span>
-							<span *ngIf="isReceivingRolist == false">
-								<a class="btn nobg btn-edit-cstm" (click)="edit(rowData)"
+							<span >
+								<a *ngIf="(rowData.statusId == pendingStatusId || rowData.statusId == openStatusId) && isReceivingRolist == false" class="btn nobg btn-edit-cstm" (click)="edit(rowData)"
 								   matTooltip="Edit" matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a>
+
+								<a *ngIf="rowData.statusId == fulfillingStatusId && isReceivingRolist == false"
+									class="btn nobg btn-edit-cstm" data-dismiss="modal"><i class="fa fa-pencil"
+										style="color:gray !important;"></i></a>
 							</span>
 							<span *ngIf="isReceivingRolist == false" data-toggle="modal" data-target="#roDelete">
 								<a class="btn nobg btn-delete-cstm" (click)="delete(rowData)"
@@ -264,11 +268,11 @@
 									<i class="fa fa-pencil"></i>
 								</a>
 							</span>
-							<span *ngIf="rowData.statusId == closedStatusId && isReceivingRolist == true" (click)="viewSummary(rowData)">
+							<!-- <span *ngIf="rowData.statusId == closedStatusId && isReceivingRolist == true" (click)="viewSummary(rowData)">
 								<a data-toggle="tooltip" matTooltip="View Summary" matTooltipPosition="above"  class="btn nobg" data-original-title="" edit="">
 									<i class="fa fa-external-link"></i>
 								</a>
-							</span>
+							</span> -->
 
 						</div>
 						<div *ngIf="currentDeletedstatus == true">							

@@ -109,7 +109,7 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'conditionDescription', header: 'Cond', width: '90px', textalign: 'left' },
       { field: 'itemGroup', header: 'Item Group', width: '100px', textalign: 'left' },
       { field: 'manufacturer', header: 'Manufacturer', width: '90px', textalign: 'left' },
-      { field: 'itemClassification', header: 'Classification', width: '90px', textalign: 'left' },
+      { field: 'itemClassificationCode', header: 'Classification', width: '90px', textalign: 'left' },
       { field: 'oempmader', header: 'OEM/PMA/DER', width: '90px', textalign: 'left' },
       { field: 'alternateFor', header: 'Alt/Equiv For', width: '90px', textalign: 'left' },
       { field: 'qtyToOrder', header: 'Qty Req', width: '70px', textalign: 'right' },

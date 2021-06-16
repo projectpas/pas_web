@@ -1742,12 +1742,16 @@ export class AppComponent implements OnInit, AfterViewInit {
       if (event instanceof NavigationStart) {
         let url = (<NavigationStart>event).url;
 
-        //if (url !== url.toLowerCase()) {
-        if (url !== url) {
-          //this.router.navigateByUrl((<NavigationStart>event).url.toLowerCase());
-          this.router.navigateByUrl((<NavigationStart>event).url);
+        if (url.includes('resetpassword?')) {
+          if (url !== url) {
+            this.router.navigateByUrl((<NavigationStart>event).url);
+          }
         }
-
+        else {
+          if (url !== url.toLowerCase()) {
+            this.router.navigateByUrl((<NavigationStart>event).url.toLowerCase());
+          }
+        }
         if (this.adminExpander && url.indexOf('admin') > 0) {
           this.adminExpander.open();
         }

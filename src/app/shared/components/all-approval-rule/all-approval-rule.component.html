@@ -129,14 +129,16 @@
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <ng-container *ngFor="let col of columns">
                         <td class="uiTable_td_ovrflw_control table-column-width" class="ui-resizable-column">
-                            <span *ngIf="col.field != 'value' && col.field != 'lowerValue'&& col.field != 'upperValue'">  {{
-                            col.field == 'createdDate'
-                            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
-                            : rowData[col.field] && col.field == 'updatedDate'
-                            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
-                            : rowData[col.field]
-                            }}</span>
-                            <span class="float-right" *ngIf="col.field == 'value' || col.field == 'lowerValue' || col.field == 'upperValue'">
+                            <span *ngIf="col.field != 'value' && col.field != 'lowerValue'&& col.field != 'upperValue'">
+                                {{
+                                col.field == 'createdDate'
+                                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                                : rowData[col.field] && col.field == 'updatedDate'
+                                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                                : rowData[col.field]
+                                }}</span>
+                            <span class="float-right"
+                                *ngIf="col.field == 'value' || col.field == 'lowerValue' || col.field == 'upperValue'">
                                 {{rowData[col.field]}} </span>
                         </td>
                     </ng-container>
@@ -315,15 +317,15 @@
                                     #approverId="ngModel">
                                 </p-autoComplete>
                                 <button type="button" class="btn btn-primary m-t-10 pull-right but_stl"
-                                [disabled]="enableheaderSaveBtn" (click)="onAddApprover();">Add</button>
+                                    (click)="onAddApprover();">Add</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card management-structure-card">
                             <div class="card-header management-structure-card-header" style="padding:0px !important">
-                                <h5 class="management-structure-header" style="color:#000;margin-left:10px">Management Structure <span
-                                        class="clr-red">*</span></h5>
+                                <h5 class="management-structure-header" style="color:#000;margin-left:10px">Management
+                                    Structure <span class="clr-red">*</span></h5>
 
                             </div>
                             <div class="card-body structure-card-body">
@@ -418,7 +420,7 @@
                                     <td class="table-column-width" *ngFor="let col of columns">
                                         {{ col.field != 'isPrimary' ? rowData[col.field] : ''}}
                                     </td>
-                                    <td class="table-column-width">
+                                    <td class="table-column-width text-center">
                                         <input *ngIf="rowData.isPrimary" disabled type="checkbox" name="isPrimary"
                                             checked>
                                         <input *ngIf="!rowData.isPrimary" (click)="makePrimary(rowData.employeeId)"
@@ -483,11 +485,11 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer"> 
+            <div class="modal-footer">
                 <!-- || creatingData.ruleNumberId == 0  !poApprovalForm1.valid ||-->
                 <button class="btn btn-primary" (click)="savePoApproval()"
                     [disabled]=" employeeNames.length == 0 || creatingData.managementStructureId == 0 || creatingData.approvalTaskId == 0 || !enableSaveBtn">
-                    {{(isEdit)?'Update':'Save'}} 
+                    {{(isEdit)?'Update':'Save'}}
                 </button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal"
                     (click)="isEdit = false;">Close</button>
@@ -686,7 +688,8 @@
                         <p class="view-text-editor" style="margin-bottom:5px">
                             <span class="label view-text-editor"><b>Memo: </b></span>
                             <span class="value">
-                                <p class="p-0 m-0 p_textEditor" style="margin-top:-2px" [innerHTML]="creatingData.memo?creatingData.memo:'-'"> </p>
+                                <p class="p-0 m-0 p_textEditor" style="margin-top:-2px"
+                                    [innerHTML]="creatingData.memo?creatingData.memo:'-'"> </p>
                             </span>
                         </p>
                         <p><span class="label"><b>Rule number <span class="clr-red">*</span> : </b></span>
@@ -721,8 +724,8 @@
                     <div class="col-md-3">
                         <div class="card management-structure-card">
                             <div class="card-header management-structure-card-header" style="padding:0px !important">
-                                <h5 class="management-structure-header" style="color:#000;margin-left:10px">Management Structure <span
-                                        class="clr-red">*</span></h5>
+                                <h5 class="management-structure-header" style="color:#000;margin-left:10px">Management
+                                    Structure <span class="clr-red">*</span></h5>
 
                             </div>
                             <div class="card-body structure-card-body">
