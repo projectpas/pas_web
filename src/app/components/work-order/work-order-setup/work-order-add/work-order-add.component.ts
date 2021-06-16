@@ -2400,6 +2400,18 @@ this.getNewMaterialListByWorkOrderId();
                     this.isAllowLaberSave=true;
                     return;
                 }
+                if((element.burdaenRatePercentageId ==0 || element.burdaenRatePercentageId ==undefined || element.burdaenRatePercentageId ==null || element.burdaenRatePercentageId =='') && element.burdenRateAmount==0){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Set Burdaen Rate Percentage or Burden Rate Amount From Settings',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+
+
+
                 if(element.employeeId ==undefined || element.employeeId ==null || element.employeeId ==''){
                     this.alertService.showMessage(
                         this.taskName,
@@ -4007,7 +4019,7 @@ else if(this.gridActiveTab == 'equipment'){
     this.isSubWorkOrder=false;
     this.gridActiveTab = 'equipment';
 }else if(this.subTabOtherOptions && this.subTabOtherOptions == 'charges'){
-    console.log('equpppppp')
+
     this.getChargesListByWorkOrderId();
 } 
     }

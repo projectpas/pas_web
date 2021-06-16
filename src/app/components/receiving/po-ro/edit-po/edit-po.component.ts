@@ -135,8 +135,8 @@ export class EditPoComponent implements OnInit {
         this.otherModuleId = AppModuleEnum.Others;
     }
 
-    ngOnInit() {
-        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseOrderId'];
+    ngOnInit() {        
+        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];        
         if (this.receivingService.purchaseOrderId == undefined && this.receivingService.purchaseOrderId == null) {
             this.alertService.showMessage(this.pageTitle, "No purchase order is selected to edit.", MessageSeverity.error);
             return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
@@ -1800,7 +1800,7 @@ export class EditPoComponent implements OnInit {
         if (receiveParts.length > 0) {
             this.isSpinnerVisible = true;            
             this.shippingService.updateStockLine(receiveParts).subscribe(data => {
-                this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
+                this.alertService.showMessage(this.pageTitle, 'Stock Line Draft Updated Successfully.', MessageSeverity.success);
                 this.isSpinnerVisible = false;
                 //return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
                 this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);

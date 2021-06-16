@@ -701,7 +701,7 @@
                                                                 [suggestions]="revisedPartNumCollection"
                                                                 (completeMethod)="filterRevisedPart($event)" [size]="30"
                                                                 [minLength]="1" [disabled]="true" [dropdown]="true"
-                                                                required>
+                                                                >
                                                             </p-autoComplete>
                                                         </div>
                                                         <div class="form-group">
@@ -1111,18 +1111,23 @@
                                                                 (keyup)="moveByKey($event, part)"
                                                                 disabled="{{part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided}}"
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumber"
-                                                                type="text" pInputText [maxLength]="25">
+                                                                type="text" pInputText [maxLength]="25" [required]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided == false">
                                                             <div class="checkbox-cstm m-t-4">
                                                                 <label class="width-200">
-                                                                    <input type="checkbox" class="form-control"
-                                                                        disabled="part.itemMaster.isSerialized"
+                                                                    <!-- <input type="checkbox" class="form-control"
+                                                                        disabled="part.itemMaster.isSerialized"                                                                       
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided"
                                                                         (click)="onSerialNumberNotProvided(part.stocklineListObj[part.currentSERIndex])">
                                                                     <span class="cr"
                                                                         [ngStyle]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided ?{'background-color':'#a9a9a9'} : {'background-color': 'white'}">
+                                                                        <i class="cr-icon pi pi-check"></i> -->
+                                                                        <input type="checkbox" class="form-control"                                                                                                                                          
+                                                                            [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided"
+                                                                            (click)="onSerialNumberNotProvided(part.stocklineListObj[part.currentSERIndex])">
+                                                                        <span class="cr">
                                                                         <i class="cr-icon pi pi-check"></i>
                                                                     </span>
-                                                                    Serial Number not provided
+                                                                    Serial Number not provided                                                                    
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -1157,11 +1162,11 @@
                                                                     <input type="checkbox"
                                                                         [(ngModel)]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                         class="form-control"
-                                                                        (click)="onChangeTimeLife(part)"
-                                                                        disabled="part.itemMaster.isTimeLife">
+                                                                        (click)="onChangeTimeLife(part)">                                                                       
                                                                     <span class="cr"><i
                                                                             class="cr-icon pi pi-check"></i></span> Time
                                                                     Life details not provided
+                                                                    <!-- disabled="part.itemMaster.isTimeLife" -->
                                                                 </label>
                                                             </div>
                                                         </div>

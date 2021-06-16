@@ -562,7 +562,8 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
                 dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                 currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                 billingAmount: this.formateCurrency(x.amount),
-                masterCompanyId: this.currentUserMasterCompanyId
+                masterCompanyId: this.currentUserMasterCompanyId,
+                shipVia: x.shipViaId ? getValueFromArrayOfObjectById('label', 'value', x.shipViaId, this.shipViaList) : '',
             }
         });
         if (this.isEdit) {

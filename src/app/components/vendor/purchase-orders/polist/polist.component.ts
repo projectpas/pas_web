@@ -1044,12 +1044,12 @@ export class PolistComponent implements OnInit {
 
     public getSelectedRow(rowData) {
         this.receivingService.purchaseOrderId = rowData.purchaseOrderId;        
-        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receivng-po?purchaseOrderId=${rowData.purchaseOrderId}`);
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receivng-po?purchaseorderid=${rowData.purchaseOrderId}`);
     }
 
     public editStockLine(rowData) {
         this.receivingService.purchaseOrderId = rowData.purchaseOrderId;
-        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${rowData.purchaseOrderId}`);
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseorderid=${rowData.purchaseOrderId}`);
     }
 
     exportCSV(dt) {

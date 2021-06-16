@@ -193,14 +193,19 @@ export class ExchangequoteService {
 
     partNumberObj.exchangeCurrencyId=selectedPart.exchangeCurrencyId;
     partNumberObj.loanCurrencyId=selectedPart.loanCurrencyId;
-    partNumberObj.exchangeListPrice=formatStringToNumber(selectedPart.exchangeListPrice);
+    //partNumberObj.exchangeListPrice=formatStringToNumber(selectedPart.exchangeListPrice);
+    partNumberObj.exchangeListPrice = selectedPart.exchangeListPrice ? formatStringToNumber(selectedPart.exchangeListPrice) : 0;
     partNumberObj.entryDate=selectedPart.entryDate;
-    partNumberObj.exchangeOverhaulPrice=selectedPart.exchangeOverhaulPrice;
-    partNumberObj.exchangeCorePrice=selectedPart.exchangeCorePrice;
+    //partNumberObj.exchangeOverhaulPrice=selectedPart.exchangeOverhaulPrice;
+    partNumberObj.exchangeOverhaulPrice = selectedPart.exchangeOverhaulPrice ? formatStringToNumber(selectedPart.exchangeOverhaulPrice) : 0;
+    //partNumberObj.exchangeCorePrice= formatStringToNumber(Number(selectedPart.exchangeCorePrice).toFixed(2));
+    partNumberObj.exchangeCorePrice = selectedPart.exchangeCorePrice ? formatStringToNumber(selectedPart.exchangeCorePrice) : 0;
     partNumberObj.estOfFeeBilling=selectedPart.estOfFeeBilling;
     partNumberObj.billingStartDate=selectedPart.billingStartDate;
-    partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
-    partNumberObj.exchangeOverhaulCost=selectedPart.exchangeOverhaulCost;
+    //partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
+    partNumberObj.exchangeOutrightPrice = selectedPart.exchangeOutrightPrice ? formatStringToNumber(selectedPart.exchangeOutrightPrice) : 0;
+    //partNumberObj.exchangeOverhaulCost=selectedPart.exchangeOverhaulCost;
+    partNumberObj.exchangeOverhaulCost = selectedPart.exchangeOverhaulCost ? formatStringToNumber(selectedPart.exchangeOverhaulCost) : 0;
     partNumberObj.daysForCoreReturn=selectedPart.daysForCoreReturn;
     partNumberObj.billingIntervalDays=formatStringToNumber(selectedPart.billingIntervalDays);
     partNumberObj.currencyId=selectedPart.currencyId;
@@ -315,7 +320,7 @@ export class ExchangequoteService {
         //   }
         // })
         exchangefees=parseFloat(part.exchangeListPrice);
-        overhaulprice=parseFloat(part.exchangeOverhaulPrice);
+        overhaulprice= part.exchangeOverhaulPrice ? parseFloat(part.exchangeOverhaulPrice) : 0;
         othercharges=0;
         //const totalestrevenue = parseFloat(parseFloat(exchangefees) + parseFloat(overhaulprice))
         if(part.exchangeQuoteScheduleBilling.length>0){
@@ -324,7 +329,7 @@ export class ExchangequoteService {
         else{
           cogsfees=0;
         }
-        overhaulcost=parseFloat(part.exchangeOverhaulCost);
+        overhaulcost= part.exchangeOverhaulCost ? parseFloat(part.exchangeOverhaulCost) : 0;
         othercost=0;
         //const marginamount=(parseFloat(totalestrevenue)-parseFloat(totalestcost));
         //const marginpercentage=(parseFloat(marginamount)/parseFloat(totalestrevenue));

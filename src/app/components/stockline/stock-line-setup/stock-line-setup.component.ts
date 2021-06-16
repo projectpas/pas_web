@@ -854,9 +854,11 @@ export class StockLineSetupComponent implements OnInit {
 				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);
 
 				if (res.isSerialized == true) {
+					this.stockLineForm.isSerialized = res.isSerialized;
 					this.hideSerialNumber = false;
 				}
 				else {
+					this.stockLineForm.isSerialized = res.isSerialized;
 					this.hideSerialNumber = true;
 				}
 				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {
@@ -1764,17 +1766,17 @@ export class StockLineSetupComponent implements OnInit {
 					}
 				}
 			}
-			if (this.saveStockLineForm.receivedDate != "" && moment(this.saveStockLineForm.receivedDate, 'MM/DD/YYYY', true).isValid()) {
-				if (this.saveStockLineForm.receivedDate <= this.saveStockLineForm.manufacturingDate) {
-					this.isSpinnerVisible = false;
-					if (errmessage != '') {
-						errmessage = errmessage + '<br />' + "Received Date must be greater than Manufacturing Date."
-					}
-					else {
-						errmessage = errmessage + "Received Date must be greater than Manufacturing Date."
-					}
-				}
-			}
+			// if (this.saveStockLineForm.receivedDate != "" && moment(this.saveStockLineForm.receivedDate, 'MM/DD/YYYY', true).isValid()) {
+			// 	if (this.saveStockLineForm.receivedDate <= this.saveStockLineForm.manufacturingDate) {
+			// 		this.isSpinnerVisible = false;
+			// 		if (errmessage != '') {
+			// 			errmessage = errmessage + '<br />' + "Received Date must be greater than Manufacturing Date."
+			// 		}
+			// 		else {
+			// 			errmessage = errmessage + "Received Date must be greater than Manufacturing Date."
+			// 		}
+			// 	}
+			// }
 			if (this.saveStockLineForm.entryDate != "" && moment(this.saveStockLineForm.entryDate, 'MM/DD/YYYY', true).isValid()) {
 				if (this.saveStockLineForm.entryDate <= this.saveStockLineForm.manufacturingDate) {
 					this.isSpinnerVisible = false;

@@ -144,9 +144,9 @@
             </button>
           </td>
         </tr>
-      </tbody>
-      <tfoot *ngIf="workFlow.materialList.length > 0 && !isWorkOrder">
-        <tr>
+      <!-- </tbody>
+      <tfoot *ngIf="workFlow.materialList.length > 0 && !isWorkOrder"> -->
+        <tr *ngIf="workFlow.materialList.length > 0 && !isWorkOrder">
           <td>
             <b>Total</b>
           </td>
@@ -169,7 +169,8 @@
        
 
         </tr>
-      </tfoot>
+      <!-- </tfoot> -->
+      </tbody>
     </table>
     </div>
     </div>

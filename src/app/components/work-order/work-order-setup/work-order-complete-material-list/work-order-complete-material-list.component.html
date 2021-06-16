@@ -110,7 +110,7 @@
                                         <th class="text-center" colspan="1"></th>
                                         <!-- <th *ngIf="isShowAlternatePN  " class="text-center" colspan="1"> </th> -->
                                         <!-- <th *ngIf=" isShowEqPN" class="text-center" colspan="1"> </th> -->
-                                        <th colspan="11" class="text-center"> Materials</th>
+                                        <th colspan="12" class="text-center"> Materials</th>
                                         <th colspan="2" class="text-center"> Stock</th>
                                         <th class="text-center" colspan="4"></th>
                                     </tr>
@@ -136,6 +136,7 @@
                                         <th class="text-center width-50"> Stk Type</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Req</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Res</th>
+                                        <th *ngIf="!isSubWorkOrder" class="text-center width-50" style="width:60px !important">Qty Picked</th>
                                         <th class="text-center" style="width:60px !important"> Qty To Be Reserved</th>
                                         <th class="text-center" style="width:60px !important">
                                             <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
@@ -216,6 +217,9 @@
                                             <td class="tex_end text-right">
                                                 {{x.quantityAlreadyReserved}}
                                             </td>
+                                            <td *ngIf="!isSubWorkOrder" class="tex_end text-right">
+                                                {{x.quantityPicked}}
+                                            </td>
                                             <td class="tex_end text-right" *ngIf="(statusId === 1 || statusId === 5)">
                                                 {{ statusId !=5 ? x.qtyToBeReserved : x.qtyToBeReserved}}
                                             </td>
@@ -229,7 +233,13 @@
                                                     (keyup)="validatePartsQuantity($event,x)" (change)="handleQty(x)"
                                                     [disabled]="!x.isParentSelected">
                                             </td>
-                                            <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
+                                            <td *ngIf="(( statusId === 2 && !enablePickTicket) || statusId === 3 || statusId === 4)">
+                                                <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
+                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
+                                                    (keyup)="validatePartsQuantity($event,x)"
+                                                    [disabled]="!x.isParentSelected">
+                                            </td>
+                                            <td *ngIf="!isSubWorkOrder && (statusId === 2 && enablePickTicket)">
                                                 <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
                                                     (change)="handleQty(x)" (keypress)="restrictMinus($event)"
                                                     (keyup)="validatePartsQuantity($event,x)"
@@ -856,7 +866,7 @@
     </div>
 </div>
 <div *ngIf="!ispickticket">
-    <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align1 parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+    <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
         style="min-height: 130px !important;">
         <p-table class=" rpo-table-cstm1 rro-table-cstm materialListTable" id="custome_material"
             [columns]="summaryColumns" #materialTble [value]="workOrderMaterialList" [paginator]="true"
@@ -1047,7 +1057,7 @@
                     </td>
                     <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
   
-                        <span><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.quantityIssued!=0 || childRowData.quantityReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+                        <span><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
                         <span>
                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                 (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
@@ -1055,7 +1065,7 @@
                             </a>
                         </span>
                         <span><button type="button" class="btn nobg btn-delete-cstm"
-                                [disabled]="childRowData.quantityIssued!=0 || childRowData.quantityReserved !=0"
+                                [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0"
                                 (click)="deleteStockLine(Stockcontent,childRowData)" matTooltip="Remove"
                                 matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
                         <!-- <span><button type="button" class="btn nobg btn-pluspo-cstm"

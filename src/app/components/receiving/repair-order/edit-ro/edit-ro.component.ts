@@ -138,7 +138,7 @@ export class EditRoComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.repairOrderId = this._actRoute.snapshot.queryParams['repairOrderId'];
+        this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
         if (this.repairOrderId == undefined && this.repairOrderId == null) {
             this.alertService.showMessage(this.pageTitle, "No Repair order is selected to edit.", MessageSeverity.error);
             return this.route.navigate(['/receivingmodule/receivingpages/app-ro']);
@@ -1728,10 +1728,10 @@ export class EditRoComponent implements OnInit {
                     stockLine.repairOrderId = this.repairOrderId;
                     stockLine.masterCompanyId = this.currentUserMasterCompanyId;
 
-                    if (stockLine.revisedPartId == undefined || stockLine.revisedPartId == 0) {
-                        this.alertService.showMessage(this.pageTitle, "Please select Revised Part Number in Receiving Qty - " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
-                        return
-                    }
+                    // if (stockLine.revisedPartId == undefined || stockLine.revisedPartId == 0) {
+                    //     this.alertService.showMessage(this.pageTitle, "Please select Revised Part Number in Receiving Qty - " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                    //     return
+                    // }
                     if (stockLine.unitOfMeasureId == undefined || stockLine.unitOfMeasureId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Unit Of Measure in Receiving Qty - " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return
@@ -1781,7 +1781,7 @@ export class EditRoComponent implements OnInit {
             this.isSpinnerVisible = true;
             this.receivingService.updateStockLine(receiveParts).subscribe(data => {
                 this.isSpinnerVisible = false;
-                this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
+                this.alertService.showMessage(this.pageTitle, 'Stock Line Draft Updated Successfully.', MessageSeverity.success);
                 this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);
             },
                 errr => {
