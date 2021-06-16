@@ -114,7 +114,7 @@
                             <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
                                 <tr *ngIf="!SL.isDeleted">
                                     <td>{{SL.stockLineNumber}}</td>                                    
-                                    <td>{{part.itemMaster.partNumber}}</td>
+                                    <td>{{SL.partNumber}}</td>
                                     <td>{{part.itemMaster.partDescription}}</td>
                                     <td>{{SL.controlNumber}}</td>
                                     <td>{{SL.idNumber}}</td>
