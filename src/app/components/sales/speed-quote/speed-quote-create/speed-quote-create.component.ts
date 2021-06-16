@@ -1485,33 +1485,67 @@ export class SpeedQuoteCreateComponent implements OnInit {
               font-size: 10.5px !important;
               font-weight: 700;
             }
-                        table {font-size:12px !important}        
-            table thead { background: #808080;}    
              
-            table, thead, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-          } 
-          table, thead, th {
-            border: 1px solid black;
-            border-collapse: collapse;
-          } 
-          .border-none{
-            border:none;
-          }
-            table thead tr th 
-            {
-              //   background: #0d57b0 !important;
-                padding: 5px!important;color: #fff;letter-spacing: 0.3px;font-weight:bold;
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                 font-size: 12.5px;text-transform: capitalize; z-index: 1;} 
-            table tbody{   overflow-y: auto; max-height: 500px;  }
-            table tbody tr td{ background: #fff;
-               padding: 2px;line-height: 22px;
-               height:22px;color: #333;
-              //  border-right:1px solid black !important;
-              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight;normal;
-              font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
+
+              table {
+                width: 100.3%;
+               overflow: auto !important;
+              }
+              
+              table thead {
+               background: #808080;
+              }
+              
+              table thead tr {
+               /* background: #0d57b0 !important; */
+              
+              }
+              
+              table,
+              thead,
+              td {
+               border: 1px solid black;
+               border-collapse: collapse;
+              }
+              
+              table,
+              thead,
+              th {
+               border: 1px solid black;
+               border-collapse: collapse;
+              }
+              
+              table thead tr th {
+               /*  background: #c7c6c6 !important; */
+               padding: 5px !important;
+               color: #000;
+               letter-spacing: 0.3px;
+               font-size: 10.5px;
+               text-transform: capitalize;
+               z-index: 1;
+              }
+              
+              table tbody {
+               overflow-y: auto;
+               max-height: 500px;
+              }
+              
+              table tbody tr td {
+               background: #fff;
+               padding: 2px;
+               line-height: 22px;
+               height: 22px;
+               color: #333;
+              border:1px solid black !important;
+                border-right: 1px solid black !important;
+               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                 font-size: 10.5px !important;
+                 font-weight: 700;
+               max-width: 100px;
+               letter-spacing: 0.1px;
+               border: 0
+              }
+             
             h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
             
             .very-first-block {position: relative; height:auto;border-right:1px solid black; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
@@ -1778,7 +1812,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
             }
             
             .parttable th {
-              background: #fff !important;
+              // background: #fff !important;
+              background: #c7c6c6 !important;
               color: #000 !important;
               -webkit-print-color-adjust: exact;
             }
