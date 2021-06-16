@@ -38,7 +38,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     }
 
     getExpertiseData() {
-        let expertiseIds = [];
+        let expertiseIds = []; 
        this.workFlow.expertise.forEach(acc => {
           expertiseIds.push(acc.expertiseTypeId);
         })
