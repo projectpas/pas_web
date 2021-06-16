@@ -77,7 +77,7 @@ close()
 
 print() {
   let printContents, popupWin;
-  this.Updateshippingpopup.emit();
+
   printContents = document.getElementById('woShippingLabel').innerHTML;
   popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
   popupWin.document.open();
@@ -307,6 +307,7 @@ margin-bottom: 0;
     </html>`
   );
   popupWin.document.close();
+  this.Updateshippingpopup.emit();
  
   setTimeout(() => {
       this.isPrint = false;  

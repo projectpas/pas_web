@@ -79,9 +79,9 @@ ClockInOut:2,
 Scan:3
   }
   woHoursType:any={
-    workFlow:1,
-    specificTasks:2,
-    workOrder:3
+    // workFlow:1,
+    specificTasks:1,
+    workOrder:2
   }
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService, private modalService: NgbModal,        private alertService: AlertService,
@@ -490,9 +490,9 @@ setTimeout(() => {
   onItemSelect(item: any) {
     if (!this.laborForm.workOrderLaborList[0][item.description]) {
       this.laborForm.workOrderLaborList[0][item.description] = [];
-      if (this.laborForm.isTaskCompletedByOne) {
-        this.addNewTask(item.description);
-      }
+      // if (this.laborForm.isTaskCompletedByOne) {
+        this.addNewTask(item.description); 
+      // }
     }
     this.disabledUpdatebtn = false;
   }
@@ -719,7 +719,7 @@ setTimeout(() => {
 
         }
       }
-    )
+    ) 
     // this.isQuote && 
     if (this.basicLabourDetail) {
       // burdenRateId

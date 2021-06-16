@@ -1143,10 +1143,11 @@
                     </div>
                   </div>
                 </div>
-          
-                 <button class="btn btn-primary pull-right"  (click)="GenerateInvoice()" [disabled]="!billinForm.valid || !Iswocheckbox">Save</button>
+          <div>
+            <button class="btn btn-primary pull-right"  (click)="GenerateInvoice()" [disabled]="!billinForm.valid || !Iswocheckbox">Save</button>
+          </div>
+                
                   <!-- <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button> -->
-                <!-- </div> -->
               </form>
             </div>
           </div>
