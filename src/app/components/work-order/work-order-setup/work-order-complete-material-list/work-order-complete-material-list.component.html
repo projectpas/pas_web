@@ -1057,7 +1057,7 @@
                     </td>
                     <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
   
-                        <span><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.quantityIssued!=0 || childRowData.quantityReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+                        <span><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
                         <span>
                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                 (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
@@ -1065,7 +1065,7 @@
                             </a>
                         </span>
                         <span><button type="button" class="btn nobg btn-delete-cstm"
-                                [disabled]="childRowData.quantityIssued!=0 || childRowData.quantityReserved !=0"
+                                [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0"
                                 (click)="deleteStockLine(Stockcontent,childRowData)" matTooltip="Remove"
                                 matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
                         <!-- <span><button type="button" class="btn nobg btn-pluspo-cstm"
