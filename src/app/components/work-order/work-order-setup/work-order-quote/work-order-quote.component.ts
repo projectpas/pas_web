@@ -415,6 +415,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         { field: 'updatedDate', header: 'Updated Date',isRequired:false },
         { field: 'updatedBy', header: 'Updated By',isRequired:false },
       ]
+      isAllowLaberSave:boolean=false;
     constructor(private router: ActivatedRoute, private arouter: Router,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     
     ngOnInit() {
@@ -1569,18 +1570,92 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             }
         )
     }
-
+    LaborList:any=[];
+    taskName:any;
     createLaborQuote() { 
+        this.isAllowLaberSave=false;
         this.laborPayload['workflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.laborPayload['SelectedId'] = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
         this.isSpinnerVisible=true;
         this.laborPayload.masterCompanyId= this.authService.currentUser.masterCompanyId; 
-        // this.laborPayload.laborList.forEach((labor) => {// labor.masterCompanyId=this.authService.currentUser.masterCompanyId;
-        this.workOrderService.saveLaborListQuote(this.laborPayload)
+        this.LaborList=this.laborPayload.WorkOrderQuoteLaborHeader['laborList'];
+        console.log("alsdsadsad",this.LaborList);
+        if(this.laborPayload &&  this.LaborList && this.LaborList.length==0){
+            this.isAllowLaberSave=true;
+ this.alertService.showMessage(
+            this.moduleName,
+            'Add Atleast one Task',
+            MessageSeverity.warn
+        );
+        return;
+        }
+        if(  this.LaborList && this.LaborList.length!=0){
+            this.isAllowLaberSave=false;
+            this.taskName='';
+            this.LaborList.forEach(element => {
+                this.taskList.forEach(subel => {
+    if(subel.taskId==element.taskId){
+        this.taskName=subel.description;
+    }
+});
+                if(element.expertiseId ==undefined || element.expertiseId ==null || element.expertiseId ==''){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Expertise',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+                if((element.burdaenRatePercentageId ==0 || element.burdaenRatePercentageId ==undefined || element.burdaenRatePercentageId ==null || element.burdaenRatePercentageId =='') && element.burdenRateAmount==0){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Set Burdaen Rate Percentage or Burden Rate Amount From Settings',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+
+
+
+                if(element.employeeId ==undefined || element.employeeId ==null || element.employeeId ==''){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Employee Name',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+                if( Number(element.hours.toString().split(',').join('')) ==undefined || Number(element.hours.toString().split(',').join('')) ==null ||  element.hours ==''   || Number(element.hours.toString().split(',').join('')) <=0){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Hours',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                }
+                if( Number(element.adjustments.toString().split(',').join('')) >0 &&  element.memo ==''){
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Memo',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave=true;
+                    return;
+                } 
+            });
+        }
+    
+        // if(this.isAllowLaberSave==false){
+        this.workOrderService.saveLaborListQuote(this.laborPayload) 
             .subscribe(
                 res => {
                     this.isSpinnerVisible=false;
                     if (res) {
+                        this.isAllowLaberSave==false;
                         this.tabQuoteCreated['labor'] = true;
                         let laborList = this.labor.workOrderLaborList;
                         this.labor = { ...res.workOrderQuoteLaborHeader, workOrderLaborList: laborList };
@@ -1605,6 +1680,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.errorHandling(err)
                 }
             )
+        // }
     }
 
     createChargeQuote(data) {

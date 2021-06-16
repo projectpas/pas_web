@@ -2374,14 +2374,15 @@ this.getNewMaterialListByWorkOrderId();
                 }
             }
         }
-        if(this.result &&  this.result.LaborList && this.result.LaborList.length==0){
- this.alertService.showMessage(
-            this.moduleName,
-            'Add Atleast one Task',
-            MessageSeverity.warn
-        );
-        return;
-        }
+//         if(this.result &&  this.result.LaborList && this.result.LaborList.length==0){
+//             this.isAllowLaberSave=true;
+//  this.alertService.showMessage(
+//             this.moduleName,
+//             'Add Atleast one Task',
+//             MessageSeverity.warn
+//         );
+//         return;
+//         }
         if(this.result &&  this.result.LaborList && this.result.LaborList.length!=0){
             this.isAllowLaberSave=false;
             this.taskName='';
