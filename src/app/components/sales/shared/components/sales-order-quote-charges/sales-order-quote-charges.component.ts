@@ -3,7 +3,7 @@ declare var $: any;
 import { AlertService, MessageSeverity } from '../../../../../services/alert.service';
 import { AuthService } from '../../../../../services/auth.service';
 import { CommonService } from '../../../../../services/common.service';
-import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition, formatStringToNumber } from '../../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition, formatStringToNumber, getValueFromArrayOfObjectById } from '../../../../../generic/autocomplete';
 import { SalesQuoteService } from '../../../../../services/salesquote.service';
 import { SalesOrderQuoteCharge } from '../../../../../models/sales/SalesOrderQuoteCharge';
 import { ActionService } from '../../../../../Workflow/ActionService';
@@ -115,7 +115,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       this.setEditArray.push(0);
     }
     const strText = value ? value : '';
-    this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
       this.chargesTypes = res.map(x => {
         return {
           chargeType: x.label,
@@ -144,6 +144,9 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       if (Number(this.costPlusType) == 3) {
         this.chargesFlatBillingAmount = res[0].markupFixedPrice;
       }
+      this.salesOrderChargesList.forEach(ele => {
+        ele.billingAmount = this.formateCurrency(ele.billingAmount);
+      });
       this.isUpdate = true;
     } else {
       this.salesOrderChargesList = [];
@@ -230,7 +233,8 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
         ...x,
         billingAmount: this.formateCurrency(x.extendedCost),
         billingRate: this.formateCurrency(x.unitCost),
-        masterCompanyId: this.currentUserMasterCompanyId
+        masterCompanyId: this.currentUserMasterCompanyId,
+        chargeType: x.chargesTypeId ? getValueFromArrayOfObjectById('chargeType', 'chargeId', x.chargesTypeId, this.chargesTypes) : ''
       }
     });
     if (this.isEdit) {
@@ -479,7 +483,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       });
     }
     this.arrayVendlsit.push(0);
-    this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
+    this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
       this.allVendors = res.map(x => {
         return {
           vendorId: x.vendorId,
@@ -598,6 +602,21 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
   }
   storedData: any = [];
+
+  onChangeBillingMethod(changes) {
+    changes.markupPercentageId = '';
+    changes.billingRate = this.formateCurrency(0);
+    changes.billingAmount = this.formateCurrency(0);
+    if (changes.billingMethodId == '2') {
+      changes.billingAmount = this.formateCurrency(changes.extendedCost);
+    } else {
+      changes.billingAmount = '';
+    }
+  }
+
+  onChangeAmount(charge) {
+    charge.billingAmount = charge.billingAmount ? formatNumberAsGlobalSettingsModule(charge.billingAmount, 2) : 0.00;
+  }
 
   refreshOnDataSaveOrEditORDelete(fromDelete = false) {
     this.isSpinnerVisible = true;

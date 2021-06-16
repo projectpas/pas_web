@@ -273,7 +273,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     // }
     else {
       this.getNewExchangeQuoteInstance(this.customerId, initialCall);
-      //this.marginSummary = new MarginSummary();
+      this.marginSummary = new ExchangeQUoteMarginSummary();
       this.isEdit = false;
     }
   }

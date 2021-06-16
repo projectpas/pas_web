@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnChanges, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, ViewEncapsulation } from '@angular/core';
 declare var $: any;
 import { AlertService, MessageSeverity } from '../../../../../services/alert.service';
 import { SalesQuoteService } from '../../../../../services/salesquote.service';
@@ -129,7 +129,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.unitOfMeasureList = res;
         }, err => {
             this.isSpinnerVisible = false;
@@ -148,7 +148,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.currencyList = res;
         }, err => {
             this.isSpinnerVisible = false;
@@ -230,9 +230,9 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
     createFreightsQuote() {
@@ -248,7 +248,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
         })
         let result = { 'data': sendData, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
-        
+
         this.isSpinnerVisible = true;
         this.salesOrderQuoteService.createFreight(sendData).subscribe(result => {
             this.isSpinnerVisible = false;
@@ -541,6 +541,11 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
                 this.freightFlatBillingAmount = res[0].markupFixedPrice;
             }
             this.isUpdate = true;
+
+            this.salesOrderFreightList.forEach(ele => {
+                ele.billingAmount = this.formateCurrency(ele.billingAmount);
+            });
+
         } else {
             this.salesOrderFreightList = [];
             this.isUpdate = false;
@@ -557,7 +562,8 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
                 dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                 currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                 billingAmount: this.formateCurrency(x.amount),
-                masterCompanyId: this.currentUserMasterCompanyId
+                masterCompanyId: this.currentUserMasterCompanyId,
+                shipVia: x.shipViaId ? getValueFromArrayOfObjectById('label', 'value', x.shipViaId, this.shipViaList) : '',
             }
         });
         if (this.isEdit) {
@@ -623,5 +629,19 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
         }
         this.IsAddShipVia1 = false;
         $('#AddShipVia').modal('hide');
+    }
+
+    onChangeBillingMethod(freight) {
+        freight.markupPercentageId = '';
+        freight.billingAmount = this.formateCurrency(0);
+        if (freight.billingMethodId == '2') {
+            freight.billingAmount = this.formateCurrency(freight.amount);
+        } else {
+            freight.billingAmount = '';
+        }
+    }
+
+    onChangeAmount(freight) {
+        freight.billingAmount = freight.billingAmount ? formatNumberAsGlobalSettingsModule(freight.billingAmount, 2) : 0.00;
     }
 }

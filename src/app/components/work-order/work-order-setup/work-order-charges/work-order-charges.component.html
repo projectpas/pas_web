@@ -96,7 +96,7 @@
                   </div>
                   <div class="radios-margin">
                     <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType" value="2"
-                      label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
+                      label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                   </div>
                   <div>
                     <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
@@ -228,10 +228,10 @@
                   [disabled]="isView || dt.billingMethodId != '2'" />
               </td>
             </ng-container>
-            <td class="table-column-width action-icons-cstm" >
+            <td class="table-column-width action-icons-cstm" *ngIf="!isView">
               <div *ngIf="currentDeletedstatus == false">
               <span data-target="#addNewCharges" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
-                (click)="edit(dt, mainIndex, subIndex)" *ngIf="!isView" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
+                (click)="edit(dt, mainIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
             <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
                   class="fa fa-trash"></i></a> </span> 
                   <span *ngIf="!isQuote">
@@ -306,10 +306,10 @@
                   [disabled]="isView || dt.billingMethodId != '2'" />
               </td>
             </ng-container>
-            <td class="table-column-width action-icons-cstm" >
+            <td class="table-column-width action-icons-cstm">
               <div *ngIf="currentDeletedstatus == false">
               <span data-target="#addNewCharges" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
-                (click)="edit(dt, mainIndex, subIndex)" *ngIf="!isView" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
+                (click)="edit(dt, mainIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
             <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
                   class="fa fa-trash"></i></a> </span> 
                   <span *ngIf="!isQuote">
@@ -356,7 +356,7 @@
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
-        <td *ngIf=" !isEdit || !isView">&nbsp;</td>
+        <td *ngIf=" !isEdit && !isView">&nbsp;</td>
     
       </tr>
     </ng-template>

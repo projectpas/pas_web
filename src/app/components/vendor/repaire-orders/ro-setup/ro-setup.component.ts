@@ -397,7 +397,7 @@ export class RoSetupComponent implements OnInit {
 	qty: number;
 	stocklineId: number;
 	workOrderId:number;
-	subWorkOrderId:number;
+	subWorkOrderId:any;
 	msgflag: number = 0;
 	openStatusId: number = 0
 	pendingStatusId: number = 0
@@ -439,7 +439,7 @@ export class RoSetupComponent implements OnInit {
 		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
 		this.qty = JSON.parse(localStorage.getItem('lsqty'));
 		this.stocklineId = JSON.parse(localStorage.getItem('lsstocklineId'));
-		this.subWorkOrderId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		this.subWorkOrderId = localStorage.getItem('lsSubWoId');
 		this.workOrderId = JSON.parse(localStorage.getItem('lsWoId'));
 		
 		this.openStatusId = StatusEnum.Open;
@@ -2908,10 +2908,10 @@ export class RoSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "PN is required."
 			}
-			if (!this.partListData[i].revisedPartId) {
-				this.isSpinnerVisible = false;
-				errmessage = errmessage + '<br />' + "Revised Part Number is required."
-			}
+			// if (!this.partListData[i].revisedPartId) {
+			// 	this.isSpinnerVisible = false;
+			// 	errmessage = errmessage + '<br />' + "Revised Part Number is required."
+			// }
 			if (!this.partListData[i].workPerformedId) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Work to Perform is required."
@@ -3460,11 +3460,12 @@ export class RoSetupComponent implements OnInit {
 						controlId: x.idNumber,
 						controlNumber: x.controlNumber,
 						acTailNum: x.aircraftTailNumber,
-						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },						
-						workOrderId: getObjectById('value', this.workOrderId == null ? 0 : this.workOrderId, this.allWorkOrderDetails),											
-						subWorkOrderId: getObjectById('value', this.subWorkOrderId == null ? 0 : this.subWorkOrderId, this.allSalesOrderInfo),
-						//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
-						x,
+						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },	
+						x,					
+						workOrderId: getObjectById('value', this.workOrderId == null ? 0 : this.workOrderId , this.allWorkOrderDetails),	
+						subWorkOrderId: this.subWorkOrderId,
+						//subWorkOrderId: getObjectById('value', this.subWorkOrderId == null ? 0 : this.subWorkOrderId, this.allSalesOrderInfo),
+						//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),						
 					}
 					this.getManagementStructureForParentEdit(newObject);
 					this.getPNDetailsByStocklineId(newObject);
@@ -3476,8 +3477,10 @@ export class RoSetupComponent implements OnInit {
 					if (!this.partListData[i].ifSplitShip) {
 						this.partListData[i].childList = [];
 					}
-				}			
-				this.partListData[0].quantityOrdered = qty;
+				}						
+				if(this.partListData.length > 0){
+					this.partListData[0].quantityOrdered = qty;
+				}
 			}
 			this.partNumbers = null;
 			this.addAllMultiPN = false;
@@ -3676,12 +3679,13 @@ export class RoSetupComponent implements OnInit {
 					}
 				}
 			}
-			
+			this.stocklinepartNumberId = this.partCollection.find((x: any) => x.value == itmeMasterID);		
+			var conditiondata = this.allconditioninfo.find((x: any) => x.value == Condtionid);
+			this.stocklineconditionId = [parseInt(conditiondata["value"])];
 		}, err => {
 			this.isSpinnerVisible = false;
 			this.stocklineData = []
 		});
-
 	}
 
 
@@ -5222,8 +5226,7 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	StockLinePopup(row) {
-		debugger
+	StockLinePopup(row) {		
 		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
 			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;

@@ -984,18 +984,23 @@ export class SalesOrderPartNumberComponent {
     this.deleteAllPartModal.close();
   }
 
-  createPO(rowData) {
+  createPO(rowData) {    
     localStorage.setItem("itemMasterId", rowData.partId);
     localStorage.setItem("partNumber", rowData.partNumber);
     localStorage.setItem("salesOrderId", this.salesOrderId);
     localStorage.setItem("lsconditionId", rowData.conditionId);
+    localStorage.setItem("lsqty", rowData.quantityRequested > 0 ? rowData.quantityRequested  : 0);
+    
     this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup`);
   }
 
-  createRO(rowData) {
-    localStorage.setItem("itemMasterId", rowData.partId);
+  createRO(rowData) {    
+    localStorage.setItem("itemMasterId", rowData.itemMasterId);
     localStorage.setItem("partNumber", rowData.partNumber);
     localStorage.setItem("salesOrderId", this.salesOrderId);
+    localStorage.setItem("lsstocklineId", rowData.stockLineId);
+    //localStorage.setItem("lsconditionId", rowData.conditionId);
+    localStorage.setItem("lsqty", rowData.qtyAvailable > 0 ? rowData.qtyAvailable  : 0);
     this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup`);
   }
 

@@ -14380,10 +14380,14 @@ body .ui-radiobutton .ui-radiobutton-box:not(.ui-state-disabled):not(.ui-state-a
 }
 
 .p-checkbox-label-2 .ui-chkbox-label {
-  margin-top: 16px !important;
+  // margin-top: 16px !important;
+  margin-top:5px !important;
   font-size: 10.5px !important;
   font-weight: normal !important;
   width: 194px !important;
+}
+.p-checkbox-label-2 .ui-chkbox{
+  margin-top:-10px;
 }
 
 .p-checkbox-label-womaterial .ui-chkbox-label {
@@ -15917,7 +15921,8 @@ body .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link.ui-state-active,
 }
 
 .p-checkbox-label-2 .ui-chkbox-label {
-  margin-top: 16px !important;
+  // margin-top: 16px !important;
+  margin-top:5px !important;
   font-size: 10.5px !important;
   font-weight: normal !important;
   width: auto !important;
