@@ -28,6 +28,7 @@
 }
 .grand-total-span{
   color: red !important; float: right !important;
+  padding-top:3px !important;
 }
 .tr-back{
   color: #f1f1f1 !important; background-color: #fff !important;
@@ -187,7 +188,7 @@ textarea {
   min-width: 80px;
 }
 .table tbody tr td {
-  padding: 4px;
+  // padding: 4px;
 }
 .invoice-div{
   padding-left:25px !important; padding-top:5px !important;
