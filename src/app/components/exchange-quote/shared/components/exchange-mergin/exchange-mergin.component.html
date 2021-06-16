@@ -68,7 +68,7 @@
       <div class="col-3 column">
         <div class="form-group">
           <label>Core Price<span class="clr-red">*</span></label>
-          <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
+          <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="money"
             name="exchangeCorePrice" [ngModel]="part.exchangeCorePrice  | twoDecimalGlobalNumberFormatPipe"
             (ngModelChange)="part.exchangeCorePrice=formatStringToNumberGlobal($event)" />
         </div>
