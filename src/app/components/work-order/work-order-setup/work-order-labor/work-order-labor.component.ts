@@ -79,9 +79,9 @@ ClockInOut:2,
 Scan:3
   }
   woHoursType:any={
-    workFlow:1,
-    specificTasks:2,
-    workOrder:3
+    // workFlow:1,
+    specificTasks:1,
+    workOrder:2
   }
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService, private modalService: NgbModal,        private alertService: AlertService,
