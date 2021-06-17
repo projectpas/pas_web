@@ -41,7 +41,10 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() hideHeader: boolean = false;
   @Input() islaborCreated: boolean = false;
   @Input() isLoadWoLabor: boolean = false;
-  
+  billingMethod:any={
+    tm:1,
+    actual:2
+} 
   totalHours: number;
   disableSaveForEdit: boolean = false;
   workOrderWorkFlowList: any;
@@ -57,7 +60,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     { label: 'Billable', value: 1 },
     { label: 'Non-Billable', value: 2 }
   ];
-  overAllMarkup: any;
+  overAllMarkup: any='';
   dropdownSettings = {};
   selectedItems: any = [];
   taskListForHeader: any[];
@@ -89,6 +92,7 @@ Scan:3
 
   ngOnInit() {
     this.laborMethods=this.laborMethods;
+    this.billingMethod=this.billingMethod;
     this.woHoursType=this.woHoursType;
     this.disabledUpdatebtn = true;
     this.allEmployees = this.employeesOriginalData;
@@ -172,6 +176,7 @@ Scan:3
   ngOnChanges() {
     this.isLoadWoLabor=this.isLoadWoLabor;
     this.laborMethods=this.laborMethods;
+    this.billingMethod=this.billingMethod;
     this.woHoursType=this.woHoursType;
     setTimeout(() => {
       this.checkPercentageData();
@@ -841,8 +846,8 @@ setTimeout(() => {
 for (let task in this.laborForm.workOrderLaborList[0]) {
   this.laborForm.workOrderLaborList[0][task].forEach(
     data => {
-     if (data.isDeleted==false && (Number(data.directLaborOHCost.toString().split(',').join(''))== 0 || data.directLaborOHCost == undefined || data.directLaborOHCost == null || data.directLaborOHCost == '') && !this.isQuote) {
-      // || data.totalCost <= 0 || data.totalCost== undefined
+     if (data.isDeleted==false && (Number(data.directLaborOHCost.toString().split(',').join(''))== 0 || data.directLaborOHCost == undefined || data.directLaborOHCost == null || data.directLaborOHCost == '')) {
+      // && !this.isQuote
          this.restrictUserToSave=false;
          this.enableToSave=true;
        setTimeout(() => {
@@ -1533,6 +1538,17 @@ if(this.enableToSave==false){
           //     result = true;
           //   }
           // }
+if(this.isQuote){
+          if (data.billingMethodId==1) { 
+            if (data.markupPercentageId == ''  || data.markupPercentageId == undefined || data.markupPercentageId == null) {
+              result = true;
+            }
+          }
+          if( Number(data.hours.toString().split(',').join('')) ==undefined || Number(data.hours.toString().split(',').join('')) ==null ||  data.hours ==''   || Number(data.hours.toString().split(',').join('')) <=0){
+            result = true;
+        }
+}
+
           if (data.adjustments > 0 && !this.isQuote) {
             if (data.memo == '' || !data.memo || data.memo == undefined || data.memo == null) {
               result = true;

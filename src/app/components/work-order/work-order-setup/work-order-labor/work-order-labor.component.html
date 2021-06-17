@@ -404,7 +404,7 @@
                     </select>
                   </td>
                   <td>
-                   <select class="form-control select-markup min-width-100" (ngModelChange)="checkValid(26)" (change)="markupChanged(rec, 'row')" [(ngModel)]="rec.markupPercentageId"
+                   <select [ngClass]="{setRequiredSelect : (rec.billingMethodId ==billingMethod.tm)}" class="form-control select-markup min-width-100" (ngModelChange)="checkValid(26)" (change)="markupChanged(rec, 'row')" [(ngModel)]="rec.markupPercentageId"
                       [disabled]="isView || rec.billingMethodId != 1">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -594,8 +594,11 @@
       </div>
   </div>
 </div>
-
-<button (click)="saveLabor()" class="btn btn-primary pull-right edit-btn" *ngIf="!isView" 
+<button (click)="saveLabor()" class="btn btn-primary pull-right edit-btn" *ngIf="!isView && !isQuote" 
+ [disabled]="(labourHeader && !labourHeader.valid) || checkHoursAndDirectLabour() || disabledUpdatebtn">
+   {{isEdit ? 'Update Labor' : 'Save Labor'}}
+</button>
+<button (click)="saveLabor()" class="btn btn-primary pull-right edit-btn" *ngIf="!isView && isQuote" 
  [disabled]="(labourHeader && !labourHeader.valid) || checkHoursAndDirectLabour() || disabledUpdatebtn">
    {{isEdit ? 'Update Labor' : 'Save Labor'}}
 </button>
