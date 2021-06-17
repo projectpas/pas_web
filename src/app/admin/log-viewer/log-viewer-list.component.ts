@@ -7,8 +7,8 @@ import { AuthService } from "../../services/auth.service";
 import { listSearchFilterObjectCreation } from "../../generic/autocomplete";
 import { DatePipe } from "@angular/common";
 import { MenuItem } from "primeng/api";
-import { LoggerService } from "../../services/logger.service";
 import { ILogSearchParameters } from "../../models/sales/ILogSearchParameters";
+import { LoggerService } from "../../services/logger.service";
 import { LogSearchParameters } from "../../models/sales/LogSearchParameters";
 
 @Component({
@@ -49,6 +49,8 @@ export class LogViewerListComponent implements OnInit {
   isSettingsReceived = false;
   @ViewChild("filterStatusInput", { static: false }) public filterText: ElementRef;
   clearStatusText: boolean = false;
+  fromDate: any;
+  toDate: any;
 
   constructor(
     private loggerService: LoggerService,
@@ -103,14 +105,19 @@ export class LogViewerListComponent implements OnInit {
   }
 
   loadData(event, globalFilter = "") {
+    this.lazyLoadEventData = event;
+
     this.searchParameters.first = parseInt(event.first) / event.rows;
     this.searchParameters.rows = event.rows;
     this.searchParameters.sortOrder = event.sortOrder;
     this.searchParameters.sortField = event.sortField;
-    this.lazyLoadEventData = event;
     this.searchParameters.filters = listSearchFilterObjectCreation(
       event.filters
     );
+
+    if ((this.fromDate != undefined && this.fromDate != '') && (this.toDate != undefined && this.toDate != '')) {
+      this.searchParameters.filters = { ...this.searchParameters.filters, fromDate: this.fromDate, toDate: this.toDate };
+    }
 
     this.searchParameters.filters = {
       ...this.searchParameters.filters
@@ -196,7 +203,7 @@ export class LogViewerListComponent implements OnInit {
   }
 
   convertDate(key, data) {
-      return data[key];
+    return data[key];
   }
 
   viewdata: any = {};
@@ -257,5 +264,19 @@ export class LogViewerListComponent implements OnInit {
 
   openDownload(content) {
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+  }
+
+  setFromDate(event) {
+    this.fromDate = new Date(event);
+  }
+
+  setToDate(event) {
+    this.toDate = new Date(event);
+  }
+
+  advanSearch() {
+    this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters, masterCompanyId: this.authService.currentUser.masterCompanyId, fromDate: this.fromDate, toDate: this.toDate };
+    const lazyEvent = this.lazyLoadEventData;
+    this.loadData(lazyEvent, '');
   }
 }

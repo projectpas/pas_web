@@ -20,6 +20,45 @@
                             selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
                             defaultLabel="Choose Columns" style="float:left">
                         </p-multiSelect>
+                        <div class="advance-search-card">
+                            <div class="form-row">
+                                <div class="col-md-3" style="width: 140px;">
+                                    <h4 class="f-s-14" style="margin-top: 5px;">Search :</h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <!-- <p-calendar name="fromDate" [yearNavigator]="true" [monthNavigator]="true"
+                                            yearRange="1900:2100" class="p-calendar-cstm"
+                                            [(ngModel)]="selectedPartNumberModel" [showIcon]="true" id="checkDate"
+                                            #checkDate="ngModel" required>
+                                        </p-calendar> -->
+                                        <input type="date" (ngModelChange)="setFromDate($event)"
+                                            [ngModel]="fromDate | date:'yyyy-MM-dd'" name="fromDate"
+                                            class="table-header-input-width">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <!-- <p-calendar name="toDate" [yearNavigator]="true" [monthNavigator]="true"
+                                            yearRange="1900:2100" class="p-calendar-cstm"
+                                            [(ngModel)]="selectedCapesTypeModel" [showIcon]="true" id="checkDate"
+                                            #checkDate="ngModel" required>
+                                        </p-calendar> -->
+                                        <input type="date" (ngModelChange)="setToDate($event)"
+                                            [ngModel]="toDate | date:'yyyy-MM-dd'" name="toDate"
+                                            class="table-header-input-width">
+                                    </div>
+                                </div>
+                                <div class="col-md-1" style="margin-top: 2px !important;">
+                                    <div class="form-group">
+                                        <button class="btn btn-primary mtop20" (click)="advanSearch()"
+                                            matTooltip="Search" matTooltipPosition="above">
+                                            <i class="pi pi-search pi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col">
                         <div style="width: auto !important; float: right;"
@@ -195,8 +234,8 @@
                             <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.level></p>
                         </span>
                     </p>
-                    <p><span class="label"><b>Properties: </b></span><span
-                        class="value">{{viewdata.properties}}</span></p>
+                    <p><span class="label"><b>Properties: </b></span><span class="value">{{viewdata.properties}}</span>
+                    </p>
                     <p><span class="label"><b>Timestamp: </b></span><span
                             class="value">{{viewdata.timestamp | date: 'MM/dd/yyyy h:mm a'}}</span></p>
                     <div class="clear"></div>
