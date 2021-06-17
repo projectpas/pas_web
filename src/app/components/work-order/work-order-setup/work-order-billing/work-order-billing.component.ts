@@ -167,7 +167,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.getBillingList();
         this.getEmployeeList(this.workOrderId);
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
-        this.employeeId= editValueAssignByCondition('value', this.savedWorkOrderData.employeeId),
+        this.employeeId= editValueAssignByCondition('value', this.savedWorkOrderData.employeeId);
         // this.getShipViaByCustomerId();
         // this.getPercentageList();
         // this.getInvoiceList();
@@ -175,9 +175,6 @@ export class WorkOrderBillingComponent implements OnInit {
         // this.BindManagementStructure();
         // this.getCurrencyList();
 
-        this.getManagementStructureDetails(this.billingorInvoiceForm
-            ? this.billingorInvoiceForm.managementStructureId
-            : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
     }
     ngOnChanges(changes: SimpleChanges) {
         if (this.quoteMaterialList && this.quoteMaterialList.length > 0) {
@@ -232,11 +229,14 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.getSiteNamesByShipCustomerId(this.billingorInvoiceForm.shipToCustomerId.customerId,this.billingorInvoiceFormNew.shipToSiteId);
             }
        
+        this.getManagementStructureDetails(this.billingorInvoiceForm
+                ? this.billingorInvoiceForm.managementStructureId
+                : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
         this.getShipViaByCustomerId();
         this.getPercentageList();
         this.getInvoiceList();
         this.resetOtherOptions();
-        this.BindManagementStructure();
+        //this.BindManagementStructure();
         this.getCurrencyList();
         this.resetMisCharges();
         this.resetMaterial();
@@ -1237,6 +1237,7 @@ resetallcost()
                 this.shipCustomerAddress.postalCode = site.postalCode;
                 this.shipCustomerAddress.stateOrProvince = site.stateOrProvince;
                 this.shipCustomerAddress.city = site.city;
+                this.billingorInvoiceForm.shipToAttention =site.attention;
             }
         });
     }
