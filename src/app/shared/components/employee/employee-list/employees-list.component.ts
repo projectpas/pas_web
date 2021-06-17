@@ -431,6 +431,15 @@ export class EmployeesListComponent implements OnInit {
             this.filterText = false;
         }
     }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
     loadEmployeePages(event) {
         this.isSpinnerVisible = true;
         this.lazyLoadEventData = event;

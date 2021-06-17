@@ -287,7 +287,8 @@
               }}
             </td>
             <td *ngIf="col.field == 'memo'" class="table-column-width">
-                <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                [matTooltip]="parsedText(rowData[col.field])" style="float: left" [innerHTML]="rowData[col.field]"></p>
             </td>
           </ng-container>          
           <td class="table-column-width" style="  width:160px !important;
@@ -720,8 +721,10 @@
                 )
                   ? 'black'
                   : 'red'
-              }" [innerHTML]="audit.capabilityTypeDescription"
+              }" 
             >
+            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+              [matTooltip]="parsedText(audit.capabilityTypeDescription)" [innerHTML]="audit.capabilityTypeDescription"></p>
             </td>
             <td
               [ngStyle]="{
@@ -925,7 +928,8 @@
                                           </span>
                                       </p>                                        
                                       <p>
-                                        <span class="label"><b>Memo: </b></span><span class="value" style="vertical-align: middle;" 
+                                        <span class="label"><b>Memo: </b></span><span class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                        [matTooltip]="parsedText(vendorCapesGeneralInfo.memo)" style="vertical-align: middle;" 
                                         [innerHTML]="vendorCapesGeneralInfo.memo ? vendorCapesGeneralInfo.memo  : '-'">
                                     </span>
                                     </p>

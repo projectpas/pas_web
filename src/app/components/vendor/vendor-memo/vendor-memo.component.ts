@@ -87,7 +87,16 @@ export class VendorMemoComponent implements OnInit {
 			this.VendorROMemolist();
 		}
 	}
-
+	parsedText(text) {
+    
+        if(text){
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+                const decodedString = dom.body.textContent;
+                return decodedString;
+        }
+          }
 	onClickMemo(rowData) {
 		this.memoPopupContent = {...rowData};		
 	}
