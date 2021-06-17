@@ -1,13 +1,13 @@
             
-   <div id="woReleaseFromDiv" class="modal fade" role="dialog" data-backdrop="static">
+   <div id="wopartlist" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
-        <div class="modal-content" id="wopartlistid">
+        <div class="modal-content" >
 
             <div class="modal-header">
-                <button type="button" class="close" (click)="close()" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" (click)="close()">&times;</button>
                 <!-- <h4 class="modal-title warning_color"></h4> -->
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="wopartlistid">
                 <div class="clear"></div>
                 <form id="" name="" action=" #" method="post" onsubmit="return false;">
                     <div class="image">
@@ -187,30 +187,32 @@
                     </div>
                   </form>
             </div>
+
+            <div class="preloader" *ngIf="isSpinnerVisible">
+              <div class="loading">
+                <div class="lds-roller">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+            </div>
             <div style="height:100px"> &nbsp;</div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+                <button *ngIf="!isView" type="submit" class="btn btn-primary"  (click)="print()">Print</button>
+                <button type="button" class="btn btn-danger"  (click)="close()">Close</button>
              </div>
           </div>
          
     </div>
 </div>
 
-<div class="preloader" *ngIf="isSpinnerVisible">
-    <div class="loading">
-      <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-  </div>
+
 
             
 

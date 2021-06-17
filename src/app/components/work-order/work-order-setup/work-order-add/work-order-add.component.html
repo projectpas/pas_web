@@ -1162,15 +1162,17 @@
                             [ngClass]="{active : gridActiveTab === 'releasefrom'}"
                             (click)="gridTabChange('releasefrom')" >Release Form</a>
                     </li>
-                    <li class="nav-item dropdown" *ngIf="!isSubWorkOrder">
+                    <li class="nav-item dropdown" >
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workorderprint'}">Work Order Print
                             </a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item"
-                            (click)="gridTabChange('workorderfrom')"> Work Order Form</a>
+                            (click)="gridTabChange('workorderfrom')" *ngIf="!isSubWorkOrder"> Work Order Form</a>
                             <a class="dropdown-item"
-                            (click)="gridTabChange('workorderpartfrom')">Work Order Part Form</a>
+                            (click)="gridTabChange('workorderpartfrom')" *ngIf="!isSubWorkOrder">Work Order Part Form</a>
+                            <a class="dropdown-item"
+                            (click)="gridTabChange('subworkorderfrom')" *ngIf="isSubWorkOrder">Sub Work Order Part Form</a>
                             </div>
                     </li>
                 </ul>
@@ -1259,7 +1261,7 @@
                         [labordata]="labor" [workOrderLaborList]="workOrderLaborList"
                         [quoteChargesList]="quoteChargesList" [workOrderChargesList]="workOrderChargesList"
                         [quoteLaborList]="quoteLaborList" [taskList]="taskList"
-                        [buildMethodDetails]="buildMethodDetails" [isViewMode]="isView || isViewForApprovedPart">
+                        [buildMethodDetails]="buildMethodDetails" [isView]="isView"  [isViewMode]="isView || isViewForApprovedPart">
                     </app-work-order-billing>
                 </div>
                 <div *ngIf="(gridActiveTab == 'quote') && !isSubWorkOrder">
@@ -1317,12 +1319,15 @@
                     </app-work-order-analysis>
                 </div>
                 <div *ngIf="(gridActiveTab == 'workorderfrom')" [ngClass]="{hidedata: gridActiveTab !== 'workorderfrom'}">
-                    <app-wo-print-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-print-form>
+                    <app-wo-print-form [isView]="isView" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-print-form>
+                </div>
+                <div *ngIf="(gridActiveTab == 'subworkorderfrom')" [ngClass]="{hidedata: gridActiveTab !== 'subworkorderfrom'}">
+                    <app-sub-wo-print-form [isView]="isView" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails" > </app-sub-wo-print-form>
                 </div>
                 <div *ngIf="(gridActiveTab == 'workorderpartfrom')" [ngClass]="{hidedata: gridActiveTab !== 'workorderpartfrom'}">
 
                     <!-- <app-woq-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-woq-form> -->
-                    <app-wo-part-list-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-part-list-form>
+                    <app-wo-part-list-form [isView]="isView" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-part-list-form>
                 </div>
 
                 <div *ngIf="(gridActiveTab == 'laboranalysis')"
@@ -1336,11 +1341,18 @@
                 <div *ngIf="(gridActiveTab == 'releasefrom')"
                 [ngClass]="{hidedata: gridActiveTab !== 'releasefrom'}">
 
-                <app-work-order-release-from-list [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-work-order-release-from-list>
+                <app-work-order-release-from-list [isView]="isView" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-work-order-release-from-list>
                 <!-- <app-wo-release-from 
                      [workOrderId]="workOrderId" [isSubWorkOrder]="isSubWorkOrder"
                     [subWOPartNoId]="subWOPartNoId">
                 </app-wo-release-from> -->
+            </div>
+            <div  *ngIf="(gridActiveTab == 'ActualVsQuote')"
+            [ngClass]="{hidedata: gridActiveTab !== 'ActualVsQuote'}">
+
+            <app-work-order-vs-work-quote-summury [workOrderbillingInvoicingId]="WObillingInvoicingId"
+            [workOrderId]="workOrderId" (onInvoiceLoad)="onInvoiceLoad($event)"></app-work-order-vs-work-quote-summury>
+
             </div>
 
             <!-- <div *ngIf="(gridActiveTab == 'woreleaseeasafrom')"

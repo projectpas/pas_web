@@ -19,6 +19,7 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
 
     @Input() workOrderPartNumberId;
     @Input() workOrderId;
+    @Input() isView: boolean = false;
     @Output() updateRelreaseList = new EventEmitter();
     lazyLoadEventData: any;
     pageSize: number = 10;
@@ -31,7 +32,6 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     global_lang: any;
     is9130from:boolean=false;
     is8130from:boolean=false;
-    isView:boolean=false;
     isEdit:boolean=false;
     isViewopen:boolean=false;
     EsafromAuditHistory: any;
@@ -79,9 +79,11 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     }
 
     getWorkOrderReleaseFromData(workOrderId,workOrderPartNumberId) {
+        this.isSpinnerVisible = true;
         this.workOrderService.workOrderReleaseFromListData(workOrderId, workOrderPartNumberId)
             .pipe(takeUntil(this.onDestroy$)).subscribe(
                 (res: any) => {
+                    this.isSpinnerVisible = false;
                     if (res) {
                         this.data = res.map(x => {
                             return {
@@ -98,7 +100,10 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
                             }
                         });
                     }
-                }
+                },
+                error => {
+                    this.isSpinnerVisible = false;
+                  }
             )
     }
 
@@ -106,7 +111,6 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     {
         this.is8130from= false;
         this.is9130from= false;
-        this.isView=false;
         this.isViewopen= false;
         this.isEdit= false;
         this.updateRelreaseList.emit();
@@ -115,12 +119,14 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     }
     getAuditHistoryById(rowData) 
     {
-      
+        this.isSpinnerVisible = false;
         this.workOrderService.GetReleaseHistory(rowData.releaseFromId).subscribe(res => {
+            this.isSpinnerVisible = false;
             this.EsafromAuditHistory = res;
         },
-            err => {
-            })
+        error => {
+            this.isSpinnerVisible = false;
+          })
 
     }
 
@@ -168,6 +174,7 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
              rowData.updatedDate= new Date();
              rowData.isActive= true;
              rowData.isDeleted= false;
+             this.isSpinnerVisible = true;
             //   rowData.IsClosed= true;
             //  rowData.workOrderPartNoId=this.workOrderPartNumberId;
             //  rowData.WorkorderId=this.workOrderId;

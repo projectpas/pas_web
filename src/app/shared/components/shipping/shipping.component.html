@@ -147,7 +147,7 @@
                                         {{ ship.commodityCode }}
                                     </td>
 
-                                    <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
+                                    <td  class="zui-sticky-col" style="width:107px !important">
                                         <span *ngIf="ship.packagingSlipNo !== undefined && ship.packagingSlipNo != ''">
                                             <a class="btn nobg" matTooltip="Print Packaging Slip"
                                                 matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i
@@ -165,7 +165,7 @@
                                                 <i class="fa fa-eye"></i>
                                             </button>
                                         </span> -->
-                                        <span>
+                                        <span *ngIf="isView == false">
                                             <button class="btn nobg font-bold" *ngIf="ship.qtyShipped == 0"
                                                 type="submit" (click)="onSelectPartNumber(ship)"
                                                 matTooltip="Perform Shipping" matTooltipPosition="above"
@@ -198,7 +198,7 @@
                         <tbody>
                             <tr>
                                 <td colspan="48"
-                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                    style="color: red; font-weight: bold; text-align: center; text-transform: uppercase">
                                     No records found
                                 </td>
                             </tr>
