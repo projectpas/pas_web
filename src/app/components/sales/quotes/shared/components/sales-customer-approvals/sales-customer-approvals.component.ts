@@ -71,6 +71,24 @@ export class SalesCustomerApprovalsComponent {
         { field: 'marginPercentage', header: 'Margin %', width: "60px" },
     ];
     selectedColumns = this.columns;
+    custColumns: any = [
+        { field: 'actionStatus', header: 'Action', width: "150px" },
+        { field: 'customerSentDate', header: 'Customer Sent Date', width: "100px" },
+        { field: 'customerStatusId', header: 'Customer Status', width: "150px" },
+        { field: 'customerMemo', header: 'Customer Memo', width: "150px" },
+        { field: 'customerApprovedDate', header: 'Customer Approved Date', width: "100px" },
+        { field: 'customerApprovedBy', header: 'Customer Approved By', width: "100px" },
+        { field: 'partNumber', header: 'PN', width: "100px" },
+        { field: 'partDescription', header: 'PN Desc', width: "110px" },
+        { field: 'qtyQuoted', header: 'Qty', width: "90px" },
+        { field: 'markupExtended', header: 'Mark Up Amt.', width: "90px" },
+        { field: 'discountAmount', header: 'Disc Amt.', width: "90px" },
+        { field: 'netSales', header: 'Net Sales', width: "90px" },
+        { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
+        { field: 'marginAmountExtended', header: 'Margin Amt.', width: "90px" },
+        { field: 'marginPercentage', header: 'Margin %', width: "60px" },
+    ];
+    selectedCustColumns = this.custColumns;
     approveAllQuotes: Boolean = false;
     statusList: any = [];
     quotesListTemp: any = [];
@@ -86,6 +104,9 @@ export class SalesCustomerApprovalsComponent {
     disableSubmitButtonForCustomerApproval: boolean = false;
     Total: any[];
     defaultContactId: any;
+    soqSettingsList: any;
+    todayDate: Date = new Date();
+    internalApprovaEnabled: boolean;
 
     constructor(private alertService: AlertService,
         private modalService: NgbModal,
@@ -107,6 +128,24 @@ export class SalesCustomerApprovalsComponent {
         }
         this.selectedColumns = this.columns;
         this.setDefaultContact();
+    }
+
+    isInternalApprovaEnabled() {
+        if (this.soqSettingsList != null &&
+            (!this.soqSettingsList[0].isApprovalRule ||
+                (this.soqSettingsList[0].isApprovalRule
+                    && new Date(this.soqSettingsList[0].effectiveDate) > new Date(this.todayDate)))) {
+            this.internalApprovaEnabled = false;
+        }
+        else {
+            this.internalApprovaEnabled = true;
+        }
+    }
+
+    get masterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : 1;
     }
 
     get userName(): string {
@@ -137,11 +176,14 @@ export class SalesCustomerApprovalsComponent {
         }
         forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0),
             this.salesQuoteService.approverslistbyTaskId(ApprovalTaskEnum.SalesQuoteApproval, this.salesQuoteId),
-            this.salesQuoteService.getCustomerQuotesList(this.salesQuoteId)).subscribe(response => {
+            this.salesQuoteService.getCustomerQuotesList(this.salesQuoteId),
+            this.salesQuoteService.getAllSalesOrderQuoteSettings(this.masterCompanyId)).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.approvers = response[1];
                 this.setApprovers(response[0])
                 this.setApproverProcessdata(response[2]);
+                this.soqSettingsList = response[3];
+                this.isInternalApprovaEnabled();
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -559,6 +601,7 @@ export class SalesCustomerApprovalsComponent {
                         this.onPartsApprovedEvent.emit(true);
                     }
                     this.getCustomerQuotesList();
+                    this.selectall = false;
                 },
                 err => {
                     this.isSpinnerVisible = false;
