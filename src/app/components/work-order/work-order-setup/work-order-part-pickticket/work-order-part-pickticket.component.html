@@ -123,6 +123,13 @@
                         <i class="fa fa-eye"></i>
                       </a>
                     </span>
+                    <!-- <span>
+                      <button class="btn nobg" mat-icon-button
+                        (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
+                        matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
+                        <i class="fa fa-pencil"></i>
+                      </button>
+                    </span> -->
                     <span>
                       <button class="btn nobg" mat-icon-button
                         (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
@@ -327,9 +334,22 @@
       </div>
     </form>
   </div>
-  <!-- </div>
-  </div> -->
+  <div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
 </ng-template>
+
 <!-- </div> -->
 <ng-template #confirm let-c="close" let-d="dismiss">
   <div class="modal-header">
