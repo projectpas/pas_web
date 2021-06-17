@@ -338,7 +338,7 @@ export class WorkOrderPickticketComponent implements OnInit {
       this.alertService.showMessage(
         "",
         errmessage,
-        MessageSeverity.warn
+        MessageSeverity.error
       );
     }
     else {
@@ -427,7 +427,7 @@ export class WorkOrderPickticketComponent implements OnInit {
         this.alertService.showMessage(
             'Work Order',
             'You cannot pick more than Ready To Pick',
-            MessageSeverity.warn
+            MessageSeverity.error
         );
     }
  }
