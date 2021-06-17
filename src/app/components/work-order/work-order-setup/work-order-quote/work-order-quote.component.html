@@ -942,7 +942,8 @@
                                                     [disabled]="isView || isViewForApprovedPart"
                                                     (click)="(!isView)?tmchange():''"></p-radioButton>
                                      <div>
-                                         <select [ngClass]="{setRequiredSelect : (costPlusType ==1)}" class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart"
+                                        <!-- [ngClass]="{setRequiredSelect : (costPlusType ==1)}" -->
+                                         <select  class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart"
                                          >
                                              <option value="">Select</option>
                                              <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -1038,7 +1039,7 @@
                                      </select>
                                  </td>
                                  <td>
-                                     <select [ngClass]="{setRequiredSelect : (matQuotation.billingMethodId ==1)}" class="form-control wf-pub-id select-markup" (ngModelChange)="getValidMat()" (change)="markupChanged(matQuotation, 'row')" [(ngModel)]="matQuotation.markupPercentageId" [disabled]="isView || matQuotation.billingMethodId != '1' || isViewForApprovedPart">
+                                     <select [ngClass]="{setRequiredSelect : (matQuotation.billingMethodId ==billingMethod.tm)}" class="form-control wf-pub-id select-markup" (ngModelChange)="getValidMat()" (change)="markupChanged(matQuotation, 'row')" [(ngModel)]="matQuotation.markupPercentageId" [disabled]="isView || matQuotation.billingMethodId != '1' || isViewForApprovedPart">
                                          <option value="">Select</option>
                                          <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                      </select>
@@ -1131,7 +1132,7 @@
      <div>
          <ng-container *ngIf="gridActiveTab === 'materialList'">
              <button class="btn btn-primary pull-right" (click)="createMaterialQuote()" *ngIf="!isView && !isViewForApprovedPart "
-              style="margin-top: 10px; margin-bottom: 10px;" [disabled]="disableMat">{{workOrderQuoteDetailsId !=0 ? 'Update':'Save'}} Material List</button>
+              style="margin-top: 10px; margin-bottom: 10px;" [disabled]="disableMat || checkValidationforMarkUp()">{{workOrderQuoteDetailsId !=0 ? 'Update':'Save'}} Material List</button>
          </ng-container>
      </div>
  

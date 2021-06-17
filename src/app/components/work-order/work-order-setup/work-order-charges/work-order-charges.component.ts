@@ -96,12 +96,15 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   mainEditingIndex: number;
   subEditingIndex: number;
   costPlusType: number = 0;
-  overAllMarkup: any;
+  overAllMarkup: any='';
   addNewCharges: boolean = false;
   workOrderChargesLists: any;
   chargesFlatRateBillingAmount: any;
   workOrderQuoteDetailsId: any;
-
+  billingMethod:any={
+    tm:1,
+    actual:2
+}
   constructor(private workOrderService: WorkOrderService, private authService: AuthService,
     private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef, private commonService: CommonService) {
 
@@ -111,7 +114,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   ngOnChanges() { 
     this.isLoadWoCharges=this.isLoadWoCharges;
     this.originalList=this.workOrderChargesList;
-    console.log(this.originalList)
+    this.billingMethod=this.billingMethod;
     // if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId !=0){
     //   this.disableCrg=true;
     // }else{
@@ -168,6 +171,7 @@ if(!this.isSummarizedView){
   this.getRONumberList();
   this.getTaskList(); 
   this.originalList=this.workOrderChargesList;
+  this.billingMethod=this.billingMethod;
 }
 
     if (this.workOrderChargesList && this.workOrderChargesList.length > 0 && this.workOrderChargesList[0].markupFixedPrice) {
@@ -241,7 +245,6 @@ if(!this.isSummarizedView){
     this.isEdit = true;
     this.addNewCharges = true;
     this.editData = rowData; 
-    console.log("edit dataaaa",this.editData)
     this.getTaskList();
   }
   currentRow: any = {};
@@ -651,7 +654,6 @@ if(!this.isSummarizedView){
   taskList:any=[];
   getTaskList() {  
     this.setEditArray=[]; 
-    // console.log("taskId edit data",this.editData)
     // this.isEdit = true;
     // this.addNewCharges = true; 
     if(this.isEdit){
@@ -675,4 +677,19 @@ if(!this.isSummarizedView){
             // this.handleError(err);
         })
 }
+       // Markup Validation 
+       checkValidationforMarkUp() {
+        var result = false;
+     if(this.workOrderChargesList &&  this.workOrderChargesList[0] && this.workOrderChargesList[0].length !=0){
+        this.workOrderChargesList[0].forEach(
+            data => {
+              if (data.billingMethodId==1) { 
+                if (data.markupPercentageId == ''  || data.markupPercentageId == undefined || data.markupPercentageId == null) {
+                  result = true;
+                }
+              }
+            })
+     }
+        return result;
+      }
 }

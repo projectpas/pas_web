@@ -130,7 +130,8 @@
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                     <div>
-                      <select (ngModelChange)="getValidCrg()" class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                      <!-- [ngClass]="{setRequiredSelect : costPlusType ==billingMethod.tm}" -->
+                      <select  (ngModelChange)="getValidCrg()" class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
                         [disabled]="isView || costPlusType != 1">
                         <option value="">Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -212,7 +213,7 @@
                 </select>
               </td>
               <td class="table-column-width">
-                <select class="form-control select-markup" (ngModelChange)="getValidCrg()"  (change)="markupChanged(dt, 'row')"
+                <select [ngClass]="{setRequiredSelect : dt.billingMethodId == billingMethod.tm}" class="form-control select-markup" (ngModelChange)="getValidCrg()"  (change)="markupChanged(dt, 'row')"
                   [(ngModel)]="dt.markupPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
                   <option value="">Select</option>
                   <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -405,6 +406,9 @@
           pInputText type="text" />
   </ng-template>
   </p-table>
+  <button class="btn btn-primary pull-right" (click)="createChargeQuote()" [disabled]="disableCrg || checkValidationforMarkUp()" *ngIf="isQuote && !isView">
+    {{workOrderQuoteDetailsId ? 'Update': 'Save'}}   Charges
+  </button>
 <ng-template #restoreIdWo let-c="close" let-d="dismiss" data-backdrop="static">
 
   <div class="modal-header">
@@ -425,9 +429,7 @@
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>
-  <button class="btn btn-primary pull-right" (click)="createChargeQuote()" [disabled]="disableCrg" *ngIf="isQuote && !isView">
-    {{workOrderQuoteDetailsId ? 'Update': 'Save'}}   Charges
-  </button>
+ 
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
