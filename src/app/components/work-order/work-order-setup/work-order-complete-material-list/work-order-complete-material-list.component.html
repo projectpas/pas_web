@@ -886,7 +886,8 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView"
+                    <!-- *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" -->
+                    <th class="table-actions-column" 
                         style=" width: 160px !important; ">Actions </th>
                 </tr>
             </ng-template>
@@ -947,19 +948,20 @@
                     <td class="summary-column"></td>
                     <td class="action-icons-cstm  lastcol-fix"
                         style="position: sticky !important; min-width: 145px !important;width: 160px !important;"
-                        *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
-                        <span><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit"
+                       >
+                       <!-- *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" -->
+                        <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit"
                                 matTooltipPosition="above"><i class="fa fa-pencil"></i></button></span>
                         <span>
                             <a class="btn nobg btn-view-cstm" (click)="viewItem(rowData)" matTooltip="View Inventory"
                                 matTooltipPosition="above">
                                 <i class="fa fa-eye"></i> </a>
                         </span>
-                        <span><button type="button" class="btn nobg btn-pluspo-cstm"
+                        <span *ngIf="!isView"><button type="button" class="btn nobg btn-pluspo-cstm"
                                 (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"
                                 matTooltip="Create PO" matTooltipPosition="above"><i
                                     class="fa fa-plus create_po_crl"></i></button></span>
-                        <span *ngIf="!isSubWorkOrder">
+                        <span *ngIf="!isSubWorkOrder && !isView">
                             <button class="btn nobg" mat-icon-button
                                 (click)="pickticketItemInterface(rowData,pickticketieminterface)"
                                 matTooltip="Add Pick Ticket" matTooltipPosition="above" style="font-weight: bold;"
@@ -967,7 +969,7 @@
                                 <i class="fa fa-plus" [ngClass]="{'btn_disabled':!(rowData.partStatusId >0)}"></i>
                             </button>
                         </span>
-                        <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
+                        <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order' && !isView">
                             <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId == 0"
                                 (click)="subWoClick(rowData)"
                                 [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'"
@@ -983,12 +985,12 @@
                                 <i class="fa fa-pencil grn_clr"></i>
                             </button>
                         </span>
-                        <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order'">
+                        <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order' && !isView">
                             <button type="button" class="btn nobg btn-pluspo-cstm" disabled>
                                 <i class="fa fa-plus" style="color: #b7b7b7;"></i>
                             </button>
                         </span>
-                        <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;"
+                        <span *ngIf="!isView"><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;"
                                 (click)="openDelete(content,rowData)"
                                 [ngClass]="{'btn_disabled': (rowData.quantityIssued!=0 || rowData.quantityReserved!=0)}"
                                 [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"
@@ -1004,7 +1006,7 @@
                         [ngStyle]="{'min-width': childcol.width}" style="text-align: center !important;">
                         {{childcol.header}}
                     </td>
-                    <td *ngIf="!isView" class="lastcol-fix"
+                    <td   class="lastcol-fix"
                         style="position: sticky !important; min-width: 145px !important; width:80px"></td>
                 </tr>
                 <tr class="child-data splitship-child child-data-back " pReorderableRowHandle
@@ -1055,16 +1057,16 @@
                             class="p_textEditor truncate-text" matTooltipPosition="above"
                             [matTooltip]="parsedText(childRowData[childcol.field])"></span>
                     </td>
-                    <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
+                    <td  class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
   
-                        <span><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+                        <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
                         <span>
                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                 (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
                                 <i class="fa fa-eye"></i>
                             </a>
                         </span>
-                        <span><button type="button" class="btn nobg btn-delete-cstm"
+                        <span *ngIf="!isView"><button type="button" class="btn nobg btn-delete-cstm"
                                 [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0"
                                 (click)="deleteStockLine(Stockcontent,childRowData)" matTooltip="Remove"
                                 matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
