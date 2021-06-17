@@ -1445,12 +1445,12 @@ export class AppComponent implements OnInit, AfterViewInit {
         ],
       },
       {
-        label: 'Dashboard',
+        label: 'Management Structure',
         icon: 'fa fa-user-circle',
         items: [
           [
             {
-              label: 'Dashboard',
+              label: 'Management Structure',
               items: [
                 {
                   label: 'Comp',
