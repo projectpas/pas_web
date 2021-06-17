@@ -202,6 +202,7 @@ export class RoSetupComponent implements OnInit {
 	legalEntityList_Forgrid: any;
 	discountPercentList: any = [];
 	allPercentData: any = [];
+	allrevisedpartData: any = [];
 	splitcustomersList: any = [];
 	splitAddressData: any = [];
 	tempSplitAddressData: any = [];
@@ -521,6 +522,9 @@ export class RoSetupComponent implements OnInit {
 						}
 						else if (x.label == "CONDITION") {
 							this.arrayConditionlist.push(x.value);
+						}
+						else if (x.label == "REVISEDPART") {
+							this.arrayrevisedPartlist.push(x.value);
 						}
 					});
 					this.editDropDownLoad();
@@ -1464,6 +1468,10 @@ export class RoSetupComponent implements OnInit {
 		this.arraySOlist.push(id);
 	}
 
+	onRevisedPnSelect(id) {		
+		this.arrayrevisedPartlist.push(id);
+	}
+
 	// private salesStockRefData() {		
 	// 		if(this.salesOrderReferenceData){
 	//             this.newObjectForParent.partNumberId = {value: this.salesOrderReferenceData.itemMasterId, label: this.salesOrderReferenceData.partNumber};
@@ -1671,8 +1679,8 @@ export class RoSetupComponent implements OnInit {
 		});
 	}
 	BindAllParts(data) {
-		this.partListData = [];
-		this.newPartsList = [this.newObjectForParent];
+		this.partListData = [];		
+		this.newPartsList = [this.newObjectForParent];		
 		if (data) {
 			data[0].map((x, pindex) => {
 				this.newPartsList = {
@@ -1701,8 +1709,8 @@ export class RoSetupComponent implements OnInit {
 					isApproved: x.isApproved ? x.isApproved : false,
 					childList: this.getRepairOrderSplitPartsEdit(x, pindex, data[1]),
 					remQty: 0,
-
-					revisedPartId: x.revisedPartId ? getObjectById('itemMasterId', x.revisedPartId, this.revisedPartNumCollection) : 0,
+					
+					revisedPartId: x.revisedPartId && x.revisedPartId > 0 ? getObjectById('itemMasterId', x.revisedPartId, this.revisedPartNumCollection) : getObjectById('itemMasterId', 0 , this.revisedPartNumCollection),
 					vendorQuoteNoId: getObjectById('value', x.vendorQuoteNoId == null ? 0 : x.vendorQuoteNoId, this.allSalesOrderDetails),
 					workPerformedId: getObjectById('value', x.workPerformedId == null ? 0 : x.workPerformedId, this.workPerformedCollection),
 					estRecordDate: x.estRecordDate ? new Date(x.estRecordDate) : '',
@@ -5171,10 +5179,17 @@ export class RoSetupComponent implements OnInit {
 			this.arrayrevisedPartlist.push(0);
 		}
 		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20, this.arrayrevisedPartlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-			this.revisedPartNumCollection = [];
-			for (let i = 0; i < res.length; i++) {
-				this.revisedPartNumCollection.push({ itemMasterId: res[i].value, partNumber: res[i].label });
-			};
+			
+			const data = res.map(x => {
+				return {
+					itemMasterId: x.value,
+					partNumber: x.label
+				}
+			});
+			this.allrevisedpartData = [
+				{ itemMasterId: 0, partNumber: '-- Select --' }
+			];
+			this.revisedPartNumCollection = [...this.allrevisedpartData, ...data];	
 		});
 	}
 

@@ -594,14 +594,17 @@
                 <tr class="header-table-width">
                   <th>PN <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>ALT/Equiv PN</th>
-                  <th>PN Description</th>												
+                  <th>PN Description</th>
+                  <th>Revised PN</th>	
                   <th>Stock Type</th>
                   <th>Mfr</th>												
-                  <th class="min-width-70">Priority<span _ngcontent-c22="" class="clr-red">*</span></th>												
+                  <th class="min-width-70">Priority <span _ngcontent-c22="" class="clr-red">*</span></th>												
                   <th class="min-width-70">Need By <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Est. Rec'd Date <span _ngcontent-c22="" class="clr-red">*</span></th>                  
                   <th class="min-width-70">Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Work to Perform <span _ngcontent-c22="" class="clr-red">*</span></th>                  
                   <th class="min-width-70">Order Qty <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th class="min-width-70">Vend List Price<span _ngcontent-c22="" class="clr-red">*</span></th>												
+                  <th class="min-width-70">Vend List Price <span _ngcontent-c22="" class="clr-red">*</span></th>												
                   <th class="min-width-70">Disc Percent</th>
                   <th class="min-width-70">Disc./unit</th>
                   <th class="min-width-70">Disc. Amount</th>
@@ -619,6 +622,7 @@
                   <th class="min-width-80">SO Num</th>
                   <th>Item Type</th>
                   <th>GL Account</th>
+                  <th>AC Tail Num</th>                  
                   <th>UOM</th>
                   <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>Notes</th>
@@ -629,12 +633,15 @@
                   <tr class="parent-data purchase-td-back">
                     <td>{{partList?.partNumber}}</td>
                     <td>{{partList?.altEquiPartNumber}}</td>
-                    <td>{{partList?.partDescription}}</td>												
+                    <td>{{partList?.partDescription}}</td>	
+                    <td>{{partList?.revisedPartNumber}}</td>
                     <td>{{partList?.stockType}}</td>
                     <td>{{partList?.manufacturer}}</td>													
                     <td>{{partList?.priority}}</td>
                     <td>{{partList?.needByDate | date: 'MM/dd/yyyy' }}</td>
+                    <td>{{partList?.estRecordDate | date: 'MM/dd/yyyy' }}</td>
                     <td>{{partList?.condition}}</td>
+                    <td>{{partList?.workPerformed}}</td>
                     <td class="text-right">{{partList?.quantityOrdered}}</td>
                     <td class="text-right">{{partList?.vendorListPrice}}</td>
                     <td class="text-right">{{partList?.discountPercent}}</td>
@@ -655,6 +662,7 @@
                     <td>{{partList?.salesOrderNo}}</td>
                     <td>{{partList?.itemType}}</td>
                     <td>{{partList?.glAccount}}</td>
+                    <td>{{partList?.acTailNum}}</td>
                     <td>{{partList?.unitOfMeasure}}</td>
                     <td colspan="4">{{partList?.level1}}, {{partList?.level2}}, {{partList?.level3}}, {{partList?.level4}}</td>
                     <td>
