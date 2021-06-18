@@ -107,9 +107,14 @@
                         matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
                         <i class="fa fa-pencil"></i>
                       </button> -->
-                      <button type="button" data-toggle="modal" data-target="#woDelete"  (click)="delete(part)"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
+                      <button type="button" data-toggle="modal" [disabled]="part.isConfirmed" data-target="#woDelete"  (click)="delete(part)"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
                         (click)="showDeletePickTkt(part)"><i class="fa fa-trash"></i></button>
                     </span>
+                  </td>
+                </tr>
+                <tr *ngIf="summaryPart && summaryPart.pickticketchild && summaryPart.pickticketchild.length ==0">
+                  <td colspan="48" style="color: red; font-weight: bold; text-align: center; text-transform: uppercase">
+                    No records found
                   </td>
                 </tr>
               </tbody>
@@ -118,7 +123,7 @@
           <ng-container *ngIf="pickTickes.length == 0">
             <tbody>
               <tr>
-                <td colspan="48" style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                <td colspan="48" style="color: red; font-weight: bold; text-align: center; text-transform: uppercase">
                   No records found
                 </td>
               </tr>
