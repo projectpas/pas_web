@@ -32,9 +32,11 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
     global_lang: any;
     is9130from:boolean=false;
     is8130from:boolean=false;
+    islocked:boolean=false;
     isEdit:boolean=false;
     isViewopen:boolean=false;
     EsafromAuditHistory: any;
+    rowDataTolock: any = {};
     ReleaseData: any;
     isSpinnerVisible: boolean = true;
     private onDestroy$: Subject<void> = new Subject<void>();
@@ -88,17 +90,17 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
                         this.data = res.map(x => {
                             return {
                                 ...x,
-                                // materialCost: this.formatCost(x.materialCost),
-                                // materialRevenuePercentage: this.formatCost(x.materialRevenuePercentage),
-                                // laborCost: this.formatCost(x.laborCost),
-                                // laborRevenuePercentage: this.formatCost(x.laborRevenuePercentage),
-                                // overHeadCost: this.formatCost(x.overHeadCost),
-                                // otherCost: this.formatCost(x.otherCost),
-                                // directCost: this.formatCost(x.directCost),
-                                // otherCostRevenuePercentage: this.formatCost(x.otherCostRevenuePercentage),
-                                // revenuePercentage: this.formatCost(x.revenuePercentage)
                             }
                         });
+
+                        this.data.forEach(
+                            x => {
+                                if (x.islocked == true) 
+                                {
+                                    this.islocked= true;
+                                }
+                            }
+                        )
                     }
                 },
                 error => {
@@ -167,31 +169,40 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
 
     Locked(rowData)
     {
-             rowData.masterCompanyId= this.authService.currentUser.masterCompanyId;
-             rowData.createdBy= this.userName;
-             rowData.updatedBy= this.userName;
-             rowData.createdDate= new Date();
-             rowData.updatedDate= new Date();
-             rowData.isActive= true;
-             rowData.isDeleted= false;
-             this.isSpinnerVisible = true;
-            //   rowData.IsClosed= true;
-            //  rowData.workOrderPartNoId=this.workOrderPartNumberId;
-            //  rowData.WorkorderId=this.workOrderId;
-      this.workOrderService.LockedWorkorderpart(rowData).pipe(takeUntil(this.onDestroy$)).subscribe(
-        result => {
-            this.isSpinnerVisible = false;
-            this.isEdit = true;
-            this.alertService.showMessage(
-                '',
-                'Locked WorkOrder Successfully',
-                MessageSeverity.success
-            );
-        },
-        err => {
-            this.handleError(err);
-        }
-    );
+
+        this.rowDataTolock = rowData
+       
+    }
+    closewoLockedModal()
+    {
+        $("#woLocked").modal("hide"); 
+    }
+
+    submitlock()
+    {
+        this.rowDataTolock.masterCompanyId= this.authService.currentUser.masterCompanyId;
+        this.rowDataTolock.createdBy= this.userName;
+        this.rowDataTolock.updatedBy= this.userName;
+        this.rowDataTolock.createdDate= new Date();
+        this.rowDataTolock.updatedDate= new Date();
+        this.rowDataTolock.isActive= true;
+        this.rowDataTolock.isDeleted= false;
+        this.isSpinnerVisible = true;
+ this.workOrderService.LockedWorkorderpart(this.rowDataTolock).pipe(takeUntil(this.onDestroy$)).subscribe(
+   result => {
+       this.isSpinnerVisible = false;
+       this.isEdit = true;
+       this.alertService.showMessage(
+           '',
+           'Locked WorkOrder Successfully',
+           MessageSeverity.success
+       );
+       this.UpdateGird();
+   },
+   err => {
+       this.handleError(err);
+   }
+);
     }
     handleError(err) {
         this.isSpinnerVisible = false;
