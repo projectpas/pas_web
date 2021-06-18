@@ -174,6 +174,7 @@ Scan:3
   laborTaskData: any;
   allTaskList: any = [];
   ngOnChanges() {
+    // console.log("management structure",this.selectedPartNumber)
     this.isLoadWoLabor=this.isLoadWoLabor;
     this.laborMethods=this.laborMethods;
     this.billingMethod=this.billingMethod;
@@ -230,6 +231,7 @@ Scan:3
         }
       }
     }
+    this.laborForm.laborFlatBillingAmount =this.laborForm.laborFlatBillingAmount ? formatNumberAsGlobalSettingsModule(this.laborForm.laborFlatBillingAmount, 2) : '0.00';
     this.calculateTotalWorkHours();
     setTimeout(() => { 
       if (this.workOrderLaborList) {
