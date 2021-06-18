@@ -383,10 +383,11 @@ body .ui-widget {
   background-color: white;
 }
 .title-logo-login {
-  width: 260px;
+  width: 240px;
   height: 40px;
   background-color: white;
 }
+
 p {
   padding-top: 6px;
 }
@@ -10930,7 +10931,8 @@ a.ui-button:active,
 .ui-button:active,
 .ui-button.ui-state-active:hover {
   border: 1px solid #003eff;
-  background: #007fff;
+  // background: #007fff;
+  background:#337ab7 !important;
   font-weight: normal;
   color: #ffffff;
 }
