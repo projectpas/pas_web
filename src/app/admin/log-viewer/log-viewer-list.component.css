@@ -9,10 +9,12 @@
     display: inline-block;
     margin-left: 5%;
 }
-.loader-position{
+
+.loader-position {
     position: absolute;
 }
-.loader-align{
+
+.loader-align {
     margin-top: 17rem;
-    margin-left:30rem;
+    margin-left: 30rem;
 }

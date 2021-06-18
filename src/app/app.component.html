@@ -20,15 +20,20 @@
         <div  *ngIf="isUserLoggedIn" class="title-logo-login">
           <p>
             <a routerLink="/">
-              <img src="assets/images/PAS-logo.png" id="logo" style="padding-left:0px !important" />
+              <img src="assets/images/PAS-logo.png" id="logo" style="padding-left:0px !important;" />
             </a>
           </p>
           
         </div>
+        <p-megaMenu
+        [model]="megaMenuItems"
+        *ngIf="isUserLoggedIn"
+        [ngClass]="{ sticky: isSticky }"
+      ></p-megaMenu>
         <span class="app-toolbar-spacer"></span>
-        <span  *ngIf="isUserLoggedIn" matTooltip="Dashboard">
+        <!-- <span  *ngIf="isUserLoggedIn" matTooltip="Dashboard">
         <i class="fa fa-sitemap entity-block-btn" (click)="showthis()"></i>
-        </span>
+        </span> -->
         <!-- <app-theme-picker
           tooltip="{{ 'mainMenu.Theme' | translate }}"
         ></app-theme-picker> -->
@@ -42,10 +47,12 @@
           <span>{{ 'mainMenu.Login' | translate }}</span>
         </button> -->
 
-        <button
+
+
+        <!-- <button
           *ngIf="isUserLoggedIn"
           class="side-button"
-          mat-button
+          mat-button style="padding-right:40px"
           [matMenuTriggerFor]="accountMenu"
           matTooltip="{{ 'mainMenu.UserAccount' | translate }}"
         >
@@ -72,7 +79,7 @@
             <mat-icon>lock</mat-icon
             ><span>{{ 'mainMenu.Logout' | translate }}</span>
           </button>
-        </mat-menu>
+        </mat-menu> -->
       </mat-toolbar-row>
       <!-- <mat-toolbar-row>
             <span style="font-size: 12px;">Texts for panel row</span>
@@ -91,11 +98,11 @@
         <i class="fa fa-chevron-circle-left"></i> Back
       </button>
     </mat-toolbar> -->
-    <p-megaMenu
+    <!-- <p-megaMenu
       [model]="megaMenuItems"
       *ngIf="isUserLoggedIn"
       [ngClass]="{ 'mat-elevation-z5': true, sticky: isSticky }"
-    ></p-megaMenu>
+    ></p-megaMenu> -->
     <div id="mainContent">
       <router-outlet></router-outlet>
     </div>

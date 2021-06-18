@@ -41,7 +41,7 @@
                                         </span>
                 </td>
                 <td *ngIf="headername.field == 'memo'" [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
-                    <p class="m-0 p-0" [innerHTML]="audit[headername.field]"></p>
+                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit[headername.field])" [innerHTML]="audit[headername.field]"></p>
               
                 </td>
             

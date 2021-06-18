@@ -410,7 +410,7 @@ export class SalesPartNumberComponent {
           this.part.customerRef = this.salesQuote.customerReferenceName;
           this.part.serialNumber = this.selectedPart.serialNumber;
           this.part.qtyAvailable = this.selectedPart.qtyAvailable;
-          this.part.quantityOnHand = this.selectedPart.quantityOnHand;
+          this.part.quantityOnHand = this.selectedPart.qtyOnHand; //this.selectedPart.quantityOnHand;
           // if (this.selectedPart.itemClassification) {
           //   this.part.masterCompanyId = this.selectedPart.itemClassification.masterCompanyId;
           // } else {

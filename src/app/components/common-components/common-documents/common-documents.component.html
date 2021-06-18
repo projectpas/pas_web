@@ -467,8 +467,8 @@
               <td [ngStyle]="{'color': getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
                 {{audit.name}}
               </td>
-              <td [ngStyle]="{'color': getColorCodeForHistory(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }">
-                <p style="margin:0px;padding:0px !important" class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.docMemo)" [innerHTML]="audit.docMemo"></p>
+              <td class="width-50" [ngStyle]="{'color': getColorCodeForHistory(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }">
+                <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.docMemo)" [innerHTML]="audit.docMemo"></p>
               </td>
               <td>
             <tr *ngFor="let x of audit.attachmentDetails">

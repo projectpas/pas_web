@@ -175,7 +175,8 @@
           <td class="table-column-width">{{dt.dimensionUOM}}</td>
           <td class="table-column-width">{{dt.currency}}</td>
           <td class="content-to-end table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
-          <td class="table-column-width" [innerHTML]="dt.memo"></td> 
+          <td class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+          [matTooltip]="parsedText(dt.memo)" [innerHTML]="dt.memo"></td> 
           <!-- <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]"> </span> -->
           <!-- <td *ngFor="let col of columns">
             {{ dt[col.field] }}
@@ -278,7 +279,8 @@
           <td class="table-column-width">{{dt.dimensionUOM}}</td>
           <td class="table-column-width">{{dt.currency}}</td>
           <td class="content-to-end table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
-          <td class="table-column-width" [innerHTML]="dt.memo"></td> 
+          <td class="table-column-width value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+          [matTooltip]="parsedText(dt.memo)" [innerHTML]="dt.memo"></td> 
           <!-- <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]"> </span> -->
           <!-- <td *ngFor="let col of columns">
             {{ dt[col.field] }}
