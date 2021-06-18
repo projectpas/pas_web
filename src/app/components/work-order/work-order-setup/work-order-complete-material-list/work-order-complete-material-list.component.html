@@ -233,24 +233,30 @@
                                                     (keyup)="validatePartsQuantity($event,x)" (change)="handleQty(x)"
                                                     [disabled]="!x.isParentSelected">
                                             </td>
-                                            <td *ngIf="((!isSubWorkOrder && statusId === 2 && !enablePickTicket) || statusId === 3 || statusId === 4)">
+                                            <td *ngIf="!isSubWorkOrder &&  (statusId === 2  || statusId === 3 || statusId === 4)">
+                                                <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
+                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
+                                                    (keyup)="validatePartsQuantity($event,x)"
+                                                    [disabled]="!x.isParentSelected">
+                                                  
+                                                    <!-- <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
+                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
+                                                    (keyup)="validatePartsQuantity($event,x)"
+                                                    [disabled]="!x.isParentSelected"> -->
+
+                                            </td>
+                                            <td *ngIf="(( statusId === 2  || statusId === 3 || statusId === 4) && isSubWorkOrder)">
                                                 <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
                                                     (change)="handleQty(x)" (keypress)="restrictMinus($event)"
                                                     (keyup)="validatePartsQuantity($event,x)"
                                                     [disabled]="!x.isParentSelected">
                                             </td>
-                                            <td *ngIf="(( statusId === 2 && isSubWorkOrder) || statusId === 3 || statusId === 4)">
+                                            <!-- <td *ngIf="!isSubWorkOrder && (statusId === 2 && enablePickTicket)">
                                                 <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
                                                     (change)="handleQty(x)" (keypress)="restrictMinus($event)"
                                                     (keyup)="validatePartsQuantity($event,x)"
                                                     [disabled]="!x.isParentSelected">
-                                            </td>
-                                            <td *ngIf="!isSubWorkOrder && (statusId === 2 && enablePickTicket)">
-                                                <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
-                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
-                                                    (keyup)="validatePartsQuantity($event,x)"
-                                                    [disabled]="!x.isParentSelected">
-                                            </td>
+                                            </td> -->
                                             <td class="tex_end text-right">
                                                 {{x.quantityAlreadyIssued}}
                                             </td>
