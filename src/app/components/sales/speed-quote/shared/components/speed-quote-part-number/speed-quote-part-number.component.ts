@@ -420,6 +420,15 @@ export class SpeedQuotePartNumberComponent {
       //})
     }
   }
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
   onCloseMargin(event) {
     this.show = false;
     this.salesMarginModal.close();

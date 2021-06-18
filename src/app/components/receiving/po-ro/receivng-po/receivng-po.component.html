@@ -416,7 +416,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Cond <span class="clr-red">*</span></label>
-                                                <select class="form-control width-100" required
+                                                <select class="form-control" required
                                                     [(ngModel)]="part.conditionId" #selects="ngModel"
                                                     [ngModelOptions]="{standalone: true}">
                                                     <option value="0">Select</option>
@@ -427,7 +427,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-1 receiving-margin-left">
+                                        <div class="col-md-1 ">
                                             <div class="form-group">
                                                 <label>Qty To Receive</label>
                                                 <input type="text" maxlength="12" pInputText pKeyFilter="pnum"
@@ -437,16 +437,16 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <label>Qty Actually Received</label>
+                                                <label style="margin-left:10px">Qty Actually Received</label>
                                                 <input type="text" maxlength="12"
                                                     *ngIf="part.stockLineCount < part.quantityOrdered"
                                                     value="{{part.quantityActuallyReceived}}" pInputText
-                                                    pKeyFilter="pnum" class="form-control width-100 text-right"
+                                                    pKeyFilter="pnum" class="form-control text-right"
                                                     required />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-1 receiving-margin-left" style="left:0px">
+                                        <div class="col-md-1" style="left:0px">
                                             <div class="form-group">
                                                 <label>Qty Rejected <span class="clr-red">*</span></label>
                                                 <input type="text" maxlength="12" [(ngModel)]="part.quantityRejected"

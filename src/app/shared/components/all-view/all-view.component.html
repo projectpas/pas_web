@@ -496,7 +496,8 @@
                                   </select>
                               </td>
                               <td *ngIf="field.field == 'memo'" class="memo-td-width">
-                                    <p class="m-0 p-0 p_textEditor" class="memo-left" [innerHTML]="approver['memo']"></p>
+                                    <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                                   <!-- </div> -->
                                   <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
                                      
@@ -900,7 +901,8 @@
                                   </select>
                               </td>
                               <td *ngIf="field.field == 'memo'" class="memo-td-width">
-                                    <p class="m-0 p-0 p_textEditor" class="memo-left" [innerHTML]="approver['memo']"></p>
+                                    <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                                   <!-- </div> -->
                                   <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
                                      
