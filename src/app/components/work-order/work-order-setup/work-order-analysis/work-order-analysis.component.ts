@@ -100,6 +100,7 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
                                 overHeadCost: this.formatCost(x.overHeadCost),
                                 otherCost: this.formatCost(x.otherCost),
                                 directCost: this.formatCost(x.directCost),
+                                freightCost: this.formatCost(x.freightCost),
                                 directCostRevenuePercentage: this.formatCost(x.directCostRevenuePercentage),
                                 revenuePercentage: this.formatCost(x.revenuePercentage),
                                 margin: this.formatCost(x.margin),
