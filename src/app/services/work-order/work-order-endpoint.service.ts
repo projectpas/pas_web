@@ -937,7 +937,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
     workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder,isDetailView, masterCompanyId) {
         if (isSubWorkOrder) {
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subwolabouranalysis?subWOPartNoId=${workOrderPartNoId}&masterCompanyId=${masterCompanyId}`).catch(error => {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subwolabouranalysis?subWorkOrderId=${workOrderId}&subWOPartNoId=${workOrderPartNoId}&isDetailView=${isDetailView}&masterCompanyId=${masterCompanyId}`).catch(error => {
                 return this.handleErrorCommon(error, () => this.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder,isDetailView, masterCompanyId));
             });
         } else {
