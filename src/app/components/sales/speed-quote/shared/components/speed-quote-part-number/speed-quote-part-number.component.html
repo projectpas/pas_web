@@ -263,7 +263,9 @@
                                     {{audit.marginPercentage}}</td>
                                 <td
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
-                                    {{audit.notes}}</td>
+                                    <!-- {{audit.notes}} -->
+                                    <p style="margin:0px;padding:0px !important" class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                     [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p></td>
                                 <td
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
                                     {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
