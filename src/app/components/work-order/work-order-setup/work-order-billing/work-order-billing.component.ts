@@ -43,6 +43,7 @@ export class WorkOrderBillingComponent implements OnInit {
     @Input() quoteLaborList;
     @Input() buildMethodDetails: any = {};
     @Input() isViewMode: boolean = false;
+    @Input() isView: boolean = false;
     @Output() saveWOBilling = new EventEmitter();
     @Output() updateWOBilling = new EventEmitter();
     @Input() workFlowWorkOrderId = 0;
@@ -99,7 +100,7 @@ export class WorkOrderBillingComponent implements OnInit {
     markUpList: any;
     invoiceTypeList: any;
     shipViaData: any;
-    isView: boolean = false;
+    //isView: boolean = false;
     id: number;
     workFlowObject = {
         materialList: [],
@@ -1024,7 +1025,7 @@ export class WorkOrderBillingComponent implements OnInit {
                     var p = new BillingItems;
                     p.workOrderShippingId = a.workOrderBillingInvoiceChild[i].workOrderShippingId;
                     this.workOrderShippingId=a.workOrderBillingInvoiceChild[i].workOrderShippingId;
-                    p.noOfPieces = a.workOrderBillingInvoiceChild[i].qtyToBill;
+                    p.noOfPieces = a.qtyToBill;
                     this.ItemMasterId = a.workOrderBillingInvoiceChild[i].itemMasterId;
                     p.workOrderPartId = a.workOrderBillingInvoiceChild[i].workOrderPartId;
 

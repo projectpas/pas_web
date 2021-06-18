@@ -1,13 +1,13 @@
 
-<div id="woworkorderdiv" class="modal fade" role="dialog" data-backdrop="static">
+<div id="woReleaseFromDiv" class="modal fade" role="dialog" data-backdrop="static">
   <div class="modal-dialog modal-xlg">
       <div class="modal-content" >
 
           <div class="modal-header">
-              <button type="button" class="close" (click)="close()">&times;</button>
+              <button type="button" class="close" (click)="close()" data-dismiss="modal">&times;</button>
               <!-- <h4 class="modal-title warning_color"></h4> -->
           </div>
-          <div class="modal-body" id="workorderfrom">
+          <div class="modal-body" id="subworkorderfrom">
               <div class="clear"></div>
               <form id="" name="" action=" #" method="post" onsubmit="return false;">
                   <div class="image">
@@ -86,7 +86,7 @@
 
                                       <div class="second-block col-sm-4">
                                           <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
-                                              WORK ORDER FORM
+                                              SUB WORK ORDER FORM
                                           </h3>
                                           <div class="second-block-div">
                                               <label class="col-sm-6 second-block-label" style="width:100%">Work Order Num</label>
@@ -94,14 +94,9 @@
                                                      disabled>{{this.workOrderprintData.workOrderNum}}</label>
                                           </div>
                                           <div class="second-block-div">
-                                              <label class="col-sm-6 second-block-label" style="width:100%">Quote Num</label>
+                                              <label class="col-sm-6 second-block-label" style="width:100%">Sub Work Order Num</label>
                                               <label class="col-sm-6 second-block-label" style="width:100%"
                                                      disabled>{{this.workOrderprintData.quoteNumber}}</label>
-                                          </div>
-                                          <div class="second-block-div">
-                                              <label class="col-sm-6 second-block-label" style="width:100%">Quote Date</label>
-                                              <label class="col-sm-6 second-block-label" style="width:100%"
-                                                     disabled>{{this.workOrderprintData.qouteDate   | date: 'MM/dd/yyyy h:mm a '}}</label>
                                           </div>
                                           <div class="second-block-div">
                                               <label class="col-sm-6 second-block-label" style="width:100%">Num of Items</label>
@@ -537,7 +532,7 @@
                   </div>
               </form>
           </div>
-          <div class="preloader" *ngIf="isSpinnerVisible">
+          <div class="preloader" *ngIf="isSpinnerVisibleNew">
             <div class="loading">
                 <div class="lds-roller">
                     <div></div>
@@ -553,8 +548,8 @@
           </div>
           <div style="height:100px"> &nbsp;</div>
           <div class="modal-footer">
-              <button *ngIf="!isView" type="submit" class="btn btn-primary" (click)="print()">Print</button>
-              <button type="button" class="btn btn-danger"  (click)="close()">Close</button>
+              <button *ngIf="!isView" type="submit" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
           </div>
       </div>
 

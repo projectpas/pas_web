@@ -1648,6 +1648,15 @@ export class WorkOrderEndpointService extends EndpointFactory {
           });
       }
 
+      GetSubWorkOrderPrintFormData(subWorkOrderId: number,subWOPartNoId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetSubWorkOrderPrintFormData?subWorkOrderId=${subWorkOrderId}&subWOPartNoId=${subWOPartNoId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetSubWorkOrderPrintFormData(subWorkOrderId,subWOPartNoId));
+          });
+      }
+
       
       GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
         const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderPartlistFormData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}`;

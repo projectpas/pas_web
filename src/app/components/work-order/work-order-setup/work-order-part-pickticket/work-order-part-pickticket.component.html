@@ -12,6 +12,7 @@
               </span>
             </th>
             <th *ngIf="isView == false">Actions</th>
+            <th *ngIf="isView == true"></th>
           </tr>
           <ng-container *ngIf="pickTickes.length > 0">
             <ng-container *ngFor="let summaryPart of pickTickes;let rowIndex=index;">
@@ -55,6 +56,7 @@
                       </button>
                     </span>
                   </td>
+                  <td *ngIf="isView == true"></td>
                 </tr>
                 <tr class="child-header splitship-head child-header-back">
                   <th style="background-color: #fff !important;"></th>
@@ -69,7 +71,7 @@
                   <th>Ctrl Num</th>
                   <th>ID Num</th>
                   <th colspan="2"></th>
-                  <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">Actions</th>
+                  <th style="min-width: 120px; position: sticky !important">Actions</th>
                 </tr>
                 <tr class="child-data splitship-child child-data-back"
                   *ngFor="let part of summaryPart.pickticketchild; let stockIndex = index">
@@ -105,12 +107,12 @@
                     {{ part.idNumber }}
                   </td>
                   <td colspan="2"></td>
-                  <td class="zui-sticky-col" style="width:107px !important" *ngIf="isView == false">
+                  <td class="zui-sticky-col" style="width:107px !important" >
                     <span>
                       <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"
                         (click)="printPickTicket(part);"><i class="fa fa-print"></i></a>
                     </span>
-                    <span>
+                    <span *ngIf="isView == false">
                       <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,part)"
                         matTooltip="Confirm" matTooltipPosition="above" style="font-weight: bold;"
                         [disabled]="part.isConfirmed">
@@ -123,7 +125,7 @@
                         <i class="fa fa-eye"></i>
                       </a>
                     </span>
-                    <span>
+                    <span *ngIf="isView == false">
                       <button class="btn nobg" mat-icon-button
                         (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
                         matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
@@ -138,7 +140,7 @@
           <ng-container *ngIf="pickTickes.length == 0">
             <tbody>
               <tr>
-                <td colspan="48" style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                <td colspan="48" style="color: red; font-weight: bold; text-align: center; text-transform: uppercase">
                   No records found
                 </td>
               </tr>

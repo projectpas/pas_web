@@ -21,7 +21,7 @@ export class WoPartlistFromComponent implements OnInit,OnChanges {
   @Input() workOrderPartNumberId;
   @Input() workOrderId;
   // @Input() releaseFromId;
-  // @Input() isView;
+   @Input() isView: boolean = false;
   // @Input() isEdit;
   // @Input() ReleaseDataForm;
   // @Output() updateRelreaseList = new EventEmitter();
@@ -50,7 +50,7 @@ export class WoPartlistFromComponent implements OnInit,OnChanges {
   ngOnInit() 
   {
     this.endPointURL = environment.baseUrl;
-    $('#woReleaseFromDiv').modal('show');
+    $('#wopartlist').modal('show');
     this.GetWorkOrderPrintFormData();
   }
     
@@ -81,6 +81,7 @@ get currentUserMasterCompanyId(): number {
 }
 close()
 {
+  $('#wopartlist').modal('hide');
     //this.updateRelreaseList.emit();
 }
 
@@ -493,6 +494,8 @@ tfoot { display:table-footer-group }
       </html>`
     );
     popupWin.document.close();
+    this.close();
+    
   }
 
 }
