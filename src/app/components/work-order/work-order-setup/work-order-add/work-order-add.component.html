@@ -1101,6 +1101,7 @@
                             (click)="gridTabChange('documents');">Documents</a>
                     </li>
 
+               
                     <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workComplete'}"
@@ -1119,9 +1120,9 @@
                         (click)="otherOptionTabSelected('freight');gridTabChange('otherOptions')">Freight</a>
                     <a class="dropdown-item"
                         (click)="otherOptionTabSelected('charges');gridTabChange('otherOptions')">Charges</a>
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workComplete'}"
-                        (click)="gridTabChange('workComplete')">Work Complete</a>
+                        <!-- <a class="nav-link  "  
+                         [ngClass]="{active : gridActiveTab === 'workComplete'}"
+                        (click)="gridTabChange('workComplete')">Settlement</a> -->
                
                     </div>
             </li>
@@ -1161,6 +1162,11 @@
                             [ngClass]="{active : gridActiveTab === 'releasefrom'}"
                             (click)="gridTabChange('releasefrom')" >Release Form</a>
                     </li>
+                    <li class="nav-item" *ngIf="!isSubWorkOrder">
+                        <a class="nav-link " 
+                          [ngClass]="{active : gridActiveTab === 'workComplete'}"
+                        (click)="gridTabChange('workComplete')">Settlement</a>
+                        </li>
                     <li class="nav-item dropdown" >
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workorderprint'}">Work Order Print
@@ -1390,6 +1396,13 @@
 <app-wo-actual-vs-quote [isWorkOrder]="isWorkOrder" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
 [isSubWorkOrder]="isSubWorkOrder"  [workFlowWorkOrderId]="workFlowWorkOrderId"  [subWOPartNoId]="subWOPartNoId"
 ></app-wo-actual-vs-quote>
+</div>
+
+<div *ngIf="workOrderId && (gridActiveTab == 'workComplete')" class="wf-label-cstm  "
+[ngClass]="{hidedata : gridActiveTab !== 'workComplete'}">
+<app-wo-workComplete [isWorkOrder]="isWorkOrder" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
+  [workFlowWorkOrderId]="workFlowWorkOrderId"   
+></app-wo-workComplete>
 </div>
                 <div *ngIf="workOrderId && (subTabOtherOptions == 'exclusions')" class="wf-label-cstm"
                     [ngClass]="{hidedataOthers :  subTabOtherOptions !== 'exclusions'} ">

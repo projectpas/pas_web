@@ -77,6 +77,9 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                           this.isSpinnerVisible = false;
                           if (res) {
                             this.data = res;
+                            this.data.forEach(element => {
+                              element.burdenRateAmount=element.burdenRateAmount ? formatNumberAsGlobalSettingsModule(element.burdenRateAmount, 2) : '0.00';
+                            });
                           }
                       },
                       err => {

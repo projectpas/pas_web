@@ -1265,17 +1265,25 @@ export class AppComponent implements OnInit, AfterViewInit {
               label: 'Work Order Setting',
               items: [
                 {
-                  label: 'Work Order Quote Setup List',
-                  routerLink: '',
+                  label: 'Work Order Settings Setup List',
+                  routerLink:
+                    '/workordersettingsmodule/workordersettings/app-work-order-settings-list',
                 },
                 {
-                  label: 'Workflow Setting Setup List',
-                  routerLink: '',
+                  label: 'WO Quote Settings Setup List',
+                  routerLink:
+                    '/workordersettingsmodule/workordersettings/app-wo-quote-settings-list',
                 },
                 {
-                  label: 'Workorder Setup List',
-                  routerLink: '',
-                }
+                  label: 'Direct Labour and OH Cost',
+                  routerLink:
+                    '/workordersmodule/workorderspages/app-direct-labour',
+                },
+                {
+                                  label: 'Work Order Quote Approval Rule',
+                                  command: () => this.clearStocklineAndSOStorageReference(),
+                                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
+                                }
               ],
             }
           ],
