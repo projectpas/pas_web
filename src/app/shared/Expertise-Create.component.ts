@@ -38,7 +38,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     }
 
     getExpertiseData() {
-        let expertiseIds = [];
+        let expertiseIds = []; 
        this.workFlow.expertise.forEach(acc => {
           expertiseIds.push(acc.expertiseTypeId);
         })
@@ -46,8 +46,15 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
             expertiseIds.push(0)
         // }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', '', true, 100, expertiseIds)
-            .subscribe(res => {
+       // http://localhost:5050//api/Common/autoCompleteDropdownsExpertiseTypes?searchText=&startWith=true&count=20&idList=14&masterCompanyId=1
+
+
+        // this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', '', true, 100, expertiseIds)
+
+
+        //     .subscribe(res => {
+            const strText = '';
+            this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 0, expertiseIds.join()).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.expertiseTypes = res.map(x => {
                     return {

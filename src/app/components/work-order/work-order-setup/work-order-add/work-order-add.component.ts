@@ -448,6 +448,7 @@ setTimeout(() => {
                 }
             });
             if (this.mpnDropdownList && this.mpnDropdownList.length != 0) {
+
                 this.changeofMPNForSubWo(this.mpnDropdownList[0].value);
                 this.selectedMPNSubWo = this.mpnDropdownList[0].value;
              
@@ -464,7 +465,7 @@ setTimeout(() => {
         this.subWOPartNoId = data.subWOPartNoId;
         this.workOrderPartNumberId = data.subWOPartNoId;
         this.savedWorkOrderData.workFlowId = data.workFlowId;
-
+        this.selectedPartNumber =data.datas;
         if (this.workFlowId != null) {
             this.gridActiveTab = "workFlow";
             this.subTabWorkFlow = "viewworkFlow";
@@ -2259,6 +2260,7 @@ this.getNewMaterialListByWorkOrderId();
                 })
         }
     }
+
     getMaterialListByWorkOrderId() {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
@@ -2374,14 +2376,15 @@ this.getNewMaterialListByWorkOrderId();
                 }
             }
         }
-        if(this.result &&  this.result.LaborList && this.result.LaborList.length==0){
- this.alertService.showMessage(
-            this.moduleName,
-            'Add Atleast one Task',
-            MessageSeverity.warn
-        );
-        return;
-        }
+//         if(this.result &&  this.result.LaborList && this.result.LaborList.length==0){
+//             this.isAllowLaberSave=true;
+//  this.alertService.showMessage(
+//             this.moduleName,
+//             'Add Atleast one Task',
+//             MessageSeverity.warn
+//         );
+//         return;
+//         }
         if(this.result &&  this.result.LaborList && this.result.LaborList.length!=0){
             this.isAllowLaberSave=false;
             this.taskName='';

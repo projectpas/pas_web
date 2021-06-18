@@ -203,6 +203,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                             this.isSpinnerVisible = false;
                             if (res) {
                                 charge.memo = res.memo;
+                                charge.description = res.description;
                                 charge.glAccountName = res.glAccountName;
                             }
                         }, error => {

@@ -106,6 +106,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
         { field: 'revisedPN', header: 'Revised PN'},
         { field: "partDescription", header: "PN Description" },
         { field: 'customer', header: 'Customer'  },
+        { field: 'billableOrNonBillable', header: 'Billable /NonBillable' },
         { field: 'hours', header: 'Act Hours'},
         { field: 'adjustedHours', header: 'Adj Hours' },
         { field: 'adjustments', header: 'Var. Hours' },

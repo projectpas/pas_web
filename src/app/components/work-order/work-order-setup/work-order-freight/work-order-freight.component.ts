@@ -41,7 +41,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     carrierList: any;
     mainEditingIndex: any;
     subEditingIndex: any;
-    overAllMarkup: any;
+    overAllMarkup: any='';
     costPlusType: number = 0;
     modal: NgbModalRef;
     isSpinnerVisible: boolean = false;
@@ -101,6 +101,10 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     totalRecords: number = 0;
     totalPages: number = 0;
     pageSize: number = 10;
+    billingMethod:any={
+        tm:1,
+        actual:2
+    }
     constructor(private workOrderService: WorkOrderService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -108,6 +112,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         private cdRef: ChangeDetectorRef) {
     }
     ngOnInit() {
+        this.billingMethod=this.billingMethod;
         if (this.freightForm) {
             this.freightForm = [...this.freightForm, new Freight()];
         }
@@ -148,9 +153,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     originalList:any=[]
     ngOnChanges() {
         this.isLoadWoFreights=this.isLoadWoFreights;
-        console.log("changes friehgts",this.isLoadWoFreights)
+        this.billingMethod=this.billingMethod;
         this.originalList=this.workOrderFreightList;
-        // console.log("hello",this.originalList)
         // if(this.originalList && this.originalList[0] && this.originalList[0].workOrderQuoteDetailsId !=undefined){
         //     this.disableFrt=true;
         // }else{
@@ -390,8 +394,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                     dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                     currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                     billingAmount: this.formateCurrency(x.amount),
-                    //billingMethodId:this.costPlusType? this.costPlusType :0,
-                    //markupPercentageId: this.overAllMarkup ? this.overAllMarkup : 0,
+                    billingMethodId:this.costPlusType? this.costPlusType :'',
+                    markupPercentageId: this.overAllMarkup ? this.overAllMarkup : '',
                     // currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                 }
             });
@@ -430,6 +434,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             }
         }
         this.disableFrt=false;
+    if(this.isQuote){
+        this.markupChanged(this.workOrderFreightLists, 'row')
+    }
     }
 
     createFreightsQuote() {
@@ -791,4 +798,20 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.shipViaList = [];
         }
     }
+
+        // Markup Validation 
+        checkValidationforMarkUp() {
+            var result = false;
+         if(this.workOrderFreightList && this.workOrderFreightList[0] && this.workOrderFreightList[0].length !=0){
+            this.workOrderFreightList[0].forEach(
+                data => {
+                  if (data.billingMethodId==1) { 
+                    if (data.markupPercentageId == ''  || data.markupPercentageId == undefined || data.markupPercentageId == null) {
+                      result = true;
+                    }
+                  }
+                })
+         }
+            return result;
+          }
 }

@@ -475,8 +475,9 @@
               <p style="width: 80px;"> {{ audit.cost | twoDecimalGlobalNumberFormatPipe }}</p>
             </td>
             <td
-              [ngStyle]="{width: '150px',color: getColorCodeForHistoryForPandS(i, 'memo', audit.memo) ? 'black' : 'red'}">
-              <p style="width: 150px;" class="p_editor" [innerHTML]="audit.memo"></p>
+              [ngStyle]="{color: getColorCodeForHistoryForPandS(i, 'memo', audit.memo) ? 'black' : 'red'}">
+              <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+              [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
             </td>
             <td>
               <p style="width: 120px;"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p>

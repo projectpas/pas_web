@@ -194,6 +194,7 @@ export class RepairOrderPart {
     showHeader:boolean;
     revisedPartId:number=0;
     acTailNum: string;
+    revisedPartNumber:string;
 }
 
 export class TimeLife {

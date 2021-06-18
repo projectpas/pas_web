@@ -4,11 +4,8 @@
 // ===============================
 
 import { NgModule } from "@angular/core";
-
 import { SharedModule } from '../shared/shared.module';
-
 import { AdminRoutingModule } from "./admin-routing.module";
-
 import { AdminComponent } from "./admin.component";
 import { RoleListComponent } from "./role-list.component";
 import { EditRoleDialogComponent } from "./edit-role-dialog.component";
@@ -27,7 +24,7 @@ import { CheckboxModule } from "primeng/checkbox";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { BreadcrumbModule } from 'primeng/breadcrumb'; //bread crumb
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {DropdownModule} from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
 import { AccountService } from "../services/account.service";
 import { POApprovalService } from "../services/po-approval.service";
 import { GlAccountEndpointService } from "../services/glAccount/glAccount-endpoint.service";
@@ -40,10 +37,12 @@ import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.servi
 import { LogViewerListComponent } from "./log-viewer/log-viewer-list.component";
 import { LoggerService } from "../services/logger.service";
 import { LoggerEndpointService } from "../services/logger-endpoint.service copy";
+import { CalendarModule } from "primeng/calendar";
+import { AppSharedModule } from "../app-shared.module";
 
 @NgModule({
     imports: [
-        FormsModule, 
+        FormsModule,
         ReactiveFormsModule,
         SharedModule,
         AdminRoutingModule,
@@ -58,7 +57,9 @@ import { LoggerEndpointService } from "../services/logger-endpoint.service copy"
         BreadcrumbModule,
         DropdownModule,
         FileUploadModule,
-        EditorModule
+        EditorModule,
+        CalendarModule,
+        AppSharedModule
     ],
     declarations: [
         AdminComponent,
@@ -87,7 +88,6 @@ import { LoggerEndpointService } from "../services/logger-endpoint.service copy"
         EditRoleDialogComponent
     ]
 })
-export class AdminModule
-{
+export class AdminModule {
 
 } 

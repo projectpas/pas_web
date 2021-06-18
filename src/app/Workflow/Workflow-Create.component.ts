@@ -838,10 +838,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         if (event == 'percentage') {
             this.ispercent = true;
             this.sourceWorkFlow.isPercentageofNew = true;
-               this.sourceWorkFlow.percentageOfNew = -1;
+               this.sourceWorkFlow.percentageOfNew = this.sourceWorkFlow.percentageOfNew ? this.sourceWorkFlow.percentageOfNew :-1;
         }
         if (event == 'percentreplace') {
-            this.sourceWorkFlow.percentageOfReplacement=-1;
+            this.sourceWorkFlow.percentageOfReplacement= this.sourceWorkFlow.percentageOfReplacement? this.sourceWorkFlow.percentageOfReplacement:-1;
             this.percentreplcae = true;
             this.sourceWorkFlow.isPercentageOfReplacement = true;
         }
@@ -859,7 +859,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.ispercent = false;
             this.sourceWorkFlow.isPercentageofNew = false;
              this.sourceWorkFlow.percentOfNew = undefined
-            this.sourceWorkFlow.percentageOfNew = -1;
+            this.sourceWorkFlow.percentageOfNew = this.sourceWorkFlow.percentageOfNew ? this.sourceWorkFlow.percentageOfNew :-1;
             this.sourceWorkFlow.costOfNew = '';
         }
     }

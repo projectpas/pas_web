@@ -395,14 +395,23 @@ body .ui-widget {
 }
 
 .title-logo-login {
-  width: 240px;
+  // width: 240px;
+  width:260px;
   height: 40px;
   background-color: white;
 }
-
+body .ui-megamenu .ui-megamenu-panel{
+  right: 0 !important;
+  left: auto !important;
+}
 p {
   padding-top: 6px;
 }
+
+// .dropdown-menu-right {
+//   right: 0;
+//   left: auto !important;
+// }
 
 #logo {
   height: 60px;
@@ -10944,9 +10953,14 @@ a.ui-button:active,
 .ui-button:active,
 .ui-button.ui-state-active:hover {
   border: 1px solid #003eff;
-  background: #007fff;
+  // background: #007fff;
+  background:#337ab7 !important;
   font-weight: normal;
-  color: #ffffff;
+  color: #fff !important;
+}
+.ui-state-active,
+.ui-widget-content .ui-state-active .ui-menuitem-text{
+  color:#fff !important;
 }
 
 .ui-icon-background,
@@ -15150,13 +15164,26 @@ body .ui-tabview.ui-tabview-right .ui-tabview-nav li a {
 
 body .ui-megamenu .ui-megamenu-submenu-header {
   margin: 0;
-  padding: 0.571em 1em;
+  // padding: 0.571em 1em;
+  padding: 0.01em 0.8em;
   color: #333333;
   background-color: #f4f4f4;
   font-weight: 400;
   border: 0 none;
 }
-
+.ui-megamenu .ui-menuitem-link {
+  /* padding: .25em; */
+  padding: 0px 10px 0px 10px !important;
+  
+}
+body .ui-megamenu {
+  padding: 0;
+  background-color: #ffffff;
+  // border: 1px solid #c8c8c8;
+  white-space: normal;
+  margin-top:30px;
+  border:none !important;
+}
 /* ./css for sidenav */
 .add-details-dialog .ui-widget.ui-widget-content {
   left: 0% !important;
