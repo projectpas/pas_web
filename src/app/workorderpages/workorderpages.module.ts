@@ -221,7 +221,7 @@ import { SubWoPrintFromComponent } from '../components/work-order/work-order-set
     WorkOrderPickticketprintComponent,
     WorkOrderMaterialsAddComponent,
     WoCustomerDetailComponent,
-    WoPartNumberFilterComponent, 
+    WoPartNumberFilterComponent,
     WoPartDetailsComponent,
     WorkOrderPartPickticketComponent,
     WorkOrderPartPickticketprintComponent,
@@ -238,7 +238,7 @@ import { SubWoPrintFromComponent } from '../components/work-order/work-order-set
     WoqFromComponent,
     WoPartlistFromComponent,
     WoPrintFromComponent,
-    WorkOrderActualVsQuoteComponent
+    WorkOrderActualVsQuoteComponent,
     SubWoPrintFromComponent
     // TwoDecimalGlobalNumberFormatPipe
   ],
@@ -260,6 +260,6 @@ import { SubWoPrintFromComponent } from '../components/work-order/work-order-set
     DatePipe
   ],
   exports: [SubWorkOrderComponent, EmailComponent],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class WorkOrderPagesModule { }
