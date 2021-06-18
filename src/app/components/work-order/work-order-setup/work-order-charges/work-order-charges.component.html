@@ -392,7 +392,7 @@
           <td class="content-to-end"><strong>{{ getTotalBillingAmount()}} </strong></td>
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
-            <input type="text" pInputText pKeyFilter="money"  (blur)="chargesFlatRateBillingAmount = (chargesFlatRateBillingAmount)?formateCurrency(chargesFlatRateBillingAmount):'0.00'" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg();"  [disabled]="isView" />
+            <input type="text" class="text-ee" pInputText pKeyFilter="money"  (blur)="chargesFlatRateBillingAmount = (chargesFlatRateBillingAmount)?formateCurrency(chargesFlatRateBillingAmount):'0.00'" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg();"  [disabled]="isView" />
         </ng-container>
         <td *ngIf="!isView">&nbsp;</td>
       </tr>

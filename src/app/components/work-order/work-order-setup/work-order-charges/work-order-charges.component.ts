@@ -162,7 +162,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       {
         this.tmchange();
       }
-      this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'];
+      this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'].toFixed(2);
     
     }
   }
@@ -196,7 +196,7 @@ if(!this.isSummarizedView){
         this.tmchange();
       }
     
-      this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'];
+      this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'].toFixed(2);
       if(this.buildMethodDetails.workOrderQuoteDetailsId !=0){
       this.disableCrg=true;
     }else{

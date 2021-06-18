@@ -1151,8 +1151,7 @@
                             (click)="gridTabChange('releasefrom')">8130 Form</a>
                             <a class="dropdown-item"
                             (click)="gridTabChange('woreleaseeasafrom')">9130A Form</a> -->
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                aria-expanded="false"
+                                <a class="dropdown-item"   *ngIf="!isSubWorkOrder"
                                 (click)="gridTabChange('ActualVsQuote')">Actual vs. Quote Summary</a>
                        
                             </div>
@@ -1216,7 +1215,7 @@
                         (refreshLabor)="refreshLabor($event)" [workFlowId]="workFlowId"
                         [isView]="isView || isViewForApprovedPart">
                     </app-work-order-labor> 
-                </div>
+                </div> 
                 <div *ngIf="(gridActiveTab == 'equipment')" [ngClass]="{hidedata : gridActiveTab !== 'equipment'}">
                     <app-work-order-assets (saveEquipmentListForWO)="saveWorkOrderEquipmentList($event)"
                         [workOrderPartNumberId]="workOrderPartNumberId" [transferWorkflow]="transferWorkflowData"
@@ -1374,8 +1373,12 @@
                         (refreshData)="getChargesListByWorkOrderId()" [isView]="isView || isViewForApprovedPart">
                     </app-work-order-charges>
                 </div>
-
-
+<div *ngIf="workOrderId && (gridActiveTab == 'ActualVsQuote')" class="wf-label-cstm  "
+[ngClass]="{hidedata : gridActiveTab !== 'ActualVsQuote'}">
+<app-wo-actual-vs-quote [isWorkOrder]="isWorkOrder" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
+[isSubWorkOrder]="isSubWorkOrder"  [workFlowWorkOrderId]="workFlowWorkOrderId"  [subWOPartNoId]="subWOPartNoId"
+></app-wo-actual-vs-quote>
+</div>
                 <div *ngIf="workOrderId && (subTabOtherOptions == 'exclusions')" class="wf-label-cstm"
                     [ngClass]="{hidedataOthers :  subTabOtherOptions !== 'exclusions'} ">
                     <app-work-order-exclusions [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder"

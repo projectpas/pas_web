@@ -381,7 +381,10 @@ export class WorkOrderService {
     createworkOrderTearDownData(data, isSubWorkOrder) {
         return this.workOrderEndpointService.createworkOrderTearDownData(data, isSubWorkOrder);
     }
-
+    getWOActualVsSummary(workorderId,refId, isSubWorkOrder) {
+        return this.workOrderEndpointService.getWOActualVsSummary(workorderId,refId, isSubWorkOrder);
+    }
+    
     getworkOrderTearDownData(id, isSubWorkOrder, masterCompanyId) {
         return this.workOrderEndpointService.getworkOrderTearDownData(id, isSubWorkOrder, masterCompanyId);
     }
@@ -823,5 +826,8 @@ getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> 
       this.workOrderEndpointService.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId)
     );
   }
-
+  
+  deleteWoPickTicket(pickTicketId, login) {
+    return this.workOrderEndpointService.deleteWoPickTicket(pickTicketId, login);
+}
 }

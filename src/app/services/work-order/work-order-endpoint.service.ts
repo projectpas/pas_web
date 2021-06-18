@@ -1666,4 +1666,22 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId));
           });
       }
+
+      getWOActualVsSummary(workorderId: number,refId : number,isSubWorkOrder:boolean) {
+        if (isSubWorkOrder) {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkOrderandquoteActualCostDetails?workOrderWorkflowId=${refId}&workOrderId=${workorderId}`, this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.getWOActualVsSummary(workorderId,refId, isSubWorkOrder));
+            });
+        } else {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkOrderandquoteActualCostDetails?workOrderWorkflowId=${refId}&workOrderId=${workorderId}`, this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.getWOActualVsSummary(workorderId,refId, isSubWorkOrder));
+            });
+        }
+    }
+
+    deleteWoPickTicket(pickTicketId, login) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workOrder/deletewomaterialspickticket?PickTicketId=${pickTicketId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.deleteWoPickTicket(pickTicketId, login));
+        });
+    }
 }

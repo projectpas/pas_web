@@ -119,8 +119,8 @@ import { WorkOrderPrintInvoiceComponent } from '../components/work-order/work-or
 import { WoqFromComponent } from '../components/work-order/work-order-setup/woq-form/woq-form.component';
 import { WoPartlistFromComponent } from '../components/work-order/work-order-setup/wo-part-list-form/wo-part-list-form.component';
 import { WoPrintFromComponent } from '../components/work-order/work-order-setup/wo-print-form/wo-print-form.component';
+import { WorkOrderActualVsQuoteComponent } from '../components/work-order/work-order-setup/wo-actual-vs-quote/wo-actual-vs-quote.component';
 // import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
-
 
 
 @NgModule({
@@ -237,7 +237,8 @@ import { WoPrintFromComponent } from '../components/work-order/work-order-setup/
     WorkOrderPrintInvoiceComponent,
     WoqFromComponent,
     WoPartlistFromComponent,
-    WoPrintFromComponent
+    WoPrintFromComponent,
+    WorkOrderActualVsQuoteComponent
 
     // TwoDecimalGlobalNumberFormatPipe
   ],

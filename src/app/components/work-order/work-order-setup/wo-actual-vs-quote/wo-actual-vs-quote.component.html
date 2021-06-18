@@ -1,0 +1,118 @@
+<div class="card">
+  <div class="header">
+    <div class="row">
+        <div class="col">
+            <h4 class="header-name">WO Actual vs. WO Quote Summary</h4>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="table_actq">
+<div class="row">
+  <div class="col-md-4">
+    <h4 class="tb_header">Price</h4>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th class="ted_ms">WO Act</th>
+        <th class="ted_ms">WO Qte</th>
+      </tr>
+      <tr>
+        <td>Material Price</td>
+        <td class="text-end">{{modifiedResults.materialPrice ? modifiedResults.materialPrice : '-' }}</td>
+        <td class="text-end">{{modifiedResults.quoteMaterialPrice ? modifiedResults.quoteMaterialPrice : '-' }}</td>
+      </tr>
+      <tr>
+        <td>Labor Price</td>
+        <td class="text-end">{{modifiedResults.labourPrice ? modifiedResults.labourPrice : '-' }}</td>
+        <td class="text-end">{{modifiedResults.quoteLabourPrice ? modifiedResults.quoteLabourPrice : '-' }}</td>
+      </tr>
+      <tr>
+        <td>Misc Price</td>
+        <td class="text-end">{{modifiedResults.miscChargesPrice ? modifiedResults.miscChargesPrice : '-' }}</td>
+        <td class="text-end">{{modifiedResults.quoteMiscChargesPrice ? modifiedResults.quoteMiscChargesPrice : '-' }}</td>
+      </tr>
+      <tr>
+        <td><strong>Total</strong></td>
+        <td  class="text-end"><strong>{{totalWoPrice}}</strong></td>
+        <td  class="text-end"><strong>{{totalWoQPrice}}</strong></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <h4 class="tb_header">Cost</h4>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th class="ted_ms">WO Act</th>
+        <th class="ted_ms">WO Qte</th>
+      </tr>
+      <tr>
+        <td>Material Cost</td>
+        <td class="text-end">{{modifiedResults.materialCost ? modifiedResults.materialCost : '-' }}</td>
+        <td class="text-end">{{modifiedResults.quoteMaterialCost ? modifiedResults.quoteMaterialCost : '-' }}</td>
+      </tr>
+      <tr>
+        <td>Labor Cost</td>
+        <td class="text-end">{{modifiedResults.labourCost ? modifiedResults.labourCost : '-' }}</td>
+        <td class="text-end">{{modifiedResults.quoteLabourCost ? modifiedResults.quoteLabourCost : '-' }}</td>
+      </tr>
+      <tr>
+        <td>Misc Cost</td>
+        <td class="text-end">{{modifiedResults.miscCharges ? modifiedResults.miscCharges : '-' }}</td>
+        <td class="text-end">{{modifiedResults.quoteMiscCharges ? modifiedResults.quoteMiscCharges : '-' }}</td>
+      </tr>
+      <tr>
+        <td><strong>Total</strong></td>
+        <td  class="text-end"><strong>{{totalWoCost}}</strong></td>
+        <td  class="text-end"><strong>{{totalWoQCost}}</strong></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <h4 class="tb_header">Margins</h4>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th class="ted_ms">WO Act</th>
+        <th class="ted_ms">WO Qte</th>
+      </tr>
+      <tr>
+        <td>Material Price</td>
+        <td class="text-end">{{modifiedResults.marginMaterialCost ? modifiedResults.marginMaterialCost : '-' }}</td>
+        <td class="text-end">{{modifiedResults.marginQuoteMaterialCost ? modifiedResults.marginQuoteMaterialCost : '-' }}</td>
+      </tr>
+      <tr>
+        <td>Labor Price</td>
+        <td class="text-end">{{modifiedResults.marginLabourCost ? modifiedResults.marginLabourCost : '-' }}</td>
+        <td class="text-end">{{modifiedResults.marginQuoteLabourCost ? modifiedResults.marginQuoteLabourCost : '-' }}</td>
+      </tr>
+      <tr>
+        <td>Misc Price</td>
+        <td class="text-end">{{modifiedResults.marginMiscCharges ? modifiedResults.marginMiscCharges : '-' }}</td>
+        <td class="text-end">{{modifiedResults.marginQuoteMiscCharges ? modifiedResults.marginQuoteMiscCharges : '-' }}</td>
+      </tr>
+      <tr>
+        <td><strong>Total</strong></td>
+        <td  class="text-end"><strong>{{totalWoMargin}}</strong></td>
+        <td  class="text-end"><strong>{{totalWoQMargin}}</strong></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div> 
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>
