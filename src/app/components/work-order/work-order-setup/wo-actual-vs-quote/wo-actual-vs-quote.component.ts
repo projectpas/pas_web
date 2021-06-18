@@ -47,7 +47,7 @@ export class WorkOrderActualVsQuoteComponent implements OnChanges, OnInit {
   getWOActualVsSummaryData(){
     this.isSpinnerVisible=true;
     this.workOrderService.getWOActualVsSummary(this.workOrderId,this.workFlowWorkOrderId,this.isSubWorkOrder).subscribe(res => {
-console.log("res for actual vs qte",res)
+// console.log("res for actual vs qte",res)
 this.isSpinnerVisible=false;
 this.result=res;
 this.modifiedResults={...res,
