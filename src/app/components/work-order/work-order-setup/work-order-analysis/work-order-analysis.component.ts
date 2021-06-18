@@ -43,6 +43,7 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
         { field: 'overHeadCost', header: 'Overhead Cost',width:"110px" },
         { field: 'overHeadCostRevenuePercentage', header: 'Overhead Cost %' ,width:"120px"},
         { field: 'otherCost', header: 'Other Cost',width:"100px" },
+        { field: 'freightCost', header: 'Freight Cost',width:"100px" },
         { field: 'directCost', header: 'Direct Cost',width:"100px" },
         { field: 'directCostRevenuePercentage', header: 'Direct Cost Rev %',width:"120px" },
         { field: 'margin', header: 'Margin',width:"100px" },
