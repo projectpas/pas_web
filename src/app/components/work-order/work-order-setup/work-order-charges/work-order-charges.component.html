@@ -171,7 +171,8 @@
             Billing Amount
           </th>
         </ng-container>
-        <th class="table-actions-column" >Actions</th>
+        <th class="table-actions-column" *ngIf="isQuote && !isView">Actions</th>
+        <th class="table-actions-column" *ngIf="!isQuote">Actions</th>
         <!-- <th colspan="4" class="text-center" *ngIf="!isView"></th> -->
       </tr>
     </ng-template>
@@ -357,8 +358,8 @@
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
-        <td *ngIf=" !isEdit ">&nbsp;</td>
-    
+        <td *ngIf=" !isEdit && !isQuote">&nbsp;</td>
+        <td *ngIf=" !isEdit &&  isQuote && !isView">&nbsp;</td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage" let-columns>
