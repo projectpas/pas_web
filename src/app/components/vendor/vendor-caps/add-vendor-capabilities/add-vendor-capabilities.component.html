@@ -372,24 +372,24 @@
 				<h4 class="modal-title">Edit {{tempMemoLabel}}</h4>
 			</div>
 			<div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                         <th style="color: #fff;">Memo</th>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
+                            <td> -->
 								<p-editor [(ngModel)]="tempMemo"
 								 [style]="{'height':'320px'}"
 								 name="tempMemo" required></p-editor>
-                            </td>
+                            <!-- </td>
                         </tr>
                     </tbody>
-                </table>
-				<div style="float:right">
-					<button type="button" class="btn btn-primary" style="padding: 6px 12px !important;margin-top: 10px;"
+                </table> -->
+				<div class="editor-buttons" style="float:right">
+					<button type="button" class="btn btn-primary editor-buttons-margin" style="padding: 6px 12px !important;margin-top: 10px;"
 					 (click)="onSaveDescription()">Save</button>
-				<button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+				<button type="button" class="btn btn-danger editor-buttons-margin" style="padding: 6px 12px !important;margin-top: 10px;"
 				 (click)="dismissMemoModel()">Close</button>
 
                 </div>

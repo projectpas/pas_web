@@ -108,7 +108,7 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'description', header: 'PN Description', width: '200px', textalign: 'left' },
       { field: 'conditionDescription', header: 'Cond', width: '90px', textalign: 'left' },
       { field: 'itemGroup', header: 'Item Group', width: '100px', textalign: 'left' },
-      { field: 'manufacturer', header: 'Manufacturer', width: '90px', textalign: 'left' },
+      { field: 'manufacturer', header: 'Mfr', width: '90px', textalign: 'left' },
       { field: 'itemClassificationCode', header: 'Classification', width: '90px', textalign: 'left' },
       { field: 'oempmader', header: 'OEM/PMA/DER', width: '90px', textalign: 'left' },
       { field: 'alternateFor', header: 'Alt/Equiv For', width: '90px', textalign: 'left' },
@@ -121,12 +121,10 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'selected', header: '', width: '30px', textalign: 'left' },
       { field: 'stockLineNumber', header: 'Stk Line Num', width: '80px', textalign: 'left' },
       { field: 'serialNumber', header: 'Ser Num', width: '80px', textalign: 'left' },
-      { field: 'controlNumber', header: 'Cntrl Num', width: '80px', textalign: 'left' },
-      { field: 'idNumber', header: 'Cntrl ID Num', width: '80px', textalign: 'left' },
       { field: 'partNumber', header: 'PN', width: '80px', textalign: 'left' },
       { field: 'description', header: 'PN Description', width: '100px', textalign: 'left' },
       { field: 'stockType', header: 'Stk Type', width: '100px', textalign: 'left' },
-      { field: 'stkLineManufacturer', header: 'Manufacturer', width: '100px', textalign: 'left' },
+      { field: 'stkLineManufacturer', header: 'Mfr', width: '100px', textalign: 'left' },
       { field: 'uomDescription', header: 'UOM', width: '80px', textalign: 'left' },
       { field: 'qtyAvailable', header: 'Qty Avail', width: '70px', textalign: 'right' },
       { field: 'qtyOnHand', header: 'Qty On Hand', width: '70px', textalign: 'right' },
@@ -138,6 +136,8 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'tagType', header: 'Tag Type', width: '80px', textalign: 'left' },
       { field: 'certifiedBy', header: 'Cert By', width: '80px', textalign: 'left' },
       { field: 'certifiedDate', header: 'Cert Date', width: '80px', textalign: 'left' },
+      { field: 'controlNumber', header: 'Cntrl Num', width: '80px', textalign: 'left' },
+      { field: 'idNumber', header: 'Cntrl ID Num', width: '80px', textalign: 'left' },
       { field: 'memo', header: 'Memo', width: '80px', textalign: 'left' }
     ]
   }

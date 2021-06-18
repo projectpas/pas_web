@@ -899,8 +899,8 @@
                     <th></th>
                     <th></th>
                     <!-- *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" -->
-                    <th class="table-actions-column" 
-                        style=" width: 160px !important; ">Actions </th>
+                    <th class="table-actions-column"
+                         [ngClass]="(isView == false) ? 'width-160' : 'width-80'">Actions </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
@@ -959,7 +959,7 @@
                     <td class="summary-column"></td>
                     <td class="summary-column"></td>
                     <td class="action-icons-cstm  lastcol-fix"
-                        style="position: sticky !important; min-width: 145px !important;width: 160px !important;"
+                        style="position: sticky !important; min-width: 145px !important;width: 160px !important;text-align:center !important"
                        >
                        <!-- *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" -->
                         <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit"
@@ -1008,9 +1008,12 @@
                                 [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"
                                 matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button>
                         </span>
-                        <span data-toggle="modal" data-target="#materialAudit"><a class="btn nobg btn-hist-cstm mr-top5"
+                        <span data-toggle="modal" data-target="#materialAudit"><a 
+                            [ngClass]="(isView == false) ? 'btn nobg btn-hist-cstm mr-top5' : 'btn nobg btn-hist-cstm'"
+                           
                                 (click)="openMaterialAudit(rowData)" matTooltip="Material List History"
                                 matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                <!-- class="btn nobg btn-hist-cstm mr-top5" -->
                     </td>
                 </tr>
                 <tr class="child-header splitship-head child-header-back">
@@ -1069,7 +1072,7 @@
                             class="p_textEditor truncate-text" matTooltipPosition="above"
                             [matTooltip]="parsedText(childRowData[childcol.field])"></span>
                     </td>
-                    <td  class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
+                    <td  class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px;text-align:center !important">
   
                         <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
                         <span>

@@ -12,19 +12,27 @@ import { DatePipe } from '@angular/common';
 import { NavigationExtras } from "@angular/router";
 import { environment } from "../../../../../environments/environment";
 @Component({
-  selector: 'app-wo-print-form',
-  templateUrl: './wo-print-form.component.html',
-  styleUrls: ['./wo-print-form.component.scss'],
+  selector: 'app-sub-wo-print-form',
+  templateUrl: './sub-wo-print-form.component.html',
+  styleUrls: ['./sub-wo-print-form.component.scss'],
   providers:[DatePipe]
 })
-export class WoPrintFromComponent implements OnInit,OnChanges {
+export class SubWoPrintFromComponent implements OnInit,OnChanges {
 
-  @Input() workOrderPartNumberId;
-  @Input() workOrderId;
-  @Input() isView: boolean = false;
+  // @Input('modal-reference') modalReference: NgbModalRef;
+  // @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
+  @Input() subWorkOrderDetails;
+  @Input() subWOPartNoId;
+  // @Input() releaseFromId;
+  // @Input() isView;
+  // @Input() isEdit;
+  // @Input() ReleaseDataForm;
+  // @Output() onWorkOrderPrintLoad = new EventEmitter();
+  //ReleaseData: any;
   ReleaseData : any = {};
-  isSpinnerVisible: boolean = true;
+  isSpinnerVisibleNew: boolean = true;
   modal: NgbModalRef;
+  isView: boolean = false;
   private onDestroy$: Subject<void> = new Subject<void>();
   Printeddate1 : string;
   Printeddate2 : string;
@@ -46,8 +54,8 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
   ngOnInit() 
   {
     this.endPointURL = environment.baseUrl;
-    $('#woworkorderdiv').modal('show');
-     this.GetWorkOrderPrintFormData();
+    $('#woReleaseFromDiv').modal('show');
+     this.GetSubWorkOrderPrintFormData();
 
   }
     
@@ -57,15 +65,15 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
   
   }
 
-  GetWorkOrderPrintFormData() {
-    this.isSpinnerVisible = true;
-    this.workOrderService.GetWorkOrderPrintFormData(this.workOrderId,this.workOrderPartNumberId).subscribe(res => {
+  GetSubWorkOrderPrintFormData() {
+    this.isSpinnerVisibleNew = true;
+    this.workOrderService.GetSubWorkOrderPrintFormData(this.subWorkOrderDetails.subWorkOrderId,this.subWOPartNoId).subscribe(res => {
         this.workOrderprintData = res[0];
        // this.getWorkOrderCharges();
         //this.onWorkOrderPrintLoad.emit();
-        this.isSpinnerVisible = false;
+        this.isSpinnerVisibleNew = false;
     }, error => {
-        this.isSpinnerVisible = false;
+        this.isSpinnerVisibleNew = false;
     })
 }
 
@@ -80,7 +88,6 @@ get currentUserMasterCompanyId(): number {
 
 close()
 {
-  $('#woworkorderdiv').modal('hide');
     //this.updateRelreaseList.emit();
 }
 
@@ -92,7 +99,7 @@ close()
  
 
   handleError(err) {
-    this.isSpinnerVisible = false;
+    this.isSpinnerVisibleNew = false;
 }
   
 
@@ -100,7 +107,7 @@ close()
     //this.CreateUpdateReleasedata();
     //this.updateRelreaseList.emit();
     let printContents, popupWin;
-    printContents = document.getElementById('workorderfrom').innerHTML;
+    printContents = document.getElementById('subworkorderfrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
     popupWin.document.write(`
@@ -496,7 +503,6 @@ tfoot { display:table-footer-group }
       </html>`
     );
     popupWin.document.close();
-    this.close();
   }
 
 }
