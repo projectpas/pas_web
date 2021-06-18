@@ -5,7 +5,9 @@ import { WorkOrderService } from '../../../../services/work-order/work-order.ser
 import { AuthService } from '../../../../services/auth.service';
 import { CommonService } from "../../../../services/common.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+
+// import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
 @Component({
   selector: 'app-wo-actual-vs-quote',
   templateUrl: './wo-actual-vs-quote.component.html',
