@@ -121,6 +121,7 @@ import { WoPartlistFromComponent } from '../components/work-order/work-order-set
 import { WoPrintFromComponent } from '../components/work-order/work-order-setup/wo-print-form/wo-print-form.component';
 import { WorkOrderActualVsQuoteComponent } from '../components/work-order/work-order-setup/wo-actual-vs-quote/wo-actual-vs-quote.component';
 import { SubWoPrintFromComponent } from '../components/work-order/work-order-setup/sub-wo-print-form/sub-wo-print-form.component';
+import { WorkOrderWorkCompleteComponent } from '../components/work-order/work-order-setup/wo-workComplete/wo-workComplete.component';
 // import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
 
 @NgModule({
@@ -239,7 +240,8 @@ import { SubWoPrintFromComponent } from '../components/work-order/work-order-set
     WoPartlistFromComponent,
     WoPrintFromComponent,
     WorkOrderActualVsQuoteComponent,
-    SubWoPrintFromComponent
+    SubWoPrintFromComponent,
+    WorkOrderWorkCompleteComponent
     // TwoDecimalGlobalNumberFormatPipe
   ],
   entryComponents: [WorkOrderPickticketprintComponent, WorkOrderPartPickticketprintComponent],

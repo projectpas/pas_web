@@ -1,0 +1,71 @@
+<div class="right_col warning-main-padding" role="main">
+  <div>
+          <div class="x_content">
+
+      <div class="card new-card">
+          <div class="card-header header" >
+              <div class="row">
+                <div class="col">
+                  <h4 class="header-name"> WO Settlement </h4>
+                </div>
+              </div>
+            </div>
+          <div class="clear"></div> 
+              <form action="#" method="post" #WarningsForm="ngForm" id="" name="" class="form-horizontal add-custustomer">
+                  <div class="col-md-12 col-sm-12 col-12">
+                      <div class="tab-content">
+                          <div class="tab-pane active" id="menu7">
+                              <div class="col-sm-12">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align ">
+                                  <div class="tableFixHead">  
+                                  <table class="table table-bordered header-table-width warnings-table">
+                                          <thead class="warning-head">
+                                              <tr align="center">
+                                                  <th class="th-warning-name">Validation</th>
+                                                  <th class="th-warning-name"> </th>
+                                                  <th class="th-font">NA</th>
+                                                  <th class="th-font">Memo</th>
+                                                  <th class="th-font">User</th>
+                                                  <th class="th-font">Date/Time</th>
+                                                  <th class="th-font">Action</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody> 
+                                                  <tr align="center" *ngFor="let w of woSettlements; let i=index">
+                                                          <td class="warning-td">
+                                                  <div style="display: inline-flex;">
+                                                    <span>
+                                                      <input type="checkbox" name="allow{{i}}"  [(ngModel)]="w.allow" (change)="aSectionClick($event)" (ngModelChange)="enableSave()"    class="form-control" />
+                                                    </span>  
+                                                      <span> {{w.name}}</span> 
+                                                  </div>
+
+
+                                                          </td>   
+                                                          <td class="warning-td" >
+                                                            <!-- *ngIf="w.value==6"   -->
+                                                          </td>                                                     
+                                                          <td><input type="checkbox" name="allow{{i}}"  [(ngModel)]="w.allow" (change)="bSectionClick($event)" (ngModelChange)="enableSave()"    class="form-control" /></td>
+                                                     <td></td>
+                                                     <td></td>
+                                                     <td></td>
+                                                     <td></td>
+                                                        </tr>
+                                          </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                              </div>
+
+                          </div>
+                          <div class="clear"></div>
+                      </div>
+                      <div class="m-t-10">
+                          <!-- <button type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableSave" (click)="saveWarnings()">{{warningsUpdateBoolean ? 'Update' : 'Save' }}</button> -->
+                      </div>
+                  </div>
+              </form>
+          </div>
+  </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+﻿.table_actq table, td, th {  
+  border: 1px solid #ddd;
+  text-align: left;
+}
+.table_actq table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.table_actq th, td {
+  padding: 4px;
+}
+.table_actq{
+  padding: 20px;
+}
+.tb_header{
+  font-size: 14px;
+  font-weight: 600;
+  color: #337ab7;
+}
+.ted_ms{
+  width: 100px !important;
+}
+td strong {
+  font-weight: 600;
+}
+.text-end{
+  text-align: end;
+}
