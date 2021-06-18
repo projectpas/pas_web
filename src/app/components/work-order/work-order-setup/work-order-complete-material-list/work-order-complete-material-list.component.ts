@@ -1641,7 +1641,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                     this.parts[i]['isSelected'] = false;
                     this.parts[i]['workOrderId'] = workOrderId;
                     this.parts[i]['workOrderMaterialsId'] = workOrderMaterialsId;
-                    this.parts[i].qtyToShip = this.qtyToPick;
+                    this.parts[i].qtyToShip = this.parts[i].qtyToPick;
                     if (this.parts[i].qtyToReserve == 0) {
                         this.parts[i].qtyToReserve = null
                     }
