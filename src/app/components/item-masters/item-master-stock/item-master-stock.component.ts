@@ -1819,11 +1819,10 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
-    eventHandler(event) {
-       
-        if (event.target.value != "") {
+    eventHandler(event) {       
+        if (event.target.value.trim() != "") {
             for(let i=0; i<this.allPartnumbersInfo.length; i++){
-                if(event.target.value == this.allPartnumbersInfo[i].partNumber && event.target.value != this.selectedPartNumber){
+                if(event.target.value.trim() == this.allPartnumbersInfo[i].partNumber && event.target.value.trim() != this.selectedPartNumber){
                     this.disableSavepartNumber = true;
                     break;
                 }

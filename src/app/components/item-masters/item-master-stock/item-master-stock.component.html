@@ -150,6 +150,7 @@
                                                         title="Part Number"
                                                         [(ngModel)]="sourceItemMaster.partNumber"
                                                         (onKeyUp)=eventHandler($event) 
+                                                        (onBlur)=eventHandler($event) 
                                                         (onSelect)="partnmId($event)"
                                                         [suggestions]="partCollection" 
                                                         name="partNumber" required
