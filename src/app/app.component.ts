@@ -331,8 +331,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
                 {
                   label: 'Work Order Quote Pending Approval',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
+                  routerLink: '/#',
                 }
               ],
             },
@@ -351,13 +350,11 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 {
                   label: 'Work Order in Process List',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-list',
+                  routerLink: '/#',
                 },
                 {
                   label: 'Assign WO to Tech',
-                  routerLink:
-                    '/workordersmodule/workorderspages/app-work-order-list',
+                  routerLink: '/#',
                 }
               ],
             },
@@ -550,7 +547,9 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 {
                   label: 'Open SO Report',
-                  routerLink: '',
+                  command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSO+Backlog&rs:Command=Render');
+                  },
                 },
                 {
                   label: 'SO Billing',
@@ -653,8 +652,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
                 {
                   label: 'PO Pending Approval',
-                  command: () => this.clearStocklineAndSOStorageReference(),
-                  routerLink: '/vendorsmodule/vendorpages/app-po-approval',
+                  routerLink: '/#',
                 }
               ],
             },
@@ -690,6 +688,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                 {
                   label: 'Vendor Capabilities', command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/Reports/report/Report%20Project1/Capabilities');
+                  }
+                },
+                {
+                  label: 'Vendor Utilization', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fVendor+Utilization&rs:Command=Render');
                   }
                 }
               ],
@@ -742,11 +745,14 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 {
                   label: 'PO/RO Receiving Log',
-                  routerLink: '',
+                  command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fReceiving+Log&rs:Command=Render');
+                  }
                 },
                 {
-                  label: 'Receive Customer Work Log',
-                  routerLink: '',
+                  label: 'Receive Customer Work Log', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Work&rs:Command=Render');
+                  }
                 },
                 {
                   label: 'WO/SO Shipping Log',
@@ -1280,10 +1286,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                     '/workordersmodule/workorderspages/app-direct-labour',
                 },
                 {
-                                  label: 'Work Order Quote Approval Rule',
-                                  command: () => this.clearStocklineAndSOStorageReference(),
-                                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
-                                }
+                  label: 'Work Order Quote Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
+                }
               ],
             }
           ],
