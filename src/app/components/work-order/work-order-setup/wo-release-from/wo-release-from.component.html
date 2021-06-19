@@ -16,7 +16,7 @@
             
                         <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
                             <div class="logo-block">
-                  <img src="http://design.poweraerosuites.com/image/logo.png" width="130" /> </div>
+                                <img  src="{{this.endPointURL + this.ReleaseData.managementStructureHeaderData.logo}}" width="130" /> </div>
                             <div class="clear"></div>
                             <hr/>
               
@@ -38,7 +38,7 @@
                             </tr>
     <tr></tr>
                         <tr>
-                                <td rowspan="2" colspan="2" style="width:72px"><b>4.Organization Name and Address: </b> <span style="text-align:center;font-size:15px"> {{ReleaseData.organizationName}}     {{ReleaseData.organizationAddress}}</span></td>
+                                <td rowspan="2" colspan="2" style="width:72px"><b>4.Organization Name and Address: </b> <span style="text-align:center;font-size:15px"> {{this.ReleaseData.managementStructureHeaderData.companyName}}    {{ReleaseData.managementStructureHeaderData.address1}}  , {{ReleaseData.managementStructureHeaderData.address2}} , {{ReleaseData.managementStructureHeaderData.city}} {{ReleaseData.managementStructureHeaderData.country}}</span></td>
                                
                                <td rowspan="2" ><b>5.Work Order/Contract/Invoice Number: </b> <span style="text-align:center;font-size:15px"> {{ReleaseData.invoiceNo}} </span></td>
                                

@@ -1,11 +1,11 @@
 <div id="woReleaseEasaFromDiv" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
        <div class="modal-content" >
-          <div class="modal-header" id="woReleaseEasaFrom">
+          <div class="modal-header" >
              <button type="button" class="close" (click)="close()" data-dismiss="modal">&times;</button>
              <!-- <h4 class="modal-title warning_color"></h4> -->
           </div>
-          <div class="modal-body">
+          <div class="modal-body" id="woReleaseEasaFrom">
              <div class="clear"></div>
              <form id=""  name="" action="#" method="post" onsubmit="return false;" >
                 <div class="image">
@@ -14,7 +14,7 @@
              <form id="" class="form-div" name="" action="#"
                 method="post" onsubmit="return false;" >
              <div class="logo-block">
-             <img src="http://design.poweraerosuites.com/image/logo.png" width="130" /> </div>
+             <img  src="{{this.endPointURL + this.ReleaseData.managementStructureHeaderData.logo}}" width="130" /> </div>
              <div class="clear"></div>
              <hr/>
              <div class="col-sm-12">
@@ -35,7 +35,7 @@
              </tr>
              <tr></tr>
              <tr>
-             <td rowspan="2" colspan="2" style="width:72px;height:80px;vertical-align:top"><b>4.Organization Name and Address:  </b><span style="text-align:center;font-size:15px"> {{ReleaseData.organizationName}}   {{ReleaseData.organizationAddress}} </span></td>
+             <td rowspan="2" colspan="2" style="width:72px;height:80px;vertical-align:top"><b>4.Organization Name and Address:  </b><span style="text-align:center;font-size:15px"> {{this.ReleaseData.managementStructureHeaderData.companyName}}    {{ReleaseData.managementStructureHeaderData.address1}}  , {{ReleaseData.managementStructureHeaderData.address2}} , {{ReleaseData.managementStructureHeaderData.city}} {{ReleaseData.managementStructureHeaderData.country}}</span></td>
              <td rowspan="2" style="vertical-align:top"><b>5.Work Order/Contract/Invoice: </b><span style="text-align:center;font-size:15px"> {{ReleaseData.invoiceNo}} </span></td>
              </tr>
              <tr></tr>
