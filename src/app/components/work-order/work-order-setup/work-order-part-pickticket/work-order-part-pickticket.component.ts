@@ -393,6 +393,7 @@ export class WorkOrderPartPickticketComponent implements OnInit {
   }
 
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
+    this.isSpinnerVisible = true;
     const pickTicketId = rowData.pickTicketId;
     const referenceId = rowData.workOrderId;
     const orderPartId = rowData.workFlowWorkOrderId;

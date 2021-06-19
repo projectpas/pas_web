@@ -291,7 +291,15 @@ export class VendorCapabilitiesListComponent implements OnInit {
             this.alertService.showMessage("Success", `Record Was Restored Successfully`, MessageSeverity.success);
         })
     }
-
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

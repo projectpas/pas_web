@@ -1091,7 +1091,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.buildMethodDetails = res;
             if (res) {
                 this.costPlusType = res['materialBuildMethod']? res['materialBuildMethod'].toString(): '';
-                this.materialFlatBillingAmount = res['materialFlatBillingAmount'];
+                // this.materialFlatBillingAmount =  res['materialFlatBillingAmount'] ? formatNumberAsGlobalSettingsModule(res['materialFlatBillingAmount'], 2) : '0.00';
+                this.materialFlatBillingAmount = res['materialFlatBillingAmount'].toFixed(2);;
             }
             if (res && res['workOrderQuoteDetailsId']) {
                 this.workOrderQuoteDetailsId = res['workOrderQuoteDetailsId'];

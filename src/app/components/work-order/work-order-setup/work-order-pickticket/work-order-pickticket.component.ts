@@ -338,7 +338,7 @@ export class WorkOrderPickticketComponent implements OnInit {
       this.alertService.showMessage(
         "",
         errmessage,
-        MessageSeverity.warn
+        MessageSeverity.error
       );
     }
     else {
@@ -427,8 +427,28 @@ export class WorkOrderPickticketComponent implements OnInit {
         this.alertService.showMessage(
             'Work Order',
             'You cannot pick more than Ready To Pick',
-            MessageSeverity.warn
+            MessageSeverity.error
         );
     }
  }
+ rowDataToDelete:any={}
+ delete(rowData) {
+  this.rowDataToDelete = rowData;
+}
+
+deleteWO() {
+  this.isSpinnerVisible = false;
+  this.onSearch();
+  this.workOrderService.deleteWoPickTicket(this.rowDataToDelete.pickTicketId,this.userName).subscribe(res => {
+      this.isSpinnerVisible = false;
+      this.alertService.showMessage("Success", `Records Was Deleted Successfully.`, MessageSeverity.success);
+
+  },err => {
+          this.isSpinnerVisible = false;
+      })
+}
+
+closeDeleteModal() {
+  $("#woDelete").modal("hide");
+}
 }

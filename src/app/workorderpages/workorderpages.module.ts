@@ -119,9 +119,9 @@ import { WorkOrderPrintInvoiceComponent } from '../components/work-order/work-or
 import { WoqFromComponent } from '../components/work-order/work-order-setup/woq-form/woq-form.component';
 import { WoPartlistFromComponent } from '../components/work-order/work-order-setup/wo-part-list-form/wo-part-list-form.component';
 import { WoPrintFromComponent } from '../components/work-order/work-order-setup/wo-print-form/wo-print-form.component';
+import { WorkOrderActualVsQuoteComponent } from '../components/work-order/work-order-setup/wo-actual-vs-quote/wo-actual-vs-quote.component';
+import { SubWoPrintFromComponent } from '../components/work-order/work-order-setup/sub-wo-print-form/sub-wo-print-form.component';
 // import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
-
-
 
 @NgModule({
   imports: [
@@ -221,7 +221,7 @@ import { WoPrintFromComponent } from '../components/work-order/work-order-setup/
     WorkOrderPickticketprintComponent,
     WorkOrderMaterialsAddComponent,
     WoCustomerDetailComponent,
-    WoPartNumberFilterComponent, 
+    WoPartNumberFilterComponent,
     WoPartDetailsComponent,
     WorkOrderPartPickticketComponent,
     WorkOrderPartPickticketprintComponent,
@@ -237,8 +237,9 @@ import { WoPrintFromComponent } from '../components/work-order/work-order-setup/
     WorkOrderPrintInvoiceComponent,
     WoqFromComponent,
     WoPartlistFromComponent,
-    WoPrintFromComponent
-
+    WoPrintFromComponent,
+    WorkOrderActualVsQuoteComponent,
+    SubWoPrintFromComponent
     // TwoDecimalGlobalNumberFormatPipe
   ],
   entryComponents: [WorkOrderPickticketprintComponent, WorkOrderPartPickticketprintComponent],
@@ -259,6 +260,6 @@ import { WoPrintFromComponent } from '../components/work-order/work-order-setup/
     DatePipe
   ],
   exports: [SubWorkOrderComponent, EmailComponent],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class WorkOrderPagesModule { }

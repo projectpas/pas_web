@@ -9,13 +9,13 @@
       <div class="col">
         <h4 class="header-name"> Release Form</h4>
       </div>
-      <div>
-        <button type="button" class="btn-sm header-button " *ngIf="!isView"
+      <div *ngIf="isView == false">
+        <button type="button" class="btn-sm header-button " *ngIf="!isView && !islocked"
          (click)="createNew()" data-toggle="modal">
             Add 8130 Form
         </button>
 
-        <button type="button" class="btn-sm header-button " *ngIf="!isView"
+        <button type="button" class="btn-sm header-button " *ngIf="!isView && !islocked"
         (click)="create9130New()" data-toggle="modal">
            Add 9130 Form
        </button>
@@ -136,19 +136,19 @@ selectionMode="multiple"
                       <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                   </ng-container> 
                 </td>
-                <td class="action-icons-cstm table-column-width"  [ngClass]="{'max_widthControl': isView}">
+                <td class="action-icons-cstm table-column-width">
                     <div>
-                        <span  *ngIf="!isView" > 
+                        <span> 
                              <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
                             matTooltipPosition="above">
                             <i class="fa fa-eye"></i>
                         </a>
                         </span>
-                      <span  *ngIf="!isView" ><button [disabled]="rowData['isClosed'] ==true" class="btn nobg btn-edit-cstm"
+                      <span  *ngIf="!isView && !islocked" ><button [disabled]="rowData['isClosed'] ==true" class="btn nobg btn-edit-cstm"
                         (click)="Edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></button>
                     </span>
-                    <span  *ngIf="!isView"  ><button [disabled]="rowData['isClosed'] ==true" class="btn nobg btn-lo-cstm"
-                      (click)="Locked(rowData)" matTooltip="Locked" matTooltipPosition="above"><i class="fa fa-lock"></i></button>
+                    <span  *ngIf="!isView && !islocked"  ><button [disabled]="rowData['isClosed'] ==true" class="btn nobg btn-lo-cstm"
+                      (click)="Locked(rowData)" matTooltip="Locked" matTooltipPosition="above" data-toggle="modal" data-target="#woLocked" ><i class="fa fa-lock"></i></button>
                     </span>
                         <span data-toggle="modal" data-target="#easaHistory">
                           <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"  matTooltipPosition="above" matTooltip="History"><i
@@ -349,6 +349,43 @@ selectionMode="multiple"
             Close
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  
+<div class="modal fade" id="woLocked" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" (click)="closewoLockedModal()">&times;</button>
+              <h4 class="modal-title">Are You Sure Want to Lock?</h4>
+          </div>
+          <div class="modal-body">
+              <strong>
+                  Release Form : 
+                  <span class="new-label">{{rowDataTolock.formType}}</span>
+              </strong>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="submitlock(); closewoLockedModal();">Yes</button>
+              <button type="button" class="btn btn-danger" (click)="closewoLockedModal()">No</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+  <div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
   </div>
