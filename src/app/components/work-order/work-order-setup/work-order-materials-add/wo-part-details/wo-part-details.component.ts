@@ -76,7 +76,7 @@ export class WoPartDetailsComponent implements OnChanges {
   };
   searchQuery={
     first:0,
-    rows:10,
+    rows:20,
     limit:5,
     pageCount:10,
     page:10,
