@@ -4249,7 +4249,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             itemMasterId: parseInt(ItemMasterID), 
             exportValue: this.exportInfo.exportValue ? parseFloat(this.exportInfo.exportValue.toString().replace(/\,/g,'')) : 0 }
 
-            console.log(data)
+            
         this.itemser.newItemMasterExportInformation(data).subscribe(datas => {
             this.tempExportCountryId = null;
             this.alertService.showMessage(
@@ -6039,7 +6039,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
     redirectToTab(addItemMasterStockForm){
         this.dismissModel();
-        debugger
+        
         if (!this.disableSaveForEdit) {   
             if(this.activeMenuItem == 1) {       
                 this.saveItemMasterGeneralInformation(addItemMasterStockForm)
@@ -6060,8 +6060,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceItemMaster.isOemPNId = undefined;
         }
     }
-    leadtime(){
-        this.sourceItemMaster.leadTimeDays = this.sourceItemMaster.leadTimeDays ? formatNumberAsGlobalSettingsModule(this.sourceItemMaster.exportValue, 2) : '0'; 
+    leadtime(){        
+        this.sourceItemMaster.leadTimeDays = this.sourceItemMaster.leadTimeDays ? formatNumberAsGlobalSettingsModule(this.sourceItemMaster.leadTimeDays, 2) : '0'; 
+        this.disableSaveForEdit=false;
     }
 
     onChangeExportVal() {

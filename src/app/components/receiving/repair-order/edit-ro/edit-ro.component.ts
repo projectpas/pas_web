@@ -1525,7 +1525,8 @@ export class EditRoComponent implements OnInit {
         }
         else {
             const unitCost = stockLine.repairOrderUnitCost ? parseFloat(stockLine.repairOrderUnitCost.toString().replace(/\,/g, '')) : 0;
-            stockLine.repairOrderExtendedCost = unitCost * part.quantityActuallyReceived;
+            //stockLine.repairOrderExtendedCost = unitCost * part.quantityActuallyReceived; 
+            stockLine.repairOrderExtendedCost = unitCost * stockLine.quantity;
         }
         if (stockLine.repairOrderUnitCost) {
             stockLine.repairOrderUnitCost = stockLine.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(stockLine.repairOrderUnitCost, 2) : '0.00';
@@ -1547,7 +1548,8 @@ export class EditRoComponent implements OnInit {
         }
         else {
             const unitCost = part.unitCost ? parseFloat(part.unitCost.toString().replace(/\,/g, '')) : 0;
-            const extendedCost = unitCost * part.quantityActuallyReceived;
+            //const extendedCost = unitCost * part.quantityActuallyReceived;
+            const extendedCost = unitCost * part.quantityOrdered;;
             part.extendedCost = extendedCost ? formatNumberAsGlobalSettingsModule(extendedCost, 2) : '0.00';
         }
 

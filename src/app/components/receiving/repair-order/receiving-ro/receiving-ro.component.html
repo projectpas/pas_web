@@ -516,10 +516,10 @@
                                                 </div>-->
                                         <div class="stockGridpanel"
                                             *ngIf="part.stocklineListObj != undefined && part.stocklineListObj.length > 0">
-                                            <h3 class="add-details-heading">{{ part.itemMaster?.partNumber }} receiving
+                                            <h3 class="add-details-heading" *ngIf="part.quantityActuallyReceived > 1">{{ part.itemMaster?.partNumber }} receiving
                                                 Qty {{ (part.currentSLIndex + 1) }} of
                                                 {{ part.stocklineListObj.length }} </h3>
-                                            <div class="pull-right parts-div" *ngIf="!part.isSameDetailsForAllParts">
+                                            <div class="pull-right parts-div" *ngIf="!part.isSameDetailsForAllParts && part.quantityActuallyReceived > 1">
                                                 <!--*ngIf="part.itemMaster.isSerialized"-->
                                                 <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                     (click)="moveStockLineMainPage('stockline', part.currentSLIndex - 1, part)"></i>
@@ -529,7 +529,7 @@
                                                     class="form-control parts-input" />
                                                 <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                     (click)="moveStockLineMainPage('stockline', part.currentSLIndex + 1, part)"></i>
-                                                <p>Page {{part.currentSLIndex + 1}} of {{part.stocklineListObj.length}}
+                                                <p *ngIf="part.quantityActuallyReceived > 1">Page {{part.currentSLIndex + 1}} of {{part.stocklineListObj.length}}
                                                     Pages</p>
                                             </div>
                                             <section>
@@ -537,7 +537,7 @@
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <div class="checkbox-cstm m-t-4">
-                                                                <label class="width-200">
+                                                                <label class="width-200" *ngIf="part.quantityActuallyReceived > 1">
                                                                     <!--*ngIf="part.itemMaster.isSerialized"-->
                                                                     <input type="checkbox" class="form-control"
                                                                         (change)="toggleSameDetailsForAllParts(part)">
@@ -1091,7 +1091,7 @@
                                                     *ngIf="part.itemMaster.isSerialized">Serialized
                                                 </h4>
                                                 <div class="pull-right serialised-div"
-                                                    *ngIf="part.itemMaster.isSerialized">
+                                                    *ngIf="part.itemMaster.isSerialized && part.quantityActuallyReceived > 1">
                                                     <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('stockline', part.currentSERIndex - 1, part)"></i>
                                                     <input [value]="part.currentSERIndex + 1" type="text" pInputText
@@ -1100,7 +1100,7 @@
                                                         class="form-control parts-input" />
                                                     <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('stockline', part.currentSERIndex + 1, part)"></i>
-                                                    <p>Page {{part.currentSERIndex + 1}} of
+                                                    <p *ngIf="part.quantityActuallyReceived > 1">Page {{part.currentSERIndex + 1}} of
                                                         {{part.stocklineListObj.length}} Pages</p>
                                                 </div>
                                                 <div class="form-row" *ngIf="part.itemMaster.isSerialized">
@@ -1136,12 +1136,12 @@
                                             </section>
                                             <br />
                                             <section *ngIf="part.itemMaster.isTimeLife">
-                                                <h3 class="add-details-heading">
+                                                <h3 class="add-details-heading" *ngIf="part.quantityActuallyReceived > 1">
                                                     {{ part.itemMaster?.partNumber }}
                                                     receiving Qty Time Life {{ (part.currentTLIndex + 1) }} of
                                                     {{ part.timeLifeList.length }}
                                                 </h3>
-                                                <div class="pull-right parts-div" *ngIf="part.itemMaster.isTimeLife">
+                                                <div class="pull-right parts-div" *ngIf="part.itemMaster.isTimeLife && part.quantityActuallyReceived > 1">
                                                     <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('timelife', part.currentTLIndex - 1, part)"></i>
                                                     <input [value]="part.currentTLIndex + 1" type="text" pInputText
@@ -1150,7 +1150,7 @@
                                                         class="form-control parts-input" />
                                                     <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('timelife', part.currentTLIndex + 1, part)"></i>
-                                                    <p>Page {{part.currentTLIndex + 1}} of {{part.timeLifeList.length}}
+                                                    <p *ngIf="part.quantityActuallyReceived > 1">Page {{part.currentTLIndex + 1}} of {{part.timeLifeList.length}}
                                                         Pages
                                                     </p>
                                                 </div>
