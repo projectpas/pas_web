@@ -16,7 +16,7 @@
                                         <th class="width-60"></th>
                                     </tr>
                                 </thead>
-                                <tbody *ngIf="purchaseOrderData != undefined && purchaseOrderPart != undefined">                                    
+                                <tbody>                                    
                                     <ng-container *ngFor="let part of purchaseOrderPart;let row_index=index">                                        
                                         <tr class="parent-data" *ngIf="part.stockLine != null && part.stockLine.length > 0">
                                             <td class="text-right">{{row_index + 1}}</td>
@@ -219,18 +219,12 @@
                                                     </section>-->
                                                 </div>
                                             </td>
-                                        </tr> 
-                                        <tr *ngIf="part.stockLine.length == 0">
-                                            <td *ngIf="row_index == 0" [attr.colspan]="29" class="no-records-cstm no-records-msg">
-                                                No records found
-                                            </td>	
-                                        </tr>
-                                    </ng-container>                                                                         
+                                        </tr>                                                                              
+                                    </ng-container>                                                                                                             
                                 </tbody>                                                               
                             </table>
                             </div>
-                        </div>
-                        <!-- </div> -->
+                        </div>                        
                     </div>
                 </div>
             </div>
