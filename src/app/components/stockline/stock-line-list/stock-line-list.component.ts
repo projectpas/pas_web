@@ -183,7 +183,7 @@ export class StockLineListComponent implements OnInit {
         { field: 'tagDate', header: 'Tagged Date',width:"120px" },
         // { field: 'createdBy', header: 'Created By' },
         // { field: 'createdDate', header: 'Created Date' },
-        { field: 'certifiedBy', header: 'Certified By' },
+        { field: 'partCertificationNumber', header: 'Certified Num' },
         { field: 'certifiedDate', header: 'Certified Date',width:"120px" },
         { field: 'updatedBy', header: 'Updated By' },
         { field: 'updatedDate', header: 'Updated Date',width:"120px" },
