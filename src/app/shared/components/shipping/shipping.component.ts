@@ -623,7 +623,6 @@ checkedToGenerate(evt, ship) {
 
     assignDetails(value) {
         if (value == true) {
-            debugger;
             this.shippingHeader.shipToCustomerId = this.workOrderGeneralInformation['customerDetails'];
             this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']['customerId'], this.shippingHeader.soldToSiteId);
             this.shippingHeader['shipToSiteId'] = this.shippingHeader.soldToSiteId;

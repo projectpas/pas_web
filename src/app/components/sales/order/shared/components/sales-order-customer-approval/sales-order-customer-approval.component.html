@@ -85,7 +85,7 @@
 
                 <td *ngIf="field.field == 'internalSentDate'">
                   <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                    [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                    [(ngModel)]="approver[field.field]" [dateFormat]="'mm/dd/yy'" [yearNavigator]="true"
                     [monthNavigator]="true" yearRange="1900:2100"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 1" appendTo="body">
                   </p-calendar>
@@ -127,14 +127,14 @@
                 </td>
                 <td *ngIf="field.field == 'internalApprovedDate'">
                   <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                    [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                    [(ngModel)]="approver[field.field]" [dateFormat]="'mm/dd/yy'" [yearNavigator]="true"
                     [monthNavigator]="true" yearRange="1900:2100"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 2" appendTo="body">
                   </p-calendar>
                 </td>
                 <td *ngIf="field.field == 'customerSentDate'">
                   <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                    [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                    [(ngModel)]="approver[field.field]" [dateFormat]="'mm/dd/yy'" [yearNavigator]="true"
                     [monthNavigator]="true" yearRange="1900:2100"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 3" appendTo="body">
                   </p-calendar>
@@ -144,7 +144,7 @@
                   <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 4"
-                    *ngIf="field.field == 'customerStatusId'">
+                    *ngIf="field.field == 'customerStatusId'" required>
                     <option value='-1'>--Select</option>
                     <option *ngFor="let status of statusList" [ngValue]="status.statusId">
                       {{status.name}}
@@ -156,7 +156,7 @@
                   <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 4"
-                    *ngIf="field.field == 'customerStatusId'">
+                    *ngIf="field.field == 'customerStatusId'" required>
                     <option value='' selected>--Select</option>
                     <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
                       {{status.name}}
@@ -174,12 +174,12 @@
                 </td>
                 <td *ngIf="field.field == 'customerApprovedDate'">
                   <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                    [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                    [(ngModel)]="approver[field.field]" [dateFormat]="'mm/dd/yy'" [yearNavigator]="true"
                     [monthNavigator]="true" yearRange="1900:2100"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 4" appendTo="body">
                   </p-calendar>
                 </td>
-                <td *ngIf="field.field == 'customerApprovedBy'">
+                <td *ngIf="field.field == 'customerApprovedBy'" required>
                   <label *ngIf="field.field != 'customerApprovedBy'">{{approver[field.field]}}</label>
                   <select *ngIf="field.field == 'customerApprovedBy'" [(ngModel)]="approver['customerApprovedById']"
                     class="width-150" [disabled]="!approver.selected || approver['approvalActionId'] != 4">

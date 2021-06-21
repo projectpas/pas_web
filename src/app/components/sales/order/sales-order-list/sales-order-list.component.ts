@@ -433,7 +433,6 @@ export class SalesOrderListComponent implements OnInit {
 
   convertDate(key, data) {
     if (key === 'requestedDateType' && data[key]) {
-      debugger;
       return data['requestedDateType'] !== 'Multiple' ? moment(data['requestedDate']).format('MM/DD/YYYY') : data['requestedDateType'];
     }
     else if (key === 'estimatedShipDateType' && data[key]) {

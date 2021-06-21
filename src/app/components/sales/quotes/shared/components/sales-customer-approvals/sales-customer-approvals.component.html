@@ -95,7 +95,7 @@
                     <select class="width-150" [(ngModel)]="approver.internalStatusId"
                       [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
                       *ngIf="field.field == 'internalStatusId'">
-                      <option value='-1'>--Select</option>
+                      <option value='-1'>--Select--</option>
                       <option *ngFor="let status of statusList" [ngValue]="status.statusId">
                         {{status.name}}
                       </option>
@@ -107,7 +107,7 @@
                     <select class="width-150" [(ngModel)]="approver.internalStatusId"
                       [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
                       *ngIf="field.field == 'internalStatusId'">
-                      <option value='' selected>--Select</option>
+                      <option value='' selected>--Select--</option>
                       <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
                         {{status.name}}
                       </option>
@@ -140,9 +140,9 @@
                   <td *ngIf="field.field == 'customerStatusId' && !getApprovalActionCustomerStatus(approver)">
                     <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
                     <select class="width-150" [(ngModel)]="approver['customerStatusId']"
-                      [disabled]="getcustomerStatusIdEnableStatus(approver)" #customerStatusId="ngModel"
-                      required id="customerStatusId" name="customerStatusId">
-                      <option value='-1'>--Select</option>
+                      [disabled]="getcustomerStatusIdEnableStatus(approver)" #customerStatusId="ngModel" required
+                      id="customerStatusId" name="customerStatusId">
+                      <option value='-1'>--Select--</option>
                       <option *ngFor="let status of statusList" [ngValue]="status.statusId">
                         {{status.name}}
                       </option>
@@ -151,9 +151,9 @@
                   <td *ngIf="field.field == 'customerStatusId' && getApprovalActionCustomerStatus(approver)">
                     <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
                     <select class="width-150" [(ngModel)]="approver['customerStatusId']" #customerStatusId="ngModel"
-                      [disabled]="getcustomerStatusIdEnableStatus(approver)"
-                      required id="customerStatusId" name="customerStatusId">
-                      <option value='' selected>--Select</option>
+                      [disabled]="getcustomerStatusIdEnableStatus(approver)" required id="customerStatusId"
+                      name="customerStatusId">
+                      <option value='' selected>--Select--</option>
                       <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
                         {{status.name}}
                       </option>
@@ -178,8 +178,8 @@
                   <td *ngIf="field.field == 'customerApprovedBy'">
                     <label *ngIf="field.field != 'customerApprovedBy'">{{approver[field.field]}}</label>
                     <select *ngIf="field.field == 'customerApprovedBy'" [(ngModel)]="approver['customerApprovedById']"
-                      class="width-150" [disabled]="getcustomerStatusIdEnableStatus(approver)">
-                      <option value="">Select</option>
+                      class="width-150" [disabled]="getcustomerStatusIdEnableStatus(approver)" required>
+                      <option value="">--Select--</option>
                       <option *ngFor="let cus of customerContactList" [value]="cus.contactId">{{cus.firstName}}</option>
                     </select>
                   </td>
@@ -293,7 +293,7 @@
                     <select class="width-150" [(ngModel)]="approver.internalStatusId"
                       [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
                       *ngIf="field.field == 'internalStatusId'">
-                      <option value='' selected>--Select</option>
+                      <option value='' selected>--Select--</option>
                       <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
                         {{status.name}}
                       </option>
@@ -327,8 +327,9 @@
                     <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
                     <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                       [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)"
-                      *ngIf="field.field == 'customerStatusId'">
-                      <option value='-1'>--Select</option>
+                      *ngIf="field.field == 'customerStatusId'" #customerStatusId="ngModel" required
+                      id="customerStatusId" name="customerStatusId">
+                      <option value='-1'>--Select--</option>
                       <option *ngFor="let status of statusList" [ngValue]="status.statusId">
                         {{status.name}}
                       </option>
@@ -338,8 +339,9 @@
                     <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
                     <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                       [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)"
-                      *ngIf="field.field == 'customerStatusId'">
-                      <option value='' selected>--Select</option>
+                      *ngIf="field.field == 'customerStatusId'" #customerStatusId="ngModel" required
+                      id="customerStatusId" name="customerStatusId">
+                      <option value='' selected>--Select--</option>
                       <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
                         {{status.name}}
                       </option>
@@ -364,8 +366,8 @@
                   <td *ngIf="field.field == 'customerApprovedBy'">
                     <label *ngIf="field.field != 'customerApprovedBy'">{{approver[field.field]}}</label>
                     <select *ngIf="field.field == 'customerApprovedBy'" [(ngModel)]="approver['customerApprovedById']"
-                      class="width-150" [disabled]="getcustomerStatusIdEnableStatus(approver)">
-                      <option value="">Select</option>
+                      class="width-150" [disabled]="getcustomerStatusIdEnableStatus(approver)" required>
+                      <option value="">--Select--</option>
                       <option *ngFor="let cus of customerContactList" [value]="cus.contactId">{{cus.firstName}}</option>
                     </select>
                   </td>
