@@ -6,7 +6,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { CommonService } from "../../../../services/common.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
-// import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
+import { AuditComponentComponent } from '../../../../../app/shared/components/audit-component/audit-component.component';
 @Component({
   selector: 'app-wo-workComplete',
   templateUrl: './wo-workComplete.component.html',
@@ -28,18 +28,20 @@ export class WorkOrderWorkCompleteComponent implements OnChanges, OnInit {
   settlementList:any=[];
   loginUser:any={};
   conditionList:any=[];
+  isWOClose:any;
   constructor(private workOrderService: WorkOrderService, private authService: AuthService,
     private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef, private commonService: CommonService) {
   }
   isSpinnerVisible: boolean = false;
-  woSettlements:any=[
-  {'name':'Mat Required = Mat Issued',value:1},
-  {'name':'Labor Hrs Entered',value:2},
-  {'name':'Put Backs',value:3},
-  {'name':'Margin Reviewed',value:4},
-  {'name':'WO Act vs. WO Qte Reviewed',value:5},
-  {'name':'Cond/Tag Changed',value:6},
-  {'name':'8130 Reviewed',value:7}]
+  woSettlements:any=[];
+  // woSettlements:any=[
+  // {'name':'Mat Required = Mat Issued',value:1},
+  // {'name':'Labor Hrs Entered',value:2},
+  // {'name':'Put Backs',value:3},
+  // {'name':'Margin Reviewed',value:4},
+  // {'name':'WO Act vs. WO Qte Reviewed',value:5},
+  // {'name':'Cond/Tag Changed',value:6},
+  // {'name':'8130 Reviewed',value:7}]
   ngOnChanges() { 
   }
   ngOnInit() {
@@ -72,9 +74,15 @@ getWorkCompleteDetails(){
    if(this.woSettlements && this.woSettlements.length !=0){
     this.woSettlements.forEach(element => {
       element.userId=this.authService.currentEmployee;
+      element.userName=this.authService.currentEmployee.name;
       element.isenableUpdate=false;
+      element.sattlement_DateTime=this.toDaysDate;
+      if(element.isMastervalue==true || element.isvalue_NA==true){
+        element.closeWO=true;
+      }
     });
    }
+   console.log("settlementarray",this.woSettlements)
     this.isSpinnerVisible=false;
     },err=>{
     this.isSpinnerVisible=false;
@@ -84,13 +92,52 @@ isenableUpdate:any;
 editRow(currentRecord){
   currentRecord.isenableUpdate=true;
 }
-upDateRow(currentRecord){
+upDateSettlemts( ){
+
+  console.log("newDat",this.woSettlements)
+  const newData=[...  this.woSettlements];
+  newData.forEach(element => {
+    element.userId=element.userId?element.userId.employeeId:0;
+    element.conditionId= element.conditionId ==0 ? null :element.conditionId
+  });
+  // newData[0].closeWO=true;
+  // newData.forEach(element => {
+  //   if(element.closeWO==false){
+  //     this.isWOClose=false
+  //   }
+  // });
+  // console.log("newDat",newData)
+  const arrayWithFilterObjects= newData.filter((o) => o.closeWO === true);
+  if((arrayWithFilterObjects && arrayWithFilterObjects.length)==(newData&&newData.length)){
+    this.isWOClose=true;
+  }else{
+    this.isWOClose=false
+  }
+  // console.log("arrayWithFilterObjects",arrayWithFilterObjects)
+  // console.log("clds",this.isWOClose)
   this.isSpinnerVisible=true;
-  const newData={...currentRecord}
-  newData.userId=newData.userId?newData.userId.employeeId:0;
-  this.workOrderService.updateWoSettlements(newData).subscribe(res => {
+  this.workOrderService.updateWoSettlements(newData,this.isWOClose).subscribe(res => {
+    this.woSettlements.forEach(element => {
+      element.userId=this.authService.currentEmployee;
+      element.isenableUpdate=false;
+      element.sattlement_DateTime=this.toDaysDate;
+      if(element.isMastervalue==true || element.isvalue_NA==true){
+        element.closeWO=true;
+      }
+    }); 
+    
+setTimeout(() => {
   this.isSpinnerVisible=false;
-  currentRecord.isenableUpdate=false;
+  this.alertService.showMessage('',
+    'Work Order Settlements Updated Succesfully',
+    MessageSeverity.success
+);
+this.getWorkCompleteDetails();
+}, 1000);
+  // currentRecord.isenableUpdate=false;
+  this.woSettlements.forEach(element => {
+    element.isenableUpdate=false;
+  });
   this.settlementList=res;
   },err=>{
   this.isSpinnerVisible=false;
@@ -153,5 +200,75 @@ getConditionsList() {
       }, error => {
           this.isSpinnerVisible = false;
       });
+}
+
+checkValidation() {
+  var result = true;
+if(this.woSettlements &&    this.woSettlements.length !=0){
+  this.woSettlements.forEach(
+      data => {
+        if (data.isenableUpdate==true) { 
+             result = false;
+         
+        }
+      })
+}
+  return result;
+}
+
+getAuditHistoryById(rowData) {
+  this.isSpinnerVisible=true;
+    this.workOrderService.getWorkCompleteHistory(rowData.workOrderSettlementDetailId).subscribe(res => {
+      this.isSpinnerVisible=false;
+      this.historyData = res.reverse();
+      this.auditHistoryHeaders=this.auditHistoryHeaders;
+ 
+this.triggerHistory();
+    },err=>{
+      this.isSpinnerVisible=false;
+    })
+}
+historyData:any=[];
+isCloseWo:boolean=false;
+auditHistoryHeaders = [
+  { field: 'isMastervalue', header: 'Task Action' ,isRequired:false,isCheckbox:true,isDate:false},
+  { field: 'workOrderSettlementName', header: 'Task' ,isRequired:false,isCheckbox:false,isDate:false},
+  { field: 'conditionName', header: 'Condition',isRequired:false,isCheckbox:false,isDate:false },
+  { field: 'isvalue_NA', header: 'NA',isRequired:false,isCheckbox:true,isDate:false },
+  { field: 'memo', header: 'Memo',isRequired:false,isCheckbox:false,isDate:false },
+  { field: 'userName', header: 'User',isRequired:false,isCheckbox:false,isDate:false },
+  { field: 'createdDate', header: 'Date/Time',isRequired:false,isCheckbox:false,isDate:true }, 
+  { field: 'createdDate', header: 'Created Date',isRequired:false,isCheckbox:false,isDate:true },
+  { field: 'createdBy', header: 'Created By',isRequired:false,isCheckbox:false,isDate:false },
+  { field: 'updatedDate', header: 'Updated Date',isRequired:false,isCheckbox:false,isDate:true },
+  { field: 'updatedBy', header: 'Updated By',isRequired:false,isCheckbox:false,isDate:false },
+]
+triggerHistory(){
+
+  this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+    this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+    this.modal.componentInstance.auditHistory = this.historyData;
+
+  }
+  // closeWo(){
+  //   $('#closeWoPopUp').modal('hide');   
+  // }
+  closeWo(ev){ 
+    if (ev.target.checked) {
+        $('#closeWoPopUp').modal('show'); 
+
+    }else{
+        $('#closeWoPopUp').modal('show');   
+    }  
+}
+get userName(): string {
+  return this.authService.currentUser ? this.authService.currentUser.userName : "";
+}
+closeSaveWorkOrder( ){ 
+  
+  this.workOrderService.closeWoSettlements(this.workOrderId,this.workOrderPartNoId,this.userName).subscribe(res => 
+  {
+  })
+
 }
 }

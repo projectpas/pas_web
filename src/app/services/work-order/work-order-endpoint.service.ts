@@ -1690,9 +1690,22 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId));
         });
     }
-    updateWoSettlements<T>(data): Observable<T> {
-        return this.http.post<T>(`${this.configurations.baseUrl}/api/workOrder/UpdateWorkOrderSettlementDetails`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.updateWoSettlements(data));
+    updateWoSettlements<T>(data,isWOClose:boolean=false): Observable<T> {
+        return this.http.post<T>(`${this.configurations.baseUrl}/api/workOrder/UpdateWorkOrderSettlementDetails?isWOClose=${isWOClose}`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.updateWoSettlements(data,isWOClose));
         });
     } 
+
+    getWorkCompleteHistory(id) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkOrderSettlementDetailsAudit?WorkOrderSettlementDetailId=${id}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getWorkCompleteHistory(id));
+        });
+    }
+
+    closeWoSettlements(WorkorderId: number,workOrderPartNoId : number,updatedBy : string) {
+        return this.http.post(`${this.configurations.baseUrl}/api/workOrder/SaveworkorderPartclose?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy));
+        });
+    }
+ 
 }

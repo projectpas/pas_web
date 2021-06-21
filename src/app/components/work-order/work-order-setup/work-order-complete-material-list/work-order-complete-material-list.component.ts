@@ -1156,7 +1156,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                     }
                 }
             }
+         
         }
+        // this.checkedParts.forEach(element => {
+        //     if(currentRecord.isParentSelected == true){
+        //         this.savebutonDisabled = true;
+        //         return;
+        //     }
+        // });
     }
 
     pageIndexChange(event) {
@@ -1628,12 +1635,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         const workOrderId = rowData.workOrderId;
         const workOrderMaterialsId = rowData.workOrderMaterialsId;
         this.qtyToPick = rowData.quantityReserved - rowData.qunatityPicked; 
-
-        this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
+this.isSpinnerVisible=true;
         this.workOrderService
             .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId)
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
+                
+        this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
                 this.parts = response;
                 for (let i = 0; i < this.parts.length; i++) {
                     if (this.parts[i].oemDer == null)
@@ -1724,13 +1732,18 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.disableSubmitButton = false;
         }
     }
-
+    checkValid(selectedItem){
+        if(selectedItem && selectedItem.qtyToShip == undefined || selectedItem.qtyToShip == 0 ||  selectedItem.qtyToShip <= 0 ){
+          selectedItem.qtyToShip=selectedItem.qtyToPick;
+        }
+      }
     onFocusOutEvent(objPickTicket: any){
         let invalidQty = false;
         let selectedItem = objPickTicket;
         var errmessage = '';
         if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
             invalidQty = true;
+            selectedItem.qtyToShip=selectedItem.qtyToPick;
             errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
         }            
         if (invalidQty) {

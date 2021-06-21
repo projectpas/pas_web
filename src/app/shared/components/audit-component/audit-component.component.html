@@ -1,63 +1,57 @@
 <div class="modal-header">
     <button type="button" class="close" (click)="dismissModell()">&times;</button>
-    <div class="col-md-10" >
+    <div class="col-md-10">
 
         <h4 class="modal-title">History Details</h4>
     </div>
- 
 </div>
-<div class="modal-body" >
-<div class="tableFixHead history_hg">
-<table class="table table-bordered" *ngIf="auditHistory && auditHistory.length> 0 else noDatavailable">
-    <thead>
-        <tr> 
-            <ng-container *ngFor="let headername of auditHistoryHeader; let z = index;">
-                <th *ngIf="headername.isRequired == true">{{headername.header}}<span style="color: #ff0000;">*</span></th>
-                <th *ngIf="headername.isRequired == false">{{headername.header}}</th>
-            </ng-container>
-        </tr>
-    </thead> 
-    <tbody class="audithistory-cstm">
-        <tr *ngFor="let audit of auditHistory; let i = index;">
-            <ng-container *ngFor="let headername of auditHistoryHeader; let j = index;">
-            <td *ngIf="headername.field != 'isActive' && headername.field != 'isDeleted' && headername.field != 'createdDate' && headername.field != 'updatedDate' && headername.field != 'memo'"
-                [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
-                {{audit[headername.field]}}</td>
-                <td *ngIf="headername.field == 'createdDate' || headername.field == 'updatedDate'  "
-                [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
-                {{audit[headername.field] | date: 'MM/dd/yyyy h:mm a'}}</td> 
-                <td *ngIf="headername.field == 'isActive'" class="text-center width-60">
-                    <span class="value">
-                        <label class="wauto"> <input type="checkbox"
-                                            name="isActive" [checked]="audit[headername.field]" disabled>
-                        </label>
-                        </span>
-                </td>
-                <td *ngIf="headername.field == 'isDeleted'" class="text-center width-60">
-                    <span class="value">
-                        <label class="wauto"> <input type="checkbox"
-                                            name="isDeleted" [checked]="audit[headername.field]" disabled>
-                                        </label>
-                                        </span>
-                </td>
-                <td *ngIf="headername.field == 'memo'" [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
-                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit[headername.field])" [innerHTML]="audit[headername.field]"></p>
-              
-                </td>
-            
-            </ng-container>
-        </tr>
-    </tbody>
-</table>
-<ng-template #noDatavailable>
-    <div class="text-center">
-        <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-        <h4 style="color: #ff5663;">No History Found </h4>
+<div class="modal-body">
+    <div class="tableFixHead history_hg">
+        <table class="table table-bordered" *ngIf="auditHistory && auditHistory.length> 0 else noDatavailable">
+            <thead>
+                <tr>
+                    <ng-container *ngFor="let headername of auditHistoryHeader; let z = index;">
+                        <th *ngIf="headername.isRequired == true">{{headername.header}}<span
+                                style="color: #ff0000;">*</span></th>
+                        <th *ngIf="headername.isRequired == false">{{headername.header}}</th>
+                    </ng-container>
+                </tr>
+            </thead>
+            <tbody class="audithistory-cstm">
+                <tr *ngFor="let audit of auditHistory; let i = index;">
+                    <ng-container *ngFor="let headername of auditHistoryHeader; let j = index;">
+                        <td *ngIf="headername.isCheckbox == false  && headername.isDate == false && headername.field != 'memo'"
+                            [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
+                            {{audit[headername.field]}}</td>
+                        <td *ngIf="headername.isDate == true  "
+                            [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
+                            {{audit[headername.field] | date: 'MM/dd/yyyy h:mm a'}}</td>
+                        <td *ngIf="headername.isCheckbox == true " class="text-center width-60">
+                            <span class="value">
+                                <label class="wauto"> <input type="checkbox" name="audit[headername.field]"
+                                        [checked]="audit[headername.field]" disabled>
+                                </label>
+                            </span>
+                        </td>
+                        <td *ngIf="headername.field == 'memo'"
+                            [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
+                            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                [matTooltip]="parsedText(audit[headername.field])"
+                                [innerHTML]="audit[headername.field]"></p>
+                        </td>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
+        <ng-template #noDatavailable>
+            <div class="text-center">
+                <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                <h4 style="color: #ff5663;">No History Found </h4>
+            </div>
+        </ng-template>
     </div>
-</ng-template>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="dismissModell()">
-        Close
-    </button>
-</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModell()">
+            Close
+        </button>
+    </div>

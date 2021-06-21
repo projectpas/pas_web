@@ -841,8 +841,16 @@ getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId){
     return this.workOrderEndpointService.getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId); 
 }
 
-updateWoSettlements(data) {
-    return this.workOrderEndpointService.updateWoSettlements<any>(data);
+updateWoSettlements(data,isWOClose) {
+    return this.workOrderEndpointService.updateWoSettlements<any>(data,isWOClose);
+}
+
+getWorkCompleteHistory(rowData) {
+    return this.workOrderEndpointService.getWorkCompleteHistory(rowData);
+}
+
+closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy) {
+    return this.workOrderEndpointService.closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy);
 }
 
 }
