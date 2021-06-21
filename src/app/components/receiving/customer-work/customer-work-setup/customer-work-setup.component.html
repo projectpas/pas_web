@@ -258,6 +258,11 @@
                                     <option *ngFor="let site of allBins" [ngValue]="site.binId">{{site.name}}</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label>AC Tail Num </label>
+                                <input class="form-control" type="text" name="acTailNum" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.acTailNum" #actailnum="ngModel">
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12">
