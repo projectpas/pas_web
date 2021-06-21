@@ -228,16 +228,16 @@ export class PartDetailsComponent implements OnChanges {
   }
 
   viewSelectedRow(part, rowindex) {
-    if (this.parts.length > 0) {
-      this.parts.forEach((part, index) => {
-        if (rowindex != index) {
-          this.hideme[index] = false;
-        }
-      })
-    }
+    // if (this.parts.length > 0) {
+    //   this.parts.forEach((part, index) => {
+    //     if (rowindex != index) {
+    //       this.hideme[index] = false;
+    //     }
+    //   })
+    // }
     this.stockLineViewedRow = rowindex;
     part.isShowPlus = false;
-    this.roleUpMaterialList = [];
+    this.roleUpMaterialList[rowindex] = [];
     this.customPaginate.filters.itemMasterId = part.partId;
     this.customPaginate.filters.conditionId = part.conditionId;
     this.customPaginate.filters.partNumber = part.partNumber;
@@ -266,12 +266,12 @@ export class PartDetailsComponent implements OnChanges {
         this.isSpinnerVisible = false;
         let resultdata = data['data'];
         if (resultdata && resultdata.length > 0) {
-          this.roleUpMaterialList = resultdata;
-          this.roleUpMaterialList.forEach((part, i) => {
-            this.roleUpMaterialList[i]['qtyRemainedToQuote'] = this.roleUpMaterialList[i].qtyAvailable;
+          this.roleUpMaterialList[rowindex] = resultdata;
+          this.roleUpMaterialList[rowindex].forEach((part, i) => {
+            this.roleUpMaterialList[rowindex][i]['qtyRemainedToQuote'] = this.roleUpMaterialList[rowindex][i].qtyAvailable;
           });
         } else {
-          this.roleUpMaterialList = [];
+          this.roleUpMaterialList[rowindex] = [];
         }
         this.salesQuoteService.getSelectedParts().subscribe(data => {
           if (data && data.length > 0) {

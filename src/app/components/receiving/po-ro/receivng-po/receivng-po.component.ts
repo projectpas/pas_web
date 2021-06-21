@@ -83,6 +83,9 @@ export class ReceivngPoComponent implements OnInit {
     obtainfromcustomer: boolean = false;
     obtainfromother: boolean = false;
     obtainfromvendor: boolean = false;
+    taggedbycustomer : boolean = false;
+    taggedbyother : boolean = false;
+    taggedbyvendor : boolean = false;
     ownercustomer: boolean = false;
     ownerother: boolean = false;
     ownervendor: boolean = false;
@@ -750,6 +753,10 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.currentDate = new Date();
             stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.obtainFrom = this.purchaseOrderData.vendor.vendorId;
+
+            stockLine.taggedByType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
+            stockLine.taggedBy = this.purchaseOrderData.vendor.vendorId;
+
             stockLine.ownerType = AppModuleEnum.Vendor;
             stockLine.owner = this.purchaseOrderData.vendor.vendorId;           
             stockLine.unitOfMeasureId = part.unitOfMeasureId;
@@ -765,6 +772,8 @@ export class ReceivngPoComponent implements OnInit {
 
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
+            stockLine.taggedByObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
+            
 
             if (part.itemMaster != undefined) {
                 stockLine.purchaseOrderUnitCost = part.unitCost;
@@ -1023,6 +1032,27 @@ export class ReceivngPoComponent implements OnInit {
         }
     }
 
+    onTaggedTypeChange(event, stockLine) {
+        stockLine.taggedBy = '';
+        stockLine.taggedByObject = {};
+
+        if (event.target.value === AppModuleEnum.Customer) {
+            this.taggedbycustomer = true;
+            this.taggedbyother = false;
+            this.taggedbyvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Vendor) {
+            this.taggedbyother = true;
+            this.taggedbycustomer = false;
+            this.taggedbyvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Company) {
+            this.taggedbyvendor = true;
+            this.taggedbycustomer = false;
+            this.taggedbyother = false;
+        }
+    }
+
 
     onObtainSelect(stockLine: StockLine, type): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;        
@@ -1054,6 +1084,17 @@ export class ReceivngPoComponent implements OnInit {
             this.arrayVendlsit.push(stockLine.traceableToObject.Key);
         } else if (type == AppModuleEnum.Company) {
             this.arrayComplist.push(stockLine.traceableToObject.Key);
+        }
+    }
+
+    ontagTypeSelect(stockLine: StockLine, type): void {
+        stockLine.taggedBy = stockLine.taggedByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.taggedByObject.Key);
         }
     }
 
@@ -1523,7 +1564,7 @@ export class ReceivngPoComponent implements OnInit {
                     sl.tagType = "";
                     sl.tagTypeId = "";
                 }
-                sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
+                //sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
                 sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
             }             
             if (part.isSameDetailsForAllParts) {

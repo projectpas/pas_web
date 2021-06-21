@@ -169,18 +169,24 @@ export class StockLineListComponent implements OnInit {
         { field: 'quantityOnHand', header: 'Qty On Hand',width:"100px" },
         { field: 'quantityAvailable', header: 'Qty Avail',width:"80px" },
         { field: 'serialNumber', header: 'Serial Num' },
-        { field: 'stocklineNumber', header: 'SL Num' },
-        { field: 'controlNumber', header: 'Control Number' },
-        { field: 'idNumber', header: 'Control Id Num' },
-        { field: 'condition', header: 'Condition' },
-        { field: 'receivedDate', header: 'Received Date' },
-        { field: 'awb', header: 'AWB' },
-        { field: 'expirationDate', header: 'Exp Date' },
-        { field: 'tagDate', header: 'Tagged Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'createdDate', header: 'Created Date' },
+        { field: 'isCustomerStock', header: 'C/S',width:"50px" },
+        { field: 'stocklineNumber', header: 'SL Num',width:"100px"  },
+        { field: 'controlNumber', header: 'Ctrl Num',width:"80px" },
+        { field: 'idNumber', header: 'Ctrl ID',width:"80px" },
+        { field: 'condition', header: 'Cond' },
+        { field: 'receivedDate', header: "Rec'd Date",width:"120px" },
+        // { field: 'awb', header: 'AWB' },
+        { field: 'expirationDate', header: 'Exp Date',width:"120px" }, 
+        { field: 'traceableToName', header: 'Traceable To' }, 
+        { field: 'tagType', header: 'Tag Type' },
+        { field: 'taggedByName', header: 'Tagged By' },
+        { field: 'tagDate', header: 'Tagged Date',width:"120px" },
+        // { field: 'createdBy', header: 'Created By' },
+        // { field: 'createdDate', header: 'Created Date' },
+        { field: 'partCertificationNumber', header: 'Certified Num' },
+        { field: 'certifiedDate', header: 'Certified Date',width:"120px" },
         { field: 'updatedBy', header: 'Updated By' },
-        { field: 'updatedDate', header: 'Updated Date' },
+        { field: 'updatedDate', header: 'Updated Date',width:"120px" },
         { field: 'companyName', header: 'Level 01' },
         { field: 'buName', header: 'Level 02' },
         { field: 'divName', header: 'Level 03' },
@@ -260,6 +266,7 @@ export class StockLineListComponent implements OnInit {
 				return {
                     ...x,
                     createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                    certifiedDate : x.certifiedDate ?  this.datePipe.transform(x.certifiedDate, 'MM/dd/yyyy hh:mm a'): '',
                     updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
                     receivedDate : x.receivedDate ?  this.datePipe.transform(x.receivedDate, 'MM/dd/yyyy'): '',
                     expirationDate : x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy'): '',  
@@ -294,6 +301,7 @@ export class StockLineListComponent implements OnInit {
         const data = {...this.lazyLoadFilterData, globalFilter: ''}
         this.data.forEach(x => {
             x.createdDate = this.getFormatedDate(x.createdDate);
+            x.certifiedDate = this.getFormatedDate(x.certifiedDate);
             x.updatedDate = this.getFormatedDate(x.updatedDate);
         })
         this.getList(data);
@@ -377,7 +385,8 @@ export class StockLineListComponent implements OnInit {
                     x.receivedDate = x.receivedDate ?  this.datePipe.transform(x.receivedDate, 'MMM-dd-yyyy'): '';  
                     x.expirationDate = x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MMM-dd-yyyy'): '';  
                     x.tagDate = x.tagDate ?  this.datePipe.transform(x.tagDate, 'MMM-dd-yyyy'): '';                       
-                    x.createdDate = x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '';
+                    //x.createdDate = x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '';
+                    x.certifiedDate = x.certifiedDate ?  this.datePipe.transform(x.certifiedDate, 'MMM-dd-yyyy hh:mm a'): '';
                     x.updatedDate = x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '';
                 })
                 dt._value = results['results'];
@@ -592,8 +601,10 @@ export class StockLineListComponent implements OnInit {
         date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
         if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
             if (dateyear > minyear) {
-                if(field=='createdDate'){
-                    this.dateObject={'createdDate':date}
+                // if(field=='createdDate'){
+                //     this.dateObject={'createdDate':date}
+                if(field=='certifiedDate'){
+                    this.dateObject={'certifiedDate':date}
                 }else if(field=='updatedDate'){
                     this.dateObject={'updatedDate':date}
                 }else if(field=='receivedDate'){
@@ -609,8 +620,11 @@ export class StockLineListComponent implements OnInit {
             }
         }else{
             this.lazyLoadFilterData.filters = { ...this.lazyLoadFilterData.filters,...this.dateObject};
-            if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.createdDate){
-                delete this.lazyLoadFilterData.filters.createdDate;
+            // if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.createdDate){
+            //     delete this.lazyLoadFilterData.filters.createdDate;
+            // }
+            if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.certifiedDate){
+                delete this.lazyLoadFilterData.filters.certifiedDate;
             }
             if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.updatedDate){
                 delete this.lazyLoadFilterData.filters.updatedDate;

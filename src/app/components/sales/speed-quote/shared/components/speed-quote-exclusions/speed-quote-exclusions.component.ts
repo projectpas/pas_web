@@ -32,6 +32,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   @Input() isViewMode: Boolean;
   @Output('on-exclusion-load') onExclusionLoad: EventEmitter<number> = new EventEmitter<number>();
   disabledSave:boolean=true;
+  saveButton:boolean = false;
   constructor(private commonService: CommonService,
     private authService: AuthService,private itemMasterService: ItemMasterService,
     private changeDetector: ChangeDetectorRef,private _actRoute: ActivatedRoute,
@@ -275,6 +276,8 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
           }
           console.log("partlistdetail" , this.partListData);
       //this.partListData = res;
+      if(this.partListData.length > 0)
+        this.saveButton = false;
       console.log("partlist",this.partListData);
       this.onExclusionLoad.emit(this.partListData.length);
     }, error => this.isSpinnerVisible = false);

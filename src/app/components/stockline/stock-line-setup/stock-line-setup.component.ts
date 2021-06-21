@@ -25,6 +25,8 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { masterCompanyId } from '../../../common-masterData/mastercompany-details';
 import { timePattern } from '../../../validations/validation-pattern';
+import { any } from 'underscore';
+import { TimeLifeDraftData } from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 
 
 @Component({
@@ -236,7 +238,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.loadRevicePnPartNumData('',0);
 			this.loadEmployeeData();
 			this.loadWorkOrderList();
-			this.loadTagByEmployeeData('',0)
+			//this.loadTagByEmployeeData('',0)
 		}
 	}
 
@@ -694,8 +696,7 @@ export class StockLineSetupComponent implements OnInit {
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			const errorLog = err;			
 		});
 	}
 
@@ -849,7 +850,7 @@ export class StockLineSetupComponent implements OnInit {
 				this.getPOSelecionOnEdit('',res.purchaseOrderId);
 				this.getROSelecionOnEdit('',res.repairOrderId);
 				this.loadRevicePnPartNumData('',res.revicedPNId);
-				this.loadTagByEmployeeData('',res.taggedBy);
+				//this.loadTagByEmployeeData('',res.taggedBy);
 				
 				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);
 
@@ -860,10 +861,11 @@ export class StockLineSetupComponent implements OnInit {
 				else {
 					this.stockLineForm.isSerialized = res.isSerialized;
 					this.hideSerialNumber = true;
-				}
-				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {
+				}				
+				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {					
 					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;
-					this.sourceTimeLife = res.timelIfeData;
+					//this.sourceTimeLife = res.timelIfeData;										
+				    this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
 				}
 				if (this.stockLineForm.tagType && this.stockLineForm.tagType != '0') {
 					this.stockLineForm.tagType = this.stockLineForm.tagType.split(',');
@@ -1053,17 +1055,19 @@ export class StockLineSetupComponent implements OnInit {
 		if (res.obtainFrom != null) { this.arrayCustlist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayCustlist.push(res.owner); }
 		if (res.traceableTo != null) this.arrayCustlist.push(res.traceableTo);
+		if (res.taggedBy != null) this.arrayCustlist.push(res.taggedBy);
 
 		//Add Vendor Id to Array list
 		if (res.obtainFrom != null) { this.arrayVendorlist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayVendorlist.push(res.owner); }
 		if (res.traceableTo != null) { this.arrayVendorlist.push(res.traceableTo); }
+		if (res.taggedBy != null) { this.arrayVendorlist.push(res.taggedBy); }
 
 		//Add Company Id to Array list
 		if (res.obtainFrom != null) { this.arrayCompanylist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayCompanylist.push(res.owner); }
 		if (res.traceableTo != null) { this.arrayCompanylist.push(res.traceableTo); }
-
+		if (res.taggedBy != null) { this.arrayCompanylist.push(res.taggedBy); }
 
 		//obtain from
 		if (res.obtainFromType == this.customerModuleId) {
@@ -1141,6 +1145,32 @@ export class StockLineSetupComponent implements OnInit {
 		}
 		else if (res.traceableToType == this.otherModuleId) {
 			this.stockLineForm.traceableTo = res.tracableToName;
+		}
+
+		//Tegged by
+		if (res.taggedByType == this.customerModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCustomersList = response;
+				this.customerNames = this.allCustomersList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allCustomersList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.vendorModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allVendorsList = response;
+				this.vendorNames = this.allVendorsList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allVendorsList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.companyModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCompanyList = response;
+				this.companyNames = this.allCompanyList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allCompanyList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.otherModuleId) {
+			this.stockLineForm.taggedByName = res.taggedByName;
 		}
 	}
 
@@ -1319,7 +1349,7 @@ export class StockLineSetupComponent implements OnInit {
 				this.disableQtyOnHand = false;
 			}
 			this.stockLineForm.isDER = partDetails.isDER;
-			this.stockLineForm.oem = partDetails.isOEM.toString();
+			this.stockLineForm.oem = partDetails.isOEM.toString();			
 			this.sourceTimeLife.timeLife = partDetails.isTimeLife;
 			this.disableManufacturer = false;
 			this.stockLineForm.locationId = this.getInactiveObjectOnEdit('value', partDetails.locationId, this.allLocations, 'Location', 'LocationId', 'Name');
@@ -1519,6 +1549,12 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.traceableTo = undefined;
 	}
 
+	onSelectTaggedType() {
+		this.stockLineForm.taggedBy = undefined;
+	}
+
+
+
 	onChangePONum(selected) {
 		this.stocklineser.getPurchaseOrderUnitCost(selected.value).subscribe(res => {
 			const resp: any = res;
@@ -1640,24 +1676,24 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	onSaveStockLine() {
-		this.isSpinnerVisible = true;
-
-		const timeLife = {
-			timeLifeCyclesId: this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
-			cyclesRemaining: typeof (this.sourceTimeLife.cyclesRemaining) == 'string' ? this.sourceTimeLife.cyclesRemaining : this.sourceTimeLife.cyclesRemaining ? this.datePipe.transform(this.sourceTimeLife.cyclesRemaining, "HH:mm") : null,
-			timeRemaining: typeof (this.sourceTimeLife.timeRemaining) == 'string' ? this.sourceTimeLife.timeRemaining : this.sourceTimeLife.timeRemaining ? this.datePipe.transform(this.sourceTimeLife.timeRemaining, "HH:mm") : null,
-			cyclesSinceNew: typeof (this.sourceTimeLife.cyclesSinceNew) == 'string' ? this.sourceTimeLife.cyclesSinceNew : this.sourceTimeLife.cyclesSinceNew ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceNew, "HH:mm") : null,
-			timeSinceNew: typeof (this.sourceTimeLife.timeSinceNew) == 'string' ? this.sourceTimeLife.timeSinceNew : this.sourceTimeLife.timeSinceNew ? this.datePipe.transform(this.sourceTimeLife.timeSinceNew, "HH:mm") : null,
-			lastSinceNew: typeof (this.sourceTimeLife.lastSinceNew) == 'string' ? this.sourceTimeLife.lastSinceNew : this.sourceTimeLife.lastSinceNew ? this.datePipe.transform(this.sourceTimeLife.lastSinceNew, "HH:mm") : null,
-			cyclesSinceOVH: typeof (this.sourceTimeLife.cyclesSinceOVH) == 'string' ? this.sourceTimeLife.cyclesSinceOVH : this.sourceTimeLife.cyclesSinceOVH ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceOVH, "HH:mm") : null,
-			timeSinceOVH: typeof (this.sourceTimeLife.timeSinceOVH) == 'string' ? this.sourceTimeLife.timeSinceOVH : this.sourceTimeLife.timeSinceOVH ? this.datePipe.transform(this.sourceTimeLife.timeSinceOVH, "HH:mm") : null,
-			lastSinceOVH: typeof (this.sourceTimeLife.lastSinceOVH) == 'string' ? this.sourceTimeLife.lastSinceOVH : this.sourceTimeLife.lastSinceOVH ? this.datePipe.transform(this.sourceTimeLife.lastSinceOVH, "HH:mm") : null,
-			cyclesSinceInspection: typeof (this.sourceTimeLife.cyclesSinceInspection) == 'string' ? this.sourceTimeLife.cyclesSinceInspection : this.sourceTimeLife.cyclesSinceInspection ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceInspection, "HH:mm") : null,
-			timeSinceInspection: typeof (this.sourceTimeLife.timeSinceInspection) == 'string' ? this.sourceTimeLife.timeSinceInspection : this.sourceTimeLife.timeSinceInspection ? this.datePipe.transform(this.sourceTimeLife.timeSinceInspection, "HH:mm") : null,
-			lastSinceInspection: typeof (this.sourceTimeLife.lastSinceInspection) == 'string' ? this.sourceTimeLife.lastSinceInspection : this.sourceTimeLife.lastSinceInspection ? this.datePipe.transform(this.sourceTimeLife.lastSinceInspection, "HH:mm") : null,
-			cyclesSinceRepair: typeof (this.sourceTimeLife.cyclesSinceRepair) == 'string' ? this.sourceTimeLife.cyclesSinceRepair : this.sourceTimeLife.cyclesSinceRepair ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceRepair, "HH:mm") : null,
-			timeSinceRepair: typeof (this.sourceTimeLife.timeSinceRepair) == 'string' ? this.sourceTimeLife.timeSinceRepair : this.sourceTimeLife.timeSinceRepair ? this.datePipe.transform(this.sourceTimeLife.timeSinceRepair, "HH:mm") : null,
-		}
+		this.isSpinnerVisible = true;		
+		const timeLife = this.getTimeLife(this.sourceTimeLife);
+		// const timeLife = {
+		// 	timeLifeCyclesId: this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
+		// 	cyclesRemaining: typeof (this.sourceTimeLife.cyclesRemaining) == 'string' ? this.sourceTimeLife.cyclesRemaining : this.sourceTimeLife.cyclesRemaining ? this.datePipe.transform(this.sourceTimeLife.cyclesRemaining, "HH:mm") : null,
+		// 	timeRemaining: typeof (this.sourceTimeLife.timeRemaining) == 'string' ? this.sourceTimeLife.timeRemaining : this.sourceTimeLife.timeRemaining ? this.datePipe.transform(this.sourceTimeLife.timeRemaining, "HH:mm") : null,
+		// 	cyclesSinceNew: typeof (this.sourceTimeLife.cyclesSinceNew) == 'string' ? this.sourceTimeLife.cyclesSinceNew : this.sourceTimeLife.cyclesSinceNew ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceNew, "HH:mm") : null,
+		// 	timeSinceNew: typeof (this.sourceTimeLife.timeSinceNew) == 'string' ? this.sourceTimeLife.timeSinceNew : this.sourceTimeLife.timeSinceNew ? this.datePipe.transform(this.sourceTimeLife.timeSinceNew, "HH:mm") : null,
+		// 	lastSinceNew: typeof (this.sourceTimeLife.lastSinceNew) == 'string' ? this.sourceTimeLife.lastSinceNew : this.sourceTimeLife.lastSinceNew ? this.datePipe.transform(this.sourceTimeLife.lastSinceNew, "HH:mm") : null,
+		// 	cyclesSinceOVH: typeof (this.sourceTimeLife.cyclesSinceOVH) == 'string' ? this.sourceTimeLife.cyclesSinceOVH : this.sourceTimeLife.cyclesSinceOVH ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceOVH, "HH:mm") : null,
+		// 	timeSinceOVH: typeof (this.sourceTimeLife.timeSinceOVH) == 'string' ? this.sourceTimeLife.timeSinceOVH : this.sourceTimeLife.timeSinceOVH ? this.datePipe.transform(this.sourceTimeLife.timeSinceOVH, "HH:mm") : null,
+		// 	lastSinceOVH: typeof (this.sourceTimeLife.lastSinceOVH) == 'string' ? this.sourceTimeLife.lastSinceOVH : this.sourceTimeLife.lastSinceOVH ? this.datePipe.transform(this.sourceTimeLife.lastSinceOVH, "HH:mm") : null,
+		// 	cyclesSinceInspection: typeof (this.sourceTimeLife.cyclesSinceInspection) == 'string' ? this.sourceTimeLife.cyclesSinceInspection : this.sourceTimeLife.cyclesSinceInspection ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceInspection, "HH:mm") : null,
+		// 	timeSinceInspection: typeof (this.sourceTimeLife.timeSinceInspection) == 'string' ? this.sourceTimeLife.timeSinceInspection : this.sourceTimeLife.timeSinceInspection ? this.datePipe.transform(this.sourceTimeLife.timeSinceInspection, "HH:mm") : null,
+		// 	lastSinceInspection: typeof (this.sourceTimeLife.lastSinceInspection) == 'string' ? this.sourceTimeLife.lastSinceInspection : this.sourceTimeLife.lastSinceInspection ? this.datePipe.transform(this.sourceTimeLife.lastSinceInspection, "HH:mm") : null,
+		// 	cyclesSinceRepair: typeof (this.sourceTimeLife.cyclesSinceRepair) == 'string' ? this.sourceTimeLife.cyclesSinceRepair : this.sourceTimeLife.cyclesSinceRepair ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceRepair, "HH:mm") : null,
+		// 	timeSinceRepair: typeof (this.sourceTimeLife.timeSinceRepair) == 'string' ? this.sourceTimeLife.timeSinceRepair : this.sourceTimeLife.timeSinceRepair ? this.datePipe.transform(this.sourceTimeLife.timeSinceRepair, "HH:mm") : null,
+		// }
 		this.saveStockLineForm = {
 			...this.stockLineForm,
 			purchaseUnitOfMeasureId: this.stockLineForm.purchaseUnitOfMeasureId > 0 ? this.stockLineForm.purchaseUnitOfMeasureId : null,
@@ -1677,10 +1713,13 @@ export class StockLineSetupComponent implements OnInit {
 			itemMasterId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId),
 			revicedPNId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.revicedPNId),
 			vendorId: this.stockLineForm.vendorId ? editValueAssignByCondition('value', this.stockLineForm.vendorId) : '',
-			customerId: this.stockLineForm.customerId ? editValueAssignByCondition('value', this.stockLineForm.customerId) : '',
+			customerId: this.stockLineForm.customerId ? editValueAssignByCondition('value', this.stockLineForm.customerId) : '',			
 			obtainFromName: this.stockLineForm.obtainFromType == 4 ? this.stockLineForm.obtainFrom : (this.stockLineForm.obtainFrom ? getValueFromObjectByKey('label', this.stockLineForm.obtainFrom) : ''),
 			obtainFrom: this.stockLineForm.obtainFromType == 4 ? null : (this.stockLineForm.obtainFrom ? editValueAssignByCondition('value', this.stockLineForm.obtainFrom) : ''),
-			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,
+			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,			
+			taggedBy : this.stockLineForm.taggedByType == 4 ? null : (this.stockLineForm.taggedBy ? editValueAssignByCondition('value', this.stockLineForm.taggedBy) : ''),
+			taggedByName: this.stockLineForm.taggedByType == 4 ? this.stockLineForm.taggedByName : (this.stockLineForm.taggedBy ? getValueFromObjectByKey('label', this.stockLineForm.taggedBy) : ''),
+			taggedByType: this.stockLineForm.taggedByType > 0 ? this.stockLineForm.taggedByType : null,			
 			ownerType: this.stockLineForm.ownerType > 0 ? this.stockLineForm.ownerType : null,
 			traceableToType: this.stockLineForm.traceableToType > 0 ? this.stockLineForm.traceableToType : null,
 			manufacturerId: this.stockLineForm.manufacturerId > 0 ? this.stockLineForm.manufacturerId : null,
@@ -1699,13 +1738,11 @@ export class StockLineSetupComponent implements OnInit {
 			binId: this.stockLineForm.binId > 0 ? this.stockLineForm.binId : null,
 			isCustomerStock: this.stockLineForm.isCustomerStock,
 			isCustomerstockType: this.stockLineForm.isCustomerstockType,
-
 			ownerName: this.stockLineForm.ownerType == 4 ? this.stockLineForm.owner : (this.stockLineForm.owner ? getValueFromObjectByKey('label', this.stockLineForm.owner) : ''),
 			owner: this.stockLineForm.ownerType == 4 ? null : (this.stockLineForm.owner ? editValueAssignByCondition('value', this.stockLineForm.owner) : ''),
-
 			traceableToName: this.stockLineForm.traceableToType == 4 ? this.stockLineForm.traceableTo : (this.stockLineForm.traceableTo ? getValueFromObjectByKey('label', this.stockLineForm.traceableTo) : ''),
 			traceableTo: this.stockLineForm.traceableToType == 4 ? null : (this.stockLineForm.traceableTo ? editValueAssignByCondition('value', this.stockLineForm.traceableTo) : ''),
-			taggedBy: this.stockLineForm.taggedBy ? getValueFromObjectByKey('value', this.stockLineForm.taggedBy) : '',
+			//taggedBy: this.stockLineForm.taggedBy ? getValueFromObjectByKey('value', this.stockLineForm.taggedBy) : '',
 			requestorId: this.stockLineForm.requestorId ? getValueFromObjectByKey('value', this.stockLineForm.requestorId) : '',
 			inspectionBy: this.stockLineForm.inspectionBy ? getValueFromObjectByKey('value', this.stockLineForm.inspectionBy) : '',
 			workOrderId: this.stockLineForm.workOrderId && this.getValueFromObj(this.stockLineForm.workOrderId) != 0 ? this.getValueFromObj(this.stockLineForm.workOrderId) : null,
@@ -1719,6 +1756,7 @@ export class StockLineSetupComponent implements OnInit {
 			unitCost: this.stockLineForm.unitCost ? parseFloat(this.stockLineForm.unitCost.toString().replace(/\,/g, '')) : '0.00',
 			coreUnitCost: this.stockLineForm.coreUnitCost ? parseFloat(this.stockLineForm.coreUnitCost.toString().replace(/\,/g, '')) : '0.00',
 			lotCost: this.stockLineForm.lotCost ? parseFloat(this.stockLineForm.lotCost.toString().replace(/\,/g, '')) : '0.00',
+			//timeLifes: { ...timeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
 			timeLifes: { ...timeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
 			masterCompanyId: this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null,
 			createdby: this.authService.currentUser ? this.authService.currentUser.userName : "",
@@ -1848,8 +1886,6 @@ export class StockLineSetupComponent implements OnInit {
 		 this.UnitPrice = Number(this.POValue)+ Number(this.ROValue);
 
 		this.stockLineForm.unitCost = this.UnitPrice ? formatNumberAsGlobalSettingsModule(this.UnitPrice, 2) : '0.00';
-
-
 	}
 
 	onChangePOUnitCost() 
@@ -2245,36 +2281,9 @@ export class StockLineSetupComponent implements OnInit {
 			const mfgdate = new Date(value);
 			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
 			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-			console.log(diffTime + " milliseconds");
-			console.log(diffDays + " days");
-
 			this.stockLineForm.manufacturingDays = diffDays;
 		}
-	}
-
-	errorMessageHandler(log) {
-		const errorLog = log;
-		var msg = '';
-		if (errorLog.message) {
-			if (errorLog.error && errorLog.error.errors.length > 0) {
-				for (let i = 0; i < errorLog.error.errors.length; i++) {
-					msg = msg + errorLog.error.errors[i].message + '<br/>'
-				}
-			}
-			this.alertService.showMessage(
-				errorLog.error.message,
-				msg,
-				MessageSeverity.error
-			);
-		}
-		else {
-			this.alertService.showMessage(
-				'Error',
-				log.error,
-				MessageSeverity.error
-			);
-		}
-	}
+	}	
 
 	onChangeInspectedDate() {
 		if (this.stockLineForm.inspectionBy) {
@@ -2283,4 +2292,56 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.inspectionDate = null;
 		}
 	}
+
+	getTimeLifeDetails(x) {		
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData();                      
+		timeLife.timeLifeCyclesId = x.timeLifeCyclesId;
+        timeLife.cyclesRemainingHrs = x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null;
+		timeLife.cyclesRemainingMin = x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null;				
+        timeLife.cyclesSinceInspectionHrs = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null;
+		timeLife.cyclesSinceInspectionMin = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null;				
+        timeLife.cyclesSinceNewHrs = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null;
+		timeLife.cyclesSinceNewMin = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null;				
+        timeLife.cyclesSinceOVHHrs = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null;
+		timeLife.cyclesSinceOVHMin = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null;				
+        timeLife.cyclesSinceRepairHrs = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null;
+		timeLife.cyclesSinceRepairMin = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null;			
+        timeLife.timeRemainingHrs = x.timeRemaining ? x.timeRemaining.split(':')[0] : null;
+		timeLife.timeRemainingMin = x.timeRemaining ? x.timeRemaining.split(':')[1] : null;
+        timeLife.timeSinceInspectionHrs = x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null;
+		timeLife.timeSinceInspectionMin = x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null;				
+        timeLife.timeSinceNewHrs = x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null;
+		timeLife.timeSinceNewMin = x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null;				
+        timeLife.timeSinceOVHHrs = x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null;
+		timeLife.timeSinceOVHMin = x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null;				
+        timeLife.timeSinceRepairHrs = x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null;
+		timeLife.timeSinceRepairMin = x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null;	
+        timeLife.lastSinceInspectionHrs = x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null;
+		timeLife.lastSinceInspectionMin = x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null;				
+        timeLife.lastSinceNewHrs = x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null;
+		timeLife.lastSinceNewMin = x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null;				
+        timeLife.lastSinceOVHHrs = x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null;
+        timeLife.lastSinceOVHMin = x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null;           
+        return timeLife;
+	}
+
+	getTimeLife(x) {
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData(); 
+		timeLife.timeLifeCyclesId = this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null;   
+		timeLife.cyclesRemaining = ((x.cyclesRemainingHrs ? x.cyclesRemainingHrs : '00') + ':' + (x.cyclesRemainingMin ? x.cyclesRemainingMin : '00'));
+		timeLife.timeRemaining = ((x.timeRemainingHrs ? x.timeRemainingHrs : '00') + ':' + (x.timeRemainingMin ? x.timeRemainingMin : '00'));
+		timeLife.cyclesSinceNew = ((x.cyclesSinceNewHrs ? x.cyclesSinceNewHrs : '00') + ':' + (x.cyclesSinceNewMin ? x.cyclesSinceNewMin : '00'));
+		timeLife.timeSinceNew = ((x.timeSinceNewHrs ? x.timeSinceNewHrs : '00') + ':' + (x.timeSinceNewMin ? x.timeSinceNewMin : '00'));
+		timeLife.lastSinceNew = ((x.lastSinceNewHrs ? x.lastSinceNewHrs : '00') + ':' + (x.lastSinceNewMin ? x.lastSinceNewMin : '00'));
+		timeLife.cyclesSinceOVH = ((x.cyclesSinceOVHHrs ? x.cyclesSinceOVHHrs : '00') + ':' + (x.cyclesSinceOVHMin ? x.cyclesSinceOVHMin : '00'));
+		timeLife.timeSinceOVH = ((x.timeSinceOVHHrs ? x.timeSinceOVHHrs : '00') + ':' + (x.timeSinceOVHMin ? x.timeSinceOVHMin : '00'));
+		timeLife.lastSinceOVH = ((x.lastSinceOVHHrs ? x.lastSinceOVHHrs : '00') + ':' + (x.lastSinceOVHMin ? x.lastSinceOVHMin : '00'));
+		timeLife.cyclesSinceInspection = ((x.cyclesSinceInspectionHrs ? x.cyclesSinceInspectionHrs : '00') + ':' + (x.cyclesSinceInspectionMin ? x.cyclesSinceInspectionMin : '00'));
+		timeLife.timeSinceInspection = ((x.timeSinceInspectionHrs ? x.timeSinceInspectionHrs : '00') + ':' + (x.timeSinceInspectionMin ? x.timeSinceInspectionMin : '00'));
+		timeLife.lastSinceInspection = ((x.lastSinceInspectionHrs ? x.lastSinceInspectionHrs : '00') + ':' + (x.lastSinceInspectionMin ? x.lastSinceInspectionMin : '00'));
+		timeLife.cyclesSinceRepair = ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00'));
+		timeLife.timeSinceRepair = ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00'));				
+        return timeLife;
+	}
+	
 }

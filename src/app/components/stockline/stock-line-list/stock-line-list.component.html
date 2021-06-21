@@ -141,7 +141,7 @@
                 <tr>
                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                         <input class="text-right" [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'"
-                         *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" 
+                         *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'certifiedDate' && col.field !== 'updatedDate'" 
                         class="table-header-input-width" pInputText [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
                             (input)="dt.filter($event.target.value, col.field, 'contains')" >
                         <input type="date" class="table-header-input-width" *ngIf="col.field == 'receivedDate'"
@@ -150,10 +150,11 @@
                             name="expirationDate"  (change)="dateFilterForTable($event.target.value, col.field)" />                        
                         <input type="date" class="table-header-input-width" *ngIf="col.field == 'tagDate'"
                             name="tagDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-                        <input type="date"   class="table-header-input-width" *ngIf="col.field == 'createdDate'"
-                            name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+                        <input type="date"   class="table-header-input-width" *ngIf="col.field == 'certifiedDate'"
+                            name="certifiedDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
                         <input type="date"   class="table-header-input-width"  *ngIf="col.field == 'updatedDate'"
                             name="updatedDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+                        
                     </th>
                     <th class="table-actions-column"></th>
                 </tr>
@@ -161,14 +162,14 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(rowData)">
                     <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>    
-                      <span *ngIf="col.field != 'quantityOnHand' && col.field != 'quantityAvailable'">  {{
+                      <span *ngIf="col.field != 'quantityOnHand' && col.field != 'quantityAvailable' && col.field != 'isCustomerStock'">  {{
                                           col.field == 'receivedDate'
                                             ? (rowData[col.field] |  date: 'MM/dd/yyyy h:mm a')
                                             : rowData[col.field] && col.field == 'expirationDate'
                                             ? (rowData[col.field] |  date: 'MM/dd/yyyy h:mm a')
                                             : rowData[col.field] && col.field == 'tagDate'
                                             ? (rowData[col.field] |  date: 'MM/dd/yyyy h:mm a')
-                                            : rowData[col.field] && col.field == 'createdDate'
+                                            : rowData[col.field] && col.field == 'certifiedDate'
                                             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                                             : rowData[col.field] && col.field == 'updatedDate'
                                             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
@@ -176,6 +177,8 @@
                         }}</span>
                         <span class="float-right" *ngIf="col.field == 'quantityOnHand' || col.field == 'quantityAvailable'">
                          {{rowData[col.field]}} </span>
+                         <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'" *ngIf="col.field == 'isCustomerStock'"
+                            class="shop-employee-checkbox" /> 
                     </td>
 
                     <td class="action-icons-cstm table-column-width" *ngIf="selectedGridColumns.length > 0">
@@ -195,6 +198,10 @@
                     </td>
                 </tr>
             </ng-template>
+            <!-- <ng-container *ngIf="col.field =='isCustomerStock'">
+              <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
+                   class="shop-employee-checkbox" />
+            </ng-container> -->
             <ng-template pTemplate="emptymessage" let-columns *ngIf="data.length == 0">
                 <tr>
                   <td colspan="25" class="no-records-msg no-records-cstm">
