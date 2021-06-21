@@ -180,6 +180,11 @@ export class AddressComponentComponent implements OnInit {
 					this.userBillingIdList.push(x.value);
 					this.userShipingIdList.push(x.value);
 				}
+				else if (x.label == "VENDORID") {
+					this.defaultMSCOMPANYID = x.value;
+					this.userBillingIdList.push(x.value);
+					this.userShipingIdList.push(x.value);
+				}
 				else if (x.label == "CUST_ADDID") {
 					shipUsertype = 1;
 					billUsertype = 1;
