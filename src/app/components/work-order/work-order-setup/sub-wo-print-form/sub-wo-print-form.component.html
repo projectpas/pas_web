@@ -332,15 +332,15 @@
                                               </tr>
 
                                               <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Priliminary inspection</b>
+                                                <td style="border-bottom:none;vertical-align:top">
+                                                    <b>Priliminary inspection</b>
 
-                                                  </td>
-                                                  <td>Technician : {{this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspector}}</td>
-                                                  <td>Date : {{this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate | date: 'MM/dd/yyyy'}}</td>
-                                                  <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnician}}</td>
-                                                  <td>Date : {{this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate  | date: 'MM/dd/yyyy'}}</td>
-                                              </tr>
+                                                </td>
+                                                <td>Technician : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspector: ''}}</td>
+                                                <td>Date : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate : ''}}</td>
+                                                <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnician : ''}}</td>
+                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate :'' }}</td>
+                                            </tr>
                                               <tr style="border-bottom:1px solid black">
                                                 <td></td>
                                                 <td>Signature</td>
@@ -351,15 +351,15 @@
                                               </tr>
 
                                               <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Pre-Test Results:</b>
+                                                <td style="border-bottom:none;vertical-align:top">
+                                                    <b>Pre-Test Results:</b>
 
-                                                  </td>
-                                                  <td>Technician : {{this.workOrderprintData.workOrderTeardownModel.assmentResultsInspector}}</td>
-                                                  <td>Date : {{this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate | date: 'MM/dd/yyyy' }}</td>
-                                                  <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnician}}</td>
-                                                  <td>Date : {{this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate | date: 'MM/dd/yyyy'}}</td>
-                                              </tr>
+                                                </td>
+                                                <td>Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspector : ''}}</td>
+                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate : '' }}</td>
+                                                <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnician: ''}}</td>
+                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate  : '' }}</td>
+                                            </tr>
                                               <tr style="border-bottom:1px solid black">
                                                   <td></td>
                                                   <td>Signature</td>
@@ -389,15 +389,15 @@
                                               </tr>
 
                                               <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Detail of Work Performed:</b>
+                                                <td style="border-bottom:none;vertical-align:top">
+                                                    <b>Detail of Work Performed:</b>
 
-                                                  </td>
-                                                  <td>Technician : {{this.workOrderprintData.workOrderTeardownModel.workPerformedInspector}}</td>
-                                                  <td>Date : {{this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate  | date: 'MM/dd/yyyy'}}</td>
-                                                  <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel.workPerformedTechnician}}</td>
-                                                  <td>Date : {{this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate  | date: 'MM/dd/yyyy'}}</td>
-                                              </tr>
+                                                </td>
+                                                <td>Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspector: ''}}</td>
+                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate  : '' }}</td>
+                                                <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnician:''}}</td>
+                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate   : '' }}</td>
+                                            </tr>
                                               <tr style="border-bottom:1px solid black">
                                                   <td></td>
                                                   <td>Signature</td>
