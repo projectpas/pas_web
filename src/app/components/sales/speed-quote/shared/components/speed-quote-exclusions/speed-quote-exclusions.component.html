@@ -47,12 +47,13 @@
             </td>
             <td>
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
-                (change)="calculateExtendedCost(partList)" [(ngModel)]="partList.exUnitPrice"
-                [disabled]="partList['isEditPart'] == true" value="{{ partList.exUnitPrice }}" name="exUnitPrice_{{row_index}}" maxlength="15" />
+                (change)="calculateExtendedCost(partList)" [ngModel]="partList.exUnitPrice | twoDecimalGlobalNumberFormatPipe"
+                [disabled]="partList['isEditPart'] == true" value="{{ partList.exUnitPrice | twoDecimalGlobalNumberFormatPipe }}" name="exUnitPrice_{{row_index}}" maxlength="15" 
+                (ngModelChange)="partList.exUnitPrice=formatStringToNumberGlobal($event)" />
             </td>
             <td>
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
-                [(ngModel)]="partList.exExtPrice"
+                [ngModel]="partList.exExtPrice | twoDecimalGlobalNumberFormatPipe"
                 value="{{ partList.exExtPrice }}" name="exExtPrice_{{row_index}}" maxlength="15" disabled/>
             </td>
             <td>
@@ -61,7 +62,7 @@
                 <option value="-1">--Select--</option>
                 <option value="{{ occurance.label }}" *ngFor="
                                                 let occurance of exclusionEstimatedOccurances;
-                                                let i = index">{{ occurance.value }}</option>
+                                                let i = index">{{ occurance.label }}</option>
               </select>
             </td>
             <td>

@@ -44,18 +44,33 @@
                                         <!-- <span class="float-right" *ngIf="summaryColumn.field != 'partNumber' && summaryColumn.field != 'conditionDescription' && summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span> -->
-                                        <span class="float-right" *ngIf="summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes'">
+                                        <span class="float-right" *ngIf="summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes' && summaryColumn.field != 'quantityRequested' && summaryColumn.field != 'tat' && summaryColumn.field != 'salesPriceExtended' && summaryColumn.field != 'unitCost' && summaryColumn.field != 'unitCostExtended' && summaryColumn.field != 'marginAmountExtended' && summaryColumn.field != 'marginPercentageExtended'">
                                             {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span class="float-right" *ngIf="summaryColumn.field == 'salesPriceExtended' || summaryColumn.field == 'unitCost' || summaryColumn.field == 'unitCostExtended' || summaryColumn.field == 'marginAmountExtended' || summaryColumn.field == 'marginPercentageExtended'">
+                                            {{summaryPart[summaryColumn.field]  | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                      
                                         <ng-container *ngIf="summaryColumn.field == 'unitSalePrice'">
                                         
                                           <input class="table-header-input-width text-right" name="unitSalePricetext{{i}}"
                                           [disabled]="summaryPart['isEditPart'] == true"
-                                          [ngModel]="summaryPart[summaryColumn.field]"
+                                          [ngModel]="summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe"
                                           (ngModelChange)="onChangeUnitSalesPrice(rowIndex,$event)" pInputText type="text"/>
                                         
                                         </ng-container>
+                                        <ng-container *ngIf="summaryColumn.field == 'quantityRequested'">
+                                            <input class="table-header-input-width text-right" name="quantityRequested{{i}}"
+                                            [disabled]="summaryPart['isEditPart'] == true"
+                                            [ngModel]="summaryPart[summaryColumn.field]"
+                                            (ngModelChange)="onChangeQuantity(rowIndex,$event)" pInputText type="text"/>
+                                        </ng-container>
+                                        <ng-container *ngIf="summaryColumn.field == 'tat'">
+                                            <input class="table-header-input-width text-right" name="tat{{i}}"
+                                            [disabled]="summaryPart['isEditPart'] == true"
+                                            [ngModel]="summaryPart[summaryColumn.field]"
+                                            pInputText type="text"/>
+                                          </ng-container>
                                         <ng-container *ngIf="summaryColumn.field == 'notes'">
                                             <td class="width-120" *ngIf="isViewMode == false">
                                             <div class="form-group notes-popup-cstm mat_emo"
