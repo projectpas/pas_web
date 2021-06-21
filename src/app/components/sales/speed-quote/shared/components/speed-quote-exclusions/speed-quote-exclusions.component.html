@@ -4,7 +4,7 @@
     <table class="table table-bordered " id="po-table">
       <thead>
         <tr class="font-size-10">
-          <th class="min-width-30">Line#</th>
+          <!-- <th class="min-width-30">Line#</th> -->
           <th class="th-width">PN</th>
           <th>PN Description</th>
           <th *ngIf="isViewMode == false"></th>
@@ -23,7 +23,7 @@
         <ng-container *ngFor="let partList of partListData;let row_index=index;">
           <tr class="table-parent-data purchase-td-back" *ngIf="!partList.isDeleted">
 
-            <td>{{partList.itemNo}}</td>
+            <!-- <td>{{partList.itemNo}}</td> -->
             <td class="parts-des-td">{{partList.pn}}</td>
             <td class="parts-des-td">{{partList.description}}</td>
             <td *ngIf="isViewMode == false">
@@ -54,7 +54,7 @@
             <td>
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
                 [ngModel]="partList.exExtPrice | twoDecimalGlobalNumberFormatPipe"
-                value="{{ partList.exExtPrice }}" name="exExtPrice_{{row_index}}" maxlength="15" disabled/>
+                value="{{ partList.exExtPrice }}" name="exExtPrice_{{row_index}}" maxlength="15" (ngModelChange)="enableSave()" disabled/>
             </td>
             <td>
               <select class="form-control wf-pub-id full-width" id="ddlEstimatedOccurance"
@@ -88,7 +88,7 @@
     </table>
   </div>
   <div class="float-right" *ngIf="isViewMode == false">
-    <button class="btn btn-primary m-t-10" (click)="saveSpeedQuoteExclusions(errorpopup)">
+    <button class="btn btn-primary m-t-10" [disabled]="disabledSave" (click)="saveSpeedQuoteExclusions(errorpopup)">
       Save
     </button>
   </div>

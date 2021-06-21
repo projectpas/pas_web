@@ -31,6 +31,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   @Input() SQId:number;
   @Input() isViewMode: Boolean;
   @Output('on-exclusion-load') onExclusionLoad: EventEmitter<number> = new EventEmitter<number>();
+  disabledSave:boolean=true;
   constructor(private commonService: CommonService,
     private authService: AuthService,private itemMasterService: ItemMasterService,
     private changeDetector: ChangeDetectorRef,private _actRoute: ActivatedRoute,
@@ -289,6 +290,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     else {
         exclusion.exExtPrice = 0.00;
     }
+    this.disabledSave = false;
   }
   dismissModel() {
 		this.modal.close();
@@ -298,5 +300,8 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   }
   formatStringToNumberGlobal(val) {
     return formatStringToNumber(val)
+  }
+  enableSave(){
+    this.disabledSave = false;
   }
 }
