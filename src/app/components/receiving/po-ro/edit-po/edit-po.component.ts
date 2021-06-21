@@ -241,7 +241,7 @@ export class EditPoComponent implements OnInit {
                             this.getCustomers();
                             this.getVendors();
                             this.getCompanyList();
-                            this.loadTagByEmployeeData();
+                            //this.loadTagByEmployeeData();
                             this.Purchaseunitofmeasure();
                             this.getTagType();
                             if (this.purchaseOrderData.purchaseOderPart) {
@@ -842,9 +842,7 @@ export class EditPoComponent implements OnInit {
                     Value: x.label
                 }
             });
-            this.CustomerList = data;
-            // stockLine.filteredRecords = this.CustomerList;    
-
+            this.CustomerList = data;            
             for (let part of this.purchaseOrderData.purchaseOderPart) {
                 for (let SL of part.stockLine) {
                     if (SL.owner != null && SL.owner != '' && SL.ownerType == 1) {
@@ -855,6 +853,9 @@ export class EditPoComponent implements OnInit {
                     }
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 1) {
                         SL.traceableToObject = this.CustomerList.find(x => x.Key == SL.traceableTo);
+                    }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 1) {
+                        SL.taggedByObject = this.CustomerList.find(x => x.Key == SL.taggedBy);
                     }
                 }
             }
@@ -877,8 +878,7 @@ export class EditPoComponent implements OnInit {
             });
             this.VendorList = data;            
             for (let part of this.purchaseOrderData.purchaseOderPart) {
-                for (let SL of part.stockLine) {
-
+                for (let SL of part.stockLine) {                    
                     if (SL.owner != null && SL.owner != '' && SL.ownerType == 2) {
                         SL.ownerObject = this.VendorList.find(x => x.Key == SL.owner);
                     }
@@ -887,6 +887,9 @@ export class EditPoComponent implements OnInit {
                     }
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 2) {
                         SL.traceableToObject = this.VendorList.find(x => x.Key == SL.traceableTo);
+                    }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 2) {
+                        SL.taggedByObject = this.VendorList.find(x => x.Key == SL.taggedBy);
                     }
                 }
             }
@@ -937,7 +940,6 @@ export class EditPoComponent implements OnInit {
 
             for (let part of this.purchaseOrderData.purchaseOderPart) {
                 for (let SL of part.stockLine) {
-
                     if (SL.owner != null && SL.owner != '' && SL.ownerType == 9) {
                         SL.ownerObject = this.CompanyList.find(x => x.Key == SL.owner);
                     }
@@ -946,6 +948,9 @@ export class EditPoComponent implements OnInit {
                     }
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 9) {
                         SL.traceableToObject = this.CompanyList.find(x => x.Key == SL.traceableTo);
+                    }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 9) {
+                        SL.taggedByObject = this.CompanyList.find(x => x.Key == SL.taggedBy);
                     }
                 }
             }
@@ -1592,6 +1597,27 @@ export class EditPoComponent implements OnInit {
         }
     }
 
+    onTaggedTypeChange(event, stockLine) {
+        stockLine.taggedBy = '';
+        stockLine.taggedByObject = {};
+
+        if (event.target.value === AppModuleEnum.Customer) {
+            this.obtainfromcustomer = true;
+            this.obtainfromother = false;
+            this.obtainfromvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Vendor) {
+            this.obtainfromother = true;
+            this.obtainfromcustomer = false;
+            this.obtainfromvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Company) {
+            this.obtainfromvendor = true;
+            this.obtainfromcustomer = false;
+            this.obtainfromother = false;
+        }
+    }
+
     onOwnerChange(event, stockLine) {
         stockLine.ownerObject = {};
         stockLine.owner = '';
@@ -1676,8 +1702,7 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    onOwnerSelect(stockLine: StockLine): void {
-        debugger
+    onOwnerSelect(stockLine: StockLine): void {        
         stockLine.owner = stockLine.ownerObject.Key;
         if (stockLine.ownerType == AppModuleEnum.Customer) {
             this.arrayCustlist.push(stockLine.ownerObject.Key);
@@ -1696,6 +1721,17 @@ export class EditPoComponent implements OnInit {
             this.arrayVendlsit.push(stockLine.traceableToObject.Key);
         } else if (stockLine.ownerType == AppModuleEnum.Company) {
             this.arrayComplist.push(stockLine.traceableToObject.Key);
+        }
+    }
+
+    ontagTypeSelect(stockLine: StockLine, type): void {
+        stockLine.taggedBy = stockLine.taggedByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.taggedByObject.Key);
         }
     }
 
