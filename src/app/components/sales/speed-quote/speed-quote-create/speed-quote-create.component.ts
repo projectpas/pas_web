@@ -1280,13 +1280,13 @@ export class SpeedQuoteCreateComponent implements OnInit {
           this.alertService.showStickyMessage('Speed Quote', "Please select valid Dates for Speed Quote PartsList!", MessageSeverity.error);
         } else {
           this.isSpinnerVisible = false;
-          this.marginSummary.speedQuoteId = this.id;
-          this.marginSummary.misc = this.totalCharges;
-          this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
-            this.marginSummary.speedQuoteMarginSummaryId = result
-          }, error => {
-            this.isSpinnerVisible = false;
-          });
+          // this.marginSummary.speedQuoteId = this.id;
+          // this.marginSummary.misc = this.totalCharges;
+          // this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
+          //   this.marginSummary.speedQuoteMarginSummaryId = result
+          // }, error => {
+          //   this.isSpinnerVisible = false;
+          // });
           this.speedQuoteService.update(this.speedQuoteView).subscribe(data => {
             this.SpeedQuoteId = data[0].speedQuoteId;
             this.isCreateModeHeader = true;
@@ -1311,14 +1311,14 @@ export class SpeedQuoteCreateComponent implements OnInit {
           });
         }
       } else {
-        if (this.isCopyMode == true) {
-          this.speedQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
-          this.speedQuoteView.speedQuote.speedQuoteId = null;
-          this.speedQuoteView.speedQuote.speedQuoteNumber = undefined;
-          if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
-            this.speedQuoteView.parts.filter(x => x.speedQuotePartId = null)
-          }
-        }
+        // if (this.isCopyMode == true) {
+        //   this.speedQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
+        //   this.speedQuoteView.speedQuote.speedQuoteId = null;
+        //   this.speedQuoteView.speedQuote.speedQuoteNumber = undefined;
+        //   if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
+        //     this.speedQuoteView.parts.filter(x => x.speedQuotePartId = null)
+        //   }
+        // }
         this.speedQuoteService.create(this.speedQuoteView).subscribe(data => {
           this.SpeedQuoteId = data[0].speedQuoteId;
           this.speedQuoteView.speedQuote.speedQuoteId = this.SpeedQuoteId;
