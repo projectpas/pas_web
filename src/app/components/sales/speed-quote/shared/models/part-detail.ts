@@ -36,6 +36,7 @@ export class PartDetail {
     salesDiscountPerUnit: number;
     netSalesPricePerUnit: number;
     unitCostPerUnit: number;
+    unitCost: number;
     marginAmountPerUnit: number;
     marginPercentagePerUnit: number;
     salesPriceExtended: number;

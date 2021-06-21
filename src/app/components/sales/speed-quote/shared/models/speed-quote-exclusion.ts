@@ -36,7 +36,7 @@ export class SpeedQuoteExclusion {
         this.exPartDescription = null;
         this.exStockType = null;
         this.exQuantity = 0;
-        this.exUnitPrice = 0.00;
+        this.exUnitPrice = 0;
         this.exExtPrice = 0.00;
         this.exOccurance = null;
         this.exCurr = null;

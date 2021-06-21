@@ -1400,7 +1400,7 @@
 
 <div *ngIf="workOrderId && (gridActiveTab == 'workComplete')" class="wf-label-cstm  "
 [ngClass]="{hidedata : gridActiveTab !== 'workComplete'}">
-<app-wo-workComplete [isWorkOrder]="isWorkOrder" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
+<app-wo-workComplete [isWorkOrder]="isWorkOrder" [workOrderPartNoId]="workOrderPartNumberId" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
   [workFlowWorkOrderId]="workFlowWorkOrderId"   
 ></app-wo-workComplete>
 </div>
@@ -1570,8 +1570,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

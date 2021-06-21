@@ -27,7 +27,6 @@
                                                 <i class="fa fa-{{ part.showStockLineGridDraft ? 'minus':'plus'}} btn btn-success btn-cstm btn-xs margin0 btn-receiving-toggle" (click)="toggleExpandIcon(part)"></i>
                                             </td>
                                         </tr>
-
                                         <tr class="more-info" *ngIf="part.showStockLineGridDraft">
 
                                             <td colspan="6">
@@ -110,9 +109,9 @@
                                                                 
                                                                 <p><span class="label"><b>Revised PN <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].revisedPartNumber}}</span></p>                                                               
                                                                 <p><span class="label"><b>Bin: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].binText}}</span></p>
-                                                                <p><span class="label"><b>Obtain From: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].obtainFrom}}</span></p>
-                                                                <p><span class="label"><b>Owner: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].owner}}</span></p>
-                                                                <p><span class="label"><b>Traceable To: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].traceableTo}}</span></p>
+                                                                <p><span class="label"><b>Obtain From: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].obtainFromName}}</span></p>
+                                                                <p><span class="label"><b>Owner: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].ownerName}}</span></p>
+                                                                <p><span class="label"><b>Traceable To: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].traceableToName}}</span></p>
                                                                 <p><span class="label"><b>MFG: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturerText}}</span></p>
                                                                 <p><span class="label"><b>MFG Lot Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturerLotNumber}}</span></p>
                                                                 <p><span class="label"><b>MFG Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturingDate}}</span></p>
@@ -224,13 +223,11 @@
                                                 </div>
                                             </td>
                                         </tr>
-
-                                        <tr *ngIf="part.stockLine.length == 0">
+                                        <!-- <tr *ngIf="part.stockLine.length == 0">
                                             <td *ngIf="row_index == 0" [attr.colspan]="29" class="no-records-cstm no-records-msg">
                                                 No records found
                                             </td>	
-                                        </tr>
-
+                                        </tr> -->
                                     </ng-container>                                    
                                 </tbody>
                                 <tfoot> 

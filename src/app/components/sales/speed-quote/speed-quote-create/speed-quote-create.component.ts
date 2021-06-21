@@ -1111,6 +1111,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
     } else {
       this.display = false;
       this.isSpinnerVisible = true;
+      if(this.id)
+        this.speedQuote.speedQuoteId = this.id;
       this.speedQuote.speedQuoteTypeId = this.salesQuote.speedQuoteTypeId;
       this.speedQuote.openDate = this.salesQuote.openDate.toDateString();
       this.speedQuote.validForDays = this.salesQuote.validForDays;

@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SpeedQuoteService } from "../../../../../../services/speedquote.service";
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { formatStringToNumber } from "../../../../../../generic/autocomplete";
 @Component({
   selector: 'app-speed-quote-exclusions',
   templateUrl: './speed-quote-exclusions.component.html',
@@ -30,6 +31,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   @Input() SQId:number;
   @Input() isViewMode: Boolean;
   @Output('on-exclusion-load') onExclusionLoad: EventEmitter<number> = new EventEmitter<number>();
+  disabledSave:boolean=true;
   constructor(private commonService: CommonService,
     private authService: AuthService,private itemMasterService: ItemMasterService,
     private changeDetector: ChangeDetectorRef,private _actRoute: ActivatedRoute,
@@ -286,13 +288,20 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
         exclusion.exExtPrice = formatNumberAsGlobalSettingsModule(value, 2);
     }
     else {
-        exclusion.exExtPrice = "";
+        exclusion.exExtPrice = 0.00;
     }
+    this.disabledSave = false;
   }
   dismissModel() {
 		this.modal.close();
   }
   editPart(rowIndex) {
     this.partListData[rowIndex].isEditPart = false;
+  }
+  formatStringToNumberGlobal(val) {
+    return formatStringToNumber(val)
+  }
+  enableSave(){
+    this.disabledSave = false;
   }
 }
