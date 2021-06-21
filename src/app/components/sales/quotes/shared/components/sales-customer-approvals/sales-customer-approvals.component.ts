@@ -63,8 +63,8 @@ export class SalesCustomerApprovalsComponent {
         { field: 'partNumber', header: 'PN', width: "100px" },
         { field: 'partDescription', header: 'PN Desc', width: "110px" },
         { field: 'qtyQuoted', header: 'Qty', width: "90px" },
-        { field: 'markupExtended', header: 'Mark Up Amt.', width: "90px" },
-        { field: 'discountAmount', header: 'Disc Amt.', width: "90px" },
+        // { field: 'markupExtended', header: 'Mark Up Amt.', width: "90px" },
+        // { field: 'discountAmount', header: 'Disc Amt.', width: "90px" },
         { field: 'netSales', header: 'Net Sales', width: "90px" },
         { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
         { field: 'marginAmountExtended', header: 'Margin Amt.', width: "90px" },
@@ -642,6 +642,9 @@ export class SalesCustomerApprovalsComponent {
                 if (!x.customerMemo) {
                     str += 'Customer memo is required<br/>';
                 }
+            }
+            if (!x.customerApprovedById) {
+                str += 'Customer Approved by is required<br/>';
             }
         }
         return str;
