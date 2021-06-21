@@ -1505,11 +1505,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.router.navigateByUrl('/updatepassword');
                   }
                 },
-                {
-                  label: 'Settings', command: (event?: any) => {
-                    this.router.navigateByUrl('/settings#preferences');
-                  }
-                },
+                // {
+                //   label: 'Settings', command: (event?: any) => {
+                //     this.router.navigateByUrl('/settings#preferences');
+                //   }
+                // },
                 {
                   label: 'Logout', command: (event?: any) => {
                     this.logout();

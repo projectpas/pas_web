@@ -1308,8 +1308,14 @@ export class SalesQuoteCreateComponent implements OnInit {
             }
           }
         }
-        if (!invalidParts && !invalidDate) {
-          let partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
+
+        let partNumberObj;
+        if (this.isCopyMode) {
+          partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
+          partList.push(partNumberObj);
+        }
+        else if (!invalidParts && !invalidDate) {
+          partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
         }
       }
@@ -1573,21 +1579,24 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   initiateQuoteCopying() {
-    let content = this.copyQuotePopup;
-    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    // let content = this.copyQuotePopup;
+    // this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    this.copySalesOrderQuote();
   }
 
   copySalesOrderQuote() {
     let considerParts = false;
-    if (this.copyConsiderations.isPartsAllowForCopy == true) {
-      considerParts = true
-    } else {
-      considerParts = false;
-    }
+    // if (this.copyConsiderations.isPartsAllowForCopy == true) {
+    //   considerParts = true
+    // } else {
+    //   considerParts = false;
+    // }
+    considerParts = true;
     let considerApprovers = false;
     this.salesQuoteService.initiateQuoteCopying(this.id).subscribe(
       results => {
-        this.closeModal()
+        //this.closeModal();
+        this.salesQuoteView.parts = results[0].parts;
         this.router.navigate(['/salesmodule/salespages/sales-quote-create/' + results[0].salesOrderQuote.customerId], { queryParams: { copyRef: results[0].originalSalesOrderQuoteId, considerParts: considerParts, considerApprovers: considerApprovers } });
       }, error => {
         this.isSpinnerVisible = false;
