@@ -823,6 +823,13 @@ export class EditRoComponent implements OnInit {
                         SL.traceableToObject = this.CustomerList.find(x => x.Key == SL.traceableTo);
                     }
                     if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 1) {
+                        var taggedBy = this.CustomerList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.CustomerList.push(taggedBy);                           
+                        } 
                         SL.taggedByObject = this.CustomerList.find(x => x.Key == SL.taggedBy);
                     }
                 }
@@ -854,6 +861,13 @@ export class EditRoComponent implements OnInit {
                         SL.traceableToObject = this.VendorList.find(x => x.Key == SL.traceableTo);
                     }
                     if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 2) {
+                        var taggedBy = this.VendorList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.VendorList.push(taggedBy);                           
+                        } 
                         SL.taggedByObject = this.VendorList.find(x => x.Key == SL.taggedBy);
                     }
                 }
@@ -885,6 +899,13 @@ export class EditRoComponent implements OnInit {
                         SL.traceableToObject = this.CompanyList.find(x => x.Key == SL.traceableTo);
                     }
                     if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 9) {
+                        var taggedBy = this.CompanyList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.CompanyList.push(taggedBy);                           
+                        }
                         SL.taggedByObject = this.CompanyList.find(x => x.Key == SL.taggedBy);
                     }
                 }
@@ -2104,6 +2125,17 @@ export class EditRoComponent implements OnInit {
     Purchaseunitofmeasure() {
         this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname', '', '', 0, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.allPurchaseUnitOfMeasureinfo = res;
+            for (let part of this.repairOrderData) {
+                for (let SL of part.stockLine) {                   
+                    if (SL.unitOfMeasureId != null) {                       
+                        var unitofmasure = this.allPurchaseUnitOfMeasureinfo.find(temp => temp.value == SL.unitOfMeasureId)
+                        if (!unitofmasure || unitofmasure == undefined) {
+                            var uom = {label:SL.unitOfMeasure , value : SL.unitOfMeasureId}
+                            this.allPurchaseUnitOfMeasureinfo.push(uom);
+                        }
+                    }  
+                }
+            }
         })
     }
 

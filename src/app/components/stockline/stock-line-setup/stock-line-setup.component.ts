@@ -861,11 +861,12 @@ export class StockLineSetupComponent implements OnInit {
 				else {
 					this.stockLineForm.isSerialized = res.isSerialized;
 					this.hideSerialNumber = true;
-				}				
+				}								
 				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {					
-					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;
+					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;					
 					//this.sourceTimeLife = res.timelIfeData;										
-				    this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
+					this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
+					this.sourceTimeLife.timeLife = true;
 				}
 				if (this.stockLineForm.tagType && this.stockLineForm.tagType != '0') {
 					this.stockLineForm.tagType = this.stockLineForm.tagType.split(',');
@@ -1369,11 +1370,11 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
 			this.stockLineForm.daysReceived = partDetails.daysReceived;
 			this.stockLineForm.openDays = partDetails.openDays;
-			this.sourceTimeLife.timeLife = partDetails.isTimeLife;
+			//this.sourceTimeLife.timeLife = partDetails.isTimeLife;
 			this.stockLineForm.revisedPart = partDetails.revisedPart;
 			this.stockLineForm.itemGroup = partDetails.itemGroup;
 			this.stockLineForm.glAccountName = partDetails.glAccount;
-			this.stockLineForm.isSerialized = partDetails.isSerialized;
+			//this.stockLineForm.isSerialized = partDetails.isSerialized;
 			if (this.stockLineForm.isSerialized == true) {
 				this.disableQtyOnHand = true;
 			} else {
