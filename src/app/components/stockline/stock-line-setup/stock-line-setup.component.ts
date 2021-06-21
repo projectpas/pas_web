@@ -1370,11 +1370,11 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
 			this.stockLineForm.daysReceived = partDetails.daysReceived;
 			this.stockLineForm.openDays = partDetails.openDays;
-			//this.sourceTimeLife.timeLife = partDetails.isTimeLife;
+			this.sourceTimeLife.timeLife = partDetails.isTimeLife;
 			this.stockLineForm.revisedPart = partDetails.revisedPart;
 			this.stockLineForm.itemGroup = partDetails.itemGroup;
 			this.stockLineForm.glAccountName = partDetails.glAccount;
-			//this.stockLineForm.isSerialized = partDetails.isSerialized;
+			this.stockLineForm.isSerialized = partDetails.isSerialized;
 			if (this.stockLineForm.isSerialized == true) {
 				this.disableQtyOnHand = true;
 			} else {
