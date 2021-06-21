@@ -88,7 +88,10 @@
     </table>
   </div>
   <div class="float-right" *ngIf="isViewMode == false">
-    <button class="btn btn-primary m-t-10" [disabled]="disabledSave" (click)="saveSpeedQuoteExclusions(errorpopup)">
+    <button class="btn btn-primary m-t-10" *ngIf="saveButton" [disabled]="disabledSave" (click)="saveSpeedQuoteExclusions(errorpopup)">
+      Update
+    </button>
+    <button class="btn btn-primary m-t-10" *ngIf="!saveButton" [disabled]="disabledSave" (click)="saveSpeedQuoteExclusions(errorpopup)">
       Save
     </button>
   </div>

@@ -88,26 +88,26 @@
                                     <!-- <td colspan="11"></td> -->
                                     <td *ngIf="isViewMode == false" class="center">
                                         <span>
-                                            <a class="btn nobg btn-pluspo-cstm" (click)="createExclusionPN(summaryPart)"
+                                            <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
+                                                [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg btn-pluspo-cstm" (click)="createExclusionPN(summaryPart)"
                                                 matTooltip="Add Excls" matTooltipPosition="above">
                                                 <i class="fa fa-plus"> </i>
                                             </a>
                                         </span>
-                                        <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                            [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                            class="btn nobg view-part-eye" (click)="editPart(rowIndex)"
+                                        <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
+                                            [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg view-part-eye" (click)="editPart(rowIndex)"
                                             matTooltip="Edit PN" matTooltipPosition="above">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                            [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                            class="btn nobg"
+                                        <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
+                                            [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg"
                                             (click)="openPartDelete(deleteContent,summaryPart)"
                                             matTooltip="Delete" matTooltipPosition="above">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                         <span data-toggle="modal" data-target="#speedQuotePartHistory">
-                                            <a [ngClass]="{'btn_disabled': !summaryPart.speedQuotePartId}"
+                                            <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
+                                                [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}"
                                                 class="btn nobg btn-hist-cstm view-part-eye"
                                                 (click)="getAuditHistoryById(summaryPart)" matTooltip="History"
                                                 matTooltipPosition="above"><i class="fa fa-history"></i></a>
