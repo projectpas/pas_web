@@ -77,6 +77,9 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                           this.isSpinnerVisible = false;
                           if (res) {
                             this.data = res;
+                            this.data.forEach(element => {
+                              element.burdenRateAmount=element.burdenRateAmount ? formatNumberAsGlobalSettingsModule(element.burdenRateAmount, 2) : '0.00';
+                            });
                           }
                       },
                       err => {
@@ -106,6 +109,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
         { field: 'revisedPN', header: 'Revised PN'},
         { field: "partDescription", header: "PN Description" },
         { field: 'customer', header: 'Customer'  },
+        { field: 'billableOrNonBillable', header: 'Billable /NonBillable' },
         { field: 'hours', header: 'Act Hours'},
         { field: 'adjustedHours', header: 'Adj Hours' },
         { field: 'adjustments', header: 'Var. Hours' },

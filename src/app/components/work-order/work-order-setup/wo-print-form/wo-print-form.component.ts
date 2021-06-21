@@ -19,20 +19,12 @@ import { environment } from "../../../../../environments/environment";
 })
 export class WoPrintFromComponent implements OnInit,OnChanges {
 
-  // @Input('modal-reference') modalReference: NgbModalRef;
-  // @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
   @Input() workOrderPartNumberId;
   @Input() workOrderId;
-  // @Input() releaseFromId;
-  // @Input() isView;
-  // @Input() isEdit;
-  // @Input() ReleaseDataForm;
-  // @Output() onWorkOrderPrintLoad = new EventEmitter();
-  //ReleaseData: any;
+  @Input() isView: boolean = false;
   ReleaseData : any = {};
   isSpinnerVisible: boolean = true;
   modal: NgbModalRef;
-  isView: boolean = false;
   private onDestroy$: Subject<void> = new Subject<void>();
   Printeddate1 : string;
   Printeddate2 : string;
@@ -54,7 +46,7 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
   ngOnInit() 
   {
     this.endPointURL = environment.baseUrl;
-    $('#woReleaseFromDiv').modal('show');
+    $('#woworkorderdiv').modal('show');
      this.GetWorkOrderPrintFormData();
 
   }
@@ -88,6 +80,7 @@ get currentUserMasterCompanyId(): number {
 
 close()
 {
+  $('#woworkorderdiv').modal('hide');
     //this.updateRelreaseList.emit();
 }
 
@@ -107,7 +100,7 @@ close()
     //this.CreateUpdateReleasedata();
     //this.updateRelreaseList.emit();
     let printContents, popupWin;
-    printContents = document.getElementById('woReleaseFrom').innerHTML;
+    printContents = document.getElementById('workorderfrom').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
     popupWin.document.write(`
@@ -503,6 +496,7 @@ tfoot { display:table-footer-group }
       </html>`
     );
     popupWin.document.close();
+    this.close();
   }
 
 }

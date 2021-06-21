@@ -41,7 +41,10 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() hideHeader: boolean = false;
   @Input() islaborCreated: boolean = false;
   @Input() isLoadWoLabor: boolean = false;
-  
+  billingMethod:any={
+    tm:1,
+    actual:2
+} 
   totalHours: number;
   disableSaveForEdit: boolean = false;
   workOrderWorkFlowList: any;
@@ -57,7 +60,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     { label: 'Billable', value: 1 },
     { label: 'Non-Billable', value: 2 }
   ];
-  overAllMarkup: any;
+  overAllMarkup: any='';
   dropdownSettings = {};
   selectedItems: any = [];
   taskListForHeader: any[];
@@ -73,11 +76,24 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   modal: NgbModalRef;
   modalMemo: NgbModalRef;
   taskList: any = [];
+  laborMethods:any={
+ManualEntry:1,
+ClockInOut:2,
+Scan:3
+  }
+  woHoursType:any={
+    // workFlow:1,
+    specificTasks:1,
+    workOrder:2
+  }
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService, private modalService: NgbModal,        private alertService: AlertService,
     private commonService: CommonService) { }
 
   ngOnInit() {
+    this.laborMethods=this.laborMethods;
+    this.billingMethod=this.billingMethod;
+    this.woHoursType=this.woHoursType;
     this.disabledUpdatebtn = true;
     this.allEmployees = this.employeesOriginalData;
     this.dropdownSettings = {
@@ -158,7 +174,11 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   laborTaskData: any;
   allTaskList: any = [];
   ngOnChanges() {
+    // console.log("management structure",this.selectedPartNumber)
     this.isLoadWoLabor=this.isLoadWoLabor;
+    this.laborMethods=this.laborMethods;
+    this.billingMethod=this.billingMethod;
+    this.woHoursType=this.woHoursType;
     setTimeout(() => {
       this.checkPercentageData();
     }, 1000);
@@ -181,15 +201,17 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     this.selectedItems = [];
     this.laborForm.costPlusType = 'Mark Up'
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
+  
+
     if (this.laborForm['workOrderHoursType']) {
       this.laborForm.workFloworSpecificTaskorWorkOrder = 'specificTasks';
-      if (this.laborForm['workOrderHoursType'] == 1) {
+      if (this.laborForm['workOrderHoursType'] ==  this.woHoursType.workFlow) {
         this.laborForm.workFloworSpecificTaskorWorkOrder = 'workFlow';
       }
-      else if (this.laborForm['workOrderHoursType'] == 2) {
+      else if (this.laborForm['workOrderHoursType'] ==  this.woHoursType.specificTasks) { 
         this.laborForm.workFloworSpecificTaskorWorkOrder = 'specificTasks';
       }
-      else if (this.laborForm['workOrderHoursType'] == 3) {
+      else if (this.laborForm['workOrderHoursType'] ==  this.woHoursType.workOrder) {
         this.laborForm.workFloworSpecificTaskorWorkOrder = "workOrder";
       }
     }
@@ -209,6 +231,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         }
       }
     }
+    this.laborForm.laborFlatBillingAmount =this.laborForm.laborFlatBillingAmount ? formatNumberAsGlobalSettingsModule(this.laborForm.laborFlatBillingAmount, 2) : '0.00';
     this.calculateTotalWorkHours();
     setTimeout(() => { 
       if (this.workOrderLaborList) {
@@ -390,10 +413,10 @@ setTimeout(() => {
     this.calculateBurderRate(currentRecord);
     // }
   }
-  modifyDirectLoaborFormat(ev){
+  modifyDirectLoaborFormat(ev){ 
     ev.directLaborOHCost= ev.directLaborOHCost ? formatNumberAsGlobalSettingsModule(ev.directLaborOHCost, 2) : '0.00';
   }
-  calculateBurderRate(rec) { 
+  calculateBurderRate(rec) {  
     if (rec.burdaenRatePercentageId && rec.directLaborOHCost) {
       this.markupList.forEach((markup) => {
         if (markup.value == rec.burdaenRatePercentageId) {
@@ -427,7 +450,7 @@ setTimeout(() => {
     if (this.laborForm && this.laborForm.workOrderLaborList[0]) {
       Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
         this.laborForm.workOrderLaborList[0][task].forEach((value) => {
-          if (this.laborForm.hoursorClockorScan != 1) {
+          if (this.laborForm.hoursorClockorScan != this.laborMethods.ManualEntry) {
             this.calculateWorkingHoursandMins(value);
           }
           this.allTaskList.forEach(t => { 
@@ -474,9 +497,9 @@ setTimeout(() => {
   onItemSelect(item: any) {
     if (!this.laborForm.workOrderLaborList[0][item.description]) {
       this.laborForm.workOrderLaborList[0][item.description] = [];
-      if (this.laborForm.isTaskCompletedByOne) {
-        this.addNewTask(item.description);
-      }
+      // if (this.laborForm.isTaskCompletedByOne) {
+        this.addNewTask(item.description); 
+      // }
     }
     this.disabledUpdatebtn = false;
   }
@@ -500,7 +523,7 @@ setTimeout(() => {
     }
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
-        if (this.laborForm.hoursorClockorScan != 1) {
+        if (this.laborForm.hoursorClockorScan != this.laborMethods.ManualEntry) {
           this.calculateWorkingHoursandMins(value);
         }
         this.allTaskList.forEach(t => {
@@ -525,7 +548,7 @@ setTimeout(() => {
  
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
-        if (this.laborForm.hoursorClockorScan != 1) {
+        if (this.laborForm.hoursorClockorScan != this.laborMethods.ManualEntry) {
           this.calculateWorkingHoursandMins(value);
         }
         this.allTaskList.forEach(t => {
@@ -703,7 +726,7 @@ setTimeout(() => {
 
         }
       }
-    )
+    ) 
     // this.isQuote && 
     if (this.basicLabourDetail) {
       // burdenRateId
@@ -713,7 +736,7 @@ setTimeout(() => {
         this.markupChanged(taskData, 'row');
       }
       else if (this.basicLabourDetail['burdenRateIdText'] == 'Flat Amount Per Hour') {
-        taskData['burdenRateAmount'] = this.basicLabourDetail['flatAmount'];
+        taskData['burdenRateAmount'] = this.basicLabourDetail['flatAmount'] ? this.basicLabourDetail['flatAmount'] :0;
         this.calculateTotalCost(taskData);
         this.markupChanged(taskData, 'row');
       }
@@ -732,7 +755,7 @@ setTimeout(() => {
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       if (this.laborForm.workOrderLaborList[0][task] && this.laborForm.workOrderLaborList[0][task].length != 0) {
         this.laborForm.workOrderLaborList[0][task].forEach((value,index1) => {
-          if (this.laborForm.hoursorClockorScan != 1) {
+          if (this.laborForm.hoursorClockorScan != this.laborMethods.ManualEntry) {
             this.calculateWorkingHoursandMins(value);
           }
           this.allTaskList.forEach(t => {
@@ -781,9 +804,9 @@ setTimeout(() => {
     }
     this.calculateWorkingHoursandMins(currentRecord)
   }
-  resetEndDateandTime(currentRecord) {
-    currentRecord.endDate = null;
-  }
+  // resetEndDateandTime(currentRecord) {
+  //   currentRecord.endDate = null;
+  // }
   calculateWorkingHoursandMins(currentRecord) {
     if (currentRecord.startDate && currentRecord.endDate) {
       const start = moment(currentRecord.startDate)
@@ -795,6 +818,16 @@ setTimeout(() => {
 
       currentRecord.totalMinutes = moment.utc(ms).format("mm");
       currentRecord.totalHours = Math.floor(days.asHours());
+
+      if(currentRecord.totalHours && currentRecord.totalHours <0){
+        currentRecord.totalHours=0;
+        currentRecord.totalMinutes='00';
+        this.disabledUpdatebtn = true;
+        this.alertService.showMessage(currentRecord.employeeId ? currentRecord.employeeId.name : '',
+        'Hours should not be less than zero',
+        MessageSeverity.error
+        ) 
+      }
       // currentRecord.ajdtotalMinutes = moment.utc(ms).format("mm");
       // currentRecord.adjtotalHours = Math.floor(days.asHours());
       this.calculateHoursDifference(currentRecord);
@@ -815,8 +848,8 @@ setTimeout(() => {
 for (let task in this.laborForm.workOrderLaborList[0]) {
   this.laborForm.workOrderLaborList[0][task].forEach(
     data => {
-     if (data.isDeleted==false && (Number(data.directLaborOHCost.toString().split(',').join(''))== 0 || data.directLaborOHCost == undefined || data.directLaborOHCost == null || data.directLaborOHCost == '') && !this.isQuote) {
-      // || data.totalCost <= 0 || data.totalCost== undefined
+     if (data.isDeleted==false && (Number(data.directLaborOHCost.toString().split(',').join(''))== 0 || data.directLaborOHCost == undefined || data.directLaborOHCost == null || data.directLaborOHCost == '')) {
+      // && !this.isQuote
          this.restrictUserToSave=false;
          this.enableToSave=true;
        setTimeout(() => {
@@ -928,14 +961,15 @@ if(this.enableToSave==false){
           WorkOrderQuoteTask: WorkOrderQuoteTask,
           LaborBuildMethod: this.laborForm.costPlusType
         }
+    
         if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'workFlow') {
-          this.saveFormdata['workOrderHoursType'] = 1;
+          this.saveFormdata['workOrderHoursType'] = this.woHoursType.workFlow;
         }
         else if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks') {
-          this.saveFormdata['workOrderHoursType'] = 2;
+          this.saveFormdata['workOrderHoursType'] = this.woHoursType.specificTasks;
         }
         else if (this.laborForm.workFloworSpecificTaskorWorkOrder == "workOrder") {
-          this.saveFormdata['workOrderHoursType'] = 3;
+          this.saveFormdata['workOrderHoursType'] = this.woHoursType.workOrder;
         }
         if (this.isQuote) {
           this.saveFormdata.headerMarkupId = Number(this.overAllMarkup);
@@ -1055,7 +1089,7 @@ if(this.enableToSave==false){
   commonfunctionHandler() {
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
-        if (this.laborForm.hoursorClockorScan != 1) {
+        if (this.laborForm.hoursorClockorScan != this.laborMethods.ManualEntry) {
           this.calculateWorkingHoursandMins(value);
         }
         this.allTaskList.forEach(t => {
@@ -1075,7 +1109,7 @@ if(this.enableToSave==false){
       })
     })
     this.calculateOverallTotalHours()
-  }
+  } 
   calculateTotalCost(rec) {
     if (rec['directLaborOHCost']) {
       rec.totalCostPerHour = Number(rec['directLaborOHCost']);
@@ -1465,7 +1499,7 @@ if(this.enableToSave==false){
   deleteConfirmation() {
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
-        if (this.laborForm.hoursorClockorScan != 1) {
+        if (this.laborForm.hoursorClockorScan != this.laborMethods.ManualEntry) {
           this.calculateWorkingHoursandMins(value);
         }
         this.allTaskList.forEach(t => {
@@ -1498,21 +1532,38 @@ if(this.enableToSave==false){
     var result = false;
     for (let task in this.laborForm.workOrderLaborList[0]) {
       this.laborForm.workOrderLaborList[0][task].forEach(
+  
         data => {
-          if (!data.isDeleted && this.isQuote) {
-            if (!data.hours || !data.directLaborOHCost) {
+                // console.log("data",data)
+          // if (!data.isDeleted && this.isQuote) {
+          //   if (!data.hours || !data.directLaborOHCost) {
+          //     result = true;
+          //   }
+          // }
+if(this.isQuote){
+          if (data.billingMethodId==1) { 
+            if (data.markupPercentageId == ''  || data.markupPercentageId == undefined || data.markupPercentageId == null) {
               result = true;
             }
           }
+          if( Number(data.hours.toString().split(',').join('')) ==undefined || Number(data.hours.toString().split(',').join('')) ==null ||  data.hours ==''   || Number(data.hours.toString().split(',').join('')) <=0){
+            result = true;
+        }
+}
+
           if (data.adjustments > 0 && !this.isQuote) {
             if (data.memo == '' || !data.memo || data.memo == undefined || data.memo == null) {
               result = true;
             }
           }
+          data.burdenRateAmount=data.burdenRateAmount? data.burdenRateAmount :0;
           if ((data.employeeId == 0 || data.employeeId == undefined || data.employeeId == null || data.employeeId == '') && !this.isQuote) {
             result = true;
           }
           if ((data.expertiseId == 0 || data.expertiseId == undefined || data.expertiseId == null || data.expertiseId == '') && !this.isQuote) {
+            result = true;
+          }
+          if (!this.isQuote && this.laborForm.hoursorClockorScan == this.laborMethods.ClockInOut && data.hours == 0  ) {
             result = true;
           }
         }
@@ -1523,7 +1574,7 @@ if(this.enableToSave==false){
   assignAllTask() { 
     this.newLaborForm = { ...this.laborForm };
     this.laborForm.workOrderLaborList[0] = {};
-    this.laborForm.hoursorClockorScan = 1;
+    this.laborForm.hoursorClockorScan = this.laborMethods.ManualEntry;
     if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'workOrder') { 
       this.allTaskList.forEach(
         (task) => {

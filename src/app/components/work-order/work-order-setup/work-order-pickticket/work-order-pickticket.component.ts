@@ -117,8 +117,9 @@ export class WorkOrderPickticketComponent implements OnInit {
     this.pickTicketItemInterfaceheader = [
       { field: "partNumber", header: "PN", width: "100px" },
       { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
-      { field: "qtyOnHand", header: "Qty On Hand", width: "50px" },
+      { field: "qtyOnHand", header: "Qty On Hand", width: "130px" },
       { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
+      { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
       { field: "qtyToShip", header: "Qty To Pick", width: "100px" },
       { field: "serialNumber", header: "Serial Num", width: "100px" },
       { field: "stkLineManufacturer", header: "Manufacturer", width: "100px" },
@@ -260,6 +261,7 @@ export class WorkOrderPickticketComponent implements OnInit {
   parts: any[] = [];
   qtyToPick: number = 0;
   pickticketItemInterface(rowData, pickticketieminterface) {
+
     const itemMasterId = rowData.itemMasterId;
     const conditionId = rowData.conditionId;
     const workOrderId = rowData.workOrderId;
@@ -277,7 +279,7 @@ export class WorkOrderPickticketComponent implements OnInit {
           this.parts[i]['isSelected'] = false;
           this.parts[i]['workOrderId'] = workOrderId;
           this.parts[i]['workOrderMaterialsId'] = workOrderMaterialsId;
-          this.parts[i].qtyToShip = this.qtyToPick;
+          this.parts[i].qtyToShip = this.parts[i].qtyToPick;
           if (this.parts[i].qtyToReserve == 0) {
             this.parts[i].qtyToReserve = null
           }
@@ -324,10 +326,10 @@ export class WorkOrderPickticketComponent implements OnInit {
     for (let i = 0; i < parts.length; i++) {
       let selectedItem = parts[i];
       var errmessage = '';
-      if (selectedItem.qtyToShip > this.qtyToPick) {
+      if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
         this.isSpinnerVisible = false;
         invalidQty = true;
-        errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+        errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
       }
     }
     if (invalidQty) {
@@ -336,10 +338,8 @@ export class WorkOrderPickticketComponent implements OnInit {
       this.alertService.showMessage(
         "",
         errmessage,
-        MessageSeverity.warn
+        MessageSeverity.error
       );
-      // this.alertService.resetStickyMessage();
-      // this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
     }
     else {
       this.disableSubmitButton = true;
@@ -414,4 +414,42 @@ export class WorkOrderPickticketComponent implements OnInit {
         this.isSpinnerVisible = false;
       });
   }
+
+  onFocusOutEvent(objPickTicket: any){
+    let invalidQty = false;
+    let selectedItem = objPickTicket;
+    var errmessage = '';
+    if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
+        invalidQty = true;
+        errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
+    }            
+    if (invalidQty) {
+        this.alertService.showMessage(
+            'Work Order',
+            'You cannot pick more than Ready To Pick',
+            MessageSeverity.error
+        );
+    }
+ }
+ rowDataToDelete:any={}
+ delete(rowData) {
+  this.rowDataToDelete = rowData;
+}
+
+deleteWO() {
+  this.isSpinnerVisible = false;
+
+  this.workOrderService.deleteWoPickTicket(this.rowDataToDelete.pickTicketId,this.userName).subscribe(res => {
+      this.isSpinnerVisible = false;
+      this.alertService.showMessage("Success", `Records Was Deleted Successfully.`, MessageSeverity.success);
+      this.onSearch();
+
+  },err => {
+          this.isSpinnerVisible = false;
+      })
+}
+
+closeDeleteModal() {
+  $("#woDelete").modal("hide");
+}
 }

@@ -937,7 +937,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
     workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder,isDetailView, masterCompanyId) {
         if (isSubWorkOrder) {
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subwolabouranalysis?subWOPartNoId=${workOrderPartNoId}&masterCompanyId=${masterCompanyId}`).catch(error => {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subwolabouranalysis?subWorkOrderId=${workOrderId}&subWOPartNoId=${workOrderPartNoId}&isDetailView=${isDetailView}&masterCompanyId=${masterCompanyId}`).catch(error => {
                 return this.handleErrorCommon(error, () => this.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId, isSubWorkOrder,isDetailView, masterCompanyId));
             });
         } else {
@@ -1648,6 +1648,15 @@ export class WorkOrderEndpointService extends EndpointFactory {
           });
       }
 
+      GetSubWorkOrderPrintFormData(subWorkOrderId: number,subWOPartNoId : number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/GetSubWorkOrderPrintFormData?subWorkOrderId=${subWorkOrderId}&subWOPartNoId=${subWOPartNoId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.GetSubWorkOrderPrintFormData(subWorkOrderId,subWOPartNoId));
+          });
+      }
+
       
       GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
         const URL = `${this.configurations.baseUrl}/api/workOrder/GetWorkOrderPartlistFormData?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}`;
@@ -1666,4 +1675,22 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId));
           });
       }
+
+      getWOActualVsSummary(workorderId: number,refId : number,isSubWorkOrder:boolean) {
+        if (isSubWorkOrder) {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkOrderandquoteActualCostDetails?workOrderWorkflowId=${refId}&workOrderId=${workorderId}`, this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.getWOActualVsSummary(workorderId,refId, isSubWorkOrder));
+            });
+        } else {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/GetWorkOrderandquoteActualCostDetails?workOrderWorkflowId=${refId}&workOrderId=${workorderId}`, this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.getWOActualVsSummary(workorderId,refId, isSubWorkOrder));
+            });
+        }
+    }
+
+    deleteWoPickTicket(pickTicketId, login) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workOrder/deletewomaterialspickticket?PickTicketId=${pickTicketId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.deleteWoPickTicket(pickTicketId, login));
+        });
+    }
 }

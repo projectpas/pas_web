@@ -135,8 +135,8 @@ export class EditPoComponent implements OnInit {
         this.otherModuleId = AppModuleEnum.Others;
     }
 
-    ngOnInit() {
-        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseOrderId'];
+    ngOnInit() {        
+        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];        
         if (this.receivingService.purchaseOrderId == undefined && this.receivingService.purchaseOrderId == null) {
             this.alertService.showMessage(this.pageTitle, "No purchase order is selected to edit.", MessageSeverity.error);
             return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
@@ -187,6 +187,9 @@ export class EditPoComponent implements OnInit {
                                 this.purchaseOrderData.purchaseOderPart = results[0][0].map(x => {
                                     return {
                                         ...x,
+                                        discountPerUnit : x.discountPerUnit ? formatNumberAsGlobalSettingsModule(x.discountPerUnit, 2) : '0.00',
+                                        unitCost : x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+                                        extendedCost : x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
                                         stockLine: this.getStockLineDetails(x.stockLine),
                                         timeLife: this.getTimeLifeDetails(x.timeLife)
                                     }
@@ -200,7 +203,7 @@ export class EditPoComponent implements OnInit {
                                 }
                             }
                             var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
-                            for (let parent of allParentParts) {
+                            for (let parent of allParentParts) {                                                                
                                 var splitParts = this.purchaseOrderData.purchaseOderPart.filter(x => !x.isParent && x.parentId == parent.purchaseOrderPartRecordId);
                                 if (splitParts.length > 0) {
                                     parent.hasChildren = true;
@@ -1514,7 +1517,7 @@ export class EditPoComponent implements OnInit {
         );
     }
 
-    calculateExtendedCost(part: any, stockLine: any): void {
+    calculateExtendedCost(part: any, stockLine: any): void {        
         if (stockLine.purchaseOrderUnitCost == undefined || stockLine.purchaseOrderUnitCost == '') {
             return;
         }
@@ -1523,7 +1526,8 @@ export class EditPoComponent implements OnInit {
         }
         else {
             const unitCost = stockLine.purchaseOrderUnitCost ? parseFloat(stockLine.purchaseOrderUnitCost.toString().replace(/\,/g, '')) : 0;
-            stockLine.purchaseOrderExtendedCost = unitCost * part.quantityActuallyReceived;
+            //stockLine.purchaseOrderExtendedCost = unitCost * part.quantityActuallyReceived;  
+            stockLine.purchaseOrderExtendedCost = unitCost * stockLine.quantity;
         }
         if (stockLine.purchaseOrderUnitCost) {
             stockLine.purchaseOrderUnitCost = stockLine.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(stockLine.purchaseOrderUnitCost, 2) : '0.00';
@@ -1533,19 +1537,20 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    calculatePartExtendedCost(part: any): void {
+    calculatePartExtendedCost(part: any): void {                
         if (part.unitCost == undefined || part.unitCost == '') {
             return;
         }
         part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
         if (part.itemMaster.isSerialized) {
-            const unitCost = part.unitCost ? parseFloat(part.unitCost.toString().replace(/\,/g, '')) : '0.00';
+            const unitCost = part.unitCost ? parseFloat(part.unitCost.toString().replace(/\,/g, '')) : 0;
             const extendedCost = unitCost;
             part.extendedCost = extendedCost ? formatNumberAsGlobalSettingsModule(extendedCost, 2) : '0.00';
         }
         else {
             const unitCost = part.unitCost ? parseFloat(part.unitCost.toString().replace(/\,/g, '')) : 0;
-            const extendedCost = unitCost * part.quantityActuallyReceived;
+            //const extendedCost = unitCost * part.quantityActuallyReceived; 
+            const extendedCost = unitCost * part.quantityOrdered;
             part.extendedCost = extendedCost ? formatNumberAsGlobalSettingsModule(extendedCost, 2) : '0.00';
         }
 
@@ -1800,7 +1805,7 @@ export class EditPoComponent implements OnInit {
         if (receiveParts.length > 0) {
             this.isSpinnerVisible = true;            
             this.shippingService.updateStockLine(receiveParts).subscribe(data => {
-                this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
+                this.alertService.showMessage(this.pageTitle, 'Stock Line Draft Updated Successfully.', MessageSeverity.success);
                 this.isSpinnerVisible = false;
                 //return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
                 this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);

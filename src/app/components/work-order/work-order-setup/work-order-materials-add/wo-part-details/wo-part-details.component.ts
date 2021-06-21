@@ -76,7 +76,7 @@ export class WoPartDetailsComponent implements OnChanges {
   };
   searchQuery={
     first:0,
-    rows:10,
+    rows:20,
     limit:5,
     pageCount:10,
     page:10,
@@ -531,39 +531,39 @@ export class WoPartDetailsComponent implements OnChanges {
     if(this.formObject.restrictPMA==false && this.formObject.restrictDER==false){
       this.newFormObject.restrictPMA=true;
       this.newFormObject.restrictDER=true;
-      this.newFormObject.includeAlternatePartNumber=false;
-      this.newFormObject.includeEquivalentPartNumber=false;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
     }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==false){
       this.newFormObject.restrictPMA=false;
       this.newFormObject.restrictDER=true;
-      this.newFormObject.includeAlternatePartNumber=false;
-      this.newFormObject.includeEquivalentPartNumber=false;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
     }
     else if(this.formObject.restrictDER==true && this.formObject.restrictPMA==false){
       this.newFormObject.restrictPMA=true;
       this.newFormObject.restrictDER=false;
-      this.newFormObject.includeAlternatePartNumber=false;
-      this.newFormObject.includeEquivalentPartNumber=false;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
     }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==true){
       this.newFormObject.restrictPMA=false;
       this.newFormObject.restrictDER=false;
-      this.newFormObject.includeAlternatePartNumber=false;
-      this.newFormObject.includeEquivalentPartNumber=false;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
     }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==true && this.newFormObject.includeAlternatePartNumber==true && this.newFormObject.includeEquivalentPartNumber==true){
       this.newFormObject.restrictPMA=false;
       this.newFormObject.restrictDER=false;
       this.newFormObject.includeAlternatePartNumber=true;
       this.newFormObject.includeEquivalentPartNumber=true;
-    }else if(this.formObject.includeAlternatePartNumber==true ){
+    }else if(this.formObject.includeAlternatePartNumber==true && this.formObject.includeEquivalentPartNumber==false  ){
       this.newFormObject.restrictPMA=true;
       this.newFormObject.restrictDER=true;
       this.newFormObject.includeAlternatePartNumber=true;
-      this.newFormObject.includeEquivalentPartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
     }
-    else if(this.formObject.includeEquivalentPartNumber==true){
+    else if(this.formObject.includeEquivalentPartNumber==true && this.formObject.includeAlternatePartNumber==false){
       this.newFormObject.restrictPMA=true;
       this.newFormObject.restrictDER=true;
-      this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeAlternatePartNumber=false;
       this.newFormObject.includeEquivalentPartNumber=true;
     }else if(this.formObject.restrictPMA==false && this.formObject.restrictDER==false && this.newFormObject.includeAlternatePartNumber==true && this.newFormObject.includeEquivalentPartNumber==true){
       this.newFormObject.restrictPMA=true;

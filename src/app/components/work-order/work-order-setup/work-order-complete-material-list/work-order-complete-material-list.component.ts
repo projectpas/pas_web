@@ -178,8 +178,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     pickTicketItemInterfaceheader = [
         { field: "partNumber", header: "PN", width: "100px" },
         { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
-        { field: "qtyOnHand", header: "Qty On Hand", width: "50px" },
+        { field: "qtyOnHand", header: "Qty On Hand", width: "130px" },
         { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
+        { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
         { field: "qtyToShip", header: "Qty To Pick", width: "100px" },
         { field: "serialNumber", header: "Serial Num", width: "100px" },
         { field: "stkLineManufacturer", header: "Manufacturer", width: "100px" },
@@ -591,13 +592,22 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.savebutonDisabled = false;
             }
         } else if (this.statusId === 2) {
+            if (!this.isSubWorkOrder && this.enablePickTicket && data.quantityIssued > (data.quantityPicked - data.quantityAlreadyIssued)) {
+                this.alertService.showMessage(
+                    '',
+                    ' Qty Actually Issuing Cant be greater than Qty Reserved And Picked.',
+                    MessageSeverity.warn
+                );
+                data.quantityIssued = data.quantityPicked - data.quantityAlreadyIssued;
+                this.savebutonDisabled = false;
+            }
             if (data.quantityIssued > data.quantityAlreadyReserved) {
                 this.alertService.showMessage(
                     '',
                     ' Qty Actually Issuing Cant be greater than Qty Reserved',
                     MessageSeverity.warn
                 );
-                data.quantityIssued = 0;
+                data.quantityIssued = data.quantityAlreadyReserved;
                 this.savebutonDisabled = false;
             }
         } else if (this.statusId === 3) {
@@ -793,8 +803,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                         x.createdBy = x.createdBy ? x.createdBy : this.authService.currentUser.userName;
                         x.updatedBy = this.authService.currentUser.userName;
                         this.setdefaultValues(x);
+                        if (!this.isSubWorkOrder && this.statusId == 2 && this.enablePickTicket)
+                        {
+                           x.quantityIssued = x.quantityPicked - x.quantityAlreadyIssued;     
+                        }
                         if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
-                            //    this.savebutonDisabled = true;
                             if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                                 this.isShowAlternatePN = true;
                                 x.isParentSelected = false;
@@ -1628,7 +1641,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                     this.parts[i]['isSelected'] = false;
                     this.parts[i]['workOrderId'] = workOrderId;
                     this.parts[i]['workOrderMaterialsId'] = workOrderMaterialsId;
-                    this.parts[i].qtyToShip = this.qtyToPick;
+                    this.parts[i].qtyToShip = this.parts[i].qtyToPick;
                     if (this.parts[i].qtyToReserve == 0) {
                         this.parts[i].qtyToReserve = null
                     }
@@ -1659,21 +1672,19 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         for (let i = 0; i < parts.length; i++) {
             let selectedItem = parts[i];
             var errmessage = '';
-            if (selectedItem.qtyToShip > this.qtyToPick) {
+            if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
                 this.isSpinnerVisible = false;
                 invalidQty = true;
-                errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+                errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
             }
         }
         if (invalidQty) {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
                 'Work Order',
-                'You cannot pick more than Qty To Pick',
-                MessageSeverity.warn
+                'You cannot pick more than Ready To Pick',
+                MessageSeverity.error
             );
-            //   this.alertService.resetStickyMessage();
-            //   this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
         }
         else {
             this.disableSubmitButton = true;
@@ -1687,7 +1698,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                         MessageSeverity.success
                     );
                     this.dismissModel();
-                    //   this.onSearch();
                 }, error => this.isSpinnerVisible = false);
         }
     }
@@ -1721,13 +1731,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         var errmessage = '';
         if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
             invalidQty = true;
-            errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+            errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
         }            
         if (invalidQty) {
             this.alertService.showMessage(
                 'Work Order',
-                'You cannot pick more than Qty To Pick',
-                MessageSeverity.warn
+                'You cannot pick more than Ready To Pick',
+                MessageSeverity.error
             );
         }
      }

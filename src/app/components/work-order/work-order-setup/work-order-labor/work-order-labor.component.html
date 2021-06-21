@@ -42,7 +42,7 @@
                *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView && !isQuote" >
                   <div class="form-group task-detail text_pad">
                       <label class="pad_labr">Select Task</label>
-                      <ng-multiselect-dropdown 
+                      <ng-multiselect-dropdown  appendTo='body' [baseZIndex]="9999"
                           class="form-control multiple-custom-select capitalizer setCaps" style="width:250px" [placeholder]="'Select Task'"
                           [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
                           [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"
@@ -58,20 +58,20 @@
     </div>   
   </div>
   <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" 
-    [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''">
+    [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''" [ngClass]="isQuote?'min-height-300': ''">
     <div class="tableFixHead">
     <table class="table table-bordered  lastcol-fix mpn-list-table">
       <thead>
         <tr *ngIf="isQuote" class="background-white">
           <td colspan="5" class="table-header-col2" *ngIf="
-                !laborForm.hoursorClockorScan || laborForm.hoursorClockorScan == 1
+                !laborForm.hoursorClockorScan || laborForm.hoursorClockorScan == laborMethods.ManualEntry
               ">
               &nbsp;
               <div class="col-sm-3 text_pad wd-p" 
               *ngIf=" !isView && isQuote" >
                  <div class="form-group task-detail text_pad">
                      <label class="pad_labr">Select Task</label>
-                     <ng-multiselect-dropdown  appendTo="body"
+                     <ng-multiselect-dropdown  appendTo='body' [baseZIndex]="9999"
                          class="form-control multiple-custom-select capitalizer setCaps" style="width:250px" [placeholder]="'Select Task'"
                          [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
                          [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"
@@ -81,10 +81,10 @@
                  </div>
              </div> 
             </td>
-            <td colspan="7" class="table-header-col2" *ngIf="laborForm.hoursorClockorScan == 2">
+            <td colspan="7" class="table-header-col2" *ngIf="laborForm.hoursorClockorScan == laborMethods.ClockInOut">
               &nbsp;
             </td>
-            <td colspan="6" class="table-header-col2" *ngIf="laborForm.hoursorClockorScan == 3">
+            <td colspan="6" class="table-header-col2" *ngIf="laborForm.hoursorClockorScan == laborMethods.Scan">
               &nbsp;
             </td>
             <td colspan="4" class="table-header-col1">
@@ -127,18 +127,18 @@
             <th class="text-center th-zindex-2 width-70">Billable /NonBillable</th>
             <th class="text-center width-70" *ngIf="
                 laborForm.hoursorClockorScan &&
-                laborForm.hoursorClockorScan !== 1 &&
-                laborForm.hoursorClockorScan !== 3
+                laborForm.hoursorClockorScan !== laborMethods.ManualEntry &&
+                laborForm.hoursorClockorScan !== laborMethods.Scan
               ">
               Start/Stop
             </th>
             <th class="text-center start-date-th" *ngIf="
-                laborForm.hoursorClockorScan && laborForm.hoursorClockorScan !== 1
+                laborForm.hoursorClockorScan && laborForm.hoursorClockorScan !== laborMethods.ManualEntry
               ">
               Start Date and Time
             </th>
             <th class="text-center th-zindex-2" *ngIf="
-                laborForm.hoursorClockorScan && laborForm.hoursorClockorScan !== 1
+                laborForm.hoursorClockorScan && laborForm.hoursorClockorScan !== laborMethods.ManualEntry
               ">
             End Date and Time
           </th>
@@ -171,7 +171,7 @@
             <th>
               Billing Rate/hr
             </th>
-            <th>
+            <th style="width: 100px;">
               Billing Amount
             </th>
           </ng-container>
@@ -209,16 +209,16 @@
               <td></td>
               <td *ngIf="
                   laborForm.hoursorClockorScan &&
-                  laborForm.hoursorClockorScan !== 1 &&
-                  laborForm.hoursorClockorScan !== 3
+                  laborForm.hoursorClockorScan !== laborMethods.ManualEntry &&
+                  laborForm.hoursorClockorScan !== laborMethods.Scan
                 "></td>
               <td *ngIf="
                   laborForm.hoursorClockorScan &&
-                  laborForm.hoursorClockorScan !== 1
+                  laborForm.hoursorClockorScan !== laborMethods.ManualEntry
                 "></td>
               <td *ngIf="
                   laborForm.hoursorClockorScan &&
-                  laborForm.hoursorClockorScan !== 1
+                  laborForm.hoursorClockorScan !== laborMethods.ManualEntry
                 "></td>
               <td></td>
               <td></td>
@@ -239,7 +239,7 @@
                 <td></td>
                 <td></td>
               </ng-container>
-              <td *ngIf="!isView"></td>
+              <td *ngIf="!isView"></td> 
             </tr>
             <ng-container *ngFor="
                 let rec of laborForm.workOrderLaborList[0][
@@ -249,7 +249,7 @@
                   {{ task.description}}
                   <!-- &&  laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' -->
                   <!-- *ngIf=" !isView && i<1  " -->
-                   <i  *ngIf="!isView  "
+                   <i  *ngIf="!isView  &&  laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder'"
                   class="float-right float-right fa fa-plus-circle fa-lg labor_ico "
                   (click)="addNewTask(task.description)"></i>
                 </td>
@@ -279,8 +279,8 @@
                 </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&
-                    laborForm.hoursorClockorScan !== 1 &&
-                    laborForm.hoursorClockorScan !== 3
+                    laborForm.hoursorClockorScan !== laborMethods.ManualEntry &&
+                    laborForm.hoursorClockorScan !== laborMethods.Scan
                   " class="text-center">
                   <button class="btn btn-primary start-btn" (click)="startandStop(rec);calculateWorkingHoursandMins(rec);calculateTaskHours(task);" [disabled]="
                       (rec.startDate && rec.endDate) !== null || isView ">
@@ -289,30 +289,33 @@
                  </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&
-                    laborForm.hoursorClockorScan !== 1
-                  ">
-                  <p-calendar [(ngModel)]="rec.startDate" (ngModelChange)="checkValid(18)" [showIcon]="true" appendTo="body"
-                    showTime="true" hourFormat="12" [minDate]="minDateValue" (onSelect)="resetEndDateandTime(rec)" 
+                    laborForm.hoursorClockorScan !== laborMethods.ManualEntry">
+                  <!-- (ngModelChange)="checkValid(18)"  (onSelect)="resetEndDateandTime(rec)" -->
+                  <!-- <p-calendar [(ngModel)]="rec.startDate"  [showIcon]="true" appendTo="body"
+                    showTime="true"  [minDate]="minDateValue" 
                     (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);" class="w150 pcalendar-wo-labor model_view" [disabled]="isView || !rec.startDate">
-                  </p-calendar>
+                  </p-calendar> -->
+                  <p-calendar [(ngModel)]="rec.startDate" 
+                  (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);"
+                    (ngModelChange)="checkValid(18)" appendTo="body" [showIcon]="true" showTime="showTime" hourFormat="24" [utc]="true" class="w150 pcalendar-wo-labor model_view" [disabled]="isView || !rec.startDate"></p-calendar>
                 </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&
-                    laborForm.hoursorClockorScan !== 1
-                  ">
-                  <p-calendar [(ngModel)]="rec.endDate" [showIcon]="true" (ngModelChange)="checkValid(19)"  appendTo="body"
-                    showTime="true" hourFormat="12" class="w150 pcalendar-wo-labor model_view" [minDate]="rec.endDate"
+                    laborForm.hoursorClockorScan !== laborMethods.ManualEntry">
+                  <!-- (ngModelChange)="checkValid(19)"  [minDate]="rec.startDate"-->
+                  <p-calendar [(ngModel)]="rec.endDate" [showIcon]="true"   appendTo="body"
+                    showTime="true"  class="w150 pcalendar-wo-labor model_view" (ngModelChange)="checkValid(19)"
                     (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);" [disabled]="isView || !rec.endDate"></p-calendar>
                 </td>
                 <td style="width:70px !important;text-align:right !important" *ngIf="
                     laborForm.hoursorClockorScan &&
-                    laborForm.hoursorClockorScan !== 1
+                    laborForm.hoursorClockorScan !== laborMethods.ManualEntry
                   ">
-                  {{ rec.totalHours + ':' + rec.totalMinutes }}
+                  {{ rec.totalHours ? rec.totalHours : '0'}}:{{ rec.totalMinutes ? rec.totalMinutes :'00' }}
                 </td>
                 <td *ngIf="
                     !laborForm.hoursorClockorScan ||
-                    laborForm.hoursorClockorScan === 1
+                    laborForm.hoursorClockorScan === laborMethods.ManualEntry
                   " class="check-flex">
                   <div class="check-flex-div1">
                     <input type="number" class="form-control check-flex-input" (blur)="
@@ -401,7 +404,7 @@
                     </select>
                   </td>
                   <td>
-                   <select class="form-control select-markup min-width-100" (ngModelChange)="checkValid(26)" (change)="markupChanged(rec, 'row')" [(ngModel)]="rec.markupPercentageId"
+                   <select [ngClass]="{setRequiredSelect : (rec.billingMethodId ==billingMethod.tm)}" class="form-control select-markup min-width-100" (ngModelChange)="checkValid(26)" (change)="markupChanged(rec, 'row')" [(ngModel)]="rec.markupPercentageId"
                       [disabled]="isView || rec.billingMethodId != 1">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -470,14 +473,14 @@
               <td *ngIf="!isQuote"></td>
               <td style="text-align: right;" *ngIf="
                   laborForm.hoursorClockorScan &&
-                  laborForm.hoursorClockorScan !== 1 &&
-                  laborForm.hoursorClockorScan !== 3"></td>
+                  laborForm.hoursorClockorScan !== laborMethods.ManualEntry &&
+                  laborForm.hoursorClockorScan !== laborMethods.Scan"></td>
               <td style="text-align: right;"*ngIf="
                   laborForm.hoursorClockorScan &&
-                  laborForm.hoursorClockorScan !== 1"></td>
+                  laborForm.hoursorClockorScan !== laborMethods.ManualEntry"></td>
               <td style="text-align: right;"*ngIf="
                   laborForm.hoursorClockorScan &&
-                  laborForm.hoursorClockorScan !== 1"></td>
+                  laborForm.hoursorClockorScan !== laborMethods.ManualEntry"></td>
             <td *ngIf="!isQuote">
                <!-- <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled /> -->
                <!-- {{laborForm.totalWorkHours}} -->
@@ -505,7 +508,7 @@
             </ng-container>
             <ng-container *ngIf="laborForm.costPlusType == 3 && isQuote">
               <td>
-                <input type="number" (ngModelChange)="checkValid(28)" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount"
+                <input type="text" pInputText pKeyFilter="money" (ngModelChange)="checkValid(28)" class="form-control text-ee" [(ngModel)]="laborForm.laborFlatBillingAmount"
                   [disabled]="isView" (change)="formateCost(laborForm)"/>
               </td>
             </ng-container>
@@ -591,8 +594,11 @@
       </div>
   </div>
 </div>
-
-<button (click)="saveLabor()" class="btn btn-primary pull-right edit-btn" *ngIf="!isView" 
+<button (click)="saveLabor()" class="btn btn-primary pull-right edit-btn" *ngIf="!isView && !isQuote" 
+ [disabled]="(labourHeader && !labourHeader.valid) || checkHoursAndDirectLabour() || disabledUpdatebtn">
+   {{isEdit ? 'Update Labor' : 'Save Labor'}}
+</button>
+<button (click)="saveLabor()" class="btn btn-primary pull-right edit-btn" *ngIf="!isView && isQuote" 
  [disabled]="(labourHeader && !labourHeader.valid) || checkHoursAndDirectLabour() || disabledUpdatebtn">
    {{isEdit ? 'Update Labor' : 'Save Labor'}}
 </button>

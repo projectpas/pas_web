@@ -112,6 +112,16 @@ export class SpeedQuoteViewComponent implements OnInit {
       : 1;
   }
 
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+  }
+
   getRequiredData() {
     this.isSpinnerVisible = true;
     this.managementStructureId = this.salesQuote.managementStructureId;

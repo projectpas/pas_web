@@ -1167,7 +1167,7 @@
                                         {{approver.rule}}
                                     </td>
                                     <td>
-                                        <p class="m-0 p-0 p_textEditor memo-left" [innerHTML]="approver['memo']"></p>
+                                        <p class="m-0 p-0 p_textEditor memo-left"  [innerHTML]="approver['memo']"></p>
                                     </td>
                                     <td [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</td>
                                 </tr>
@@ -1271,11 +1271,14 @@
                                         <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
                                            [disabled]="!approver.isSelected || approver['actionId'] != 2"
                                            [readonly]="!approver.isSelected || approver['actionId'] != 2"/> -->
-                                        <p class="m-0 p-0 p_textEditor" class="memo-left"
+                                        <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(approver['memo'])"
                                             [innerHTML]="approver['memo']"></p>
                                         <!-- </div> -->
-                                        <div class="approver-memo-div"
-                                            *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
+
+                                        <!-- *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3" -->
+                                        <div class="approver-memo-div" style="margin-top:-18px"
+                                        *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3"  >
                                             <!-- <i class="fa fa-info-circle fa-lg" data-toggle="modal"
                                            data-target="#approvers-memo-popup"
                                            matTooltipPosition="above" matTooltip="Add Memo"
@@ -1283,8 +1286,9 @@
 
                                             <i class="fa fa-pencil btn nobg" data-toggle="modal"
                                                 data-target="#approvers-memo-popup" matTooltipPosition="above"
-                                                matTooltip="Add Memo" (click)="onClickApproversMemo(approver)"
-                                                *ngIf="approver.isSelected"></i>
+                                                *ngIf="approver.isSelected" matTooltip="Add Memo" (click)="onClickApproversMemo(approver)"
+                                               ></i>
+                                               <!-- *ngIf="approver.isSelected" -->
                                         </div>
 
                                     </td>

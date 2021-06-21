@@ -26,6 +26,7 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
     totalPages: number = 10;
     data: any[] = [];
     globalSettings: any = {};
+    isSpinnerVisible:boolean=false;
     global_lang: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     headers = [
@@ -42,6 +43,7 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
         { field: 'overHeadCost', header: 'Overhead Cost',width:"110px" },
         { field: 'overHeadCostRevenuePercentage', header: 'Overhead Cost %' ,width:"120px"},
         { field: 'otherCost', header: 'Other Cost',width:"100px" },
+        { field: 'freightCost', header: 'Freight Cost',width:"100px" },
         { field: 'directCost', header: 'Direct Cost',width:"100px" },
         { field: 'directCostRevenuePercentage', header: 'Direct Cost Rev %',width:"120px" },
         { field: 'margin', header: 'Margin',width:"100px" },
@@ -79,14 +81,18 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
     }
 
     getWorkOrderAnalysisData(workOrderId) {
+        this.isSpinnerVisible=true;
         const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
         this.workOrderService.workOrderAnalysisData(workOrderId, id, this.isSubWorkOrder,this.authService.currentUser.masterCompanyId)
             .pipe(takeUntil(this.onDestroy$)).subscribe(
                 (res: any) => {
+
+                    this.isSpinnerVisible=false;
                     if (res) {
                         this.data = res.map(x => {
                             return {
                                 ...x,
+                                revenue: this.formatCost(x.revenue),
                                 materialCost: this.formatCost(x.materialCost),
                                 materialRevenuePercentage: this.formatCost(x.materialRevenuePercentage),
                                 laborCost: this.formatCost(x.laborCost),
@@ -94,8 +100,11 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
                                 overHeadCost: this.formatCost(x.overHeadCost),
                                 otherCost: this.formatCost(x.otherCost),
                                 directCost: this.formatCost(x.directCost),
-                                otherCostRevenuePercentage: this.formatCost(x.otherCostRevenuePercentage),
-                                revenuePercentage: this.formatCost(x.revenuePercentage)
+                                freightCost: this.formatCost(x.freightCost),
+                                directCostRevenuePercentage: this.formatCost(x.directCostRevenuePercentage),
+                                revenuePercentage: this.formatCost(x.revenuePercentage),
+                                margin: this.formatCost(x.margin),
+                                marginPercentage: this.formatCost(x.marginPercentage)
                             }
                         });
                         // if (this.data.length != 0) {
@@ -103,6 +112,8 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
                         //   this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
                         // }
                     }
+                }, error => {
+                    this.isSpinnerVisible = false;
                 }
             )
     }

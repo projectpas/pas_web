@@ -838,8 +838,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         if (event == 'percentage') {
             this.ispercent = true;
             this.sourceWorkFlow.isPercentageofNew = true;
+               this.sourceWorkFlow.percentageOfNew = this.sourceWorkFlow.percentageOfNew ? this.sourceWorkFlow.percentageOfNew :-1;
         }
         if (event == 'percentreplace') {
+            this.sourceWorkFlow.percentageOfReplacement= this.sourceWorkFlow.percentageOfReplacement? this.sourceWorkFlow.percentageOfReplacement:-1;
             this.percentreplcae = true;
             this.sourceWorkFlow.isPercentageOfReplacement = true;
         }
@@ -857,7 +859,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.ispercent = false;
             this.sourceWorkFlow.isPercentageofNew = false;
              this.sourceWorkFlow.percentOfNew = undefined
-            this.sourceWorkFlow.percentageOfNew = '';
+            this.sourceWorkFlow.percentageOfNew = this.sourceWorkFlow.percentageOfNew ? this.sourceWorkFlow.percentageOfNew :-1;
             this.sourceWorkFlow.costOfNew = '';
         }
     }
@@ -867,7 +869,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.sourceWorkFlow.percentreplcae = false;
             this.sourceWorkFlow.percentOfReplacement = '';
             this.sourceWorkFlow.costOfReplacement = '';
-            this.sourceWorkFlow.percentageOfReplacement = '';
+            this.sourceWorkFlow.percentageOfReplacement = -1;
         }
     }
     private loadWorkScopedata() {
@@ -1254,7 +1256,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     newCostPercentValue:any;
     onPercentOfNew(myValue, pValue = 0) {
         if( this.totalPercent &&  this.totalPercent.length !=0){
-      if(pValue !=0){
+      if(pValue >0){
         this.totalPercent.forEach(element => {
             if(element.value ==pValue){
                this.newCostPercentValue=Number(element.label);
@@ -1278,7 +1280,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     replacePercentValue:any;
     onPercentOfReplcaement(myValue, pValue = 0) {
         if( this.totalPercent &&  this.totalPercent.length !=0){
-            if(pValue !=0){
+            if(pValue >0){
             this.totalPercent.forEach(element => {
                 if(element.value ==pValue){
                    this.replacePercentValue=Number(element.label);
@@ -2525,6 +2527,8 @@ if(this.validateTask==true){
         });
     }
     delete souceData.customerName 
+    souceData.percentageOfNew= souceData.percentageOfNew==-1?0 :souceData.percentageOfNew;
+    souceData.percentageOfReplacement = souceData.percentageOfReplacement==-1?0 :souceData.percentageOfReplacement
     this.actionService.getNewWorkFlow(souceData).subscribe(
         result => {
             this.isSpinnerVisible = false;
@@ -2728,7 +2732,8 @@ if(this.validateTask==true){
         this.sourceWorkFlow.updatedBy = this.userName;
         const dataSet = { ...this.sourceWorkFlow }
         delete dataSet.customerName;
-   
+        dataSet.percentageOfNew= dataSet.percentageOfNew==-1?0 :dataSet.percentageOfNew;
+        dataSet.percentageOfReplacement = dataSet.percentageOfReplacement==-1?0 :dataSet.percentageOfReplacement
         this.actionService.getNewWorkFlow(dataSet).subscribe(
             data => {
                 this.isSpinnerVisible = false;

@@ -688,7 +688,8 @@
                     }}
                   </td>
                   <td class="table-column-width" *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="float-left m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                    [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                   
@@ -973,7 +974,8 @@
                   ? 'black'
                   : 'red'
               }">
-            <p [innerHTML]="audit.memo"></p>
+            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+            [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
             </td>
             <td class="text-center">
               <span class="value">
@@ -1291,7 +1293,8 @@
                       }}
                     </td>
                     <td class="table-column-width" *ngIf="col.field == 'memo'">
-                      <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                      <p class="float-left m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                   </td>
                   </ng-container>
                     
@@ -1531,7 +1534,8 @@
                   }}
                 </td>
                 <td *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above" 
+                    [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
@@ -1816,7 +1820,8 @@
                     ? 'black'
                     : 'red'
                 }">
-              <p [innerHTML]="audit.memo"></p>
+              <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+              [matTooltip]="parsedText(audit.memo)"[innerHTML]="audit.memo"></p>
             </td>
               <td class="text-center">
                 <span class="value">
@@ -2146,7 +2151,8 @@
                   }}
                 </td>
                 <td *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="float-left m-0 p-0 p_textEditor  truncate-text" matTooltipPosition="above" 
+                    [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
@@ -2328,7 +2334,8 @@
             <p style="vertical-align: top;">
               <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
               <span class="value">
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforInterShippingVia.memo"></p>
+                <p class="m-0 p-0 p_textEditor  truncate-text" matTooltipPosition="above" 
+                [matTooltip]="parsedText(sourceViewforInterShippingVia.memo)" [innerHTML]="sourceViewforInterShippingVia.memo"></p>
               </span>
             </p>
             <p>
@@ -2402,7 +2409,8 @@
             <p style="vertical-align: top;">
               <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
               <span class="value">
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforDomesticShippingVia.memo">
+                <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                [matTooltip]="parsedText(sourceViewforDomesticShippingVia.memo)" [innerHTML]="sourceViewforDomesticShippingVia.memo">
                 </p>
               </span></p>
             <p>

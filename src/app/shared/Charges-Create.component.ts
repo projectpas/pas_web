@@ -120,7 +120,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(): void {
-        debugger;
         if (this.workFlow) {
             if (this.workFlow.charges.length > 0) {
                 this.workFlow.charges = this.workFlow.charges.map(x => {
@@ -204,6 +203,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                             this.isSpinnerVisible = false;
                             if (res) {
                                 charge.memo = res.memo;
+                                charge.description = res.description;
                                 charge.glAccountName = res.glAccountName;
                             }
                         }, error => {
@@ -272,17 +272,22 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     addRow(): void {
         var newRow = Object.assign({}, this.row);
         newRow.workflowChargesListId = "0";
-        newRow.taskId = "";
+        // newRow.taskId = "";
         newRow.vendor = {};
-        // if (this.taskList) {
-        //     this.taskList.forEach(
-        //         task => {
-        //             if (task.description == "Assemble") {
-        //                 newRow.taskId = task.taskId;
-        //             }
-        //         }
-        //     )
-        // }
+        if (this.workFlow) {
+            if (this.taskList) {
+                this.taskList.forEach(
+                    task => {
+                        if (task.description == "Assemble") {
+                            newRow.taskId = task.taskId;
+                        }
+                    }
+                )
+            }
+        }else{
+            newRow.taskId = "";  
+        }
+
         newRow.currencyId = "0";
         newRow.description = "";
         newRow.extendedCost = "0.00";

@@ -19,32 +19,35 @@ import { AppComponent } from '../../app.component';
 export class HomeComponent implements AfterViewInit {
     dashboardUrl = environment.dashboardUrl;
     constructor(public appcomponent: AppComponent, public configurations: ConfigurationService, private router: ActivatedRoute, private route: Router) {
-console.log("configurations.dashboardUrl",this.dashboardUrl)
     }
+
     customerModule() {
         this.appcomponent.setStep(1);
         //this.configurations.configObj.next("1");
         this.route.navigateByUrl('/customersmodule/customerpages/app-customers-list');
     }
+
     itemMasterModule() {
         this.appcomponent.setStep(5);
         //this.configurations.configObj.next("1");
         this.route.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-list');
     }
 
-
     vendorModule() {
         this.appcomponent.setStep(3);
         this.route.navigateByUrl('/vendorsmodule/vendorpages/app-vendors-list');
     }
+
     employeeModule() {
         this.appcomponent.setStep(6);
         this.route.navigateByUrl('/employeesmodule/employeepages/app-employees-list');
     }
+
     stocklineModule() {
         this.appcomponent.setStep(2);
         this.route.navigateByUrl('/stocklinemodule/stocklinepages/app-stock-line-list');
     }
+
     roleModule() {
         this.appcomponent.setStep(0);
         this.route.navigateByUrl('/rolesmodule/rolespages/app-roles-list');
@@ -52,5 +55,4 @@ console.log("configurations.dashboardUrl",this.dashboardUrl)
 
     ngAfterViewInit() {
     }
-
 }

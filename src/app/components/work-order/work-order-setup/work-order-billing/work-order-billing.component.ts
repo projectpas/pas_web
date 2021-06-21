@@ -43,6 +43,7 @@ export class WorkOrderBillingComponent implements OnInit {
     @Input() quoteLaborList;
     @Input() buildMethodDetails: any = {};
     @Input() isViewMode: boolean = false;
+    @Input() isView: boolean = false;
     @Output() saveWOBilling = new EventEmitter();
     @Output() updateWOBilling = new EventEmitter();
     @Input() workFlowWorkOrderId = 0;
@@ -74,6 +75,7 @@ export class WorkOrderBillingComponent implements OnInit {
     isMultipleSelected: boolean = false;
     isworkorderdetails: boolean = false;
     disableMagmtStruct: boolean = true;
+    Iswocheckbox: boolean = true;
     workOrderShippingId:number;
     selectedQtyToBill:number;
     isSpinnerVisible = false;
@@ -98,7 +100,7 @@ export class WorkOrderBillingComponent implements OnInit {
     markUpList: any;
     invoiceTypeList: any;
     shipViaData: any;
-    isView: boolean = false;
+    //isView: boolean = false;
     id: number;
     workFlowObject = {
         materialList: [],
@@ -166,17 +168,14 @@ export class WorkOrderBillingComponent implements OnInit {
         this.getBillingList();
         this.getEmployeeList(this.workOrderId);
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
-        this.employeeId= editValueAssignByCondition('value', this.savedWorkOrderData.employeeId),
-        this.getShipViaByCustomerId();
-        this.getPercentageList();
-        this.getInvoiceList();
-        this.resetOtherOptions();
-        this.BindManagementStructure();
-        this.getCurrencyList();
+        this.employeeId= editValueAssignByCondition('value', this.savedWorkOrderData.employeeId);
+        // this.getShipViaByCustomerId();
+        // this.getPercentageList();
+        // this.getInvoiceList();
+        // this.resetOtherOptions();
+        // this.BindManagementStructure();
+        // this.getCurrencyList();
 
-        this.getManagementStructureDetails(this.billingorInvoiceForm
-            ? this.billingorInvoiceForm.managementStructureId
-            : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
     }
     ngOnChanges(changes: SimpleChanges) {
         if (this.quoteMaterialList && this.quoteMaterialList.length > 0) {
@@ -231,6 +230,15 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.getSiteNamesByShipCustomerId(this.billingorInvoiceForm.shipToCustomerId.customerId,this.billingorInvoiceFormNew.shipToSiteId);
             }
        
+        this.getManagementStructureDetails(this.billingorInvoiceForm
+                ? this.billingorInvoiceForm.managementStructureId
+                : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
+        this.getShipViaByCustomerId();
+        this.getPercentageList();
+        this.getInvoiceList();
+        this.resetOtherOptions();
+        //this.BindManagementStructure();
+        this.getCurrencyList();
         this.resetMisCharges();
         this.resetMaterial();
         this.resetLaborOverHead();
@@ -313,6 +321,7 @@ export class WorkOrderBillingComponent implements OnInit {
             }
 
             this.billingorInvoiceForm=this.billing;
+            this.Iswocheckbox = true;
             if(type =="workorder")
             {
                 this.getbillingCostDataForWoOnly();
@@ -762,13 +771,12 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     calculateTotalWorkOrderCost() {
-        debugger;
         this.sumOfMaterialList();
         this.sumofCharges();
         this.sumofLaborOverHead();
         this.sumofFreight();
         if (this.billingorInvoiceForm) {
-            this.billingorInvoiceForm.totalWorkOrderCost = (Math.round(this.billingorInvoiceForm.materialCost) + Math.round(this.billingorInvoiceForm.miscChargesCost) + Math.round(this.billingorInvoiceForm.laborOverHeadCost) + Math.round(this.billingorInvoiceForm.freightCost)).toFixed(2);
+            this.billingorInvoiceForm.totalWorkOrderCost =this.formateCurrency(Number(this.billingorInvoiceForm.materialCost.toString().replace(/\,/g,'')) + Number(this.billingorInvoiceForm.miscChargesCost.toString().replace(/\,/g,'')) + Number(this.billingorInvoiceForm.laborOverHeadCost.toString().replace(/\,/g,'')) + Number(this.billingorInvoiceForm.freightCost.toString().replace(/\,/g,'')));
             this.calculateTotalWorkOrderCostPlus(0);
         }
     }
@@ -843,7 +851,6 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     resetFreight() {
-        debugger;
         if (this.billingorInvoiceForm) {
             if (this.billingorInvoiceForm.freight === false || this.billingorInvoiceForm.totalWorkOrder === true) {
                 this.billingorInvoiceForm.freight = false
@@ -954,23 +961,42 @@ export class WorkOrderBillingComponent implements OnInit {
     }
     calculateGrandTotal() {
         if (this.billingorInvoiceForm) {
+
+          if(this.billingorInvoiceForm.totalWorkOrder  == true)
+          {
+             this.Iswocheckbox = true;
+          } 
+          else
+          {
+
+            if(this.billingorInvoiceForm.laborOverHead  == true || this.billingorInvoiceForm.material == true || this.billingorInvoiceForm.miscCharges == true || this.billingorInvoiceForm.freight == true )
+            {
+               this.Iswocheckbox = true;
+            }else
+            {
+                this.Iswocheckbox = false;
+            }
+
+
+          }
+
             if (this.billingorInvoiceForm.totalWorkOrder === false) {
                 if (this.billingorInvoiceForm.costPlusType === 'Cost Plus') {
                     const materialAmount = this.billingorInvoiceForm.materialValue === null ? this.billingorInvoiceForm.materialCost : this.billingorInvoiceForm.materialCostPlus;
                     const misChargesAmount = this.billingorInvoiceForm.miscChargesValue === null ? this.billingorInvoiceForm.miscChargesCost : this.billingorInvoiceForm.miscChargesCostPlus;
                     const laborOverHeadAmount = this.billingorInvoiceForm.laborOverHeadValue === null ? this.billingorInvoiceForm.laborOverHeadCost : this.billingorInvoiceForm.laborOverHeadCostPlus;
                     const freightCostPlusAmount = this.billingorInvoiceForm.freightValue === null ? this.billingorInvoiceForm.freightCost : this.billingorInvoiceForm.freightCostPlus;
-                    this.billingorInvoiceForm.grandTotal = (Math.round(Number(materialAmount.toString().replace(/\,/g,''))) + Math.round(Number(misChargesAmount.toString().replace(/\,/g,''))) + Math.round(Number(laborOverHeadAmount.toString().replace(/\,/g,''))) + Math.round(Number(freightCostPlusAmount.toString().replace(/\,/g,'')))).toFixed(2);
+                    this.billingorInvoiceForm.grandTotal = this.formateCurrency((Number(materialAmount.toString().replace(/\,/g,''))) + (Number(misChargesAmount.toString().replace(/\,/g,''))) + (Number(laborOverHeadAmount.toString().replace(/\,/g,''))) + (Number(freightCostPlusAmount.toString().replace(/\,/g,''))));
                 } else {
-                    const materialAmount = this.billingorInvoiceForm.material ? this.billingorInvoiceForm.materialCostPlus : this.billingorInvoiceForm.materialCost;
-                    const misChargesAmount = this.billingorInvoiceForm.laborOverHead ? this.billingorInvoiceForm.miscChargesCostPlus : this.billingorInvoiceForm.miscChargesCost;
-                    const laborOverHeadAmount = this.billingorInvoiceForm.miscCharges ? this.billingorInvoiceForm.laborOverHeadCostPlus : this.billingorInvoiceForm.laborOverHeadCost;
-                    const freightCostPlusAmount = this.billingorInvoiceForm.freight === null ? this.billingorInvoiceForm.freightCostPlus : this.billingorInvoiceForm.freightCost;
-                    this.billingorInvoiceForm.grandTotal = (Math.round(Number(materialAmount.toString().replace(/\,/g,''))) + Math.round(Number(misChargesAmount.toString().replace(/\,/g,''))) + Math.round(Number(laborOverHeadAmount.toString().replace(/\,/g,''))) + Math.round(Number(freightCostPlusAmount.toString().replace(/\,/g,'')))).toFixed(2);
+                    const materialAmount = this.billingorInvoiceForm.materialCostPlus;
+                    const misChargesAmount =  this.billingorInvoiceForm.miscChargesCostPlus;
+                    const laborOverHeadAmount =  this.billingorInvoiceForm.laborOverHeadCostPlus;
+                    const freightCostPlusAmount =  this.billingorInvoiceForm.freightCostPlus;
+                    this.billingorInvoiceForm.grandTotal = this.formateCurrency((Number(materialAmount.toString().replace(/\,/g,''))) + (Number(misChargesAmount.toString().replace(/\,/g,''))) + (Number(laborOverHeadAmount.toString().replace(/\,/g,''))) + (Number(freightCostPlusAmount.toString().replace(/\,/g,''))));
                 }
             } else {
                 const totalWorkOrderCostPlus = this.billingorInvoiceForm.totalWorkOrder === null ? this.billingorInvoiceForm.totalWorkOrderCost : this.billingorInvoiceForm.totalWorkOrderCostPlus;
-                this.billingorInvoiceForm.grandTotal = Math.round(totalWorkOrderCostPlus).toFixed(2);
+                this.billingorInvoiceForm.grandTotal = this.formateCurrency(Number(totalWorkOrderCostPlus.toString().replace(/\,/g,'')));
             }
         }
 
@@ -999,7 +1025,7 @@ export class WorkOrderBillingComponent implements OnInit {
                     var p = new BillingItems;
                     p.workOrderShippingId = a.workOrderBillingInvoiceChild[i].workOrderShippingId;
                     this.workOrderShippingId=a.workOrderBillingInvoiceChild[i].workOrderShippingId;
-                    p.noOfPieces = a.workOrderBillingInvoiceChild[i].qtyToBill;
+                    p.noOfPieces = a.qtyToBill;
                     this.ItemMasterId = a.workOrderBillingInvoiceChild[i].itemMasterId;
                     p.workOrderPartId = a.workOrderBillingInvoiceChild[i].workOrderPartId;
 
@@ -1135,25 +1161,38 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
   
+resetallcost()
+{
 
+    this.billingorInvoiceForm.totalWorkOrderValue = null;
+    this.billingorInvoiceForm.materialValue = null;
+    this.billingorInvoiceForm.laborOverHeadValue = null;
+    this.billingorInvoiceForm.miscChargesValue = null;
+    this.billingorInvoiceForm.freightValue = null;
+    this.billingorInvoiceForm.totalWorkOrderCostPlus = this.formateCurrency(this.billingorInvoiceForm.totalWorkOrderCost);
+    this.billingorInvoiceForm.materialCostPlus = this.formateCurrency(this.billingorInvoiceForm.materialCost);
+    this.billingorInvoiceForm.laborOverHeadCostPlus = this.formateCurrency(this.billingorInvoiceForm.laborOverHeadCost);
+    this.billingorInvoiceForm.miscChargesCostPlus = this.formateCurrency(this.billingorInvoiceForm.miscChargesCost);
+    this.billingorInvoiceForm.freightCostPlus = this.formateCurrency(this.billingorInvoiceForm.freightCost);
+}
 
     onChangeWOCostPlus() {
         if (this.billingorInvoiceForm.totalWorkOrder) {
-            this.billingorInvoiceForm.grandTotal = Math.round(this.billingorInvoiceForm.totalWorkOrderCostPlus).toFixed(2);
+            this.billingorInvoiceForm.grandTotal = this.formateCurrency(Number(this.billingorInvoiceForm.totalWorkOrderCostPlus.toString().replace(/\,/g,'')));
         }
-        this.billingorInvoiceForm.totalWorkOrderCostPlus = this.billingorInvoiceForm.totalWorkOrderCostPlus.toFixed(2);
+        this.billingorInvoiceForm.totalWorkOrderCostPlus = this.formateCurrency(this.billingorInvoiceForm.totalWorkOrderCostPlus);
     }
     onChangeMaterialCostPlus() {
-        this.billingorInvoiceForm.materialCostPlus = this.billingorInvoiceForm.materialCostPlus.toFixed(2);
+        this.billingorInvoiceForm.materialCostPlus = this.formateCurrency(this.billingorInvoiceForm.materialCostPlus);
     }
     onChangeLaborOHCostPlus() {
-        this.billingorInvoiceForm.laborOverHeadCostPlus = this.billingorInvoiceForm.laborOverHeadCostPlus.toFixed(2);
+        this.billingorInvoiceForm.laborOverHeadCostPlus = this.formateCurrency(this.billingorInvoiceForm.laborOverHeadCostPlus);
     }
     onChangeMiscChCostPlus() {
-        this.billingorInvoiceForm.miscChargesCostPlus = this.billingorInvoiceForm.miscChargesCostPlus.toFixed(2);
+        this.billingorInvoiceForm.miscChargesCostPlus = this.formateCurrency(this.billingorInvoiceForm.miscChargesCostPlus);
     }
     onChangeFreightCostPlus() {
-        this.billingorInvoiceForm.freightCostPlus = this.billingorInvoiceForm.freightCostPlus.toFixed(2);
+        this.billingorInvoiceForm.freightCostPlus = this.formateCurrency(this.billingorInvoiceForm.freightCostPlus);
     }
     async getSiteNamesByShipCustomerId(customerId, siteid) {
         this.clearShipToAddress();
@@ -1195,10 +1234,11 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.shipCustomerAddress = new AddressModel();
                 this.shipCustomerAddress.line1 = site.address1;
                 this.shipCustomerAddress.line2 = site.address2;
-                this.shipCustomerAddress.country = site.countryName;
+                this.shipCustomerAddress.country = site.country;
                 this.shipCustomerAddress.postalCode = site.postalCode;
                 this.shipCustomerAddress.stateOrProvince = site.stateOrProvince;
                 this.shipCustomerAddress.city = site.city;
+                this.billingorInvoiceForm.shipToAttention =site.attention;
             }
         });
     }
@@ -1214,7 +1254,7 @@ export class WorkOrderBillingComponent implements OnInit {
             {this.soldCustomerAddress = new AddressModel();
                 this.soldCustomerAddress.line1 = site.address1;
                 this.soldCustomerAddress.line2 = site.address2;
-                this.soldCustomerAddress.country = site.countryName;
+                this.soldCustomerAddress.country = site.country;
                 this.soldCustomerAddress.postalCode = site.postalCode;
                 this.soldCustomerAddress.stateOrProvince = site.stateOrProvince;
                 this.soldCustomerAddress.city = site.city;

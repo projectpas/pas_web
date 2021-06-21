@@ -702,8 +702,9 @@
                                                 [(ngModel)]="partList.revisedPartId" name="revisedPartId{{row_index}}"
                                                 id="revisedPartId{{row_index}}" [forceSelection]="true"
                                                 [suggestions]="revisedPartNumCollection"
+                                                (onSelect)="onRevisedPnSelect($event.itemMasterId)"
                                                 (completeMethod)="filterRevisedPart($event)" [size]="30" [minLength]="1"
-                                                [dropdown]="true" [disabled]="partList.isApproved" required>
+                                                [dropdown]="true" [disabled]="partList.isApproved">
                                             </p-autoComplete>
                                         </td>
                                         <td>{{partList.stockType}}</td>

@@ -134,6 +134,7 @@ export class WorkOrderPartPickticketComponent implements OnInit {
   }
 
   onSearch() {
+    
     this.isSpinnerVisible = true;
     this.workOrderService
       .getPickTicketListMainPart(this.referenceId, this.workFlowWorkOrderId)
@@ -392,6 +393,7 @@ export class WorkOrderPartPickticketComponent implements OnInit {
   }
 
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
+    this.isSpinnerVisible = true;
     const pickTicketId = rowData.pickTicketId;
     const referenceId = rowData.workOrderId;
     const orderPartId = rowData.workFlowWorkOrderId;

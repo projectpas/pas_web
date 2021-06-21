@@ -467,7 +467,8 @@ col.field == 'createdDate'?
 
                         <p><span class="label"><b>Fax: </b></span><span
                                 class="value">{{sourceViewforContact.fax}}</span></p>
-                        <p><span class="label"><b>Memo: </b></span><span class="value"
+                        <p><span class="label"><b>Memo: </b></span><span class="value p_textEditor p-0 m-0 truncate-text" matTooltipPosition="above"
+                            [matTooltip]="parsedText(sourceViewforContact.notes)"
                                 [innerHTML]="sourceViewforContact.notes"></span></p>
                         <!-- <p><span class="label"><b>Active: </b></span><span class="value">{{sourceViewforContact.isActive}}</span></p> -->
 
@@ -591,7 +592,9 @@ col.field == 'createdDate'?
                                         {{audit.websiteURL}}</td>
 
                                     <td [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }"
-                                        [innerHTML]="audit.notes"></td>
+                                   >
+                                        <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(audit.notes)" [innerHTML]=audit.notes></p></td>
                                     <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td> -->
                                     <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isDefaultContact', audit.isDefaultContact)  ? 'black' : 'red'  }">{{audit.isDefaultContact}}</td> -->
 

@@ -76,7 +76,8 @@
                     label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                   </p-radioButton>
                   <div>
-                    <select (ngModelChange)="getValidFrt()" class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                    <!-- [ngClass]="{setRequiredSelect : costPlusType ==billingMethod.tm}" -->
+                    <select  (ngModelChange)="getValidFrt()" class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
                       [disabled]="isView || costPlusType != 1">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -128,7 +129,9 @@
           <!-- <th tooltip="Time & Materials">T&M Amount</th>
           <th>Fixed Amount</th> -->
         </ng-container>
-        <th rowspan="2" style="width:80px !important" *ngIf="!isView" class="table-actions-column" >Actions</th>
+        <th rowspan="2" style="width:80px !important"  class="table-actions-column" *ngIf="isQuote && !isView">Actions</th>
+        <th rowspan="2" style="width:80px !important"  class="table-actions-column" *ngIf="!isQuote">Actions</th>
+
       </tr>
       <tr>
         <th>L</th>
@@ -174,7 +177,8 @@
           <td class="table-column-width">{{dt.dimensionUOM}}</td>
           <td class="table-column-width">{{dt.currency}}</td>
           <td class="content-to-end table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
-          <td class="table-column-width" [innerHTML]="dt.memo"></td> 
+          <td class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+          [matTooltip]="parsedText(dt.memo)" [innerHTML]="dt.memo"></td> 
           <!-- <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]"> </span> -->
           <!-- <td *ngFor="let col of columns">
             {{ dt[col.field] }}
@@ -188,7 +192,7 @@
               </select>
             </td>
             <td class="table-column-width">
-              <select class="form-control select-markup" (ngModelChange)="getValidFrt()" (change)="markupChanged(dt, 'row')"
+              <select class="form-control select-markup" [ngClass]="{setRequiredSelect : dt.billingMethodId ==billingMethod.tm}" (ngModelChange)="getValidFrt()" (change)="markupChanged(dt, 'row')"
                 [(ngModel)]="dt.markupPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
                 <option value="">Select</option>
                 <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -277,7 +281,8 @@
           <td class="table-column-width">{{dt.dimensionUOM}}</td>
           <td class="table-column-width">{{dt.currency}}</td>
           <td class="content-to-end table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
-          <td class="table-column-width" [innerHTML]="dt.memo"></td> 
+          <td class="table-column-width value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+          [matTooltip]="parsedText(dt.memo)" [innerHTML]="dt.memo"></td> 
           <!-- <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]"> </span> -->
           <!-- <td *ngFor="let col of columns">
             {{ dt[col.field] }}
@@ -291,7 +296,7 @@
               </select>
             </td>
             <td class="table-column-width">
-              <select class="form-control select-markup" (ngModelChange)="getValidFrt()" (change)="markupChanged(dt, 'row')"
+              <select [ngClass]="{setRequiredSelect : dt.billingMethodId ==billingMethod.tm}" class="form-control select-markup" (ngModelChange)="getValidFrt()" (change)="markupChanged(dt, 'row')"
                 [(ngModel)]="dt.markupPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
                 <option value="">Select</option>
                 <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -432,7 +437,7 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
   </ng-template>
-  <button class="btn btn-primary pull-right seve" (click)="createFreightsQuote()" *ngIf="!isView && isQuote" [disabled]="disableFrt">
+  <button class="btn btn-primary pull-right seve" (click)="createFreightsQuote()" *ngIf="!isView && isQuote" [disabled]="disableFrt || checkValidationforMarkUp()">
    <!-- {{originalList && originalList[0].workOrderQuoteDetailsId ? 'Update': 'Save'}}  Freights -->
    Save Freights
   </button>

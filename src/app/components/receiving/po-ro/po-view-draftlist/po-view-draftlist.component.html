@@ -16,14 +16,15 @@
                                         <th class="width-60"></th>
                                     </tr>
                                 </thead>
-                                <tbody *ngIf="purchaseOrderData != undefined && purchaseOrderPart != undefined">                                    
+                                <tbody>                                    
                                     <ng-container *ngFor="let part of purchaseOrderPart;let row_index=index">                                        
                                         <tr class="parent-data" *ngIf="part.stockLine != null && part.stockLine.length > 0">
                                             <td class="text-right">{{row_index + 1}}</td>
                                             <td>{{part.itemMaster?.partNumber}}</td>
                                             <td class="text-right">{{part.quantityOrdered}}</td>
                                             <td class="text-right">{{part.stockLine.length}}</td>
-                                            <td class="text-right">{{part.quantityOrdered - part.stockLine.length}}</td>
+                                            <!-- <td class="text-right">{{part.quantityOrdered - part.stockLine.length}}</td> -->
+                                            <td class="text-right">{{part.quantityBackOrdered}}</td>
                                             <td class="details-control eachcol" style="padding: 4px 6px;">
                                                 <i class="fa fa-{{ part.showStockLineGridDraft ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs" (click)="toggleExpandIcon(part)"></i>
                                             </td>
@@ -218,18 +219,12 @@
                                                     </section>-->
                                                 </div>
                                             </td>
-                                        </tr> 
-                                        <tr *ngIf="part.stockLine.length == 0">
-                                            <td *ngIf="row_index == 0" [attr.colspan]="29" class="no-records-cstm no-records-msg">
-                                                No records found
-                                            </td>	
-                                        </tr>
-                                    </ng-container>                                                                         
+                                        </tr>                                                                              
+                                    </ng-container>                                                                                                             
                                 </tbody>                                                               
                             </table>
                             </div>
-                        </div>
-                        <!-- </div> -->
+                        </div>                        
                     </div>
                 </div>
             </div>

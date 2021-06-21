@@ -80,7 +80,7 @@ export class DirectLabourAddComponent implements OnInit {
                 burdenRateId: res.burdenRateId.toString(),
                 averageRate: this.onChangeCost(res.averageRate),
                 // flatAmount: this.onChangeBurdenCost(res.flatAmount)
-            };
+            }; 
             this.currencyData();
             this.percentData();
 setTimeout(() => {
@@ -214,14 +214,14 @@ setTimeout(() => {
             updatedBy: this.userName,
             masterCompanyId: this.currentUserMasterCompanyId
         };
-        if(data.burdenRateId==1){
+        // if(data.burdenRateId==1){
    
-            this.allPercentList.forEach(element => {
-                if(data.flatAmount==element.value){
-                    data.flatAmount=element.label;
-                }
-            });
-        }
+        //     this.allPercentList.forEach(element => {
+        //         if(data.flatAmount==element.value){
+        //             data.flatAmount=element.label;
+        //         }
+        //     });
+        // }
         if(!this.isEditMode) {
             this.isSpinnerVisible=true;
             this.laborOHService.createLaborOHSettings(data).subscribe(res => {
