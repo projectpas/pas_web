@@ -1937,7 +1937,8 @@
                 <td [ngClass]="audit.auditRightAlign ? 'text-right' : ''" [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'changedFrom', audit.changedFrom) ? 'black' : 'red'}">{{ audit.changedFrom }}</td>
                 <td [ngClass]="audit.auditRightAlign ? 'text-right' : ''" [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'changedTo', audit.changedTo) ? 'black' : 'red'}">{{ audit.changedTo }}</td>
                 <td [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'adjustmentReason', audit.adjustmentReason) ? 'black' : 'red'}">{{ audit.adjustmentReason }}</td>
-                <td [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'adjustmentMemo', audit.adjustmentMemo) ? 'black' : 'red'}">{{ audit.adjustmentMemo }}</td>
+                <td class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                [matTooltip]="parsedText(audit.adjustmentMemo)" [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'adjustmentMemo', audit.adjustmentMemo) ? 'black' : 'red'}">{{ audit.adjustmentMemo }}</td>
                 <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'createdBy', audit.createdBy) ? 'black' : 'red'}">{{ audit.createdBy }}</td>
                 <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>

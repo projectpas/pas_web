@@ -184,7 +184,8 @@
                         {{rowData[col.field] }}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'memo'">
-                        <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="rowData[col.field]"></p>
+                        <p class="m-0 p-0 p_textEditor memo-align-left truncate-text" matTooltipPosition="above"
+                         [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                     </ng-container>
                 </td>
                 <td class="action-icons-cstm table-column-width">
@@ -308,7 +309,8 @@
                         <p>
                             <span class="label"><strong>Memo</strong> : </span>
                                 <span class="value">
-                                    <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="selectedItemMasterCapData.memo"></p>
+                                    <p class="m-0 p-0 p_textEditor memo-align-left truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(selectedItemMasterCapData.memo)" [innerHTML]="selectedItemMasterCapData.memo"></p>
                                 </span>
                         </p>
                     </div>
@@ -400,7 +402,8 @@
                                 
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }">{{audit.verifiedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red' }">
-                                    <p [innerHTML]="audit.memo"></p>
+                                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
                                 </td>
                                 <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a'}}</td>
 

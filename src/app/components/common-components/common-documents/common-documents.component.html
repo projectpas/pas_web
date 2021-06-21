@@ -460,9 +460,9 @@
               <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'docName', audit.docName)  ? 'black' : 'red'  }">
                 {{audit.docName}}
               </td>
-              <td
+              <td class="truncate-text"
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'docDescription', audit.docDescription)  ? 'black' : 'red'  }">
-                {{audit.docDescription}}
+             <p > {{audit.docDescription}}</p>
               </td>
               <td [ngStyle]="{'color': getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
                 {{audit.name}}

@@ -529,6 +529,8 @@
                                         <span>
                                             <div class="form-group memo-popup-cstm mat_emo">
                                                 <div [innerHTML]="sourceWorkFlow.memo"
+                                                matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(sourceWorkFlow.memo)"
                                                     class="form-control"
                                                     style="width:100% !important"
                                                     class="text_editor_box">
@@ -632,7 +634,8 @@
                                                         <td class="text-right">{{charge.extendedCost}}</td>
                                                         <td>{{charge.vendorName}}</td>
                                                         <td>
-                                                            <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="charge.memo"></span>
+                                                            <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(charge.memo)" [innerHTML]="charge.memo"></span>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -671,7 +674,8 @@
                                                         <td>{{direction.description}}</td>
                                                         <td class="text-right">{{direction.sequence}}</td>
                                                         <td>
-                                                            <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="direction.memo"></span>
+                                                            <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(direction.memo)" [innerHTML]="direction.memo"></span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -704,7 +708,8 @@
                                                         <td>{{equipment.assetTypeName}}</td>                                                
                                                         <td class="text-right">{{equipment.quantity}}</td>
                                                         <td>
-                                                            <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="equipment.memo"></span>
+                                                            <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(equipment.memo)" [innerHTML]="equipment.memo"></span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -744,7 +749,8 @@
                                                         <td class="text-right">{{exclusion.unitCost}}</td>
                                                         <td class="text-right">{{exclusion.extendedCost}}</td>
                                                         <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
-                                                        <td> <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="exclusion.memo"></span>
+                                                        <td> <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(exclusion.memo)" [innerHTML]="exclusion.memo"></span>
                                                             </td>
                                                     </tr>
                                                     <tr>
@@ -793,7 +799,8 @@
                                                         <td class="text-right">{{expertise.overheadBurden}}</td>
                                                         <td class="text-right">{{expertise.overheadCost}}</td>
                                                         <td class="text-right">{{expertise.laborOverheadCost}}</td>
-                                                        <td> <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="expertise.memo"></span>
+                                                        <td> <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(expertise.memo)" [innerHTML]="expertise.memo"></span>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -846,7 +853,8 @@
                                                         <td class="text-right">{{material.unitCost}}</td>
                                                         <td class="text-right">{{material.extendedCost}}</td>
                                                         <td>
-                                                            <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="material.memo"></span>
+                                                            <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(material.memo)" [innerHTML]="material.memo"></span>
                                                         </td> 
                                                         <td>
                                                             <!-- {{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }} -->
@@ -907,7 +915,8 @@
                                                         <td class="text-right">{{measurement.max}}</td>
                                                         <td>{{measurement.expected}}</td>
                                                         <td>{{measurement.diagramURL}}</td>
-                                                        <td>   <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="measurement.memo"></span>
+                                                        <td>   <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(measurement.memo)" [innerHTML]="measurement.memo"></span>
                                                            </td>
                                                     </tr>
                                                 </tbody>
@@ -962,7 +971,8 @@
                                                                 <i class="fa fa-eye"></i>
                                                             </button>
                                                         </td>
-                                                        <td> <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="publication.memo"></span>
+                                                        <td> <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(publication.memo)" [innerHTML]="publication.memo"></span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -1144,7 +1154,8 @@
                                             <td class="text-right">{{material.extendedCost}}</td>
                                             <!-- <td class="text-right">{{material.price}}</td> -->
                                             <td>
-                                                <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="material.memo"></span>
+                                                <span class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
+                                                [matTooltip]="parsedText(material.memo)" [innerHTML]="material.memo"></span>
                                             </td>
                                             <td>
                                                 <input type="checkbox" disabled="disabled"
@@ -1494,7 +1505,8 @@
                                                 <td>{{direction.description}}</td>
                                                 <td class="text-right">{{direction.sequence}}</td>
                                                 <td>
-                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="direction.memo"></span> 
+                                                    <span class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                    [matTooltip]="parsedText(direction.memo)" style="float: left" [innerHTML]="direction.memo"></span> 
                                                  </td>
                                             </tr>
                                         </tbody>
@@ -1527,7 +1539,8 @@
                                                 <td>{{equipment.assetDescription}}</td>
                                                 <td class="text-right">{{equipment.quantity}}</td>
                                                 <td>
-                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="equipment.memo"></span> 
+                                                    <span class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                    [matTooltip]="parsedText(equipment.memo)" style="float: left" [innerHTML]="equipment.memo"></span> 
                                                  </td>
                                             </tr>
                                         </tbody>
@@ -1568,7 +1581,8 @@
                                                 <td class="text-right">{{exclusion.extendedCost}}</td>
                                                 <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
                                                 <td>
-                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="exclusion.memo"></span>
+                                                    <span class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                    [matTooltip]="parsedText(exclusion.memo)" style="float: left" [innerHTML]="exclusion.memo"></span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1618,7 +1632,8 @@
                                                 <td class="text-right">{{expertise.overheadCost}}</td>
                                                 <td class="text-right">{{expertise.laborOverheadCost}}</td>
                                                    <td>
-                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="expertise.memo"></span> 
+                                                    <span class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                    [matTooltip]="parsedText(expertise.memo)" style="float: left" [innerHTML]="expertise.memo"></span> 
                                                    </td>
                                             </tr>
                                             <tr>
@@ -1664,7 +1679,8 @@
                                                 <td class="text-right">{{charge.extendedCost}}</td>
                                               <td>{{charge.vendorName}}</td>
                                               <td>
-                                                <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="charge.memo"></span> 
+                                                <span class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                [matTooltip]="parsedText(charge.memo)" style="float: left" [innerHTML]="charge.memo"></span> 
                                                </td>
                                             </tr>
                                             <tr>
@@ -1716,7 +1732,8 @@
                                                 <td class="text-right">{{material.unitCost}}</td>
                                                 <td class="text-right">{{material.extendedCost}}</td>
                                                 <td>
-                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span> 
+                                                    <span class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                    [matTooltip]="parsedText(material.memo)" style="float: left" [innerHTML]="material.memo"></span> 
                                                 </td>
                                                 <td>
                                                     <input type="checkbox" disabled="disabled"
@@ -1773,7 +1790,8 @@
                                                 <td class="text-right">{{measurement.expected}}</td>
                                                 <td>{{measurement.diagramURL}}</td>
                                                 <td>
-                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="measurement.memo"></span>
+                                                    <span class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                    [matTooltip]="parsedText(measurement.memo)" style="float: left" [innerHTML]="measurement.memo"></span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -1825,7 +1843,8 @@
                                                     </button>
                                                 </td>
                                                 <td>
-                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="publication.memo"></span> 
+                                                    <span class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                    [matTooltip]="parsedText(publication.memo)" style="float: left" [innerHTML]="publication.memo"></span> 
                                                    </td>
                                             </tr>
                                         </tbody>
