@@ -38,7 +38,7 @@
                                     (change)="aSectionClick($event,wData)" (ngModelChange)="enableSave()"
                                     class="form-control mat_r" [disabled]="wData && wData.isenableUpdate==false"/>
                                 </span>
-                                <span class="span_re"> {{wData.workOrderSettlementName}}</span>
+                                <span class="span_re" [ngClass]="{redColor : (wData.isMastervalue==false && wData.workOrderSettlementName=='Mat Required = Mat Issued')}" > {{wData.workOrderSettlementName}}</span>
                               </div>
                             </td>
                             <td class="warning-td">

@@ -48,7 +48,6 @@ export class WorkOrderWorkCompleteComponent implements OnChanges, OnInit {
  this.getWorkCompleteDetails();
   }
 aSectionClick(event, currentRecord){
-console.log("ev",event)
 if(event.target.checked==true){
   currentRecord.isMastervalue=true;
   currentRecord.isvalue_NA=false;
@@ -82,7 +81,6 @@ getWorkCompleteDetails(){
       }
     });
    }
-   console.log("settlementarray",this.woSettlements)
     this.isSpinnerVisible=false;
     },err=>{
     this.isSpinnerVisible=false;
@@ -94,7 +92,6 @@ editRow(currentRecord){
 }
 upDateSettlemts( ){
 
-  console.log("newDat",this.woSettlements)
   const newData=[...  this.woSettlements];
   newData.forEach(element => {
     element.userId=element.userId?element.userId.employeeId:0;
@@ -106,15 +103,12 @@ upDateSettlemts( ){
   //     this.isWOClose=false
   //   }
   // });
-  // console.log("newDat",newData)
   const arrayWithFilterObjects= newData.filter((o) => o.closeWO === true);
   if((arrayWithFilterObjects && arrayWithFilterObjects.length)==(newData&&newData.length)){
     this.isWOClose=true;
   }else{
     this.isWOClose=false
   }
-  // console.log("arrayWithFilterObjects",arrayWithFilterObjects)
-  // console.log("clds",this.isWOClose)
   this.isSpinnerVisible=true;
   this.workOrderService.updateWoSettlements(newData,this.isWOClose).subscribe(res => {
     this.woSettlements.forEach(element => {
