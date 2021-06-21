@@ -150,6 +150,7 @@
                                                         title="Part Number"
                                                         [(ngModel)]="sourceItemMaster.partNumber"
                                                         (onKeyUp)=eventHandler($event) 
+                                                        (onBlur)=eventHandler($event) 
                                                         (onSelect)="partnmId($event)"
                                                         [suggestions]="partCollection" 
                                                         name="partNumber" required
@@ -583,7 +584,7 @@
                                             <!-- <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15"
                                              name="exportLength"  pInputText pKeyFilter="money" maxlength="10" (keyup)="btnChange()" 
                                              (change)="onChangeExportSizeLength()" [(ngModel)]="exportInfo.exportSizeLength" />&nbsp; -->
-                                            <input type="text" pInputText pKeyFilter="money"  (change)="leadtime()"   (ngModelChange)="getmemo()" 
+                                            <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getmemo()" 
                                              onKeyPress="if(this.value.length==5) return false;" class="input-field-value text-right"
                                                    [ngModelOptions]="{standalone: true}"
                                                    [(ngModel)]="sourceItemMaster.leadTimeDays">
@@ -591,7 +592,7 @@
                                         <div class="clear"></div>
                                         <label class="control-label spacing-label">Stock Level</label>
                                         <div>
-                                            <input type="text" pInputText pKeyFilter="money"  (change)="leadtime()"   (ngModelChange)="getmemo()" 
+                                            <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getmemo()" 
                                             onKeyPress="if(this.value.length==5) return false;" class="input-field-value text-right"
                                                   [ngModelOptions]="{standalone: true}"
                                                    [(ngModel)]="sourceItemMaster.stockLevel">
@@ -600,7 +601,7 @@
                                         <label class="control-label spacing-label">Reorder Point</label>
                                         <div>
                                             <span data-toggle="tooltip" title="" data-original-title="calculation field">
-                                                <input type="text" pInputText pKeyFilter="money"  (change)="leadtime()"   (ngModelChange)="getmemo()" 
+                                                <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getmemo()" 
                                              onKeyPress="if(this.value.length==10) return false;" class="input-field-value text-right"
                                                    [ngModelOptions]="{standalone: true}"
                                                        [(ngModel)]="sourceItemMaster.reorderPoint">
@@ -613,14 +614,14 @@
                                         <!--Min Order Qty-->
                                         <label class="control-label spacing-label">Min Order Qty</label>
                                         <div>
-                                            <input type="text" pInputText pKeyFilter="money"  (change)="leadtime()"   (ngModelChange)="getmemo()" 
+                                            <input type="text" pInputText pKeyFilter="money"    (ngModelChange)="getmemo()" 
                                              onKeyPress="if(this.value.length==10) return false;" class="input-field-value text-right"
                                                    [ngModelOptions]="{standalone: true}"
                                                    [(ngModel)]="sourceItemMaster.minimumOrderQuantity">
                                         </div>
                                         <label class="control-label spacing-label">Reorder Qty</label>
                                         <div>
-                                            <input type="text" pInputText pKeyFilter="money"  (change)="leadtime()"   (ngModelChange)="getmemo()" 
+                                            <input type="text" pInputText pKeyFilter="money"    (ngModelChange)="getmemo()" 
                                              onKeyPress="if(this.value.length==10) return false;" class="input-field-value text-right"
                                                    [ngModelOptions]="{standalone: true}"
                                             (keyup)=rqeventHandler($event)  [(ngModel)]="sourceItemMaster.reorderQuantiy">

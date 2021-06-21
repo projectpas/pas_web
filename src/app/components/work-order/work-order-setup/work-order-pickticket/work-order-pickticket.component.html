@@ -102,12 +102,19 @@
                       </a>
                     </span>
                     <span>
-                      <button class="btn nobg" mat-icon-button
+                      <!-- <button class="btn nobg" mat-icon-button
                         (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
                         matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
                         <i class="fa fa-pencil"></i>
-                      </button>
+                      </button> -->
+                      <button type="button" data-toggle="modal" [disabled]="part.isConfirmed" data-target="#woDelete"  (click)="delete(part)"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
+                        (click)="showDeletePickTkt(part)"><i class="fa fa-trash"></i></button>
                     </span>
+                  </td>
+                </tr>
+                <tr *ngIf="summaryPart && summaryPart.pickticketchild && summaryPart.pickticketchild.length ==0">
+                  <td colspan="48" style="color: red; font-weight: bold; text-align: center; text-transform: uppercase">
+                    No records found
                   </td>
                 </tr>
               </tbody>
@@ -116,7 +123,7 @@
           <ng-container *ngIf="pickTickes.length == 0">
             <tbody>
               <tr>
-                <td colspan="48" style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                <td colspan="48" style="color: red; font-weight: bold; text-align: center; text-transform: uppercase">
                   No records found
                 </td>
               </tr>
@@ -139,6 +146,26 @@
       <div></div>
       <div></div>
     </div>
+  </div>
+</div>
+<div class="modal fade" id="woDelete" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+              <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+          </div>
+          <div class="modal-body">
+              <strong>
+                  WO Number : 
+                  <span class="new-label">{{rowDataToDelete.pickTicketNumber}}</span>
+              </strong>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="deleteWO(); closeDeleteModal();">Yes</button>
+              <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">No</button>
+          </div>
+      </div>
   </div>
 </div>
 <div id="pickticketHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -280,7 +307,7 @@
               <ng-container *ngIf="col.field =='qtyToShip'">
                 <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
                   required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
-                  [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false"
+                  [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false" (focusout)="onFocusOutEvent(rowData)"
                   required="col.field =='qtyToShip'" />
               </ng-container>
             </td>

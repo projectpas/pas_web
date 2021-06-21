@@ -205,7 +205,8 @@
                   }}
                 </ng-container>
                 <ng-container *ngIf="col.field == 'notes'">                  
-                  <span class="value"><p class="p-0 m-0 p_textEditor" [innerHTML]="rowData.notes"></p></span>
+                  <span class="value"><p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                    [matTooltip]="parsedText(rowData.notes)" [innerHTML]="rowData.notes"></p></span>
                 </ng-container>
                 <ng-container *ngIf="col.field == 'workPhone'">
                     {{ rowData.workPhone }} {{rowData.workPhoneExtn && rowData.workPhoneExtn.trim() != '' ? 'Ext ' : ''}} {{ rowData.workPhoneExtn }}
@@ -529,7 +530,8 @@
                       ? 'black'
                       : 'red'
                   }">
-                  <p [innerHTML]="audit.notes"></p>
+                  <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                  [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p>
                 </td>
                 <td class="text-center width-60">
                   <span class="value">
@@ -1011,7 +1013,8 @@
           </p> -->
           <p class="vertical-top">
             <span class="label vertical-top"><b>Memo: </b></span>
-            <span class="value"><p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforContact.notes"></p></span>
+            <span class="value"><p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+              [matTooltip]="parsedText(sourceViewforContact.notes)" [innerHTML]="sourceViewforContact.notes"></p></span>
           </p>
           <p>
             <span class="label"><b>Email<span class="clr-red">*</span>:</b></span><span

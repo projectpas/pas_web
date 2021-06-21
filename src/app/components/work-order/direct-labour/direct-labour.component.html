@@ -322,7 +322,7 @@
                 <div class="card-body">
                     <div>
                         <div class="form-row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div>
                                     <h4 class="po-head-sm">Direct Labor (Technician/Mechanic)</h4>
                                     <hr />
@@ -364,97 +364,122 @@
                                         </div>
                                     </div>        
                                 </div>
-                                <div class="p-t-10" style="clear: both;">
-                                    <h4 class="po-head-sm">Overhead Burden Rate</h4>
-                                    <hr />
-                                </div>
-                                <div class="form-group">
-                                    <div *ngIf="directLaborData.burdenRateId == '1'">
-                                        <!-- <label>
-                                            <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="1" disabled>
-                                            As A% of Technician/Mechanic Hourly Rate 
-                                            <span class="clr-red">*</span>
-                                        </label> -->
-                                        <div>
-                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
-                                                <input type="radio" name="burdenRateId" class="form-control" value="1" [(ngModel)]="directLaborData.burdenRateId" disabled>
-                                                <span class="checkmark"></span>As A% of Technician/Mechanic Hourly Rate
-                                                <span class="clr-red">*</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-row m-b-10">
-                                            <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount ? directLaborData.flatAmount : '-'}}</span></p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div *ngIf="directLaborData.burdenRateId == '2'">
-                                        <!-- <label>
-                                            <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="2" disabled>
-                                            Flat Amount per Hour
-                                            <span class="clr-red">*</span>
-                                        </label> -->
-                                        <div>
-                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
-                                                <input type="radio" name="burdenRateId" class="form-control" value="2" [(ngModel)]="directLaborData.burdenRateId" disabled>
-                                                <span class="checkmark"></span>Flat Amount per Hour
-                                                <span class="clr-red">*</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-row m-b-10">
-                                            <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount ? directLaborData.flatAmount : '-'}}</span></p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div *ngIf="directLaborData.burdenRateId == '3'">
-                                        <!-- <label>
-                                            <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="3" disabled>
-                                            Flat Amount per Work Order
-                                            <span class="clr-red">*</span>
-                                        </label> -->
-                                        <!-- <div>
-                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
-                                                <input type="radio" name="burdenRateId" class="form-control" value="3" [(ngModel)]="directLaborData.burdenRateId" disabled>
-                                                <span class="checkmark"></span>Flat Amount per Work Order
-                                                <span class="clr-red">*</span>
-                                            </label>
-                                        </div>
-                                        <div class="m-b-10">
-                                            <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount ? directLaborData.flatAmount : '-'}}</span></p>
-                                        </div>  -->
-                                    </div>                                                   
-                                </div>
-                                <p><span class="label"><b>Functional Currency: <span class="text-danger">*</span></b></span><span class="value">{{directLaborData.functionalCurrencyCode ? directLaborData.functionalCurrencyCode : '-'}}</span></p>
-                                <p><span class="label"><b>Transactional Currency: <span class="text-danger">*</span></b></span><span class="value">{{directLaborData.transactionalCurrencyCode ? directLaborData.transactionalCurrencyCode : '-'}}</span></p>
-                            </div>
-                            <div class="col-md-6">
+                          
+                           
                                 <div class="form-row">
-                                    <div class="col-md-6">
-                                        <div class="card" style="margin-top: 6px;">
-                                            <div class="card-header" style="padding: 0 10px;">
-                                                <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="text-danger">*</span></h5>
-                                            </div>
-                                            <div class="card-body" style="padding: 8px 12px 6px;">
-                                                <div class="form-group" style="margin-bottom: 4px;">
-                                                    <input class="form-control" type="text" name="companyName"
-                                                        [(ngModel)]="headerManagementStructure.level1" disabled>
-                                                </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
-                                                    <input class="form-control" type="text" name="BUName"
-                                                        [(ngModel)]="headerManagementStructure.level2" disabled>
-                                                </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
-                                                    <input class="form-control" type="text" name="divisionName"
-                                                        [(ngModel)]="headerManagementStructure.level3" disabled>
-                                                </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
-                                                    <input class="form-control" type="text" name="deptName"
-                                                        [(ngModel)]="headerManagementStructure.level4" disabled>
-                                                </div>
-                                            </div>
-                                        </div>	
+                                    <div class="col-md-12 task-detail" style="padding-top: 12px;">
+                                        <div class="form-group task-hours-type" style="display: inline-flex;">
+                                            <p-radioButton 
+                                                class="p-radiobutton-label-horizontal p-radiobutton-cstm adj"
+                                                name="WorkFloworSpecificTaskorWorkOrder" label="Manual Hours"
+                                                [value]="1" disabled [(ngModel)]="directLaborData.laborHoursMedthodId">
+                                            </p-radioButton>
+                                            <br />
+                                            <p-radioButton 
+                                                class="p-radiobutton-label-horizontal p-radiobutton-cstm jda wosettingLabel "
+                                                name="WorkFloworSpecificTaskorWorkOrder"
+                                                label="Labor Clock In/Out " [value]="2" disabled
+                                                [(ngModel)]="directLaborData.laborHoursMedthodId">
+                                            </p-radioButton>
+                                            <br />
+                                            <p-radioButton 
+                                                class="p-radiobutton-label-horizontal p-radiobutton-cstm jda"
+                                                name="Scan" [value]="3" label="Scan" disabled
+                                                [(ngModel)]="directLaborData.laborHoursMedthodId">
+                                            </p-radioButton>
+                                        </div>
+                                    </div>
+                            </div>
+                          
+                        </div>
+                        <div class="col-md-5">
+                            <div class="p-t-10" style="clear: both;">
+                                <h4 class="po-head-sm">Overhead Burden Rate</h4>
+                                <hr />
+                            </div>
+                            <div class="form-group">
+                                <div *ngIf="directLaborData.burdenRateId == '1'">
+                                    <!-- <label>
+                                        <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="1" disabled>
+                                        As A% of Technician/Mechanic Hourly Rate 
+                                        <span class="clr-red">*</span>
+                                    </label> -->
+                                    <div>
+                                        <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                            <input type="radio" name="burdenRateId" class="form-control" value="1" [(ngModel)]="directLaborData.burdenRateId" disabled>
+                                            <span class="checkmark"></span>As A% of Technician/Mechanic Hourly Rate
+                                            <span class="clr-red">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-row m-b-10">
+                                        <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount}}</span></p>
                                     </div>
                                 </div>
+                                
+                                <div *ngIf="directLaborData.burdenRateId == '2'">
+                                    <!-- <label>
+                                        <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="2" disabled>
+                                        Flat Amount per Hour
+                                        <span class="clr-red">*</span>
+                                    </label> -->
+                                    <div>
+                                        <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                            <input type="radio" name="burdenRateId" class="form-control" value="2" [(ngModel)]="directLaborData.burdenRateId" disabled>
+                                            <span class="checkmark"></span>Flat Amount per Hour
+                                            <span class="clr-red">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-row m-b-10">
+                                        <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount ? directLaborData.flatAmount : '-'}}</span></p>
+                                    </div>
+                                </div>
+                                
+                                <div *ngIf="directLaborData.burdenRateId == '3'">
+                                    <!-- <label>
+                                        <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="3" disabled>
+                                        Flat Amount per Work Order
+                                        <span class="clr-red">*</span>
+                                    </label> -->
+                                    <!-- <div>
+                                        <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                            <input type="radio" name="burdenRateId" class="form-control" value="3" [(ngModel)]="directLaborData.burdenRateId" disabled>
+                                            <span class="checkmark"></span>Flat Amount per Work Order
+                                            <span class="clr-red">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="m-b-10">
+                                        <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount ? directLaborData.flatAmount : '-'}}</span></p>
+                                    </div>  -->
+                                </div>                                                   
                             </div>
+                            <p><span class="label"><b>Functional Currency: <span class="text-danger">*</span></b></span><span class="value">{{directLaborData.functionalCurrencyCode ? directLaborData.functionalCurrencyCode : '-'}}</span></p>
+                            <p><span class="label"><b>Transactional Currency: <span class="text-danger">*</span></b></span><span class="value">{{directLaborData.transactionalCurrencyCode ? directLaborData.transactionalCurrencyCode : '-'}}</span></p>
+                       
+                        </div>
+                        <div class="col-md-3">
+                                    <div class="card" style="margin-top: 6px;">
+                                        <div class="card-header" style="padding: 0 10px;">
+                                            <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="text-danger">*</span></h5>
+                                        </div>
+                                        <div class="card-body" style="padding: 8px 12px 6px;">
+                                            <div class="form-group" style="margin-bottom: 4px;">
+                                                <input class="form-control" type="text" name="companyName"
+                                                    [(ngModel)]="directLaborData.levelCode1" disabled>
+                                            </div>
+                                            <div class="form-group" style="margin-bottom: 4px;">
+                                                <input class="form-control" type="text" name="BUName"
+                                                    [(ngModel)]="directLaborData.levelCode2" disabled>
+                                            </div>
+                                            <div class="form-group" style="margin-bottom: 4px;">
+                                                <input class="form-control" type="text" name="divisionName"
+                                                    [(ngModel)]="directLaborData.levelCode3" disabled>
+                                            </div>
+                                            <div class="form-group" style="margin-bottom: 4px;">
+                                                <input class="form-control" type="text" name="deptName"
+                                                    [(ngModel)]="directLaborData.levelCode4" disabled>
+                                            </div>
+                                        </div>
+                                    </div>	
                         </div>
                     </div>
                 </div>

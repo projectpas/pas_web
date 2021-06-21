@@ -151,7 +151,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="expdate">Expiration Date</label>
-                                    <p-calendar class="workflow-clder" [minDate]="sourceWorkFlow.workflowCreateDate"
+                                    <!-- [minDate]="sourceWorkFlow.workflowCreateDate" -->
+                                    <p-calendar class="workflow-clder" 
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                         [showIcon]="true" [ngModelOptions]="{standalone: true}"
                                         [(ngModel)]="sourceWorkFlow.workflowExpirationDate"
@@ -289,7 +290,7 @@
                                                     class="form-control w70 text-right" id="" name="" pInputText
                                                     pKeyFilter="money"  (ngModelChange)="checkEnableUpdate()"
                                                     (change)="onPercentOfNew(sourceWorkFlow.costOfNew,sourceWorkFlow.percentageOfNew)">
-                                            </div>
+                                            </div> 
                                             <div class="col-sm-4">
                                                 <label class="w60">Percent:</label>
                                                 <select [(ngModel)]="sourceWorkFlow.percentageOfNew"

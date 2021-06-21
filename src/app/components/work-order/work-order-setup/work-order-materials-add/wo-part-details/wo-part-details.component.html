@@ -267,7 +267,8 @@
                             {{ part.unitCost  }}
                         </span>
                         <span *ngIf="col.field == 'memo'" class="float-right1">
-                            <p class="m-0 p-0 p_textEditor" [innerHTML]=part.memo></p>
+                            <p class="m-0 p-0 p_textEditor"  [matTooltip]="parsedText(part.memo)"
+                            matTooltipPosition="above" [innerHTML]=part.memo> </p>
                         </span>
                     </td>
                     <td>

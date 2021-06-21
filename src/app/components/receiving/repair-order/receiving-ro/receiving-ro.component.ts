@@ -360,7 +360,7 @@ export class ReceivingRoComponent implements OnInit {
 
     ngOnInit() {
         this.isSpinnerVisible = true; 
-        this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
+        this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];        
         this.getROViewById(this.repairOrderId);
         this.receivingService.getReceivingROPartById(this.repairOrderId, this.employeeId).subscribe(res => {
             this.loadRepairOrderData(res[0], res[1])
@@ -600,6 +600,12 @@ export class ReceivingRoComponent implements OnInit {
             var uom = {label:part.UOMText , value : part.uomId}
             this.allPurchaseUnitOfMeasureinfo.push(uom);
         }
+
+        var revisedpn = this.revisedPartNumCollection.find(temp => temp.itemMasterId == part.revisedPartId)
+        if (!revisedpn || revisedpn == undefined) {
+            var rpn = { itemMasterId : part.revisedPartId , partNumber : part.revisedPartNumber }           
+            this.revisedPartNumCollection.push(rpn);
+        }
         
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
@@ -740,10 +746,11 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.parentbuId = part.parentbuId;
             stockLine.parentDivisionId = part.parentDivisionId;
             stockLine.parentDeptId = part.parentDeptId;                 
-            stockLine.unitOfMeasureId = part.uomId;                 
+            stockLine.unitOfMeasureId = part.uomId;              
+            stockLine.serialNumber = part.serialNumber;         
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());            
-            stockLine.revisedPartId = this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId);   
+            stockLine.revisedPartId = part.revisedPartId > 0 ? this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId) : 0;   
             stockLine.aircraftTailNumber = part.acTailNum;
             if (part.itemMaster != undefined) {
                 stockLine.repairOrderUnitCost = part.unitCost;
@@ -1464,9 +1471,26 @@ export class ReceivingRoComponent implements OnInit {
                 sl.revisedPartId = sl.revisedPartId ? editValueAssignByCondition('itemMasterId', sl.revisedPartId) : null;
             }
             if (part.isSameDetailsForAllParts) {
-                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
-                for (let slObj of part.stocklineListObj) {
-                    slObj = stockLineToCopy;
+                // var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                // for (let slObj of part.stocklineListObj) {
+                //     slObj = stockLineToCopy;
+                // }
+                for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
+                    var sernotprovide = false;
+                    var serno = "";
+                    if (part.itemMaster.isSerialized) {
+                        sernotprovide = part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided;
+                        serno=  part.stocklineListObj[part.currentSERIndex].serialNumber;
+                    }
+    
+                    var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                    part.stocklineListObj[i] = stockLineToCopy;
+                    if (part.itemMaster.isSerialized) {
+                        part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
+                        part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
+                    }
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
                 }
             }
         }
@@ -2126,25 +2150,60 @@ export class ReceivingRoComponent implements OnInit {
         part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
 
         if (part.isSameDetailsForAllParts) {
-            for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
-                // var serialNumber = part.stocklineListObj[i].serialNumber;
-                // var serialNumberNotProvided = part.stocklineListObj[i].serialNumberNotProvided;
+            // for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
+            //     // var serialNumber = part.stocklineListObj[i].serialNumber;
+            //     // var serialNumberNotProvided = part.stocklineListObj[i].serialNumberNotProvided;
 
+            //     var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+            //     part.stocklineListObj[i] = stockLineToCopy;
+            //     // part.stocklineListObj[i].serialNumber = serialNumber;
+            //     // part.stocklineListObj[i].serialNumberNotProvided = serialNumberNotProvided;
+            //     var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+            //     part.timeLifeList[i] = timeLifeToCopy;
+            // }
+            for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
+                var sernotprovide = false;
+                var serno = "";
+                if (part.itemMaster.isSerialized) {
+                    sernotprovide = part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided;
+                    serno=  part.stocklineListObj[part.currentSERIndex].serialNumber;
+                }
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.stocklineListObj[i] = stockLineToCopy;
-                // part.stocklineListObj[i].serialNumber = serialNumber;
-                // part.stocklineListObj[i].serialNumberNotProvided = serialNumberNotProvided;
+                if (part.itemMaster.isSerialized) {
+                    part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
+                    part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
+                }
+                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                part.timeLifeList[i] = timeLifeToCopy;
             }
         }
     }
     
     isCheckedSameDetailsForAllParts(part: RepairOrderPart) {
         if (part.isSameDetailsForAllParts) {
+            // for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
+            //     var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+            //     part.stocklineListObj[i] = stockLineToCopy;
+            //     var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+            //     var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+            //     part.timeLifeList[i] = timeLifeToCopy;
+            // }
+
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
+                var sernotprovide = false;
+                var serno = "";
+                if (part.itemMaster.isSerialized) {
+                    sernotprovide = part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided;
+                    serno =  part.stocklineListObj[part.currentSERIndex].serialNumber;
+                }
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.stocklineListObj[i] = stockLineToCopy;
+                if (part.itemMaster.isSerialized) {
+                    part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
+                    part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
+                }
                 var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.timeLifeList[i] = timeLifeToCopy;
             }
         }

@@ -27,7 +27,6 @@
     <div class="card-body header-body">
       <p-table [columns]="cols" [value]="salesOrderFreightList" [lazy]="false" [paginator]="true" [rows]="10"
         class="rpo-table-cstm rro-table-cstm" [paginator]="true">
-        <!--freightss-->
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th colspan="8"
@@ -128,10 +127,6 @@
         <ng-template pTemplate="body" let-freight let-columns="columns" let-rowIndex="rowIndex">
           <tr>
             <td class="table-column-width">
-              <!-- <select class="form-control select-read-only" id="hideDisabled" [(ngModel)]="freight.shipViaId" disabled>
-                <option value="">Select</option>
-                <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
-              </select> -->
               {{freight.shipVia}}
             </td>
             <td class="table-column-width content-to-end">{{freight.weight}}</td>
@@ -146,11 +141,18 @@
             <td class="table-column-width content-to-end" style="text-transform: none;" [innerHTML]="freight.memo"></td>
             <ng-container>
               <td class="table-column-width">
-                <select (ngModelChange)="validated()" class="form-control" [(ngModel)]="freight.billingMethodId"
+                <!-- <select (ngModelChange)="validated()" class="form-control" [(ngModel)]="freight.billingMethodId"
                   [disabled]="isView || costPlusType == 3"
                   (change)="freight.markupPercentageId = '';freight.billingAmount = 0;(freight.billingMethodId == '2')?freight.billingAmount = freight.amount:'';">
                   <option value="" selected>Select</option>
-                  <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
+                  <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}, {'label': 'Flat Rate', 'value': '3'}]"
+                    [value]="bm.value">{{bm.label}}</option>
+                </select> -->
+                <select (ngModelChange)="validated()" class="form-control" [(ngModel)]="freight.billingMethodId"
+                  [disabled]="isView || costPlusType == 3" (change)="onChangeBillingMethod(freight);">
+                  <option value="" selected>Select</option>
+                  <option
+                    *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}, {'label': 'Flat Rate', 'value': '3'}]"
                     [value]="bm.value">{{bm.label}}</option>
                 </select>
               </td>
@@ -164,9 +166,8 @@
               </td>
               <td class="table-column-width">
                 <input (ngModelChange)="validated()" type="text" pInputText pKeyFilter="money"
-                  class="form-control text_right" value="{{ formateCurrency(freight.billingAmount) }}"
-                  (change)="freight.billingAmount = formateCurrency(freight.billingAmount)"
-                  [(ngModel)]="freight.billingAmount" [disabled]="isView || freight.billingMethodId != '2'" />
+                  (change)="onChangeAmount(freight)" class="form-control text_right" [(ngModel)]="freight.billingAmount"
+                  [disabled]="isView || (freight.billingMethodId != '2' && freight.billingMethodId != '3')" />
               </td>
             </ng-container>
             <td class="table-column-width" class="btn-spaces text-center">

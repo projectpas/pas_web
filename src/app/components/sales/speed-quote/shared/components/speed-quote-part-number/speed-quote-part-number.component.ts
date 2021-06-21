@@ -167,9 +167,12 @@ export class SpeedQuotePartNumberComponent {
       { field: 'manufacturer', header: 'Manufacturer', width: "84px" },
       { field: 'oempmader', header: 'Item Type', width: "60px" },
       { field: 'unitSalePrice', header: 'Unit Price', width: "90px" },
-      { field: 'unitCostExtended', header: 'Extended Cost', width: "90px" },
+      { field: 'salesPriceExtended', header: 'Ext Price', width: "90px" },
+      { field: 'unitCost', header: 'UnitCost', width: "90px" },
+      { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
       { field: 'marginAmountExtended', header: 'Margin Amt', width: "103px" },
       { field: 'marginPercentageExtended', header: 'Margin%', width: "102px" },
+      { field: 'tat', header: 'TAT', width: "60px" },
       { field: 'notes', header: "Notes", width: "120px" },
     ]
     // if (!this.isViewMode) {
@@ -420,6 +423,15 @@ export class SpeedQuotePartNumberComponent {
       //})
     }
   }
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
   onCloseMargin(event) {
     this.show = false;
     this.salesMarginModal.close();
@@ -550,6 +562,33 @@ export class SpeedQuotePartNumberComponent {
           this.selectedParts[i].marginPercentageExtended = 0;
         }
         this.canSaveParts = false;
+      }
+      this.summaryParts = this.selectedParts;
+    }
+  }
+  onChangeQuantity(index,event)
+  {
+    let qty = event;
+    //this.unitSalePricetext[0] = true;
+    console.log("this.selectedParts[i]",this.selectedParts);
+    for(let i=0;i<this.selectedParts.length;i++)
+    {
+      if(i == index)
+      {
+        this.selectedParts[i].quantityRequested = qty;
+        this.selectedParts[i].salesPriceExtended = Number(this.selectedParts[i].unitSalePrice) * Number(qty);
+        this.selectedParts[i].unitCostExtended = +(Number(this.selectedParts[i].unitCost) * Number(qty)).toFixed(2);
+        this.selectedParts[i].marginAmountExtended = +((Number(this.selectedParts[i].salesPriceExtended) - Number(this.selectedParts[i].unitCostExtended))).toFixed(2);
+        this.selectedParts[i].marginAmountPerUnit = +(Number(this.selectedParts[i].unitSalePrice) - Number(this.selectedParts[i].unitCost)).toFixed(2);
+        if (Number(this.selectedParts[i].unitSalePrice) > 0) {
+          this.selectedParts[i].marginPercentagePerUnit = +((Number(this.selectedParts[i].marginAmountPerUnit) / Number(this.selectedParts[i].unitSalePrice)) * 100).toFixed(2);
+        } else {
+          this.selectedParts[i].marginPercentagePerUnit = 0;
+        }
+        if(qty > 0)
+          this.canSaveParts = false;
+        else
+        this.canSaveParts = true;
       }
       this.summaryParts = this.selectedParts;
     }

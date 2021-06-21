@@ -375,7 +375,7 @@ export class PurchaseSetupComponent implements OnInit {
 	moduleId: any = 0;
 	referenceId: any = 0;
 	moduleName: any = "PurchaseOrder";
-	itemMasterId: number;
+	itemMasterId: number = 0;
 	lsconditionId: number;
 	lsWoId: number;
 	lsSubWoId: number;
@@ -425,9 +425,12 @@ export class PurchaseSetupComponent implements OnInit {
 		this.vendorService.alertObj.next(this.vendorService.ShowPtab);
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
 		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
-		this.partName = (localStorage.getItem('partNumber'));
+		this.partName = (localStorage.getItem('partNumber'));		
 		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
-		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
+		var itmmasterid =  localStorage.getItem('itemMasterId');
+		if(itmmasterid!== 'undefined' && itmmasterid !== null){
+			this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'))
+		}
 		this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
 		this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
 		this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
@@ -4616,7 +4619,6 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	addPartNumbers(partNumberId, partName, conditionid) {
-		debugger;
 		this.inputValidCheck = false;
 		//if (this.vendorService.isEditMode == false) {
 		let newParentObject = new CreatePOPartsList();

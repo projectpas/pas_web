@@ -70,10 +70,11 @@ export class POViewListComponent implements OnInit {
         );
     }
 
-    getStockLineDetails(stockline) {
+    getStockLineDetails(stockline) {       
         stockline = stockline.map(x => {
             return {
                 ...x,
+                unitCost: x.unitCost.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost.unitCost, 2) : '0.00',
                 purchaseOrderUnitCost: x.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2) : '0.00',
                 purchaseOrderExtendedCost: x.purchaseOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2) : '0.00'
             }

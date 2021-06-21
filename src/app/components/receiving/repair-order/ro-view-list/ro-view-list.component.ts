@@ -68,12 +68,15 @@ export class ROViewListComponent implements OnInit {
         );
     }
 
-    getStockLineDetails(stockline) {
+    getStockLineDetails(stockline) {        
         stockline = stockline.map(x => {
             return {
                 ...x,
+                unitCost : x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
                 repairOrderUnitCost: x.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.repairOrderUnitCost, 2) : '0.00',
+                //repairOrderExtendedCost: x.unitCost ? formatNumberAsGlobalSettingsModule(( x.quantityToRepair * x.unitCost) , 2) : '0.00'
                 repairOrderExtendedCost: x.repairOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2) : '0.00'
+
             }
         })
         return stockline;
@@ -82,6 +85,9 @@ export class ROViewListComponent implements OnInit {
     getTimeLifeDetails(timeLife) {
         timeLife = timeLife.map(x => {
             return {
+                x,
+                stockLineDraftId: x.stockLineDraftId,
+                timeLifeDraftCyclesId: x.timeLifeDraftCyclesId,
                 cyclesRemaining: x.cyclesRemaining ? x.cyclesRemaining : '00:00',
                 cyclesSinceInspection: x.cyclesSinceInspection ? x.cyclesSinceInspection : '00:00',
                 cyclesSinceNew: x.cyclesSinceNew ? x.cyclesSinceNew : '00:00',

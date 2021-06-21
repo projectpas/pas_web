@@ -319,7 +319,7 @@
          <div class="card col-md-12 list_caps" id="approvalTabs">
              <div class="form-group margin-0">
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'mpns'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('mpns');">MPNs</button>
-                 <button *ngIf="IsApprovalBypass" type="button" class="btn" [ngClass]="approvalGridActiveTab === 'internalApprovers'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('internalApprovers');">Internal Approvers</button>
+                 <button *ngIf="checkEnforceInternalApproval()" type="button" class="btn" [ngClass]="approvalGridActiveTab === 'internalApprovers'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('internalApprovers');">Internal Approvers</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'approvalProcess'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('approvalProcess');selectall = false;">Approval Process</button>
                  <!--<button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'setForInternalApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('setForInternalApproval');selectall = false;">Sent for Internal Approval</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'submittedInternalApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('submittedInternalApproval');selectall = false;">Submitted Internal Approval</button>
@@ -942,7 +942,8 @@
                                                     [disabled]="isView || isViewForApprovedPart"
                                                     (click)="(!isView)?tmchange():''"></p-radioButton>
                                      <div>
-                                         <select class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart"
+                                        <!-- [ngClass]="{setRequiredSelect : (costPlusType ==1)}" -->
+                                         <select  class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart"
                                          >
                                              <option value="">Select</option>
                                              <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -1038,7 +1039,7 @@
                                      </select>
                                  </td>
                                  <td>
-                                     <select class="form-control wf-pub-id select-markup" (ngModelChange)="getValidMat()" (change)="markupChanged(matQuotation, 'row')" [(ngModel)]="matQuotation.markupPercentageId" [disabled]="isView || matQuotation.billingMethodId != '1' || isViewForApprovedPart">
+                                     <select [ngClass]="{setRequiredSelect : (matQuotation.billingMethodId ==billingMethod.tm)}" class="form-control wf-pub-id select-markup" (ngModelChange)="getValidMat()" (change)="markupChanged(matQuotation, 'row')" [(ngModel)]="matQuotation.markupPercentageId" [disabled]="isView || matQuotation.billingMethodId != '1' || isViewForApprovedPart">
                                          <option value="">Select</option>
                                          <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                      </select>
@@ -1046,7 +1047,7 @@
                                  <td class="text-right">{{ matQuotation.billingRate }}</td>
                                  <td>
                                      <!-- <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" /> -->
-                                     <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
+                                     <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
                                       value="{{matQuotation.billingAmount}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="calculatebCost($event.target.value,matQuotation)"/>
                      
                                      </td>
@@ -1056,7 +1057,7 @@
                                      <!-- <span>
                                          <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(matQuotation)"
                                              matTooltip="History" matTooltipPosition="above"><i
-                                                 class="fa fa-history"></i></a>
+                                                 class="fa fa-history"></i></a> 
                                      </span> -->
                                 
                                  </td>  
@@ -1131,7 +1132,7 @@
      <div>
          <ng-container *ngIf="gridActiveTab === 'materialList'">
              <button class="btn btn-primary pull-right" (click)="createMaterialQuote()" *ngIf="!isView && !isViewForApprovedPart "
-              style="margin-top: 10px; margin-bottom: 10px;" [disabled]="disableMat">{{workOrderQuoteDetailsId !=0 ? 'Update':'Save'}} Material List</button>
+              style="margin-top: 10px; margin-bottom: 10px;" [disabled]="disableMat || checkValidationforMarkUp()">{{workOrderQuoteDetailsId !=0 ? 'Update':'Save'}} Material List</button>
          </ng-container>
      </div>
  

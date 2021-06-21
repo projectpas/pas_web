@@ -7,7 +7,7 @@
                 <button type="button" (click)="close()" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title warning_color"></h4>
             </div>
-            <div class="modal-body" *ngIf="objWorkOrderShippingLabels" id="soShippingLabel">
+            <div class="modal-body" *ngIf="objWorkOrderShippingLabels" id="woShippingLabel">
                 <ng-container *ngFor="let workOrderShipping of objWorkOrderShippingLabels; let i = index;">
                     <form id="" name="" action="#" method="post" onsubmit="return false;">
                         <div class="image">
@@ -167,16 +167,20 @@
                 <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
             </div>
+
+           
           </div>
+
+          <div class="preloader" *ngIf="isSpinnerVisibleNew">
+            <div class="loading">
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
          
     </div>
 </div>
 
-<div class="preloader" *ngIf="isSpinnerVisible">
-    <div class="loading">
-        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-    </div>
-</div>
+
 
             
 

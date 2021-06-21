@@ -114,6 +114,11 @@
             {{salesQuote.leadSource ? salesQuote.leadSource : '-'}}
           </span>
         </p>
+        <p><span class="label"><b>Lead Source Ref : </b></span>
+          <span class="value">
+            {{salesQuote.leadSourceReference ? salesQuote.leadSourceReference : '-'}}
+          </span>
+        </p>
         <p><span class="label"><b>Probability (%) : </b></span>
           <span class="value">
             <!-- {{salesQuote.ProbabilityName ? (salesQuote.ProbabilityName | twoDecimalGlobalNumberFormatPipe) : '-'}} -->
@@ -124,14 +129,15 @@
         <p><span class="label"><b>Memo: </b></span>
           <span class="value">
 
-            <p class="p-0 m-0 p_textEditor" [innerHTML]="salesQuote.memo"></p>
-
+            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+            [matTooltip]="parsedText(salesQuote.memo)" [innerHTML]="salesQuote.memo"></p>
           </span>
         </p>
         <p><span class="label"><b>Notes: </b></span>
           <span class="value">
 
-            <p class="p-0 m-0 p_textEditor" [innerHTML]="salesQuote.notes"></p>
+            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+            [matTooltip]="parsedText(salesQuote.notes)" [innerHTML]="salesQuote.notes"></p>
 
           </span>
         </p>

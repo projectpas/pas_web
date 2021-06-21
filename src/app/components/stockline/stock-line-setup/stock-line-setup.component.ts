@@ -855,9 +855,11 @@ export class StockLineSetupComponent implements OnInit {
 				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);
 
 				if (res.isSerialized == true) {
+					this.stockLineForm.isSerialized = res.isSerialized;
 					this.hideSerialNumber = false;
 				}
 				else {
+					this.stockLineForm.isSerialized = res.isSerialized;
 					this.hideSerialNumber = true;
 				}				
 				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {					
@@ -1296,6 +1298,7 @@ export class StockLineSetupComponent implements OnInit {
 					this.stockLineForm.isOemPNId = getObjectById('itemMasterId', res.isOemPNId, this.allPartnumbersList);
 				}, error => this.saveFailedHelper(error));
 			}
+			this.stockLineForm.expirationDate=partDetails.expirationDate ? new Date(partDetails.expirationDate) :null;
 			this.stockLineForm.partDescription = partDetails.partDescription;
 			this.stockLineForm.revisedPart = partDetails.revisedPart;
 			this.stockLineForm.itemGroup = partDetails.itemGroup;
@@ -1314,7 +1317,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.unitCost = partDetails.poUnitCost ? formatNumberAsGlobalSettingsModule(partDetails.poUnitCost, 2) : '0.00';
 		    this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice ? formatNumberAsGlobalSettingsModule(partDetails.unitSalesPrice, 2) : '0.00';
 			this.stockLineForm.conditionId = partDetails.conditionId;
-			this.stockLineForm.tagDays = partDetails.tagDays;
+			this.stockLineForm.tagDays = partDetails.tagDays; 
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
 			this.stockLineForm.daysReceived = partDetails.daysReceived;
 			this.stockLineForm.openDays = partDetails.openDays;
@@ -1802,17 +1805,17 @@ export class StockLineSetupComponent implements OnInit {
 					}
 				}
 			}
-			if (this.saveStockLineForm.receivedDate != "" && moment(this.saveStockLineForm.receivedDate, 'MM/DD/YYYY', true).isValid()) {
-				if (this.saveStockLineForm.receivedDate <= this.saveStockLineForm.manufacturingDate) {
-					this.isSpinnerVisible = false;
-					if (errmessage != '') {
-						errmessage = errmessage + '<br />' + "Received Date must be greater than Manufacturing Date."
-					}
-					else {
-						errmessage = errmessage + "Received Date must be greater than Manufacturing Date."
-					}
-				}
-			}
+			// if (this.saveStockLineForm.receivedDate != "" && moment(this.saveStockLineForm.receivedDate, 'MM/DD/YYYY', true).isValid()) {
+			// 	if (this.saveStockLineForm.receivedDate <= this.saveStockLineForm.manufacturingDate) {
+			// 		this.isSpinnerVisible = false;
+			// 		if (errmessage != '') {
+			// 			errmessage = errmessage + '<br />' + "Received Date must be greater than Manufacturing Date."
+			// 		}
+			// 		else {
+			// 			errmessage = errmessage + "Received Date must be greater than Manufacturing Date."
+			// 		}
+			// 	}
+			// }
 			if (this.saveStockLineForm.entryDate != "" && moment(this.saveStockLineForm.entryDate, 'MM/DD/YYYY', true).isValid()) {
 				if (this.saveStockLineForm.entryDate <= this.saveStockLineForm.manufacturingDate) {
 					this.isSpinnerVisible = false;

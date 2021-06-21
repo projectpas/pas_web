@@ -381,7 +381,10 @@ export class WorkOrderService {
     createworkOrderTearDownData(data, isSubWorkOrder) {
         return this.workOrderEndpointService.createworkOrderTearDownData(data, isSubWorkOrder);
     }
-
+    getWOActualVsSummary(workorderId,refId, isSubWorkOrder) {
+        return this.workOrderEndpointService.getWOActualVsSummary(workorderId,refId, isSubWorkOrder);
+    }
+    
     getworkOrderTearDownData(id, isSubWorkOrder, masterCompanyId) {
         return this.workOrderEndpointService.getworkOrderTearDownData(id, isSubWorkOrder, masterCompanyId);
     }
@@ -648,9 +651,9 @@ export class WorkOrderService {
     getFreightHistory(isSubworkOrder, freightId) {
         return this.workOrderEndpointService.getFreightHistory(isSubworkOrder, freightId);
     }
-    getShippingDataList(WorkOrderId: number): Observable<any> {
+    getShippingDataList(WorkOrderId: number,workOrderPartNumberId :number): Observable<any> {
         return Observable.forkJoin(
-            this.workOrderEndpointService.getShippingDataList(WorkOrderId)
+            this.workOrderEndpointService.getShippingDataList(WorkOrderId,workOrderPartNumberId)
         );
     }
 
@@ -812,6 +815,12 @@ getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> 
     );
   }
 
+  GetSubWorkOrderPrintFormData(subWorkOrderId: number,subWOPartNoId : number): Observable<any> {
+    return Observable.forkJoin(
+      this.workOrderEndpointService.GetSubWorkOrderPrintFormData(subWorkOrderId,subWOPartNoId)
+    );
+  }
+
   GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
     return Observable.forkJoin(
       this.workOrderEndpointService.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId)
@@ -823,5 +832,17 @@ getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> 
       this.workOrderEndpointService.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId)
     );
   }
+  
+  deleteWoPickTicket(pickTicketId, login) {
+    return this.workOrderEndpointService.deleteWoPickTicket(pickTicketId, login);
+}
+
+getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId){
+    return this.workOrderEndpointService.getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId); 
+}
+
+updateWoSettlements(data) {
+    return this.workOrderEndpointService.updateWoSettlements<any>(data);
+}
 
 }

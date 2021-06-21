@@ -116,8 +116,7 @@
                 <tr>
                     <th style="text-align: left !important;" *ngFor="let col of stockLinecolumns" pResizableColumn
                         pReorderableColumn>
-
-                        <span *ngIf="col.field == 'stockLineNumber' ||
+                        <!-- <span *ngIf="col.field == 'stockLineNumber' ||
                                             col.field == 'controlNumber' || 
                                             col.field == 'idNumber' || 
                                             col.field == 'stockType' || 
@@ -127,7 +126,7 @@
                                             col.field == 'qtyOnHand' || 
                                             col.field == 'mfg' || 
                                             col.field == 'unitCost'">
-                            {{ col.header }}<span class="clr-red">*</span>
+                            {{ col.header }}
                         </span>
                         <span *ngIf="col.field != 'stockLineNumber' &&
                                             col.field != 'controlNumber' && 
@@ -140,8 +139,10 @@
                                             col.field != 'mfg' && 
                                             col.field != 'unitCost'">
                             {{ col.header }}
+                        </span> -->
+                        <span>
+                            {{ col.header }}
                         </span>
-
                     </th>
                     <th>Actions</th>
                 </tr>

@@ -396,7 +396,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Internal Approvers">
+        <p-tabPanel header="Internal Approvers" *ngIf="!poHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
             <table class="table table-bordered " id="po-table">
@@ -439,7 +439,7 @@
           </div>
         </p-tabPanel>   
 
-        <p-tabPanel header="Approver Process">
+        <p-tabPanel header="Approver Process" *ngIf="!poHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
                 <table class="table table-bordered">
@@ -496,7 +496,8 @@
                                   </select>
                               </td>
                               <td *ngIf="field.field == 'memo'" class="memo-td-width">
-                                    <p class="m-0 p-0 p_textEditor" class="memo-left" [innerHTML]="approver['memo']"></p>
+                                    <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                                   <!-- </div> -->
                                   <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
                                      
@@ -594,14 +595,17 @@
                 <tr class="header-table-width">
                   <th>PN <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>ALT/Equiv PN</th>
-                  <th>PN Description</th>												
+                  <th>PN Description</th>
+                  <th>Revised PN</th>	
                   <th>Stock Type</th>
                   <th>Mfr</th>												
-                  <th class="min-width-70">Priority<span _ngcontent-c22="" class="clr-red">*</span></th>												
+                  <th class="min-width-70">Priority <span _ngcontent-c22="" class="clr-red">*</span></th>												
                   <th class="min-width-70">Need By <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Est. Rec'd Date <span _ngcontent-c22="" class="clr-red">*</span></th>                  
                   <th class="min-width-70">Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Work to Perform <span _ngcontent-c22="" class="clr-red">*</span></th>                  
                   <th class="min-width-70">Order Qty <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th class="min-width-70">Vend List Price<span _ngcontent-c22="" class="clr-red">*</span></th>												
+                  <th class="min-width-70">Vend List Price <span _ngcontent-c22="" class="clr-red">*</span></th>												
                   <th class="min-width-70">Disc Percent</th>
                   <th class="min-width-70">Disc./unit</th>
                   <th class="min-width-70">Disc. Amount</th>
@@ -619,6 +623,7 @@
                   <th class="min-width-80">SO Num</th>
                   <th>Item Type</th>
                   <th>GL Account</th>
+                  <th>AC Tail Num</th>                  
                   <th>UOM</th>
                   <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>Notes</th>
@@ -629,12 +634,15 @@
                   <tr class="parent-data purchase-td-back">
                     <td>{{partList?.partNumber}}</td>
                     <td>{{partList?.altEquiPartNumber}}</td>
-                    <td>{{partList?.partDescription}}</td>												
+                    <td>{{partList?.partDescription}}</td>	
+                    <td>{{partList?.revisedPartNumber}}</td>
                     <td>{{partList?.stockType}}</td>
                     <td>{{partList?.manufacturer}}</td>													
                     <td>{{partList?.priority}}</td>
                     <td>{{partList?.needByDate | date: 'MM/dd/yyyy' }}</td>
+                    <td>{{partList?.estRecordDate | date: 'MM/dd/yyyy' }}</td>
                     <td>{{partList?.condition}}</td>
+                    <td>{{partList?.workPerformed}}</td>
                     <td class="text-right">{{partList?.quantityOrdered}}</td>
                     <td class="text-right">{{partList?.vendorListPrice}}</td>
                     <td class="text-right">{{partList?.discountPercent}}</td>
@@ -655,6 +663,7 @@
                     <td>{{partList?.salesOrderNo}}</td>
                     <td>{{partList?.itemType}}</td>
                     <td>{{partList?.glAccount}}</td>
+                    <td>{{partList?.acTailNum}}</td>
                     <td>{{partList?.unitOfMeasure}}</td>
                     <td colspan="4">{{partList?.level1}}, {{partList?.level2}}, {{partList?.level3}}, {{partList?.level4}}</td>
                     <td>
@@ -792,7 +801,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Internal Approvers">
+        <p-tabPanel header="Internal Approvers" *ngIf="!roHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
             <table class="table table-bordered " id="po-table">
@@ -835,7 +844,7 @@
           </div>
         </p-tabPanel>   
 
-        <p-tabPanel header="Approver Process">
+        <p-tabPanel header="Approver Process"  *ngIf="!roHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
                 <table class="table table-bordered">
@@ -892,7 +901,8 @@
                                   </select>
                               </td>
                               <td *ngIf="field.field == 'memo'" class="memo-td-width">
-                                    <p class="m-0 p-0 p_textEditor" class="memo-left" [innerHTML]="approver['memo']"></p>
+                                    <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                                   <!-- </div> -->
                                   <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
                                      

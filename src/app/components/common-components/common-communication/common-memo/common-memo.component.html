@@ -466,7 +466,7 @@
                                 <tbody>
                                     <tr *ngFor="let audit of documentauditHisory; let i = index;">
                                         <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'memoId', audit.memoId)  ? 'black' : 'red'  }">{{audit.memoId}}</td> -->
-                                        <td
+                                        <td class="width-50"
                                             [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
                                             <p style="margin:0px;padding:0px !important" class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.description)" [innerHTML]="audit.description"></p>
                                         </td>

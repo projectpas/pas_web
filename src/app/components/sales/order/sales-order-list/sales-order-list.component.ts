@@ -123,7 +123,7 @@ export class SalesOrderListComponent implements OnInit {
       { field: "quoteDate", header: "Quote Date", width: "130px" },
       { field: "partNumberType", header: "PN", width: "130px" },
       { field: "partDescriptionType", header: "PN Description", width: "200px" },
-      { field: "status", header: "Status", width: "100px" },
+      { field: "status", header: "Status", width: "140px" },
       { field: "priorityType", header: "Priority", width: "100px" },
       { field: "openDate", header: "Open Date", width: "120px" },
       { field: "requestedDateType", header: "Request Date", width: "120px" },
@@ -255,11 +255,10 @@ export class SalesOrderListComponent implements OnInit {
                 quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MM/dd/yyyy') : '',
                 createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
-                requestedDateType: moment(x.requestedDateType).format('MM/DD/YYYY') == '01/01/0001' ? '' : (x.requestedDateType && x.requestedDateType != 'Multiple' ? this.datePipe.transform(x.requestedDateType, 'MMM/dd/yyyy hh:mm a') : ''),
-                estimatedShipDateType: moment(x.estimatedShipDateType).format('MM/DD/YYYY') == '01/01/0001' ? '' : (x.estimatedShipDateType && x.estimatedShipDateType != 'Multiple' ? this.datePipe.transform(x.estimatedShipDateType, 'MMM/dd/yyyy hh:mm a') : '')
+                requestedDateType: x.requestedDateType && x.requestedDateType != 'Multiple' ? (moment(x.requestedDateType).format('MM/DD/YYYY') == '01/01/0001' ? '' : this.datePipe.transform(x.requestedDateType, 'MMM/dd/yyyy hh:mm a')) : x.requestedDateType,
+                estimatedShipDateType: x.estimatedShipDateType && x.estimatedShipDateType != 'Multiple' ? (moment(x.estimatedShipDateType).format('MM/DD/YYYY') == '01/01/0001' ? '' : this.datePipe.transform(x.estimatedShipDateType, 'MMM/dd/yyyy hh:mm a')) : x.estimatedShipDateType
               }
             });
-
           this.totalRecords = response[0].totalRecordsCount;
           this.totalPages = Math.ceil(
             this.totalRecords / this.searchParameters.rows
@@ -377,6 +376,10 @@ export class SalesOrderListComponent implements OnInit {
       return data['partDescription']
     } else if (key === 'priorityType') {
       return data['priority']
+    } else if (key === 'requestedDateType') {
+      return data['requestedDate']
+    } else if (key === 'estimatedShipDateType') {
+      return data['estimatedShipDate']
     }
     else if (key === 'quoteDate' && data[key]) {
       return moment(data['quoteDate']).format('MM-DD-YYYY');

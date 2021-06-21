@@ -1,4 +1,4 @@
-<div *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
+﻿<div *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
     <button type="button" class="btn btn-primary" (click)="openPartNumber()" style="min-width: 97px !important;">
         Add PN
     </button>
@@ -110,7 +110,7 @@
                                         <th class="text-center" colspan="1"></th>
                                         <!-- <th *ngIf="isShowAlternatePN  " class="text-center" colspan="1"> </th> -->
                                         <!-- <th *ngIf=" isShowEqPN" class="text-center" colspan="1"> </th> -->
-                                        <th colspan="11" class="text-center"> Materials</th>
+                                        <th colspan="12" class="text-center"> Materials</th>
                                         <th colspan="2" class="text-center"> Stock</th>
                                         <th class="text-center" colspan="4"></th>
                                     </tr>
@@ -136,6 +136,7 @@
                                         <th class="text-center width-50"> Stk Type</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Req</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Res</th>
+                                        <th *ngIf="!isSubWorkOrder" class="text-center width-50" style="width:60px !important">Qty Picked</th>
                                         <th class="text-center" style="width:60px !important"> Qty To Be Reserved</th>
                                         <th class="text-center" style="width:60px !important">
                                             <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
@@ -216,6 +217,9 @@
                                             <td class="tex_end text-right">
                                                 {{x.quantityAlreadyReserved}}
                                             </td>
+                                            <td *ngIf="!isSubWorkOrder" class="tex_end text-right">
+                                                {{x.quantityPicked}}
+                                            </td>
                                             <td class="tex_end text-right" *ngIf="(statusId === 1 || statusId === 5)">
                                                 {{ statusId !=5 ? x.qtyToBeReserved : x.qtyToBeReserved}}
                                             </td>
@@ -229,12 +233,30 @@
                                                     (keyup)="validatePartsQuantity($event,x)" (change)="handleQty(x)"
                                                     [disabled]="!x.isParentSelected">
                                             </td>
-                                            <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
+                                            <td *ngIf="!isSubWorkOrder &&  (statusId === 2  || statusId === 3 || statusId === 4)">
+                                                <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
+                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
+                                                    (keyup)="validatePartsQuantity($event,x)"
+                                                    [disabled]="!x.isParentSelected">
+                                                  
+                                                    <!-- <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
+                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
+                                                    (keyup)="validatePartsQuantity($event,x)"
+                                                    [disabled]="!x.isParentSelected"> -->
+
+                                            </td>
+                                            <td *ngIf="(( statusId === 2  || statusId === 3 || statusId === 4) && isSubWorkOrder)">
                                                 <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
                                                     (change)="handleQty(x)" (keypress)="restrictMinus($event)"
                                                     (keyup)="validatePartsQuantity($event,x)"
                                                     [disabled]="!x.isParentSelected">
                                             </td>
+                                            <!-- <td *ngIf="!isSubWorkOrder && (statusId === 2 && enablePickTicket)">
+                                                <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
+                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
+                                                    (keyup)="validatePartsQuantity($event,x)"
+                                                    [disabled]="!x.isParentSelected">
+                                            </td> -->
                                             <td class="tex_end text-right">
                                                 {{x.quantityAlreadyIssued}}
                                             </td>
@@ -856,7 +878,7 @@
     </div>
 </div>
 <div *ngIf="!ispickticket">
-    <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align1 parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+    <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
         style="min-height: 130px !important;">
         <p-table class=" rpo-table-cstm1 rro-table-cstm materialListTable" id="custome_material"
             [columns]="summaryColumns" #materialTble [value]="workOrderMaterialList" [paginator]="true"
@@ -876,8 +898,9 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView"
-                        style=" width: 160px !important; ">Actions </th>
+                    <!-- *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" -->
+                    <th class="table-actions-column"
+                         [ngClass]="(isView == false) ? 'width-160' : 'width-80'">Actions </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
@@ -936,20 +959,21 @@
                     <td class="summary-column"></td>
                     <td class="summary-column"></td>
                     <td class="action-icons-cstm  lastcol-fix"
-                        style="position: sticky !important; min-width: 145px !important;width: 160px !important;"
-                        *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
-                        <span><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit"
+                        style="position: sticky !important; min-width: 145px !important;width: 160px !important;text-align:center !important"
+                       >
+                       <!-- *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" -->
+                        <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit"
                                 matTooltipPosition="above"><i class="fa fa-pencil"></i></button></span>
                         <span>
                             <a class="btn nobg btn-view-cstm" (click)="viewItem(rowData)" matTooltip="View Inventory"
                                 matTooltipPosition="above">
                                 <i class="fa fa-eye"></i> </a>
                         </span>
-                        <span><button type="button" class="btn nobg btn-pluspo-cstm"
+                        <span *ngIf="!isView"><button type="button" class="btn nobg btn-pluspo-cstm"
                                 (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"
                                 matTooltip="Create PO" matTooltipPosition="above"><i
                                     class="fa fa-plus create_po_crl"></i></button></span>
-                        <span *ngIf="!isSubWorkOrder">
+                        <span *ngIf="!isSubWorkOrder && !isView">
                             <button class="btn nobg" mat-icon-button
                                 (click)="pickticketItemInterface(rowData,pickticketieminterface)"
                                 matTooltip="Add Pick Ticket" matTooltipPosition="above" style="font-weight: bold;"
@@ -957,14 +981,14 @@
                                 <i class="fa fa-plus" [ngClass]="{'btn_disabled':!(rowData.partStatusId >0)}"></i>
                             </button>
                         </span>
-                        <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
+                        <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order' && !isView">
                             <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId == 0"
                                 (click)="subWoClick(rowData)"
                                 [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'"
                                 matTooltipPosition="above"
-                                [disabled]="!(rowData.partStatusId ==2  || rowData.partStatusId ==3)">
+                                [disabled]="!(rowData.partStatusId ==enumPartStatus.Issued  || rowData.partStatusId ==enumPartStatus.Reserveandissued)">   
                                 <i class="fa fa-plus grn_clr"
-                                    [ngClass]="{'btn_disabled':!(rowData.partStatusId ==2 || rowData.partStatusId ==3 )}"></i>
+                                    [ngClass]="{'btn_disabled':!(rowData.partStatusId ==enumPartStatus.Issued || rowData.partStatusId ==enumPartStatus.Reserveandissued )}"></i>
                             </button>
                             <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId != 0"
                                 (click)="editSubWo(rowData)"
@@ -973,20 +997,23 @@
                                 <i class="fa fa-pencil grn_clr"></i>
                             </button>
                         </span>
-                        <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order'">
+                        <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order' && !isView">
                             <button type="button" class="btn nobg btn-pluspo-cstm" disabled>
                                 <i class="fa fa-plus" style="color: #b7b7b7;"></i>
                             </button>
                         </span>
-                        <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;"
+                        <span *ngIf="!isView"><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;"
                                 (click)="openDelete(content,rowData)"
                                 [ngClass]="{'btn_disabled': (rowData.quantityIssued!=0 || rowData.quantityReserved!=0)}"
                                 [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"
                                 matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button>
                         </span>
-                        <span data-toggle="modal" data-target="#materialAudit"><a class="btn nobg btn-hist-cstm mr-top5"
+                        <span data-toggle="modal" data-target="#materialAudit"><a 
+                            [ngClass]="(isView == false) ? 'btn nobg btn-hist-cstm mr-top5' : 'btn nobg btn-hist-cstm'"
+                           
                                 (click)="openMaterialAudit(rowData)" matTooltip="Material List History"
                                 matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                <!-- class="btn nobg btn-hist-cstm mr-top5" -->
                     </td>
                 </tr>
                 <tr class="child-header splitship-head child-header-back">
@@ -994,7 +1021,7 @@
                         [ngStyle]="{'min-width': childcol.width}" style="text-align: center !important;">
                         {{childcol.header}}
                     </td>
-                    <td *ngIf="!isView" class="lastcol-fix"
+                    <td   class="lastcol-fix"
                         style="position: sticky !important; min-width: 145px !important; width:80px"></td>
                 </tr>
                 <tr class="child-data splitship-child child-data-back " pReorderableRowHandle
@@ -1045,16 +1072,23 @@
                             class="p_textEditor truncate-text" matTooltipPosition="above"
                             [matTooltip]="parsedText(childRowData[childcol.field])"></span>
                     </td>
-                    <td *ngIf="!isView" class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px">
+                    <td  class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px;text-align:center !important">
   
-                        <span><button class="btn nobg btn-edit-cstm1" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
+                        <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
                         <span>
                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                 (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            </span>
-                        <span><button type="button" class="btn nobg btn-delete-cstm" [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"  (click)="deleteStockLine(Stockcontent,childRowData)"  matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                        </span>
+                        <span *ngIf="!isView"><button type="button" class="btn nobg btn-delete-cstm"
+                                [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0"
+                                (click)="deleteStockLine(Stockcontent,childRowData)" matTooltip="Remove"
+                                matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                        <!-- <span><button type="button" class="btn nobg btn-pluspo-cstm"
+                                (click)="createNewROWorkOrder(childRowData,rowData)" *ngIf="rowData.isRoleUp == false && rowData.provision == 'REPAIR'"
+                                matTooltip="Create RO" matTooltipPosition="above"><i
+                                    class="fa fa-plus"></i></button></span> -->
                     </td>
                 </tr>
                 <tr class="child-data splitship-child child-data-back "
@@ -1145,7 +1179,7 @@
                             <ng-container *ngIf="col.field =='qtyToShip'">
                                 <input type="number" class="form-control quantityTextBox text-right" pInputText
                                     pKeyFilter="num" required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}"
-                                    value="{{part.qtyToReserve}}" [(ngModel)]="part.qtyToShip"
+                                    value="{{part.qtyToReserve}}" [(ngModel)]="part.qtyToShip" (focusout)="onFocusOutEvent(rowData)"
                                     [disabled]="rowData.isSelected == false" required="col.field =='qtyToShip'" />
                             </ng-container>
                         </td>

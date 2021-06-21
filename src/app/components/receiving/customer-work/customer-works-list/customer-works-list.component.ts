@@ -536,7 +536,8 @@ export class CustomerWorksListComponent implements OnInit {
     // } 
     setEditArray:any=[]
     getCustomerWarningsList(): void {
-        const strText='Receive MPN';
+        // const strText='Receive MPN'; 
+        const strText='Create WO for MPN';
         this.setEditArray.push(0);
     const mcId= this.authService.currentUser
     ? this.authService.currentUser.masterCompanyId
@@ -561,7 +562,7 @@ export class CustomerWorksListComponent implements OnInit {
         this.editData=rowData;
         this.isAddWorkOrder=true;
         this.customerWarnings(rowData.customerId);
-       this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${rowData.receivingCustomerWorkId}`);
+    //    this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${rowData.receivingCustomerWorkId}`);
     }
 
     gotoCustomer(rowData) {

@@ -516,10 +516,10 @@
                                                 </div>-->
                                         <div class="stockGridpanel"
                                             *ngIf="part.stocklineListObj != undefined && part.stocklineListObj.length > 0">
-                                            <h3 class="add-details-heading">{{ part.itemMaster?.partNumber }} receiving
+                                            <h3 class="add-details-heading" *ngIf="part.quantityActuallyReceived > 1">{{ part.itemMaster?.partNumber }} receiving
                                                 Qty {{ (part.currentSLIndex + 1) }} of
                                                 {{ part.stocklineListObj.length }} </h3>
-                                            <div class="pull-right parts-div" *ngIf="!part.isSameDetailsForAllParts">
+                                            <div class="pull-right parts-div" *ngIf="!part.isSameDetailsForAllParts && part.quantityActuallyReceived > 1">
                                                 <!--*ngIf="part.itemMaster.isSerialized"-->
                                                 <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                     (click)="moveStockLineMainPage('stockline', part.currentSLIndex - 1, part)"></i>
@@ -529,7 +529,7 @@
                                                     class="form-control parts-input" />
                                                 <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                     (click)="moveStockLineMainPage('stockline', part.currentSLIndex + 1, part)"></i>
-                                                <p>Page {{part.currentSLIndex + 1}} of {{part.stocklineListObj.length}}
+                                                <p *ngIf="part.quantityActuallyReceived > 1">Page {{part.currentSLIndex + 1}} of {{part.stocklineListObj.length}}
                                                     Pages</p>
                                             </div>
                                             <section>
@@ -537,7 +537,7 @@
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <div class="checkbox-cstm m-t-4">
-                                                                <label class="width-200">
+                                                                <label class="width-200" *ngIf="part.quantityActuallyReceived > 1">
                                                                     <!--*ngIf="part.itemMaster.isSerialized"-->
                                                                     <input type="checkbox" class="form-control"
                                                                         (change)="toggleSameDetailsForAllParts(part)">
@@ -701,7 +701,7 @@
                                                                 [suggestions]="revisedPartNumCollection"
                                                                 (completeMethod)="filterRevisedPart($event)" [size]="30"
                                                                 [minLength]="1" [disabled]="true" [dropdown]="true"
-                                                                required>
+                                                                >
                                                             </p-autoComplete>
                                                         </div>
                                                         <div class="form-group">
@@ -1157,7 +1157,7 @@
                                                     *ngIf="part.itemMaster.isSerialized">Serialized
                                                 </h4>
                                                 <div class="pull-right serialised-div"
-                                                    *ngIf="part.itemMaster.isSerialized">
+                                                    *ngIf="part.itemMaster.isSerialized && part.quantityActuallyReceived > 1">
                                                     <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('stockline', part.currentSERIndex - 1, part)"></i>
                                                     <input [value]="part.currentSERIndex + 1" type="text" pInputText
@@ -1166,7 +1166,7 @@
                                                         class="form-control parts-input" />
                                                     <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('stockline', part.currentSERIndex + 1, part)"></i>
-                                                    <p>Page {{part.currentSERIndex + 1}} of
+                                                    <p *ngIf="part.quantityActuallyReceived > 1">Page {{part.currentSERIndex + 1}} of
                                                         {{part.stocklineListObj.length}} Pages</p>
                                                 </div>
                                                 <div class="form-row" *ngIf="part.itemMaster.isSerialized">
@@ -1177,18 +1177,23 @@
                                                                 (keyup)="moveByKey($event, part)"
                                                                 disabled="{{part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided}}"
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumber"
-                                                                type="text" pInputText [maxLength]="25">
+                                                                type="text" pInputText [maxLength]="25" [required]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided == false">
                                                             <div class="checkbox-cstm m-t-4">
                                                                 <label class="width-200">
-                                                                    <input type="checkbox" class="form-control"
-                                                                        disabled="part.itemMaster.isSerialized"
+                                                                    <!-- <input type="checkbox" class="form-control"
+                                                                        disabled="part.itemMaster.isSerialized"                                                                       
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided"
                                                                         (click)="onSerialNumberNotProvided(part.stocklineListObj[part.currentSERIndex])">
                                                                     <span class="cr"
                                                                         [ngStyle]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided ?{'background-color':'#a9a9a9'} : {'background-color': 'white'}">
+                                                                        <i class="cr-icon pi pi-check"></i> -->
+                                                                        <input type="checkbox" class="form-control"                                                                                                                                          
+                                                                            [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided"
+                                                                            (click)="onSerialNumberNotProvided(part.stocklineListObj[part.currentSERIndex])">
+                                                                        <span class="cr">
                                                                         <i class="cr-icon pi pi-check"></i>
                                                                     </span>
-                                                                    Serial Number not provided
+                                                                    Serial Number not provided                                                                    
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -1197,12 +1202,12 @@
                                             </section>
                                             <br />
                                             <section *ngIf="part.itemMaster.isTimeLife">
-                                                <h3 class="add-details-heading">
+                                                <h3 class="add-details-heading" *ngIf="part.quantityActuallyReceived > 1">
                                                     {{ part.itemMaster?.partNumber }}
                                                     receiving Qty Time Life {{ (part.currentTLIndex + 1) }} of
                                                     {{ part.timeLifeList.length }}
                                                 </h3>
-                                                <div class="pull-right parts-div" *ngIf="part.itemMaster.isTimeLife">
+                                                <div class="pull-right parts-div" *ngIf="part.itemMaster.isTimeLife && part.quantityActuallyReceived > 1">
                                                     <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('timelife', part.currentTLIndex - 1, part)"></i>
                                                     <input [value]="part.currentTLIndex + 1" type="text" pInputText
@@ -1211,7 +1216,7 @@
                                                         class="form-control parts-input" />
                                                     <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('timelife', part.currentTLIndex + 1, part)"></i>
-                                                    <p>Page {{part.currentTLIndex + 1}} of {{part.timeLifeList.length}}
+                                                    <p *ngIf="part.quantityActuallyReceived > 1">Page {{part.currentTLIndex + 1}} of {{part.timeLifeList.length}}
                                                         Pages
                                                     </p>
                                                 </div>
@@ -1223,11 +1228,11 @@
                                                                     <input type="checkbox"
                                                                         [(ngModel)]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                         class="form-control"
-                                                                        (click)="onChangeTimeLife(part)"
-                                                                        disabled="part.itemMaster.isTimeLife">
+                                                                        (click)="onChangeTimeLife(part)">                                                                       
                                                                     <span class="cr"><i
                                                                             class="cr-icon pi pi-check"></i></span> Time
                                                                     Life details not provided
+                                                                    <!-- disabled="part.itemMaster.isTimeLife" -->
                                                                 </label>
                                                             </div>
                                                         </div>

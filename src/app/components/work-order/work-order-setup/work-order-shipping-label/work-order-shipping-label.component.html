@@ -1,13 +1,13 @@
             
    <div id="ShippingSlipDiv" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
-        <div class="modal-content" id="soShippingLabel">
+        <div class="modal-content" >
 
             <div class="modal-header">
                 <button type="button" (click)="close()" class="close" data-dismiss="modal">&times;</button>
                 <!-- <h4 class="modal-title warning_color"></h4> -->
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="woShippingLabel">
                 <form id="" name="" action="#" method="post" onsubmit="return false;">
                     <div class="image">
                         <div style="padding: 0; margin: 0;">
@@ -183,25 +183,19 @@
                 <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
             </div>
+
+
           </div>
+
+          <div class="preloader" *ngIf="isSpinnerVisibleNew">
+            <div class="loading">
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
          
     </div>
 </div>
 
-<div class="preloader" *ngIf="isSpinnerVisible">
-    <div class="loading">
-        <div class="lds-roller">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-</div>
 
             
 

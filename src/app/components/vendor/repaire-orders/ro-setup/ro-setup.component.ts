@@ -202,6 +202,7 @@ export class RoSetupComponent implements OnInit {
 	legalEntityList_Forgrid: any;
 	discountPercentList: any = [];
 	allPercentData: any = [];
+	allrevisedpartData: any = [];
 	splitcustomersList: any = [];
 	splitAddressData: any = [];
 	tempSplitAddressData: any = [];
@@ -397,7 +398,7 @@ export class RoSetupComponent implements OnInit {
 	qty: number;
 	stocklineId: number;
 	workOrderId:number;
-	subWorkOrderId:number;
+	subWorkOrderId:any;
 	msgflag: number = 0;
 	openStatusId: number = 0
 	pendingStatusId: number = 0
@@ -439,7 +440,7 @@ export class RoSetupComponent implements OnInit {
 		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
 		this.qty = JSON.parse(localStorage.getItem('lsqty'));
 		this.stocklineId = JSON.parse(localStorage.getItem('lsstocklineId'));
-		this.subWorkOrderId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		this.subWorkOrderId = localStorage.getItem('lsSubWoId');
 		this.workOrderId = JSON.parse(localStorage.getItem('lsWoId'));
 		
 		this.openStatusId = StatusEnum.Open;
@@ -521,6 +522,9 @@ export class RoSetupComponent implements OnInit {
 						}
 						else if (x.label == "CONDITION") {
 							this.arrayConditionlist.push(x.value);
+						}
+						else if (x.label == "REVISEDPART") {
+							this.arrayrevisedPartlist.push(x.value);
 						}
 					});
 					this.editDropDownLoad();
@@ -1464,6 +1468,10 @@ export class RoSetupComponent implements OnInit {
 		this.arraySOlist.push(id);
 	}
 
+	onRevisedPnSelect(id) {		
+		this.arrayrevisedPartlist.push(id);
+	}
+
 	// private salesStockRefData() {		
 	// 		if(this.salesOrderReferenceData){
 	//             this.newObjectForParent.partNumberId = {value: this.salesOrderReferenceData.itemMasterId, label: this.salesOrderReferenceData.partNumber};
@@ -1671,8 +1679,8 @@ export class RoSetupComponent implements OnInit {
 		});
 	}
 	BindAllParts(data) {
-		this.partListData = [];
-		this.newPartsList = [this.newObjectForParent];
+		this.partListData = [];		
+		this.newPartsList = [this.newObjectForParent];		
 		if (data) {
 			data[0].map((x, pindex) => {
 				this.newPartsList = {
@@ -1701,8 +1709,8 @@ export class RoSetupComponent implements OnInit {
 					isApproved: x.isApproved ? x.isApproved : false,
 					childList: this.getRepairOrderSplitPartsEdit(x, pindex, data[1]),
 					remQty: 0,
-
-					revisedPartId: x.revisedPartId ? getObjectById('itemMasterId', x.revisedPartId, this.revisedPartNumCollection) : 0,
+					
+					revisedPartId: x.revisedPartId && x.revisedPartId > 0 ? getObjectById('itemMasterId', x.revisedPartId, this.revisedPartNumCollection) : getObjectById('itemMasterId', 0 , this.revisedPartNumCollection),
 					vendorQuoteNoId: getObjectById('value', x.vendorQuoteNoId == null ? 0 : x.vendorQuoteNoId, this.allSalesOrderDetails),
 					workPerformedId: getObjectById('value', x.workPerformedId == null ? 0 : x.workPerformedId, this.workPerformedCollection),
 					estRecordDate: x.estRecordDate ? new Date(x.estRecordDate) : '',
@@ -2908,10 +2916,10 @@ export class RoSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "PN is required."
 			}
-			if (!this.partListData[i].revisedPartId) {
-				this.isSpinnerVisible = false;
-				errmessage = errmessage + '<br />' + "Revised Part Number is required."
-			}
+			// if (!this.partListData[i].revisedPartId) {
+			// 	this.isSpinnerVisible = false;
+			// 	errmessage = errmessage + '<br />' + "Revised Part Number is required."
+			// }
 			if (!this.partListData[i].workPerformedId) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Work to Perform is required."
@@ -3460,11 +3468,12 @@ export class RoSetupComponent implements OnInit {
 						controlId: x.idNumber,
 						controlNumber: x.controlNumber,
 						acTailNum: x.aircraftTailNumber,
-						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },						
-						workOrderId: getObjectById('value', this.workOrderId == null ? 0 : this.workOrderId, this.allWorkOrderDetails),											
-						subWorkOrderId: getObjectById('value', this.subWorkOrderId == null ? 0 : this.subWorkOrderId, this.allSalesOrderInfo),
-						//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
-						x,
+						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },	
+						x,					
+						workOrderId: getObjectById('value', this.workOrderId == null ? 0 : this.workOrderId , this.allWorkOrderDetails),	
+						subWorkOrderId: this.subWorkOrderId,
+						//subWorkOrderId: getObjectById('value', this.subWorkOrderId == null ? 0 : this.subWorkOrderId, this.allSalesOrderInfo),
+						//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),						
 					}
 					this.getManagementStructureForParentEdit(newObject);
 					this.getPNDetailsByStocklineId(newObject);
@@ -3476,8 +3485,10 @@ export class RoSetupComponent implements OnInit {
 					if (!this.partListData[i].ifSplitShip) {
 						this.partListData[i].childList = [];
 					}
-				}			
-				this.partListData[0].quantityOrdered = qty;
+				}						
+				if(this.partListData.length > 0){
+					this.partListData[0].quantityOrdered = qty;
+				}
 			}
 			this.partNumbers = null;
 			this.addAllMultiPN = false;
@@ -3676,12 +3687,13 @@ export class RoSetupComponent implements OnInit {
 					}
 				}
 			}
-			
+			this.stocklinepartNumberId = this.partCollection.find((x: any) => x.value == itmeMasterID);		
+			var conditiondata = this.allconditioninfo.find((x: any) => x.value == Condtionid);
+			this.stocklineconditionId = [parseInt(conditiondata["value"])];
 		}, err => {
 			this.isSpinnerVisible = false;
 			this.stocklineData = []
 		});
-
 	}
 
 
@@ -5167,10 +5179,17 @@ export class RoSetupComponent implements OnInit {
 			this.arrayrevisedPartlist.push(0);
 		}
 		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20, this.arrayrevisedPartlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-			this.revisedPartNumCollection = [];
-			for (let i = 0; i < res.length; i++) {
-				this.revisedPartNumCollection.push({ itemMasterId: res[i].value, partNumber: res[i].label });
-			};
+			
+			const data = res.map(x => {
+				return {
+					itemMasterId: x.value,
+					partNumber: x.label
+				}
+			});
+			this.allrevisedpartData = [
+				{ itemMasterId: 0, partNumber: '-- Select --' }
+			];
+			this.revisedPartNumCollection = [...this.allrevisedpartData, ...data];	
 		});
 	}
 
@@ -5222,8 +5241,7 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	StockLinePopup(row) {
-		debugger
+	StockLinePopup(row) {		
 		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
 			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
 			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;

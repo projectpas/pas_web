@@ -10931,7 +10931,8 @@ a.ui-button:active,
 .ui-button:active,
 .ui-button.ui-state-active:hover {
   border: 1px solid #003eff;
-  background: #007fff;
+  // background: #007fff;
+  background:#337ab7 !important;
   font-weight: normal;
   color: #ffffff;
 }
@@ -17102,4 +17103,8 @@ ng-multiselect-dropdown{
   border-collapse: collapse;
   width: 100%;
   table-layout: auto !important;
+}
+.ui-megamenu-submenu {
+
+    width: 19em !important;
 }

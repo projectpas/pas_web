@@ -20,7 +20,7 @@ export class WorkOrderMultiShippingLabelComponent implements OnInit,OnChanges {
   salesOrderpartConditionDescription: any;
   endPointURL: any;
   isPrint: boolean = false;
-  isSpinnerVisible: boolean = false;
+  isSpinnerVisibleNew: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -47,12 +47,12 @@ export class WorkOrderMultiShippingLabelComponent implements OnInit,OnChanges {
     const data={
       'shippingLabels' :this.shippingLabels
      }
-     this.isSpinnerVisible= true
+     this.isSpinnerVisibleNew= true
     this.workOrderService.getMultiShippingLabelPrint(data).subscribe(res => {
       this.objWorkOrderShippingLabels = res[0];
-      this.isSpinnerVisible= false
+      this.isSpinnerVisibleNew= false
     }, error => {
-      this.isSpinnerVisible = false;
+      this.isSpinnerVisibleNew = false;
     })
   }
   close()
@@ -64,7 +64,7 @@ export class WorkOrderMultiShippingLabelComponent implements OnInit,OnChanges {
 
   print(): void {
     let printContents, popupWin;
-    printContents = document.getElementById('ShippingSlip').innerHTML;
+    printContents = document.getElementById('woShippingLabel').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
     popupWin.document.write(`

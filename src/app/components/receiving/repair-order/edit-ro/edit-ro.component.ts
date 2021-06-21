@@ -168,7 +168,7 @@ export class EditRoComponent implements OnInit {
                     }
                     else if (x.label == "MANUFACTURER") {
                         this.arraymanufacturerlist.push(x.value);
-                    }
+                    }                   
                 });
                 this.getShippingVia();
                 this.getConditionList();
@@ -1534,7 +1534,8 @@ export class EditRoComponent implements OnInit {
         }
         else {
             const unitCost = stockLine.repairOrderUnitCost ? parseFloat(stockLine.repairOrderUnitCost.toString().replace(/\,/g, '')) : 0;
-            stockLine.repairOrderExtendedCost = unitCost * part.quantityActuallyReceived;
+            //stockLine.repairOrderExtendedCost = unitCost * part.quantityActuallyReceived; 
+            stockLine.repairOrderExtendedCost = unitCost * stockLine.quantity;
         }
         if (stockLine.repairOrderUnitCost) {
             stockLine.repairOrderUnitCost = stockLine.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(stockLine.repairOrderUnitCost, 2) : '0.00';
@@ -1556,7 +1557,8 @@ export class EditRoComponent implements OnInit {
         }
         else {
             const unitCost = part.unitCost ? parseFloat(part.unitCost.toString().replace(/\,/g, '')) : 0;
-            const extendedCost = unitCost * part.quantityActuallyReceived;
+            //const extendedCost = unitCost * part.quantityActuallyReceived;
+            const extendedCost = unitCost * part.quantityOrdered;;
             part.extendedCost = extendedCost ? formatNumberAsGlobalSettingsModule(extendedCost, 2) : '0.00';
         }
 
@@ -1769,10 +1771,10 @@ export class EditRoComponent implements OnInit {
                     stockLine.repairOrderId = this.repairOrderId;
                     stockLine.masterCompanyId = this.currentUserMasterCompanyId;
 
-                    if (stockLine.revisedPartId == undefined || stockLine.revisedPartId == 0) {
-                        this.alertService.showMessage(this.pageTitle, "Please select Revised Part Number in Receiving Qty - " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
-                        return
-                    }
+                    // if (stockLine.revisedPartId == undefined || stockLine.revisedPartId == 0) {
+                    //     this.alertService.showMessage(this.pageTitle, "Please select Revised Part Number in Receiving Qty - " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                    //     return
+                    // }
                     if (stockLine.unitOfMeasureId == undefined || stockLine.unitOfMeasureId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Unit Of Measure in Receiving Qty - " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return
@@ -1822,7 +1824,7 @@ export class EditRoComponent implements OnInit {
             this.isSpinnerVisible = true;
             this.receivingService.updateStockLine(receiveParts).subscribe(data => {
                 this.isSpinnerVisible = false;
-                this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
+                this.alertService.showMessage(this.pageTitle, 'Stock Line Draft Updated Successfully.', MessageSeverity.success);
                 this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);
             },
                 errr => {
@@ -2118,7 +2120,12 @@ export class EditRoComponent implements OnInit {
             };
             for (let part of this.repairOrderData) {
                 for (let SL of part.stockLine) {
-                    if (SL.revisedPartId != null) {
+                    if (SL.revisedPartId != null) {                        
+                        var revisedpn = this.revisedPartNumCollection.find(temp => temp.itemMasterId == SL.revisedPartId)
+                        if (!revisedpn || revisedpn == undefined) {
+                            var rpn = { itemMasterId : SL.revisedPartId , partNumber : SL.revisedPartNumber }           
+                            this.revisedPartNumCollection.push(rpn);
+                        }
                         SL.revisedPartObject = this.revisedPartNumCollection.find(x => x.itemMasterId == SL.revisedPartId);
                     }
                 }

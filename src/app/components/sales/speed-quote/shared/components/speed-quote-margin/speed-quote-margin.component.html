@@ -120,9 +120,16 @@
                                 </td>                                                         
                             </tr>
                             <tr>
-                                <td>
+                                <!-- <td>
                                   {{partData.tat}}
-                                </td>                                                            
+                                </td>-->
+                                <td>
+                                  <input type="text" class="form-control text-right"
+                                    [ngModel]="partData.tat"
+                                    [ngModelOptions]="{updateOn:'blur'}"
+                                    (ngModelChange)="partData.tat=formatStringToNumberGlobal($event)"
+                                    pKeyFilter="money" />
+                                </td>  
                             </tr>
                         </table>                      
                     </td>

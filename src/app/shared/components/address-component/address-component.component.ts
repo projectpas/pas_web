@@ -180,6 +180,11 @@ export class AddressComponentComponent implements OnInit {
 					this.userBillingIdList.push(x.value);
 					this.userShipingIdList.push(x.value);
 				}
+				else if (x.label == "VENDORID") {
+					this.defaultMSCOMPANYID = x.value;
+					this.userBillingIdList.push(x.value);
+					this.userShipingIdList.push(x.value);
+				}
 				else if (x.label == "CUST_ADDID") {
 					shipUsertype = 1;
 					billUsertype = 1;
@@ -838,17 +843,24 @@ export class AddressComponentComponent implements OnInit {
 					}
 					if (this.shipToContactDataList && this.shipToContactDataList.length > 0) {
 						this.sourcePoApproval.shipToContactId = this.shipToContactDataList[0].contactId;
+						this.shipToContactDataList.forEach(
+							x => {
+								if (x.isPrimary) {
+									this.sourcePoApproval.shipToContactId = x.contactId;
+								}
+							}
+						)
 					}
 
 					if (this.shipViaList && this.shipViaList.length > 0) {
 						this.sourcePoApproval.shippingViaId = this.shipViaList[0].shippingViaId;
 						this.shipViaList.forEach(
-                            x => {
-                                if (x.isPrimary) {
-                                    this.sourcePoApproval.shippingViaId = x.shippingViaId;
-                                }
-                            }
-                        )
+							x => {
+								if (x.isPrimary) {
+									this.sourcePoApproval.shippingViaId = x.shippingViaId;
+								}
+							}
+						)
 						this.getShipViaDetails(this.sourcePoApproval.shippingViaId);
 					}
 
@@ -940,6 +952,13 @@ export class AddressComponentComponent implements OnInit {
 
 					if (this.billToContactDataList && this.billToContactDataList.length > 0) {
 						this.sourcePoApproval.billToContactId = this.billToContactDataList[0].contactId;
+						this.billToContactDataList.forEach(
+							x => {
+								if (x.isPrimary) {
+									this.sourcePoApproval.billToContactId = x.contactId;
+								}
+							}
+						)
 					}
 
 					this.billingSieListOriginal = this.billToSite.map(x => {

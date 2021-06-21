@@ -234,7 +234,7 @@
                                                         Warning
                                                     </label>
                                                     <input class="form-control" matTooltipPosition="above" type="text"
-                                                        name="warningMessag" #adminUsername="ngModel" disabled
+                                                        name="warningMessag" matTooltip="{{currentWarningMessage}}" #adminUsername="ngModel" disabled
                                                         [(ngModel)]="currentWarningMessage" />
                                                 </div>
                                             </div>
@@ -1101,6 +1101,7 @@
                             (click)="gridTabChange('documents');">Documents</a>
                     </li>
 
+               
                     <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workComplete'}"
@@ -1119,9 +1120,9 @@
                         (click)="otherOptionTabSelected('freight');gridTabChange('otherOptions')">Freight</a>
                     <a class="dropdown-item"
                         (click)="otherOptionTabSelected('charges');gridTabChange('otherOptions')">Charges</a>
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workComplete'}"
-                        (click)="gridTabChange('workComplete')">Work Complete</a>
+                        <!-- <a class="nav-link  "  
+                         [ngClass]="{active : gridActiveTab === 'workComplete'}"
+                        (click)="gridTabChange('workComplete')">Settlement</a> -->
                
                     </div>
             </li>
@@ -1151,8 +1152,7 @@
                             (click)="gridTabChange('releasefrom')">8130 Form</a>
                             <a class="dropdown-item"
                             (click)="gridTabChange('woreleaseeasafrom')">9130A Form</a> -->
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                aria-expanded="false"
+                                <a class="dropdown-item"   *ngIf="!isSubWorkOrder"
                                 (click)="gridTabChange('ActualVsQuote')">Actual vs. Quote Summary</a>
                        
                             </div>
@@ -1162,15 +1162,22 @@
                             [ngClass]="{active : gridActiveTab === 'releasefrom'}"
                             (click)="gridTabChange('releasefrom')" >Release Form</a>
                     </li>
-                    <li class="nav-item dropdown" *ngIf="!isSubWorkOrder">
+                    <li class="nav-item" *ngIf="!isSubWorkOrder">
+                        <a class="nav-link " 
+                          [ngClass]="{active : gridActiveTab === 'workComplete'}"
+                        (click)="gridTabChange('workComplete')">Settlement</a>
+                        </li>
+                    <li class="nav-item dropdown" >
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" [ngClass]="{active : gridActiveTab === 'workorderprint'}">Work Order Print
                             </a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item"
-                            (click)="gridTabChange('workorderfrom')"> Work Order Form</a>
+                            (click)="gridTabChange('workorderfrom')" *ngIf="!isSubWorkOrder"> Work Order Form</a>
                             <a class="dropdown-item"
-                            (click)="gridTabChange('workorderpartfrom')">Work Order Part Form</a>
+                            (click)="gridTabChange('workorderpartfrom')" *ngIf="!isSubWorkOrder">Work Order Part Form</a>
+                            <a class="dropdown-item"
+                            (click)="gridTabChange('subworkorderfrom')" *ngIf="isSubWorkOrder">Sub Work Order Part Form</a>
                             </div>
                     </li>
                 </ul>
@@ -1215,11 +1222,11 @@
                         [savedWorkOrderData]="savedWorkOrderData" (saveworkOrderLabor)="saveworkOrderLabor($event)"
                         (refreshLabor)="refreshLabor($event)" [workFlowId]="workFlowId"
                         [isView]="isView || isViewForApprovedPart">
-                    </app-work-order-labor>
-                </div>
+                    </app-work-order-labor> 
+                </div> 
                 <div *ngIf="(gridActiveTab == 'equipment')" [ngClass]="{hidedata : gridActiveTab !== 'equipment'}">
                     <app-work-order-assets (saveEquipmentListForWO)="saveWorkOrderEquipmentList($event)"
-                        [workOrderPartNumberId]="workOrderPartNumberId"
+                        [workOrderPartNumberId]="workOrderPartNumberId" [transferWorkflow]="transferWorkflowData"
                         (updateEquipmentListForWO)="updateWorkOrderEquipmentList($event)"
                         [woNumber]="isSubWorkOrder? subWorkOrderDetails.workOrderNum : workOrderGeneralInformation.workOrderNum"
                         [customerName]="isSubWorkOrder?subWorkOrderDetails.customerName:  workOrderGeneralInformation.customerDetails.customerName"
@@ -1259,7 +1266,7 @@
                         [labordata]="labor" [workOrderLaborList]="workOrderLaborList"
                         [quoteChargesList]="quoteChargesList" [workOrderChargesList]="workOrderChargesList"
                         [quoteLaborList]="quoteLaborList" [taskList]="taskList"
-                        [buildMethodDetails]="buildMethodDetails" [isViewMode]="isView || isViewForApprovedPart">
+                        [buildMethodDetails]="buildMethodDetails" [isView]="isView"  [isViewMode]="isView || isViewForApprovedPart">
                     </app-work-order-billing>
                 </div>
                 <div *ngIf="(gridActiveTab == 'quote') && !isSubWorkOrder">
@@ -1317,12 +1324,15 @@
                     </app-work-order-analysis>
                 </div>
                 <div *ngIf="(gridActiveTab == 'workorderfrom')" [ngClass]="{hidedata: gridActiveTab !== 'workorderfrom'}">
-                    <app-wo-print-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-print-form>
+                    <app-wo-print-form [isView]="isView" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-print-form>
+                </div>
+                <div *ngIf="(gridActiveTab == 'subworkorderfrom')" [ngClass]="{hidedata: gridActiveTab !== 'subworkorderfrom'}">
+                    <app-sub-wo-print-form [isView]="isView" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails" > </app-sub-wo-print-form>
                 </div>
                 <div *ngIf="(gridActiveTab == 'workorderpartfrom')" [ngClass]="{hidedata: gridActiveTab !== 'workorderpartfrom'}">
 
                     <!-- <app-woq-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-woq-form> -->
-                    <app-wo-part-list-form [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-part-list-form>
+                    <app-wo-part-list-form [isView]="isView" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-wo-part-list-form>
                 </div>
 
                 <div *ngIf="(gridActiveTab == 'laboranalysis')"
@@ -1336,11 +1346,18 @@
                 <div *ngIf="(gridActiveTab == 'releasefrom')"
                 [ngClass]="{hidedata: gridActiveTab !== 'releasefrom'}">
 
-                <app-work-order-release-from-list [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-work-order-release-from-list>
+                <app-work-order-release-from-list [isView]="isView" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId"> </app-work-order-release-from-list>
                 <!-- <app-wo-release-from 
                      [workOrderId]="workOrderId" [isSubWorkOrder]="isSubWorkOrder"
                     [subWOPartNoId]="subWOPartNoId">
                 </app-wo-release-from> -->
+            </div>
+            <div  *ngIf="(gridActiveTab == 'ActualVsQuote')"
+            [ngClass]="{hidedata: gridActiveTab !== 'ActualVsQuote'}">
+
+            <app-work-order-vs-work-quote-summury [workOrderbillingInvoicingId]="WObillingInvoicingId"
+            [workOrderId]="workOrderId" (onInvoiceLoad)="onInvoiceLoad($event)"></app-work-order-vs-work-quote-summury>
+
             </div>
 
             <!-- <div *ngIf="(gridActiveTab == 'woreleaseeasafrom')"
@@ -1374,8 +1391,19 @@
                         (refreshData)="getChargesListByWorkOrderId()" [isView]="isView || isViewForApprovedPart">
                     </app-work-order-charges>
                 </div>
+<div *ngIf="workOrderId && (gridActiveTab == 'ActualVsQuote')" class="wf-label-cstm  "
+[ngClass]="{hidedata : gridActiveTab !== 'ActualVsQuote'}">
+<app-wo-actual-vs-quote [isWorkOrder]="isWorkOrder" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
+[isSubWorkOrder]="isSubWorkOrder"  [workFlowWorkOrderId]="workFlowWorkOrderId"  [subWOPartNoId]="subWOPartNoId"
+></app-wo-actual-vs-quote>
+</div>
 
-
+<div *ngIf="workOrderId && (gridActiveTab == 'workComplete')" class="wf-label-cstm  "
+[ngClass]="{hidedata : gridActiveTab !== 'workComplete'}">
+<app-wo-workComplete [isWorkOrder]="isWorkOrder" [workOrderPartNoId]="workOrderPartNumberId" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
+  [workFlowWorkOrderId]="workFlowWorkOrderId"   
+></app-wo-workComplete>
+</div>
                 <div *ngIf="workOrderId && (subTabOtherOptions == 'exclusions')" class="wf-label-cstm"
                     [ngClass]="{hidedataOthers :  subTabOtherOptions !== 'exclusions'} ">
                     <app-work-order-exclusions [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder"
@@ -1542,8 +1570,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

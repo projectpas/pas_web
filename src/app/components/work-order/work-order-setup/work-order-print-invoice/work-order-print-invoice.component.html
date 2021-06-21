@@ -340,14 +340,14 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td class="border-transparent" colspan="2">Total Work Order</td>
+                                <td style="text-align: right;">
+                                    {{this.workOrderInvoice.totalWorkOrderCostPlus | number : '1.2-2'}}</td>
+                            </tr>
+                            <tr>
                                 <td class="border-transparent" colspan="2">Material Cost</td>
                                 <td style="text-align: right;">
                                     {{this.workOrderInvoice.materialCostPlus | number : '1.2-2'}}</td>
-                            </tr>
-                            <tr>
-                                <td class="border-transparent" colspan="2">MISC CHARGES</td>
-                                <td style="text-align: right;">
-                                    {{this.workOrderInvoice.miscChargesCostPlus | number : '1.2-2'}}</td>
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2">Labor Over HeadCost</td>
@@ -355,14 +355,12 @@
                                     {{this.workOrderInvoice.laborOverHeadCostPlus | number : '1.2-2'}}</td>
                             </tr>
                             <tr>
-                                <td class="border-transparent" colspan="2">
-                                    <b>TOTAL</b>
-                                </td>
+                                <td class="border-transparent" colspan="2">MISC CHARGES</td>
                                 <td style="text-align: right;">
-                                    <b> {{this.workOrderInvoice.grandTotal | number : '1.2-2'}}</b>
-                                </td>
+                                    {{this.workOrderInvoice.miscChargesCostPlus | number : '1.2-2'}}</td>
                             </tr>
-                            <tr></tr>
+                            <tr>
+                            </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2"></td>
                                 <td class="border-transparent" colspan="2">
@@ -371,42 +369,57 @@
                                 <td class="border-transparent" colspan="3">
                                     <b>Payment by check Mail Wire:</b>
                                 </td>
-                                <td class="border-transparent" colspan="2">DEPOSIT</td>
-                                <td style="text-align: right;"> 0.00 </td>
+                                <td class="border-transparent" colspan="2">FREIGHT Cost</td>
+                                <td style="text-align: right;">
+                                    {{this.workOrderInvoice.freightCostPlus | number : '1.2-2'}}</td>
+                             
+                            
                             </tr>
                             <tr>
                                 <td class="border-transparent" colspan="2"></td>
-                                <td colspan="2" rowspan="6">
+                                <td colspan="2" rowspan="7">
                                     <div style="width: 100%; height: 100%"
                                         [innerHTML]="this.workOrderInvoice.mailToBankingInformation"></div>
                                 </td>
-                                <td colspan="3" rowspan="6">
+                                <td colspan="3" rowspan="7">
                                     <div style="width: 100%; height: 100%;"
                                         [innerHTML]="this.workOrderInvoice.wireTransferBankingInformation"></div>
                                 </td>
+                                <td class="border-transparent" colspan="2">
+                                    <b>TOTAL</b>
+                                </td>
+                                <td style="text-align: right;">
+                                    <b> {{this.workOrderInvoice.grandTotal | number : '1.2-2'}}</b>
+                                </td>
+                               
+                               
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2"></td>
+                                <td class="border-transparent" colspan="2">DEPOSIT</td>
+                                <td style="text-align: right;"> 0.00 </td>
+                                
+                             
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2"></td>
                                 <td class="border-transparent" colspan="2">
                                     <b>BALANCE DUE</b>
                                 </td>
                                 <td style="text-align: right;">
                                     <b>{{this.workOrderInvoice.balanceDue | number : '1.2-2'}}</b>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="border-transparent" colspan="2"></td>
-                                <!-- <td class="border-transparent" colspan="2">Box 145478</td> -->
-                                <!-- <td class="border-transparent" colspan="3">1454 New York Ave - Suites 1000
-                                    </td> -->
-                                <td class="border-transparent" style="border-bottom:1px solid black" colspan="2">
-                                    CURRENCY</td>
-                                <td style="text-align: right;">
-                                    <b>{{this.workOrderInvoice.currency}}</b>
-                                </td>
+                             
                             </tr>
                             <tr>
                                 <td colspan="2"></td>
                                 <!-- <td class="border-transparent" colspan="2">Grapevine, TX 74584</td> -->
                                 <!-- <td class="border-transparent" colspan="3">New York, 12487, USA</td> -->
-                                <td class="border-transparent" colspan="3"></td>
+                                <td class="border-transparent" style="border-bottom:1px solid black" colspan="2">
+                                    CURRENCY</td>
+                                <td style="text-align: right;">
+                                    <b>{{this.workOrderInvoice.currency}}</b>
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="2" rowspan="3">Barcode

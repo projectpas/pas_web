@@ -21,6 +21,7 @@ import { ISpeedQuoteView } from "../models/sales/ISpeedQuoteView";
 import { SpeedQuoteEndpointService } from "./speedquote-endpoint.service";
 import { SpeedQuoteMarginSummary } from "../models/sales/SpeedQuoteMarginSummary";
 import { ISpeedQuoteListView } from "../models/sales/ISpeedQuoteListView";
+import { SpeedQuotePrintCritera } from "../components/sales/speed-quote/models/speed-quote-print-criteria";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
@@ -146,7 +147,7 @@ export class SpeedQuoteService {
     partNumberObj.speedQuotePartId = selectedPart.speedQuotePartId;
     //partNumberObj.salesPricePerUnit = selectedPart.unitSalePrice;
     partNumberObj.unitSalePrice = selectedPart.unitSalePrice;
-    partNumberObj.salesPriceExtended = selectedPart.salesBeforeDiscount;
+    partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended;
     partNumberObj.salesDiscount = selectedPart.discount;
     partNumberObj.salesDiscountPerUnit = selectedPart.discountAmount;
     partNumberObj.netSalesPriceExtended = selectedPart.netSales;
@@ -157,6 +158,7 @@ export class SpeedQuoteService {
     partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended;
     partNumberObj.marginPercentageExtended = selectedPart.marginPercentage;
     partNumberObj.markupExtended = selectedPart.markupExtended;
+    partNumberObj.unitCost = selectedPart.unitCost;
     partNumberObj.unitCostPerUnit = selectedPart.unitCost;
     partNumberObj.unitCostExtended = selectedPart.unitCostExtended;
     partNumberObj.altOrEqType = selectedPart.altOrEqType;
@@ -193,11 +195,12 @@ export class SpeedQuoteService {
     partNumberObj.updatedBy = userName;
     partNumberObj.createdOn = new Date().toDateString();
     partNumberObj.updatedOn = new Date().toDateString();
-    partNumberObj.unitCost = selectedPart.unitCost ? selectedPart.unitCost : 0;
+    //partNumberObj.unitCost = selectedPart.unitCost ? selectedPart.unitCost : 0;
     partNumberObj.altOrEqType = selectedPart.altOrEqType;
     partNumberObj.qtyPrevQuoted = selectedPart.quantityAlreadyQuoted;
     partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0;
     partNumberObj.netSalePriceExtended = selectedPart.netSalePriceExtended;
+    partNumberObj.unitCost = selectedPart.unitCost ? formatStringToNumber(selectedPart.unitCost) : 0;
     partNumberObj.unitCostExtended = selectedPart.unitCostExtended ? formatStringToNumber(selectedPart.unitCostExtended) : 0;
     partNumberObj.marginAmount = selectedPart.marginAmount ? formatStringToNumber(selectedPart.marginAmount) : 0;
     partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended ? formatStringToNumber(selectedPart.marginAmountExtended) : 0;
@@ -351,6 +354,11 @@ export class SpeedQuoteService {
   getExclusionPrintview(speedQuoteId: number): Observable<any> {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.getExclusionPrintview(speedQuoteId)
+    );
+  }
+  sendSppedQuoteEmail(speedQuotePrintCritera: SpeedQuotePrintCritera): Observable<SalesOrderView[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.sendSppedQuoteEmail(speedQuotePrintCritera)
     );
   }
 }

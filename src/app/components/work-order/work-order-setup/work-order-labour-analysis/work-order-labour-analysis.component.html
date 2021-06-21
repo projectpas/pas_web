@@ -140,41 +140,41 @@
                 </tr>
 
                 <tr *ngIf="isDetailView && rowIndex == (data.length-1)" class="footer">
-                    <td class="table-column-width" colspan="7">&nbsp;
+                    <td class="table-column-width" colspan="8">&nbsp;
                     </td>
                     <td class="table-column-width"><label>Total</label>
                     </td>
                     <td class="content-to-end table-column-width">  
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('hours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('hours')}}</p>
                     </td>
                     <td class="table-column-width content-to-end">
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('adjustedHours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('adjustedHours')}}</p>
                     </td>
                     <td class="table-column-width content-to-end">
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('adjustments')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('adjustments')}}</p>
                     </td>
                     <td class="content-to-end table-column-width">
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('burdenRateAmount')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('burdenRateAmount')}}</p>
                     </td>   
                     <td class="content-to-end table-column-width" colspan="4">
                     </td>
                 </tr>
                 <tr *ngIf="!isDetailView && rowIndex == (data.length-1)" class="footer">
-                    <td class="table-column-width" colspan="4">&nbsp;
+                    <td class="table-column-width" colspan="5">&nbsp;
                     </td>
                     <td class="table-column-width"><label>Total</label>
                     </td>
                     <td class="content-to-end table-column-width">  
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('hours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('hours')}}</p>
                     </td>
                     <td class="table-column-width content-to-end">
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('adjustedHours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('adjustedHours')}}</p>
                     </td>
                     <td class="table-column-width content-to-end">
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('adjustments')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('adjustments')}}</p>
                     </td>
                     <td class="content-to-end table-column-width">
-                        <p class="m-0 p-0 text-right" style="color: #222;">{{getTotalAmount('burdenRateAmount')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('burdenRateAmount')}}</p>
                     </td>
                     <td class="content-to-end table-column-width" colspan="4">
                     </td>
