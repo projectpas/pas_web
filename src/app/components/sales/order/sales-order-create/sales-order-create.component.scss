@@ -28,7 +28,9 @@ button {
 }
 
 .ng-invalid:not(form) {
-    border-color: #a94442 !important; /* red */
+    // border-color: #a94442 !important;
+    
+    border-color: red !important;
 }
 
 :host ::ng-deep .ui-autocomplete {

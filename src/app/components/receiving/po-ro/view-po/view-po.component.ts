@@ -53,7 +53,7 @@ export class ViewPoComponent implements OnInit {
     rpoEditCF: boolean = true; //remove once add dynamic content
     memoNotes: string;
     purchaseOrderData: PurchaseOrderPart[] = [];
-    pageTitle: string = 'Edit Receieve RO';
+    pageTitle: string = 'Edit Receieve PO';
     poStatus: any[];
     poUserType: DropDownData[];
     managementStructure: ManagementStructure[];

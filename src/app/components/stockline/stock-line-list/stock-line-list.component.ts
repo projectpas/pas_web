@@ -306,6 +306,15 @@ export class StockLineListComponent implements OnInit {
         })
         this.getList(data);
     }
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     
     columnsChanges() {
         this.refreshList();

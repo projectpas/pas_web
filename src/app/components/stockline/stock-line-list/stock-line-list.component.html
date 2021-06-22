@@ -473,19 +473,19 @@
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="blackListed" [(ngModel)]="audit.blackListed" disabled></label></span></td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'blackListedReason', audit.blackListedReason) ? 'black' : 'red'}">
-                    <p [innerHTML]="audit.blackListedReason"></p>    
+                    <p [matTooltip]="parsedText(audit.blackListedReason)" matTooltipPosition="above" [innerHTML]="audit.blackListedReason"></p>    
                 </td>
                 <td class="text-center width-60">
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="accident" [(ngModel)]="audit.accident" disabled></label></span></td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'accidentReason', audit.accidentReason) ? 'black' : 'red'}">
-                    <p [innerHTML]="audit.accidentReason"></p>    
+                    <p [matTooltip]="parsedText(audit.accidentReason)" matTooltipPosition="above" [innerHTML]="audit.accidentReason"></p>    
                 </td>
                 <td class="text-center width-60">
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="incident" [(ngModel)]="audit.incident" disabled></label></span></td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'incidentReason', audit.incidentReason) ? 'black' : 'red'}">
-                    <p [innerHTML]="audit.incidentReason"></p>    
+                    <p [matTooltip]="parsedText(audit.incidentReason)" matTooltipPosition="above" [innerHTML]="audit.incidentReason"></p>    
                 </td>
                 <td class="min-w-130" [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">{{ audit.companyName }}</td>
                 <td class="min-w-130" [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">{{ audit.buName }}</td>
@@ -502,7 +502,7 @@
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionDate', audit.inspectionDate) ? 'black' : 'red'}">{{ audit.inspectionDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'integrationPortal', audit.integrationPortal) ? 'black' : 'red'}">{{ audit.integrationPortal }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
-                    <p [innerHTML]="audit.memo"></p>
+                    <p [matTooltip]="parsedText(audit.memo)" matTooltipPosition="above" [innerHTML]="audit.memo"></p>
                 </td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesRemaining', audit.cyclesRemaining) ? 'black' : 'red'}">{{ audit.cyclesRemaining }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesSinceNew', audit.cyclesSinceNew) ? 'black' : 'red'}">{{ audit.cyclesSinceNew }}</td>

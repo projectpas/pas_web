@@ -453,7 +453,8 @@
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.blackListed">
                                  <div [innerHTML]="viewSLInfo.blackListedReason" class="form-control stock-reason"
-                                     class="text_editor_box" disabled></div>
+                                     class="text_editor_box" style="width:100%" matTooltipPosition="above"
+                                     [matTooltip]="parsedText(viewSLInfo.blackListedReason)" disabled></div>
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm m-t-10">
@@ -465,7 +466,8 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.accident">
-                                 <div [innerHTML]="viewSLInfo.accidentReason" class="form-control stock-reason"
+                                 <div [innerHTML]="viewSLInfo.accidentReason" matTooltipPosition="above"
+                                 [matTooltip]="parsedText(viewSLInfo.accidentReason)" style="width:100%" class="form-control stock-reason"
                                       class="text_editor_box" disabled></div>
                             </div>
                             <div class="form-group">
@@ -478,7 +480,8 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.incident">
-                                 <div [innerHTML]="viewSLInfo.incidentReason" class="form-control stock-reason"
+                                 <div [innerHTML]="viewSLInfo.incidentReason" matTooltipPosition="above"
+                                 [matTooltip]="parsedText(viewSLInfo.incidentReason)" style="width:100%" class="form-control stock-reason"
                                  class="text_editor_box" disabled></div>
                             </div>                              
                         </div>
@@ -583,7 +586,8 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label class="margin-right-10">Memo</label>
-                                 <div [innerHTML]="viewSLInfo.memo" class="form-control stock-reason"
+                                 <div [innerHTML]="viewSLInfo.memo" matTooltipPosition="above"
+                                 [matTooltip]="parsedText(viewSLInfo.memo)" style="width:100%" class="form-control stock-reason"
                                  class="text_editor_box" disabled></div>
                             </div>   
                         </div>
@@ -677,7 +681,8 @@
                                        </span>
                                    </div>
                                    <div *ngIf="col.field == 'docMemo'">
-                                    <p class="p_textEditor" [innerHTML]=rowData[col.field]></p></div>
+                                    <p class="p_textEditor" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(rowData[col.field])" [innerHTML]=rowData[col.field]></p></div>
                                </td>                             
                            </tr>
                        </ng-template>
@@ -834,7 +839,9 @@
                                                 <td [ngStyle]="{color: getColorCodeForHistoryDoc(i, 'docDescription', audit.docDescription) ? 'black' : 'red' }">
                                                     {{ audit.docDescription }}
                                                 </td>
-                                                <td [ngStyle]="{color: getColorCodeForHistoryDoc(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }" [innerHTML]="audit.docMemo">
+                                                <td [ngStyle]="{color: getColorCodeForHistoryDoc(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }">
+                                                 <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                                 [matTooltip]="parsedText(audit.docMemo)" [innerHTML]="audit.docMemo"></p>
                                                 </td>
                                                 <td [ngStyle]="{ color: getColorCodeForHistoryDoc(i, 'fileName', audit.fileName) ? 'black' : 'red'}">
                                                     {{ audit.fileName }}

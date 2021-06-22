@@ -184,7 +184,7 @@
                   <td style="width: 95%;">
                     <div [innerHTML]="field.memo" [matTooltip]="parsedText(field.memo)" matTooltipPosition="above"
                       class="form-control" style="width: 102%; text-align: left; min-width: 100px;line-height:1.5;"
-                      (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
+                      (ngModelChange)="enableSave()" class="text_editor_box truncate-text" disabled></div>
                   </td>
                   <td *ngIf="field.isEditable" style="width: 5%">
                     <!-- <div *ngIf="field.isEditable"> -->

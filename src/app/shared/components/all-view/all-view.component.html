@@ -41,13 +41,15 @@
               <p class="view-text-editor">
                 <span class="label view-text-editor"><b>Notes: </b></span>
                 <span class="value">
-                  <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.notes">
+                  <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                  [matTooltip]="parsedText(poHeaderAdd.notes)" [innerHTML]="poHeaderAdd.notes">
                   </p>
                 </span></p>
               <p class="view-text-editor">
                 <span class="label view-text-editor"><b>Memo: </b></span>
                 <span class="value">
-                  <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.poMemo">
+                  <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                  [matTooltip]="parsedText(poHeaderAdd.poMemo)" [innerHTML]="poHeaderAdd.poMemo">
                   </p>
                 </span></p>
               <p class="view-text-editor">
@@ -147,13 +149,15 @@
               <p class="view-text-editor">
                 <span class="label view-text-editor"><b>Notes: </b></span>
                 <span class="value">
-                  <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.notes">
+                  <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                  [matTooltip]="parsedText(roHeaderAdd.notes)" [innerHTML]="roHeaderAdd.notes">
                   </p>
                 </span></p>
               <p class="view-text-editor">
                 <span class="label view-text-editor"><b>Memo: </b></span>
                 <span class="value">
-                  <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.roMemo">
+                  <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                  [matTooltip]="parsedText(roHeaderAdd.roMemo)" [innerHTML]="roHeaderAdd.roMemo">
                   </p>
                 </span></p>
               <p class="view-text-editor">
@@ -280,7 +284,8 @@
                     <td>{{partList?.unitOfMeasure}}</td>
                     <td colspan="4">{{partList?.level1}}, {{partList?.level2}}, {{partList?.level3}}, {{partList?.level4}}</td>
                     <td>
-                      <div [innerHTML]="partList?.memo" ></div>
+                      <div class=" p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(partList?.memo)" [innerHTML]="partList?.memo" ></div>
                     </td>
                   </tr>
                   <tr class="child-header splitship-head child-header-back"  *ngIf="partList.purchaseOrderSplitParts.length > 0">
@@ -373,7 +378,8 @@
               <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.shipToCountry ? poHeaderAdd.shipToCountry : '-'}}</span></p>              
               <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{poHeaderAdd.shipToContact ? poHeaderAdd.shipToContact : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
-              <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.shipToMemo"></p></span></p>              
+              <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+              [matTooltip]="parsedText(poHeaderAdd.shipToMemo)" [innerHTML]="poHeaderAdd.shipToMemo"></p></span></p>              
               <p><span class="label"><b>Ship Via <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{poHeaderAdd.shipVia ? poHeaderAdd.shipVia : '-'}}</span></p>             
               <p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{poHeaderAdd.shippingCost ? poHeaderAdd.shippingCost : '-'}}</span></p>
               <p><span class="label"><b>Handling Cost: </b></span><span class="value">{{poHeaderAdd.handlingCost ? poHeaderAdd.handlingCost : '-'}}</span></p>
@@ -391,7 +397,8 @@
               <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.billToCountry ? poHeaderAdd.billToCountry : '-'}}</span></p>              
               <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{poHeaderAdd.billToContactName ? poHeaderAdd.billToContactName : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">              
-              <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.billToMemo"></p></span></p>
+              <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+              [matTooltip]="parsedText(poHeaderAdd.billToMemo)" [innerHTML]="poHeaderAdd.billToMemo"></p></span></p>
             </div>
           </div>
         </p-tabPanel>
@@ -424,7 +431,8 @@
                       {{approver.rule}}
                     </td>
                     <td>
-                      <p class="m-0 p-0 p_textEditor approver-memo" [innerHTML]="approver['memo']"></p>
+                      <p class="m-0 p-0 p_textEditor approver-memo truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                     </td>
                     <td [ngClass]="{red : approver.isExceeded == true}" >{{approver.message}}</td>
                   </tr>
@@ -667,7 +675,8 @@
                     <td>{{partList?.unitOfMeasure}}</td>
                     <td colspan="4">{{partList?.level1}}, {{partList?.level2}}, {{partList?.level3}}, {{partList?.level4}}</td>
                     <td>
-                      <div [innerHTML]="partList?.memo" ></div>
+                      <div class="m-0 p-0 p_textEditor approver-memo truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(partList?.memo)" [innerHTML]="partList?.memo" ></div>
                     </td>
                   </tr>
                   <tr class="child-header splitship-head child-header-back"  *ngIf="partList.repairOrderSplitParts.length > 0">
@@ -769,7 +778,8 @@
               <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipToContact ? roHeaderAdd.shipToContact : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
                 <!-- {{poHeaderAdd.shipToMemo ? poHeaderAdd.shipToMemo : '-'}} -->
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.shipToMemo"></p>
+                <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                [matTooltip]="parsedText(roHeaderAdd.shipToMemo)" [innerHTML]="roHeaderAdd.shipToMemo"></p>
 
               </span></p>
               <p><span class="label"><b>Ship Via <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipVia ? roHeaderAdd.shipVia : '-'}}</span></p>
@@ -794,7 +804,8 @@
               <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.billToContactName ? roHeaderAdd.billToContactName : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
                 <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.billToMemo"></p>
+                <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                [matTooltip]="parsedText(roHeaderAdd.billToMemo)" [innerHTML]="roHeaderAdd.billToMemo"></p>
 
               </span></p>
             </div>
@@ -829,7 +840,8 @@
                       {{approver.rule}}
                     </td>
                     <td>
-                      <p class="m-0 p-0 p_textEditor approver-memo" [innerHTML]="approver['memo']"></p>
+                      <p class="m-0 p-0 p_textEditor approver-memo truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                     </td>
                     <td [ngClass]="{red : approver.isExceeded == true}" >{{approver.message}}</td>
                   </tr>
