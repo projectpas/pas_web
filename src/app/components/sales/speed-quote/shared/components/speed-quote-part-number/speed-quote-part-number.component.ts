@@ -300,7 +300,7 @@ export class SpeedQuotePartNumberComponent {
         })
         this.combineParts(this.summaryParts);
       }
-      this.openPartNumber(false);
+      //this.openPartNumber(false);
       const partsList = this.selectedParts;
       for(let i=0;i<event.length;i++)
       {
