@@ -126,6 +126,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     customerModuleId: number = 0;   
     otherModuleId: number = 0; 
     stockLineId : number = 0;
+    customerTypeId: number = 1;
 
     constructor(private commonService: CommonService,
         private datePipe: DatePipe,
@@ -610,12 +611,13 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else { 
             this.arrayCustlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+
+        this.commonService.autoCompleteSmartDropDownCustomerList(this.customerTypeId, strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allCustomersInfo = res.map(x => {
                 return {
                     ...x,
-                    customerId: x.value,
-                    name: x.label
+                    customerId: x.customerId,
+                    name: x.customerName
                 }
             });
             this.customerNamesInfo = this.allCustomersInfo;
