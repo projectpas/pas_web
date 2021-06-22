@@ -45,7 +45,7 @@
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
                                         </span>
-                                        <span *ngIf="summaryColumn.field == 'itemNo'">
+                                        <span class="text-center" style="display: block;" *ngIf="summaryColumn.field == 'itemNo'">
                                             {{summaryPart[summaryColumn.field] }}
                                         </span>
                                         <span *ngIf="summaryColumn.field != 'itemNo'
@@ -96,16 +96,14 @@
                                     <td colspan="13" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" style="position:sticky; width:80px">
                                         <span>
-                                            <a class="btn nobg"
-                                                (click)="adjustQty(summaryPart,rowIndex)" matTooltip="Adjust Qty"
-                                                matTooltipPosition="above">
+                                            <a class="btn nobg" (click)="adjustQty(summaryPart,rowIndex)"
+                                                matTooltip="Adjust Qty" matTooltipPosition="above">
                                                 <i class="fa fa-cubes" style="color: #000;"></i>
                                             </a>
                                         </span>
                                         <span *ngIf="summaryPart['methodType'] == 'S'">
-                                            <a class="btn nobg"
-                                                (click)="addPartNumber(summaryPart,rowIndex)" matTooltip="Add StkLine"
-                                                matTooltipPosition="above">
+                                            <a class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
+                                                matTooltip="Add StkLine" matTooltipPosition="above">
                                                 <i class="fa fa-plus" style="color: #000;"></i>
                                             </a>
                                         </span>
@@ -196,7 +194,9 @@
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let part of summaryPart.childParts; let stockIndex = index"
                                     [hidden]="part.isDeleted">
-                                    <td></td>
+                                    <td class="text-center">
+                                        {{(summaryPart['itemNo']) + '.' + (stockIndex + 1)}}
+                                    </td>
                                     <td>
                                         {{ part.partNumber }}
                                     </td>

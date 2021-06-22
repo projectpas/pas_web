@@ -194,6 +194,7 @@ export class SalesOrderBillingComponent implements OnInit {
                 this.billingorInvoiceForm.openDate = new Date(result.openDate);
                 this.billingorInvoiceForm.printDate = new Date();
                 this.billingorInvoiceForm.invoiceDate = new Date();
+                this.billingorInvoiceForm.invoiceNo = "Creating";
                 this.billingorInvoiceForm.creditLimit = this.formateCurrency(result.creditLimit);
                 this.billingorInvoiceForm.customerId = result.customerId;
             } else {

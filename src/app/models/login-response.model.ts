@@ -41,4 +41,6 @@ export interface AccessToken {
     roleName:string;
     permissionName:string[];
     roleID:string;
+    firstName:string;
+    lastName:string;
 }
