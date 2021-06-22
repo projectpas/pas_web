@@ -907,8 +907,8 @@ export class AppComponent implements OnInit, AfterViewInit {
               label: 'Asset Maintenance',
               items: [
                 {
-                  label: 'Calibration,Certification',
-                  routerLink: '',
+                  label: 'Calibration Management',
+                  routerLink: '/assetmodule/assetpages/app-calibration-mgmt-listing',
                 },
                 {
                   label: 'Lease and Insurance',

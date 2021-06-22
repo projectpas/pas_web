@@ -975,9 +975,9 @@ if(this.enableToSave==false){
           this.saveFormdata.headerMarkupId = Number(this.overAllMarkup);
           this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
         } 
-        if(this.saveFormdata.costPlusType==3){
-          this.saveFormdata.laborFlatBillingAmount= this.flatAmount ? this.flatAmount : '0.00'
-        }
+        // if(this.saveFormdata.costPlusType==3){
+        //   this.saveFormdata.laborFlatBillingAmount= this.flatAmount ? this.flatAmount : '0.00'
+        // }
         this.saveworkOrderLabor.emit(this.saveFormdata);
         this.enableToSave=false;
         this.disabledUpdatebtn = true;
@@ -1283,7 +1283,7 @@ if(this.enableToSave==false){
         total += Number(labor.billingAmount.toString().split(',').join(''));
       }
     }
-    this.laborForm['laborFlatBillingAmount'] = total.toFixed(2);
+    //this.laborForm['laborFlatBillingAmount'] = total.toFixed(2);
     return formatNumberAsGlobalSettingsModule(total, 0);
   }
   getTotalCostPlus(taskList) {
@@ -1494,6 +1494,14 @@ if(this.enableToSave==false){
         }
       )
     }
+
+    if(type == 'BillingAmount')
+    {
+      this.laborForm.laborFlatBillingAmount = bATotal ? formatNumberAsGlobalSettingsModule(bATotal, 2) : '0.00';
+      this.flatAmount=this.laborForm.laborFlatBillingAmount;
+    }
+   
+
     return (type == 'Hours') ? htotal.toFixed(2) : (type == 'LaborOHCost') ? formatNumberAsGlobalSettingsModule(loTotal, 0) : (type == 'LaborBurdenRate') ? formatNumberAsGlobalSettingsModule(burTotal, 0) : (type == 'CostPerHour') ? formatNumberAsGlobalSettingsModule(cpTotal, 0) : (type == 'Cost') ? formatNumberAsGlobalSettingsModule(costTotal, 0) : (type == 'BillingRate') ? formatNumberAsGlobalSettingsModule(bRTotal, 0) : formatNumberAsGlobalSettingsModule(bATotal, 0);
   }
   deleteConfirmation() {

@@ -501,9 +501,17 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     checkEnforceInternalApproval() {
-        return this.woqsettingModel != null &&
-          this.woqsettingModel.IsApprovalRule &&
-          new Date(this.quoteForm.openDate) >= new Date(this.woqsettingModel.effectivedate);
+
+        if(this.woqsettingModel != null && this.woqsettingModel.IsApprovalRule == false)
+        {
+            return true;
+        }else
+        {
+            return this.woqsettingModel != null &&
+            this.woqsettingModel.IsApprovalRule &&
+            new Date(this.quoteForm.openDate) >= new Date(this.woqsettingModel.effectivedate);
+        }
+   
       }
 
     getWOQSettingMasterData(currentUserMasterCompanyId) {
