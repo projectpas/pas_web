@@ -844,7 +844,7 @@ export class EditPoComponent implements OnInit {
             });
             this.CustomerList = data;            
             for (let part of this.purchaseOrderData.purchaseOderPart) {
-                for (let SL of part.stockLine) {
+                for (let SL of part.stockLine) {                    
                     if (SL.owner != null && SL.owner != '' && SL.ownerType == 1) {
                         SL.ownerObject = this.CustomerList.find(x => x.Key == SL.owner);
                     }
@@ -855,6 +855,13 @@ export class EditPoComponent implements OnInit {
                         SL.traceableToObject = this.CustomerList.find(x => x.Key == SL.traceableTo);
                     }
                     if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 1) {
+                        var taggedBy = this.CustomerList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.CustomerList.push(taggedBy);                           
+                        }                       
                         SL.taggedByObject = this.CustomerList.find(x => x.Key == SL.taggedBy);
                     }
                 }
@@ -889,39 +896,20 @@ export class EditPoComponent implements OnInit {
                         SL.traceableToObject = this.VendorList.find(x => x.Key == SL.traceableTo);
                     }
                     if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 2) {
+                        var taggedBy = this.VendorList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.VendorList.push(taggedBy);                           
+                        } 
                         SL.taggedByObject = this.VendorList.find(x => x.Key == SL.taggedBy);
                     }
                 }
             }
         },
             error => this.onDataLoadFailed(error)
-        );
-        // this.vendorService.getVendors().subscribe(
-        //     vendors => {
-        //         for (let vendor of vendors[0]) {
-        //             var dropdown = new DropDownData();
-        //             dropdown.Key = vendor.vendorId.toLocaleString();
-        //             dropdown.Value = vendor.vendorName;
-        //             this.VendorList.push(dropdown);
-        //         }
-
-        //         for (let part of this.purchaseOrderData.purchaseOderPart) {
-        //             for (let SL of part.stockLine) {
-
-        //                 if (SL.owner != null && SL.owner != '' && SL.ownerType == 3) {
-        //                     SL.ownerObject = this.VendorList.find(x => x.Key == SL.owner);
-        //                 }
-        //                 if (SL.obtainFrom != null && SL.obtainFrom != '' && SL.obtainFromType == 3) {
-        //                     SL.obtainFromObject = this.VendorList.find(x => x.Key == SL.obtainFrom);
-        //                 }
-        //                 if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 3) {
-        //                     SL.traceableToObject = this.VendorList.find(x => x.Key == SL.traceableTo);
-        //                 }
-        //             }
-        //         }
-        //     },
-        //     error => this.onDataLoadFailed(error)
-        // );
+        );        
     }
 
     getCompanyList(strText = '') {
@@ -950,6 +938,13 @@ export class EditPoComponent implements OnInit {
                         SL.traceableToObject = this.CompanyList.find(x => x.Key == SL.traceableTo);
                     }
                     if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 9) {
+                        var taggedBy = this.CompanyList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.CompanyList.push(taggedBy);                           
+                        }
                         SL.taggedByObject = this.CompanyList.find(x => x.Key == SL.taggedBy);
                     }
                 }
@@ -2124,7 +2119,18 @@ export class EditPoComponent implements OnInit {
 
     Purchaseunitofmeasure() {
 		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-			this.allPurchaseUnitOfMeasureinfo = res;
+            this.allPurchaseUnitOfMeasureinfo = res;            
+            for (let part of this.purchaseOrderData.purchaseOderPart) {
+                for (let SL of part.stockLine) {    
+                    if (SL.unitOfMeasureId != null) {                       
+                        var unitofmasure = this.allPurchaseUnitOfMeasureinfo.find(temp => temp.value == SL.unitOfMeasureId)
+                        if (!unitofmasure || unitofmasure == undefined) {
+                            var uom = {label:SL.unitOfMeasure , value : SL.unitOfMeasureId}
+                            this.allPurchaseUnitOfMeasureinfo.push(uom);
+                        }
+                    }                       
+                }
+            }
 		})
     }
 

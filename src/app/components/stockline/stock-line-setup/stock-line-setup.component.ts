@@ -861,11 +861,12 @@ export class StockLineSetupComponent implements OnInit {
 				else {
 					this.stockLineForm.isSerialized = res.isSerialized;
 					this.hideSerialNumber = true;
-				}				
+				}								
 				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {					
-					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;
+					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;					
 					//this.sourceTimeLife = res.timelIfeData;										
-				    this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
+					this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
+					this.sourceTimeLife.timeLife = true;
 				}
 				if (this.stockLineForm.tagType && this.stockLineForm.tagType != '0') {
 					this.stockLineForm.tagType = this.stockLineForm.tagType.split(',');

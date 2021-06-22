@@ -76,13 +76,10 @@ export class ShippingEndpoint extends EndpointFactory {
 
     updateStockLine<T>(receiveParts: ReceiveParts[]): Observable<T> {
         var listObj = [];
-
         for (let part of receiveParts) {
             let stockLines: StockLineDraft[] = [];
-
             part.stockLines.forEach(SL => {
                 var stockLine = new StockLineDraft();
-
                 stockLine.stockLineNumber = SL.stockLineNumber;
                 stockLine.owner = SL.owner;
                 stockLine.ownerType = SL.ownerType;
@@ -91,6 +88,7 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.traceableToName = SL.traceableToName;
                 stockLine.taggedBy = SL.taggedBy;
                 stockLine.taggedByType = SL.taggedByType;
+                stockLine.taggedByName = SL.taggedByName;                
                 stockLine.tagType = SL.tagType;
                 stockLine.tagTypeId = SL.tagTypeId;
                 stockLine.unitOfMeasureId = SL.unitOfMeasureId;
@@ -112,7 +110,6 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.manufacturerLotNumber = SL.manufacturerLotNumber;
                 stockLine.manufacturingDate = SL.manufacturingDate;
                 stockLine.manufacturingBatchNumber = SL.manufacturingBatchNumber;
-
                 stockLine.certifiedDate = SL.certifiedDate;
                 stockLine.certifiedBy = SL.certifiedBy;
                 stockLine.tagDate = SL.tagDate;
@@ -131,15 +128,12 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.updatedDate = new Date();
                 stockLine.isActive = SL.isActive;   
                 stockLine.createdBy = SL.createdBy;   
-                stockLine.updatedBy = SL.updatedBy;        
-                
+                stockLine.updatedBy = SL.updatedBy; 
                 if (stockLine.stockLineNumber && stockLine.stockLineNumber.length > 0 ) {
-
                 } else {
                     stockLines.push(stockLine);
                 }
-            });
-            
+            });            
             let Obj = {
                 'purchaseOrderPartRecordId': part.purchaseOrderPartRecordId,
                 //'managementStructureEntityId': part.managementStructureEntityId,
@@ -153,14 +147,12 @@ export class ShippingEndpoint extends EndpointFactory {
                 'stockLines': stockLines,
                 'timeLife': part.timeLife,
             };
-
             listObj.push(Obj);
-        }
-        
+        }        
         return this.http.post<T>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.updateStockLine(receiveParts));
-            });
+        });
 
     }
 }
