@@ -24,7 +24,7 @@ import { StocklineViewComponent } from '../../../../shared/components/stockline/
 export class WorkOrderPickticketComponent implements OnInit {
   @Input() referenceId;
   isEnablePOList: any;
-  pickTickes: any[] = [];
+  pickTickes: any[] = []; 
   tempSales: any[] = [];
   pnViewSelected = false;
   selected: any;
@@ -414,13 +414,21 @@ export class WorkOrderPickticketComponent implements OnInit {
         this.isSpinnerVisible = false;
       });
   }
-
+  checkValid(selectedItem){
+    if(selectedItem && selectedItem.qtyToShip == undefined || selectedItem.qtyToShip == 0 ||  selectedItem.qtyToShip <= 0 ){
+      selectedItem.qtyToShip=selectedItem.qtyToPick;
+    }
+  }
   onFocusOutEvent(objPickTicket: any){
     let invalidQty = false;
     let selectedItem = objPickTicket;
     var errmessage = '';
+    if(selectedItem && selectedItem.qtyToShip == undefined || selectedItem.qtyToShip == 0 ||  selectedItem.qtyToShip <= 0 ){
+      selectedItem.qtyToShip=selectedItem.qtyToPick;
+    }
     if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
         invalidQty = true;
+        selectedItem.qtyToShip=selectedItem.qtyToPick;
         errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
     }            
     if (invalidQty) {

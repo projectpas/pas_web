@@ -20,7 +20,7 @@
                       <table class="table table-bordered header-table-width1 warnings-table">
                         <thead class="warning-head">
                           <tr align="center">
-                            <th class="th-warning-name">Validation</th>
+                            <th class="th-warning-name">Task</th>
                             <th class="th-warning-name wd_cond"> </th>
                             <th class="th-font wd_Na">NA</th>
                             <th class="th-font wd-200">Memo</th>
@@ -36,26 +36,26 @@
                                 <span>
                                   <input type="checkbox" name="allow{{i}}" [(ngModel)]="wData.isMastervalue"
                                     (change)="aSectionClick($event,wData)" (ngModelChange)="enableSave()"
-                                    class="form-control mat_r" [disabled]="!wData.isenableUpdate"/>
+                                    class="form-control mat_r" [disabled]="wData && wData.isenableUpdate==false"/>
                                 </span>
-                                <span> {{wData.workOrderSettlementName}}</span>
+                                <span class="span_re" [ngClass]="{redColor : (wData.isMastervalue==false && wData.workOrderSettlementName=='Mat Required = Mat Issued')}" > {{wData.workOrderSettlementName}}</span>
                               </div>
                             </td>
                             <td class="warning-td">
                               <!--   -->
                               <p-dropdown *ngIf="wData.workOrderSettlementName=='Cond/Tag Changed'"  placeholder="--Select--" (ngModelChange)="enableSave()" id="mat_condition" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
-              (onChange)="getPNDetails(wData)" [disabled]="!wData.isenableUpdate" class="p-dropdown-1001"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="wData.conditionId"
+              (onChange)="getPNDetails(wData)" [disabled]="wData && wData.isenableUpdate==false" class="p-dropdown-1001"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="wData.conditionId"
                >
             </p-dropdown>
                             </td>
                             <td class="th-font"><input type="checkbox" name="ballow{{i}}" [(ngModel)]="wData.isvalue_NA"
-                                (change)="bSectionClick($event,wData)" [disabled]="!wData.isenableUpdate" (ngModelChange)="enableSave()" class="form-control" />
+                                (change)="bSectionClick($event,wData)" [disabled]="wData && wData.isenableUpdate==false" (ngModelChange)="enableSave()" class="form-control" />
                             </td>
                             <td>
-                              <div class="form-group memo-popup-cstm mat_emo">
+                              <div class="form-group memo-popup-cstm mat_emo3">
                                 <div [innerHTML]="wData.memo" matTooltipPosition="above" [matTooltip]="parsedText(wData.memo)" style="width: 290px !important;"
                                   class="text_editor_box"></div>
-                                <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{'btn_disabled':!wData.isenableUpdate}" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo"
+                                <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{'btn_disabled':wData && wData.isenableUpdate==false}" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo" style="    margin-top: 4px;"
                                   matTooltipPosition="above" (click)="onAddTextAreaInfo(wData,i)"></i>
                               </div>
                             </td>
@@ -74,20 +74,23 @@
                               <p-calendar [showIcon]="true" class="calender-cstm "
                               [yearNavigator]="true" [monthNavigator]="true"
                               yearRange="1900:2100" name="openDate" #openDate="ngModel"
-                              required (ngModelChange)="getmemo($event)"
-                              [(ngModel)]="toDaysDate"
+                              required (ngModelChange)="getmemo($event)"  [showTime]="true"
+                              [(ngModel)]="wData.sattlement_DateTime"
                               [disabled]="true" appendTo="body">
                           </p-calendar>
                             </td>
                             <td class="back_clor">
-                              <span *ngIf="!isView"><button *ngIf="!wData.isenableUpdate" class="btn nobg btn-edit-cstm1" (click)="editRow(wData)" matTooltip="Edit"
-                                matTooltipPosition="above"><i class="fa fa-pencil"></i></button>
-                                <button type="button" *ngIf="wData.isenableUpdate" class="btn btn-primary ted_wd" (click)="upDateRow(wData)" style="  width: 50px;font-size: 11px !important;">Update</button>
+                              <span *ngIf="!isView">
+                                <span *ngIf=""></span>
+                                <button   class="btn nobg btn-edit-cstm1" (click)="editRow(wData)" matTooltip="Edit"
+                                matTooltipPosition="above" [disabled]="wData && wData.workOrderSettlementName == 'Mat Required = Mat Issued'"><i class="fa fa-pencil edit_ico"></i></button>
+                                <!-- <button type="button" *ngIf="wData.isenableUpdate" class="btn btn-primary ted_wd" (click)="upDateRow(wData)" style="  width: 50px;font-size: 11px !important;">Update</button> -->
                               </span>
-                                <span data-toggle="modal" data-target="#materialAudit"><a 
-                                  [ngClass]="(isView == false) ? 'btn nobg btn-hist-cstm mr-top5' : 'btn nobg btn-hist-cstm'"
-                                 (click)="openMaterialAudit(wData)" matTooltip=" History"
-                                      matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                              <span>
+                                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(wData)"
+                                    matTooltip="History" matTooltipPosition="above"><i
+                                        class="fa fa-history"></i></a>
+                            </span>
                             </td>
                           </tr>
                         </tbody>
@@ -103,15 +106,33 @@
             </div>
           </div>
         </form>
+        <div class="row">
+<div class="col-md-9">
+  <div class="dis_flex pad-16">
+
+    <input type="checkbox" name="tranfe" 
+    class="form-control w60  mr10 mat_r"
+    [(ngModel)]="isWOClose" [disabled]="true"
+    (change)="closeWo($event)"  >
+
+    <!-- <input type="checkbox" name="close"  
+      class="form-control mat_r"  /> -->
+      <span class="span_re"> WO Close</span>
+  </div>
+</div>
+<div class="col-md-3">
+  <div class="align_end">
+    <button type="button" [disabled]="checkValidation()" class="btn btn-primary ted_wd update_wd" (click)="upDateSettlemts()">Update</button>
+  </div>
+</div>
+        </div>
+  
+     
       </div>
     </div>
   </div>
 </div>
-<div class="dis_flex">
-  <input type="checkbox" name="close"  
-    class="form-control mat_r"  />
-    <span> WO Close</span>
-</div>
+
 <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
@@ -130,5 +151,36 @@
           (click)="onCloseTextAreaInfo()">Close</button>
       </div>
     </div>
+  </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>
+<div id="closeWoPopUp1" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-xsm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                  (click)="closeTranferFlow()">&times;</button>
+              <h4 class="modal-title warning_color">Do you want to Close Wo</h4>
+          </div> 
+          <div class="modal-footer footer-padding">
+              <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="closeSaveWorkOrder()">Save</button>
+              <button type="button" class="btn btn-danger" (click)="closeWo()"
+                  data-dismiss="modal">Close</button>
+
+          </div>
+      </div>
   </div>
 </div>

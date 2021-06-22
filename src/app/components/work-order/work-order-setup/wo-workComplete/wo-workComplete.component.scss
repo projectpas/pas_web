@@ -26,7 +26,7 @@ td strong {
 .text-end{
   text-align: end;
 }
-.mat_emo{
+.mat_emo3{
   display: inline-flex;
 }
 .wd_user{
@@ -48,7 +48,13 @@ td strong {
   background: #f4f4f4;
 }
 .mat_r{
-  margin-right: 8px;
+  margin-right: 8px !important;
+  zoom: 1.4;
+
+}
+.span_re{
+  position: relative;
+  top: 1px;
 }
 .wd-200{
   width: 200px !important;
@@ -59,4 +65,23 @@ td strong {
 }
 .dis_flex{
   display: inline-flex;
+}
+.edit_ico{
+  color: #0fa3b1;
+}
+.align_end{
+  float: right;
+  text-align: end;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.update_wd{
+  width: 60px;
+  font-size: 11px !important;
+}
+.pad-16{
+  padding-left: 16px;
+}
+.redColor{
+  color: red !important;
 }
