@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>SO Quote Num</label>
+                            <label>SQ Num</label>
                             <input type="text" [(ngModel)]="salesQuote.speedQuoteNumber"
                                 name="speedQuoteNumber" class="form-control" [disabled]="true"
                                 id="speedQuoteNumber" #speedQuoteNumber="ngModel" />
@@ -72,9 +72,9 @@
                                 <label class="wauto" matTooltipPosition="above" matTooltip="MRO">
                                     <input type="radio" [value]="1" name="type" class="radio_adjust"
                                         [(ngModel)]="salesQuote.speedQuoteTypeId" #type="ngModel">
-                                    MRO
+                                    Repair
                                 </label>
-                                <label class="wauto" matTooltipPosition="above" matTooltip="Parts Sale">
+                                <!-- <label class="wauto" matTooltipPosition="above" matTooltip="Parts Sale">
                                     <input type="radio" [value]="2" name="type" class="radio_adjust"
                                         [(ngModel)]="salesQuote.speedQuoteTypeId" #type="ngModel">
                                     Parts Sale
@@ -83,7 +83,7 @@
                                     <input type="radio" [value]="3" name="type" class="radio_adjust"
                                         [(ngModel)]="salesQuote.speedQuoteTypeId" #type="ngModel">
                                     Exchange
-                                </label>
+                                </label> -->
                             </div>
                         </div>
                         <div class="clear"></div>
@@ -145,24 +145,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Contract Ref</label>
-                                            <input type="text" class="form-control" name="contractReferenceName"
-                                                [(ngModel)]="salesQuote.contractReferenceName"
-                                                (change)="onChangeInput()" [disabled]="true" />
-                                        </div>
                                         <div class="form-group memo-popup-cstm">
-                                            <label>
-                                                Memo<i class=" fa fa-pencil" data-toggle="modal"
-                                                    data-target="#add-description" matTooltipPosition="above"
-                                                    matTooltip="Memo" (click)="onAddDescription('memo')"></i>
+                                            <label style="margin-top:0px">
+                                                Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                                    matTooltipPosition="above" matTooltip="Notes"
+                                                    (click)="onAddDescription('notes')"></i>
                                             </label>
                                             <span>
                                                 <div class="form-group memo-popup-cstm mat_emo">
-                                                    <div [innerHTML]="salesQuote.memo"
-                                                        [matTooltip]="parsedText(salesQuote.memo)"
-                                                        class="form-control" matTooltipPosition="above"
-                                                        style="height: 25px !important;width:100%"
+                                                    <div [innerHTML]="salesQuote.notes" matTooltipPosition="above"
+                                                        [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
+                                                        style="height: 25px !important; width:100% !important"
                                                         class="text_editor_box">
                                                     </div>
                                                 </div>
@@ -269,29 +262,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label style="margin-top:14px">Probability (%)</label>
-                                            <select name="probability" [(ngModel)]="salesQuote.probabilityId"
-                                                (change)="onChangeInput()">
-                                                <option value="null" selected>--Select</option>
-                                                <option *ngFor="let p of percents" [ngValue]="p.value">
-                                                    {{ p.label }}</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group memo-popup-cstm">
-                                            <label style="margin-top:0px">
-                                                Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                                    matTooltipPosition="above" matTooltip="Notes"
-                                                    (click)="onAddDescription('notes')"></i>
-                                            </label>
-                                            <span>
-                                                <div class="form-group memo-popup-cstm mat_emo">
-                                                    <div [innerHTML]="salesQuote.notes" matTooltipPosition="above"
-                                                        [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
-                                                        style="height: 25px !important; width:100% !important"
-                                                        class="text_editor_box">
-                                                    </div>
-                                                </div>
-                                            </span>
+                                            <label style="margin-top:14px">Contract Ref</label>
+                                            <input type="text" class="form-control" name="contractReferenceName"
+                                                [(ngModel)]="salesQuote.contractReferenceName"
+                                                (change)="onChangeInput()" [disabled]="true" />
                                         </div>
                                         
                                         <!-- <div class="form-group" style="padding-top: 24px">
@@ -390,21 +364,49 @@
                                             </div>
                                         </div>
                                        
-                                        <div class="form-group">
-                                            <label>Speed Quote Status<span class="clr-red">*</span></label>
+                                        <div class="form-group col-md-12">
                                             <div class="col-md-6" style="padding-left:0px">
+                                            <label>Speed Quote Status<span class="clr-red">*</span></label>
+                                            
                                                 <input type="text" class="form-control"
                                                     [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
                                                     [disabled]="true" />
                                             </div>
-                                            <div class="col-md-6">
+                                            <!-- <div class="col-md-6">
                                                 <p-calendar name="statusChangeDate" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="salesQuote.statusChangeDate" [showIcon]="true"
                                                     id="statusChangeDate" #statusChangeDate="ngModel" required
                                                     [disabled]="true">
                                                 </p-calendar>
+                                            </div> -->
+                                            <div class="col-md-6">
+                                                <!-- <label style="margin-top:14px">Probability (%)</label> -->
+                                                <label>Probability (%)</label>
+                                                <select name="probability" [(ngModel)]="salesQuote.probabilityId"
+                                                    (change)="onChangeInput()">
+                                                    <option value="null" selected>--Select</option>
+                                                    <option *ngFor="let p of percents" [ngValue]="p.value">
+                                                        {{ p.label }}</option>
+                                                </select>
                                             </div>
+                                        </div>
+                                        <div class="form-group memo-popup-cstm">
+                                            <label style="margin-top:4px">
+                                                Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                    data-target="#add-description" matTooltipPosition="above"
+                                                    matTooltip="Memo" (click)="onAddDescription('memo')"></i>
+                                            </label>
+                                            <span>
+                                                <div class="form-group memo-popup-cstm mat_emo">
+                                                    <div [innerHTML]="salesQuote.memo"
+                                                        [matTooltip]="parsedText(salesQuote.memo)"
+                                                        class="form-control" matTooltipPosition="above"
+                                                        style="height: 25px !important;width:100%"
+                                                        class="text_editor_box">
+                                                    </div>
+                                                </div>
+                                            </span>
                                         </div>
                                         
                                     </div>
@@ -527,7 +529,7 @@
                                 </div>
                             </div> -->
                             <div class="col-md-12 main_ar">
-                                <div class="form-group" style="position: absolute; right: 10px; bottom: 0;">
+                                <div class="form-group" style="right: 10px; bottom: 0;">
                                     <button type="submit" *ngIf="!isEdit && !isCreateModeHeader"
                                         (click)="onSubmit(true)" [disabled]="!newSalesQuoteForm.form.valid"
                                         class="btn pull-right submit-btn btn btn-primary">

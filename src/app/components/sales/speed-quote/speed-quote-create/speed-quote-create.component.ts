@@ -2047,7 +2047,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       results => {
         this.alertService.showMessage(
           "Success",
-          `Quote coverted to Order successfully.`,
+          `Email Send successfully.`,
           MessageSeverity.success
         );
         this.isSpinnerVisible = false;
