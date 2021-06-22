@@ -200,6 +200,15 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                   padding-left: 2px;
                   box-sizing: border-box;
                 }
+                .width-110{
+                  width:110px;
+                }
+                .width-90{
+                  width:90px;
+                }
+                .width-80{
+                  width:80px;
+                }
                 
                 .second-block-div {
                   margin: 2px 0;
