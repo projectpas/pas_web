@@ -35,7 +35,7 @@ import { DatePipe } from '@angular/common';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs'
-
+import * as moment from 'moment';
 
 
 
@@ -1474,6 +1474,19 @@ export class ReceivngPoComponent implements OnInit {
 
                     if (item.stocklineListObj[i].shippingReference == undefined || item.stocklineListObj[i].shippingReference == '') {
                         errorMessages.push("Please select shipping Reference in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
+
+                    if (moment(item.stocklineListObj[i].manufacturingDate, 'MM/DD/YYYY', true).isValid()) {
+                        if (moment(item.stocklineListObj[i].tagDate, 'MM/DD/YYYY', true).isValid()) {
+                            if (item.stocklineListObj[i].tagDate <= item.stocklineListObj[i].manufacturingDate) {                                
+                                errorMessages.push("Tag Date must be greater than Manufacturing Date - " + (i + 1).toString() + ofPartMsg);
+                            }
+                        }                        
+                        if (moment(item.stocklineListObj[i].certifiedDate, 'MM/DD/YYYY', true).isValid()) {
+                            if (item.stocklineListObj[i].certifiedDate <= item.stocklineListObj[i].manufacturingDate) {
+                                errorMessages.push("Certified Date must be greater than Manufacturing Date - " + (i + 1).toString() + ofPartMsg);                               
+                            }
+                        }                        
                     }
 
                     if (item.itemMaster.isSerialized == true) {
