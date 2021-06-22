@@ -140,7 +140,7 @@
                                         <th class="text-center width-50"> Stk Type</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Req</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Res</th>
-                                        <th *ngIf="!isSubWorkOrder" class="text-center width-50" style="width:60px !important">Qty Picked</th>
+                                        <th *ngIf="!isSubWorkOrder && statusId == 2 && enablePickTicket" class="text-center width-50" style="width:60px !important">Qty Picked</th>
                                         <th class="text-center" style="width:60px !important"> Qty To Be Reserved</th>
                                         <th class="text-center" style="width:60px !important">
                                             <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
@@ -221,7 +221,7 @@
                                             <td class="tex_end text-right">
                                                 {{x.quantityAlreadyReserved}}
                                             </td>
-                                            <td *ngIf="!isSubWorkOrder" class="tex_end text-right">
+                                            <td *ngIf="!isSubWorkOrder && statusId == 2 && enablePickTicket" class="tex_end text-right">
                                                 {{x.quantityPicked}}
                                             </td>
                                             <td class="tex_end text-right" *ngIf="(statusId === 1 || statusId === 5)">
