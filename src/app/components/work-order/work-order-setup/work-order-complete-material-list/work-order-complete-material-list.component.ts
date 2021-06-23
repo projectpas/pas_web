@@ -1067,19 +1067,34 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         //                     }
         //         }
     }
+       checkIsSeclected(){
+        if(this.reservedList &&  this.reservedList.length !=0){
+        //    this.reservedList.forEach(element => {
+        //     if (element.isParentSelected) {
+        //         return false;
+        //     }
+        // });
+        const arrayWithFilterObjects= this.reservedList.filter((o) => o.isParentSelected === true);
+        if(arrayWithFilterObjects && arrayWithFilterObjects.length !=0){
+            this.savebutonDisabled = true;
+        }else{
+            this.savebutonDisabled = false;
+        }
+      }
+    }  
     selectedParts(currentRecord, event) {
         if (this.statusId === 1 || this.statusId === 5) {
             if (currentRecord.isParentSelected == true && currentRecord.quantityReserved != 0) {
                 this.savebutonDisabled = true;
             } else {
-                this.savebutonDisabled = false;
+                // this.savebutonDisabled = false;
             }
         }
         if (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) {
             if (currentRecord.isParentSelected == true && currentRecord.quantityIssued != 0) {
                 this.savebutonDisabled = true;
             } else {
-                this.savebutonDisabled = false;
+                // this.savebutonDisabled = false;
             }
         }
 
@@ -1165,7 +1180,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         //     }
         // });
     }
-
+ 
     pageIndexChange(event) {
         this.pageIndex = parseInt(event.first) / event.rows;
         this.pageSize = event.rows;
@@ -1485,15 +1500,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         }
     }
-    // checkIsSeclected(){
-    //     if(this.reservedList &&  this.reservedList.length !=0){
-    //        this.reservedList.forEach(element => {
-    //         if (element.isParentSelected) {
-    //             return false;
-    //         }
-    //     });
-    //   }
-    // }  
+ 
     summaryColumns: any = [];
     childColumnsData: any = [];
     initColumns() {
