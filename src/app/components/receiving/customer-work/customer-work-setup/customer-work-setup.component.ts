@@ -19,6 +19,7 @@ import { timePattern } from '../../../../validations/validation-pattern';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { TimeLifeDraftData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 // import { time } from 'console';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-customer-work-setup',
@@ -967,6 +968,8 @@ export class CustomerWorkSetupComponent implements OnInit {
     onSaveCustomerReceiving() {
         this.gettagTypeIds = [];
         const timeLife = this.getTimeLife(this.sourceTimeLife);
+
+
         const receivingForm = {
             ...this.receivingForm,
             customerId: getValueFromObjectByKey('customerId', this.receivingForm.customerId),
@@ -998,7 +1001,45 @@ export class CustomerWorkSetupComponent implements OnInit {
             obtainFromTypeId:this.receivingForm.obtainFromTypeId==0? null :this.receivingForm.obtainFromTypeId,
             traceableToTypeId:this.receivingForm.traceableToTypeId==0? null :this.receivingForm.traceableToTypeId,
             taggedByType : this.receivingForm.taggedByType == 0 ? null :this.receivingForm.taggedByType,
+        }        
+        var errmessage = '';
+        if (this.receivingForm.mfgDate != "" && moment(this.receivingForm.mfgDate, 'MM/DD/YYYY', true).isValid()) {
+			if (this.receivingForm.tagDate != "" && moment(this.receivingForm.tagDate, 'MM/DD/YYYY', true).isValid()) {
+				if (this.receivingForm.tagDate <= this.receivingForm.mfgDate) {
+					this.isSpinnerVisible = false;
+					errmessage = errmessage + "Tag Date must be greater than Manufacturing Date."
+				}
+			}
+			if (this.receivingForm.inspectedDate != "" && moment(this.receivingForm.inspectedDate, 'MM/DD/YYYY', true).isValid()) {
+				if (this.receivingForm.inspectedDate <= this.receivingForm.mfgDate) {
+					this.isSpinnerVisible = false;
+					if (errmessage != '') {
+						errmessage = errmessage + '<br />' + "Inspection Date must be greater than Manufacturing Date."
+					}
+					else {
+						errmessage = errmessage + "Inspection Date must be greater than Manufacturing Date."
+					}
+				}
+			}
+			if (this.receivingForm.certifiedDate != "" && moment(this.receivingForm.certifiedDate, 'MM/DD/YYYY', true).isValid()) {
+				if (this.receivingForm.certifiedDate <= this.receivingForm.mfgDate) {
+					this.isSpinnerVisible = false;
+					if (errmessage != '') {
+						errmessage = errmessage + '<br />' + "Certified Date must be greater than Manufacturing Date."
+					}
+					else {
+						errmessage = errmessage + "Certified Date must be greater than Manufacturing Date."
+					}
+				}
+			}
         }
+        
+        if (errmessage != '') {
+			this.isSpinnerVisible = false;
+			this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
+			return;
+		}
+
         const { customerCode, customerPhone, partDescription, manufacturer, revisePartId, ...receivingInfo } = receivingForm;
         this.isSpinnerVisible = true;
         if (!this.isEditMode) {

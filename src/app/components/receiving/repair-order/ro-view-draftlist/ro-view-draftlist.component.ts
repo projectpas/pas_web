@@ -25,8 +25,7 @@ export class ROViewStockDraftListComponent implements OnInit {
         private alertService: AlertService) {
     }
     
-    ngOnInit() {      
-        console.log(this.repairOrderData) 
+    ngOnInit() {             
        this.repairOrderData.map(x => {
         const data = {
                 ...x,  
