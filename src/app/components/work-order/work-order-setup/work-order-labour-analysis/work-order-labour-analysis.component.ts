@@ -64,7 +64,46 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     ngOnDestroy(): void {
         this.onDestroy$.next();
     }
+     isInteger(x) { return typeof x === "number" && isFinite(x) && Math.floor(x) === x; }
+     isFloat(x) { return !!(x % 1); }
+     calculateHours(currentValue){ 
+if(this.isFloat(currentValue)==true){
+  currentValue=currentValue.toString().split('.');
+const hrs=currentValue[0]
+const mnts=currentValue[1]
+const newhrs= Number(mnts)>60 ? Number(hrs) +1 : hrs;
+const newmnts=Number(mnts)>60 ? Number(mnts)-60 : Number(mnts) <10 ? ('0'+Number(mnts)) :mnts;
+// const final =moment(Number(newhrs+'.'+newmnts), "hhmm").format("HH.mm")
+// return final
+return Number(newhrs+'.'+newmnts).toFixed(2)  
+}else{
+  return  currentValue.toFixed(2) 
+  // return currentValue ? formatNumberAsGlobalSettingsModule(currentValue, 2) : '0.00';
+}
+     }
+     getTotalHours(key){
+      let total = 0;
+      if (this.data && this.data.length > 0) {
+        this.data.forEach(
+          (part) => {
+            total += Number(this.sumHours(part, key));
+          }
+        )
+      }
+      total;
+      return this.calculateHours(total); 
+    }
 
+    sumHours(part, key) {
+      let total = 0;
+      if (part[key]) {
+        total +=  parseFloat(part[key]);
+      }
+      return total;
+    }
+    //  formatTime(currentValue){
+    //   moment(currentValue, "hhmm").format("HH.mm");
+    //  }
     getWorkOrderLabourAnalysisData(workOrderId) {
         this.isSpinnerVisible = true;
         const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
@@ -75,10 +114,19 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
                   .pipe(takeUntil(this.onDestroy$)).subscribe(
                       (res: any) => {
                           this.isSpinnerVisible = false;
-                          if (res) {
+                          if (res && res.length !=0) {
                             this.data = res;
                             this.data.forEach(element => {
                               element.burdenRateAmount=element.burdenRateAmount ? formatNumberAsGlobalSettingsModule(element.burdenRateAmount, 2) : '0.00';
+                              element.hours=this.calculateHours(element.hours);
+                              element.adjustedHours=this.calculateHours(element.adjustedHours);
+                              element.adjustments= this.calculateHours(element.adjustments);
+                       setTimeout(() => {
+      // element.hours=  moment(element.hours, "hhmm").format("HH.mm");
+      // element.adjustedHours=  moment(element.adjustedHours, "hhmm").format("HH.mm")
+      // element.adjustments=  moment(element.adjustments, "hhmm").format("HH.mm")
+      element.varPercentage=(Number(element.adjustments) / Number(element.adjustedHours)).toFixed(2);
+     }, 600);
                             });
                           }
                       },
@@ -104,41 +152,43 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
 
     initColumns() {
       this.headers = [
-        { field: "workOrderNum", header: "WO Num" },         
-        { field: "partNumber", header: "PN" },
-        { field: 'revisedPN', header: 'Revised PN'},
-        { field: "partDescription", header: "PN Description" },
-        { field: 'customer', header: 'Customer'  },
-        { field: 'billableOrNonBillable', header: 'Billable /NonBillable' },
+        { field: "workOrderNum", header: "WO Num", width: "120px" },         
+        { field: "partNumber", header: "PN",width: "140px" },
+        { field: 'revisedPN', header: 'Revised PN', width: "120px"},
+        { field: "partDescription", header: "PN Description",width: "250px"  },
+        { field: 'customer', header: 'Customer',width: "160px"  },
+        { field: 'billableOrNonBillable', header: 'Billable /NonBillable', width: "160px"  },
         { field: 'hours', header: 'Act Hours'},
         { field: 'adjustedHours', header: 'Adj Hours' },
         { field: 'adjustments', header: 'Var. Hours' },
+        { field: 'varPercentage', header: 'Var %', width:"100px" },
         { field: 'burdenRateAmount', header: 'Burden Rate'},
-        { field: 'stage', header: 'Stage' },
-        { field: 'status', header: 'Status' },
+        { field: 'stage', header: 'Stage',width: "100px"  },
+        { field: 'status', header: 'Status',width: "90px"  },
       ];
         this.selectedColumns = this.headers;
       }
 
       initSummaryColumns() {
         this.headers = [
-          { field: "workOrderNum", header: "WO Num", width: "140px" },         
-          { field: "partNumber", header: "PN", width: "200px" },
-          { field: 'revisedPN', header: 'Revised PN' },
+          { field: "workOrderNum", header: "WO Num", width: "120px" },         
+          { field: "partNumber", header: "PN",width: "140px" },
+          { field: 'revisedPN', header: 'Revised PN', width: "120px" },
           { field: "partDescription", header: "PN Description", width: "250px" },
-          { field: 'customer', header: 'Customer' },
+          { field: 'customer', header: 'Customer',width: "160px"  },
           { field: 'action', header: 'Task' },
           { field: 'expertise', header: 'Expertise' },
-          { field: 'employeeName', header: 'Employee' },
-          { field: 'billableOrNonBillable', header: 'Billable /NonBillable' },
+          { field: 'employeeName', header: 'Employee',width: "160px" },
+          { field: 'billableOrNonBillable', header: 'Billable /NonBillable',width: "160px"  },
           { field: 'hours', header: 'Act Hours', width:"100px"},
           { field: 'adjustedHours', header: 'Adj Hours', width:"100px" },
           { field: 'adjustments', header: 'Var. Hours', width:"100px" },
+          { field: 'varPercentage', header: 'Var %', width:"100px" },
           { field: 'burdenRateAmount', header: 'Burden Rate' ,width:"100px"},
           // { field: 'burdenRateAmount', header: 'Var. Hours',width:"100px" },
           // { field: 'varPercentage', header: 'Var %',width:"100px" },
-          { field: 'stage', header: 'Stage' },
-          { field: 'status', header: 'Status' },
+          { field: 'stage', header: 'Stage',width: "100px"  },
+          { field: 'status', header: 'Status' ,width: "90px" },
         ];
         this.selectedColumns = this.headers;
       }
@@ -285,7 +335,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
           return (percentage / this.data.length).toFixed(2);
         }
       }
-    
+
       getTotalAmount(key) {
         let total = 0;
         if (this.data && this.data.length > 0) {

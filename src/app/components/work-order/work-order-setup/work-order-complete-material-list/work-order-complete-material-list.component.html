@@ -523,10 +523,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer"> 
                     <!-- !savebutonDisabled  || checkActiveStatus || checkIsSeclected()-->
                     <button class="btn btn-primary" data-dismiss="modal" (click)="saveRIPart()"
-                        [disabled]="!savebutonDisabled">
+                        [disabled]="!savebutonDisabled || checkIsSeclected()">
                         <span *ngIf="statusId === 1">Reserve</span>
                         <span *ngIf="statusId === 2">Issue</span>
                         <span *ngIf="statusId === 3">Reserve & Issue</span>

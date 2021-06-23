@@ -35,6 +35,9 @@
                               <div style="display: inline-flex;">
                                 <span>
                                   <input type="checkbox" name="allow{{i}}" [(ngModel)]="wData.isMastervalue"
+                                    (change)="aSectionClick($event,wData)" (ngModelChange)="enableSave()" *ngIf="wData.workOrderSettlementName=='Mat Required = Mat Issued'"
+                                    class="form-control mat_r" [disabled]="true"/>
+                                    <input type="checkbox" name="allow{{i}}" [(ngModel)]="wData.isMastervalue" *ngIf="wData.workOrderSettlementName !='Mat Required = Mat Issued'"
                                     (change)="aSectionClick($event,wData)" (ngModelChange)="enableSave()"
                                     class="form-control mat_r" [disabled]="wData && wData.isenableUpdate==false"/>
                                 </span>
@@ -55,7 +58,7 @@
                               <div class="form-group memo-popup-cstm mat_emo3">
                                 <div [innerHTML]="wData.memo" matTooltipPosition="above" [matTooltip]="parsedText(wData.memo)" style="width: 290px !important;"
                                   class="text_editor_box"></div>
-                                <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{'btn_disabled':wData && wData.isenableUpdate==false}" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo" style="    margin-top: 4px;"
+                                <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{'btn_disabled pointerEvents':wData && wData.isenableUpdate==false && wData.workOrderSettlementName !='Mat Required = Mat Issued'}" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo" style="    margin-top: 4px;"
                                   matTooltipPosition="above" (click)="onAddTextAreaInfo(wData,i)"></i>
                               </div>
                             </td>
