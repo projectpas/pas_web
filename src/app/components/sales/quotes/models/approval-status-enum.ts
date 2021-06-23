@@ -11,3 +11,12 @@ export enum ApprovalStatusDescirptionEnum {
     Rejected = "Rejected",
     WaitingForApproval = "WaitingForApproval"
 }
+
+export enum WorkOrderQuoteStatusEnum {
+    Open = 1,
+    Closed = 2,
+    Cancelled = 3,
+    Delayed = 4,
+    Approved = 5,
+    Pending = 6
+}

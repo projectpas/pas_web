@@ -18,7 +18,7 @@ import {WorkOrderLabor,AllTasks,WorkOrderQuoteLabor,ExclusionQuote,ChargesQuote,
 import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { DBkeys } from '../../../../services/db-Keys';
 import { ApprovalProcessEnum } from "../../../sales/quotes/models/approval-process-enum";
-import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../sales/quotes/models/approval-status-enum";
+import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum,WorkOrderQuoteStatusEnum } from "../../../sales/quotes/models/approval-status-enum";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
@@ -461,10 +461,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         {
             this.getEmployeeList(this.workOrderId);
             this.loadCurrency('');
+            this.getAllWorkOrderStatus('');
      
             // this.getUnitOfMeasure();
             this.getAllEmailType();
-            this.getAllWorkOrderStatus('');
+           
         }
     }
     get currentUserMasterCompanyId(): number {
@@ -504,7 +505,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
         if(this.woqsettingModel != null && this.woqsettingModel.IsApprovalRule == false)
         {
-            return true;
+            return false;
         }else
         {
             return this.woqsettingModel != null &&
@@ -684,6 +685,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                         ...res.workOrderQuote, WorkOrderId: res.workOrderId,
                                         WorkFlowWorkOrderId: res["workFlowWorkOrderId"], quoteNumber: res.workOrderQuote.quoteNumber, expirationDateStatus: res.workOrderQuote.quoteStatusId
                                     };
+
+                                    this.getAllWorkOrderStatus('');
                                     this.employeeName=res.employeeName ?  res.employeeName : this.authService.currentEmployee.name;
                                     this.quoteForm['versionNo'] = 'V1';
                                     if (res.workOrderQuote['versionNo']) {
@@ -3412,6 +3415,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 if (res) {
                     this.quoteForm['versionNo'] = res.workOrderQuote['versionNo'];
                     this.quoteForm.expirationDateStatus = res.workOrderQuote.quoteStatusId;
+                    this.getAllWorkOrderStatus('');
                 }
             },
             err => {
@@ -3434,6 +3438,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     
     getAllWorkOrderStatus(value) {
         this.setEditArray = [];
+        let tempList = [];
         if (this.isEditMode == true) {
             this.setEditArray.push(this.quoteForm.expirationDateStatus? this.quoteForm.expirationDateStatus :0);
         } else {
@@ -3442,7 +3447,26 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         const strText = value ? value : '';
         this.commonService.autoSuggestionSmartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
-                this.quoteStatusList = res;
+               // this.quoteStatusList = res;
+
+                if (res && res.length > 0) {
+                    for (let i = 0; i < res.length; i++) 
+                    {
+                        if (WorkOrderQuoteStatusEnum.Approved === this.quoteForm.expirationDateStatus) 
+                        {
+                            tempList.push(res[i]);
+                        } 
+                        else  
+                        {
+                            if(res[i].value != WorkOrderQuoteStatusEnum.Approved) 
+                            {
+                                tempList.push(res[i]);
+                            }
+                            
+                        }
+                    }
+                }
+                this.quoteStatusList = tempList;
             }
         })
     }
