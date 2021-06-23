@@ -90,12 +90,15 @@ isenableUpdate:any;
 editRow(currentRecord){
   currentRecord.isenableUpdate=true;
 }
+
 upDateSettlemts( ){
 
   const newData=[...  this.woSettlements];
   newData.forEach(element => {
     element.userId=element.userId?element.userId.employeeId:0;
     element.conditionId= element.conditionId ==0 ? null :element.conditionId
+    element.updatedDate=this.toDaysDate;
+    element.updatedBy= this.userName;
   });
   // newData[0].closeWO=true;
   // newData.forEach(element => {
