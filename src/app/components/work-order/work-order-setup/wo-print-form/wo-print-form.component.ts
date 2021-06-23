@@ -31,6 +31,11 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
   Printeddate2 : string;
   Issave: boolean = true;
   isconfirmsave : boolean = true;
+  isshortteardown  : boolean = false;
+  isBulletinsModification  : boolean = false;
+  isTestDataUsed  : boolean = false;
+  isPmaDerBulletins  : boolean = false;
+  isWorkPerformed  : boolean = false;
   workOrderprintData: any = [];
   endPointURL : any;
   constructor(
@@ -64,6 +69,11 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
       this.workOrderprintData = res[0];
 
       this.isSpinnerVisible = false;
+      this.isshortteardown = this.workOrderprintData.workOrderTeardownModel.isshortteardown;
+      this.isBulletinsModification = this.workOrderprintData.workOrderTeardownModel.isBulletinsModification;
+      this.isTestDataUsed = this.workOrderprintData.workOrderTeardownModel.isTestDataUsed;
+      this.isPmaDerBulletins = this.workOrderprintData.workOrderTeardownModel.isPmaDerBulletins;
+      this.isWorkPerformed = this.workOrderprintData.workOrderTeardownModel.isWorkPerformed;
       this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate = this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate, 'MMM-dd-yyyy') : '';
       this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate = this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate, 'MMM-dd-yyyy') : '';
       this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate = this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate, 'MMM-dd-yyyy') : '';
