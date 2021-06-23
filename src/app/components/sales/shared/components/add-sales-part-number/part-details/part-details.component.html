@@ -15,7 +15,7 @@
                 <tr>
                     <th></th>
                     <th *ngFor="let col of columns" pResizableColumn pReorderableColumn>
-                        <span *ngIf="col.field == 'conditionDescription' || col.field == 'qtyToOrder'">
+                        <span>
                             {{ col.header }}
                         </span>
                         <!-- <span *ngIf="col.field != 'conditionDescription' && col.field != 'qtyToOrder'">

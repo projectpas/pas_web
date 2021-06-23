@@ -186,22 +186,24 @@ export class SalesReserveUnreserveComponent implements OnInit {
             if (event == true) {
                 this.parts[i]['isSelected'] = true;
                 this.disableSubmitButtonForAction = false;
-
+                this.parts[i]['qtyToReserve'] = this.parts[i]['qtyToBeReserved'];
             } else {
                 this.parts[i]['isSelected'] = false;
                 this.disableSubmitButtonForAction = true;
-
+                this.parts[i]['qtyToReserve'] = null;
             }
         }
     }
 
-    onChangeOfPartSelection(event) {
+    onChangeOfPartSelection(event, rowData) {
         let selectedPartsLength = 0;
         for (let i = 0; i < this.parts.length; i++) {
             if (event == true) {
                 selectedPartsLength = selectedPartsLength + 1;
+                rowData.qtyToReserve = rowData.qtyToBeReserved;
             }
             else {
+                rowData.qtyToReserve = null;;
                 if (selectedPartsLength != 0) {
                     selectedPartsLength = selectedPartsLength - 1;
                 }

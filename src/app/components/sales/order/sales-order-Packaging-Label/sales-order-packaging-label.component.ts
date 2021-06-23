@@ -65,6 +65,12 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
       : "";
   }
 
+  get fullName(): string {
+    return this.authService.currentUser
+      ? this.authService.currentUser.firstName + ' ' + this.authService.currentUser.lastName
+      : "";
+  }
+
   printContent() {
     let printContents, popupWin;
     printContents = document.getElementById('PackagingSlip').innerHTML;

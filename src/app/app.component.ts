@@ -173,10 +173,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'Sales Order Quote List',
                   routerLink: '/salesmodule/salespages/sales-quote-list',
                 },
-                {
-                  label: 'Sales Order Speed Quote List',
-                  routerLink: '/salesmodule/salespages/speed-quote-list',
-                }
+                // {
+                //   label: 'Sales Order Speed Quote List',
+                //   routerLink: '/salesmodule/salespages/speed-quote-list',
+                // }
               ],
             },
             {
@@ -188,8 +188,8 @@ export class AppComponent implements OnInit, AfterViewInit {
                     '/workordersmodule/workorderspages/app-work-order-quote-list',
                 },
                 {
-                  label: 'Work Order Speed Quote',
-                  routerLink: '/#',
+                  label: 'Speed Quote List',
+                  routerLink: '/salesmodule/salespages/speed-quote-list',
                 }
               ],
             },
