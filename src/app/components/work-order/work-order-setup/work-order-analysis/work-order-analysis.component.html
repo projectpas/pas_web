@@ -91,9 +91,9 @@
       <ng-template pTemplate="header" let-columns>
           <tr>
 
-              <th class="table-column-width"
+              <th class="table-column-width" [ngStyle]="{'width': col.width}"
                   *ngFor="let col of columns"
-                  pResizableColumn
+                  pResizableColumn 
                   pReorderableColumn
                   [pSortableColumn]="col.field">
                   {{ col.header }}

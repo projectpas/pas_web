@@ -347,7 +347,8 @@
                                 </p>
                                 <p>
                                     <span class="label"><b>Memo: </b></span><span class="value">
-                                        <p class="p-0 m-0 p_textEditor" [innerHTML]="viewItemMaster.memo"></p>
+                                        <p class=" m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(viewItemMaster.memo)" [innerHTML]="viewItemMaster.memo"></p>
                                     </span> 
                                 </p>
                                 <p>

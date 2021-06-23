@@ -18,7 +18,7 @@ import {WorkOrderLabor,AllTasks,WorkOrderQuoteLabor,ExclusionQuote,ChargesQuote,
 import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { DBkeys } from '../../../../services/db-Keys';
 import { ApprovalProcessEnum } from "../../../sales/quotes/models/approval-process-enum";
-import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../sales/quotes/models/approval-status-enum";
+import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum,WorkOrderQuoteStatusEnum } from "../../../sales/quotes/models/approval-status-enum";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
@@ -395,25 +395,25 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     historyData:any=[];
     woqsettingModel: any = {};
     auditHistoryHeaders = [
-        { field: 'taskName', header: 'Task' ,isRequired:true},
-        { field: 'partNumber', header: 'PN',isRequired:true },
-        { field: 'partDescription', header: 'PN Description',isRequired:false },
-        { field: 'provision', header: 'Provision',isRequired:false },
-        { field: 'quantity', header: 'Qty',isRequired:true },
-        { field: 'uomName', header: 'UOM',isRequired:false },
-        { field: 'conditiontype', header: 'Cond Type',isRequired:true },
-        { field: 'stocktype', header: 'Stock Type',isRequired:false },
-        { field: 'unitCost', header: 'Unit Cost',isRequired:false },
-        { field: 'totalPartCost', header: 'Total Part Cost',isRequired:false },
-        { field: 'billingName', header: 'Billing Method',isRequired:true },
-        { field: 'markUp', header: 'Mark Up',isRequired:false },
-        { field: 'billingRate', header: 'Billing Rate',isRequired:false },
-        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
-        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
-        { field: 'createdDate', header: 'Created Date',isRequired:false },
-        { field: 'createdBy', header: 'Created By',isRequired:false },
-        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
-        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+        { field: 'taskName', header: 'Task' ,isRequired:true,isCheckbox:false,isDate:false},
+        { field: 'partNumber', header: 'PN',isRequired:true ,isCheckbox:false,isDate:false},
+        { field: 'partDescription', header: 'PN Description',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'provision', header: 'Provision',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'quantity', header: 'Qty',isRequired:true ,isCheckbox:false,isDate:false},
+        { field: 'uomName', header: 'UOM',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'conditiontype', header: 'Cond Type',isRequired:true ,isCheckbox:false,isDate:false},
+        { field: 'stocktype', header: 'Stock Type',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'unitCost', header: 'Unit Cost',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'totalPartCost', header: 'Total Part Cost',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'billingName', header: 'Billing Method',isRequired:true ,isCheckbox:false,isDate:false},
+        { field: 'markUp', header: 'Mark Up',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'billingRate', header: 'Billing Rate',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false ,isCheckbox:true,isDate:false},
+        { field: 'createdDate', header: 'Created Date',isRequired:false ,isCheckbox:false,isDate:true},
+        { field: 'createdBy', header: 'Created By',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false ,isCheckbox:false,isDate:true},
+        { field: 'updatedBy', header: 'Updated By',isRequired:false ,isCheckbox:false,isDate:false},
       ]
       isAllowLaberSave:boolean=false;
       billingMethod:any={
@@ -461,10 +461,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         {
             this.getEmployeeList(this.workOrderId);
             this.loadCurrency('');
+            this.getAllWorkOrderStatus('');
      
             // this.getUnitOfMeasure();
             this.getAllEmailType();
-            this.getAllWorkOrderStatus('');
+           
         }
     }
     get currentUserMasterCompanyId(): number {
@@ -501,9 +502,17 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     checkEnforceInternalApproval() {
-        return this.woqsettingModel != null &&
-          this.woqsettingModel.IsApprovalRule &&
-          new Date(this.quoteForm.openDate) >= new Date(this.woqsettingModel.effectivedate);
+
+        if(this.woqsettingModel != null && this.woqsettingModel.IsApprovalRule == false)
+        {
+            return false;
+        }else
+        {
+            return this.woqsettingModel != null &&
+            this.woqsettingModel.IsApprovalRule &&
+            new Date(this.quoteForm.openDate) >= new Date(this.woqsettingModel.effectivedate);
+        }
+   
       }
 
     getWOQSettingMasterData(currentUserMasterCompanyId) {
@@ -676,6 +685,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                         ...res.workOrderQuote, WorkOrderId: res.workOrderId,
                                         WorkFlowWorkOrderId: res["workFlowWorkOrderId"], quoteNumber: res.workOrderQuote.quoteNumber, expirationDateStatus: res.workOrderQuote.quoteStatusId
                                     };
+
+                                    this.getAllWorkOrderStatus('');
                                     this.employeeName=res.employeeName ?  res.employeeName : this.authService.currentEmployee.name;
                                     this.quoteForm['versionNo'] = 'V1';
                                     if (res.workOrderQuote['versionNo']) {
@@ -3404,6 +3415,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                 if (res) {
                     this.quoteForm['versionNo'] = res.workOrderQuote['versionNo'];
                     this.quoteForm.expirationDateStatus = res.workOrderQuote.quoteStatusId;
+                    this.getAllWorkOrderStatus('');
                 }
             },
             err => {
@@ -3426,6 +3438,7 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
     
     getAllWorkOrderStatus(value) {
         this.setEditArray = [];
+        let tempList = [];
         if (this.isEditMode == true) {
             this.setEditArray.push(this.quoteForm.expirationDateStatus? this.quoteForm.expirationDateStatus :0);
         } else {
@@ -3434,7 +3447,26 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
         const strText = value ? value : '';
         this.commonService.autoSuggestionSmartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
-                this.quoteStatusList = res;
+               // this.quoteStatusList = res;
+
+                if (res && res.length > 0) {
+                    for (let i = 0; i < res.length; i++) 
+                    {
+                        if (WorkOrderQuoteStatusEnum.Approved === this.quoteForm.expirationDateStatus) 
+                        {
+                            tempList.push(res[i]);
+                        } 
+                        else  
+                        {
+                            if(res[i].value != WorkOrderQuoteStatusEnum.Approved) 
+                            {
+                                tempList.push(res[i]);
+                            }
+                            
+                        }
+                    }
+                }
+                this.quoteStatusList = tempList;
             }
         })
     }

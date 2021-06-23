@@ -194,6 +194,7 @@ export class SalesOrderBillingComponent implements OnInit {
                 this.billingorInvoiceForm.openDate = new Date(result.openDate);
                 this.billingorInvoiceForm.printDate = new Date();
                 this.billingorInvoiceForm.invoiceDate = new Date();
+                this.billingorInvoiceForm.invoiceNo = "Creating";
                 this.billingorInvoiceForm.creditLimit = this.formateCurrency(result.creditLimit);
                 this.billingorInvoiceForm.customerId = result.customerId;
             } else {
@@ -663,6 +664,12 @@ export class SalesOrderBillingComponent implements OnInit {
                    padding-left: 2px;
                    box-sizing: border-box;
                  }
+                 .width-70{
+                    width:70px;
+                  }
+                  .width-80{
+                    width:80px;
+                  }
                  
                  .second-block-div {
                    margin: 2px 0;

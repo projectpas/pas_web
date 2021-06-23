@@ -975,9 +975,9 @@ if(this.enableToSave==false){
           this.saveFormdata.headerMarkupId = Number(this.overAllMarkup);
           this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
         } 
-        if(this.saveFormdata.costPlusType==3){
-          this.saveFormdata.laborFlatBillingAmount= this.flatAmount ? this.flatAmount : '0.00'
-        }
+        // if(this.saveFormdata.costPlusType==3){
+        //   this.saveFormdata.laborFlatBillingAmount= this.flatAmount ? this.flatAmount : '0.00'
+        // }
         this.saveworkOrderLabor.emit(this.saveFormdata);
         this.enableToSave=false;
         this.disabledUpdatebtn = true;
@@ -1283,7 +1283,7 @@ if(this.enableToSave==false){
         total += Number(labor.billingAmount.toString().split(',').join(''));
       }
     }
-    this.laborForm['laborFlatBillingAmount'] = total.toFixed(2);
+    //this.laborForm['laborFlatBillingAmount'] = total.toFixed(2);
     return formatNumberAsGlobalSettingsModule(total, 0);
   }
   getTotalCostPlus(taskList) {
@@ -1494,6 +1494,14 @@ if(this.enableToSave==false){
         }
       )
     }
+
+    if(type == 'BillingAmount')
+    {
+      this.laborForm.laborFlatBillingAmount = bATotal ? formatNumberAsGlobalSettingsModule(bATotal, 2) : '0.00';
+      this.flatAmount=this.laborForm.laborFlatBillingAmount;
+    }
+   
+
     return (type == 'Hours') ? htotal.toFixed(2) : (type == 'LaborOHCost') ? formatNumberAsGlobalSettingsModule(loTotal, 0) : (type == 'LaborBurdenRate') ? formatNumberAsGlobalSettingsModule(burTotal, 0) : (type == 'CostPerHour') ? formatNumberAsGlobalSettingsModule(cpTotal, 0) : (type == 'Cost') ? formatNumberAsGlobalSettingsModule(costTotal, 0) : (type == 'BillingRate') ? formatNumberAsGlobalSettingsModule(bRTotal, 0) : formatNumberAsGlobalSettingsModule(bATotal, 0);
   }
   deleteConfirmation() {
@@ -1674,25 +1682,25 @@ if(this.isQuote){
   }
   historyData: any = []; 
   auditHistoryHeaders = [
-    { field: 'taskName', header: 'Task', isRequired: false },
-    { field: 'expertise', header: 'Expertise', isRequired: false },
-    { field: 'billabletype', header: 'Billable /NonBillable', isRequired: false },
-    { field: 'hours', header: 'Hours', isRequired: false },
-    { field: 'directLaborOHCost', header: 'Direct Labor', isRequired: false },
-    { field: 'uomName', header: 'Burden Rate %', isRequired: false },
-    { field: 'burdaenRatePercentage', header: 'Burden Rate %', isRequired: false },
-    { field: 'burdenRateAmount', header: 'Burden Rate Amount', isRequired: false },
-    { field: 'totalCostPerHour', header: 'Labor Cost/Hr', isRequired: false },
-    { field: 'totalCost', header: 'Total Direct Cost', isRequired: false },
-    { field: 'billingName', header: 'Billing Method', isRequired: false },
-    { field: 'markUp', header: 'Mark Up', isRequired: false },
-    { field: 'billingRate', header: 'Billing Rate', isRequired: false },
-    { field: 'billingAmount', header: 'Billing Amount', isRequired: false },
-    { field: 'isDeleted', header: 'Is Deleted', isRequired: false },
-    { field: 'createdDate', header: 'Created Date', isRequired: false },
-    { field: 'createdBy', header: 'Created By', isRequired: false },
-    { field: 'updatedDate', header: 'Updated Date', isRequired: false },
-    { field: 'updatedBy', header: 'Updated By', isRequired: false },
+    { field: 'taskName', header: 'Task', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'expertise', header: 'Expertise', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'billabletype', header: 'Billable /NonBillable', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'hours', header: 'Hours', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'directLaborOHCost', header: 'Direct Labor', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'uomName', header: 'Burden Rate %', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'burdaenRatePercentage', header: 'Burden Rate %', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'burdenRateAmount', header: 'Burden Rate Amount', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'totalCostPerHour', header: 'Labor Cost/Hr', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'totalCost', header: 'Total Direct Cost', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'billingName', header: 'Billing Method', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'markUp', header: 'Mark Up', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'billingRate', header: 'Billing Rate', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'billingAmount', header: 'Billing Amount', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'isDeleted', header: 'Is Deleted', isRequired: false ,isCheckbox:true,isDate:false},
+    { field: 'createdDate', header: 'Created Date', isRequired: false ,isCheckbox:false,isDate:true},
+    { field: 'createdBy', header: 'Created By', isRequired: false ,isCheckbox:false,isDate:false},
+    { field: 'updatedDate', header: 'Updated Date', isRequired: false ,isCheckbox:false,isDate:true},
+    { field: 'updatedBy', header: 'Updated By', isRequired: false ,isCheckbox:false,isDate:false},
   ]
   getAuditHistoryById(rowData) {
     if (rowData.workOrderQuoteLaborId) {

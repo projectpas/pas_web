@@ -17,6 +17,9 @@ import { StocklineService } from '../../../../services/stockline.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { timePattern } from '../../../../validations/validation-pattern';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
+import { TimeLifeDraftData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
+// import { time } from 'console';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-customer-work-setup',
@@ -123,6 +126,8 @@ export class CustomerWorkSetupComponent implements OnInit {
     vendorModuleId: number = 0;   
     customerModuleId: number = 0;   
     otherModuleId: number = 0; 
+    stockLineId : number = 0;
+    customerTypeId: number = 1;
 
     constructor(private commonService: CommonService,
         private datePipe: DatePipe,
@@ -142,6 +147,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.obtainFromTypeId = 1;
         this.receivingForm.ownerTypeId = 1;
         this.receivingForm.traceableToTypeId = 1;
+        this.receivingForm.taggedByType = 1;
         this.receivingForm.tagType = null;
         this.receivingForm.quantity = 1;
         this.receivingForm.isCustomerStock = true;
@@ -268,11 +274,12 @@ export class CustomerWorkSetupComponent implements OnInit {
     
     private loadVendorData(strText = '') {
         this.arrayVendlsit = [];
-        if(this.isEditMode==true){
+        if(this.isEditMode==true) {
             this.arrayVendlsit.push(this.receivingForm.traceableTo? this.receivingForm.traceableTo.value :0,
-                this.receivingForm.owner?  this.receivingForm.owner.value :0,
-                this.receivingForm.obtainFrom? this.receivingForm.obtainFrom.value :0); 
-        }else{
+                this.receivingForm.owner?  this.receivingForm.owner.value : 0,
+                this.receivingForm.obtainFrom ? this.receivingForm.obtainFrom.value : 0,
+                this.receivingForm.taggedById ? this.receivingForm.taggedById.value : 0 ); 
+        } else {
             this.arrayVendlsit.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
@@ -293,8 +300,9 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.arrayVendlsit = [];
         if(this.isEditMode==true){
             this.arrayVendlsit.push(this.receivingForm.traceableTo? this.receivingForm.traceableTo.value :0,
-                this.receivingForm.owner?this.receivingForm.owner.value :0,
-                this.receivingForm.obtainFrom? this.receivingForm.obtainFrom.value :0); 
+                this.receivingForm.owner ? this.receivingForm.owner.value :0,
+                this.receivingForm.obtainFrom ? this.receivingForm.obtainFrom.value :0 , 
+                this.receivingForm.taggedById ? this.receivingForm.taggedById.value : 0 ); 
         }else{
             this.arrayVendlsit.push(0);
         }
@@ -410,6 +418,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 ownerTypeId:res.ownerTypeId==null? 0 :res.ownerTypeId,
                 obtainFromTypeId:res.obtainFromTypeId==null? 0 :res.obtainFromTypeId,
                 traceableToTypeId:res.traceableToTypeId==null? 0 :res.traceableToTypeId,
+                taggedById: res.taggedById == null ? 0 :res.taggedById,  //---------------------------------
                 purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
             };
             this.getManagementStructureDetails(this.receivingForm
@@ -422,11 +431,12 @@ export class CustomerWorkSetupComponent implements OnInit {
             }, 1000);
             this.getObtainOwnerTraceOnEdit(res);
             this.loadTagTypes('');
-            if (res.obtainFromType == 'Vendor' || res.ownerType == 'Vendor' || res.tracableToType == 'Vendor') {
+            if (res.obtainFromType == 'Vendor' || res.ownerType == 'Vendor' || res.tracableToType == 'Vendor' || res.taggedByTypeName == 'Vendor') {
                 this.loadVendorData('');
             }
             this.loadConditionData('');
             this.getworkScope('');
+            this.stockLineId = res.stockLineId > 0 ? res.stockLineId : null;
             if (res.timeLifeCyclesId != null || res.timeLifeCyclesId != 0) {
                 this.timeLifeCyclesId = res.timeLifeCyclesId;
                 this.getTimeLifeOnEdit(res.timeLifeCyclesId);
@@ -485,6 +495,19 @@ export class CustomerWorkSetupComponent implements OnInit {
         }
         else if (res.traceableToTypeId == this.otherModuleId) {
             this.receivingForm.traceableTo = res.traceableTo;
+        }
+        //------------------------------------------- added    
+        if (res.taggedByType == this.customerModuleId) {
+            this.receivingForm.taggedById = { 'customerId': res.taggedById, 'name': res.taggedBy ,'label': res.taggedBy, 'value': res.taggedById };
+        }
+        else if (res.taggedByType == this.vendorModuleId) {
+            this.receivingForm.taggedById = { 'label': res.taggedBy, 'value': res.taggedById };
+        }
+        else if (res.taggedByType == this.companyModuleId) {
+            this.receivingForm.taggedById = { 'label': res.taggedBy, 'value': res.taggedById };
+        }
+        else if (res.taggedByType == this.otherModuleId ) {
+            this.receivingForm.taggedBy = res.taggedBy;
         }
     }
 
@@ -549,7 +572,8 @@ export class CustomerWorkSetupComponent implements OnInit {
 
     getTimeLifeOnEdit(timeLifeId) {
         this.stocklineService.getStockLineTimeLifeList(timeLifeId).subscribe(res => {
-            this.sourceTimeLife = res[0];
+            //this.sourceTimeLife = res[0];           
+            this.sourceTimeLife = this.getTimeLifeDetails(res[0]);
         });
     }
 
@@ -580,19 +604,21 @@ export class CustomerWorkSetupComponent implements OnInit {
     getCustomers(strText = '', type) {
         this.arrayCustlist = [];
         if (this.isEditMode == true) {
-            this.arrayCustlist.push(this.receivingForm.traceableTo? this.receivingForm.traceableTo.customerId :0,
-                this.receivingForm.owner? this.receivingForm.owner.customerId :0,
-                this.receivingForm.obtainFrom?this.receivingForm.obtainFrom.customerId :0,
-                this.receivingForm.customerId?this.receivingForm.customerId.customerId :0);  
+            this.arrayCustlist.push(this.receivingForm.traceableTo ? this.receivingForm.traceableTo.customerId :0,
+                this.receivingForm.owner ? this.receivingForm.owner.customerId :0,
+                this.receivingForm.obtainFrom ? this.receivingForm.obtainFrom.customerId :0,
+                this.receivingForm.customerId ? this.receivingForm.customerId.customerId :0,
+                this.receivingForm.taggedById ? this.receivingForm.taggedById.customerId :0 );  
         } else { 
             this.arrayCustlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+
+        this.commonService.autoCompleteSmartDropDownCustomerList(this.customerTypeId, strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allCustomersInfo = res.map(x => {
                 return {
                     ...x,
-                    customerId: x.value,
-                    name: x.label
+                    customerId: x.customerId,
+                    name: x.customerName
                 }
             });
             this.customerNamesInfo = this.allCustomersInfo;
@@ -784,6 +810,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.obtainFrom = value;
             this.receivingForm.owner = value;
             this.receivingForm.traceableTo = value;
+            this.receivingForm.taggedById = value;
         }
         this.receivingForm.customerId = value;
         this.isgotoWO=false;
@@ -894,6 +921,11 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.obtainFromTypeId = value;
     }
 
+    onSelectTaggedType(value) {     
+        this.receivingForm.taggedById = undefined;
+        this.receivingForm.taggedByType = value;
+    }
+
     onSelectOwner(value) {
         this.receivingForm.owner = undefined;
         this.receivingForm.ownerTypeId = value;
@@ -935,6 +967,8 @@ export class CustomerWorkSetupComponent implements OnInit {
    
     onSaveCustomerReceiving() {
         this.gettagTypeIds = [];
+        const timeLife = this.getTimeLife(this.sourceTimeLife);
+
 
         const receivingForm = {
             ...this.receivingForm,
@@ -961,18 +995,58 @@ export class CustomerWorkSetupComponent implements OnInit {
             workScopeId: this.receivingForm.workScopeId,
             isSerialized: this.receivingForm.isSerialized ? this.receivingForm.isSerialized : false,
             isTimeLife: this.receivingForm.isTimeLife ? this.receivingForm.isTimeLife : false,
-            timeLife: { ...this.sourceTimeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
+            //timeLife: { ...this.sourceTimeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
+            timeLife: { ...timeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
             ownerTypeId:this.receivingForm.ownerTypeId==0? null :this.receivingForm.ownerTypeId,
             obtainFromTypeId:this.receivingForm.obtainFromTypeId==0? null :this.receivingForm.obtainFromTypeId,
             traceableToTypeId:this.receivingForm.traceableToTypeId==0? null :this.receivingForm.traceableToTypeId,
+            taggedByType : this.receivingForm.taggedByType == 0 ? null :this.receivingForm.taggedByType,
+        }        
+        var errmessage = '';
+        if (this.receivingForm.mfgDate != "" && moment(this.receivingForm.mfgDate, 'MM/DD/YYYY', true).isValid()) {
+			if (this.receivingForm.tagDate != "" && moment(this.receivingForm.tagDate, 'MM/DD/YYYY', true).isValid()) {
+				if (this.receivingForm.tagDate <= this.receivingForm.mfgDate) {
+					this.isSpinnerVisible = false;
+					errmessage = errmessage + "Tag Date must be greater than Manufacturing Date."
+				}
+			}
+			if (this.receivingForm.inspectedDate != "" && moment(this.receivingForm.inspectedDate, 'MM/DD/YYYY', true).isValid()) {
+				if (this.receivingForm.inspectedDate <= this.receivingForm.mfgDate) {
+					this.isSpinnerVisible = false;
+					if (errmessage != '') {
+						errmessage = errmessage + '<br />' + "Inspection Date must be greater than Manufacturing Date."
+					}
+					else {
+						errmessage = errmessage + "Inspection Date must be greater than Manufacturing Date."
+					}
+				}
+			}
+			if (this.receivingForm.certifiedDate != "" && moment(this.receivingForm.certifiedDate, 'MM/DD/YYYY', true).isValid()) {
+				if (this.receivingForm.certifiedDate <= this.receivingForm.mfgDate) {
+					this.isSpinnerVisible = false;
+					if (errmessage != '') {
+						errmessage = errmessage + '<br />' + "Certified Date must be greater than Manufacturing Date."
+					}
+					else {
+						errmessage = errmessage + "Certified Date must be greater than Manufacturing Date."
+					}
+				}
+			}
         }
+        
+        if (errmessage != '') {
+			this.isSpinnerVisible = false;
+			this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
+			return;
+		}
+
         const { customerCode, customerPhone, partDescription, manufacturer, revisePartId, ...receivingInfo } = receivingForm;
         this.isSpinnerVisible = true;
         if (!this.isEditMode) {
-            receivingInfo.obtainFrom = this.receivingForm.obtainFrom ? editValueAssignByCondition('value', this.receivingForm.obtainFrom) : null;
+                receivingInfo.obtainFrom = this.receivingForm.obtainFrom ? editValueAssignByCondition('value', this.receivingForm.obtainFrom) : null;
                 receivingInfo.owner = this.receivingForm.owner ? editValueAssignByCondition('value', this.receivingForm.owner) : null;
                 receivingInfo.traceableTo = this.receivingForm.traceableTo ? editValueAssignByCondition('value', this.receivingForm.traceableTo) : null;
-              
+                receivingInfo.taggedById = this.receivingForm.taggedById ? editValueAssignByCondition('value', this.receivingForm.taggedById) : null;
               
                 if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
                     this.allTagTypes.forEach(element1 => {
@@ -1012,6 +1086,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             receivingInfo.ownerTypeId=(receivingInfo.ownerTypeId==0 || receivingInfo.ownerTypeId==false)? null :receivingInfo.ownerTypeId;
             receivingInfo.obtainFromTypeId=(receivingInfo.obtainFromTypeId==0 || receivingInfo.obtainFromTypeId==false)? null :receivingInfo.obtainFromTypeId;
             receivingInfo.traceableToTypeId=(receivingInfo.traceableToTypeId==0 || receivingInfo.traceableToTypeId==0)? null :receivingInfo.traceableToTypeId;
+            receivingInfo.taggedByType =(receivingInfo.taggedByType == 0 || receivingInfo.taggedByType == false) ? null :receivingInfo.taggedByType;
 
             if(receivingInfo.obtainFromTypeId !=null && receivingInfo.obtainFrom !=null){
                 receivingInfo.obtainFrom = (typeof receivingInfo.obtainFrom=='object' )? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
@@ -1028,6 +1103,14 @@ export class CustomerWorkSetupComponent implements OnInit {
             }else{
                 receivingInfo.traceableTo=null;  
             }
+
+            if(receivingInfo.taggedByType !=null && receivingInfo.taggedById !=null){
+                receivingInfo.taggedById = (typeof receivingInfo.taggedById == 'object' )? receivingInfo.taggedById.value: receivingInfo.taggedById;
+            }else{
+                receivingInfo.taggedById=null;
+            }
+
+
             if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
                 this.allTagTypes.forEach(element1 => {
                     receivingInfo.tagType.forEach(element2 => {
@@ -1368,4 +1451,57 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.shelfValueChange(this.receivingForm.shelfId)
           })
       }
+
+      getTimeLifeDetails(x) {		
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData();                      
+		timeLife.timeLifeCyclesId = x.timeLifeCyclesId;
+        timeLife.cyclesRemainingHrs = x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null;
+		timeLife.cyclesRemainingMin = x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null;				
+        timeLife.cyclesSinceInspectionHrs = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null;
+		timeLife.cyclesSinceInspectionMin = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null;				
+        timeLife.cyclesSinceNewHrs = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null;
+		timeLife.cyclesSinceNewMin = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null;				
+        timeLife.cyclesSinceOVHHrs = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null;
+		timeLife.cyclesSinceOVHMin = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null;				
+        timeLife.cyclesSinceRepairHrs = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null;
+		timeLife.cyclesSinceRepairMin = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null;			
+        timeLife.timeRemainingHrs = x.timeRemaining ? x.timeRemaining.split(':')[0] : null;
+		timeLife.timeRemainingMin = x.timeRemaining ? x.timeRemaining.split(':')[1] : null;
+        timeLife.timeSinceInspectionHrs = x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null;
+		timeLife.timeSinceInspectionMin = x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null;				
+        timeLife.timeSinceNewHrs = x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null;
+		timeLife.timeSinceNewMin = x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null;				
+        timeLife.timeSinceOVHHrs = x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null;
+		timeLife.timeSinceOVHMin = x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null;				
+        timeLife.timeSinceRepairHrs = x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null;
+		timeLife.timeSinceRepairMin = x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null;	
+        timeLife.lastSinceInspectionHrs = x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null;
+		timeLife.lastSinceInspectionMin = x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null;				
+        timeLife.lastSinceNewHrs = x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null;
+		timeLife.lastSinceNewMin = x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null;				
+        timeLife.lastSinceOVHHrs = x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null;
+        timeLife.lastSinceOVHMin = x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null;           
+        return timeLife;
+	}
+
+	getTimeLife(x) {
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData(); 
+        timeLife.timeLifeCyclesId = this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null; 
+        timeLife.masterCompanyId = this.authService.currentUser.masterCompanyId;
+        timeLife.stockLineId = this.stockLineId > 0 ? this.stockLineId : 0 ;
+		timeLife.cyclesRemaining = ((x.cyclesRemainingHrs ? x.cyclesRemainingHrs : '00') + ':' + (x.cyclesRemainingMin ? x.cyclesRemainingMin : '00'));
+		timeLife.timeRemaining = ((x.timeRemainingHrs ? x.timeRemainingHrs : '00') + ':' + (x.timeRemainingMin ? x.timeRemainingMin : '00'));
+		timeLife.cyclesSinceNew = ((x.cyclesSinceNewHrs ? x.cyclesSinceNewHrs : '00') + ':' + (x.cyclesSinceNewMin ? x.cyclesSinceNewMin : '00'));
+		timeLife.timeSinceNew = ((x.timeSinceNewHrs ? x.timeSinceNewHrs : '00') + ':' + (x.timeSinceNewMin ? x.timeSinceNewMin : '00'));
+		timeLife.lastSinceNew = ((x.lastSinceNewHrs ? x.lastSinceNewHrs : '00') + ':' + (x.lastSinceNewMin ? x.lastSinceNewMin : '00'));
+		timeLife.cyclesSinceOVH = ((x.cyclesSinceOVHHrs ? x.cyclesSinceOVHHrs : '00') + ':' + (x.cyclesSinceOVHMin ? x.cyclesSinceOVHMin : '00'));
+		timeLife.timeSinceOVH = ((x.timeSinceOVHHrs ? x.timeSinceOVHHrs : '00') + ':' + (x.timeSinceOVHMin ? x.timeSinceOVHMin : '00'));
+		timeLife.lastSinceOVH = ((x.lastSinceOVHHrs ? x.lastSinceOVHHrs : '00') + ':' + (x.lastSinceOVHMin ? x.lastSinceOVHMin : '00'));
+		timeLife.cyclesSinceInspection = ((x.cyclesSinceInspectionHrs ? x.cyclesSinceInspectionHrs : '00') + ':' + (x.cyclesSinceInspectionMin ? x.cyclesSinceInspectionMin : '00'));
+		timeLife.timeSinceInspection = ((x.timeSinceInspectionHrs ? x.timeSinceInspectionHrs : '00') + ':' + (x.timeSinceInspectionMin ? x.timeSinceInspectionMin : '00'));
+		timeLife.lastSinceInspection = ((x.lastSinceInspectionHrs ? x.lastSinceInspectionHrs : '00') + ':' + (x.lastSinceInspectionMin ? x.lastSinceInspectionMin : '00'));
+		timeLife.cyclesSinceRepair = ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00'));
+		timeLife.timeSinceRepair = ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00'));				
+        return timeLife;
+	}
 }

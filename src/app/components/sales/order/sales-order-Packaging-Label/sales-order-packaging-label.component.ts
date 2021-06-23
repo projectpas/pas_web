@@ -65,6 +65,12 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
       : "";
   }
 
+  get fullName(): string {
+    return this.authService.currentUser
+      ? this.authService.currentUser.firstName + ' ' + this.authService.currentUser.lastName
+      : "";
+  }
+
   printContent() {
     let printContents, popupWin;
     printContents = document.getElementById('PackagingSlip').innerHTML;
@@ -199,6 +205,15 @@ export class SalesOrderPackagingLabelComponent implements OnInit {
                     // margin-left: 16%;
                   padding-left: 2px;
                   box-sizing: border-box;
+                }
+                .width-110{
+                  width:110px;
+                }
+                .width-90{
+                  width:90px;
+                }
+                .width-80{
+                  width:80px;
                 }
                 
                 .second-block-div {

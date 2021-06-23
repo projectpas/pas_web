@@ -424,7 +424,8 @@
                                                     <span ><b>Memo: </b></span>
                                                 </p>
                                             </div>
-                                            <div [innerHTML]="assetViewList.memo"   matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.memo)" class="value" style="font-size: 11.4px;"></div>
+                                            <div [innerHTML]="assetViewList.memo" class="m-0 p-0 p_textEditor truncate-text"
+                                              matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.memo)" class="value" style="font-size: 11.4px;"></div>
                                         </div>
                                     </div>
                                     <div class="card view-card" *ngIf="assetViewList.isIntangible==true">
@@ -635,7 +636,8 @@
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.calibrationRequired">*</span></b></span><span class="value">{{assetViewList.calibrationGlAccount}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.calibrationRequired">
-                                            <span class="label"><b>Calibration Memo: </b></span><span class="value textareaMemos" [innerHTML]="assetViewList.calibrationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.calibrationMemo)"></span>
+                                            <span class="label"><b>Calibration Memo: </b></span><span class="value textareaMemos m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(assetViewList.calibrationMemo)"  [innerHTML]="assetViewList.calibrationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.calibrationMemo)"></span>
                                         </p>
                                        
                                         <br>
@@ -682,7 +684,9 @@
                                                                 <td>Memo</td>
                                                                 <td colspan="2">
                                                                     <!-- <span class="value">{{assetViewList.assetCalibrationMemo}}</span> -->
-                                                                    <div [innerHTML]="assetViewList.assetCalibrationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.assetCalibrationMemo)" class="value"
+                                                                    <div [innerHTML]="assetViewList.assetCalibrationMemo" 
+                                                                    class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(assetViewList.assetCalibrationMemo)" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.assetCalibrationMemo)" class="value"
                                                                      style="font-size: 11.4px;"></div>
                                                                 </td>
                                                             </tr>
@@ -718,7 +722,8 @@
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.certificationRequired">*</span></b></span><span class="value">{{assetViewList.certificationGlAccount}}</span>
                                         </p>
                                         <p  *ngIf="assetViewList && assetViewList.certificationRequired">
-                                            <span class="label"><b>Certification Memo: </b></span><span class="value textareaMemos" [innerHTML]="assetViewList.certificationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.certificationMemo)"></span>
+                                            <span class="label"><b>Certification Memo: </b></span><span class="value textareaMemos m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(assetViewList.certificationMemo)" [innerHTML]="assetViewList.certificationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.certificationMemo)"></span>
                                         </p>
                                       
                                     </div>
@@ -747,7 +752,8 @@
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.inspectionRequired">*</span></b></span><span class="value">{{assetViewList.inspectionGlAccount}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.inspectionRequired"> 
-                                             <span class="label"><b>Inspection Memo: </b></span><span class="value textareaMemos" [innerHTML]="assetViewList.inspectionMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.inspectionMemo)"></span> 
+                                             <span class="label"><b>Inspection Memo: </b></span><span class="value textareaMemos m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                             [matTooltip]="parsedText(assetViewList.inspectionMemo)" [innerHTML]="assetViewList.inspectionMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.inspectionMemo)"></span> 
                                         </p>
                                     </div>
                                     <!-- *ngIf="assetViewList.verificationRequired" -->
@@ -775,7 +781,8 @@
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.verificationRequired">*</span></b></span><span class="value">{{assetViewList.verificationGlAccount}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.verificationRequired">
-                                            <span class="label"><b>Verification Memo: </b></span><span class="value textareaMemos" [innerHTML]="assetViewList.verificationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.verificationMemo)"></span>
+                                            <span class="label"><b>Verification Memo: </b></span><span class="value textareaMemos m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(assetViewList.verificationMemo)" [innerHTML]="assetViewList.verificationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.verificationMemo)"></span>
                                         </p>
                                        
                                     </div>
@@ -817,7 +824,8 @@
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.assetIsMaintenanceReqd">*</span></b></span><span class="value">{{assetViewList.maintenanceGlAccount}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.assetIsMaintenanceReqd">
-                                            <span class="label"><b>Maintenance Memo: </b></span><span class="value textareaMemos" [innerHTML]="assetViewList.maintenanceMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.maintenanceMemo)"></span>
+                                            <span class="label"><b>Maintenance Memo: </b></span><span class="value textareaMemos m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(assetViewList.maintenanceMemo)" [innerHTML]="assetViewList.maintenanceMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.maintenanceMemo)"></span>
                                         </p>
                                         
                                     </div>

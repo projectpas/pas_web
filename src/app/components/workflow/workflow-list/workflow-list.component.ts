@@ -123,28 +123,28 @@ export class WorkflowListComponent implements OnInit {
     chargesPercentValue:any;
     othersPercentValue:any;
     auditHistoryHeaders = [
-        { field: 'workOrderNumber', header: 'Workflow ID',isRequired:false },
-        { field: 'workflowDescription', header: 'Workflow Description',isRequired:false },
-        { field: 'version', header: 'Version Number',isRequired:false },
-        { field: 'partNumber', header: 'PN',isRequired:false },
-        { field: 'partNumberDescription', header: 'PN Description',isRequired:false },
-        { field: 'workScope', header: 'Work Scope',isRequired:false },
-        { field: 'customerName', header: 'Customer Name',isRequired:false },
-        { field: 'workflowCreateDate', header: 'WF Created Date',isRequired:false },
-        { field: 'workflowExpirationDate', header: 'Expiration Date',isRequired:false },
-        { field: 'revisedPartNumber', header: 'Revised PN',isRequired:false },
-        { field: 'currency', header: 'Currency',isRequired:false },
-        { field: 'berThresholdAmount', header: 'Amount',isRequired:false },
-        { field: 'fixedAmount', header: 'Fixed Amount',isRequired:false },
-        { field: 'costOfNew', header: 'Cost Of New',isRequired:false },
-        { field: 'otherCost', header: 'Other Cost',isRequired:false },
-        { field: 'isActive', header: 'Is Active',isRequired:false },
-        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
-        { field: 'memo', header: 'Memo',isRequired:false },
-        { field: 'createdDate', header: 'Created Date',isRequired:false },
-        { field: 'createdBy', header: 'Created By',isRequired:false },
-        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
-        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+        { field: 'workOrderNumber', header: 'Workflow ID',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'workflowDescription', header: 'Workflow Description',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'version', header: 'Version Number',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'partNumber', header: 'PN',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'partNumberDescription', header: 'PN Description',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'workScope', header: 'Work Scope',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'customerName', header: 'Customer Name',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'workflowCreateDate', header: 'WF Created Date',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'workflowExpirationDate', header: 'Expiration Date',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'revisedPartNumber', header: 'Revised PN',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'currency', header: 'Currency',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'berThresholdAmount', header: 'Amount',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'fixedAmount', header: 'Fixed Amount',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'costOfNew', header: 'Cost Of New',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'otherCost', header: 'Other Cost',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'isActive', header: 'Is Active',isRequired:false ,isCheckbox:true,isDate:false},
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false ,isCheckbox:true,isDate:false},
+        { field: 'memo', header: 'Memo',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'createdDate', header: 'Created Date',isRequired:false ,isCheckbox:false,isDate:true},
+        { field: 'createdBy', header: 'Created By',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false ,isCheckbox:false,isDate:true},
+        { field: 'updatedBy', header: 'Updated By',isRequired:false ,isCheckbox:false,isDate:false},
       ]
 
     constructor(private actionService: ActionService,
@@ -312,7 +312,15 @@ export class WorkflowListComponent implements OnInit {
             this.getList(PagingData);
         }
     }
-
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     resetGlobalFilter() {
         this.filterText = '';
     }

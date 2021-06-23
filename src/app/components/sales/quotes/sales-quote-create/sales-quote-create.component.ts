@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
 import {
   NgForm,
-  FormBuilder,
   FormGroup
 } from "@angular/forms";
 import { CustomerSearchQuery } from "../models/customer-search-query";
@@ -24,7 +23,6 @@ import { EmployeeService } from "../../../../services/employee.service";
 import { AuthService } from "../../../../services/auth.service";
 import { Router } from "@angular/router";
 import { getValueFromArrayOfObjectById } from "../../../../generic/autocomplete";
-
 import {
   getObjectById,
   editValueAssignByCondition
@@ -186,7 +184,6 @@ export class SalesQuoteCreateComponent implements OnInit {
     private alertService: AlertService,
     private route: ActivatedRoute,
     private salesQuoteService: SalesQuoteService,
-    private formBuilder: FormBuilder,
     private commonservice: CommonService,
     private commonService: CommonService,
     public currencyService: CurrencyService,
@@ -901,6 +898,8 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesOrderQuoteObj = this.salesQuoteView.salesOrderQuote;
         this.verifySalesQuoteConversion(this.salesQuoteView.verificationResult);
         this.toggle_po_header = false;
+        this.enforceApproval = this.salesOrderQuoteObj.isEnforceApproval;
+        this.effectiveDate = this.salesOrderQuoteObj.enforceEffectiveDate;
       }
       if (this.deletePartsWhileCopieng == true) {
         this.salesQuoteView.parts = [];
@@ -995,13 +994,14 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.salesQuote.statusName = validDaysObject.defaultStatusName;
         }
         this.defaultSettingPriority = validDaysObject.defaultPriorityId;
-        this.enforceApproval = validDaysObject.isApprovalRule;
-        this.effectiveDate = validDaysObject.effectiveDate;
+        if (!this.id) {
+          this.enforceApproval = validDaysObject.isApprovalRule;
+          this.effectiveDate = validDaysObject.effectiveDate;
+        }
       } else {
         this.salesQuote.validForDays = 10;
         if (this.salesQuote.salesQuoteTypes && this.salesQuote.salesQuoteTypes.length > 0) {
           this.salesQuote.quoteTypeId = this.salesQuote.salesQuoteTypes[0].id;
-
         }
       }
     } else {
@@ -1176,6 +1176,8 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesOrderQuote.buId = this.salesQuote.buId;
       this.salesOrderQuote.departmentId = this.salesQuote.departmentId;
       this.salesOrderQuote.divisionId = this.salesQuote.divisionId;
+      this.salesOrderQuote.enforceEffectiveDate = this.effectiveDate;
+      this.salesOrderQuote.isEnforceApproval = this.enforceApproval;
       this.salesOrderQuote.salesPersonId = editValueAssignByCondition(
         "employeeId",
         this.salesQuote.salesPersonName
@@ -1308,8 +1310,14 @@ export class SalesQuoteCreateComponent implements OnInit {
             }
           }
         }
-        if (!invalidParts && !invalidDate) {
-          let partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
+
+        let partNumberObj;
+        if (this.isCopyMode) {
+          partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
+          partList.push(partNumberObj);
+        }
+        else if (!invalidParts && !invalidDate) {
+          partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
         }
       }
@@ -1573,21 +1581,24 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   initiateQuoteCopying() {
-    let content = this.copyQuotePopup;
-    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    // let content = this.copyQuotePopup;
+    // this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    this.copySalesOrderQuote();
   }
 
   copySalesOrderQuote() {
     let considerParts = false;
-    if (this.copyConsiderations.isPartsAllowForCopy == true) {
-      considerParts = true
-    } else {
-      considerParts = false;
-    }
+    // if (this.copyConsiderations.isPartsAllowForCopy == true) {
+    //   considerParts = true
+    // } else {
+    //   considerParts = false;
+    // }
+    considerParts = true;
     let considerApprovers = false;
     this.salesQuoteService.initiateQuoteCopying(this.id).subscribe(
       results => {
-        this.closeModal()
+        //this.closeModal();
+        this.salesQuoteView.parts = results[0].parts;
         this.router.navigate(['/salesmodule/salespages/sales-quote-create/' + results[0].salesOrderQuote.customerId], { queryParams: { copyRef: results[0].originalSalesOrderQuoteId, considerParts: considerParts, considerApprovers: considerApprovers } });
       }, error => {
         this.isSpinnerVisible = false;
@@ -1788,19 +1799,17 @@ export class SalesQuoteCreateComponent implements OnInit {
 
   onTabChange(event) {
     let indexToInc: number = 0;
-    if (this.validDaysSettingsList[0] != null &&
-      (!this.validDaysSettingsList[0].isApprovalRule ||
-        (this.validDaysSettingsList[0].isApprovalRule
-          && new Date(this.validDaysSettingsList[0].effectiveDate) > new Date(this.todayDate)))) {
+    if (!this.enforceApproval ||
+      (this.enforceApproval
+        && new Date(this.effectiveDate) > new Date(this.todayDate))) {
       indexToInc = 1;
     }
 
     if (event.index == 0) {
       this.salesPartNumberComponent.refresh();
     }
-    if (event.index == 1 && (this.validDaysSettingsList[0] != null
-      && this.validDaysSettingsList[0].isApprovalRule
-      && new Date(this.todayDate) >= new Date(this.validDaysSettingsList[0].effectiveDate))) {
+    if (event.index == 1 && (this.enforceApproval
+      && new Date(this.todayDate) >= new Date(this.effectiveDate))) {
       this.salesApproveComponent.refresh(this.marginSummary);
     }
     if (event.index == (2 - indexToInc)) {

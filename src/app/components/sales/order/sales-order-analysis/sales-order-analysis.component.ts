@@ -281,15 +281,18 @@ export class SalesOrderAnalysisComponent implements OnInit {
   }
 
   calculateMarginAmount(part: PartDetail, i) {
-    return (this.sales[i].marginAmountExtended + this.sales[i].misc).toFixed(2);
+    //return (this.sales[i].marginAmountExtended + this.sales[i].misc).toFixed(2);
+    return (this.sales[i]['totalRevenue'] - this.sales[i].unitCostExtended).toFixed(2);
   }
 
   calculateTotalRevenue(part: PartDetail, i) {
-    return (this.sales[i].netSales + this.sales[i].misc).toFixed(2);
+    //return (this.sales[i].netSales + this.sales[i].misc).toFixed(2);
+    return (this.sales[i].salesPriceExtended + this.sales[i].misc).toFixed(2);
   }
 
   calculateProductRevenue(part, i) {
-    return this.sales[i].netSales + this.sales[i].misc; // + this.sales[i].freight + this.sales[i].taxAmount;
+    //return this.sales[i].netSales + this.sales[i].misc; // + this.sales[i].freight + this.sales[i].taxAmount;
+    return this.sales[i].salesPriceExtended + this.sales[i].misc;
   }
 
   getPercentage(key) {
@@ -397,5 +400,24 @@ export class SalesOrderAnalysisComponent implements OnInit {
       return acc;
     }, []);
     return uniqueParts;
+  }
+
+  getUnFormattedTotalAmount(key) {
+    let total = 0;
+    if (this.sales && this.sales.length > 0) {
+      this.sales.forEach(
+        (part) => {
+          total += Number(this.sumAmount(part, key));
+        }
+      )
+    }
+    return total;
+  }
+
+  getTotalMarginPercentage() {
+    let totalRevenue = this.getUnFormattedTotalAmount('totalSales');
+    let totalMarginAmt = this.getUnFormattedTotalAmount('marginAmountExtended');
+
+    return ((totalMarginAmt / totalRevenue) * 100).toFixed(2);
   }
 }

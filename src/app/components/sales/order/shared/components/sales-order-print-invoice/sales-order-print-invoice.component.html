@@ -32,12 +32,7 @@
                             </div>
                             <br />
                             <br /> -->
-                                <div class="col-sm-12 first-block-name">
-                                    <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Tagline :</label> -->
-                                    <label class="col-sm-12 first-block-label" disabled></label>
-                                </div>
-                                <br />
-                                <br />
+                               
                                 <div class="col-sm-12 first-block-name">
                                     <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Address1 :</label> -->
                                     <label class="col-sm-12 first-block-label"
@@ -51,23 +46,22 @@
                                 <div class="col-sm-12 first-block-name">
                                     <!-- <label class="col-sm-3 first-block-label" style="text-align: left">City :</label> -->
                                     <label class="col-sm-12 first-block-label"
-                                        disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.city : ''}}</label>
+                                        disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.city : ''}},{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.stateOrProvince : ''}}</label>
                                 </div>
-                                <div class="col-sm-12 first-block-name">
-                                    <!-- <label class="col-sm-3 first-block-label" style="text-align: left">State/Prov :</label> -->
+                                <!-- <div class="col-sm-12 first-block-name">
+                                   
                                     <label class="col-sm-12 first-block-label"
                                         disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.stateOrProvince : ''}}</label>
-                                </div>
+                                </div> -->
                                 <div class="col-sm-12 first-block-name">
                                     <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Zip :</label> -->
                                     <label class="col-sm-12 first-block-label"
-                                        disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.postalCode : ''}}</label>
+                                        disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.postalCode : ''}},{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.country : ''}}</label>
                                 </div>
-                                <div class="col-sm-12 first-block-name">
-                                    <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Country :</label> -->
+                                <!-- <div class="col-sm-12 first-block-name">
                                     <label class="col-sm-12 first-block-label"
                                         disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.country : ''}}</label>
-                                </div>
+                                </div> -->
                                 <div class="col-sm-12 first-block-name">
                                     <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Phone :</label> -->
                                     <label class="col-sm-12 first-block-label"
@@ -79,7 +73,7 @@
                     <div class="second-block col-sm-4">
                         <h3
                             style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
-                            INVOICE</h3>
+                            SO INVOICE</h3>
                         <div class="second-block-div">
                             <label class="col-sm-6 second-block-label" style="width:100%">Invoice Num</label>
                             <label class="col-sm-6 second-block-label" style="width:100%" disabled>
@@ -220,7 +214,7 @@
                                 <th>Buyer</th>
                                 <th>Sales Person</th>
                                 <th>Credit Terms</th>
-                                <th>Cust VAT Num</th>
+                                <!-- <th>Cust VAT Num</th> -->
                                 <th>Shipping Terms</th>
                                 <th>Ship Via</th>
                                 <th>Shipped Date</th>
@@ -235,7 +229,7 @@
                                 <td>{{this.salesOrderInvoice.salesPerson}}</td>
                                 <td>{{this.salesOrderInvoice.creditTerms}}</td>
                                 <td></td>
-                                <td></td>
+                                <!-- <td></td> -->
                                 <td>{{this.salesOrderInvoice.shipVia}}</td>
                                 <td>{{this.salesOrderInvoice.shipDate}}</td>
                                 <td>{{this.salesOrderInvoice.shippingOrderNumber}}</td>
@@ -251,14 +245,14 @@
                         style="margin-top:10px">
                         <thead>
                             <tr>
-                                <th>Item Num</th>
+                                <th style="width:110px">Item Num</th>
                                 <th colspan="3" rowspan="3">PN Information</th>
                                 <th>UOM</th>
                                 <th>Cond</th>
-                                <th>Back Ord</th>
-                                <th>Qty Shipped</th>
-                                <th>Unit Price</th>
-                                <th>Amount</th>
+                                <th class="width-70">Back Ord</th>
+                                <th class="width-80">Qty Shipped</th>
+                                <th class="width-70">Unit Price</th>
+                                <th class="width-70">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -412,7 +406,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2" rowspan="3">Barcode
-                                    <br /><img src="{{this.salesOrderInvoice.barcode}}" alt="barcode" /></td>
+                                    <br /><img style="width: 100px;" src="{{this.salesOrderInvoice.barcode}}" alt="barcode" width="98%" /></td>
                                 <!-- <td class="border-transparent" colspan="2">USA</td> -->
                                 <!-- <td class="border-transparent" colspan="3">Account Name: PowerAeroSuites.com
                                     </td> -->

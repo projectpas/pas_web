@@ -111,7 +111,7 @@
               <p class="m-0 p-0 p_textEditor float-left text-capital truncate-text" matTooltipPosition="above"
               [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
             </td>
-            <td class="table-column-width text-capital" *ngIf="col.field == 'createdBy' || col.field == 'updatedBy'"></td>
+            <td class="table-column-width text-capital" *ngIf="col.field == 'createdBy' || col.field == 'updatedBy'">{{rowData[col.field]}} </td>
             <td class="table-column-width" *ngIf="col.field == 'fileName'">
             <tr *ngFor="let x of rowData.attachmentDetails">
               <a class="filelink" (click)="downloadFile(x)"> {{x.fileName}},</a>
@@ -460,9 +460,9 @@
               <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'docName', audit.docName)  ? 'black' : 'red'  }">
                 {{audit.docName}}
               </td>
-              <td
+              <td class="truncate-text"
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'docDescription', audit.docDescription)  ? 'black' : 'red'  }">
-                {{audit.docDescription}}
+             <p > {{audit.docDescription}}</p>
               </td>
               <td [ngStyle]="{'color': getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
                 {{audit.name}}

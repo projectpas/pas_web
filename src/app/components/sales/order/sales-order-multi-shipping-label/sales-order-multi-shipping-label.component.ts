@@ -146,7 +146,15 @@ export class SalesMultiShippingLabelComponent implements OnInit {
                 padding-left: 2px;
               }
               
-              
+              .width-110{
+                width:110px;
+              }
+              .width-90{
+                width:90px;
+              }
+              .width-80{
+                width:80px;
+              }
               
               .first-block-address {
                 margin-right: 20px;

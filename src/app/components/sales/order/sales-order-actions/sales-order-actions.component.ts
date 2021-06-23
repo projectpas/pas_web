@@ -68,6 +68,8 @@ export class SalesOrderActionsComponent implements OnInit {
       this.openConfirmationModal(actionType, this.confirmationModal.header, this.confirmationModal.body.cancel);
     } else if (actionType == SalesOrderActionType.CloseSalesOrder) {
       this.openConfirmationModal(actionType, this.confirmationModal.header, this.confirmationModal.body.close);
+    } else if (actionType == SalesOrderActionType.MakeDuplicate) {
+      this.copySalesOrder();
     }
     else {
       this.onActionClick.emit(new SalesOrderEventArgs(actionType, SalesOrderConfirmationType.None));
@@ -122,7 +124,6 @@ export class SalesOrderActionsComponent implements OnInit {
       {
         label: 'Email', command: () => {
           this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Email, SalesOrderConfirmationType.None));
-
         }
       },
       {
@@ -170,11 +171,11 @@ export class SalesOrderActionsComponent implements OnInit {
       //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.EmailSalesOrder, SalesOrderConfirmationType.None));
       //   }
       // },
-      {
-        label: 'Make Duplicate', command: () => {
-          this.copySalesOrder();
-        }
-      },
+      // {
+      //   label: 'Make Duplicate', command: () => {
+      //     this.copySalesOrder();
+      //   }
+      // },
       // {
       //   label: 'Sales Register', command: () => {
       //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.SalesRegister, SalesOrderConfirmationType.None));

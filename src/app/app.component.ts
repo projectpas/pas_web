@@ -173,10 +173,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'Sales Order Quote List',
                   routerLink: '/salesmodule/salespages/sales-quote-list',
                 },
-                {
-                  label: 'Sales Order Speed Quote List',
-                  routerLink: '/salesmodule/salespages/speed-quote-list',
-                }
+                // {
+                //   label: 'Sales Order Speed Quote List',
+                //   routerLink: '/salesmodule/salespages/speed-quote-list',
+                // }
               ],
             },
             {
@@ -188,8 +188,8 @@ export class AppComponent implements OnInit, AfterViewInit {
                     '/workordersmodule/workorderspages/app-work-order-quote-list',
                 },
                 {
-                  label: 'Work Order Speed Quote',
-                  routerLink: '/#',
+                  label: 'Speed Quote List',
+                  routerLink: '/salesmodule/salespages/speed-quote-list',
                 }
               ],
             },
@@ -907,8 +907,8 @@ export class AppComponent implements OnInit, AfterViewInit {
               label: 'Asset Maintenance',
               items: [
                 {
-                  label: 'Calibration,Certification',
-                  routerLink: '',
+                  label: 'Calibration Management',
+                  routerLink: '/assetmodule/assetpages/app-calibration-mgmt-listing',
                 },
                 {
                   label: 'Lease and Insurance',
@@ -1505,11 +1505,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.router.navigateByUrl('/updatepassword');
                   }
                 },
-                {
-                  label: 'Settings', command: (event?: any) => {
-                    this.router.navigateByUrl('/settings#preferences');
-                  }
-                },
+                // {
+                //   label: 'Settings', command: (event?: any) => {
+                //     this.router.navigateByUrl('/settings#preferences');
+                //   }
+                // },
                 {
                   label: 'Logout', command: (event?: any) => {
                     this.logout();

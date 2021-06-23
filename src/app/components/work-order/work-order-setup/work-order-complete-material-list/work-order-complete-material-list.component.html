@@ -14,10 +14,14 @@
         (click)="partsIssueRI(2)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;"> Issue
         Stock
     </button>
-    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && !enablePickTicket"
+    <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && !enablePickTicket && !isSubWorkOrder"
         class="btn btn-primary" (click)="partsIssueRI(3)" data-toggle="modal" data-target="#reserve"
         style="min-width: 97px !important;">
         Reserve & Issue </button>
+        <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0 && isSubWorkOrder"
+            class="btn btn-primary" (click)="partsIssueRI(3)" data-toggle="modal" data-target="#reserve"
+            style="min-width: 97px !important;">
+            Reserve & Issue </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
         (click)="partsIssueRI(4)" data-toggle="modal" data-target="#reserve" style="min-width: 97px !important;">
         Unissue </button>
@@ -136,7 +140,7 @@
                                         <th class="text-center width-50"> Stk Type</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Req</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Res</th>
-                                        <th *ngIf="!isSubWorkOrder" class="text-center width-50" style="width:60px !important">Qty Picked</th>
+                                        <th *ngIf="!isSubWorkOrder && statusId == 2 && enablePickTicket" class="text-center width-50" style="width:60px !important">Qty Picked</th>
                                         <th class="text-center" style="width:60px !important"> Qty To Be Reserved</th>
                                         <th class="text-center" style="width:60px !important">
                                             <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
@@ -217,7 +221,7 @@
                                             <td class="tex_end text-right">
                                                 {{x.quantityAlreadyReserved}}
                                             </td>
-                                            <td *ngIf="!isSubWorkOrder" class="tex_end text-right">
+                                            <td *ngIf="!isSubWorkOrder && statusId == 2 && enablePickTicket" class="tex_end text-right">
                                                 {{x.quantityPicked}}
                                             </td>
                                             <td class="tex_end text-right" *ngIf="(statusId === 1 || statusId === 5)">
@@ -519,10 +523,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer"> 
                     <!-- !savebutonDisabled  || checkActiveStatus || checkIsSeclected()-->
                     <button class="btn btn-primary" data-dismiss="modal" (click)="saveRIPart()"
-                        [disabled]="!savebutonDisabled">
+                        [disabled]="!savebutonDisabled || checkIsSeclected()">
                         <span *ngIf="statusId === 1">Reserve</span>
                         <span *ngIf="statusId === 2">Issue</span>
                         <span *ngIf="statusId === 3">Reserve & Issue</span>
@@ -1168,7 +1172,7 @@
                         <td>
                             <span>
                                 <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
-                                    (onChange)="onChangeOfPartSelection($event)" binary="true">
+                                    (onChange)="onChangeOfPartSelection($event)" [disabled]="!(rowData.qtyToShip >0)"  binary="true">
                                 </p-checkbox>
                             </span>
                         </td>
@@ -1179,7 +1183,7 @@
                             <ng-container *ngIf="col.field =='qtyToShip'">
                                 <input type="number" class="form-control quantityTextBox text-right" pInputText
                                     pKeyFilter="num" required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}"
-                                    value="{{part.qtyToReserve}}" [(ngModel)]="part.qtyToShip" (focusout)="onFocusOutEvent(rowData)"
+                                    value="{{part.qtyToReserve}}" [(ngModel)]="part.qtyToShip" (keyup)="checkValid(rowData)" (focusout)="onFocusOutEvent(rowData)"
                                     [disabled]="rowData.isSelected == false" required="col.field =='qtyToShip'" />
                             </ng-container>
                         </td>

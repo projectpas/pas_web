@@ -217,7 +217,7 @@
                                             <th>PO/RO NUM</th>
                                             <th>Salesperson</th>
                                             <th>Buyer</th>
-                                            <th>Credit Terms</th>
+                                            <!-- <th>Credit Terms</th> -->
                                             <th>Shipping Terms</th>
                                             <th>Ship Via</th>
                                             <th>Ship Date</th>
@@ -233,7 +233,7 @@
                                             <td style="vertical-align: top;border-right:1px solid black;">
                                                 {{packagingSlip.packagingLabelViewModel.customerContactName}}
                                             </td>
-                                            <td style="vertical-align: top;border-right:1px solid black;">{{packagingSlip.packagingLabelViewModel.creditTerm}}</td>
+                                            <!-- <td style="vertical-align: top;border-right:1px solid black;">{{packagingSlip.packagingLabelViewModel.creditTerm}}</td> -->
                                             <td style="vertical-align: top;border-right:1px solid black;"></td>
                                             <td style="vertical-align: top;border-right:1px solid black;">{{packagingSlip.packagingLabelViewModel.shipViaName}}</td>
                                             <td style="vertical-align: top;border-right:1px solid black;">
@@ -250,14 +250,14 @@
                                 <table rules=none class="parttable table-margins">
                                     <thead>
                                         <tr>
-                                            <th>Item Num</th>
+                                            <th class="width-110">Item Num</th>
                                             <th style="border-right:none">PN</th>
-                                            <th style="border-left:none;text-align:center">Stk Line Num</th>
+                                            <th style="border-left:none;text-align:center" class="width-90">Stk Line Num</th>
                                             <th>PN Description</th>
-                                            <th>Serial Num</th>
+                                            <th class="width-80">Serial Num</th>
                                             <th>UOM</th>
                                             <th>Cond</th>
-                                            <th>Qty Shipped</th>
+                                            <th class="width-80">Qty Shipped</th>
                                         </tr>
                                     </thead>
                                     <tbody>

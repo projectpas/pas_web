@@ -296,7 +296,7 @@
             <td>
               <span>
                 <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
-                  (onChange)="onChangeOfPartSelection($event)" binary="true">
+                  (onChange)="onChangeOfPartSelection($event)" binary="true" [disabled]="!(part.qtyToShip >0)">
                 </p-checkbox>
               </span>
             </td>
@@ -307,7 +307,7 @@
               <ng-container *ngIf="col.field =='qtyToShip'">
                 <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
                   required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
-                  [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false" (focusout)="onFocusOutEvent(rowData)"
+                  [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false" (keyup)="checkValid(rowData)" (focusout)="onFocusOutEvent(rowData)"
                   required="col.field =='qtyToShip'" />
               </ng-container>
             </td>

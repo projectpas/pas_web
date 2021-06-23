@@ -69,9 +69,19 @@ export class SubWoPrintFromComponent implements OnInit,OnChanges {
     this.isSpinnerVisibleNew = true;
     this.workOrderService.GetSubWorkOrderPrintFormData(this.subWorkOrderDetails.subWorkOrderId,this.subWOPartNoId).subscribe(res => {
         this.workOrderprintData = res[0];
-       // this.getWorkOrderCharges();
-        //this.onWorkOrderPrintLoad.emit();
+       
         this.isSpinnerVisibleNew = false;
+        this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate = this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate, 'MMM-dd-yyyy') : '';
+        this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate = this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate, 'MMM-dd-yyyy') : '';
+        this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate = this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate, 'MMM-dd-yyyy') : '';
+        this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate = this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate, 'MMM-dd-yyyy') : '';
+        this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate = this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate, 'MMM-dd-yyyy') : '';
+        this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate = this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate, 'MMM-dd-yyyy') : '';
+        this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate = this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate, 'MMM-dd-yyyy') : '';
+        this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate = this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate, 'MMM-dd-yyyy') : '';
+        this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspectorDate = this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspectorDate, 'MMM-dd-yyyy') : '';
+       
+      
     }, error => {
         this.isSpinnerVisibleNew = false;
     })

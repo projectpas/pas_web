@@ -12,58 +12,36 @@
         </mat-form-field>
     
         </div> -->
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label style="margin-right:-12%;">{{'users.editor.FullName' | translate}}</label>
 
             <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
                 <input matInput formControlName="fullName"
                     style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" />
             </mat-form-field>
-        </div>
+        </div> -->
         <div class="form-group col-md-4">
-            <label style="margin-right:-13%; width: 83px;">First Name</label>
+            <label style="margin-right:-15%;">First Name <span class="clr-red">*</span></label>
             <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
                 <input matInput formControlName="firstName"
-                    style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" />
+                    style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" required/>
             </mat-form-field>
         </div>
+    </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
         <div class="form-group col-md-4">
-            <label style="margin-right:-12%">Last Name</label>
+            <label style="margin-right:-15%">Last Name <span class="clr-red">*</span></label>
 
             <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
                 <input matInput formControlName="lastName"
-                    style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" />
+                    style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" required/>
             </mat-form-field>
         </div>
-    </div>
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
-        <div class="form-group col-md-4">
-            <label style="margin-right:-10%;padding-right:21px;">{{'users.editor.Email' | translate}}</label>
-            <mat-form-field class="app-validate  matform-margin" [floatLabel]="floatLabels" fxFlex>
-                <input disabled matInput
-                    style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
-                    formControlName="email" [readonly]="!isEditMode" required />
-                <mat-error *ngIf="email.hasError('required')">
-                    {{'users.editor.EmailRequired' | translate}}
-                </mat-error>
-                <mat-error *ngIf="!email.hasError('required') && email.hasError('email')">
-                    {{'users.editor.InvalidEmail' | translate}}
-                </mat-error>
-            </mat-form-field>
         </div>
-        <div class="form-group col-md-4">
-            <label style="margin-right:-17%;width:100px">{{'users.editor.PhoneNumber' | translate}}</label>
-            <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
-                <input matInput
-                    style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
-                    formControlName="phoneNumber" />
-            </mat-form-field>
-        </div>
-    </div>
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
         <div class="form-group col-md-4">
             <label
-                style="margin-right:-16%;width:100px;padding-right:22px;">{{'users.editor.UserName' | translate}}</label>
+                style="margin-right:-19%;width:100px;padding-right:22px;">{{'users.editor.UserName' | translate}} <span class="clr-red">*</span></label>
             <mat-form-field class="app-validate matform-margin" [floatLabel]="floatLabels" fxFlex>
                 <input disabled matInput
                     style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
@@ -73,6 +51,35 @@
                 </mat-error>
             </mat-form-field>
         </div>
+        </div>
+    <!-- </div> -->
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
+        <div class="form-group col-md-4">
+            <label style="margin-right:-13%;padding-right:24px;">{{'users.editor.Email' | translate}} <span class="clr-red">*</span></label>
+            <mat-form-field class="app-validate  matform-margin" [floatLabel]="floatLabels" fxFlex>
+                <input disabled matInput
+                    style="background-color: #f4f4f4 !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
+                    formControlName="email" [readonly]="!isEditMode" required />
+                <mat-error *ngIf="email.hasError('required')">
+                    {{'users.editor.EmailRequired' | translate}}
+                </mat-error>
+                <mat-error *ngIf="!email.hasError('required') && email.hasError('email')">
+                    {{'users.editor.InvalidEmail' | translate}}
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
+        <div class="form-group col-md-4">
+            <label style="margin-right:-21%;width:100px">{{'users.editor.PhoneNumber' | translate}}</label>
+            <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
+                <input matInput
+                    style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
+                    formControlName="phoneNumber" />
+            </mat-form-field>
+        </div>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
         <div class="form-group col-md-4"
             *ngIf="(isEditMode && !isNewUser && userName.value != user.userName) || (isChangePassword && isEditingSelf)">
             <label style="margin-right:-12%;width:100px">{{'users.editor.CurrentPassword' | translate}}</label>
@@ -124,7 +131,7 @@
     </div>
     <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
         <div class="form-group col-md-4">
-            <label style="margin-top: 10px; width: 52px;">{{'users.editor.Roles' | translate}}</label>
+            <label style="margin-top: 25px; width: 52px;">{{'users.editor.Roles' | translate}}</label>
             <li style="list-style: none !important; margin-left: 20px; font-size: 14px;"
                 *ngFor="let role of roleAssign">
                 <span class="badge">{{role}}</span> x

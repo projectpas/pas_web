@@ -15,12 +15,12 @@
                 <tr>
                     <th></th>
                     <th *ngFor="let col of columns" pResizableColumn pReorderableColumn>
-                        <span *ngIf="col.field == 'conditionDescription' || col.field == 'qtyToOrder'">
-                            {{ col.header }}<span class="clr-red">*</span>
-                        </span>
-                        <span *ngIf="col.field != 'conditionDescription' && col.field != 'qtyToOrder'">
+                        <span>
                             {{ col.header }}
                         </span>
+                        <!-- <span *ngIf="col.field != 'conditionDescription' && col.field != 'qtyToOrder'">
+                            {{ col.header }}
+                        </span> -->
                     </th>
                     <!-- <th style="width:80px;">Actions</th> -->
                 </tr>
@@ -99,11 +99,11 @@
                     <td colspan="12" class="p-0">
                         <!-- rpo-table-cstm rro-table-cstm sales-quote-part-search-data -->
                         <p-table #dt class=" rpo-table-cstm1 rro-table-cstm salesquotePart padding-bottom-10"
-                            [value]="roleUpMaterialList" [rows]="10" [lazy]="true" [paginator]="showChildPaginator"
-                            [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords" [pageLinks]="pageLinks"
-                            [columns]="stockLinecolumns" [scrollable]="true" [resizableColumns]="true"
-                            [reorderableColumns]="true" scrollHeight="450px" [style]="{ width: '100%' }"
-                            (onLazyLoad)="onPaging($event)">
+                            [value]="roleUpMaterialList[rowIndex]" [rows]="10" [lazy]="true"
+                            [paginator]="showChildPaginator" [rowsPerPageOptions]="[10, 20, 30]"
+                            [totalRecords]="totalRecords" [pageLinks]="pageLinks" [columns]="stockLinecolumns"
+                            [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
+                            scrollHeight="450px" [style]="{ width: '100%' }" (onLazyLoad)="onPaging($event)">
                             <ng-template pTemplate="colgroup" let-stockLinecolumns>
                                 <colgroup>
                                     <col *ngFor="let col of stockLinecolumns"

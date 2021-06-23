@@ -41,7 +41,7 @@
                 <div class="col-sm-3 text_pad" 
                *ngIf="laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView && !isQuote" >
                   <div class="form-group task-detail text_pad">
-                      <label class="pad_labr">Select Task</label>
+                      <label style="width:60px" class="pad_labr">Select Task</label>
                       <ng-multiselect-dropdown  appendTo='body' [baseZIndex]="9999"
                           class="form-control multiple-custom-select capitalizer setCaps" style="width:250px" [placeholder]="'Select Task'"
                           [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"
@@ -70,7 +70,7 @@
               <div class="col-sm-3 text_pad wd-p" 
               *ngIf=" !isView && isQuote" >
                  <div class="form-group task-detail text_pad">
-                     <label class="pad_labr">Select Task</label>
+                     <label style="width:60px" class="pad_labr">Select Task</label>
                      <ng-multiselect-dropdown  appendTo='body' [baseZIndex]="9999"
                          class="form-control multiple-custom-select capitalizer setCaps" style="width:250px" [placeholder]="'Select Task'"
                          [data]="taskListForHeader" [(ngModel)]="selectedItems"  [disabled]="isView"

@@ -68,7 +68,7 @@
                 <tr pReorderableRowHandle>
                     <td class="text-left">                      
                             <p-checkbox [(ngModel)]="rowData.isSelected" class="margin-left-3" name="isSelected{{i}}"
-                                (onChange)="onChangeOfPartSelection($event)" binary="true">
+                                (onChange)="onChangeOfPartSelection($event, rowData)" binary="true">
                             </p-checkbox>
                       
                     </td>

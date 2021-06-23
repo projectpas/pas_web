@@ -94,6 +94,7 @@
                                 <th>Certified Date</th>
                                 <th class="date">Certified Due Date</th>
                                 <th>Tag Type</th>
+                                <th>Tagged By Type</th>
                                 <th>Tagged By </th>
                                 <th>UOM </th>
                                 <th class="date">Date Tagged </th>
@@ -204,6 +205,7 @@
                                         </p-calendar>
                                     </td>
                                     <td>{{SL.tagType}}</td>
+                                    <td>{{SL.taggedByTypeName}}</td>
                                     <td>{{SL.taggedByName}}</td>
                                     <td>{{SL.unitOfMeasure}}</td>
                                     <td>
@@ -223,10 +225,11 @@
                                     <td>{{SL.engineSerialNumber}}</td>
                                     <td>{{SL.glAccountText}}</td>
                                     <td>
-                                        <input type="checkbox" disabled [checked]="part.itemMaster.isTimeLife == true" />
+                                        <input type="checkbox" disabled [checked]="part.timeLife[stockline_row_index].stockLineDraftId > 0" />
                                     </td>
+                                    <td colspan="13" *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)"> </td>
                                     <ng-container
-                                        *ngIf="part.timeLife != null && part.timeLife.length > 0 && part.timeLife[stockline_row_index] != null">
+                                        *ngIf="part.timeLife[stockline_row_index].stockLineDraftId > 0">
                                         <td style="min-width: 120px;">Remaining
                                             {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
                                         <td style="min-width: 120px;">Since New

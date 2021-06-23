@@ -170,7 +170,15 @@ export class StocklineViewComponent implements OnInit {
             }
         })
 	}
-
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     dateFilterForTable(date, field) {
 
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
