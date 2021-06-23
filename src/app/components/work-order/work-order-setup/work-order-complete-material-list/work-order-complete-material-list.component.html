@@ -890,7 +890,7 @@
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th class="table-column-width" [ngStyle]="{'width': col.width}"
-                        [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }"
+                        [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description') }"
                         *ngFor="let col of columns">
                         {{col.header}}
                     </th>
