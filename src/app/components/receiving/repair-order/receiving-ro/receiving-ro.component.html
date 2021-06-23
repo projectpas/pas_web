@@ -1021,16 +1021,7 @@
                                                                 name="tagType{{part.currentSLIndex}}">
                                                             </p-multiSelect>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label>Tag Date</label>
-                                                            <p-calendar
-                                                                [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
-                                                                class="calendar" [showIcon]="true" appendTo="body"
-                                                                [yearNavigator]="true" [monthNavigator]="true"
-                                                                yearRange="1900:2100" name="tagDate"
-                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
-                                                            </p-calendar>
-                                                        </div>
+                                                        
                                                         <div class="form-group">
                                                             <label>Tag By</label>
                                                             <select class="form-control"
@@ -1044,8 +1035,7 @@
                                                                 </option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group"
-                                                        *ngIf="part.stocklineListObj[part.currentSLIndex].taggedByType != undefined && part.stocklineListObj[part.currentSLIndex].taggedByType > 0">
+                                                        <div class="form-group" *ngIf="part.stocklineListObj[part.currentSLIndex].taggedByType != undefined && part.stocklineListObj[part.currentSLIndex].taggedByType > 0">
                                                         <label>{{part.stocklineListObj[part.currentSLIndex].taggedByType
                                                             == customerModuleId ? 'Select Customer' :
                                                             part.stocklineListObj[part.currentSLIndex].taggedByType ==
@@ -1096,7 +1086,17 @@
                                                                     pInputText>
                                                             </div>                                                           
                                                         </div>
-                                                    </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Tag Date</label>
+                                                            <p-calendar
+                                                                [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
+                                                                class="calendar" [showIcon]="true" appendTo="body"
+                                                                [yearNavigator]="true" [monthNavigator]="true"
+                                                                yearRange="1900:2100" name="tagDate"
+                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
+                                                            </p-calendar>
+                                                        </div>
                                                         <!-- <div class="form-group">
                                                             <label>Tag By</label>
                                                             <p-autoComplete field="label" class="pautocomp-cstm"

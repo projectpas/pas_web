@@ -1054,17 +1054,7 @@
                                                                     <option value="0">Select</option>
                                                                     <option *ngFor="let tagType of TagTypeList" [value]="tagType.Key">{{tagType.Value}}</option>
                                                                 </select> -->
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Tag Date</label>
-                                                        <p-calendar
-                                                            [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
-                                                            class="calendar" [showIcon]="true" appendTo="body"
-                                                            [yearNavigator]="true" [monthNavigator]="true"
-                                                            yearRange="1900:2100" name="tagDate"
-                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
-                                                        </p-calendar>
-                                                    </div>
+                                                    </div>                                                    
                                                     <div class="form-group">
                                                         <label>Tag By</label>
                                                         <select class="form-control"
@@ -1131,7 +1121,16 @@
                                                             </div>                                                           
                                                         </div>
                                                     </div>
-
+                                                    <div class="form-group">
+                                                        <label>Tag Date</label>
+                                                        <p-calendar
+                                                            [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
+                                                            class="calendar" [showIcon]="true" appendTo="body"
+                                                            [yearNavigator]="true" [monthNavigator]="true"
+                                                            yearRange="1900:2100" name="tagDate"
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
+                                                        </p-calendar>
+                                                    </div>
                                                     <!-- <div class="form-group">
                                                         <label>vendor</label>
                                                         <p-autoComplete field="label" class="pautocomp-cstm"
