@@ -663,6 +663,12 @@ export class SalesOrderBillingComponent implements OnInit {
                    padding-left: 2px;
                    box-sizing: border-box;
                  }
+                 .width-70{
+                    width:70px;
+                  }
+                  .width-80{
+                    width:80px;
+                  }
                  
                  .second-block-div {
                    margin: 2px 0;
