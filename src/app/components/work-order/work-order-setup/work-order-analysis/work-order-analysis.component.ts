@@ -30,7 +30,7 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
     global_lang: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     headers = [
-        { field: 'partNumber', header: 'Main PN',width:"100px" },
+        { field: 'partNumber', header: 'Main PN',width:"120px" },
         { field: 'revisedPartNo', header: 'Revised PN',width:"100px" },
         { field: 'partDescription', header: 'PN Description',width:"250px" },
         { field: 'workOrderNum', header: 'WO Num',width:"100px" },
