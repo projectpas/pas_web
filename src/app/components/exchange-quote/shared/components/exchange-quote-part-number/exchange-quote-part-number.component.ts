@@ -100,6 +100,7 @@ export class ExchangeQuotePartNumberComponent {
 
   refresh() {
     this.exchangequoteService.getSelectedParts().subscribe(data => {
+      debugger;
       if (data) {
         this.selectedParts = data;
       } else {

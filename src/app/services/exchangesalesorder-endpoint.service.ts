@@ -9,7 +9,7 @@ import { IExchangeSalesOrder } from "../models/exchange/IExchangeSalesOrder.mode
 import { ISalesSearchParameters } from "../models/sales/ISalesSearchParameters";
 //import { ISalesOrderView } from "../models/sales/ISalesOrderView";
 import { IExchangeSalesOrderView } from "../models/exchange/IExchangeSalesOrderView";
-import { PartAction } from "../components/sales/shared/models/part-action";
+import { PartAction } from "../components/exchange-sales-order/shared/models/part-action";
 import { ISalesOrderCustomerApproval } from "../components/sales/order/models/isales-order-customer-approval";
 import { ISOFreight } from "../models/sales/ISOFreight";
 import { ISalesOrderCharge } from "../models/sales/ISalesOrderCharge";
@@ -29,7 +29,9 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getExchangeSalesOrderSetting: string = environment.baseUrl + "/api/exchangesalesorder/getExchangeSalesOrderSettinglist"
     private readonly getSalesOrderDetails: string = environment.baseUrl + "/api/exchangesalesorder/get";
     private readonly searchExchangeQuote: string = environment.baseUrl + "/api/exchangesalesorder/exchangesalesordersearch";
-
+    private readonly getreserverstockPartsByExchangeSOIdUrl: string = environment.baseUrl + "/api/exchangesalesorder/getreservedstockpartslistByExchangeSOId"
+    private readonly getunreserverstockPartsByExchangeSOIdUrl: string = environment.baseUrl + "/api/exchangesalesorder/getunreservedstockpartslistByExchangeSOId"
+    private readonly getrelesereservepartUrl: string = environment.baseUrl + "/api/exchangesalesorder/releasestocklinereservedparts"
     constructor(
         http: HttpClient,
         configurations: ConfigurationService,
@@ -82,5 +84,37 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
           .catch(error => {
             return this.handleErrorCommon(error, () => this.search(exchangeSalesOrderSearchParameters));
           });
+    }
+    getReservestockpartlistsBySOId(salesOrderId: number): Observable<PartAction> {
+      const URL = `${this.getreserverstockPartsByExchangeSOIdUrl}?salesorderid=${salesOrderId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getReservestockpartlistsBySOId(salesOrderId));
+        });
+    }
+    getunreservedstockpartslistBySOId(salesOrderId: number): Observable<PartAction> {
+      const URL = `${this.getunreserverstockPartsByExchangeSOIdUrl}?salesorderid=${salesOrderId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getunreservedstockpartslistBySOId(salesOrderId));
+        });
+    }
+    releasestocklinereservedparts(salesOrderId: number): Observable<any> {
+      const URL = `${this.getrelesereservepartUrl}?salesorderid=${salesOrderId}`;
+      return this.http
+        .post<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.releasestocklinereservedparts(salesOrderId));
+        });
+    }
+    savereserveissuesparts(parts: PartAction): any {
+      let url: string = `${this.savereserveissuespartsurl}`;
+      return this.http
+        .post(url, parts, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.savereserveissuesparts(parts));
+        });
     }
 }

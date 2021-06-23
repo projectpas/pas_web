@@ -65,6 +65,7 @@ import { ExchangeSalesOrderCustomerDetailsComponent } from "../components/exchan
 import { ExchangeSalesOrderPartDetailsComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-part-number/exchange-sales-order-part-details/exchange-sales-order-part-details.component";
 import { ExchangeSalesOrderPartNumberFilterComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-part-number/exchange-sales-order-part-number-filter/exchange-sales-order-part-number-filter.component";
 import { ExchangeSalesOrderMarginComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-margin/exchange-sales-order-margin.component";
+import { AddExchangeSalesOrderReserveUnreservePartNumberComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-reserve-unreserve-part-number/add-exchange-sales-order-reserve-unreserve-part-number.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -130,7 +131,8 @@ import { ExchangeSalesOrderMarginComponent } from "../components/exchange-sales-
     ExchangeSalesOrderCustomerDetailsComponent,
     ExchangeSalesOrderPartDetailsComponent,
     ExchangeSalesOrderPartNumberFilterComponent,
-    ExchangeSalesOrderMarginComponent
+    ExchangeSalesOrderMarginComponent,
+    AddExchangeSalesOrderReserveUnreservePartNumberComponent
   ],
   providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService,ActionService,ActionEndpoint,ExchangeSalesOrderService,ExchangeSalesOrderEndpointService],
   entryComponents: []

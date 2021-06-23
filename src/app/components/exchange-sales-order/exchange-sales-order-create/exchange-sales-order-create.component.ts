@@ -226,7 +226,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     });
 
     this.exchangequoteService.getSelectedParts().subscribe(data => {
-      this.selectedParts = data;
+      //this.selectedParts = data;
       //this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.selectedParts, this.marginSummary);
     });
 
@@ -653,11 +653,19 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     if (this.selectedParts.length > 0)
       this.selectedParts = [];
 
+    // for (let i = 0; i < partList.length; i++) {
+    //   let selectedPart = partList[i];
+    //   //let partNumberObj = this.exchangeSalesOrderService.marshalExchangeSalesOrderPartToView(selectedPart, this.salesOrderObj);
+    //   let partNumberObj = this.exchangeSalesOrderService.marshalExchangeSalesOrderPartToView(selectedPart);
+    //   this.selectedParts.push(partNumberObj);
+    //   this.exchangeSalesOrderService.selectedParts = selectedPart;
+    // }
     for (let i = 0; i < partList.length; i++) {
       let selectedPart = partList[i];
-      //let partNumberObj = this.exchangeSalesOrderService.marshalExchangeSalesOrderPartToView(selectedPart, this.salesOrderObj);
       let partNumberObj = this.exchangeSalesOrderService.marshalExchangeSalesOrderPartToView(selectedPart);
-      this.selectedParts.push(partNumberObj);
+      const selectedPartsTemp = this.selectedParts;
+      selectedPartsTemp.push(partNumberObj)
+      this.exchangeSalesOrderService.selectedParts = selectedPartsTemp;
     }
     //this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.selectedParts, this.marginSummary);
 
@@ -1192,7 +1200,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     }
 
     if (event.index == 0) {
-      //this.salesOrderPartNumberComponent.refresh();
+      this.exchangeSalesOrderPartNumberComponent.refresh();
       //this.salesOrderPartNumberComponent.refreshParts();
     }
     if (event.index == 1 && (this.soSettingsList[0] != null
@@ -1235,7 +1243,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   }
 
   updateMarginSummary() {
-    this.isSpinnerVisible = true;
+    //this.isSpinnerVisible = true;
     this.marginSummary.salesOrderId = this.id;
     // this.salesOrderService.createSOMarginSummary(this.marginSummary).subscribe(result => {
     //   this.marginSummary.soMarginSummaryId = result;
@@ -1247,8 +1255,8 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
 
   onPartsSaveEvent(savedParts) {
     if (savedParts) {
-      this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(savedParts, this.marginSummary);
-      this.updateMarginSummary();
+      // this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(savedParts, this.marginSummary);
+      // this.updateMarginSummary();
     }
   }
 

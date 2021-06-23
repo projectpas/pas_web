@@ -10,7 +10,7 @@ import { IExchangeSalesOrder } from "../models/exchange/IExchangeSalesOrder.mode
 import { IExchangeSalesOrderView } from "../models/exchange/IExchangeSalesOrderView";
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { PartDetail } from "../components/exchange-sales-order/shared/models/part-detail";
-import { PartAction } from "../components/sales/shared/models/part-action";
+import { PartAction } from "../components/exchange-sales-order/shared/models/part-action";
 import { IPartJson } from "../components/exchange-sales-order/shared/models/ipart-json";
 import { formatStringToNumber } from "../generic/autocomplete";
 import { ExchangeSalesOrderPart } from '../models/exchange/ExchangeSalesOrderPart';
@@ -261,4 +261,24 @@ export class ExchangeSalesOrderService {
     //     this.totalCharges = 0;
     //     this.salesOrderQuote = new ExchangeOrderQuote();
     //   }
+    getReservestockpartlistsBySOId(salesOrderId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getReservestockpartlistsBySOId(salesOrderId)
+      );
+    }
+    getunreservedstockpartslistBySOId(salesOrderId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getunreservedstockpartslistBySOId(salesOrderId)
+      );
+    }
+    releasestocklinereservedparts(salesOrderId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.releasestocklinereservedparts(salesOrderId)
+      );
+    }
+    savereserveissuesparts(parts: PartAction): Observable<PartAction[]> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.savereserveissuesparts(parts)
+      );
+    }
 }
