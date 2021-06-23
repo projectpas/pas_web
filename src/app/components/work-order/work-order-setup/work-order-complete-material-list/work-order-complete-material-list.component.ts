@@ -1,4 +1,4 @@
-﻿import { WorkOrderPickticketComponent } from './../work-order-pickticket/work-order-pickticket.component';
+import { WorkOrderPickticketComponent } from './../work-order-pickticket/work-order-pickticket.component';
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { ItemClassificationService } from '../../../../services/item-classfication.service';
