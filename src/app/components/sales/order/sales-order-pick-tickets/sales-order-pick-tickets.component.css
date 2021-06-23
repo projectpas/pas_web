@@ -10,11 +10,11 @@
     margin-left: 5%;
 }
 
-.loader-position{
+.loader-position {
     position: absolute;
 }
 
-.loader-align{
+.loader-align {
     margin-top: 17rem;
     margin-left: 30rem;
 }
@@ -22,15 +22,29 @@
 .myclass {
     margin-top: -5px
 }
-.label{
-    margin-right:0px !important;
+
+.label {
+    margin-right: 0px !important;
 }
 
-.sales-analysis-header tr th{
+.sales-analysis-header tr th {
     background: #4298ff !important;
-    color:#fff !important;
+    color: #fff !important;
 }
 
 .print-pick-ticket-div {
-    float: right !important; margin-right: 10px !important;
+    float: right !important;
+    margin-right: 10px !important;
+}
+
+.print-pick-ticket-div-left {
+    float: left !important;
+    margin-left: 10px !important;
+}
+
+.chkbox {
+    text-align: left;
+    font-weight: bold;
+    padding-left: 3px;
+    vertical-align: bottom;
 }

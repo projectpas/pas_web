@@ -107,7 +107,7 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th class="table-column-width"
+                <th class="table-column-width" [ngStyle]="{'width': col.width}"
                     *ngFor="let col of columns"
                     pResizableColumn
                     pReorderableColumn
@@ -130,11 +130,12 @@
                     *ngFor="let col of columns"
                     class="ui-resizable-column"
                     pReorderableRowHandle>
-                    <ng-container *ngIf="col.field !='hours' && col.field !='adjustedHours' && col.field !='adjustments' && col.field !='burdenRateAmount'">
+                    <ng-container *ngIf="col.field !='hours' && col.field != 'varPercentage' && col.field !='adjustedHours' && col.field !='adjustments' && col.field !='burdenRateAmount'">
                         {{rowData[col.field]}}
                     </ng-container>
-                    <ng-container *ngIf="col.field=='hours' || col.field=='adjustedHours' || col.field=='adjustments' || col.field=='burdenRateAmount'">
-                        <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                    <ng-container *ngIf="col.field=='hours' || col.field == 'varPercentage' ||col.field=='adjustedHours' || col.field=='adjustments' || col.field=='burdenRateAmount'">
+                        <p class="m-0 p-0 text-right">{{ [col.field] =='varPercentage' ? rowData[col.field] + '%' : rowData[col.field]}}</p>
+                        
                     </ng-container> 
                     </td>                    
                 </tr>
@@ -145,13 +146,16 @@
                     <td class="table-column-width"><label>Total</label>
                     </td>
                     <td class="content-to-end table-column-width">  
-                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('hours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('hours')}}</p>
                     </td>
                     <td class="table-column-width content-to-end">
-                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('adjustedHours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('adjustedHours')}}</p>
                     </td>
                     <td class="table-column-width content-to-end">
-                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('adjustments')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('adjustments')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('varPercentage')}} %</p>
                     </td>
                     <td class="content-to-end table-column-width">
                         <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('burdenRateAmount')}}</p>
@@ -165,13 +169,16 @@
                     <td class="table-column-width"><label>Total</label>
                     </td>
                     <td class="content-to-end table-column-width">  
-                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('hours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('hours')}}</p>
                     </td>
                     <td class="table-column-width content-to-end">
-                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('adjustedHours')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('adjustedHours')}}</p>
                     </td>
                     <td class="table-column-width content-to-end">
-                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('adjustments')}}</p>
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('adjustments')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('varPercentage')}} %</p>
                     </td>
                     <td class="content-to-end table-column-width">
                         <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('burdenRateAmount')}}</p>

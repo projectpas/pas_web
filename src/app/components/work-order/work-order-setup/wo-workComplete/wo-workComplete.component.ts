@@ -194,6 +194,9 @@ onSaveTextAreaInfo(memo) {
     if (memo) {
         this.textAreaInfo = memo;
         this.woSettlements[this.memoIndex].memo = this.textAreaInfo;
+        if(this.woSettlements[this.memoIndex].workOrderSettlementName =='Mat Required = Mat Issued'){
+          this.woSettlements[this.memoIndex].isenableUpdate=true;
+        }
     }
     this.disableEditor = true;
     $("#textarea-popup").modal("hide");

@@ -2132,11 +2132,16 @@ export class PurchaseSetupComponent implements OnInit {
 
 	getTotalDiscAmount() {
 		this.totalDiscAmount = 0;
+		// this.partListData.map(x => {
+		// 	x.tempDiscAmt = x.discountAmount ? parseFloat(x.discountAmount.toString().replace(/\,/g, '')) : 0;
+		// 	this.totalDiscAmount = parseFloat(this.totalDiscAmount) + parseFloat(x.tempDiscAmt);
+		// 	this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : '0.00';
+		// })
 		this.partListData.map(x => {
 			x.tempDiscAmt = x.discountAmount ? parseFloat(x.discountAmount.toString().replace(/\,/g, '')) : 0;
-			this.totalDiscAmount = parseFloat(this.totalDiscAmount) + parseFloat(x.tempDiscAmt);
-			this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : '0.00';
+			this.totalDiscAmount += x.tempDiscAmt;
 		})
+		this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : 0.00;
 	}
 
 

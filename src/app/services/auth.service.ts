@@ -216,7 +216,9 @@ export class AuthService {
             decodedAccessToken.employeeId,
             decodedAccessToken.managementStructureId,
             decodedAccessToken.masterCompanyId,
-            decodedAccessToken.legalEntityId
+            decodedAccessToken.legalEntityId,
+            decodedAccessToken.firstName,
+            decodedAccessToken.lastName
         );
 
         user.isEnabled = true;

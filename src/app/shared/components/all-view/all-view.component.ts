@@ -376,10 +376,10 @@ export class AllViewComponent implements OnInit {
   }
 
   viewRepairOrder(repairOrderId: number): void {
+    this.isSpinnerVisible = true;
     this.receivingService.getReceivingROPartsForViewById(repairOrderId).subscribe(
-      results => {
+      results => {       
         this.repairOrderData = results;
-
         var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
         for (let parent of allParentParts) {
           var splitParts = this.repairOrderData.filter(x => !x.isParent && x.parentId == parent.repairOrderPartRecordId);
@@ -418,6 +418,7 @@ export class AllViewComponent implements OnInit {
         //this.getStatus();               
         this.isSpinnerVisible = false;
       }, error => {
+        this.isSpinnerVisible = false;
         this.alertService.showMessage("", "Something went wrong while loading the Repair Order detail", MessageSeverity.error);
       }
     )

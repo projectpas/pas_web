@@ -49,4 +49,6 @@ export interface ISalesOrderQuote {
     divisionId: number;
     departmentId: number;
     customerName: string;
+    enforceEffectiveDate: Date;
+    isEnforceApproval: boolean;
 }

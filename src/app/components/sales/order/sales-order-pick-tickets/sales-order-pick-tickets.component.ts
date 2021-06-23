@@ -271,6 +271,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.isEdit = false;
+        this.disableSubmitButton = true;
         this.parts = response[0];
         for (let i = 0; i < this.parts.length; i++) {
           if (this.parts[i].oemDer == null)
@@ -278,7 +279,8 @@ export class SalesOrderPickTicketsComponent implements OnInit {
           this.parts[i]['isSelected'] = false;
           this.parts[i]['salesOrderId'] = salesOrderId;
           //this.parts[i].qtyToShip = this.qtyToPick;
-          this.parts[i].qtyToShip = this.parts[i].qtyToReserve;
+          //this.parts[i].qtyToShip = this.parts[i].qtyToReserve;
+          this.parts[i].qtyToShip = null;
           if (this.parts[i].qtyToReserve == 0) {
             this.parts[i].qtyToReserve = null;
           }
@@ -288,7 +290,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       });
   }
 
-  onChangeOfPartSelection(event) {
+  onChangeOfPartSelection(event, part) {
     let selectedPartsLength = 0;
     for (let i = 0; i < this.parts.length; i++) {
       if (event == true) {
@@ -299,6 +301,10 @@ export class SalesOrderPickTicketsComponent implements OnInit {
           selectedPartsLength = selectedPartsLength - 1;
         }
       }
+    }
+
+    if (event == true) {
+      part.qtyToShip = part.qtyToReserve;
     }
 
     if (selectedPartsLength == 0) {
@@ -485,6 +491,15 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     });
 
     instance.salesOrderPickTickets = pickTickets;
+  }
+
+  selectAllPT(evt) {
+    this.pickTickes.forEach(pick => {
+      pick.sopickticketchild.forEach(pickItem => {
+        pickItem.selected = evt.target.checked;
+      });
+    });
+    this.checkIsCheckedToPrint();
   }
 }
 
