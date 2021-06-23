@@ -51,13 +51,31 @@ aSectionClick(event, currentRecord){
 if(event.target.checked==true){
   currentRecord.isMastervalue=true;
   currentRecord.isvalue_NA=false;
+  
 }
+if(currentRecord.isMastervalue==true || currentRecord.isvalue_NA==true){
+  currentRecord.closeWO=true;
+}
+else
+  {
+    currentRecord.closeWO=false;
+  }
+this.onchangecheck();
 }
 bSectionClick(event,currentRecord){
   if(event.target.checked==true){
     currentRecord.isMastervalue=false;
     currentRecord.isvalue_NA=true;
+    
   }
+
+  if(currentRecord.isMastervalue==true || currentRecord.isvalue_NA==true){
+    currentRecord.closeWO=true;
+  }else
+  {
+    currentRecord.closeWO=false;
+  }
+  this.onchangecheck();
 }
 enableSave(){
 }
@@ -80,6 +98,7 @@ getWorkCompleteDetails(){
         element.closeWO=true;
       }
     });
+    this.onchangecheck();
    }
     this.isSpinnerVisible=false;
     },err=>{
@@ -89,6 +108,16 @@ getWorkCompleteDetails(){
 isenableUpdate:any;
 editRow(currentRecord){
   currentRecord.isenableUpdate=true;
+}
+onchangecheck()
+{
+  const newData=[...  this.woSettlements];
+  const arrayWithFilterObjects= newData.filter((o) => o.closeWO === true);
+  if((arrayWithFilterObjects && arrayWithFilterObjects.length)==(newData&&newData.length)){
+    this.isWOClose=true;
+  }else{
+    this.isWOClose=false
+  }
 }
 
 upDateSettlemts( ){
