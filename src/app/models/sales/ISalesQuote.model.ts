@@ -71,4 +71,6 @@ export interface ISalesQuote {
   qtyToBeQuoted: number;
   statusName: string;
   isApproved: boolean;
+  enforceEffectiveDate: Date;
+  isEnforceApproval: boolean;
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
 import {
   NgForm,
-  FormBuilder,
   FormGroup
 } from "@angular/forms";
 import { CustomerSearchQuery } from "../models/customer-search-query";
@@ -24,7 +23,6 @@ import { EmployeeService } from "../../../../services/employee.service";
 import { AuthService } from "../../../../services/auth.service";
 import { Router } from "@angular/router";
 import { getValueFromArrayOfObjectById } from "../../../../generic/autocomplete";
-
 import {
   getObjectById,
   editValueAssignByCondition
@@ -186,7 +184,6 @@ export class SalesQuoteCreateComponent implements OnInit {
     private alertService: AlertService,
     private route: ActivatedRoute,
     private salesQuoteService: SalesQuoteService,
-    private formBuilder: FormBuilder,
     private commonservice: CommonService,
     private commonService: CommonService,
     public currencyService: CurrencyService,
@@ -901,6 +898,8 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesOrderQuoteObj = this.salesQuoteView.salesOrderQuote;
         this.verifySalesQuoteConversion(this.salesQuoteView.verificationResult);
         this.toggle_po_header = false;
+        this.enforceApproval = this.salesOrderQuoteObj.isEnforceApproval;
+        this.effectiveDate = this.salesOrderQuoteObj.enforceEffectiveDate;
       }
       if (this.deletePartsWhileCopieng == true) {
         this.salesQuoteView.parts = [];
@@ -995,13 +994,14 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.salesQuote.statusName = validDaysObject.defaultStatusName;
         }
         this.defaultSettingPriority = validDaysObject.defaultPriorityId;
-        this.enforceApproval = validDaysObject.isApprovalRule;
-        this.effectiveDate = validDaysObject.effectiveDate;
+        if (!this.id) {
+          this.enforceApproval = validDaysObject.isApprovalRule;
+          this.effectiveDate = validDaysObject.effectiveDate;
+        }
       } else {
         this.salesQuote.validForDays = 10;
         if (this.salesQuote.salesQuoteTypes && this.salesQuote.salesQuoteTypes.length > 0) {
           this.salesQuote.quoteTypeId = this.salesQuote.salesQuoteTypes[0].id;
-
         }
       }
     } else {
@@ -1176,6 +1176,8 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesOrderQuote.buId = this.salesQuote.buId;
       this.salesOrderQuote.departmentId = this.salesQuote.departmentId;
       this.salesOrderQuote.divisionId = this.salesQuote.divisionId;
+      this.salesOrderQuote.enforceEffectiveDate = this.effectiveDate;
+      this.salesOrderQuote.isEnforceApproval = this.enforceApproval;
       this.salesOrderQuote.salesPersonId = editValueAssignByCondition(
         "employeeId",
         this.salesQuote.salesPersonName
@@ -1797,19 +1799,17 @@ export class SalesQuoteCreateComponent implements OnInit {
 
   onTabChange(event) {
     let indexToInc: number = 0;
-    if (this.validDaysSettingsList[0] != null &&
-      (!this.validDaysSettingsList[0].isApprovalRule ||
-        (this.validDaysSettingsList[0].isApprovalRule
-          && new Date(this.validDaysSettingsList[0].effectiveDate) > new Date(this.todayDate)))) {
+    if (!this.enforceApproval ||
+      (this.enforceApproval
+        && new Date(this.effectiveDate) > new Date(this.todayDate))) {
       indexToInc = 1;
     }
 
     if (event.index == 0) {
       this.salesPartNumberComponent.refresh();
     }
-    if (event.index == 1 && (this.validDaysSettingsList[0] != null
-      && this.validDaysSettingsList[0].isApprovalRule
-      && new Date(this.todayDate) >= new Date(this.validDaysSettingsList[0].effectiveDate))) {
+    if (event.index == 1 && (this.enforceApproval
+      && new Date(this.todayDate) >= new Date(this.effectiveDate))) {
       this.salesApproveComponent.refresh(this.marginSummary);
     }
     if (event.index == (2 - indexToInc)) {
@@ -1837,6 +1837,24 @@ export class SalesQuoteCreateComponent implements OnInit {
     }
   }
 
+  setFreightsAtPartLevel(freightList) {
+    if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
+      this.salesQuoteService.selectedParts.forEach((part, i) => {
+        let freightFound = freightList.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
+        if (freightFound !== undefined && freightFound.length > 0) {
+          let total = 0;
+
+          freightFound.forEach(element => {
+            total += element.billingAmount;
+          });
+
+          this.salesQuoteService.selectedParts[i].freight = total; //freightFound[0].total; //this.totalFreights;
+        }
+      });
+    }
+    this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
+  }
+
   setFreightsOrCharges() {
     if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
       this.salesQuoteService.selectedParts.forEach((part, i) => {
@@ -1848,19 +1866,51 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   saveSalesOrderFreightsList(e) {
-    this.totalFreights = e;
-    this.marginSummary.freightAmount = this.totalFreights;
-    this.salesQuoteService.setTotalFreights(e);
-    this.setFreightsOrCharges();
+    let freightList = e;
+    //let listFreight = [];
+
+    // freightList.forEach((freight, i) => {
+    //   let itemMasterId = this.salesQuoteService.selectedParts.find(a => a.salesOrderQuotePartId == freight.salesOrderQuotePartId).itemMasterId;
+    //   let total = Number(this.getTotalTaskBillingAmount(freight));
+    //   listFreight.push({ itemMasterId, total });
+    // });
+
+    this.setFreightsAtPartLevel(freightList);
     this.updateMarginSummary();
+    // this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.salesQuoteService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
   }
 
   updateSalesOrderFreightsList(e) {
-    this.totalFreights = e;
-    this.marginSummary.freightAmount = this.totalFreights;
-    this.salesQuoteService.setTotalFreights(e);
-    this.setFreightsOrCharges();
+    debugger;
+    let freightList = e;
+    let listFreight = [];
+
+    freightList.forEach((freight, i) => {
+      let itemMasterId = this.salesQuoteService.selectedParts.find(a => a.salesOrderQuotePartId == freight.salesOrderQuotePartId).itemMasterId;
+      let total = Number(this.getTotalTaskBillingAmount(freight));
+      listFreight.push({ itemMasterId, total });
+    });
+
+    this.setFreightsAtPartLevel(listFreight);
     this.updateMarginSummary();
+
+    // this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.salesQuoteService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    //this.updateMarginSummary();
+  }
+
+  getTotalTaskBillingAmount(freight) {
+    let total = 0;
+    if (freight.billingAmount && !freight.isDeleted) {
+      total += Number(freight.billingAmount.toString().replace(/\,/g, ''));
+    }
+    return total.toFixed(2);
   }
 
   getFreightList() {

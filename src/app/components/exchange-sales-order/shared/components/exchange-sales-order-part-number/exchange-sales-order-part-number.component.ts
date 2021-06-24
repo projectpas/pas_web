@@ -52,10 +52,13 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   @Input() exchangeQuoteView: IExchangeSalesOrderView;
   totalRecords: number;
   pageLinks: any;
-  @Input() exchangeQuoteId: any;
+  @Input() exchangeSalesOrderId: any;
   summaryColumns: any[] = [];
   IsRestrictOnePN:boolean=false;
   @Input() defaultSettingPriority;
+  selectedPartActionType: any;
+  @ViewChild("salesReserve", { static: false }) salesReserve: ElementRef;
+  salesReserveModal: NgbModalRef;
   constructor(private exchangeSalesOrderService: ExchangeSalesOrderService,
     private authService: AuthService,
     private modalService: NgbModal,
@@ -555,5 +558,15 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   onEditPartDetails() {
     this.combineParts(this.summaryParts);
     this.canSaveParts = false;
+  }
+  partsAction(type) {
+    this.selectedPartActionType = type;
+    let contentPart = this.salesReserve;
+    this.salesReserveModal = this.modalService.open(contentPart, { size: "xlg", backdrop: 'static', keyboard: false });
+  }
+  onCloseReserve(event) {
+    this.show = false;
+    this.salesReserveModal.close();
+    //this.refreshParts();
   }
 }

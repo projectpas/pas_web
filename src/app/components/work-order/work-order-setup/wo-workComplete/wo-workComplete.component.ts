@@ -51,13 +51,31 @@ aSectionClick(event, currentRecord){
 if(event.target.checked==true){
   currentRecord.isMastervalue=true;
   currentRecord.isvalue_NA=false;
+  
 }
+if(currentRecord.isMastervalue==true || currentRecord.isvalue_NA==true){
+  currentRecord.closeWO=true;
+}
+else
+  {
+    currentRecord.closeWO=false;
+  }
+this.onchangecheck();
 }
 bSectionClick(event,currentRecord){
   if(event.target.checked==true){
     currentRecord.isMastervalue=false;
     currentRecord.isvalue_NA=true;
+    
   }
+
+  if(currentRecord.isMastervalue==true || currentRecord.isvalue_NA==true){
+    currentRecord.closeWO=true;
+  }else
+  {
+    currentRecord.closeWO=false;
+  }
+  this.onchangecheck();
 }
 enableSave(){
 }
@@ -80,6 +98,7 @@ getWorkCompleteDetails(){
         element.closeWO=true;
       }
     });
+    this.onchangecheck();
    }
     this.isSpinnerVisible=false;
     },err=>{
@@ -90,12 +109,25 @@ isenableUpdate:any;
 editRow(currentRecord){
   currentRecord.isenableUpdate=true;
 }
+onchangecheck()
+{
+  const newData=[...  this.woSettlements];
+  const arrayWithFilterObjects= newData.filter((o) => o.closeWO === true);
+  if((arrayWithFilterObjects && arrayWithFilterObjects.length)==(newData&&newData.length)){
+    this.isWOClose=true;
+  }else{
+    this.isWOClose=false
+  }
+}
+
 upDateSettlemts( ){
 
   const newData=[...  this.woSettlements];
   newData.forEach(element => {
     element.userId=element.userId?element.userId.employeeId:0;
     element.conditionId= element.conditionId ==0 ? null :element.conditionId
+    element.updatedDate=this.toDaysDate;
+    element.updatedBy= this.userName;
   });
   // newData[0].closeWO=true;
   // newData.forEach(element => {
@@ -162,6 +194,9 @@ onSaveTextAreaInfo(memo) {
     if (memo) {
         this.textAreaInfo = memo;
         this.woSettlements[this.memoIndex].memo = this.textAreaInfo;
+        if(this.woSettlements[this.memoIndex].workOrderSettlementName =='Mat Required = Mat Issued'){
+          this.woSettlements[this.memoIndex].isenableUpdate=true;
+        }
     }
     this.disableEditor = true;
     $("#textarea-popup").modal("hide");

@@ -29,6 +29,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
     @Input() markupList;
     @Input() isView: boolean = false;
     @Input() buildMethodDetails: any = {};
+    salesOrderPartsList = [];
     selectedRowForDelete;
     selectedRowIndexForDelete;
     deleteModal: NgbModalRef;
@@ -103,16 +104,28 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         this.arrayEmplsit.push(0);
         forkJoin(this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId, this.deletedStatusInfo),
+            this.salesOrderQuoteService.getSalesQuoteParts(this.salesOrderQuoteId, this.deletedStatusInfo),
             this.commonService.getShipVia(this.currentUserMasterCompanyId)
         ).subscribe(response => {
             this.isSpinnerVisible = false;
             this.setFreightsData(response[0]);
-            this.setShipViaList(response[1]);
+            this.setPartsData(response[1]);
+            this.setShipViaList(response[2]);
         }, error => {
             this.isSpinnerVisible = false;
         })
         this.getunitOfMeasureList('');
         this.CurrencyData('');
+    }
+
+    setPartsData(res) {
+        if (res && res.length > 0) {
+            this.salesOrderPartsList = res;
+            this.isUpdate = true;
+        } else {
+            this.salesOrderPartsList = [];
+            this.isUpdate = false;
+        }
     }
 
     onFilterUom(value) {
@@ -258,7 +271,14 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
                 MessageSeverity.success
             );
             this.refreshFreightsOnSaveOrDelete();
-            this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
+            //this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
+
+            this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId, this.deletedStatusInfo).subscribe(response => {
+                if (response && response.length > 0) {
+                    this.salesOrderFreightList = response;
+                    this.saveFreightListForSO.emit(this.salesOrderFreightList);
+                }
+            }, error => { });
         }, error => {
             this.isSpinnerVisible = false;
         })
@@ -525,7 +545,8 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
 
             if (fromDelete) {
                 this.getTotalBillingAmount();
-                this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
+                //this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
+                this.updateFreightListForSO.emit(this.salesOrderFreightList);
             }
         }, error => {
             this.isSpinnerVisible = false;
@@ -564,6 +585,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
                 billingAmount: this.formateCurrency(x.amount),
                 masterCompanyId: this.currentUserMasterCompanyId,
                 shipVia: x.shipViaId ? getValueFromArrayOfObjectById('label', 'value', x.shipViaId, this.shipViaList) : '',
+                partNumber: x.salesOrderQuotePartId ? getValueFromArrayOfObjectById('partNumber', 'salesOrderQuotePartId', x.salesOrderQuotePartId, this.salesOrderPartsList) : ''
             }
         });
         if (this.isEdit) {

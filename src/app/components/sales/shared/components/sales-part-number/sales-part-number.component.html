@@ -31,7 +31,7 @@
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of summaryColumns" class="summary-column"
                                         pReorderableRowHandle>
-                                        <span *ngIf="summaryColumn.field == 'itemNo'">
+                                        <span class="text-center" style="display: block;" *ngIf="summaryColumn.field == 'itemNo'">
                                             {{summaryPart[summaryColumn.field] }}
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
@@ -160,7 +160,9 @@
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let part of summaryPart.childParts; let stockIndex = index"
                                     [hidden]="part.isDeleted">
-                                    <td></td>
+                                    <td class="text-center">
+                                        {{(summaryPart['itemNo']) + '.' + (stockIndex + 1)}}
+                                    </td>
                                     <td>
                                         {{ part.partNumber }}
                                     </td>

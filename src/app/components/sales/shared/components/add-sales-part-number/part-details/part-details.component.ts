@@ -200,12 +200,14 @@ export class PartDetailsComponent implements OnChanges {
           let remained = stockLineItem.qtyAvailable - qtyQuoted;
           if (remained != stockLineItem.qtyAvailable) {
             if (isStock) {
-              this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
+              if (this.roleUpMaterialList[rowIndex] !== undefined) {
+                this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
+              }
             } else {
               this.parts[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
             }
           }
-          if (this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] != this.roleUpMaterialList[rowIndex].qtyAvailable) {
+          if (this.roleUpMaterialList[rowIndex] !== undefined && this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] != this.roleUpMaterialList[rowIndex].qtyAvailable) {
             return true;
           }
           return false;

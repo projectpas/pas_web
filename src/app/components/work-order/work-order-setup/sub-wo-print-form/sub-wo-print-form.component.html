@@ -154,7 +154,7 @@
                                                               <td>{{this.workOrderprintData.billCountry}}</td>
                                                           </tr>
                                                           <tr>
-                                                              <td>Attn: </td>
+                                                            <td>Attn:  {{this.workOrderprintData.billAttention}}</td>
                                                           </tr>
                                                       </table>
                                                   </td>
@@ -182,7 +182,7 @@
                                                               <td>{{this.workOrderprintData.shipcountry}}</td>
                                                           </tr>
                                                           <tr>
-                                                              <td>Attn:</td>
+                                                            <td>Attn: {{this.workOrderprintData.shipAttention}}</td>
                                                           </tr>
                                                       </table>
                                                   </td>
@@ -287,241 +287,292 @@
 
                                   <div class="clear"></div>
                                   <div class="col-sm-12">
-                                      <table rules=none class=" top-table-alignment print-friendly border table-border-right parttable print-table table-margins">
+                                    <table rules=none class=" top-table-alignment print-friendly border table-border-right parttable print-table table-margins">
 
-                                          <tbody>
-
-
-
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b> Reported Removal Reason:</b>
-
-                                                  </td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-
-
-                                              </tr>
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Root Cause:</b>
-
-                                                  </td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-
-                                              </tr>
-
-                                              <tr>
-                                                <td style="border-bottom:none;vertical-align:top">
-                                                    <b>Priliminary inspection</b>
+                                        <tbody>
+                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isRemovalReasons: false">
+                                                <td style="border-bottom:none;vertical-align:top; width: 20%;">
+                                                    <b> Reported Removal Reason: </b> <p>{{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.removalReason: ''}}</p>
 
                                                 </td>
-                                                <td>Technician : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspector: ''}}</td>
-                                                <td>Date : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate : ''}}</td>
-                                                <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnician : ''}}</td>
-                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate :'' }}</td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
                                             </tr>
-                                              <tr style="border-bottom:1px solid black">
+                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isRemovalReasons: false" style="border-bottom:1px solid black">
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+
+
+                                            </tr>
+                                            <tr *ngIf="isteardownshow">
+                                                <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                    <b>Root Cause: </b>
+
+                                                </td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;">Inspector</td>
+                                                <td style="width: 20%;">Date</td>
+                                            </tr>
+                                            <tr *ngIf="isteardownshow" style="border-bottom:1px solid black">
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;">Signature</td>
+                                                <td style="width: 20%;"></td>
+
+                                            </tr>
+
+                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreAssemblyInspection: false">
+                                                <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                    <b>Priliminary inspection: </b> <p>{{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionReason: ''}}</p>
+
+                                                </td>
+                                                <td style="width: 20%;">Technician : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspector: ''}}</td>
+                                                <td style="width: 20%;">Date : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate : ''}}</td>
+                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnician : ''}}</td>
+                                                <td >Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate :'' }}</td>
+                                            </tr>
+                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreAssemblyInspection: false" style="border-bottom:1px solid black">
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;">Signature</td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;">Signature</td>
+                                              <td style="width: 20%;"></td>
+
+                                            </tr>
+                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreliinaryReview: false">
+                                              <td style="border-bottom:none;vertical-align:top; width: 20%;">
+                                                  <b>Priliminary Review: </b> <p>{{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.preliinaryReviewReason: ''}}</p>
+
+                                              </td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspector : ''}}</td>
+                                              <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspectorDate :'' }}</td>
+                                            </tr>
+                                          <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreliinaryReview: false" style="border-bottom:1px solid black">
+                                            <td style="width: 20%;"></td>
+                                            <td style="width: 20%;"></td>
+                                            <td style="width: 20%;"></td>
+                                            <td style="width: 20%;">Signature</td>
+                                            <td style="width: 20%;"></td>
+
+                                          </tr>
+
+                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreAssmentResults: false">
+                                                <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                    <b>Pre-Test Results:</b> <p> {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsReason : ''}}</p>
+
+                                                </td>
+                                                <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspector : ''}}</td>
+                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate : '' }}</td>
+                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnician: ''}}</td>
+                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate  : '' }}</td>
+                                            </tr>
+                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreAssmentResults: false" style="border-bottom:1px solid black">
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;">Signature</td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;">Signature</td>
+                                                <td style="width: 20%;"></td>
+
+                                            </tr>
+                                            <tr *ngIf="isteardownshow">
+                                                <td style="border-bottom:none;vertical-align:top">
+                                                    <b>Hidden Damages:</b>
+
+                                                </td>
+                                                <td>Technician</td>
+                                                <td>Date</td>
+
+                                                <td>Inspector</td>
+                                                <td>Date</td>
+                                            </tr>
+                                            <tr *ngIf="isteardownshow" style="border-bottom:1px solid black">
                                                 <td></td>
                                                 <td>Signature</td>
                                                 <td></td>
                                                 <td>Signature</td>
                                                 <td></td>
 
-                                              </tr>
+                                            </tr>
 
-                                              <tr>
-                                                <td style="border-bottom:none;vertical-align:top">
-                                                    <b>Pre-Test Results:</b>
+                                            <tr *ngIf="isWorkPerformed && !isshortteardown">
+                                                <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                    <b>Detail of Work Performed: </b><p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedReason: ''}}</p>
 
                                                 </td>
-                                                <td>Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspector : ''}}</td>
-                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate : '' }}</td>
-                                                <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnician: ''}}</td>
-                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate  : '' }}</td>
+                                                <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspector: ''}}</td>
+                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate  : '' }}</td>
+                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnician:''}}</td>
+                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate   : '' }}</td>
                                             </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
+                                            <tr *ngIf="isWorkPerformed && !isshortteardown" style="border-bottom:1px solid black">
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;">Signature</td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;">Signature</td>
+                                                <td style="width: 20%;"></td>
 
-                                              </tr>
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Hidden Damages:</b>
+                                            </tr>
 
-                                                  </td>
-                                                  <td>Technician</td>
-                                                  <td>Date</td>
-
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-
-                                              </tr>
-
-                                              <tr>
+                                            <tr *ngIf="isteardownshow">
                                                 <td style="border-bottom:none;vertical-align:top">
-                                                    <b>Detail of Work Performed:</b>
+                                                    <b>Inspection Before Assembly:</b>
 
                                                 </td>
-                                                <td>Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspector: ''}}</td>
-                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate  : '' }}</td>
-                                                <td>Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnician:''}}</td>
-                                                <td>Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate   : '' }}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Inspector</td>
+                                                <td>Date</td>
                                             </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
+                                            <tr *ngIf="isteardownshow" style="border-bottom:1px solid black">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Signature</td>
+                                                <td></td>
 
-                                              </tr>
+                                            </tr>
 
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Inspection Before Assembly:</b>
+                                            <tr *ngIf="isteardownshow">
+                                                <td style="border-bottom:none;vertical-align:top">
+                                                    <b>Corrective Action:</b>
 
-                                                  </td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
+                                                </td>
+                                                <td>Technician</td>
+                                                <td>Date</td>
 
-                                              </tr>
+                                                <td>Inspector</td>
+                                                <td>Date</td>
+                                            </tr>
+                                            <tr *ngIf="isteardownshow" style="border-bottom:1px solid black">
+                                                <td></td>
+                                                <td>Signature</td>
+                                                <td></td>
+                                                <td>Signature</td>
+                                                <td></td>
 
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Corrective Action:</b>
+                                            </tr>
 
-                                                  </td>
-                                                  <td>Technician</td>
-                                                  <td>Date</td>
+                                            <tr *ngIf="isPmaDerBulletins  && !isshortteardown">
+                                                <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                    <b>Service Bulletins (SBs),Airworthiness Directives (ADs) and Mods:  </b> <p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.mandatoryService:''}} , {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.airworthinessDirecetives:''}}</p>
 
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
+                                                </td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                            </tr>
+                                            <tr *ngIf="isPmaDerBulletins  && !isshortteardown" style="border-bottom:1px solid black">
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
 
-                                              </tr>
+                                            </tr>
 
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Service Bulletins (SBs),Airworthiness Directives (ADs) and Mods:</b>
+                                            <tr *ngIf="isTestDataUsed  && this.isshortteardown == false">
+                                                <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                    <b>Test Equipment and Test Data Used:  </b> <p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.datausedReason: ''}}</p>
 
-                                                  </td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
+                                                </td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                            </tr>
+                                            <tr *ngIf="isTestDataUsed && this.isshortteardown == false" style="border-bottom:1px solid black">
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;"></td>
 
-                                              </tr>
+                                            </tr>
+                                            <tr *ngIf="this.isBulletinsModification == true && this.isshortteardown == false">
+                                              <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                  <b>Bulletins And Modifications:  </b> <p> {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.bulletinsModificationReason: ''}}</p>
 
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Test Equipment and Test Data Used:</b>
+                                              </td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;"></td>
+                                          </tr>
+                                          <tr *ngIf="this.isBulletinsModification == true && this.isshortteardown == false" style="border-bottom:1px solid black">
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;"></td>
 
-                                                  </td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
+                                          </tr>
 
-                                              </tr>
+                                          <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isDiscovery: false" >
+                                              <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                  <b>Teardown Discovery:   </b> <p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryReason: ''}}</p>
 
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Final test:</b>
+                                              </td>
+                                              <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryInspector: ''}}</td>
+                                              <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate  : '' }}</td>
+                                              <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryTechnician:''}}</td>
+                                              <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate   : '' }}</td>
+                                          </tr>
+                                          <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isDiscovery: false"  style="border-bottom:1px solid black">
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;">Signature</td>
+                                              <td style="width: 20%;"></td>
+                                              <td style="width: 20%;">Signature</td>
+                                              <td style="width: 20%;"></td>
+                                          </tr>
 
-                                                  </td>
-                                                  <td>Technician</td>
-                                                  <td>Date</td>
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-                                              </tr>
+                                            <tr *ngIf="isteardownshow">
+                                                <td style="border-bottom:none;vertical-align:top">
+                                                    <b>Final test:</b>
 
-                                              <tr>
-                                                  <td style="border-bottom:none;vertical-align:top">
-                                                      <b>Final Inspection:</b>
+                                                </td>
+                                                <td>Technician</td>
+                                                <td>Date</td>
+                                                <td>Inspector</td>
+                                                <td>Date</td>
+                                            </tr>
+                                            <tr *ngIf="isteardownshow" style="border-bottom:1px solid black">
+                                                <td></td>
+                                                <td>Signature</td>
+                                                <td></td>
+                                                <td>Signature</td>
+                                                <td></td>
+                                            </tr>
 
-                                                  </td>
-                                                  <td>Technician</td>
-                                                  <td>Date</td>
-                                                  <td>Inspector</td>
-                                                  <td>Date</td>
-                                              </tr>
-                                              <tr style="border-bottom:1px solid black">
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-                                                  <td>Signature</td>
-                                                  <td></td>
-                                              </tr>
+                                            <tr *ngIf="isteardownshow">
+                                                <td style="border-bottom:none;vertical-align:top;width: 20%;">
+                                                    <b>Final Inspection:</b>
 
-                                          </tbody>
-                                      </table>
+                                                </td>
+                                                <td style="width: 20%;">Technician</td>
+                                                <td style="width: 20%;">Date</td>
+                                                <td style="width: 20%;">Inspector</td>
+                                                <td style="width: 20%;">Date</td>
+                                            </tr>
+                                            <tr *ngIf="isteardownshow" style="border-bottom:1px solid black">
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;">Signature</td>
+                                                <td style="width: 20%;"></td>
+                                                <td style="width: 20%;">Signature</td>
+                                                <td style="width: 20%;"></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
                                   </div>
 
 

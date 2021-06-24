@@ -25,6 +25,7 @@ import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-edit-po',
@@ -1803,6 +1804,20 @@ export class EditPoComponent implements OnInit {
                     if (stockLine.purchaseOrderUnitCost == undefined || (stockLine.purchaseOrderUnitCost != undefined && stockLine.purchaseOrderUnitCost.toString() == '')) {
                         this.alertService.showMessage(this.pageTitle, "Please enter Unit Cost in Part No. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
+                    }                    
+                    if(stockLine.manufacturingDate){
+                        if(stockLine.tagDate){
+                            if (new Date(stockLine.tagDate) <=  new Date(stockLine.manufacturingDate)) {   
+                                this.alertService.showMessage(this.pageTitle, "Tag Date must be greater than Manufacturing Date. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                                return;                                                            
+                            }
+                         }                      
+                         if(stockLine.certifiedDate){
+                            if (new Date(stockLine.certifiedDate) <= new Date(stockLine.manufacturingDate)) {
+                                this.alertService.showMessage(this.pageTitle, "Certified Date must be greater than Manufacturing Date. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                                return;                                  
+                            }
+                        }
                     }
                     for (var tl of part.timeLife) {
                         if (tl.stockLineDraftId == stockLine.stockLineDraftId) {
@@ -1841,9 +1856,9 @@ export class EditPoComponent implements OnInit {
                 //return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
                 this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
             },
-                errr => {
-                    this.isSpinnerVisible = false;
-                });
+            errr => {
+                this.isSpinnerVisible = false;
+            });
         }
         else {
             this.alertService.showMessage(this.pageTitle, 'Please edit Stock Line to update.', MessageSeverity.info);

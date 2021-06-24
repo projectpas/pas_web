@@ -976,7 +976,10 @@ if(this.enableToSave==false){
           this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
         } 
         // if(this.saveFormdata.costPlusType==3){
-        //   this.saveFormdata.laborFlatBillingAmount= this.flatAmount ? this.flatAmount : '0.00'
+        //   this.saveFormdata.laborFlatBillingAmount= this.saveFormdata.laborFlatBillingAmount ? this.saveFormdata.laborFlatBillingAmount : '0.00'
+        // }else
+        // {
+        //   this.saveFormdata.laborFlatBillingAmount= this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]);
         // }
         this.saveworkOrderLabor.emit(this.saveFormdata);
         this.enableToSave=false;
@@ -998,13 +1001,19 @@ if(this.enableToSave==false){
   }
   getTotalLabourCost(taskList) {
     let total = 0;
-    taskList.forEach(
-      (tl) => {
-        if (tl['totalCost']) {
-          total += Number(tl['totalCost']);
-        }
+
+    for (let labor of taskList) {
+      if (labor.totalCost && !labor.isDeleted && labor.billableId==1) {
+        total += Number(labor.totalCost.toString().split(',').join(''));
       }
-    )
+    }
+    // taskList.forEach(
+    //   (tl) => {
+    //     if (tl['totalCost']) {
+    //       total += Number(tl['totalCost']);
+    //     }
+    //   }
+    // )
     return total;
   }
   getExpertise(expertiseType, taskId) {
@@ -1277,12 +1286,14 @@ if(this.enableToSave==false){
     return total.toFixed(2);
   }
   getTotalBillingAmount(taskList) {
+    debugger;
     let total = 0;
     for (let labor of taskList) {
-      if (labor.billingAmount && !labor.isDeleted) {
+      if (labor.billingAmount && !labor.isDeleted && labor.billableId==1) {
         total += Number(labor.billingAmount.toString().split(',').join(''));
       }
     }
+
     //this.laborForm['laborFlatBillingAmount'] = total.toFixed(2);
     return formatNumberAsGlobalSettingsModule(total, 0);
   }
@@ -1465,6 +1476,7 @@ if(this.enableToSave==false){
     let costTotal = 0;
     let bRTotal = 0;
     let bATotal = 0;
+    let flatTotal = 0;
     for (let task in this.laborForm.workOrderLaborList[0]) {
       this.laborForm.workOrderLaborList[0][task].forEach(
         data => {
@@ -1489,17 +1501,29 @@ if(this.enableToSave==false){
             }
             default: {
               if (data.billingAmount && !data.isDeleted) bATotal += Number(data.billingAmount.toString().split(',').join(''));
+            
+              if(type == 'BillingAmount')
+              {
+                if(this.laborForm.costPlusType !=3)
+                {
+                  if (data.billingAmount && !data.isDeleted && data.billableId ==1) flatTotal += Number(data.billingAmount.toString().split(',').join(''));
+            
+                  this.laborForm.laborFlatBillingAmount = flatTotal ? formatNumberAsGlobalSettingsModule(flatTotal, 2) : '0.00';
+                  this.flatAmount=this.laborForm.laborFlatBillingAmount;
+                }
+               
+              }
             }
           }
         }
       )
     }
 
-    if(type == 'BillingAmount')
-    {
-      this.laborForm.laborFlatBillingAmount = bATotal ? formatNumberAsGlobalSettingsModule(bATotal, 2) : '0.00';
-      this.flatAmount=this.laborForm.laborFlatBillingAmount;
-    }
+    // if(type == 'BillingAmount')
+    // {
+    //   this.laborForm.laborFlatBillingAmount = bATotal ? formatNumberAsGlobalSettingsModule(bATotal, 2) : '0.00';
+    //   this.flatAmount=this.laborForm.laborFlatBillingAmount;
+    // }
    
 
     return (type == 'Hours') ? htotal.toFixed(2) : (type == 'LaborOHCost') ? formatNumberAsGlobalSettingsModule(loTotal, 0) : (type == 'LaborBurdenRate') ? formatNumberAsGlobalSettingsModule(burTotal, 0) : (type == 'CostPerHour') ? formatNumberAsGlobalSettingsModule(cpTotal, 0) : (type == 'Cost') ? formatNumberAsGlobalSettingsModule(costTotal, 0) : (type == 'BillingRate') ? formatNumberAsGlobalSettingsModule(bRTotal, 0) : formatNumberAsGlobalSettingsModule(bATotal, 0);

@@ -33,7 +33,8 @@ import { formatNumberAsGlobalSettingsModule, getObjectById,editValueAssignByCond
 import { DatePipe } from '@angular/common';
 import { RepairOrderService } from '../../../../services/repair-order.service';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-receiving-ro',
@@ -1379,6 +1380,19 @@ export class ReceivingRoComponent implements OnInit {
                         errorMessages.push("Please select shipping Reference in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
 
+                    if (moment(item.stocklineListObj[i].manufacturingDate, 'MM/DD/YYYY', true).isValid()) {
+                        if (moment(item.stocklineListObj[i].tagDate, 'MM/DD/YYYY', true).isValid()) {
+                            if (item.stocklineListObj[i].tagDate <= item.stocklineListObj[i].manufacturingDate) {                                
+                                errorMessages.push("Tag Date must be greater than Manufacturing Date - " + (i + 1).toString() + ofPartMsg);
+                            }
+                        }                        
+                        if (moment(item.stocklineListObj[i].certifiedDate, 'MM/DD/YYYY', true).isValid()) {
+                            if (item.stocklineListObj[i].certifiedDate <= item.stocklineListObj[i].manufacturingDate) {
+                                errorMessages.push("Certified Date must be greater than Manufacturing Date - " + (i + 1).toString() + ofPartMsg);                               
+                            }
+                        }                        
+                    }
+
                     if (item.itemMaster.isSerialized == true) {
                         item.stocklineListObj[i].serialNumber = item.stocklineListObj[i].serialNumber != undefined ? item.stocklineListObj[i].serialNumber.trim() : '';
                         if (!item.stocklineListObj[i].serialNumberNotProvided && (item.stocklineListObj[i].serialNumber == undefined || item.stocklineListObj[i].serialNumber == '')) {
@@ -1489,8 +1503,10 @@ export class ReceivingRoComponent implements OnInit {
                         part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                         part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                     }
-                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                    part.timeLifeList[i] = timeLifeToCopy;
+                    if (part.itemMaster.isTimeLife) {
+                        var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                        part.timeLifeList[i] = timeLifeToCopy;
+                    }
                 }
             }
         }
@@ -2161,6 +2177,7 @@ export class ReceivingRoComponent implements OnInit {
             //     var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
             //     part.timeLifeList[i] = timeLifeToCopy;
             // }
+            
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                 var sernotprovide = false;
                 var serno = "";
@@ -2174,8 +2191,10 @@ export class ReceivingRoComponent implements OnInit {
                     part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                     part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                 }
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                part.timeLifeList[i] = timeLifeToCopy;
+                if (part.itemMaster.isTimeLife) {
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
+                }
             }
         }
     }
@@ -2203,8 +2222,10 @@ export class ReceivingRoComponent implements OnInit {
                     part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                     part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                 }
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                part.timeLifeList[i] = timeLifeToCopy;
+                if (part.itemMaster.isTimeLife) {
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
+                }
             }
         }
     }   

@@ -523,10 +523,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer"> 
                     <!-- !savebutonDisabled  || checkActiveStatus || checkIsSeclected()-->
                     <button class="btn btn-primary" data-dismiss="modal" (click)="saveRIPart()"
-                        [disabled]="!savebutonDisabled">
+                        [disabled]="!savebutonDisabled || checkIsSeclected()">
                         <span *ngIf="statusId === 1">Reserve</span>
                         <span *ngIf="statusId === 2">Issue</span>
                         <span *ngIf="statusId === 3">Reserve & Issue</span>
@@ -890,7 +890,7 @@
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th class="table-column-width" [ngStyle]="{'width': col.width}"
-                        [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }"
+                        [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description') }"
                         *ngFor="let col of columns">
                         {{col.header}}
                     </th>

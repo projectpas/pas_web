@@ -24,12 +24,18 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
   @Input() isView: boolean = false;
   ReleaseData : any = {};
   isSpinnerVisible: boolean = true;
+  isteardownshow: boolean = false;
   modal: NgbModalRef;
   private onDestroy$: Subject<void> = new Subject<void>();
   Printeddate1 : string;
   Printeddate2 : string;
   Issave: boolean = true;
   isconfirmsave : boolean = true;
+  isshortteardown  : boolean = false;
+  isBulletinsModification  : boolean = false;
+  isTestDataUsed  : boolean = false;
+  isPmaDerBulletins  : boolean = false;
+  isWorkPerformed  : boolean = false;
   workOrderprintData: any = [];
   endPointURL : any;
   constructor(
@@ -62,16 +68,25 @@ export class WoPrintFromComponent implements OnInit,OnChanges {
     this.workOrderService.GetWorkOrderPrintFormData(this.workOrderId,this.workOrderPartNumberId).subscribe(res => {
       this.workOrderprintData = res[0];
 
-
+      this.isSpinnerVisible = false;
+      this.isshortteardown = this.workOrderprintData.workOrderTeardownModel.isshortteardown;
+      this.isBulletinsModification = this.workOrderprintData.workOrderTeardownModel.isBulletinsModification;
+      this.isTestDataUsed = this.workOrderprintData.workOrderTeardownModel.isTestDataUsed;
+      this.isPmaDerBulletins = this.workOrderprintData.workOrderTeardownModel.isPmaDerBulletins;
+      this.isWorkPerformed = this.workOrderprintData.workOrderTeardownModel.isWorkPerformed;
       this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate = this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate, 'MMM-dd-yyyy') : '';
       this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate = this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate, 'MMM-dd-yyyy') : '';
       this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate = this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate, 'MMM-dd-yyyy') : '';
       this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate = this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate, 'MMM-dd-yyyy') : '';
       this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate = this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate, 'MMM-dd-yyyy') : '';
       this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate = this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate, 'MMM-dd-yyyy') : '';
-       // this.getWorkOrderCharges();
+      
+      this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate = this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate, 'MMM-dd-yyyy') : '';
+      this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate = this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate, 'MMM-dd-yyyy') : '';
+      this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspectorDate = this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspectorDate, 'MMM-dd-yyyy') : '';
+      // this.getWorkOrderCharges();
         //this.onWorkOrderPrintLoad.emit();
-        this.isSpinnerVisible = false;
+       
     }, error => {
         this.isSpinnerVisible = false;
     })

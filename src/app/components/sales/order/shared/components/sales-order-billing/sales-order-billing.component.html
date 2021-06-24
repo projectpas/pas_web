@@ -236,9 +236,9 @@
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label> No of Pieces </label>
-                                            <input type="number" class="form-control wo-input" name="noofPieces"
-                                                #noofPieces="ngModel" [(ngModel)]="billingorInvoiceForm.noofPieces"
-                                                [disabled]="isViewMode" />
+                                            <input type="number" class="form-control wo-input" style="text-align: left;"
+                                                name="noofPieces" #noofPieces="ngModel"
+                                                [(ngModel)]="billingorInvoiceForm.noofPieces" [disabled]="isViewMode" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -285,6 +285,10 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label>Credit Terms </label>
@@ -607,9 +611,12 @@
     </div>
     <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Billed'" (click)="PrintInvoice()">Print</button>
-        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Invoiced'" (click)="PrintInvoiced()">Print</button>
-        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Reviewed'" (click)="PrintPostInvoice()">Print And Post</button>
+        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Billed'"
+            (click)="PrintInvoice()">Print</button>
+        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Invoiced'"
+            (click)="PrintInvoiced()">Print</button>
+        <button type="button" class="btn btn-primary" *ngIf="invoiceStatus == 'Reviewed'"
+            (click)="PrintPostInvoice()">Print And Post</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
     </div>
 </ng-template>
