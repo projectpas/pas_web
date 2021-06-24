@@ -361,4 +361,9 @@ export class SpeedQuoteService {
       this.speedQuoteEndPointSevice.sendSppedQuoteEmail(speedQuotePrintCritera)
     );
   }
+  deleteExclusion(exclusionPartId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.deleteExclusion(exclusionPartId)
+    );
+  }
 }

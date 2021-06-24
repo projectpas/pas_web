@@ -32,7 +32,7 @@
             </td>
             <td>
               <p-autoComplete appendTo="body" [(ngModel)]="partList.partNumber" [suggestions]="partCollection"
-                (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
+                (completeMethod)="filterpartItems($event,partList.pn)" [size]="32" [minLength]="1" [dropdown]="true"
                 class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
                 (onSelect)="onPartSelect($event,row_index)" [forceSelection]="true" title="PN" required
                 name="pn_{{row_index}}">
@@ -80,7 +80,12 @@
                                             class="btn nobg view-part-eye" (click)="editPart(row_index)"
                                             matTooltip="Edit PN" matTooltipPosition="above">
                                             <i class="fa fa-pencil"></i>
-                                        </a>
+              </a>
+              <a [class.disabled]="partList['exclusionPartId'] == 0"
+                  [ngClass]="{'btn_disabled': partList['exclusionPartId'] == 0 }"
+                  class="btn nobg" (click)="openDelete(content,partList)" matTooltip="Remove" matTooltipPosition="above">
+                  <i class="fa fa-trash"></i>
+                </a>
             </td>
           </tr>
         </ng-container>
@@ -152,5 +157,21 @@
           <button type="button" class="btn btn-danger"
               (click)="dismissModel();">close</button>
       </div>
+  </div>
+</ng-template>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Remove?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="modal-body">PN : {{selectedExclusionToDelete}}</h6>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="deleteExclusion()">Yes</button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>
