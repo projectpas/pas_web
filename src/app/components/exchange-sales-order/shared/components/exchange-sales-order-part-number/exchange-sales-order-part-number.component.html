@@ -4,6 +4,14 @@
           [disabled]="IsRestrictOnePN">
           Add PN
       </button>
+      <button *ngIf="isViewMode == false" type="button" class="btn btn-primary ml-1"
+            [disabled]="selectedParts.length == 0 || !canSaveParts" (click)="partsAction('Reserve')">
+            Reserve
+      </button> 
+      <button *ngIf="isViewMode == false" type="button" class="btn btn-primary ml-1"
+            [disabled]="selectedParts.length == 0 || !canSaveParts" (click)="partsAction('Unreserve')">
+            Unreserve
+      </button>
       <div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'">
             <div class="tableFixHead">
                 <table class="table table-bordered" id="soq-table">
@@ -153,6 +161,12 @@
   (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode" 
   [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'EQ'">
   </app-add-exchange-sales-order-part-number>
+</ng-template>
+<ng-template #salesReserve let-c="close" let-d="dismiss">
+    <app-add-exchange-sales-order-reserve-unreserve-part-number [salesQuote]="exchangeQuote" [employeesList]="employeesList"
+        [selectedPartDataForAction]="selectedPartDataForAction" [selectedPartActionType]="selectedPartActionType"
+        [selectedParts]="selectedParts" [part]="part" [salesOrderId]="exchangeSalesOrderId" (close)="onCloseReserve($event)">
+    </app-add-exchange-sales-order-reserve-unreserve-part-number>
 </ng-template>
 <ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
   <app-exchange-sales-order-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
