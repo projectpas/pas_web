@@ -1,4 +1,4 @@
-<div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
+<div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
   style="min-height: 130px !important;">
   <div class="tableFixHead">
     <table class="table table-bordered " id="po-table">
@@ -15,13 +15,13 @@
           <td>Unit Price</td>
           <td>Est Price</td>
           <td>Occurance (%)*</td>
-          <td>Notes</td>
+          <td class="width-130">Notes</td>
           <td *ngIf="isViewMode == false">Action</td>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let partList of partListData;let row_index=index;">
-          <tr class="table-parent-data purchase-td-back" *ngIf="!partList.isDeleted">
+          <tr class="purchase-td-back" *ngIf="!partList.isDeleted">
 
             <!-- <td>{{partList.itemNo}}</td> -->
             <td class="parts-des-td">{{partList.pn}}</td>
@@ -33,10 +33,11 @@
             <td>
               <p-autoComplete appendTo="body" [(ngModel)]="partList.partNumber" [suggestions]="partCollection"
                 (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
-                class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
+                 #partNum="ngModel" errorMessage="Records not found" field="partNumber"
                 (onSelect)="onPartSelect($event,row_index)" [forceSelection]="true" title="PN" required
                 name="pn_{{row_index}}">
               </p-autoComplete>
+              <!-- class="wf-header-select" -->
             </td>
             <td class="parts-des-td">{{partList.exPartDescription}}</td>
             <td class="parts-des-td">{{partList.exStockType}}</td>
@@ -66,12 +67,18 @@
               </select>
             </td>
             <td>
-              <div class="form-group memo-popup-cstm mat_emo textarea-memo-div">
+              <div  *ngIf="isViewMode == false" class="form-group memo-popup-cstm mat_emo textarea-memo-div">
                 <div [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
                   [matTooltip]="parsedText(partList.exNotes)"></div>
-                <i class="fa fa-pencil ci_cls m-t-5"  data-toggle="modal" data-target="#textarea-popupexclusion"
+                <i class="fa fa-pencil ci_cls  m-t-5"  data-toggle="modal" data-target="#textarea-popupexclusion"
                   matTooltip="Notes" matTooltipPosition="above" [class.disabled]="isViewMode"
                   [ngClass]="{'btn_disabled': isViewMode}" (click)="onAddTextAreaInfo(partList,row_index)"></i>
+              </div>
+
+              <div *ngIf="isViewMode == true" class="form-group memo-popup-cstm mat_emo textarea-memo-div">
+                <div [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
+                  [matTooltip]="parsedText(partList.exNotes)"></div>
+      
               </div>
             </td>
             <td *ngIf="isViewMode == false">

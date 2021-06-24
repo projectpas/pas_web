@@ -157,11 +157,14 @@
             [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
             [matTooltipDisabled]="rowData['partNumberType'] != 'Multiple'"
             [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
-            <span *ngIf="col.field == 'quoteAmount'" style="float: right !important;">
+            <span *ngIf="col.field == 'quoteAmount' " style="float: right !important;">
               {{convertDate(col.field , rowData) | toDecimal}}
             </span>
+            <span *ngIf="col.field == 'probability' " style="float: right !important;">
+              {{convertDate(col.field , rowData)}}
+            </span>
             <span
-              *ngIf="col.field != 'quoteAmount' && col.field != 'createdDate' && col.field != 'updatedDate'">
+              *ngIf="col.field != 'quoteAmount'&& col.field != 'probability' && col.field != 'createdDate' && col.field != 'updatedDate'">
               {{convertDate(col.field , rowData)}}
             </span>
             <span *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">

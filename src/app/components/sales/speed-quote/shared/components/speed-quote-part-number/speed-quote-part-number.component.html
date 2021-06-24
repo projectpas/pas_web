@@ -1,4 +1,5 @@
-<div class="form-group">
+<div >
+    <!-- class="form-group" -->
   <div [ngClass]="(isViewMode == false) ? 'row' : 'row ui-tabview-panels'" class="padding-bottom-8">
       <button *ngIf="isViewMode == false" type="button" class="btn btn-primary" (click)="addPartNumber()"
           [disabled]="salesQuote.isApproved">
@@ -83,7 +84,7 @@
                                                 (click)="onAddTextAreaInfo(summaryPart,i, rowIndex)"></i>
                                             </div>
 
-                                            <div  *ngIf="isViewMode == true"class="form-group notes-popup-cstm mat_emo"
+                                            <div  *ngIf="isViewMode == true" class="form-group notes-popup-cstm mat_emo"
                                             style="width: 120px; margin-bottom: 0;">
                                             <div [innerHTML]="summaryPart.notes" matTooltipPosition="above"
                                             [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box"></div>
@@ -130,7 +131,7 @@
                           <ng-container *ngIf="summaryParts.length == 0">
                             <tbody>
                                 <tr>
-                                    <td colspan="37" class="sales-no-records-found" style="margin-left:-15%">
+                                    <td colspan="36" class="no-records-cstm no-records-msg" style="margin-left:-15%">
                                         No records found
                                     </td>
                                 </tr>
@@ -142,11 +143,11 @@
   </div>
 </div>
 <div *ngIf="isViewMode == false" class="view-mode-div">
-  <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
+  <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary"
       (click)="approve()">
       <span>Update</span>
   </button>
-  <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
+  <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary"
       (click)="approve()">
       <span>Save</span>
   </button>
