@@ -310,7 +310,13 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
         MessageSeverity.success
       );
       this.refreshOnDataSaveOrEditORDelete();
-      this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+      //this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+      this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId, this.deletedStatusInfo).subscribe(response => {
+        if (response && response.length > 0) {
+          this.salesOrderChargesList = response;
+          this.saveChargesListForSO.emit(this.salesOrderChargesList);
+        }
+      }, error => { });
     }, error => {
       this.isSpinnerVisible = false;
     })
@@ -662,7 +668,8 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       }
       if (fromDelete) {
         this.getTotalBillingAmount();
-        this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+        //this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+        this.updateChargesListForSO.emit(this.salesOrderChargesList);
       }
     }, error => {
       this.isSpinnerVisible = false;
