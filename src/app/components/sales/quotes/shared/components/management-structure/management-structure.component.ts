@@ -75,7 +75,7 @@ export class ManagementStructureComponent {
   getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
     empployid = empployid == 0 ? this.employeeId : empployid;
     editMSID = this.isEditMode ? editMSID = id : 0;
-    this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+    this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
       if (response) {
         const result = response;
         if (result[0] && result[0].level == 'Level1') {
@@ -199,7 +199,7 @@ export class ManagementStructureComponent {
 
   getManagementStructureForChildEdit(partChildList) {
     var editMSID = this.isEditMode ? partChildList.managementStructureId : 0;
-    this.commonService.getManagmentStrctureData(partChildList.managementStructureId, this.employeeId, editMSID).subscribe(response => {
+    this.commonService.getManagmentStrctureData(partChildList.managementStructureId, this.employeeId, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
       if (response) {
         const result = response;
         if (result[0] && result[0].level == 'Level1') {

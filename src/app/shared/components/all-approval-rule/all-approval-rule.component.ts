@@ -357,7 +357,7 @@ export class AllApprovalRuleComponent implements OnInit {
     getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEdit ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
             if (response) {
                 const result = response;
                 if (result[0] && result[0].level == 'Level1') {
