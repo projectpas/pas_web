@@ -1263,36 +1263,112 @@ export class SalesOrderCreateComponent implements OnInit {
     this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
   }
 
+  setFreightsAtPartLevel(freightList) {
+    if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
+      this.salesQuoteService.selectedParts.forEach((part, i) => {
+        let freightFound = freightList.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
+        if (freightFound !== undefined && freightFound.length > 0) {
+          let total = 0;
+
+          freightFound.forEach(element => {
+            total += element.billingAmount;
+          });
+
+          this.salesQuoteService.selectedParts[i].freight = total; //freightFound[0].total; //this.totalFreights;
+        }
+      });
+    }
+    this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
+  }
+
   saveSalesOrderFreightsList(e) {
-    this.totalFreights = e;
-    this.marginSummary.freightAmount = this.totalFreights;
-    this.salesOrderService.setTotalFreights(e);
-    this.setFreightsOrCharges();
+    let freightList = e;
+    this.setFreightsAtPartLevel(freightList);
     this.updateMarginSummary();
+
+    // this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.salesOrderService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
   }
 
   updateSalesOrderFreightsList(e) {
-    this.totalFreights = e;
-    this.marginSummary.freightAmount = this.totalFreights;
-    this.salesOrderService.setTotalFreights(e);
-    this.setFreightsOrCharges();
+    let freightList = e;
+    let listFreight = [];
+
+    freightList.forEach((freight, i) => {
+      let itemMasterId = this.salesQuoteService.selectedParts.find(a => a.salesOrderQuotePartId == freight.salesOrderQuotePartId).itemMasterId;
+      let total = Number(this.getTotalTaskBillingAmount(freight));
+      listFreight.push({ itemMasterId, total });
+    });
+
+    this.setChargesAtPartLevel(listFreight);
     this.updateMarginSummary();
+
+    // this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.salesOrderService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
+
+  setChargesAtPartLevel(chargeList) {
+    if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
+      this.salesQuoteService.selectedParts.forEach((part, i) => {
+        let chargeFound = chargeList.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
+        if (chargeFound !== undefined && chargeFound.length > 0) {
+          let total = 0;
+
+          chargeFound.forEach(element => {
+            total += element.billingAmount;
+          });
+
+          this.salesQuoteService.selectedParts[i].misc = total; //chargeFound[0].total; //this.totalCharges;
+        }
+      });
+    }
+    this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
   }
 
   saveSalesOrderChargesList(e) {
-    this.totalCharges = e;
-    this.salesOrderService.setTotalCharges(e);
-    this.marginSummary.misc = this.totalCharges;
-    this.setFreightsOrCharges();
+    let chargeList = e;
+    this.setChargesAtPartLevel(chargeList);
     this.updateMarginSummary();
+
+    // this.totalCharges = e;
+    // this.salesOrderService.setTotalCharges(e);
+    // this.marginSummary.misc = this.totalCharges;
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
   }
 
   updateSalesOrderChargesList(e) {
-    this.totalCharges = e;
-    this.salesOrderService.setTotalCharges(e);
-    this.marginSummary.misc = this.totalCharges;
-    this.setFreightsOrCharges();
+    let chargeList = e;
+    let listCharge = [];
+
+    chargeList.forEach((charge, i) => {
+      let itemMasterId = this.salesQuoteService.selectedParts.find(a => a.salesOrderQuotePartId == charge.salesOrderQuotePartId).itemMasterId;
+      let total = Number(this.getTotalTaskBillingAmount(charge));
+      listCharge.push({ itemMasterId, total });
+    });
+
+    this.setChargesAtPartLevel(listCharge);
     this.updateMarginSummary();
+
+    // this.totalCharges = e;
+    // this.salesOrderService.setTotalCharges(e);
+    // this.marginSummary.misc = this.totalCharges;
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
+
+  getTotalTaskBillingAmount(freight) {
+    let total = 0;
+    if (freight.billingAmount && !freight.isDeleted) {
+      total += Number(freight.billingAmount.toString().replace(/\,/g, ''));
+    }
+    return total.toFixed(2);
   }
 
   load(managementStructureId: number) {
