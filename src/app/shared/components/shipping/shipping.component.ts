@@ -848,22 +848,56 @@ checkedToGenerate(evt, ship) {
         this.billAddbutton = true;
     }
 
-    onClickBillSiteName(value, data?) {
-        this.resetAddressBillingForm();
-        if (value === 'Add') {
-            this.billAddbutton = true;
-            this.editSiteName = '';
-            this.isEditModeBilling = false;
-        }
-    }
+    // onClickBillSiteName(value, data?) {
+    //     this.resetAddressBillingForm();
+    //     if (value === 'Add') {
+    //         this.billAddbutton = true;
+    //         this.editSiteName = '';
+    //         this.isEditModeBilling = false;
+    //     }
+    // }
+    // onClickShipSiteName(value, data?) {
+    //     this.resetAddressShippingForm();
+    //     if (value === 'Add') {
+    //         this.ShipAddbutton = true;
+    //         this.editSiteName = '';
+    //         this.isEditModeShipping = false;
+    //     }
+    // }
+
     onClickShipSiteName(value, data?) {
-        this.resetAddressShippingForm();
-        if (value === 'Add') {
-            this.ShipAddbutton = true;
-            this.editSiteName = '';
-            this.isEditModeShipping = false;
-        }
-    }
+		this.resetAddressShippingForm();
+		if (value === 'Add') {
+			this.ShipAddbutton = true;
+			this.editSiteName = '';
+			this.isEditModeShipping = false;
+		}
+		if (value === 'Edit') {
+			this.ShipAddbutton = false;
+            this.isEditModeShipping = true;
+			if (this.shippingSieListOriginal && this.shippingSieListOriginal.length != 0) {
+				for (let i = 0; i < this.shippingSieListOriginal.length; i++) {
+					if (this.shippingSieListOriginal[i].siteID == this.shippingHeader.shipToSiteId) {
+						this.addressFormForShipping.isPrimary = this.shippingSieListOriginal[i].isPrimary;
+						this.addressFormForShipping.siteId = this.shippingSieListOriginal[i].siteID;
+						this.editSiteName = this.shippingSieListOriginal[i].siteName;
+						this.addressFormForShipping.siteName = getObjectByValue('siteName', this.shippingSieListOriginal[i].siteName, this.shippingSieListOriginal);
+						this.addressFormForShipping.addressID = this.shippingSieListOriginal[i].addressId;
+						this.addressFormForShipping.address1 = this.shippingSieListOriginal[i].address1;
+						this.addressFormForShipping.address2 = this.shippingSieListOriginal[i].address2;
+						this.addressFormForShipping.city = this.shippingSieListOriginal[i].city;
+						this.addressFormForShipping.stateOrProvince = this.shippingSieListOriginal[i].stateOrProvince;
+						this.addressFormForShipping.postalCode = this.shippingSieListOriginal[i].postalCode;
+						this.addressFormForShipping.countryId = getObjectByValue('value', this.shippingSieListOriginal[i].countryId, this.countriesList);
+                        this.addressFormForShipping.attention = this.shippingSieListOriginal[i].attention;
+                        return;
+					}
+				}
+
+			}
+		}
+	}
+
     resetAddressShippingForm() {
         this.addressFormForShipping = new CustomerShippingModel();
         this.isEditModeShipping = false;
@@ -901,6 +935,44 @@ checkedToGenerate(evt, ship) {
 
         }
     }
+    shipAddChange() {
+		this.ShipAddbutton = true;
+	}
+
+    onClickBillSiteName(value, data?) {
+		this.resetAddressBillingForm();
+		if (value === 'Add') {
+			this.billAddbutton = true;
+			this.editSiteName = '';
+			//this.isEditModeBillingPoOnly = false;
+			this.isEditModeBilling = false;
+		}
+		if (value === 'Edit') {
+
+			//this.addressSiteNameHeader = 'Edit Ship To Company Details';
+			this.billAddbutton = false;
+            this.isEditModeBilling = true;
+			if (this.billingSieListOriginal && this.billingSieListOriginal.length != 0) {
+				for (let i = 0; i < this.billingSieListOriginal.length; i++) {
+					if (this.billingSieListOriginal[i].siteID == this.shippingHeader.soldToSiteId) {
+						this.addressFormForBilling.isPrimary = this.billingSieListOriginal[i].isPrimary;
+						this.addressFormForBilling.siteId = this.billingSieListOriginal[i].siteID;
+						this.editSiteName = this.billingSieListOriginal[i].siteName;
+						this.addressFormForBilling.siteName = getObjectByValue('siteName', this.billingSieListOriginal[i].siteName, this.billingSieListOriginal);
+						this.addressFormForBilling.addressID = this.billingSieListOriginal[i].addressId;
+						this.addressFormForBilling.address1 = this.billingSieListOriginal[i].address1;
+						this.addressFormForBilling.address2 = this.billingSieListOriginal[i].address2;
+						this.addressFormForBilling.city = this.billingSieListOriginal[i].city;
+                        this.addressFormForBilling.attention = this.billingSieListOriginal[i].attention;
+						this.addressFormForBilling.stateOrProvince = this.billingSieListOriginal[i].stateOrProvince;
+						this.addressFormForBilling.postalCode = this.billingSieListOriginal[i].postalCode;
+						this.addressFormForBilling.countryId = getObjectByValue('value', this.billingSieListOriginal[i].countryId, this.countriesList);
+						return;
+					}
+				}
+			}
+		}
+	}
     filterCountries(event) {
         this.countriesList = this.countryList; 
         if (event.query !== undefined && event.query !== null) {
@@ -1038,6 +1110,7 @@ checkedToGenerate(evt, ship) {
         } else {
             this.commonService.createAllAddres(addressData).subscribe(response => {
                 if (response) {
+                    this.getSiteName(this.workOrderGeneralInformation['customerDetails']['customerId'], response)
                     this.alertService.showMessage(
                         'Success',
                         `Shipping Information Updated Successfully`,
@@ -1098,6 +1171,10 @@ checkedToGenerate(evt, ship) {
         } else {
             this.commonService.createAllAddres(addressData).subscribe(response => {
                 if (response) {
+
+                    let shiptocustomerobj = getObjectByValue('customerId', this.shippingHeader.shipToCustomerId.customerId, this.customerNamesList);
+                    this.shippingHeader.shipToCustomerId = shiptocustomerobj;
+                    this.getSiteNamesByShipCustomerId(shiptocustomerobj.customerId, response);
                     this.alertService.showMessage(
                         'Success',
                         `Shipping Information Updated Successfully`,
