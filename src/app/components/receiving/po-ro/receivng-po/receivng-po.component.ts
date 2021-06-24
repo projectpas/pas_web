@@ -86,6 +86,9 @@ export class ReceivngPoComponent implements OnInit {
     taggedbycustomer : boolean = false;
     taggedbyother : boolean = false;
     taggedbyvendor : boolean = false;
+    certbycustomer : boolean = false;
+    certbyother : boolean = false;
+    certbyvendor : boolean = false;
     ownercustomer: boolean = false;
     ownerother: boolean = false;
     ownervendor: boolean = false;
@@ -757,6 +760,9 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.taggedByType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.taggedBy = this.purchaseOrderData.vendor.vendorId;
 
+            stockLine.certifiedTypeId = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
+            stockLine.certifiedById = this.purchaseOrderData.vendor.vendorId;
+
             stockLine.ownerType = AppModuleEnum.Vendor;
             stockLine.owner = this.purchaseOrderData.vendor.vendorId;           
             stockLine.unitOfMeasureId = part.unitOfMeasureId;
@@ -773,6 +779,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
             stockLine.taggedByObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
+            stockLine.certByObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
             
 
             if (part.itemMaster != undefined) {
@@ -1053,6 +1060,27 @@ export class ReceivngPoComponent implements OnInit {
         }
     }
 
+    onCertTypeChange(event, stockLine) {
+        stockLine.certifiedById = '';
+        stockLine.certByObject = {};
+
+        if (event.target.value === AppModuleEnum.Customer) {
+            this.certbycustomer = true;
+            this.certbyother = false;
+            this.certbyvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Vendor) {
+            this.certbyother = true;
+            this.certbycustomer = false;
+            this.certbyvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Company) {
+            this.certbyvendor = true;
+            this.certbycustomer = false;
+            this.certbyother = false;
+        }
+    }
+
 
     onObtainSelect(stockLine: StockLine, type): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;        
@@ -1097,6 +1125,18 @@ export class ReceivngPoComponent implements OnInit {
             this.arrayComplist.push(stockLine.taggedByObject.Key);
         }
     }
+
+    oncertTypeSelect(stockLine: StockLine, type): void {
+        stockLine.certifiedById = stockLine.certByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.certByObject.Key);
+        }
+    }
+
 
     onTraceableToChange(event, stockLine) {
         stockLine.traceableTo = '';
