@@ -1374,8 +1374,10 @@ export class ReceivngPoComponent implements OnInit {
                         part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                         part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                     }
-                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                    part.timeLifeList[i] = timeLifeToCopy;
+                    if (part.itemMaster.isTimeLife) {
+                        var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                        part.timeLifeList[i] = timeLifeToCopy;
+                    }
                 }
                 // for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                 //     if (part.itemMaster.isSerialized) {
@@ -1603,8 +1605,10 @@ export class ReceivngPoComponent implements OnInit {
                         part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                         part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                     }
-                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                    part.timeLifeList[i] = timeLifeToCopy;
+                    if (part.itemMaster.isTimeLife) {
+                        var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                        part.timeLifeList[i] = timeLifeToCopy;
+                    }
                 }
             }
         }
@@ -1693,8 +1697,10 @@ export class ReceivngPoComponent implements OnInit {
                     part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                     part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                 }
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                part.timeLifeList[i] = timeLifeToCopy;
+                if (part.itemMaster.isTimeLife) {
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
+                }
             }
         }
     }
@@ -1720,8 +1726,10 @@ export class ReceivngPoComponent implements OnInit {
                     part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                     part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                 }
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                part.timeLifeList[i] = timeLifeToCopy;
+                if (part.itemMaster.isTimeLife) {
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
+                }
             }
         }
     }

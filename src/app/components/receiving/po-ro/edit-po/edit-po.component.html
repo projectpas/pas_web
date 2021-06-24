@@ -494,11 +494,11 @@
                                         <th>Certified Date</th>
                                         <th class="date">Certified Due Date</th>
                                         <th>Tag Type</th>
-                                        <th>Tagged By Type</th>                                        
-                                        <th>Tagged By </th>
-                                        <th>UOM</th>
-                                        <th class="date">Date Tagged </th>
+                                        <th>Tag By</th>                                        
+                                        <th></th>
+                                        <th class="date">Tag Date</th>
                                         <th class="date">Tag Exp Date </th>
+                                        <th>UOM</th>
                                         <th>Shipping Ref#/AWB</th>
                                         <th>Ship Via</th>
                                         <th>Shipping Account</th>
@@ -1006,21 +1006,6 @@
                                                     id="taggedBy{{stockline_row_index}}">
                                                 </p-autoComplete>
                                             </td> -->
-                                            <td>                                                                                     
-                                                <p-dropdown class="rpo-acomp" 
-                                                    [options]="allPurchaseUnitOfMeasureinfo" 
-                                                    filter="true"
-                                                    appendTo="body"
-                                                    [disabled]="!SL.isEnabled"
-                                                    [(ngModel)]="SL.unitOfMeasureId" 
-                                                    [resetFilterOnHide]="true" 
-                                                    placeholder="-- Select --" 
-                                                    [showClear]="true" 
-                                                    name="purchaseUnitOfMeasureId{{stockline_row_index}}"
-                                                    id="purchaseUnitOfMeasureId{{stockline_row_index}}" required>
-
-                                                </p-dropdown>   
-                                            </td>                                        
                                             <td>
                                                 <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"
@@ -1037,6 +1022,21 @@
                                                     id="expirationDate{{stockline_row_index}}"
                                                     [(ngModel)]="SL.expirationDate"></p-calendar>
                                             </td>
+                                            <td>                                                                                     
+                                                <p-dropdown class="rpo-acomp" 
+                                                    [options]="allPurchaseUnitOfMeasureinfo" 
+                                                    filter="true"
+                                                    appendTo="body"
+                                                    [disabled]="!SL.isEnabled"
+                                                    [(ngModel)]="SL.unitOfMeasureId" 
+                                                    [resetFilterOnHide]="true" 
+                                                    placeholder="-- Select --" 
+                                                    [showClear]="true" 
+                                                    name="purchaseUnitOfMeasureId{{stockline_row_index}}"
+                                                    id="purchaseUnitOfMeasureId{{stockline_row_index}}" required>
+
+                                                </p-dropdown>   
+                                            </td>                                             
                                             <td>
                                                 <input class="form-control" type="text" [disabled]="!SL.isEnabled"
                                                     [(ngModel)]="SL.shippingReference" pInputText [maxLength]="200">

@@ -829,8 +829,7 @@ export class StockLineSetupComponent implements OnInit {
 					nhaItemMasterId: this.getInactiveObjectNHATLAOnEdit('nhaItemMasterId', res.nhaItemMasterId, this.allNHAInfo),
 					tlaItemMasterId: this.getInactiveObjectNHATLAOnEdit('tlaItemMasterId', res.tlaItemMasterId, this.allTLAInfo),
 					receiverNumber : res.receiver,					
-				};
-				
+				};								
 				this.receiverNumber = res.receiver;
 				//this.stockLineForm.purchaseOrderId = getObjectById('purchaseOrderId',  res.purchaseOrderId == null ? 0 :  res.purchaseOrderId, this.allPolistInfo);
 				//this.stockLineForm.purchaseOrderId = getObjectById('repairOrderId',  res.repairOrderId == null ? 0 :  res.repairOrderId, this.allRolistInfo);
@@ -852,16 +851,7 @@ export class StockLineSetupComponent implements OnInit {
 				this.loadRevicePnPartNumData('',res.revicedPNId);
 				//this.loadTagByEmployeeData('',res.taggedBy);
 				
-				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);
-
-				if (res.isSerialized == true) {
-					this.stockLineForm.isSerialized = res.isSerialized;
-					this.hideSerialNumber = false;
-				}
-				else {
-					this.stockLineForm.isSerialized = res.isSerialized;
-					this.hideSerialNumber = true;
-				}								
+				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);												
 				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {					
 					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;					
 					//this.sourceTimeLife = res.timelIfeData;										
@@ -880,6 +870,19 @@ export class StockLineSetupComponent implements OnInit {
 					this.disableVendor = true;
 				}
 				this.getSiteDetailsInactive(res);
+				setTimeout(() => {
+					if (res.isSerialized == true) {
+						this.stockLineForm.isSerialized = res.isSerialized;
+						this.hideSerialNumber = false;
+					}
+					else {
+						this.stockLineForm.isSerialized = res.isSerialized;
+						this.hideSerialNumber = true;
+					}
+					if(res.expirationDate){
+						this.stockLineForm.manufacturingDays = this.onChangeMfgDateonEdit(res.expirationDate);
+					}
+				},1000);
 			});
 		});
 	}
@@ -1834,7 +1837,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.isSpinnerVisible = false;
 			this.stockLineForm = {
 				...this.stockLineForm,
-				itemMasterId: getObjectById('itemMasterId', this.saveStockLineForm.itemMasterId, this.allPartnumbersList),
+				//itemMasterId: getObjectById('itemMasterId', this.saveStockLineForm.itemMasterId, this.allPartnumbersList),
 			}
 
 			this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
@@ -2343,6 +2346,18 @@ export class StockLineSetupComponent implements OnInit {
 		timeLife.cyclesSinceRepair = ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00'));
 		timeLife.timeSinceRepair = ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00'));				
         return timeLife;
+	}
+
+	onChangeMfgDateonEdit(value) {
+		if (value) {
+			const todayDate = new Date();
+			const mfgdate = new Date(value);
+			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			return this.stockLineForm.manufacturingDays = diffDays;
+		}else{
+			return 0
+		}		
 	}
 	
 }

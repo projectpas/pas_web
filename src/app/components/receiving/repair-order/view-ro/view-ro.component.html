@@ -328,10 +328,10 @@
                             <th>Certified Date</th>
                             <th class="date">Certified Due Date</th>
                             <th>Tag Type</th>
-                            <th>Tagged Type </th>
-                            <th>Tagged By </th>
-                            <th>UOM </th>
-                            <th class="date">Date Tagged </th>
+                            <th>Tag By</th>
+                            <th></th>
+                            <th>UOM</th>
+                            <th class="date">Tag Date</th>
                             <th class="date">Tag Exp Date </th>
                             <th>Shipping Ref#/AWB</th>
                             <th>Ship Via</th>
@@ -445,7 +445,6 @@
                                 <td>{{SL.tagType}}</td>
                                 <td>{{SL.taggedByTypeName}}</td>
                                 <td>{{SL.taggedByName}}</td>
-                                <td>{{SL.unitOfMeasure}}</td>
                                 <td>
                                     <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
                                         [disabled]="!SL.isEnabled" [showIcon]="true"
@@ -457,6 +456,7 @@
                                         [disabled]="!SL.isEnabled" [ngModelOptions]="{standalone: true}"
                                         [(ngModel)]="SL.expirationDate"></p-calendar>
                                 </td>
+                                <td>{{SL.unitOfMeasure}}</td>                                
                                 <td>{{SL.shippingReference}}</td>
                                 <td>{{SL.shippingViaText}}</td>
                                 <td>{{SL.shippingAccount}}</td>

@@ -945,10 +945,21 @@
                                     (ngModelChange)="enableSave()"></p-calendar>
                             </div>
                             <div class="form-group">
-                                <label>Tag Type</label>
-                                <p-multiSelect [options]="allTagTypes" [(ngModel)]="stockLineForm.tagType"
-                                    name="tagType" (ngModelChange)="enableSave()">
-                                </p-multiSelect>
+                                <label>Inspected By</label>
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                    [(ngModel)]="stockLineForm.inspectionBy" name="inspectionBy"
+                                    [suggestions]="certifyByNames" (completeMethod)="filterEmployees($event)"
+                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    (ngModelChange)="enableSave()" (onSelect)="onChangeInspectedDate()"
+                                    [forceSelection]="true">
+                                </p-autoComplete>
+                            </div>
+                            <div class="form-group">
+                                <label>Inspected Date</label>
+                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" name="inspectionDate"
+                                    [(ngModel)]="stockLineForm.inspectionDate" (ngModelChange)="enableSave()">
+                                </p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Tag Num</label>
@@ -956,14 +967,13 @@
                                     [(ngModel)]="stockLineForm.tagNumber" (ngModelChange)="enableSave()" />
                             </div>
                             <div class="form-group">
-                                <label>Tag Date</label>
-                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
-                                    [monthNavigator]="true" yearRange="1900:2100" name="tagDate"
-                                    [maxDate]="minDateValue" [(ngModel)]="stockLineForm.tagDate"
-                                    (ngModelChange)="enableSave()"></p-calendar>
+                                <label>Tag Type</label>
+                                <p-multiSelect [options]="allTagTypes" [(ngModel)]="stockLineForm.tagType"
+                                    name="tagType" (ngModelChange)="enableSave()">
+                                </p-multiSelect>
                             </div>
                             <div class="form-group">
-                                <label>Tagged Type</label>
+                                <label>Tag By</label>
                                 <select [(ngModel)]="stockLineForm.taggedByType" name="taggedByType"
                                     (change)="onSelectTaggedType()" (ngModelChange)="enableSave()">
                                     <option value="0">-- Select --</option>
@@ -1010,7 +1020,14 @@
                                             [(ngModel)]="stockLineForm.taggedByName" (ngModelChange)="enableSave()">
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
+                            <div class="form-group">
+                                <label>Tag Date</label>
+                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" name="tagDate"
+                                    [maxDate]="minDateValue" [(ngModel)]="stockLineForm.tagDate"
+                                    (ngModelChange)="enableSave()"></p-calendar>
+                            </div>                            
                             <!-- <div class="form-group">
                                 <label>Tagged By</label>
                                 <p-autoComplete field="label" class="pautocomp-cstm"
@@ -1020,27 +1037,9 @@
                                     (ngModelChange)="enableSave()" 
                                     [forceSelection]="true">
                                 </p-autoComplete>
-                            </div> -->
-                            <div class="form-group">
-                                <label>Inspected By</label>
-                                <p-autoComplete field="label" class="pautocomp-cstm"
-                                    [(ngModel)]="stockLineForm.inspectionBy" name="inspectionBy"
-                                    [suggestions]="certifyByNames" (completeMethod)="filterEmployees($event)"
-                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                    (ngModelChange)="enableSave()" (onSelect)="onChangeInspectedDate()"
-                                    [forceSelection]="true">
-                                </p-autoComplete>
-                            </div>
-                            <div class="form-group">
-                                <label>Inspected Date</label>
-                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
-                                    [monthNavigator]="true" yearRange="1900:2100" name="inspectionDate"
-                                    [(ngModel)]="stockLineForm.inspectionDate" (ngModelChange)="enableSave()">
-                                </p-calendar>
-                            </div>
+                            </div> -->                            
                         </div>
                     </div>
-
                     <div class="card card-stock">
                         <div class="card-header">
                             <h5>Other</h5>

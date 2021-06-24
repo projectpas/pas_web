@@ -1503,8 +1503,10 @@ export class ReceivingRoComponent implements OnInit {
                         part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                         part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                     }
-                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                    part.timeLifeList[i] = timeLifeToCopy;
+                    if (part.itemMaster.isTimeLife) {
+                        var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                        part.timeLifeList[i] = timeLifeToCopy;
+                    }
                 }
             }
         }
@@ -2175,6 +2177,7 @@ export class ReceivingRoComponent implements OnInit {
             //     var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
             //     part.timeLifeList[i] = timeLifeToCopy;
             // }
+            
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                 var sernotprovide = false;
                 var serno = "";
@@ -2188,8 +2191,10 @@ export class ReceivingRoComponent implements OnInit {
                     part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                     part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                 }
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                part.timeLifeList[i] = timeLifeToCopy;
+                if (part.itemMaster.isTimeLife) {
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
+                }
             }
         }
     }
@@ -2217,8 +2222,10 @@ export class ReceivingRoComponent implements OnInit {
                     part.stocklineListObj[i].serialNumberNotProvided = sernotprovide;
                     part.stocklineListObj[part.currentSERIndex].serialNumber= serno;
                 }
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
-                part.timeLifeList[i] = timeLifeToCopy;
+                if (part.itemMaster.isTimeLife) {
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };
+                    part.timeLifeList[i] = timeLifeToCopy;
+                }
             }
         }
     }   

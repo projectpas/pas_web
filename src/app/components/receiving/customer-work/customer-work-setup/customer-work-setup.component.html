@@ -805,13 +805,14 @@
                                     (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [(ngModel)]="receivingForm.inspectedDate"></p-calendar>
                             </div>
-
-
-
-
-                            
                             <div class="form-group">
-                                <label>Tagged Type</label>
+                                <label>Tag Type</label>
+                                <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
+                                </p-multiSelect>
+                            </div>                             
+                            <div class="form-group">
+                                <label>Tag By</label>
                                 <select [(ngModel)]="receivingForm.taggedByType" name="taggedByType"
                                     (change)="onSelectTaggedType(receivingForm.taggedByType)" (ngModelChange)="getActive()">
                                     <option value="0">-- Select --</option>
@@ -894,15 +895,9 @@
                                     [(ngModel)]="receivingForm.taggedById"
                                     (ngModelChange)="getActive()">             
                                 </p-dropdown>
-                            </div>       -->
+                            </div>       -->                                            
                             <div class="form-group">
-                                <label>Tag Type</label>
-                                <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
-                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
-                                </p-multiSelect>
-                            </div>                 
-                            <div class="form-group">
-                                <label>Tagged Date</label>
+                                <label>Tag Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="tagDate"
                                     (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [(ngModel)]="receivingForm.tagDate"></p-calendar>

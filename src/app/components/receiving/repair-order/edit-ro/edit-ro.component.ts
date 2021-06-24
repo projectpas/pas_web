@@ -1812,28 +1812,21 @@ export class EditRoComponent implements OnInit {
                     if (stockLine.repairOrderUnitCost == undefined || (stockLine.repairOrderUnitCost != undefined && stockLine.repairOrderUnitCost.toString() == '')) {
                         this.alertService.showMessage(this.pageTitle, "Please enter Unit Cost in Part No. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
-                    }                    
-                    // if (moment(stockLine.manufacturingDate, 'MM/DD/YYYY', true).isValid()) {
-                    //     if (moment(stockLine.tagDate, 'MM/DD/YYYY', true).isValid()) {
-                        if(stockLine.manufacturingDate != undefined ||  stockLine.manufacturingDate != null || stockLine.manufacturingDate !=""){
-                            if(stockLine.tagDate != undefined ||  stockLine.tagDate != null || stockLine.tagDate !=""){
-                                if (stockLine.tagDate <= stockLine.manufacturingDate) {   
-                                    this.alertService.showMessage(this.pageTitle, "Tag Date must be greater than Manufacturing Date. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
-                                    return;                                                            
-                                }
+                    } 
+                    if(stockLine.manufacturingDate){
+                        if(stockLine.tagDate){
+                            if (new Date(stockLine.tagDate) <=  new Date(stockLine.manufacturingDate)) {   
+                                this.alertService.showMessage(this.pageTitle, "Tag Date must be greater than Manufacturing Date. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                                return;                                                            
                             }
-                        //}                        
-                        // if (moment(stockLine.certifiedDate, 'MM/DD/YYYY', true).isValid()) {
-                            if(stockLine.certifiedDate != undefined ||  stockLine.certifiedDate != null || stockLine.certifiedDate !=""){
-                                if (stockLine.certifiedDate <= stockLine.manufacturingDate) {
-                                    this.alertService.showMessage(this.pageTitle, "Certified Date must be greater than Manufacturing Date. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
-                                    return;                                  
-                                }
+                         }                      
+                         if(stockLine.certifiedDate){
+                            if (new Date(stockLine.certifiedDate) <= new Date(stockLine.manufacturingDate)) {
+                                this.alertService.showMessage(this.pageTitle, "Certified Date must be greater than Manufacturing Date. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                                return;                                  
                             }
                         }
-                        //}                        
-                   // }
-
+                    }
                     for (var tl of part.timeLife) {
                         if (tl.stockLineDraftId == stockLine.stockLineDraftId) {
                             timeLife.push(tl);
