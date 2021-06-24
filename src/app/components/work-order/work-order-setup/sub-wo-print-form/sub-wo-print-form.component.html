@@ -290,9 +290,6 @@
                                     <table rules=none class=" top-table-alignment print-friendly border table-border-right parttable print-table table-margins">
 
                                         <tbody>
-
-
-
                                             <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isRemovalReasons: false">
                                                 <td style="border-bottom:none;vertical-align:top; width: 20%;">
                                                     <b> Reported Removal Reason: </b> <p>{{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.removalReason: ''}}</p>
@@ -358,7 +355,7 @@
                                               <td style="width: 20%;"></td>
                                               <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspector : ''}}</td>
                                               <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.preliinaryReviewInspectorDate :'' }}</td>
-                                          </tr>
+                                            </tr>
                                           <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreliinaryReview: false" style="border-bottom:1px solid black">
                                             <td style="width: 20%;"></td>
                                             <td style="width: 20%;"></td>
@@ -406,7 +403,7 @@
 
                                             </tr>
 
-                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isWorkPerformed: false">
+                                            <tr *ngIf="isWorkPerformed && !isshortteardown">
                                                 <td style="border-bottom:none;vertical-align:top;width: 20%;">
                                                     <b>Detail of Work Performed: </b><p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedReason: ''}}</p>
 
@@ -416,7 +413,7 @@
                                                 <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnician:''}}</td>
                                                 <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate   : '' }}</td>
                                             </tr>
-                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isWorkPerformed: false" style="border-bottom:1px solid black">
+                                            <tr *ngIf="isWorkPerformed && !isshortteardown" style="border-bottom:1px solid black">
                                                 <td style="width: 20%;"></td>
                                                 <td style="width: 20%;">Signature</td>
                                                 <td style="width: 20%;"></td>
@@ -464,7 +461,7 @@
 
                                             </tr>
 
-                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPmaDerBulletins: false">
+                                            <tr *ngIf="isPmaDerBulletins  && !isshortteardown">
                                                 <td style="border-bottom:none;vertical-align:top;width: 20%;">
                                                     <b>Service Bulletins (SBs),Airworthiness Directives (ADs) and Mods:  </b> <p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.mandatoryService:''}} , {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.airworthinessDirecetives:''}}</p>
 
@@ -474,7 +471,7 @@
                                                 <td style="width: 20%;"></td>
                                                 <td style="width: 20%;"></td>
                                             </tr>
-                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPmaDerBulletins: false" style="border-bottom:1px solid black">
+                                            <tr *ngIf="isPmaDerBulletins  && !isshortteardown" style="border-bottom:1px solid black">
                                                 <td style="width: 20%;"></td>
                                                 <td style="width: 20%;"></td>
                                                 <td style="width: 20%;"></td>
@@ -483,7 +480,7 @@
 
                                             </tr>
 
-                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isTestDataUsed: false">
+                                            <tr *ngIf="isTestDataUsed  && this.isshortteardown == false">
                                                 <td style="border-bottom:none;vertical-align:top;width: 20%;">
                                                     <b>Test Equipment and Test Data Used:  </b> <p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.datausedReason: ''}}</p>
 
@@ -493,7 +490,7 @@
                                                 <td style="width: 20%;"></td>
                                                 <td style="width: 20%;"></td>
                                             </tr>
-                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isTestDataUsed: false" style="border-bottom:1px solid black">
+                                            <tr *ngIf="isTestDataUsed && this.isshortteardown == false" style="border-bottom:1px solid black">
                                                 <td style="width: 20%;"></td>
                                                 <td style="width: 20%;"></td>
                                                 <td style="width: 20%;"></td>
@@ -501,7 +498,7 @@
                                                 <td style="width: 20%;"></td>
 
                                             </tr>
-                                            <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isBulletinsModification: false">
+                                            <tr *ngIf="this.isBulletinsModification == true && this.isshortteardown == false">
                                               <td style="border-bottom:none;vertical-align:top;width: 20%;">
                                                   <b>Bulletins And Modifications:  </b> <p> {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.bulletinsModificationReason: ''}}</p>
 
@@ -511,7 +508,7 @@
                                               <td style="width: 20%;"></td>
                                               <td style="width: 20%;"></td>
                                           </tr>
-                                          <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isBulletinsModification: false" style="border-bottom:1px solid black">
+                                          <tr *ngIf="this.isBulletinsModification == true && this.isshortteardown == false" style="border-bottom:1px solid black">
                                               <td style="width: 20%;"></td>
                                               <td style="width: 20%;"></td>
                                               <td style="width: 20%;"></td>
