@@ -66,6 +66,8 @@ import { ExchangeSalesOrderPartDetailsComponent } from "../components/exchange-s
 import { ExchangeSalesOrderPartNumberFilterComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-part-number/exchange-sales-order-part-number-filter/exchange-sales-order-part-number-filter.component";
 import { ExchangeSalesOrderMarginComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-margin/exchange-sales-order-margin.component";
 import { AddExchangeSalesOrderReserveUnreservePartNumberComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-reserve-unreserve-part-number/add-exchange-sales-order-reserve-unreserve-part-number.component";
+import { ExchangeSalesOrderPickTicketsComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-pick-tickets/exchange-sales-order-pick-tickets.component";
+import { ExchangeSalesOrderPickTicketComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-pick-ticket/exchange-sales-order-pick-ticket.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -132,9 +134,11 @@ import { AddExchangeSalesOrderReserveUnreservePartNumberComponent } from "../com
     ExchangeSalesOrderPartDetailsComponent,
     ExchangeSalesOrderPartNumberFilterComponent,
     ExchangeSalesOrderMarginComponent,
-    AddExchangeSalesOrderReserveUnreservePartNumberComponent
+    AddExchangeSalesOrderReserveUnreservePartNumberComponent,
+    ExchangeSalesOrderPickTicketComponent,
+    ExchangeSalesOrderPickTicketsComponent,
   ],
   providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService,ActionService,ActionEndpoint,ExchangeSalesOrderService,ExchangeSalesOrderEndpointService],
-  entryComponents: []
+  entryComponents: [ExchangeSalesOrderPickTicketsComponent,ExchangeSalesOrderPickTicketComponent,]
 })
 export class ExchangepagesModule { }

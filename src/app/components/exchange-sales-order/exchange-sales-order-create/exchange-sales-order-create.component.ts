@@ -62,6 +62,7 @@ import { forkJoin } from "rxjs/observable/forkJoin";
 // import { SalesOrderShippingComponent } from "../../sales/order/shared/components/sales-order-shipping/sales-order-shipping.component";
 // import { SalesOrderPickTicketsComponent } from "../../sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 import { ExchangeSalesOrderPartNumberComponent } from '../shared/components/exchange-sales-order-part-number/exchange-sales-order-part-number.component';
+import { ExchangeSalesOrderPickTicketsComponent } from '../shared/components/exchange-sales-order-pick-tickets/exchange-sales-order-pick-tickets.component';
 @Component({
   selector: 'app-exchange-sales-order-create',
   templateUrl: './exchange-sales-order-create.component.html',
@@ -144,6 +145,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   charge = [];
   @Input() salesQuoteId: number = 0;
   @ViewChild(ExchangeSalesOrderPartNumberComponent, { static: false }) public exchangeSalesOrderPartNumberComponent: ExchangeSalesOrderPartNumberComponent;
+  @ViewChild(ExchangeSalesOrderPickTicketsComponent, { static: false }) public exchangeSalesOrderPickTicketsComponent: ExchangeSalesOrderPickTicketsComponent;
   // @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
   // @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
   salesOrderCopyParameters: ISalesOrderCopyParameters;
@@ -226,7 +228,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     });
 
     this.exchangequoteService.getSelectedParts().subscribe(data => {
-      //this.selectedParts = data;
+      this.selectedParts = data;
       //this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.selectedParts, this.marginSummary);
     });
 
@@ -1191,55 +1193,13 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
-    let indexToInc: number = 0;
-    if (this.soSettingsList[0] != null &&
-      (!this.soSettingsList[0].isApprovalRule ||
-        (this.soSettingsList[0].isApprovalRule
-          && new Date(this.soSettingsList[0].effectiveDate) > new Date(this.todayDate)))) {
-      indexToInc = 1;
-    }
-
     if (event.index == 0) {
       this.exchangeSalesOrderPartNumberComponent.refresh();
-      //this.salesOrderPartNumberComponent.refreshParts();
     }
-    if (event.index == 1 && (this.soSettingsList[0] != null
-      && this.soSettingsList[0].isApprovalRule
-      && new Date(this.todayDate) >= new Date(this.soSettingsList[0].effectiveDate))) {
-      //this.salesOrderApproveComponent.refresh(this.marginSummary);
+    if (event.index == 1) {
+      this.exchangeSalesOrderPickTicketsComponent.refresh(this.id);
     }
-    if (event.index == (2 - indexToInc)) {
-      //this.salesOrderCustomerApprovalComponent.refresh(this.marginSummary, this.salesOrderView.salesOrder.salesOrderId, this.salesOrderView.salesOrder.salesOrderQuoteId);
-    }
-    if (event.index == (3 - indexToInc)) {
-      this.showAddresstab = true;
-    }
-    if (event.index == (4 - indexToInc)) {
-      if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
-        //this.salesOrderFreightComponent.refresh(false);
-      } else {
-        //this.salesOrderFreightComponent.refresh(true);
-      }
-    }
-    if (event.index == (5 - indexToInc)) {
-      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
-        //this.salesOrderChargesComponent.refresh(false);
-      } else {
-        //this.salesOrderChargesComponent.refresh(true);
-      }
-    }
-    if (event.index == (6 - indexToInc)) {
-      //this.salesOrderPickTicketsComponent.refresh(this.id);
-    }
-    if (event.index == (7 - indexToInc)) {
-      //this.salesOrderShippingComponent.refresh(this.selectedParts);
-    }
-    if (event.index == (8 - indexToInc)) {
-      //this.salesOrderBillingComponent.refresh(this.id); //(this.selectedParts);
-    }
-    if (event.index == (10 - indexToInc)) {
-      //this.salesOrderAnalysisComponent.refresh(this.id);
-    }
+
   }
 
   updateMarginSummary() {
