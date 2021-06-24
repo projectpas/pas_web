@@ -21,6 +21,7 @@ export class CustomerShippingModel {
                 this.isPrimary = false;
                 this.contactTagId = 0
                 this.tagName ="";
+                this.attention="";
         
                 // this.CustomerShippingId = CustomerShippingId;
                 // this.CustomerId = CustomerId;
@@ -53,6 +54,7 @@ export class CustomerShippingModel {
             public isPrimary: boolean;
             public contactTagId : number;
             public tagName:string
+            public attention:string
           
             // public CustomerShippingId: number;
             // public CustomerId: number;

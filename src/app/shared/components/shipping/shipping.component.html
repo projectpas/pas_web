@@ -541,6 +541,13 @@
                                             matTooltip="Add Site Name" matTooltipPosition="above"
                                             data-toggle="modal" data-target="#createBillingSiteName1"
                                             (click)="onClickBillSiteName('Add')"></a></span>
+
+                                            <span class="pencil-span"><a class="btn nobg" matTooltipPosition="above"
+                                                matTooltip="Edit Site Name"
+                                                *ngIf="this.CustomerId && this.CustomerId > 0"
+                                                data-toggle="modal" data-target="#createBillingSiteName1"
+                                                (click)="onClickBillSiteName('Edit', shippingHeader)"><i class="fa fa-pencil"></i></a>
+                                        </span>
                                     </label>
                                    
                                 </div>
@@ -674,6 +681,13 @@
                                             matTooltip="Add Site Name" matTooltipPosition="above"
                                             data-toggle="modal" data-target="#createPOSiteName1"
                                             (click)="onClickShipSiteName('Add')"></a></span>
+
+                                            <span class="pencil-span"><a class="btn nobg"
+                                                *ngIf="shippingHeader.shipToCustomerId && shippingHeader.shipToSiteId > 0"
+                                                matTooltip="Edit Site Name" matTooltipPosition="above" data-toggle="modal"
+                                                data-target="#createPOSiteName1"
+                                                (click)="onClickShipSiteName('Edit',shippingHeader)"><i class="fa fa-pencil"></i></a>
+                                        </span>
                                     </label>
                              
                                 </div>
@@ -900,6 +914,11 @@
                             </div>
                         </div>
                         <div class="form-group col-md-12">
+                            <label class="col-md-6">Attention <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="soldattention"
+                            (change)="billAddChange()" [(ngModel)]="addressFormForBilling.attention" required>
+                        </div>
+                        <div class="form-group col-md-12">
                             <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
                             <input type="text" class="form-control col-md-6" name="address1" (change)="billAddChange()"
                                 [(ngModel)]="addressFormForBilling.address1" required>
@@ -980,6 +999,11 @@
                             <!-- <input type="text" class="form-control col-md-6" name="siteName" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.siteName" required>-->
                         </div>
                         <div class="form-group col-md-12">
+                            <label class="col-md-6">Attention <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="shipattention"
+                            (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.attention" required>
+                        </div>
+                        <div class="form-group col-md-12">
                             <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
                             <input type="text" class="form-control col-md-6" name="address1" (change)="shipAddChange()"
                                 [(ngModel)]="addressFormForShipping.address1" required>
@@ -1013,6 +1037,7 @@
                                 [minLength]="1" [dropdown]="true" errorMessage="Records not found"
                                 [forceSelection]="true" required></p-autoComplete>
                         </div>
+                     
                         <!-- <div class="form-group col-md-12" style="margin-top: 8px;">
                             <button type="button" class="btn btn-primary" *ngIf="(!isEditModeShipping) || isEditModeShipping" (click)="saveShippingAddress();"  [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button> <!--resetAddressShippingForm();-->
                         <!-- <button type="button" class="btn btn-primary" *ngIf="showIsPoOnlyButton &&  (!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShippingPoOnly" [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists) || addressFormForShipping.isPrimary" (click)="saveShippingAddressToPO();"   data-dismiss="modal">{{isEditModeShippingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>

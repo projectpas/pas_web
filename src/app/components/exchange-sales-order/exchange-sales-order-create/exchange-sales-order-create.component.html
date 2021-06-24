@@ -577,12 +577,15 @@
                   <ng-container *ngIf="((isCreateModeHeader||isEdit) && !isEmailTabEnabled)">
                       <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
                           <p-tabPanel header="Parts List" [selected]="true">
-                              <app-exchange-sales-order-part-number [exchangeQuote]="salesQuote" [exchangeQuoteId]="id"
+                              <app-exchange-sales-order-part-number [exchangeQuote]="salesQuote" [exchangeSalesOrderId]="id"
                                   [employeesList]="employeesList" [isViewMode]="false" [customer]="customerDetails"
                                   [exchangeQuoteView]="salesOrderView" (on-parts-save)="onPartsSaveEvent($event)"
                                   [totalCharges]="totalCharges" [totalFreights]="totalFreights"
                                   [defaultSettingPriority]="defaultSettingPriority">
                               </app-exchange-sales-order-part-number>
+                          </p-tabPanel>
+                          <p-tabPanel header="Pick Ticket">
+                            <app-exchange-sales-order-pick-tickets></app-exchange-sales-order-pick-tickets>
                           </p-tabPanel>
                           <!-- <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                               <app-sales-order-approve>

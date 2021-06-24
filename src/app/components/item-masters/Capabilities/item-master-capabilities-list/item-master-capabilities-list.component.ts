@@ -1407,6 +1407,16 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 				MessageSeverity.error
 			); }
     }
+
+    checkChange(e) {
+        this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+        const data = [...this.allItemMasterCapsList.filter(x => {
+            if(x.isVerified == e.target.checked){
+                return x; 
+            }                
+        })]
+        this.allItemMasterCapsList = data;       
+    }
     
     columnsChanges() {}
 }

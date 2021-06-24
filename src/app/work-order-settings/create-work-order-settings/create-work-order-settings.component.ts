@@ -117,6 +117,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.receivingForm.createdBy = 0;
         this.receivingForm.updatedBy = 0;
         this.receivingForm.isApprovalRule = false;
+        this.receivingForm.isshortteardown = false;
         this.receivingForm.receivedDate = new Date();
     }
 
@@ -187,18 +188,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                 ...res[0]
             };
             this.isSpinnerVisible = false;
-            let teardowns = res[0].tearDownTypes.split(',');
-            this.tearDownTypes.forEach(
-                teardown => {
-                    teardowns.forEach(
-                        (td) => {
-                            if (td == teardown.value) {
-                                this.selectedTearDownTypes = [...this.selectedTearDownTypes, teardown];
-                            }
-                        }
-                    )
-                }
-            )
+         
             this.loadSiteData('');
             this.loadConditionData('');
             if (this.receivingForm.defaultSiteId) {
@@ -217,6 +207,19 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                 this.receivingForm.pickTicketEffectiveDate = new Date(this.receivingForm.pickTicketEffectiveDate);
             }
             this.getSiteDetailsOnEdit(this.receivingForm);
+
+            let teardowns = res[0].tearDownTypes.split(',');
+            this.tearDownTypes.forEach(
+                teardown => {
+                    teardowns.forEach(
+                        (td) => {
+                            if (td == teardown.value) {
+                                this.selectedTearDownTypes = [...this.selectedTearDownTypes, teardown];
+                            }
+                        }
+                    )
+                }
+            )
 
         },
             err => {

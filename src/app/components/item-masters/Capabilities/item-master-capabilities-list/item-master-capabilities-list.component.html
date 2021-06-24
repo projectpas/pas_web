@@ -140,6 +140,8 @@
                             name="updatedDate" (change)="addeddateFilterForTable($event.target.value,col.field)" />
                         </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
+                        <input type="checkbox" class="input-check" *ngIf="col.field == 'isVerified'"
+                        name="isVerified" (change)="checkChange($event)"/>
                     </ng-container>
                 </th>
                 <th class="table-actions-column"></th>
@@ -161,7 +163,7 @@
                     </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
                         <input type="checkbox" [checked]="rowData[col.field] == true"
-                               class="input-check" />
+                               class="input-check" disabled/>
                                <!-- <div class="form-group">
                                 <div class="checkbox-cstm">
                                   <label> 
