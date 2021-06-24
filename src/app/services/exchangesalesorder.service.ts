@@ -312,6 +312,11 @@ export class ExchangeSalesOrderService {
         this.exchangeSalesOrderEndpointService.getPickTicketPrint(salesOrderId, salesOrderPartId, soPickTicketId)
       );
     }
+    getMultiPickTicketPrint(salesOrderPickTickets: any): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getMultiPickTicketPrint(salesOrderPickTickets)
+      );
+    }
     getpickticketHistory(pickticketid) {
       return this.exchangeSalesOrderEndpointService.getpickticketHistory(pickticketid)
     }

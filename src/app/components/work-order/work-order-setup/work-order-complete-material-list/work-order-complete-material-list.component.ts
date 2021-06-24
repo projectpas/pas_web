@@ -76,7 +76,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     addPartModal: NgbModalRef;
     show: boolean;
     clearData = false;
-    isVisible:boolean=false;
+    isVisible: boolean = false;
     cols = [
         { field: 'taskName', header: 'Task', align: 0 },
         { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
@@ -207,12 +207,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     enablePickTicket: boolean = false;
     isViewItem: boolean = false;
     stockLineId: any;
-     enumPartStatus:any= {
-        Reserve:1,
-        Issued:2,
-        Reserveandissued:3,
-        Unissued:4,
-        Unreserved:5
+    enumPartStatus: any = {
+        Reserve: 1,
+        Issued: 2,
+        Reserveandissued: 3,
+        Unissued: 4,
+        Unreserved: 5
     }
     constructor(
         private workOrderService: WorkOrderService,
@@ -224,15 +224,16 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private alertService: AlertService,
         public router: Router,
         private commonService: CommonService
-    ) { this.show = true; 
-    
+    ) {
+        this.show = true;
+
     }
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
     ngOnInit() {
- this.enumPartStatus=this.enumPartStatus;
+        this.enumPartStatus = this.enumPartStatus;
         this.initColumns();
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
@@ -264,7 +265,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         })
     }
     ngOnChanges(changes: SimpleChanges) {
-        this.enumPartStatus=this.enumPartStatus;
+        this.enumPartStatus = this.enumPartStatus;
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -379,7 +380,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.editData = undefined;
         this.isViewItem = false;
         let contentPart = this.addPart;
-        this.ispickticket=false;
+        this.ispickticket = false;
         this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     }
     openDelete(content, row) {
@@ -793,9 +794,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                         x.createdBy = x.createdBy ? x.createdBy : this.authService.currentUser.userName;
                         x.updatedBy = this.authService.currentUser.userName;
                         this.setdefaultValues(x);
-                        if (!this.isSubWorkOrder && this.statusId == 2 && this.enablePickTicket)
-                        {
-                           x.quantityIssued = x.quantityPicked - x.quantityAlreadyIssued;     
+                        if (!this.isSubWorkOrder && this.statusId == 2 && this.enablePickTicket) {
+                            x.quantityIssued = x.quantityPicked - x.quantityAlreadyIssued;
                         }
                         if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
                             if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
@@ -992,13 +992,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.eqPartData = [];
         this.eqPartData = childPart;
         childPart.forEach(element => {
-                element.reservedById = this.authService.currentEmployee,
+            element.reservedById = this.authService.currentEmployee,
                 element.issuedById = this.authService.currentEmployee,
                 element.createdBy = this.authService.currentUser.userName,
                 element.updatedBy = this.authService.currentUser.userName
         });
         this.eqPartData.map(element => {
-                element.reservedById = this.authService.currentEmployee.value,
+            element.reservedById = this.authService.currentEmployee.value,
                 element.issuedById = this.authService.currentEmployee.value
         });
         if ((isChecked === true) && (this.statusId == 1 || this.statusId == 3)) {
@@ -1028,16 +1028,16 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
     handleQty(currentRecord) {
     }
-       checkIsSeclected(){
-        if(this.reservedList &&  this.reservedList.length !=0){
-        const arrayWithFilterObjects= this.reservedList.filter((o) => o.isParentSelected === true);
-        if(arrayWithFilterObjects && arrayWithFilterObjects.length !=0){
-            this.savebutonDisabled = true;
-        }else{
-            this.savebutonDisabled = false;
+    checkIsSeclected() {
+        if (this.reservedList && this.reservedList.length != 0) {
+            const arrayWithFilterObjects = this.reservedList.filter((o) => o.isParentSelected === true);
+            if (arrayWithFilterObjects && arrayWithFilterObjects.length != 0) {
+                this.savebutonDisabled = true;
+            } else {
+                this.savebutonDisabled = false;
+            }
         }
-      }
-    }  
+    }
     selectedParts(currentRecord, event) {
         if (this.statusId === 1 || this.statusId === 5) {
             if (currentRecord.isParentSelected == true && currentRecord.quantityReserved != 0) {
@@ -1113,10 +1113,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                     }
                 }
             }
-         
+
         }
     }
- 
+
     pageIndexChange(event) {
         this.pageIndex = parseInt(event.first) / event.rows;
         this.pageSize = event.rows;
@@ -1215,7 +1215,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         localStorage.setItem("lsconditionId", rowData.conditionCodeId);
         localStorage.setItem("lsqty", rowData.quantity);
         if (this.isSubWorkOrder == true) {
-            localStorage.setItem("lsSubWoId", this.subWOPartNoId);
+            debugger;
+            localStorage.setItem("lsSubWoId", this.workOrderId);
+            localStorage.setItem("lsWoId", this.subWoRecord.workOrderId);
             this.router.navigateByUrl(
                 `/vendorsmodule/vendorpages/app-purchase-setup`
             );
@@ -1224,14 +1226,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.router.navigateByUrl(
                 `vendorsmodule/vendorpages/app-purchase-setup`
             );
-        } 
+        }
     }
     createNewROWorkOrder(childRowData, rowData) {
         localStorage.setItem("itemMasterId", rowData.itemMasterId);
         localStorage.setItem("partNumber", rowData.partNumber);
-        localStorage.setItem("lsWoId", this.workOrderId);        
+        localStorage.setItem("lsWoId", this.workOrderId);
         localStorage.setItem("lsconditionId", rowData.conditionCodeId);
-        localStorage.setItem("lsSubWoId", rowData.subWorkOrderId);        
+        localStorage.setItem("lsSubWoId", rowData.subWorkOrderId);
         localStorage.setItem("lsqty", childRowData.stocklineQuantity);
         localStorage.setItem("lsstocklineId", childRowData.stockLineId);
         if (this.isSubWorkOrder == true) {
@@ -1384,7 +1386,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         }
     }
- 
+
     summaryColumns: any = [];
     childColumnsData: any = [];
     initColumns() {
@@ -1411,11 +1413,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'qunatityTurnIn', header: 'Qty Turned In', align: 1, width: "90px" },
             { field: 'partQuantityOnHand', header: 'Qty OH', align: 1, width: "60px" },
             { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1, width: "66px" },
-            { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },          
+            { field: 'qunatityRemaining', header: 'Qty Rem', align: 1, width: "60px" },
             { field: 'uom', header: 'UOM', align: 0, width: "70px" },
             { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
             { field: 'itemClassification', header: 'Classification', align: 0, width: "150px" },
-            { field: 'manufacturerName', header: 'Manufacturer', align: 0,width: "120px" },
+            { field: 'manufacturerName', header: 'Manufacturer', align: 0, width: "120px" },
             { field: 'needDate', header: 'Need Date', align: 0 },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
             { field: 'unitCost', header: 'Unit Cost', align: 1, width: "68px" },
@@ -1428,7 +1430,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'qtyOnOrder', header: 'Qty On Order', align: 1, width: "86px" },
             { field: 'qtyOnBkOrder', header: 'Qty on BK Order', align: 1, width: "110px" },
             { field: 'poNum', header: 'PO Num' },
-            { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date',width: "115px" },
+            { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', width: "115px" },
         ]
 
         this.childColumnsData = [
@@ -1449,9 +1451,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'stocklineQtyRemaining', header: 'Qty Rem', align: 1, width: "60px" },
             { field: 'uom', header: 'UOM', align: 0, width: "70px" },
             { field: 'stockType', header: 'Stk Type', align: 0, width: "70px" }, //oem
-            { field: 'itemClassification', header: 'Classification', align: 0,width: "150px" },
-            { field: 'manufacturerName', header: 'Manufacturer', align: 0,width: "120px" },
-            { field: 'needDate', header: 'Need Date', align: 0 , width: "70px"},
+            { field: 'itemClassification', header: 'Classification', align: 0, width: "150px" },
+            { field: 'manufacturerName', header: 'Manufacturer', align: 0, width: "120px" },
+            { field: 'needDate', header: 'Need Date', align: 0, width: "70px" },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
             { field: 'stocklineUnitCost', header: 'Unit Cost', align: 1, width: "61px" },
             { field: 'stocklineExtendedCost', header: 'Extended Cost', align: 1, width: "90px" },
@@ -1474,7 +1476,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'bin', header: 'Bin', align: 0, width: "100px" },
         ]
     }
-   
+
     parts: any[] = [];
     qtyToPick: number = 0;
     pickticketItemInterface(rowData, pickticketieminterface) {
@@ -1482,14 +1484,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         const conditionId = rowData.conditionCodeId;
         const workOrderId = rowData.workOrderId;
         const workOrderMaterialsId = rowData.workOrderMaterialsId;
-        this.qtyToPick = rowData.quantityReserved - rowData.qunatityPicked; 
-        this.isSpinnerVisible=true;
+        this.qtyToPick = rowData.quantityReserved - rowData.qunatityPicked;
+        this.isSpinnerVisible = true;
         this.workOrderService
             .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId)
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
-                
-        this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
+
+                this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
                 this.parts = response;
                 for (let i = 0; i < this.parts.length; i++) {
                     if (this.parts[i].oemDer == null)
@@ -1580,20 +1582,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.disableSubmitButton = false;
         }
     }
-    checkValid(selectedItem){
-        if(selectedItem && selectedItem.qtyToShip == undefined || selectedItem.qtyToShip == 0 ||  selectedItem.qtyToShip <= 0 ){
-          selectedItem.qtyToShip=selectedItem.qtyToPick;
+    checkValid(selectedItem) {
+        if (selectedItem && selectedItem.qtyToShip == undefined || selectedItem.qtyToShip == 0 || selectedItem.qtyToShip <= 0) {
+            selectedItem.qtyToShip = selectedItem.qtyToPick;
         }
-      }
-    onFocusOutEvent(objPickTicket: any){
+    }
+    onFocusOutEvent(objPickTicket: any) {
         let invalidQty = false;
         let selectedItem = objPickTicket;
         var errmessage = '';
         if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
             invalidQty = true;
-            selectedItem.qtyToShip=selectedItem.qtyToPick;
+            selectedItem.qtyToShip = selectedItem.qtyToPick;
             errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
-        }            
+        }
         if (invalidQty) {
             this.alertService.showMessage(
                 'Work Order',
@@ -1601,5 +1603,5 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 MessageSeverity.error
             );
         }
-     }
+    }
 }

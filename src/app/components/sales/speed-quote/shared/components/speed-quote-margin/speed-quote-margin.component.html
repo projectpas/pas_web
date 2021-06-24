@@ -100,7 +100,7 @@
                                 <td>
                                   <input type="text" class="form-control text-right"
                                     [ngModel]="partData.unitSalePrice  | twoDecimalGlobalNumberFormatPipe"
-                                    [ngModelOptions]="{updateOn:'blur'}"
+                                    [ngModelOptions]="{updateOn:'blur'}" name=unitSalePrice{{i}}
                                     (ngModelChange)="partData.unitSalePrice=formatStringToNumberGlobal($event)" (blur)="calculate()"
                                     pKeyFilter="money" />
                                 </td>                                                         

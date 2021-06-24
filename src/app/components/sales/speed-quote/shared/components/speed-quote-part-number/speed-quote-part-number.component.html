@@ -113,7 +113,7 @@
                                         <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
                                             [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg"
                                             (click)="openPartDelete(deleteContent,summaryPart)"
-                                            matTooltip="Delete" matTooltipPosition="above">
+                                            matTooltip="Remove" matTooltipPosition="above">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                         <span data-toggle="modal" data-target="#speedQuotePartHistory">
@@ -208,7 +208,7 @@
 </ng-container> -->
 <ng-template #deleteContent let-c="close" let-d="dismiss">
     <div class="modal-header">
-        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <h4 class="modal-title">Are You Sure Want to Remove?</h4>
         <button type="button" class="close" aria-label="Close" (click)="onClosePartDelete()">
             <span aria-hidden="true">&times;</span>
         </button>

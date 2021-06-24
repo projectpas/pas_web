@@ -434,7 +434,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     empployid = empployid == 0 ? this.employeeId : empployid;
     editMSID = this.isEditModeHeader ? editMSID = id : 0;
     this.isSpinnerVisible = true;
-    this.commonservice.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+    this.commonservice.getManagmentStrctureData(id, empployid, editMSID, this.masterCompanyId).subscribe(response => {
       this.isSpinnerVisible = false;
       if (response) {
         const result = response;
