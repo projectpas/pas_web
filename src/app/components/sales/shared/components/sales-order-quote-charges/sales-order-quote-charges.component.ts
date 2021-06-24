@@ -30,6 +30,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   @Input() isQuote = false;
   @Input() markupList;
   @Input() isView: boolean = false;
+  salesOrderPartsList = [];
   shipViaList: any;
   mainEditingIndex: any;
   subEditingIndex: any;
@@ -93,11 +94,14 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
 
   refresh(isView) {
     this.isSpinnerVisible = true;
+    this.setEditArray = [];
     forkJoin(this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId, this.deletedStatusInfo),
-      this.actionService.getCharges()
+      this.salesOrderQuoteService.getSalesQuoteParts(this.salesOrderQuoteId, this.deletedStatusInfo),
+      this.actionService.getCharges(),
     ).subscribe(res => {
       this.isSpinnerVisible = false;
       this.setChargesData(res[0]);
+      this.setPartsData(res[1]);
       this.setVendors();
     }, error => {
       this.isSpinnerVisible = false;
@@ -154,6 +158,16 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     }
     this.chargeForm = [];
     this.salesOrderChargesLists = [];
+  }
+
+  setPartsData(res) {
+    if (res && res.length > 0) {
+      this.salesOrderPartsList = res;
+      this.isUpdate = true;
+    } else {
+      this.salesOrderPartsList = [];
+      this.isUpdate = false;
+    }
   }
 
   get userName(): string {
@@ -234,7 +248,8 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
         billingAmount: this.formateCurrency(x.extendedCost),
         billingRate: this.formateCurrency(x.unitCost),
         masterCompanyId: this.currentUserMasterCompanyId,
-        chargeType: x.chargesTypeId ? getValueFromArrayOfObjectById('chargeType', 'chargeId', x.chargesTypeId, this.chargesTypes) : ''
+        chargeType: x.chargesTypeId ? getValueFromArrayOfObjectById('chargeType', 'chargeId', x.chargesTypeId, this.chargesTypes) : '',
+        partNumber: x.salesOrderQuotePartId ? getValueFromArrayOfObjectById('partNumber', 'salesOrderQuotePartId', x.salesOrderQuotePartId, this.salesOrderPartsList) : ''
       }
     });
     if (this.isEdit) {
@@ -515,7 +530,6 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       }
     }
   }
-
 
   formatStringToNumberGlobal(val) {
     let tempValue = Number(val.toString().replace(/\,/g, ''));

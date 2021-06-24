@@ -29,7 +29,7 @@
         class="rpo-table-cstm rro-table-cstm ptable-f10" [paginator]="true">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th colspan="7" class="quote-freight-colspan">
+            <th colspan="8" class="quote-freight-colspan">
               &nbsp;
             </th>
             <ng-container *ngIf="isView">
@@ -95,6 +95,7 @@
             </ng-container>
           </tr>
           <tr>
+            <th rowspan="2" class="table-column-width">Part<span class="clr-red">*</span></th>
             <th rowspan="2" class="table-column-width">Type<span class="clr-red">*</span></th>
             <th rowspan="2" class="table-column-width">Description</th>
             <th rowspan="2" class="table-column-width">Qty<span class="clr-red">*</span></th>
@@ -113,6 +114,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-charge let-columns="columns" let-rowIndex="rowIndex">
           <tr>
+            <td class="table-column-width">
+              {{charge.partNumber}}
+            </td>
             <td class="table-column-width">
               {{charge.chargeType}}
             </td>
@@ -210,7 +214,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns>
           <tr>
-            <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+            <td colspan="13" style="color: red; font-weight: bold; text-align: center">
               No records found
             </td>
           </tr>
@@ -224,6 +228,7 @@
             <td class="table-column-width">&nbsp;</td>
             <td class="table-column-width" class="content-to-end">{{formateCurrency(calculateExtendedCostSummation())}}
             </td>
+            <td class="table-column-width">&nbsp;</td>
             <td class="table-column-width">&nbsp;</td>
             <td class="table-column-width">&nbsp;</td>
             <td class="table-column-width">&nbsp;</td>
@@ -277,6 +282,7 @@
                 <table class="table table-bordered ">
                   <thead>
                     <tr>
+                      <th rowspan="2">Parts<span class="clr-red">*</span></th>
                       <th rowspan="2">Type<span class="clr-red">*</span></th>
                       <th rowspan="2">Description</th>
                       <th rowspan="2">Qty<span class="clr-red">*</span></th>
@@ -288,6 +294,15 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let charge of chargeForm; let i = index">
+                      <td>
+                        <select class="form-control custom-select1 wf-pub-id table-column-width" id="dllParts"
+                          [(ngModel)]="charge.salesOrderQuotePartId" (ngModelChange)="enableUpdate()" name="parts_{{i}}"
+                          required>
+                          <option [value]="">Select</option>
+                          <option [value]="part.salesOrderQuotePartId" *ngFor="let part of salesOrderPartsList">{{part.partNumber}}
+                          </option>
+                        </select>
+                      </td>
                       <td>
                         <select class="form-control custom-select1 wf-pub-id table-column-width" id="dllChargesType"
                           [(ngModel)]="charge.chargesTypeId" (ngModelChange)="enableUpdate()" name="type_{{i}}"
@@ -324,10 +339,10 @@
                       </td>
                       <td>
                         <p-autoComplete class="autocomp-customer-cstm" name="vendorName" [(ngModel)]="charge.vendor"
-                        appendTo='body' [baseZIndex]="9999"  (ngModelChange)="enableUpdate()" [ngModelOptions]="{standalone: true}"
-                          [suggestions]="vendorCollection" [forceSelection]="true" emptyMessage="No Match Found"
-                          field="vendorName" (completeMethod)="filterVendor($event)" [size]="30" [minLength]="1"
-                          [dropdown]="true">
+                          appendTo='body' [baseZIndex]="9999" (ngModelChange)="enableUpdate()"
+                          [ngModelOptions]="{standalone: true}" [suggestions]="vendorCollection" [forceSelection]="true"
+                          emptyMessage="No Match Found" field="vendorName" (completeMethod)="filterVendor($event)"
+                          [size]="30" [minLength]="1" [dropdown]="true">
                         </p-autoComplete>
                       </td>
                     </tr>
