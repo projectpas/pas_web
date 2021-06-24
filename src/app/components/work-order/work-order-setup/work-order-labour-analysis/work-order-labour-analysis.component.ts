@@ -67,19 +67,19 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
      isInteger(x) { return typeof x === "number" && isFinite(x) && Math.floor(x) === x; }
      isFloat(x) { return !!(x % 1); }
      calculateHours(currentValue){ 
-if(this.isFloat(currentValue)==true){
-  currentValue=currentValue.toString().split('.');
-const hrs=currentValue[0]
-const mnts=currentValue[1]
-const newhrs= Number(mnts)>60 ? Number(hrs) +1 : hrs;
-const newmnts=Number(mnts)>60 ? Number(mnts)-60 : Number(mnts) <10 ? ('0'+Number(mnts)) :mnts;
-// const final =moment(Number(newhrs+'.'+newmnts), "hhmm").format("HH.mm")
-// return final
-return Number(newhrs+'.'+newmnts).toFixed(2)  
-}else{
-  return  currentValue.toFixed(2) 
-  // return currentValue ? formatNumberAsGlobalSettingsModule(currentValue, 2) : '0.00';
-}
+    if(this.isFloat(currentValue)==true){
+      currentValue=currentValue.toString().split('.');
+    const hrs=currentValue[0]
+    const mnts=currentValue[1]
+    const newhrs= Number(mnts)>60 ? Number(hrs) +1 : hrs;
+    const newmnts=Number(mnts)>60 ? Number(mnts)-60 : Number(mnts) <10 ? ('0'+Number(mnts)) :mnts;
+    // const final =moment(Number(newhrs+'.'+newmnts), "hhmm").format("HH.mm")
+    // return final
+    return Number(newhrs+'.'+newmnts).toFixed(2)  
+    }else{
+      return  currentValue.toFixed(2) 
+      // return currentValue ? formatNumberAsGlobalSettingsModule(currentValue, 2) : '0.00';
+    }
      }
      getTotalHours(key){
       let total = 0;
@@ -101,9 +101,7 @@ return Number(newhrs+'.'+newmnts).toFixed(2)
       }
       return total;
     }
-    //  formatTime(currentValue){
-    //   moment(currentValue, "hhmm").format("HH.mm");
-    //  }
+
     getWorkOrderLabourAnalysisData(workOrderId) {
         this.isSpinnerVisible = true;
         const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
@@ -121,12 +119,9 @@ return Number(newhrs+'.'+newmnts).toFixed(2)
                               element.hours=this.calculateHours(element.hours);
                               element.adjustedHours=this.calculateHours(element.adjustedHours);
                               element.adjustments= this.calculateHours(element.adjustments);
-                       setTimeout(() => {
-      // element.hours=  moment(element.hours, "hhmm").format("HH.mm");
-      // element.adjustedHours=  moment(element.adjustedHours, "hhmm").format("HH.mm")
-      // element.adjustments=  moment(element.adjustments, "hhmm").format("HH.mm")
-      element.varPercentage=(Number(element.adjustments) / Number(element.adjustedHours)).toFixed(2);
-     }, 600);
+                              setTimeout(() => {
+                                element.varPercentage=((Number(element.adjustments) * 100) / Number(element.adjustedHours)).toFixed(2);
+                              }, 600);
                             });
                           }
                       },
@@ -159,7 +154,7 @@ return Number(newhrs+'.'+newmnts).toFixed(2)
         { field: 'customer', header: 'Customer',width: "160px"  },
         { field: 'billableOrNonBillable', header: 'Billable /NonBillable', width: "160px"  },
         { field: 'hours', header: 'Act Hours'},
-        { field: 'adjustedHours', header: 'Adj Hours' },
+        { field: 'adjustedHours', header: 'Std Hours' },
         { field: 'adjustments', header: 'Var. Hours' },
         { field: 'varPercentage', header: 'Var %', width:"100px" },
         { field: 'burdenRateAmount', header: 'Burden Rate'},
@@ -181,12 +176,10 @@ return Number(newhrs+'.'+newmnts).toFixed(2)
           { field: 'employeeName', header: 'Employee',width: "160px" },
           { field: 'billableOrNonBillable', header: 'Billable /NonBillable',width: "160px"  },
           { field: 'hours', header: 'Act Hours', width:"100px"},
-          { field: 'adjustedHours', header: 'Adj Hours', width:"100px" },
+          { field: 'adjustedHours', header: 'Std Hours', width:"100px" },
           { field: 'adjustments', header: 'Var. Hours', width:"100px" },
           { field: 'varPercentage', header: 'Var %', width:"100px" },
           { field: 'burdenRateAmount', header: 'Burden Rate' ,width:"100px"},
-          // { field: 'burdenRateAmount', header: 'Var. Hours',width:"100px" },
-          // { field: 'varPercentage', header: 'Var %',width:"100px" },
           { field: 'stage', header: 'Stage',width: "100px"  },
           { field: 'status', header: 'Status' ,width: "90px" },
         ];

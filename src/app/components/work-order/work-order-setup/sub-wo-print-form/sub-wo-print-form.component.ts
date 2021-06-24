@@ -40,6 +40,11 @@ export class SubWoPrintFromComponent implements OnInit,OnChanges {
   isconfirmsave : boolean = true;
   workOrderprintData: any = [];
   endPointURL : any;
+  isshortteardown  : boolean = false;
+  isBulletinsModification  : boolean = false;
+  isTestDataUsed  : boolean = false;
+  isPmaDerBulletins  : boolean = false;
+  isWorkPerformed  : boolean = false;
   constructor(
     private authService: AuthService,
     private acRouter: ActivatedRoute,
@@ -71,6 +76,12 @@ export class SubWoPrintFromComponent implements OnInit,OnChanges {
         this.workOrderprintData = res[0];
        
         this.isSpinnerVisibleNew = false;
+        this.isshortteardown = this.workOrderprintData.workOrderTeardownModel.isshortteardown;
+        this.isBulletinsModification = this.workOrderprintData.workOrderTeardownModel.isBulletinsModification;
+        this.isTestDataUsed = this.workOrderprintData.workOrderTeardownModel.isTestDataUsed;
+        this.isPmaDerBulletins = this.workOrderprintData.workOrderTeardownModel.isPmaDerBulletins;
+        this.isWorkPerformed = this.workOrderprintData.workOrderTeardownModel.isWorkPerformed;
+
         this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate = this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate, 'MMM-dd-yyyy') : '';
         this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate = this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate, 'MMM-dd-yyyy') : '';
         this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate = this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate ? this.datePipe.transform(this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate, 'MMM-dd-yyyy') : '';

@@ -10,7 +10,7 @@ import { IExchangeSalesOrder } from "../models/exchange/IExchangeSalesOrder.mode
 import { IExchangeSalesOrderView } from "../models/exchange/IExchangeSalesOrderView";
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { PartDetail } from "../components/exchange-sales-order/shared/models/part-detail";
-import { PartAction } from "../components/sales/shared/models/part-action";
+import { PartAction } from "../components/exchange-sales-order/shared/models/part-action";
 import { IPartJson } from "../components/exchange-sales-order/shared/models/ipart-json";
 import { formatStringToNumber } from "../generic/autocomplete";
 import { ExchangeSalesOrderPart } from '../models/exchange/ExchangeSalesOrderPart';
@@ -18,6 +18,7 @@ import { IExchangeSalesSearchParameters } from "../models/exchange/IExchangeSale
 import { IExchangeSalesOrderListView } from "../models/exchange/IExchangeSalesOrderListView";
 import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
 import { ExchangeOrderQuote } from "../models/exchange/ExchangeOrderQuote";
+import { ExchangeSOPickTicket } from "../models/exchange/ExchangeSOPickTicket";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
     roles: Role[] | string[];
@@ -261,4 +262,57 @@ export class ExchangeSalesOrderService {
     //     this.totalCharges = 0;
     //     this.salesOrderQuote = new ExchangeOrderQuote();
     //   }
+    getReservestockpartlistsBySOId(salesOrderId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getReservestockpartlistsBySOId(salesOrderId)
+      );
+    }
+    getunreservedstockpartslistBySOId(salesOrderId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getunreservedstockpartslistBySOId(salesOrderId)
+      );
+    }
+    releasestocklinereservedparts(salesOrderId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.releasestocklinereservedparts(salesOrderId)
+      );
+    }
+    savereserveissuesparts(parts: PartAction): Observable<PartAction[]> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.savereserveissuesparts(parts)
+      );
+    }
+    getPickTicketList(salesOrderId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getPickTicketList(salesOrderId)
+      );
+    }
+    getStockLineforPickTicket(itemMasterId: number, conditionId: number, salesOrderId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getStockLineforPickTicket(itemMasterId, conditionId, salesOrderId)
+      );
+    }
+    savepickticketiteminterface(parts: ExchangeSOPickTicket): Observable<ExchangeSOPickTicket[]> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.savepickticketiteminterface(parts)
+      );
+    }
+    confirmPickTicket(pickticketId: number, confirmById: string): Observable<boolean[]> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.confirmPickTicket(pickticketId, confirmById)
+      );
+    }
+    getPickTicketEdit(soPickTicketId: number, salesOrderId: number, salesOrderPartId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getPickTicketEdit(soPickTicketId, salesOrderId, salesOrderPartId)
+      );
+    }
+    getPickTicketPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.getPickTicketPrint(salesOrderId, salesOrderPartId, soPickTicketId)
+      );
+    }
+    getpickticketHistory(pickticketid) {
+      return this.exchangeSalesOrderEndpointService.getpickticketHistory(pickticketid)
+    }
 }
