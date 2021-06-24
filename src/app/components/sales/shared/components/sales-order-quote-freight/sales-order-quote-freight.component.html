@@ -29,8 +29,8 @@
         class="rpo-table-cstm rro-table-cstm" [paginator]="true">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th colspan="8"
-              style="width:650px;color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">
+            <th colspan="9"
+              style="width:638px;color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">
               &nbsp;
             </th>
             <ng-container *ngIf="isView">
@@ -103,6 +103,7 @@
             </ng-container>
           </tr>
           <tr>
+            <th rowspan="2" class="table-column-width">Part<span class="clr-red">*</span></th>
             <th rowspan="2" class="table-column-width">Ship Via<span class="clr-red">*</span></th>
             <th rowspan="2" class="table-column-width">Weight</th>
             <th rowspan="2" class="table-column-width">UOM</th>
@@ -126,6 +127,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-freight let-columns="columns" let-rowIndex="rowIndex">
           <tr>
+            <td class="table-column-width">
+              {{freight.partNumber}}
+            </td>
             <td class="table-column-width">
               {{freight.shipVia}}
             </td>
@@ -211,7 +215,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns>
           <tr>
-            <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+            <td colspan="15" style="color: red; font-weight: bold; text-align: center">
               No records found
             </td>
           </tr>
@@ -219,6 +223,7 @@
         <ng-template pTemplate="footer">
           <tr class="footer">
             <td class="table-column-width">Total</td>
+            <td class="table-column-width">&nbsp;</td>
             <td class="table-column-width">&nbsp;</td>
             <td class="table-column-width">&nbsp;</td>
             <td class="table-column-width">&nbsp;</td>
@@ -281,6 +286,7 @@
                 <table class="table table-bordered">
                   <thead>
                     <tr>
+                      <th rowspan="2">Parts<span class="clr-red">*</span></th>
                       <th rowspan="2">Ship Via<span class="clr-red">*</span></th>
                       <th rowspan="2">Weight</th>
                       <th rowspan="2">UOM</th>
@@ -299,6 +305,16 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let f of freightForm; let i = index">
+                      <td>
+                        <select class="form-control custom-select1 wf-pub-id table-column-width" id="dllParts"
+                          [(ngModel)]="f.salesOrderQuotePartId" (ngModelChange)="enableUpdate()" name="parts_{{i}}"
+                          required>
+                          <option [value]="">Select</option>
+                          <option [value]="part.salesOrderQuotePartId" *ngFor="let part of salesOrderPartsList">
+                            {{part.partNumber}}
+                          </option>
+                        </select>
+                      </td>
                       <td class="text-center">
                         <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel"
                           [options]="shipViaList" (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md"

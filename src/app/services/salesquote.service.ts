@@ -607,4 +607,8 @@ export class SalesQuoteService {
       this.salesQuoteEndPointSevice.deleteMultiplePart(salesOrderQuotePartIds)
     );
   }
+
+  getSalesQuoteParts(id, isDeleted) {
+    return this.salesQuoteEndPointSevice.getSalesQuoteParts(id, isDeleted);
+  }
 }
