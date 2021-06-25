@@ -3,6 +3,9 @@
   <div class="tableFixHead">
     <table class="table table-bordered " id="po-table">
       <thead>
+        <tr>
+          <th colspan="12" class="font-size-12">Excluded Items</th>
+        </tr>
         <tr class="font-size-10">
           <!-- <th class="min-width-30">Line#</th> -->
           <th class="th-width">PN</th>
@@ -11,12 +14,12 @@
           <th>PN</th>
           <th>PN Description</th>
           <th>Item Type</th>
-          <td>Qty</td>
-          <td>Unit Price</td>
-          <td>Est Price</td>
+          <td style="text-align: center;">Qty</td>
+          <td style="text-align: center;">Unit Price</td>
+          <td style="text-align: center;">Est Price</td>
           <td>Occurance (%)*</td>
-          <td>Notes</td>
-          <td *ngIf="isViewMode == false">Action</td>
+          <td style="text-align: center;">Notes</td>
+          <td *ngIf="isViewMode == false" style="text-align: center;">Action</td>
         </tr>
       </thead>
       <tbody>
@@ -24,13 +27,13 @@
           <tr class="table-parent-data purchase-td-back" *ngIf="!partList.isDeleted">
 
             <!-- <td>{{partList.itemNo}}</td> -->
-            <td class="parts-des-td">{{partList.pn}}</td>
+            <td class="parts-des-td" style="width:230px;">{{partList.pn}}</td>
             <td class="parts-des-td">{{partList.description}}</td>
             <td *ngIf="isViewMode == false">
               <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add PN"
                 matTooltipPosition="above" style="padding: 0px 4px !important;" (click)="addNewPartNumber(partList)"></i>
             </td>
-            <td>
+            <td style="width:250px;">
               <p-autoComplete appendTo="body" [(ngModel)]="partList.partNumber" [suggestions]="partCollection"
                 (completeMethod)="filterpartItems($event,partList.pn)" [size]="32" [minLength]="1" [dropdown]="true"
                 class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
@@ -38,26 +41,26 @@
                 name="pn_{{row_index}}">
               </p-autoComplete>
             </td>
-            <td class="parts-des-td">{{partList.exPartDescription}}</td>
-            <td class="parts-des-td">{{partList.exStockType}}</td>
-            <td>
+            <td class="parts-des-td" style="width:230px;">{{partList.exPartDescription}}</td>
+            <td class="parts-des-td" style="width:80px;">{{partList.exStockType}}</td>
+            <td style="width:50px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15"
                 (keyup)="calculateExtendedCost(partList)" [(ngModel)]="partList.exQuantity"
                 [disabled]="partList['isEditPart'] == true" value="{{ partList.exQuantity }}" name="exQuantity_{{row_index}}" />
             </td>
-            <td>
+            <td style="width:80px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
-                (change)="calculateExtendedCost(partList)" [ngModel]="partList.exUnitPrice | twoDecimalGlobalNumberFormatPipe"
-                [disabled]="partList['isEditPart'] == true" value="{{ partList.exUnitPrice | twoDecimalGlobalNumberFormatPipe }}" name="exUnitPrice_{{row_index}}" maxlength="15" 
-                (ngModelChange)="partList.exUnitPrice=formatStringToNumberGlobal($event)" />
+                (blur)="calculateExtendedCost(partList)" [ngModel]="partList.exUnitPrice | twoDecimalGlobalNumberFormatPipe"
+                [disabled]="partList['isEditPart'] == true" value="{{ partList.exUnitPrice }}" name="exUnitPrice_{{row_index}}"
+                [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="partList.exUnitPrice=formatStringToNumberGlobal($event)" />
             </td>
-            <td>
+            <td style="width:80px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
                 [ngModel]="partList.exExtPrice | twoDecimalGlobalNumberFormatPipe"
                 value="{{ partList.exExtPrice }}" name="exExtPrice_{{row_index}}" maxlength="15" (ngModelChange)="enableSave()" disabled/>
             </td>
-            <td>
-              <select class="form-control wf-pub-id full-width" id="ddlEstimatedOccurance"
+            <td style="width:90px;">
+              <select class="form-control wf-pub-id full-width select-right" id="ddlEstimatedOccurance"
                 [disabled]="partList['isEditPart'] == true" [(ngModel)]="partList.exOccurance" name="exOccurance_{{row_index}}"> Occurance
                 <option value="-1">--Select--</option>
                 <option value="{{ occurance.label }}" *ngFor="
@@ -65,9 +68,9 @@
                                                 let i = index">{{ occurance.label }}</option>
               </select>
             </td>
-            <td>
+            <td style="width:100px;">
               <div class="form-group memo-popup-cstm mat_emo textarea-memo-div">
-                <div [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
+                <div style="width:100%;" [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
                   [matTooltip]="parsedText(partList.exNotes)"></div>
                 <i class="fa fa-pencil ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
                   matTooltip="Notes" matTooltipPosition="above" [class.disabled]="isViewMode"

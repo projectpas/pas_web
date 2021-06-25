@@ -4,7 +4,7 @@ import { ItemSearchType } from "../../../../quotes/models/item-search-type";
 import { PartDetail } from "../../models/part-detail";
 import { IPartJson } from "../../models/ipart-json";
 import { ISpeedQuote } from "../../../../../../models/sales/ISpeedQuote.model";
-import { SalesQuoteService } from "../../../../../../services/salesquote.service";
+//import { SalesQuoteService } from "../../../../../../services/salesquote.service";
 import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
 import { ConditionService } from "../../../../../../services/condition.service";
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
@@ -34,7 +34,9 @@ export class AddSpeedQuotePartNumberComponent implements OnInit {
   query: ItemMasterSearchQuery;
   allConditionInfo: any[] = [];
   allConditionInfoArray: any[] = [];
-  constructor(private authService: AuthService, private salesQuoteService: SalesQuoteService, private conditionService: ConditionService,
+  constructor(private authService: AuthService,
+    //private salesQuoteService: SalesQuoteService,
+    private conditionService: ConditionService,
     private speedQuoteService: SpeedQuoteService,) {
     this.searchType = ItemSearchType.ItemMaster;
     this.showModalMargin = false;
@@ -42,12 +44,12 @@ export class AddSpeedQuotePartNumberComponent implements OnInit {
 
   ngOnInit() {
     this.getConditions();
-    this.salesQuoteService
+    this.speedQuoteService
       .getSearchPartResult()
       .subscribe(data => {
         this.parts = data;
       });
-    this.salesQuoteService.getSearchPartObject()
+    this.speedQuoteService.getSearchPartObject()
       .subscribe(data => {
         this.query = data;
         this.searchType = this.getSearchType(this.query.partSearchParamters.itemSearchType);
@@ -111,8 +113,8 @@ export class AddSpeedQuotePartNumberComponent implements OnInit {
         this.parts[i].qtyToOrder = this.query.partSearchParamters.quantityRequested;
       })
     }
-    this.salesQuoteService.updateSearchPartResult(this.parts);
-    this.salesQuoteService.getSearchPartObject()
+    this.speedQuoteService.updateSearchPartResult(this.parts);
+    this.speedQuoteService.getSearchPartObject()
       .subscribe(data => {
         this.query = data;
         this.searchType = this.getSearchType(this.query.partSearchParamters.itemSearchType);
@@ -128,7 +130,7 @@ export class AddSpeedQuotePartNumberComponent implements OnInit {
     }
     this.query.partSearchParamters.qtyAvailable = qtyAvailable;
     this.query.partSearchParamters.qtyOnHand = qtyOnHand;
-    this.salesQuoteService.updateSearchPartObject(this.query);
+    this.speedQuoteService.updateSearchPartObject(this.query);
   }
 
   onSearchTypeChange(type: ItemSearchType) {

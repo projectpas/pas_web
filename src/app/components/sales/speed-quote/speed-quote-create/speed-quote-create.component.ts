@@ -1836,6 +1836,10 @@ export class SpeedQuoteCreateComponent implements OnInit {
                     height: auto;
                     width:100%;
                   float:left;}
+                  .exclusdeditem{
+                    text-align: center;
+                    font-size: 12px;
+                  }
             
                         </style>
         </head>

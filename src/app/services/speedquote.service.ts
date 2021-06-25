@@ -298,6 +298,9 @@ export class SpeedQuoteService {
       observer.complete();
     });
   }
+  updateSearchPartResult(parts) {
+    this.parts = parts;
+  }
 
   updateSearchPartObject(query) {
     this.query = query;
