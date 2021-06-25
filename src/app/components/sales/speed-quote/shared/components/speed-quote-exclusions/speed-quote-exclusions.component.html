@@ -1,4 +1,4 @@
-<div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
+<div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
   style="min-height: 130px !important;">
   <div class="tableFixHead">
     <table class="table table-bordered " id="po-table">
@@ -24,7 +24,7 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let partList of partListData;let row_index=index;">
-          <tr class="table-parent-data purchase-td-back" *ngIf="!partList.isDeleted">
+          <tr class="purchase-td-back" *ngIf="!partList.isDeleted">
 
             <!-- <td>{{partList.itemNo}}</td> -->
             <td class="parts-des-td" style="width:230px;">{{partList.pn}}</td>
@@ -40,6 +40,7 @@
                 (onSelect)="onPartSelect($event,row_index)" [forceSelection]="true" title="PN" required
                 name="pn_{{row_index}}">
               </p-autoComplete>
+              <!-- class="wf-header-select" -->
             </td>
             <td class="parts-des-td" style="width:230px;">{{partList.exPartDescription}}</td>
             <td class="parts-des-td" style="width:80px;">{{partList.exStockType}}</td>
@@ -62,8 +63,8 @@
             <td style="width:90px;">
               <select class="form-control wf-pub-id full-width select-right" id="ddlEstimatedOccurance"
                 [disabled]="partList['isEditPart'] == true" [(ngModel)]="partList.exOccurance" name="exOccurance_{{row_index}}"> Occurance
-                <option value="-1">--Select--</option>
-                <option value="{{ occurance.label }}" *ngFor="
+                <option class="text-right" value="-1">--Select--</option>
+                <option class="text-right" value="{{ occurance.label }}" *ngFor="
                                                 let occurance of exclusionEstimatedOccurances;
                                                 let i = index">{{ occurance.label }}</option>
               </select>
@@ -72,9 +73,15 @@
               <div class="form-group memo-popup-cstm mat_emo textarea-memo-div">
                 <div style="width:100%;" [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
                   [matTooltip]="parsedText(partList.exNotes)"></div>
-                <i class="fa fa-pencil ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
+                <i class="fa fa-pencil ci_cls  m-t-5"  data-toggle="modal" data-target="#textarea-popupexclusion"
                   matTooltip="Notes" matTooltipPosition="above" [class.disabled]="isViewMode"
                   [ngClass]="{'btn_disabled': isViewMode}" (click)="onAddTextAreaInfo(partList,row_index)"></i>
+              </div>
+
+              <div *ngIf="isViewMode == true" class="form-group memo-popup-cstm mat_emo textarea-memo-div">
+                <div [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
+                  [matTooltip]="parsedText(partList.exNotes)"></div>
+      
               </div>
             </td>
             <td *ngIf="isViewMode == false">
@@ -82,13 +89,8 @@
                                             [ngClass]="{'btn_disabled': isViewMode}"
                                             class="btn nobg view-part-eye" (click)="editPart(row_index)"
                                             matTooltip="Edit PN" matTooltipPosition="above">
-                                            <i class="fa fa-pencil"></i>
-              </a>
-              <a [class.disabled]="partList['exclusionPartId'] == 0"
-                  [ngClass]="{'btn_disabled': partList['exclusionPartId'] == 0 }"
-                  class="btn nobg" (click)="openDelete(content,partList)" matTooltip="Remove" matTooltipPosition="above">
-                  <i class="fa fa-trash"></i>
-                </a>
+                                            <i class="fa fa-pencil" style="color:#337ab7 !important"></i>
+                                        </a>
             </td>
           </tr>
         </ng-container>

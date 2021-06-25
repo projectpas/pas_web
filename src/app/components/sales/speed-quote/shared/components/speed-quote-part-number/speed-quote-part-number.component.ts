@@ -158,14 +158,14 @@ export class SpeedQuotePartNumberComponent {
 
     this.summaryColumns = [
       // { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
-      { field: 'itemNo', header: 'Line #', width: '30px', textalign: 'center' },
+      { field: 'itemNo', header: 'Line #', width: '50px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: "140px" },
       // { field: 'partDescription', header: 'PN Description', width: '200px' },
       { field: 'description', header: 'PN Description', width: '200px' },
       { field: 'conditionDescription', header: 'Cond', width: "130px" },
       { field: 'quantityRequested', header: 'Qty', width: "10px" },
       { field: 'manufacturer', header: 'Manufacturer', width: "84px" },
-      { field: 'oempmader', header: 'Item Type', width: "60px" },
+      { field: 'oempmader', header: 'Item Type', width: "75px" },
       { field: 'unitSalePrice', header: 'Unit Price', width: "90px" },
       { field: 'salesPriceExtended', header: 'Ext Price', width: "90px" },
       { field: 'unitCost', header: 'Unit Cost', width: "90px" },

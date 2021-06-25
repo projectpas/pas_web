@@ -1,4 +1,5 @@
-<div class="form-group">
+<div >
+    <!-- class="form-group" -->
   <div [ngClass]="(isViewMode == false) ? 'row' : 'row ui-tabview-panels'" class="padding-bottom-8">
       <button *ngIf="isViewMode == false" type="button" class="btn btn-primary" (click)="addPartNumber()"
           [disabled]="salesQuote.isApproved">
@@ -82,11 +83,21 @@
                                                 matTooltip="Notes" matTooltipPosition="above"
                                                 (click)="onAddTextAreaInfo(summaryPart,i, rowIndex)"></i>
                                             </div>
+
+                                            <div  *ngIf="isViewMode == true" class="form-group notes-popup-cstm mat_emo"
+                                            style="width: 120px; margin-bottom: 0;">
+                                            <div [innerHTML]="summaryPart.notes" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box"></div>
+                                            <!-- <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
+                                                data-toggle="modal" data-target="#textarea-popupNotes"
+                                                matTooltip="Notes" matTooltipPosition="above"
+                                                (click)="onAddTextAreaInfo(summaryPart,i, rowIndex)"></i> -->
+                                            </div>
                                             <!-- </td> -->
                                         </ng-container>
                                     </td>
                                     <!-- <td colspan="11"></td> -->
-                                    <td *ngIf="isViewMode == false" class="center">
+                                    <td *ngIf="isViewMode == false" class="center speed-actions-width">
                                         <span>
                                             <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
                                                 [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg btn-pluspo-cstm" (click)="createExclusionPN(summaryPart)"
@@ -97,7 +108,7 @@
                                         <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
                                             [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg view-part-eye" (click)="editPart(rowIndex)"
                                             matTooltip="Edit PN" matTooltipPosition="above">
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-pencil" style="color:#337ab7 !important"></i>
                                         </a>
                                         <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
                                             [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg"
@@ -120,7 +131,7 @@
                           <ng-container *ngIf="summaryParts.length == 0">
                             <tbody>
                                 <tr>
-                                    <td colspan="37" class="sales-no-records-found" style="margin-left:-15%">
+                                    <td colspan="36" class="no-records-cstm no-records-msg" style="margin-left:-15%">
                                         No records found
                                     </td>
                                 </tr>
@@ -132,17 +143,17 @@
   </div>
 </div>
 <div *ngIf="isViewMode == false" class="view-mode-div">
-  <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
+  <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary"
       (click)="approve()">
       <span>Update</span>
   </button>
-  <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
+  <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary"
       (click)="approve()">
       <span>Save</span>
   </button>
 </div>
 <div class="modal fade" id="textarea-popupNotes" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -203,10 +214,14 @@
         </button>
     </div>
     <div class="modal-body">
-        <h6 class="modal-body">Part Number : {{part.partNumber}} - {{part.conditionDescription}}</h6>
+        <!-- <h6 class="modal-body">Part Number : {{part.partNumber}}</h6> -->
+        <strong>
+            Part Number :
+            <span class="new-label">{{part.partNumber}}</span>
+          </strong>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="deletePart()">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="deletePart()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="onClosePartDelete()">No</button>
     </div>
 </ng-template>
@@ -220,7 +235,8 @@
                 <h4 class="modal-title">History of Speed Quote Part</h4>
             </div>
             <div class="modal-body" *ngIf="auditHistory">
-                <div class="table-responsive history_hg" style="overflow-x:auto;">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                    <div class="tableFixHead">
                     <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
@@ -293,9 +309,13 @@
                                 <td
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                                     {{audit.updatedBy}}</td>
-                                <td>
-                                    <p class="background-white"> <input type="checkbox" name="isDeleted"
-                                            [(ngModel)]="audit.isDeleted" disabled></p>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                        <label class="wauto">
+                                     <input type="checkbox" name="isDeleted"
+                                            [(ngModel)]="audit.isDeleted" disabled>
+                                            </label>
+                                            </span>
                                 </td>
                             </tr>
                         </tbody>
@@ -306,6 +326,7 @@
                             <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
                     </ng-template>
+                    </div>
                 </div>
             </div>
             <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">

@@ -362,13 +362,13 @@
                 <th>Tag</th>
                 <th class="width-130" >Attention</th>
                 <th class="width-130">Prefix</th>
-                <th style="min-width:100px">First Name</th>
+                <th style="min-width:100px">First Name <span class="clr-red">*</span></th>
                 <th style="min-width:100px">Middle Name</th>
-                <th style="min-width:100px">Last Name</th>
+                <th style="min-width:100px">Last Name <span class="clr-red">*</span></th>
                 <th class="width-130">Suffix</th>
                 <th style="min-width:100px">Contact Title</th>
-                <th class="width-130">Email</th>
-                <th style="min-width:100px">Work Phone</th>
+                <th class="width-130">Email <span class="clr-red">*</span></th>
+                <th style="min-width:100px">Work Phone <span class="clr-red">*</span></th>
                 <th style="min-width:100px">Mobile Phone</th>
                 <th style="min-width:100px">Alternate Phone</th>
                 <th style="min-width:100px">Fax</th>
@@ -953,7 +953,7 @@
       <div class="modal-body">
         <div class="col-sm-12">
           <p>
-            <span class="label"><b>Tag<span class="clr-red">*</span>: </b></span><span
+            <span class="label"><b>Tag: </b></span><span
               class="value">{{ sourceViewforContact.tag }}</span>
           </p>
           <p>
@@ -1390,7 +1390,7 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1413,7 +1413,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel1()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel1()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1709,7 +1709,7 @@
       </strong>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+      <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>  
@@ -1752,7 +1752,7 @@
     </strong>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreATARecord()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="restoreATARecord()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
 </div>
 </ng-template> 
