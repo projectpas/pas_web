@@ -731,11 +731,12 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.repairOrderUnitCost = 0;
             stockLine.repairOrderExtendedCost = part.unitCost;
             stockLine.currentDate = new Date();
-            stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
+            stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from Repair order.
             stockLine.obtainFrom = this.repairOrderHeaderData.vendorId;
-            stockLine.taggedByType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
+            stockLine.taggedByType = AppModuleEnum.Vendor; // default is vendor and set the value from Repair order.
             stockLine.taggedBy = this.repairOrderHeaderData.vendorId;
-
+            stockLine.certifiedTypeId = AppModuleEnum.Vendor; // default is vendor and set the value from Repair order.
+            stockLine.certifiedById = this.repairOrderHeaderData.vendorId;
             stockLine.ownerType = AppModuleEnum.Vendor;
             stockLine.owner = this.repairOrderHeaderData.vendorId; 
             stockLine.maincompanylist = part.maincompanylist;
@@ -750,7 +751,10 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.unitOfMeasureId = part.uomId;              
             stockLine.serialNumber = part.serialNumber;         
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
-            stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());            
+            stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString()); 
+            stockLine.taggedByObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString()); 
+            stockLine.certByObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString()); 
+
             stockLine.revisedPartId = part.revisedPartId > 0 ? this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId) : 0;   
             stockLine.aircraftTailNumber = part.acTailNum;
             if (part.itemMaster != undefined) {
@@ -1019,6 +1023,27 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
+    onCertTypeChange(event, stockLine) {
+        stockLine.certifiedById = '';
+        stockLine.certByObject = {};
+
+        // if (event.target.value === AppModuleEnum.Customer) {
+        //     this.certbycustomer = true;
+        //     this.certbyother = false;
+        //     this.certbyvendor = false;
+        // }
+        // if (event.target.value === AppModuleEnum.Vendor) {
+        //     this.certbyother = true;
+        //     this.certbycustomer = false;
+        //     this.certbyvendor = false;
+        // }
+        // if (event.target.value === AppModuleEnum.Company) {
+        //     this.certbyvendor = true;
+        //     this.certbycustomer = false;
+        //     this.certbyother = false;
+        // }
+    }
+
     onObtainSelect(stockLine: StockLine, type): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;
         if (type == AppModuleEnum.Customer) {
@@ -1060,6 +1085,17 @@ export class ReceivingRoComponent implements OnInit {
             this.arrayVendlsit.push(stockLine.taggedByObject.Key);
         } else if (type == AppModuleEnum.Company) {
             this.arrayComplist.push(stockLine.taggedByObject.Key);
+        }
+    }
+
+    oncertTypeSelect(stockLine: StockLine, type): void {
+        stockLine.certifiedById = stockLine.certByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.certByObject.Key);
         }
     }
 

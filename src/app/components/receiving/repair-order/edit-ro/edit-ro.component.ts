@@ -833,6 +833,16 @@ export class EditRoComponent implements OnInit {
                         } 
                         SL.taggedByObject = this.CustomerList.find(x => x.Key == SL.taggedBy);
                     }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 1) {
+                        var certifiedById = this.CustomerList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.CustomerList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.CustomerList.find(x => x.Key == SL.certifiedById);
+                    }
                 }
             }
         });
@@ -871,6 +881,16 @@ export class EditRoComponent implements OnInit {
                         } 
                         SL.taggedByObject = this.VendorList.find(x => x.Key == SL.taggedBy);
                     }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 2) {
+                        var certifiedById = this.VendorList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.VendorList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.VendorList.find(x => x.Key == SL.certifiedById);
+                    }
                 }
             }
         });
@@ -908,6 +928,16 @@ export class EditRoComponent implements OnInit {
                             this.CompanyList.push(taggedBy);                           
                         }
                         SL.taggedByObject = this.CompanyList.find(x => x.Key == SL.taggedBy);
+                    }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 9) {
+                        var certifiedById = this.CompanyList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.CompanyList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.CompanyList.find(x => x.Key == SL.certifiedById);
                     }
                 }
             }
@@ -1638,6 +1668,27 @@ export class EditRoComponent implements OnInit {
         }
     }
 
+    onCertTypeChange(event, stockLine) {
+        stockLine.certifiedById = '';
+        stockLine.certByObject = {};
+
+        // if (event.target.value === AppModuleEnum.Customer) {
+        //     this.certbycustomer = true;
+        //     this.certbyother = false;
+        //     this.certbyvendor = false;
+        // }
+        // if (event.target.value === AppModuleEnum.Vendor) {
+        //     this.certbyother = true;
+        //     this.certbycustomer = false;
+        //     this.certbyvendor = false;
+        // }
+        // if (event.target.value === AppModuleEnum.Company) {
+        //     this.certbyvendor = true;
+        //     this.certbycustomer = false;
+        //     this.certbyother = false;
+        // }
+    }
+
     onOwnerChange(event, stockLine) {
         stockLine.ownerObject = {};
         stockLine.owner = '';
@@ -1720,6 +1771,17 @@ export class EditRoComponent implements OnInit {
             this.arrayVendlsit.push(stockLine.taggedByObject.Key);
         } else if (type == AppModuleEnum.Company) {
             this.arrayComplist.push(stockLine.taggedByObject.Key);
+        }
+    }
+
+    oncertTypeSelect(stockLine: StockLine, type): void {
+        stockLine.certifiedById = stockLine.certByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.certByObject.Key);
         }
     }
 

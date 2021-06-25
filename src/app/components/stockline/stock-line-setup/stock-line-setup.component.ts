@@ -1060,18 +1060,21 @@ export class StockLineSetupComponent implements OnInit {
 		if (res.owner != null) { this.arrayCustlist.push(res.owner); }
 		if (res.traceableTo != null) this.arrayCustlist.push(res.traceableTo);
 		if (res.taggedBy != null) this.arrayCustlist.push(res.taggedBy);
+		if (res.certifiedById != null) this.arrayCustlist.push(res.certifiedById);
 
 		//Add Vendor Id to Array list
 		if (res.obtainFrom != null) { this.arrayVendorlist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayVendorlist.push(res.owner); }
 		if (res.traceableTo != null) { this.arrayVendorlist.push(res.traceableTo); }
 		if (res.taggedBy != null) { this.arrayVendorlist.push(res.taggedBy); }
+		if (res.certifiedById != null) { this.arrayVendorlist.push(res.certifiedById); }
 
 		//Add Company Id to Array list
 		if (res.obtainFrom != null) { this.arrayCompanylist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayCompanylist.push(res.owner); }
 		if (res.traceableTo != null) { this.arrayCompanylist.push(res.traceableTo); }
 		if (res.taggedBy != null) { this.arrayCompanylist.push(res.taggedBy); }
+		if (res.certifiedById != null) { this.arrayCompanylist.push(res.certifiedById); }
 
 		//obtain from
 		if (res.obtainFromType == this.customerModuleId) {
@@ -1151,7 +1154,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.traceableTo = res.tracableToName;
 		}
 
-		//Tegged by
+		//Tagged by
 		if (res.taggedByType == this.customerModuleId) {
 			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 				this.allCustomersList = response;
@@ -1175,6 +1178,32 @@ export class StockLineSetupComponent implements OnInit {
 		}
 		else if (res.taggedByType == this.otherModuleId) {
 			this.stockLineForm.taggedByName = res.taggedByName;
+		}
+
+		// Certified Type
+		if (res.certifiedTypeId == this.customerModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCustomersList = response;
+				this.customerNames = this.allCustomersList;
+				this.stockLineForm.certifiedById = getObjectById('value', res.certifiedById, this.allCustomersList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.certifiedTypeId == this.vendorModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allVendorsList = response;
+				this.vendorNames = this.allVendorsList;
+				this.stockLineForm.certifiedById = getObjectById('value', res.certifiedById, this.allVendorsList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.certifiedTypeId == this.companyModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCompanyList = response;
+				this.companyNames = this.allCompanyList;
+				this.stockLineForm.certifiedById = getObjectById('value', res.certifiedById, this.allCompanyList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.certifiedTypeId == this.otherModuleId) {
+			this.stockLineForm.certifiedBy = res.certifiedBy;
 		}
 	}
 
@@ -1557,6 +1586,10 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.taggedBy = undefined;
 	}
 
+	onSelectCertype() {
+		this.stockLineForm.certifiedById = undefined;
+	}
+
 
 
 	onChangePONum(selected) {
@@ -1723,7 +1756,12 @@ export class StockLineSetupComponent implements OnInit {
 			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,			
 			taggedBy : this.stockLineForm.taggedByType == 4 ? null : (this.stockLineForm.taggedBy ? editValueAssignByCondition('value', this.stockLineForm.taggedBy) : ''),
 			taggedByName: this.stockLineForm.taggedByType == 4 ? this.stockLineForm.taggedByName : (this.stockLineForm.taggedBy ? getValueFromObjectByKey('label', this.stockLineForm.taggedBy) : ''),
-			taggedByType: this.stockLineForm.taggedByType > 0 ? this.stockLineForm.taggedByType : null,			
+			taggedByType: this.stockLineForm.taggedByType > 0 ? this.stockLineForm.taggedByType : null,
+			
+			certifiedById : this.stockLineForm.certifiedTypeId == 4 ? null : (this.stockLineForm.certifiedById ? editValueAssignByCondition('value', this.stockLineForm.certifiedById) : ''),
+			certifiedBy: this.stockLineForm.certifiedTypeId == 4 ? this.stockLineForm.certifiedBy : (this.stockLineForm.certifiedById ? getValueFromObjectByKey('label', this.stockLineForm.certifiedById) : ''),
+			certifiedTypeId: this.stockLineForm.certifiedTypeId > 0 ? this.stockLineForm.certifiedTypeId : null,
+
 			ownerType: this.stockLineForm.ownerType > 0 ? this.stockLineForm.ownerType : null,
 			traceableToType: this.stockLineForm.traceableToType > 0 ? this.stockLineForm.traceableToType : null,
 			manufacturerId: this.stockLineForm.manufacturerId > 0 ? this.stockLineForm.manufacturerId : null,
@@ -2358,6 +2396,55 @@ export class StockLineSetupComponent implements OnInit {
 		}else{
 			return 0
 		}		
+	}
+
+	onChangeTimeLifeMin(name,value) {  	
+        if (value > 59) {           
+			this.alertService.showMessage('Error','Minutes can\'t be greater than 59', MessageSeverity.error);
+			this.timeLifeMinNames(name);
+        }       
+	}
+	
+	timeLifeMinNames(name){
+		if(name == 'cyclesRemainingMin'){
+			this.sourceTimeLife.cyclesRemainingMin = '00';
+		}
+		else if (name == 'timeRemainingMin'){
+			this.sourceTimeLife.timeRemainingMin = '00';
+		}
+		else if (name == 'lastSinceNewMin'){
+			this.sourceTimeLife.lastSinceNewMin = '00';
+		}
+		else if (name == 'cyclesSinceNewMin'){
+			this.sourceTimeLife.cyclesSinceNewMin = '00';
+		}
+		else if (name == 'timeSinceNewMin'){
+			this.sourceTimeLife.timeSinceNewMin = '00';
+		}
+		else if (name == 'lastSinceOVHMin'){
+			this.sourceTimeLife.lastSinceOVHMin = '00';
+		}
+		else if (name == 'cyclesSinceOVHMin'){
+			this.sourceTimeLife.cyclesSinceOVHMin = '00';
+		}
+		else if (name == 'timeSinceOVHMin'){
+			this.sourceTimeLife.timeSinceOVHMin = '00';
+		}
+		else if (name == 'lastSinceInspectionMin'){
+			this.sourceTimeLife.lastSinceInspectionMin = '00';
+		}
+		else if (name == 'cyclesSinceInspectionMin'){
+			this.sourceTimeLife.cyclesSinceInspectionMin = '00';
+		}
+		else if (name == 'timeSinceInspectionMin'){
+			this.sourceTimeLife.timeSinceInspectionMin = '00';
+		}
+		else if (name == 'cyclesSinceRepairMin'){
+			this.sourceTimeLife.cyclesSinceRepairMin = '00';
+		}
+		else if (name == 'timeSinceRepairMin'){
+			this.sourceTimeLife.timeSinceRepairMin = '00';
+		}
 	}
 	
 }

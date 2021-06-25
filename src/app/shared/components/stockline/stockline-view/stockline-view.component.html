@@ -519,42 +519,24 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Part Cert Num</label>
+                                <label>Cert Num</label>
                                 <input class="form-control" type="text" name="partCertificationNumber" [(ngModel)]="viewSLInfo.partCertificationNumber" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Certify By</label>
+                                <label>Cert Type</label>
+                                <input class="form-control" type="text" name="certifiedType" [(ngModel)]="viewSLInfo.certifiedType" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Cert By</label>
                                 <input class="form-control" type="text" name="certifiedBy" [(ngModel)]="viewSLInfo.certifiedBy" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Certified Date</label>
+                                <label>Cert Date</label>
                                 <input type="text" class="form-control" name="certifiedDate" [(ngModel)]="viewSLInfo.certifiedDate" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Certify Due Date</label>
+                                <label>Cert Due Date</label>
                                 <input type="text" class="form-control" name="certifiedDueDate" [(ngModel)]="viewSLInfo.certifiedDueDate" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label>Tag Type</label>
-                                <input class="form-control" type="text" name="tagTypeName"
-                                 [(ngModel)]="viewSLInfo.tagType" [matTooltip]="viewSLInfo.tagType"
-                                 matTooltipPosition="above" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label>Tag Num</label>
-                                <input class="form-control" type="text" name="tagNumber" [(ngModel)]="viewSLInfo.tagNumber" disabled />
-                            </div>
-                            <div class="form-group">
-                                <label>Tag Date</label>
-                                <input type="text" class="form-control" name="tagDate" [(ngModel)]="viewSLInfo.tagDate" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label>Tagged By Type</label>
-                                <input class="form-control" type="text" name="taggedByTypeName" [(ngModel)]="viewSLInfo.taggedByTypeName" disabled />
-                            </div>
-                            <div class="form-group">
-                                <label>Tagged By</label>
-                                <input class="form-control" type="text" name="taggedByName" [(ngModel)]="viewSLInfo.taggedByName" disabled />
                             </div>
                             <div class="form-group">
                                 <label>Inspected By</label>
@@ -563,7 +545,29 @@
                             <div class="form-group">
                                 <label>Inspected Date</label>
                                 <input type="text" class="form-control" name="inspectionDate" [(ngModel)]="viewSLInfo.inspectionDate" disabled>
-                            </div>                                
+                            </div>
+                            <div class="form-group">
+                                <label>Tag Num</label>
+                                <input class="form-control" type="text" name="tagNumber" [(ngModel)]="viewSLInfo.tagNumber" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label>Tag Type</label>
+                                <input class="form-control" type="text" name="tagTypeName"
+                                 [(ngModel)]="viewSLInfo.tagType" [matTooltip]="viewSLInfo.tagType"
+                                 matTooltipPosition="above" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Tag By Type</label>
+                                <input class="form-control" type="text" name="taggedByTypeName" [(ngModel)]="viewSLInfo.taggedByTypeName" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label>Tag By</label>
+                                <input class="form-control" type="text" name="taggedByName" [(ngModel)]="viewSLInfo.taggedByName" disabled />
+                            </div>  
+                            <div class="form-group">
+                                <label>Tag Date</label>
+                                <input type="text" class="form-control" name="tagDate" [(ngModel)]="viewSLInfo.tagDate" disabled>
+                            </div>                                                         
                         </div>
                     </div>
     

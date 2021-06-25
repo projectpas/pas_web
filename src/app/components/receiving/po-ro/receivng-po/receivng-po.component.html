@@ -1014,13 +1014,72 @@
                                                             [maxLength]="200">
                                                     </div>
                                                     <div class="form-group">
+                                                        <label>Cert Type</label>
+                                                        <select class="form-control"
+                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedTypeId"
+                                                            #selects="ngModel" [ngModelOptions]="{standalone: true}"
+                                                            (change)="onCertTypeChange($event, part.stocklineListObj[part.currentSLIndex])">
+                                                            <option value="0">Select</option>
+                                                            <option *ngFor="let item of moduleListDropdown"
+                                                                [ngValue]="item.moduleId">
+                                                                {{item.moduleName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group" *ngIf="part.stocklineListObj[part.currentSLIndex].certifiedTypeId != undefined && part.stocklineListObj[part.currentSLIndex].certifiedTypeId > 0">
+                                                        <label>Cert By</label>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12">
+                                                                <p-autoComplete
+                                                                    *ngIf="part.stocklineListObj[part.currentSLIndex].certifiedTypeId == customerModuleId"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certByObject"
+                                                                    [suggestions]="CustomerList"
+                                                                    (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
+                                                                    (onSelect)="oncertTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
+                                                                    [dropdown]="true" [size]="32" [minLength]="1"
+                                                                    field="Value" class="autocomp-customer-cstm"
+                                                                    [forceSelection]="true">
+                                                                </p-autoComplete>
+
+                                                                <p-autoComplete
+                                                                    *ngIf="part.stocklineListObj[part.currentSLIndex].certifiedTypeId == vendorModuleId"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certByObject"
+                                                                    [suggestions]="VendorList"
+                                                                    (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
+                                                                    (onSelect)="oncertTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
+                                                                    [dropdown]="true" [size]="32" [minLength]="1"
+                                                                    field="Value" class="autocomp-customer-cstm"
+                                                                    [forceSelection]="true">
+                                                                </p-autoComplete>
+
+                                                                <p-autoComplete
+                                                                    *ngIf="part.stocklineListObj[part.currentSLIndex].certifiedTypeId == companyModuleId"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certByObject"
+                                                                    [suggestions]="CompanyList"
+                                                                    (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
+                                                                    (onSelect)="oncertTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
+                                                                    [dropdown]="true" [size]="32" [minLength]="1"
+                                                                    field="Value" class="autocomp-customer-cstm"
+                                                                    [forceSelection]="true">
+                                                                </p-autoComplete>
+
+                                                                <input
+                                                                    *ngIf="part.stocklineListObj[part.currentSLIndex].certifiedTypeId == otherModuleId"
+                                                                    class="form-control" type="text"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedBy"
+                                                                    pInputText>
+                                                            </div>                                                           
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="form-group">
                                                         <label>Cert By</label>
                                                         <input class="form-control"
                                                             [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedBy"
                                                             type="text" pInputText [maxLength]="200">
-                                                    </div>
+                                                    </div> -->
                                                     <div class="form-group">
-                                                        <label>Certified Date</label>
+                                                        <label>Cert Date</label>
                                                         <p-calendar
                                                             [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
                                                             class="calendar" [showIcon]="true" appendTo="body"
@@ -1032,7 +1091,7 @@
                                                         </p-calendar>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Certified Due Date</label>
+                                                        <label>Cert Due Date</label>
                                                         <p-calendar
                                                             [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
                                                             class="calendar" [showIcon]="true" appendTo="body"

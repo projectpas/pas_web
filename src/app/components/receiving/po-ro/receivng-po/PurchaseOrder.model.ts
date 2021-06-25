@@ -355,6 +355,7 @@ export class StockLine {
     manufacturingTrace: string;
     partCertificationNumber: string;
     certifiedBy: string;
+    certifiedById : string;
     certifiedDate: Date;
     tagDate: Date;
     tagType: any;
@@ -445,6 +446,7 @@ export class StockLine {
     ownerObject: DropDownData;
     traceableToObject: DropDownData;
     taggedByObject: DropDownData;
+    certByObject: DropDownData;
 }
 
 // export class StockLineDraft {
@@ -617,6 +619,7 @@ export class StockLineDraft {
     manufacturingBatchNumber: string = null;
     partCertificationNumber: string = null;
     certifiedBy: string = null;
+    certifiedTypeId: number = null;    //-----------------------------------------
     certifiedDate: Date = null;
     tagDate: Date = null;
     tagType: any = null;
@@ -651,9 +654,7 @@ export class StockLineDraft {
     obtainFromType: number = null;
     ownerType: number = null;
     traceableToType: number = null;
-
-    taggedByType : number = null;    //-----------------------------------------
-
+    taggedByType : number = null;  
     unitCostAdjustmentReasonTypeId: number = null;
     unitSalePriceAdjustmentReasonTypeId: number = null;
     idNumber: string = null;
@@ -727,8 +728,8 @@ export class StockLineDraft {
     ownerObject: DropDownData = null;
     traceableToObject: DropDownData = null;
 
-    taggedByObject: DropDownData = null;   //------------------------------
-
+    taggedByObject: DropDownData = null;   
+    certByObject : DropDownData = null;   //------------------------------
     createdBy: string = null;
     updatedBy: string = null;
 
@@ -768,11 +769,13 @@ export class StockLineDraft {
     WorkOrder: string = null;
     WorkOrderMaterialsName: string = null;
     tagTypeId: any = null;
-    taggedBy:number = null;         // ---------------------------------------  
+    taggedBy:number = null;         
     taggedByName: string = null;
     unitOfMeasureId:any = null;
     unitOfMeasure: string = null;
     tagTypeobject:any=null;
+
+    certifiedById:number = null;    // ---------------------------------------   
 }
 
 export class ReceiveParts {

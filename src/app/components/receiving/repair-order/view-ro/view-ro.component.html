@@ -250,7 +250,7 @@
                     <th>SO</th>
                     <th>Sub-WO</th>
                     <th colspan="4" style="text-align: center;">Management Structure</th>
-                    <th colspan="46"></th>
+                    <th colspan="48"></th>
                 </tr>
             </thead>
             <tbody *ngIf="repairOrderData != undefined">
@@ -284,7 +284,7 @@
                         <td style="min-width: 130px;">
                             <!-- <label style="width:90px;">Dept:</label> -->
                             {{part.departmentText}}
-                        <th colspan="46"></th>
+                        <th colspan="48"></th>
                     </tr>
 
                     <ng-container>
@@ -325,6 +325,8 @@
                             <th>Mfg Date</th>
                             <th>Mfg Batch Num</th>
                             <th>Part Cert Num </th>
+                            <th>Cert Type</th>
+                            <th>Cert By</th>
                             <th>Certified Date</th>
                             <th class="date">Certified Due Date</th>
                             <th>Tag Type</th>
@@ -430,6 +432,8 @@
                                 </td>
                                 <td>{{SL.manufacturingBatchNumber}}</td>
                                 <td>{{SL.partCertificationNumber}}</td>
+                                <td>{{SL.certifiedType}}</td>
+                                <td>{{SL.certifiedBy}}</td>
                                 <td>
                                     <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
                                         [disabled]="!SL.isEnabled" [showIcon]="true"
