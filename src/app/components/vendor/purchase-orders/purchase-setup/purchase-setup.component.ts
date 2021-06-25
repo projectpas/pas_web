@@ -426,15 +426,30 @@ export class PurchaseSetupComponent implements OnInit {
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
 		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
 		this.partName = (localStorage.getItem('partNumber'));
-		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		var salesOrderId = localStorage.getItem('salesOrderId');
+		if (salesOrderId !== 'undefined' && salesOrderId !== null) {
+			this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		}
 		var itmmasterid = localStorage.getItem('itemMasterId');
 		if (itmmasterid !== 'undefined' && itmmasterid !== null) {
 			this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'))
 		}
-		this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
-		this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
-		this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
-		this.lsqty = JSON.parse(localStorage.getItem('lsqty'));
+		var lsconditionId = localStorage.getItem('lsconditionId');
+		if (lsconditionId !== 'undefined' && lsconditionId !== null) {
+			this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
+		}
+		var lsWoId = localStorage.getItem('lsWoId');
+		if (lsWoId !== 'undefined' && lsWoId !== null) {
+			this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
+		}
+		var lsSubWoId = localStorage.getItem('lsSubWoId');
+		if (lsSubWoId !== 'undefined' && lsSubWoId !== null) {
+			this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		}
+		var lsqty = localStorage.getItem('lsqty');
+		if (lsqty !== 'undefined' && lsqty !== null) {
+			this.lsqty = JSON.parse(localStorage.getItem('lsqty'));
+		}
 		this.openStatusId = StatusEnum.Open;
 		this.pendingStatusId = StatusEnum.Pending;
 		this.fulfillingStatusId = StatusEnum.Fulfilling;
