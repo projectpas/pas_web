@@ -489,13 +489,13 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.owner = res.owner;
         }
         if (res.traceableToTypeId == this.customerModuleId) {
-            this.receivingForm.traceableTo = { 'customerId': res.traceableTo, 'name': res.tracableToName,'label': res.tracableToName, 'value': res.traceableTo };
+            this.receivingForm.traceableTo = { 'customerId': res.traceableTo, 'name': res.traceableToName,'label': res.traceableToName, 'value': res.traceableTo };
         }
         else if (res.traceableToTypeId == this.vendorModuleId) {
-            this.receivingForm.traceableTo = { 'label': res.tracableToName, 'value': res.traceableTo };
+            this.receivingForm.traceableTo = { 'label': res.traceableToName, 'value': res.traceableTo };
         }
         else if (res.traceableToTypeId == this.companyModuleId) {
-            this.receivingForm.traceableTo = { 'label': res.tracableToName, 'value': res.traceableTo };
+            this.receivingForm.traceableTo = { 'label': res.traceableToName, 'value': res.traceableTo };
         }
         else if (res.traceableToTypeId == this.otherModuleId) {
             this.receivingForm.traceableTo = res.traceableTo;
@@ -637,7 +637,9 @@ export class CustomerWorkSetupComponent implements OnInit {
                 return {
                     ...x,
                     customerId: x.customerId,
-                    name: x.customerName
+                    name: x.customerName,
+                    label : x.customerName,
+                    value : x.customerId,
                 }
             });
             this.customerNamesInfo = this.allCustomersInfo;
@@ -1115,7 +1117,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             receivingInfo.traceableToTypeId=(receivingInfo.traceableToTypeId==0 || receivingInfo.traceableToTypeId==0)? null :receivingInfo.traceableToTypeId;
             receivingInfo.taggedByType =(receivingInfo.taggedByType == 0 || receivingInfo.taggedByType == false) ? null :receivingInfo.taggedByType;
             receivingInfo.certifiedTypeId =(receivingInfo.certifiedTypeId == 0 || receivingInfo.certifiedTypeId == false) ? null :receivingInfo.certifiedTypeId;
-
+            
             if(receivingInfo.obtainFromTypeId !=null && receivingInfo.obtainFrom !=null){
                 receivingInfo.obtainFrom = (typeof receivingInfo.obtainFrom=='object' )? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
             }else{
