@@ -136,7 +136,7 @@ export class SpeedQuoteListComponent implements OnInit {
             { field: "partDescriptionType", header: "PN Description", width: "200px" },
             { field: "speedQuoteNumber", header: "Quote Num", width: "120px" },
             { field: "leadSourceName", header: "Lead Source", width: "160px" },
-            { field: "probability", header: "Probability", width: "80px" },
+            { field: "probability", header: "Probability", width: "90px" },
             { field: "quoteDate", header: "Quote Date", width: "120px" },
             { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
             { field: "quoteExpireDate", header: "Valid Until", width: "120px" },

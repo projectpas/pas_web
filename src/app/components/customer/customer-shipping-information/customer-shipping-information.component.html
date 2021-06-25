@@ -234,7 +234,7 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="domesticShippingData?.length == 0">
                             <tr>
-                              <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
+                              <td [attr.colspan]="11" class="no-records-cstm no-records-msg">
                                 No records found
                               </td>
                             </tr>
@@ -369,7 +369,7 @@
                           <ng-template pTemplate="header" let-columns>
                             <tr>
                               <th class="width-50">Flag</th>
-                              <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
+                              <th class="table-column-width" [ngStyle]="{'width': col.width}" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
                                 pReorderableColumn [pSortableColumn]="col.field">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -420,7 +420,7 @@
                                     : rowData[col.field]
                                 }}
                               </td>
-                              <td class="table-column-width" *ngIf="col.field == 'amount'" [hidden]="col.field == 'isPrimary'">
+                              <td *ngIf="col.field == 'amount'" [hidden]="col.field == 'isPrimary'">
                                 <p class="m-0 p-0 text-right"> {{ rowData[col.field] }}</p>
                               </td>
                               </ng-container>
@@ -487,7 +487,7 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingData?.length == 0">
                             <tr>
-                              <td [attr.colspan]="8" class="no-records-cstm no-records-msg">
+                              <td [attr.colspan]="12" class="no-records-cstm no-records-msg">
                                 No records found
                               </td>
                             </tr>

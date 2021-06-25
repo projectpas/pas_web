@@ -67,7 +67,7 @@
                 <form #newSalesQuoteForm="ngForm" class="form-horizontal">
                     <div class="card sales-toggle" *ngIf="toggle_po_header">
                         <div class="col-md-12 row">
-                            <div class="col-md-6" style="padding-left: 10px; padding-top: 10px;">
+                            <div class="col-md-6" style="padding-left: 10px;">
                                 <label style="width: 17%;">Speed Quote Type:</label>
                                 <label class="wauto" matTooltipPosition="above" matTooltip="MRO">
                                     <input type="radio" [value]="1" name="type" class="radio_adjust"
@@ -370,7 +370,7 @@
                                             
                                                 <input type="text" class="form-control"
                                                     [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
-                                                    [disabled]="true" />
+                                                    [disabled]="true" required/>
                                             </div>
                                             <!-- <div class="col-md-6">
                                                 <p-calendar name="statusChangeDate" [yearNavigator]="true"
@@ -683,7 +683,7 @@
     </div>
 </div>
 <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" aria-label="Close" (click)="closeModal()">&times;</button>

@@ -414,7 +414,13 @@
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                           <tr align="center">
                             <td class="table-column-width" *ngFor="let col of columns">
-                              {{ rowData[col.field] }}
+                              <ng-container *ngIf="col.field!='taxRate'">
+                                {{ rowData[col.field] }}
+                            </ng-container> 
+
+                              <ng-container *ngIf="col.field=='taxRate'">
+                                <p class="m-0 p-0 text-right">{{ rowData[col.field] }}</p>
+                            </ng-container> 
                             </td>
 
                             <td class="action-icons-cstm table-column-width">

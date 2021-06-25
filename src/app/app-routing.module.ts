@@ -85,7 +85,8 @@ import { ResetPassComponent } from './components/login/reset-password-ui/resetpa
             {
                 path: "exchangemodule",
                 //loadChildren: "./exchangepages/exchangepages.module#ExchangepagesModule"
-                loadChildren: () => import('./exchangepages/exchangepages.module').then(m => m.ExchangepagesModule)
+                //loadChildren: () => import('./exchangepages/exchangepages.module').then(m => m.ExchangepagesModule)
+                loadChildren: "./exchangepages/exchangepages.module#ExchangepagesModule"
             },
             { path: "home", redirectTo: "/", pathMatch: "full" },
             { path: "updatepassword", component:UpdatepasswordComponent ,data: { title: "UpdatePassword" } },

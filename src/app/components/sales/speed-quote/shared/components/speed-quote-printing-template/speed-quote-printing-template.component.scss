@@ -90,6 +90,9 @@ table {
    width: 100%;
   
   }
+  .table-bottom{
+    margin-bottom:-3px;
+  }
   
   .first-block-ship-to {
    position: relative;
@@ -104,9 +107,12 @@ table {
   .border-none{
    border:none;
   }
-  .label-margin{
-  //  margin-left:-15px;
+  .label-margin-quote{
+   margin-left:-15px;
   }
+  .label-margin-ship{
+    margin-left:-20px;
+   }
   
   .first-block-sold {
    position: relative;
@@ -283,7 +289,7 @@ table {
   
   .very-first-block {
    position: relative;
-   min-height: 1px;
+   min-height: 170px;
    height:auto;
    border-right:1px solid black;
    float: left;

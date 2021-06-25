@@ -84,7 +84,7 @@
             </div>
             <div class="col-sm-12 first-block-sold-bottom">
               <div class="first-block-sold col-sm-6">
-                <label class="label-margin"><b>Quote For:</b></label>
+                <label class="label-margin-quote"><b>Quote For:</b></label>
                 <div class="first-block-sold-to">
 
                   <div class="sold-block-div">
@@ -113,7 +113,7 @@
                 </div>
               </div>
               <div class="first-block-ship col-sm-6">
-                <label class="label-margin"><b> Ship To:</b></label>
+                <label class="label-margin-ship"><b> Ship To:</b></label>
                 <div class="first-block-ship-to">
 
                   <div class="ship-block-div">
@@ -175,7 +175,7 @@
             </div>
             <!-- <div class="clear"></div>
               <hr /> -->
-            <div class="col-sm-12">
+            <div class="col-sm-12 table-bottom">
               <table rules=none *ngFor="let part of this.parts let i=index"
                 class="parttable print-table print-friendly table-margins" style="margin-top:10px">
                 <thead>
@@ -266,13 +266,14 @@
                           {{price.notes != '' ? price.conditionDescription + '-' + price.notes : ''}}
                         </label>
                       </td> -->
-                      <td colspan="3" rowspan="3" style="border:1px solid black">
+                      <td colspan="3" style="border:1px solid black">
                       </td>
+                      <td colspan="4"></td>
                     </tr>
-                    <tr></tr>
-                    <tr> </tr>
+                    <!-- <tr></tr>
+                    <tr> </tr> -->
                     <tr>
-                      <td colspan="8" rowspan="3">Notes: {{this.speedQuote.notes}}</td>
+                      <td colspan="8" >Notes: {{this.speedQuote.notes}}</td>
                     </tr>
                   </ng-container>
 
@@ -360,7 +361,7 @@
                     </div>
                 </div>
                 <div class="clear"></div>
-                <div class="col-sm-12">
+                <div class="col-sm-12" style="margin-bottom:-3px">
                     <table rules=none class="parttable print-table print-friendly table-margins" *ngFor="let part of this.exclusionParts let i=index">
                         <thead>
                             <tr>

@@ -157,11 +157,14 @@
             [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
             [matTooltipDisabled]="rowData['partNumberType'] != 'Multiple'"
             [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
-            <span *ngIf="col.field == 'quoteAmount'" style="float: right !important;">
+            <span *ngIf="col.field == 'quoteAmount' " style="float: right !important;">
               {{convertDate(col.field , rowData) | toDecimal}}
             </span>
+            <span *ngIf="col.field == 'probability' " style="float: right !important;">
+              {{convertDate(col.field , rowData)}}
+            </span>
             <span
-              *ngIf="col.field != 'quoteAmount' && col.field != 'createdDate' && col.field != 'updatedDate'">
+              *ngIf="col.field != 'quoteAmount'&& col.field != 'probability' && col.field != 'createdDate' && col.field != 'updatedDate'">
               {{convertDate(col.field , rowData)}}
             </span>
             <span *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
@@ -242,7 +245,11 @@
     </button>
   </div>
   <div class="modal-body">
-    <h6 class="modal-body">Speed Quote Number : {{restorerecord.speedQuoteNumber}}</h6>
+    <!-- <h6 class="modal-body">Speed Quote Number : {{restorerecord.speedQuoteNumber}}</h6> -->
+    <strong>
+      Speed Quote Number :
+      <span class="new-label">{{restorerecord.speedQuoteNumber}}</span>
+    </strong>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
@@ -284,7 +291,11 @@
     </button>
   </div>
   <div class="modal-body">
-    <h6 class="modal-body">Speed Quote Number : {{selectedQuoteToDelete}}</h6>
+    <!-- <h6 class="modal-body">Speed Quote Number : {{selectedQuoteToDelete}}</h6> -->
+    <strong>
+      Speed Quote Number :
+      <span class="new-label">{{selectedQuoteToDelete}}</span>
+    </strong>
   </div>
 
   <div class="modal-footer">
@@ -336,7 +347,8 @@
       <h4 class="modal-title">History of Sales Order Quote</h4>
     </div>
     <div class="modal-body" *ngIf="auditHistory">
-      <div class="table-responsive">
+      <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+        <div class="tableFixHead"> 
         <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
           <thead>
             <tr>
@@ -376,7 +388,7 @@
               <td
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'customerReference', audit.customerReference)  ? 'black' : 'red'  }">
                 {{audit.customerReference}}</td>
-              <td
+              <td class="text-right"
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'probability', audit.probability)  ? 'black' : 'red'  }">
                 {{audit.probability}}</td>
               <td
@@ -409,6 +421,7 @@
             <h4 class="no-history-found-msg">No History Found </h4>
           </div>
         </ng-template>
+        </div>
       </div>
     </div>
     <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">

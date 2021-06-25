@@ -104,9 +104,12 @@ table {
   .border-none{
    border:none;
   }
-  .label-margin{
-   margin-left:-15px;
-  }
+  .label-margin-quote{
+    margin-left:-15px;
+   }
+   .label-margin-ship{
+     margin-left:-20px;
+    }
   
   .first-block-sold {
    position: relative;
