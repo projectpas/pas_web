@@ -2018,7 +2018,7 @@ this.getNewMaterialListByWorkOrderId();
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderMaterialListNew(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.salesQuoteService.selectedParts =[];
                 if (res && res.length > 0) {
