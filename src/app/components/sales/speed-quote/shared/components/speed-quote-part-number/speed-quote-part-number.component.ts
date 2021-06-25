@@ -21,6 +21,7 @@ import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 import { StocklineViewComponent } from "../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
 import { SpeedQuoteService } from "../../../../../../services/speedquote.service";
 import { SpeedQuoteExclusionsComponent } from "../../../shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
+import { formatStringToNumber } from "../../../../../../generic/autocomplete";
 @Component({
   selector: 'app-speed-quote-part-number',
   templateUrl: './speed-quote-part-number.component.html',
@@ -699,5 +700,8 @@ export class SpeedQuotePartNumberComponent {
 
   onCloseTextAreaInfo() {
     $("#textarea-popupNotes").modal("hide");
+  }
+  formatStringToNumberGlobal(val) {
+    return formatStringToNumber(val)
   }
 }
