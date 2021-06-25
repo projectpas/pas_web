@@ -756,13 +756,10 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.currentDate = new Date();
             stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.obtainFrom = this.purchaseOrderData.vendor.vendorId;
-
             stockLine.taggedByType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.taggedBy = this.purchaseOrderData.vendor.vendorId;
-
             stockLine.certifiedTypeId = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
             stockLine.certifiedById = this.purchaseOrderData.vendor.vendorId;
-
             stockLine.ownerType = AppModuleEnum.Vendor;
             stockLine.owner = this.purchaseOrderData.vendor.vendorId;           
             stockLine.unitOfMeasureId = part.unitOfMeasureId;
@@ -775,12 +772,10 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.parentbuId = part.parentbuId;
             stockLine.parentDivisionId = part.parentDivisionId;
             stockLine.parentDeptId = part.parentDeptId;
-
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
             stockLine.taggedByObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
-            stockLine.certByObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
-            
+            stockLine.certByObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());            
 
             if (part.itemMaster != undefined) {
                 stockLine.purchaseOrderUnitCost = part.unitCost;
@@ -1453,9 +1448,7 @@ export class ReceivngPoComponent implements OnInit {
             return;
         }, err => {
             this.isSpinnerVisible = false;            
-        }
-        );
-
+        });
     }
 
 

@@ -924,12 +924,63 @@
                                 <input class="form-control" type="text" name="partCertificationNumber"
                                     [(ngModel)]="stockLineForm.partCertificationNumber" (ngModelChange)="enableSave()">
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Certify By
                                 </label>
                                 <input class="form-control" type="text" name="certifiedBy"
                                     [(ngModel)]="stockLineForm.certifiedBy" (ngModelChange)="enableSave()" />
+                            </div> -->
+                            <div class="form-group">
+                                <label>Cert Type</label>
+                                <select [(ngModel)]="stockLineForm.certifiedTypeId" name="certifiedTypeId"
+                                    (change)="onSelectCertype()" (ngModelChange)="enableSave()">
+                                    <option value="0">-- Select --</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
+                                </select>
                             </div>
+
+                            <div class="form-group">
+                                <label>Cert By</label>
+                                <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 1">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.certifiedById" name="certifiedByCustomer"
+                                            [suggestions]="customerNames" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true"></p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 2">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.certifiedById" name="certifiedByVendor"
+                                            [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 9">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.certifiedById" name="certifiedByCompany"
+                                            [suggestions]="companyNames" (completeMethod)="filterCompanyNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 4">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" name="certifiedByOther"
+                                            [(ngModel)]="stockLineForm.certifiedBy" (ngModelChange)="enableSave()">
+                                    </div>
+                                </div>
+                            </div> 
                             <div class="form-group">
                                 <label>Certified Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
@@ -1131,7 +1182,8 @@
                                             #cyclesRemainingMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="cyclesRemainingMin"
-                                            [(ngModel)]="sourceTimeLife.cyclesRemainingMin">
+                                            [(ngModel)]="sourceTimeLife.cyclesRemainingMin"
+                                            (change)="onChangeTimeLifeMin('cyclesRemainingMin',sourceTimeLife.cyclesRemainingMin)">
                                     </td>
                                     <td>Remaining</td>
                                     <td class="clr2">
@@ -1158,7 +1210,8 @@
                                             #timeRemainingMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="timeRemainingMin"
-                                            [(ngModel)]="sourceTimeLife.timeRemainingMin">
+                                            [(ngModel)]="sourceTimeLife.timeRemainingMin"
+                                            (change)="onChangeTimeLifeMin('timeRemainingMin',sourceTimeLife.timeRemainingMin)">
                                     </td>
                                     <td style="width:70px!important">Since New</td>
                                     <td class="clr2">
@@ -1173,8 +1226,8 @@
                                             #lastSinceNewMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="lastSinceNewMin"
-                                            [(ngModel)]="sourceTimeLife.lastSinceNewMin">
-
+                                            [(ngModel)]="sourceTimeLife.lastSinceNewMin"
+                                            (change)="onChangeTimeLifeMin('lastSinceNewMin',sourceTimeLife.lastSinceNewMin)">
                                     </td>
                                 </tr>
                                 <tr>
@@ -1204,7 +1257,8 @@
                                             #cyclesSinceNewMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="cyclesSinceNewMin"
-                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewMin">
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewMin"
+                                            (change)="onChangeTimeLifeMin('cyclesSinceNewMin',sourceTimeLife.cyclesSinceNewMin)">
 
                                     </td>
                                     <td>Since New</td>
@@ -1232,7 +1286,8 @@
                                             #timeSinceNewMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="timeSinceNewMin"
-                                            [(ngModel)]="sourceTimeLife.timeSinceNewMin">
+                                            [(ngModel)]="sourceTimeLife.timeSinceNewMin"
+                                            (change)="onChangeTimeLifeMin('timeSinceNewMin',sourceTimeLife.timeSinceNewMin)">
 
                                     </td>
                                     <td style="width:70px!important">Since Ovh</td>
@@ -1260,7 +1315,8 @@
                                             #lastSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="lastSinceOVHMin"
-                                            [(ngModel)]="sourceTimeLife.lastSinceOVHMin">
+                                            [(ngModel)]="sourceTimeLife.lastSinceOVHMin"
+                                            (change)="onChangeTimeLifeMin('lastSinceOVHMin',sourceTimeLife.lastSinceOVHMin)">
                                     </td>
                                 </tr>
                                 <tr>
@@ -1289,7 +1345,8 @@
                                             #cyclesSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="cyclesSinceOVHMin"
-                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHMin">
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHMin"
+                                            (change)="onChangeTimeLifeMin('cyclesSinceOVHMin',sourceTimeLife.cyclesSinceOVHMin)">
                                     </td>
                                     <td>Since Ovh</td>
                                     <td class="clr2">
@@ -1316,7 +1373,8 @@
                                             #timeSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="timeSinceOVHMin"
-                                            [(ngModel)]="sourceTimeLife.timeSinceOVHMin">
+                                            [(ngModel)]="sourceTimeLife.timeSinceOVHMin"
+                                            (change)="onChangeTimeLifeMin('timeSinceOVHMin',sourceTimeLife.timeSinceOVHMin)">
                                     </td>
                                     <td>Since Insp</td>
                                     <td class="clr2">
@@ -1343,7 +1401,8 @@
                                             #lastSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="lastSinceInspectionMin"
-                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionMin">
+                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionMin"
+                                            (change)="onChangeTimeLifeMin('lastSinceInspectionMin',sourceTimeLife.lastSinceInspectionMin)">
                                     </td>
                                 </tr>
                                 <tr>
@@ -1373,7 +1432,8 @@
                                             #cyclesSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="cyclesSinceInspectionMin"
-                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin">
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin"
+                                            (change)="onChangeTimeLifeMin('cyclesSinceInspectionMin',sourceTimeLife.cyclesSinceInspectionMin)">
                                     </td>
                                     <td>Since Insp</td>
                                     <td class="clr2">
@@ -1400,7 +1460,8 @@
                                             #timeSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="timeSinceInspectionMin"
-                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionMin">
+                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionMin"
+                                            (change)="onChangeTimeLifeMin('timeSinceInspectionMin',sourceTimeLife.timeSinceInspectionMin)">
                                     </td>
                                     <td></td>
                                     <td style="background-color: #fff !important;"></td>
@@ -1445,7 +1506,8 @@
                                             #cyclesSinceRepairMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="cyclesSinceRepairMin"
-                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairMin">
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairMin"
+                                            (change)="onChangeTimeLifeMin('cyclesSinceRepairMin',sourceTimeLife.cyclesSinceRepairMin)">
                                     </td>
                                     <td>Since Repair</td>
                                     <td class="clr2">
@@ -1472,7 +1534,8 @@
                                             #timeSinceRepairMin="ngModel" (ngModelChange)="enableSave()"
                                             type="number" 
                                             name="timeSinceRepairMin"
-                                            [(ngModel)]="sourceTimeLife.timeSinceRepairMin">
+                                            [(ngModel)]="sourceTimeLife.timeSinceRepairMin"
+                                            (change)="onChangeTimeLifeMin('timeSinceRepairMin',sourceTimeLife.timeSinceRepairMin)">
                                     </td>
                                     <td></td>
                                     <td style="background-color: #fff !important;"></td>

@@ -374,7 +374,7 @@ export class StockLine {
     parentbuId: number = 0;
     parentDivisionId: number = 0;
     parentDeptId: number = 0;
-    taggedByType : number = null;    //-----------------------------------------
+    taggedByType : number = null;   
     taggedBy:any = null;
     taggedByName: string = null;
     unitOfMeasureId:number = null;
@@ -382,6 +382,9 @@ export class StockLine {
     revisedPartId:any = null;
     revisedPartNumber: string = null;
     revisedPartObject: DropDownData;
+    certifiedById:any = null;
+    certByObject: DropDownData;
+    certifiedTypeId : number = null;
 }
 
 export class ReceiveParts {

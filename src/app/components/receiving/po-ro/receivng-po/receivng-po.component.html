@@ -1046,7 +1046,7 @@
                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certByObject"
                                                                     [suggestions]="VendorList"
                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
-                                                                    (onSelect)="ontagTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
+                                                                    (onSelect)="oncertTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                     field="Value" class="autocomp-customer-cstm"
                                                                     [forceSelection]="true">
@@ -1057,7 +1057,7 @@
                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certByObject"
                                                                     [suggestions]="CompanyList"
                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
-                                                                    (onSelect)="ontagTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
+                                                                    (onSelect)="oncertTypeSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].certifiedTypeId)"
                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                     field="Value" class="autocomp-customer-cstm"
                                                                     [forceSelection]="true">

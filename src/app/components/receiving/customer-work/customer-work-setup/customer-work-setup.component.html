@@ -767,20 +767,86 @@
                                 <input class="form-control" type="text" name="partCertificationNumber"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.partCertificationNumber">
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>
                                     Cert By
                                 </label>
                                 <input class="form-control" type="text" name="certifiedBy"
-                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.certifiedBy">
-                                <!-- <p-dropdown class="p-dropdown-100" [showClear]="true"
-                                    [options]="certifiedEmployeeList"
-                                    placeholder="Select" filter="true"                                                
-                                    name="certifiedById" [resetFilterOnHide]="true"
-                                    [(ngModel)]="receivingForm.certifiedById"
-                                    (ngModelChange)="getActive()">             
-                                </p-dropdown> -->
-                            </div>     
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.certifiedBy">                                
+                            </div>      -->
+
+                            <div class="form-group">
+                                <label>Cert Type</label>
+                                <select [(ngModel)]="receivingForm.certifiedTypeId" name="certifiedTypeId"
+                                    (change)="onSelectCertType(receivingForm.certifiedTypeId)" (ngModelChange)="getActive()">
+                                    <option value="0">-- Select --</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Cert By</label>
+                                <div class="form-row" *ngIf="receivingForm.certifiedTypeId == customerModuleId">
+                                    <div class="col-sm-12">  
+                                        <p-autoComplete field="name" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()"                                            
+                                            (keyup)="getCustomers($event.target.value, 2)"
+                                            [(ngModel)]="receivingForm.certifiedById" name="certifiedByCustomer"
+                                            [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.certifiedTypeId == vendorModuleId">
+                                    <div class="col-sm-12">                                        
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()"                                           
+                                            [(ngModel)]="receivingForm.certifiedById" name="certifiedByVendor"
+                                            [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.certifiedTypeId == companyModuleId">
+                                    <div class="col-sm-12">                                        
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()" 
+                                            [(ngModel)]="receivingForm.certifiedById"
+                                            name="certifiedByCompany" [suggestions]="companyList"
+                                            (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
+                                            [dropdown]="true" errorMessage="Records not found"
+                                             [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.certifiedTypeId == otherModuleId">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" name="certifiedBy"
+                                            [(ngModel)]="receivingForm.certifiedBy" (ngModelChange)="getActive()">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             <div class="form-group">
                                 <label> Cert Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="certifiedDate"

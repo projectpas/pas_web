@@ -55,6 +55,9 @@ export class EditPoComponent implements OnInit {
     traceabletocustomer: boolean = false;
     traceabletoother: boolean = false;
     traceabletovendor: boolean = false;
+    certbycustomer : boolean = false;
+    certbyother : boolean = false;
+    certbyvendor : boolean = false;
     rpoEditPF: boolean = true; //remove once add dynamic content
     rpoEditCF: boolean = true; //remove once add dynamic content
     poDataHeader: any;
@@ -284,7 +287,6 @@ export class EditPoComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-
     getManagementStructureForPart(partList, response) {
         if (response) {
             const result = response[partList.purchaseOrderPartRecordId];
@@ -357,7 +359,6 @@ export class EditPoComponent implements OnInit {
 
     }
 
-
     selectedLegalEntity(legalEntityId, part) {
         part.parentBulist = [];
         part.parentDivisionlist = [];
@@ -416,7 +417,6 @@ export class EditPoComponent implements OnInit {
             }
         }
     }
-
 
     selectedBusinessUnit(businessUnitId, part) {
         part.parentDivisionlist = [];
@@ -552,7 +552,6 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-
     getManagementStructureForSL(sl1, response) {
         if (response) {
             const result = response[sl1.stockLineDraftId];
@@ -624,7 +623,6 @@ export class EditPoComponent implements OnInit {
         }
 
     }
-
 
     selectedLegalEntitySL(legalEntityId, stockLine) {
         stockLine.parentBulist = [];
@@ -749,9 +747,9 @@ export class EditPoComponent implements OnInit {
     onAddNotes() {
         this.headerNotes = this.purchaseOrderData.notes;
     }
+    
     onSaveNotes() {
         this.purchaseOrderData.notes = this.headerNotes;
-
     }
 
     onAddMemo() {
@@ -865,6 +863,16 @@ export class EditPoComponent implements OnInit {
                         }                       
                         SL.taggedByObject = this.CustomerList.find(x => x.Key == SL.taggedBy);
                     }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 1) {
+                        var certifiedById = this.CustomerList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.CustomerList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.CustomerList.find(x => x.Key == SL.certifiedById);
+                    }
                 }
             }
         },
@@ -905,6 +913,16 @@ export class EditPoComponent implements OnInit {
                             this.VendorList.push(taggedBy);                           
                         } 
                         SL.taggedByObject = this.VendorList.find(x => x.Key == SL.taggedBy);
+                    }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 2) {
+                        var certifiedById = this.VendorList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.VendorList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.VendorList.find(x => x.Key == SL.certifiedById);
                     }
                 }
             }
@@ -948,10 +966,19 @@ export class EditPoComponent implements OnInit {
                         }
                         SL.taggedByObject = this.CompanyList.find(x => x.Key == SL.taggedBy);
                     }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 9) {
+                        var certifiedById = this.CompanyList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.CompanyList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.CompanyList.find(x => x.Key == SL.certifiedById);
+                    }
                 }
             }
-        }
-        );
+        });
     }
 
     getConditionList() {
@@ -1614,6 +1641,27 @@ export class EditPoComponent implements OnInit {
         }
     }
 
+    onCertTypeChange(event, stockLine) {
+        stockLine.certifiedById = '';
+        stockLine.certByObject = {};
+
+        if (event.target.value === AppModuleEnum.Customer) {
+            this.certbycustomer = true;
+            this.certbyother = false;
+            this.certbyvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Vendor) {
+            this.certbyother = true;
+            this.certbycustomer = false;
+            this.certbyvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Company) {
+            this.certbyvendor = true;
+            this.certbycustomer = false;
+            this.certbyother = false;
+        }
+    }
+
     onOwnerChange(event, stockLine) {
         stockLine.ownerObject = {};
         stockLine.owner = '';
@@ -1728,6 +1776,17 @@ export class EditPoComponent implements OnInit {
             this.arrayVendlsit.push(stockLine.taggedByObject.Key);
         } else if (type == AppModuleEnum.Company) {
             this.arrayComplist.push(stockLine.taggedByObject.Key);
+        }
+    }
+
+    oncertTypeSelect(stockLine: StockLine, type): void {
+        stockLine.certifiedById = stockLine.certByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.certByObject.Key);
         }
     }
 

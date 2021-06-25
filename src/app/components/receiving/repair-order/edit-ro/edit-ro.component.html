@@ -240,7 +240,7 @@
                                     <th>Location</th>
                                     <th>Shelf</th>
                                     <th>Bin</th>
-                                    <th colspan="41"></th>
+                                    <th colspan="43"></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -379,7 +379,7 @@
                                                 </option>
                                             </select>
                                         </td>
-                                        <td colspan="41"></td>
+                                        <td colspan="43"></td>
                                         <td><a matTooltip="Edit" matTooltipPosition="above"
                                                 class="btn boxed-float-btn nobg edit"><i class="fa fa-edit"
                                                     (click)="editPart(part)"></i></a></td>
@@ -423,6 +423,8 @@
                                             <th>Mfg Date</th>
                                             <th>Mfg Batch Num</th>
                                             <th>Part Cert Num </th>
+                                            <th>Cert Type</th>
+                                            <th>Cert By</th>
                                             <th>Certified Date</th>
                                             <th class="date">Certified Due Date</th>
                                             <th>Tag Type</th>
@@ -799,6 +801,62 @@
                                                     <input class="form-control" type="text" pInputText
                                                         [disabled]="!SL.isEnabled"
                                                         [(ngModel)]="SL.partCertificationNumber" [maxLength]="200">
+                                                </td>
+
+                                                <td>
+                                                    <select class="form-control" [(ngModel)]="SL.certifiedTypeId"
+                                                        #selects="ngModel" [disabled]="!SL.isEnabled"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (change)="onCertTypeChange($event, SL)">
+                                                        <option value="0">Select</option>
+                                                        <option *ngFor="let item of moduleListDropdown"
+                                                            [ngValue]="item.moduleId">{{item.moduleName}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group"
+                                                        *ngIf="SL.certifiedTypeId != undefined && SL.certifiedTypeId > 0">
+                                                        <div class="form-row">
+                                                            <div class="col-sm-11">
+                                                                <p-autoComplete
+                                                                    *ngIf="SL.certifiedTypeId == customerModuleId"
+                                                                    [(ngModel)]="SL.certByObject"
+                                                                    [suggestions]="CustomerList" appendTo="body"
+                                                                    [disabled]="!SL.isEnabled"
+                                                                    (completeMethod)="onFilter($event, SL, SL.certifiedTypeId)"
+                                                                    (onSelect)="oncertTypeSelect(SL)" [dropdown]="true"
+                                                                    [size]="32" [minLength]="1" field="Value"
+                                                                    class="rpo-acomp">
+                                                                </p-autoComplete>
+    
+                                                                <p-autoComplete *ngIf="SL.certifiedTypeId == vendorModuleId"
+                                                                    [(ngModel)]="SL.certByObject"
+                                                                    [suggestions]="VendorList" [disabled]="!SL.isEnabled"
+                                                                    appendTo="body"
+                                                                    (completeMethod)="onFilter($event, SL, SL.certifiedTypeId)"
+                                                                    (onSelect)="oncertTypeSelect(SL)" [dropdown]="true"
+                                                                    [size]="32" [minLength]="1" field="Value"
+                                                                    class="rpo-acomp">
+                                                                </p-autoComplete>
+    
+                                                                <p-autoComplete *ngIf="SL.certifiedTypeId == companyModuleId"
+                                                                    [(ngModel)]="SL.certByObject"
+                                                                    [suggestions]="CompanyList" [disabled]="!SL.isEnabled"
+                                                                    appendTo="body"
+                                                                    (completeMethod)="onFilter($event, SL, SL.certifiedTypeId)"
+                                                                    (onSelect)="oncertTypeSelect(SL)" [dropdown]="true"
+                                                                    [size]="32" [minLength]="1" field="Value"
+                                                                    class="rpo-acomp">
+                                                                </p-autoComplete>
+    
+                                                                <input *ngIf="SL.certifiedTypeId == otherModuleId"
+                                                                    class="form-control" type="text"
+                                                                    [disabled]="!SL.isEnabled"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [(ngModel)]="SL.certifiedBy" pInputText>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <!-- <p-calendar class="pas-clder pas-clder-po-table"

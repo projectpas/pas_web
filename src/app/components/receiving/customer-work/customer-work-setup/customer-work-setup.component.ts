@@ -148,6 +148,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.ownerTypeId = 1;
         this.receivingForm.traceableToTypeId = 1;
         this.receivingForm.taggedByType = 1;
+        this.receivingForm.certifiedTypeId = 1;
         this.receivingForm.tagType = null;
         this.receivingForm.quantity = 1;
         this.receivingForm.isCustomerStock = true;
@@ -278,7 +279,8 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.arrayVendlsit.push(this.receivingForm.traceableTo? this.receivingForm.traceableTo.value :0,
                 this.receivingForm.owner?  this.receivingForm.owner.value : 0,
                 this.receivingForm.obtainFrom ? this.receivingForm.obtainFrom.value : 0,
-                this.receivingForm.taggedById ? this.receivingForm.taggedById.value : 0 ); 
+                this.receivingForm.taggedById ? this.receivingForm.taggedById.value : 0,
+                this.receivingForm.certifiedById ? this.receivingForm.certifiedById.value : 0); 
         } else {
             this.arrayVendlsit.push(0);
         }
@@ -302,7 +304,8 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.arrayVendlsit.push(this.receivingForm.traceableTo? this.receivingForm.traceableTo.value :0,
                 this.receivingForm.owner ? this.receivingForm.owner.value :0,
                 this.receivingForm.obtainFrom ? this.receivingForm.obtainFrom.value :0 , 
-                this.receivingForm.taggedById ? this.receivingForm.taggedById.value : 0 ); 
+                this.receivingForm.taggedById ? this.receivingForm.taggedById.value : 0 ,
+                this.receivingForm.certifiedById ? this.receivingForm.certifiedById.value : 0); 
         }else{
             this.arrayVendlsit.push(0);
         }
@@ -418,7 +421,8 @@ export class CustomerWorkSetupComponent implements OnInit {
                 ownerTypeId:res.ownerTypeId==null? 0 :res.ownerTypeId,
                 obtainFromTypeId:res.obtainFromTypeId==null? 0 :res.obtainFromTypeId,
                 traceableToTypeId:res.traceableToTypeId==null? 0 :res.traceableToTypeId,
-                taggedById: res.taggedById == null ? 0 :res.taggedById,  //---------------------------------
+                taggedById: res.taggedById == null ? 0 :res.taggedById,  
+                certifiedById : res.certifiedById == null ? 0 :res.certifiedById,  
                 purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
             };
             this.getManagementStructureDetails(this.receivingForm
@@ -431,7 +435,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             }, 1000);
             this.getObtainOwnerTraceOnEdit(res);
             this.loadTagTypes('');
-            if (res.obtainFromType == 'Vendor' || res.ownerType == 'Vendor' || res.tracableToType == 'Vendor' || res.taggedByTypeName == 'Vendor') {
+            if (res.obtainFromType == 'Vendor' || res.ownerType == 'Vendor' || res.tracableToType == 'Vendor' || res.taggedByTypeName == 'Vendor' ||  res.certifiedType == 'Vendor') {
                 this.loadVendorData('');
             }
             this.loadConditionData('');
@@ -509,6 +513,20 @@ export class CustomerWorkSetupComponent implements OnInit {
         else if (res.taggedByType == this.otherModuleId ) {
             this.receivingForm.taggedBy = res.taggedBy;
         }
+        //------------------------------------------- added    
+        if (res.certifiedTypeId == this.customerModuleId) {
+            this.receivingForm.certifiedById = { 'customerId': res.certifiedById, 'name': res.certifiedBy ,'label': res.certifiedBy, 'value': res.certifiedById };
+        }
+        else if (res.certifiedTypeId == this.vendorModuleId) {
+            this.receivingForm.certifiedById = { 'label': res.certifiedBy, 'value': res.certifiedById };
+        }
+        else if (res.certifiedTypeId == this.companyModuleId) {
+            this.receivingForm.certifiedById = { 'label': res.certifiedBy, 'value': res.certifiedById };
+        }
+        else if (res.certifiedTypeId == this.otherModuleId ) {
+            this.receivingForm.certifiedBy = res.certifiedBy;
+        }
+
     }
 
     getInactiveObjectOnEdit(string, id, originalData, tableName, primaryColumn, description) {
@@ -608,7 +626,8 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.receivingForm.owner ? this.receivingForm.owner.customerId :0,
                 this.receivingForm.obtainFrom ? this.receivingForm.obtainFrom.customerId :0,
                 this.receivingForm.customerId ? this.receivingForm.customerId.customerId :0,
-                this.receivingForm.taggedById ? this.receivingForm.taggedById.customerId :0 );  
+                this.receivingForm.taggedById ? this.receivingForm.taggedById.customerId :0,
+                this.receivingForm.certifiedById ? this.receivingForm.certifiedById.customerId :0);  
         } else { 
             this.arrayCustlist.push(0);
         }
@@ -811,6 +830,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.owner = value;
             this.receivingForm.traceableTo = value;
             this.receivingForm.taggedById = value;
+            this.receivingForm.certifiedById = value;
         }
         this.receivingForm.customerId = value;
         this.isgotoWO=false;
@@ -926,6 +946,11 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.taggedByType = value;
     }
 
+    onSelectCertType(value) {     
+        this.receivingForm.certifiedById = undefined;
+        this.receivingForm.certifiedTypeId = value;
+    }
+
     onSelectOwner(value) {
         this.receivingForm.owner = undefined;
         this.receivingForm.ownerTypeId = value;
@@ -1001,6 +1026,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             obtainFromTypeId:this.receivingForm.obtainFromTypeId==0? null :this.receivingForm.obtainFromTypeId,
             traceableToTypeId:this.receivingForm.traceableToTypeId==0? null :this.receivingForm.traceableToTypeId,
             taggedByType : this.receivingForm.taggedByType == 0 ? null :this.receivingForm.taggedByType,
+            certifiedTypeId : this.receivingForm.certifiedTypeId == 0 ? null :this.receivingForm.certifiedTypeId,
         }        
         var errmessage = '';
         if (this.receivingForm.mfgDate != "" && moment(this.receivingForm.mfgDate, 'MM/DD/YYYY', true).isValid()) {
@@ -1047,7 +1073,8 @@ export class CustomerWorkSetupComponent implements OnInit {
                 receivingInfo.owner = this.receivingForm.owner ? editValueAssignByCondition('value', this.receivingForm.owner) : null;
                 receivingInfo.traceableTo = this.receivingForm.traceableTo ? editValueAssignByCondition('value', this.receivingForm.traceableTo) : null;
                 receivingInfo.taggedById = this.receivingForm.taggedById ? editValueAssignByCondition('value', this.receivingForm.taggedById) : null;
-              
+                receivingInfo.certifiedById = this.receivingForm.certifiedById ? editValueAssignByCondition('value', this.receivingForm.certifiedById) : null;
+
                 if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
                     this.allTagTypes.forEach(element1 => {
                         receivingInfo.tagType.forEach(element2 => {
@@ -1087,6 +1114,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             receivingInfo.obtainFromTypeId=(receivingInfo.obtainFromTypeId==0 || receivingInfo.obtainFromTypeId==false)? null :receivingInfo.obtainFromTypeId;
             receivingInfo.traceableToTypeId=(receivingInfo.traceableToTypeId==0 || receivingInfo.traceableToTypeId==0)? null :receivingInfo.traceableToTypeId;
             receivingInfo.taggedByType =(receivingInfo.taggedByType == 0 || receivingInfo.taggedByType == false) ? null :receivingInfo.taggedByType;
+            receivingInfo.certifiedTypeId =(receivingInfo.certifiedTypeId == 0 || receivingInfo.certifiedTypeId == false) ? null :receivingInfo.certifiedTypeId;
 
             if(receivingInfo.obtainFromTypeId !=null && receivingInfo.obtainFrom !=null){
                 receivingInfo.obtainFrom = (typeof receivingInfo.obtainFrom=='object' )? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
@@ -1108,6 +1136,12 @@ export class CustomerWorkSetupComponent implements OnInit {
                 receivingInfo.taggedById = (typeof receivingInfo.taggedById == 'object' )? receivingInfo.taggedById.value: receivingInfo.taggedById;
             }else{
                 receivingInfo.taggedById=null;
+            }
+
+            if(receivingInfo.certifiedTypeId !=null && receivingInfo.certifiedById !=null){
+                receivingInfo.certifiedById = (typeof receivingInfo.certifiedById == 'object' )? receivingInfo.certifiedById.value: receivingInfo.certifiedById;
+            }else{
+                receivingInfo.certifiedById=null;
             }
 
 
