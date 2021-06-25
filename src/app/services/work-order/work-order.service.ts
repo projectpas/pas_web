@@ -28,10 +28,6 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getAllWorkOrders<WorkOrder[]>();
     }
 
-    // getById(workOrderId: number) {
-    //     return this.workOrderEndpointService.getWorkOrderById<WorkOrder>(workOrderId);
-    // }
-
     getWorkOrderById(workOrderId, receivingCustomerId) {
         return this.workOrderEndpointService.getWorkOrderById(workOrderId, receivingCustomerId);
     }
@@ -93,7 +89,6 @@ export class WorkOrderService {
     getMultipleParts(masterCompanyId) {
         return this.workOrderEndpointService.getMultipleParts(masterCompanyId)
     }
-
 
     getWorkOrderDatesFoRTat(workOrderId, masterCompanyId) {
         return this.workOrderEndpointService.getWorkOrderDatesFoRTat(workOrderId, masterCompanyId)
@@ -213,9 +208,7 @@ export class WorkOrderService {
     getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId) {
         return this.workOrderEndpointService.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId, masterCompanyId)
     }
-    getWorkOrderMaterialListNew(workFlowWorkOrderId, workOrderId, masterCompanyId) {
-        return this.workOrderEndpointService.getWorkOrderMaterialListNew(workFlowWorkOrderId, workOrderId, masterCompanyId)
-    }
+
     getSubWorkOrderMaterialList(subWOPartNoId, masterCompanyId) {
         return this.workOrderEndpointService.getSubWorkOrderMaterialList(subWOPartNoId, masterCompanyId)
     }
@@ -262,9 +255,7 @@ export class WorkOrderService {
     viewWorkOrderHeader(workOrderId, masterCompanyId) {
         return this.workOrderEndpointService.viewWorkOrderHeader(workOrderId, masterCompanyId);
     }
-    // getSitesbymanagementstructrue(managementStructureId){
-    //     return this.workOrderEndpointService.getSitesbymanagementstructrue(managementStructureId);
-    // }
+
     viewWorkOrderPartNumber(workOrderId) {
         return this.workOrderEndpointService.viewWorkOrderPartNumber(workOrderId);
     }
@@ -337,10 +328,6 @@ export class WorkOrderService {
     createNewWORO(workOrderPartNoId) {
         return this.workOrderEndpointService.createNewWORO(workOrderPartNoId);
     }
-
-
-
-
 
     getPartsDetail(workOrderId, masterCompanyId) {
         return this.workOrderEndpointService.getPartsDetail(workOrderId, masterCompanyId);
@@ -476,9 +463,7 @@ export class WorkOrderService {
     updatesubworkordermaterials(data) {
         return this.workOrderEndpointService.updatesubworkordermaterials(data)
     }
-    // createWorkOrderMaterialListNew(data) {
-    //     return this.workOrderEndpointService.createWorkOrderMaterialListNew(data)
-    // }
+
     getSubWoMaterialRoleUps(subWorkOrderMaterialId) {
         return this.workOrderEndpointService.getSubWoMaterialRoleUps(subWorkOrderMaterialId)
     }
@@ -507,14 +492,6 @@ export class WorkOrderService {
     getSubWorkOrderChargesList(subWOPartNoId, isDeleted, masterCompanyId) {
         return this.workOrderEndpointService.getSubWorkOrderChargesList(subWOPartNoId, isDeleted, masterCompanyId)
     }
-
-    // createWorkOrderFreightList(data){
-    //     return this.workOrderEndpointService.createWorkOrderFreightList(data);
-    // }
-
-    // deleteWorkOrderFreightList(workOrderFreightId , updatedBy){
-    //     return this.workOrderEndpointService. deleteWorkOrderFreightList(workOrderFreightId , updatedBy);
-    // }
 
     getMaterialListMPNS(workOrderId) {
         return this.workOrderEndpointService.getMaterialListMPNS(workOrderId);
@@ -656,14 +633,11 @@ export class WorkOrderService {
             this.workOrderEndpointService.getShippingDataList(WorkOrderId,workOrderPartNumberId)
         );
     }
-
     generatePackagingSlip(packagingSlip: any): Observable<any> {
         return Observable.forkJoin(
           this.workOrderEndpointService.generatePackagingSlip(packagingSlip)
         );
-      }
-
-
+    }
     getquoteMaterialHistory(id) {
         return this.workOrderEndpointService.getquoteMaterialHistory(id);
     }
@@ -682,20 +656,15 @@ export class WorkOrderService {
     getMaterialStockHistory(id, isSubWorkOrder) {
         return this.workOrderEndpointService.getMaterialStockHistory(id, isSubWorkOrder);
     }
-
     transferWorkflow(data) {
         return this.workOrderEndpointService.transferWorkflow(data);
     }
-
     getPickTicketList(workOrderId) {
         return this.workOrderEndpointService.getPickTicketList(workOrderId);
     }
-
-    
     GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId) {
         return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId);
     }
-
     GetWorkorderReleaseEasaFromData(workOrderId,workOrderPartNumberId) {
         return this.workOrderEndpointService.GetWorkorderReleaseEasaFromData(workOrderId,workOrderPartNumberId);
     }
@@ -753,104 +722,103 @@ export class WorkOrderService {
         return Observable.forkJoin(
           this.workOrderEndpointService.getPackagingSlipPrint(WorkOrderId, WorkOrderPartNoId, woPickTicketId, packagingSlipId)
         );
-      }
+    }
 
-      
-  getMultiShippingLabelPrint(workOrderPackagingSlips: any): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.getMultiShippingLabelPrint(workOrderPackagingSlips)
-    );
-  }
+    getMultiShippingLabelPrint(workOrderPackagingSlips: any): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.getMultiShippingLabelPrint(workOrderPackagingSlips)
+        );
+    }
 
-  getMultiPackagingSlipPrint(workOrderPackagingSlips: any): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.getMultiPackagingSlipPrint(workOrderPackagingSlips)
-    );
-  }
+    getMultiPackagingSlipPrint(workOrderPackagingSlips: any): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.getMultiPackagingSlipPrint(workOrderPackagingSlips)
+        );
+    }
 
-  getShippingLabelPrint(workOrderId: number, workOrderPartId: number, woShippingId: number): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.getShippingLabelPrint(workOrderId, workOrderPartId, woShippingId)
-    );
-  }
+    getShippingLabelPrint(workOrderId: number, workOrderPartId: number, woShippingId: number): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.getShippingLabelPrint(workOrderId, workOrderPartId, woShippingId)
+        );
+    }
 
-  updateShipping(serviceClass: string, workOrderShippingId: number): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.updateShipping(serviceClass, workOrderShippingId)
-    );
-  }
+    updateShipping(serviceClass: string, workOrderShippingId: number): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.updateShipping(serviceClass, workOrderShippingId)
+        );
+    }
 
-  CreateUpdateReleasefrom(Releasefrom) {
-    return this.workOrderEndpointService.CreateUpdateReleasefrom<any>(Releasefrom);
-}
+    CreateUpdateReleasefrom(Releasefrom) {
+        return this.workOrderEndpointService.CreateUpdateReleasefrom<any>(Releasefrom);
+    }
 
-LockedWorkorderpart(Releasefrom) {
-    return this.workOrderEndpointService.LockedWorkorderpart<any>(Releasefrom);
-}
-getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.getWorkOrderBillingInvoicingData(wobillingInvoicingId)
-    );
-  }
+    LockedWorkorderpart(Releasefrom) {
+        return this.workOrderEndpointService.LockedWorkorderpart<any>(Releasefrom);
+    }
+    getWorkOrderBillingInvoicingData(wobillingInvoicingId: number): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.getWorkOrderBillingInvoicingData(wobillingInvoicingId)
+        );
+    }
 
-  getworkOrderChargesById(id, isDeleted) {
-    return this.workOrderEndpointService.getworkOrderChargesById(id, isDeleted);
-  }
+    getworkOrderChargesById(id, isDeleted) {
+        return this.workOrderEndpointService.getworkOrderChargesById(id, isDeleted);
+    }
 
-  getWorkOrderBillingInvoicingById(wobillingInvoicingId: number): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.getWorkOrderBillingInvoicingById(wobillingInvoicingId)
-    );
-  }
-  
-   UpdateWorkOrderBillingInvoicing(wobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.UpdateWorkOrderBillingInvoicing(wobillingInvoicingId, billingInvoicing)
-    );
-  }
+    getWorkOrderBillingInvoicingById(wobillingInvoicingId: number): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.getWorkOrderBillingInvoicingById(wobillingInvoicingId)
+        );
+    }
+    
+    UpdateWorkOrderBillingInvoicing(wobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.UpdateWorkOrderBillingInvoicing(wobillingInvoicingId, billingInvoicing)
+        );
+    }
 
-  GetWorkOrderPrintFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.GetWorkOrderPrintFormData(WorkorderId,workOrderPartNoId)
-    );
-  }
+    GetWorkOrderPrintFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.GetWorkOrderPrintFormData(WorkorderId,workOrderPartNoId)
+        );
+    }
 
-  GetSubWorkOrderPrintFormData(subWorkOrderId: number,subWOPartNoId : number): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.GetSubWorkOrderPrintFormData(subWorkOrderId,subWOPartNoId)
-    );
-  }
+    GetSubWorkOrderPrintFormData(subWorkOrderId: number,subWOPartNoId : number): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.GetSubWorkOrderPrintFormData(subWorkOrderId,subWOPartNoId)
+        );
+    }
 
-  GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId)
-    );
-  }
+    GetWorkOrderPartlistFormData(WorkorderId: number,workOrderPartNoId : number): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.GetWorkOrderPartlistFormData(WorkorderId,workOrderPartNoId)
+        );
+    }
 
-  GetWorkOrderQoutePrintFormData(WorkorderId: number,workOrderPartNoId : number ,workflowWorkorderId : number): Observable<any> {
-    return Observable.forkJoin(
-      this.workOrderEndpointService.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId)
-    );
-  }
-  
-  deleteWoPickTicket(pickTicketId, login) {
-    return this.workOrderEndpointService.deleteWoPickTicket(pickTicketId, login);
-}
+    GetWorkOrderQoutePrintFormData(WorkorderId: number,workOrderPartNoId : number ,workflowWorkorderId : number): Observable<any> {
+        return Observable.forkJoin(
+        this.workOrderEndpointService.GetWorkOrderQoutePrintFormData(WorkorderId,workOrderPartNoId,workflowWorkorderId)
+        );
+    }
+    
+    deleteWoPickTicket(pickTicketId, login) {
+        return this.workOrderEndpointService.deleteWoPickTicket(pickTicketId, login);
+    }
 
-getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId){
-    return this.workOrderEndpointService.getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId); 
-}
+    getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId){
+        return this.workOrderEndpointService.getWoSettlementDetails(WorkorderId,workOrderPartNoId,workflowWorkorderId); 
+    }
 
-updateWoSettlements(data,isWOClose) {
-    return this.workOrderEndpointService.updateWoSettlements<any>(data,isWOClose);
-}
+    updateWoSettlements(data,isWOClose) {
+        return this.workOrderEndpointService.updateWoSettlements<any>(data,isWOClose);
+    }
 
-getWorkCompleteHistory(rowData) {
-    return this.workOrderEndpointService.getWorkCompleteHistory(rowData);
-}
+    getWorkCompleteHistory(rowData) {
+        return this.workOrderEndpointService.getWorkCompleteHistory(rowData);
+    }
 
-closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy) {
-    return this.workOrderEndpointService.closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy);
-}
+    closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy) {
+        return this.workOrderEndpointService.closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy);
+    }
 
-}
+    }
