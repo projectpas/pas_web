@@ -42,7 +42,7 @@ export class ExchangeMerginComponent implements OnInit {
       this.part.coreDueDate = new Date(this.part.coreDueDate);
       setTimeout(() => {
         this.setSchesuleBilling(this.part.exchangeQuoteScheduleBilling.length);
-      }, 500);
+      }, 1000);
     }
   }
 
