@@ -136,11 +136,11 @@ import { ExchangeSalesOrderMultiPickTicketComponent } from "../components/exchan
     ExchangeSalesOrderPartNumberFilterComponent,
     ExchangeSalesOrderMarginComponent,
     AddExchangeSalesOrderReserveUnreservePartNumberComponent,
-    ExchangeSalesOrderPickTicketComponent,
+    //ExchangeSalesOrderPickTicketComponent,
     ExchangeSalesOrderPickTicketsComponent,
-    ExchangeSalesOrderMultiPickTicketComponent,
+    ExchangeSalesOrderMultiPickTicketComponent
   ],
-  providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService,ActionService,ActionEndpoint,ExchangeSalesOrderService,ExchangeSalesOrderEndpointService],
-  entryComponents: [ExchangeSalesOrderPickTicketsComponent,ExchangeSalesOrderPickTicketComponent,ExchangeSalesOrderMultiPickTicketComponent,]
+  providers: [CommonService, DatePipe, ExchangequoteService, ExchangeQuoteEndpointService, ActionService, ActionEndpoint, ExchangeSalesOrderService, ExchangeSalesOrderEndpointService],
+  //entryComponents: [ExchangeSalesOrderPickTicketComponent, ExchangeSalesOrderMultiPickTicketComponent]
 })
 export class ExchangepagesModule { }

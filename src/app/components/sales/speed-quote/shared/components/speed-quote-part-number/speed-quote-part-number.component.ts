@@ -159,11 +159,11 @@ export class SpeedQuotePartNumberComponent {
     this.summaryColumns = [
       // { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
       { field: 'itemNo', header: 'Line #', width: '50px', textalign: 'center' },
-      { field: 'partNumber', header: 'PN', width: "140px" },
+      { field: 'partNumber', header: 'PN', width: "120px" },
       // { field: 'partDescription', header: 'PN Description', width: '200px' },
       { field: 'description', header: 'PN Description', width: '200px' },
       { field: 'conditionDescription', header: 'Cond', width: "130px" },
-      { field: 'quantityRequested', header: 'Qty', width: "10px" },
+      { field: 'quantityRequested', header: 'Qty', width: "50px" },
       { field: 'manufacturer', header: 'Manufacturer', width: "84px" },
       { field: 'oempmader', header: 'Item Type', width: "75px" },
       { field: 'unitSalePrice', header: 'Unit Price', width: "90px" },
@@ -172,8 +172,8 @@ export class SpeedQuotePartNumberComponent {
       { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
       { field: 'marginAmountExtended', header: 'Margin Amt', width: "103px" },
       { field: 'marginPercentageExtended', header: 'Margin %', width: "80px" },
-      { field: 'tat', header: 'TAT', width: "20px" },
-      { field: 'notes', header: "Notes", width: "120px" },
+      { field: 'tat', header: 'TAT', width: "50px" },
+      { field: 'notes', header: "Notes", width: "140px" },
     ]
     // if (!this.isViewMode) {
     //   // { header: "Notes", width: "100px" },
