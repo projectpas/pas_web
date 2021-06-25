@@ -11,7 +11,8 @@
                                         <th>Line no</th>
                                         <th>PN</th>
                                         <th class="width-60">Qty Ord</th>
-                                        <th class="width-60">Qty Received</th>
+                                        <th class="width-60">Qty Drafted</th>
+                                        <th class="width-60">Qty Received</th>                                       
                                         <th class="width-60">Back Ord</th>
                                         <th class="width-60"></th>
                                     </tr>
@@ -22,6 +23,7 @@
                                             <td class="text-right">{{row_index + 1}}</td>
                                             <td>{{part.itemMaster?.partNumber}}</td>
                                             <td class="text-right">{{part.quantityOrdered}}</td>
+                                            <td class="text-right">{{part.stockLineDraftCount}}</td>
                                             <td class="text-right">{{part.stockLineCount}}</td>
                                             <!-- <td class="text-right">{{part.quantityOrdered - part.stockLine.length}}</td> -->
                                             <td class="text-right">{{part.quantityBackOrdered}}</td>
@@ -31,7 +33,7 @@
                                         </tr>
                                         <tr class="more-info" *ngIf="part.showStockLineGridDraft">
 
-                                            <td colspan="6">
+                                            <td colspan="7">
                                                 <div class="label-value-row">
                                                     <div class="col-sm-3">
                                                         <p><span class="label"><b>PN <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value"> {{part.itemMaster?.partNumber}}</span></p>

@@ -391,7 +391,7 @@
 							<ng-container *ngFor="let item of stocklineAdjustmentData">
 								<ng-container *ngIf="item.adjustmentDataTypeId == 10">
 									<tr>
-										<td><input type="checkbox" name="quantityOnHandAllow" [(ngModel)]="quantityOnHandAllow" (change)="onChangePrices(item); onChangeQtyOnHand(item)"></td>
+										<td><input type="checkbox" name="quantityOnHandAllow" [(ngModel)]="quantityOnHandAllow" (change)="onChangePrices(item); onChangeQtyOnHand(item)" [disabled]="sourceStockLineSetup.isSerialized"></td>
 										<td>{{item.stocklineAdjustmentDataType}}</td>
 										<td class="text-right">{{sourceStockLineSetup.quantityOnHand}}</td>
 										<td>

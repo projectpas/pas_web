@@ -882,6 +882,12 @@ export class StockLineSetupComponent implements OnInit {
 					if(res.expirationDate){
 						this.stockLineForm.manufacturingDays = this.onChangeMfgDateonEdit(res.expirationDate);
 					}
+					if(res.tagDate){
+						this.stockLineForm.tagDays = this.onChangeTagDateonEdit(res.tagDate);
+					}
+					if(res.receivedDate){
+						this.stockLineForm.daysReceived = this.onChangeReceivedDateonEdit(res.receivedDate);
+					}
 				},1000);
 			});
 		});
@@ -2393,6 +2399,30 @@ export class StockLineSetupComponent implements OnInit {
 			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
 			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 			return this.stockLineForm.manufacturingDays = diffDays;
+		}else{
+			return 0
+		}		
+	}
+
+	onChangeTagDateonEdit(value) {
+		if (value) {
+			const todayDate = new Date();
+			const mfgdate = new Date(value);
+			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			return this.stockLineForm.tagDays = diffDays;
+		}else{
+			return 0
+		}		
+	}
+
+	onChangeReceivedDateonEdit(value) {
+		if (value) {
+			const todayDate = new Date();
+			const mfgdate = new Date(value);
+			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			return this.stockLineForm.daysReceived = diffDays;
 		}else{
 			return 0
 		}		

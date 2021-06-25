@@ -10,6 +10,7 @@
                                         <th>Line no</th>
                                         <th>PN</th>
                                         <th>Qty to Repair</th>
+                                        <th>Qty Drafted</th>
                                         <th>Qty Repaired</th>
                                         <th>Back Ord</th>
                                         <th></th>
@@ -21,6 +22,7 @@
                                             <td>{{row_index + 1}}</td>
                                             <td>{{part.itemMaster?.partNumber}}</td>
                                             <td>{{part.quantityToRepair}}</td>
+                                            <td>{{part.stockLineCount}}</td>
                                             <td>{{part.receivedCount}}</td>
                                             <td>{{part.quantityBackOrdered}}</td>
                                             <td class="details-control eachcol" style="padding: 4px 6px;">

@@ -1409,14 +1409,32 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         }
     }
 
-    checkChange(e) {
-        this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
-        const data = [...this.allItemMasterCapsList.filter(x => {
-            if (x.isVerified == e.target.checked) {
-                return x;
+    isverified : boolean;    
+    checkChange(e) {                
+        if(e!==''){
+            this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+            if(e=='y' || e=='ye' || e== 'yes' || e=='1' || e=='true' ||  e=='Y' || e=='YE' || e== 'YES' || e=='Ye' || e== 'Yes' ){
+                this.isverified = true;
             }
-        })]
-        this.allItemMasterCapsList = data;
+            else  if(e=='n' || e=='no' || e=='0' || e=='false' || e=='N' || e=='NO' || e=='No'){
+                this.isverified = false;                
+            }
+            else{
+                this.isverified = null;    
+            }
+            if(this.isverified!=null){
+                const data = [...this.allItemMasterCapsList.filter(x => {
+                    if (x.isVerified ==  this.isverified) {
+                        return x;
+                    }
+                })]
+                this.allItemMasterCapsList = data;
+            } else {
+                this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+            }            
+        } else {
+            this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+        }
     }
 
     columnsChanges() { }

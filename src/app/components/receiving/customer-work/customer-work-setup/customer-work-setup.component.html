@@ -798,7 +798,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Cert By</label>
+                                <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label>
                                 <div class="form-row" *ngIf="receivingForm.certifiedTypeId == customerModuleId">
                                     <div class="col-sm-12">  
                                         <p-autoComplete field="name" class="pautocomp-cstm"
