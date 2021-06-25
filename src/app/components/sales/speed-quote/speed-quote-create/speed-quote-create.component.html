@@ -383,7 +383,7 @@
                                             <div class="col-md-6">
                                                 <!-- <label style="margin-top:14px">Probability (%)</label> -->
                                                 <label>Probability (%)</label>
-                                                <select name="probability" [(ngModel)]="salesQuote.probabilityId"
+                                                <select class="select-right" name="probability" [(ngModel)]="salesQuote.probabilityId"
                                                     (change)="onChangeInput()">
                                                     <option value="null" selected>--Select</option>
                                                     <option *ngFor="let p of percents" [ngValue]="p.value">

@@ -425,16 +425,31 @@ export class PurchaseSetupComponent implements OnInit {
 		this.vendorService.alertObj.next(this.vendorService.ShowPtab);
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
 		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
-		this.partName = (localStorage.getItem('partNumber'));		
-		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
-		var itmmasterid =  localStorage.getItem('itemMasterId');
-		if(itmmasterid!== 'undefined' && itmmasterid !== null){
+		this.partName = (localStorage.getItem('partNumber'));
+		var salesOrderId = localStorage.getItem('salesOrderId');
+		if (salesOrderId !== 'undefined' && salesOrderId !== null) {
+			this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		}
+		var itmmasterid = localStorage.getItem('itemMasterId');
+		if (itmmasterid !== 'undefined' && itmmasterid !== null) {
 			this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'))
 		}
-		this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
-		this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
-		this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
-		this.lsqty = JSON.parse(localStorage.getItem('lsqty'));
+		var lsconditionId = localStorage.getItem('lsconditionId');
+		if (lsconditionId !== 'undefined' && lsconditionId !== null) {
+			this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
+		}
+		var lsWoId = localStorage.getItem('lsWoId');
+		if (lsWoId !== 'undefined' && lsWoId !== null) {
+			this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
+		}
+		var lsSubWoId = localStorage.getItem('lsSubWoId');
+		if (lsSubWoId !== 'undefined' && lsSubWoId !== null) {
+			this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		}
+		var lsqty = localStorage.getItem('lsqty');
+		if (lsqty !== 'undefined' && lsqty !== null) {
+			this.lsqty = JSON.parse(localStorage.getItem('lsqty'));
+		}
 		this.openStatusId = StatusEnum.Open;
 		this.pendingStatusId = StatusEnum.Pending;
 		this.fulfillingStatusId = StatusEnum.Fulfilling;
@@ -4569,7 +4584,25 @@ export class PurchaseSetupComponent implements OnInit {
 
 	suborderlist: any = [];
 
-	GetSubWolist(workOrderId, partList, index) {
+	GetlsSubWolistfromsession(workOrderId, subworkOrderId) {
+		this.allsubWorkOrderDetails = [];
+		this.commonService.GetSubWolist(workOrderId).subscribe(res => {
+			const data = res.map(x => {
+				return {
+					value: x.subWorkOrderId,
+					label: x.subWorkOrderNo
+				}
+			});
+			//this.suborderlist = data;
+			this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
+			this.allsubWorkOrderDetails = [...this.allsubWorkOrderInfo, ...data]
+
+		}, err => {
+			this.isSpinnerVisible = false;
+		})
+	}
+
+	GetSubWolist(workOrderId, partList, index, subWOID?) {
 		this.allsubWorkOrderDetails = [];
 		this.commonService.GetSubWolist(workOrderId).subscribe(res => {
 			const data = res.map(x => {
@@ -4582,6 +4615,9 @@ export class PurchaseSetupComponent implements OnInit {
 			this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
 			this.allsubWorkOrderDetails = [...this.allsubWorkOrderInfo, ...data]
 			partList.subWorkOrderlist = [...this.allsubWorkOrderInfo, ...data];
+			if (subWOID && subWOID > 0) {
+				partList.subWorkOrderId = getObjectById('value', this.lsSubWoId == null ? 0 : subWOID, this.allsubWorkOrderDetails);
+			}
 		}, err => {
 			this.isSpinnerVisible = false;
 		})
@@ -4624,6 +4660,7 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	addPartNumbers(partNumberId, partName, conditionid) {
+		debugger;
 		this.inputValidCheck = false;
 		//if (this.vendorService.isEditMode == false) {
 		let newParentObject = new CreatePOPartsList();
@@ -4635,7 +4672,7 @@ export class PurchaseSetupComponent implements OnInit {
 			discountPercent: 0,
 			partNumberId: { value: partNumberId, label: partName },
 			workOrderId: getObjectById('value', this.lsWoId == null ? 0 : this.lsWoId, this.allWorkOrderDetails),
-			subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allSalesOrderInfo),
+			subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allsubWorkOrderDetails),
 			salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
 		}
 
@@ -4702,6 +4739,9 @@ export class PurchaseSetupComponent implements OnInit {
 		this.getPNDetailsById(newParentObject, null)
 		newParentObject.quantityOrdered = null ? 0 : this.lsqty;
 		newParentObject.conditionId = conditionid > 0 ? conditionid : this.defaultCondtionId;
+		if (this.lsWoId > 0 && this.lsSubWoId > 0) {
+			this.GetSubWolist(this.lsWoId, newParentObject, 0, this.lsSubWoId);
+		}
 		this.enablePartSave();
 
 		//}

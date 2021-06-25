@@ -1855,6 +1855,24 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
   }
 
+  setChargesAtPartLevel(chargeList) {
+    if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
+      this.salesQuoteService.selectedParts.forEach((part, i) => {
+        let chargeFound = chargeList.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
+        if (chargeFound !== undefined && chargeFound.length > 0) {
+          let total = 0;
+
+          chargeFound.forEach(element => {
+            total += element.billingAmount;
+          });
+
+          this.salesQuoteService.selectedParts[i].misc = total; //chargeFound[0].total; //this.totalCharges;
+        }
+      });
+    }
+    this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
+  }
+
   setFreightsOrCharges() {
     if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
       this.salesQuoteService.selectedParts.forEach((part, i) => {
@@ -1867,16 +1885,9 @@ export class SalesQuoteCreateComponent implements OnInit {
 
   saveSalesOrderFreightsList(e) {
     let freightList = e;
-    //let listFreight = [];
-
-    // freightList.forEach((freight, i) => {
-    //   let itemMasterId = this.salesQuoteService.selectedParts.find(a => a.salesOrderQuotePartId == freight.salesOrderQuotePartId).itemMasterId;
-    //   let total = Number(this.getTotalTaskBillingAmount(freight));
-    //   listFreight.push({ itemMasterId, total });
-    // });
-
     this.setFreightsAtPartLevel(freightList);
     this.updateMarginSummary();
+
     // this.totalFreights = e;
     // this.marginSummary.freightAmount = this.totalFreights;
     // this.salesQuoteService.setTotalFreights(e);
@@ -1885,7 +1896,6 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   updateSalesOrderFreightsList(e) {
-    debugger;
     let freightList = e;
     let listFreight = [];
 
@@ -1917,19 +1927,35 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   saveSalesOrderChargesList(e) {
-    this.totalCharges = e;
-    this.marginSummary.misc = this.totalCharges;
-    this.salesQuoteService.setTotalCharges(e);
-    this.setFreightsOrCharges();
+    let chargeList = e;
+    this.setChargesAtPartLevel(chargeList);
     this.updateMarginSummary();
+
+    // this.totalCharges = e;
+    // this.marginSummary.misc = this.totalCharges;
+    // this.salesQuoteService.setTotalCharges(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
   }
 
   updateSalesOrderChargesList(e) {
-    this.totalCharges = e;
-    this.salesQuoteService.setTotalCharges(e);
-    this.marginSummary.misc = this.totalCharges;
-    this.setFreightsOrCharges();
+    let chargeList = e;
+    let listCharge = [];
+
+    chargeList.forEach((charge, i) => {
+      let itemMasterId = this.salesQuoteService.selectedParts.find(a => a.salesOrderQuotePartId == charge.salesOrderQuotePartId).itemMasterId;
+      let total = Number(this.getTotalTaskBillingAmount(charge));
+      listCharge.push({ itemMasterId, total });
+    });
+
+    this.setChargesAtPartLevel(listCharge);
     this.updateMarginSummary();
+
+    // this.totalCharges = e;
+    // this.salesQuoteService.setTotalCharges(e);
+    // this.marginSummary.misc = this.totalCharges;
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
   }
 
   getChargesList() {

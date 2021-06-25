@@ -15,6 +15,7 @@ import { AlertService, MessageSeverity } from '../../../../../services/alert.ser
 import { DatePipe } from "@angular/common";
 import { StocklineViewComponent } from "../../../../../shared/components/stockline/stockline-view/stockline-view.component";
 //import { SalesOrderMultiPickTicketComponent } from "../sales-order-multi-pickTicket/sales-order-multi-pickTicket.component";
+import { ExchangeSalesOrderMultiPickTicketComponent } from "../exchange-sales-order-multi-pickTicket/exchange-sales-order-multi-pickTicket.component";
 
 @Component({
   selector: 'app-exchange-sales-order-pick-tickets',
@@ -477,17 +478,17 @@ export class ExchangeSalesOrderPickTicketsComponent implements OnInit {
     let pickTickets: any = {};
     pickTickets['pickTickets'] = pickTicketToPrint;
 
-    //this.modal = this.modalService.open(SalesOrderMultiPickTicketComponent, { size: "lg" });
-    //let instance: SalesOrderMultiPickTicketComponent = (<SalesOrderMultiPickTicketComponent>this.modal.componentInstance)
-    // instance.modalReference = this.modal;
+    this.modal = this.modalService.open(ExchangeSalesOrderMultiPickTicketComponent, { size: "lg" });
+    let instance: ExchangeSalesOrderMultiPickTicketComponent = (<ExchangeSalesOrderMultiPickTicketComponent>this.modal.componentInstance)
+    instance.modalReference = this.modal;
 
-    // instance.onConfirm.subscribe($event => {
-    //   if (this.modal) {
-    //     this.modal.close();
-    //   }
-    // });
+    instance.onConfirm.subscribe($event => {
+      if (this.modal) {
+        this.modal.close();
+      }
+    });
 
-    // instance.salesOrderPickTickets = pickTickets;
+    instance.salesOrderPickTickets = pickTickets;
   }
 
   selectAllPT(evt) {

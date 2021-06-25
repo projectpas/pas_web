@@ -49,7 +49,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   }
   refresh(rowdata){
     //this.loapartItems();
-    this.bindPartsDroppdown('');
+    this.bindPartsDroppdown('','');
     this.getExclusionList();
   }
   addPartNumber(rowdata) {
@@ -101,10 +101,10 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
 		})
   }
   
-  filterpartItems(event) {
+  filterpartItems(event,pn) {
 		if (event.query !== undefined && event.query !== null) {
       //this.loapartItems(event.query);
-      this.bindPartsDroppdown(event.query);
+      this.bindPartsDroppdown(event.query,pn);
 		}
   }
   
@@ -118,7 +118,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     console.log("this.partListData",this.partListData);
   }
 
-  bindPartsDroppdown(query) {
+  bindPartsDroppdown(query,pn) {
     let partSearchParamters = {
       'partNumber': query,
       "restrictPMA": false,
@@ -134,8 +134,16 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     this.itemMasterService.searchPartNumberAdvanced(partSearchParamters).subscribe(
       (result: any) => {
         if (result && result.length > 0) {
+          this.partDetailsList = [];
+          this.partCollection = [];
           this.partDetailsList = result;
           this.partCollection = [...this.partDetailsList];
+          const data = [...this.partCollection.filter(x => {
+            if (x.partNumber != pn) {
+                return x;
+            }
+          })]
+          this.partCollection = data;
           console.log("partCollection",this.partCollection);
           // this.partCollection = result.map(x => {
           //   return {
@@ -307,4 +315,26 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   enableSave(){
     this.disabledSave = false;
   }
+  selected: any;
+  selectedExclusionToDelete: any;
+  openDelete(content, rowData) {
+    this.selected = rowData.exclusionPartId;
+    this.selectedExclusionToDelete = rowData.pn;
+    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+  deleteExclusion(): void {
+    this.isSpinnerVisible = true;
+    this.speedQuoteService.deleteExclusion(this.selected).subscribe(response => {
+        this.isSpinnerVisible = false;
+        this.modal.close();
+        this.alertService.showMessage(
+            "Success",
+            `Exclusion removed successfully.`,
+            MessageSeverity.success
+        );
+        this.getExclusionList();
+    }, error => {
+        this.isSpinnerVisible = false;
+    });
+}
 }

@@ -298,6 +298,9 @@ export class SpeedQuoteService {
       observer.complete();
     });
   }
+  updateSearchPartResult(parts) {
+    this.parts = parts;
+  }
 
   updateSearchPartObject(query) {
     this.query = query;
@@ -359,6 +362,11 @@ export class SpeedQuoteService {
   sendSppedQuoteEmail(speedQuotePrintCritera: SpeedQuotePrintCritera): Observable<SalesOrderView[]> {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.sendSppedQuoteEmail(speedQuotePrintCritera)
+    );
+  }
+  deleteExclusion(exclusionPartId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.deleteExclusion(exclusionPartId)
     );
   }
 }

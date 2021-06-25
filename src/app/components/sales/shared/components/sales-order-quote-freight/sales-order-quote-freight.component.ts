@@ -267,7 +267,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
                 '',
-                'SO Quote Freight saved successfully',
+                'SO Quote Freights saved successfully',
                 MessageSeverity.success
             );
             this.refreshFreightsOnSaveOrDelete();

@@ -235,7 +235,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEditMode ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
             if (response) {
                 const result = response;
                 if (result[0] && result[0].level == 'Level1') {
@@ -313,8 +313,8 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
         this.aircraftData = [];
         var newRow = Object.assign({}, this.aircraftData);
         newRow.IsChecked = false,
-        newRow.capabilityTypeId = 0,
-        newRow.capailityTypeName = '';
+            newRow.capabilityTypeId = 0,
+            newRow.capailityTypeName = '';
         newRow.description = '';
         newRow.entryDate = new Date();
         newRow.isVerified = false;
@@ -480,14 +480,14 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
         if (this.arrayItemMasterlist.length == 0) {
             this.arrayItemMasterlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.itemMasterListOriginal = response.map(x => {
                 return {
                     partNumber: x.label, itemMasterId: x.value
                 }
             })
             this.partListItemMaster = [...this.itemMasterListOriginal];
-        }, err => {            
+        }, err => {
         });
     }
 
@@ -772,7 +772,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
 
     closeMemoModel() {
         $('#capes-memo').modal('hide');
-    }   
+    }
 
     enableSave() { }
     managementStructure = {

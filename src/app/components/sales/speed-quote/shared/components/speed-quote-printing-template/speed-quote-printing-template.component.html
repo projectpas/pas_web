@@ -258,13 +258,21 @@
                       </ng-container>
                     </tr>
                     <tr>
+                      <!-- <td></td>
+                      <td colspan="3" rowspan="3" style="border:1px solid black">Notes:</td> -->
                       <td></td>
-                      <td colspan="3" rowspan="3" style="border:1px solid black">Notes:</td>
+                      <!-- <td colspan="3" rowspan="3" style="border:1px solid black">Notes:
+                        <label *ngFor="let price of part.unitPriceData let i=index">
+                          {{price.notes != '' ? price.conditionDescription + '-' + price.notes : ''}}
+                        </label>
+                      </td> -->
+                      <td colspan="3" rowspan="3" style="border:1px solid black">
+                      </td>
                     </tr>
                     <tr></tr>
                     <tr> </tr>
                     <tr>
-                      <td colspan="8" rowspan="3">Notes</td>
+                      <td colspan="8" rowspan="3">Notes: {{this.speedQuote.notes}}</td>
                     </tr>
                   </ng-container>
 
@@ -355,6 +363,9 @@
                 <div class="col-sm-12">
                     <table rules=none class="parttable print-table print-friendly table-margins" *ngFor="let part of this.exclusionParts let i=index">
                         <thead>
+                            <tr>
+                              <th colspan="8" class="exclusdeditem">Excluded Items</th>
+                            </tr>
                             <tr>
                                 <th>Item Num</th>
                                 <th>PN</th>

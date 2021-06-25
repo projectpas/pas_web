@@ -38,6 +38,7 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly confirmpickticketUrl = environment.baseUrl + "/api/exchangesalesorder/confirmpt";
     private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/exchangesalesorder/getpickticketedit"
     private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/exchangesalesorder/getsalesorderpickticketforprint";
+    private readonly getMultiPickTicketForPrint: string = environment.baseUrl + "/api/exchangesalesorder/getMultiSalesOrderPickTicketForPrint";
     constructor(
         http: HttpClient,
         configurations: ConfigurationService,
@@ -169,6 +170,14 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
         .get<any>(URL, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId, salesOrderPartId, soPickTicketId));
+        });
+    }
+    getMultiPickTicketPrint(multiPickTicket: any): Observable<any> {
+      const URL = `${this.getMultiPickTicketForPrint}`;
+      return this.http
+        .post<any>(URL, JSON.stringify(multiPickTicket), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getMultiPickTicketPrint(multiPickTicket));
         });
     }
     getpickticketHistory(pickticketid) {

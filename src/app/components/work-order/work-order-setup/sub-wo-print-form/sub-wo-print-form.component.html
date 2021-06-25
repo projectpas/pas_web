@@ -287,9 +287,10 @@
 
                                   <div class="clear"></div>
                                   <div class="col-sm-12">
-                                    <table rules=none class=" top-table-alignment print-friendly border table-border-right parttable print-table table-margins">
+                                    <table rules=none style="margin-bottom:-2px" class=" top-table-alignment print-friendly border table-border-right parttable print-table table-margins">
 
                                         <tbody>
+
                                             <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isRemovalReasons: false">
                                                 <td style="border-bottom:none;vertical-align:top; width: 20%;">
                                                     <b> Reported Removal Reason: </b> <p>{{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.removalReason: ''}}</p>
@@ -333,10 +334,10 @@
                                                     <b>Priliminary inspection: </b> <p>{{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionReason: ''}}</p>
 
                                                 </td>
-                                                <td style="width: 20%;">Technician : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspector: ''}}</td>
-                                                <td style="width: 20%;">Date : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate : ''}}</td>
-                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnician : ''}}</td>
-                                                <td >Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate :'' }}</td>
+                                                <td style="width: 20%;">Technician : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnician: ''}}</td>
+                                                <td style="width: 20%;">Date : {{ this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionTechnicianDate : ''}}</td>
+                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspector : ''}}</td>
+                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assemblyInspectionInspectorDate :'' }}</td>
                                             </tr>
                                             <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreAssemblyInspection: false" style="border-bottom:1px solid black">
                                               <td style="width: 20%;"></td>
@@ -370,10 +371,10 @@
                                                     <b>Pre-Test Results:</b> <p> {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsReason : ''}}</p>
 
                                                 </td>
-                                                <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspector : ''}}</td>
+                                                <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnician : ''}}</td>
+                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate : '' }}</td>
+                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspector: ''}}</td>
                                                 <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsInspectorDate : '' }}</td>
-                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnician: ''}}</td>
-                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.assmentResultsTechnicianDate  : '' }}</td>
                                             </tr>
                                             <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isPreAssmentResults: false" style="border-bottom:1px solid black">
                                                 <td style="width: 20%;"></td>
@@ -408,10 +409,10 @@
                                                     <b>Detail of Work Performed: </b><p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedReason: ''}}</p>
 
                                                 </td>
-                                                <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspector: ''}}</td>
+                                                <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnician: ''}}</td>
+                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate : '' }}</td>
+                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspector :''}}</td>
                                                 <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedInspectorDate  : '' }}</td>
-                                                <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnician:''}}</td>
-                                                <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.workPerformedTechnicianDate   : '' }}</td>
                                             </tr>
                                             <tr *ngIf="isWorkPerformed && !isshortteardown" style="border-bottom:1px solid black">
                                                 <td style="width: 20%;"></td>
@@ -522,10 +523,10 @@
                                                   <b>Teardown Discovery:   </b> <p>{{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryReason: ''}}</p>
 
                                               </td>
-                                              <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryInspector: ''}}</td>
-                                              <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate  : '' }}</td>
-                                              <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryTechnician:''}}</td>
-                                              <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate   : '' }}</td>
+                                              <td style="width: 20%;">Technician : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryTechnician: ''}}</td>
+                                              <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryTechnicianDate  : '' }}</td>
+                                              <td style="width: 20%;">Inspector : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryInspector :''}}</td>
+                                              <td style="width: 20%;">Date : {{this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.discoveryInspectorDate : '' }}</td>
                                           </tr>
                                           <tr *ngIf="this.workOrderprintData.workOrderTeardownModel ? this.workOrderprintData.workOrderTeardownModel.isDiscovery: false"  style="border-bottom:1px solid black">
                                               <td style="width: 20%;"></td>
