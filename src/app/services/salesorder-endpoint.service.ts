@@ -63,7 +63,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly _geSaleQuoteDocumentHistory: string = environment.baseUrl + "/api/SalesOrder/getSaleOrderDocumentAudit";
   private readonly _getSaveFreights: string = environment.baseUrl + "/api/SalesOrder/createsalesorderfreight";
   private readonly _getFreights: string = environment.baseUrl + "/api/SalesOrder/salesorderfreightlist";
-  private readonly _getDeleteFreight: string = environment.baseUrl + "/api/SalesOrder/deletesalesorderfreight/";
+  private readonly _getDeleteFreight: string = environment.baseUrl + "/api/SalesOrder/deletesalesorderfreight";
   private readonly _getSaveCharges: string = environment.baseUrl + "/api/SalesOrder/createsalesordercharges";
   private readonly _getCharges: string = environment.baseUrl + "/api/SalesOrder/gesalesorderchargeslist";
   private readonly _getChargesById: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderChargesBySOId";
@@ -101,6 +101,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly GetSalesOrderBillingInvoicingByIdURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingById";
   private readonly updateSalesOrderBillingInvoicingURL: string = environment.baseUrl + "/api/SalesOrder/updateSalesOrderBillingInvoicing";
   //**End  savesarvice end point creation implementation --nitin
+  private readonly _geSalesOrderParts: string = environment.baseUrl + "/api/SalesOrder/gesalesorderpartslist";
 
   constructor(
     http: HttpClient,
@@ -869,4 +870,11 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
   //end nitin
+
+  getSalesOrderParts(id, isDeleted) {
+    return this.http.get<any>(`${this._geSalesOrderParts}?SalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderParts(id, isDeleted));
+      });
+  }
 }

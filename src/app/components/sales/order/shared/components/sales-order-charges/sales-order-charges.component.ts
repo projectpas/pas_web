@@ -31,6 +31,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     @Input() view: boolean = false;
     @Input() isQuote = false;
     @Input() isView: boolean = false;
+    salesOrderPartsList = [];
     markupList: any = [];
     mainEditingIndex: any;
     subEditingIndex: any;
@@ -110,7 +111,8 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.isSpinnerVisible = true;
         forkJoin(this.salesOrderService.getSalesQuoteCharges(this.salesOrderId, this.deletedStatusInfo),
             this.actionService.getCharges(),
-            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId)
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId),
+            this.salesOrderService.getSalesOrderParts(this.salesOrderId, this.deletedStatusInfo)
         ).subscribe(res => {
             this.isSpinnerVisible = false;
             this.setChargesData(res[0]);
@@ -118,8 +120,19 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             this.markupList = res[2];
             this.setVendors();
             this.vendorList('');
+            this.setPartsData(res[3]);
         }, error => this.isSpinnerVisible = false);
     }
+
+    setPartsData(res) {
+        if (res && res.length > 0) {
+          this.salesOrderPartsList = res;
+          this.isUpdate = true;
+        } else {
+          this.salesOrderPartsList = [];
+          this.isUpdate = false;
+        }
+      }
 
     private vendorList(value) {
         this.arrayVendlsit = [];
@@ -172,7 +185,8 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             }
             if (fromDelete) {
                 this.getTotalBillingAmount();
-                this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+                //this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+                this.updateChargesListForSO.emit(this.salesOrderChargesList);
             }
         }, error => {
             this.isSpinnerVisible = false;
@@ -337,7 +351,13 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
                 MessageSeverity.success
             );
             this.refreshOnDataSaveOrEditORDelete();
-            this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+            //this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+            this.salesOrderService.getSalesQuoteCharges(this.salesOrderId, this.deletedStatusInfo).subscribe(response => {
+                if (response && response.length > 0) {
+                    this.salesOrderChargesList = response;
+                    this.saveChargesListForSO.emit(this.salesOrderChargesList);
+                }
+            }, error => { });
         }, error => this.isSpinnerVisible = false)
         this.isSaveChargesDesabled = true;
         this.storedData = [];
