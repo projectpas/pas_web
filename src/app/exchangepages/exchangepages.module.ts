@@ -138,7 +138,7 @@ import { ExchangeSalesOrderMultiPickTicketComponent } from "../components/exchan
     AddExchangeSalesOrderReserveUnreservePartNumberComponent,
     //ExchangeSalesOrderPickTicketComponent,
     ExchangeSalesOrderPickTicketsComponent,
-    ExchangeSalesOrderMultiPickTicketComponent
+    //ExchangeSalesOrderMultiPickTicketComponent
   ],
   providers: [CommonService, DatePipe, ExchangequoteService, ExchangeQuoteEndpointService, ActionService, ActionEndpoint, ExchangeSalesOrderService, ExchangeSalesOrderEndpointService],
   //entryComponents: [ExchangeSalesOrderPickTicketComponent, ExchangeSalesOrderMultiPickTicketComponent]
