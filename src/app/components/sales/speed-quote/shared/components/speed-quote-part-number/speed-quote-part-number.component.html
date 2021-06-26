@@ -54,10 +54,16 @@
                                      
                                         <ng-container *ngIf="summaryColumn.field == 'unitSalePrice'">
                                         
-                                          <input class="table-header-input-width text-right" name="unitSalePricetext{{i}}"
+                                          <!-- <input class="table-header-input-width text-right" name="unitSalePricetext{{i}}"
                                           [disabled]="summaryPart['isEditPart'] == true"
                                           [ngModel]="summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe"
-                                          (ngModelChange)="onChangeUnitSalesPrice(rowIndex,$event)" pInputText type="text"/>
+                                          (blur)="onChangeUnitSalesPrice(rowIndex,$event)" 
+                                          pInputText type="text"/> -->
+
+                                          <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
+                                          (blur)="onChangeUnitSalesPrice(rowIndex,summaryPart[summaryColumn.field])" [ngModel]="summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe"
+                                          [disabled]="summaryPart['isEditPart'] == true" value="{{ summaryPart[summaryColumn.field] }}" name="unitSalePricetext{{i}}"
+                                          [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="summaryPart[summaryColumn.field]=formatStringToNumberGlobal($event)" />
                                         
                                         </ng-container>
                                         <ng-container style="width: 50px;" *ngIf="summaryColumn.field == 'quantityRequested'">
