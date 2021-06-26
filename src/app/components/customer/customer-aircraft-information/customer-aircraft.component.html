@@ -180,7 +180,7 @@
     <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
       <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewAircraftdbldisplay(rowData)">
         <td class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn>
-          <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
+          <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' ">
             {{rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
           </ng-container>
           <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
@@ -677,7 +677,7 @@
                 }">
                 {{audit.dashNumber == 'Unknown' ? '' : audit.dashNumber }}
               </td>
-              <td [ngStyle]="{
+              <td class="text-right" [ngStyle]="{
                   color: getColorCodeForHistory(i, 'inventory', audit.inventory)
                     ? 'black'
                     : 'red'

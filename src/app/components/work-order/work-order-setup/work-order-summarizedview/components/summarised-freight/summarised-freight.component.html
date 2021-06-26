@@ -68,7 +68,7 @@
         <ng-container *ngFor="let materialMPN of value; let i=index" >
         <tr>
             <td *ngFor="let matField of freightsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
-              <span *ngIf="matField.field !='plus'"> {{globalizeAmount(materialMPN[matField.field], matField.field)}}</span>
+              <span [ngClass]="(matField.field == 'amount' )?'float-right':''" *ngIf="matField.field !='plus'"> {{globalizeAmount(materialMPN[matField.field], matField.field)}}</span>
                 <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
                    <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 1px 5px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
                    <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 5px !important;" (click)="handelPlus(materialMPN)"></i>   
