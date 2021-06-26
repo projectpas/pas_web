@@ -644,20 +644,6 @@
                 <h4 class="modal-title">Material History </h4>
             </div>
             <div class="modal-body">
-                <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
-                    <div class="loading">
-                        <div class="lds-roller">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                </div>
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead history_hg">
                         <table class="table table-bordered header-table-width">
@@ -865,6 +851,7 @@
                 </button>
             </div>
         </div>
+       
     </div>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
@@ -904,7 +891,7 @@
                     <th></th>
                     <!-- *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" -->
                     <th class="table-actions-column"
-                         [ngClass]="(isView == false) ? 'width-160' : 'width-80'">Actions </th>
+                         [ngClass]="(isView == false) ? 'width-170' : 'width-80'">Actions </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
@@ -969,9 +956,9 @@
                         <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1" (click)="editNew(rowData)" matTooltip="Edit"
                                 matTooltipPosition="above"><i class="fa fa-pencil"></i></button></span>
                         <span>
-                            <a class="btn nobg btn-view-cstm" (click)="viewItem(rowData)" matTooltip="View Inventory"
+                            <button class="btn nobg btn-view-cstm" (click)="viewItem(rowData)" matTooltip="View Inventory"
                                 matTooltipPosition="above">
-                                <i class="fa fa-eye"></i> </a>
+                                <i class="fa fa-eye"></i> </button>
                         </span>
                         <span *ngIf="!isView"><button type="button" class="btn nobg btn-pluspo-cstm"
                                 (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false"
@@ -1012,11 +999,11 @@
                                 [disabled]="rowData.quantityIssued!=0 || rowData.quantityReserved !=0"
                                 matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button>
                         </span>
-                        <span data-toggle="modal" data-target="#materialAudit"><a 
+                        <span data-toggle="modal" data-target="#materialAudit"><button
                             [ngClass]="(isView == false) ? 'btn nobg btn-hist-cstm mr-top5' : 'btn nobg btn-hist-cstm'"
                            
                                 (click)="openMaterialAudit(rowData)" matTooltip="Material List History"
-                                matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                matTooltipPosition="above"><i class="fa fa-history"></i></button></span>
                                 <!-- class="btn nobg btn-hist-cstm mr-top5" -->
                     </td>
                 </tr>
