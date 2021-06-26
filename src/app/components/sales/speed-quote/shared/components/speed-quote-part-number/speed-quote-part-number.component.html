@@ -60,14 +60,14 @@
                                           (ngModelChange)="onChangeUnitSalesPrice(rowIndex,$event)" pInputText type="text"/>
                                         
                                         </ng-container>
-                                        <ng-container *ngIf="summaryColumn.field == 'quantityRequested'">
-                                            <input class="table-header-input-width text-right" name="quantityRequested{{i}}"
+                                        <ng-container style="width: 50px;" *ngIf="summaryColumn.field == 'quantityRequested'">
+                                            <input class="min-width text-right" name="quantityRequested{{i}}"
                                             [disabled]="summaryPart['isEditPart'] == true"
                                             [ngModel]="summaryPart[summaryColumn.field]"
                                             (ngModelChange)="onChangeQuantity(rowIndex,$event)" pInputText type="text"/>
                                         </ng-container>
                                         <ng-container *ngIf="summaryColumn.field == 'tat'">
-                                            <input class="table-header-input-width text-right" name="tat{{i}}"
+                                            <input style="width: 50px;" class="table-header-input-width text-right" name="tat{{i}}"
                                             [disabled]="summaryPart['isEditPart'] == true"
                                             [ngModel]="summaryPart[summaryColumn.field]"
                                             pInputText type="text"/>
@@ -75,16 +75,16 @@
                                         <ng-container *ngIf="summaryColumn.field == 'notes'">
                                             <!-- <td class="width-120" *ngIf="isViewMode == false"> -->
                                             <div  *ngIf="isViewMode == false"class="form-group notes-popup-cstm mat_emo"
-                                            style="width: 120px; margin-bottom: 0;">
+                                            style="margin-bottom: 0;">
                                             <div [innerHTML]="summaryPart.notes" matTooltipPosition="above"
-                                            [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box"></div>
+                                            [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box_exclusion"></div>
                                             <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
                                                 data-toggle="modal" data-target="#textarea-popupNotes"
                                                 matTooltip="Notes" matTooltipPosition="above"
                                                 (click)="onAddTextAreaInfo(summaryPart,i, rowIndex)"></i>
                                             </div>
 
-                                            <div  *ngIf="isViewMode == true" class="form-group notes-popup-cstm mat_emo"
+                                            <div *ngIf="isViewMode == true" class="form-group notes-popup-cstm mat_emo"
                                             style="width: 120px; margin-bottom: 0;">
                                             <div [innerHTML]="summaryPart.notes" matTooltipPosition="above"
                                             [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box"></div>

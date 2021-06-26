@@ -699,4 +699,8 @@ export class SalesOrderService {
     );
   }
   //end --nitin
+
+  getSalesOrderParts(id, isDeleted) {
+    return this.salesOrderEndPointSevice.getSalesOrderParts(id, isDeleted);
+  }
 }

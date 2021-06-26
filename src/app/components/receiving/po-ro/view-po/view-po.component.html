@@ -323,10 +323,12 @@
                                 <th>Name</th>
                                 <th>Trace</th>
                                 <th>Mfg</th>
-                                <th>Mfg Lot Num</th>
+                                <th>Mfg Lot Num</th>                                
                                 <th>Mfg Date</th>
                                 <th>Mfg Batch Num</th>
                                 <th>Part Cert Num </th>
+                                <th>Cert Type</th>
+                                <th>Cert By</th>
                                 <th>Certified Date</th>
                                 <th class="date">Certified Due Date</th>
                                 <th>Tag Type</th>
@@ -415,8 +417,10 @@
                                             [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.manufacturingDate">
                                         </p-calendar>
                                     </td>
-                                    <td>{{SL.manufacturingBatchNumber}}</td>
+                                    <td>{{SL.manufacturingBatchNumber}}</td>                                    
                                     <td>{{SL.partCertificationNumber}}</td>
+                                    <td>{{SL.certifiedType}}</td>
+                                    <td>{{SL.certifiedBy}}</td>
                                     <td>
                                         <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
                                             [disabled]="!SL.isEnabled" [showIcon]="true"

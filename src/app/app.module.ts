@@ -279,6 +279,10 @@ import { ForgotPasswordComponent } from './components/login/forgot-password/forg
 import { ForgotPassComponent } from './components/login/forgot-password-ui/forgotpassword.component';
 import { ResetPasswordComponent } from './components/login/reset-password/reset-password.component';
 import { ResetPassComponent } from './components/login/reset-password-ui/resetpassword.component';
+import { ExchangeSalesOrderPickTicketComponent } from './components/exchange-sales-order/shared/components/exchange-sales-order-pick-ticket/exchange-sales-order-pick-ticket.component';
+import { ExchangeSalesOrderEndpointService } from './services/exchangesalesorder-endpoint.service';
+import { ExchangeSalesOrderService } from './services/exchangesalesorder.service';
+import { ExchangeSalesOrderMultiPickTicketComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-multi-pickTicket/exchange-sales-order-multi-pickTicket.component";
 @NgModule({
   imports: [
     CardModule,
@@ -346,7 +350,9 @@ import { ResetPassComponent } from './components/login/reset-password-ui/resetpa
     ForgotPasswordComponent,
     ForgotPassComponent,
     ResetPasswordComponent,
-    ResetPassComponent
+    ResetPassComponent,
+    ExchangeSalesOrderPickTicketComponent,
+    ExchangeSalesOrderMultiPickTicketComponent
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
@@ -556,7 +562,9 @@ import { ResetPassComponent } from './components/login/reset-password-ui/resetpa
     StocklineReferenceStorage,
     CommunicationService,
     InvoicePaymentService,
-    InvoicePaymentEndpointService
+    InvoicePaymentEndpointService,
+    ExchangeSalesOrderEndpointService,
+    ExchangeSalesOrderService
   ],
   entryComponents: [
     LoginDialogComponent,
@@ -566,7 +574,9 @@ import { ResetPassComponent } from './components/login/reset-password-ui/resetpa
     StocklineHistoryComponent,
     EntityViewComponent,
     AssetInventoryViewComponent,
-    AuditComponentComponent
+    AuditComponentComponent,
+    ExchangeSalesOrderPickTicketComponent,
+    ExchangeSalesOrderMultiPickTicketComponent
   ],
   bootstrap: [AppComponent],
   exports: [CommonModule],
