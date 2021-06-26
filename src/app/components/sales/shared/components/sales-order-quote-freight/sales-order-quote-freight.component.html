@@ -243,7 +243,7 @@
                 <input type="text" pInputText pKeyFilter="money" class="text-right"
                   [ngModel]="freightFlatBillingAmount  | twoDecimalGlobalNumberFormatPipe"
                   [ngModelOptions]="{updateOn:'blur'}"
-                  (ngModelChange)="freightFlatBillingAmount=formatStringToNumberGlobal($event)"
+                  (ngModelChange)="freightFlatBillingAmount=formatStringToNumberGlobal($event); validated()"
                   (blur)="freightFlatBillingAmount = (freightFlatBillingAmount)?formateCurrency(freightFlatBillingAmount):'0.00'"
                   [disabled]="isView" />
               </td>

@@ -260,10 +260,10 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
         sendData = sendData.map((f) => {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
         })
-        let result = { 'data': sendData, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
+        let result = { 'salesOrderQuoteFreights': sendData, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'freightBuildMethod': this.costPlusType, 'salesOrderQuoteId': this.salesOrderQuoteId }
 
         this.isSpinnerVisible = true;
-        this.salesOrderQuoteService.createFreight(sendData).subscribe(result => {
+        this.salesOrderQuoteService.createFreight(result).subscribe(result => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
                 '',
@@ -554,13 +554,18 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
     }
 
     setFreightsData(res) {
-        if (res && res.length > 0) {
-            this.salesOrderFreightList = res;
-            this.costPlusType = res[0].headerMarkupId;
-            this.overAllMarkup = res[0].headerMarkupPercentageId;
-            if (Number(this.costPlusType) == 3) {
-                this.freightFlatBillingAmount = res[0].markupFixedPrice;
+        //if (res && res.length > 0) {
+        if (res) {
+            this.salesOrderFreightList = res.salesOrderQuoteFreights;
+            //this.costPlusType = res[0].headerMarkupId;
+            this.costPlusType = res.freightBuildMethod;
+            if (res.salesOrderQuoteFreights.length > 0) {
+                this.overAllMarkup = res.salesOrderQuoteFreights[0].headerMarkupPercentageId;
             }
+            this.freightFlatBillingAmount = this.formateCurrency(res.freightFlatBillingAmount);
+            // if (Number(this.costPlusType) == 3) {
+            //     this.freightFlatBillingAmount = res[0].markupFixedPrice;
+            // }
             this.isUpdate = true;
 
             this.salesOrderFreightList.forEach(ele => {

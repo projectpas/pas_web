@@ -19,7 +19,6 @@ import { SalesOrderConversionCritera } from "../components/sales/quotes/models/s
 import { SalesOrderView } from "../models/sales/SalesOrderView";
 import { BehaviorSubject } from "rxjs";
 import { ISalesOrderFreight } from "../models/sales/ISalesOrderFreight";
-import { ISalesOrderQuoteCharge } from "../models/sales/ISalesOrderQuoteCharge";
 import { formatStringToNumber } from "../generic/autocomplete";
 import { SalesOrderQuotePart } from "../models/sales/SalesOrderQuotePart";
 import { SOQuoteMarginSummary } from "../models/sales/SoQuoteMarginSummary";
@@ -340,13 +339,13 @@ export class SalesQuoteService {
     );
   }
 
-  createFreight(freightsList: ISalesOrderFreight[]): Observable<ISalesOrderQuote[]> {
+  createFreight(freightsList: any): Observable<ISalesOrderQuote[]> {
     return Observable.forkJoin(
       this.salesQuoteEndPointSevice.createFreight(freightsList)
     );
   }
 
-  createSOQCharge(chargesList: ISalesOrderQuoteCharge[]): Observable<ISalesOrderQuote[]> {
+  createSOQCharge(chargesList: any): Observable<ISalesOrderQuote[]> {
     return Observable.forkJoin(
       this.salesQuoteEndPointSevice.createCharges(chargesList)
     );
