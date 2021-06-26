@@ -140,14 +140,19 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
 
   restorerecord: any = {}
   setChargesData(res) {
-    if (res && res.length > 0) {
-      this.salesOrderChargesList = res;
+    //if (res && res.length > 0) {
+    if (res) {
+      this.salesOrderChargesList = res.salesOrderQuoteCharges;
       this.setVendors();
-      this.costPlusType = res[0].headerMarkupId;
-      this.overAllMarkup = res[0].headerMarkupPercentageId;
-      if (Number(this.costPlusType) == 3) {
-        this.chargesFlatBillingAmount = res[0].markupFixedPrice;
+      //this.costPlusType = res.salesOrderQuoteCharges[0].headerMarkupId;
+      this.costPlusType = res.chargesBuildMethod;
+      if (res.salesOrderQuoteCharges.length > 0) {
+        this.overAllMarkup = res.salesOrderQuoteCharges[0].headerMarkupPercentageId;
       }
+      this.chargesFlatBillingAmount = this.formateCurrency(res.chargesFlatBillingAmount);
+      // if (Number(this.costPlusType) == 3) {
+      //   this.chargesFlatBillingAmount = res[0].markupFixedPrice;
+      // }
       this.salesOrderChargesList.forEach(ele => {
         ele.billingAmount = this.formateCurrency(ele.billingAmount);
       });
@@ -300,9 +305,10 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
         vendorId: editValueAssignByCondition("vendorId", f.vendor)
       }
     })
-    let result = { 'data': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
+    
+    let result = { 'salesOrderQuoteCharges': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'chargesBuildMethod': this.costPlusType, 'salesOrderQuoteId': this.salesOrderQuoteId }
     this.isSpinnerVisible = true;
-    this.salesOrderQuoteService.createSOQCharge(sendData).subscribe(result => {
+    this.salesOrderQuoteService.createSOQCharge(result).subscribe(result => {
       this.isSpinnerVisible = false;
       this.alertService.showMessage(
         '',
