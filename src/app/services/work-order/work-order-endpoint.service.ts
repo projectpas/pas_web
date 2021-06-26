@@ -1321,7 +1321,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
     //material list history
     getMaterialHistory(id, isSubWorkOrder) {
-        if (isSubWorkOrder) {
+        if (isSubWorkOrder == true || isSubWorkOrder ==  'true') {
             return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subworkordermaterialauditlist?SubWorkOrderMaterialsId=${id}`, this.getRequestHeaders()).catch(error => {
                 return this.handleErrorCommon(error, () => this.getMaterialHistory(id, isSubWorkOrder));
             });
