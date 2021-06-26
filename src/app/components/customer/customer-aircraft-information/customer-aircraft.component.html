@@ -179,10 +179,12 @@
     </ng-template>
     <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
       <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewAircraftdbldisplay(rowData)">
-        <td class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn>
-          <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' ">
-            {{rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
+        <td class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
+        [ngClass]="(col.field == 'inventory' )?'text-right':''">
+          <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
+          {{rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }} 
           </ng-container>
+         
           <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
               {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
           </ng-container> 
