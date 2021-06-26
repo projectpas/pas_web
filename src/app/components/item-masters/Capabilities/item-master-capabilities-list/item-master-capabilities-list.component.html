@@ -138,10 +138,9 @@
                             name="createdDate" (change)="addeddateFilterForTable($event.target.value, col.field)" />
                           <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
                             name="updatedDate" (change)="addeddateFilterForTable($event.target.value,col.field)" />
-                        </ng-container>
+                    </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
-                        <input type="checkbox" class="input-check" *ngIf="col.field == 'isVerified'"
-                        name="isVerified" (change)="checkChange($event)"/>
+                        <input  class="table-header-input-width" pInputText type="text" name="isVerified" (input)="checkChange($event.target.value)"/>
                     </ng-container>
                 </th>
                 <th class="table-actions-column"></th>

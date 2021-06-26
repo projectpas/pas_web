@@ -391,7 +391,7 @@
 							<ng-container *ngFor="let item of stocklineAdjustmentData">
 								<ng-container *ngIf="item.adjustmentDataTypeId == 10">
 									<tr>
-										<td><input type="checkbox" name="quantityOnHandAllow" [(ngModel)]="quantityOnHandAllow" (change)="onChangePrices(item); onChangeQtyOnHand(item)"></td>
+										<td><input type="checkbox" name="quantityOnHandAllow" [(ngModel)]="quantityOnHandAllow" (change)="onChangePrices(item); onChangeQtyOnHand(item)" [disabled]="sourceStockLineSetup.isSerialized"></td>
 										<td>{{item.stocklineAdjustmentDataType}}</td>
 										<td class="text-right">{{sourceStockLineSetup.quantityOnHand}}</td>
 										<td>
@@ -624,7 +624,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="cyclesRemainingMin"
-                                            	[(ngModel)]="sourceTimeLife.cyclesRemainingMin">
+												[(ngModel)]="sourceTimeLife.cyclesRemainingMin"
+												(change)="onChangeTimeLifeMin('cyclesRemainingMin',sourceTimeLife.cyclesRemainingMin)">
 										</td>
 										<!-- <td>Remaining</td> -->
 										<td class="clr2">
@@ -648,7 +649,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="timeRemainingMin"
-                                            	[(ngModel)]="sourceTimeLife.timeRemainingMin">
+												[(ngModel)]="sourceTimeLife.timeRemainingMin"
+												(change)="onChangeTimeLifeMin('timeRemainingMin',sourceTimeLife.timeRemainingMin)">
                                         </td>        
 										<td class="clr2">
 											<input class="form-control tl-input" matInput placeholder="HH"
@@ -663,7 +665,8 @@
 												[disabled]="!timeLifeAllow"
 												type="number" 
 												name="lastSinceNewMin"
-												[(ngModel)]="sourceTimeLife.lastSinceNewMin">
+												[(ngModel)]="sourceTimeLife.lastSinceNewMin"
+												(change)="onChangeTimeLifeMin('lastSinceNewMin',sourceTimeLife.lastSinceNewMin)">
 	
 										</td>
 										<td rowspan="5" class="vertical-top">
@@ -709,7 +712,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="cyclesSinceNewMin"
-                                            	[(ngModel)]="sourceTimeLife.cyclesSinceNewMin">
+												[(ngModel)]="sourceTimeLife.cyclesSinceNewMin"
+												(change)="onChangeTimeLifeMin('cyclesSinceNewMin',sourceTimeLife.cyclesSinceNewMin)">
                                         </td>                  
                                         <td class="clr2">
                                             <!-- <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel" mask="000:00" name="timeSinceNew" [(ngModel)]="sourceTimeLife.timeSinceNew" [disabled]="!timeLifeAllow"/>
@@ -732,7 +736,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="timeSinceNewMin"
-                                            	[(ngModel)]="sourceTimeLife.timeSinceNewMin">
+												[(ngModel)]="sourceTimeLife.timeSinceNewMin"
+												(change)="onChangeTimeLifeMin('timeSinceNewMin',sourceTimeLife.timeSinceNewMin)">
                                         </td>                  
                                         <td class="clr2">
                                             <!-- <input class="form-control remaining-width" matInput type="text"  placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel" mask="000:00" name="lastSinceNew" [(ngModel)]="sourceTimeLife.lastSinceNew" [disabled]="!timeLifeAllow"/>
@@ -755,7 +760,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="lastSinceOVHMin"
-                                            	[(ngModel)]="sourceTimeLife.lastSinceOVHMin">
+												[(ngModel)]="sourceTimeLife.lastSinceOVHMin"
+												(change)="onChangeTimeLifeMin('lastSinceOVHMin',sourceTimeLife.lastSinceOVHMin)">
                                         </td>  
 									</tr>
 									<tr>
@@ -781,7 +787,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="cyclesSinceOVHMin"
-                                            	[(ngModel)]="sourceTimeLife.cyclesSinceOVHMin">
+												[(ngModel)]="sourceTimeLife.cyclesSinceOVHMin"
+												(change)="onChangeTimeLifeMin('cyclesSinceOVHMin',sourceTimeLife.cyclesSinceOVHMin)">
                                         </td>            
                                         <td class="clr2">
                                             <!-- <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel" mask="000:00" name="timeSinceOVH" [(ngModel)]="sourceTimeLife.timeSinceOVH" [disabled]="!timeLifeAllow"/>
@@ -804,7 +811,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="timeSinceOVHMin"
-                                            	[(ngModel)]="sourceTimeLife.timeSinceOVHMin">
+												[(ngModel)]="sourceTimeLife.timeSinceOVHMin"
+												(change)="onChangeTimeLifeMin('timeSinceOVHMin',sourceTimeLife.timeSinceOVHMin)">
                                         </td>            
                                         <td class="clr2">
                                             <!-- <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel" mask="000:00" name="lastSinceOVH" [(ngModel)]="sourceTimeLife.lastSinceOVH" [disabled]="!timeLifeAllow"/>
@@ -827,7 +835,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="lastSinceInspectionMin"
-                                            	[(ngModel)]="sourceTimeLife.lastSinceInspectionMin">
+												[(ngModel)]="sourceTimeLife.lastSinceInspectionMin"
+												(change)="onChangeTimeLifeMin('lastSinceInspectionMin',sourceTimeLife.lastSinceInspectionMin)">
                                         </td>   
 									</tr>
 									<tr>
@@ -853,7 +862,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="cyclesSinceInspectionMin"
-                                            	[(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin">
+												[(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin"
+												(change)="onChangeTimeLifeMin('cyclesSinceInspectionMin',sourceTimeLife.cyclesSinceInspectionMin)">
                                         </td>            
                                         <td class="clr2">
                                             <!-- <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel" mask="000:00" name="timeSinceInspection" [(ngModel)]="sourceTimeLife.timeSinceInspection" [disabled]="!timeLifeAllow"/>
@@ -876,7 +886,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="timeSinceInspectionMin"
-                                            	[(ngModel)]="sourceTimeLife.timeSinceInspectionMin">
+												[(ngModel)]="sourceTimeLife.timeSinceInspectionMin"
+												(change)="onChangeTimeLifeMin('timeSinceInspectionMin',sourceTimeLife.timeSinceInspectionMin)">
                                         </td>            
                                         <td class="clr2">
                                             <!-- <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel" mask="000:00" name="lastSinceInspection" [(ngModel)]="sourceTimeLife.lastSinceInspection" [disabled]="!timeLifeAllow"/>
@@ -913,7 +924,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="cyclesSinceRepairMin"
-                                            	[(ngModel)]="sourceTimeLife.cyclesSinceRepairMin">
+												[(ngModel)]="sourceTimeLife.cyclesSinceRepairMin"
+												(change)="onChangeTimeLifeMin('cyclesSinceRepairMin',sourceTimeLife.cyclesSinceRepairMin)">
                                         </td>            
                                         <td class="clr2">
                                             <!-- <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel" mask="000:00" name="timeSinceRepair" [(ngModel)]="sourceTimeLife.timeSinceRepair" [disabled]="!timeLifeAllow"/>
@@ -936,7 +948,8 @@
 												[disabled]="!timeLifeAllow"
                                             	type="number" 
                                             	name="timeSinceRepairMin"
-                                            	[(ngModel)]="sourceTimeLife.timeSinceRepairMin">
+												[(ngModel)]="sourceTimeLife.timeSinceRepairMin"
+												(change)="onChangeTimeLifeMin('timeSinceRepairMin',sourceTimeLife.timeSinceRepairMin)">
                                         </td> 
 										<td></td>
 									</tr>

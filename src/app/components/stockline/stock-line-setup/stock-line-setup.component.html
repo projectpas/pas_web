@@ -941,7 +941,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Cert By</label>
+                                <label *ngIf="stockLineForm.certifiedTypeId > 0">Cert By</label>
                                 <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 1">
                                     <div class="col-sm-12">
                                         <p-autoComplete field="label" class="pautocomp-cstm"

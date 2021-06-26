@@ -418,7 +418,8 @@
                                                             #cyclesRemainingMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="cyclesRemainingMin"
-                                                            [(ngModel)]="sourceTimeLife.cyclesRemainingMin">
+                                                            [(ngModel)]="sourceTimeLife.cyclesRemainingMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesRemainingMin',sourceTimeLife.cyclesRemainingMin)">
                                                     </td>     
                                                     <td class="clr2">
                                                         <!-- <input class="form-control width-input" matInput type="text"
@@ -444,7 +445,8 @@
                                                             #timeRemainingMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="timeRemainingMin"
-                                                            [(ngModel)]="sourceTimeLife.timeRemainingMin">
+                                                            [(ngModel)]="sourceTimeLife.timeRemainingMin"
+                                                            (change)="onChangeTimeLifeMin('timeRemainingMin',sourceTimeLife.timeRemainingMin)">
                                                     </td>                                               
                                                     <td>
                                                         <input class="form-control tl-input" matInput placeholder="HH"
@@ -459,7 +461,8 @@
                                                             (ngModelChange)="getActive()"                                                           
                                                             type="number" 
                                                             name="lastSinceNewMin"
-                                                            [(ngModel)]="sourceTimeLife.lastSinceNewMin">
+                                                            [(ngModel)]="sourceTimeLife.lastSinceNewMin"
+                                                            (change)="onChangeTimeLifeMin('lastSinceNewMin',sourceTimeLife.lastSinceNewMin)">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -488,7 +491,8 @@
                                                             #cyclesSinceNewMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="cyclesSinceNewMin"
-                                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewMin">
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesSinceNewMin',sourceTimeLife.cyclesSinceNewMin)">
                                                     </td>
                                                     <td class="clr2">
                                                         <!-- <input class="form-control width-input" matInput type="text"
@@ -514,7 +518,8 @@
                                                             #timeSinceNewMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="timeSinceNewMin"
-                                                            [(ngModel)]="sourceTimeLife.timeSinceNewMin">
+                                                            [(ngModel)]="sourceTimeLife.timeSinceNewMin"
+                                                            (change)="onChangeTimeLifeMin('timeSinceNewMin',sourceTimeLife.timeSinceNewMin)">
 
                                                     </td>
                                                     <td class="clr2">
@@ -541,7 +546,8 @@
                                                             #lastSinceOVHMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="lastSinceOVHMin"
-                                                            [(ngModel)]="sourceTimeLife.lastSinceOVHMin">
+                                                            [(ngModel)]="sourceTimeLife.lastSinceOVHMin"
+                                                            (change)="onChangeTimeLifeMin('lastSinceOVHMin',sourceTimeLife.lastSinceOVHMin)">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -570,7 +576,8 @@
                                                             #cyclesSinceOVHMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="cyclesSinceOVHMin"
-                                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHMin">
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesSinceOVHMin',sourceTimeLife.cyclesSinceOVHMin)">
                                                     </td>
                                                     <td class="clr2">
                                                         <!-- <input class="form-control width-input" matInput type="text"
@@ -596,7 +603,8 @@
                                                             #timeSinceOVHMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="timeSinceOVHMin"
-                                                            [(ngModel)]="sourceTimeLife.timeSinceOVHMin">
+                                                            [(ngModel)]="sourceTimeLife.timeSinceOVHMin"
+                                                            (change)="onChangeTimeLifeMin('timeSinceOVHMin',sourceTimeLife.timeSinceOVHMin)">
                                                     </td>
                                                     <td class="clr2">
                                                         <!-- <input class="form-control width-input" matInput type="text"
@@ -622,7 +630,8 @@
                                                             #lastSinceInspectionMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="lastSinceInspectionMin"
-                                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionMin">
+                                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionMin"
+                                                            (change)="onChangeTimeLifeMin('lastSinceInspectionMin',sourceTimeLife.lastSinceInspectionMin)">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -652,7 +661,8 @@
                                                             #cyclesSinceInspectionMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="cyclesSinceInspectionMin"
-                                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin">
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesSinceInspectionMin',sourceTimeLife.cyclesSinceInspectionMin)">
                                                     </td>
                                                     <td class="clr2">
                                                         <!-- <input class="form-control width-input" matInput type="text"
@@ -678,7 +688,8 @@
                                                             #timeSinceInspectionMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="timeSinceInspectionMin"
-                                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionMin">
+                                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionMin"
+                                                            (change)="onChangeTimeLifeMin('timeSinceInspectionMin',sourceTimeLife.timeSinceInspectionMin)">
                                                     </td>
                                                     <td class="clr2">
                                                         <!-- <input class="form-control width-input" matInput type="text"
@@ -721,7 +732,8 @@
                                                             #cyclesSinceRepairMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="cyclesSinceRepairMin"
-                                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairMin">
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesSinceRepairMin',sourceTimeLife.cyclesSinceRepairMin)">
                                                     </td>
                                                     <td class="clr2">
                                                         <!-- <input class="form-control width-input" matInput type="text"
@@ -747,7 +759,8 @@
                                                             #timeSinceRepairMin="ngModel" (ngModelChange)="getActive()"
                                                             type="number" 
                                                             name="timeSinceRepairMin"
-                                                            [(ngModel)]="sourceTimeLife.timeSinceRepairMin">
+                                                            [(ngModel)]="sourceTimeLife.timeSinceRepairMin"
+                                                            (change)="onChangeTimeLifeMin('timeSinceRepairMin',sourceTimeLife.timeSinceRepairMin)">
                                                     </td>
                                                     <td></td>
                                                 </tr>
@@ -785,7 +798,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Cert By</label>
+                                <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label>
                                 <div class="form-row" *ngIf="receivingForm.certifiedTypeId == customerModuleId">
                                     <div class="col-sm-12">  
                                         <p-autoComplete field="name" class="pautocomp-cstm"

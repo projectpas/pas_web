@@ -1185,5 +1185,54 @@ this.currentItem=currentItem;
 		timeLife.timeSinceRepair = ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00'));				
         return timeLife;
 	}
+
+	onChangeTimeLifeMin(name,value) {  	
+        if (value > 59) {           
+			this.alertService.showMessage('Error','Minutes can\'t be greater than 59', MessageSeverity.error);
+			this.timeLifeMinNames(name);
+        }       
+	}
+	
+	timeLifeMinNames(name){
+		if(name == 'cyclesRemainingMin'){
+			this.sourceTimeLife.cyclesRemainingMin = '00';
+		}
+		else if (name == 'timeRemainingMin'){
+			this.sourceTimeLife.timeRemainingMin = '00';
+		}
+		else if (name == 'lastSinceNewMin'){
+			this.sourceTimeLife.lastSinceNewMin = '00';
+		}
+		else if (name == 'cyclesSinceNewMin'){
+			this.sourceTimeLife.cyclesSinceNewMin = '00';
+		}
+		else if (name == 'timeSinceNewMin'){
+			this.sourceTimeLife.timeSinceNewMin = '00';
+		}
+		else if (name == 'lastSinceOVHMin'){
+			this.sourceTimeLife.lastSinceOVHMin = '00';
+		}
+		else if (name == 'cyclesSinceOVHMin'){
+			this.sourceTimeLife.cyclesSinceOVHMin = '00';
+		}
+		else if (name == 'timeSinceOVHMin'){
+			this.sourceTimeLife.timeSinceOVHMin = '00';
+		}
+		else if (name == 'lastSinceInspectionMin'){
+			this.sourceTimeLife.lastSinceInspectionMin = '00';
+		}
+		else if (name == 'cyclesSinceInspectionMin'){
+			this.sourceTimeLife.cyclesSinceInspectionMin = '00';
+		}
+		else if (name == 'timeSinceInspectionMin'){
+			this.sourceTimeLife.timeSinceInspectionMin = '00';
+		}
+		else if (name == 'cyclesSinceRepairMin'){
+			this.sourceTimeLife.cyclesSinceRepairMin = '00';
+		}
+		else if (name == 'timeSinceRepairMin'){
+			this.sourceTimeLife.timeSinceRepairMin = '00';
+		}
+	}
 }
 
