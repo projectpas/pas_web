@@ -1357,7 +1357,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     openMaterialAudit(row) {
         this.auditHistoryList = [];
         this.isSpinnerVisibleHistory = true;
-        this.workOrderService.getMaterialHistory(this.isSubWorkOrder ? row.subWorkOrderMaterialsId : row.workOrderMaterialsId, this.isSubWorkOrder).subscribe(res => {
+        this.workOrderService.getMaterialHistory((this.isSubWorkOrder == false || this.isSubWorkOrder ==  'false' || this.isSubWorkOrder == undefined) ?  row.workOrderMaterialsId : row.subWorkOrderMaterialsId, this.isSubWorkOrder).subscribe(res => {
             this.isSpinnerVisibleHistory = false;
             this.auditHistoryList = res.reverse();
 
