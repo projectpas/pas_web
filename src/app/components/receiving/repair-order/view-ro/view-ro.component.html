@@ -27,8 +27,8 @@
                             </h4>
                         </div>
                         <button type="button" class="btn-sm header-button pull-right"
-                            [routerLink]="['/receivingmodule/receivingpages/app-purchase-order']">
-                            Receiving PO List
+                            [routerLink]="['/receivingmodule/receivingpages/app-ro']">
+                            Receiving RO List
                         </button>
                     </div>
                 </div>
@@ -250,7 +250,7 @@
                     <th>SO</th>
                     <th>Sub-WO</th>
                     <th colspan="4" style="text-align: center;">Management Structure</th>
-                    <th colspan="43"></th>
+                    <th colspan="48"></th>
                 </tr>
             </thead>
             <tbody *ngIf="repairOrderData != undefined">
@@ -284,13 +284,13 @@
                         <td style="min-width: 130px;">
                             <!-- <label style="width:90px;">Dept:</label> -->
                             {{part.departmentText}}
-                        <th colspan="43"></th>
+                        <th colspan="48"></th>
                     </tr>
 
                     <ng-container>
-                        <tr *ngIf="part.stockLine.length > 0">
+                        <tr class="child-header splitship-head child-header-back" *ngIf="part.stockLine.length > 0">
                             <!--<th>Stock Line</th>-->
-                            <td></td>
+                            <th></th>
                             <th>PN</th>
                             <th>PN Description</th>
                             <th>Ctrl Num</th>
@@ -307,6 +307,7 @@
                             <th>SO </th>
                             <th>Sub-WO </th>
                             <th colspan="4" style="text-align: center;">Management Structure</th>
+                            <th>Revised PartNumber </th>
                             <th>Site</th>
                             <th>Warehouse</th>
                             <th>Location</th>
@@ -324,15 +325,20 @@
                             <th>Mfg Date</th>
                             <th>Mfg Batch Num</th>
                             <th>Part Cert Num </th>
+                            <th>Cert Type</th>
+                            <th>Cert By</th>
                             <th>Certified Date</th>
                             <th class="date">Certified Due Date</th>
-                            <th>Tagged By </th>
-                            <th class="date">Date Tagged </th>
+                            <th>Tag Type</th>
+                            <th>Tag By</th>
+                            <th></th>
+                            <th>UOM</th>
+                            <th class="date">Tag Date</th>
                             <th class="date">Tag Exp Date </th>
                             <th>Shipping Ref#/AWB</th>
                             <th>Ship Via</th>
                             <th>Shipping Account</th>
-                            <th>Engine Serial Number</th>
+                            <th>Engine Serial No</th>
                             <th>GL Account</th>
                             <th>Time Life</th>
                             <ng-container *ngIf="part.timeLife != null && part.timeLife.length > 0">
@@ -381,6 +387,9 @@
                                 <td style="min-width: 120px;">
                                     <!-- <label style="width:90px;">Dept:</label> -->
                                     {{part.stockLine[stockline_row_index].departmentText}}
+                                </td>
+                                <td>
+                                    {{part.stockLine[stockline_row_index].revisedPartNumber}}
 
                                 </td>
                                 <td>
@@ -423,6 +432,8 @@
                                 </td>
                                 <td>{{SL.manufacturingBatchNumber}}</td>
                                 <td>{{SL.partCertificationNumber}}</td>
+                                <td>{{SL.certifiedType}}</td>
+                                <td>{{SL.certifiedBy}}</td>
                                 <td>
                                     <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
                                         [disabled]="!SL.isEnabled" [showIcon]="true"
@@ -435,7 +446,9 @@
                                         [ngModelOptions]="{standalone: true}" [(ngModel)]="SL.certifiedDueDate">
                                     </p-calendar>
                                 </td>
-                                <td>{{SL.certifiedBy}}</td>
+                                <td>{{SL.tagType}}</td>
+                                <td>{{SL.taggedByTypeName}}</td>
+                                <td>{{SL.taggedByName}}</td>
                                 <td>
                                     <p-calendar class="pas-clder pas-clder-po-table" [maxDate]="currentDate"
                                         [disabled]="!SL.isEnabled" [showIcon]="true"
@@ -447,43 +460,45 @@
                                         [disabled]="!SL.isEnabled" [ngModelOptions]="{standalone: true}"
                                         [(ngModel)]="SL.expirationDate"></p-calendar>
                                 </td>
+                                <td>{{SL.unitOfMeasure}}</td>                                
                                 <td>{{SL.shippingReference}}</td>
                                 <td>{{SL.shippingViaText}}</td>
                                 <td>{{SL.shippingAccount}}</td>
                                 <td>{{SL.engineSerialNumber}}</td>
                                 <td>{{SL.glAccountText}}</td>
                                 <td>
-                                    <input type="checkbox" disabled [checked]="part.itemMaster.isTimeLife == true" />
+                                    <input type="checkbox" disabled [checked]="part.timeLife[stockline_row_index].stockLineDraftId > 0" />
                                 </td>
+                                <td colspan="13" *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)"> </td>
                                 <ng-container
-                                    *ngIf="part.timeLife != null && part.timeLife.length > 0 && part.timeLife[stockline_row_index] != null">
-                                    <td style="min-width: 106px;">Remaining
+                                    *ngIf="part.timeLife[stockline_row_index].stockLineDraftId > 0">
+                                    <td style="min-width: 120px;">Remaining
                                         {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
-                                    <td style="min-width: 106px;">Since New
+                                    <td style="min-width: 120px;">Since New
                                         {{part.timeLife[stockline_row_index].cyclesSinceNew}} hrs</td>
-                                    <td style="min-width: 106px;">Since OVH
+                                    <td style="min-width: 120px;">Since OVH
                                         {{part.timeLife[stockline_row_index].cyclesSinceOVH}} hrs</td>
-                                    <td style="min-width: 106px;">Since Insp
+                                    <td style="min-width: 120px;">Since Insp
                                         {{part.timeLife[stockline_row_index].cyclesSinceInspection}} hrs</td>
-                                    <td style="min-width: 106px;">Since Repair
+                                    <td style="min-width: 120px;">Since Repair
                                         {{part.timeLife[stockline_row_index].cyclesSinceRepair}} hrs</td>
 
-                                    <td style="min-width: 106px;">Remaining
+                                    <td style="min-width: 120px;">Remaining
                                         {{part.timeLife[stockline_row_index].timeRemaining}} hrs</td>
-                                    <td style="min-width: 106px;">Since New
+                                    <td style="min-width: 120px;">Since New
                                         {{part.timeLife[stockline_row_index].timeSinceNew}} hrs</td>
-                                    <td style="min-width: 106px;">Since OVH
+                                    <td style="min-width: 120px;">Since OVH
                                         {{part.timeLife[stockline_row_index].timeSinceOVH}} hrs</td>
-                                    <td style="min-width: 106px;">Since Insp
+                                    <td style="min-width: 120px;">Since Insp
                                         {{part.timeLife[stockline_row_index].timeSinceInspection}} hrs</td>
-                                    <td style="min-width: 106px;">Since Repair
+                                    <td style="min-width: 120px;">Since Repair
                                         {{part.timeLife[stockline_row_index].timeSinceRepair}} hrs</td>
 
-                                    <td style="min-width: 106px;">Since New
+                                    <td style="min-width: 120px;">Since New
                                         {{part.timeLife[stockline_row_index].lastSinceNew}} hrs</td>
-                                    <td style="min-width: 106px;">Since OVH
+                                    <td style="min-width: 120px;">Since OVH
                                         {{part.timeLife[stockline_row_index].lastSinceOVH}} hrs</td>
-                                    <td style="min-width: 106px;">Since Insp
+                                    <td style="min-width: 120px;">Since Insp
                                         {{part.timeLife[stockline_row_index].lastSinceInspection}} hrs</td>
                                 </ng-container>
                             </tr>

@@ -1772,8 +1772,15 @@ export class VendorGeneralInformationComponent implements OnInit {
     }
     previousOrNextTab(previousOrNext){
         this.nextOrPreviousTab = previousOrNext;
-        let content = this.tabRedirectConfirmationModal;
-        this.modal = this.modalService.open(content, { size: "sm" });
+        if(!this.disableSaveForEdit){        
+            let content = this.tabRedirectConfirmationModal;
+            this.modal = this.modalService.open(content, { size: "sm" });
+        }
+        else {
+            this.activeIndex = 2;
+            this.editVendorId.emit(this.vendorId);
+            this.vendorService.changeofTab(this.activeIndex);
+        }
     }
 
     paginate(event, totalRecords) {

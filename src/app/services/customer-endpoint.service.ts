@@ -253,8 +253,12 @@ export class CustomerEndpoint extends EndpointFactory {
     }
 
     getCustomerBillingHistory<T>(customerId: number, customerBillingAddressId: number): Observable<T> {
-        let endpointUrl = `${this.configurations.baseUrl}/${this._customerBillingHistory}?customerId=${customerId}&customerBillingaddressId=${customerBillingAddressId}`
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
+        // return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerBillingHistory}?customerId=${customerId}&customerBillingaddressId=${customerBillingAddressId}`)
+        //     .catch(error => {
+        //         return this.handleErrorCommon(error, () => this.getCustomerBillingHistory(customerId, customerBillingAddressId));
+        // });
+        let endpointUrl = `${this.configurations.baseUrl}/${this._customerBillingHistory}?customerId=${customerId}&customerBillingaddressId=${customerBillingAddressId}`;
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerBillingHistory}/${customerId}?customerBillingaddressId=${customerBillingAddressId}`)
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getCustomerBillingHistory(customerId, customerBillingAddressId));
         });

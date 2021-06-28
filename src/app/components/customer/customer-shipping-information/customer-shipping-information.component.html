@@ -234,7 +234,7 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="domesticShippingData?.length == 0">
                             <tr>
-                              <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
+                              <td [attr.colspan]="11" class="no-records-cstm no-records-msg">
                                 No records found
                               </td>
                             </tr>
@@ -369,7 +369,7 @@
                           <ng-template pTemplate="header" let-columns>
                             <tr>
                               <th class="width-50">Flag</th>
-                              <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
+                              <th class="table-column-width" [ngStyle]="{'width': col.width}" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
                                 pReorderableColumn [pSortableColumn]="col.field">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -420,7 +420,7 @@
                                     : rowData[col.field]
                                 }}
                               </td>
-                              <td class="table-column-width" *ngIf="col.field == 'amount'" [hidden]="col.field == 'isPrimary'">
+                              <td *ngIf="col.field == 'amount'" [hidden]="col.field == 'isPrimary'">
                                 <p class="m-0 p-0 text-right"> {{ rowData[col.field] }}</p>
                               </td>
                               </ng-container>
@@ -487,7 +487,7 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingData?.length == 0">
                             <tr>
-                              <td [attr.colspan]="8" class="no-records-cstm no-records-msg">
+                              <td [attr.colspan]="12" class="no-records-cstm no-records-msg">
                                 No records found
                               </td>
                             </tr>
@@ -688,7 +688,8 @@
                     }}
                   </td>
                   <td class="table-column-width" *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="float-left m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                    [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                   
@@ -973,7 +974,8 @@
                   ? 'black'
                   : 'red'
               }">
-            <p [innerHTML]="audit.memo"></p>
+            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+            [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
             </td>
             <td class="text-center">
               <span class="value">
@@ -1291,7 +1293,8 @@
                       }}
                     </td>
                     <td class="table-column-width" *ngIf="col.field == 'memo'">
-                      <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                      <p class="float-left m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                   </td>
                   </ng-container>
                     
@@ -1540,7 +1543,8 @@
                   }}
                 </td>
                 <td *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above" 
+                    [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
@@ -1833,7 +1837,8 @@
                     ? 'black'
                     : 'red'
                 }">
-              <p [innerHTML]="audit.memo"></p>
+              <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+              [matTooltip]="parsedText(audit.memo)"[innerHTML]="audit.memo"></p>
             </td>
               <td class="text-center">
                 <span class="value">
@@ -2175,7 +2180,8 @@
                   }}
                 </td>
                 <td *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="float-left m-0 p-0 p_textEditor  truncate-text" matTooltipPosition="above" 
+                    [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
@@ -2362,7 +2368,8 @@
             <p style="vertical-align: top;">
               <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
               <span class="value">
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforInterShippingVia.memo"></p>
+                <p class="m-0 p-0 p_textEditor  truncate-text" matTooltipPosition="above" 
+                [matTooltip]="parsedText(sourceViewforInterShippingVia.memo)" [innerHTML]="sourceViewforInterShippingVia.memo"></p>
               </span>
             </p>
             <p>
@@ -2436,7 +2443,8 @@
             <p style="vertical-align: top;">
               <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
               <span class="value">
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforDomesticShippingVia.memo">
+                <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                [matTooltip]="parsedText(sourceViewforDomesticShippingVia.memo)" [innerHTML]="sourceViewforDomesticShippingVia.memo">
                 </p>
               </span></p>
             <p>
@@ -2587,20 +2595,20 @@
               <tr>
                 <th>Tag</th>
                 <th>Attention</th>
-                <th>Site Name</th>
-                <th>Address1</th>
+                <th class="min-width-80">Site Name <span class="clr-red">*</span></th>
+                <th class="min-width-80">Address1 <span class="clr-red">*</span></th>
                 <th>Address2</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Postal Code</th>
-                <th>Country</th>
-                <th>Is Active</th>
-                <th>Is Primary</th>
-                <th>Created Date</th>
-                <th>Created By</th>
-                <th>Updated Date</th>
-                <th>Updated By</th>
-                <th>Is Deleted</th>
+                <th class="min-width-80">City <span class="clr-red">*</span></th>
+                <th class="min-width-80">State <span class="clr-red">*</span></th>
+                <th class="min-width-80">Postal Code <span class="clr-red">*</span></th>
+                <th class="min-width-80">Country <span class="clr-red">*</span></th>
+                <th class="min-width-80">Is Active</th>
+                <th class="min-width-80">Is Primary</th>
+                <th class="min-width-110">Created Date</th>
+                <th class="min-width-80">Created By</th>
+                <th class="min-width-110">Updated Date</th>
+                <th class="min-width-80">Updated By</th>
+                <th class="min-width-80">Is Deleted</th>
               </tr>
             </thead>
             <tbody>
@@ -2760,7 +2768,7 @@
                 <th>Start Date</th>
                 <th>Expiration Date</th>
                 <th>Amount</th>
-                <th>Country</th>
+                <th>Country <span class="clr-red">*</span></th>
                 <th>Is Primary</th>
                 <th>Is Active</th>
                 <th style="min-width:120px">Created Date</th>

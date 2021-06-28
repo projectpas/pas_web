@@ -49,132 +49,64 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     labourDetailedViewOpened: boolean = false;
 
     materialListHeader = [
-        {
-            "header": "Task",
-            "field": "task"
-        },
-        {
-            "header": "MPN",
-            "field": "partNumber"
-        },
-        {
-            "header": "Revised Part No",
-            "field": "revisedPartNo"
-        },
-        {
-            "header": "Part Description",
-            "field": "partDescription"
-        },
-        {
-            "header": "SN",
-            "field": "serialNo"
-        },
-        {
-            "header": "Stock Line No",
-            "field": "stockLineNo"
-        },
-        {
-            "header": "Stock Type",
-            "field": "stockType"
-        },
-        {
-            "header": "Control #",
-            "field": "controllerId"
-        },
-        {
-            "header": "Control Num",
-            "field": "controllerNo"
-        },
-        {
-            "header": "Cond #",
-            "field": "condition"
-        },
-        {
-            "header": "Item Type",
-            "field": "itemType"
-        },
-        {
-            "header": "Qty Required",
-            "field": "quantityReq"
-        },
-        {
-            "header": "Qty On Hand",
-            "field": "quantityOnHand"
-        },
-        {
-            "header": "Qty Available",
-            "field": "quantityAvailable"
-        },
-        {
-            "header": "QTY Issued",
-            "field": "qtyssued"
-        },
-        {
-            "header": "Unit Cost",
-            "field": "unitCost"
-        },
-        {
-            "header": "Extended Cost",
-            "field": "extendedCost"
-        },
-        {
-            "header": "Warehouse",
-            "field": "warehouse"
-        },
-        {
-            'header': 'Location',
-            'field': 'location'
-        },
-        {
-            'header': 'Receiver',
-            'field': 'receiver'
-        },
-        {
-            'header': 'Site',
-            'field': 'site'
-        },
-        {
-            "header": 'Shelf',
-            "field": "shelf"
-        }
+        {"header": "", "field": "plus",width:"30px"},
+        {"header": "Task","field": "task"},
+        {"header": "MPN", "field": "partNumber"},
+        {"header": "Revised Part No","field": "revisedPartNo"},
+        {"header": "Part Description","field": "partDescription"},
+        {"header": "SN","field": "serialNo"},
+        {"header": "Stock Line No","field": "stockLineNo"},
+        {"header": "Stock Type","field": "stockType"},
+        {"header": "Control #", "field": "controllerId"},
+        {"header": "Control Num","field": "controllerNo"},
+        {"header": "Cond #","field": "condition"},
+        {"header": "Item Type","field": "itemType"},
+        {"header": "Qty Required","field": "quantityReq"},
+        {"header": "Qty On Hand","field": "quantityOnHand"},
+        {"header": "Qty Available","field": "quantityAvailable"},
+        {"header": "QTY Issued","field": "qtyssued"},
+        {"header": "Unit Cost", "field": "unitCost"},
+        { "header": "Extended Cost", "field": "extendedCost"},
+        {"header": "Warehouse","field": "warehouse"},
+        {'header': 'Location','field': 'location'},
+        {'header': 'Receiver','field': 'receiver'},
+        {'header': 'Site','field': 'site'},
+        {"header": 'Shelf',"field": "shelf"}
     ]
 
     labourListHeader = [
+        {"header": "", "field": "plus"},
         {
-            "header": "MPN",
+            "header": "WO Num",
+            "field": "workOrderNum"
+        }, {
+            "header": "PN",
             "field": "partNumber"
         },
         {
-            "header": "Revised Part No",
+            "header": "Revised PN",
             "field": "revisedPartNo"
         },
         {
-            "header": "Part Description",
+            "header": "PN Description",
             "field": "partDescription"
         },
+        // {
+        //     "header": "Data Entered By",
+        //     "field": "dataEnteredBy"
+        // },
+        
         {
-            "header": "Data Entered By",
-            "field": "dataEnteredBy"
+            "header": "Stage",
+            "field": "stage"
         },
         {
-            "header": "Expertise",
-            "field": "expertise"
-        },
-        {
-            "header": "Employee",
-            "field": "employee"
-        },
-        {
-            "header": "Task Completed By One",
-            "field": "taskCompletedByOne"
-        },
-        {
-            "header": "Add Hours By",
-            "field": "addHoursBy"
+            "header": "Status",
+            "field": "status"
         },
         {
             "header": "Total Hours",
-            "field": "totalHours"
+            "field": "hours"
         }
     ]
 
@@ -217,110 +149,35 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
         }
     ];
 
-    chargesListHeader = [
-        {
-            "header": "MPN",
-            "field": "partNumber"
-        },
-        {
-            "header": "Revised Part No",
-            "field": "revisedPartNo"
-        },
-        {
-            "header": "Part Description",
-            "field": "partDescription"
-        },
-        {
-            "header": "Item",
-            "field": "chargeType"
-        },
-        {
-            "header": "Vendor",
-            "field": "vendor"
-        },
-        {
-            "header": "QTY",
-            "field": "quantity"
-        },
-        {
-            "header": "RO Num",
-            "field": "roNum"
-        },
-        {
-            "header": "Ref Num",
-            "field": "refNum"
-        },
-        {
-            "header": "Invoice Num",
-            "field": "invoiceNum"
-        },
-        {
-            "header": "Amount",
-            "field": "unitPrice"
-        }
-    ]
+  
 
     documentsListHeader = [
+        {"header": "", "field": "plus"},
         {
             "header": "MPN",
             "field": "partNumber"
         },
-        {
-            "header": "Revised Part No",
-            "field": "revisedPartNo"
-        },
-        {
-            "header": "Part Description",
-            "field": "partDescription"
-        },
+      
         {
             "header": "Description",
             "field": "description"
         },
         {
-            "header": "Code",
-            "field": "code"
+            "header": "Workscope",
+            "field": "workscope"
         },
         {
-            "header": "Link",
-            "field": "link"
+            "header": "Stage",
+            "field": "stage"
+        },
+        {
+            "header": "Status",
+            "field": "status"
         }
     ]
 
-    freightsListHeader = [
-        {
-            "header": "MPN",
-            "field": "partNumber"
-        },
-        {
-            "header": "Revised Part No",
-            "field": "revisedPartNo"
-        },
-        {
-            "header": "Part Description",
-            "field": "partDescription"
-        },
-        {
-            "header": "Ship Via",
-            "field": "shipVia"
-        },
-        {
-            "header": "Dimention",
-            "field": "dimention"
-        },
-        {
-            "header": "Weight",
-            "field": "weight"
-        },
-        {
-            "header": "Memo",
-            "field": "memo"
-        },
-        {
-            "header": "Amount",
-            "field": "amount"
-        }
-    ]
+  
+    
     isView = true;
     selectedCommunicationTab = '';
     freight = [];
@@ -331,14 +188,42 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-
+this.gridTabChange('materialList');
+this.getWorkOrderWorkFlowNos();
     }
 
     ngOnChanges() {
         this.gridActiveTab = '';
         this.selectedCommunicationTab = '';
     }
-
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+    documentNumberList:any=[];
+    memoNumberList:any=[];
+    emailNumberList:any=[];
+    phoneNumberList:any=[];
+    textNumberList:any=[];
+    getWorkOrderWorkFlowNos() {
+        if (this.workOrderId) {
+            this.isSpinnerVisible = true;
+            this.workOrderService.getWorkOrderWorkFlowNumbers(this.workOrderId,this.currentUserMasterCompanyId).subscribe(res => {
+                this.isSpinnerVisible = false 
+                res.forEach(element => {
+                    element.isShowPlus=true;
+                });
+                this.mpnPartNumbersList = [...res];
+                this.documentNumberList=[...res]; 
+                this.memoNumberList=[...res]; 
+                this.emailNumberList=[...res]; 
+                this.phoneNumberList=[...res]; 
+                this.textNumberList=[...res]; 
+                
+            },
+                err => { 
+                })
+        }
+    }
     resetParentTab() {
         this.resetSelectedTab.emit();
     }
@@ -347,7 +232,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
         switch(tabname){
             case 'materialList':{
                 this.gridActiveTab = tabname;
-                this.isSpinnerVisible = true;
+                this.isSpinnerVisible = true; 
                 this.workOrderService.getMaterialListMPNS(this.workOrderId)
                 .subscribe(
                     (res: any[]) => {
@@ -355,6 +240,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                         this.materialListMPNs = res;
                         this.materialListMPNs.forEach(
                             first => {
+                                first.isShowPlus=true;
                                 this.mpnPartNumbersList.forEach(
                                     second => {
                                         if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
@@ -364,7 +250,6 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                                 )
                             }
                         )
-                        console.log(this.materialListMPNs);
                     },
                     (err) => {
                         this.isSpinnerVisible = false;
@@ -375,31 +260,49 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
             }
             case 'labour': {
                 this.gridActiveTab = tabname;
+
+                // this.isSpinnerVisible = true;
+                // this.workOrderService.getLabourListMPNS(this.workOrderId) 
+                // .subscribe(
+                //     (res: any[]) => {
+                //         this.isSpinnerVisible = false;
+                //         this.labourListMPNs = res;
+                //         this.labourListMPNs.forEach(
+                //             first => {
+                //                 this.mpnPartNumbersList.forEach(
+                //                     second => {
+                //                          if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
+                //                             first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         )
+                //         console.log(this.labourListMPNs);
+                //     },
+                    // (err) => {
+                    //     this.isSpinnerVisible = false;
+                    //     this.errorHandling(err);
+                    // }
+                // )
+                // break;
                 this.isSpinnerVisible = true;
-                this.workOrderService.getLabourListMPNS(this.workOrderId)
-                .subscribe(
-                    (res: any[]) => {
-                        this.isSpinnerVisible = false;
-                        this.labourListMPNs = res;
-                        this.labourListMPNs.forEach(
-                            first => {
-                                this.mpnPartNumbersList.forEach(
-                                    second => {
-                                        if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                        console.log(this.labourListMPNs);
-                    },
-                    (err) => {
-                        this.isSpinnerVisible = false;
-                        this.errorHandling(err);
-                    }
-                )
-                break;
+                      this.workOrderService.workOrderLabourAnalysisData(this.workOrderId, 0, false, false, this.authService.currentUser.masterCompanyId)
+                          .subscribe(
+                              (res: any) => {
+                                  this.isSpinnerVisible = false;
+                                  if (res) {
+                                  res.forEach(element => {
+                                        element.isShowPlus=true;
+                                    });
+                                  }
+                                  this.labourListMPNs=res;
+                                  console.log("res labor",this.labourListMPNs)
+                              },
+                              err => {
+                                  this.isSpinnerVisible = false;
+                              }
+                          )
             }
             case 'labourAnalysis': {
                 this.gridActiveTab = tabname;
@@ -432,23 +335,28 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
             case 'charges': {
                 this.gridActiveTab = tabname;
                 this.isSpinnerVisible = true;
+                console.log("mpnPartNumbersList,",this.mpnPartNumbersList);
                 this.workOrderService.getChargesListMPNS(this.workOrderId)
                 .subscribe(
                     (res: any[]) => {
                         this.isSpinnerVisible = false;
                         this.chargesListMPNs = res;
                         this.chargesListMPNs.forEach(
-                            first => {
+                            first => { 
                                 this.mpnPartNumbersList.forEach(
                                     second => {
-                                        if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                                        if(first.workFlowWorkOrderId == second.value){
+                                            first['workOrderPartNumberId'] = second.value;
                                         }
                                     }
                                 )
+
                             }
                         )
-                        console.log(this.chargesListMPNs);
+                      
+                        this.chargesListMPNs.forEach(element => {
+                            element.isShowPlus=true;
+                        });
                     },
                     (err) => {
                         this.isSpinnerVisible = false;
@@ -460,143 +368,163 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
 
             case 'documents': {
                 this.gridActiveTab = tabname;
-                this.isSpinnerVisible = true;
-                this.workOrderService.getDocumentsListMPNS(this.workOrderId)
-                .subscribe(
-                    (res: any[]) => {
-                        this.isSpinnerVisible = false;
-                        this.documentsListMPNs = res;
-                        this.documentsListMPNs.forEach(
-                            first => {
-                                this.mpnPartNumbersList.forEach(
-                                    second => {
-                                        if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                        console.log(this.documentsListMPNs);
-                    },
-                    (err) => {
-                        this.isSpinnerVisible = false;
-                        this.errorHandling(err);
-                    }
-                )
+                // this.isSpinnerVisible = true;
+                // this.workOrderService.getDocumentsListMPNS(this.workOrderId)
+                // .subscribe(
+                //     (res: any[]) => {
+                //         this.isSpinnerVisible = false;
+                //         this.documentsListMPNs = res;
+                //         this.documentsListMPNs.forEach(
+                //             first => {
+                //                 this.mpnPartNumbersList.forEach(
+                //                     second => {
+                //                         if(first.workFlowWorkOrderId == second.value.workOrderWorkFlowId){
+                //                             first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         )
+                //         console.log(this.documentsListMPNs);
+                //     },
+                //     (err) => {
+                //         this.isSpinnerVisible = false;
+                //         this.errorHandling(err);
+                //     }
+                // )
                 break;
             }
 
             case 'memo': {
+                this.mpnPartNumbersList=this.mpnPartNumbersList;
                 this.gridActiveTab = 'communication';
-                this.isSpinnerVisible = true;
-                this.workOrderService.getMemosListMPNS(this.workOrderId)
-                .subscribe(
-                    (res: any[]) => {
-                        this.isSpinnerVisible = false;
-                        this.memoListMPNs = res;
-                        this.memoListMPNs.forEach(
-                            first => {
-                                this.mpnPartNumbersList.forEach(
-                                    second => {
-                                        if(first.partNumber == second.label){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                        console.log(this.memoListMPNs);
-                    },
-                    (err) => {
-                        this.isSpinnerVisible = false;
-                        this.errorHandling(err);
-                    }
-                )
+  
+                this.memoNumberList.forEach(element => {
+                    element.isShowPlus=true;
+                });
+                // this.isSpinnerVisible = true;
+                // this.workOrderService.getMemosListMPNS(this.workOrderId)
+                // .subscribe(
+                //     (res: any[]) => {
+                //         this.isSpinnerVisible = false;
+                //         this.memoListMPNs = res;
+                //         this.memoListMPNs.forEach(
+                //             first => {
+                //                 this.mpnPartNumbersList.forEach(
+                //                     second => {
+                //                         if(first.partNumber == second.label){
+                //                             first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         )
+                //         console.log(this.memoListMPNs);
+                //     },
+                //     (err) => {
+                //         this.isSpinnerVisible = false;
+                //         this.errorHandling(err);
+                //     }
+                // )
                 break;
             }
 
             case 'email': {
                 this.gridActiveTab = 'communication';
-                this.isSpinnerVisible = true;
-                this.workOrderService.getEmailsListMPNS(this.workOrderId)
-                .subscribe(
-                    (res: any[]) => {
-                        this.isSpinnerVisible = false;
-                        this.emailListMPNs = res;
-                        this.emailListMPNs.forEach(
-                            first => {
-                                this.mpnPartNumbersList.forEach(
-                                    second => {
-                                        if(first.partNumber == second.label){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                    },
-                    (err) => {
-                        this.isSpinnerVisible = false;
-                        this.errorHandling(err);
-                    }
-                )
+                this.mpnPartNumbersList=this.mpnPartNumbersList;
+                // this.isSpinnerVisible = true;
+             
+                this.emailNumberList.forEach(element => {
+                    element.isShowPlus=true;
+                });
+                // this.workOrderService.getEmailsListMPNS(this.workOrderId)
+                // .subscribe(
+                //     (res: any[]) => {
+                //         this.isSpinnerVisible = false;
+                //         this.emailListMPNs = res;
+                //         this.emailListMPNs.forEach(
+                //             first => {
+                //                 this.mpnPartNumbersList.forEach(
+                //                     second => {
+                //                         if(first.partNumber == second.label){
+                //                             first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         )
+                //     },
+                //     (err) => {
+                //         this.isSpinnerVisible = false;
+                //         this.errorHandling(err);
+                //     }
+                // )
                 break;
             }
 
             case 'phone': {
                 this.gridActiveTab = 'communication';
-                this.isSpinnerVisible = true;
-                this.workOrderService.getPhonesListMPNS(this.workOrderId)
-                .subscribe(
-                    (res: any[]) => {
-                        this.isSpinnerVisible = false;
-                        this.phoneListMPNs = res;
-                        this.phoneListMPNs.forEach(
-                            first => {
-                                this.mpnPartNumbersList.forEach(
-                                    second => {
-                                        if(first.partNumber == second.label){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                    },
-                    (err) => {
-                        this.isSpinnerVisible = false;
-                        this.errorHandling(err);
-                    }
-                )
+                this.mpnPartNumbersList=this.mpnPartNumbersList;
+                // this.isSpinnerVisible = true;
+              
+                this.phoneNumberList.forEach(element => {
+                    element.isShowPlus=true;
+                }); 
+                // this.workOrderService.getPhonesListMPNS(this.workOrderId)
+                // .subscribe(
+                //     (res: any[]) => {
+                //         this.isSpinnerVisible = false;
+                //         this.phoneListMPNs = res;
+                //         this.phoneListMPNs.forEach(
+                //             first => {
+                //                 this.mpnPartNumbersList.forEach(
+                //                     second => {
+                //                         if(first.partNumber == second.label){
+                //                             first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         )
+                //     },
+                //     (err) => {
+                //         this.isSpinnerVisible = false;
+                //         this.errorHandling(err);
+                //     }
+                // )
                 break;
             }
 
             case 'text': {
                 this.gridActiveTab = 'communication';
-                this.isSpinnerVisible = true;
-                this.workOrderService.getTextsListMPNS(this.workOrderId)
-                .subscribe(
-                    (res: any[]) => {
-                        this.isSpinnerVisible = false;
-                        this.textListMPNs = res;
-                        this.textListMPNs.forEach(
-                            first => {
-                                this.mpnPartNumbersList.forEach(
-                                    second => {
-                                        if(first.partNumber == second.label){
-                                            first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                    },
-                    (err) => {
-                        this.isSpinnerVisible = false;
-                        this.errorHandling(err);
-                    }
-                )
+                this.mpnPartNumbersList=this.mpnPartNumbersList;
+            
+                this.textNumberList.forEach(element => {
+                    element.isShowPlus=true;
+                }); 
+                // this.isSpinnerVisible = true;
+                // this.workOrderService.getTextsListMPNS(this.workOrderId)
+                // .subscribe(
+                //     (res: any[]) => {
+                //         this.isSpinnerVisible = false;
+                //         this.textListMPNs = res;
+                //         this.textListMPNs.forEach(
+                //             first => {
+                //                 this.mpnPartNumbersList.forEach(
+                //                     second => {
+                //                         if(first.partNumber == second.label){
+                //                             first['workOrderPartNumberId'] = second.value.workOrderPartNumberId;
+                //                         }
+                //                     }
+                //                 )
+                //             }
+                //         )
+                //     },
+                //     (err) => {
+                //         this.isSpinnerVisible = false;
+                //         this.errorHandling(err);
+                //     }
+                // )
                 break;
             }
 
@@ -606,6 +534,9 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                 this.workOrderService.getFreightsListMPNS(this.workOrderId).subscribe((res: any[]) => {
                     this.isSpinnerVisible = false;
                     this.freightsListMPNs = res;
+                    this.freightsListMPNs.forEach(element => {
+                        element.isShowPlus=true;
+                    });
                 },
                 err => {
                     this.isSpinnerVisible = false;
@@ -689,20 +620,67 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
                     $(`#${grid}_${x}`).collapse('hide');
                 }
         }
+    } 
+    isShowChild:boolean=false;
+    summaryParts:any=[];
+    totalRecords: number;
+    pageLinks: any; 
+    workOrderMaterial:any=[];
+    workOrderMaterialList:any=[];
+    handelPlus(materialMPN){
+        materialMPN.isShowPlus=true;
+        this.isShowChild=false;
     }
-
     getMaterialListData(materialMPN){
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderMaterialList(materialMPN.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
+            this.materialListMPNs.forEach(element => {
+                element.isShowPlus=true;
+            });
+            materialMPN.isShowPlus=false;
+            this.isShowChild=true;
             if (res.length > 0) {
                 res.forEach(element => {
-                    this.getValues(element)
-                            element.isShowPlus=true;
+                    this.getValues(element) 
                             if(element.currency)element.currency= element.currency.symbol;
                         });
-                materialMPN.workOrderMaterialList = res;
-                materialMPN.materialStatus = res[0].partStatusId;
+             
+                        this.workOrderMaterial=res;
+
+               
+                    this.summaryParts = [];
+                    let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
+                    if (uniqueParts.length > 0) {
+                      uniqueParts.forEach((part, i) => {
+                        let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.stockLineId !=0 && selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
+                        if (childParts && childParts.length > 0) {
+                        //   uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
+                          uniqueParts[i].childParts = childParts;
+                        }else{
+                            uniqueParts[i].childParts = [];
+                        }
+                      });
+                      uniqueParts.map((x,xindex)=>{
+                         if(x.childParts && x.childParts.length !=0){
+                            x.childParts.map((y,yindex)=>{
+                                y.line = (xindex + 1) + '.' + (yindex + 1)
+                            })
+                         } 
+                      })
+                      this.workOrderMaterialList=[];
+                      materialMPN.workOrderMaterialList =[];
+                      materialMPN.workOrderMaterialList=uniqueParts;
+                      materialMPN.materialStatus = res[0].partStatusId;
+                    //   this.workOrderMaterialList = uniqueParts;
+                    }
+                    this.totalRecords =materialMPN.workOrderMaterialList.length;
+                    this.pageLinks = Math.ceil(
+                      this.totalRecords / 10
+                    );
+
+
+
             }
         },
         err => {
@@ -710,78 +688,28 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
             this.errorHandling(err);
         })
     }
-
+    getUniqueParts(myArr, prop1, prop2, prop3) {
+        let uniqueParts = JSON.parse(JSON.stringify(myArr));
+        uniqueParts.reduceRight((acc, v, i) => {
+          if (acc.some(obj => v[prop1] === obj[prop1] && v[prop2] === obj[prop2] && v[prop3] === obj[prop3])) {
+            uniqueParts.splice(i, 1);
+          } else {
+            acc.push(v); 
+          }
+          return acc;
+        }, []);
+        return uniqueParts;
+      }
+      selectedPartNumber:any={};
     getLabourListData(labourMPN){
-        this.workOrderService.getLabourListForDetailedView(labourMPN.workFlowWorkOrderId)
-        .subscribe(
-            (res: any[])=>{
-                labourMPN['labor'] = res;
+        labourMPN.isShowPlus=false;
+        this.selectedPartNumber={};
+        this.mpnPartNumbersList.forEach(element => {
+            if(element.partNumber==labourMPN.partNumber){
+                this.selectedPartNumber=element;
             }
-        )
-        // let labor =  new WorkOrderLabor();
-        // if ((labourMPN.workFlowWorkOrderId !== 0 || labourMPN.workFlowWorkOrderId !== undefined) && this.workOrderId) {
-        //     this.isSpinnerVisible = true;
-        //     this.workOrderService.getWorkOrderLaborList(labourMPN.workFlowWorkOrderId, this.workOrderId,false,0).subscribe(res => {
-        //         let data = {};
-        //         data = res;
-        //         this.isSpinnerVisible = false;
-        //         if (res) {
-        //             labourMPN['workOrderLaborList'] = {
-        //                 ...data,
-        //                 workFlowWorkOrderId: getObjectById('value', data['workFlowWorkOrderId'], this.workOrderWorkFlowOriginalData),
-        //                 employeeId: getObjectById('value', data['employeeId'], this.employeesOriginalData),
-        //                 dataEnteredBy: getObjectById('value', data['employeeId'], this.employeesOriginalData),
-        //             };
-        //             labor.hoursorClockorScan = res.hoursorClockorScan;
-        //             labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0)?'workFlow':(res.workOrderHoursType == 1)?'specificTasks':'workOrder';
-        //             labor.totalWorkHours = res.totalWorkHours;
-        //             labor.expertiseId = res.expertiseId;
-        //             labor['labourMemo'] = res.labourMemo;
-        //             labor.employeeId = getObjectById('value', data['employeeId'], this.employeesOriginalData);
-        //             labor.dataEnteredBy = getObjectById('value', data['employeeId'], this.employeesOriginalData);
-        //             labor['workOrderHoursType'] = res['workOrderHoursType'];
-        //         }
-        //         if (res) {
-        //             for (let labList of data['laborList']) {
-        //                 if(this.taskList){
-        //                     for (let task of this.taskList) {
-
-        //                         if (task.taskId == labList['taskId']) {
-        //                             if(!labor.workOrderLaborList){
-        //                                 labor.workOrderLaborList = [{}];
-        //                             }
-        //                             if (!labor.workOrderLaborList[0][task.description.toLowerCase()]) {
-        //                                 labor.workOrderLaborList[0][task.description.toLowerCase()] = []
-        //                             }
-        //                             if (labor.workOrderLaborList[0][task.description.toLowerCase()][0] && (labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == undefined || labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == null)) {
-        //                                 labor.workOrderLaborList[0][task.description.toLowerCase()].splice(0, 1);
-        //                             }
-        //                             let taskData = new AllTasks()
-        //                             taskData['workOrderLaborHeaderId'] = labList['workOrderLaborHeaderId'];
-        //                             taskData['workOrderLaborId'] = labList['workOrderLaborId'];
-        //                             taskData['expertiseId'] = labList['expertiseId'];
-        //                             taskData['employeeId'] = getObjectById('value', labList['employeeId'], this.employeesOriginalData);
-        //                             taskData['billableId'] = labList['billableId'];
-        //                             taskData['startDate'] = labList['startDate']?new Date(labList['startDate']):null;
-        //                             taskData['endDate'] = labList['endDate']?new Date(labList['endDate']):null;
-        //                             taskData['hours'] = labList['hours'];
-        //                             taskData['adjustments'] = labList['adjustments'];
-        //                             taskData['adjustedHours'] = labList['adjustedHours'];
-        //                             taskData['memo'] = labList['memo'];
-        //                             labor.workOrderLaborList[0][task.description.toLowerCase()].push(taskData);
-        //                             break;
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         labourMPN['labor'] = labor;
-        //     },
-        //     err => {
-        //         this.isSpinnerVisible = false;
-        //         this.errorHandling(err);
-        //     })
-        // }
+        });
+this.selectedPartNumber.workOrderId=this.workOrderId;
     }
 
     getChargesListData(chargesMPN){

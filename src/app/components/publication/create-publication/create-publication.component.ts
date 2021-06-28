@@ -43,6 +43,7 @@ declare var $: any;
 /** Create-publication component*/
 export class CreatePublicationComponent implements OnInit {
   publicationType: any;
+  
   @ViewChild('tagsFileUploadInput', { static: false }) tagsFileUploadInput: any;
   @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
   activeMenuItem: number = 1;
@@ -152,6 +153,7 @@ export class CreatePublicationComponent implements OnInit {
   ];
   isEnableNext: any = false;
   formData = new FormData();
+  currentDate=new Date();
   selectedRowforDelete: any;
   active: boolean = false;
   inactive: boolean = false;
@@ -248,6 +250,7 @@ export class CreatePublicationComponent implements OnInit {
   vendorModuleId: number = 0;
   otherModuleId: number = 0;
   manufacturermoduleid : number = 0;
+  alternateData: any = {};
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -308,6 +311,7 @@ export class CreatePublicationComponent implements OnInit {
     this.sourcePublication.sequence = 1;
     if (!this.isEditMode) {
       this.sourcePublication.revisionNum = 1;
+      this,this.sourcePublication.verifiedDate=new Date();
     }
 
     if (this.publicationRecordId) {
@@ -336,6 +340,7 @@ export class CreatePublicationComponent implements OnInit {
       this.changeOfTab('General');
     }
   }
+   
 
   getPnMapping() {
     this.isSpinnerVisible = true;
@@ -486,6 +491,8 @@ export class CreatePublicationComponent implements OnInit {
   }
   closeModal() {
     this.viewAircraftData = {};
+    this.alternateData={};
+    this.selectedPartNumbers=[];
     if (this.modal) {
       this.modal.close()
     }
@@ -776,6 +783,11 @@ export class CreatePublicationComponent implements OnInit {
       this.disabledPartNumber = false;
     }
   }
+  bindPartDataInPopup(){
+    let selectedPart: any = this.selectedPartNumbers;
+    this.alternateData.Description = selectedPart.partDetails.partDescription;
+    this.alternateData.manufacturer = selectedPart.partDetails.manufacturer;
+  }
 
   enablePnMappingSave() {
     this.disabledPartNumber = false;
@@ -1060,8 +1072,8 @@ export class CreatePublicationComponent implements OnInit {
           })
           return {
             ...x,
-            ataChapter: `${x.ataChapterCode} - ${x.ataChapterName}`,
-            ataSubChapter: `${x.ataSubChapterCode} - ${x.ataSubChapterDescription}`,
+            ataChapter: `${x.ataChapterName}`,
+            ataSubChapter: ` ${x.ataSubChapterDescription}`,
           };
 
         });

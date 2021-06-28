@@ -78,6 +78,9 @@ export class WOQuoteSettingsListComponent {
     totalRecords: number = 0;
     totalPages: number = 0;
     noDatavailable: any;
+    isSpinnerVisible: boolean = true;
+    breadcrumbs: MenuItem[];
+
     constructor(private workOrderService: WorkOrderService,
         private router: ActivatedRoute,
         private route: Router,
@@ -86,22 +89,20 @@ export class WOQuoteSettingsListComponent {
         private authService: AuthService,
         private modalService: NgbModal,
         private alertService: AlertService,
-       
         private customerService: CustomerService,
-       
         private itemMasterService: ItemMasterService,
-      
         private vendorservice: VendorService,
-       // private conditionService: ConditionService,
-       
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
         this.receivingCustomerWorkOrderService.isEditWOQuoteSettingsList = false;
         this.receivingCustomerWorkOrderService.woQuoteSettingsData = {};
         this.selectedGridColumns = this.gridColumns;
         this.getAllWOQuoteSettings();
+        this.breadcrumbs = [
+            { label: 'WO Quote Settings' },
+            { label: ' WO Quote Settings List' },
+        ];
     }
 
     ngOnChange() {
@@ -110,7 +111,6 @@ export class WOQuoteSettingsListComponent {
     }
 
     columnsChanges() {
-        // this.refreshList();
     }
 
     globalSearch(value) {
@@ -119,7 +119,7 @@ export class WOQuoteSettingsListComponent {
         this.customerService.getGlobalSearch(value, this.pageIndex, this.pageSize).subscribe(res => {
             this.data = res;
             if (res.length > 0) {
-                this.totalRecords = res[0].totalRecords;
+                this.totalRecords = res[0].totalRecolumnsChangescords;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
             }
         })
@@ -153,12 +153,14 @@ export class WOQuoteSettingsListComponent {
     }
 
     getAllWOQuoteSettings(): void {
+        this.isSpinnerVisible = true;
         this.workOrderService.getWOQuoteSettingList().pipe(takeUntil(this.onDestroy$)).subscribe(
             result => {
                 this.workflowList = result;
                 this.totalRecords = result.length;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-            }
+                this.isSpinnerVisible = false;
+            },error => {this.isSpinnerVisible = false; }
         );
     }
 
@@ -170,6 +172,7 @@ export class WOQuoteSettingsListComponent {
     AddPage() {
         this.route.navigateByUrl('/workordersettingsmodule/workordersettings/app-create-wo-quote-settings');
     }
+
     openEdit(row) {
         this.route.navigateByUrl('/workordersettingsmodule/workordersettings/app-create-wo-quote-settings');
     }

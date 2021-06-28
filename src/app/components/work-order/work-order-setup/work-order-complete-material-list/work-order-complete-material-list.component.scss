@@ -14,6 +14,18 @@
   max-width: 150px;
   margin: 0 auto;
 }
+.width-160{
+  width: 160px !important;
+}
+.width-170{
+  width:170px !important;
+}
+.width-80{
+  width:80px !important;
+}
+.create_po_crl{
+  color: #36c6d3 !important;
+}
 .min-width-250{
   min-width:250px !important;
 }
@@ -46,14 +58,14 @@ font-size: 10px !important;
 }
 .defered-check{
   pointer-events: none !important;
-  margin-left: 42% !important;
+  margin-left: 39% !important;
 }
 .defered-check2{
   pointer-events: none !important;
 }
 .defered-check3{
   pointer-events: none !important;
-  margin-left: 7% !important;
+  margin-left: 3% !important;
 }
 .roleUpd{
   width: 24px !important;
@@ -219,7 +231,7 @@ input[type='number']::-webkit-outer-spin-button {
 button {
   border-radius: 5px;
 }
-p-table tr th {
+p-table tr td {
   text-align: left !important;
 }
 
@@ -353,4 +365,11 @@ button:disabled {
 }
 .color-white{
   color: #fff !important;
+}
+.no-recordscusMsg{
+  color: red !important;
+  font-size: 10px !important;
+  text-transform: capitalize;
+  padding: 6px !important;
+  padding-left: 13% !important;
 }

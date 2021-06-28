@@ -1,0 +1,24 @@
+<form #addPartNumbers="ngForm" class="form-horizontal" (ngSubmit)="onAddPartNumberSubmit($event)">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="onClose()">
+      &times;
+    </button>
+    <h4 class="modal-title">Add PN</h4>
+  </div>
+  <div class="modal-body">
+    <app-speed-quote-custpmer-details [salesQuote]="salesQuote"></app-speed-quote-custpmer-details>
+    <app-speed-quote-part-number-filter [salesQuote]="salesQuote" [parts]="parts" [allConditionInfo]="allConditionInfoArray"
+      [selectedParts]="selectedParts" [isStockLineViewMode]="isStockLineViewMode" [clearData]="clearData" (onPartSearch)="onPartSearch($event)"
+      [selectedSummaryRow]="selectedSummaryRow" (onSearchTypeChange)="onSearchTypeChange($event)" [type]="type">
+    </app-speed-quote-part-number-filter>
+    <ng-container>
+      <app-speed-quote-part-details [parts]="parts" [query]="query" (select)="onSelect($event)" [clearData]="clearData"
+        [isStockLineViewMode]="isStockLineViewMode" (onPartSelect)="onShowModalMargin($event)"></app-speed-quote-part-details>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="onClose()" class="btn btn-danger">
+      Close
+    </button>
+  </div>
+</form>

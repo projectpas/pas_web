@@ -23,7 +23,19 @@
         <h4 class="modal-title">{{isEdit ? 'Edit' : 'Add'}} Tools </h4>
       </div>
       <div class="modal-body " id="asset_create">
+        <div class="form-row input-width-100-percent">
+          <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-2 adK_f" >
+              <label class="change_cd">MPN : </label>
+              <span class="span-header-red"> {{masterPartData?.partNumber}}</span>
+          </div>
+          <div class="col-md-9">
+              <label class="cost_v">MPN Description: </label>
+              <span class="span-header-red"> {{masterPartData?.description}}</span>
 
+          </div>
+          </div>
+      </div>
         <div *ngIf="!isEdit && addNewEquipment">
           <grd-equipment [workFlowObject]="workFlowObject" [moduleName]="moduleName" [isWorkOrder]="isWorkOrder"
             (saveEquipmentListForWO)="saveEquipmentList($event)" (closeEvent)="closerefreshview()"></grd-equipment>
@@ -352,8 +364,10 @@
           <div class="col-md-3">
             <div class="form-group">
               <label class="input-width-100-percent">WO Open Date</label>
-             <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                [(ngModel)]="woOperDate" disabled appendTo="body">
+             <p-calendar [showIcon]="true" class="calender-cstm"
+              name="openDate" #openDate="ngModel" required
+                [(ngModel)]="woOperDate" [yearNavigator]="true" 
+                [monthNavigator]="true" yearRange="1900:2100" disabled appendTo="body">
               </p-calendar>
             </div>
           </div>
@@ -384,9 +398,9 @@
                           <i class="fa fa-plus btn btn-success btn-cstm1 btn-xs1 step2-padding" matTooltip="Show Asset Inventory list"
                             matTooltipPosition="above"  (click)="openGrid()"></i> 
                         </a>
-                      </span>
+                      </span> 
 
-                      <button type="button" class="btn btn-danger roleUpd" *ngIf="togglePlus ==true"  matTooltip="Show stock line details"  matTooltipPosition="above"  style="font-size: 10px !important;" >
+                      <button type="button" (click)="CloseGrid();releaseInventory()" class="btn btn-danger roleUpd" *ngIf="togglePlus ==true"  matTooltip="Show stock line details"  matTooltipPosition="above"  style="font-size: 10px !important;" >
                       <i 
                       class="fa fa-minus mr-0" ></i>  
                     </button>
@@ -418,7 +432,7 @@
             <div id="step2" class="panel-collapse  collapse" *ngIf="showcheckInOutlist">
               <div class="panel-body m-lr-7">
                 <form #assetCheckForm="ngForm" class="back-white" >
-                  <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+                  <div class="lastcol-fix table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
                       <table class="table table-bordered table-border-modal1">
                       <thead>
@@ -457,17 +471,20 @@
                             <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutBy}}</div>
                           </td>
                           <td class="width-100">
-                            <div  *ngIf="assetsform.assetStatus == 'checkOut'">
-                              <p-calendar class="pas-clder" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="row.checkOutDate"
-                               [showIcon]="true" [disabled]="!row.isChecked"
+                            <div  *ngIf="assetsform.assetStatus == 'checkOut'"> 
+                              <!-- row.checkOutDate -->
+                              <p-calendar [showIcon]="true" [yearNavigator]="true"
+                               [monthNavigator]="true" yearRange="1900:2100"   [showTime]="true"  hourFormat="24"
+                               appendTo='body' [baseZIndex]="9999" [(ngModel)]="todaysDate"
+                               [showIcon]="true" [disabled]="!row.isChecked" [maxDate]="todaysDate"
                                 name="checkOutDate{{i}}"></p-calendar>
                             </div>
-                            <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutDate | date: 'MM/dd/yyyy'}}</div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutDate | date: 'MM/dd/yyyy , h:mm a'}}</div>
                           </td>
                           <td class="width-135">
                             <div  *ngIf="assetsform.assetStatus == 'checkIn'">
                               <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="row.checkInById" [disabled]="!row.isChecked"
-                                name="checkInBy{{i}}" [suggestions]="employeeList"
+                                name="checkInBy{{i}}" [suggestions]="employeeList"  appendTo='body' [baseZIndex]="9999"
                                 (completeMethod)="filterEmployee($event)" [size]="30" [minLength]="1" [dropdown]="true"
                                 errorMessage="Records not found" [forceSelection]="true">
                               </p-autoComplete>
@@ -476,17 +493,21 @@
                           </td>
                           <td class="width-100"> 
                             <div  *ngIf="assetsform.assetStatus == 'checkIn'">
-                              <p-calendar class="pas-clder" [(ngModel)]="row.checkInDate" [showIcon]="true" [disabled]="!row.isChecked"
+                              <!-- row.checkInDate -->
+                              <p-calendar [(ngModel)]="todaysDate" [showTime]="true" 
+                              [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                               [showIcon]="true" [disabled]="!row.isChecked" [maxDate]="todaysDate"
+                               appendTo='body' [baseZIndex]="9999" hourFormat="24"
                                 name="checkInDate{{i}}"></p-calendar>
                             </div>
-                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy'}}</div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy , h:mm a'}}</div>
                           </td>
                           <td>
                             <div class="align_adh">
                               <div [innerHTML]="row.notes"
                                   matTooltipPosition="above"
                                   [matTooltip]="parsedText(row.notes)"
-                                  class="text_editor_box input-width-100-percent"></div>
+                                  class="text_editor_box"></div>
                               <i class="fa fa-pencil contoel_v" data-toggle="modal"
                                   data-target="#textarea-popup" matTooltip="Memo"
                                   matTooltipPosition="above"
@@ -751,7 +772,7 @@
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <h4 class="modal-title">Are You Sure Want to Remove?</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
       <span aria-hidden="true">&times;</span>
     </button>

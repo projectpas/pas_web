@@ -52,7 +52,7 @@ export class SalesOrderPart implements ISalesOrderPart {
   qtyShipped?: number;
   qtyInvoiced?: number;
   invoiceNumber: string;
-  invoiceDate: string;
+  invoiceDate: Date;
   qtyPreviouslyShipped?: number;
   lastShippedDate: string;
   shipReference: string;

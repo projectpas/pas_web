@@ -19,11 +19,17 @@ export class SalesMarginComponent implements OnInit {
   query: ItemMasterSearchQuery;
   percentage: any[] = [];
   invalidQuantityenteredForQuantityFromThis: boolean = false;
+  prevQntity = 0;
+  markUpPercentage: any;
+  salesDiscount: any;
 
   constructor(private commonservice: CommonService,) {
   }
 
   ngOnInit() {
+    this.prevQntity = this.part.quantityFromThis;
+    this.markUpPercentage = Number(this.part.markUpPercentage).toFixed(2).toString();
+    this.salesDiscount = Number(this.part.salesDiscount).toFixed(2).toString();
     this.getPercents();
     this.calculate();
   }
@@ -39,13 +45,26 @@ export class SalesMarginComponent implements OnInit {
   }
 
   onClose(event: Event): void {
+    this.part.quantityFromThis = this.prevQntity;
+    this.part.quantityToBeQuoted = Number(this.part.quantityFromThis);
+    this.part.quantityAlreadyQuoted = Number(this.part.quantityFromThis);
+    this.isEdit = false;
     event.preventDefault();
     this.close.emit(true);
   }
 
   onSave(event: Event): void {
-    event.preventDefault();
-    this.save.emit(this.part);
+    if (!this.isEdit) {
+      let isInvalid = this.validateInput();
+      if (!isInvalid) {
+        event.preventDefault();
+        this.save.emit(this.part);
+      }
+    }
+    else {
+      event.preventDefault();
+      this.save.emit(this.part);
+    }
   }
 
   onSearchAnotherPN(event: Event): void {
@@ -61,13 +80,18 @@ export class SalesMarginComponent implements OnInit {
   }
 
   calculate() {
-    if (this.part) {
-      this.calculatePart();
-    }
+    setTimeout(() => {
+      if (this.part && !this.invalidQuantityenteredForQuantityFromThis) {
+        this.calculatePart();
+      }
+    }, 1000);
   }
 
   calculatePart() {
     try {
+      this.part.markUpPercentage = Number(this.markUpPercentage);
+      this.part.salesDiscount = Number(this.salesDiscount);
+
       this.part.salesPriceExtended = Number(this.part.salesPricePerUnit) * Number(this.part.quantityFromThis);
       this.part.markupPerUnit = + (Number(this.part.salesPricePerUnit) * (Number(this.part.markUpPercentage) / 100)).toFixed(2);
       this.part.markupExtended = + (Number(this.part.markupPerUnit) * Number(this.part.quantityFromThis)).toFixed(2);
@@ -77,7 +101,8 @@ export class SalesMarginComponent implements OnInit {
       this.part.netSalesPriceExtended = +(Number(this.part.salesPriceExtended) + Number(this.part.markupExtended) - Number(this.part.salesDiscountExtended)).toFixed(2);
       this.part.taxAmount = +((Number(this.part.netSalesPriceExtended) / 100) * Number(this.part.taxPercentage)).toFixed(2);
       this.part.marginAmountPerUnit = +(Number(this.part.netSalesPricePerUnit) - Number(this.part.unitCostPerUnit)).toFixed(2);
-      this.part.marginAmountExtended = +((Number(this.part.marginAmountPerUnit) * Number(this.part.quantityFromThis)) + Number(this.part.misc)).toFixed(2);
+      //this.part.marginAmountExtended = +((Number(this.part.marginAmountPerUnit) * Number(this.part.quantityFromThis)) + Number(this.part.misc)).toFixed(2);
+      this.part.marginAmountExtended = +(Number(this.part.marginAmountPerUnit) * Number(this.part.quantityFromThis)).toFixed(2);
       this.part.unitCostExtended = +(Number(this.part.unitCostPerUnit) * Number(this.part.quantityFromThis)).toFixed(2);
       if (Number(this.part.netSalesPricePerUnit) > 0) {
         this.part.marginPercentagePerUnit = +((Number(this.part.marginAmountPerUnit) / Number(this.part.netSalesPricePerUnit)) * 100).toFixed(2);
@@ -97,18 +122,35 @@ export class SalesMarginComponent implements OnInit {
     }
   }
 
+  validateInput() {
+    if (Number(this.part.quantityFromThis) != 0) {
+      if (this.part['qtyRemainedToQuote']) {
+        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted && Number(this.part.quantityFromThis) > Number(this.part['qtyRemainedToQuote']);
+      }
+      else if (Number(this.part.quantityFromThis) < 0) {
+        this.invalidQuantityenteredForQuantityFromThis = true;
+      }
+      else {
+        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted || (this.part.stockLineId != null && this.part.quantityFromThis > this.part.qtyAvailable);
+      }
+    } else {
+      this.invalidQuantityenteredForQuantityFromThis = true;
+    }
+
+    return this.invalidQuantityenteredForQuantityFromThis;
+  }
+
   onChangeQuantityFromThis(event) {
 
     if (Number(this.part.quantityFromThis) != 0) {
       if (this.part['qtyRemainedToQuote']) {
         this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted && Number(this.part.quantityFromThis) > Number(this.part['qtyRemainedToQuote']);
       }
-      else if (Number(this.part.quantityFromThis) < 0)
-      {
+      else if (Number(this.part.quantityFromThis) < 0) {
         this.invalidQuantityenteredForQuantityFromThis = true;
       }
       else {
-        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted;
+        this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted || (this.part.stockLineId != null && this.part.quantityFromThis > this.part.qtyAvailable);
       }
     } else {
       this.invalidQuantityenteredForQuantityFromThis = true;

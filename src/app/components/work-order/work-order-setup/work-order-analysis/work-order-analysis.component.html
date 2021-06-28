@@ -91,9 +91,9 @@
       <ng-template pTemplate="header" let-columns>
           <tr>
 
-              <th class="table-column-width"
+              <th class="table-column-width" [ngStyle]="{'width': col.width}"
                   *ngFor="let col of columns"
-                  pResizableColumn
+                  pResizableColumn 
                   pReorderableColumn
                   [pSortableColumn]="col.field">
                   {{ col.header }}
@@ -114,10 +114,10 @@
                   *ngFor="let col of columns"
                   class="ui-resizable-column"
                   pReorderableRowHandle>
-                    <ng-container *ngIf="col.field!='materialRevenue' && col.field!='materialCost' && col.field!='materialRevenuePercentage' && col.field!='laborCost' && col.field!='laborRevenuePercentage' && col.field!='overHeadCost' && col.field!='otherCost' && col.field!='directCost' && col.field!='otherCostRevenuePercentage'">
+                    <ng-container *ngIf="col.field!='materialRevenue' &&  col.field!='revenue' && col.field!='materialCost' && col.field!='materialRevenuePercentage' && col.field!='laborCost' && col.field!='laborRevenuePercentage' && col.field!='overHeadCost' && col.field!='overHeadCostRevenuePercentage' && col.field!='otherCost'  && col.field!='freightCost' && col.field!='directCost' && col.field!='directCostRevenuePercentage' && col.field!='margin' && col.field!='marginPercentage' ">
                         {{rowData[col.field]}}
                     </ng-container>
-                    <ng-container *ngIf="col.field=='materialRevenue' || col.field=='materialCost' || col.field=='materialRevenuePercentage' || col.field=='laborCost' || col.field=='laborRevenuePercentage' || col.field=='overHeadCost' || col.field=='otherCost' || col.field=='directCost' || col.field=='otherCostRevenuePercentage'">
+                    <ng-container *ngIf="col.field =='materialRevenue' || col.field =='revenue' || col.field=='materialCost' || col.field=='materialRevenuePercentage' || col.field=='laborCost' || col.field=='laborRevenuePercentage' || col.field=='overHeadCost' || col.field=='overHeadCostRevenuePercentage' || col.field=='otherCost'  || col.field=='freightCost' || col.field=='directCost' || col.field=='directCostRevenuePercentage' || col.field =='margin' || col.field =='marginPercentage'">
                         <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                     </ng-container> 
                   </td>
@@ -148,3 +148,18 @@
   </p-table>
 </div>
 </div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>

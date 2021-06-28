@@ -42,8 +42,6 @@
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
               data-toggle="modal"
               (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
-            <!-- (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true })
-                :exportCSV(targetData); closeDeleteModal();" -->
             <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
               (click)="dt.exportCSV({selectionOnly:true})"></button>
@@ -61,7 +59,7 @@
                 <span class="checkmark"></span>PN View
               </label>
             </div> -->
-            <div class="pull-left radio-buttons-align">
+            <!-- <div class="pull-left radio-buttons-align">
               <label class="radio-cstm wauto">
                 <input type="radio" name="viewType" class="form-control" value="soqview" [(ngModel)]="viewType"
                   (click)="changeOfStatus('','soqview')">
@@ -74,7 +72,7 @@
                   (click)="changeOfStatus('','pnview')">
                 <span class="checkmark"></span>PN View
               </label>
-            </div>
+            </div> -->
           </div>
           <div class="pull-right buttons-div-align">
             <div class="col" style="padding-left: 2px">
@@ -159,11 +157,14 @@
             [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
             [matTooltipDisabled]="rowData['partNumberType'] != 'Multiple'"
             [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
-            <span *ngIf="col.field == 'quoteAmount'" style="float: right !important;">
+            <span *ngIf="col.field == 'quoteAmount' " style="float: right !important;">
               {{convertDate(col.field , rowData) | toDecimal}}
             </span>
+            <span *ngIf="col.field == 'probability' " style="float: right !important;">
+              {{convertDate(col.field , rowData)}}
+            </span>
             <span
-              *ngIf="col.field != 'quoteAmount' && col.field != 'createdDate' && col.field != 'updatedDate'">
+              *ngIf="col.field != 'quoteAmount'&& col.field != 'probability' && col.field != 'createdDate' && col.field != 'updatedDate'">
               {{convertDate(col.field , rowData)}}
             </span>
             <span *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
@@ -244,7 +245,11 @@
     </button>
   </div>
   <div class="modal-body">
-    <h6 class="modal-body">SO Quote Number : {{restorerecord.salesOrderQuoteNumber}}</h6>
+    <!-- <h6 class="modal-body">Speed Quote Number : {{restorerecord.speedQuoteNumber}}</h6> -->
+    <strong>
+      Speed Quote Number :
+      <span class="new-label">{{restorerecord.speedQuoteNumber}}</span>
+    </strong>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
@@ -286,7 +291,11 @@
     </button>
   </div>
   <div class="modal-body">
-    <h6 class="modal-body">SO Quote Number : {{selectedQuoteToDelete}}</h6>
+    <!-- <h6 class="modal-body">Speed Quote Number : {{selectedQuoteToDelete}}</h6> -->
+    <strong>
+      Speed Quote Number :
+      <span class="new-label">{{selectedQuoteToDelete}}</span>
+    </strong>
   </div>
 
   <div class="modal-footer">
@@ -305,8 +314,8 @@
   </div>
 
   <div class="modal-body" *ngIf="salesQuote">
-    <app-sales-quote-view [customerId]="customerId" [salesQuoteId]="salesOrderQuoteId"
-      [salesQuoteView]="salesQuoteView"></app-sales-quote-view>
+    <app-speed-quote-view [customerId]="customerId" [speedQuoteId]="salesOrderQuoteId"
+      [salesQuoteView]="salesQuoteView"></app-speed-quote-view>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
@@ -338,13 +347,14 @@
       <h4 class="modal-title">History of Sales Order Quote</h4>
     </div>
     <div class="modal-body" *ngIf="auditHistory">
-      <div class="table-responsive">
+      <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+        <div class="tableFixHead"> 
         <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
           <thead>
             <tr>
               <th>Quote Num</th>
               <th>Status</th>
-              <th>SO Num</th>
+              <!-- <th>SO Num</th> -->
               <th>Customer Name</th>
               <th>Customer Type</th>
               <th>Cust Ref</th>
@@ -362,13 +372,13 @@
             <tr *ngFor="let audit of auditHistory; let i = index;">
               <!-- auditHistory[i>0 ? i-1 : i] -->
               <td
-                [ngStyle]="{'color':  getColorCodeForHistory(i, 'salesOrderQuoteNumber', audit.salesOrderQuoteNumber)  ? 'black' : 'red'  }">
-                {{audit.salesOrderQuoteNumber}}</td>
+                [ngStyle]="{'color':  getColorCodeForHistory(i, 'speedQuoteNumber', audit.speedQuoteNumber)  ? 'black' : 'red'  }">
+                {{audit.speedQuoteNumber}}</td>
               <td [ngStyle]="{'color': getColorCodeForHistory(i, 'status', audit.status)  ? 'black' : 'red'  }">
                 {{audit.status}}</td>
-              <td
+              <!-- <td
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'salesOrderNumber', audit.salesOrderNumber)  ? 'black' : 'red'  }">
-                {{audit.salesOrderNumber}}</td>
+                {{audit.salesOrderNumber}}</td> -->
               <td
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'customerName', audit.customerName)  ? 'black' : 'red'  }">
                 {{audit.customerName}}</td>
@@ -378,7 +388,7 @@
               <td
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'customerReference', audit.customerReference)  ? 'black' : 'red'  }">
                 {{audit.customerReference}}</td>
-              <td
+              <td class="text-right"
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'probability', audit.probability)  ? 'black' : 'red'  }">
                 {{audit.probability}}</td>
               <td
@@ -411,6 +421,7 @@
             <h4 class="no-history-found-msg">No History Found </h4>
           </div>
         </ng-template>
+        </div>
       </div>
     </div>
     <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">

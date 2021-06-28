@@ -5,18 +5,11 @@
 		  <div class="col">
 			<h4 class="header-name">Work Order Quote List</h4>
 		  </div>
-		  <!-- <div>
-			<button
-			  type="button"
-			  class="btn-sm header-button"
-              [routerLink]="['/workordersmodule/workorderspages/app-work-order-quote']"
-              >
-			  Add Work Order Quote
-			</button>
-		  </div> -->
 		</div>
       </div>
       <div class="header-body"> 
+     
+    
     <p-table #dt
     class="rpo-table-cstm rro-table-cstm"
     [value]="woQuoteList"
@@ -37,7 +30,7 @@
     [scrollable]="true"
     [metaKeySelection]="true"
     scrollHeight="450px"
-    (onPage)="pageIndexChange($event)">
+    (onPage)="pageIndexChange($event)"> 
     <ng-template pTemplate="caption">
         <div class="row">
           <div class="col">
@@ -122,20 +115,10 @@
                                         <span class="checkmark"></span>All
                                     </label>
                                 </div>
-                                <!-- <div class="checkbox-cstm pull-left checkbox-align">
-                                    <label class="checkbox-label-align">
-                                        <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"
-                                            id="cparent"
-                                            (click)="getDeleteListByStatus($event.target.checked)" />
-                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                        Show Deleted List
-                                    </label>
-                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
-            <!-- </div> -->
         </div>
          
     </ng-template>
@@ -183,7 +166,7 @@
                      let-rowIndex="rowIndex"
                      let-expanded="expanded"
                      let-columns="columns">
-            <tr class="ui-widget-header">
+            <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle>
                 <td class="table-column-width" *ngFor="let col of columns" style="text-overflow: ellipsis; overflow: hidden; " [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above" 
                 [ngStyle]="{'color': getColorCodeForMultiple(rowData)}"
                 > 
@@ -191,7 +174,12 @@
                 </td>
                 <td class="table-actions-column table-column-width width-131 action-icons-cstm" *ngIf="selectedColumns.length > 0">
                     <span data-toggle="modal" data-target="#viewWorkOrder"><a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                    <span><a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                    <!-- <span><a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span> -->
+                    <span><a [class.disabled]="rowData.quoteStatus === 'Closed' || rowData.isVersionIncrease || rowData.quoteStatus === 'Expired'"
+                        [ngClass]="{'btn_disabled': rowData.quoteStatus === 'Closed' || rowData.isVersionIncrease || rowData.quoteStatus === 'Expired'}"
+                        class="btn nobg" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above">
+                        <i class="fa fa-pencil"></i>
+                      </a></span>
                 </td>
             </tr>
             

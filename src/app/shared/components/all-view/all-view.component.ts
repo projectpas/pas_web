@@ -72,9 +72,13 @@ export class AllViewComponent implements OnInit {
   id: number;
 
   //showPartListtab: boolean = false;
+  showreceiveddraftpo : boolean = false;
+  showreceived : boolean = false;
+  showreceiveddraft : boolean = false;
   showVendorCaptab: boolean = false;
   purchaseOrderData: PurchaseOrder;
   repairOrderData: RepairOrderPart[] = [];
+  repairOrderId:number = 0;
 
   approvalProcessHeader = [
     {
@@ -206,38 +210,70 @@ export class AllViewComponent implements OnInit {
       this.showAddresstab = true;
       this.id = this.OrderId;
     }
-    if (event.index == 5) {
+    if (event.index == 5  && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {
       //this.showDocumenttab = true;
+      this.showreceiveddraftpo = true;  
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
     }
-    if (event.index == 6) {
+    if (event.index == 6 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {
       //this.showComunicationtab = true;
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
     }
-
-    if (event.index == 7 && this.isReceivingpo == true) {
+    if (event.index == 5 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {              
+      this.repairOrderId = this.id;   
+      this.showreceiveddraft = true;  
+      if(this.repairOrderData.length == 0){         
+        this.viewRepairOrder(this.id);   
+      }   
+    }
+    if (event.index == 6 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {     
+        this.showreceived = true;
+        this.repairOrderId = this.id; 
+    }
+    if (event.index == 7 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {
+      //this.isSpinnerVisible = true;
+      this.showreceiveddraftpo = true;  
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
+    }
+    if (event.index == 8 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {
       //this.isSpinnerVisible = true;
       if (!this.purchaseOrderData) {
         this.viewPurchaseOrder(this.id);
       }
     }
-    if (event.index == 8 && this.isReceivingpo == true) {
-      //this.isSpinnerVisible = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
-    }
-    if (event.index == 7 && this.isReceivingro == true) {
+    if (event.index == 7 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {
       //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){        
-      this.viewRepairOrder(this.id);
+      //if(this.repairOrderData.length>0){          
+      this.repairOrderId = this.id;   
+      this.showreceiveddraft = true;  
+      if(this.repairOrderData.length == 0){         
+        this.viewRepairOrder(this.id);   
+      }   
     }
-    if (event.index == 8 && this.isReceivingro == true) {
+    if (event.index == 8 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {
       //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){        
-      this.viewRepairOrder(this.id);
+      //if(this.repairOrderData.length>0){   
+        this.showreceived = true;
+        this.repairOrderId = this.id;      
+      //this.viewRepairOrder(this.id);
     }
     //} 
   }
-
+	parsedText(text) {
+		if (text) {
+			const dom = new DOMParser().parseFromString(
+				'<!doctype html><body>' + text,
+				'text/html');
+			const decodedString = dom.body.textContent;
+			return decodedString;
+		}
+	}
 
   getPOViewById(poId) {
     this.purchaseOrderService.getPOViewById(poId).subscribe(res => {
@@ -277,7 +313,7 @@ export class AllViewComponent implements OnInit {
     this.isSpinnerVisible = true;
     this.receivingService.getPurchaseOrderDataForViewById(purchaseOrderId).subscribe(
       results => {        
-        this.purchaseOrderData = results[0];
+        this.purchaseOrderData = results[0];        
         this.purchaseOrderData.openDate = new Date(results[0].openDate).toLocaleDateString();
         this.purchaseOrderData.needByDate = new Date(results[0].needByDate);
         this.purchaseOrderData.dateApproved = new Date(results[0].dateApproved).toLocaleDateString();
@@ -340,10 +376,10 @@ export class AllViewComponent implements OnInit {
   }
 
   viewRepairOrder(repairOrderId: number): void {
+    this.isSpinnerVisible = true;
     this.receivingService.getReceivingROPartsForViewById(repairOrderId).subscribe(
-      results => {
+      results => {       
         this.repairOrderData = results;
-
         var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
         for (let parent of allParentParts) {
           var splitParts = this.repairOrderData.filter(x => !x.isParent && x.parentId == parent.repairOrderPartRecordId);
@@ -381,9 +417,8 @@ export class AllViewComponent implements OnInit {
         }        
         //this.getStatus();               
         this.isSpinnerVisible = false;
-        console.log(this.repairOrderData);
-
       }, error => {
+        this.isSpinnerVisible = false;
         this.alertService.showMessage("", "Something went wrong while loading the Repair Order detail", MessageSeverity.error);
       }
     )
@@ -395,7 +430,7 @@ export class AllViewComponent implements OnInit {
         ...res,
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
         handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
-      };
+      };      
     }, err => { });
   }
 

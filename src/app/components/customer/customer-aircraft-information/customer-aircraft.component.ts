@@ -703,14 +703,15 @@ export class CustomerAircraftComponent implements OnInit {
     }
     nextClick() {
         this.stopmulticlicks = true;
-        this.tab.emit('Atachapter');
+        //this.tab.emit('Atachapter');
+        this.tab.emit('Financial');
         setTimeout(() => {
             this.stopmulticlicks = false;
         }, 500)
     }
     backClick() {
-
-        this.tab.emit('Contacts');
+        //this.tab.emit('Contacts');
+        this.tab.emit('Atachapter');
     }
     private saveCompleted(user?: any) {
 

@@ -9,17 +9,15 @@
             </span>
             </h4>
         </div> -->
-    <div class="card-header header">
+    <div class="card-header header" *ngIf="!isSummarizedView">
         <div class="row">
             <div class="col">
-                <h4 class="header-name"> Communication - Memo </h4>
+                <h4 class="header-name"> Memo </h4>
             </div>
             <div>
-                <button *ngIf="!isView" type="button"
-                 class="btn-sm header-button"
-                     data-toggle="modal" data-target="#addNewMemo"
-                    (click)="addMemo()">
-                    Create Memo
+                <button *ngIf="!isView" type="button" class="btn-sm header-button" data-toggle="modal"
+                    data-target="#addNewMemo" (click)="addMemo()">
+                    Add Memo
                 </button>
             </div>
         </div>
@@ -32,13 +30,13 @@
             [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true"
             scrollHeight="450px">
 
-            <ng-template pTemplate="caption">
+            <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
                 <div class="row">
                     <div class="col">
                         <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
                             [ngModelOptions]="{ standalone: true }" optionLabel="header"
                             selectedItemsLabel="{0} columns selected" class="multiselect-field"
-                            defaultLabel="Choose Columns"></p-multiSelect> 
+                            defaultLabel="Choose Columns"></p-multiSelect>
 
 
                         <!-- <div class="excel-upload excel-upload-cstm">
@@ -61,8 +59,7 @@
                         <div class="global-search-field inner-addon right-addon inline-block">
                             <i class="fa fa-search"></i>
                             <input type="text" pInputText size="50" class="form-control"
-                                (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
-                              />
+                                (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter" />
                         </div>
                     </div>
                 </div>
@@ -72,10 +69,9 @@
                             matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
                             data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
                             data-target="#memodownloadConfirmation"></button>
-                        <button type="button" class="btn btn-primary exports-button"
-                            matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download"
-                            iconPos="left" label="Export Selected Data" (click)="dt.exportCSV({ selectionOnly: true })"
-                           ></button>
+                        <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+                            matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+                            label="Export Selected Data" (click)="dt.exportCSV({ selectionOnly: true })"></button>
                     </div>
                     <div class="col">
                         <div class="">
@@ -94,26 +90,23 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" class="table-column-width">
+                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-
                     <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                         [pSortableColumn]="col.field">
                         {{ col.header }}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th class="table-actions-column">
+                    <th class=" width-100">
                         Actions
                     </th>
                 </tr>
@@ -128,17 +121,16 @@
                             *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text"
                             (input)="dt.filter($event.target.value, col.field, 'contains')">
 
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
-                            name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
-                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
-                            name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
+                        <input type="date" class="hidePlaceHolder table-header-input-width"
+                            *ngIf="col.field == 'createdDate'" name="createdDate"
+                            (change)="dateFilterForTable($event.target.value, col.field)" />
+                        <input type="date" class="hidePlaceHolder table-header-input-width"
+                            *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                            (change)="dateFilterForTable($event.target.value,col.field)" />
                         <!-- <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"
                             (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
                     </th>
-
-
-
-                    <th class="table-actions-column"></th>
+                    <th class="width-100"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -149,11 +141,12 @@
                             <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                             <span> </span>
                         </td>
-                        <td class="table-column-width" *ngIf="col.field == 'description'" class="ui-resizable-column"
+                        <td class="table-column-width ui-resizable-column text-capital" *ngIf="col.field == 'descriptionData'"
                             pReorderableRowHandle>
-                            <p class="p_textEditor" [innerHTML]=rowData[col.field]></p>
+                            <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                             [matTooltip]="parsedText(rowData[col.field])" [innerHTML]=rowData[col.field]></p>
                         </td>
-                        <td class="table-column-width" *ngIf="col.field !='SERIAL_NO' && col.field!='description'">
+                        <td class="table-column-width" *ngIf="col.field !='SERIAL_NO' && col.field!='descriptionData'">
                             {{
                                         col.field == 'createdDate'
                                           ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
@@ -163,7 +156,7 @@
                                       }}
                         </td>
                     </ng-container>
-                    <td class="action-icons-cstm table-column-width">
+                    <td class="action-icons-cstm width-100">
                         <!-- <button class="btn-edit ptable-wo-btns buton_back_bordernon" mat-icon-button data-target="#addNewMemo" data-toggle="modal"
                             (click)="edit(rowData, i)" matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
@@ -175,9 +168,9 @@
                                 (click)="getViewData(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                     class="fa fa-eye"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==false && !isView" data-toggle="modal"
-                            data-target="#addNewMemo"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, rowIndex)"
-                                matTooltip="Edit" matTooltipPosition="above" data-dismiss="modal"><i
-                                    class="fa fa-pencil"></i></a> </span>
+                            data-target="#addNewMemo"><a class="btn nobg btn-edit-cstm"
+                                (click)="edit(rowData, rowIndex)" matTooltip="Edit" matTooltipPosition="above"
+                                data-dismiss="modal"><i class="fa fa-pencil"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==false  && !isView"><a class="btn nobg btn-delete-cstm"
                                 (click)="deleteMemoConfirmation(rowData)" matTooltip="Delete"
                                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
@@ -199,7 +192,8 @@
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
                 <label id="footer">Total:</label>
-                <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText
+                    type="text" />
                 &nbsp;&nbsp;
                 <label id="footer">Pages Count:</label>
                 <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
@@ -212,7 +206,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close btn-font"
-                           (click)="closePopupmodel('viewText')" >&times;</button>
+                            (click)="closePopupmodel('viewText')">&times;</button>
                         <h4 class="modal-title"> Memo Details</h4>
                         <!-- <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
@@ -250,8 +244,9 @@
                             <!-- <p><span class="label"><b>Mobile<span class="clr-red">*</span> : </b></span><span class="value">{{viewdata.mobile}}</span></p> -->
                             <!-- <p><span class="label"><b>Contacted by<span class="clr-red">*</span> :   </b></span><span class="value">{{viewdata.contactBy}}</span></p> -->
                             <p class="memo-margin-bottom">
-                                <span class="label"><strong> Memo: </strong></span><span class="value">
-                                    <p class="m-0 p-0 p_textEditor" [innerHTML]=viewdata.description></p>
+                                <span class="label"><strong> Memo: </strong></span>
+                                <span class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(viewdata.description)"
+                                     [innerHTML]=viewdata.description>
                                 </span>
                             </p>
                             <p><span class="label"><b>Created Date: </b></span><span
@@ -267,7 +262,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" (click)="closePopupmodel('viewText')" >Close</button>
+                        <button type="button" class="btn btn-danger"
+                            (click)="closePopupmodel('viewText')">Close</button>
                     </div>
                 </div>
             </div>
@@ -370,16 +366,17 @@
                             </tr>
                         </tbody>
                     </table> -->
-                    <div  class="material-tr" *ngFor="let material of addList; let i = index" id="row_{{i}}">
-                    <p-editor [(ngModel)]="material.description" [style]="{'height':'320px'}"
-                    name="description"   (ngModelChange)="enableSaveMemo()" required></p-editor>
+                    <div class="material-tr" *ngFor="let material of addList; let i = index" id="row_{{i}}">
+                        <p-editor [(ngModel)]="material.description" [style]="{'height':'320px'}" name="description"
+                            (ngModelChange)="enableSaveMemo()" required></p-editor>
                     </div>
                     <div class="editor-buttons">
-                        <button class="btn btn-primary editor-buttons-margin" 
-                        [disabled]="disableSaveMemo" (click)="saveMemo()">
+                        <button class="btn btn-primary editor-buttons-margin" [disabled]="disableSaveMemo"
+                            (click)="saveMemo()">
                             Save
                         </button>
-                        <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger editor-buttons-margin"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -418,7 +415,7 @@
 
     <div id="contentHistDocs" #contentHistDocs class="modal fade" role="dialog" data-backdrop="static"
         data-keyboard="false">
-        <div class="modal-dialog modal-xlg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
 
@@ -450,46 +447,46 @@
                         </p>
                     </div>
                 </div> -->
-                    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                        <div class="tableFixHead">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <!-- <th>Memo Id </th> -->
-                                    <th>Memo</th>
-                                    <th>Created Date</th>
-                                    <th class="min-width-70">Created By</th>
-                                    <th> Updated Date</th>
-                                    <th class="min-width-70">Updated By</th>
-                                    <th class="min-width-70">Is Deleted</th>
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
+						<table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <!-- <th>Memo Id </th> -->
+                                        <th>Memo</th>
+                                        <th>Created Date</th>
+                                        <th class="min-width-70">Created By</th>
+                                        <th> Updated Date</th>
+                                        <th class="min-width-70">Updated By</th>
+                                        <th class="min-width-70">Is Deleted</th>
 
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let audit of documentauditHisory; let i = index;">
-                                    <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'memoId', audit.memoId)  ? 'black' : 'red'  }">{{audit.memoId}}</td> -->
-                                    <td style="margin-bottom:-10px !important"
-                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
-                                        <p class="margin-tb" [innerHTML]="audit.description"></p>
-                                    </td>
-                                    <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                    <td>{{audit.createdBy}}</td>
-                                    <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                    <td>{{audit.updatedBy}}</td>
-                                    <td class="text-center width-60">
-                                        <span class="value">
-                                            <label class="wauto">
-                                                <input type="checkbox" name="isDeleted"
-                                                    [checked]="audit.isDeleted == true" disabled>
-                                            </label>
-                                        </span>
-                                    </td>
-                                </tr>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let audit of documentauditHisory; let i = index;">
+                                        <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'memoId', audit.memoId)  ? 'black' : 'red'  }">{{audit.memoId}}</td> -->
+                                        <td class="width-50"
+                                            [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
+                                            <p style="margin:0px;padding:0px !important" class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.description)" [innerHTML]="audit.description"></p>
+                                        </td>
+                                        <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                        <td>{{audit.createdBy}}</td>
+                                        <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                        <td>{{audit.updatedBy}}</td>
+                                        <td class="text-center width-60">
+                                            <span class="value">
+                                                <label class="wauto">
+                                                    <input type="checkbox" name="isDeleted"
+                                                        [checked]="audit.isDeleted == true" disabled>
+                                                </label>
+                                            </span>
+                                        </td>
+                                    </tr>
 
-                            </tbody>
+                                </tbody>
 
-                        </table>
+                            </table>
                         </div>
                     </div>
                 </div>

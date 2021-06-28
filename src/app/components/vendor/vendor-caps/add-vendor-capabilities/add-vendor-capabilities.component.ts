@@ -330,7 +330,12 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 	}
  
 	bindCapsDesc(capabilityId, currentRecord) {
-		currentRecord.capabilityTypeDescription = getValueFromArrayOfObjectById('label', 'value', capabilityId, this.capabilityTypeList);
+		//currentRecord.capabilityTypeDescription = getValueFromArrayOfObjectById('label', 'value', capabilityId, this.capabilityTypeList);
+		this.commonService.GetCapabilityTypeDescription(capabilityId).subscribe(response => {			
+			currentRecord.capabilityTypeDescription = response.description;
+		},err => {
+			this.onDataLoadFailed(err);
+		});
 	}
 
 	private atamaindata() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnChanges ,Input, Output, EventEmitter, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { AuthService } from '../../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
@@ -14,7 +14,7 @@ import{AssetInventoryViewComponent} from '../../../Asset-Management/asset-invent
     templateUrl: './work-order-assets.component.html',
     styleUrls: ['./work-order-assets.component.css']
 })
-export class WorkOrderAssetsComponent implements OnInit {
+export class WorkOrderAssetsComponent implements OnInit,OnChanges {
     modal: NgbModalRef;
     @Input() isView: boolean = false;
     @Input() savedWorkOrderData: any;
@@ -34,6 +34,8 @@ export class WorkOrderAssetsComponent implements OnInit {
     @Input() woOperDate;
     @Input() workOrderPartNumberId;
     @Input() workOrderId;
+    @Input() transferWorkflow;
+    
     textAreaInfo: any;
     memoIndex;
     pageSize: number = 10;
@@ -89,6 +91,7 @@ export class WorkOrderAssetsComponent implements OnInit {
         checkInQty: null,
         checkOutQty: null,
     }
+    todaysDate= new Date();
     assetsform = { ...this.assets }
     status: any;
     currentRecord: any;
@@ -99,15 +102,20 @@ export class WorkOrderAssetsComponent implements OnInit {
     assetAuditHistory: any;
     addNewEquipment: boolean = false;
     //customerName:any;
-
+    masterPartData:any={};
     ngOnInit(): void {
-       // this.customerName="A Pusapkraj";
+      // this.customerName="A Pusapkraj";
+     this.masterPartData= this.workOrderService.partNumberData; 
     }
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, private datePipe: DatePipe, private commonService: CommonService,
         private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef) {
 
     }
-
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes.transferWorkflow && changes.transferWorkflow.currentValue==true){
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            this.getAllWorkOrderList(this.lazyLoadEventData);
+        }}
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
@@ -138,9 +146,23 @@ viewAsstesInventory(rowData){
     AvailableCount: any;
     showcheckInOutlist = false;
     togglePlus:boolean=false;
+    CloseGrid()
+    {
+        this.showcheckInOutlist = false;
+        this.togglePlus=false;
+    }
     openGrid() {
         this.togglePlus=true;
+
         this.showcheckInOutlist = true;
+        // if(this.showcheckInOutlist)
+        // {
+        //     this.showcheckInOutlist = false;
+        // }else
+        // {
+        //     this.showcheckInOutlist = true;
+        // }
+    
         this.workOrderCheckInCheckOutList = [];
         this.AvailableCount = 0;
         if (this.status == 'checkIn') {
@@ -214,8 +236,7 @@ viewAsstesInventory(rowData){
             employeeId: editValueAssignByCondition('value', this.assetsform.employeeId),
         }
         this.quantitySelected = 0;
-       if(this.isSubWorkOrder){
-           console.log("check in ")
+       if(this.isSubWorkOrder){ 
         if (this.status === 'checkIn') {
             formData.forEach(element => {
                 element.checkInById = element.checkInById.value;
@@ -684,6 +705,7 @@ viewAsstesInventory(rowData){
                     isActive: true,
                     createdBy: this.userName,
                     updatedBy: this.userName,
+                    updatedDate:new Date(),
                     workFlowWorkOrderId: this.workFlowWorkOrderId,
                     subWOPartNoId: this.subWOPartNoId,
                     workOrderId: this.subWorkOrderDetails.workOrderId,
@@ -716,6 +738,7 @@ viewAsstesInventory(rowData){
                     isActive: true,
                     createdBy: this.userName,
                     updatedBy: this.userName,
+                    updatedDate:new Date(),
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
                 }
             })

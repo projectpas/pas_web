@@ -1,13 +1,13 @@
 ﻿<div class="card new-card">
-    <div class="card-header header">
+    <div class="card-header header" *ngIf="!isSummarizedView">
         <div class="row">
             <div class="col">
-                <h4 class="header-name"> Communication - Phone </h4>
+                <h4 class="header-name"> Phone </h4>
             </div>
             <div>
                 <button *ngIf="!isView" type="button" class="btn-sm header-button" data-toggle="modal"
                     data-target="#addNewPhone" (click)="addPhone()">
-                    Create Phone
+                    Add Phone
                 </button>
             </div>
         </div>
@@ -18,7 +18,7 @@
             [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
             [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true"
             scrollHeight="450px">
-            <ng-template pTemplate="caption">
+            <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
                 <div class="row">
                     <div class="col">
                         <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
@@ -64,7 +64,7 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" class="table-column-width">
+                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}">
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
@@ -81,7 +81,7 @@
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
                     </ng-container>
-                    <th class="table-actions-column">
+                    <th class="width-100">
                         Actions
                     </th>
                 </tr>
@@ -107,18 +107,18 @@
                                 (change)="dateFilterForTable($event.target.value,col.field)" />
                         </th>
                     </ng-container>
-                    <th class="table-actions-column"></th>
+                    <th class="width-100"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <ng-container *ngFor="let col of columns">
-                        <td class="table-column-width" *ngIf="col.field == 'notes'" class="ui-resizable-column"
-                            pReorderableRowHandle>
-                            <p class="m-0 p-0 p_textEditor" style="white-space: nowrap;" matTooltip="view"
-                                matTooltipPosition="above" [innerHTML]=rowData[col.field]></p>
+                        <td class="table-column-width ui-resizable-column text-capital" *ngIf="col.field == 'notesData'"     
+                                                   pReorderableRowHandle>
+                            <p class="m-0 p-0 p_textEditor text-capital truncate-text" matTooltipPosition="above"
+                            [matTooltip]="parsedText(rowData[col.field])" style="white-space: nowrap;" [innerHTML]=rowData[col.field]></p>
                         </td>
-                        <td class="table-column-width" *ngIf="col.field !='notes'">
+                        <td class="table-column-width" *ngIf="col.field !='notesData'">
                             {{ col.field == 'createdDate'
                                       ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                                       : rowData[col.field] && col.field == 'updatedDate'
@@ -126,7 +126,7 @@
                                       : rowData[col.field] }}
                         </td>
                     </ng-container>
-                    <td class="action-icons-cstm table-column-width">
+                    <td class="width-100">
                         <span data-toggle="modal" data-target="#viewPhone"><a class="btn nobg btn-view-cstm"
                                 (click)="phoneView(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                     class="fa fa-eye"></i></a> </span>
@@ -273,7 +273,7 @@
             </div>
             <div class="modal-body">
                 <p><span class="label"><b><span *ngIf="type==1">Customer</span><span *ngIf="type==2">Vendor</span>
-                            Contact<span class="clr-red">*</span> : </b></span><span class="value">
+                            Contact <span class="clr-red">*</span> : </b></span><span class="value">
                         <span *ngIf="type==1"> {{phoneViewData.customerContact}}</span>
                         <span *ngIf="type==2"> {{phoneViewData.vendorContact}}</span>
                     </span></p>
@@ -282,8 +282,9 @@
                 <p><span class="label"><b>Contacted By <span class="clr-red">*</span> : </b></span><span
                         class="value">{{phoneViewData.contactBy}}</span></p>
                 <p class="memo-margin-bottom">
-                    <span class="label"><strong> Notes: </strong></span><span class="value">
-                        <p class="m-0 p-0 p_textEditor" [innerHTML]=phoneViewData.notes></p>
+                    <span class="label"><strong> Notes: </strong></span><span class="value m-0 p-0 p_textEditor truncate-text"
+                      matTooltipPosition="above" [matTooltip]="parsedText(phoneViewData.notes)" 
+                      [innerHTML]=phoneViewData.notes>
                     </span>
                 </p>
                 <p><span class="label"><b>Created Date: </b></span><span
@@ -340,7 +341,7 @@
 </div>
 <div id="contentHistDocs" #contentHistDocs class="modal fade" role="dialog" data-backdrop="static"
     data-keyboard="false">
-    <div class="modal-dialog modal-xlg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">History of Phone</h4>
@@ -380,9 +381,9 @@
                                     <td
                                         [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactBy', audit.contactBy)  ? 'black' : 'red'  }">
                                         {{audit.contactBy}}</td>
-                                    <td style="margin-bottom:-10px !important"
+                                    <td class="width-50"
                                         [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
-                                        <p class="margin-tb" [innerHTML]="audit.notes"></p>
+                                        <p style="margin:0px;padding:0px !important" class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p>
                                     </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.createdBy}}</td>

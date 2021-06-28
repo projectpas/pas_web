@@ -27,6 +27,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     @Output() refreshData = new EventEmitter();
     @Input() view: boolean = false;
     @Input() isQuote = false;
+    salesOrderPartsList = [];
     markupList: any = [];
     @Input() isView: boolean = false;
     shipViaList: any = [];
@@ -106,14 +107,26 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             this.commonService.getShipVia(this.currentUserMasterCompanyId),
             this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join(), this.currentUserMasterCompanyId),
             this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join(), this.currentUserMasterCompanyId),
-            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId)).subscribe(response => {
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId),
+            this.salesOrdeService.getSalesOrderParts(this.salesOrderId, this.deletedStatusInfo)).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setFreightsData(response[0]);
                 this.setShipViaList(response[1]);
                 this.unitOfMeasureList = response[2];
                 this.currencyList = response[3];
                 this.markupList = response[4];
+                this.setPartsData(response[5]);
             }, error => this.isSpinnerVisible = false);
+    }
+
+    setPartsData(res) {
+        if (res && res.length > 0) {
+            this.salesOrderPartsList = res;
+            this.isUpdate = true;
+        } else {
+            this.salesOrderPartsList = [];
+            this.isUpdate = false;
+        }
     }
 
     refreshFreightsOnSaveOrDelete(fromDelete = false) {
@@ -145,7 +158,8 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
 
             if (fromDelete) {
                 this.getTotalBillingAmount();
-                this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
+                //this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
+                this.updateFreightListForSO.emit(this.salesOrderFreightList);
             }
         }, error => {
             this.isSpinnerVisible = false;
@@ -267,7 +281,8 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                 dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                 currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                 billingAmount: this.formateCurrency(x.amount),
-                masterCompanyId: this.currentUserMasterCompanyId
+                masterCompanyId: this.currentUserMasterCompanyId,
+                partNumber: x.salesOrderPartId ? getValueFromArrayOfObjectById('partNumber', 'salesOrderPartId', x.salesOrderPartId, this.salesOrderPartsList) : ''
             }
         });
         if (this.isEdit) {
@@ -326,7 +341,13 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                 MessageSeverity.success
             );
             this.refreshFreightsOnSaveOrDelete();
-            this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
+            //this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
+            this.salesOrdeService.getSalesOrderFreights(this.salesOrderId, this.deletedStatusInfo).subscribe(response => {
+                if (response && response.length > 0) {
+                    this.salesOrderFreightList = response;
+                    this.saveFreightListForSO.emit(this.salesOrderFreightList);
+                }
+            }, error => { });
         }, error => {
             this.isSpinnerVisible = false;
         })

@@ -312,7 +312,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
         this.salesOrder.amount = 0;
       }
       //this.salesOrder.amount = Number(this.customerPayment.amount);
-      this.salesOrder.amtApplied = Number(this.customerPayment.amtApplied);
+      this.salesOrder.amtApplied = this.customerPayment.amtApplied ? Number(this.customerPayment.amtApplied) : 0;
       this.salesOrder.amtRemaining = Number(this.salesOrder.amount) - Number(this.salesOrder.amtApplied);
       this.salesOrder.reference = this.customerPayment.reference;
       this.salesOrder.cntrlNum = "cntrl";
@@ -434,7 +434,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     empployid = empployid == 0 ? this.employeeId : empployid;
     editMSID = this.isEditModeHeader ? editMSID = id : 0;
     this.isSpinnerVisible = true;
-    this.commonservice.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+    this.commonservice.getManagmentStrctureData(id, empployid, editMSID, this.masterCompanyId).subscribe(response => {
       this.isSpinnerVisible = false;
       if (response) {
         const result = response;

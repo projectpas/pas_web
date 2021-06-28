@@ -106,9 +106,23 @@ import { WorkOrderPickticketprintComponent } from '../components/work-order/work
 import { WoPartNumberFilterComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-number-filter/wo-part-number-filter.component';
 import { WoPartDetailsComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-details/wo-part-details.component';
 import { WorkOrderPartPickticketComponent } from '../components/work-order/work-order-setup/work-order-part-pickticket/work-order-part-pickticket.component';
+import { WorkOrderPartPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-part-pickticketprint/work-order-part-pickticketprint.component';
+import { WoMarginComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-margin/wo-margin..component';
+import { WoReleaseFromComponent } from '../components/work-order/work-order-setup/wo-release-from/wo-release-from.component';
+import { WoReleaseEasaFromComponent } from '../components/work-order/work-order-setup/wo-release-easa-from/wo-release-easa-from.component';
+import { WorkOrderMultiPackagingLabelComponent } from '../components/work-order/work-order-setup/wo-order-multi-Packaging-Label/wo-order-multi-Packaging-Label.component';
+import { WorkOrderMultiShippingLabelComponent } from '../components/work-order/work-order-setup/work-order-multi-shipping-label/work-order-multi-shipping-label.component';
+import { WorkOrderPackagingLabelComponent } from '../components/work-order/work-order-setup/work-order-packaging-label/work-order-packaging-label.component';
+import { WorkOrderShippingLabelComponent } from '../components/work-order/work-order-setup/work-order-shipping-label/work-order-shipping-label.component';
+import { WorkOrderReleaseFromListComponent } from '../components/work-order/work-order-setup/work-order-release-from-list/work-order-release-from-list.component';
+import { WorkOrderPrintInvoiceComponent } from '../components/work-order/work-order-setup/work-order-print-invoice/work-order-print-invoice.component';
+import { WoqFromComponent } from '../components/work-order/work-order-setup/woq-form/woq-form.component';
+import { WoPartlistFromComponent } from '../components/work-order/work-order-setup/wo-part-list-form/wo-part-list-form.component';
+import { WoPrintFromComponent } from '../components/work-order/work-order-setup/wo-print-form/wo-print-form.component';
+import { WorkOrderActualVsQuoteComponent } from '../components/work-order/work-order-setup/wo-actual-vs-quote/wo-actual-vs-quote.component';
+import { SubWoPrintFromComponent } from '../components/work-order/work-order-setup/sub-wo-print-form/sub-wo-print-form.component';
+import { WorkOrderWorkCompleteComponent } from '../components/work-order/work-order-setup/wo-workComplete/wo-workComplete.component';
 // import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
-
-
 
 @NgModule({
   imports: [
@@ -208,12 +222,29 @@ import { WorkOrderPartPickticketComponent } from '../components/work-order/work-
     WorkOrderPickticketprintComponent,
     WorkOrderMaterialsAddComponent,
     WoCustomerDetailComponent,
-    WoPartNumberFilterComponent, 
+    WoPartNumberFilterComponent,
     WoPartDetailsComponent,
-    WorkOrderPartPickticketComponent
+    WorkOrderPartPickticketComponent,
+    WorkOrderPartPickticketprintComponent,
+    WoMarginComponent,
+    WoReleaseFromComponent,
+    WoReleaseEasaFromComponent,
+    WorkOrderMultiPackagingLabelComponent,
+    WorkOrderMultiShippingLabelComponent,
+    WorkOrderShippingComponent,
+    WorkOrderPackagingLabelComponent,
+    WorkOrderShippingLabelComponent,
+    WorkOrderReleaseFromListComponent,
+    WorkOrderPrintInvoiceComponent,
+    WoqFromComponent,
+    WoPartlistFromComponent,
+    WoPrintFromComponent,
+    WorkOrderActualVsQuoteComponent,
+    SubWoPrintFromComponent,
+    WorkOrderWorkCompleteComponent
     // TwoDecimalGlobalNumberFormatPipe
   ],
-  entryComponents: [WorkOrderPickticketprintComponent],
+  entryComponents: [WorkOrderPickticketprintComponent, WorkOrderPartPickticketprintComponent],
   providers: [
     WorkFlowtService,
     WorkOrderService,
@@ -231,6 +262,6 @@ import { WorkOrderPartPickticketComponent } from '../components/work-order/work-
     DatePipe
   ],
   exports: [SubWorkOrderComponent, EmailComponent],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class WorkOrderPagesModule { }

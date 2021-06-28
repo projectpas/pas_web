@@ -143,7 +143,7 @@
                                             </ng-template>
                                             <ng-template pTemplate="colgroup" let-columns>
                                                 <colgroup>
-                                                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                                                    <col *ngFor="let col of columns" class="table-column-width">
                                                 </colgroup>
                                             </ng-template>
                                             <ng-template pTemplate="header" let-columns>
@@ -804,7 +804,8 @@
                                                                 }}
                                                               </td>
                                                               <td *ngIf="col.field == 'memo'">
-                                                                  <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                                                  <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                                                  [matTooltip]="parsedText(rowData[col.field])" style="float: left" [innerHTML]="rowData[col.field]"></p>
                                                               </td>
                                                               </ng-container>
 
@@ -1050,7 +1051,8 @@
                                                 <p style="vertical-align: top;">
                                                     <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
                                                     <span class="value">
-                                                  <p class="p-0 m-0 p_textEditor" [innerHTML]="domesticShippingViaView.memo"></p></span>
+                                                  <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                                  [matTooltip]="parsedText(domesticShippingViaView.memo)" [innerHTML]="domesticShippingViaView.memo"></p></span>
                                                 </p>
                                                 <p>
                                                     <span class="label"><b>Is Active : </b></span>
@@ -1223,7 +1225,8 @@
                                                             {{audit.shippingAccountinfo}}
                                                         </td>
                                                         <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
-                                                            <p [innerHTML]="audit.memo"></p>
+                                                            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                                            [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <span class="value">
@@ -1404,7 +1407,7 @@
 
                                             <ng-template pTemplate="colgroup" let-columns>
                                                 <colgroup>
-                                                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                                                    <col *ngFor="let col of columns" class="table-column-width">
                                                 </colgroup>
                                             </ng-template>
                                             <ng-template pTemplate="header" let-columns>
@@ -1753,7 +1756,8 @@
                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                             </td>
                             <td *ngIf="col.field == 'memo'">
-                                <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                [matTooltip]="parsedText(rowData[col.field])" style="float: left" [innerHTML]="rowData[col.field]"></p>
                             </td>
                         </ng-container>
                         </tr>
@@ -2037,7 +2041,8 @@
                                         {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                     </td>
                                     <td class="table-column-width" *ngIf="col.field == 'memo'">
-                                        <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                        <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                        [matTooltip]="parsedText(rowData[col.field])" style="float: left" [innerHTML]="rowData[col.field]"></p>
                                     </td>
                                     </ng-container>
                                 </tr>
@@ -2355,7 +2360,7 @@
                                             <i class="fa fa-pencil contoel_v" style="font-size:12px !important" data-toggle="modal"
                                                 data-target="#textarea-popup2" matTooltip="Memo"
                                                 matTooltipPosition="above"
-                                                (click)="onAddDomesticMemo()"></i>
+                                                (click)="onAddInternationalmemo()"></i>
                                         </div>
                             </div>
                         </div>
@@ -2463,7 +2468,8 @@
                                     }}
                                   </td>
                                   <td class="table-column-width" *ngIf="col.field == 'memo'">
-                                      <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                      <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                      [matTooltip]="parsedText(rowData[col.field])" style="float: left" [innerHTML]="rowData[col.field]"></p>
                                   </td>
                                   </ng-container>
 
@@ -2717,7 +2723,8 @@
                                     ? 'black'
                                     : 'red'
                                 }">
-                            <p [innerHTML]="audit.memo"></p>
+                            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                            [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
                             </td>
                             <td style="text-align: center;">
                                 <span class="value">
@@ -2810,7 +2817,8 @@
                     <p style="vertical-align: top;">
                         <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
                         <span class="value">
-                          <p class="p-0 m-0 p_textEditor" [innerHTML]="interShippingViaView.memo"></p>
+                          <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                          [matTooltip]="parsedText(interShippingViaView.memo)" [innerHTML]="interShippingViaView.memo"></p>
                         </span>
                       </p>
                     <p>

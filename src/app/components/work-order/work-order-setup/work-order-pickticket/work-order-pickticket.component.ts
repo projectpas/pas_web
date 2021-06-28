@@ -24,7 +24,7 @@ import { StocklineViewComponent } from '../../../../shared/components/stockline/
 export class WorkOrderPickticketComponent implements OnInit {
   @Input() referenceId;
   isEnablePOList: any;
-  pickTickes: any[] = [];
+  pickTickes: any[] = []; 
   tempSales: any[] = [];
   pnViewSelected = false;
   selected: any;
@@ -105,10 +105,10 @@ export class WorkOrderPickticketComponent implements OnInit {
       { field: "qtyToShip", header: "Qty Picked", width: "130px" },
       { field: "qtyToPick", header: "Qty To Pick", width: "130px" },
       { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
-      { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
+      { field: "readyToPick", header: "Ready To Pick", width: "130px" },
       { field: "status", header: "Status", width: "130px" },
-      { field: "orderNumber", header: "SO Num", width: "130px" },
-      { field: "orderQuoteNumber", header: "SOQ Num", width: "130px" },
+      { field: "orderNumber", header: "WO Num", width: "130px" },
+      { field: "orderQuoteNumber", header: "WOQ Num", width: "130px" },
       { field: "customerName", header: "Customer Name", width: "130px" },
       { field: "customerCode", header: "Customer Code", width: "130px" },
     ];
@@ -117,8 +117,9 @@ export class WorkOrderPickticketComponent implements OnInit {
     this.pickTicketItemInterfaceheader = [
       { field: "partNumber", header: "PN", width: "100px" },
       { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
-      { field: "qtyOnHand", header: "Qty On Hand", width: "50px" },
+      { field: "qtyOnHand", header: "Qty On Hand", width: "130px" },
       { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
+      { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
       { field: "qtyToShip", header: "Qty To Pick", width: "100px" },
       { field: "serialNumber", header: "Serial Num", width: "100px" },
       { field: "stkLineManufacturer", header: "Manufacturer", width: "100px" },
@@ -260,6 +261,7 @@ export class WorkOrderPickticketComponent implements OnInit {
   parts: any[] = [];
   qtyToPick: number = 0;
   pickticketItemInterface(rowData, pickticketieminterface) {
+
     const itemMasterId = rowData.itemMasterId;
     const conditionId = rowData.conditionId;
     const workOrderId = rowData.workOrderId;
@@ -277,7 +279,7 @@ export class WorkOrderPickticketComponent implements OnInit {
           this.parts[i]['isSelected'] = false;
           this.parts[i]['workOrderId'] = workOrderId;
           this.parts[i]['workOrderMaterialsId'] = workOrderMaterialsId;
-          this.parts[i].qtyToShip = this.qtyToPick;
+          this.parts[i].qtyToShip = this.parts[i].qtyToPick;
           if (this.parts[i].qtyToReserve == 0) {
             this.parts[i].qtyToReserve = null
           }
@@ -324,16 +326,20 @@ export class WorkOrderPickticketComponent implements OnInit {
     for (let i = 0; i < parts.length; i++) {
       let selectedItem = parts[i];
       var errmessage = '';
-      if (selectedItem.qtyToShip > this.qtyToPick) {
+      if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
         this.isSpinnerVisible = false;
         invalidQty = true;
-        errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+        errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
       }
     }
     if (invalidQty) {
       this.isSpinnerVisible = false;
-      this.alertService.resetStickyMessage();
-      this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
+      this.alertService.stopLoadingMessage();
+      this.alertService.showMessage(
+        "",
+        errmessage,
+        MessageSeverity.error
+      );
     }
     else {
       this.disableSubmitButton = true;
@@ -408,4 +414,50 @@ export class WorkOrderPickticketComponent implements OnInit {
         this.isSpinnerVisible = false;
       });
   }
+  checkValid(selectedItem){
+    if(selectedItem && selectedItem.qtyToShip == undefined || selectedItem.qtyToShip == 0 ||  selectedItem.qtyToShip <= 0 ){
+      selectedItem.qtyToShip=selectedItem.qtyToPick;
+    }
+  }
+  onFocusOutEvent(objPickTicket: any){
+    let invalidQty = false;
+    let selectedItem = objPickTicket;
+    var errmessage = '';
+    if(selectedItem && selectedItem.qtyToShip == undefined || selectedItem.qtyToShip == 0 ||  selectedItem.qtyToShip <= 0 ){
+      selectedItem.qtyToShip=selectedItem.qtyToPick;
+    }
+    if (selectedItem.qtyToShip > selectedItem.qtyToPick) {
+        invalidQty = true;
+        selectedItem.qtyToShip=selectedItem.qtyToPick;
+        errmessage = errmessage + '<br />' + "You cannot pick more than Ready To Pick"
+    }            
+    if (invalidQty) {
+        this.alertService.showMessage(
+            'Work Order',
+            'You cannot pick more than Ready To Pick',
+            MessageSeverity.error
+        );
+    }
+ }
+ rowDataToDelete:any={}
+ delete(rowData) {
+  this.rowDataToDelete = rowData;
+}
+
+deleteWO() {
+  this.isSpinnerVisible = false;
+
+  this.workOrderService.deleteWoPickTicket(this.rowDataToDelete.pickTicketId,this.userName).subscribe(res => {
+      this.isSpinnerVisible = false;
+      this.alertService.showMessage("Success", `Records Was Deleted Successfully.`, MessageSeverity.success);
+      this.onSearch();
+
+  },err => {
+          this.isSpinnerVisible = false;
+      })
+}
+
+closeDeleteModal() {
+  $("#woDelete").modal("hide");
+}
 }

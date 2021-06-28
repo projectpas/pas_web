@@ -260,7 +260,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
     this.savedGeneralInformationData.discountId = 0;
     this.savedGeneralInformationData.markUpPercentageId = 0;
 
-    if (this.editMode) {     
+    if (this.editMode) {
       //this.id = this.editGeneralInformationData.customerId;
       this.customerGeneralInformation = this.editGeneralInformationData;
       this.savedGeneralInformationData = this.editGeneralInformationData;
@@ -268,13 +268,13 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.customerName = this.editGeneralInformationData.name;
       //if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {      
       if (this.customerGeneralInformation.isCustomerAlsoVendor == true) {
-         this.showAllowNettingOfAPAR = true;
-         this.savedGeneralInformationData.allowNettingOfAPAR = true;
-       } else {
-         this.showAllowNettingOfAPAR = false;
-         this.savedGeneralInformationData.allowNettingOfAPAR = false;
+        this.showAllowNettingOfAPAR = true;
+        this.savedGeneralInformationData.allowNettingOfAPAR = true;
+      } else {
+        this.showAllowNettingOfAPAR = false;
+        this.savedGeneralInformationData.allowNettingOfAPAR = false;
       }
-    } else {     
+    } else {
       this.savedGeneralInformationData.allowPartialBilling = true;
       this.savedGeneralInformationData.allowProformaBilling = true;
       this.customerGeneralInformation = this.savedGeneralInformationData;
@@ -316,7 +316,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
             if (this.id) {
               this.toGetDocumentsListNew(this.id);
               this.getFinanceInfoByCustomerId();
-            }            
+            }
 
             this.savedGeneralInformationData = {
               ...this.editGeneralInformationData,
@@ -422,8 +422,8 @@ export class CustomerFinancialInformationComponent implements OnInit {
   getAllPercentage() {
     //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
-      this.percentageList = res;      
-      this.percentageList.sort(function(a, b) {
+      this.percentageList = res;
+      this.percentageList.sort(function (a, b) {
         return parseFloat(a.label) - parseFloat(b.label);
       });
     }, error => { this.isSpinnerVisible = false });
@@ -433,7 +433,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
     //this.commonservice.smartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.taxRatesList = res;
-      this.taxRatesList.sort(function(a, b) {
+      this.taxRatesList.sort(function (a, b) {
         return parseFloat(a.label) - parseFloat(b.label);
       });
     }, error => { this.isSpinnerVisible = false });
@@ -581,7 +581,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
     //this.commonservice.smartDropDownList('[Discount]', 'DiscountId', 'DiscontValue').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.discountList1 = res;
-      this.discountList1.sort(function(a, b) {
+      this.discountList1.sort(function (a, b) {
         return parseFloat(a.label) - parseFloat(b.label);
       });
     }, error => { this.isSpinnerVisible = false });
@@ -722,19 +722,19 @@ export class CustomerFinancialInformationComponent implements OnInit {
   getMappedTaxTypeRateDetails() {
     this.isSpinnerVisible = true;
     this.customerService.getMappedTaxTypeRateDetails(this.id, this.currentDeletedstatus).subscribe((res) => {
-        res.map((element, index) => {
-          element.id = index + 1;
-        });
-        this.taxTypeRateMapping = res.map(x=>{
-          return {
-            ...x,
-            taxRate:x.taxRate ? this._decimalPipe.transform(x.taxRate,"1.2-2"):''
-          }
-        });
-        this.totalRecords = this.taxTypeRateMapping.length;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        this.isSpinnerVisible = false;
-      }, error => { this.isSpinnerVisible = false });
+      res.map((element, index) => {
+        element.id = index + 1;
+      });
+      this.taxTypeRateMapping = res.map(x => {
+        return {
+          ...x,
+          taxRate: x.taxRate ? this._decimalPipe.transform(x.taxRate, "1.2-2") : ''
+        }
+      });
+      this.totalRecords = this.taxTypeRateMapping.length;
+      this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+      this.isSpinnerVisible = false;
+    }, error => { this.isSpinnerVisible = false });
   }
 
   mapTaxTypeandRate() {
@@ -794,14 +794,14 @@ export class CustomerFinancialInformationComponent implements OnInit {
   updateTaxTypeandRate() {
     if (this.taxRateEditData.customerTaxTypeRateMappingId) {
       this.customerService.updateCustomerTaxTypeRate(this.taxRateEditData).subscribe((res) => {
-          this.taxRateEditData = undefined;
-          this.getMappedTaxTypeRateDetails();
-          this.alertService.showMessage(
-            'Success',
-            `Successfully Updated Tax Type and Tax Rate`,
-            MessageSeverity.success
-          );
-        }, error => { this.isSpinnerVisible = false });
+        this.taxRateEditData = undefined;
+        this.getMappedTaxTypeRateDetails();
+        this.alertService.showMessage(
+          'Success',
+          `Successfully Updated Tax Type and Tax Rate`,
+          MessageSeverity.success
+        );
+      }, error => { this.isSpinnerVisible = false });
     } else {
       const data = [
         ...this.taxTypeRateMapping.map((x) => {
@@ -841,8 +841,8 @@ export class CustomerFinancialInformationComponent implements OnInit {
   getAuditHistoryById(content, data) {
     const { customerTaxTypeRateMappingId } = data;
     this.customerService.getAuditHistoryForTaxType(customerTaxTypeRateMappingId).subscribe((res) => {
-        this.auditDataForTaxData = res;
-      }, error => { this.isSpinnerVisible = false });
+      this.auditDataForTaxData = res;
+    }, error => { this.isSpinnerVisible = false });
     this.modal = this.modalService.open(content, {
       size: 'sm',
       backdrop: 'static',
@@ -870,21 +870,20 @@ export class CustomerFinancialInformationComponent implements OnInit {
     },
       this.id
     ).subscribe((res) => {
-        this.onUploadDocumentListNew();
-        this.savedGeneralInformationData.customerFinancialId = res;
-        this.alertService.showMessage(
-          'Success',
-          ` ${
-          this.editModeFinance ? 'Updated' : 'Saved'
-          }  Customer Financial Information Sucessfully`,
-          MessageSeverity.success
-        );
-        this.getMappedTaxTypeRateDetails();
-        this.editModeFinance = true;
-        this.disableSave = true;
-        this.isSpinnerVisible = false;
-        //this.fininfoformdata.reset();
-      }, error => { this.isSpinnerVisible = false });
+      this.onUploadDocumentListNew();
+      this.savedGeneralInformationData.customerFinancialId = res;
+      this.alertService.showMessage(
+        'Success',
+        ` ${this.editModeFinance ? 'Updated' : 'Saved'
+        }  Customer Financial Information Sucessfully`,
+        MessageSeverity.success
+      );
+      this.getMappedTaxTypeRateDetails();
+      this.editModeFinance = true;
+      this.disableSave = true;
+      this.isSpinnerVisible = false;
+      //this.fininfoformdata.reset();
+    }, error => { this.isSpinnerVisible = false });
   }
 
   downloadFileUpload(rowData) {
@@ -925,10 +924,10 @@ export class CustomerFinancialInformationComponent implements OnInit {
   deleteConformationForFile(value) {
     if (value === 'Yes') {
       this.customerService.GetCustomerAttachmentDelete(
-          this.selectedRowFileForDelete.attachmentDetailId,
-          true,
-          this.userName
-        )
+        this.selectedRowFileForDelete.attachmentDetailId,
+        true,
+        this.userName
+      )
         .subscribe((res) => {
           this.alertService.showMessage(
             'Success',
@@ -1103,10 +1102,10 @@ export class CustomerFinancialInformationComponent implements OnInit {
     let user = this.userName;
     if (customerTaxRateMappingId > 0) {
       this.customerService.deleteCustomerTaxTypeRateById(customerTaxRateMappingId, true, user).subscribe(
-          (response) => {
-            this.saveCompleted('');
-            this.getMappedTaxTypeRateDetails();
-          },(error) => {this.currentUserMasterCompanyId});
+        (response) => {
+          this.saveCompleted('');
+          this.getMappedTaxTypeRateDetails();
+        }, (error) => { this.currentUserMasterCompanyId });
     } else {
       this.taxTypeRateMapping.splice(this.taxRateIndex, 1);
       this.totalRecords = this.taxTypeRateMapping.length;
@@ -1132,16 +1131,16 @@ export class CustomerFinancialInformationComponent implements OnInit {
     let user = this.userName;
     if (customerTaxRateMappingId > 0) {
       this.customerService.deleteCustomerTaxTypeRateById(customerTaxRateMappingId, false, user).subscribe(
-          (response) => {
-            this.alertService.showMessage(
-              'Success',
-              `Action was Restore successfully`,
-              MessageSeverity.success
-            );
-            this.getMappedTaxTypeRateDetails();
-          },
-          (error) => this.saveFailedHelper(error)
-        );
+        (response) => {
+          this.alertService.showMessage(
+            'Success',
+            `Action was Restore successfully`,
+            MessageSeverity.success
+          );
+          this.getMappedTaxTypeRateDetails();
+        },
+        (error) => this.saveFailedHelper(error)
+      );
     } else {
       this.taxTypeRateMapping.splice(this.taxRateIndex, 1);
       this.totalRecords = this.taxTypeRateMapping.length;
@@ -1181,7 +1180,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.tab.emit('Billing');
     }
     if (this.nextOrPreviousTab == 'Previous') {
-      this.tab.emit('Atachapter');
+      this.tab.emit('AircraftInfo');
     }
   }
 
@@ -1210,7 +1209,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         this.tab.emit('Billing');
       }
       if (this.nextOrPreviousTab == 'Previous') {
-        this.tab.emit('Atachapter');
+        this.tab.emit('AircraftInfo');
       }
       setTimeout(() => {
         this.stopmulticlicks = false;
@@ -1228,7 +1227,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.tab.emit('Billing');
     }
     if (this.nextOrPreviousTab == 'Previous') {
-      this.tab.emit('Atachapter');
+      this.tab.emit('AircraftInfo');
     }
   }
 
@@ -1419,13 +1418,13 @@ export class CustomerFinancialInformationComponent implements OnInit {
     let attachmentDetailId = this.selectedRowForDelete.attachmentDetailId;
     if (attachmentDetailId > 0) {
       this.commonservice.GetAttachmentDeleteById(attachmentDetailId, this.userName).subscribe((res) => {
-          this.toGetDocumentsListNew(this.id);
-          this.alertService.showMessage(
-            'Success',
-            `Deleted Attachment  Successfully`,
-            MessageSeverity.success
-          );
-        }, error => { this.isSpinnerVisible = false });
+        this.toGetDocumentsListNew(this.id);
+        this.alertService.showMessage(
+          'Success',
+          `Deleted Attachment  Successfully`,
+          MessageSeverity.success
+        );
+      }, error => { this.isSpinnerVisible = false });
     } else {
       this.allCustomerFinanceDocumentsList.splice(this.rowIndex, 1);
       this.totalRecordNew = this.allCustomerFinanceDocumentsList.length;

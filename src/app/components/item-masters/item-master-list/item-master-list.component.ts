@@ -8,26 +8,22 @@
 import { Router, ActivatedRoute } from "@angular/router";
 import { MenuItem } from "primeng/api"; //bread crumb
 import { ItemMasterService } from "../../../services/itemMaster.service";
-import { fadeInOut } from "../../../services/animations";
-import { AuthService } from "../../../services/auth.service";
-import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { MasterComapnyService } from "../../../services/mastercompany.service";
-import { MasterCompany } from "../../../models/mastercompany.model";
-import { AlertService, MessageSeverity } from "../../../services/alert.service";
-import { CommonService } from "../../../services/common.service";
-import { Currency } from "../../../models/currency.model";
-import { ItemMasterLoanExchange } from "../../../models/item-master-loan-exchange.model";
-import { CurrencyService } from "../../../services/currency.service";
+import { fadeInOut } from '../../../services/animations';
+import { AuthService } from '../../../services/auth.service';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MasterComapnyService } from '../../../services/mastercompany.service';
+import { MasterCompany } from '../../../models/mastercompany.model';
+import { AlertService, MessageSeverity } from '../../../services/alert.service';
+import { CommonService } from '../../../services/common.service';
+import { Currency } from '../../../models/currency.model';
+import { ItemMasterLoanExchange } from '../../../models/item-master-loan-exchange.model';
+import { CurrencyService } from '../../../services/currency.service';
 declare var $: any;
-import {
-  getValueFromArrayOfObjectById,
-  listSearchFilterObjectCreation,
-  formatNumberAsGlobalSettingsModule,
-} from "../../../generic/autocomplete";
-import { AtaSubChapter1Service } from "../../../services/atasubchapter1.service";
-import { TableModule, Table } from "primeng/table";
-import { DatePipe } from "@angular/common";
-import * as moment from "moment";
+import { getValueFromArrayOfObjectById, listSearchFilterObjectCreation, formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
+import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
+import { TableModule, Table } from 'primeng/table';
+import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 import {
   ModuleConstants,
   PermissionConstants,
@@ -43,7 +39,7 @@ import { Permission } from "src/app/models/permission.model";
 })
 /** item-master-list component*/
 export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterContentChecked {
-	ItemMasterList:string="Item Master List";
+	ItemMasterList: string = "Item Master List";
 	public isCollapsed = false;
 	private table: Table;
 	isSpinnerVisible: Boolean = false;
@@ -103,151 +99,150 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	updatedDate: any = "";
 	deletePartDesc: any = "";
 
-  EquipmentView: boolean = false;
-  partdescription: any = "";
-  itemClassificationCode: any = "";
-  isActive: any = "";
-  currencyId: any = "";
-  exportCurrencyId: any = "";
-  discountPurchasePercent: any = "";
-  unitCost: any = "";
-  listPrice: any = "";
-  priceDate: any = "";
-  descriptionName: any = "";
-  manufacturingDays: any;
-  salesMarkUpOnListPrice: any = "";
-  EquipmentAdd: boolean = false;
-  EquipmentUpdate: boolean = false;
-  NonstockDelete: boolean = false;
-  selectedColumns1: any[];
-  cols1: any[];
-  cols2: any[];
-  selectedstockColumn: any[];
-  selectedNonstockColumn: any[];
-  selectedEquipmentColumn: any[];
-  selectedColumns2: any[];
-  getSelectedCollection: any;
-  NonstockView: boolean = false;
-  NonstockAdd: boolean = false;
-  priorityId: any;
-  memo: any;
-  exportWeight: any;
-  exportValue: any;
-  exportSizeLength: any;
-  exportClassificationId: any;
-  description: any;
-  exportSizeWidth: any;
-  exportSizeHeight: any;
-  orginalAtaSubChapterValues: any = [];
-  NonstockUpdate: boolean = false;
-  Delete: boolean = false;
-  View: boolean = false;
-  Add: boolean = false;
-  Update: boolean = false;
-  allRolesInfo: any[] = [];
-  activeIndex: number;
-  rowDataToDelete: any = {};
-  rowDataToDeleteStock: any = {};
-  sourceItemMaster: any;
-  allEquipmentInfo: any[];
-  allNonstockInfo: any[] = [];
-  loanTable: boolean;
-  exchangeTable: any;
-  equipmentTable: boolean;
-  nonStockTable: boolean;
-  public sourceAction: any = {};
-  stockTable: boolean;
-  radioButtonValue: string = "Stock";
-  cols: any[];
-  allStockInfo: any[] = [];
-  selectedColumns: any[];
-  loadingIndicator: boolean;
-  dataSource: any;
-  allActions: any[];
-  selectedColumn: any;
-  modal: NgbModalRef;
-  isEditMode: boolean;
-  isSaving: boolean;
-  itemName: string;
-  allUploadedDocumentsList: any = [];
-  aircraftListDataValues: any = [];
-  ataMappedList: any = [];
-  allItemMasterCapsList: any[] = [];
-  pnCols: any[];
-  ntaeTableColumns: any[];
-  ntaeData: any = [];
-  ntaeData2: any = [];
-  ntaeData3: any = [];
-  ntaeData4: any = [];
-  filterManufacturerData: any = [];
-  filterDiscriptionData: any = [];
-  filterPartItemClassificationData: any = [];
-  showExchange: boolean = false;
-  showLoan: boolean = false;
-  exchangeCurrencies: Currency[];
-  loanCurrencies: Currency[];
-  currentItem: ItemMasterLoanExchange;
-  displayName: string;
-  displayNameLoan: string;
-  exchangeListPrice: any;
-  loanFees: any;
-  loanCorePrice: any;
-  loanOutrightPrice: any;
-  exchangeCorePrice: any;
-  exchangeOverhaulPrice: any;
-  exchangeOutrightPrice: any;
-  exchangeCoreCost: any;
-  pageSize: number = 10;
-  totalRecords: number = 0;
-  totalPages: number = 0;
-  itemMasterData: any = {};
-  ataChapterId: any;
-  viewAircraftData: any = {};
-  aircraftauditHistory: any = [];
-  itemMasterId: number;
-  isEnableItemMasterView: boolean = true;
-  isViewItemMasterNHA: boolean = true;
-  isViewItemMasterTLA: boolean = true;
-  isViewItemMasterAlternate: boolean = true;
-  isViewItemMasterEquivalency: boolean = true;
-  purchaseSalesInfo: any = [];
-  exchangeLoanInfo: any = {};
-  viewItemMasterNS: any = {};
-  lazyLoadEventData: any;
-  pageIndex: number = 0;
-  filteredText: string;
-  stockTableColumns: any[];
-  lazyLoadEventDataForNonStock: any;
-  pageIndexNonStock: number;
-  pageSizeNonStock: any;
-  nonStockTableColumns: any[];
-  totalRecordsNonStock: any;
-  totalPagesNonStock: number;
-  nonStockPageSize: number = 10;
-  exportDataTable: any;
-  dateObject: any = {};
-  searchData = {
-    partNo: "",
-    description: "",
-    wildCardSearch: "",
-    stockType: "",
-    hazardousMaterial: "",
-    listPrice: "",
-  };
-  copyAllStockInfo: any[];
-  partCollection: any[];
-  itemclaColl: any[];
-  allPartnumbersInfo: any;
-  disableSavePartName: boolean;
-  selectedActionName: any;
-  itemser: any;
-  disableSavepartDescription: boolean;
-  descriptionbyPart: any;
-  sourceActions: any;
-  descriptionCollection: any[];
-  itemdescription: any[];
-  allCountryInfo: any[];
-  isOpenAdvancedSearch: boolean;
+	EquipmentView: boolean = false;
+	partdescription: any = "";
+	itemClassificationCode: any = "";
+	isActive: any = "";
+	currencyId: any = "";
+	exportCurrencyId: any = ""
+	discountPurchasePercent: any = "";
+	unitCost: any = "";
+	listPrice: any = "";
+	priceDate: any = "";
+	descriptionName: any = "";
+	manufacturingDays: any;
+	salesMarkUpOnListPrice: any = "";
+	EquipmentAdd: boolean = false;
+	EquipmentUpdate: boolean = false;
+	NonstockDelete: boolean = false;
+	selectedColumns1: any[];
+	cols1: any[];
+	cols2: any[];
+	selectedstockColumn: any[];
+	selectedNonstockColumn: any[];
+	selectedEquipmentColumn: any[];
+	selectedColumns2: any[];
+	getSelectedCollection: any;
+	NonstockView: boolean = false;
+	NonstockAdd: boolean = false; priorityId: any;
+	memo: any;
+	exportWeight: any;
+	exportValue: any;
+	exportSizeLength: any;
+	exportClassificationId: any;
+	description: any;
+	exportSizeWidth: any;
+	exportSizeHeight: any;
+	orginalAtaSubChapterValues: any = [];
+	NonstockUpdate: boolean = false;
+	Delete: boolean = false;
+	View: boolean = false;
+	Add: boolean = false;
+	Update: boolean = false;
+	allRolesInfo: any[] = [];
+	activeIndex: number;
+	rowDataToDelete: any = {};
+	rowDataToDeleteStock: any = {};
+	sourceItemMaster: any;
+	allEquipmentInfo: any[];
+	allNonstockInfo: any[] = [];
+	loanTable: boolean;
+	exchangeTable: any;
+	equipmentTable: boolean;
+	nonStockTable: boolean;
+	public sourceAction: any = {};
+	stockTable: boolean;
+	radioButtonValue: string = "Stock";
+	cols: any[];
+	allStockInfo: any[] = [];
+	selectedColumns: any[];
+	loadingIndicator: boolean;
+	dataSource: any;
+	allActions: any[];
+	selectedColumn: any;
+	modal: NgbModalRef;
+	isEditMode: boolean;
+	isSaving: boolean;
+	itemName: string;
+	allUploadedDocumentsList: any = [];
+	aircraftListDataValues: any = [];
+	ataMappedList: any = [];
+	allItemMasterCapsList: any[] = [];
+	pnCols: any[];
+	ntaeTableColumns: any[];
+	ntaeData: any = [];
+	ntaeData2: any = [];
+	ntaeData3: any = [];
+	ntaeData4: any = [];
+	filterManufacturerData: any = [];
+	filterDiscriptionData: any = [];
+	filterPartItemClassificationData: any = [];
+	showExchange: boolean = false;
+	showLoan: boolean = false;
+	exchangeCurrencies: Currency[];
+	loanCurrencies: Currency[];
+	currentItem: ItemMasterLoanExchange;
+	displayName: string;
+	displayNameLoan: string;
+	exchangeListPrice: any;
+	loanFees: any;
+	loanCorePrice: any;
+	loanOutrightPrice: any;
+	exchangeCorePrice: any;
+	exchangeOverhaulPrice: any;
+	exchangeOutrightPrice: any;
+	exchangeCoreCost: any;
+	pageSize: number = 10;
+	totalRecords: number = 0;
+	totalPages: number = 0;
+	itemMasterData: any = {};
+	ataChapterId: any;
+	viewAircraftData: any = {};
+	aircraftauditHistory: any = [];
+	itemMasterId: number;
+	isEnableItemMasterView: boolean = true;
+	isViewItemMasterNHA: boolean = true;
+	isViewItemMasterTLA: boolean = true;
+	isViewItemMasterAlternate: boolean = true;
+	isViewItemMasterEquivalency: boolean = true;
+	purchaseSalesInfo: any = [];
+	exchangeLoanInfo: any = {};
+	viewItemMasterNS: any = {};
+	lazyLoadEventData: any;
+	pageIndex: number = 0;
+	filteredText: string;
+	stockTableColumns: any[];
+	lazyLoadEventDataForNonStock: any;
+	pageIndexNonStock: number;
+	pageSizeNonStock: any;
+	nonStockTableColumns: any[];
+	totalRecordsNonStock: any;
+	totalPagesNonStock: number;
+	nonStockPageSize: number = 10;
+	exportDataTable: any;
+	dateObject: any = {};
+	searchData = {
+		partNo: '',
+		description: '',
+		wildCardSearch: '',
+		stockType: '',
+		hazardousMaterial: '',
+		listPrice: ''
+	};
+	copyAllStockInfo: any[];
+	partCollection: any[];
+	itemclaColl: any[];
+	allPartnumbersInfo: any;
+	disableSavePartName: boolean;
+	selectedActionName: any;
+	itemser: any;
+	disableSavepartDescription: boolean;
+	descriptionbyPart: any;
+	sourceActions: any;
+	descriptionCollection: any[];
+	itemdescription: any[];
+	allCountryInfo: any[];
+	isOpenAdvancedSearch: boolean;
 
   allDocumentsList: any = [];
 
@@ -391,28 +386,28 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 		this.cols = [
 			{ field: 'partNumber', header: 'PN' },
-			{ field: 'partDescription', header: 'PN Description' },
+			{ field: 'partDescription', header: 'PN Description',width:"200px" },
 			{ field: 'manufacturerdesc', header: 'Manufacturer' },
-			{ field: 'itemType', header: 'Item Type'},
-			{ field: 'stockType', header: 'Stock Type' },
+			{ field: 'itemType', header: 'Item Type',width:"100px" },
+			{ field: 'stockType', header: 'Stock Type',width:"100px" },
 			{ field: 'classificationdesc', header: 'Classification' },
 			{ field: 'itemGroup', header: 'Group Name' },
-			{ field: 'isSerialized', header: 'Serialized' },
-			{ field: 'isTimeLife', header: 'Time Life' },
+			{ field: 'isSerialized', header: 'Serialized',width:"100px" },
+			{ field: 'isTimeLife', header: 'Time Life',width:"100px" },
 			{ field: 'nationalStockNumber', header: 'NSN' },
 			{ field: 'createdDate', header: 'Created Date' },
 			{ field: 'createdBy', header: 'Created By' },
 			{ field: 'updatedDate', header: 'Updated Date' },
 			{ field: 'updatedBy', header: 'Updated By' },
-			
+
 		];
 		this.cols1 = [
 			{ field: 'partNumber', header: 'PN' },
-			{ field: 'partDescription', header: 'Description' },
+			{ field: 'partDescription', header: 'Description',width:"200px" },
 			{ field: 'isHazardousMaterial', header: 'Is Hazardous Material' },
 			{ field: 'manufacturerdesc', header: 'Manufacturer' },
-			{ field: 'unitCost', header: 'Unit Cost' },
-			{ field: 'listPrice', header: 'List Price' },
+			{ field: 'unitCost', header: 'Unit Cost',width:"90px" },
+			{ field: 'listPrice', header: 'List Price',width:"90px" },
 			{ field: 'createdDate', header: 'Created Date' },
 			{ field: 'createdBy', header: 'Created By' },
 			{ field: 'updatedDate', header: 'Updated Date' },
@@ -420,28 +415,28 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		];
 	}
 
-	openHist(rowData) {	
+	openHist(rowData) {
 		this.isSpinnerVisible = true;
 		this.itemMasterService.getAuditHistory(rowData.itemMasterId).subscribe(data => {
 			this.auditHistory = data;
 			this.isSpinnerVisible = false;
-        }, err => {
-            this.isSpinnerVisible = false;
-        });
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
 	}
 
-    getColorCodeForHistoryItemMaster(i, field, value) {
-        const data = this.auditHistory;
-        const dataLength = data.length;
-        if (i >= 0 && i <= dataLength) {
-            if ((i + 1) === dataLength) {
-                return true;
-            } else {
-                return data[i + 1][field] === value
-            }
-        }
-    }
-	
+	getColorCodeForHistoryItemMaster(i, field, value) {
+		const data = this.auditHistory;
+		const dataLength = data.length;
+		if (i >= 0 && i <= dataLength) {
+			if ((i + 1) === dataLength) {
+				return true;
+			} else {
+				return data[i + 1][field] === value
+			}
+		}
+	}
+
 	openEdit(row) {
 		const { itemMasterId } = row;
 		this.activeIndex = 0;
@@ -518,98 +513,97 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     );
   }
 
-  get currentUserMasterCompanyId(): number {
-    return this.authService.currentUser
-      ? this.authService.currentUser.masterCompanyId
-      : null;
-  }
+	get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
 
   ngAfterViewInit() {}
 
-  public onRadioChange(val: any) {
-    this.currentDeletedstatus = false;
-    this.status = "active";
-    this.currentstatus = "active";
-    this.isOpenAdvancedSearch = false;
-    this.clearAdvanceSerchData();
-    if (val == 0) {
-      this.radioButtonValue = "Stock";
-      this.stockTable = true;
-      this.nonStockTable = false;
-      this.equipmentTable = false;
-      this.exchangeTable = false;
-      this.loanTable = false;
-      this.searchData.stockType = "Stock";
-    } else if (val == 1) {
-      this.radioButtonValue = "Non-stock";
-      this.stockTable = false;
-      this.nonStockTable = true;
-      this.equipmentTable = false;
-      this.exchangeTable = false;
-      this.loanTable = false;
-      this.searchData.stockType = "Non-stock";
-    } else if (val == 2) {
-      this.radioButtonValue = "Equipment";
-      this.stockTable = false;
-      this.nonStockTable = false;
-      this.equipmentTable = true;
-      this.exchangeTable = false;
-      this.loanTable = false;
-      this.searchData.stockType = "Equipment";
-    } else if (val == 3) {
-      this.radioButtonValue = "Exchange";
-      this.stockTable = false;
-      this.nonStockTable = false;
-      this.equipmentTable = false;
-      this.exchangeTable = true;
-      this.loanTable = false;
-    } else if (val == 4) {
-      this.radioButtonValue = "Loan";
-      this.stockTable = false;
-      this.nonStockTable = false;
-      this.equipmentTable = false;
-      this.exchangeTable = false;
-      this.loanTable = true;
-    }
-  }
+	public onRadioChange(val: any) {
+		this.currentDeletedstatus = false;
+		this.status = 'active';
+		this.currentstatus = 'active';
+		this.isOpenAdvancedSearch = false;
+		this.clearAdvanceSerchData();
+		if (val == 0) {
+			this.radioButtonValue = "Stock";
+			this.stockTable = true;
+			this.nonStockTable = false;
+			this.equipmentTable = false;
+			this.exchangeTable = false;
+			this.loanTable = false;
+			this.searchData.stockType = 'Stock';
+		}
+		else if (val == 1) {
+			this.radioButtonValue = "Non-stock";
+			this.stockTable = false;
+			this.nonStockTable = true;
+			this.equipmentTable = false;
+			this.exchangeTable = false;
+			this.loanTable = false;
+			this.searchData.stockType = 'Non-stock';
 
-  public loadStockData(event, dt?) {
-    this.isSpinnerVisible = true;
-    this.lazyLoadEventData = event;
-    this.lazyLoadEventDataInputStock = event;
-    this.lazyLoadEventDataInputStock.filters = {
-      ...this.lazyLoadEventData.filters,
-      status: this.currentstatus ? this.currentstatus : "active",
-    };
-    event.filters.isDeleted = this.currentDeletedstatus ? true : false;
-    event.filters.status = this.currentstatus ? this.currentstatus : "active";
-    this.pageIndex = parseInt(event.first) / event.rows;
-    this.pageSize = event.rows;
-    event.first = this.pageIndex;
-    this.loadingIndicator = true;
-    if (event.globalFilter == null) {
-      event.globalFilter = "";
-    }
-    let PagingData = {
-      ...this.lazyLoadEventData,
-      filters: listSearchFilterObjectCreation(this.lazyLoadEventData.filters),
-    };
-    PagingData.filters.isHazardousMaterial =
-      this.searchData.hazardousMaterial === "Yes"
-        ? true
-        : this.searchData.hazardousMaterial === "No"
-        ? false
-        : "";
+		}
+		else if (val == 2) {
+			this.radioButtonValue = "Equipment";
+			this.stockTable = false;
+			this.nonStockTable = false;
+			this.equipmentTable = true;
+			this.exchangeTable = false;
+			this.loanTable = false;
+			this.searchData.stockType = 'Equipment';
 
-    if (this.radioButtonValue.toLowerCase() == "non-stock") {
-      this.getItemsListNonStock(PagingData);
-    } else {
-      this.getItemsListStock(PagingData);
-    }
-  }
+		}
+		else if (val == 3) {
+			this.radioButtonValue = "Exchange";
+			this.stockTable = false;
+			this.nonStockTable = false;
+			this.equipmentTable = false;
+			this.exchangeTable = true;
+			this.loanTable = false;
+		}
+		else if (val == 4) {
+			this.radioButtonValue = "Loan";
+			this.stockTable = false;
+			this.nonStockTable = false;
+			this.equipmentTable = false;
+			this.exchangeTable = false;
+			this.loanTable = true;
+		}
+	}
 
-	getItemsListStock(PagingData){
-		let Stock=[];
+	public loadStockData(event, dt?) {
+		this.isSpinnerVisible = true;
+		this.lazyLoadEventData = event;
+		this.lazyLoadEventDataInputStock = event;
+		this.lazyLoadEventDataInputStock.filters = {
+			...this.lazyLoadEventData.filters,
+			status: this.currentstatus ? this.currentstatus : 'active'
+		}
+		event.filters.isDeleted = this.currentDeletedstatus ? true : false;
+		event.filters.status = this.currentstatus ? this.currentstatus : 'active';
+		this.pageIndex = parseInt(event.first) / event.rows;
+		this.pageSize = event.rows;
+		event.first = this.pageIndex;
+		this.loadingIndicator = true;
+		if (event.globalFilter == null) {
+			event.globalFilter = ""
+		}
+		let PagingData = { ...this.lazyLoadEventData, filters: listSearchFilterObjectCreation(this.lazyLoadEventData.filters) }
+		PagingData.filters.isHazardousMaterial = this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : "")
+
+		if (this.radioButtonValue.toLowerCase() == "non-stock") {
+			this.getItemsListNonStock(PagingData)
+		}
+		else {
+			this.getItemsListStock(PagingData)
+		}
+	}
+
+	getItemsListStock(PagingData) {
+		let Stock = [];
 		this.isSpinnerVisible = true;
 		PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
 		this.itemMasterService.getItemMasterStockListData(PagingData).subscribe(
@@ -618,90 +612,81 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				this.nonStockTable = false;
 				this.stockTableColumns = this.cols;
 				this.loadingIndicator = false;
-				 this.allStockInfo= results[0]['results'].map(x => {
+				this.allStockInfo = results[0]['results'].map(x => {
 					return {
 						...x,
 						isTimeLife: x.isTimeLife == "1" ? 'true' : 'false',
 						isSerialized: x.isSerialized == "1" ? 'true' : 'false'
 					}
 				});
-				this.allStockInfoOriginal=this.allStockInfo
+				this.allStockInfoOriginal = this.allStockInfo
 				this.totalRecords = results[0]['totalRecordsCount']
 				this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 				this.isSpinnerVisible = false;
 			},
-			error => {this.isSpinnerVisible = false}
+			error => { this.isSpinnerVisible = false }
 		);
 	}
-	filterdata(value,field){
-		if(value!=''){
+	filterdata(value, field) {
+		if (value != '') {
 			this.allStockInfo = this.allStockInfoOriginal;
 			const data = [...this.allStockInfo.filter(x => {
-				if (x.isTimeLife==value && field === 'isTimeLife') {
+				if (x.isTimeLife == value && field === 'isTimeLife') {
 					return x;
-				} else if (x.isSerialized==value && field === 'isSerialized') {
+				} else if (x.isSerialized == value && field === 'isSerialized') {
 					return x;
 				}
 			})]
-			this.allStockInfo=data;
+			this.allStockInfo = data;
 		}
-		else{
-			this.allStockInfo=this.allStockInfoOriginal;
+		else {
+			this.allStockInfo = this.allStockInfoOriginal;
 		}
-		
+
 	}
 
-  getItemsListNonStock(PagingData) {
-    this.isSpinnerVisible = true;
-    PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
-    this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
-      (results) => {
-        this.nonStockTable = true;
-        this.stockTable = false;
-        this.nonStockTableColumns = this.cols1;
-        this.loadingIndicator = false;
-        this.allNonstockInfo = results[0]["results"].map((x) => {
-          return {
-            ...x,
-            unitCost: x.unitCost
-              ? formatNumberAsGlobalSettingsModule(x.unitCost, 2)
-              : "0.00",
-            listPrice: x.listPrice
-              ? formatNumberAsGlobalSettingsModule(x.listPrice, 2)
-              : "0.00",
-            isHazardousMaterial:
-              x.isHazardousMaterial == "1" ? "true" : "false",
-          };
-        });
-        this.totalRecordsNonStock = results[0]["totalRecordsCount"];
-        this.totalPagesNonStock = Math.ceil(
-          this.totalRecordsNonStock / this.nonStockPageSize
-        );
-        this.isSpinnerVisible = false;
-      },
-      (error) => {
-        this.isSpinnerVisible = false;
-      }
-    );
-  }
+	getItemsListNonStock(PagingData) {
+		this.isSpinnerVisible = true;
+		PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
+		this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
+			results => {
+				this.nonStockTable = true;
+				this.stockTable = false;
+				this.nonStockTableColumns = this.cols1;
+				this.loadingIndicator = false;
+				this.allNonstockInfo = results[0]['results'].map(x => {
+					return {
+						...x,
+						unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+						listPrice: x.listPrice ? formatNumberAsGlobalSettingsModule(x.listPrice, 2) : '0.00',
+						isHazardousMaterial: x.isHazardousMaterial == "1" ? 'true' : 'false'
+					}
+				});
+				this.totalRecordsNonStock = results[0]['totalRecordsCount']
+				this.totalPagesNonStock = Math.ceil(this.totalRecordsNonStock / this.nonStockPageSize);
+				this.isSpinnerVisible = false;
+			},
+			error => { this.isSpinnerVisible = false }
+		);
+	}
 
-  public loadNonStockData(event) {
-    this.isSpinnerVisible = true;
-    this.lazyLoadEventDataForNonStock = event;
-    this.lazyLoadEventDataInputNonStock = event;
-    this.lazyLoadEventDataInputNonStock.filters = {
-      ...this.lazyLoadEventDataForNonStock.filters,
-      status: this.currentstatus ? this.currentstatus : "active",
-    };
-    event.filters.isDeleted = this.currentDeletedstatus ? true : false;
-    event.filters.status = this.currentstatus ? this.currentstatus : "active";
-    this.pageIndexNonStock = parseInt(event.first) / event.rows;
-    this.nonStockPageSize = event.rows;
-    event.first = this.pageIndexNonStock;
-    this.loadingIndicator = true;
-    if (event.globalFilter == null) {
-      event.globalFilter = "";
-    }
+	public loadNonStockData(event) {
+		this.isSpinnerVisible = true;
+		this.lazyLoadEventDataForNonStock = event;
+		this.lazyLoadEventDataInputNonStock = event;
+		this.lazyLoadEventDataInputNonStock.filters = {
+			...this.lazyLoadEventDataForNonStock.filters,
+			status: this.currentstatus ? this.currentstatus : 'active'
+		}
+		event.filters.isDeleted = this.currentDeletedstatus ? true : false;
+		event.filters.status = this.currentstatus ? this.currentstatus : 'active';
+		this.pageIndexNonStock = parseInt(event.first) / event.rows;
+		this.nonStockPageSize = event.rows;
+		event.first = this.pageIndexNonStock
+		this.loadingIndicator = true;
+		if (event.globalFilter == null) {
+			event.globalFilter = ""
+		}
 
     const PagingData = {
       ...this.lazyLoadEventDataForNonStock,
@@ -715,13 +700,11 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
   private loadRolesData() {
     this.loadingIndicator = true;
 
-    this.itemMasterService.getRolesData().subscribe(
-      (results) => this.onRolesLoadSuccessfull(results[0]),
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+		this.itemMasterService.getRolesData().subscribe(
+			results => this.onRolesLoadSuccessfull(results[0]),
+			error => { this.loadingIndicator = false }
+		);
+	}
 
   private onDataLoadSuccessful(allWorkFlows: any[]) {
     this.loadingIndicator = false;
@@ -885,18 +868,18 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     { field: "memo", header: "Memo" },
   ];
 
-  alterTableColumns: any[] = [
-    { field: "altPartNo", header: "PN" },
-    { field: "altPartDescription", header: "Description" },
-    { field: "manufacturer", header: "Manufacturer " },
-  ];
+	alterTableColumns: any[] = [
+		{ field: "altPartNo", header: "PN" },
+		{ field: "altPartDescription", header: "Description" },
+		{ field: "manufacturer", header: "Manufacturer " }
+	];
 
-  equivalencyTableColumns: any[] = [
-    { field: "altPartNo", header: "PN" },
-    { field: "altPartDescription", header: "Description" },
-    { field: "manufacturer", header: "Manufacturer " },
-    { field: "itemClassification", header: "ITEM CLASSIFICATION " },
-  ];
+	equivalencyTableColumns: any[] = [
+		{ field: "altPartNo", header: "PN" },
+		{ field: "altPartDescription", header: "Description" },
+		{ field: "manufacturer", header: "Manufacturer " },
+		{ field: "itemClassification", header: "ITEM CLASSIFICATION " },
+	];
 
   get userName(): string {
     return this.authService.currentUser
@@ -904,93 +887,73 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
       : "";
   }
 
-  deleteItemAndCloseModel() {
-    this.isSpinnerVisible = true;
-    this.isSaving = true;
-    this.isDeleteMode = true;
-    this.sourceItemMaster.isdelete = false;
-    this.sourceItemMaster.updatedBy = this.userName;
-    if (this.stockTable) {
-      this.itemMasterService
-        .updaateEquipmentDelete(this.sourceItemMaster.itemMasterId)
-        .subscribe((data) => {
-          this.geListByStatus(this.currentstatus);
-          this.isSpinnerVisible = false;
-          this.alertService.showMessage(
-            "Success",
-            `Item Was Deleted Successfully `,
-            MessageSeverity.success
-          );
-          this.saveCompleted(this.sourceItemMaster);
-        });
-    }
-    if (this.nonStockTable) {
-      this.itemMasterService
-        .updateDeleteStatusNonStock(this.sourceItemMaster.itemMasterId)
-        .subscribe((data) => {
-          this.geListByStatus(this.currentstatus);
-          this.isSpinnerVisible = false;
-          this.alertService.showMessage(
-            "Success",
-            `Item Was Deleted Successfully `,
-            MessageSeverity.success
-          );
-          this.saveCompleted(this.sourceItemMaster);
-        });
-    }
-    this.modal.close();
-  }
+	deleteItemAndCloseModel() {
+		this.isSpinnerVisible = true;
+		this.isSaving = true;
+		this.isDeleteMode = true;
+		this.sourceItemMaster.isdelete = false;
+		this.sourceItemMaster.updatedBy = this.userName;
+		if (this.stockTable) {
+			this.itemMasterService.updaateEquipmentDelete(this.sourceItemMaster.itemMasterId).subscribe(
+				data => {
+					this.geListByStatus(this.currentstatus);
+					this.isSpinnerVisible = false;
+					this.alertService.showMessage("Success", `Item Was Deleted Successfully `, MessageSeverity.success)
+					this.saveCompleted(this.sourceItemMaster);
+				});
+		}
+		if (this.nonStockTable) {
+			this.itemMasterService.updateDeleteStatusNonStock(this.sourceItemMaster.itemMasterId).subscribe(
+				data => {
+					this.geListByStatus(this.currentstatus);
+					this.isSpinnerVisible = false;
+					this.alertService.showMessage("Success", `Item Was Deleted Successfully `, MessageSeverity.success)
+					this.saveCompleted(this.sourceItemMaster);
+				});
+		}
+		this.modal.close();
+	}
 
-  openDelete(content, row) {
-    this.isEditMode = false;
-    this.isDeleteMode = true;
-    this.sourceItemMaster = row;
-    this.deletePartDesc = row.partNumber + " - " + row.partDescription;
-    this.modal = this.modalService.open(content, {
-      size: "sm",
-      backdrop: "static",
-      keyboard: false,
-    });
-  }
+	openDelete(content, row) {
+		this.isEditMode = false;
+		this.isDeleteMode = true;
+		this.sourceItemMaster = row;
+		this.deletePartDesc = row.partNumber + ' - ' + row.partDescription;
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+	}
 
-  private nonstockList() {
-    this.loadingIndicator = true;
-    this.itemMasterService.getItemNonstockList().subscribe(
-      (results) => this.onitemnonstockSuccessful(results[0]),
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+	private nonstockList() {
+		this.loadingIndicator = true;
+		this.itemMasterService.getItemNonstockList().subscribe(
+			results => this.onitemnonstockSuccessful(results[0]),
+			error => { this.loadingIndicator = false }
+		);
+	}
 
   private onitemnonstockSuccessful(allWorkFlows: any[]) {
     this.loadingIndicator = false;
     this.allNonstockInfo = allWorkFlows;
   }
 
-  private StockList() {
-    this.loadingIndicator = true;
-    this.itemMasterService.getItemeStockList().subscribe(
-      (results) => this.onitemStockSuccessful(results[0]),
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+	private StockList() {
+		this.loadingIndicator = true;
+		this.itemMasterService.getItemeStockList().subscribe(
+			results => this.onitemStockSuccessful(results[0]),
+			error => { this.loadingIndicator = false }
+		);
+	}
 
   private onitemStockSuccessful(allWorkFlows: any[]) {
     this.loadingIndicator = false;
   }
 
-  private EuipmentList() {
-    this.loadingIndicator = true;
-    this.itemMasterService.getItemEquipmentList().subscribe(
-      (results) => this.onitemequipmntSuccessful(results[0]),
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+	private EuipmentList() {
+		this.loadingIndicator = true;
+		this.itemMasterService.getItemEquipmentList().subscribe(
+			results => this.onitemequipmntSuccessful(results[0]),
+			error => { this.loadingIndicator = false }
+		);
+	}
 
   private onitemequipmntSuccessful(allWorkFlows: any[]) {
     this.loadingIndicator = false;
@@ -1007,13 +970,11 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     this.alertService.startLoadingMessage();
     this.loadingIndicator = true;
 
-    this.masterComapnyService.getMasterCompanies().subscribe(
-      (results) => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+		this.masterComapnyService.getMasterCompanies().subscribe(
+			results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
+			error => { this.loadingIndicator = false }
+		);
+	}
 
   private onDataMasterCompaniesLoadSuccessful(allStockInfo: MasterCompany[]) {
     this.alertService.stopLoadingMessage();
@@ -1026,230 +987,132 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     this.modal.close();
   }
 
-  handleChangeforstock(rowData, e) {
-    if (e.checked == false) {
-      this.sourceAction.itemMasterId = rowData.itemMasterId;
-      rowData.updatedBy = this.userName;
-      this.sourceAction.updatedBy = this.userName;
-      this.Active = "In Active";
-      this.sourceAction.isActive = false;
-      this.isSpinnerVisible = true;
-      if (this.radioButtonValue == "Stock") {
-        this.itemMasterService.updateActionforActiveforstock(rowData).subscribe(
-          (response) => {
-            this.lazyLoadEventDataInputStock.filters.isDeleted = this.currentDeletedstatus;
-            this.lazyLoadEventDataInputStock.filters = {
-              ...this.lazyLoadEventDataInputStock.filters,
-              status: this.currentstatus,
-            };
-            this.lazyLoadEventDataInputStock.first = 0;
-            this.pageNumber = 0;
-            let PagingData = {
-              ...this.lazyLoadEventDataInputStock,
-              filters: listSearchFilterObjectCreation(
-                this.lazyLoadEventDataInputStock.filters
-              ),
-            };
-            PagingData.filters.isHazardousMaterial =
-              this.searchData.hazardousMaterial === "Yes"
-                ? true
-                : this.searchData.hazardousMaterial === "No"
-                ? false
-                : "";
-            if (
-              this.searchData.partNo != "" &&
-              this.searchData.partNo != undefined &&
-              this.searchData.partNo != null
-            ) {
-              PagingData.filters.partNumber = this.searchData.partNo;
-            }
-            if (
-              this.searchData.description != "" &&
-              this.searchData.description != undefined &&
-              this.searchData.description != null
-            ) {
-              PagingData.filters.partDescription = this.searchData.description;
-            }
-            PagingData.filters.status = this.currentstatus;
-            this.getItemsListStock(PagingData);
-            this.saveCompleted(this.sourceAction),
-              (this.isSpinnerVisible = false);
-            this.alertService.showMessage(
-              "Success",
-              `Successfully Updated Status `,
-              MessageSeverity.success
-            );
-          },
-          (error) => {
-            this.isSpinnerVisible = false;
-          }
-        );
-      } else {
-        this.itemMasterService.updateActionforNonstock(rowData).subscribe(
-          (response) => {
-            this.lazyLoadEventDataInputStock.filters.isDeleted = this.currentDeletedstatus;
-            this.lazyLoadEventDataInputStock.filters = {
-              ...this.lazyLoadEventDataInputStock.filters,
-              status: this.currentstatus,
-            };
-            this.lazyLoadEventDataInputStock.first = 0;
-            this.pageNumber = 0;
-            let PagingData = {
-              ...this.lazyLoadEventDataInputStock,
-              filters: listSearchFilterObjectCreation(
-                this.lazyLoadEventDataInputStock.filters
-              ),
-            };
-            PagingData.filters.isHazardousMaterial =
-              this.searchData.hazardousMaterial === "Yes"
-                ? true
-                : this.searchData.hazardousMaterial === "No"
-                ? false
-                : "";
-            if (
-              this.searchData.partNo != "" &&
-              this.searchData.partNo != undefined &&
-              this.searchData.partNo != null
-            ) {
-              PagingData.filters.partNumber = this.searchData.partNo;
-            }
-            if (
-              this.searchData.description != "" &&
-              this.searchData.description != undefined &&
-              this.searchData.description != null
-            ) {
-              PagingData.filters.partDescription = this.searchData.description;
-            }
-            PagingData.filters.status = this.currentstatus;
-            this.getItemsListNonStock(PagingData);
-            this.saveCompleted(this.sourceAction),
-              (this.isSpinnerVisible = false);
-            this.alertService.showMessage(
-              "Success",
-              `Successfully Updated Status `,
-              MessageSeverity.success
-            );
-          },
-          (error) => {
-            this.isSpinnerVisible = false;
-          }
-        );
-      }
-    } else {
-      var employpeeleaveTypeId = [];
-      this.sourceAction = rowData;
-      employpeeleaveTypeId.push(this.sourceAction.employeeLeaveTypeId);
-      this.sourceAction.employeeLeaveTypeId = employpeeleaveTypeId;
-      this.sourceAction.itemMasterId = rowData.itemMasterId;
-      this.sourceAction.updatedBy = this.userName;
-      this.Active = "Active";
-      this.sourceAction.isActive = true;
-      this.isSpinnerVisible = true;
+	handleChangeforstock(rowData, e) {
+		if (e.checked == false) {
+			this.sourceAction.itemMasterId = rowData.itemMasterId;
+			rowData.updatedBy = this.userName;
+			this.sourceAction.updatedBy = this.userName;
+			this.Active = "In Active";
+			this.sourceAction.isActive = false;
+			this.isSpinnerVisible = true;
+			if (this.radioButtonValue == "Stock") {
+				this.itemMasterService.updateActionforActiveforstock(rowData).subscribe(
+					response => {
+						this.lazyLoadEventDataInputStock.filters.isDeleted = this.currentDeletedstatus
+						this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, status: this.currentstatus };
+						this.lazyLoadEventDataInputStock.first = 0;
+						this.pageNumber = 0;
+						let PagingData = {
+							...this.lazyLoadEventDataInputStock,
+							filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInputStock.filters)
+						}
+						PagingData.filters.isHazardousMaterial = this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : "")
+						if (this.searchData.partNo != "" && this.searchData.partNo != undefined && this.searchData.partNo != null) {
+							PagingData.filters.partNumber = this.searchData.partNo;
+						}
+						if (this.searchData.description != "" && this.searchData.description != undefined && this.searchData.description != null) {
+							PagingData.filters.partDescription = this.searchData.description;
+						}
+						PagingData.filters.status = this.currentstatus;
+						this.getItemsListStock(PagingData);
+						this.saveCompleted(this.sourceAction),
+							this.isSpinnerVisible = false;
+						this.alertService.showMessage("Success", `Successfully Updated Status `, MessageSeverity.success)
+					},
+					error => { this.isSpinnerVisible = false })
+			} else {
+				this.itemMasterService.updateActionforNonstock(rowData).subscribe(
+					response => {
+						this.lazyLoadEventDataInputStock.filters.isDeleted = this.currentDeletedstatus
+						this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, status: this.currentstatus };
+						this.lazyLoadEventDataInputStock.first = 0;
+						this.pageNumber = 0;
+						let PagingData = {
+							...this.lazyLoadEventDataInputStock,
+							filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInputStock.filters)
+						}
+						PagingData.filters.isHazardousMaterial = this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : "")
+						if (this.searchData.partNo != "" && this.searchData.partNo != undefined && this.searchData.partNo != null) {
+							PagingData.filters.partNumber = this.searchData.partNo;
+						}
+						if (this.searchData.description != "" && this.searchData.description != undefined && this.searchData.description != null) {
+							PagingData.filters.partDescription = this.searchData.description;
+						}
+						PagingData.filters.status = this.currentstatus;
+						this.getItemsListNonStock(PagingData);
+						this.saveCompleted(this.sourceAction),
+							this.isSpinnerVisible = false;
+						this.alertService.showMessage("Success", `Successfully Updated Status `, MessageSeverity.success)
+					},
+					error => { this.isSpinnerVisible = false })
+			}
+		}
+		else {
+			var employpeeleaveTypeId = [];
+			this.sourceAction = rowData;
+			employpeeleaveTypeId.push(this.sourceAction.employeeLeaveTypeId);
+			this.sourceAction.employeeLeaveTypeId = employpeeleaveTypeId;
+			this.sourceAction.itemMasterId = rowData.itemMasterId;
+			this.sourceAction.updatedBy = this.userName;
+			this.Active = "Active";
+			this.sourceAction.isActive = true;
+			this.isSpinnerVisible = true;
 
-      if (this.radioButtonValue == "Stock") {
-        this.itemMasterService.updateActionforActiveforstock(rowData).subscribe(
-          (response) => {
-            this.lazyLoadEventDataInputStock.filters.isDeleted = this.currentDeletedstatus;
-            this.lazyLoadEventDataInputStock.filters = {
-              ...this.lazyLoadEventDataInputStock.filters,
-              status: this.currentstatus,
-            };
-            this.lazyLoadEventDataInputStock.first = 0;
-            this.pageNumber = 0;
-            let PagingData = {
-              ...this.lazyLoadEventDataInputStock,
-              filters: listSearchFilterObjectCreation(
-                this.lazyLoadEventDataInputStock.filters
-              ),
-            };
-            PagingData.filters.isHazardousMaterial =
-              this.searchData.hazardousMaterial === "Yes"
-                ? true
-                : this.searchData.hazardousMaterial === "No"
-                ? false
-                : "";
-            if (
-              this.searchData.partNo != "" &&
-              this.searchData.partNo != undefined &&
-              this.searchData.partNo != null
-            ) {
-              PagingData.filters.partNumber = this.searchData.partNo;
-            }
-            if (
-              this.searchData.description != "" &&
-              this.searchData.description != undefined &&
-              this.searchData.description != null
-            ) {
-              PagingData.filters.partDescription = this.searchData.description;
-            }
-            PagingData.filters.status = this.currentstatus;
-            this.getItemsListStock(PagingData);
+			if (this.radioButtonValue == "Stock") {
+				this.itemMasterService.updateActionforActiveforstock(rowData).subscribe(
+					response => {
 
-            this.saveCompleted(this.sourceAction),
-              (this.isSpinnerVisible = false);
-            this.alertService.showMessage(
-              "Success",
-              `Successfully Updated Status `,
-              MessageSeverity.success
-            );
-          },
-          (error) => {
-            this.isSpinnerVisible = false;
-          }
-        );
-      } else {
-        this.itemMasterService.updateActionforNonstock(rowData).subscribe(
-          (response) => {
-            this.lazyLoadEventDataInputStock.filters.isDeleted = this.currentDeletedstatus;
-            this.lazyLoadEventDataInputStock.filters = {
-              ...this.lazyLoadEventDataInputStock.filters,
-              status: this.currentstatus,
-            };
-            this.lazyLoadEventDataInputStock.first = 0;
-            this.pageNumber = 0;
-            let PagingData = {
-              ...this.lazyLoadEventDataInputStock,
-              filters: listSearchFilterObjectCreation(
-                this.lazyLoadEventDataInputStock.filters
-              ),
-            };
-            PagingData.filters.isHazardousMaterial =
-              this.searchData.hazardousMaterial === "Yes"
-                ? true
-                : this.searchData.hazardousMaterial === "No"
-                ? false
-                : "";
-            if (
-              this.searchData.partNo != "" &&
-              this.searchData.partNo != undefined &&
-              this.searchData.partNo != null
-            ) {
-              PagingData.filters.partNumber = this.searchData.partNo;
-            }
-            if (
-              this.searchData.description != "" &&
-              this.searchData.description != undefined &&
-              this.searchData.description != null
-            ) {
-              PagingData.filters.partDescription = this.searchData.description;
-            }
-            PagingData.filters.status = this.currentstatus;
-            this.getItemsListNonStock(PagingData);
-            this.saveCompleted(this.sourceAction),
-              (this.isSpinnerVisible = false);
-            this.alertService.showMessage(
-              "Success",
-              `Successfully Updated Status `,
-              MessageSeverity.success
-            );
-          },
-          (error) => {
-            this.isSpinnerVisible = false;
-          }
-        );
-      }
-    }
-  }
+						this.lazyLoadEventDataInputStock.filters.isDeleted = this.currentDeletedstatus
+						this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, status: this.currentstatus };
+						this.lazyLoadEventDataInputStock.first = 0;
+						this.pageNumber = 0;
+						let PagingData = {
+							...this.lazyLoadEventDataInputStock,
+							filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInputStock.filters)
+						}
+						PagingData.filters.isHazardousMaterial = this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : "")
+						if (this.searchData.partNo != "" && this.searchData.partNo != undefined && this.searchData.partNo != null) {
+							PagingData.filters.partNumber = this.searchData.partNo;
+						}
+						if (this.searchData.description != "" && this.searchData.description != undefined && this.searchData.description != null) {
+							PagingData.filters.partDescription = this.searchData.description;
+						}
+						PagingData.filters.status = this.currentstatus;
+						this.getItemsListStock(PagingData);
+
+						this.saveCompleted(this.sourceAction),
+							this.isSpinnerVisible = false;
+						this.alertService.showMessage("Success", `Successfully Updated Status `, MessageSeverity.success)
+					},
+					error => { this.isSpinnerVisible = false })
+			} else {
+				this.itemMasterService.updateActionforNonstock(rowData).subscribe(
+					response => {
+						this.lazyLoadEventDataInputStock.filters.isDeleted = this.currentDeletedstatus
+						this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, status: this.currentstatus };
+						this.lazyLoadEventDataInputStock.first = 0;
+						this.pageNumber = 0;
+						let PagingData = {
+							...this.lazyLoadEventDataInputStock,
+							filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInputStock.filters)
+						}
+						PagingData.filters.isHazardousMaterial = this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : "")
+						if (this.searchData.partNo != "" && this.searchData.partNo != undefined && this.searchData.partNo != null) {
+							PagingData.filters.partNumber = this.searchData.partNo;
+						}
+						if (this.searchData.description != "" && this.searchData.description != undefined && this.searchData.description != null) {
+							PagingData.filters.partDescription = this.searchData.description;
+						}
+						PagingData.filters.status = this.currentstatus;
+						this.getItemsListNonStock(PagingData);
+						this.saveCompleted(this.sourceAction),
+							this.isSpinnerVisible = false;
+						this.alertService.showMessage("Success", `Successfully Updated Status `, MessageSeverity.success)
+					},
+					error => { this.isSpinnerVisible = false })
+			}
+		}
+	}
 
   private saveCompleted(user?: any) {
     this.isSaving = false;
@@ -1411,69 +1274,55 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     $("#itemMasterView").modal("show");
   }
 
-  getPurchaseSalesInfo(id) {
-    this.itemMasterService.getPurcSaleDetailById(id).subscribe((res) => {
-      this.purchaseSalesInfo = res;
-    });
-  }
+	getPurchaseSalesInfo(id) {
+		this.itemMasterService.getPurcSaleDetailById(id).subscribe(res => {
+			this.purchaseSalesInfo = res;
+		});
+	}
 
-  restoreStockItem(rowData) {
-    this.rowDataToDeleteStock = rowData;
-    this.rowDataToDelete = rowData;
-    $("#itemRestore").modal("show");
-  }
+	restoreStockItem(rowData) {
+		this.rowDataToDeleteStock = rowData;
+		this.rowDataToDelete = rowData;
+		$("#itemRestore").modal("show");
+	}
 
-  restoreNonStockItem(rowData) {
-    this.rowDataToDelete = rowData;
-    this.rowDataToDeleteStock = rowData;
-    $("#nonStockRestore").modal("show");
-  }
-  closeItemRestore() {
-    $("#itemRestore").modal("hide");
-  }
-  closeNonStockRestore() {
-    $("#nonStockRestore").modal("hide");
-  }
+	restoreNonStockItem(rowData) {
+		this.rowDataToDelete = rowData;
+		this.rowDataToDeleteStock = rowData;
+		$("#nonStockRestore").modal("show");
+	}
+	closeItemRestore() {
+		$("#itemRestore").modal("hide");
+	}
+	closeNonStockRestore() {
+		$("#nonStockRestore").modal("hide");
+	}
 
-  restore() {
-    const { itemMasterId } = this.rowDataToDeleteStock;
-    this.commonService
-      .updatedeletedrecords11("ItemMaster", "ItemMaster", itemMasterId)
-      .subscribe((res) => {
-        this.getDeleteListByStatus(true);
-        this.alertService.showMessage(
-          "Success",
-          `Successfully Updated Status`,
-          MessageSeverity.success
-        );
-      });
-  }
 
-  restoreNonStock() {
-    const { itemMasterId } = this.rowDataToDelete;
-    this.commonService
-      .updatedeletedrecords11(
-        "ItemMasterNonStock",
-        "ItemMasterNonStockId",
-        itemMasterId
-      )
-      .subscribe((res) => {
-        this.getDeleteListByStatus(true);
-        this.alertService.showMessage(
-          "Success",
-          `Successfully Updated Status`,
-          MessageSeverity.success
-        );
-      });
-  }
 
-  getExchange(itemMasterId) {
-    this.itemMasterService.getExchangeLoan(itemMasterId).subscribe((res) => {
-      if (res[0] != null && res[0] != undefined) {
-        this.exchangeLoanInfo = res[0];
-      }
-    });
-  }
+	restore() {
+		const { itemMasterId } = this.rowDataToDeleteStock;
+		this.commonService.updatedeletedrecords11('ItemMaster', 'itemMasterId', itemMasterId).subscribe(res => {
+			this.getDeleteListByStatus(true)
+			this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+		})
+	}
+
+	restoreNonStock() {
+		const { itemMasterId } = this.rowDataToDelete;
+		this.commonService.updatedeletedrecords11('ItemMasterNonStock', 'ItemMasterNonStockId', itemMasterId).subscribe(res => {
+			this.getDeleteListByStatus(true)
+			this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+		})
+	}
+
+	getExchange(itemMasterId) {
+		this.itemMasterService.getExchangeLoan(itemMasterId).subscribe(res => {
+			if (res[0] != null && res[0] != undefined) {
+				this.exchangeLoanInfo = res[0];
+			}
+		});
+	}
 
   getNtaeData(itemMasterId) {
     this.filterManufacturerData = [];
@@ -1568,22 +1417,22 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     }
   }
 
-  resetViewData() {
-    this.viewRowData = undefined;
-  }
+	resetViewData() {
+		this.viewRowData = undefined;
+	}
 
-  viewSelectedRow(rowData) {
-    this.viewRowData = rowData;
-  }
+	viewSelectedRow(rowData) {
+		this.viewRowData = rowData;
+	}
 
-  // get all subchapter for dropdown
-  getAllSubChapters() {
-    this.atasubchapter1service
-      .getAtaSubChapter1List()
-      .subscribe((atasubchapter) => {
-        this.orginalAtaSubChapterValues = atasubchapter[0];
-      });
-  }
+	// get all subchapter for dropdown
+	getAllSubChapters() {
+		this.atasubchapter1service
+			.getAtaSubChapter1List()
+			.subscribe(atasubchapter => {
+				this.orginalAtaSubChapterValues = atasubchapter[0];
+			});
+	}
 
   getATAMappedDataByItemMasterId(itemMasterId) {
     this.itemMasterService
@@ -1626,40 +1475,23 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
       });
   }
 
-  openViewforNonstock(content, row) {
-    this.isSpinnerVisible = true;
-    this.itemMasterService
-      .getItemMasterNonStockDataById(row.itemMasterId)
-      .subscribe(
-        (res) => {
-          this.viewItemMasterNS = {
-            ...res,
-            unitCost: res.unitCost
-              ? formatNumberAsGlobalSettingsModule(res.unitCost, 2)
-              : "",
-            listPrice: res.listPrice
-              ? formatNumberAsGlobalSettingsModule(res.listPrice, 2)
-              : "",
-            discountPurchasePercent: res.discountPurchasePercent
-              ? formatNumberAsGlobalSettingsModule(
-                  res.discountPurchasePercent,
-                  2
-                )
-              : "",
-          };
-          this.isSpinnerVisible = false;
-        },
-        (err) => {
-          this.isSpinnerVisible = false;
-        }
-      );
+	openViewforNonstock(content, row) {
+		this.isSpinnerVisible = true;
+		this.itemMasterService.getItemMasterNonStockDataById(row.itemMasterId).subscribe(res => {
+			this.viewItemMasterNS = {
+				...res,
+				unitCost: res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '',
+				listPrice: res.listPrice ? formatNumberAsGlobalSettingsModule(res.listPrice, 2) : '',
+				discountPurchasePercent: res.discountPurchasePercent ? formatNumberAsGlobalSettingsModule(res.discountPurchasePercent, 2) : '',
+			};
+			this.isSpinnerVisible = false;
+		}, err => {
+			this.isSpinnerVisible = false;
 
-    this.modal = this.modalService.open(content, {
-      size: "lg",
-      backdrop: "static",
-      keyboard: false,
-    });
-  }
+		})
+
+		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+	}
 
   openHelpText(content) {
     this.modal = this.modalService.open(content, {
@@ -1785,68 +1617,66 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     }
   }
 
-  advancedSearchData(searchData) {
-    this.loadingIndicator = true;
-    const itemMasterSearch = {
-      partNumber: searchData.partNo,
-      partDescription: searchData.description,
-      wildCardSearch: searchData.wildCardSearch,
-      listPrice: searchData.listPrice,
-      isDeleted: this.currentDeletedstatus,
-      status: this.currentstatus,
-      isHazardousMaterial:
-        searchData.hazardousMaterial === "Yes"
-          ? true
-          : searchData.hazardousMaterial === "No"
-          ? false
-          : "",
-      masterCompanyId: this.currentUserMasterCompanyId,
-    };
+	advancedSearchData(searchData) {
+		this.loadingIndicator = true;
+		const itemMasterSearch = {
+			partNumber: searchData.partNo,
+			partDescription: searchData.description,
+			wildCardSearch: searchData.wildCardSearch,
+			listPrice: searchData.listPrice,
+			isDeleted: this.currentDeletedstatus,
+			status: this.currentstatus,
+			isHazardousMaterial: searchData.hazardousMaterial === 'Yes' ? true : (searchData.hazardousMaterial === "No" ? false : ""),
+			masterCompanyId: this.currentUserMasterCompanyId
+		}
 
-    const filterdData = {
-      first: 0,
-      rows: 10,
-      sortField: undefined,
-      sortOrder: 1,
-      filters: itemMasterSearch,
-      globalFilter: "",
-      multiSortMeta: undefined,
-    };
-    if (searchData.stockType === "Stock") {
-      this.loadStockDataList(filterdData);
-    } else {
-      this.loadNonStockDataList(filterdData);
-    }
-    this.loadingIndicator = false;
-  }
+		const filterdData = {
+			first: 0,
+			rows: 10,
+			sortField: undefined,
+			sortOrder: 1,
+			filters: itemMasterSearch,
+			globalFilter: "",
+			multiSortMeta: undefined
+		}
+		if (searchData.stockType === 'Stock') {
 
-  clearAdvanceSerchData() {
-    (this.searchData.partNo = ""),
-      (this.searchData.description = ""),
-      (this.searchData.hazardousMaterial = ""),
-      (this.searchData.listPrice = "");
-  }
+			this.loadStockDataList(filterdData);
 
-  clearSerchData() {
-    this.loadingIndicator = true;
-    const filterdData = {
-      first: 0,
-      rows: 10,
-      sortField: undefined,
-      sortOrder: 1,
-      filters: "",
-      globalFilter: "",
-      multiSortMeta: undefined,
-    };
-    if (this.searchData.stockType === "Stock") {
-      this.loadStockData(filterdData);
-    } else {
-      this.loadNonStockData(filterdData);
-    }
-    (this.searchData.partNo = ""),
-      (this.searchData.description = ""),
-      (this.searchData.hazardousMaterial = ""),
-      (this.searchData.listPrice = "");
+		} else {
+			this.loadNonStockDataList(filterdData);
+		}
+		this.loadingIndicator = false;
+	}
+
+	clearAdvanceSerchData() {
+		this.searchData.partNo = '',
+			this.searchData.description = '',
+			this.searchData.hazardousMaterial = '',
+			this.searchData.listPrice = ''
+	}
+
+	clearSerchData() {
+		this.loadingIndicator = true;
+		const filterdData = {
+			first: 0,
+			rows: 10,
+			sortField: undefined,
+			sortOrder: 1,
+			filters: "",
+			globalFilter: "",
+			multiSortMeta: undefined
+		}
+		if (this.searchData.stockType === 'Stock') {
+			this.loadStockData(filterdData);
+
+		} else {
+			this.loadNonStockData(filterdData);
+		}
+		this.searchData.partNo = '',
+			this.searchData.description = '',
+			this.searchData.hazardousMaterial = '',
+			this.searchData.listPrice = ''
 
     this.loadingIndicator = false;
   }
@@ -1876,24 +1706,22 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     this.sourceItemMaster.partNumber = undefined;
   }
 
-  partnmId(event) {
-    if (this.itemclaColl && this.itemclaColl.length > 0) {
-      for (let i = 0; i < this.itemclaColl.length; i++) {
-        if (event == this.itemclaColl[i][0].partName) {
-          this.sourceItemMaster.partId = this.itemclaColl[i][0].partId;
-          this.disableSavePartName = true;
-          this.selectedActionName = event;
-        }
-      }
-      this.itemser.getDescriptionbypart(event).subscribe(
-        (results) => this.onpartnumberloadsuccessfull(results[0]),
-        (error) => {
-          this.loadingIndicator = false;
-        }
-      );
-      this.disableSavepartDescription = true;
-    }
-  }
+	partnmId(event) {
+		if (this.itemclaColl && this.itemclaColl.length > 0) {
+			for (let i = 0; i < this.itemclaColl.length; i++) {
+				if (event == this.itemclaColl[i][0].partName) {
+					this.sourceItemMaster.partId = this.itemclaColl[i][0].partId;
+					this.disableSavePartName = true;
+					this.selectedActionName = event;
+				}
+			}
+			this.itemser.getDescriptionbypart(event).subscribe(
+				results => this.onpartnumberloadsuccessfull(results[0]),
+				error => { this.loadingIndicator = false }
+			);
+			this.disableSavepartDescription = true;
+		}
+	}
 
   private onpartnumberloadsuccessfull(allWorkFlows: any[]) {
     this.descriptionbyPart = allWorkFlows[0];
@@ -1903,26 +1731,14 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
   eventHandler(event) {}
 
-  private ptnumberlistdata() {
-    this.alertService.startLoadingMessage();
-    this.loadingIndicator = true;
-    this.commonService
-      .smartDropDownList(
-        "ItemMaster",
-        "ItemMasterId",
-        "partnumber",
-        "",
-        "",
-        0,
-        this.authService.currentUser.masterCompanyId
-      )
-      .subscribe(
-        (results) => this.onptnmbersSuccessful(results),
-        (error) => {
-          this.loadingIndicator = false;
-        }
-      );
-  }
+	private ptnumberlistdata() {
+		this.alertService.startLoadingMessage();
+		this.loadingIndicator = true;
+		this.commonService.smartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', '', '', 0, this.authService.currentUser.masterCompanyId).subscribe(
+			results => this.onptnmbersSuccessful(results),
+			error => { this.loadingIndicator = false }
+		)
+	}
 
   private onptnmbersSuccessful(allWorkFlows: any[]) {
     this.alertService.stopLoadingMessage();
@@ -1942,25 +1758,25 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     this.allCountryInfo = allWorkFlows;
   }
 
-  toggleShowOpenAdvancedSearch(dt) {
-    this.isOpenAdvancedSearch = !this.isOpenAdvancedSearch;
-    if (dt.filters.partNumber && this.isOpenAdvancedSearch) {
-      dt.filters.partNumber.value = "";
-    }
-    if (dt.filters.partDescription && this.isOpenAdvancedSearch) {
-      dt.filters.partDescription.value = "";
-    }
-  }
+	toggleShowOpenAdvancedSearch(dt) {
+		this.isOpenAdvancedSearch = !this.isOpenAdvancedSearch;
+		if (dt.filters.partNumber && this.isOpenAdvancedSearch) {
+			dt.filters.partNumber.value = '';
+		}
+		if (dt.filters.partDescription && this.isOpenAdvancedSearch) {
+			dt.filters.partDescription.value = '';
+		}
+	}
 
-  private loadStockDataList(event) {
-    this.lazyLoadEventData = event;
-    this.pageIndex = parseInt(event.first) / event.rows;
-    this.pageSize = event.rows;
-    event.first = this.pageIndex;
-    event.filters.status = this.currentstatus;
-    if (event.globalFilter == null) {
-      event.globalFilter = "";
-    }
+	private loadStockDataList(event) {
+		this.lazyLoadEventData = event;
+		this.pageIndex = parseInt(event.first) / event.rows;
+		this.pageSize = event.rows;
+		event.first = this.pageIndex;
+		event.filters.status = this.currentstatus;
+		if (event.globalFilter == null) {
+			event.globalFilter = ""
+		}
 
     if (
       this.searchData.partNo != "" &&
@@ -1997,14 +1813,12 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
           };
         });
 
-        this.totalRecords = results[0]["totalRecordsCount"];
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-      },
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+				this.totalRecords = results[0]['totalRecordsCount']
+				this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+			},
+			error => { this.loadingIndicator = false }
+		);
+	}
 
   private getisHazardousMaterial(isHazardousMaterial) {
     if (isHazardousMaterial) {
@@ -2028,76 +1842,58 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
       filters: listSearchFilterObjectCreation(event.filters),
     };
 
-    this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
-      (results) => {
-        this.nonStockTable = true;
-        this.stockTable = false;
-        this.nonStockTableColumns = this.cols1;
-        this.loadingIndicator = false;
+		this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
+			results => {
+				this.nonStockTable = true;
+				this.stockTable = false;
+				this.nonStockTableColumns = this.cols1;
+				this.loadingIndicator = false;
 
-        this.allNonstockInfo = results[0]["results"].map((x) => {
-          return {
-            ...x,
-            unitCost: x.unitCost
-              ? formatNumberAsGlobalSettingsModule(x.unitCost, 2)
-              : "0.00",
-            listPrice: x.listPrice
-              ? formatNumberAsGlobalSettingsModule(x.listPrice, 2)
-              : "0.00",
-            isHazardousMaterial:
-              x.isHazardousMaterial == "1" ? "true" : "false",
-          };
-        });
+				this.allNonstockInfo = results[0]['results'].map(x => {
+					return {
+						...x,
+						unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+						listPrice: x.listPrice ? formatNumberAsGlobalSettingsModule(x.listPrice, 2) : '0.00',
+						isHazardousMaterial: x.isHazardousMaterial == "1" ? 'true' : 'false'
+					}
+				});
 
-        this.totalRecordsNonStock = results[0]["totalRecordsCount"];
-        this.totalPagesNonStock = Math.ceil(
-          this.totalRecordsNonStock / this.nonStockPageSize
-        );
-      },
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+				this.totalRecordsNonStock = results[0]['totalRecordsCount']
+				this.totalPagesNonStock = Math.ceil(this.totalRecordsNonStock / this.nonStockPageSize);
+			},
+			error => { this.loadingIndicator = false }
+		);
 
-  toGetDocumentsListNew(itemMasterId) {
-    var moduleId = 22;
-    this.commonService
-      .GetDocumentsListNew(itemMasterId, moduleId)
-      .subscribe((res) => {
-        this.allDocumentsList = res;
-        this.allDocumentsListOriginal = res;
-      });
-  }
-  pageIndexChange(event) {
-    this.pageSize = event.rows;
-  }
+	}
 
-  dateFilterForTable(date, field) {
-    if (date !== "" && moment(date).format("MMMM DD YYYY")) {
-      this.allDocumentsList = this.allDocumentsListOriginal;
-      const data = [
-        ...this.allDocumentsList.filter((x) => {
-          if (
-            moment(x.createdDate).format("MMMM DD YYYY") ===
-              moment(date).format("MMMM DD YYYY") &&
-            field === "createdDate"
-          ) {
-            return x;
-          } else if (
-            moment(x.updatedDate).format("MMMM DD YYYY") ===
-              moment(date).format("MMMM DD YYYY") &&
-            field === "updatedDate"
-          ) {
-            return x;
-          }
-        }),
-      ];
-      this.allDocumentsList = data;
-    } else {
-      this.allDocumentsList = this.allDocumentsListOriginal;
-    }
-  }
+	toGetDocumentsListNew(itemMasterId) {
+		var moduleId = 22;
+		this.commonService.GetDocumentsListNew(itemMasterId, moduleId).subscribe(res => {
+			this.allDocumentsList = res;
+			this.allDocumentsListOriginal = res;
+
+		})
+	}
+	pageIndexChange(event) {
+		this.pageSize = event.rows;
+	}
+
+	dateFilterForTable(date, field) {
+		if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+			this.allDocumentsList = this.allDocumentsListOriginal;
+			const data = [...this.allDocumentsList.filter(x => {
+
+				if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+					return x;
+				} else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+					return x;
+				}
+			})]
+			this.allDocumentsList = data;
+		} else {
+			this.allDocumentsList = this.allDocumentsListOriginal;
+		}
+	}
 
   openHistoryDoc(rowData) {
     this.commonService
@@ -2107,185 +1903,148 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
       });
   }
 
-  getColorCodeForHistoryDoc(i, field, value) {
-    const data = this.sourceViewforDocumentAudit;
-    const dataLength = data.length;
-    if (i >= 0 && i <= dataLength) {
-      if (i + 1 === dataLength) {
-        return true;
-      } else {
-        return data[i + 1][field] === value;
-      }
-    }
-  }
+	getColorCodeForHistoryDoc(i, field, value) {
+		const data = this.sourceViewforDocumentAudit;
+		const dataLength = data.length;
+		if (i >= 0 && i <= dataLength) {
+			if ((i + 1) === dataLength) {
+				return true;
+			} else {
+				return data[i + 1][field] === value
+			}
+		}
+	}
 
-  lazyLoadEventDataInput: any;
+	lazyLoadEventDataInput: any;
 
-  geListByStatus(status) {
-    this.currentstatus = status;
-    const itemMasterSearch = {
-      partNumber: this.searchData.partNo,
-      partDescription: this.searchData.description,
-      status: this.currentstatus,
-      isDeleted: this.currentDeletedstatus,
-      isHazardousMaterial:
-        this.searchData.hazardousMaterial === "Yes"
-          ? true
-          : this.searchData.hazardousMaterial === "No"
-          ? false
-          : "",
-      listPrice: this.searchData.listPrice,
-      masterCompanyId: this.currentUserMasterCompanyId,
-    };
+	geListByStatus(status) {
+		this.currentstatus = status;
+		const itemMasterSearch = {
+			partNumber: this.searchData.partNo,
+			partDescription: this.searchData.description,
+			status: this.currentstatus,
+			isDeleted: this.currentDeletedstatus,
+			isHazardousMaterial: this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : ""),
+			listPrice: this.searchData.listPrice,
+			masterCompanyId: this.currentUserMasterCompanyId
+		}
 
-    const filterdData = {
-      first: 0,
-      rows: 10,
-      sortField: undefined,
-      sortOrder: 1,
-      filters: itemMasterSearch,
-      globalFilter: "",
-      multiSortMeta: undefined,
-    };
+		const filterdData = {
+			first: 0,
+			rows: 10,
+			sortField: undefined,
+			sortOrder: 1,
+			filters: itemMasterSearch,
+			globalFilter: "",
+			multiSortMeta: undefined
+		}
 
-    if (this.searchData.stockType === "Stock") {
-      this.loadStockDataList(filterdData);
-    } else {
-      this.loadNonStockDataList(filterdData);
-    }
-    this.loadingIndicator = false;
-  }
+		if (this.searchData.stockType === 'Stock') {
+			this.loadStockDataList(filterdData);
 
-  currentDeletedstat = false;
-  getDeleteListByStatus(value) {
-    this.currentDeletedstatus = value;
-    this.lazyLoadEventDataInputStock.filters.isDeleted = value;
-    this.lazyLoadEventDataInputStock.filters = {
-      ...this.lazyLoadEventDataInputStock.filters,
-      status: this.currentstatus,
-    };
-    this.lazyLoadEventDataInputStock.first = 0;
-    this.pageNumber = 0;
-    let PagingData = {
-      ...this.lazyLoadEventDataInputStock,
-      filters: listSearchFilterObjectCreation(
-        this.lazyLoadEventDataInputStock.filters
-      ),
-    };
-    PagingData.filters.isHazardousMaterial =
-      this.searchData.hazardousMaterial === "Yes"
-        ? true
-        : this.searchData.hazardousMaterial === "No"
-        ? false
-        : "";
-    if (
-      this.searchData.partNo != "" &&
-      this.searchData.partNo != undefined &&
-      this.searchData.partNo != null
-    ) {
-      PagingData.filters.partNumber = this.searchData.partNo;
-    }
-    if (
-      this.searchData.description != "" &&
-      this.searchData.description != undefined &&
-      this.searchData.description != null
-    ) {
-      PagingData.filters.partDescription = this.searchData.description;
-    }
-    PagingData.filters.status = this.currentstatus;
+		} else {
+			this.loadNonStockDataList(filterdData);
+		}
+		this.loadingIndicator = false;
+	}
 
-    if (this.radioButtonValue == "Stock") {
-      this.getItemsListStock(PagingData);
-    } else {
-      PagingData.filters.listPrice = this.searchData.listPrice;
-      PagingData.filters.wildCardSearch = this.searchData.wildCardSearch;
-      this.getItemsListNonStock(PagingData);
-    }
-  }
+	currentDeletedstat = false;
+	getDeleteListByStatus(value) {
+		this.currentDeletedstatus = value;
+		this.lazyLoadEventDataInputStock.filters.isDeleted = value
+		this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, status: this.currentstatus };
+		this.lazyLoadEventDataInputStock.first = 0;
+		this.pageNumber = 0;
+		let PagingData = {
+			...this.lazyLoadEventDataInputStock,
+			filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInputStock.filters)
+		}
+		PagingData.filters.isHazardousMaterial = this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : "")
+		if (this.searchData.partNo != "" && this.searchData.partNo != undefined && this.searchData.partNo != null) {
+			PagingData.filters.partNumber = this.searchData.partNo;
+		}
+		if (this.searchData.description != "" && this.searchData.description != undefined && this.searchData.description != null) {
+			PagingData.filters.partDescription = this.searchData.description;
+		}
+		PagingData.filters.status = this.currentstatus;
 
-  exportCSV(dt) {
-    this.isSpinnerVisible = true;
-    if (this.radioButtonValue == "Stock") {
-      this.getAllStockDataforDownload(dt);
-    } else {
-      this.getAllNonStockDataforDownload(dt);
-    }
-  }
+		if (this.radioButtonValue == "Stock") {
+			this.getItemsListStock(PagingData);
+		} else {
+			PagingData.filters.listPrice = this.searchData.listPrice;
+			PagingData.filters.wildCardSearch = this.searchData.wildCardSearch;
+			this.getItemsListNonStock(PagingData)
+		}
+	}
 
-  getAllStockDataforDownload(dt) {
-    this.isSpinnerVisible = true;
-    const isdelete = this.currentDeletedstatus ? true : false;
-    let PagingData = {
-      first: 0,
-      rows: dt.totalRecords,
-      sortOrder: 1,
-      filters: {
-        masterCompanyId: this.currentUserMasterCompanyId,
-        status: this.currentstatus,
-        isDeleted: isdelete,
-      },
-      globalFilter: "",
-    };
-    let filters = Object.keys(dt.filters);
-    filters.forEach((x) => {
-      PagingData.filters[x] = dt.filters[x].value;
-    });
-    filters = Object.keys(this.searchData);
-    filters.forEach((x) => {
-      if (this.searchData[x]) {
-        if (x == "partNo") {
-          PagingData.filters["partNumber"] = this.searchData[x];
-        } else {
-          PagingData.filters[x] = this.searchData[x];
-        }
-      }
-    });
-    PagingData.filters["stockType"] = "";
-    //this.itemMasterService.advancedSearchStockListData(PagingData).subscribe(
-    this.itemMasterService.getItemMasterStockListData(PagingData).subscribe(
-      (results) => {
-        this.loadingIndicator = false;
-        dt._value = results[0]["results"].map((x) => {
-          return {
-            ...x,
-            itemType: "stock",
-            isTimeLife: x.isTimeLife == "1" ? "true" : "false",
-            isSerialized: x.isSerialized == "1" ? "true" : "false",
-            createdDate: x.createdDate
-              ? this.datePipe.transform(x.createdDate, "MMM-dd-yyyy hh:mm a")
-              : "",
-            updatedDate: x.updatedDate
-              ? this.datePipe.transform(x.updatedDate, "MMM-dd-yyyy hh:mm a")
-              : "",
-          };
-        });
-        dt.exportCSV();
-        dt.value = this.allStockInfo;
-        this.isSpinnerVisible = false;
-      },
-      (error) => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
+	exportCSV(dt) {
+		this.isSpinnerVisible = true;
+		if (this.radioButtonValue == "Stock") {
+			this.getAllStockDataforDownload(dt);
+		} else {
+			this.getAllNonStockDataforDownload(dt)
+		}
+	}
 
-	getAllNonStockDataforDownload(dt){
+	getAllStockDataforDownload(dt) {
+		this.isSpinnerVisible = true;
+		const isdelete = this.currentDeletedstatus ? true : false;
+		let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "masterCompanyId": this.currentUserMasterCompanyId, "status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
+		let filters = Object.keys(dt.filters);
+		filters.forEach(x => {
+			PagingData.filters[x] = dt.filters[x].value;
+		})
+		filters = Object.keys(this.searchData);
+		filters.forEach(x => {
+			if (this.searchData[x]) {
+				if (x == 'partNo') {
+					PagingData.filters['partNumber'] = this.searchData[x];
+				}
+				else {
+					PagingData.filters[x] = this.searchData[x];
+				}
+			}
+		})
+		PagingData.filters['stockType'] = "";
+		//this.itemMasterService.advancedSearchStockListData(PagingData).subscribe(
+		this.itemMasterService.getItemMasterStockListData(PagingData).subscribe(
+			results => {
+				this.loadingIndicator = false;
+				dt._value = results[0]['results'].map(x => {
+					return {
+						...x,
+						itemType: 'stock',
+						isTimeLife: x.isTimeLife == "1" ? 'true' : 'false',
+						isSerialized: x.isSerialized == "1" ? 'true' : 'false',
+						createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+						updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+					}
+				});
+				dt.exportCSV();
+				dt.value = this.allStockInfo;
+				this.isSpinnerVisible = false;
+			},
+			error => { this.loadingIndicator = false }
+		);
+	}
+
+	getAllNonStockDataforDownload(dt) {
 		this.isSpinnerVisible = true;
 		//Need to Set global filters
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId" : this.currentUserMasterCompanyId,"status":this.currentstatus,"isDeleted":false},"globalFilter":""}
+		let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "masterCompanyId": this.currentUserMasterCompanyId, "status": this.currentstatus, "isDeleted": false }, "globalFilter": "" }
 		let filters = Object.keys(dt.filters);
-		filters.forEach(x=>{
+		filters.forEach(x => {
 			PagingData.filters[x] = dt.filters[x].value;
 		})
 		//this.itemMasterService.advancedSearchNonStockListData(PagingData).subscribe(
-		  this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
+		this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
 			results => {
 				this.loadingIndicator = false;
-				dt._value = results[0]['results'].map(x=>{
-					return{
+				dt._value = results[0]['results'].map(x => {
+					return {
 						...x,
-						createdDate:x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-						updatedDate:x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+						createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+						updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
 
 					}
 				});
@@ -2294,108 +2053,82 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				dt.value = this.allNonstockInfo;
 				this.isSpinnerVisible = false;
 			},
-			error => {this.loadingIndicator=false}
+			error => { this.loadingIndicator = false }
 		);
 	}
-	
 
-	edit(rowData) {}
+
+	edit(rowData) { }
 
   getAuditHistoryById(rowData) {}
 
-  changeStatus(rowData) {}
+	changeStatus(rowData) { }
 
-  dateFilterForItemMasterList(date, field, el) {
-    if (date === "") {
-      el.classList.add("hidePlaceHolder");
-    } else el.classList.remove("hidePlaceHolder");
-    const minyear = "1900";
-    const dateyear = moment(date).format("YYYY");
-    this.dateObject = {};
-    date = moment(date).format("MM/DD/YYYY");
-    moment(date).format("MM/DD/YY");
-    if (date != "" && moment(date, "MM/DD/YYYY", true).isValid()) {
-      if (dateyear > minyear) {
-        if (field == "createdDate") {
-          this.dateObject = { createdDate: date };
-        } else if (field == "updatedDate") {
-          this.dateObject = { updatedDate: date };
-        }
-        this.lazyLoadEventDataInputStock.filters = {
-          ...this.lazyLoadEventDataInputStock.filters,
-          ...this.dateObject,
-        };
-        this.getItemsListStock(this.lazyLoadEventDataInputStock);
-      }
-    } else {
-      this.lazyLoadEventDataInputStock.filters = {
-        ...this.lazyLoadEventDataInputStock.filters,
-        ...this.dateObject,
-      };
-      if (
-        this.lazyLoadEventDataInputStock.filters &&
-        this.lazyLoadEventDataInputStock.filters.createdDate
-      ) {
-        delete this.lazyLoadEventDataInputStock.filters.createdDate;
-      }
-      if (
-        this.lazyLoadEventDataInputStock.filters &&
-        this.lazyLoadEventDataInputStock.filters.updatedDate
-      ) {
-        delete this.lazyLoadEventDataInputStock.filters.updatedDate;
-      }
-      this.lazyLoadEventDataInputStock.filters = {
-        ...this.lazyLoadEventDataInputStock.filters,
-        ...this.dateObject,
-      };
-      this.getItemsListStock(this.lazyLoadEventDataInputStock);
-    }
-  }
+	dateFilterForItemMasterList(date, field, el) {
+		if (date === '') { el.classList.add("hidePlaceHolder"); }
+		else el.classList.remove("hidePlaceHolder");
+		const minyear = '1900';
+		const dateyear = moment(date).format('YYYY');;
+		this.dateObject = {}
+		date = moment(date).format('MM/DD/YYYY');
+		moment(date).format('MM/DD/YY');
+		if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+			if (dateyear > minyear) {
+				if (field == 'createdDate') {
+					this.dateObject = { 'createdDate': date }
+				} else if (field == 'updatedDate') {
+					this.dateObject = { 'updatedDate': date }
+				}
+				this.lazyLoadEventDataInputStock.filters = {
+					...this.lazyLoadEventDataInputStock.filters,
+					...this.dateObject
+				}
+				this.getItemsListStock(this.lazyLoadEventDataInputStock);
+			}
+		} else {
+			this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, ...this.dateObject };
+			if (this.lazyLoadEventDataInputStock.filters && this.lazyLoadEventDataInputStock.filters.createdDate) {
+				delete this.lazyLoadEventDataInputStock.filters.createdDate;
+			}
+			if (this.lazyLoadEventDataInputStock.filters && this.lazyLoadEventDataInputStock.filters.updatedDate) {
+				delete this.lazyLoadEventDataInputStock.filters.updatedDate;
+			}
+			this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, ...this.dateObject };
+			this.getItemsListStock(this.lazyLoadEventDataInputStock);
+		}
+	}
 
-  dateFilterForItemNonstockList(date, field, el) {
-    if (date === "") {
-      el.classList.add("hidePlaceHolder");
-    } else el.classList.remove("hidePlaceHolder");
-    const minyear = "1900";
-    const dateyear = moment(date).format("YYYY");
-    this.dateObject = {};
-    date = moment(date).format("MM/DD/YYYY");
-    moment(date).format("MM/DD/YY");
-    if (date != "" && moment(date, "MM/DD/YYYY", true).isValid()) {
-      if (dateyear > minyear) {
-        if (field == "createdDate") {
-          this.dateObject = { createdDate: date };
-        } else if (field == "updatedDate") {
-          this.dateObject = { updatedDate: date };
-        }
-        this.lazyLoadEventDataForNonStock.filters = {
-          ...this.lazyLoadEventDataForNonStock.filters,
-          ...this.dateObject,
-        };
-        this.getItemsListNonStock(this.lazyLoadEventDataForNonStock);
-      }
-    } else {
-      this.lazyLoadEventDataForNonStock.filters = {
-        ...this.lazyLoadEventDataForNonStock.filters,
-        ...this.dateObject,
-      };
-      if (
-        this.lazyLoadEventDataForNonStock.filters &&
-        this.lazyLoadEventDataForNonStock.filters.createdDate
-      ) {
-        delete this.lazyLoadEventDataForNonStock.filters.createdDate;
-      }
-      if (
-        this.lazyLoadEventDataForNonStock.filters &&
-        this.lazyLoadEventDataForNonStock.filters.updatedDate
-      ) {
-        delete this.lazyLoadEventDataForNonStock.filters.updatedDate;
-      }
-      this.lazyLoadEventDataForNonStock.filters = {
-        ...this.lazyLoadEventDataForNonStock.filters,
-        ...this.dateObject,
-      };
-      this.getItemsListNonStock(this.lazyLoadEventDataForNonStock);
-    }
-  }
+	dateFilterForItemNonstockList(date, field, el) {
+		if (date === '') { el.classList.add("hidePlaceHolder"); }
+		else el.classList.remove("hidePlaceHolder");
+		const minyear = '1900';
+		const dateyear = moment(date).format('YYYY');;
+		this.dateObject = {}
+		date = moment(date).format('MM/DD/YYYY');
+		moment(date).format('MM/DD/YY');
+		if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+			if (dateyear > minyear) {
+				if (field == 'createdDate') {
+					this.dateObject = { 'createdDate': date }
+				} else if (field == 'updatedDate') {
+					this.dateObject = { 'updatedDate': date }
+				}
+				this.lazyLoadEventDataForNonStock.filters = {
+					...this.lazyLoadEventDataForNonStock.filters,
+					...this.dateObject
+				}
+				this.getItemsListNonStock(this.lazyLoadEventDataForNonStock)
+			}
+		} else {
+			this.lazyLoadEventDataForNonStock.filters = { ...this.lazyLoadEventDataForNonStock.filters, ...this.dateObject };
+			if (this.lazyLoadEventDataForNonStock.filters && this.lazyLoadEventDataForNonStock.filters.createdDate) {
+				delete this.lazyLoadEventDataForNonStock.filters.createdDate;
+			}
+			if (this.lazyLoadEventDataForNonStock.filters && this.lazyLoadEventDataForNonStock.filters.updatedDate) {
+				delete this.lazyLoadEventDataForNonStock.filters.updatedDate;
+			}
+			this.lazyLoadEventDataForNonStock.filters = { ...this.lazyLoadEventDataForNonStock.filters, ...this.dateObject };
+			this.getItemsListNonStock(this.lazyLoadEventDataForNonStock)
+		}
+	}
 }

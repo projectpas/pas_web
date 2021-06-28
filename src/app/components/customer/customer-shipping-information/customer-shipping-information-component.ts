@@ -82,7 +82,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedBy', header: 'Updated By' },
         { field: 'expirationDate', header: 'Expiration Date' },
-        { field: 'amount', header: 'Amount',width:"70px" },
+        { field: 'amount', header: 'Amount',width:"80px" },
         { field: 'shipToCountry', header: 'Country' },
         { field: 'isPrimary', header: 'IsPrimary' }
     ]

@@ -1,0 +1,218 @@
+            
+   <div id="wopartlist" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xlg">
+        <div class="modal-content" >
+
+            <div class="modal-header">
+                <button type="button" class="close" (click)="close()">&times;</button>
+                <!-- <h4 class="modal-title warning_color"></h4> -->
+            </div>
+            <div class="modal-body" id="wopartlistid">
+                <div class="clear"></div>
+                <form id="" name="" action=" #" method="post" onsubmit="return false;">
+                    <div class="image">
+                      <div style="padding: 0; margin: 0;">
+                        <div>
+                          <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                            <!-- <div class="logo-block">
+                              <img src="http://design.poweraerosuites.com/image/logo.png" width="130" /> 
+                            </div>
+                            <div class="clear"></div>
+                            <hr /> -->
+                            <div class="col-sm-12 invoice-border">
+                              <div class="very-first-block col-sm-8">
+                                <div class="col-sm-12 address-block" style="width:100%;display:flex;">
+                                    <div class="col-sm-6" style="width:50%" *ngIf="this.workOrderprintData.managementStructureHeaderData">
+                                        <img class="logo" src="{{this.endPointURL + this.workOrderprintData.managementStructureHeaderData.logo}}" />
+                                    </div>
+                                    <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Company :</label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.workOrderprintData.managementStructureHeaderData ? this.workOrderprintData.managementStructureHeaderData.companyName : ''}}</label>
+                                        </div>
+                                        <!-- <br /> -->
+                                        <!-- <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label" style="text-align: left">Logo/Slogan :</label>
+                                        <label class="col-sm-4 first-block-label" 
+                                            disabled></label>
+                                    </div>
+                                    <br />
+                                    <br /> -->
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Tagline :</label> -->
+                                            <label class="col-sm-12 first-block-label" disabled></label>
+                                        </div>
+                                        <br />
+                                        <br />
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Address1 :</label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.workOrderprintData.managementStructureHeaderData ? this.workOrderprintData.managementStructureHeaderData.address1 : ''}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Address2 :</label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.workOrderprintData.managementStructureHeaderData ? this.workOrderprintData.managementStructureHeaderData.address2 : ''}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">City :</label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.workOrderprintData.managementStructureHeaderData ? this.workOrderprintData.managementStructureHeaderData.city : ''}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">State/Prov :</label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.workOrderprintData.managementStructureHeaderData ? this.workOrderprintData.managementStructureHeaderData.stateOrProvince : ''}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Zip :</label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.workOrderprintData.managementStructureHeaderData ? this.workOrderprintData.managementStructureHeaderData.postalCode : ''}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Country :</label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.workOrderprintData.managementStructureHeaderData ? this.workOrderprintData.managementStructureHeaderData.country : ''}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Phone :</label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.workOrderprintData.managementStructureHeaderData ? this.workOrderprintData.managementStructureHeaderData.phoneNumber : ''}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                  
+                              <div class="second-block col-sm-4">
+                                <h3
+                                  style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
+                                  WORK ORDER FORM</h3>
+                                <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Work Order Num</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                    disabled>{{this.workOrderprintData.workOrderNum}}</label>
+                                </div>
+                                <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Quote Num</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                    disabled>{{this.workOrderprintData.quoteNumber}}</label>
+                                </div>
+                                <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Quote Date</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                    disabled>{{this.workOrderprintData.qouteDate | date: 'MM/dd/yyyy h:mm a ' }}</label>
+                                </div>
+                                <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Num of Items</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.workOrderprintData.noofItem}}</label>
+                                </div>
+                                <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Prepared By</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.workOrderprintData.preparedby}}</label>
+                                </div>
+                                <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Date & Time Printed</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                    disabled>{{this.workOrderprintData.datePrinted | date: 'MM/dd/yyyy h:mm a ' }}</label>
+                                </div>
+                  
+                                <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Page</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                    disabled>{{this.workOrderprintData.page}}</label>
+                                </div>
+                               
+                              </div>
+                            </div>
+                            <div  class="col-sm-12" style="margin-top:20px">
+                        <table rules=none class=" print-friendly border table-border-right parttable print-table table-margins">
+                                      <thead>
+                                        <tr>
+                                          
+                                          <th>Cust Name</th>                        
+                                         
+                                          <th>MPN</th>
+                                          <th colspan="2" >MPN Description</th>
+                                         
+                                        
+                                        </tr>
+                                    </thead>
+                             
+                                
+                                  <tbody>
+                                    
+                  <tr>
+                  <td class="border-right">{{this.workOrderprintData.clientName}}</td>
+                  <td class="border-right">{{this.workOrderprintData.partnumber}}</td>
+                  <td class="border-right" colspan="2">{{this.workOrderprintData.partDescription}}</td>
+                  
+                  </tr>
+                  
+                  <tr>
+                  
+                  
+                  <th class="font-12"><u>Material List PN </u></th>
+                  <th class="font-12"><u>PN Description</u></th>
+                  <th class="font-12"><u>Qty Req'd</u></th>
+                  <th class="font-12"><u>Qty Issued</u></th>
+                  
+                  </tr>
+                  
+                  <ng-container *ngFor="let part of this.workOrderprintData.materialPartsList; let i = index;">
+                    <tr>
+                    <td class="border-right">{{part.partnumber}}</td>
+                    <td class="border-right">{{part.partDescription}}</td>
+                    <td class="border-right">{{part.quantity}}</td>
+                    <td class="border-right">{{part.quantityIssued}}</td>
+                    
+                    </tr>
+                  </ng-container>
+                     
+                                  </tbody>
+                                
+                              </table>   
+                       
+                                         </div> 
+                            <div class="clear"></div>
+                            
+                            <div class="clear"></div>
+                  
+                  
+                          
+                            <div style="height:100px"> &nbsp;</div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+            </div>
+
+            <div class="preloader" *ngIf="isSpinnerVisible">
+              <div class="loading">
+                <div class="lds-roller">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+            </div>
+            <div style="height:100px"> &nbsp;</div>
+            <div class="modal-footer">
+                <button *ngIf="!isView" type="submit" class="btn btn-primary"  (click)="print()">Print</button>
+                <button type="button" class="btn btn-danger"  (click)="close()">Close</button>
+             </div>
+          </div>
+         
+    </div>
+</div>
+
+
+
+            
+

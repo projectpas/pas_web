@@ -460,8 +460,18 @@ export class VendorWarningsComponent implements OnInit {
 
     previousOrNextTab(previousOrNext) {
         this.nextOrPreviousTab = previousOrNext;
-        let content = this.tabRedirectConfirmationModal;
-        this.modal = this.modalService.open(content, { size: "sm" });
+        if(!this.disableUpdate){
+            let content = this.tabRedirectConfirmationModal;
+            this.modal = this.modalService.open(content, { size: "sm" });
+        } else {
+            if(this.nextOrPreviousTab == "Previous"){
+                this.activeIndex = 8;
+                this.vendorService.changeofTab(this.activeIndex);
+            } else {
+                this.activeIndex = 10;
+                this.vendorService.changeofTab(this.activeIndex);
+            }
+        }
     }
 
     redirectToTab() {

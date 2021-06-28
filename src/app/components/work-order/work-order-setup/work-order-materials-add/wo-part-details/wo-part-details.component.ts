@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Input, Output, EventEmitter,ElementRef,ViewChild, OnChanges, SimpleChanges } from "@angular/core";
 import { IPartJson } from "../../../../../components/sales/shared/models/ipart-json";
 import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -35,6 +35,7 @@ export class WoPartDetailsComponent implements OnChanges {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() isEdit = false;
   @Input() editData;
+  @Input() isView:boolean=false;
   selectedColumns: any[];
   showPaginator: boolean;
   totalRecords: number;
@@ -54,10 +55,11 @@ export class WoPartDetailsComponent implements OnChanges {
   @Input() workFlowWorkOrderId=0;
   @Input('part-number') partNumber: string;
   @Input() stockLineInformation: IPartJson[];
+  @Input() isSubWorkOrder:boolean=false;
   auditHistory: any = [];
   adjAuditHistoryList: any = [];
   adjAuditHistoryData: any = [];
-  hideme = [];
+ hideme = [];
   rowIndex = -1;
   stockLineViewedRow: any;
   customPaginate: CustomPaginate<StocklineListSalesFilter> = new CustomPaginate<StocklineListSalesFilter>();
@@ -66,11 +68,15 @@ export class WoPartDetailsComponent implements OnChanges {
     partNumberObj:undefined,
     quantity:0,
     conditionIds:undefined,
-    provisionId:0
+    provisionId:0,
+    restrictPMA:false,
+    restrictDER:false,
+    includeAlternatePartNumber:false,
+    includeEquivalentPartNumber:false
   };
   searchQuery={
     first:0,
-    rows:10,
+    rows:20,
     limit:5,
     pageCount:10,
     page:10,
@@ -87,7 +93,8 @@ export class WoPartDetailsComponent implements OnChanges {
   taskList:any=[];
   provisionListData:any=[];
   materialMandatory:any=[];
-
+  selectedMaterialPart:any;
+  showMarginPopUp:boolean=false;
   constructor(private salesQuoteService: SalesQuoteService,
     private service: StocklineService,
     private modalService: NgbModal,
@@ -107,39 +114,42 @@ export class WoPartDetailsComponent implements OnChanges {
 
   ngOnInit() {    
    if(this.editData){
+    this.disableforPartNum=true;
+    this.formObject.restrictPMA= false,
+    this.formObject.restrictDER= false,
+    this.formObject.customerId= this.customer ? this.customer.customerId:0;
+    this.formObject.partId=this.editData.partItem.partId;
+    this.formObject.includeMultiplePartNumber= false;
+
+    this.formObject.includeAlternatePartNumber=false;
+    this.formObject.includeEquivalentPartNumber= false;
+    this.formObject.conditionId=this.editData.conditionCodeId;
+    this.formObject.partNumber=this.editData.partItem.partName;
     this.formObject.partNumberObj={'partId': this.editData.partItem.partId,'partNumber': this.editData.partItem.partName};
     this.formObject.partDescription=this.editData.partDescription;
     this.formObject.conditionIds=[this.editData.conditionCodeId];
     this.formObject.quantity=this.editData.quantity;
     this.formObject.qtyOnHand=this.editData.qtyOnHand;
     this.formObject.qtyAvailable=this.editData.qtyAvail;
-    this.formObject.taskId=this.editData.taskId;
-    this.formObject.provisionId=this.editData.provisionId;
-    this.formObject.isDeferred=this.editData.isDeferred;
-    this.formObject.memo=this.editData.memo;
-    this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
-  
-    this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
-    this.formObject.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
-    this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
-    
+    if(this.isSubWorkOrder){
+      this.materialCreateObject.subWorkOrderMaterialsId=this.editData.subWorkOrderMaterialsId;
+      this.materialCreateObject.workOrderMaterialsId=0;
+     }else{
+      this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+      this.materialCreateObject.subWorkOrderMaterialsId=0;
+     }
+    this.search();
+   }else{
    }
-    
-    this.getTaskList();
-    this.provisionList();
-    this.getMaterailMandatories();
-
   }
-
   hideStockline(rowIndex) {
     this.hideme[rowIndex] = !this.hideme[rowIndex];
     this.rowIndex = -1;
   }
-
   ngOnChanges(changes: SimpleChanges) {
     this.salesQuoteService.getSelectedParts().subscribe(data => {
       if (data && data.length > 0) {
-        this.selectedParts = data;
+        this.selectedParts = data; 
       }
     })
     if (this.parts.length > 0 && this.rowIndex != -1) {
@@ -149,14 +159,14 @@ export class WoPartDetailsComponent implements OnChanges {
         this.viewSelectedRow(this.parts[0], 0);
       }
     }
+    this.isView=this.isView;
   }
-
   initColumns() {
     this.columns = [
       { field: 'select', header: '', width: '30px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: '40px', textalign: 'left' },
-      { field: 'description', header: 'PN Description', width: '100px', textalign: 'left' },
-      { field: 'conditionDescription', header: 'Cond', width: '90px', textalign: 'left' },
+      { field: 'description', header: 'PN Description', width: '180px', textalign: 'left' },
+      { field: 'conditionDescription', header: 'Cond', width: '180px', textalign: 'left' },
       { field: 'itemGroup', header: 'Item Group', width: '100px', textalign: 'left' },
       { field: 'manufacturer', header: 'Manufacturer', width: '90px', textalign: 'left' },
       { field: 'itemClassification', header: 'Classification', width: '90px', textalign: 'left' },
@@ -168,29 +178,28 @@ export class WoPartDetailsComponent implements OnChanges {
     ]
     this.stockLinecolumns = [
       { field: 'selected', header: '', width: '30px', textalign: 'left' },
-      { field: 'stockLineNumber', header: 'Stk Line Num', width: '80px', textalign: 'left' },
+      { field: 'stockLineNumber', header: 'Stk Line Num', width: '100px', textalign: 'left' },
       { field: 'serialNumber', header: 'Ser Num', width: '80px', textalign: 'left' },
-      { field: 'controlNumber', header: 'Cntrl Num', width: '80px', textalign: 'left' },
-      { field: 'idNumber', header: 'Cntrl ID Num', width: '80px', textalign: 'left' },
-      { field: 'partNumber', header: 'PN', width: '80px', textalign: 'left' },
-      { field: 'description', header: 'PN Description', width: '100px', textalign: 'left' },
+      { field: 'controlNumber', header: 'Cntrl Num', width: '100px', textalign: 'left' },
+      { field: 'idNumber', header: 'Cntrl ID Num', width: '100px', textalign: 'left' },
+      { field: 'partNumber', header: 'PN', width: '200px', textalign: 'left' },
+      { field: 'description', header: 'PN Description', width: '250px', textalign: 'left' },
       { field: 'stockType', header: 'Stk Type', width: '100px', textalign: 'left' },
       { field: 'stkLineManufacturer', header: 'Manufacturer', width: '100px', textalign: 'left' },
       { field: 'uomDescription', header: 'UOM', width: '80px', textalign: 'left' },
       { field: 'qtyAvailable', header: 'Qty Avail', width: '100px', textalign: 'right' },
       { field: 'qtyOnHand', header: 'Qty On Hand', width: '100px', textalign: 'right' },
       { field: 'unitCost', header: 'Unit Cost', width: '80px', textalign: 'left' },
-      { field: 'tracableToName', header: 'Traceable to', width: '80px', textalign: 'left' },
+      { field: 'tracableToName', header: 'Traceable to', width: '100px', textalign: 'left' },
       { field: 'ownerName', header: 'Owner', width: '100px', textalign: 'left' },
       { field: 'obtainFromName', header: 'Obtain From', width: '100px', textalign: 'left' },
       { field: 'tagDate', header: 'Tag Date', width: '80px', textalign: 'left' },
       { field: 'tagType', header: 'Tag Type', width: '80px', textalign: 'left' },
       { field: 'certifiedBy', header: 'Cert By', width: '80px', textalign: 'left' },
       { field: 'certifiedDate', header: 'Cert Date', width: '80px', textalign: 'left' },
-      { field: 'memo', header: 'Memo', width: '80px', textalign: 'left' }
+      { field: 'memo', header: 'Memo', width: '250px', textalign: 'left' }
     ]
   }
-
   parsedText(text) {
     if (text) {
         const dom = new DOMParser().parseFromString(
@@ -200,12 +209,10 @@ export class WoPartDetailsComponent implements OnChanges {
         return decodedString;
    }
   }
-
   onAddTextAreaInfo(material) {
     this.disableEditor = true;
     this.textAreaInfo = material.memo;
   }
-
   onSaveTextAreaInfo(memo) {
     if (memo) {
         this.textAreaInfo = memo;
@@ -217,57 +224,33 @@ export class WoPartDetailsComponent implements OnChanges {
       this.disableUpdateButton = false;
     }
   }
-
   onCloseTextAreaInfo() {
     this.disableEditor = true;
     $("#textarea-popup2").modal("hide");
   }
-
   onPaging(event) {
   }
-
-  savePart(){
-    this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-    this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-    this.materialCreateObject.memo=this.formObject.memo;
-    this.saveMaterialListData.emit(this.materialCreateObject)
-  }
-
-  upDatePart(){
-    if(this.isEdit){
-      this.materialCreateObject= this.editData
-      this.materialCreateObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
-    }
-    this.materialCreateObject.memo=this.formObject.memo;
-     this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
-     this.materialCreateObject.extendedCost=this.formObject.extendedCost ? formatNumberAsGlobalSettingsModule(this.formObject.extendedCost, 2) : '0.00';
-    this.updateMaterialListData.emit(this.materialCreateObject)
-    this.disableUpdateButton=true;
-  }
-
-
   getActive(){
     this.disableUpdateButton=false;
   }
-
   onChange(event, part,index) {
-    console.log("part item",part)
     let checked: boolean = event.srcElement.checked;
     this.formObject.qtyOnHand = part.qtyOnHand;
-    this.formObject.qtyAvailable = part.qtyAvailable;
-    // this.onPartSelect.emit({ checked: checked, part: part });
-    if(checked==true){
-  
+    this.formObject.qtyAvailable = part.qtyAvailable; 
 
-      this.parts.forEach(element => {
-        element.isPartChecked=false;
-      });
-      part.isPartChecked==true;
+    if(checked==true){
+      event.srcElement.checked=false;
+      part.method='ItemMaster';
+      this.materialCreateObject=part;
+      if(this.editData){
+        this.materialCreateObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
+      }
       this.formObject.qtyOnHand = part.qtyOnHand;
       this.formObject.qtyAvailable = part.qtyAvailable;
       this.materialCreateObject.conditionCodeId=part.conditionId;
       this.materialCreateObject.itemMasterId=part.itemMasterId;
       this.materialCreateObject.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
+      //this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
       this.materialCreateObject.partNumber=part.partNumber;
       this.materialCreateObject.itemClassificationId=part.itemClassificationId;
       this.materialCreateObject.itemClassification=part.itemClassification;
@@ -277,7 +260,15 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.taskId=this.formObject.taskId;
       this.materialCreateObject.qtyOnHand = part.qtyOnHand;
       this.materialCreateObject.qtyAvailable = part.qtyAvailable;
-      this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :null;
+      this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :0;
+      
+      if(this.isSubWorkOrder){
+        this.materialCreateObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId ?this.formObject.subWorkOrderMaterialsId :0;
+        this.materialCreateObject.workOrderMaterialsId=0;
+       }else{
+        this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId ? this.formObject.workOrderMaterialsId :0;
+        this.materialCreateObject.subWorkOrderMaterialsId=0;
+       }
       this.materialCreateObject.stockLineId= null;
       this.materialCreateObject.quantity=this.formObject.quantity;
       this.materialCreateObject.provisionId=this.formObject.provisionId;
@@ -285,13 +276,19 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.unitOfMeasureId=part.unitOfMeasureId;
       this.materialCreateObject.provision=''; 
       this.materialCreateObject.memo=this.formObject.memo;
+      this.materialCreateObject.stocklineQuantity=part.qtyToOrder;
       this.disableSaveUpdateButton=true;
+      this.selectedMaterialPart=undefined;
+      this.selectedMaterialPart=this.materialCreateObject;
+      this.openSalesMargin();
       this.provisionListData.forEach(element => {
         if(element.value==this.formObject.provisionId){
           this.materialCreateObject.provision=element.label;
         }
       });
-    }else{
+
+    }else{ 
+      this.selectedMaterialPart=undefined;
       this.parts.forEach(element => {
         element.isPartChecked=false;
       });
@@ -304,20 +301,21 @@ export class WoPartDetailsComponent implements OnChanges {
   }
   childPartChecked
   onChangeStock(event, part, salesMargin) {
-    console.log("part item",part)
     let checked: boolean = event.srcElement.checked;
-    console.log("roleUpparts",this.roleUpMaterialList)
     if(checked==true){
-
-      this.roleUpMaterialList.forEach(element => {
-        element.childPartChecked=false;
-      });
+      event.srcElement.checked=false;
+  part.method='StockLine';
     part.childPartChecked=true;
+    if(this.editData){
+      this.materialCreateObject.totalStocklineQtyReq=this.editData.totalStocklineQtyReq;
+    }
+    this.materialCreateObject=part;
     this.formObject.qtyOnHand = part.qtyOnHand;
     this.formObject.qtyAvailable = part.qtyAvailable;
     this.materialCreateObject.conditionCodeId=part.conditionId;
     this.materialCreateObject.itemMasterId=part.itemMasterId;
     this.materialCreateObject.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
+    //this.materialCreateObject.unitCost=this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
     this.materialCreateObject.partNumber=part.partNumber;
     this.materialCreateObject.itemClassificationId=part.itemClassificationId;
     this.materialCreateObject.itemClassification=part.itemClassification;
@@ -328,6 +326,13 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject.qtyOnHand = part.qtyOnHand;
     this.materialCreateObject.qtyAvailable = part.qtyAvailable;
     this.materialCreateObject.materialMandatoriesId=this.formObject.materialMandatoriesId ? this.formObject.materialMandatoriesId :1;
+    if(this.isSubWorkOrder){
+      this.materialCreateObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId ?this.formObject.subWorkOrderMaterialsId :null;
+      this.materialCreateObject.workOrderMaterialsId=0;
+     }else{
+      this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId ? this.formObject.workOrderMaterialsId :null;
+      this.materialCreateObject.subWorkOrderMaterialsId=0;
+     }
     this.materialCreateObject.stockLineId= part.stockLineId;
     this.materialCreateObject.quantity=this.formObject.quantity
     this.materialCreateObject.provisionId=this.formObject.provisionId;
@@ -336,11 +341,15 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject.unitOfMeasure=part.unitOfMeasure;
     this.materialCreateObject.unitOfMeasureId=part.unitOfMeasureId;
     this.disableSaveUpdateButton=true;
+    this.materialCreateObject.stocklineQuantity=part.qtyAvailable;
     this.provisionListData.forEach(element => {
     if(element.value==this.formObject.provisionId){
       this.materialCreateObject.provision=element.label;
     }
     });
+    this.selectedMaterialPart={};
+    this.selectedMaterialPart=this.materialCreateObject
+    this.openSalesMargin();
   }else{
     this.roleUpMaterialList.forEach(element => {
       element.childPartChecked=false;
@@ -351,7 +360,6 @@ export class WoPartDetailsComponent implements OnChanges {
     this.materialCreateObject={};
     this.disableSaveUpdateButton=false;
   }
-    // this.select.emit({ checked: checked, part: part, salesMargin: salesMargin });
   }
   materialCreateObject:any={  
     isActive: true,
@@ -376,39 +384,36 @@ export class WoPartDetailsComponent implements OnChanges {
       let sameParts = [];
       if (isStock) {
         sameParts = this.selectedParts.filter(part =>
-          part.partNumber == this.formObject.partNumber && part.stockLineNumber == stockLineItem.stockLineNumber
-        );
-      } else {
-        sameParts = this.selectedParts.filter(part =>
-          part.partNumber == stockLineItem.partNumber
-        );
-      }
-      let qtyQuoted = 0;
-      if (sameParts && sameParts.length > 0) {
-        sameParts.forEach(samePart => {
-          qtyQuoted = qtyQuoted + samePart.quantityFromThis;
-        });
-      }
-      if (qtyQuoted < stockLineItem.qtyAvailable) {
-        let remained = stockLineItem.qtyAvailable - qtyQuoted;
-        if (remained != stockLineItem.qtyAvailable) {
-          if (isStock) {
-            this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
-          } else {
-            this.parts[rowIndex]['qtyRemainedToQuote'] = stockLineItem.qtyAvailable - qtyQuoted;
-          }
-        }
-        if (this.roleUpMaterialList[rowIndex]['qtyRemainedToQuote'] != this.roleUpMaterialList[rowIndex].qtyAvailable) {
+          part.partNumber == this.formObject.partNumber && part.stockLineId == stockLineItem.stockLineId
+        ); 
+    
+        if (stockLineItem.qtyAvailable==0) {
           return true;
         }
-        return false;
-      } else {
-        return true;
+       else if (sameParts && sameParts.length > 0) { 
+          return true;
+        }
+      }else{
+        if(!this.isEdit){
+        sameParts = this.selectedParts.filter(part =>
+          part.partNumber == this.formObject.partNumber && part.conditionCodeId == stockLineItem.conditionId
+        );
+        if (sameParts && sameParts.length > 0) {
+          return true;
+        }
       }
+    }
     } else {
       this.selectedParts = [];
       return false;
     }
+    if (isStock) {
+    if (stockLineItem.qtyAvailable==0) {
+      return true;
+    }
+  }else{
+    
+  }
   }
 
   getStocklineAccess() {
@@ -431,6 +436,12 @@ export class WoPartDetailsComponent implements OnChanges {
     this.isSpinnerVisible = true;
     this.formObject.conditionId = part.conditionId;
     this.formObject.partId = part.partId;
+
+
+    if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
+      this.formObject.conditionIds.push(this.formObject.conditionId);
+    } 
+    this.searchQuery.partSearchParamters=this.formObject;
     this.service.searchstocklinefromsoqpop(this.searchQuery)
       .subscribe(data => {
         this.isSpinnerVisible = false;
@@ -438,6 +449,8 @@ export class WoPartDetailsComponent implements OnChanges {
         if (resultdata && resultdata.length > 0) {
           this.roleUpMaterialList = resultdata;
           this.roleUpMaterialList.forEach((part, i) => {
+            part.unitCost=part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
+
             part.childPartChecked=false;
             this.roleUpMaterialList[i]['qtyRemainedToQuote'] = this.roleUpMaterialList[i].qtyAvailable;
           });
@@ -503,7 +516,6 @@ export class WoPartDetailsComponent implements OnChanges {
   get masterCompanyId(): number {
     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : 1;
   }
-  //part filters start from here
   async searchPartByPartNumber(event) {
     if (event.query !== undefined && event.query !== null) {
       this.bindPartsDroppdown(event.query);
@@ -514,18 +526,64 @@ export class WoPartDetailsComponent implements OnChanges {
       // this.searchDisabled = false;
     }
   }
-
+  modifyStockTypes(){
+    this.newFormObject={...this.formObject};
+    if(this.formObject.restrictPMA==false && this.formObject.restrictDER==false){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=true;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
+    }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==false){
+      this.newFormObject.restrictPMA=false;
+      this.newFormObject.restrictDER=true;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
+    }
+    else if(this.formObject.restrictDER==true && this.formObject.restrictPMA==false){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=false;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
+    }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==true){
+      this.newFormObject.restrictPMA=false;
+      this.newFormObject.restrictDER=false;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      // this.newFormObject.includeEquivalentPartNumber=false;
+    }else if(this.formObject.restrictPMA==true && this.formObject.restrictDER==true && this.newFormObject.includeAlternatePartNumber==true && this.newFormObject.includeEquivalentPartNumber==true){
+      this.newFormObject.restrictPMA=false;
+      this.newFormObject.restrictDER=false;
+      this.newFormObject.includeAlternatePartNumber=true;
+      this.newFormObject.includeEquivalentPartNumber=true;
+    }else if(this.formObject.includeAlternatePartNumber==true && this.formObject.includeEquivalentPartNumber==false  ){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=true;
+      this.newFormObject.includeAlternatePartNumber=true;
+      // this.newFormObject.includeEquivalentPartNumber=false;
+    }
+    else if(this.formObject.includeEquivalentPartNumber==true && this.formObject.includeAlternatePartNumber==false){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=true;
+      // this.newFormObject.includeAlternatePartNumber=false;
+      this.newFormObject.includeEquivalentPartNumber=true;
+    }else if(this.formObject.restrictPMA==false && this.formObject.restrictDER==false && this.newFormObject.includeAlternatePartNumber==true && this.newFormObject.includeEquivalentPartNumber==true){
+      this.newFormObject.restrictPMA=true;
+      this.newFormObject.restrictDER=true;
+      this.newFormObject.includeAlternatePartNumber=true;
+      this.newFormObject.includeEquivalentPartNumber=true;
+    }
+  }
+newFormObject:any={};
   bindPartsDroppdown(query) {
-    // this.searchDisabled = true;
+ this.modifyStockTypes();
     let partSearchParamters = {
       'partNumber': query,
-      "restrictPMA": this.formObject.restrictPMA,
-      "restrictDER": this.formObject.restrictDER,
+      "restrictPMA": this.newFormObject.restrictPMA,
+      "restrictDER": this.newFormObject.restrictDER,
       "customerId": this.customer.customerId,
       "custRestrictDER": this.customer.restrictDER,
       "custRestrictPMA": this.customer.restrictPMA,
-      "includeAlternatePartNumber": this.formObject.includeAlternatePartNumber,
-      "includeEquivalentPartNumber": this.formObject.includeEquivalentPartNumber,
+      "includeAlternatePartNumber": this.newFormObject.includeAlternatePartNumber,
+      "includeEquivalentPartNumber": this.newFormObject.includeEquivalentPartNumber,
       "idlist": '0',
       "masterCompanyId": this.masterCompanyId
     };
@@ -539,7 +597,6 @@ export class WoPartDetailsComponent implements OnChanges {
           this.partDetailsList = [];
           this.partDetails = [];
         }
-        // this.changeDetector.detectChanges();
       }
     )
   }
@@ -563,27 +620,28 @@ export class WoPartDetailsComponent implements OnChanges {
     this.formObject.includeMultiplePartNumber = false;
   }
   resetActionButtons() {
-    // this.searchDisabled = true;
-    //this.historicalDisabled = true;
   }
-  search($event, programaticSearch = false) {
-    // let searchQuery = JSON.parse(JSON.stringify(this.formObject));
-    this.formObject.restrictDER = !this.formObject.restrictDER;
-    this.formObject.restrictPMA = !this.formObject.restrictPMA;
-    if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
-      this.formObject.conditionIds.push(this.formObject.conditionId);
-    }
-    // let searchQuery= new ItemMasterSearchQuery();
-    this.searchQuery.partSearchParamters=this.formObject;
-    if (!programaticSearch) {
-      $event.preventDefault();
-    }
+  search() {
+    this.modifyStockTypes();
+    this.roleUpMaterialList=[];
+    this.parts=[];
+    this.hideme=[];
+    //  this.formObject.restrictDER = !this.formObject.restrictDER;
+    // this.formObject.restrictPMA = !this.formObject.restrictPMA;
+    // if (this.newFormObject.conditionIds !== undefined && this.newFormObject.conditionIds.length == 0) {
+    //   this.newFormObject.conditionIds.push(this.newFormObject.conditionId);
+    // } 
+    // this.searchQuery.partSearchParamters=this.newFormObject;
+
     if (this.formObject.includeMultiplePartNumber) {
-      // this.getMultipartsQuery();
-    } else {
+   } else {
       switch (this.formObject.itemSearchType) {
         case ItemSearchType.StockLine:
           this.isSpinnerVisible = true;
+          if (this.formObject.conditionIds !== undefined && this.formObject.conditionIds.length == 0) {
+            this.formObject.conditionIds.push(this.formObject.conditionId);
+          } 
+          this.searchQuery.partSearchParamters=this.formObject;
           this.service.searchstocklinefromsoqpop(this.searchQuery)
             .subscribe(result => {
               this.isSpinnerVisible = false;
@@ -595,32 +653,33 @@ export class WoPartDetailsComponent implements OnChanges {
                   qtyOnHandTemp = qtyOnHandTemp + resultdata[i].qtyOnHand;
                   qtyAvailableTemp = qtyAvailableTemp + resultdata[i].qtyAvailable
                 }
-              }
+              } 
               this.formObject.qtyOnHand = qtyOnHandTemp;
               this.formObject.qtyAvailable = qtyAvailableTemp;
               this.parts = result['data'];
               this.parts.forEach(element => {
                 element.isPartChecked=false;
               });
-              // this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
             });
           break;
         default:
           this.isSpinnerVisible = true;
+          if (this.newFormObject.conditionIds !== undefined && this.newFormObject.conditionIds.length == 0) {
+            this.newFormObject.conditionIds.push(this.newFormObject.conditionId);
+          } 
+          this.searchQuery.partSearchParamters=this.newFormObject;
           this.itemMasterService.searchitemmasterfromsoqpop(this.searchQuery)
             .subscribe(result => {
               this.isSpinnerVisible = false;
               if (result && result['data'] && result['data'][0]) {
-                // this.formObject.qtyOnHand = result['data'][0].qtyOnHand;
-                // this.formObject.qtyAvailable = result['data'][0].qtyAvailable;
-              }
+             }
               this.parts = result['data'];
               this.parts.forEach(element => {
                 element.isPartChecked=false;
+                element.qtyToOrder=this.formObject.quantity;
               });
-              // this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
             });
@@ -628,11 +687,14 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     }
   }
- 
   provisionList() {
     this.isSpinnerVisible = true;
     let provisionIds = []; 
-    provisionIds.push(0)
+    if(this.editData){
+      this.setEditArray.push(this.editData.provisionId ? this.editData.provisionId :0);
+    }else{
+      this.setEditArray.push(0);
+    }
     this.isSpinnerVisible = true;
     this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 0, provisionIds,this.masterCompanyId)
         .subscribe(res => {
@@ -643,10 +705,14 @@ export class WoPartDetailsComponent implements OnChanges {
             this.isSpinnerVisible = false;
         });
   }
-
   getTaskList() {  
   this.setEditArray=[];
-  this.setEditArray.push(0);
+
+  if(this.editData){
+    this.setEditArray.push(this.editData.taskId ? this.editData.taskId :0);
+  }else{
+    this.setEditArray.push(0);
+  }
   const strText = '';
   this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
    this.taskList = res.map(x => {
@@ -660,9 +726,11 @@ export class WoPartDetailsComponent implements OnChanges {
       if (this.taskList) {
         this.taskList.forEach(
             task => {
+              if(!this.isEdit){
                 if (task.description == "Assemble" || task.description == "assemble") {
-                    this.formObject.taskId = task.taskId;
-                }
+                  this.formObject.taskId = task.taskId;
+              }
+              }
             }
         )
     }
@@ -670,10 +738,14 @@ export class WoPartDetailsComponent implements OnChanges {
       err => {
       })
 }
-
 getMaterailMandatories() {
   let materialMandatoriesIds = [];
   materialMandatoriesIds.push(0)
+  if(this.editData){
+    materialMandatoriesIds.push(this.editData.materialMandatoriesId ? this.editData.materialMandatoriesId :0);
+  }else{
+   materialMandatoriesIds.push(0);
+  }
   this.isSpinnerVisible = true;
   this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 0, materialMandatoriesIds,this.masterCompanyId)
       .subscribe(res => {
@@ -685,24 +757,27 @@ getMaterailMandatories() {
                   materialMandatoriesName: x.label
               }
           });
+          if(!this.isEdit){
           this.materialMandatory.forEach(element => {
             if (element.materialMandatoriesName == 'Mandatory') {
                 this.formObject.materialMandatoriesId = element.materialMandatoriesId;
                 this.formObject.materialMandatoriesName = element.materialMandatoriesName;
             }
         });
+      }
       }, error => {
           this.isSpinnerVisible = false;
       });
 }
-
 get userName(): string {
   return this.authService.currentUser ? this.authService.currentUser.userName : "";
 }
 onClose() {
   this.close.emit(true);
 }
-
+onCloseMargin(){
+  $("#showMarginDetails").modal("hide");
+}
 saveWorkOrderMaterialList(data) { 
       const materialArr = data.materialList.map(x => {
           return {
@@ -731,8 +806,19 @@ saveWorkOrderMaterialList(data) {
           err => {
           })
 }
-
+updateQuantiry:boolean=false;
 calculateExtendedCost(): void {
+  if(this.editData){
+    if(this.formObject.quantity < this.editData.quantity){
+      this.alertService.showMessage(
+        '',
+        ' Qty Req should be greater than Actual Qty Req',
+        MessageSeverity.warn
+    );
+    this.formObject.quantity= this.editData.quantity;
+    }
+  }
+  this.updateQuantiry=true;
   this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
   this.formObject.quantity = this.formObject.quantity ? this.formObject.quantity.toString().replace(/\,/g, '') : 0;
   if (this.formObject.quantity != 0 && this.formObject.unitCost) {
@@ -741,9 +827,38 @@ calculateExtendedCost(): void {
   else {
       this.formObject.extendedCost = "";
   }
-  // this.calculateExtendedCostSummation();
+  if(this.parts && this.parts.length !=0){
+    this.parts.forEach(element => {
+      element.isPartChecked=false;
+      element.qtyToOrder=this.formObject.quantity;
+    });
+  }
 }
 editorgetmemo(ev) {
   this.disableEditor = false;
+}
+onCloseMaterial(){
+  this.showMarginPopUp=false;
+  $("#showMarginDetails").modal("hide");
+}
+finalSaveMaterial(){
+}
+savePart(data){
+this.saveMaterialListData.emit(data);
+this.showMarginPopUp=false;
+  $("#showMarginDetails").modal("hide");
+  this.close.emit(true);
+}
+upDatePart(data){ 
+this.updateMaterialListData.emit(data)
+  this.disableUpdateButton=true;
+  this.showMarginPopUp=false;
+  $("#showMarginDetails").modal("hide");
+  this.close.emit(true);
+}
+openSalesMargin() {
+  this.showMarginPopUp=false;
+this.showMarginPopUp=true;
+ $("#showMarginDetails").modal("show");
 }
 }

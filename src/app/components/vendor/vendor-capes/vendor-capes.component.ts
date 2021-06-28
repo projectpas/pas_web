@@ -331,8 +331,8 @@ export class VendorCapesComponent implements OnInit {
         if(this.arraylistCapabilityTypeId.length == 0) {
 			this.arraylistCapabilityTypeId.push(0); }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', '', true, 200, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
-            this.CapesTypelistCollection = res;
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', true, 2000, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
+            this.CapesTypelistCollection = res;            
             this.isSpinnerVisible = false;
         },err => {
             const errorLog = err;
@@ -389,11 +389,15 @@ export class VendorCapesComponent implements OnInit {
         this.isSpinnerVisible = false;
     }
 
-    onChangeCapabilityTypeId(field)
-    {
-        var ObjCapabilityType = getObjectById('value', field.capabilityTypeId, this.CapesTypelistCollection);        
-        if(ObjCapabilityType != undefined && ObjCapabilityType !=  null)
-            field.capabilityTypeDescription = ObjCapabilityType.label;
+    onChangeCapabilityTypeId(field){
+        // var ObjCapabilityType = getObjectById('value', field.capabilityTypeId, this.CapesTypelistCollection);        
+        // if(ObjCapabilityType != undefined && ObjCapabilityType !=  null)
+        //     field.capabilityTypeDescription = ObjCapabilityType.label;
+
+        this.commonService.GetCapabilityTypeDescription(field.capabilityTypeId).subscribe(response => {			
+			field.capabilityTypeDescription = response.description;
+		},err => {			
+		});
     }
 
     onChangeCostAmt(field)
@@ -622,8 +626,20 @@ export class VendorCapesComponent implements OnInit {
 
     previousOrNextTab(previousOrNext){
         this.nextOrPreviousTab = previousOrNext;
-        let content = this.tabRedirectConfirmationModal;
-        this.modal = this.modalService.open(content, { size: "sm" });
+        if(!this.disableCapes){
+            let content = this.tabRedirectConfirmationModal;
+            this.modal = this.modalService.open(content, { size: "sm" });
+        } else {
+            if(this.nextOrPreviousTab == "Previous"){
+                this.activeIndex = 1;
+                this.vendorService.changeofTab(this.activeIndex);
+                
+            } else {
+                this.activeIndex = 3;
+                this.editVendorId.emit(this.vendorId);
+                this.vendorService.changeofTab(this.activeIndex);
+            }
+        }
     }
 
     redirectToTab(){

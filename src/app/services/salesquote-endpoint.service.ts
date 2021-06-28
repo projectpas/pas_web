@@ -63,6 +63,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
   private readonly getFreightAudihistory: string = environment.baseUrl + '/api/SalesQuote/quote-freight-history';
   private readonly getChargesAudihistory: string = environment.baseUrl + '/api/salesquote/quote-charges-history';
   private readonly getAllSOQEditIDUrl: string = environment.baseUrl + '/api/SalesQuote/getAllSOQEditID';
+  private readonly _geSaleQuoteParts: string = environment.baseUrl + "/api/SalesQuote/gesalesorderquotepartslist";
   //**End  savesarvice end point creation implementation --nitin
 
   constructor(
@@ -493,6 +494,13 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       )
       .catch(error => {
         return this.handleErrorCommon(error, () => this.deleteMultiplePart(salesOrderQuotePartIds));
+      });
+  }
+
+  getSalesQuoteParts(id, isDeleted) {
+    return this.http.get<any>(`${this._geSaleQuoteParts}?SalesOrderQuoteId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesQuoteParts(id, isDeleted));
       });
   }
 }

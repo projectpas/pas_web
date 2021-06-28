@@ -20,6 +20,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   @Input() workFlowObject;
   @Input() isWorkOrder;
   @Input() isQuote = false;
+  @Input() isSummarizedView: boolean = false;
+  @Input() isLoadWoCharges:any=false;
+  @Output() refreshChargesWO = new EventEmitter();
   @Input() markupList;
   @Output() saveChargesListForWO = new EventEmitter();
   @Output() saveChargesListDeletedStatus = new EventEmitter();
@@ -43,49 +46,49 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   cols = [
     { field: 'chargeType', header: 'Charge Type' ,isRequired:true,width:"100px"},
     { field: 'glAccountName', header: 'Gl Account Name',isRequired:false ,width:"100px"},
-    { field: 'description', header: 'Description',isRequired:false },
-    { field: 'quantity', header: 'Qty',isRequired:true ,width:"60px"},
+    { field: 'description', header: 'Description',isRequired:false ,width:"220px"},
+    { field: 'quantity', header: 'Qty',isRequired:true ,width:"50px"},
     { field: 'refNum', header: 'Ref Num',isRequired:false },
     { field: 'unitCost', header: 'Unit Cost',isRequired:true ,width:"60px"},
-    { field: 'extendedCost', header: 'Extented Cost',isRequired:false ,width:"100px"},
+    { field: 'extendedCost', header: 'Extented Cost',isRequired:false ,width:"50px"},
     { field: 'vendorName', header: 'Vendor Name',isRequired:false ,width:"100px"},
   ]
   auditHistoryHeaders = [
-    { field: 'taskName', header: 'Task' ,isRequired:true},
-    { field: 'chargeType', header: 'Charge Type',isRequired:true },
-    { field: 'glAccountName', header: 'Gl Account Name',isRequired:false },
-    { field: 'description', header: 'Description',isRequired:false },
-    { field: 'quantity', header: 'Qty',isRequired:true },
-    { field: 'refNum', header: 'Ref Num',isRequired:false },
-    { field: 'unitCost', header: 'Unit Cost',isRequired:true },
-    { field: 'extendedCost', header: 'Extented Cost',isRequired:false },
-    { field: 'vendorName', header: 'Vendor Name',isRequired:false },
-    { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
-    { field: 'createdDate', header: 'Created Date',isRequired:false },
-    { field: 'createdBy', header: 'Created By',isRequired:false },
-    { field: 'updatedDate', header: 'Updated Date',isRequired:false },
-    { field: 'updatedBy', header: 'Updated By',isRequired:false },
+    { field: 'taskName', header: 'Task' ,isRequired:true,isCheckbox:false,isDate:false},
+    { field: 'chargeType', header: 'Charge Type',isRequired:true ,isCheckbox:false,isDate:false},
+    { field: 'glAccountName', header: 'Gl Account Name',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'description', header: 'Description',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'quantity', header: 'Qty',isRequired:true ,isCheckbox:false,isDate:false},
+    { field: 'refNum', header: 'Ref Num',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'unitCost', header: 'Unit Cost',isRequired:true ,isCheckbox:false,isDate:false},
+    { field: 'extendedCost', header: 'Extented Cost',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'vendorName', header: 'Vendor Name',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'isDeleted', header: 'Is Deleted',isRequired:false ,isCheckbox:true,isDate:false},
+    { field: 'createdDate', header: 'Created Date',isRequired:false ,isCheckbox:false,isDate:true},
+    { field: 'createdBy', header: 'Created By',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'updatedDate', header: 'Updated Date',isRequired:false ,isCheckbox:false,isDate:true},
+    { field: 'updatedBy', header: 'Updated By',isRequired:false ,isCheckbox:false,isDate:false},
   ]
 
   auditHistoryQuoteHeaders= [
-    { field: 'taskName', header: 'Task' ,isRequired:true},
-    { field: 'chargeType', header: 'Charge Type',isRequired:true },
-    { field: 'glAccountName', header: 'Gl Account Name',isRequired:false },
-    { field: 'description', header: 'Description',isRequired:false },
-    { field: 'quantity', header: 'Qty',isRequired:true },
-    { field: 'refNum', header: 'Ref Num',isRequired:false },
-    { field: 'unitCost', header: 'Unit Cost',isRequired:true },
-    { field: 'extendedCost', header: 'Extented Cost',isRequired:false },
-    { field: 'vendorName', header: 'Vendor Name',isRequired:false },
-    { field: 'billingName', header: 'Billing Method',isRequired:false },
-    { field: 'markUp', header: 'Mark Up',isRequired:false },
-    { field: 'billingRate', header: 'Billing Rate',isRequired:false },
-    { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
-    { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
-    { field: 'createdDate', header: 'Created Date',isRequired:false },
-    { field: 'createdBy', header: 'Created By',isRequired:false },
-    { field: 'updatedDate', header: 'Updated Date',isRequired:false },
-    { field: 'updatedBy', header: 'Updated By',isRequired:false },
+    { field: 'taskName', header: 'Task' ,isRequired:true,isCheckbox:false,isDate:false},
+    { field: 'chargeType', header: 'Charge Type',isRequired:true ,isCheckbox:false,isDate:false},
+    { field: 'glAccountName', header: 'Gl Account Name',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'description', header: 'Description',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'quantity', header: 'Qty',isRequired:true ,isCheckbox:false,isDate:false},
+    { field: 'refNum', header: 'Ref Num',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'unitCost', header: 'Unit Cost',isRequired:true ,isCheckbox:false,isDate:false},
+    { field: 'extendedCost', header: 'Extented Cost',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'vendorName', header: 'Vendor Name',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'billingName', header: 'Billing Method',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'markUp', header: 'Mark Up',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'billingRate', header: 'Billing Rate',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'billingAmount', header: 'Billing Amount',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'isDeleted', header: 'Is Deleted',isRequired:false ,isCheckbox:true,isDate:false},
+    { field: 'createdDate', header: 'Created Date',isRequired:false ,isCheckbox:false,isDate:true},
+    { field: 'createdBy', header: 'Created By',isRequired:false ,isCheckbox:false,isDate:false},
+    { field: 'updatedDate', header: 'Updated Date',isRequired:false ,isCheckbox:false,isDate:true},
+    { field: 'updatedBy', header: 'Updated By',isRequired:false ,isCheckbox:false,isDate:false},
   ]
   modal: NgbModalRef;
   isEdit: boolean = false;
@@ -93,12 +96,15 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   mainEditingIndex: number;
   subEditingIndex: number;
   costPlusType: number = 0;
-  overAllMarkup: any;
+  overAllMarkup: any='';
   addNewCharges: boolean = false;
   workOrderChargesLists: any;
   chargesFlatRateBillingAmount: any;
   workOrderQuoteDetailsId: any;
-
+  billingMethod:any={
+    tm:1,
+    actual:2
+}
   constructor(private workOrderService: WorkOrderService, private authService: AuthService,
     private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef, private commonService: CommonService) {
 
@@ -106,7 +112,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
   originalList:any=[];
   ngOnChanges() { 
+    this.isLoadWoCharges=this.isLoadWoCharges;
     this.originalList=this.workOrderChargesList;
+    this.billingMethod=this.billingMethod;
     // if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId !=0){
     //   this.disableCrg=true;
     // }else{
@@ -118,6 +126,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
     }
     if (this.workOrderChargesList) {
+      this.workOrderChargesLists =[];
       this.workOrderChargesLists = this.workOrderChargesList.reduce(function (r, a) {
         r[a.taskId] = r[a.taskId] || [];
         r[a.taskId].push(a);
@@ -140,13 +149,31 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       this.addNewCharges = true;
     }
     if (this.buildMethodDetails) {
-      this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
-      this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'];
+
+      if(this.buildMethodDetails['chargesBuildMethod'] == null || this.buildMethodDetails['chargesBuildMethod'] == 0|| this.buildMethodDetails['chargesBuildMethod'] == undefined)
+      {
+          this.costPlusType = 1;
+          this.tmchange();
+      }else{
+          this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
+      }
+
+      if(this.isLoadWoCharges)
+      {
+        this.tmchange();
+      }
+      this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'].toFixed(2);
+    
     }
   }
   ngOnInit() {
-    this.getRONumberList();
-    this.getTaskList(); 
+if(!this.isSummarizedView){
+  this.getRONumberList();
+  this.getTaskList(); 
+  this.originalList=this.workOrderChargesList;
+  this.billingMethod=this.billingMethod;
+}
+
     if (this.workOrderChargesList && this.workOrderChargesList.length > 0 && this.workOrderChargesList[0].markupFixedPrice) {
       this.costPlusType = Number(this.workOrderChargesList[0].markupFixedPrice);
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
@@ -156,8 +183,20 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     // }
     if (this.buildMethodDetails) {
       this.workOrderQuoteDetailsId=this.buildMethodDetails['workOrderQuoteDetailsId'];
-      this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
-      this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'];
+      if(this.buildMethodDetails['chargesBuildMethod'] == null || this.buildMethodDetails['chargesBuildMethod'] == 0|| this.buildMethodDetails['chargesBuildMethod'] == undefined)
+      {
+          this.costPlusType = 1;
+          this.tmchange();
+      }else{
+          this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
+      }
+
+      if(this.isLoadWoCharges)
+      {
+        this.tmchange();
+      }
+    
+      this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'].toFixed(2);
       if(this.buildMethodDetails.workOrderQuoteDetailsId !=0){
       this.disableCrg=true;
     }else{
@@ -168,7 +207,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       this.disableCrg=false;
     }
   }
-
+  loadCharges(){
+    this.refreshChargesWO.emit(true);
+  }
   get userName(): string {
     return this.authService.currentUser ? this.authService.currentUser.userName : "";
   }
@@ -183,15 +224,16 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     this.editData = undefined;
     this.addNewCharges = true;
     this.workFlowObject.charges = [{}];
-    if (this.taskList) {
-      this.taskList.forEach(
-        task => {
-          if (task.description == "Assemble") {
-            this.workFlowObject.charges[0]['taskId'] = task.taskId;
-          }
-        }
-      )
-    }
+    this.workFlowObject.charges[0]['taskId']="";
+    // if (this.taskList) {
+    //   this.taskList.forEach(
+    //     task => {
+    //       if (task.description == "Assemble") {
+    //         this.workFlowObject.charges[0]['taskId'] = task.taskId;
+    //       }
+    //     }
+    //   )
+    // }
   }
   edit(rowData, mainInd, subInd) {
     rowData.workflowChargeTypeId = rowData.chargesTypeId;
@@ -203,7 +245,6 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     this.isEdit = true;
     this.addNewCharges = true;
     this.editData = rowData; 
-    console.log("edit dataaaa",this.editData)
     this.getTaskList();
   }
   currentRow: any = {};
@@ -222,6 +263,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     if (this.isQuote) {
       this.currentRow.isDeleted = true;
       this.modal.close();
+      this.isEdit = false;
+      this.disableCrg=false;
+      //this.refreshData.emit();
       // this.workOrderChargesList[i].isDeleted = true;
     } else {
       const chargesId = this.isSubWorkOrder == true ? this.currentRow.subWorkOrderChargesId : this.currentRow.workOrderChargesId;
@@ -318,6 +362,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         x.billingAmount = Number(x.extendedCost.toString().split(',').join('')).toFixed(2);
         x.billingMethodId=this.costPlusType? this.costPlusType :0;
         x.markupPercentageId= this.overAllMarkup ? this.overAllMarkup : 0;
+        x.chargesTypeId= x.workflowChargeTypeId;
       }
     )
     this.saveChargesListForWO.emit(event);
@@ -332,7 +377,10 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   updateChargesList(event) {
     this.disableCrg=false;
     if (this.isQuote && this.isEdit) {
+      event.charges[0].chargesTypeId=event.charges[0].workflowChargeTypeId;
       this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex] = event.charges[0];
+
+      this.markupChanged(this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex],'row')
       $('#addNewCharges').modal('hide');
       this.isEdit = false;
     }
@@ -373,8 +421,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
                   "ChargesBilling": this.getTotalTaskBillingAmount(taskCharge),
                   "ChargesRevenue": this.getTotalTaskBillingAmount(taskCharge),
                   "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                  "CreatedBy": "admin",
-                  "UpdatedBy": "admin",
+                  "CreatedBy": this.userName,
+                  "UpdatedBy": this.userName,
                   "CreatedDate": new Date().toDateString(),
                   "UpdatedDate": new Date().toDateString(),
                   "IsActive": true,
@@ -397,6 +445,10 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     })
     let result = { 'data': sendData, 'taskSum': WorkOrderQuoteTask, 'chargesFlatRateBillingAmount': this.chargesFlatRateBillingAmount, 'ChargesBuildMethod': this.costPlusType }
     this.createQuote.emit(result);
+
+    this.buildMethodDetails['chargesBuildMethod'] =this.costPlusType;
+    this.buildMethodDetails['chargesFlatBillingAmount']=this.chargesFlatRateBillingAmount;
+
     this.disableCrg=true;
   }
 
@@ -404,16 +456,18 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     try {
       this.markupList.forEach((markup) => {
         if (type == 'row' && markup.value == matData.markupPercentageId) {
-          matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost'].toString().split(',').join(''))) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 0);
-          matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity), 0);
+          matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost'].toString().split(',').join(''))) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 2);
+          matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity), 2);
+
         }
         else if (type == 'all' && markup.value == this.overAllMarkup) {
           this.workOrderChargesList.forEach((data) => {
             data.forEach((mData) => {
               if (mData.billingMethodId && Number(mData.billingMethodId) == 1) {
                 mData.markupPercentageId = this.overAllMarkup;
-                mData['billingRate'] = formatNumberAsGlobalSettingsModule(Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 0);
-                mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity), 0);
+                mData['billingRate'] = formatNumberAsGlobalSettingsModule(Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 2);
+                mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity), 2);
+              
               }
             })
           })
@@ -431,18 +485,20 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         (x) => {
           x.billingMethodId = (billingMethodId == 3) ? '' : billingMethodId;
           x.markupPercentageId = '';
-          x.billingRate = 0;
+          x.billingRate = x.unitCost;
           x.billingAmount = x.extendedCost;
-          if (this.costPlusType == 3) {
-            x.billingAmount = 0.00;
-            this.chargesFlatRateBillingAmount = 0.00;
-          }
+          // if (this.costPlusType == 3) {
+          //   x.billingAmount = 0.00;
+          //   this.chargesFlatRateBillingAmount = 0.00;
+          // }
           if (Number(this.costPlusType) == 1) {
             this.overAllMarkup = '';
           }
         }
       )
     }
+
+    this.getTotalBillingAmount();
   }
 
   getTotalQuantity() {
@@ -483,14 +539,22 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0';
     return newTotal;
   }
-
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
   getTotalTaskUnitCost(tData) {
     let total = 0;
     if (tData) {
      
       tData.forEach(
         (material) => {
-          if (material.extendedCost) {
+          if (material.extendedCost && !material.isDeleted) {
             total +=parseFloat(material.extendedCost)
             // total +=   parseFloat(material.extendedCost.toString().replace(/\,/g, ''));
             // total += Number(material.extendedCost.toString().split(',').join(''));
@@ -508,7 +572,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
      
       tData.forEach(
         (material) => {
-          if (material.extendedCost) {
+          if (material.extendedCost && !material.isDeleted) {
             // total +=parseFloat(material.extendedCost)
             total +=   parseFloat(material.extendedCost.toString().replace(/\,/g, ''));
             // total += Number(material.extendedCost.toString().split(',').join(''));
@@ -541,9 +605,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         }
       )
     }
-    this.chargesFlatRateBillingAmount = total.toFixed(2);
-    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
-    return newTotal + '.00'
+    this.chargesFlatRateBillingAmount = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
+    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
+    return newTotal;
   }
 
   getTotalTaskBillingAmount(tData) {
@@ -557,9 +621,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         }
       )
     }
-    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
+    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
 
-    return newTotal + '.00';
+    return newTotal;
   }
 
   getRONumberList() {
@@ -574,7 +638,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
 
   formateCurrency(value) {
-    return value ? formatNumberAsGlobalSettingsModule(value, 0) : '0.00';
+    return value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
   }
   getPageCount(totalNoofRecords, pageSize) {
     return Math.ceil(totalNoofRecords / pageSize)
@@ -590,7 +654,6 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   taskList:any=[];
   getTaskList() {  
     this.setEditArray=[]; 
-    // console.log("taskId edit data",this.editData)
     // this.isEdit = true;
     // this.addNewCharges = true; 
     if(this.isEdit){
@@ -614,4 +677,19 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
             // this.handleError(err);
         })
 }
+       // Markup Validation 
+       checkValidationforMarkUp() {
+        var result = false;
+     if(this.workOrderChargesList &&  this.workOrderChargesList[0] && this.workOrderChargesList[0].length !=0){
+        this.workOrderChargesList[0].forEach(
+            data => {
+              if (data.billingMethodId==1) { 
+                if (data.markupPercentageId == ''  || data.markupPercentageId == undefined || data.markupPercentageId == null) {
+                  result = true;
+                }
+              }
+            })
+     }
+        return result;
+      }
 }

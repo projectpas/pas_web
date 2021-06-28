@@ -558,11 +558,11 @@ export class RoListComponent implements OnInit {
     }
 
     public getSelectedRow(rowData) {       
-        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receiving-ro?repairOrderId=${rowData.repairOrderId}`);
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receiving-ro?repairorderid=${rowData.repairOrderId}`);
     }
 
     public editStockLine(rowData) {      
-        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${rowData.repairOrderId}`);
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairorderid=${rowData.repairOrderId}`);
     }
 
     public viewSummary(rowData) {

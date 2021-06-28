@@ -383,7 +383,7 @@
                 </div>
                 <div *ngIf="toggle_po_header">
 
-                    <button class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader()"
+                    <button class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader(poConfirm)"
                         [disabled]="!createPOForm.valid" [disabled]="!enableHeaderSaveBtn">{{isEditModeHeader ? 'Update'
                         : 'Save'}}</button>
                 </div>
@@ -397,15 +397,17 @@
     <p-tabView class="pas-tabview" (onChange)="onChangeTabView($event)">
         <p-tabPanel header="Parts List">
             <form #createPOPartsForm="ngForm">
-                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>
+                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>                
                 <button data-toggle="modal" data-target="#add-multiple-partnum" class="btn btn-primary"
                     (click)="onAddMultParts()" [disabled]="disableAddPart">Add Multiple PN</button>
-                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex">
+                <button (click)="initiatePOPrintProcess()" class="btn btn-primary">Print</button>
+                <div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
+                    style="min-height: 130px !important;">
                     <div class="tableFixHead">
                         <table class="table table-bordered " id="po-table">
                             <thead>
-                                <tr class="header-table-width">
-                                    <th class="th-width"></th>
+                                <tr class="header-table-width font-size-10">
+                                    <!-- <th class="th-width"></th> -->
                                     <!-- <th style="padding-bottom: 2px !important;min-width: 50px;">
                                     <span class="checkbox-cstm">
                                         <label style="width: 20px;">
@@ -414,6 +416,8 @@
                                         </label>
                                     </span>
                                 </th> -->
+                                    <!-- <th class="th-width">SplitShipment</th> -->
+                                    <th class="min-width-30">Line#</th>
                                     <th class="th-width">SplitShipment</th>
                                     <th>PN <span class="clr-red">*</span></th>
                                     <th>ALT/Equiv PN</th>
@@ -444,16 +448,20 @@
                                     <th class="msHeader" colspan="4">Management Structure <span class="clr-red">*</span>
                                     </th>
                                     <th>Notes</th>
+                                    <th style="position: sticky !important; min-width: 100px !important;">Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <ng-container *ngFor="let partList of partListData;let row_index=index;">
                                     <!--createPOPartsList-->
-                                    <tr class="table-parent-data" *ngIf="!partList.isDeleted">
-                                        <td class="center"><i class="fa fa-trash parts-list-delete-msg"
+                                    <tr class="table-parent-data purchase-td-back" *ngIf="!partList.isDeleted">
+                                        <!-- <td class="center"><i class="fa fa-trash parts-list-delete-msg"
                                                 matTooltip="Delete Part Number" matTooltipPosition="after"
                                                 (click)="onDelPNRow(partList, row_index)"
-                                                *ngIf="!partList.isApproved"></i></td>
+                                                *ngIf="!partList.isApproved"></i></td>-->
+
+                                        <td>{{row_index + 1}}</td>
                                         <td class="center">
                                             <span class="checkbox-cstm" *ngIf="!partList.isApproved">
                                                 <label class="checkbox-label-width">
@@ -515,10 +523,10 @@
                                         <td>
                                             <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                 [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"
-                                                appendTo="body" [minDate]="headerInfo.openDate"name="needByDate{{row_index}}"
-                                                id="needByDate{{row_index}}" title="Need By Date"
-                                                [(ngModel)]="partList.needByDate" #pNeedByDate="ngModel"
-                                                (ngModelChange)="enablePartSave()" required
+                                                appendTo="body" [minDate]="headerInfo.openDate"
+                                                name="needByDate{{row_index}}" id="needByDate{{row_index}}"
+                                                title="Need By Date" [(ngModel)]="partList.needByDate"
+                                                #pNeedByDate="ngModel" (ngModelChange)="enablePartSave()" required
                                                 [disabled]="partList.isApproved"></p-calendar>
                                             <div *ngIf="pNeedByDate.invalid && (pNeedByDate.dirty || pNeedByDate.touched)"
                                                 class="alert alert-danger alert-danger-cstm">
@@ -762,16 +770,43 @@
 
 
                                         </td>
+                                        <td style="position:sticky; width:80px">
+
+                                            <!-- <td class="center"><i class="fa fa-trash parts-list-delete-msg"
+                                                matTooltip="Delete Part Number" matTooltipPosition="after"
+                                                (click)="onDelPNRow(partList, row_index)"
+                                                *ngIf="!partList.isApproved"></i></td> -->
+                                            <i class="fa fa-trash parts-list-delete-msg"
+                                                style="vertical-align: top;padding-right:5px"
+                                                matTooltip="Delete Part Number" matTooltipPosition="after"
+                                                (click)="onDelPNRow(partList, row_index)"
+                                                *ngIf="!partList.isApproved"></i>
+
+                                            <!-- <span class="checkbox-cstm" *ngIf="!partList.isApproved">
+                                                <label class="checkbox-label-width">
+                                                    <input type="checkbox" class="splitship"
+                                                        name="ifSplitShip{{row_index}}"
+                                                        [(ngModel)]="partList.ifSplitShip"
+                                                        (change)="ifSplitShipment(partList, $event)">
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                </label>
+                                            </span> -->
+
+
+
+                                        </td>
                                     </tr>
                                     <ng-container *ngIf="!partList.isDeleted">
                                         <tr class="child-header splitship-head child-header-back"
                                             *ngIf="partList.ifSplitShip">
 
-                                            <th></th>
-                                            <th><i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs"
+                                            <!-- <th></th> -->
+                                            <!-- <th><i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs"
                                                     matTooltip="Add Split Shipment" matTooltipPosition="above"
                                                     style="padding: 4px 8px !important;" (click)="addRow(partList)"
-                                                    *ngIf="!partList.isApproved"></i></th>
+                                                    *ngIf="!partList.isApproved"></i></th> -->
+                                            <th></th>
+                                            <th></th>
                                             <th>PN</th>
                                             <th>PN Description</th>
                                             <th>User Type <span class="clr-red">*</span></th>
@@ -783,6 +818,12 @@
                                             <th>Need By <span class="clr-red">*</span></th>
                                             <th colspan="4">Management Structure <span class="clr-red">*</span></th>
                                             <th colspan="15"></th>
+                                            <th style="min-width: 120px; position: sticky !important">
+                                                <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs"
+                                                    matTooltip="Add Split Shipment" matTooltipPosition="above"
+                                                    style="padding: 0px 4px !important;" (click)="addRow(partList)"
+                                                    *ngIf="!partList.isApproved"></i>
+                                            </th>
                                         </tr>
                                         <ng-container *ngIf="partList.ifSplitShip">
                                             <tr class="child-data splitship-child child-data-back"
@@ -790,10 +831,11 @@
                                                 [hidden]="partChildList.isDeleted">
 
                                                 <td></td>
-                                                <td class="center"><i class="fa fa-trash parts-list-delete-msg"
+                                                <td></td>
+                                                <!-- <td class="center"><i class="fa fa-trash parts-list-delete-msg"
                                                         matTooltip="Delete Split Shipment" matTooltipPosition="above"
                                                         (click)="deleteSplitShipment(partChildList,row_no,row_index)"
-                                                        *ngIf="!partChildList.isApproved"></i></td>
+                                                        *ngIf="!partChildList.isApproved"></i></td> -->
                                                 <td>{{partList.partNumber}}</td>
                                                 <td>{{partList.partDescription}}</td>
                                                 <td>
@@ -1005,20 +1047,28 @@
                                                             value="{{department.value}}">{{department.label}}</option>
                                                     </select>
                                                 </td>
-                                                <td colspan="16"></td>
+                                                <td colspan="15"></td>
+                                                <td class="zui-sticky-col width-107">
+                                                    <span> <i class="fa fa-trash parts-list-delete-msg"
+                                                            matTooltip="Delete Split Shipment"
+                                                            matTooltipPosition="above"
+                                                            (click)="deleteSplitShipment(partChildList,row_no,row_index)"
+                                                            *ngIf="!partChildList.isApproved"></i></span>
+
+                                                </td>
                                             </tr>
                                         </ng-container>
                                         <tr class="child-header splitship-head child-header-back"
                                             *ngIf="partList.ifSplitShip">
                                             <td class="child-td-align"></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
 
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -1027,19 +1077,22 @@
                                             <td></td>
                                             <td></td>
                                             <td colspan="17"></td>
+                                            <td style="position: sticky !important;"></td>
                                         </tr>
                                     </ng-container>
                                 </ng-container>
 
                                 <tr *ngIf="partListData.length > 0" class="child-header-back">
                                     <td class="child-td-align"><b>Total: </b></td>
+                                    <td></td>
+                                    <td></td>
+
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
@@ -1064,6 +1117,7 @@
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
+                                    <td style="position: sticky !important"></td>
                                 </tr>
                                 <tr *ngIf="partListData.length == 0">
                                     <td [attr.colspan]="40" class="no-records-cstm no-records-msg">
@@ -1113,7 +1167,7 @@
                                         {{approver.rule}}
                                     </td>
                                     <td>
-                                        <p class="m-0 p-0 p_textEditor memo-left" [innerHTML]="approver['memo']"></p>
+                                        <p class="m-0 p-0 p_textEditor memo-left"  [innerHTML]="approver['memo']"></p>
                                     </td>
                                     <td [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</td>
                                 </tr>
@@ -1134,7 +1188,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr class="pad_workflo">
-                                <th class="approver-th-align th-width">
+                                <th class="approver-th-align th-width" style="text-align: center !important;">
                                     <input type="checkbox" (click)="selectAllApproval(selectallApprovers)"
                                         [(ngModel)]="selectallApprovers" [disabled]="disableApproverSelectAll" />
                                 </th>
@@ -1217,11 +1271,14 @@
                                         <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
                                            [disabled]="!approver.isSelected || approver['actionId'] != 2"
                                            [readonly]="!approver.isSelected || approver['actionId'] != 2"/> -->
-                                        <p class="m-0 p-0 p_textEditor" class="memo-left"
+                                        <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(approver['memo'])"
                                             [innerHTML]="approver['memo']"></p>
                                         <!-- </div> -->
-                                        <div class="approver-memo-div"
-                                            *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
+
+                                        <!-- *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3" -->
+                                        <div class="approver-memo-div" style="margin-top:-18px"
+                                        *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3"  >
                                             <!-- <i class="fa fa-info-circle fa-lg" data-toggle="modal"
                                            data-target="#approvers-memo-popup"
                                            matTooltipPosition="above" matTooltip="Add Memo"
@@ -1229,8 +1286,9 @@
 
                                             <i class="fa fa-pencil btn nobg" data-toggle="modal"
                                                 data-target="#approvers-memo-popup" matTooltipPosition="above"
-                                                matTooltip="Add Memo" (click)="onClickApproversMemo(approver)"
-                                                *ngIf="approver.isSelected"></i>
+                                                *ngIf="approver.isSelected" matTooltip="Add Memo" (click)="onClickApproversMemo(approver)"
+                                               ></i>
+                                               <!-- *ngIf="approver.isSelected" -->
                                         </div>
 
                                     </td>
@@ -1455,8 +1513,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="modal fade" id="cpo-memo" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
@@ -2236,7 +2292,6 @@
     </div>
 </div>
 
-
 <div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xsm">
         <div class="modal-content">
@@ -2287,17 +2342,58 @@
             </button>
         </div>
         <div class="modal-body">
-            <h5 [ngStyle]="{'color':'red'}">
+            <strong>
+                <span [ngStyle]="{'color':'red'}">
                 <div [innerHTML]="alertText"></div>
-            </h5>
+                </span>
+            </strong>
+            
         </div>
         <div class="modal-footer">
-            <button type="button" *ngIf="!displayWarningModal" class="btn btn-primary"
+            <button type="button" *ngIf="!displayWarningModal" class="btn btn-danger"
                 (click)="dismissModel(false);">close</button>
             <button type="button" *ngIf="displayWarningModal" class="btn btn-primary"
                 (click)="dismissModel(true);">Yes</button>
             <button type="button" *ngIf="displayWarningModal" class="btn btn-danger"
                 (click)="dismissModel(false)">No</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #purchaseOrderPrintPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Print Purchase Order</h4>
+    </div>
+    <div class="modal-content" id="purchase_order_print_content">
+        <div class="modal-body">            
+            <app-purchase-order-print-template [referenceId]="id"></app-purchase-order-print-template>            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
+<ng-template class="modal fade" #poConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="CloseModel(false)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <strong>
+                Do you want to fulfill this Purchase Order? After fullfill you are not able to edit this Purchase Order.
+            </strong>            
+        </div>
+        <div class="modal-footer">            
+            <button type="button" class="btn btn-primary"
+                (click)="CloseModel(true);">Yes</button>
+            <button type="button" class="btn btn-danger"
+                (click)="CloseModel(false)">No</button>
         </div>
     </div>
 </ng-template>

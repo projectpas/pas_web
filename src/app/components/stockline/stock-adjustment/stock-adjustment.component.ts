@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { formatNumberAsGlobalSettingsModule, getValueFromObjectByKey, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { timePattern } from '../../../validations/validation-pattern';
+import { TimeLifeDraftData } from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 
 @Component({
 	selector: 'app-stock-adjustment',
@@ -66,6 +67,8 @@ export class StockAdjustmentComponent implements OnInit {
 	shelfAllow: boolean = false;
 	binAllow: boolean = false;
 	showSite: boolean = false;
+	stockMemoInfo:string;
+	stockMemoLabel:string;
 	showWarehouse: boolean = false;
 	showLocation: boolean = false;
 	showShelf: boolean = false;
@@ -89,6 +92,7 @@ export class StockAdjustmentComponent implements OnInit {
 	lotCostAllow: boolean = false;
 	timeLifeAllow: boolean = false;
 	sourceTimeLife: any = {};
+	currentItem:any={};
 	timeLifeCyclesId: number;
 	legalEntityId: number;
 	defaultCurrencyId: number;
@@ -166,6 +170,16 @@ export class StockAdjustmentComponent implements OnInit {
             this.itemTypesList = res;
         })
 	}
+	onAddStockMemo(currentItem){
+this.currentItem=currentItem;
+		// this.stockMemoInfo=this.stocklineAdjustmentData.item.adjustmentMemo;
+		
+	}
+	onSaveStockMemo(){
+	
+				this.currentItem.adjustmentMemo=this.stockMemoInfo;
+		
+			}
 
 	onClickMemo(value,row_no, obj) {
             this.memoPopupContent = obj;
@@ -302,7 +316,8 @@ export class StockAdjustmentComponent implements OnInit {
 			this.getManagementStructureCodes(this.sourceStockLineSetup.managementStructureId);
 			if (this.sourceStockLineSetup.timelIfeData != undefined && this.sourceStockLineSetup.timelIfeData != null   ) {
 				this.timeLifeCyclesId = this.sourceStockLineSetup.timelIfeData.timeLifeCyclesId;
-				this.sourceTimeLife = this.sourceStockLineSetup.timelIfeData;
+				//this.sourceTimeLife = this.sourceStockLineSetup.timelIfeData;
+				this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
 			}
 		});
 	}
@@ -415,8 +430,7 @@ export class StockAdjustmentComponent implements OnInit {
 			}			
 		},err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			const errorLog = err;			
 		});
 	}
 
@@ -1069,23 +1083,25 @@ export class StockAdjustmentComponent implements OnInit {
 		}
 	}
 
-	onSaveStockLineAdj() {
-		const timeLife = {
-			timeLifeCyclesId : this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
-			cyclesRemaining: typeof(this.sourceTimeLife.cyclesRemaining) == 'string' ? this.sourceTimeLife.cyclesRemaining : this.sourceTimeLife.cyclesRemaining ? this.datePipe.transform(this.sourceTimeLife.cyclesRemaining, "HH:mm") : null,
-			timeRemaining: typeof(this.sourceTimeLife.timeRemaining) == 'string' ? this.sourceTimeLife.timeRemaining : this.sourceTimeLife.timeRemaining ? this.datePipe.transform(this.sourceTimeLife.timeRemaining, "HH:mm") : null,
-			cyclesSinceNew: typeof(this.sourceTimeLife.cyclesSinceNew) == 'string' ? this.sourceTimeLife.cyclesSinceNew : this.sourceTimeLife.cyclesSinceNew ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceNew, "HH:mm") : null,
-			timeSinceNew: typeof(this.sourceTimeLife.timeSinceNew) == 'string' ? this.sourceTimeLife.timeSinceNew : this.sourceTimeLife.timeSinceNew ? this.datePipe.transform(this.sourceTimeLife.timeSinceNew, "HH:mm") : null,
-			lastSinceNew: typeof(this.sourceTimeLife.lastSinceNew) == 'string' ? this.sourceTimeLife.lastSinceNew : this.sourceTimeLife.lastSinceNew ? this.datePipe.transform(this.sourceTimeLife.lastSinceNew, "HH:mm") : null,
-			cyclesSinceOVH: typeof(this.sourceTimeLife.cyclesSinceOVH) == 'string' ? this.sourceTimeLife.cyclesSinceOVH : this.sourceTimeLife.cyclesSinceOVH ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceOVH, "HH:mm") : null,
-			timeSinceOVH: typeof(this.sourceTimeLife.timeSinceOVH) == 'string' ? this.sourceTimeLife.timeSinceOVH : this.sourceTimeLife.timeSinceOVH ? this.datePipe.transform(this.sourceTimeLife.timeSinceOVH, "HH:mm") : null,
-			lastSinceOVH: typeof(this.sourceTimeLife.lastSinceOVH) == 'string' ? this.sourceTimeLife.lastSinceOVH : this.sourceTimeLife.lastSinceOVH ? this.datePipe.transform(this.sourceTimeLife.lastSinceOVH, "HH:mm") : null,
-			cyclesSinceInspection: typeof(this.sourceTimeLife.cyclesSinceInspection) == 'string' ? this.sourceTimeLife.cyclesSinceInspection : this.sourceTimeLife.cyclesSinceInspection ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceInspection, "HH:mm") : null,
-			timeSinceInspection: typeof(this.sourceTimeLife.timeSinceInspection) == 'string' ? this.sourceTimeLife.timeSinceInspection : this.sourceTimeLife.timeSinceInspection ? this.datePipe.transform(this.sourceTimeLife.timeSinceInspection, "HH:mm") : null,
-			lastSinceInspection: typeof(this.sourceTimeLife.lastSinceInspection) == 'string' ? this.sourceTimeLife.lastSinceInspection : this.sourceTimeLife.lastSinceInspection ? this.datePipe.transform(this.sourceTimeLife.lastSinceInspection, "HH:mm") : null,
-			cyclesSinceRepair: typeof(this.sourceTimeLife.cyclesSinceRepair) == 'string' ? this.sourceTimeLife.cyclesSinceRepair : this.sourceTimeLife.cyclesSinceRepair ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceRepair, "HH:mm") : null,
-			timeSinceRepair: typeof(this.sourceTimeLife.timeSinceRepair) == 'string' ? this.sourceTimeLife.timeSinceRepair : this.sourceTimeLife.timeSinceRepair ? this.datePipe.transform(this.sourceTimeLife.timeSinceRepair, "HH:mm") : null,
-		}
+
+	onSaveStockLineAdj() {		
+		const timeLife = this.getTimeLife(this.sourceTimeLife);
+		// const timeLife = {
+		// 	timeLifeCyclesId : this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
+		// 	cyclesRemaining: typeof(this.sourceTimeLife.cyclesRemaining) == 'string' ? this.sourceTimeLife.cyclesRemaining : this.sourceTimeLife.cyclesRemaining ? this.datePipe.transform(this.sourceTimeLife.cyclesRemaining, "HH:mm") : null,
+		// 	timeRemaining: typeof(this.sourceTimeLife.timeRemaining) == 'string' ? this.sourceTimeLife.timeRemaining : this.sourceTimeLife.timeRemaining ? this.datePipe.transform(this.sourceTimeLife.timeRemaining, "HH:mm") : null,
+		// 	cyclesSinceNew: typeof(this.sourceTimeLife.cyclesSinceNew) == 'string' ? this.sourceTimeLife.cyclesSinceNew : this.sourceTimeLife.cyclesSinceNew ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceNew, "HH:mm") : null,
+		// 	timeSinceNew: typeof(this.sourceTimeLife.timeSinceNew) == 'string' ? this.sourceTimeLife.timeSinceNew : this.sourceTimeLife.timeSinceNew ? this.datePipe.transform(this.sourceTimeLife.timeSinceNew, "HH:mm") : null,
+		// 	lastSinceNew: typeof(this.sourceTimeLife.lastSinceNew) == 'string' ? this.sourceTimeLife.lastSinceNew : this.sourceTimeLife.lastSinceNew ? this.datePipe.transform(this.sourceTimeLife.lastSinceNew, "HH:mm") : null,
+		// 	cyclesSinceOVH: typeof(this.sourceTimeLife.cyclesSinceOVH) == 'string' ? this.sourceTimeLife.cyclesSinceOVH : this.sourceTimeLife.cyclesSinceOVH ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceOVH, "HH:mm") : null,
+		// 	timeSinceOVH: typeof(this.sourceTimeLife.timeSinceOVH) == 'string' ? this.sourceTimeLife.timeSinceOVH : this.sourceTimeLife.timeSinceOVH ? this.datePipe.transform(this.sourceTimeLife.timeSinceOVH, "HH:mm") : null,
+		// 	lastSinceOVH: typeof(this.sourceTimeLife.lastSinceOVH) == 'string' ? this.sourceTimeLife.lastSinceOVH : this.sourceTimeLife.lastSinceOVH ? this.datePipe.transform(this.sourceTimeLife.lastSinceOVH, "HH:mm") : null,
+		// 	cyclesSinceInspection: typeof(this.sourceTimeLife.cyclesSinceInspection) == 'string' ? this.sourceTimeLife.cyclesSinceInspection : this.sourceTimeLife.cyclesSinceInspection ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceInspection, "HH:mm") : null,
+		// 	timeSinceInspection: typeof(this.sourceTimeLife.timeSinceInspection) == 'string' ? this.sourceTimeLife.timeSinceInspection : this.sourceTimeLife.timeSinceInspection ? this.datePipe.transform(this.sourceTimeLife.timeSinceInspection, "HH:mm") : null,
+		// 	lastSinceInspection: typeof(this.sourceTimeLife.lastSinceInspection) == 'string' ? this.sourceTimeLife.lastSinceInspection : this.sourceTimeLife.lastSinceInspection ? this.datePipe.transform(this.sourceTimeLife.lastSinceInspection, "HH:mm") : null,
+		// 	cyclesSinceRepair: typeof(this.sourceTimeLife.cyclesSinceRepair) == 'string' ? this.sourceTimeLife.cyclesSinceRepair : this.sourceTimeLife.cyclesSinceRepair ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceRepair, "HH:mm") : null,
+		// 	timeSinceRepair: typeof(this.sourceTimeLife.timeSinceRepair) == 'string' ? this.sourceTimeLife.timeSinceRepair : this.sourceTimeLife.timeSinceRepair ? this.datePipe.transform(this.sourceTimeLife.timeSinceRepair, "HH:mm") : null,
+		// }
 		this.tempStockData = [];
 		this.stocklineAdjustmentData.map(x => {
 			if(x.adjustmentDataTypeId == 8) {
@@ -1119,27 +1135,104 @@ export class StockAdjustmentComponent implements OnInit {
 		});
 	}
 
-	errorMessageHandler(log) {
-		const errorLog = log;
-		var msg = '';
-		if(errorLog.message) {
-		  if (errorLog.error && errorLog.error.errors.length > 0) {
-					for (let i = 0; i < errorLog.error.errors.length; i++){
-						msg = msg + errorLog.error.errors[i].message + '<br/>'
-					}
-				}
-				this.alertService.showMessage(
-                    errorLog.error.message,
-					msg,
-					MessageSeverity.error
-				);
-		   }
-		   else {
-			this.alertService.showMessage(
-				'Error',
-				log.error,
-				MessageSeverity.error
-			); }
+	getTimeLifeDetails(x) {		
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData();                      
+		timeLife.timeLifeCyclesId = x.timeLifeCyclesId;
+        timeLife.cyclesRemainingHrs = x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null;
+		timeLife.cyclesRemainingMin = x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null;				
+        timeLife.cyclesSinceInspectionHrs = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null;
+		timeLife.cyclesSinceInspectionMin = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null;				
+        timeLife.cyclesSinceNewHrs = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null;
+		timeLife.cyclesSinceNewMin = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null;				
+        timeLife.cyclesSinceOVHHrs = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null;
+		timeLife.cyclesSinceOVHMin = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null;				
+        timeLife.cyclesSinceRepairHrs = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null;
+		timeLife.cyclesSinceRepairMin = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null;			
+        timeLife.timeRemainingHrs = x.timeRemaining ? x.timeRemaining.split(':')[0] : null;
+		timeLife.timeRemainingMin = x.timeRemaining ? x.timeRemaining.split(':')[1] : null;
+        timeLife.timeSinceInspectionHrs = x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null;
+		timeLife.timeSinceInspectionMin = x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null;				
+        timeLife.timeSinceNewHrs = x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null;
+		timeLife.timeSinceNewMin = x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null;				
+        timeLife.timeSinceOVHHrs = x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null;
+		timeLife.timeSinceOVHMin = x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null;				
+        timeLife.timeSinceRepairHrs = x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null;
+		timeLife.timeSinceRepairMin = x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null;	
+        timeLife.lastSinceInspectionHrs = x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null;
+		timeLife.lastSinceInspectionMin = x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null;				
+        timeLife.lastSinceNewHrs = x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null;
+		timeLife.lastSinceNewMin = x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null;				
+        timeLife.lastSinceOVHHrs = x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null;
+        timeLife.lastSinceOVHMin = x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null;           
+        return timeLife;
+	}
+
+	getTimeLife(x) {
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData(); 
+		timeLife.timeLifeCyclesId = this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null;   
+		timeLife.cyclesRemaining = ((x.cyclesRemainingHrs ? x.cyclesRemainingHrs : '00') + ':' + (x.cyclesRemainingMin ? x.cyclesRemainingMin : '00'));
+		timeLife.timeRemaining = ((x.timeRemainingHrs ? x.timeRemainingHrs : '00') + ':' + (x.timeRemainingMin ? x.timeRemainingMin : '00'));
+		timeLife.cyclesSinceNew = ((x.cyclesSinceNewHrs ? x.cyclesSinceNewHrs : '00') + ':' + (x.cyclesSinceNewMin ? x.cyclesSinceNewMin : '00'));
+		timeLife.timeSinceNew = ((x.timeSinceNewHrs ? x.timeSinceNewHrs : '00') + ':' + (x.timeSinceNewMin ? x.timeSinceNewMin : '00'));
+		timeLife.lastSinceNew = ((x.lastSinceNewHrs ? x.lastSinceNewHrs : '00') + ':' + (x.lastSinceNewMin ? x.lastSinceNewMin : '00'));
+		timeLife.cyclesSinceOVH = ((x.cyclesSinceOVHHrs ? x.cyclesSinceOVHHrs : '00') + ':' + (x.cyclesSinceOVHMin ? x.cyclesSinceOVHMin : '00'));
+		timeLife.timeSinceOVH = ((x.timeSinceOVHHrs ? x.timeSinceOVHHrs : '00') + ':' + (x.timeSinceOVHMin ? x.timeSinceOVHMin : '00'));
+		timeLife.lastSinceOVH = ((x.lastSinceOVHHrs ? x.lastSinceOVHHrs : '00') + ':' + (x.lastSinceOVHMin ? x.lastSinceOVHMin : '00'));
+		timeLife.cyclesSinceInspection = ((x.cyclesSinceInspectionHrs ? x.cyclesSinceInspectionHrs : '00') + ':' + (x.cyclesSinceInspectionMin ? x.cyclesSinceInspectionMin : '00'));
+		timeLife.timeSinceInspection = ((x.timeSinceInspectionHrs ? x.timeSinceInspectionHrs : '00') + ':' + (x.timeSinceInspectionMin ? x.timeSinceInspectionMin : '00'));
+		timeLife.lastSinceInspection = ((x.lastSinceInspectionHrs ? x.lastSinceInspectionHrs : '00') + ':' + (x.lastSinceInspectionMin ? x.lastSinceInspectionMin : '00'));
+		timeLife.cyclesSinceRepair = ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00'));
+		timeLife.timeSinceRepair = ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00'));				
+        return timeLife;
+	}
+
+	onChangeTimeLifeMin(name,value) {  	
+        if (value > 59) {           
+			this.alertService.showMessage('Error','Minutes can\'t be greater than 59', MessageSeverity.error);
+			this.timeLifeMinNames(name);
+        }       
+	}
+	
+	timeLifeMinNames(name){
+		if(name == 'cyclesRemainingMin'){
+			this.sourceTimeLife.cyclesRemainingMin = '00';
+		}
+		else if (name == 'timeRemainingMin'){
+			this.sourceTimeLife.timeRemainingMin = '00';
+		}
+		else if (name == 'lastSinceNewMin'){
+			this.sourceTimeLife.lastSinceNewMin = '00';
+		}
+		else if (name == 'cyclesSinceNewMin'){
+			this.sourceTimeLife.cyclesSinceNewMin = '00';
+		}
+		else if (name == 'timeSinceNewMin'){
+			this.sourceTimeLife.timeSinceNewMin = '00';
+		}
+		else if (name == 'lastSinceOVHMin'){
+			this.sourceTimeLife.lastSinceOVHMin = '00';
+		}
+		else if (name == 'cyclesSinceOVHMin'){
+			this.sourceTimeLife.cyclesSinceOVHMin = '00';
+		}
+		else if (name == 'timeSinceOVHMin'){
+			this.sourceTimeLife.timeSinceOVHMin = '00';
+		}
+		else if (name == 'lastSinceInspectionMin'){
+			this.sourceTimeLife.lastSinceInspectionMin = '00';
+		}
+		else if (name == 'cyclesSinceInspectionMin'){
+			this.sourceTimeLife.cyclesSinceInspectionMin = '00';
+		}
+		else if (name == 'timeSinceInspectionMin'){
+			this.sourceTimeLife.timeSinceInspectionMin = '00';
+		}
+		else if (name == 'cyclesSinceRepairMin'){
+			this.sourceTimeLife.cyclesSinceRepairMin = '00';
+		}
+		else if (name == 'timeSinceRepairMin'){
+			this.sourceTimeLife.timeSinceRepairMin = '00';
+		}
 	}
 }
 

@@ -15,6 +15,7 @@ declare var $: any;
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
+import { WorkOrderPartPickticketprintComponent } from '../work-order-part-pickticketprint/work-order-part-pickticketprint.component';
 
 @Component({
   selector: 'app-work-order-part-pickticket',
@@ -23,6 +24,7 @@ import { StocklineViewComponent } from '../../../../shared/components/stockline/
 })
 export class WorkOrderPartPickticketComponent implements OnInit {
   @Input() referenceId;
+  @Input() workFlowWorkOrderId;
   @Input() isView: boolean = false;
   isEnablePOList: any;
   pickTickes: any[] = [];
@@ -105,10 +107,10 @@ export class WorkOrderPartPickticketComponent implements OnInit {
       { field: "qtyToShip", header: "Qty Picked", width: "130px" },
       { field: "qtyToPick", header: "Qty To Pick", width: "130px" },
       { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
-      { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
+      { field: "readyToPick", header: "Ready To Pick", width: "130px" },
       { field: "status", header: "Status", width: "130px" },
-      { field: "orderNumber", header: "SO Num", width: "130px" },
-      { field: "orderQuoteNumber", header: "SOQ Num", width: "130px" },
+      { field: "orderNumber", header: "WO Num", width: "130px" },
+      { field: "orderQuoteNumber", header: "WOQ Num", width: "130px" },
       { field: "customerName", header: "Customer Name", width: "130px" },
       { field: "customerCode", header: "Customer Code", width: "130px" },
     ];
@@ -132,9 +134,10 @@ export class WorkOrderPartPickticketComponent implements OnInit {
   }
 
   onSearch() {
+    
     this.isSpinnerVisible = true;
     this.workOrderService
-      .getPickTicketList(this.referenceId)
+      .getPickTicketListMainPart(this.referenceId, this.workFlowWorkOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.pickTickes = response;
@@ -184,8 +187,8 @@ export class WorkOrderPartPickticketComponent implements OnInit {
   }
 
   printPickTicket(rowData: any) {
-    this.modal = this.modalService.open(WorkOrderPickticketprintComponent, { size: "lg" });
-    let instance: WorkOrderPickticketprintComponent = (<WorkOrderPickticketprintComponent>this.modal.componentInstance)
+    this.modal = this.modalService.open(WorkOrderPartPickticketprintComponent, { size: "lg" });
+    let instance: WorkOrderPartPickticketprintComponent = (<WorkOrderPartPickticketprintComponent>this.modal.componentInstance)
     instance.modalReference = this.modal;
 
     instance.onConfirm.subscribe($event => {
@@ -194,7 +197,7 @@ export class WorkOrderPartPickticketComponent implements OnInit {
       }
     });
     instance.workOrderId = rowData.workOrderId;
-    instance.workOrderPartId = rowData.workOrderMaterialsId;
+    instance.workOrderPartId = rowData.workFlowWorkOrderId;
     instance.woPickTicketId = rowData.pickTicketId;
   }
 
@@ -263,11 +266,11 @@ export class WorkOrderPartPickticketComponent implements OnInit {
     const itemMasterId = rowData.itemMasterId;
     const conditionId = rowData.conditionId;
     const workOrderId = rowData.workOrderId;
-    const workOrderMaterialsId = rowData.workOrderMaterialsId;
+    const workOrderMaterialsId = rowData.workFlowWorkOrderId;
     this.qtyToPick = rowData.qtyToPick;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
     this.workOrderService
-      .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId)
+      .getStockLineforPickTicket(itemMasterId, conditionId, workOrderId, true)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.parts = response;
@@ -332,13 +335,19 @@ export class WorkOrderPartPickticketComponent implements OnInit {
     }
     if (invalidQty) {
       this.isSpinnerVisible = false;
-      this.alertService.resetStickyMessage();
-      this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
+      this.alertService.stopLoadingMessage();
+      this.alertService.showMessage(
+        "",
+        errmessage,
+        MessageSeverity.warn
+      );
+      // this.alertService.resetStickyMessage();
+      // this.alertService.showStickyMessage('Work Order', errmessage, MessageSeverity.error);
     }
     else {
       this.disableSubmitButton = true;
       this.workOrderService
-        .savepickticketiteminterface(parts)
+        .savepickticketiteminterface_mainpart(parts)
         .subscribe(data => {
           this.alertService.stopLoadingMessage();
           this.alertService.showMessage(
@@ -364,7 +373,7 @@ export class WorkOrderPartPickticketComponent implements OnInit {
   confirmPickTicket(): void {
     this.isSpinnerVisible = true;
     this.confirmedById = this.employeeId;
-    this.workOrderService.confirmPickTicket(this.confirmselected, this.confirmedById).subscribe(response => {
+    this.workOrderService.confirmPickTicket(this.confirmselected, this.confirmedById, true).subscribe(response => {
       this.isSpinnerVisible = false;
       this.modal.close();
       this.alertService.showMessage(
@@ -384,12 +393,13 @@ export class WorkOrderPartPickticketComponent implements OnInit {
   }
 
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
+    this.isSpinnerVisible = true;
     const pickTicketId = rowData.pickTicketId;
     const referenceId = rowData.workOrderId;
-    const orderPartId = rowData.workOrderMaterialsId;
+    const orderPartId = rowData.workFlowWorkOrderId;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
     this.workOrderService
-      .getPickTicketEdit(pickTicketId, referenceId, orderPartId)
+      .getPickTicketEdit(pickTicketId, referenceId, orderPartId, true)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.parts = response;

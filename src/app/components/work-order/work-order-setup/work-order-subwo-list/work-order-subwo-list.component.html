@@ -21,7 +21,7 @@
               {{ col.header }}
               <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
-          <th class="table-actions-column" *ngIf="!isView">
+          <th class="table-actions-column">
             Actions
           </th>
         </tr>
@@ -35,7 +35,7 @@
           <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
             name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
           </th>
-          <th class="table-column-width" *ngIf="!isView"></th>
+          <th class="table-column-width"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -53,12 +53,12 @@
                 : rowData[col.field]
             }}
           </td>
-          <td class="action-icons-cstm table-column-width" *ngIf="subWorkOrderData && !isView">
+          <td class="action-icons-cstm table-column-width" >
             <span data-toggle="modal" data-target="#viewSubWOrkOrder" *ngIf="!forSubWorkOrder"><a class="btn nobg btn-view-cstm" 
               (click)="view(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a></span>
-            <span *ngIf="!forSubWorkOrder"><a class="btn nobg btn-edit-cstm" 
+            <span *ngIf="!forSubWorkOrder && !isView"><a class="btn nobg btn-edit-cstm" 
               (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-         <span *ngIf="forSubWorkOrder==true">
+         <span *ngIf="forSubWorkOrder==true && !isView">
           <a class="btn nobg btn-edit-cstm"   (click)="AddSubWo(rowData)" >
             <i class="fa fa-plus" style="color:green" matTooltip="Add to Existing Sub Work Order" matTooltipPosition="above" ></i>
           </a>

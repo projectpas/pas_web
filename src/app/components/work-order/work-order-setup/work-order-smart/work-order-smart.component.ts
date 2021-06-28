@@ -29,7 +29,7 @@ export class WorkOrderSmartComponent implements OnInit {
     workOrderStagesList: any;
     priorityList: any;
     workOrderTypes: any;
-    workOrderStatusList: any;
+    workOrderStatusList: any=[];
     partNumberOriginalData: Object;
     workOrderId: any;
     recCustomerId: any = 0;

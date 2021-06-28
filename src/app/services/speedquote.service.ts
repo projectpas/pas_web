@@ -8,16 +8,20 @@ import { Role } from "../models/role.model";
 import { ISalesQuoteView } from "../models/sales/ISalesQuoteView";
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { IPartJson } from "../components/sales/shared/models/ipart-json";
-import { PartDetail } from "../components/sales/shared/models/part-detail";
+//import { PartDetail } from "../components/sales/shared/models/part-detail";
+import { PartDetail } from "../components/sales/speed-quote/shared/models/part-detail";
 import { SalesOrderView } from "../models/sales/SalesOrderView";
 import { BehaviorSubject } from "rxjs";
 import { formatStringToNumber } from "../generic/autocomplete";
 import { SalesOrderQuotePart } from "../models/sales/SalesOrderQuotePart";
+import { SpeedQuotePart } from "../models/sales/SpeedQuotePart";
 import { ISpeedQuote } from "../models/sales/ISpeedQuote.model";
 import { SpeedQuote } from "../models/sales/SpeedQuote.model";
 import { ISpeedQuoteView } from "../models/sales/ISpeedQuoteView";
 import { SpeedQuoteEndpointService } from "./speedquote-endpoint.service";
 import { SpeedQuoteMarginSummary } from "../models/sales/SpeedQuoteMarginSummary";
+import { ISpeedQuoteListView } from "../models/sales/ISpeedQuoteListView";
+import { SpeedQuotePrintCritera } from "../components/sales/speed-quote/models/speed-quote-print-criteria";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
@@ -120,32 +124,30 @@ export class SpeedQuoteService {
   marshalSpeedQPartToView(selectedPart) {
     let partNumberObj = new PartDetail();
     partNumberObj.itemMasterId = selectedPart.itemMasterId;
-    partNumberObj.stockLineId = selectedPart.stockLineId;
-    partNumberObj.fixRate = selectedPart.fxRate;
-    partNumberObj.quantityFromThis = selectedPart.qtyQuoted;
-    partNumberObj.quantityRequested = selectedPart.qtyRequested;
-    partNumberObj.quantityToBeQuoted = selectedPart.qtyQuoted;
+    partNumberObj.quantityRequested = selectedPart.quantityRequested;
+    //partNumberObj.quantityToBeQuoted = selectedPart.qtyQuoted;
     partNumberObj.conditionId = selectedPart.conditionId;
     partNumberObj.conditionDescription = selectedPart.conditionDescription;
     partNumberObj.currencyId = selectedPart.currencyId;
     partNumberObj.currencyDescription = selectedPart.currencyDescription;
-    partNumberObj.customerRequestDate = new Date(selectedPart.customerRequestDate);
-    partNumberObj.promisedDate = new Date(selectedPart.promisedDate);
-    partNumberObj.estimatedShipDate = new Date(selectedPart.estimatedShipDate);
-    partNumberObj.priorityId = selectedPart.priorityId;
+    // partNumberObj.customerRequestDate = new Date(selectedPart.customerRequestDate);
+    // partNumberObj.promisedDate = new Date(selectedPart.promisedDate);
+    // partNumberObj.estimatedShipDate = new Date(selectedPart.estimatedShipDate);
+    // partNumberObj.priorityId = selectedPart.priorityId;
     partNumberObj.partNumber = selectedPart.partNumber;
-    partNumberObj.priorityName = selectedPart.priorityName;
+    //partNumberObj.priorityName = selectedPart.priorityName;
     partNumberObj.statusName = selectedPart.statusName;
     partNumberObj.description = selectedPart.partDescription;
-    partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
-    partNumberObj.customerRef = selectedPart.customerReference;
+    //partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
+    //partNumberObj.customerRef = selectedPart.customerReference;
     partNumberObj.uom = selectedPart.uomName;
-    partNumberObj.pmaStatus = selectedPart.stockType;
-    partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
-    partNumberObj.quantityOnHand = selectedPart.quantityOnHand;
-    partNumberObj.salesOrderQuotePartId = selectedPart.salesOrderQuotePartId;
-    partNumberObj.salesPricePerUnit = selectedPart.unitSalePrice;
-    partNumberObj.salesPriceExtended = selectedPart.salesBeforeDiscount;
+    //partNumberObj.pmaStatus = selectedPart.stockType;
+    //partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
+    //partNumberObj.quantityOnHand = selectedPart.quantityOnHand;
+    partNumberObj.speedQuotePartId = selectedPart.speedQuotePartId;
+    //partNumberObj.salesPricePerUnit = selectedPart.unitSalePrice;
+    partNumberObj.unitSalePrice = selectedPart.unitSalePrice;
+    partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended;
     partNumberObj.salesDiscount = selectedPart.discount;
     partNumberObj.salesDiscountPerUnit = selectedPart.discountAmount;
     partNumberObj.netSalesPriceExtended = selectedPart.netSales;
@@ -153,33 +155,19 @@ export class SpeedQuoteService {
     partNumberObj.quantityFromThis = selectedPart.qtyQuoted;
     partNumberObj.markUpPercentage = selectedPart.markUpPercentage;
     partNumberObj.createdBy = selectedPart.createdBy;
-    partNumberObj.markupExtended = selectedPart.markupExtended;
-    partNumberObj.method = selectedPart.method;
-    partNumberObj.methodType = selectedPart.methodType;
-    partNumberObj.serialNumber = selectedPart.serialNumber;
     partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended;
     partNumberObj.marginPercentageExtended = selectedPart.marginPercentage;
     partNumberObj.markupExtended = selectedPart.markupExtended;
+    partNumberObj.unitCost = selectedPart.unitCost;
     partNumberObj.unitCostPerUnit = selectedPart.unitCost;
     partNumberObj.unitCostExtended = selectedPart.unitCostExtended;
-    partNumberObj.taxCode = selectedPart.taxCode;
-    partNumberObj.taxAmount = selectedPart.taxAmount;
-    partNumberObj.freight = selectedPart.freight;
-    partNumberObj.misc = selectedPart.misc;
-    partNumberObj.totalSales = selectedPart.totalSales;
-    partNumberObj.idNumber = selectedPart.idNumber;
-    partNumberObj.isApproved = selectedPart.isApproved;
-    partNumberObj.markupPerUnit = selectedPart.markupPerUnit;
-    partNumberObj.salesDiscountExtended = selectedPart.salesDiscountExtended;
-    partNumberObj.controlNumber = selectedPart.controlNumber;
-    partNumberObj.grossSalePrice = selectedPart.grossSalePrice;
-    partNumberObj.grossSalePricePerUnit = selectedPart.grossSalePricePerUnit;
-    partNumberObj.quantityAlreadyQuoted = selectedPart.qtyPrevQuoted;
     partNumberObj.altOrEqType = selectedPart.altOrEqType;
-    partNumberObj.notes = selectedPart.notes;
-    partNumberObj.taxType = selectedPart.taxType;
-    partNumberObj.taxAmount = selectedPart.taxAmount;
-    partNumberObj.taxPercentage = selectedPart.taxPercentage;
+    partNumberObj.notes = selectedPart.notes;    
+    partNumberObj.manufacturerId = selectedPart.manufacturerId;
+    partNumberObj.manufacturer = selectedPart.manufacturer;
+    partNumberObj.oempmader = selectedPart.type;
+    partNumberObj.tat = selectedPart.tat;
+    partNumberObj.isEditPart = true;
     partNumberObj.itemNo = selectedPart.itemNo;
     return partNumberObj;
   }
@@ -190,48 +178,29 @@ export class SpeedQuoteService {
         selectedPart[key] = 0;
       }
     })
-    let partNumberObj = new SalesOrderQuotePart();
-    partNumberObj.salesOrderQuotePartId = selectedPart.salesOrderQuotePartId;
-    partNumberObj.stockLineId = selectedPart.stockLineId;
-    partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
-    partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
-    partNumberObj.promisedDate = selectedPart.promisedDate.toDateString();
-    partNumberObj.estimatedShipDate = selectedPart.estimatedShipDate.toDateString();
-    partNumberObj.priorityId = selectedPart.priorityId;
+    let partNumberObj = new SpeedQuotePart();
+    partNumberObj.speedQuotePartId = selectedPart.speedQuotePartId;
     partNumberObj.itemMasterId = selectedPart.itemMasterId;
-    partNumberObj.fxRate = selectedPart.fixRate;
     partNumberObj.qtyQuoted = selectedPart.quantityToBeQuoted ? formatStringToNumber(selectedPart.quantityToBeQuoted) : 0;
-    partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
-    partNumberObj.unitSalePrice = selectedPart.salesPricePerUnit;
-    partNumberObj.salesBeforeDiscount = formatStringToNumber(selectedPart.salesPriceExtended);
-    partNumberObj.discount = selectedPart.discount ? Number(selectedPart.discount) : 0;
-    partNumberObj.discountAmount = selectedPart.salesDiscountPerUnit;
-    partNumberObj.netSales = formatStringToNumber(selectedPart.netSalesPriceExtended);
+    //partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
+    partNumberObj.quantityRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
+    partNumberObj.unitSalePrice = selectedPart.unitSalePrice;
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
-    partNumberObj.taxType = selectedPart.taxType;
-    partNumberObj.taxAmount = selectedPart.taxAmount;
-    partNumberObj.taxPercentage = selectedPart.taxPercentage;
     if (!selectedPart.createdBy) {
       partNumberObj.createdBy = userName;
     } else {
       partNumberObj.createdBy = selectedPart.createdBy;
     }
 
-    partNumberObj.idNumber = selectedPart.idNumber;
     partNumberObj.updatedBy = userName;
     partNumberObj.createdOn = new Date().toDateString();
     partNumberObj.updatedOn = new Date().toDateString();
-    partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
+    //partNumberObj.unitCost = selectedPart.unitCost ? selectedPart.unitCost : 0;
     partNumberObj.altOrEqType = selectedPart.altOrEqType;
     partNumberObj.qtyPrevQuoted = selectedPart.quantityAlreadyQuoted;
-    partNumberObj.methodType =
-      selectedPart.stockLineId != null ? "S" : "I";
     partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0;
-    partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0;
-    partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
-    partNumberObj.markupPerUnit = selectedPart.markupPerUnit;
-    partNumberObj.salesDiscountExtended = selectedPart.salesDiscountExtended;
     partNumberObj.netSalePriceExtended = selectedPart.netSalePriceExtended;
+    partNumberObj.unitCost = selectedPart.unitCost ? formatStringToNumber(selectedPart.unitCost) : 0;
     partNumberObj.unitCostExtended = selectedPart.unitCostExtended ? formatStringToNumber(selectedPart.unitCostExtended) : 0;
     partNumberObj.marginAmount = selectedPart.marginAmount ? formatStringToNumber(selectedPart.marginAmount) : 0;
     partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended ? formatStringToNumber(selectedPart.marginAmountExtended) : 0;
@@ -239,13 +208,15 @@ export class SpeedQuoteService {
     partNumberObj.conditionId = selectedPart.conditionId;
     partNumberObj.currencyId = selectedPart.currencyId;
     partNumberObj.uom = selectedPart.uom;
-    partNumberObj.controlNumber = selectedPart.controlNumber;
     partNumberObj.grossSalePricePerUnit = selectedPart.grossSalePricePerUnit;
     partNumberObj.grossSalePrice = selectedPart.grossSalePrice + selectedPart.misc;
     partNumberObj.notes = selectedPart.notes;
-    partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
-    partNumberObj.customerReference = selectedPart.customerRef;
     partNumberObj.itemNo = selectedPart.itemNo;
+    partNumberObj.manufacturerId = selectedPart.manufacturerId;
+    partNumberObj.manufacturer = selectedPart.manufacturer;
+    partNumberObj.type = selectedPart.oempmader;
+    partNumberObj.tat = selectedPart.tat;
+    partNumberObj.marginAmount = selectedPart.marginAmountPerUnit;
     return partNumberObj;
   }
 
@@ -312,6 +283,90 @@ export class SpeedQuoteService {
   closeSpeedQuote(salesQuoteId: number, updatedBy: string): Observable<ISalesQuoteView[]> {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.closeSpeedQuoteEndPoint(salesQuoteId, updatedBy)
+    );
+  }
+
+  resetSearchPart() {
+    this.parts = [];
+    this.query = new ItemMasterSearchQuery();
+    this.query.partSearchParamters.quantityAlreadyQuoted = 0;
+  }
+
+  getSearchPartObject() {
+    return Observable.create(observer => {
+      observer.next(this.query);
+      observer.complete();
+    });
+  }
+  updateSearchPartResult(parts) {
+    this.parts = parts;
+  }
+
+  updateSearchPartObject(query) {
+    this.query = query;
+  }
+  getSearchPartResult() {
+    return Observable.create(observer => {
+      observer.next(this.parts);
+      observer.complete();
+    });
+  }
+  getItemMasterDataConditionWise(id) {
+    return this.speedQuoteEndPointSevice.getItemMasterDataConditionWise(id);
+  }
+  search(
+    speedQuoteSearchParameters
+  ): Observable<ISpeedQuoteListView[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.search(speedQuoteSearchParameters)
+    );
+  }
+
+  saveExclusionPart(data) {
+    return this.speedQuoteEndPointSevice.saveExclusionPart(data);
+  }
+  getExclusionList(id) {
+    return this.speedQuoteEndPointSevice.getExclusionList(id);
+  }
+  delete(speedQuoteId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.delete(speedQuoteId)
+    );
+  }
+  getSpeedQuoteHistory(speedQuoteId) {
+    return this.speedQuoteEndPointSevice.getSpeedQuoteHistory(speedQuoteId);
+  }
+  getview(speedQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.getview(speedQuoteId)
+    );
+  }
+  deletePart(speedQuotePartId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.deletePart(speedQuotePartId)
+    );
+  }
+  getSpeedQuotePartHistory(speedQuotePartId) {
+    return this.speedQuoteEndPointSevice.getSpeedQuotePartHistory(speedQuotePartId);
+  }
+  getPrintview(speedQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.getPrintview(speedQuoteId)
+    );
+  }
+  getExclusionPrintview(speedQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.getExclusionPrintview(speedQuoteId)
+    );
+  }
+  sendSppedQuoteEmail(speedQuotePrintCritera: SpeedQuotePrintCritera): Observable<SalesOrderView[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.sendSppedQuoteEmail(speedQuotePrintCritera)
+    );
+  }
+  deleteExclusion(exclusionPartId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.deleteExclusion(exclusionPartId)
     );
   }
 }

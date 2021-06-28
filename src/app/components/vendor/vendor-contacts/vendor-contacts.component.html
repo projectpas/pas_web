@@ -166,7 +166,7 @@
                       <ng-template pTemplate="colgroup" let-columns>
                           <colgroup>
                               <col *ngFor="let col of columns"
-                              [ngStyle]="{'width': col.width}"   />
+                              class="table-column-width"   />
                           </colgroup>
                       </ng-template>
                       <ng-template pTemplate="header" let-columns>
@@ -245,7 +245,8 @@
                                     {{rowData.fullContactNo}}
                                    </ng-container>  
                                    <ng-container *ngIf="col.field == 'notes'">                  
-                                    <span class="value"><p class="p-0 m-0 p_textEditor" [innerHTML]="rowData.notes"></p></span>
+                                    <span class="value"><p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                      [matTooltip]="parsedText(rowData.notes)" [innerHTML]="rowData.notes"></p></span>
                                    </ng-container>
                               </td>
                               <td class="action-icons-cstm table-column-width">
@@ -596,7 +597,9 @@
               }">
               {{ audit.fax }}
             </td>
-            <td [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }" [innerHTML]="audit.notes"></td>
+            <td [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
+            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+            [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p></td>
             <td class="text-center width-60">
               <span class="value">
                 <label class="wauto"> 
@@ -743,7 +746,8 @@
         <span class="label"><b>Fax: </b></span><span class="value">{{ sourceVendorforView.fax }}</span>
       </p>
       <p>
-        <span class="label"><b>Memo : </b></span><span class="value" [innerHTML]="sourceVendorforView.notes"> </span>
+        <span class="label"><b>Memo : </b></span><span class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+        [matTooltip]="parsedText(sourceVendorforView.notes)" [innerHTML]="sourceVendorforView.notes"> </span>
       </p>
 
       <div class="clear"></div>

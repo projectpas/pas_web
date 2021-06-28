@@ -42,7 +42,7 @@
                     </div>              
                         <div>
                             <div class="card-body header-body"> 
-                                <p-table #dt class="rpo-table-cstm lastcol-fix" 
+                                <p-table #dt class="rpo-table-cstm rro-table-cstm ptable-f10" 
                                             [value]="allActions"                                             
                                             [metaKeySelection]="true" 
                                             [rows]="pageSize" 
@@ -170,9 +170,9 @@
                                     </ng-template>
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
-                                            <col *ngFor="let col of columns"  [ngStyle]="{'width': col.width}"/>
+                                          <col *ngFor="let col of columns" class="table-column-width" />
                                         </colgroup>
-                                    </ng-template>
+                                      </ng-template>
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
                                             <th class="width-50">Flag</th>

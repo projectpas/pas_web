@@ -203,6 +203,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                             this.isSpinnerVisible = false;
                             if (res) {
                                 charge.memo = res.memo;
+                                charge.description = res.description;
                                 charge.glAccountName = res.glAccountName;
                             }
                         }, error => {
@@ -222,10 +223,12 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     private loadAllVendors(strText = '') {
         this.isSpinnerVisible = true;
         let arrayVendlsit = []
-        if (this.UpdateMode) {
-            arrayVendlsit = this.workFlow.charges.reduce((acc, x) => {
-                return arrayVendlsit.push(acc.vendorId);
-            }, 0)
+        if (this.UpdateMode && this.isWorkOrder) {
+          this.workFlow.charges.forEach(element => {
+                arrayVendlsit.push(element.vendorId); 
+            }) 
+        }else{
+            arrayVendlsit.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, arrayVendlsit, this.currentUserMasterCompanyId)
             .subscribe(res => {
@@ -269,16 +272,22 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     addRow(): void {
         var newRow = Object.assign({}, this.row);
         newRow.workflowChargesListId = "0";
+        // newRow.taskId = "";
         newRow.vendor = {};
-        if (this.taskList) {
-            this.taskList.forEach(
-                task => {
-                    if (task.description == "Assemble") {
-                        newRow.taskId = task.taskId;
+        if (this.workFlow) {
+            if (this.taskList) {
+                this.taskList.forEach(
+                    task => {
+                        if (task.description == "Assemble") {
+                            newRow.taskId = task.taskId;
+                        }
                     }
-                }
-            )
+                )
+            }
+        }else{
+            newRow.taskId = "";  
         }
+
         newRow.currencyId = "0";
         newRow.description = "";
         newRow.extendedCost = "0.00";

@@ -175,7 +175,7 @@
                                                            <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                             <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                             <span><a class="btn nobg btn-adjst-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
-                                            <span><a class="btn nobg btn-adjhist-cstm" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                            <span data-toggle="modal" data-target="#AssetAdjAudit"><a class="btn nobg btn-adjhist-cstm" (click)="openAssetInventoryAdj(rowData)" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                             <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                             <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
 
@@ -1902,6 +1902,66 @@
   </div>
 </div>
 
+<div id="AssetAdjAudit" class="modal fade" role="dialog" data-backdrop="static"
+  data-keyboard="false">
+  <div class="modal-dialog modal-xl">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close"  (click)="AssethistoryCloseView()">
+          &times;
+        </button>
+        <h4 class="modal-title">History of AssetInventory Adjustment</h4>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
+						<table class="table table-bordered header-table-width" *ngIf="adjAuditHistoryList.length > 0; else noDatavailable">
+            <thead>
+              <tr>
+                <th>Adjustment Data Type</th>
+                <th>Changed From</th>
+                <th>Changed To</th>
+                <th>Adjustment Reason</th>
+                <th>Adjustment Memo</th>
+                <th>Created Date</th>             
+                <th>Created By</th>
+                <th>Updated Date</th>
+                <th>Updated By</th>               
+                <!-- <th>Action</th> -->
+              </tr>
+            </thead>
+            <tbody *ngIf="adjAuditHistoryList.length > 0">
+              <tr *ngFor="let audit of adjAuditHistoryList; let i = index">
+                <td [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'adjustmentDataType', audit.adjustmentDataType) ? 'black' : 'red'}">{{ audit.adjustmentDataType }}</td>
+                <td [ngClass]="audit.auditRightAlign ? 'text-right' : ''" [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'changedFrom', audit.changedFrom) ? 'black' : 'red'}">{{ audit.changedFrom }}</td>
+                <td [ngClass]="audit.auditRightAlign ? 'text-right' : ''" [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'changedTo', audit.changedTo) ? 'black' : 'red'}">{{ audit.changedTo }}</td>
+                <td [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'adjustmentReason', audit.adjustmentReason) ? 'black' : 'red'}">{{ audit.adjustmentReason }}</td>
+                <td class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                [matTooltip]="parsedText(audit.adjustmentMemo)" [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'adjustmentMemo', audit.adjustmentMemo) ? 'black' : 'red'}">{{ audit.adjustmentMemo }}</td>
+                <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'createdBy', audit.createdBy) ? 'black' : 'red'}">{{ audit.createdBy }}</td>
+                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td [ngStyle]="{color: getColorCodeForassetinvAdjHistory(i, 'updatedBy', audit.updatedBy) ? 'black' : 'red'}">{{ audit.updatedBy }}</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <ng-template #noDatavailable>
+            <div class="text-center">
+              <h4 class="no-history-found-msg">No History Found</h4>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="AssethistoryCloseView()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">

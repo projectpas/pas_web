@@ -114,6 +114,17 @@ import { SpeedQuoteCreateComponent } from "../components/sales/speed-quote/speed
 import { SpeedQuoteComponent } from "../components/sales/speed-quote/speed-quote/speed-quote-component";
 import { SpeedQuoteService } from "../services/speedquote.service";
 import { SpeedQuoteEndpointService } from "../services/speedquote-endpoint.service";
+import { SpeedQuotePartNumberComponent } from "../components/sales/speed-quote/shared/components/speed-quote-part-number/speed-quote-part-number.component";
+import { AddSpeedQuotePartNumberComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/add-speed-quote-part-number.component";
+import { SpeedQuoteCustpmerDetailsComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/speed-quote-custpmer-details/speed-quote-custpmer-details.component";
+import { SpeedQuotePartNumberFilterComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/speed-quote-part-number-filter/speed-quote-part-number-filter.component";
+import { SpeedQuotePartDetailsComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/speed-quote-part-details/speed-quote-part-details.component";
+import { SpeedQuoteMarginComponent } from "../components/sales/speed-quote/shared/components/speed-quote-margin/speed-quote-margin.component";
+import { SpeedQuoteExclusionsComponent } from "../components/sales/speed-quote/shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
+import { SpeedQuoteViewComponent } from "../components/sales/speed-quote/shared/components/speed-quote-view/speed-quote-view.component";
+import { SpeedQuotePrintTemplateComponent } from "../components/sales/speed-quote/shared/components/speed-quote-print-template/speed-quote-print-template.component";
+import { SpeedQuoteExclusionPrintTemplateComponent } from "../components/sales/speed-quote/shared/components/speed-quote-exclusion-print-template/speed-quote-exclusion-print-template.component";
+import { SpeedQuotePrintingTemplateComponent } from "../components/sales/speed-quote/shared/components/speed-quote-printing-template/speed-quote-printing-template.component";
 //Sales Order Components - End
 
 @NgModule({
@@ -218,7 +229,18 @@ import { SpeedQuoteEndpointService } from "../services/speedquote-endpoint.servi
     SalesOrderPrintTemplateComponent,
     SalesMultiShippingLabelComponent,
     SalesOrderMultiPackagingLabelComponent,
-    SalesOrderMultiPickTicketComponent
+    SalesOrderMultiPickTicketComponent,
+    SpeedQuotePartNumberComponent,
+    AddSpeedQuotePartNumberComponent,
+    SpeedQuoteCustpmerDetailsComponent,
+    SpeedQuotePartNumberFilterComponent,
+    SpeedQuotePartDetailsComponent,
+    SpeedQuoteMarginComponent,
+    SpeedQuoteExclusionsComponent,
+    SpeedQuoteViewComponent,
+    SpeedQuotePrintTemplateComponent,
+    SpeedQuoteExclusionPrintTemplateComponent,
+    SpeedQuotePrintingTemplateComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe, SpeedQuoteService, SpeedQuoteEndpointService],
   entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent, SalesMultiShippingLabelComponent, SalesOrderMultiPackagingLabelComponent, SalesOrderMultiPickTicketComponent]

@@ -55,13 +55,13 @@ export class AllApprovalRuleComponent implements OnInit {
     auditHistory: any = [];
     modal; any;
     emplColumns = [
-        { field: 'employee', header: 'Employee' },
-        { field: 'seqNo', header: 'Seq No' }
+        { field: 'employee', header: 'Employee' }//,
+        // { field: 'seqNo', header: 'Seq No' }
     ]
     newDataObject = {
         "approvalRuleId": 0,
         "approvalTaskId": null,
-        "ruleNumberId": 0,
+        //"ruleNumberId": 0,
         "amountId": null,
         "value": null,
         "lowerValue": null,
@@ -86,11 +86,11 @@ export class AllApprovalRuleComponent implements OnInit {
     creatingData: any;
     headers = [
         { field: 'taskName', header: 'Task Name' },
-        { field: 'ruleNo', header: 'Rule No', width: "60px" },
-        { field: 'amount', header: 'Amount', width: "60px" },
-        { field: 'value', header: 'Value', width: "60px" },
-        { field: 'lowerValue', header: 'Lower Value', width: "60px" },
-        { field: 'upperValue', header: 'Upper Value', width: "60px" },
+        // { field: 'ruleNo', header: 'Rule No', width: "100px" },
+        { field: 'amount', header: 'Amount', width: "100px" },
+        { field: 'value', header: 'Value', width: "100px" },
+        { field: 'lowerValue', header: 'Lower Value', width: "100px" },
+        { field: 'upperValue', header: 'Upper Value', width: "100px" },
         { field: 'companyName', header: 'Level 01' },
         { field: 'buName', header: 'Level 02' },
         { field: 'divName', header: 'Level 03' },
@@ -118,7 +118,7 @@ export class AllApprovalRuleComponent implements OnInit {
     }
 
     onSavecleardata() {
-        this.creatingData.ruleNumberId = 0;
+        //this.creatingData.ruleNumberId = 0;
         this.creatingData.amountId = null;
         this.creatingData.upperValue = 0
         this.creatingData.lowerValue = 0
@@ -296,6 +296,7 @@ export class AllApprovalRuleComponent implements OnInit {
                 MessageSeverity.success
             );
             this.onSaveChange();
+            // Do not Comment This Method
             //this.onSavecleardata();
         }
     }
@@ -356,7 +357,7 @@ export class AllApprovalRuleComponent implements OnInit {
     getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEdit ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
             if (response) {
                 const result = response;
                 if (result[0] && result[0].level == 'Level1') {
@@ -763,7 +764,7 @@ export class AllApprovalRuleComponent implements OnInit {
                 this.creatingData = res;
                 this.employeeNames = this.creatingData.approver;
                 this.ApprovalRuleName = getValueFromArrayOfObjectById('label', 'value', this.creatingData.approvalTaskId, this.taskNameList);
-                this.ApprovalNumber = getValueFromArrayOfObjectById('label', 'value', this.creatingData.ruleNumberId, this.ruleNumList);
+                //this.ApprovalNumber = getValueFromArrayOfObjectById('label', 'value', this.creatingData.ruleNumberId, this.ruleNumList);
                 this.AmountName = getValueFromArrayOfObjectById('label', 'value', this.creatingData.amountId, this.approvalAmountList);
 
                 this.arrayEmplsit = [];

@@ -393,10 +393,10 @@ export class VendorShippingInformationComponent {
         this.disableEditor = true;
         this.enableSaveDomeSticShipVia();
     }
-    onAddInternationalmemo() {
-        this.textInternationalMemo = this.shipViaInterObj.memo;
-        this.disableEditor = true;
-
+    onAddInternationalmemo(){
+        this.textInternationalMemo=this.shipViaInterObj.memo;
+        this.disableEditor=true;
+        this.enableSaveInternationalShipVia();
     }
 
     onCloseTextAreaInfo(type) {

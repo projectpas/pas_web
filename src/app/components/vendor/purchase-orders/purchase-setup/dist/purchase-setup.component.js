@@ -72,9 +72,10 @@ var common_1 = require("@angular/common");
 var appmodule_enum_1 = require("../../../../enum/appmodule.enum");
 var vendorwarning_enum_1 = require("../../../../enum/vendorwarning.enum");
 var PurchaseSetupComponent = /** @class */ (function () {
-    function PurchaseSetupComponent(route, legalEntityService, currencyService, unitofmeasureService, conditionService, CreditTermsService, employeeService, vendorService, priority, alertService, glAccountService, authService, customerService, companyService, commonService, _actRoute, purchaseOrderService, vendorCapesService, itemser, datePipe, salesOrderReferenceStorage, stocklineReferenceStorage) {
+    function PurchaseSetupComponent(route, legalEntityService, modalService, currencyService, unitofmeasureService, conditionService, CreditTermsService, employeeService, vendorService, priority, alertService, glAccountService, authService, customerService, companyService, commonService, _actRoute, purchaseOrderService, vendorCapesService, itemser, datePipe, salesOrderReferenceStorage, stocklineReferenceStorage) {
         this.route = route;
         this.legalEntityService = legalEntityService;
+        this.modalService = modalService;
         this.currencyService = currencyService;
         this.unitofmeasureService = unitofmeasureService;
         this.conditionService = conditionService;
@@ -144,6 +145,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
         this.needByTempDate = new Date();
         this.currentDate = new Date();
         this.addAllMultiPN = false;
+        this.disablePOStatus = true;
         this.childObject = {};
         this.parentObject = {};
         this.childObjectArray = [];
@@ -301,13 +303,16 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 field: 'stockType'
             }, {
                 header: 'Qty',
-                field: 'qty'
+                field: 'qty',
+                width: "70px"
             }, {
                 header: 'Unit Cost',
-                field: 'unitCost'
+                field: 'unitCost',
+                width: "70px"
             }, {
                 header: 'Ext Cost',
-                field: 'extCost'
+                field: 'extCost',
+                width: "70px"
             }
         ];
         this.approvalProcessList = [];
@@ -319,6 +324,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
         this.referenceId = 0;
         this.moduleName = "PurchaseOrder";
         this.adddefaultpart = true;
+        this.msgflag = 0;
         this.warningID = 0;
         this.isEditWork = false;
         this.restrictID = 0;
@@ -327,8 +333,12 @@ var PurchaseSetupComponent = /** @class */ (function () {
         this.vendorService.alertObj.next(this.vendorService.ShowPtab);
         this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
         this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
-        this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
         this.partName = (localStorage.getItem('partNumber'));
+        this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+        this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
+        this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
+        this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
+        this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
     }
     PurchaseSetupComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -410,17 +420,17 @@ var PurchaseSetupComponent = /** @class */ (function () {
                         _this.getPurchaseOrderAllPartsById(_this.poId);
                         _this.enableHeaderSaveBtn = false;
                         _this.isSpinnerVisible = false;
+                        setTimeout(function () {
+                            if (_this.itemMasterId > 0 && _this.adddefaultpart) {
+                                _this.isSpinnerVisible = true;
+                                _this.addPartNumbers(_this.itemMasterId, _this.partName, _this.lsconditionId);
+                                _this.adddefaultpart = false;
+                                _this.isSpinnerVisible = false;
+                            }
+                        }, 2000);
                     }, 2200);
                 }
             });
-            setTimeout(function () {
-                if (_this.itemMasterId > 0 && _this.adddefaultpart) {
-                    _this.isSpinnerVisible = true;
-                    _this.addPartNumbers(_this.itemMasterId, _this.partName);
-                    _this.adddefaultpart = false;
-                    _this.isSpinnerVisible = false;
-                }
-            }, 3000);
         }
         else {
             if (this.headerInfo.purchaseOrderNumber == "" || this.headerInfo.purchaseOrderNumber == undefined) {
@@ -451,6 +461,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 _this.posettingModel.IsResale = res.isResale;
                 _this.posettingModel.IsDeferredReceiver = res.isDeferredReceiver;
                 _this.posettingModel.IsEnforceApproval = res.isEnforceApproval;
+                _this.posettingModel.effectivedate = new Date(res.effectivedate);
                 if (!_this.isEditMode) {
                     _this.headerInfo.resale = _this.posettingModel.IsResale;
                     _this.headerInfo.deferredReceiver = res.isDeferredReceiver;
@@ -1242,7 +1253,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
         if (this.arrayPostatuslist.length == 0) {
             this.arrayPostatuslist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('POStatus', 'POStatusId', 'Description', '', true, 0, this.arrayPostatuslist.join(), this.currentUserMasterCompanyId)
+        this.commonService.autoSuggestionSmartDropDownList('POStatus', 'POStatusId', 'Description', '', true, 0, this.arrayPostatuslist.join(), 0)
             .subscribe(function (res) {
             _this.poStatusList = res;
             _this.poStatusList = _this.poStatusList.sort(function (a, b) { return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0); });
@@ -1322,7 +1333,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
     // }
     PurchaseSetupComponent.prototype.loadModuleListForVendorComp = function () {
         var _this = this;
-        this.commonService.getModuleListForObtainOwnerTraceable().subscribe(function (res) {
+        this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(function (res) {
             _this.userTypes = res;
             _this.userTypes.map(function (x) {
                 if (x.moduleName.toUpperCase() == 'COMPANY') {
@@ -1458,6 +1469,26 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 _this.disableAddPart = false;
             }
             _this.enableHeaderSaveBtn = false;
+            if (_this.posettingModel.IsEnforceApproval) {
+                _this.disablePOStatus = true;
+            }
+            else {
+                if (_this.headerInfo.openDate
+                    && _this.posettingModel.effectivedate
+                    && new Date(_this.headerInfo.openDate) > new Date(_this.posettingModel.effectivedate)) {
+                    _this.posettingModel.IsEnforceApproval = false;
+                    _this.disablePOStatus = false;
+                }
+                else if (_this.headerInfo.openDate
+                    && _this.posettingModel.effectivedate
+                    && new Date(_this.headerInfo.openDate) < new Date(_this.posettingModel.effectivedate)) {
+                    _this.posettingModel.IsEnforceApproval = true;
+                    _this.disablePOStatus = true;
+                }
+                else {
+                    _this.disablePOStatus = true;
+                }
+            }
             _this.capvendorId = res.vendorId;
         }, function (err) {
             _this.isSpinnerVisible = false;
@@ -1619,7 +1650,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
                     };
                 });
                 this.allsubWorkOrderInfo = [
-                    { value: 0, label: 'Select' }
+                    { value: 0, label: '-- Select --' }
                 ];
                 parentdata.subWorkOrderlist = __spreadArrays(this.allsubWorkOrderInfo, data);
                 parentdata.subWorkOrderId = autocomplete_1.getObjectByValue('value', parentdata.subWorkOrderId == null ? 0 : parentdata.subWorkOrderId, parentdata.subWorkOrderlist);
@@ -1813,9 +1844,9 @@ var PurchaseSetupComponent = /** @class */ (function () {
             parentdata.conditionId = this.defaultCondtionId;
             parentdata.priorityId = this.headerInfo.priorityId ? autocomplete_1.editValueAssignByCondition('value', this.headerInfo.priorityId) : null;
             parentdata.quantityOrdered = '0';
-            parentdata.workOrderId = null;
-            parentdata.repairOrderId = null;
-            parentdata.salesOrderId = null;
+            //parentdata.workOrderId = null;
+            //parentdata.repairOrderId = null;
+            //parentdata.salesOrderId = null;
             parentdata.memo = null;
             //this.getManagementStructureForParentEdit(parentdata,this.employeeId);
         }
@@ -2139,8 +2170,13 @@ var PurchaseSetupComponent = /** @class */ (function () {
     PurchaseSetupComponent.prototype.loadWorkOrderList = function (filterVal) {
         var _this = this;
         if (filterVal === void 0) { filterVal = ''; }
-        if (this.arrayWOlist.length == 0) {
-            this.arrayWOlist.push(0);
+        if (this.lsWoId != undefined && this.lsWoId != null) {
+            this.arrayWOlist.push(this.lsWoId);
+        }
+        else {
+            if (this.arrayWOlist.length == 0) {
+                this.arrayWOlist.push(0);
+            }
         }
         this.commonService.getWODataFilter(filterVal, 20, this.arrayWOlist.join(), this.currentUserMasterCompanyId).subscribe(function (res) {
             var data = res.map(function (x) {
@@ -2150,7 +2186,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 };
             });
             _this.allWorkOrderInfo = [
-                { value: 0, label: 'Select' }
+                { value: 0, label: '-- Select --' }
             ];
             _this.allWorkOrderInfo = __spreadArrays(_this.allWorkOrderInfo, data);
             _this.allWorkOrderDetails = __spreadArrays(_this.allWorkOrderInfo, data);
@@ -2172,7 +2208,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 };
             });
             _this.allsubWorkOrderInfo = [
-                { value: 0, label: 'Select' }
+                { value: 0, label: '-- Select --' }
             ];
             //this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
             _this.allsubWorkOrderDetails = __spreadArrays(_this.allsubWorkOrderInfo, data);
@@ -2195,7 +2231,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 };
             });
             _this.allRepairOrderInfo = [
-                { value: 0, label: 'Select' }
+                { value: 0, label: '-- Select --' }
             ];
             _this.allRepairOrderInfo = __spreadArrays(_this.allRepairOrderInfo, data);
             _this.allRepairOrderDetails = __spreadArrays(_this.allRepairOrderInfo, data);
@@ -2206,8 +2242,13 @@ var PurchaseSetupComponent = /** @class */ (function () {
     PurchaseSetupComponent.prototype.loadSalesOrderList = function (filterVal) {
         var _this = this;
         if (filterVal === void 0) { filterVal = ''; }
-        if (this.arraySOlist.length == 0) {
-            this.arraySOlist.push(0);
+        if (this.salesOrderId != undefined && this.salesOrderId != null) {
+            this.arraySOlist.push(this.salesOrderId);
+        }
+        else {
+            if (this.arraySOlist.length == 0) {
+                this.arraySOlist.push(0);
+            }
         }
         this.commonService.getSODataFilter(filterVal, 20, this.arraySOlist.join(), this.currentUserMasterCompanyId).subscribe(function (res) {
             var data = res.map(function (x) {
@@ -2217,7 +2258,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 };
             });
             _this.allSalesOrderInfo = [
-                { value: 0, label: 'Select' }
+                { value: 0, label: '-- Select --' }
             ];
             _this.allSalesOrderInfo = __spreadArrays(_this.allSalesOrderInfo, data);
             _this.allSalesOrderDetails = __spreadArrays(_this.allSalesOrderInfo, data);
@@ -2293,8 +2334,8 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 priorityId: this.headerInfo.priorityId ? this.getPriorityId(this.headerInfo.priorityId) : 0,
                 Priority: this.headerInfo.priorityId && this.headerInfo.priorityId.label
                     && this.headerInfo.priorityId.label != null && this.headerInfo.priorityId.label != undefined ? this.headerInfo.priorityId.label : '',
-                openDate: this.headerInfo.openDate,
-                needByDate: this.headerInfo.needByDate,
+                openDate: new Date(this.headerInfo.openDate),
+                needByDate: new Date(this.headerInfo.needByDate),
                 statusId: this.headerInfo.statusId ? this.headerInfo.statusId : 0,
                 Status: this.headerInfo.statusId && this.headerInfo.statusId > 0 ? autocomplete_1.getValueFromArrayOfObjectById('label', 'value', this.headerInfo.statusId, this.poStatusList) : '',
                 vendorId: this.headerInfo.vendorId ? this.getVendorId(this.headerInfo.vendorId) : 0,
@@ -2365,22 +2406,88 @@ var PurchaseSetupComponent = /** @class */ (function () {
             }
             this.toggle_po_header = false;
             this.enableHeaderSaveBtn = false;
+            if (this.posettingModel.IsEnforceApproval) {
+                this.disablePOStatus = true;
+            }
+            else {
+                if (headerInfoObj.openDate
+                    && this.posettingModel.effectivedate
+                    && new Date(headerInfoObj.openDate) > new Date(this.posettingModel.effectivedate)) {
+                    this.posettingModel.IsEnforceApproval = false;
+                    this.disablePOStatus = false;
+                }
+                else if (headerInfoObj.openDate
+                    && this.posettingModel.effectivedate
+                    && new Date(headerInfoObj.openDate) < new Date(this.posettingModel.effectivedate)) {
+                    this.posettingModel.IsEnforceApproval = true;
+                    this.disablePOStatus = true;
+                }
+                else {
+                    this.disablePOStatus = true;
+                }
+            }
         }
     };
-    PurchaseSetupComponent.prototype.dismissModel = function () {
-        this.savePurchaseOrderPartsList(true);
+    PurchaseSetupComponent.prototype.dismissModel = function (status) {
+        this.displayWarningModal = status;
+        this.modal.close();
+        if (status)
+            this.savePurchaseOrderPartsList('');
     };
-    PurchaseSetupComponent.prototype.savePurchaseOrderPartsList = function (contwithoutVendorPrice) {
+    PurchaseSetupComponent.prototype.savePurchaseOrderPartsList = function (content) {
         var _this = this;
-        if (contwithoutVendorPrice === void 0) { contwithoutVendorPrice = false; }
         this.isSpinnerVisible = true;
         this.parentObjectArray = [];
         var errmessage = '';
+        this.msgflag = 0;
         for (var i = 0; i < this.partListData.length; i++) {
             this.alertService.resetStickyMessage();
+            // if(this.partListData[i].quantityOrdered == 0) {	
+            // 	this.isSpinnerVisible = false;	
+            // 	errmessage = errmessage + '<br />' + "Please Enter Qty."
+            // }
             if (this.partListData[i].quantityOrdered == 0) {
                 this.isSpinnerVisible = false;
-                errmessage = errmessage + '<br />' + "Please Enter Qty.";
+                this.displayWarningModal = false;
+                this.alertText = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + '<br/>' + "Please Enter Qty.";
+                this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+                return;
+            }
+            if (this.partListData[i].workOrderId) {
+                if (this.partListData[i].workOrderId.value != 0) {
+                    if (this.partListData[i].repairOrderId) {
+                        if (this.partListData[i].repairOrderId.value != 0) {
+                            this.isSpinnerVisible = false;
+                            errmessage = errmessage + '<br />' + "Work Order already selected please unselect Repair Order.";
+                            this.msgflag = 1;
+                        }
+                    }
+                    if (this.partListData[i].salesOrderId) {
+                        if (this.partListData[i].salesOrderId.value != 0) {
+                            this.isSpinnerVisible = false;
+                            errmessage = errmessage + '<br />' + "Work Order already selected please unselect Sales Order.";
+                            this.msgflag = 1;
+                        }
+                    }
+                }
+            }
+            if (this.msgflag == 0) {
+                if (this.partListData[i].repairOrderId) {
+                    if (this.partListData[i].repairOrderId.value != 0) {
+                        if (this.partListData[i].workOrderId) {
+                            if (this.partListData[i].workOrderId.value != 0) {
+                                this.isSpinnerVisible = false;
+                                errmessage = errmessage + '<br />' + "Repair Order already selected please unselect Work Order.";
+                            }
+                        }
+                        if (this.partListData[i].salesOrderId) {
+                            if (this.partListData[i].salesOrderId.value != 0) {
+                                this.isSpinnerVisible = false;
+                                errmessage = errmessage + '<br />' + "Repair Order already selected please unselect Sales Order.";
+                            }
+                        }
+                    }
+                }
             }
             if (this.partListData[i].minimumOrderQuantity > 0
                 && this.partListData[i].quantityOrdered > 0
@@ -2441,9 +2548,16 @@ var PurchaseSetupComponent = /** @class */ (function () {
                         this.isSpinnerVisible = false;
                         errmessage = errmessage + '<br />' + "Split Shipment Select Address is required.";
                     }
+                    // if(!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0 ) {	
+                    // 	this.isSpinnerVisible = false;	
+                    // 	errmessage = errmessage + '<br />' + "Split Shipment Qty is required."
+                    // }
                     if (!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0) {
                         this.isSpinnerVisible = false;
-                        errmessage = errmessage + '<br />' + "Split Shipment Qty is required.";
+                        this.displayWarningModal = false;
+                        this.alertText = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + '<br/>' + "Split Shipment Qty is required.";
+                        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+                        return;
                     }
                     if (!this.partListData[i].childList[j].managementStructureId || this.partListData[i].childList[j].managementStructureId == 0) {
                         this.isSpinnerVisible = false;
@@ -2460,9 +2574,11 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 this.alertService.showStickyMessage("Validation failed", message, alert_service_1.MessageSeverity.error, 'Please enter Qty');
                 return;
             }
-            if (this.partListData[i].vendorListPrice == 0 && contwithoutVendorPrice == false) {
+            if (this.partListData[i].vendorListPrice == 0 && this.displayWarningModal == false) {
                 this.isSpinnerVisible = false;
                 this.displayWarningModal = true;
+                this.alertText = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + '<br />' + "Vendor Price is not populated  - Continue Y/N";
+                this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
                 return;
             }
             var childDataList = [];
@@ -2477,35 +2593,70 @@ var PurchaseSetupComponent = /** @class */ (function () {
                     }
                 }
             }
-            if (childDataList.length > 0) {
-                this.childObjectArray = [];
-                for (var j = 0; j < childDataList.length; j++) {
-                    this.childObject = {
-                        purchaseOrderId: this.poId,
-                        itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
-                        assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
-                        partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
-                        poPartSplitUserTypeId: childDataList[j].partListUserTypeId ? childDataList[j].partListUserTypeId : 0,
-                        poPartSplitUserId: childDataList[j].partListUserId ? this.getIdByObject(childDataList[j].partListUserId) : 0,
-                        poPartSplitSiteId: childDataList[j].poPartSplitSiteId ? childDataList[j].poPartSplitSiteId : 0,
-                        poPartSplitAddressId: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('addressId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
-                        poPartSplitAddress1: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('address1', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-                        poPartSplitAddress2: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('address2', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-                        poPartSplitCity: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('city', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-                        POPartSplitState: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('stateOrProvince', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-                        poPartSplitPostalCode: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('postalCode', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-                        POPartSplitCountryId: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('countryId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
-                        POPartSplitCountryName: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('country', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-                        UOMId: this.partListData[i].UOMId ? this.partListData[i].UOMId : 0,
-                        quantityOrdered: childDataList[j].quantityOrdered ? parseFloat(childDataList[j].quantityOrdered.toString().replace(/\,/g, '')) : 0,
-                        needByDate: this.datePipe.transform(childDataList[j].needByDate, "MM/dd/yyyy"),
-                        managementStructureId: childDataList[j].managementStructureId && childDataList[j].managementStructureId != null ? childDataList[j].managementStructureId : null,
-                        isDeleted: childDataList[j].isDeleted,
-                        createdBy: this.userName,
-                        updatedBy: this.userName
-                    };
-                    this.childObjectArray.push(this.childObject);
-                    this.childObjectArrayEdit.push(__assign(__assign({}, this.childObject), { purchaseOrderPartRecordId: childDataList[j].purchaseOrderPartRecordId ? childDataList[j].purchaseOrderPartRecordId : 0 }));
+            if (this.partListData[i].ifSplitShip) {
+                if (childDataList.length > 0) {
+                    this.childObjectArray = [];
+                    for (var j = 0; j < childDataList.length; j++) {
+                        this.childObject = {
+                            purchaseOrderId: this.poId,
+                            itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
+                            assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
+                            partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
+                            poPartSplitUserTypeId: childDataList[j].partListUserTypeId ? childDataList[j].partListUserTypeId : 0,
+                            poPartSplitUserId: childDataList[j].partListUserId ? this.getIdByObject(childDataList[j].partListUserId) : 0,
+                            poPartSplitSiteId: childDataList[j].poPartSplitSiteId ? childDataList[j].poPartSplitSiteId : 0,
+                            poPartSplitAddressId: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('addressId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
+                            poPartSplitAddress1: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('address1', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            poPartSplitAddress2: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('address2', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            poPartSplitCity: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('city', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            POPartSplitState: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('stateOrProvince', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            poPartSplitPostalCode: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('postalCode', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            POPartSplitCountryId: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('countryId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
+                            POPartSplitCountryName: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('country', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            UOMId: this.partListData[i].UOMId ? this.partListData[i].UOMId : 0,
+                            quantityOrdered: childDataList[j].quantityOrdered ? parseFloat(childDataList[j].quantityOrdered.toString().replace(/\,/g, '')) : 0,
+                            needByDate: this.datePipe.transform(childDataList[j].needByDate, "MM/dd/yyyy"),
+                            managementStructureId: childDataList[j].managementStructureId && childDataList[j].managementStructureId != null ? childDataList[j].managementStructureId : null,
+                            isDeleted: childDataList[j].isDeleted,
+                            createdBy: this.userName,
+                            updatedBy: this.userName
+                        };
+                        this.childObjectArray.push(this.childObject);
+                        this.childObjectArrayEdit.push(__assign(__assign({}, this.childObject), { purchaseOrderPartRecordId: childDataList[j].purchaseOrderPartRecordId ? childDataList[j].purchaseOrderPartRecordId : 0 }));
+                    }
+                }
+            }
+            else {
+                if (childDataList.length > 0) {
+                    this.childObjectArray = [];
+                    for (var j = 0; j < childDataList.length; j++) {
+                        this.childObject = {
+                            purchaseOrderId: this.poId,
+                            itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
+                            assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
+                            partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
+                            poPartSplitUserTypeId: childDataList[j].partListUserTypeId ? childDataList[j].partListUserTypeId : 0,
+                            poPartSplitUserId: childDataList[j].partListUserId ? this.getIdByObject(childDataList[j].partListUserId) : 0,
+                            poPartSplitSiteId: childDataList[j].poPartSplitSiteId ? childDataList[j].poPartSplitSiteId : 0,
+                            poPartSplitAddressId: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('addressId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
+                            poPartSplitAddress1: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('address1', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            poPartSplitAddress2: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('address2', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            poPartSplitCity: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('city', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            POPartSplitState: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('stateOrProvince', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            poPartSplitPostalCode: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('postalCode', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            POPartSplitCountryId: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('countryId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
+                            POPartSplitCountryName: this["splitAddressData" + i + j].length > 0 ? autocomplete_1.getValueFromArrayOfObjectById('country', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+                            UOMId: this.partListData[i].UOMId ? this.partListData[i].UOMId : 0,
+                            quantityOrdered: childDataList[j].quantityOrdered ? parseFloat(childDataList[j].quantityOrdered.toString().replace(/\,/g, '')) : 0,
+                            needByDate: this.datePipe.transform(childDataList[j].needByDate, "MM/dd/yyyy"),
+                            managementStructureId: childDataList[j].managementStructureId && childDataList[j].managementStructureId != null ? childDataList[j].managementStructureId : null,
+                            isDeleted: true,
+                            createdBy: this.userName,
+                            updatedBy: this.userName
+                        };
+                        this.childObjectArray.push(this.childObject);
+                        this.childObjectArrayEdit.push(__assign(__assign({}, this.childObject), { purchaseOrderPartRecordId: childDataList[j].purchaseOrderPartRecordId ? childDataList[j].purchaseOrderPartRecordId : 0 }));
+                    }
                 }
             }
             this.parentObject = {
@@ -2711,26 +2862,31 @@ var PurchaseSetupComponent = /** @class */ (function () {
             var funcCurrency = autocomplete_1.editValueAssignByCondition('value', partList.functionalCurrencyId);
             var reportCurrency = autocomplete_1.editValueAssignByCondition('value', partList.reportCurrencyId);
             if (funcCurrency == reportCurrency) {
-                partList.foreignExchangeRate = '1.00000';
+                partList.foreignExchangeRate = '1.00';
                 if (onChange == 'onChange') {
                     this.alertService.showMessage('Error', "FXRate can't be greater than 1, if Func CUR and Report CUR are same", alert_service_1.MessageSeverity.error);
                 }
                 return;
             }
             if (partList.foreignExchangeRate) {
-                partList.foreignExchangeRate = autocomplete_1.formatNumberAsGlobalSettingsModule(partList.foreignExchangeRate, 5);
+                partList.foreignExchangeRate = autocomplete_1.formatNumberAsGlobalSettingsModule(partList.foreignExchangeRate, 2);
             }
         }
     };
     PurchaseSetupComponent.prototype.loadConditionData = function () {
         var _this = this;
-        if (this.arrayConditionlist.length == 0) {
-            this.arrayConditionlist.push(0);
+        if (this.lsconditionId != undefined && this.lsconditionId != null) {
+            this.arrayConditionlist.push(this.lsconditionId);
+        }
+        else {
+            if (this.arrayConditionlist.length == 0) {
+                this.arrayConditionlist.push(0);
+            }
         }
         this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 0, this.arrayConditionlist.join(), this.currentUserMasterCompanyId).subscribe(function (res) {
             _this.allconditioninfo = res;
             _this.allconditioninfo.map(function (x) {
-                if (x.label == 'New') {
+                if (x.label.toUpperCase() == 'NEW') {
                     _this.defaultCondtionId = x.value;
                     _this.newObjectForParent.conditionId = x.value;
                 }
@@ -2769,7 +2925,8 @@ var PurchaseSetupComponent = /** @class */ (function () {
             }
         }
         else {
-            partList.childList = [];
+            this.enablePartSaveBtn = true;
+            //partList.childList = [];
         }
     };
     PurchaseSetupComponent.prototype.addAvailableParts = function () {
@@ -2836,7 +2993,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
         this.inputValidCheck = false;
         //if (this.vendorService.isEditMode == false) {
         var newParentObject = new create_po_partslist_model_1.CreatePOPartsList();
-        newParentObject = __assign(__assign({}, newParentObject), { needByDate: this.headerInfo.needByDate, priorityId: this.headerInfo.priorityId ? autocomplete_1.editValueAssignByCondition('value', this.headerInfo.priorityId) : null, conditionId: this.defaultCondtionId, discountPercent: 0 });
+        newParentObject = __assign(__assign({}, newParentObject), { needByDate: this.headerInfo.needByDate, priorityId: this.headerInfo.priorityId ? autocomplete_1.editValueAssignByCondition('value', this.headerInfo.priorityId) : null, conditionId: this.defaultCondtionId, discountPercent: 0, workOrderId: { value: 0, label: '-- Select --' }, subWorkOrderId: { value: 0, label: '-- Select --' }, repairOrderId: { value: 0, label: '-- Select --' }, salesOrderId: { value: 0, label: '-- Select --' } });
         this.partListData.push(newParentObject);
         for (var i = 0; i < this.partListData.length; i++) {
             if (!this.partListData[i].ifSplitShip) {
@@ -3126,7 +3283,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
                 };
             });
             _this.allPercentData = [
-                { percentId: 0, percentValue: 'Select' }
+                { percentId: 0, percentValue: '-- Select --' }
             ];
             _this.allPercentData = __spreadArrays(_this.allPercentData, data);
         }, function (err) {
@@ -3932,11 +4089,11 @@ var PurchaseSetupComponent = /** @class */ (function () {
             return null;
         }
     };
-    PurchaseSetupComponent.prototype.addPartNumbers = function (partNumberId, partName) {
+    PurchaseSetupComponent.prototype.addPartNumbers = function (partNumberId, partName, conditionid) {
         this.inputValidCheck = false;
         //if (this.vendorService.isEditMode == false) {
         var newParentObject = new create_po_partslist_model_1.CreatePOPartsList();
-        newParentObject = __assign(__assign({}, newParentObject), { needByDate: this.headerInfo.needByDate, priorityId: this.headerInfo.priorityId ? autocomplete_1.editValueAssignByCondition('value', this.headerInfo.priorityId) : null, conditionId: this.defaultCondtionId, discountPercent: 0, partNumberId: { value: partNumberId, label: partName } });
+        newParentObject = __assign(__assign({}, newParentObject), { needByDate: this.headerInfo.needByDate, priorityId: this.headerInfo.priorityId ? autocomplete_1.editValueAssignByCondition('value', this.headerInfo.priorityId) : null, conditionId: conditionid > 0 ? conditionid : this.defaultCondtionId, discountPercent: 0, partNumberId: { value: partNumberId, label: partName }, workOrderId: autocomplete_1.getObjectById('value', this.lsWoId == null ? 0 : this.lsWoId, this.allWorkOrderDetails), subWorkOrderId: autocomplete_1.getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allSalesOrderInfo), salesOrderId: autocomplete_1.getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo) });
         this.partListData.push(newParentObject);
         for (var i = 0; i < this.partListData.length; i++) {
             if (!this.partListData[i].ifSplitShip) {
@@ -3992,6 +4149,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
         for (var i = 0; i < this.partListData.length; i++) {
             if (i == this.partListData.length - 1) {
                 this.partListData[i].conditionId = this.defaultCondtionId;
+                //this.partListData[i].salesOrderId = this.salesOrderId;
                 this.getFunctionalReportCurrencyById(this.partListData[i]);
             }
         }
@@ -4003,6 +4161,10 @@ var PurchaseSetupComponent = /** @class */ (function () {
         if (this.isEditMode) {
             localStorage.removeItem("itemMasterId");
             localStorage.removeItem("partNumber");
+            localStorage.removeItem("salesOrderId");
+            localStorage.removeItem("lsconditionId");
+            localStorage.removeItem("lsWoId");
+            localStorage.removeItem("lsSubWoId");
         }
     };
     __decorate([

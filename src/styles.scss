@@ -9161,7 +9161,8 @@ label.clr-red {
 
 #workflow-attributes-block {
   padding: 5px;
-  overflow: hidden;
+  // overflow: scroll;
+  overflow: auto;
 }
 
 #workflow-attributes-block .tab-pane.form-bg.active.in {
@@ -10930,7 +10931,8 @@ a.ui-button:active,
 .ui-button:active,
 .ui-button.ui-state-active:hover {
   border: 1px solid #003eff;
-  background: #007fff;
+  // background: #007fff;
+  background:#337ab7 !important;
   font-weight: normal;
   color: #ffffff;
 }
@@ -13682,6 +13684,7 @@ body .ui-paginator .ui-paginator-pages .ui-paginator-page {
 
 .ui-paginator a.ui-paginator-element {
   color: #007bff !important;
+  padding:0px !important;
 }
 
 .ui-paginator a.ui-paginator-element.ui-state-disabled {
@@ -14033,6 +14036,7 @@ select {
 .workflow-page .multiselect-dropdown .dropdown-btn {
   padding: 2px !important;
   border-radius: 0px !important;
+  width:96% !important;
 }
 
 .bhoechie-tab .nav.nav-pills {
@@ -14363,6 +14367,7 @@ p-checkbox.checkbox-table .ui-chkbox.ui-widget {
   font-size: 10.5px !important;
   margin-top: 12px; //15px
   font-weight: normal;
+  width:100px;
 }
 
 body .ui-paginator .ui-dropdown {
@@ -15263,12 +15268,16 @@ p-table .ui-paginator-bottom {
   position: relative;
   padding: 0;
 }
-
+.materialListTable .ui-table-wrapper {
+  max-height: 600px !important;
+}
 .rro-table-cstm .ui-table-wrapper table {
   position: relative;
   border-collapse: collapse;
 }
-
+.multiCOndition .ui-state-disabled, .ui-widget:disabled {
+  opacity: 0.8 !important;
+}
 .tab-table-cstm .ui-table {
   padding-bottom: 50px;
 }
@@ -15436,7 +15445,8 @@ body .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link.ui-state-active,
 }
 
 .p-dropdown-custom-sm .ui-dropdown {
-  width: 122px !important;
+  // width:122px !important;
+   min-width: 126px !important;
 }
 
 .p-dropdown-custom-sm .ui-dropdown-trigger,
@@ -15841,6 +15851,7 @@ width:100%;
 
 .p-Treetable-view .ui-treetable .ui-treetable-tbody>tr>td {
   font-size: 11px;
+  padding: .25em .5em !important;
 }
 
 .p-Tree-checkbox .ui-chkbox .ui-chkbox-box {
@@ -17091,4 +17102,13 @@ ng-multiselect-dropdown{
 .pickticket .ui-chkbox .ui-chkbox-box {
   position: relative !important;
   top: -6px;
+}
+.ui-treetable table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto !important;
+}
+.ui-megamenu-submenu {
+
+    width: 19em !important;
 }

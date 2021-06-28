@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 declare var $: any;
 import { SalesQuoteService } from "../../../../services/salesquote.service";
+import { SpeedQuoteService } from "../../../../services/speedquote.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
 import {
@@ -11,9 +12,14 @@ import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
+import { SpeedQuote } from "../../../../models/sales/SpeedQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
+import { ISpeedQuote } from "../../../../models/sales/ISpeedQuote.model";
+import { ISpeedQte } from "../../../../models/sales/ISpeedQte";
 import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
+import { ISpeedQuoteView } from "../../../../models/sales/ISpeedQuoteView";
 import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
+import { SpeedQte } from "../../../../models/sales/SpeedQte";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { CommonService } from "../../../../services/common.service";
@@ -53,9 +59,9 @@ export class SpeedQuoteListComponent implements OnInit {
     partColumns: any[];
     currentDeletedstatus = false;
     customerDetails: any;
-    salesQuote: ISalesQuote;
-    salesOrderQuote: ISalesOrderQuote;
-    salesQuoteView: ISalesQuoteView;
+    salesQuote: ISpeedQuote;
+    salesOrderQuote: ISpeedQte;
+    salesQuoteView: ISpeedQuoteView;
     selectedParts: any[] = [];
     creditTerms: any[];
     percents: any[];
@@ -89,7 +95,8 @@ export class SpeedQuoteListComponent implements OnInit {
         private commonservice: CommonService,
         public currencyService: CurrencyService,
         private authService: AuthService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private speedQuoteService: SpeedQuoteService,
     ) { }
 
     ngOnInit() {
@@ -98,8 +105,8 @@ export class SpeedQuoteListComponent implements OnInit {
             { label: 'Speed Quote' },
             { label: 'Speed Quote List' },
         ];
-        this.salesQuote = new SalesQuote();
-        this.salesOrderQuote = new SalesOrderQuote();
+        this.salesQuote = new SpeedQuote();
+        this.salesOrderQuote = new SpeedQte();
         this.searchParameters = new SalesSearchParameters();
 
         this.initColumns();
@@ -123,18 +130,23 @@ export class SpeedQuoteListComponent implements OnInit {
     initColumns() {
         this.headers = [
             { field: "customerName", header: "Customer Name", width: "160px" },
-            { field: "salesOrderQuoteNumber", header: "Quote Num", width: "120px" },
-            { field: "quoteDate", header: "Quote Date", width: "120px" },
+            { field: "customerCode", header: "Customer Code", width: "160px" },
+            { field: "accountTypeName", header: "Acct Type", width: "160px" },
             { field: "partNumberType", header: "PN", width: "130px" },
             { field: "partDescriptionType", header: "PN Description", width: "200px" },
-            { field: "salesOrderNumber", header: "SO Num", width: "120px" },
-            { field: "status", header: "Qte Status", width: "100px" },
-            { field: "customerType", header: "Customer Type", width: "120px" },
-            { field: "versionNumber", header: "Quote Ver Num", width: "120px" },
+            { field: "speedQuoteNumber", header: "Quote Num", width: "120px" },
+            { field: "leadSourceName", header: "Lead Source", width: "160px" },
+            { field: "probability", header: "Probability", width: "90px" },
+            { field: "quoteDate", header: "Quote Date", width: "120px" },
             { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
-            { field: "priorityType", header: "Priority", width: "100px" },
-            { field: "customerReference", header: "Cust Ref", width: "130px" },
+            { field: "quoteExpireDate", header: "Valid Until", width: "120px" },
             { field: "salesPerson", header: "Salesperson", width: "150px" },
+            //{ field: "salesOrderNumber", header: "SO Num", width: "120px" },
+            { field: "status", header: "Qte Status", width: "100px" },
+            //{ field: "customerType", header: "Customer Type", width: "120px" },
+            //{ field: "versionNumber", header: "Quote Ver Num", width: "120px" },
+            //{ field: "priorityType", header: "Priority", width: "100px" },
+            //{ field: "customerReference", header: "Cust Ref", width: "130px" },            
             { field: "createdDate", header: "Created Date", width: "120px" },
             { field: "createdBy", header: "CreatedBy", width: "130px" },
             { field: "updatedDate", header: "Updated Date", width: "120px" },
@@ -203,7 +215,7 @@ export class SpeedQuoteListComponent implements OnInit {
     }
     onSearch() {
         this.isSpinnerVisible = true;
-        this.salesQuoteService
+        this.speedQuoteService
             .search(this.searchParameters)
             .subscribe((response: any) => {
                 if (response[0].results) {
@@ -238,14 +250,14 @@ export class SpeedQuoteListComponent implements OnInit {
     }
 
     openDelete(content, rowData) {
-        this.selected = rowData.salesOrderQuoteId;
-        this.selectedQuoteToDelete = rowData.salesOrderQuoteNumber;
+        this.selected = rowData.speedQuoteId;
+        this.selectedQuoteToDelete = rowData.speedQuoteNumber;
         this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
     }
 
     deleteQuote(): void {
         this.isSpinnerVisible = true;
-        this.salesQuoteService.delete(this.selected).subscribe(response => {
+        this.speedQuoteService.delete(this.selected).subscribe(response => {
             this.isSpinnerVisible = false;
             this.modal.close();
             this.alertService.showMessage(
@@ -261,16 +273,16 @@ export class SpeedQuoteListComponent implements OnInit {
 
     openQuoteToEdit(row) {
         this.isSpinnerVisible = true;
-        this.salesOrderQuoteId = row.salesOrderQuoteId;
+        this.salesOrderQuoteId = row.speedQuoteId;
         let customerId = row.customerId;
         this.router.navigateByUrl(
-            `salesmodule/salespages/sales-quote-edit/${customerId}/${this.salesOrderQuoteId}`
+            `salesmodule/salespages/speed-quote-edit/${customerId}/${this.salesOrderQuoteId}`
         );
     }
 
     viewSelectedRow(content, row) {
         this.isSpinnerVisible = true;
-        this.salesQuoteService.getview(row.salesOrderQuoteId).subscribe(res => {
+        this.speedQuoteService.getview(row.speedQuoteId).subscribe(res => {
             this.salesQuoteView = res[0];
             this.modal = this.modalService.open(content, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
             this.isSpinnerVisible = false;
@@ -392,7 +404,7 @@ export class SpeedQuoteListComponent implements OnInit {
             PagingData.filters[x] = dt.filters[x].value;
         });
 
-        this.salesQuoteService
+        this.speedQuoteService
             .search(PagingData).subscribe(res => {
                 const vList = res[0]['results'].map(x => {
                     return {
@@ -423,7 +435,7 @@ export class SpeedQuoteListComponent implements OnInit {
 
     getAuditHistoryById(rowData) {
         this.isSpinnerVisible = true;
-        this.salesQuoteService.getSOQHistory(rowData.salesOrderQuoteId).subscribe(res => {
+        this.speedQuoteService.getSpeedQuoteHistory(rowData.speedQuoteId).subscribe(res => {
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
@@ -444,8 +456,8 @@ export class SpeedQuoteListComponent implements OnInit {
     restorerecord: any = {}
 
     restoreRecord() {
-        this.commonservice.updatedeletedrecords('SalesOrderQuote', 'SalesOrderQuoteId', this.restorerecord.salesOrderQuoteId).subscribe(res => {
-            this.getDeleteListByStatus(true)
+        this.commonservice.updatedeletedrecords('SpeedQuote', 'SpeedQuoteId', this.restorerecord.speedQuoteId).subscribe(res => {
+            this.getDeleteListByStatus(true);
             this.modal.close();
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         }, err => {

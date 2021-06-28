@@ -9,56 +9,70 @@
   padding: 5px 8px;
   margin-bottom: 5px;
 }
-.sales-quote-approver-info{
-	display: flex;
-    width: 85%;
-    align-items: center;
-    margin-top: 22px;
+
+.sales-quote-approver-info {
+  display: flex;
+  width: 85%;
+  align-items: center;
+  margin-top: 22px;
 }
-.sales-quote-approver-info p{
+
+.sales-quote-approver-info p {
   flex: 30%;
   padding: 0;
 }
-.sales-quote-approver-info p .label{
+
+.sales-quote-approver-info p .label {
   color: #000 !important;
   font-weight: bold;
 }
+
 label {
-  font-size: 12px!important;
+  font-size: 12px !important;
   text-align: left;
   width: 150px;
   margin-right: 0;
   font-weight: 400;
 }
+
 .approver-details-cstm {
   margin-top: 16px;
 }
+
 .approver-details-cstm p {
   float: left;
   margin-right: 40px;
 }
+
 .approver-tab-cstm .col-md-3 {
   padding-right: 40px;
   margin-right: 0;
 }
+
 .approver-tab-cstm .form-row {
   margin-top: 10px;
 }
-.width-150{
-  width:150px !important;
+
+.width-150 {
+  width: 150px !important;
 }
-.submit-button-margin{
-  margin-top: 20px !important; margin-bottom: 10px !important;
+
+.submit-button-margin {
+  margin-top: 20px !important;
+  margin-bottom: 10px !important;
 }
-.pencil-div{
-  margin-top: 4px !important;float: right !important;
+
+.pencil-div {
+  margin-top: 4px !important;
+  float: right !important;
 }
-.float-left{
+
+.float-left {
   float: left !important;
 }
-.min-width-100{
-  min-width: 100px !important;
-}
-.part-buttons{
-  text-align:right ; width:100% !important; padding-top:5px !important;
+
+.part-buttons {
+  text-align: right;
+  width: 100% !important;
+  padding-top: 5px !important;
 }

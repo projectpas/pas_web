@@ -44,8 +44,7 @@ export class AuthService {
     private _loginStatus = new Subject<boolean>();
 
     public ModuleInfo: BehaviorSubject<Array<ModuleHierarchyMaster>> = new BehaviorSubject([]);
-
-private defaultEmployeeDetails= new Subject<any>()
+    private defaultEmployeeDetails= new Subject<any>()
     constructor(private router: Router, private configurations: ConfigurationService, private endpointFactory: EndpointFactory, private localStorage: LocalStoreManager,private userRoleService:UserRoleService ,private commonService:CommonService) {
         this.initializeLoginStatus();
     }
@@ -123,35 +122,33 @@ private defaultEmployeeDetails= new Subject<any>()
         if (this.isLoggedIn)
             this.logout();
 
-        return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password,user.masterCompanyId)
+        return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password, user.masterCompanyId)
             .map(response => this.processLoginResponse(response, user.rememberMe));
     }
 
-    employeeDetailsByEmpId(id: number){
+    employeeDetailsByEmpId(id: number) {
         return this.endpointFactory.employeeDetailsByEmpId(id);
     }
 
 
 
-    public checkUserAccessByModuleName(moduleName: string) : boolean {
-        let modules : ModuleHierarchyMaster[] = this.getAllModulesNameFromLocalStorage();
-        var selectedModules =  modules.filter(function (module) {
+    public checkUserAccessByModuleName(moduleName: string): boolean {
+        let modules: ModuleHierarchyMaster[] = this.getAllModulesNameFromLocalStorage();
+        var selectedModules = modules.filter(function (module) {
             return module.moduleCode == moduleName;
         });
 
         if (selectedModules != undefined && selectedModules.length > 0) {
-            let moduleId : number = selectedModules[0].id;
-            let userRoles : UserRole[] = this.getUserRoleWithPermissionFromLocalStorage();
+            let moduleId: number = selectedModules[0].id;
+            let userRoles: UserRole[] = this.getUserRoleWithPermissionFromLocalStorage();
             var isAllowedToAccess = false;
-            for (let userRole of userRoles)
-            {
+            for (let userRole of userRoles) {
                 var userAssignedModules = userRole.rolePermissions.filter(function (role: RolePermission) {
                     return role.moduleHierarchyMasterId == moduleId;
                 });
 
                 if (userAssignedModules != undefined && userAssignedModules.length > 0) {
-                    if (userAssignedModules[0].canAdd || userAssignedModules[0].canUpdate || userAssignedModules[0].canDelete || userAssignedModules[0].canView)
-                    {
+                    if (userAssignedModules[0].canAdd || userAssignedModules[0].canUpdate || userAssignedModules[0].canDelete || userAssignedModules[0].canView) {
                         isAllowedToAccess = true;
                         break;
                     }
@@ -179,8 +176,7 @@ private defaultEmployeeDetails= new Subject<any>()
                     return role.moduleHierarchyMasterId == moduleId;
                 });
                 if (userAssignedModules != undefined && userAssignedModules.length > 0) {
-                    if (userAssignedModules[0][permissionType] != undefined && userAssignedModules[0][permissionType])
-                    {
+                    if (userAssignedModules[0][permissionType] != undefined && userAssignedModules[0][permissionType]) {
                         return true;
                     }
                 }
@@ -216,7 +212,7 @@ private defaultEmployeeDetails= new Subject<any>()
 
         let permissions: PermissionValues[] = Array.isArray(decodedAccessToken.permission) ? decodedAccessToken.permission : [decodedAccessToken.permission];
 
-       
+
         if (!this.isLoggedIn) {
             this.configurations.import(decodedAccessToken.configuration);
         }
@@ -232,14 +228,16 @@ private defaultEmployeeDetails= new Subject<any>()
             decodedAccessToken.employeeId,
             decodedAccessToken.managementStructureId,
             decodedAccessToken.masterCompanyId,
-            decodedAccessToken.legalEntityId
+            decodedAccessToken.legalEntityId,
+            decodedAccessToken.firstName,
+            decodedAccessToken.lastName
         );
-        
+
         user.isEnabled = true;
-        user.isResetPassword = decodedAccessToken.isResetPassword,
-        user.roleName=decodedAccessToken.roleName;
-        user.permissionName=Array.isArray(decodedAccessToken.permissionName)?decodedAccessToken.permissionName:[decodedAccessToken.permissionName];
-        user.roleID=decodedAccessToken.roleID;
+        user.isResetPassword = decodedAccessToken.isResetPassword;
+        user.roleName = decodedAccessToken.roleName;
+        user.permissionName = Array.isArray(decodedAccessToken.permissionName) ? decodedAccessToken.permissionName : [decodedAccessToken.permissionName];
+        user.roleID = decodedAccessToken.roleID;
         this.saveUserDetails(user, permissions, accessToken, refreshToken, accessTokenExpiry, rememberMe);
         this.getUserRolePermissionByUserId(user.id);
         this.loadAllModulesNameToLocalStorage();
@@ -275,45 +273,45 @@ private defaultEmployeeDetails= new Subject<any>()
         });
     }
 
-    public loadGlobalSettings(){
+    public loadGlobalSettings() {
         this.userRoleService.getGlobalData(DBkeys.MASTER_COMPANY_ID).subscribe(results => {
             return this.localStorage.savePermanentData(results[0], DBkeys.GLOBAL_SETTINGS)
         })
     }
-    getEmployeeDetails(user){        
-        if(user && user.employeeId){
-            this.commonService.getEmployeeData(user.masterCompanyId,user.employeeId).subscribe( (results :any) => {                
-                const employee:any=results;
-                employee.label=results.name;
-                employee.value=results.employeeId;
+    getEmployeeDetails(user) {
+        if (user && user.employeeId) {
+            this.commonService.getEmployeeData(user.masterCompanyId, user.employeeId).subscribe((results: any) => {
+                const employee: any = results;
+                employee.label = results.name;
+                employee.value = results.employeeId;
                 this.localStorage.savePermanentData(employee, DBkeys.EMPLOYEE);
                 // return this.defaultEmployeeDetails.next(results);
             })
-           }
         }
-        getManagementstructureDetails(user){            
-            if(user && user.managementStructureId){
-                this.commonService.getManagementStructureData(1,user.managementStructureId).subscribe(results => {                    
-                    this.localStorage.savePermanentData(results, DBkeys.MANAGEMENTSTRUCTURE);
-                    // return this.defaultEmployeeDetails.next(results);
-                })
-            }
+    }
+    getManagementstructureDetails(user) {
+        if (user && user.managementStructureId) {
+            this.commonService.getManagementStructureData(1, user.managementStructureId).subscribe(results => {
+                this.localStorage.savePermanentData(results, DBkeys.MANAGEMENTSTRUCTURE);
+                // return this.defaultEmployeeDetails.next(results);
+            })
         }
-        get currentEmployee() {
-            let employee = this.localStorage.getDataObject<any>(DBkeys.EMPLOYEE);
-            return employee;
-        } 
-        get currentManagementStructure() {
-        
-            let managementStructure = this.localStorage.getDataObject<any>(DBkeys.MANAGEMENTSTRUCTURE);
-            return managementStructure;
-        } 
-        get currentUserLocalId() {
-        
-            let global_object = this.localStorage.getDataObject<any>(DBkeys.GLOBAL_SETTINGS);
-            return global_object.cultureName;
-        } 
-    public getAllModulesNameFromLocalStorage() : ModuleHierarchyMaster[] {
+    }
+    get currentEmployee() {
+        let employee = this.localStorage.getDataObject<any>(DBkeys.EMPLOYEE);
+        return employee;
+    }
+    get currentManagementStructure() {
+
+        let managementStructure = this.localStorage.getDataObject<any>(DBkeys.MANAGEMENTSTRUCTURE);
+        return managementStructure;
+    }
+    get currentUserLocalId() {
+
+        let global_object = this.localStorage.getDataObject<any>(DBkeys.GLOBAL_SETTINGS);
+        return global_object.cultureName;
+    }
+    public getAllModulesNameFromLocalStorage(): ModuleHierarchyMaster[] {
         return this.localStorage.getData(DBkeys.Module_Hierarchy);
     }
 
@@ -321,12 +319,12 @@ private defaultEmployeeDetails= new Subject<any>()
         this.userRoleService.getUserRoleByUserId(userId).subscribe(roles => {
             this.saveUserRoleWithPermission(roles[0]);
         },
-        error => {
-            console.log('Error while retreiving roles.');
-        });
+            error => {
+                console.log('Error while retreiving roles.');
+            });
     }
 
-    public getUserRoleWithPermissionFromLocalStorage(){
+    public getUserRoleWithPermissionFromLocalStorage() {
         return this.localStorage.getData(DBkeys.User_Role_Permission);
     }
 
@@ -484,4 +482,10 @@ private defaultEmployeeDetails= new Subject<any>()
         }
         return isAllowed;
       }
+
+    get userRole():string{
+        if(this.currentUser!=null){
+            return this.currentUser.roleName;
+        }
+    }
 }

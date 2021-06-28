@@ -98,6 +98,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     private readonly _searchMulitPartNumberUrl: string = "/api/ItemMaster/searchmultipleparts";
     private readonly _multiSearchItemMasterUrl: string = "/api/ItemMaster/multisearch";
     private readonly _searchItemMasterfromExchangequotepop: string = "/api/ItemMaster/searchItemMasterfromExchangequotepop";
+    private readonly _searchItemMasterfromSpeedQuotepop: string = "/api/ItemMaster/searchItemMasterfromspeedquotepop";
 
     //Vendor Caps Air Craft
     private readonly _VendorMasterAircraftPostUrlNew: string = "/api/Vendor/VendorAircraftPost";
@@ -175,6 +176,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     get advancedSearchNonStockListUrl() { return this.configurations.baseUrl + this._advanceSearchNonstockListUrl; }
     get getSearchItemMasterfromExchangeQuotepopUrl() { return this.configurations.baseUrl + this._searchItemMasterfromExchangequotepop };
     get getAuditHistoryurl() { return this.configurations.baseUrl + this.getAuditHistoryById }
+    get getSearchItemMasterfromSpeedQuotepopUrl() { return this.configurations.baseUrl + this._searchItemMasterfromSpeedQuotepop };
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
@@ -1373,6 +1375,12 @@ export class ItemMasterEndpoint extends EndpointFactory {
         return this.http.post<T>(this.getSearchItemMasterfromExchangeQuotepopUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
             .catch(err => {
                 return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
+            })
+    }
+    searchitemmasterfromSpeedQuotepop<T>(searchParameters: any): Observable<T> {
+        return this.http.post<T>(this.getSearchItemMasterfromSpeedQuotepopUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
+                return this.handleErrorCommon(err, () => this.searchitemmasterfromSpeedQuotepop(searchParameters));
             })
     }
 }

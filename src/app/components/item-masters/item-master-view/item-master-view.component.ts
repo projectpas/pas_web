@@ -689,58 +689,66 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getcurrencyExchangeLoan() {
-    this.currencyService.getCurrencyList().subscribe((dat) => {
-      this.exchangeCurrencies = [...dat[0]];
-      this.loanCurrencies = [...dat[0]];
-      this.displayNameLoan = this.loanCurrencies[0].displayName;
-      this.displayName = this.exchangeCurrencies[0].displayName;
-    });
-  }
-
-  getNtaeData(itemMasterId) {
-    this.filterManufacturerData = [];
-    this.filterDiscriptionData = [];
-    this.filterPartItemClassificationData = [];
-    let reqData = {
-      first: 0,
-      rows: 10,
-      sortOrder: 1,
-      filters: {
-        ItemMasterId: itemMasterId,
-        MappingType: 3,
-      },
-    };
-    let reqDatas = {
-      first: 0,
-      rows: 10,
-      sortOrder: 1,
-      filters: {
-        ItemMasterId: itemMasterId,
-        MappingType: 4,
-      },
-      globalFilter: null,
-    };
-    let reqDatas1 = {
-      first: 0,
-      rows: 10,
-      sortOrder: 1,
-      filters: {
-        ItemMasterId: itemMasterId,
-        MappingType: 1,
-      },
-      globalFilter: null,
-    };
-    let reqDatas2 = {
-      first: 0,
-      rows: 10,
-      sortOrder: 1,
-      filters: {
-        ItemMasterId: itemMasterId,
-        MappingType: 2,
-      },
-      globalFilter: null,
-    };
+	getcurrencyExchangeLoan() {
+		this.currencyService.getCurrencyList().subscribe(dat => {
+			this.exchangeCurrencies = [...dat[0]];
+			this.loanCurrencies = [...dat[0]];
+			this.displayNameLoan = this.loanCurrencies[0].displayName;
+			this.displayName = this.exchangeCurrencies[0].displayName;
+		});
+	}
+	parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+	getNtaeData(itemMasterId) {
+		this.filterManufacturerData = [];
+		this.filterDiscriptionData = [];
+		this.filterPartItemClassificationData = [];
+		let reqData = {
+			first: 0,
+			rows: 10,
+			sortOrder: 1,
+			filters: {
+				ItemMasterId: itemMasterId,
+				MappingType: 3,
+			},
+		}
+		let reqDatas = {
+			first: 0,
+			rows: 10,
+			sortOrder: 1,
+			filters: {
+				ItemMasterId: itemMasterId,
+				MappingType: 4,
+			},
+			globalFilter: null
+		}
+		let reqDatas1 = {
+			first: 0,
+			rows: 10,
+			sortOrder: 1,
+			filters: {
+				ItemMasterId: itemMasterId,
+				MappingType: 1,
+			},
+			globalFilter: null
+		}
+		let reqDatas2 = {
+			first: 0,
+			rows: 10,
+			sortOrder: 1,
+			filters: {
+				ItemMasterId: itemMasterId,
+				MappingType: 2,
+			},
+			globalFilter: null
+		}
 
     this.itemMasterService.getnhatlaaltequpartlis(reqData).subscribe((res) => {
       this.ntaeData = res;

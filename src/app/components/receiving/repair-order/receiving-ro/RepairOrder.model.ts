@@ -191,6 +191,10 @@ export class RepairOrderPart {
     parentDivisionId: number = 0;
     parentDeptId: number = 0;
     quantityDrafted: number = 0;
+    showHeader:boolean;
+    revisedPartId:number=0;
+    acTailNum: string;
+    revisedPartNumber:string;
 }
 
 export class TimeLife {
@@ -268,6 +272,7 @@ export class StockLine {
     tagDate: Date;
     tagType: any;
     tagTypeId:any;
+    tagTypeobject:any;
     certifiedDueDate: Date;
     calibrationMemo: string;
     orderDate: Date;
@@ -354,6 +359,10 @@ export class StockLine {
     obtainFromObject: DropDownData;
     ownerObject: DropDownData;
     traceableToObject: DropDownData;
+    taggedByObject: DropDownData;
+    obtainFromName: string = null;
+    ownerName: string = null;
+    traceableToName: string = null;
     createdBy: string;
     updatedBy: string;
 
@@ -365,6 +374,17 @@ export class StockLine {
     parentbuId: number = 0;
     parentDivisionId: number = 0;
     parentDeptId: number = 0;
+    taggedByType : number = null;   
+    taggedBy:any = null;
+    taggedByName: string = null;
+    unitOfMeasureId:number = null;
+    unitOfMeasure: string = null;
+    revisedPartId:any = null;
+    revisedPartNumber: string = null;
+    revisedPartObject: DropDownData;
+    certifiedById:any = null;
+    certByObject: DropDownData;
+    certifiedTypeId : number = null;
 }
 
 export class ReceiveParts {

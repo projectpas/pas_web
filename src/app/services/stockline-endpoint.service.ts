@@ -404,10 +404,10 @@ export class StocklineEndpoint extends EndpointFactory {
 	}
 
 
-	GetAllStocklineByPartAndCondtion(itemMasterId, condtionids, mastecompanyId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/GetAllStocklineByPartAndCondtion?itemMasterId=${itemMasterId}&condtionids=${condtionids}&mastecompanyId=${mastecompanyId}`, this.getRequestHeaders())
+	GetAllStocklineByPartAndCondtion(itemMasterId, condtionids,includeAlternatePartNumber,includeEquivalentPartNumber,includeRevicePartNumber,mastecompanyId) {
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/GetAllStocklineByPartAndCondtion?itemMasterId=${itemMasterId}&condtionids=${condtionids}&includeAlternatePartNumber=${includeAlternatePartNumber}&includeEquivalentPartNumber=${includeEquivalentPartNumber}&includeRevicePartNumber=${includeRevicePartNumber}&mastecompanyId=${mastecompanyId}`, this.getRequestHeaders())
 			.catch(err => {
-				return this.handleErrorCommon(err, () => this.GetAllStocklineByPartAndCondtion(itemMasterId, condtionids, mastecompanyId));
+				return this.handleErrorCommon(err, () => this.GetAllStocklineByPartAndCondtion(itemMasterId, condtionids, includeAlternatePartNumber,includeEquivalentPartNumber,includeRevicePartNumber, mastecompanyId));
 			})
 	}
 
@@ -526,6 +526,13 @@ export class StocklineEndpoint extends EndpointFactory {
 			.catch(err => {
 				return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
 			})
+	}
+
+	GetAllStocklineByPartCondtionAndStockline(stocklineId,mastecompanyId) {
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/GetAllStocklineByPartCondtionAndStockline?stocklineId=${stocklineId}&&mastecompanyId=${mastecompanyId}`, this.getRequestHeaders())
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.GetAllStocklineByPartCondtionAndStockline(stocklineId, mastecompanyId));
+		})
 	}
 
 }

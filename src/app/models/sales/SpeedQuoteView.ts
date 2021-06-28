@@ -1,4 +1,4 @@
-import { ISalesOrderQuotePart } from './ISalesOrderQuotePart';
+import { ISpeedQuotePart } from './ISpeedQuotePart';
 import { IPriority } from './IPriority';
 import { ISalesQuoteType } from './ISalesQuoteType';
 import { ICustomerType } from './ICustomerType';
@@ -8,12 +8,13 @@ import { ILeadSource } from './ILeadSource';
 import { IStatus } from "./IStatus";
 import { ISpeedQuoteView } from './ISpeedQuoteView';
 import { ISpeedQte } from './ISpeedQte';
+import { ISpeedQuote } from './ISpeedQuote.model';
 
 export class SpeedQuoteView implements ISpeedQuoteView {
     createNewVersion: boolean;
     originalSalesOrderQuoteId: Number;
     speedQuote: ISpeedQte;
-    parts: ISalesOrderQuotePart[]
+    parts: ISpeedQuotePart[]
     priorities: IPriority[];
     salesQuoteTypes: ISalesQuoteType[];
     customerTypes: ICustomerType[];
@@ -22,4 +23,5 @@ export class SpeedQuoteView implements ISpeedQuoteView {
     leadSources: ILeadSource[];
     status: IStatus[];
     verificationResult;
+    managementStructureHeaderData: any[];
 }

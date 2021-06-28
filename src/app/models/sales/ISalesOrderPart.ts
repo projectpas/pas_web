@@ -50,7 +50,7 @@ export interface ISalesOrderPart {
     qtyShipped?: number;
     qtyInvoiced?: number;
     invoiceNumber: string;
-    invoiceDate: string;
+    invoiceDate: Date;
     qtyPreviouslyShipped?: number;
     lastShippedDate: string;
     shipReference: string;
@@ -90,5 +90,6 @@ export interface ISalesOrderPart {
     notes: string;
     altOrEqType: string;
     qtyRequested: number;
+    statusId?: number;
     itemNo:number;
 }

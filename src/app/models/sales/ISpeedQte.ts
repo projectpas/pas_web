@@ -39,12 +39,13 @@ export interface ISpeedQte {
     isDeleted: boolean;
     statusId: number;
     statusChangeDate: Date;
-    salesOrderQuoteNumber: string;
+    speedQuoteNumber: string;
     versionNumber: string;
     managementStructureId: number;
     qtyRequested: number;
     qtyToBeQuoted: number;
     status: string;
+    statusName: string;
     isApproved: boolean;
     buId: number;
     divisionId: number;

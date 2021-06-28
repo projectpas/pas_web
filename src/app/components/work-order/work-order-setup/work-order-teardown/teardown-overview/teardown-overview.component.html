@@ -22,6 +22,11 @@
                 <div class="form-row">
                     <p class="input-width-100-percent"><strong> Reason :</strong>  <span *ngIf="saveTearDownData && saveTearDownData.removalReason">{{saveTearDownData.removalReason}}</span></p>
                     <p><strong>Memo :</strong>  <span *ngIf="saveTearDownData && saveTearDownData.removalReasonsMemo" [innerHTML]="saveTearDownData.removalReasonsMemo"></span></p>
+                    <div style="width: 100%;">
+                    <app-common-documents [moduleName]="moduleNameeRemoval"  
+                    [referenceId]="workFlowWorkOrderId1"
+                    [isViewMode]="true"   [offLineUpload]="false"></app-common-documents>
+                    </div>
             </div>
         </div>
     </div>
@@ -58,8 +63,14 @@
  <p><strong>Memo :</strong><span  *ngIf="saveTearDownData && saveTearDownData.preliinaryReviewMemo" [innerHTML]="saveTearDownData.preliinaryReviewMemo"></span> </p>
   <p><strong>Inspector :</strong> <span *ngIf="saveTearDownData && saveTearDownData.preliinaryReviewInspector">{{saveTearDownData.preliinaryReviewInspector}}</span></p>
  <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.preliinaryReviewInspectorDate">{{saveTearDownData.preliinaryReviewInspectorDate | date: 'dd-MM-yyyy'}}</span> </p>
-  </div>
+ <div style="width: 100%;">
+ <app-common-documents [moduleName]="moduleNameePrellinary"  
+ [referenceId]="workFlowWorkOrderId1"
+ [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+</div>
+</div>
         </div>
+   
     </div>
     <div class="panel panel-default" *ngIf="saveTearDownData.isPreAssmentResults">
         <div class="panel-heading">
@@ -77,6 +88,11 @@
                 <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.assmentResultsTechnicianDate">{{saveTearDownData.assmentResultsTechnicianDate | date: 'dd-MM-yyyy'}}</span> </p>
                 <p><strong>Inspector :</strong><span *ngIf="saveTearDownData && saveTearDownData.assmentResultsInspector">{{saveTearDownData.assmentResultsInspector}}</span></p>
                 <p><strong>Date :</strong> <span *ngIf="saveTearDownData && saveTearDownData.assmentResultsInspectorDate">{{saveTearDownData.assmentResultsInspectorDate | date: 'dd-MM-yyyy'}}</span></p>
+                <div style="width: 100%;">
+                <app-common-documents [moduleName]="moduleNameePreAssesment"  
+                [referenceId]="workFlowWorkOrderId1"
+                [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                </div>
             </div>
         </div>
     </div>
@@ -97,7 +113,12 @@
                 <p><strong>Date :</strong> <span *ngIf="saveTearDownData && saveTearDownData.discoveryTechnicianDate">{{saveTearDownData.discoveryTechnicianDate | date: 'dd-MM-yyyy'}}</span></p>
                 <p><strong>Inspector :</strong> <span *ngIf="saveTearDownData && saveTearDownData.discoveryInspector">{{saveTearDownData.discoveryInspector}}</span></p>
                 <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.discoveryInspectorDate">{{saveTearDownData.discoveryInspectorDate | date: 'dd-MM-yyyy'}}</span> </p>
- </div>
+                <div style="width: 100%;">
+                <app-common-documents [moduleName]="moduleNameeTearDescovery"  
+                [referenceId]="workFlowWorkOrderId1"
+                [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                </div>
+            </div>
         </div>
     </div>
     <div class="panel panel-default" *ngIf="saveTearDownData.isPreAssemblyInspection">
@@ -116,6 +137,11 @@
                 <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionTechnicianDate">{{saveTearDownData.assemblyInspectionTechnicianDate | date: 'dd-MM-yyyy'}}</span> </p>
                 <p><strong>Inspector :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionInspector">{{saveTearDownData.assemblyInspectionInspector}}</span> </p>
                 <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionInspectorDate">{{saveTearDownData.assemblyInspectionInspectorDate | date: 'dd-MM-yyyy'}}</span> </p>
+      <div style="width: 100%;">
+        <app-common-documents [moduleName]="moduleNameePreAssembly"  
+        [referenceId]="workFlowWorkOrderId1"
+        [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+      </div>
             </div>
         </div>
     </div>
@@ -236,3 +262,15 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+

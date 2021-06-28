@@ -33,7 +33,7 @@ textarea {
 .list_caps{
   background: #f1f1f1;
   margin-top: -10px;
-  padding: 10px;
+  padding: 5px;
   // margin-bottom: 10px;
 }
 .set_align{
@@ -97,7 +97,7 @@ body .ui-radiobutton .ui-radiobutton-box{
 }
 
 .footer{
-  background-color: #eaf2fd
+  // background-color: #eaf2fd
 }
 .table-header-col1 {
   border-top: 1px solid #fff !important;
@@ -154,6 +154,9 @@ table thead tr th {
 .mr_o{
   margin: 0px;
 }
+.woq-actions-width{
+  min-width:363px;
+}
 .freight-isview-th{
   background: #fff !important; border: 1px solid #e7ecf1 !important;padding: 0 !important;
 }
@@ -169,10 +172,16 @@ table thead tr th {
 .width-150{
   width:150px !important;
 }
+.content-to-end{
+  text-align: right !important;
+}
 .width-200{
   width:200px !important;
 }
 .width-130{
+  width:130px !important;
+}
+.width-100{
   width:130px !important;
 }
 .wo-details{

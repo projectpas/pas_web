@@ -7,7 +7,6 @@ import { SalesQuoteService } from "../../../../../../services/salesquote.service
 import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
 import {
   AlertService,
-  DialogType,
   MessageSeverity
 } from "../../../../../../services/alert.service";
 import { SalesOrderService } from "../../../../../../services/salesorder.service";
@@ -65,6 +64,8 @@ export class SalesOrderPartNumberComponent {
   @Output('on-parts-save') onPartsSavedEvent: EventEmitter<ISalesOrderPart[]> = new EventEmitter<ISalesOrderPart[]>();
   query: ItemMasterSearchQuery;
   isEdit: boolean = false;
+  isEditMode: boolean = false;
+  isQtyAdjust: boolean = false;
   selectedPartActionType: any;
   @Input() salesOrderView: ISalesOrderView;
   @ViewChild("updatePNDetailsModal", { static: false })
@@ -197,20 +198,21 @@ export class SalesOrderPartNumberComponent {
       { field: 'partDescription', header: 'PN Description', width: "200px" },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
-      { field: 'quantityRequested', header: 'Qty Ord', width: "60px" },
+      { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
+      { field: 'quantityAlreadyQuoted', header: 'Qty Ord', width: "60px" },
       { field: 'qtyReserved', header: 'Qty Resvd', width: "70px" },
-      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Shipped', width: "98px" },
+      { field: 'quantityPrevShipped', header: 'Qty Prev Shipped', width: "98px" },
       { field: 'qtyBackOrder', header: 'Qty Back Ord', width: "98px" },
       { field: 'qtyAvailable', header: 'Qty Avail', width: "98px" },
       { field: 'qtyOnHand', header: 'Qty on Hand', width: "98px" },
       { field: 'currencyDescription', header: 'Curr', width: "80px" },
       { field: 'fixRate', header: 'FX Rate', width: "75px" },
-      { field: 'uom', header: 'UOM', width: "90px" },
+      { field: 'uomName', header: 'UOM', width: "90px" },
       { field: 'customerRef', header: 'Cust Ref', width: "110px" },
       { field: 'grossSalePrice', header: 'Gross Sale Amt', width: "110px" },
       { field: 'salesDiscountExtended', header: 'Disc Amt', width: "75px" },
       { field: 'netSalesPriceExtended', header: 'Net Sale Amt', width: "84px" },
-      { field: 'qtyPreviouslyShipped', header: 'Qty Prev Shpd', width: "84px" },
+      // { field: 'qtyPreviouslyShipped', header: 'Qty Prev Shpd', width: "84px" },
       { field: 'lastShippedDate', header: 'Last Ship Date', width: "84px" },
       { field: 'misc', header: 'Misc', width: "70px" },
       { field: 'freight', header: 'Freight', width: "80px" },
@@ -237,23 +239,37 @@ export class SalesOrderPartNumberComponent {
     }
   }
 
+  onSave(selectedParts) {
+    this.salesQuoteService.selectedParts = selectedParts;
+    this.refresh();
+    this.canSaveParts = false;
+    this.addPartModal.close();
+  }
+
   onCloseReserve(event) {
     this.show = false;
     this.salesReserveModal.close();
     this.refreshParts();
   }
 
+  salesOrderObj: any;
   refreshParts() {
-    this.salesOrderService.GetSalesOrderPartsViewById(this.salesOrderId).subscribe(res => {
-      for (let i = 0; i < this.salesQuoteService.selectedParts.length; i++) {
-        for (let j = 0; j < res.parts.length; j++) {
-          if (this.salesQuoteService.selectedParts[i].salesOrderPartId == res.parts[j].salesOrderPartId) {
-            this.salesQuoteService.selectedParts[i].qtyAvailable = res.parts[j].qtyAvailable;
-            this.salesQuoteService.selectedParts[i].qtyReserved = res.parts[j].qtyReserved;
-          }
-        }
+    this.salesOrderService.getSalesOrder(this.salesOrderId).subscribe(res => {
+      this.salesOrderObj = res[0].salesOrder;
+      let partList: any[] = res[0].parts;
+
+      if (this.selectedParts.length > 0)
+        this.selectedParts = [];
+
+      for (let i = 0; i < partList.length; i++) {
+        let selectedPart = partList[i];
+        let partNumberObj = this.salesOrderService.marshalSOPartToView(selectedPart, this.salesOrderObj);
+        this.selectedParts.push(partNumberObj);
       }
-    })
+
+      this.salesQuoteService.selectedParts = this.selectedParts;
+      this.refresh();
+    });
   }
 
   onCloseMargin(event) {
@@ -261,7 +277,7 @@ export class SalesOrderPartNumberComponent {
     this.salesMarginModal.close();
     if (!this.isEdit) {
       this.selectedPart.selected = false;
-      this.openPartNumber(false);
+      this.openPartNumber(false, true);
     }
   }
 
@@ -287,7 +303,25 @@ export class SalesOrderPartNumberComponent {
       this.selectedSummaryRow = null;
       this.selectedSummaryRowIndex = null;
     }
-    this.openPartNumber(false);
+    this.openPartNumber(false, false);
+    if (summaryRow == "") {
+      this.isEditMode = false;
+    }
+  }
+
+  adjustQty(summaryRow: any = '', rowIndex = null) {
+    this.salesQuoteService.resetSearchPart();
+    if (summaryRow) {
+      this.selectedSummaryRow = summaryRow;
+      this.selectedSummaryRowIndex = rowIndex;
+    } else {
+      this.selectedSummaryRow = null;
+      this.selectedSummaryRowIndex = null;
+    }
+    this.openQtyAdjust(false);
+    if (summaryRow == "") {
+      this.isEditMode = false;
+    }
   }
 
   viewPartNumber(summaryRow: any = '', rowIndex = null) {
@@ -299,13 +333,28 @@ export class SalesOrderPartNumberComponent {
       this.selectedSummaryRow = null;
       this.selectedSummaryRowIndex = null;
     }
-    this.openPartNumber(true);
+    this.openPartNumber(true, false);
+    this.isEditMode = false;
   }
 
-  openPartNumber(viewMode) {
+  openPartNumber(viewMode, close) {
     this.isStockLineViewMode = viewMode;
     this.clearData = viewMode;
     let contentPart = this.addPart;
+    if (close)
+      this.isEditMode = false;
+    else
+      this.isEditMode = true;
+    this.isQtyAdjust = false;
+    this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+  }
+
+  openQtyAdjust(viewMode) {
+    this.isStockLineViewMode = viewMode;
+    this.clearData = viewMode;
+    let contentPart = this.addPart;
+    this.isEditMode = false;
+    this.isQtyAdjust = true;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
 
@@ -392,7 +441,7 @@ export class SalesOrderPartNumberComponent {
           this.part.quoteVesrion = this.salesQuote.versionNumber;
           this.part.customerRef = this.salesQuote.customerReferenceName;
           this.part.serialNumber = this.selectedPart.serialNumber;
-          this.part.uom = this.selectedPart.uomDescription;
+          this.part.uomName = this.selectedPart.uomDescription;
           this.part.pmaStatus = this.selectedPart.oempmader;
           if (!this.part.pmaStatus) {
             this.part.pmaStatus = this.selectedPart['stockType'];
@@ -465,8 +514,9 @@ export class SalesOrderPartNumberComponent {
         })
         this.combineParts(this.summaryParts);
       }
-      this.openPartNumber(false);
+      this.openPartNumber(false, true);
       this.selectedParts.push(partObj);
+      this.salesQuoteService.selectedParts = this.selectedParts;
     }
     this.salesMarginModal.close();
     this.filterParts();
@@ -482,20 +532,38 @@ export class SalesOrderPartNumberComponent {
         this.query = data;
         this.part = part;
         this.query.partSearchParamters.quantityRequested = this.part.quantityRequested;
+
         this.query.partSearchParamters.quantityToQuote = this.part.quantityToBeQuoted;
         this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
+        let parentLine = this.summaryParts.filter(a => a.partId == this.part.itemMasterId && a.conditionId == this.part.conditionId);
+
+        if (parentLine) {
+          this.query.partSearchParamters.quantityToQuote = parentLine[0].quantityToBeQuoted;
+          this.query.partSearchParamters.quantityAlreadyQuoted = parentLine[0].quantityAlreadyQuoted;
+          this.part['quantityToQuote'] = parentLine[0].quantityToBeQuoted;
+
+          if ((parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis'])) > 0)
+            this.part['quantityAlreadyQuoted'] = parentLine[0].quantityAlreadyQuoted - Number(this.part['quantityFromThis']);
+          else
+            this.part['quantityAlreadyQuoted'] = Number(this.part['quantityFromThis']);
+
+          this.part['quantityToBeQuoted'] = (this.part.quantityRequested - parentLine[0].quantityAlreadyQuoted) + Number(this.part['quantityFromThis']);
+        }
+
       });
       this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
     }
   }
 
   openPartDelete(contentPartDelete, part) {
+    this.countItemNo = this.countItemNo - 1;
     this.part = part;
     this.deletePartModal = this.modalService.open(contentPartDelete, { size: "sm", backdrop: 'static', keyboard: false });
   }
 
   deletePart(): void {
     if (this.part.salesOrderPartId) {
+      this.isSpinnerVisible = true;
       this.salesOrderService.deletePart(this.part.salesOrderPartId).subscribe(response => {
         this.removePartNamber(this.part);
         this.deletePartModal.close();
@@ -504,6 +572,10 @@ export class SalesOrderPartNumberComponent {
           `Part removed successfully.`,
           MessageSeverity.success
         );
+        this.isSpinnerVisible = false;
+        this.refreshParts();
+      }, error => {
+        this.isSpinnerVisible = false;
       });
     } else {
       this.removePartNamber(this.part);
@@ -596,10 +668,24 @@ export class SalesOrderPartNumberComponent {
   }
 
   isDeleteDisabled(quote: ISalesQuote, part: any) {
-    if (part.createdBy && part.createdBy == this.userName) {
-      return (quote.isApproved || part.isApproved);
-    } else {
+    // if (part.createdBy && part.createdBy == this.userName) {
+    //   if (quote.isApproved || part.isApproved) {
+    //     return true;
+    //   }
+    //   else if (part.qtyReserved > 0 || part.qtyShipped > 0 || part.qtyInvoiced > 0) {
+    //     return true;
+    //   }
+    //   else {
+    //     return false;
+    //   }
+    // } else {
+    //   return true;
+    // }
+    if (part.qtyReserved > 0 || part.qtyShipped > 0 || part.qtyInvoiced > 0) {
       return true;
+    }
+    else {
+      return false;
     }
   }
 
@@ -660,10 +746,10 @@ export class SalesOrderPartNumberComponent {
             invalidDate = true;
           }
         }
-        if (!invalidParts && !invalidDate) {
-          let partNumberObj = this.salesOrderService.marshalSOPartToSave(selectedPart, this.userName);
-          this.salesOrderView.parts.push(partNumberObj);
-        }
+      }
+      if (!invalidParts && !invalidDate) {
+        let partNumberObj = this.salesOrderService.marshalSOPartToSave(selectedPart, this.userName);
+        this.salesOrderView.parts.push(partNumberObj);
       }
     }
     if (invalidParts) {
@@ -678,19 +764,32 @@ export class SalesOrderPartNumberComponent {
         this.canSaveParts = true;
         this.alertService.stopLoadingMessage();
         this.isSpinnerVisible = false;
+        this.updateNewSalesOrderPartNumber(data[0]);
         this.alertService.showMessage(
           "Success",
-          `PN  updated successfully.`,
+          `PN updated successfully.`,
           MessageSeverity.success
         );
         this.saveButton = true;
         this.onPartsSavedEvent.emit(this.selectedParts);
+        this.refreshParts();
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
       });
     }
     this.closeConfirmationModal();
+  }
+
+  updateNewSalesOrderPartNumber(data) {
+    for (let i = 0; i < this.selectedParts.length; i++) {
+      let selectedPart = this.selectedParts[i];
+      for (let j = 0; j < data.parts.length; j++) {
+        let dt = data.parts[j];
+        if (selectedPart.conditionId == dt.conditionId && selectedPart.itemMasterId == dt.itemMasterId) {
+          this.selectedParts[i].salesOrderPartId = dt.salesOrderPartId;
+        }
+      }
+    }
   }
 
   onDataLoadFailed(error) {
@@ -753,6 +852,7 @@ export class SalesOrderPartNumberComponent {
       uniquePart.quantityToBeQuoted = this.getSum(uniquePart.quantityToBeQuoted, part.quantityFromThis);
       uniquePart.quantityAlreadyQuoted = uniquePart.quantityToBeQuoted;
       uniquePart.qtyReserved = this.getSum(uniquePart.qtyReserved, part.qtyReserved);
+      uniquePart.quantityPrevShipped = this.getSum(uniquePart.quantityPrevShipped, part.qtyShipped);
       uniquePart.qtyAvailable = this.getSum(uniquePart.qtyAvailable, part.qtyAvailable);
       uniquePart.qtyOnHand = this.getSum(uniquePart.qtyOnHand ? uniquePart.qtyOnHand : 0, part.quantityOnHand);
       uniquePart.grossSalePrice = this.getSum(uniquePart.grossSalePrice, part.grossSalePrice);
@@ -760,8 +860,9 @@ export class SalesOrderPartNumberComponent {
       uniquePart.netSalesPriceExtended = this.getSum(uniquePart.netSalesPriceExtended, part.netSalesPriceExtended);
       uniquePart.taxAmount = this.getSum(uniquePart.taxAmount, part.taxAmount);
       uniquePart.totalSales = this.getSum(uniquePart.totalSales, part.totalSales);
+      uniquePart.unitCostExtended = this.getSum(uniquePart.unitCostExtended, part.unitCostExtended);
       uniquePart.marginAmountExtended = this.getSum(uniquePart.marginAmountExtended, part.marginAmountExtended);
-      uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentageExtended);
+      uniquePart.marginPercentageExtended = this.getSum(uniquePart.marginPercentageExtended, part.marginPercentagePerUnit);
       if (Number(uniquePart.quantityRequested) != Number(part.quantityRequested)) {
         uniquePart.quantityRequested = Number(uniquePart.quantityRequested) + Number(part.quantityRequested);
       } else {
@@ -770,6 +871,7 @@ export class SalesOrderPartNumberComponent {
     })
     uniquePart.partId = parts[0].itemMasterId;
     uniquePart.quantityToBeQuoted = Number(uniquePart.quantityRequested) - Number(uniquePart.quantityAlreadyQuoted);
+    uniquePart.qtyBackOrder = Number(uniquePart.quantityAlreadyQuoted) - Number(uniquePart.quantityPrevShipped);
     uniquePart.conditionDescription = parts[0].conditionDescription;
     uniquePart.conditionId = parts[0].conditionId;
     uniquePart.partNumber = parts[0].partNumber;
@@ -779,7 +881,8 @@ export class SalesOrderPartNumberComponent {
     uniquePart.misc = parts[0].misc;
     uniquePart.fixRate = parts[0].fixRate;
     uniquePart.freight = parts[0].freight;
-    uniquePart.uom = parts[0].uom;
+    uniquePart.uomName = parts[0].uomName;
+    uniquePart.methodType = parts[0].methodType;
     uniquePart.customerRef = parts[0].customerRef;
     uniquePart.pmaStatus = parts[0].pmaStatus;
     uniquePart.marginPercentageExtended = (uniquePart.marginPercentageExtended) / parts.length;
@@ -854,6 +957,7 @@ export class SalesOrderPartNumberComponent {
   deleteMultiplePart(): void {
     if (this.deletedata.length > 0) {
       let data = { "salesOrderPartIds": this.deletedata }
+      this.isSpinnerVisible = true;
       this.salesOrderService.deleteMultiplePart(data).subscribe(response => {
         for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
           this.removePartNamber(this.selectedSummaryRow.childParts[i]);
@@ -864,6 +968,8 @@ export class SalesOrderPartNumberComponent {
           `Part removed successfully.`,
           MessageSeverity.success
         );
+        this.isSpinnerVisible = false;
+        this.refreshParts();
       }, error => {
         this.isSpinnerVisible = false;
       });
@@ -889,25 +995,40 @@ export class SalesOrderPartNumberComponent {
     localStorage.setItem("partNumber", rowData.partNumber);
     localStorage.setItem("salesOrderId", this.salesOrderId);
     localStorage.setItem("lsconditionId", rowData.conditionId);
+    localStorage.setItem("lsqty", rowData.quantityRequested > 0 ? rowData.quantityRequested : 0);
+
     this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup`);
   }
 
   createRO(rowData) {
-    localStorage.setItem("itemMasterId", rowData.partId);
+    localStorage.setItem("itemMasterId", rowData.itemMasterId);
     localStorage.setItem("partNumber", rowData.partNumber);
     localStorage.setItem("salesOrderId", this.salesOrderId);
+    localStorage.setItem("lsstocklineId", rowData.stockLineId);
+    //localStorage.setItem("lsconditionId", rowData.conditionId);
+    localStorage.setItem("lsqty", rowData.qtyAvailable > 0 ? rowData.qtyAvailable : 0);
     this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup`);
   }
 
   getMarginPercentage(part) {
-    return ((((part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended)) / (part.grossSalePrice + Number(part.misc))) * 100).toFixed(2);
+    return ((((part.salesPriceExtended + Number(part.misc)) - (part.unitCostExtended)) / (part.salesPriceExtended + Number(part.misc))) * 100).toFixed(2);
   }
 
   getMarginAmount(part) {
-    return (part.grossSalePrice + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
+    return (part.salesPriceExtended + Number(part.misc)) - (part.unitCostExtended).toFixed(2);
   }
 
   getTotalRevenue(part) {
-    return (part.grossSalePrice + Number(part.misc)).toFixed(2);
+    return (part.salesPriceExtended + Number(part.misc)).toFixed(2);
+  }
+
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
   }
 }

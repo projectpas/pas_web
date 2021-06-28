@@ -1,0 +1,391 @@
+<!-- <div class="col-md-12" style="margin-bottom: 15px;">
+  <h4 class="po-head-sm">
+      WO Analysis Overview
+  </h4>
+</div> -->
+<div class="card new-card">
+  <div class="card-header header" >
+    <div class="row">
+      <div class="col">
+        <h4 class="header-name"> Release Form</h4>
+      </div>
+      <div *ngIf="isView == false">
+        <button type="button" class="btn-sm header-button " *ngIf="!isView && !islocked"
+         (click)="createNew()" data-toggle="modal">
+            Add 8130 Form
+        </button>
+
+        <button type="button" class="btn-sm header-button " *ngIf="!isView && !islocked"
+        (click)="create9130New()" data-toggle="modal">
+           Add 9130 Form
+       </button>
+    </div>
+    </div>
+  </div>
+  <div class="card-body header-body">  
+<p-table #woAnalysis
+class="p-table-cstm wo-ptable-padd ptable-f10"
+[value]="data"
+[metaKeySelection]="true"
+[first]="0"
+(onPage)="pageIndexChange($event)"
+[rows]="pageSize"
+[paginator]="true"
+[pageLinks]="3"
+[rowsPerPageOptions]="[10, 20, 50, 100]"
+[columns]="selectedColumns"
+selectionMode="multiple"
+[resizableColumns]="true"
+[reorderableColumns]="true"
+[totalRecords]="totalRecords"
+[scrollable]="true" scrollHeight="450px">
+
+    <ng-template pTemplate="caption">
+      <div class="row">
+          <div class="col">
+            <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
+      [ngModelOptions]="{ standalone: true }" optionLabel="header" selectedItemsLabel="{0} columns selected" 
+      class="multiselect-field"
+      defaultLabel="Choose Columns"></p-multiSelect>
+  </div>
+  <div class="col search-align">
+      <div					
+      class="global-search-field inner-addon right-addon inline-block"
+      >
+                <i class="fa fa-search"></i>
+                <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
+                    (input)="woAnalysis.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
+                   />
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
+            pButton icon="fa-download" iconPos="left" label="Export Data" data-toggle="modal"  data-target="#downloadConfirmation" (click)="selectedOnly = false; targetData = woAnalysis;" 
+            ></button>
+            <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+            matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+            (click)="woAnalysis.exportCSV({ selectionOnly: true })"></button>
+
+       
+            <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+              <div class="modal-dialog modal-sm">
+                  <div class="modal-content">
+                      <div class="modal-header text-st">
+                          <button type="button" class="close flot-r" (click)="closeModal()">&times;</button>
+                          <h4 class="modal-title ">Are You Sure Want to Download?</h4>
+                      </div>
+                      <div class="modal-body text-st" *ngIf="targetData">
+                          <strong>
+                              <span>
+                                  You are attempting to export {{targetData.totalRecords}} of records. 
+                              </span> 
+                          </strong>
+                      </div> 
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):targetData.exportCSV(); closeModal();">Confirm</button>
+                          <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
+            <!-- [ngStyle]="col.field == 'otherCostRevenuePercentage' ? {'width': '118px'} : {'width': '105px'}" -->
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+
+            <th class="table-column-width"
+                *ngFor="let col of columns"
+                pResizableColumn
+                pReorderableColumn
+                [pSortableColumn]="col.field">
+                {{ col.header }}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+
+            <th class="table-actions-column" *ngIf="selectedColumns.length > 0"  [ngClass]="{'max_widthControl': isView}">
+                Actions
+            </th>
+        </tr>
+        <tr>
+            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                <input class="table-header-input-width" pInputText type="text" (input)="
+                woAnalysis.filter($event.target.value, col.field, 'contains')
+                " />
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
+                <td class="table-column-width"
+                *ngFor="let col of columns"
+                class="ui-resizable-column"
+                pReorderableRowHandle>
+                  <ng-container *ngIf="col.field!='materialRevenue' && col.field!='materialCost' && col.field!='materialRevenuePercentage' && col.field!='laborCost' && col.field!='laborRevenuePercentage' && col.field!='overHeadCost' && col.field!='otherCost' && col.field!='directCost' && col.field!='otherCostRevenuePercentage'">
+                      {{rowData[col.field]}}
+                  </ng-container>
+                  <ng-container *ngIf="col.field=='materialRevenue' || col.field=='materialCost' || col.field=='materialRevenuePercentage' || col.field=='laborCost' || col.field=='laborRevenuePercentage' || col.field=='overHeadCost' || col.field=='otherCost' || col.field=='directCost' || col.field=='otherCostRevenuePercentage'">
+                      <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                  </ng-container> 
+                </td>
+                <td class="action-icons-cstm table-column-width">
+                    <div>
+                        <span> 
+                             <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
+                            matTooltipPosition="above">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        </span>
+                      <span  *ngIf="!isView && !islocked" ><button [disabled]="rowData['isClosed'] ==true" class="btn nobg btn-edit-cstm"
+                        (click)="Edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></button>
+                    </span>
+                    <span  *ngIf="!isView && !islocked"  ><button [disabled]="rowData['isClosed'] ==true" class="btn nobg btn-lo-cstm"
+                      (click)="Locked(rowData)" matTooltip="Locked" matTooltipPosition="above" data-toggle="modal" data-target="#woLocked" ><i class="fa fa-lock"></i></button>
+                    </span>
+                        <span data-toggle="modal" data-target="#easaHistory">
+                          <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"  matTooltipPosition="above" matTooltip="History"><i
+                              class="fa fa-history"> </i></a></span>
+                    </div>
+                </td>
+            </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+          <td colspan="19" class="no-records-msg no-records-cstm">
+              No records found
+          </td>
+      </tr>
+  </ng-template>
+    <ng-template pTemplate="summary" id="footer">
+        <label id="footer" class="footer" style="background: #fff !important;">Total:</label>
+        <input class="footer-input-width"
+                [(ngModel)]="woAnalysis._totalRecords"
+                [disabled]="true"
+                pInputText
+                type="text" />
+        &nbsp;&nbsp;
+        <label id="footer" class="footer1">Pages Count:</label>
+        <input class="footer-input-width"
+                [ngModel]="getPageCount(woAnalysis._totalRecords, pageSize)"
+                [disabled]="true"
+                pInputText
+                type="text" />
+    </ng-template>
+</p-table>
+</div>
+</div>
+
+<div *ngIf="is8130from">
+            <app-wo-release-from (updateRelreaseList)="UpdateGird()" [ReleaseDataForm]="ReleaseData" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId" [releaseFromId]="releaseFromId" [isView]="isViewopen" [isEdit]="isEdit">
+            </app-wo-release-from>
+</div>
+<div *ngIf="is9130from">
+    <app-wo-release-easa-from  (updateRelreaseList)="UpdateGird()" [ReleaseDataForm]="ReleaseData" [workOrderId]="workOrderId" [workOrderPartNumberId]="workOrderPartNumberId" [releaseFromId]="releaseFromId"  [isView]="isViewopen" [isEdit]="isEdit">
+    </app-wo-release-easa-from>
+</div>
+
+<!-- Modal -->
+<div id="easaHistory" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="closePopupmodel('easaHistory')">
+            &times;
+          </button>
+          <h4 class="modal-title">Easa From History</h4>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+            <table class="table table-bordered tool-history">
+              <thead>
+                <tr>
+                  <th>TrackingNo</th>
+                  <th>
+                    OrganizationName
+                  </th>
+                  <th>InvoiceNo</th>
+                  <th>Description</th>
+                  <th>PartNumber</th>
+                  <th>Eligibility</th>
+                  <th>Quantity</th>
+                  <th>Batchnumber</th>
+                  <th>Status</th>
+                  <th>Remarks</th>
+                  <th>PrintedName</th>
+                  <th>ApprovalCertificate</th>
+                </tr>
+              </thead >
+              <tbody *ngIf="EsafromAuditHistory && EsafromAuditHistory.length ==0">
+                <tr>
+                  <td colspan="11" class="no-records-msg no-records-cstm">
+                      No records found
+                  </td>
+              </tr>
+              </tbody>
+              <tbody *ngIf="EsafromAuditHistory && EsafromAuditHistory.length !=0">
+                <tr *ngFor="let audit of EsafromAuditHistory; let i = index">
+                  <td [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'trackingNo',
+                      audit.trackingNo
+                    )
+                      ? 'black'
+                      : 'red'
+                  }">
+                  {{ audit.trackingNo }}
+                </td>
+                  <td [ngStyle]="{
+                      color: getColorCodeForHistory(i, 'organizationName', audit.organizationName)
+                        ? 'black'
+                        : 'red'
+                    }">
+                    {{ audit.organizationName }}
+                  </td>
+                  <td [ngStyle]="{
+                    color: getColorCodeForHistory(i, 'invoiceNo', audit.invoiceNo)
+                      ? 'black'
+                      : 'red'
+                  }">
+                  {{ audit.invoiceNo }}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(i, 'description', audit.description)
+                    ? 'black'
+                    : 'red'
+                }">
+                {{ audit.description }}
+              </td>
+              <td [ngStyle]="{
+                color: getColorCodeForHistory(i, 'partNumber', audit.partNumber)
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.partNumber }}
+            </td>
+            <td [ngStyle]="{
+              color: getColorCodeForHistory(i, 'eligibility', audit.eligibility)
+                ? 'black'
+                : 'red'
+            }">
+            {{ audit.eligibility }}
+          </td>
+          <td [ngStyle]="{
+            color: getColorCodeForHistory(i, 'quantity', audit.quantity)
+              ? 'black'
+              : 'red'
+          }">
+          {{ audit.quantity }}
+        </td>
+        <td [ngStyle]="{
+          color: getColorCodeForHistory(i, 'batchnumber', audit.batchnumber)
+            ? 'black'
+            : 'red'
+        }">
+        {{ audit.batchnumber }}
+      </td>
+                  <td [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'status',
+                      audit.status
+                    )
+                      ? 'black'
+                      : 'red'
+                  }">
+                  {{ audit.status}}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'remarks',
+                    audit.remarks
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                  {{ audit.remarks }}
+                </td>
+                <td [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'printedName',
+                      audit.printedName
+                    )
+                      ? 'black'
+                      : 'red'
+                  }">
+                    {{ audit.printedName }}
+                  </td>
+                  <td [ngStyle]="{
+                      color: getColorCodeForHistory(
+                        i,
+                        'approvalCertificate',
+                        audit.approvalCertificate
+                      )
+                        ? 'black'
+                        : 'red'
+                    }">
+                    {{ audit.approvalCertificate }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="closePopupmodel('easaHistory')">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+<div class="modal fade" id="woLocked" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" (click)="closewoLockedModal()">&times;</button>
+              <h4 class="modal-title">Are You Sure Want to Lock?</h4>
+          </div>
+          <div class="modal-body">
+              <strong>
+                  Release Form : 
+                  <span class="new-label">{{rowDataTolock.formType}}</span>
+              </strong>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="submitlock(); closewoLockedModal();">Yes</button>
+              <button type="button" class="btn btn-danger" (click)="closewoLockedModal()">No</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+  <div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>

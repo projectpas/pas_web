@@ -20,11 +20,15 @@ import { CustomerService } from '../../../../services/customer.service';
 import { Dropdown } from 'primeng/dropdown';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
-import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
 import { RepairOrderService } from '../../../../services/repair-order.service';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs'
+import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-edit-ro',
@@ -100,7 +104,8 @@ export class EditRoComponent implements OnInit {
     vendorModuleId: number = 0;
     customerModuleId: number = 0;
     otherModuleId: number = 0;
-
+    private onDestroy$: Subject<void> = new Subject<void>();
+    modal: NgbModalRef;
     /** edit-ro ctor */
     constructor(public receivingService: ReceivingService,
         public priority: PriorityService,
@@ -122,6 +127,7 @@ export class EditRoComponent implements OnInit {
         private datePipe: DatePipe,
         private authService: AuthService,
         private repairOrderService: RepairOrderService,
+        private modalService: NgbModal,
     ) {
         this.localPoData = this.vendorService.selectedPoCollection;
         this.editPoData = this.localData[0];
@@ -163,7 +169,7 @@ export class EditRoComponent implements OnInit {
                     }
                     else if (x.label == "MANUFACTURER") {
                         this.arraymanufacturerlist.push(x.value);
-                    }
+                    }                   
                 });
                 this.getShippingVia();
                 this.getConditionList();
@@ -212,7 +218,6 @@ export class EditRoComponent implements OnInit {
                                     parent.hasChildren = false;
                                 }
                             }
-
                             for (let part of this.repairOrderData) {
                                 part.isEnabled = false;
                                 this.getManagementStructureForPart(part, results[1]);
@@ -230,6 +235,10 @@ export class EditRoComponent implements OnInit {
                             this.getCustomers();
                             this.getVendors();
                             this.getCompanyList();
+                            //this.loadTagByEmployeeData();
+                            this.Purchaseunitofmeasure();
+                            this.getAllrevisedPart();
+                            this.getTagType();
                             this.isSpinnerVisible = false;
                             if (this.repairOrderData) {
                                 for (let i = 0; i < this.repairOrderData.length; i++) {
@@ -265,6 +274,12 @@ export class EditRoComponent implements OnInit {
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
+    get currentUserManagementStructureId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.managementStructureId
+            : null;
     }
 
     getManagementStructureForPart(partList, response) {
@@ -345,17 +360,21 @@ export class EditRoComponent implements OnInit {
         part.parentDepartmentlist = [];
         part.parentbuId = 0;
         part.parentDivisionId = 0;
-        part.parentDeptId = 0;  
-        
+        part.parentDeptId = 0;
+
         if (part.stockLine) {
             for (let j = 0; j < part.stockLine.length; j++) {
-                part.stockLine[j].parentCompanyId = part.parentCompanyId;
-                part.stockLine[j].parentBulist = [];
-                part.stockLine[j].parentDivisionlist = [];
-                part.stockLine[j].parentDepartmentlist = [];
-                part.stockLine[j].parentbuId = 0;
-                part.stockLine[j].parentDivisionId = 0;
-                part.stockLine[j].parentDeptId = 0;               
+                if (part.stockLine[j].stockLineId > 0) {
+                }
+                else {
+                    part.stockLine[j].parentCompanyId = part.parentCompanyId;
+                    part.stockLine[j].parentBulist = [];
+                    part.stockLine[j].parentDivisionlist = [];
+                    part.stockLine[j].parentDepartmentlist = [];
+                    part.stockLine[j].parentbuId = 0;
+                    part.stockLine[j].parentDivisionId = 0;
+                    part.stockLine[j].parentDeptId = 0;
+                }
             }
         }
         if (part.parentCompanyId != 0 && part.parentCompanyId != null
@@ -365,18 +384,26 @@ export class EditRoComponent implements OnInit {
                 part.parentBulist = res;
                 if (part.stockLine) {
                     for (let j = 0; j < part.stockLine.length; j++) {
-                        part.stockLine[j].parentBulist = part.parentBulist;
-                        part.stockLine[j].parentCompanyId = part.parentCompanyId;
-                        part.stockLine[j].managementStructureEntityId = part.parentCompanyId;
+                        if (part.stockLine[j].stockLineId > 0) {
+                        }
+                        else {
+                            part.stockLine[j].parentBulist = part.parentBulist;
+                            part.stockLine[j].parentCompanyId = part.parentCompanyId;
+                            part.stockLine[j].managementStructureEntityId = part.parentCompanyId;
+                        }
                     }
                 }
             });
-        }       
+        }
         else {
             part.managementStructureId = 0;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
-                    part.stockLine[j].managementStructureEntityId = 0;
+                    if (part.stockLine[j].stockLineId > 0) {
+                    }
+                    else {
+                        part.stockLine[j].managementStructureEntityId = 0;
+                    }
                 }
             }
         }
@@ -389,11 +416,15 @@ export class EditRoComponent implements OnInit {
         part.parentDeptId = 0;
         if (part.stockLine) {
             for (let j = 0; j < part.stockLine.length; j++) {
-                part.stockLine[j].parentbuId = part.parentbuId;
-                part.stockLine[j].parentDivisionlist = [];
-                part.stockLine[j].parentDepartmentlist = [];
-                part.stockLine[j].parentDivisionId = 0;
-                part.stockLine[j].parentDeptId = 0;
+                if (part.stockLine[j].stockLineId > 0) {
+                }
+                else {
+                    part.stockLine[j].parentbuId = part.parentbuId;
+                    part.stockLine[j].parentDivisionlist = [];
+                    part.stockLine[j].parentDepartmentlist = [];
+                    part.stockLine[j].parentDivisionId = 0;
+                    part.stockLine[j].parentDeptId = 0;
+                }
             }
         }
         if (part.parentbuId != 0 && part.parentbuId != null && part.parentbuId != undefined) {
@@ -402,9 +433,13 @@ export class EditRoComponent implements OnInit {
                 part.parentDivisionlist = res;
                 if (part.stockLine) {
                     for (let j = 0; j < part.stockLine.length; j++) {
-                        part.stockLine[j].parentDivisionlist = part.parentDivisionlist;
-                        part.stockLine[j].parentbuId = part.parentbuId;
-                        part.stockLine[j].managementStructureEntityId = part.parentbuId;
+                        if (part.stockLine[j].stockLineId > 0) {
+                        }
+                        else {
+                            part.stockLine[j].parentDivisionlist = part.parentDivisionlist;
+                            part.stockLine[j].parentbuId = part.parentbuId;
+                            part.stockLine[j].managementStructureEntityId = part.parentbuId;
+                        }
                     }
                 }
             });
@@ -413,7 +448,11 @@ export class EditRoComponent implements OnInit {
             part.managementStructureId = part.parentCompanyId;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
-                    part.stockLine[j].managementStructureEntityId = part.parentCompanyId;
+                    if (part.stockLine[j].stockLineId > 0) {
+                    }
+                    else {
+                        part.stockLine[j].managementStructureEntityId = part.parentCompanyId;
+                    }
                 }
             }
         }
@@ -424,9 +463,13 @@ export class EditRoComponent implements OnInit {
         part.parentDepartmentlist = [];
         if (part.stockLine) {
             for (let j = 0; j < part.stockLine.length; j++) {
-                part.stockLine[j].parentDivisionId = part.parentDivisionId;
-                part.stockLine[j].parentDepartmentlist = [];
-                part.stockLine[j].parentDeptId = 0;
+                if (part.stockLine[j].stockLineId > 0) {
+                }
+                else {
+                    part.stockLine[j].parentDivisionId = part.parentDivisionId;
+                    part.stockLine[j].parentDepartmentlist = [];
+                    part.stockLine[j].parentDeptId = 0;
+                }
             }
         }
         if (part.parentDivisionId != 0 && part.parentDivisionId != null
@@ -436,9 +479,13 @@ export class EditRoComponent implements OnInit {
                 part.parentDepartmentlist = res;
                 if (part.stockLine) {
                     for (let j = 0; j < part.stockLine.length; j++) {
-                        part.stockLine[j].parentDepartmentlist = part.parentDepartmentlist;
-                        part.stockLine[j].parentDivisionId = part.parentDivisionId;
-                        part.stockLine[j].managementStructureEntityId = part.parentDivisionId;
+                        if (part.stockLine[j].stockLineId > 0) {
+                        }
+                        else {
+                            part.stockLine[j].parentDepartmentlist = part.parentDepartmentlist;
+                            part.stockLine[j].parentDivisionId = part.parentDivisionId;
+                            part.stockLine[j].managementStructureEntityId = part.parentDivisionId;
+                        }
                     }
                 }
             });
@@ -447,7 +494,11 @@ export class EditRoComponent implements OnInit {
             part.managementStructureId = part.parentbuId;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
-                    part.stockLine[j].managementStructureEntityId = part.parentbuId;
+                    if (part.stockLine[j].stockLineId > 0) {
+                    }
+                    else {
+                        part.stockLine[j].managementStructureEntityId = part.parentbuId;
+                    }
                 }
             }
         }
@@ -458,8 +509,12 @@ export class EditRoComponent implements OnInit {
             part.managementStructureId = part.parentDeptId;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
-                    part.stockLine[j].parentDeptId = part.parentDeptId;
-                    part.stockLine[j].managementStructureEntityId = part.parentDeptId;	
+                    if (part.stockLine[j].stockLineId > 0) {
+                    }
+                    else {
+                        part.stockLine[j].parentDeptId = part.parentDeptId;
+                        part.stockLine[j].managementStructureEntityId = part.parentDeptId;
+                    }
                 }
             }
         }
@@ -467,8 +522,11 @@ export class EditRoComponent implements OnInit {
             part.managementStructureId = part.parentDivisionId;
             if (part.stockLine) {
                 for (let j = 0; j < part.stockLine.length; j++) {
-                    //part.stockLine[j].managementStructureId = part.parentDivisionId;
-                    part.stockLine[j].managementStructureEntityId = part.parentDivisionId;
+                    if (part.stockLine[j].stockLineId > 0) {
+                    }
+                    else {
+                        part.stockLine[j].managementStructureEntityId = part.parentDivisionId;
+                    }
                 }
             }
         }
@@ -547,61 +605,61 @@ export class EditRoComponent implements OnInit {
 
     selectedLegalEntitySL(legalEntityId, stockLine) {
         stockLine.parentBulist = [];
-		stockLine.parentDivisionlist = [];
-		stockLine.parentDepartmentlist = [];
-		stockLine.parentbuId = 0;
-		stockLine.parentDivisionId = 0;
-		stockLine.parentDeptId = 0;		
-        if (stockLine.parentCompanyId != 0 && stockLine.parentCompanyId != null 
+        stockLine.parentDivisionlist = [];
+        stockLine.parentDepartmentlist = [];
+        stockLine.parentbuId = 0;
+        stockLine.parentDivisionId = 0;
+        stockLine.parentDeptId = 0;
+        if (stockLine.parentCompanyId != 0 && stockLine.parentCompanyId != null
             && stockLine.parentCompanyId != undefined) {
-                stockLine.managementStructureEntityId = stockLine.parentCompanyId;
-			this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentCompanyId,this.employeeId ).subscribe(res => {
+            stockLine.managementStructureEntityId = stockLine.parentCompanyId;
+            this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentCompanyId, this.employeeId).subscribe(res => {
                 stockLine.parentBulist = res;
             });
-		 } 
-		  else {
+        }
+        else {
             stockLine.managementStructureEntityId = 0;
-		 }
+        }
     }
 
     selectedBusinessUnitSL(businessUnitId, stockLine) {
         stockLine.parentDivisionlist = [];
-        stockLine.parentDepartmentlist = [];		
+        stockLine.parentDepartmentlist = [];
         stockLine.parentDivisionId = 0;
-        stockLine.parentDeptId = 0;	 	
-	 	if (stockLine.parentbuId != 0 && stockLine.parentbuId != null && stockLine.parentbuId != undefined) {
+        stockLine.parentDeptId = 0;
+        if (stockLine.parentbuId != 0 && stockLine.parentbuId != null && stockLine.parentbuId != undefined) {
             stockLine.managementStructureEntityId = stockLine.parentbuId;
-	 		this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentbuId,this.employeeId ).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentbuId, this.employeeId).subscribe(res => {
                 stockLine.parentDivisionlist = res;
-	 		});
-	 	}
-	 	 else {
-            stockLine.managementStructureEntityId  = stockLine.parentCompanyId;	 		 
-	 		}	
+            });
+        }
+        else {
+            stockLine.managementStructureEntityId = stockLine.parentCompanyId;
+        }
     }
-    
+
     selectedDivisionSL(divisionUnitId, stockLine) {
         stockLine.parentDeptId = 0;
-		stockLine.parentDepartmentlist = [];	
-        if (stockLine.parentDivisionId != 0 && stockLine.parentDivisionId != null 
-               && stockLine.parentDivisionId != undefined) {
-                stockLine.managementStructureEntityId = stockLine.parentDivisionId; 
-				this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentDivisionId ,this.employeeId ).subscribe(res => {
-                    stockLine.parentDepartmentlist = res;
-                });   
-		}
-		 else {
-            stockLine.managementStructureEntityId  = stockLine.parentbuId;			
-		 }	
+        stockLine.parentDepartmentlist = [];
+        if (stockLine.parentDivisionId != 0 && stockLine.parentDivisionId != null
+            && stockLine.parentDivisionId != undefined) {
+            stockLine.managementStructureEntityId = stockLine.parentDivisionId;
+            this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentDivisionId, this.employeeId).subscribe(res => {
+                stockLine.parentDepartmentlist = res;
+            });
+        }
+        else {
+            stockLine.managementStructureEntityId = stockLine.parentbuId;
+        }
     }
 
     selectedDepartmentSL(departmentId, stockLine) {
         if (stockLine.parentDeptId != 0 && stockLine.parentDeptId != null && stockLine.parentDeptId != undefined) {
-			stockLine.managementStructureEntityId = stockLine.parentDeptId;			
-		}
-		 else {
-			stockLine.managementStructureEntityId = stockLine.parentDivisionId;
-		 }		
+            stockLine.managementStructureEntityId = stockLine.parentDeptId;
+        }
+        else {
+            stockLine.managementStructureEntityId = stockLine.parentDivisionId;
+        }
     }
 
     get currentUserMasterCompanyId(): number {
@@ -611,7 +669,6 @@ export class EditRoComponent implements OnInit {
     }
 
     getReceivingROHeaderById(id) {
-        // this.receivingService.getReceivingROHeaderById(id).subscribe(res => {
         this.repairOrderService.getROViewById(id).subscribe(res => {
             this.repairOrderHeaderData = res;
             this.repairOrderHeaderData.openDate = this.repairOrderHeaderData.openDate ? new Date(this.repairOrderHeaderData.openDate) : '';
@@ -661,7 +718,7 @@ export class EditRoComponent implements OnInit {
     onAddNotes() {
         this.headerNotes = this.repairOrderHeaderData.notes;
     }
-    
+
     onSaveNotes() {
         this.repairOrderHeaderData.notes = this.headerNotes;
     }
@@ -766,6 +823,26 @@ export class EditRoComponent implements OnInit {
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 1) {
                         SL.traceableToObject = this.CustomerList.find(x => x.Key == SL.traceableTo);
                     }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 1) {
+                        var taggedBy = this.CustomerList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.CustomerList.push(taggedBy);                           
+                        } 
+                        SL.taggedByObject = this.CustomerList.find(x => x.Key == SL.taggedBy);
+                    }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 1) {
+                        var certifiedById = this.CustomerList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.CustomerList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.CustomerList.find(x => x.Key == SL.certifiedById);
+                    }
                 }
             }
         });
@@ -794,6 +871,26 @@ export class EditRoComponent implements OnInit {
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 2) {
                         SL.traceableToObject = this.VendorList.find(x => x.Key == SL.traceableTo);
                     }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 2) {
+                        var taggedBy = this.VendorList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.VendorList.push(taggedBy);                           
+                        } 
+                        SL.taggedByObject = this.VendorList.find(x => x.Key == SL.taggedBy);
+                    }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 2) {
+                        var certifiedById = this.VendorList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.VendorList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.VendorList.find(x => x.Key == SL.certifiedById);
+                    }
                 }
             }
         });
@@ -821,6 +918,26 @@ export class EditRoComponent implements OnInit {
                     }
                     if (SL.traceableTo != null && SL.traceableTo != '' && SL.traceableToType == 9) {
                         SL.traceableToObject = this.CompanyList.find(x => x.Key == SL.traceableTo);
+                    }
+                    if (SL.taggedBy != null && SL.taggedBy != '' && SL.taggedByType == 9) {
+                        var taggedBy = this.CompanyList.find(temp => temp.Key == SL.taggedBy)
+                        if (!taggedBy || taggedBy == undefined) {                          
+                            var taggedBy = new DropDownData();
+                            taggedBy.Key = SL.taggedBy;
+                            taggedBy.Value = SL.taggedByName;
+                            this.CompanyList.push(taggedBy);                           
+                        }
+                        SL.taggedByObject = this.CompanyList.find(x => x.Key == SL.taggedBy);
+                    }
+                    if (SL.certifiedById != null && SL.certifiedById != '' && SL.certifiedTypeId == 9) {
+                        var certifiedById = this.CompanyList.find(temp => temp.Key == SL.certifiedById)
+                        if (!certifiedById || certifiedById == undefined) {                          
+                            var certifiedBy = new DropDownData();
+                            certifiedBy.Key = SL.certifiedById;
+                            certifiedBy.Value = SL.certifiedBy;
+                            this.CompanyList.push(certifiedBy);                           
+                        }                       
+                        SL.certByObject = this.CompanyList.find(x => x.Key == SL.certifiedById);
                     }
                 }
             }
@@ -853,8 +970,8 @@ export class EditRoComponent implements OnInit {
                 this.roStatus = res;
                 this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
             }
-        );
-    }   
+            );
+    }
 
     onFilter(event, stockLine, type): void {
         if (event.query !== undefined && event.query !== null) {
@@ -946,13 +1063,13 @@ export class EditRoComponent implements OnInit {
         }
     }
 
-    
 
-    
 
-    
 
- ///////////   Reffrance
+
+
+
+    ///////////   Reffrance
 
     private getPartBusinessUnitList(part: RepairOrderPart): void {
         part.managementStructureId = part.companyId;
@@ -1123,7 +1240,7 @@ export class EditRoComponent implements OnInit {
                     }
                 });
                 for (var part of this.repairOrderData) {
-                    if (part.stockLine) {                        
+                    if (part.stockLine) {
                         part.SiteList = [];
                         for (var site of this.SiteList) {
                             var row = new DropDownData();
@@ -1154,7 +1271,7 @@ export class EditRoComponent implements OnInit {
                         }
                     }
                 }
-            }            
+            }
         );
     }
 
@@ -1269,6 +1386,9 @@ export class EditRoComponent implements OnInit {
         part.binId = 0;
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }
+                else {
                 SL.siteId = part.siteId;
                 SL.warehouseId = 0;
                 SL.locationId = 0;
@@ -1278,6 +1398,7 @@ export class EditRoComponent implements OnInit {
                 SL.LocationList = [];
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
         this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', part.siteId).subscribe(
@@ -1290,7 +1411,11 @@ export class EditRoComponent implements OnInit {
 
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
-                            SL.WareHouseList.push(dropdown);
+                            if (SL.stockLineId > 0) {
+                            }
+                            else {
+                                SL.WareHouseList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1307,6 +1432,8 @@ export class EditRoComponent implements OnInit {
         part.binId = 0;
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.warehouseId = part.warehouseId;
                 SL.locationId = 0;
                 SL.shelfId = 0;
@@ -1314,6 +1441,7 @@ export class EditRoComponent implements OnInit {
                 SL.LocationList = [];
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
         this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', part.warehouseId).subscribe(
@@ -1326,7 +1454,10 @@ export class EditRoComponent implements OnInit {
 
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
-                            SL.LocationList.push(dropdown);
+                            if (SL.stockLineId > 0) {
+                            }else {
+                                SL.LocationList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1340,11 +1471,14 @@ export class EditRoComponent implements OnInit {
         part.binId = 0;
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.locationId = part.locationId;
                 SL.shelfId = 0;
                 SL.binId = 0;
                 SL.ShelfList = [];
                 SL.BinList = [];
+                }
             }
         }
         this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', part.locationId).subscribe(
@@ -1356,7 +1490,10 @@ export class EditRoComponent implements OnInit {
                     part.ShelfList.push(dropdown);
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
-                            SL.ShelfList.push(dropdown);
+                            if (SL.stockLineId > 0) {
+                            }else {
+                                SL.ShelfList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1369,9 +1506,12 @@ export class EditRoComponent implements OnInit {
         part.binId = 0;
         if (part.stockLine && onLoad) {
             for (var SL of part.stockLine) {
+                if (SL.stockLineId > 0) {
+                }else {
                 SL.shelfId = part.shelfId;
                 SL.binId = 0;
                 SL.BinList = [];
+                }
             }
         }
         this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', part.shelfId).subscribe(
@@ -1383,7 +1523,10 @@ export class EditRoComponent implements OnInit {
                     part.BinList.push(dropdown);
                     if (part.stockLine && onLoad) {
                         for (var SL of part.stockLine) {
+                            if (SL.stockLineId > 0) {
+                            }else {
                             SL.BinList.push(dropdown);
+                            }
                         }
                     }
                 }
@@ -1394,7 +1537,10 @@ export class EditRoComponent implements OnInit {
     public setPartBinIdToStockline(part: RepairOrderPart): void {
         if (part.stockLine) {
             for (var SL of part.stockLine) {
-                SL.binId = part.binId;
+                if (SL.stockLineId > 0) {
+                } else {
+                    SL.binId = part.binId;
+                }
             }
         }
     }
@@ -1402,7 +1548,11 @@ export class EditRoComponent implements OnInit {
     public conditionChange(part: RepairOrderPart) {
         if (part.stockLine) {
             for (var SL of part.stockLine) {
-                SL.conditionId = part.conditionId;
+                if (SL.stockLineId > 0) {
+                }
+                else {
+                    SL.conditionId = part.conditionId;
+                }
             }
         }
     }
@@ -1425,7 +1575,7 @@ export class EditRoComponent implements OnInit {
             },
             error => this.onDataLoadFailed(error)
         );
-    }    
+    }
 
     calculateExtendedCost(part: any, stockLine: any): void {
         if (stockLine.repairOrderUnitCost == undefined || stockLine.repairOrderUnitCost == '') {
@@ -1436,7 +1586,8 @@ export class EditRoComponent implements OnInit {
         }
         else {
             const unitCost = stockLine.repairOrderUnitCost ? parseFloat(stockLine.repairOrderUnitCost.toString().replace(/\,/g, '')) : 0;
-            stockLine.repairOrderExtendedCost = unitCost * part.quantityActuallyReceived;
+            //stockLine.repairOrderExtendedCost = unitCost * part.quantityActuallyReceived; 
+            stockLine.repairOrderExtendedCost = unitCost * stockLine.quantity;
         }
         if (stockLine.repairOrderUnitCost) {
             stockLine.repairOrderUnitCost = stockLine.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(stockLine.repairOrderUnitCost, 2) : '0.00';
@@ -1458,7 +1609,8 @@ export class EditRoComponent implements OnInit {
         }
         else {
             const unitCost = part.unitCost ? parseFloat(part.unitCost.toString().replace(/\,/g, '')) : 0;
-            const extendedCost = unitCost * part.quantityActuallyReceived;
+            //const extendedCost = unitCost * part.quantityActuallyReceived;
+            const extendedCost = unitCost * part.quantityOrdered;;
             part.extendedCost = extendedCost ? formatNumberAsGlobalSettingsModule(extendedCost, 2) : '0.00';
         }
 
@@ -1472,7 +1624,7 @@ export class EditRoComponent implements OnInit {
 
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
-    }  
+    }
 
     onObtainFromChange(event, stockLine) {
         stockLine.obtainFromObject = {};
@@ -1493,7 +1645,49 @@ export class EditRoComponent implements OnInit {
             this.obtainfromcustomer = false;
             this.obtainfromother = false;
         }
-    }    
+    }
+
+    onTaggedTypeChange(event, stockLine) {
+        stockLine.taggedBy = '';
+        stockLine.taggedByObject = {};
+
+        if (event.target.value === AppModuleEnum.Customer) {
+            this.obtainfromcustomer = true;
+            this.obtainfromother = false;
+            this.obtainfromvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Vendor) {
+            this.obtainfromother = true;
+            this.obtainfromcustomer = false;
+            this.obtainfromvendor = false;
+        }
+        if (event.target.value === AppModuleEnum.Company) {
+            this.obtainfromvendor = true;
+            this.obtainfromcustomer = false;
+            this.obtainfromother = false;
+        }
+    }
+
+    onCertTypeChange(event, stockLine) {
+        stockLine.certifiedById = '';
+        stockLine.certByObject = {};
+
+        // if (event.target.value === AppModuleEnum.Customer) {
+        //     this.certbycustomer = true;
+        //     this.certbyother = false;
+        //     this.certbyvendor = false;
+        // }
+        // if (event.target.value === AppModuleEnum.Vendor) {
+        //     this.certbyother = true;
+        //     this.certbycustomer = false;
+        //     this.certbyvendor = false;
+        // }
+        // if (event.target.value === AppModuleEnum.Company) {
+        //     this.certbyvendor = true;
+        //     this.certbycustomer = false;
+        //     this.certbyother = false;
+        // }
+    }
 
     onOwnerChange(event, stockLine) {
         stockLine.ownerObject = {};
@@ -1534,7 +1728,7 @@ export class EditRoComponent implements OnInit {
             this.traceabletocustomer = false;
             this.traceabletoother = false;
         }
-    }    
+    }
 
     onObtainSelect(stockLine: StockLine): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;
@@ -1545,7 +1739,7 @@ export class EditRoComponent implements OnInit {
         } else if (stockLine.ownerType == AppModuleEnum.Company) {
             this.arrayComplist.push(stockLine.obtainFromObject.Key);
         }
-    }    
+    }
 
     onOwnerSelect(stockLine: StockLine): void {
         stockLine.owner = stockLine.ownerObject.Key;
@@ -1557,7 +1751,7 @@ export class EditRoComponent implements OnInit {
             this.arrayComplist.push(stockLine.ownerObject.Key);
         }
     }
-   
+
     onTraceableToSelect(stockLine: StockLine): void {
         stockLine.traceableTo = stockLine.traceableToObject.Key;
         if (stockLine.ownerType == AppModuleEnum.Customer) {
@@ -1569,28 +1763,79 @@ export class EditRoComponent implements OnInit {
         }
     }
 
+    ontagTypeSelect(stockLine: StockLine, type): void {
+        stockLine.taggedBy = stockLine.taggedByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.taggedByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.taggedByObject.Key);
+        }
+    }
+
+    oncertTypeSelect(stockLine: StockLine, type): void {
+        stockLine.certifiedById = stockLine.certByObject.Key;         
+        if (type == AppModuleEnum.Customer) {
+            this.arrayCustlist.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Vendor) {
+            this.arrayVendlsit.push(stockLine.certByObject.Key);
+        } else if (type == AppModuleEnum.Company) {
+            this.arrayComplist.push(stockLine.certByObject.Key);
+        }
+    }
+
     //remove once add dynamic content
     editPart(part: RepairOrderPart) {
         part.isEnabled = !part.isEnabled;
         if (part.stockLine) {
             for (var sl of part.stockLine) {
-                sl.isEnabled = part.isEnabled;
-                sl.quantityRejected = 0;
+                if (sl.stockLineId > 0) {
+
+                }
+                else {
+                    sl.isEnabled = part.isEnabled;
+                    sl.quantityRejected = 0;
+                }
+
             }
         }
     }
 
-    deleteStockLine(stockLine: StockLine) {
+    // deleteStockLine(stockLine: StockLine) {
+    //     if (stockLine) {
+    //         var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
+    //         if (OkCancel == true) {
+    //             stockLine.isEnabled = true;
+    //             stockLine.isDeleted = true;
+    //             this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
+    //             return;
+    //         }
+    //     }
+    // }
+
+    deletestockline : any
+    deleteStockLine(stockLine: StockLine,deletepoConfirm) {
         if (stockLine) {
-            var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
-            if (OkCancel == true) {
-                stockLine.isEnabled = true;
-                stockLine.isDeleted = true;
-                this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
-                return;
-            }
+            this.modal = this.modalService.open(deletepoConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
+            this.deletestockline = stockLine;
+            return;
+            //var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
+            // if (OkCancel == true) {
+            //     stockLine.isEnabled = true;
+            //     stockLine.isDeleted = true;
+            //     this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
+            //     return;
+            // }
         }
-    } 
+    }
+
+    DeleteStockLineCloseModel(){        
+        this.deletestockline.isEnabled = true;
+        this.deletestockline.isDeleted = true;
+        this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
+        this.modal.close();		
+    }
 
     editStockLine(stockLine: StockLine) {
         stockLine.isEnabled = !stockLine.isEnabled;
@@ -1607,9 +1852,17 @@ export class EditRoComponent implements OnInit {
                 var index = 1;
                 for (var stockLine of stockLineToUpdate) {
                     stockLine.updatedBy = this.userName;
-                    stockLine.repairOrderId  = this.repairOrderId;
+                    stockLine.repairOrderId = this.repairOrderId;
                     stockLine.masterCompanyId = this.currentUserMasterCompanyId;
 
+                    // if (stockLine.revisedPartId == undefined || stockLine.revisedPartId == 0) {
+                    //     this.alertService.showMessage(this.pageTitle, "Please select Revised Part Number in Receiving Qty - " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                    //     return
+                    // }
+                    if (stockLine.unitOfMeasureId == undefined || stockLine.unitOfMeasureId == 0) {
+                        this.alertService.showMessage(this.pageTitle, "Please select Unit Of Measure in Receiving Qty - " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                        return
+                    }
                     if (stockLine.conditionId == undefined || stockLine.conditionId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Condition in Part No. " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
@@ -1621,11 +1874,36 @@ export class EditRoComponent implements OnInit {
                     if (stockLine.repairOrderUnitCost == undefined || (stockLine.repairOrderUnitCost != undefined && stockLine.repairOrderUnitCost.toString() == '')) {
                         this.alertService.showMessage(this.pageTitle, "Please enter Unit Cost in Part No. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
+                    } 
+                    if(stockLine.manufacturingDate){
+                        if(stockLine.tagDate){
+                            if (new Date(stockLine.tagDate) <=  new Date(stockLine.manufacturingDate)) {   
+                                this.alertService.showMessage(this.pageTitle, "Tag Date must be greater than Manufacturing Date. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                                return;                                                            
+                            }
+                         }                      
+                         if(stockLine.certifiedDate){
+                            if (new Date(stockLine.certifiedDate) <= new Date(stockLine.manufacturingDate)) {
+                                this.alertService.showMessage(this.pageTitle, "Certified Date must be greater than Manufacturing Date. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                                return;                                  
+                            }
+                        }
                     }
                     for (var tl of part.timeLife) {
                         if (tl.stockLineDraftId == stockLine.stockLineDraftId) {
                             timeLife.push(tl);
                         }
+                    }
+                    if (stockLine.tagType && stockLine.tagType.length > 0) {
+                        stockLine.tagTypeId = stockLine.tagType.join();
+                        stockLine.tagType = stockLine.tagTypeId.split(',');
+                        for (let i = 0; i < stockLine.tagType.length; i++) {
+                            stockLine.tagType[i] = getValueFromArrayOfObjectById('label', 'value', stockLine.tagType[i], this.TagTypeList);
+                        }
+                        stockLine.tagType = stockLine.tagType.join();
+                    } else {
+                        stockLine.tagType = "";
+                        stockLine.tagTypeId = "";
                     }
                     index += 1;
                 }
@@ -1634,23 +1912,22 @@ export class EditRoComponent implements OnInit {
                     let receivePart: ReceiveParts = new ReceiveParts();
                     receivePart.repairOrderPartRecordId = part.repairOrderPartRecordId;
                     receivePart.managementStructureEntityId = part.managementStructureEntityId ? part.managementStructureEntityId : null;
-                    receivePart.stockLines = stockLineToUpdate;                   
+                    receivePart.stockLines = stockLineToUpdate;
                     receivePart.timeLife = this.getTimeLife(timeLife, part.repairOrderPartRecordId);
                     receiveParts.push(receivePart);
-                }                
+                }
             }
         }
         if (receiveParts.length > 0) {
             this.isSpinnerVisible = true;
             this.receivingService.updateStockLine(receiveParts).subscribe(data => {
                 this.isSpinnerVisible = false;
-                this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
+                this.alertService.showMessage(this.pageTitle, 'Stock Line Draft Updated Successfully.', MessageSeverity.success);
                 this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);
             },
-            errr =>
-            {
-                this.isSpinnerVisible = false;
-            });
+                errr => {
+                    this.isSpinnerVisible = false;
+                });
         }
         else {
             this.isSpinnerVisible = false;
@@ -1680,8 +1957,8 @@ export class EditRoComponent implements OnInit {
                 repairOrderPartRecordId: repairOrderPartRecordId,
                 isActive: true,
                 createdBy: this.userName,
-                updatedBy:this.userName,
-                masterCompanyId:this.currentUserMasterCompanyId,
+                updatedBy: this.userName,
+                masterCompanyId: this.currentUserMasterCompanyId,
                 repairOrderId: this.repairOrderId,
             }
         })
@@ -1729,7 +2006,7 @@ export class EditRoComponent implements OnInit {
         }, err => {
             this.isSpinnerVisible = false;
         });
-    }       
+    }
 
     getPartBUList(part) {
         if (part.stockLine != null) {
@@ -1881,5 +2158,129 @@ export class EditRoComponent implements OnInit {
             SL.managementStructureEntityId = departmentId;
         }
     }
+
+    TagByNames: DropDownData[] = [];
+    arrayTagEmployeelist: any[] = [];
+    alltagEmployeeList: any = [];
+    allPurchaseUnitOfMeasureinfo: any[] = [];
+
+    loadTagByEmployeeData(strText = '') {
+        if (this.arrayTagEmployeelist.length == 0) {
+            this.arrayTagEmployeelist.push(0);
+        }
+        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayTagEmployeelist.join(), this.currentUserManagementStructureId)
+            .subscribe(response => {
+                const data = response.map(x => {
+                    return {
+                        Key: x.value,
+                        Value: x.label
+                    }
+                });
+                this.TagByNames = data;
+                for (let part of this.repairOrderData) {
+                    for (let SL of part.stockLine) {
+                        if (SL.taggedBy != null) {
+                            SL.taggedByObject = this.TagByNames.find(x => x.Key == SL.taggedBy);
+                        }
+                    }
+                }
+
+            }, error => { });
+    }
+
+    filterTagEmployees(event, stockLine) {
+        if (event.query !== undefined && event.query !== null) {
+            this.loadTagByEmployeeData(event.query);
+        }
+    }
+
+    onOwnerSelectTag(stockLine: StockLine): void {
+        stockLine.taggedBy = stockLine.taggedByObject.Key;
+        this.arrayTagEmployeelist.push(stockLine.taggedByObject.Key);
+    }
+
+    Purchaseunitofmeasure() {
+        this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname', '', '', 0, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.allPurchaseUnitOfMeasureinfo = res;
+            for (let part of this.repairOrderData) {
+                for (let SL of part.stockLine) {                   
+                    if (SL.unitOfMeasureId != null) {                       
+                        var unitofmasure = this.allPurchaseUnitOfMeasureinfo.find(temp => temp.value == SL.unitOfMeasureId)
+                        if (!unitofmasure || unitofmasure == undefined) {
+                            var uom = {label:SL.unitOfMeasure , value : SL.unitOfMeasureId}
+                            this.allPurchaseUnitOfMeasureinfo.push(uom);
+                        }
+                    }  
+                }
+            }
+        })
+    }
+
+    arrayrevisedPartlist: any = []
+    revisedPartNumCollection: any = [];
+    getAllrevisedPart(strText = '') {
+        if (this.arrayrevisedPartlist.length == 0) {
+            this.arrayrevisedPartlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20, this.arrayrevisedPartlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.revisedPartNumCollection = [];
+            for (let i = 0; i < res.length; i++) {
+                this.revisedPartNumCollection.push({ itemMasterId: res[i].value, partNumber: res[i].label });
+            };
+            for (let part of this.repairOrderData) {
+                for (let SL of part.stockLine) {
+                    if (SL.revisedPartId != null) {                        
+                        var revisedpn = this.revisedPartNumCollection.find(temp => temp.itemMasterId == SL.revisedPartId)
+                        if (!revisedpn || revisedpn == undefined) {
+                            var rpn = { itemMasterId : SL.revisedPartId , partNumber : SL.revisedPartNumber }           
+                            this.revisedPartNumCollection.push(rpn);
+                        }
+                        SL.revisedPartObject = this.revisedPartNumCollection.find(x => x.itemMasterId == SL.revisedPartId);
+                    }
+                }
+            }
+        });
+    }
+
+    filterRevisedPart(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.getAllrevisedPart(event.query);
+        } else {
+            this.getAllrevisedPart('');
+        }
+    }
+
+    onOwnerSelectRevise(stockLine: StockLine): void {
+        stockLine.revisedPartId = stockLine.revisedPartObject ? editValueAssignByCondition('itemMasterId', stockLine.revisedPartObject) : null;
+        this.revisedPartNumCollection.push(stockLine.revisedPartObject);
+    }
+
+    TagTypeList: any = [];
+    getTagType(strText = '') {
+        if (this.arraytagtypelist.length == 0) {
+            this.arraytagtypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.TagTypeList = res;
+            for (let part of this.repairOrderData) {
+                for (let SL of part.stockLine) {
+                    if (SL.tagType && SL.tagType.length > 0) {
+                        SL.tagType = SL.tagTypeId.split(',');
+                        for (let i = 0; i < SL.tagType.length; i++) {
+                            SL.tagType[i] = parseInt(SL.tagType[i]);
+                        }
+                    } else {
+                        SL.tagType = "";
+                        SL.tagTypeId = "";
+                    }
+                }
+            }
+        })
+    }
+
+    CloseModel(status) {
+		this.modal.close();		
+	}
+
 }
 

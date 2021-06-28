@@ -81,7 +81,6 @@ export class EmployeeService {
         return this.employeeEndpoint.getNewLeaveEndpoint<EmployeeLeaveType>(action);
     }
 
-
     getshift() {
         return Observable.forkJoin(
             this.employeeEndpoint.getshiftEndpoint<any[]>());
@@ -261,8 +260,15 @@ export class EmployeeService {
         return this.employeeEndpoint.downloadAllEmployeeList(employeeId);
     }
 
-    updateEmployeePassword(password,employeeID){
-        return this.employeeEndpoint.getUpdateEmployeePasswordEndpoint(password,employeeID);
+    updateEmployeePassword(password, employeeID, currentpassword) {
+        return this.employeeEndpoint.getUpdateEmployeePasswordEndpoint(password, employeeID, currentpassword);
     }
 
+    forgotPassword(user: any) {
+        return this.employeeEndpoint.forgotPasswordEndpoint<any>(user);
+    }
+
+    resetPassword(user: any) {
+        return this.employeeEndpoint.resetPasswordEndpoint<any>(user);
+    }
 }

@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div>
-        <div >
+        <div>
             <div class="checkbox-cstm show_cst" [ngClass]="(isView) ? 'pull-right' : ''">
                 <label class="show-label">
                     <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55"
@@ -30,7 +30,7 @@
                 <!--freightss-->
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th colspan="8"
+                        <th colspan="9"
                             style="width:650px; color: #333 !important; border: 1px solid #fff; border-right: 1px solid #e7ecf1;">
                             &nbsp;
                         </th>
@@ -40,15 +40,16 @@
                                 <div class="display-flex " style="padding-left: 10px;">
                                     <div class="form-group"
                                         style="text-align: center; display: flex;    margin-bottom: 0px;">
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92"
+                                        <p-radioButton
+                                            class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92"
                                             name="costPlusTypeSOQ" label="T&M - Mark Up" (ngModelChange)="validated()"
                                             value="1" [(ngModel)]="costPlusType" [disabled]="isView"
                                             (click)="tmchange()">
                                         </p-radioButton>
                                         <div>
-                                            <select class="form-group select-markup m-t-10" (ngModelChange)="validated()"
-                                                (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                                                [disabled]="isView || costPlusType != 1">
+                                            <select class="form-group select-markup m-t-10"
+                                                (ngModelChange)="validated()" (change)="markupChanged({}, 'all')"
+                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1">
                                                 <option value="" selected>Select</option>
                                                 <option *ngFor="let markUp of markupList" [value]="markUp.value">
                                                     {{markUp.label}}</option>
@@ -56,8 +57,8 @@
                                         </div>
                                     </div>
                                     <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusTypeSOQ"
-                                            value="2" label="Actual" [(ngModel)]="costPlusType"
+                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view"
+                                            name="costPlusTypeSOQ" value="2" label="Actual" [(ngModel)]="costPlusType"
                                             (ngModelChange)="validated()" [disabled]="isView"
                                             (click)="(!isView)?tmchange():''"></p-radioButton>
                                     </div>
@@ -78,15 +79,16 @@
                                 <div class="display-flex" style=" padding-left: 10px;">
                                     <div class="form-group"
                                         style="text-align: center; display: flex;    margin-bottom: 0px;">
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92"
+                                        <p-radioButton
+                                            class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92"
                                             name="costPlusTypeSOQ" (ngModelChange)="validated()" label="T&M - Mark Up"
                                             value="1" [(ngModel)]="costPlusType" [disabled]="isView"
                                             (click)="tmchange()">
                                         </p-radioButton>
                                         <div>
-                                            <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')"
-                                                (ngModelChange)="validated()" [(ngModel)]="overAllMarkup"
-                                                [disabled]="isView || costPlusType != 1">
+                                            <select class="form-group select-markup m-t-10"
+                                                (change)="markupChanged({}, 'all')" (ngModelChange)="validated()"
+                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1">
                                                 <option value="" selected>Select</option>
                                                 <option *ngFor="let markUp of markupList" [value]="markUp.value">
                                                     {{markUp.label}}</option>
@@ -94,15 +96,16 @@
                                         </div>
                                     </div>
                                     <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusTypeSOQ"
-                                            value="2" label="Actual" (ngModelChange)="validated()"
-                                            [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio"
+                                            name="costPlusTypeSOQ" value="2" label="Actual"
+                                            (ngModelChange)="validated()" [(ngModel)]="costPlusType" [disabled]="isView"
+                                            (click)="tmchange()">
                                         </p-radioButton>
                                     </div>
                                     <div>
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusTypeSOQ"
-                                            value="3" (ngModelChange)="validated()" label="Flat Rate"
-                                            [(ngModel)]="costPlusType" [disabled]="isView"
+                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio"
+                                            name="costPlusTypeSOQ" value="3" (ngModelChange)="validated()"
+                                            label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView"
                                             (click)="(!isView)?tmchange():''">
                                         </p-radioButton>
                                     </div>
@@ -112,6 +115,7 @@
                         </ng-container>
                     </tr>
                     <tr>
+                        <th rowspan="2" class="table-column-width">Part<span class="clr-red">*</span></th>
                         <th rowspan="2" class="table-column-width">Ship Via<span class="clr-red">*</span></th>
                         <th rowspan="2" class="table-column-width">Weight</th>
                         <th rowspan="2" class="table-column-width">UOM</th>
@@ -135,6 +139,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-freight let-columns="columns" let-rowIndex="rowIndex">
                     <tr>
+                        <td class="table-column-width">
+                            {{freight.partNumber}}
+                        </td>
                         <td class="table-column-width">
                             <select class="form-control select-read-only" [(ngModel)]="freight.shipViaId" disabled>
                                 <option value="">Select</option>
@@ -190,14 +197,14 @@
                                     </a>
                                 </span>
                                 <span *ngIf="!isView">
-                                    <a class="btn nobg btn-delete-cstm" (click)="openDelete(content,freight,rowIndex)"
-                                        matTooltip="Delete">
+                                    <a class="btn nobg btn-delete-cstm" matTooltip="Delete" matTooltipPosition="above"
+                                        (click)="openDelete(content,freight,rowIndex)">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </span>
                                 <span>
                                     <button class="btn  nobg grey_btn_icon" style="padding:0px"
-                                        [disabled]="freight.SalesOrderFreightId==0"
+                                        [disabled]="freight.salesOrderFreightId==0"
                                         (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                                         matTooltipPosition="above">
                                         <i class="fa fa-history">
@@ -211,7 +218,7 @@
                                             aria-hidden="true"></i></a> </span>
                                 <span>
                                     <button class="btn  nobg grey_btn_icon padding-0"
-                                        [disabled]="freight.SalesOrderFreightId==0"
+                                        [disabled]="freight.salesOrderFreightId==0"
                                         (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                                         matTooltipPosition="above">
                                         <i class="fa fa-history">
@@ -222,9 +229,17 @@
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td colspan="15" style="color: red; font-weight: bold; text-align: center">
+                            No records found
+                        </td>
+                    </tr>
+                </ng-template>
                 <ng-template pTemplate="footer">
                     <tr class="footer lastcol-fix">
                         <td class="table-column-width">Total</td>
+                        <td class="table-column-width">&nbsp;</td>
                         <td class="table-column-width">&nbsp;</td>
                         <td class="table-column-width">&nbsp;</td>
                         <td class="table-column-width">&nbsp;</td>
@@ -266,7 +281,7 @@
     </div>
 </div>
 <div id="addNewFreight" class="modal fade" role="dialog" *ngIf="!view" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
@@ -289,6 +304,7 @@
                                 <table class="table table-bordered ">
                                     <thead>
                                         <tr>
+                                            <th rowspan="2">Parts<span class="clr-red">*</span></th>
                                             <th rowspan="2">Ship Via<span class="clr-red">*</span>
                                             </th>
                                             <th rowspan="2">Weight</th>
@@ -309,21 +325,31 @@
                                     <tbody>
                                         <tr *ngFor="let f of freightForm; let i = index">
                                             <td>
+                                                <select class="form-control custom-select1 wf-pub-id table-column-width"
+                                                    id="dllParts" [(ngModel)]="f.salesOrderPartId"
+                                                    (ngModelChange)="enableUpdate()" name="parts_{{i}}" required>
+                                                    <option [value]="">Select</option>
+                                                    <option [value]="part.salesOrderPartId"
+                                                        *ngFor="let part of salesOrderPartsList">
+                                                        {{part.partNumber}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td style="display:flex">
                                                 <p-dropdown placeholder="Select" name="shipVia{{ i }}"
                                                     #shipVia="ngModel" [options]="shipViaList" appendTo='body'
                                                     [baseZIndex]="9999"
                                                     (ngModelChange)="enableUpdate(); getShipViaId($event);"
                                                     class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
                                                 </p-dropdown>
-                                                <span class="circle-span"><a
+                                                <span class="circle-span" style="margin-top:5px"><a
                                                         class="fa fa-plus-circle fa-lg" matTooltip="Add Ship Via"
                                                         matTooltipPosition="above" data-toggle="modal"
                                                         data-target="#AddShipVia"
                                                         (click)="onEditShipVia('Add',f.shipViaId,i)"></a></span>
-                                                <span class="pencil-span"><a class="btn nobg"
-                                                        *ngIf="f.shipViaId > 0" matTooltip="Edit Ship Via"
-                                                        matTooltipPosition="above" data-toggle="modal"
-                                                        data-target="#AddShipVia"
+                                                <span class="pencil-span"><a class="btn nobg" *ngIf="f.shipViaId > 0"
+                                                        matTooltip="Edit Ship Via" matTooltipPosition="above"
+                                                        data-toggle="modal" data-target="#AddShipVia"
                                                         (click)="onEditShipVia('Edit',f.shipViaId,i)"><i
                                                             class="fa fa-pencil"></i></a>
                                                 </span>
@@ -388,7 +414,8 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-danger nobg" [disabled]="isEdit==true"
-                                                    (click)="deleteRow(i, frieghtsCreateForm)">
+                                                    data-toggle="modal" data-target="#deleteConfirmation"
+                                                    matTooltip="Delete" matTooltipPosition="above">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </td>
@@ -400,7 +427,7 @@
                     </form>
                     <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static"
                         data-keyboard="false">
-                        <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
@@ -452,6 +479,37 @@
         </div>
     </div>
 </div>
+<div id="deleteConfirmation" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <strong style="display: inline-flex;">
+                    Ship Via:
+                    <span class="new-label">
+                        <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
+                            [(ngModel)]="restorerecord.shipViaId" disabled>
+                            <option value="">Select</option>
+                            <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+                        </select>
+                    </span>
+                </strong>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="deleteRow(i, content)">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of Freights</h4>
@@ -460,90 +518,100 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive history_hg">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th rowspan="2">Ship Via <span class="clr-red">*</span></th>
-                        <th rowspan="2">Weight</th>
-                        <th rowspan="2">UOM</th>
-                        <th colspan="4" class="text-center">Dimensions</th>
-                        <th rowspan="2">Currency</th>
-                        <th rowspan="2">Amount <span class="clr-red">*</span></th>
-                        <th rowspan="2">Memo</th>
-                        <th rowspan="2">Mark Up</th>
-                        <th rowspan="2">Billing Method</th>
-                        <th rowspan="2">Billing Amount</th>
-                        <!-- <th rowspan="2">Is Active</th> -->
-                        <th rowspan="2">Created Date</th>
-                        <th rowspan="2">Created By</th>
-                        <th rowspan="2">Updated Date</th>
-                        <th rowspan="2">Updated By</th>
-                        <th rowspan="2">Is Deleted</th>
-                    </tr>
-                    <tr>
-                        <th>Length</th>
-                        <th>Height</th>
-                        <th>Width</th>
-                        <th>UOM</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let audit of freightAudiHistory; let i = index;">
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'shipVia', audit.shipVia)  ? 'black' : 'red'  }">
-                        {{audit.shipVia}}</td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'weight', audit.weight)  ? 'black' : 'red'  }">
-                        {{audit.weight}}</td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'uom', audit.uom)  ? 'black' : 'red'  }">
-                        {{audit.uom}}</td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'length', audit.length)  ? 'black' : 'red'  }">
-                        {{audit.length}}</td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'height', audit.height)  ? 'black' : 'red'  }">
-                        {{audit.height}}</td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'width', audit.width)  ? 'black' : 'red'  }">
-                        {{audit.width}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'dimensionUOM', audit.dimensionUOM)  ? 'black' : 'red'  }">
-                        {{audit.dimensionUOM}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'currency', audit.currency)  ? 'black' : 'red'  }">
-                        {{audit.currency}}</td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">
-                        {{audit.amount}}</td>
-                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
-                        <p class="p_editor" [innerHTML]="audit.memo"></p>
-                    </td>
-                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'markupPercentageId', audit.markupPercentageId) ? 'black' : 'red'}">
-                        <p class="p_editor" [innerHTML]="audit.markupPercentageId"></p>
-                    </td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">
-                        {{audit.billingMethodName}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
-                        {{audit.billingAmount}}</td>
-                    <!-- <td style="text-align: center;">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Ship Via <span class="clr-red">*</span></th>
+                            <th rowspan="2">Weight</th>
+                            <th rowspan="2">UOM</th>
+                            <th colspan="4" class="text-center">Dimensions</th>
+                            <th rowspan="2">Currency</th>
+                            <th rowspan="2">Amount <span class="clr-red">*</span></th>
+                            <th rowspan="2">Memo</th>
+                            <th rowspan="2">Mark Up</th>
+                            <th rowspan="2">Billing Method</th>
+                            <th rowspan="2">Billing Amount</th>
+                            <!-- <th rowspan="2">Is Active</th> -->
+                            <th rowspan="2">Created Date</th>
+                            <th rowspan="2">Created By</th>
+                            <th rowspan="2">Updated Date</th>
+                            <th rowspan="2">Updated By</th>
+                            <th rowspan="2">Is Deleted</th>
+                        </tr>
+                        <tr>
+                            <th>Length</th>
+                            <th>Height</th>
+                            <th>Width</th>
+                            <th>UOM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let audit of freightAudiHistory; let i = index;">
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'shipVia', audit.shipVia)  ? 'black' : 'red'  }">
+                                {{audit.shipVia}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'weight', audit.weight)  ? 'black' : 'red'  }">
+                                {{audit.weight}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'uom', audit.uom)  ? 'black' : 'red'  }">
+                                {{audit.uom}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'length', audit.length)  ? 'black' : 'red'  }">
+                                {{audit.length}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'height', audit.height)  ? 'black' : 'red'  }">
+                                {{audit.height}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'width', audit.width)  ? 'black' : 'red'  }">
+                                {{audit.width}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'dimensionUOM', audit.dimensionUOM)  ? 'black' : 'red'  }">
+                                {{audit.dimensionUOM}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'currency', audit.currency)  ? 'black' : 'red'  }">
+                                {{audit.currency}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">
+                                {{audit.amount}}</td>
+                            <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
+                                <p class="p_editor" [innerHTML]="audit.memo"></p>
+                            </td>
+                            <td
+                                [ngStyle]="{color: getColorCodeForHistory(i, 'markupPercentageId', audit.markupPercentageId) ? 'black' : 'red'}">
+                                <p class="p_editor" [innerHTML]="audit.markupPercentageId"></p>
+                            </td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">
+                                {{audit.billingMethodName}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
+                                {{audit.billingAmount}}</td>
+                            <!-- <td style="text-align: center;">
                         <span class="value">
                             <label class="wauto">
                                 <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
                             </label>
                         </span>
                     </td> -->
-                    <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                    <td>{{audit.createdBy}}</td>
-                    <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                    <td>{{audit.updatedBy}}</td>
-                    <td class="text-center">
-                        <span class="value">
-                            <label class="wauto">
-                                <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
-                            </label>
-                        </span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                            <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                            <td>{{audit.createdBy}}</td>
+                            <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                            <td>{{audit.updatedBy}}</td>
+                            <td class="text-center">
+                                <span class="value">
+                                    <label class="wauto">
+                                        <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true"
+                                            disabled>
+                                    </label>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
@@ -570,13 +638,13 @@
         </strong> -->
         <div class="form-row">
             <div class="col-md-12 margin-right" style="display: inline-flex;">
-              <label class="fs12"> Ship Via: </label>
-              <span class="new-label"> 
-                <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
-                [(ngModel)]="selectedRowForDelete.shipViaId" disabled>
-                <option value="">Select</option>
-                <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
-            </select></span>
+                <label class="fs12"> Ship Via: </label>
+                <span class="new-label">
+                    <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
+                        [(ngModel)]="selectedRowForDelete.shipViaId" disabled>
+                        <option value="">Select</option>
+                        <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+                    </select></span>
             </div>
         </div>
     </div>
@@ -616,14 +684,14 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add Ship Via </h4>
             </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <app-ship-via-create [ShipViaEditID]="ShipViaEditID"
-                        (on-shipvia-save)="RefreshAfterAddShipVia($event)"></app-ship-via-create>
-                </div>
+            <!-- <div class="modal-body"> -->
+            <div class="form-group">
+                <app-ship-via-create [ShipViaEditID]="ShipViaEditID" (on-shipvia-save)="RefreshAfterAddShipVia($event)">
+                </app-ship-via-create>
             </div>
+            <!-- </div>
             <div class="modal-footer">
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

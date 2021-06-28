@@ -9,53 +9,58 @@
             <div class="image">
                 <div style="padding: 0; margin: 0;">
                     <!-- <div> -->
-                        <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
-                            <!-- <div class="pick-ticket-header" style="margin-bottom: 15px;">
+                    <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                        <!-- <div class="pick-ticket-header" style="margin-bottom: 15px;">
                                 <h4>SALES ORDER PICK TICKET</h4>
                             </div> -->
-                            <div class="col-sm-12 invoice-border">
+                        <div class="col-sm-12 invoice-border">
                             <div class="col-sm-8 very-first-block">
                                 <div class="col-sm-12 address-block" style="width:100%;display:flex;">
                                     <div class="col-sm-6" style="width:50%"><img class="logo"
-                                            src="{{this.endPointURL + this.management.logo}}"  /></div>
-                                            <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
-                                    <div class="col-sm-12 first-block-name">
-                                        <!-- <label class="col-sm-3 first-block-label"><b>Tagline :</b></label> -->
-                                        <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.companyName}}</label>
-                                    </div>
-                                    <div class="col-sm-12 first-block-name">
-                                        <!-- <label class="col-sm-3 first-block-label"><b>Address-1 :</b></label> -->
-                                        <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.address1}}</label>
-                                    </div>
-                                    <div class="col-sm-12 first-block-name">
-                                        <!-- <label class="col-sm-3 first-block-label"><b>Address-2 :</b></label> -->
-                                        <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.address2}}</label>
-                                    </div>
-                                    <div class="col-sm-12 first-block-name">
-                                        <!-- <label class="col-sm-3 first-block-label"><b>City :</b></label> -->
-                                        <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.city}}</label>
-                                    </div>
-                                    <div class="col-sm-12 first-block-name">
-                                        <!-- <label class="col-sm-3 first-block-label"><b>State :</b></label> -->
-                                        <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.stateOrProvince}}</label>
-                                    </div>
-                                    <div class="col-sm-12 first-block-name">
-                                        <!-- <label class="col-sm-3 first-block-label"><b>Postal Code :</b></label> -->
-                                        <label class="col-sm-12 first-block-label"
-                                            disabled>{{this.management.postalCode}}</label>
-                                    </div>
+                                            src="{{this.endPointURL + this.management.logo}}" /></div>
+                                    <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label"><b>Tagline :</b></label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.management.companyName}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label"><b>Address-1 :</b></label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.management.address1}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label"><b>Address-2 :</b></label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.management.address2}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label"><b>City :</b></label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.management.city}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label"><b>State :</b></label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.management.stateOrProvince}}</label>
+                                        </div>
+                                        <div class="col-sm-12 first-block-name">
+                                            <!-- <label class="col-sm-3 first-block-label"><b>Postal Code :</b></label> -->
+                                            <label class="col-sm-12 first-block-label"
+                                                disabled>{{this.management.postalCode}}</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4 second-block border-height" >
-                                <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">SO Pick Ticket</h3>
+                            <div class="col-sm-4 second-block border-height">
+                                <img src="{{this.salesOrder.soPickTicketBarcode}}"
+                                    style="width: 100px;float:right;margin-top:8px" alt="barcode" width="98%" />
+                                <h3
+                                    style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
+                                    SO Pick Ticket</h3>
                                 <div class="second-block-div">
-                                    <label class="col-sm-6 second-block-label" style="width:100%">Pick Ticket Num</label>
+                                    <label class="col-sm-6 second-block-label" style="width:100%">Pick Ticket
+                                        Num</label>
                                     <label class="col-sm-6 second-block-label" style="width:100%"
                                         disabled>{{this.salesOrder.soPickTicketNumber}}</label>
                                 </div>
@@ -75,286 +80,299 @@
                                         disabled>{{this.salesOrder.shipViaName}}</label>
                                 </div>
                                 <div class="second-block-div">
-                                    <label class="col-sm-6 second-block-label" style="width:100%">Date/Time Printed</label>
+                                    <label class="col-sm-6 second-block-label" style="width:100%">Date/Time
+                                        Printed</label>
                                     <label class="col-sm-6 second-block-label" style="width:100%"
                                         disabled>{{todayDate| date: 'MM/dd/yyyy h:mm a ' }}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-6 second-block-label" style="width:100%">Page</label>
-                                    <label class="col-sm-6 second-block-label" style="width:100%" disabled>1 of 1</label>
+                                    <label class="col-sm-6 second-block-label" style="width:100%" disabled>1 of
+                                        1</label>
                                 </div>
                             </div>
-                            </div>
-                            <div class="col-sm-12 first-block-sold-bottom">
-                                <div class="first-block-sold col-sm-6">
-                                    <label class="label-margin"><b>Sold To:</b></label>
-                                    <div class="first-block-sold-to">
-                                        <div class="sold-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Name :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.customerName}}</label>
-                                        </div>
-                                        <div class="sold-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Address 1 :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.custToAddress1}}</label>
-                                        </div>
-                                        <div class="sold-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Address 2 :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.custToAddress2}}</label>
-                                        </div>
-                                        <div class="sold-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>City :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.custToCity}}</label>
-                                        </div>
-                                        <div class="sold-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>State :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.custToState}}</label>
-                                        </div>
-                                        <div class="sold-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.custToPostalCode}}</label>
-                                        </div>
-                                        <div class="sold-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Country :</b></label> -->
+                        </div>
+                        <div class="col-sm-12 first-block-sold-bottom">
+                            <div class="first-block-sold col-sm-6">
+                                <label class="label-margin"><b>Sold To:</b></label>
+                                <div class="first-block-sold-to">
+                                    <div class="sold-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>Name :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.customerName}}</label>
+                                    </div>
+                                    <div class="sold-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>Address 1 :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.custToAddress1}}</label>
+                                    </div>
+                                    <div class="sold-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>Address 2 :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.custToAddress2}}</label>
+                                    </div>
+                                    <div class="sold-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>City :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.custToCity}}</label>
+                                    </div>
+                                    <div class="sold-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>State :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.custToState}}</label>
+                                    </div>
+                                    <div class="sold-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.custToPostalCode}},
+                                            {{this.salesOrder.custToCountry}}</label>
+                                    </div>
+                                    <!-- <div class="sold-block-div">
+                                          
                                             <label class="col-sm-12 first-block-label" disabled>
                                                 {{this.salesOrder.custToCountry}}</label>
-                                        </div>
-                                    </div>
+                                        </div> -->
                                 </div>
-                                <div class="first-block-ship col-sm-6">
-                                    <label class="label-margin"><b> Ship To:</b></label>
-                                    <div class="first-block-ship-to">
-                                        <div class="ship-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Name :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.shipToSiteName}}</label>
-                                        </div>
-                                        <div class="ship-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Address 1 :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.shipToAddress1}}</label>
-                                        </div>
-                                        <div class="ship-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Address 2 :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.shipToAddress2}}</label>
-                                        </div>
-                                        <div class="ship-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>City :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.shipToCity}}</label>
-                                        </div>
-                                        <div class="ship-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>State :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.shipToState}}</label>
-                                        </div>
-                                        <div class="ship-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
-                                            <label class="col-sm-12 first-block-label" disabled>
-                                                {{this.salesOrder.shipToPostalCode}}</label>
-                                        </div>
-                                        <div class="ship-block-div">
-                                            <!-- <label class="col-sm-5 first-block-label"><b>Country :</b></label> -->
+                            </div>
+                            <div class="first-block-ship col-sm-6">
+                                <label class="label-margin"><b> Ship To:</b></label>
+                                <div class="first-block-ship-to">
+                                    <div class="ship-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>Name :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.shipToSiteName}}</label>
+                                    </div>
+                                    <div class="ship-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>Address 1 :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.shipToAddress1}}</label>
+                                    </div>
+                                    <div class="ship-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>Address 2 :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.shipToAddress2}}</label>
+                                    </div>
+                                    <div class="ship-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>City :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.shipToCity}}</label>
+                                    </div>
+                                    <div class="ship-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>State :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.shipToState}}</label>
+                                    </div>
+                                    <div class="ship-block-div">
+                                        <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
+                                        <label class="col-sm-12 first-block-label" disabled>
+                                            {{this.salesOrder.shipToPostalCode}},
+                                            {{this.salesOrder.shipToCountry}}</label>
+                                    </div>
+                                    <!-- <div class="ship-block-div">
+                                           
                                             <label class="col-sm-12 first-block-label" disabled>
                                                 {{this.salesOrder.shipToCountry}}</label>
-                                        </div>
-                                    </div>
+                                        </div> -->
                                 </div>
                             </div>
-                            <div class="clear"></div>
-                            <!-- <hr /> -->
-                            <div class="clear"></div>
-                            <div class="col-sm-12">
-                                <table rules=none class="parttable table-margins">
-                                    <thead>
+                        </div>
+                        <div class="clear"></div>
+                        <!-- <hr /> -->
+                        <div class="clear"></div>
+                        <div class="col-sm-12">
+                            <table rules=none class="parttable table-margins">
+                                <thead>
+                                    <tr>
+                                        <th>Line Num</th>
+                                        <th>PN Information</th>
+                                        <th style="text-align:left">Cust PO:</th>
+                                        <th style="text-align:left">Consign:</th>
+                                        <th style="text-align:left">Lot Num:</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let part of this.parts let i=index">
                                         <tr>
-                                            <th>Line Num</th>
-                                            <th>PN Information</th>
-                                            <th>Cust PO:</th>
-                                            <th>Consignment:</th>
-                                            <th>Lot Num:</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <ng-container *ngFor="let part of this.parts let i=index">                                           
-                                            <tr>
-                                                <td style="vertical-align: top;border-right:1px solid black;width:20%">
-                                                    <table class="border-none">
-                                                        <tr>
-                                                            <td>
-                                                                {{i+1}}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <img src="{{part.partBarcode}}" style="width: 100px;" alt="barcode" width="98%" />
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td style="vertical-align: top;border-right:1px solid black;width:20%">
-                                                    <table class="border-none">
-                                                        <tr>
-                                                            <td>
-                                                                PN: {{part.partNumber}}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
+                                            <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                <table class="border-none">
+                                                    <tr>
+                                                        <td>
+                                                            {{i+1}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <img src="{{part.partBarcode}}" style="width: 100px;"
+                                                                alt="barcode" width="98%" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                <table class="border-none">
+                                                    <tr>
+                                                        <td>
+                                                            PN: {{part.partNumber}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
                                                             PN Description: {{part.partDescription}}
-                                                            </td>                                                         
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Serial Num: {{part.serialNumber}}
-                                                            </td>                                                            
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td style="vertical-align: top;border-right:1px solid black;width:20%">
-                                                    <table class="border-none">
-                                                        <tr>
-                                                            <td>
-                                                                UOM: {{part.uom}}                                                              
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Cond: {{part.conditionDescription}}
-                                                                </td>
-                                                            </tr>
-                                                        <tr>
-                                                             <td  >Site: {{part.siteName}}
-                                                                    </td>
-                                                        </tr>
-                                                        <tr>
-                                                                     <td>
-                                                                        SL Num: {{part.stockLineNumber}}
-                                                                       
-                                                                          
-                                                                        </td>
-                                                         </tr>
-                                                         <tr>
-                                                             <td>  Cntrl #: {{part.controlNumber}}
-                                                                 </td>
-                                                             </tr>
-                                                        </table>
-                                                </td>
-                                                <td style="vertical-align: top;border-right:1px solid black;width:20%">
-                                                    <table class="border-none">
-                                                        <tr>
-                                                            <td>
-                                                                Priority: {{part.priorityName}}
-                                                            </td>
-                                                        </tr>
-                                                        <tr><td> Qty OH: {{part.quantityOnHand}}</td></tr>
-                                                        <tr><td>  Qty Avl: {{part.qtyAvailable}}</td></tr>
-                                                        <tr>
-                                                             <td  >Warehouse: {{part.warehouseName}}
-                                                                Location: {{part.locationName}}
-                                                                  
-                                                             </td>
-                                                                      
-                                                        </tr>
-                                                     
-                                                        <tr>
-                                                          
-                                                            <td >
-                                                                ID #: {{part.idNumber}}
-                                                            </td>
-                                                              
-                                                        </tr>
-                                                        </table>
-                                                </td>
-                                                 <td style="vertical-align: top;border-right:1px solid black;width:20%">
-                                                    <table class="border-none">
-                                                        <tr>
-                                                            <td>
-                                                                Qty to Pick: {{part.qtyToPick}}
-                                                          
-                                                              
-                                                            </td>
-                                                        </tr>
-                                                        <tr><td>  Qty Picked: {{part.qtyShipped}}</td></tr>
-                                                      
-                                                        <tr>
-                                                                    <td>
-                                                                        Shelf: {{part.shelfName}}
-                                                                       
-                                                                          
-                                                                            </td>
-                                                                    </tr>
-                                                                    <tr><td>  Bin: {{part.binName}}</td></tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                               </td>
-                                                                   </tr>
-                                                        </table>
-                                                </td>
-                                                
-                                            </tr>
-                                     
-                                            <tr>
-                                                <td style="border:1px solid black" rowspan="2" colspan="5">
-                                                    <b>
-                                                        Notes: {{part.notes}}
-                                                    </b>
-                                                </td>
-                                            </tr>
-                                           
-                                        </ng-container>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- <br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Serial Num: {{part.serialNumber}}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                <table class="border-none">
+                                                    <tr>
+                                                        <td>
+                                                            UOM: {{part.uom}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Cond: {{part.conditionDescription}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Site: {{part.siteName}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            SL Num: {{part.stockLineNumber}}
+
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> Cntrl Num: {{part.controlNumber}}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                <table class="border-none">
+                                                    <tr>
+                                                        <td>
+                                                            Priority: {{part.priorityName}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> Qty OH: {{part.quantityOnHand}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> Qty Avl: {{part.qtyAvailable}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Warehouse: {{part.warehouseName}}
+                                                            Location: {{part.locationName}}
+
+                                                        </td>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td>
+                                                            Cntrl ID: {{part.idNumber}}
+                                                        </td>
+
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                <table class="border-none">
+                                                    <tr>
+                                                        <td>
+                                                            Qty to Pick: {{part.qtyToPick}}
+
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> Qty Picked: {{part.qtyShipped}}</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>
+                                                            Shelf: {{part.shelfName}}
+
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> Bin: {{part.binName}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td style="border:1px solid black" rowspan="2" colspan="5">
+                                                <b>
+                                                    Notes: {{part.notes}}
+                                                </b>
+                                            </td>
+                                        </tr>
+
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- <br />
                             <div class="clear"></div>
                             <div class="clear"></div> -->
-                            <div class="col-sm-12">
+                        <div class="col-sm-12">
 
-                                <div class="picked-by col-sm-6">
-                                    <p>
-                                        <span class="label">
-                                            <b>Picked By:</b>
-                                        </span><span class="value">
-                                            {{this.salesOrder.pickedByName}}
-                                        </span>
-                                    </p>
-                                    <p>
-                                        <span class="label">
-                                            <b>Date: </b>
-                                        </span><span class="value">
-                                            {{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="confirmed-by col-sm-6">
-                                    <p>
-                                        <span class="label">
-                                            <b>Confirmed By: </b>
-                                        </span><span class="value">
-                                            {{this.salesOrder.confirmedByName}}
-                                        </span>
-                                    </p>
-                                    <p>
-                                        <span class="label">
-                                            <b>Date: </b>
-                                        </span><span class="value">
-                                            {{this.salesOrder.confirmedDate | date : "MM/dd/yyyy"}}
-                                        </span>
-                                    </p>
-                                </div>
-
+                            <div class="picked-by col-sm-6">
+                                <p>
+                                    <span class="label">
+                                        <b>Picked By:</b>
+                                    </span><span class="value">
+                                        {{this.salesOrder.pickedByName}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Date: </b>
+                                    </span><span class="value">
+                                        {{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}
+                                    </span>
+                                </p>
                             </div>
-                            <div class="clear"></div>
-                            <!-- <hr /> -->
-                            <div class="clear"></div>
-                        </form>
+                            <div class="confirmed-by col-sm-6">
+                                <p>
+                                    <span class="label">
+                                        <b>Confirmed By: </b>
+                                    </span><span class="value">
+                                        {{this.salesOrder.confirmedByName}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Date: </b>
+                                    </span><span class="value">
+                                        {{this.salesOrder.confirmedDate | date : "MM/dd/yyyy"}}
+                                    </span>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="clear"></div>
+                        <!-- <hr /> -->
+                        <div class="clear"></div>
+                    </form>
                     <!-- </div> -->
                 </div>
             </div>

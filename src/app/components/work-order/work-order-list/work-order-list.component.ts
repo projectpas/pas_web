@@ -54,13 +54,14 @@ export class WorkOrderListComponent implements OnInit {
     lazyLoadEventData: any;
     workFlowWorkOrderId: any
     headers = [
-        { field: 'workOrderNum', header: 'WO NO', width: "130px"},
+        { field: 'workOrderNum', header: 'WO NO', width: "100px"},
         { field: 'partNoType', header: 'MPN',width:"200px" },
-        { field: 'pnDescriptionType', header: 'MPN Description',width:"200px " },
+        { field: 'pnDescriptionType', header: 'MPN Description',width:"250px " },
         { field: 'customerName', header: 'Customer Name',width:"200px" },
+        { field: 'workOrderType', header: 'WO Type', width: "130px" },
         { field: 'customerType', header: 'Customer Type', width: "130px" },
         { field: 'workScopeType', header: 'Work Scope',  width: "130px"},
-        { field: 'priorityType', header: 'Priority', width: "130px" },
+        { field: 'priorityType', header: 'Priority', width: "90px" },
         { field: 'openDate', header: 'Open Date', width: "130px" },
         { field: 'customerRequestDateType', header: 'Cust Req Date', width: "130px" },
         { field: 'promisedDateType', header: 'Promise Date' , width: "130px"},

@@ -139,4 +139,12 @@ export class ReceivingService {
         return this.receivingEndpoing.getAllRecevingROEditID(repairOrderId);            
     }
 
+    getReceivedPOPartsForView(purchaseOrderId){
+        return this.receivingEndpoing.getReceivedPOPartsForView(purchaseOrderId);
+    }
+
+    getReceivedROPartsForView(repairOrderId){
+        return this.receivingEndpoing.getReceivedROPartsForView(repairOrderId);
+    }
+
 }

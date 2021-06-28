@@ -207,7 +207,8 @@
                   }}
                 </ng-container>
                 <ng-container *ngIf="col.field == 'notes'">                  
-                  <span class="value"><p class="p-0 m-0 p_textEditor" [innerHTML]="rowData.notes"></p></span>
+                  <span class="value"><p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                    [matTooltip]="parsedText(rowData.notes)" [innerHTML]="rowData.notes"></p></span>
                 </ng-container>
                 <ng-container *ngIf="col.field == 'workPhone'">
                     {{ rowData.workPhone }} {{rowData.workPhoneExtn && rowData.workPhoneExtn.trim() != '' ? 'Ext ' : ''}} {{ rowData.workPhoneExtn }}
@@ -363,26 +364,26 @@
                 <th>Tag</th>
                 <th class="width-130" >Attention</th>
                 <th class="width-130">Prefix</th>
-                <th class="width-130">First Name</th>
-                <th class="width-130">Middle Name</th>
-                <th class="width-130">Last Name</th>
+                <th style="min-width:100px">First Name <span class="clr-red">*</span></th>
+                <th style="min-width:100px">Middle Name</th>
+                <th style="min-width:100px">Last Name <span class="clr-red">*</span></th>
                 <th class="width-130">Suffix</th>
-                <th class="width-130">Contact Title</th>
-                <th class="width-130">Email</th>
-                <th class="width-130">Work Phone</th>
-                <th class="width-130">Mobile Phone</th>
-                <th class="width-130">Alternate Phone</th>
-                <th class="width-130">Fax</th>
+                <th style="min-width:100px">Contact Title</th>
+                <th class="width-130">Email <span class="clr-red">*</span></th>
+                <th style="min-width:100px">Work Phone <span class="clr-red">*</span></th>
+                <th style="min-width:100px">Mobile Phone</th>
+                <th style="min-width:100px">Alternate Phone</th>
+                <th style="min-width:100px">Fax</th>
 
-                <th>Website URL</th>
-                <th class="width-60">Primary Contact</th>
+                <th style="min-width:100px">Website URL</th>
+                <th style="min-width:100px">Primary Contact</th>
                 <th class="min-width-250">Memo</th>
-                <th class="width-60">Is Active</th>                
+                <th style="min-width:100px">Is Active</th>                
                 <th style="min-width:120px">Created Date</th>
-                <th>Created By</th>
+                <th style="min-width:100px">Created By</th>
                 <th style="min-width:120px">Updated Date</th>
-                <th>Updated By</th>                
-                <th class="width-60">Is Deleted</th>
+                <th style="min-width:100px">Updated By</th>                
+                <th style="min-width:100px">Is Deleted</th>
               </tr>
             </thead>
             <tbody style="overflow-x: scroll !important;" *ngIf="auditHistory.length > 0">
@@ -531,7 +532,8 @@
                       ? 'black'
                       : 'red'
                   }">
-                  <p [innerHTML]="audit.notes"></p>
+                  <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                  [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p>
                 </td>
                 <td class="text-center width-60">
                   <span class="value">
@@ -954,7 +956,7 @@
       <div class="modal-body">
         <div class="col-sm-12">
           <p>
-            <span class="label"><b>Tag<span class="clr-red">*</span>: </b></span><span
+            <span class="label"><b>Tag: </b></span><span
               class="value">{{ sourceViewforContact.tag }}</span>
           </p>
           <p>
@@ -1014,7 +1016,8 @@
           </p> -->
           <p class="vertical-top">
             <span class="label vertical-top"><b>Memo: </b></span>
-            <span class="value"><p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforContact.notes"></p></span>
+            <span class="value"><p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+              [matTooltip]="parsedText(sourceViewforContact.notes)" [innerHTML]="sourceViewforContact.notes"></p></span>
           </p>
           <p>
             <span class="label"><b>Email<span class="clr-red">*</span>:</b></span><span
@@ -1397,7 +1400,7 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1420,7 +1423,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel1()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel1()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1716,7 +1719,7 @@
       </strong>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+      <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>  
@@ -1759,7 +1762,7 @@
     </strong>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreATARecord()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="restoreATARecord()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
 </div>
 </ng-template> 

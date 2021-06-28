@@ -22,10 +22,13 @@ export class AddSalesPartNumberComponent implements OnInit {
   @Input() display: boolean;
   @Input() customer: any;
   @Input() salesQuote: ISalesQuote;
+  @Output() save: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() select: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedParts: any = [];
   @Input() type: string;
+  @Input() isEdit: boolean = false;
+  @Input() isQtyAdjust: boolean = false;
   searchType: ItemSearchType;
   parts: IPartJson[];
   showModalMargin: boolean;
@@ -102,6 +105,20 @@ export class AddSalesPartNumberComponent implements OnInit {
 
   onAddPartNumberSubmit($event) {
     this.display = false;
+  }
+
+  onSave(parts) {
+    this.salesQuoteService.getSelectedParts()
+      .subscribe(data => {
+        let selectedData = data;
+        selectedData.forEach((part, i) => {
+          if (selectedData[i].itemMasterId == this.query.partSearchParamters.partId && selectedData[i].conditionId == this.query.partSearchParamters.conditionId) {
+            selectedData[i].quantityRequested = this.query.partSearchParamters.quantityRequested;
+          }
+        });
+
+        this.save.emit(selectedData);
+      });
   }
 
   onPartSearch(parts) {

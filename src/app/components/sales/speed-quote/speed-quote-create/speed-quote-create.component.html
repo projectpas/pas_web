@@ -48,10 +48,10 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>SO Quote Num</label>
-                            <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
-                                name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
-                                id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
+                            <label>SQ Num</label>
+                            <input type="text" [(ngModel)]="salesQuote.speedQuoteNumber"
+                                name="speedQuoteNumber" class="form-control" [disabled]="true"
+                                id="speedQuoteNumber" #speedQuoteNumber="ngModel" />
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -67,14 +67,14 @@
                 <form #newSalesQuoteForm="ngForm" class="form-horizontal">
                     <div class="card sales-toggle" *ngIf="toggle_po_header">
                         <div class="col-md-12 row">
-                            <div class="col-md-6" style="padding-left: 10px; padding-top: 10px;">
+                            <div class="col-md-6" style="padding-left: 10px;">
                                 <label style="width: 17%;">Speed Quote Type:</label>
                                 <label class="wauto" matTooltipPosition="above" matTooltip="MRO">
                                     <input type="radio" [value]="1" name="type" class="radio_adjust"
                                         [(ngModel)]="salesQuote.speedQuoteTypeId" #type="ngModel">
-                                    MRO
+                                    Repair
                                 </label>
-                                <label class="wauto" matTooltipPosition="above" matTooltip="Parts Sale">
+                                <!-- <label class="wauto" matTooltipPosition="above" matTooltip="Parts Sale">
                                     <input type="radio" [value]="2" name="type" class="radio_adjust"
                                         [(ngModel)]="salesQuote.speedQuoteTypeId" #type="ngModel">
                                     Parts Sale
@@ -83,7 +83,7 @@
                                     <input type="radio" [value]="3" name="type" class="radio_adjust"
                                         [(ngModel)]="salesQuote.speedQuoteTypeId" #type="ngModel">
                                     Exchange
-                                </label>
+                                </label> -->
                             </div>
                         </div>
                         <div class="clear"></div>
@@ -94,9 +94,9 @@
                                     <div class="col-md-6 padding-10" style="padding-bottom: 0px !important">
                                         <div class="form-group">
                                             <label>Speed Quote Num</label>
-                                            <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
-                                                name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
-                                                id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
+                                            <input type="text" [(ngModel)]="salesQuote.speedQuoteNumber"
+                                                name="speedQuoteNumber" class="form-control" [disabled]="true"
+                                                id="speedQuoteNumber" #speedQuoteNumber="ngModel" />
                                         </div>
                                         <div class="form-group padding-top-5" *ngIf="isEdit">
                                             <label>Version Num</label>
@@ -144,6 +144,22 @@
                                                     <small>Quote Valid Until is required </small>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="form-group memo-popup-cstm">
+                                            <label style="margin-top:0px">
+                                                Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                                    matTooltipPosition="above" matTooltip="Notes"
+                                                    (click)="onAddDescription('notes')"></i>
+                                            </label>
+                                            <span>
+                                                <div class="form-group memo-popup-cstm mat_emo">
+                                                    <div [innerHTML]="salesQuote.notes" matTooltipPosition="above"
+                                                        [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
+                                                        style="height: 25px !important; width:100% !important"
+                                                        class="text_editor_box">
+                                                    </div>
+                                                </div>
+                                            </span>
                                         </div>
                                         <!-- <div class="form-group">
                                             <label>Employee<span class="clr-red">*</span></label>
@@ -223,12 +239,12 @@
                                                 name="customerEmail" class="form-control" [disabled]="true"
                                                 id="customerEmail" #customerEmail="ngModel" />
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label>Contract Ref</label>
                                             <input type="text" class="form-control" name="contractReferenceName"
                                                 [(ngModel)]="salesQuote.contractReferenceName"
                                                 (change)="onChangeInput()" [disabled]="true" />
-                                        </div>
+                                        </div> -->
                                         <div class="form-group">
                                             <label>Credit Limit &amp; terms</label>
                                             <div class="col-md-5">
@@ -245,6 +261,13 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label style="margin-top:14px">Contract Ref</label>
+                                            <input type="text" class="form-control" name="contractReferenceName"
+                                                [(ngModel)]="salesQuote.contractReferenceName"
+                                                (change)="onChangeInput()" [disabled]="true" />
+                                        </div>
+                                        
                                         <!-- <div class="form-group" style="padding-top: 24px">
                                             <label>Valid For (Days)<span class="clr-red">*</span></label>
                                             <input type="number" name="validForDays"
@@ -284,7 +307,7 @@
                                             <!-- <div class="col-md-3">
                                                 
                                             </div> -->
-                                            <div class="col-md-7">
+                                            <div class="col-md-7 m-t-10">
                                                 <label>Employee<span class="clr-red">*</span></label>
                                                 <p-autoComplete field="label" class="autocomp-customer-cstm"
                                                     name="employeeId" [(ngModel)]="salesQuote.employeeId"
@@ -324,7 +347,7 @@
                                             </p-autoComplete>
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" style="padding-left:0px">
                                                 <label>Lead Source<span class="clr-red">*</span></label>
                                                 <select name="leadSource" [(ngModel)]="salesQuote.leadSourceId"
                                                     (change)="onChangeInput()" required>
@@ -340,31 +363,52 @@
                                                     (change)="onChangeInput()" required />
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Probability (%)</label>
-                                            <select name="probability" [(ngModel)]="salesQuote.probabilityId"
-                                                (change)="onChangeInput()">
-                                                <option value="null" selected>--Select</option>
-                                                <option *ngFor="let p of percents" [ngValue]="p.value">
-                                                    {{ p.label }}</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
+                                       
+                                        <div class="form-group col-md-12">
+                                            <div class="col-md-6" style="padding-left:0px">
                                             <label>Speed Quote Status<span class="clr-red">*</span></label>
-                                            <div class="col-md-6">
+                                            
                                                 <input type="text" class="form-control"
                                                     [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
-                                                    [disabled]="true" />
+                                                    [disabled]="true" required/>
                                             </div>
-                                            <div class="col-md-6">
+                                            <!-- <div class="col-md-6">
                                                 <p-calendar name="statusChangeDate" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="salesQuote.statusChangeDate" [showIcon]="true"
                                                     id="statusChangeDate" #statusChangeDate="ngModel" required
                                                     [disabled]="true">
                                                 </p-calendar>
+                                            </div> -->
+                                            <div class="col-md-6">
+                                                <!-- <label style="margin-top:14px">Probability (%)</label> -->
+                                                <label>Probability (%)</label>
+                                                <select class="select-right" name="probability" [(ngModel)]="salesQuote.probabilityId"
+                                                    (change)="onChangeInput()">
+                                                    <option value="null" selected>--Select</option>
+                                                    <option *ngFor="let p of percents" [ngValue]="p.value">
+                                                        {{ p.label }}</option>
+                                                </select>
                                             </div>
                                         </div>
+                                        <div class="form-group memo-popup-cstm">
+                                            <label style="margin-top:4px">
+                                                Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                    data-target="#add-description" matTooltipPosition="above"
+                                                    matTooltip="Memo" (click)="onAddDescription('memo')"></i>
+                                            </label>
+                                            <span>
+                                                <div class="form-group memo-popup-cstm mat_emo">
+                                                    <div [innerHTML]="salesQuote.memo"
+                                                        [matTooltip]="parsedText(salesQuote.memo)"
+                                                        class="form-control" matTooltipPosition="above"
+                                                        style="height: 25px !important;width:100%"
+                                                        class="text_editor_box">
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        
                                     </div>
                                     <div class="col-md-6 padding-10" style="padding-bottom: 0px !important;">
                                         <div>
@@ -425,7 +469,16 @@
                                             </div>
                                         </div>
                                         <div class=" main_ar" style="padding-top:10px">
-                                            <div class="form-group memo-popup-cstm">
+
+                                            <!-- <div class="col-md-4 main_ar"> -->
+                                                <div class="form-group" style="padding-left: 5px;">
+                                                    <label>Customer Warning</label>
+                                                    <textarea name="warningId" class="form-control customer-warning-msg"
+                                                        disabled
+                                                        value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
+                                                </div>
+                                            <!-- </div> -->
+                                            <!-- <div class="form-group memo-popup-cstm">
                                                 <label>
                                                     Memo<i class=" fa fa-pencil" data-toggle="modal"
                                                         data-target="#add-description" matTooltipPosition="above"
@@ -441,14 +494,14 @@
                                                         </div>
                                                     </div>
                                                 </span>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-row mb-2">
-                            <div class="col-md-4 main_ar">
+                            <!-- <div class="col-md-4 main_ar">
                                 <div class="form-group" style="padding-left: 5px;">
                                     <label>Customer Warning</label>
                                     <textarea name="warningId" class="form-control"
@@ -456,8 +509,8 @@
                                         disabled
                                         value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
                                 </div>
-                            </div>
-                            <div class="col-md-4 main_ar">
+                            </div> -->
+                            <!-- <div class="col-md-4 main_ar">
                                 <div class="form-group memo-popup-cstm">
                                     <label>
                                         Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
@@ -466,17 +519,17 @@
                                     </label>
                                     <span>
                                         <div class="form-group memo-popup-cstm mat_emo">
-                                            <div [innerHTML]="salesQuote.notes"
+                                            <div [innerHTML]="salesQuote.notes" matTooltipPosition="above"
                                                 [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
-                                                style="height: 100px !important; width:90% !important"
+                                                style="height: 25px !important; width:100% !important"
                                                 class="text_editor_box">
                                             </div>
                                         </div>
                                     </span>
                                 </div>
-                            </div>
-                            <div class="col-md-4 main_ar">
-                                <div class="form-group" style="position: absolute; right: 10px; bottom: 0;">
+                            </div> -->
+                            <div class="col-md-12 main_ar">
+                                <div class="form-group" style="right: 10px; bottom: 0;">
                                     <button type="submit" *ngIf="!isEdit && !isCreateModeHeader"
                                         (click)="onSubmit(true)" [disabled]="!newSalesQuoteForm.form.valid"
                                         class="btn pull-right submit-btn btn btn-primary">
@@ -493,7 +546,7 @@
                     </div>
                     <div class="card" style="padding: 5px; margin: 5px;" *ngIf="isEdit">
                         <div class="x_panel">
-                            <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()"
+                            <!-- <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()"
                                 [disabled]="(enforceApproval ? (verifySalesOrderQuoteObj.canCovertToSalesOrder === false ? true : false) : false)"
                                 style="width: 92px;">
                                 Email Quote
@@ -501,13 +554,17 @@
                             <button type="button" class="btn btn-primary" (click)="initiateQuoteCopying()"
                                 style="width: 92px;">
                                 Make Duplicate
-                            </button>
-                            <a class="btn btn-primary" (click)="initiatePrintProcess()" style="width: 92px;">Print Quote
+                            </button> -->
+                            <!-- <a class="btn btn-primary" (click)="initiatePrintProcess()" style="width: 92px;">Print Quote
                             </a>
-                            <a class="btn btn-primary" (click)="initiateCreatingNewQuote()" style="width: 92px;">New
+                            <a class="btn btn-primary" (click)="initiateExclusionPrintProcess()" style="width: 92px;">Print Exclusion
+                            </a> -->
+                            <a class="btn btn-primary" (click)="initiateSpeedQuotePrint()" style="width: 92px;">Print Quote
+                            </a>
+                            <!-- <a class="btn btn-primary" (click)="initiateCreatingNewQuote()" style="width: 92px;">New
                                 Quote</a>
                             <span class="btn btn-primary" (click)="initiateClosingSalesOrderQuote()"
-                                style="width: 92px;">Close</span>
+                                style="width: 92px;">Close</span> -->
                         </div>
                     </div>
                     <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled)">
@@ -518,13 +575,22 @@
                         <div class="clearfix mb-1"></div>
                     </ng-container>
                     <ng-container *ngIf="((isCreateModeHeader||isEdit) && !isEmailTabEnabled)">
-                        <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+                        <p-tabView class="pas-tabview" (onChange)="onTabChange($event)" [activeIndex]="selectedIndex">
                             <p-tabPanel header="Parts List" [selected]="true">
-                                <app-sales-part-number [salesQuote]="salesQuote" [salesQuoteView]="salesQuoteView"
+                                <!-- <app-sales-part-number [salesQuote]="salesQuote" [salesQuoteView]="salesQuoteView"
                                     [isViewMode]="false" (on-parts-save)="onPartsSaveEvent($event)"
                                     [customer]="customerDetails" [totalFreights]="totalFreights"
                                     [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
-                                </app-sales-part-number>
+                                </app-sales-part-number> -->
+                                <app-speed-quote-part-number [salesQuote]="salesQuote" [salesQuoteView]="speedQuoteView"
+                                    [isViewMode]="false" (on-parts-save)="onPartsSaveEvent($event)"
+                                    [customer]="customerDetails" [totalFreights]="totalFreights"
+                                    (triggerTabChange)="changeToExclusionTab($event)" [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
+                                </app-speed-quote-part-number>
+                            </p-tabPanel>
+                            <p-tabPanel header="Exclusions">
+                                <app-speed-quote-exclusions [salesQuote]="salesQuote" [SQId]="id" [isViewMode]="false" (on-exclusion-load)="onExlusionLoad($event)">
+                                </app-speed-quote-exclusions>
                             </p-tabPanel>
                             <!-- <p-tabPanel header="Internal Approvers" *ngIf="enforceApproval">
                                 <app-sales-approve>
@@ -538,7 +604,7 @@
                                     (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
                                 </app-sales-customer-approvals>
                             </p-tabPanel> -->
-                            <p-tabPanel header="Address">
+                            <!-- <p-tabPanel header="Address">
                                 <app-address-component [addressType]="addressType" [id]="SalesOrderQuoteId">
                                 </app-address-component>
                             </p-tabPanel>
@@ -571,7 +637,7 @@
                             <p-tabPanel header="Communication">
                                 <app-communication [isViewMode]="false" [type]="1" [moduleName]="moduleName"
                                     [idForContact]="customerId" [referenceId]="id"></app-communication>
-                            </p-tabPanel>
+                            </p-tabPanel> -->
                         </p-tabView>
                     </ng-container>
                     <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled)">
@@ -617,7 +683,7 @@
     </div>
 </div>
 <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" aria-label="Close" (click)="closeModal()">&times;</button>
@@ -795,13 +861,60 @@
     </div>
     <div class="modal-body">
         <div class="x_panel" id="quote_print_content">
-            <app-sales-quote-print-template [salesQuoteView]="salesQuoteView"></app-sales-quote-print-template>
+            <!-- <app-sales-quote-print-template [salesQuoteView]="salesQuoteView"></app-sales-quote-print-template> -->
+            <!-- <app-speed-quote-print-template [salesQuoteView]="speedQuoteView"></app-speed-quote-print-template>
+            <app-speed-quote-exclusion-print-template [salesQuoteView]="speedQuoteView"></app-speed-quote-exclusion-print-template> -->
+            <app-speed-quote-printing-template [salesQuoteView]="speedQuoteView" [speedQuotePrintCriteraObj]="speedQuotePrintCriteraObj"></app-speed-quote-printing-template>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="sendSpeedQuoteEMail()">Send Email</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
     </div>
+</ng-template>
+<ng-template #speedQuoteExclusionePrintPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Exclusion</h4>
+    </div>
+    <div class="modal-body">
+        <div class="x_panel" id="exclusion_print_content">
+            <!-- <app-sales-quote-print-template [salesQuoteView]="salesQuoteView"></app-sales-quote-print-template> -->
+            <app-speed-quote-exclusion-print-template [salesQuoteView]="speedQuoteView"></app-speed-quote-exclusion-print-template>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="printExclusion()">Print</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button> -->
+    </div>
+</ng-template>
+<ng-template #speedQuotePrintCritariaPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closePrintModal()">&times;</button>
+        <h4 class="modal-title">Print Speed Quote</h4>
+    </div>
+    <form #speedQuotePrintForm="ngForm" class="form-horizontal">
+        <div class="modal-body">
+            <div class="form-group popup_checkbox_considerations stock-check-box">
+                <p-checkbox name="printQuote" [(ngModel)]="speedQuotePrintCriteraObj.printQuote"
+                    binary="true" label="Print Quote">
+                </p-checkbox>
+            </div>
+            <div class="form-group popup_checkbox_considerations stock-check-box">
+                <p-checkbox name="printExclusion" [(ngModel)]="speedQuotePrintCriteraObj.printExclusion"
+                    [disabled]="exclusionSelectDisable" binary="true" label="Print Exclusion">
+                </p-checkbox>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                [disabled]="(speedQuotePrintCriteraObj.printQuote == false && speedQuotePrintCriteraObj.printExclusion == false)" (click)="printQuoteAndExclusion()">
+                Ok
+            </button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closePrintModal()">Close</button>
+        </div>
+    </form>
 </ng-template>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

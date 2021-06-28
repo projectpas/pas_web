@@ -29,7 +29,8 @@
             </div>
         </div> -->
         <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom" [columns]="columns" [scrollable]="true"
-            [resizableColumns]="true" selectionMode="single" [responsive]="true" [metaKeySelection]="true"
+            [resizableColumns]="true" selectionMode="single"
+            scrollHeight="450px" [responsive]="true" [metaKeySelection]="true"
             [style]="{ width: '100%' }">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
@@ -39,7 +40,7 @@
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
-                <tr>
+                <!-- <tr>
                     <th>
                     </th>
                     <th colspan="9">
@@ -50,7 +51,7 @@
                     </th>
                     <th colspan="4">
                     </th>
-                </tr>
+                </tr> -->
                 <tr>
                     <th class="text-left">
                         <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
@@ -65,12 +66,11 @@
             </ng-template>
             <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
                 <tr pReorderableRowHandle>
-                    <td>
-                        <span>
-                            <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
-                                (onChange)="onChangeOfPartSelection($event)" binary="true">
+                    <td class="text-left">                      
+                            <p-checkbox [(ngModel)]="rowData.isSelected" class="margin-left-3" name="isSelected{{i}}"
+                                (onChange)="onChangeOfPartSelection($event, rowData)" binary="true">
                             </p-checkbox>
-                        </span>
+                      
                     </td>
                     <td *ngFor="let col of columns" pReorderableRowHandle>
                         <ng-container

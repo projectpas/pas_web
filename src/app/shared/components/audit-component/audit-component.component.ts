@@ -12,10 +12,18 @@ export class AuditComponentComponent implements OnInit {
     data:any;
     constructor( private activeModal: NgbActiveModal,) { } 
 
-    ngOnInit() { 
-        console.log("auditHistoryHeader",this.auditHistoryHeader)
-        console.log("auditHistoryHeader",this.auditHistory)
+    ngOnInit() {  
     }
+
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
 
     getColorCodeForHistory(i, field, value) {
         const data = this.auditHistory;

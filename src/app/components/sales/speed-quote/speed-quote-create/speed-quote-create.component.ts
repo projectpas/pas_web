@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ɵConsole } from "@angular/core";
 import {
   NgForm,
   FormGroup
@@ -38,9 +38,8 @@ import { MenuItem } from "primeng/api";
 import { SalesApproveComponent } from "../../quotes/shared/components/sales-approve/sales-approve.component";
 import { SalesCustomerApprovalsComponent } from "../../quotes/shared/components/sales-customer-approvals/sales-customer-approvals.component";
 import { forkJoin } from "rxjs/observable/forkJoin";
-import { SalesOrderQuoteFreightComponent } from "../../shared/components/sales-order-quote-freight/sales-order-quote-freight.component";
-import { SalesOrderQuoteChargesComponent } from "../../shared/components/sales-order-quote-charges/sales-order-quote-charges.component";
 import { SalesPartNumberComponent } from "../../shared/components/sales-part-number/sales-part-number.component";
+import { SpeedQuotePartNumberComponent } from "../shared/components/speed-quote-part-number/speed-quote-part-number.component";
 import { SalesQuoteDocumentsComponent } from "../../quotes/sales-document/salesQuote-document.component";
 import { SalesQuoteAnalysisComponent } from "../../quotes/sales-quote-analysis/sales-quote-analysis.component"
 import { SpeedQuote } from "../../../../models/sales/SpeedQuote.model";
@@ -51,7 +50,9 @@ import { ISpeedQte } from "../../../../models/sales/ISpeedQte";
 import { SpeedQuoteView } from "../../../../models/sales/SpeedQuoteView";
 import { SpeedQuoteMarginSummary } from "../../../../models/sales/SpeedQuoteMarginSummary";
 import { SpeedQuoteTypeEnum } from "../models/speed-auote-type-enum";
-
+import { SpeedQuoteExclusionsComponent } from "../shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
+import { SpeedQuotePrintCritera } from "../models/speed-quote-print-criteria";
+declare var $: any;
 @Component({
   selector: "app-speed-quote-create",
   templateUrl: "./speed-quote-create.component.html",
@@ -92,6 +93,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   accountTypes: any[] = [];
   selectedParts: any[] = [];
   modal: NgbModalRef;
+  printmodal: NgbModalRef;
   errorModal: NgbModalRef;
   tempMemo: any;
   tempMemoLabel: any;
@@ -123,6 +125,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   bulist: any[] = [];
   divisionlist: any[] = [];
   SpeedQuoteType: SpeedQuoteTypeEnum;
+  speedQuotePrintCriteraObj: SpeedQuotePrintCritera;
   private onDestroy$: Subject<void> = new Subject<void>();
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
   @ViewChild("closeQuotePopup", { static: false }) public closeQuotePopup: ElementRef;
@@ -132,15 +135,15 @@ export class SpeedQuoteCreateComponent implements OnInit {
   @ViewChild("salesQuoteConvertPopup", { static: false }) public salesQuoteConvertPopup: ElementRef;
   @ViewChild("emailQuotePopup", { static: false }) public emailQuotePopup: ElementRef;
   @ViewChild("salesQuotePrintPopup", { static: false }) public salesQuotePrintPopup: ElementRef;
+  @ViewChild("speedQuoteExclusionePrintPopup", { static: false }) public speedQuoteExclusionePrintPopup: ElementRef;
+  @ViewChild("speedQuotePrintCritariaPopup", { static: false }) public speedQuotePrintCritariaPopup: ElementRef;
   @ViewChild(SalesApproveComponent, { static: false }) public salesApproveComponent: SalesApproveComponent;
-  @ViewChild(SalesCustomerApprovalsComponent, { static: false }) public salesCustomerApprovalsComponent: SalesCustomerApprovalsComponent;
-  @ViewChild(SalesOrderQuoteFreightComponent, { static: false }) public salesOrderQuoteFreightComponent: SalesOrderQuoteFreightComponent;
-  @ViewChild(SalesOrderQuoteChargesComponent, { static: false }) public salesOrderQuoteChargesComponent: SalesOrderQuoteChargesComponent;
-  @ViewChild(SalesPartNumberComponent, { static: false }) public salesPartNumberComponent: SalesPartNumberComponent;
+  @ViewChild(SpeedQuotePartNumberComponent, { static: false }) public speedQuotePartNumberComponent: SpeedQuotePartNumberComponent;
   @ViewChild(SalesQuoteDocumentsComponent, { static: false }) public salesQuoteDocumentsComponent: SalesQuoteDocumentsComponent;
   @ViewChild(SalesQuoteAnalysisComponent, { static: false }) public salesQuoteAnalysisComponent: SalesQuoteAnalysisComponent;
   @ViewChild(ManagementStructureComponent, { static: false }) public managementStructureComponent: ManagementStructureComponent;
   @ViewChild(SalesAddressComponent, { static: false }) public salesAddressComponent: SalesAddressComponent;
+  @ViewChild(SpeedQuoteExclusionsComponent, { static: false }) public speedQuoteExclusionsComponent: SpeedQuoteExclusionsComponent;
   isCopyMode: boolean = false;
   quoteCopyRefId: any;
   copyConsiderations: CopyConsiderationsForSalesQuote;
@@ -177,7 +180,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
   managementValidCheck: boolean;
   moduleName: any = "SpeedQuote";
   enforceApproval: boolean;
-
+  selectedIndex: number = 0;
+  exclusionCount:number = 0;
+  exclusionSelectDisable:boolean=false;
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -198,6 +203,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     this.salesOrderConversionCriteriaObj = new SalesOrderConversionCritera();
     this.globalCustomerWarningId = DBkeys.GLOBAL_CUSTOMER_WARNING_ID_FOR_SALES_ORDER;
     this.conversionStarted = false;
+    this.speedQuotePrintCriteraObj = new SpeedQuotePrintCritera();
   }
 
   ngOnInit() {
@@ -852,7 +858,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       if (data) {
         this.speedQuoteView = data && data.length ? data[0] : null;
         this.salesOrderQuoteObj = this.speedQuoteView.speedQuote;
-        this.verifySalesQuoteConversion(this.speedQuoteView.verificationResult);
+        //this.verifySalesQuoteConversion(this.speedQuoteView.verificationResult);
         this.toggle_po_header = false;
       }
       if (this.deletePartsWhileCopieng == true) {
@@ -873,17 +879,19 @@ export class SpeedQuoteCreateComponent implements OnInit {
         this.load(this.salesOrderQuoteObj.managementStructureId);
       }
 
-      this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(this.speedQuoteService.selectedParts, this.marginSummary);
+      //this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(this.speedQuoteService.selectedParts, this.marginSummary);
       this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.salesQuote.salesQuoteTypes = this.speedQuoteView.salesQuoteTypes;
       this.salesQuote.status = this.speedQuoteView.status;
       this.salesQuote.priorities = this.speedQuoteView.priorities;
-      if (this.salesPartNumberComponent) {
-        this.salesPartNumberComponent.refresh();
+      if (this.speedQuotePartNumberComponent) {
+        this.speedQuotePartNumberComponent.refresh();
       }
-      this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
-      this.salesQuote.speedQuoteTypeId = this.salesOrderQuoteObj.quoteTypeId;
+      //this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
+      this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.speedQuoteId;
+      //this.salesQuote.speedQuoteTypeId = this.salesOrderQuoteObj.quoteTypeId;
+      this.salesQuote.speedQuoteTypeId = this.salesOrderQuoteObj.speedQuoteTypeId;
       this.salesQuote.statusId = this.salesOrderQuoteObj.statusId;
       this.salesQuote.statusChangeDate = new Date(
         this.salesOrderQuoteObj.statusChangeDate
@@ -894,7 +902,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
         this.salesOrderQuoteObj.quoteExpireDate
       );
 
-      this.salesQuote.salesOrderQuoteNumber = this.salesOrderQuoteObj.salesOrderQuoteNumber;
+      this.salesQuote.speedQuoteNumber = this.salesOrderQuoteObj.speedQuoteNumber;
       this.salesQuote.versionNumber = this.salesOrderQuoteObj.versionNumber;
       this.salesQuote.accountTypeId = this.salesOrderQuoteObj.accountTypeId;
       this.salesQuote.customerId = this.salesOrderQuoteObj.customerId;
@@ -904,11 +912,13 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
       this.salesQuote.employeeId = getObjectById('value', this.salesOrderQuoteObj.employeeId, this.allEmployeeList)//this.salesOrderQuoteObj.employeeId;
-      this.speedQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
-      this.speedQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
+      this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
+      //this.speedQuote.speedQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
+      //this.speedQuote.speedQuoteId = this.salesOrderQuoteObj.speedQuoteId;
+      this.salesQuote.speedQuoteId = this.salesOrderQuoteObj.speedQuoteId;
       this.salesQuote.probabilityId = this.salesOrderQuoteObj.probabilityId;
       this.salesQuote.leadSourceId = this.salesOrderQuoteObj.leadSourceId;
-      this.speedQuote.leadSourceReference = this.salesOrderQuoteObj.leadSourceReference;
+      this.salesQuote.leadSourceReference = this.salesOrderQuoteObj.leadSourceReference;
       this.salesQuote.creditLimit = this.salesOrderQuoteObj.creditLimit;
       this.salesQuote.creditLimitTermsId = this.salesOrderQuoteObj.creditTermId;
       this.salesQuote.restrictPMA = this.salesOrderQuoteObj.restrictPMA;
@@ -925,7 +935,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.salesQuote.warningId = this.salesOrderQuoteObj.customerWarningId;
       this.salesQuote.memo = this.salesOrderQuoteObj.memo;
       this.salesQuote.notes = this.salesOrderQuoteObj.notes;
-      this.salesQuote.statusName = this.speedQuoteView.speedQuote.status;
+      this.salesQuote.statusName = this.speedQuoteView.speedQuote.statusName;
       this.salesQuote.isApproved = this.speedQuoteView.speedQuote.isApproved;
       this.salesQuote.customerServiceRepId = this.salesOrderQuoteObj.customerSeviceRepId;
       this.salesQuote.salesPersonId = this.salesOrderQuoteObj.salesPersonId;
@@ -979,7 +989,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
         this.salesQuote.companyId = this.masterCompanyId;
         this.salesQuote.leadSourceId = null;
         this.salesQuote.probabilityId = null;
-        this.salesQuote.salesOrderQuoteNumber = "Creating";
+        this.salesQuote.speedQuoteNumber = "Creating";
         this.load(this.managementStructureId);
         this.getInitialDataForSOQ();
         this.isSpinnerVisible = false;
@@ -1101,6 +1111,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
     } else {
       this.display = false;
       this.isSpinnerVisible = true;
+      if(this.id)
+        this.speedQuote.speedQuoteId = this.id;
       this.speedQuote.speedQuoteTypeId = this.salesQuote.speedQuoteTypeId;
       this.speedQuote.openDate = this.salesQuote.openDate.toDateString();
       this.speedQuote.validForDays = this.salesQuote.validForDays;
@@ -1112,7 +1124,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.speedQuote.contractReference = this.salesQuote.contractReferenceName;
       this.speedQuote.leadSourceReference = this.salesQuote.leadSourceReference;
       this.speedQuote.managementStructureId = this.salesQuote.managementStructureId;
-      this.speedQuote.salesOrderQuoteNumber = this.salesQuote.salesOrderQuoteNumber;
+      this.speedQuote.speedQuoteNumber = this.salesQuote.speedQuoteNumber;
       this.speedQuote.versionNumber = this.salesQuote.versionNumber;
       this.speedQuote.masterCompanyId = this.masterCompanyId;
       this.speedQuote.buId = this.salesQuote.buId;
@@ -1176,80 +1188,80 @@ export class SpeedQuoteCreateComponent implements OnInit {
       for (let i = 0; i < this.selectedParts.length; i++) {
         let partNameAdded = false;
         let selectedPart = this.selectedParts[i];
-        if (!selectedPart.customerRequestDate) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
-          }
-          errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
-        }
-        if (!selectedPart.estimatedShipDate) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
-          }
-          errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
-        }
-        if (!selectedPart.promisedDate) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
-          }
-          errmessage = errmessage + '<br />' + "Please enter Promised Date."
-        }
-        if (!selectedPart.priorityId) {
-          this.isSpinnerVisible = false;
-          invalidParts = true;
-          if (!partNameAdded) {
-            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-            partNameAdded = true;
-          }
-          errmessage = errmessage + '<br />' + "Please enter priority ID."
-        }
+        // if (!selectedPart.customerRequestDate) {
+        //   this.isSpinnerVisible = false;
+        //   invalidParts = true;
+        //   if (!partNameAdded) {
+        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //     partNameAdded = true;
+        //   }
+        //   errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
+        // }
+        // if (!selectedPart.estimatedShipDate) {
+        //   this.isSpinnerVisible = false;
+        //   invalidParts = true;
+        //   if (!partNameAdded) {
+        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //     partNameAdded = true;
+        //   }
+        //   errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
+        // }
+        // if (!selectedPart.promisedDate) {
+        //   this.isSpinnerVisible = false;
+        //   invalidParts = true;
+        //   if (!partNameAdded) {
+        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //     partNameAdded = true;
+        //   }
+        //   errmessage = errmessage + '<br />' + "Please enter Promised Date."
+        // }
+        // if (!selectedPart.priorityId) {
+        //   this.isSpinnerVisible = false;
+        //   invalidParts = true;
+        //   if (!partNameAdded) {
+        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //     partNameAdded = true;
+        //   }
+        //   errmessage = errmessage + '<br />' + "Please enter priority ID."
+        // }
 
-        if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-          let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
-          let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
-          let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
-          let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+        // if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
+        //   let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+        //   let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+        //   let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+        //   let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
 
-          if (crdate < opendate || esdate < opendate || pdate < opendate) {
-            invalidDate = true;
-            if (crdate < opendate) {
-              this.isSpinnerVisible = false;
-              invalidParts = true;
-              if (!partNameAdded) {
-                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-                partNameAdded = true;
-              }
-              errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
-            }
-            if (esdate < opendate) {
-              this.isSpinnerVisible = false;
-              invalidParts = true;
-              if (!partNameAdded) {
-                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-                partNameAdded = true;
-              }
-              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
-            }
-            if (pdate < opendate) {
-              this.isSpinnerVisible = false;
-              invalidParts = true;
-              if (!partNameAdded) {
-                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-                partNameAdded = true;
-              }
-              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
-            }
-          }
-        }
+        //   if (crdate < opendate || esdate < opendate || pdate < opendate) {
+        //     invalidDate = true;
+        //     if (crdate < opendate) {
+        //       this.isSpinnerVisible = false;
+        //       invalidParts = true;
+        //       if (!partNameAdded) {
+        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //         partNameAdded = true;
+        //       }
+        //       errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
+        //     }
+        //     if (esdate < opendate) {
+        //       this.isSpinnerVisible = false;
+        //       invalidParts = true;
+        //       if (!partNameAdded) {
+        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //         partNameAdded = true;
+        //       }
+        //       errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
+        //     }
+        //     if (pdate < opendate) {
+        //       this.isSpinnerVisible = false;
+        //       invalidParts = true;
+        //       if (!partNameAdded) {
+        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+        //         partNameAdded = true;
+        //       }
+        //       errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
+        //     }
+        //   }
+        // }
         if (!invalidParts && !invalidDate) {
           let partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
@@ -1268,13 +1280,13 @@ export class SpeedQuoteCreateComponent implements OnInit {
           this.alertService.showStickyMessage('Speed Quote', "Please select valid Dates for Speed Quote PartsList!", MessageSeverity.error);
         } else {
           this.isSpinnerVisible = false;
-          this.marginSummary.speedQuoteId = this.id;
-          this.marginSummary.misc = this.totalCharges;
-          this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
-            this.marginSummary.speedQuoteMarginSummaryId = result
-          }, error => {
-            this.isSpinnerVisible = false;
-          });
+          // this.marginSummary.speedQuoteId = this.id;
+          // this.marginSummary.misc = this.totalCharges;
+          // this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
+          //   this.marginSummary.speedQuoteMarginSummaryId = result
+          // }, error => {
+          //   this.isSpinnerVisible = false;
+          // });
           this.speedQuoteService.update(this.speedQuoteView).subscribe(data => {
             this.SpeedQuoteId = data[0].speedQuoteId;
             this.isCreateModeHeader = true;
@@ -1299,14 +1311,14 @@ export class SpeedQuoteCreateComponent implements OnInit {
           });
         }
       } else {
-        if (this.isCopyMode == true) {
-          this.speedQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
-          this.speedQuoteView.speedQuote.speedQuoteId = null;
-          this.speedQuoteView.speedQuote.salesOrderQuoteNumber = undefined;
-          if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
-            this.speedQuoteView.parts.filter(x => x.salesOrderQuotePartId = null)
-          }
-        }
+        // if (this.isCopyMode == true) {
+        //   this.speedQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
+        //   this.speedQuoteView.speedQuote.speedQuoteId = null;
+        //   this.speedQuoteView.speedQuote.speedQuoteNumber = undefined;
+        //   if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
+        //     this.speedQuoteView.parts.filter(x => x.speedQuotePartId = null)
+        //   }
+        // }
         this.speedQuoteService.create(this.speedQuoteView).subscribe(data => {
           this.SpeedQuoteId = data[0].speedQuoteId;
           this.speedQuoteView.speedQuote.speedQuoteId = this.SpeedQuoteId;
@@ -1458,85 +1470,378 @@ export class SpeedQuoteCreateComponent implements OnInit {
         <head>
           <title>Print tab</title>
           <style>
-          .t0 td {
+          @page { size: auto;  margin: 0mm; }
+          
+                        @media print
+            {
+              @page {
+              margin-top: 0;
+              margin-bottom: 0;
+              }
+            
+              @page {size: landscape}
+            } 
+            span {
+              /* font-weight: normal; */
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-size: 10.5px !important;
+              font-weight: 700;
+            }
              
-            border: 1px solid #999; 
-            -webkit-print-color-adjust: exact; 
+
+              table {
+                width: 100.3%;
+               overflow: auto !important;
+              }
+              
+              table thead {
+               background: #808080;
+              }
+              
+              table thead tr {
+               /* background: #0d57b0 !important; */
+              
+              }
+              
+              table,
+              thead,
+              td {
+               border: 1px solid black;
+               border-collapse: collapse;
+              }
+              
+              table,
+              thead,
+              th {
+               border: 1px solid black;
+               border-collapse: collapse;
+              }
+              
+              table thead tr th {
+               /*  background: #c7c6c6 !important; */
+               padding: 5px !important;
+               color: #000;
+               letter-spacing: 0.3px;
+               font-size: 10.5px;
+               text-transform: capitalize;
+               z-index: 1;
+              }
+              
+              table tbody {
+               overflow-y: auto;
+               max-height: 500px;
+              }
+              
+              table tbody tr td {
+               background: #fff;
+               padding: 2px;
+               line-height: 22px;
+               height: 22px;
+               color: #333;
+              border:1px solid black !important;
+                border-right: 1px solid black !important;
+               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                 font-size: 10.5px !important;
+                 font-weight: 700;
+               max-width: 100px;
+               letter-spacing: 0.1px;
+               border: 0
+              }
+             
+            h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
             
-                }
-                .t1 .td1, .t1 .td3 {
-                    padding-right: 30px;
-                }
-                .t1 .td2{
-                    padding-right: 100px;
-                }
-                .t4 th, .t3 th{
-                    background: #4298ff;  
-                    -webkit-print-color-adjust: exact; 
-                    color: #FFF;
-                    
-                    padding: 5px;
-                }
-                .t4 th{
-                 border: 1px solid #999;
- 
-                }
-                .t2 th{
-                    background: #c7c6c6;  
-                    color: #000;
-                    padding: 5px;
-                    border: 1px solid #999;
-                    -webkit-print-color-adjust: exact; 
-                }
-                .t2{
-                    border: 1px solid #999;   
-                    -webkit-print-color-adjust: exact; 
-                    margin-top: 20px;
-                }
-               .t4 td{
-                    border: 1px solid #999;
-                    padding: 5px; 
-                    -webkit-print-color-adjust: exact; 
+            .very-first-block {position: relative; height:auto;border-right:1px solid black; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
+              width: 50%;}
+            .first-block-name{margin-right: 20px} 
+            .first-block-sold-to {
+              position: relative;
+              min-height: 82px;
+              height: auto;
+              float: left;
+              padding-bottom:5px;
+              padding-right: 2px;
+              border-right: 1px solid black;
+              background: #fff;
+              width: 100%;
+              margin-top:-2px
+             
+            }
             
-                }
-                .t2 td {
-                    border-bottom: 1px solid #999;
-                    -webkit-print-color-adjust: exact; 
-                    border-left: 1px solid #999;
-                    padding: 5px;
-                }
-                
-                .t2 .th2, .t2 .td2{
-                    width: 265px;
-                }
-                .t3 .td2{
-                    border: 1px solid #999; 
-                    min-width: 100px;
-                    -webkit-print-color-adjust: exact; 
+            .first-block-ship-to {
+              position: relative;
+              min-height: 80px;
+              padding-bottom:5px;
+              height: auto;
+              padding-right: 2px;
+              border-right: 1px solid black;
+              background: #fff;
+              width: 100%;
             
+            }
+            
+            .first-block-sold {
+              position: relative;
+              min-height: 120px;
+              height:auto;
+              float: left;
+              border-right:1px solid black;
+              padding-right: 2px;
+              padding-left: 2px;
+              margin-left:-1px;
+              width: 50%;
+            }
+            
+            .first-block-ship {
+              position: relative;
+              min-height: 1px;
+              float: right;
+              padding-right: 2px;
+             
+              width: 49%;
+            }
+            
+            .address-block {
+              position: relative;
+              min-height: 1px;
+              float: left;
+              height:auto;
+              padding-right: 2px;
+              // border: 1px solid black;
+              width: 100%;
+              padding-left: 2px;
+            }
+            
+            .first-block-address {
+              margin-right: 20px;
+              text-align: left
+            }
+            
+            
+            .second-block {
+              position: relative;
+              min-height: 1px;
+              float: left;
+              padding-right: 2px;
+              width: 42%;
+            height:auto;
+              // border-left:1px solid black;
+                // margin-left: 16%;
+              padding-left: 2px;
+              box-sizing: border-box;
+            }
+            
+            .second-block-div {
+              margin: 2px 0;
+              position: relative;
+              display: flex;
+            
+              min-height: 1px;
+              height:auto
+             
+              width: 100%;
+            }
+            .label{
+              font-weight:500;
+            }
+            
+            .second-block-label {
+              position: relative;
+              min-height: 1px;
+              float: left;
+              padding-right: 2px;
+              padding-left: 2px;
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                  font-size: 10.5px !important;
+                  font-weight: 700;
+              
+                  width: 38.33333333%;
+                  text-transform: capitalize;
+                  margin-bottom: 0;
+                  text-align: left;
+            }
+            
+            .clear {
+              clear: both;
+            }
+            
+            .form-div {
+              // top: 6px;
+              position: relative;
+              font-weight: normal;
+              font-size:12.5
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              // margin-top: 10px;
+             
+            }
+            span {
+              font-weight: normal;
+              font-size: 12.5px !important;
+          }
+            
+            .image {
+              border: 1px solid #000;
+              // padding: 5px;
+              width: 100%;
+              display: block;
+            }
+            
+            .logo-block {
+              margin: auto;
+              text-align: center
+            }
+            
+            .pdf-block {
+              width: 800px;
+              margin: auto;
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-weight:normal;
+              border: 1px solid #ccc;
+              padding: 25px 15px;
+            }
+            
+            .picked-by {
+              position: relative;
+              float: left;
+              width: 48%;
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-size: 10.5px !important;
+              font-weight: 700;
+            }
+            
+            .confirmed-by {
+              position: relative;
+              float: right;
+              width: 48%;
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-size: 10.5px !important;
+              font-weight: 700;
+            }
+            
+            .first-part {
+              position: relative;
+              display: inline;
+              float: left;
+              width: 50%
+            }
+            
+            .seond-part {
+              position: relative;
+              display: flex;
+              float: right;
+              width: 24%
+            }
+            
+            .input-field-border {
+              width: 88px;
+              border-radius: 0px !important;
+              border: none;
+              border-bottom: 1px solid black;
+            }
+            
+            .border-transparent {
+              border-block-color: white;
+            }
+            
+            .pick-ticket-header {
+              border: 1px solid black;
+              text-align: center;
+              background: #0d57b0 !important;
+              color: #fff !important;
+              -webkit-print-color-adjust: exact;
+            }
+            
+            .first-block-label {
+              position: relative;
+              min-height: 1px;
+              float: left;
+              padding-right: 2px;
+              padding-left: 2px;
+              // width: 38.33333333%;
+              font-size:10.5px !important;
+            
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-weight: 700;
+          
+              text-transform: capitalize;
+              margin-bottom: 0;
+              text-align: left;
+            }
+            
+            .very-first-block {
+              position: relative;
+              min-height: 159px;
+              float: left;
+              height:auto;
+             border-right:1px solid black;
+              padding-right: 2px;
+              padding-left: 2px;
+              width: 57% !important;
+            }
+            
+            .logo {
+              padding-top: 10px;
+                  // height:70px;
+                  // width:220px;
+                  height:auto;
+                  max-width:100%;
+                  padding-bottom:10px;
+            }
+            
+            .sold-block-div {
+              margin: 2px 0;
+              position: relative;
+              display: flex;
+              min-height: 1px;
+              width: 100%;
+            }
+            
+            .ship-block-div {
+              margin: 2px 0;
+              position: relative;
+              display: flex;
+              min-height: 1px;
+              width: 100%;
+            }
+            .first-block-sold-bottom{
+              border-bottom: 1px solid black;
+                  position:relative;
+                  min-height:1px;
+                  height:auto;
+                  width:100%;
+                  float:left;
+                    // margin-top: -2px;
+                   // min-height: 120px;
+            }
+            
+            .parttable th {
+              // background: #fff !important;
+              background: #c7c6c6 !important;
+              color: #000 !important;
+              -webkit-print-color-adjust: exact;
+            }
+            .border-bottom{
+              border-bottom:1px solid black !important;
+            }
+            .table-margins{
+                  margin-top:-1px;margin-left:0px
                 }
-                .t2 td{
-                    height: 25px;
+                .packing-slip-table{
+                  width:100%;
                 }
-               .t2 td.blank {
-                border: 0;
-                }
-                .t3{
-                 width: 100%;
-                 margin-bottom: 20px;
-               }
-               .t3 th{
-                 font-size: 12px !important;
-               }
-               .logo{
-                 background: url("../../../../assets/images/PAS-logo.png");
-                 width: 100px;
-                 height: 100px;
-               }
-               table{
-                 font-size: 12px !important;
-               }
-          </style>
+            .invoice-border{
+              border-bottom: 1px solid;
+                  position:relative;
+                    // min-height: 119px;
+                    min-height:1px;
+                    height: auto;
+                    width:100%;
+                  float:left;}
+                  .exclusdeditem{
+                    text-align: center;
+                    font-size: 12px;
+                  }
+            
+                        </style>
         </head>
     <body onload="window.print();window.close()">${printContents}</body>
       </html>`
@@ -1569,6 +1874,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
   closeModal() {
     this.modal.close();
   }
+  closePrintModal() {
+    this.printmodal.close()
+  }
 
   openConfirmationModal(submitType: boolean) {
     this.submitType = submitType;
@@ -1600,8 +1908,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
   onPartsSaveEvent(savedParts) {
     if (savedParts) {
-      this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(savedParts, this.marginSummary);
-      this.updateMarginSummary();
+      //this.marginSummary = this.speedQuoteService.getSpeedQuoteHeaderMarginDetails(savedParts, this.marginSummary);
+      //this.updateMarginSummary();
       this.getSalesQuoteInstance(this.id, true);
     }
   }
@@ -1609,17 +1917,22 @@ export class SpeedQuoteCreateComponent implements OnInit {
   updateMarginSummary() {
     this.isSpinnerVisible = true;
     this.marginSummary.speedQuoteId = this.id;
-    this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
-      this.marginSummary.speedQuoteMarginSummaryId = result;
-      this.isSpinnerVisible = false;
-    }, error => {
-      this.isSpinnerVisible = false;
-    })
+    // this.speedQuoteService.createSpeedQuoteMarginSummary(this.marginSummary).subscribe(result => {
+    //   this.marginSummary.speedQuoteMarginSummaryId = result;
+    //   this.isSpinnerVisible = false;
+    // }, error => {
+    //   this.isSpinnerVisible = false;
+    // })
   }
 
   onTabChange(event) {
     if (event.index == 0) {
-      this.salesPartNumberComponent.refresh();
+      this.selectedIndex = 0;
+      this.speedQuotePartNumberComponent.refresh();
+    }
+    if (event.index == 1) {
+      this.selectedIndex = 1;
+      this.speedQuoteExclusionsComponent.refresh(true);
     }
     // if (event.index == 1) {
     //   this.salesApproveComponent.refresh(this.marginSummary);
@@ -1627,26 +1940,26 @@ export class SpeedQuoteCreateComponent implements OnInit {
     // if (event.index == 2) {
     //   this.salesCustomerApprovalsComponent.refresh(this.marginSummary, this.salesQuote.speedQuoteId);
     // }
-    if (event.index == 4) {
-      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
-        this.salesOrderQuoteFreightComponent.refresh(false);
-      } else {
-        this.salesOrderQuoteFreightComponent.refresh(true);
-      }
-    }
-    if (event.index == 5) {
-      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
-        this.salesOrderQuoteChargesComponent.refresh(false);
-      } else {
-        this.salesOrderQuoteChargesComponent.refresh(true);
-      }
-    }
-    if (event.index == 6) {
-      this.salesQuoteDocumentsComponent.refresh();
-    }
-    if (event.index == 7) {
-      this.salesQuoteAnalysisComponent.refresh(this.id);
-    }
+    // if (event.index == 4) {
+    //   if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+    //     this.salesOrderQuoteFreightComponent.refresh(false);
+    //   } else {
+    //     this.salesOrderQuoteFreightComponent.refresh(true);
+    //   }
+    // }
+    // if (event.index == 5) {
+    //   if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+    //     this.salesOrderQuoteChargesComponent.refresh(false);
+    //   } else {
+    //     this.salesOrderQuoteChargesComponent.refresh(true);
+    //   }
+    // }
+    // if (event.index == 6) {
+    //   this.salesQuoteDocumentsComponent.refresh();
+    // }
+    // if (event.index == 7) {
+    //   this.salesQuoteAnalysisComponent.refresh(this.id);
+    // }
   }
 
   setFreightsOrCharges() {
@@ -1695,5 +2008,63 @@ export class SpeedQuoteCreateComponent implements OnInit {
   }
 
   getChargesList() {
+  }
+
+  changeToExclusionTab(event) {
+    console.log("rowdata",event);
+    this.selectedIndex = 1;
+    this.speedQuoteExclusionsComponent.addPartNumber(event);
+  }
+
+  initiateExclusionPrintProcess() {
+    let content = this.speedQuoteExclusionePrintPopup;
+    this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  initiateSpeedQuotePrint() {
+    this.speedQuotePrintCriteraObj.speedQuoteId = this.id;
+    this.speedQuotePrintCriteraObj.printQuote = true;
+    if(this.exclusionCount > 0){
+      this.speedQuotePrintCriteraObj.printExclusion = true;
+    }else{
+      this.speedQuotePrintCriteraObj.printExclusion = false;
+      this.exclusionSelectDisable = true;
+    }
+    //let content = this.salesQuoteConvertPopup;
+    let content = this.speedQuotePrintCritariaPopup;
+    this.printmodal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+  printQuoteAndExclusion(){
+      let content = this.salesQuotePrintPopup;
+      this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  onExlusionLoad(count){
+    this.exclusionCount = count;
+  }
+  sendSpeedQuoteEMail() {
+    this.conversionStarted = true;
+    this.isSpinnerVisible = true;
+    this.speedQuotePrintCriteraObj.speedQuoteId = this.id;
+
+    this.speedQuoteService.sendSppedQuoteEmail(this.speedQuotePrintCriteraObj).subscribe(
+      results => {
+        this.alertService.showMessage(
+          "Success",
+          `Email Send successfully.`,
+          MessageSeverity.success
+        );
+        this.isSpinnerVisible = false;
+        //this.salesOrderView = results[0];
+
+        this.closeModal();
+
+        //this.router.navigateByUrl(`salesmodule/salespages/sales-order-edit/${this.salesOrderView.salesOrder.customerId}/${this.salesOrderView.salesOrder.salesOrderId}`);
+      }, error => {
+        this.isSpinnerVisible = false;
+      }
+    );
+
+    this.isSpinnerVisible = false;
   }
 }

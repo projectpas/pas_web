@@ -22,6 +22,7 @@ import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleCons
 
 export class CustomerViewComponent implements OnInit {
     moduleName="Customer"
+    custfincmoduleName =  "CustomerFinance";
     @Input() customerId;
     viewDataGeneralInformation: any = {};
     viewDataclassification: any[];
@@ -253,7 +254,15 @@ export class CustomerViewComponent implements OnInit {
         this.globalSettings = this.localStorage.getDataObject<any>(DBkeys.GLOBAL_SETTINGS) || {};
         this.global_lang = this.globalSettings.cultureName;
     }
-
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     formatCreditLimit(val){
         if(val){
             if(isNaN(val) ==  true){

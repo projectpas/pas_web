@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { CreditTermsService } from '../../../../services/Credit Terms.service';
 import { VendorService } from '../../../../services/vendor.service';
@@ -33,6 +33,8 @@ import { RepairOrderService } from '../../../../services/repair-order.service';
 import { StocklineService } from '../../../../services/stockline.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
+import { StatusEnum } from '../../../../enum/status.enum';
 
 @Component({
 	selector: 'app-ro-setup',
@@ -72,7 +74,7 @@ export class RoSetupComponent implements OnInit {
 	childDataList: any[] = [];
 	allCurrencyData: any[] = [];
 	allconditioninfo: any[] = [];
-	disableROStatus: boolean = true;
+	disableROStatus: boolean = false;
 	itemTypeId: number;
 	partWithId: any;
 	allPartDetails: any[] = [];
@@ -131,6 +133,7 @@ export class RoSetupComponent implements OnInit {
 	repairOrderId: any;
 	repairOrderPartRecordId: any
 	addAllMultiPN: boolean = false;
+	addAllMultiStockline: boolean = false;
 	childObject: any = {};
 	parentObject: any = {};
 	childObjectArray: any[] = [];
@@ -199,6 +202,7 @@ export class RoSetupComponent implements OnInit {
 	legalEntityList_Forgrid: any;
 	discountPercentList: any = [];
 	allPercentData: any = [];
+	allrevisedpartData: any = [];
 	splitcustomersList: any = [];
 	splitAddressData: any = [];
 	tempSplitAddressData: any = [];
@@ -307,6 +311,12 @@ export class RoSetupComponent implements OnInit {
 	stocklinepartNumberId: any;
 	stocklineconditionId: any;
 	searchstocklinepart: boolean = true;
+	revisedPartNumCollection: any = [];
+	workPerformedCollection: any = [];
+	acTailNumCollection: any = [];
+	includeAlternatePartNumber: any;
+	includeEquivalentPartNumber: any;
+	includeRevicePartNumber: any;
 
 	fields = ['partsCost', 'partsRevPercentage', 'unitCost', 'extCost', 'qty', 'laborCost', 'laborRevPercentage', 'overHeadCost', 'overHeadPercentage', 'chargesCost', 'freightCost', 'exclusionCost', 'directCost', 'directCostPercentage', 'revenue', 'margin', 'marginPercentage'];
 	approvalProcessHeader = [
@@ -374,6 +384,7 @@ export class RoSetupComponent implements OnInit {
 	currentUserEmployeeName: string;
 	disableApproverSelectAll: boolean = false;
 	enableMultiPartAddBtn: boolean = false;
+	enableMultistocklineAddBtn: boolean = false;
 	moduleId: any = 0;
 	referenceId: any = 0;
 	moduleName: any = "RepairOrder";
@@ -384,7 +395,19 @@ export class RoSetupComponent implements OnInit {
 	modal: NgbModalRef;
 	alertText: string
 	salesOrderId: number;
+	qty: number;
+	stocklineId: number;
+	workOrderId: number;
+	subWorkOrderId: any;
 	msgflag: number = 0;
+	openStatusId: number = 0
+	pendingStatusId: number = 0
+	fulfillingStatusId: number = 0
+	closedStatusId: number = 0
+	canceledStatusId: number = 0
+	descriptionStatusId: number = 0
+	closingStatusId: number = 0
+	@ViewChild("repairOrderPrintPopup", { static: false }) public repairOrderPrintPopup: ElementRef;
 
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
@@ -412,9 +435,45 @@ export class RoSetupComponent implements OnInit {
 		this.vendorService.alertObj.next(this.vendorService.ShowPtab);
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-ro-setup';
 		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
-		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
+		//this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
 		this.partName = (localStorage.getItem('partNumber'));
-		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		//this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		var salesOrderId = localStorage.getItem('salesOrderId');
+		if (salesOrderId !== 'undefined' && salesOrderId !== null) {
+			this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		}
+		//this.qty = JSON.parse(localStorage.getItem('lsqty'));
+		var qty = localStorage.getItem('lsqty');
+		if (qty !== 'undefined' && qty !== null) {
+			this.qty = JSON.parse(localStorage.getItem('lsqty'));
+		}
+		//this.stocklineId = JSON.parse(localStorage.getItem('lsstocklineId'));
+		var stocklineId = localStorage.getItem('lsstocklineId');
+		if (stocklineId !== 'undefined' && stocklineId !== null) {
+			this.stocklineId = JSON.parse(localStorage.getItem('lsstocklineId'));
+		}
+		//this.subWorkOrderId = localStorage.getItem('lsSubWoId');
+		var subWorkOrderId = localStorage.getItem('lsSubWoId');
+		if (subWorkOrderId !== 'undefined' && subWorkOrderId !== null) {
+			this.subWorkOrderId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		}
+		//this.workOrderId = JSON.parse(localStorage.getItem('lsWoId'));
+		var workOrderId = localStorage.getItem('lsWoId');
+		if (workOrderId !== 'undefined' && workOrderId !== null) {
+			this.workOrderId = JSON.parse(localStorage.getItem('lsWoId'));
+		}
+		var itmmasterid = localStorage.getItem('itemMasterId');
+		if (itmmasterid !== 'undefined' && itmmasterid !== null) {
+			this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'))
+		}
+
+		this.openStatusId = StatusEnum.Open;
+		this.pendingStatusId = StatusEnum.Pending;
+		this.fulfillingStatusId = StatusEnum.Fulfilling;
+		this.closedStatusId = StatusEnum.Closed;
+		this.canceledStatusId = StatusEnum.Canceled;
+		this.descriptionStatusId = StatusEnum.Description;
+		this.closingStatusId = StatusEnum.Closing;
 	}
 
 	ngOnInit() {
@@ -434,7 +493,9 @@ export class RoSetupComponent implements OnInit {
 		this.rosettingModel.IsDeferredReceiver = false;
 		this.rosettingModel.IsEnforceApproval = false;
 		this.getRepairOrderMasterData();
-
+		this.includeAlternatePartNumber = true;
+		this.includeEquivalentPartNumber = true;
+		this.includeRevicePartNumber = true;
 
 		this.vendorIdByParams = this._actRoute.snapshot.params['vendorId'];
 		this.id = this.roId = this._actRoute.snapshot.params['id'];
@@ -486,6 +547,9 @@ export class RoSetupComponent implements OnInit {
 						else if (x.label == "CONDITION") {
 							this.arrayConditionlist.push(x.value);
 						}
+						else if (x.label == "REVISEDPART") {
+							this.arrayrevisedPartlist.push(x.value);
+						}
 					});
 					this.editDropDownLoad();
 					this.isEditMode = true;
@@ -501,7 +565,10 @@ export class RoSetupComponent implements OnInit {
 						setTimeout(() => {
 							if (this.itemMasterId > 0 && this.adddefaultpart) {
 								this.isSpinnerVisible = true;
-								this.addPartNumbers(this.itemMasterId, this.partName)
+								//this.addPartNumbers(this.itemMasterId, this.partName)
+								if (this.stocklineId > 0 && this.qty > 0) {
+									this.addAvailableStocklineAddPArt(this.stocklineId, this.qty)
+								}
 								this.adddefaultpart = false;
 								this.isSpinnerVisible = false;
 							}
@@ -1425,6 +1492,10 @@ export class RoSetupComponent implements OnInit {
 		this.arraySOlist.push(id);
 	}
 
+	onRevisedPnSelect(id) {
+		this.arrayrevisedPartlist.push(id);
+	}
+
 	// private salesStockRefData() {		
 	// 		if(this.salesOrderReferenceData){
 	//             this.newObjectForParent.partNumberId = {value: this.salesOrderReferenceData.itemMasterId, label: this.salesOrderReferenceData.partNumber};
@@ -1571,31 +1642,45 @@ export class RoSetupComponent implements OnInit {
 			}
 			if (this.headerInfo.statusId == this.roFulfillingstatusID) {
 				this.disableAddPart = true;
-			} else {
+			}
+			else {
 				this.disableAddPart = false;
 			}
 			this.enableHeaderSaveBtn = false;
 			this.capvendorId = res.vendorId;
+
+
 			if (this.rosettingModel.IsEnforceApproval) {
 				this.disableROStatus = true;
-			}
-			else {
 				if (this.headerInfo.openDate
 					&& this.rosettingModel.effectivedate
-					&& new Date(this.headerInfo.openDate) > new Date(this.rosettingModel.effectivedate)) {
+					&& new Date(this.headerInfo.openDate) <= new Date(this.rosettingModel.effectivedate)
+					&& this.rosettingModel.IsEnforceApproval) {
 					this.rosettingModel.IsEnforceApproval = false;
 					this.disableROStatus = false;
 				}
-				else if (this.headerInfo.openDate
-					&& this.rosettingModel.effectivedate
-					&& new Date(this.headerInfo.openDate) < new Date(this.rosettingModel.effectivedate)) {
-					this.rosettingModel.IsEnforceApproval = true;
-					this.disableROStatus = true;
-				}
-				else {
-					this.disableROStatus = true;
-				}
 			}
+
+			// if (this.rosettingModel.IsEnforceApproval) {
+			// 	this.disableROStatus = true;
+			// }
+			// else {
+			// 	if (this.headerInfo.openDate
+			// 		&& this.rosettingModel.effectivedate
+			// 		&& new Date(this.headerInfo.openDate) > new Date(this.rosettingModel.effectivedate)) {
+			// 		this.rosettingModel.IsEnforceApproval = false;
+			// 		this.disableROStatus = false;
+			// 	}
+			// 	else if (this.headerInfo.openDate
+			// 		&& this.rosettingModel.effectivedate
+			// 		&& new Date(this.headerInfo.openDate) < new Date(this.rosettingModel.effectivedate)) {
+			// 		this.rosettingModel.IsEnforceApproval = true;
+			// 		this.disableROStatus = true;
+			// 	}
+			// 	else {
+			// 		this.disableROStatus = true;
+			// 	}
+			// }
 
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -1624,6 +1709,7 @@ export class RoSetupComponent implements OnInit {
 			data[0].map((x, pindex) => {
 				this.newPartsList = {
 					...x,
+					quantityReserved: x.quantityReserved,
 					partNumberId: { value: x.itemMasterId, label: x.partNumber },
 					ifSplitShip: x.roPartSplits.length > 0 ? true : false,
 					partNumber: x.partNumber,
@@ -1647,8 +1733,16 @@ export class RoSetupComponent implements OnInit {
 					isApproved: x.isApproved ? x.isApproved : false,
 					childList: this.getRepairOrderSplitPartsEdit(x, pindex, data[1]),
 					remQty: 0,
-					stocklineId: x.stocklineId
+
+					revisedPartId: x.revisedPartId && x.revisedPartId > 0 ? getObjectById('itemMasterId', x.revisedPartId, this.revisedPartNumCollection) : getObjectById('itemMasterId', 0, this.revisedPartNumCollection),
+					vendorQuoteNoId: getObjectById('value', x.vendorQuoteNoId == null ? 0 : x.vendorQuoteNoId, this.allSalesOrderDetails),
+					workPerformedId: getObjectById('value', x.workPerformedId == null ? 0 : x.workPerformedId, this.workPerformedCollection),
+					estRecordDate: x.estRecordDate ? new Date(x.estRecordDate) : '',
+					vendorQuoteDate: x.vendorQuoteDate ? new Date(x.vendorQuoteDate) : '',
+					//acTailNum : x.acTailNum ? getObjectByValue ('label', x.acTailNum, this.acTailNumCollection) : null,	
+					acTailNum: x.acTailNum,
 				}
+
 				this.getManagementStructureForParentPart(this.newPartsList, data[1], data[3]);
 
 				if (this.newPartsList.childList && this.newPartsList.childList.length > 0) {
@@ -1826,15 +1920,15 @@ export class RoSetupComponent implements OnInit {
 				this.partWithId = data1[0];
 				parentdata.partId = this.partWithId.itemMasterId;
 				parentdata.partDescription = this.partWithId.partDescription;
-				parentdata.minimumOrderQuantity = this.partWithId.minimumOrderQuantity;
+				parentdata.minimumOrderQuantity = this.partWithId.quantityAvailable;
 				parentdata.itemTypeId = this.partWithId.itemTypeId;
 				parentdata.stockType = this.partWithId.stockType;
 				parentdata.manufacturerId = this.partWithId.manufacturerId;
-				parentdata.manufacturerName = this.partWithId.name;
+				parentdata.manufacturerName = this.partWithId.manufacturer;
 				parentdata.glAccountId = this.partWithId.glAccountId;
 				parentdata.glAccountName = this.partWithId.glAccount;
 				parentdata.UOMId = this.partWithId.purchaseUnitOfMeasureId;
-				parentdata.UOMShortName = this.partWithId.shortName;
+				parentdata.UOMShortName = this.partWithId.unitOfMeasure;
 				parentdata.partNumber = this.partWithId.partNumber;
 				parentdata.itemMasterId = this.partWithId.itemMasterId;
 				parentdata.altPartCollection = this.partWithId.altPartNumList.map(x => {
@@ -1846,13 +1940,18 @@ export class RoSetupComponent implements OnInit {
 				} else if (this.altPartNumList.length > 0) {
 					parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
 				}
-				this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId, this.authService.currentUser.masterCompanyId).subscribe(resp => {
-					parentdata.allStocklineDetails = resp;
-					if (parentdata.stockLineId) {
-						parentdata.stocklineId = getObjectById('stockLineId', parentdata.stockLineId, parentdata.allStocklineDetails);
-					}
-					this.getStockLineDetails(parentdata);
-				}, err => { const errorLog = err; });
+				parentdata.controlId = this.partWithId.idNumber;
+				parentdata.purchaseOrderNum = '';
+				parentdata.controlNumber = this.partWithId.controlNumber;
+				parentdata.stocklineId = { stocklineId: this.partWithId.stockLineId, stockLineNumber: this.partWithId.stockLineNumber };
+				//bind stock line
+				// this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId, this.authService.currentUser.masterCompanyId).subscribe(resp => {
+				// 	parentdata.allStocklineDetails = resp;
+				// 	if (parentdata.stockLineId) {
+				// 		parentdata.stocklineId = getObjectById('stockLineId', parentdata.stockLineId, parentdata.allStocklineDetails);
+				// 	}
+				//this.getStockLineDetails(parentdata);
+				// }, err => { const errorLog = err; });
 
 				// if(parentdata.conditionId && value != 'onEdit') {
 				// 	this.getStockLineByItemMasterId(parentdata);
@@ -2004,7 +2103,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	getStoclineetailsById() {
-		if (this.stocklineconditionId.length > 0 && this.stocklinepartNumberId.value) {
+		if (this.stocklineconditionId && this.stocklineconditionId.length > 0 && this.stocklinepartNumberId.value) {
 			this.searchstocklinepart = false;
 			this.stocklineData = [];
 			this.getStocklineparts();
@@ -2029,6 +2128,52 @@ export class RoSetupComponent implements OnInit {
 	}
 
 
+	getPNDetailsByStocklineId(parentdata, value?) {
+		this.showInput = true;
+		const itemMasterId = getValueFromObjectByKey('value', parentdata.partNumberId)
+		this.sourcePoApproval.itemMasterId = itemMasterId;
+		this.partWithId = [];
+		this.altPartNumList = [];
+		this.altPartNumList = parentdata.x.altPartNumList;
+		parentdata.needByDate = this.headerInfo.needByDate;
+		parentdata.estRecordDate = this.headerInfo.needByDate;
+		parentdata.conditionId = parentdata.x.conditionId;
+		parentdata.priorityId = this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null;
+		parentdata.quantityOrdered = parentdata.x.quantityAvailable;
+		parentdata.workOrderId = null;
+		parentdata.repairOrderId = null;
+		parentdata.salesOrderId = null;
+		parentdata.memo = null;
+		parentdata.altEquiPartNumberId = null;
+		this.itemTypeId = 1;
+		parentdata.partId = parentdata.x.itemMasterId;
+		parentdata.minimumOrderQuantity = parentdata.x.quantityAvailable;
+		parentdata.partDescription = parentdata.x.partDescription;
+		parentdata.itemTypeId = parentdata.x.itemTypeId;
+		parentdata.stockType = parentdata.x.stockType;
+		parentdata.manufacturerId = parentdata.x.manufacturerId;
+		parentdata.manufacturerName = parentdata.x.manufacturer;
+		parentdata.glAccountId = parentdata.x.glAccountId;
+		parentdata.glAccountName = parentdata.x.glAccount;
+		parentdata.UOMId = parentdata.x.purchaseUnitOfMeasureId;
+		parentdata.UOMShortName = parentdata.x.unitOfMeasure;
+		parentdata.vendorListPrice = 0;
+		parentdata.unitCost = parentdata.x.purchaseOrderUnitCost;
+		parentdata.discountPercent = 0;
+		parentdata.discountPerUnit = formatNumberAsGlobalSettingsModule(0, 2);
+		this.onGetDiscPerUnit(parentdata);
+		this.onGetDiscAmount(parentdata);
+		this.onGetExtCost(parentdata);
+		if (this.altPartNumList && this.altPartNumList.length > 0) {
+			parentdata.altPartCollection = parentdata.x.altPartNumList.map(x => {
+				return { value: x.altEquiPartNumberId, label: x.altEquiPartNumber }
+			});
+			parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
+		}
+	}
+
+
+
 	getPNDetailsById(parentdata, value?) {
 		this.showInput = true;
 		const itemMasterId = getValueFromObjectByKey('value', parentdata.partNumberId)
@@ -2038,6 +2183,7 @@ export class RoSetupComponent implements OnInit {
 		parentdata.altEquiPartNumberId = null;
 		if (value != 'onEdit') {
 			parentdata.needByDate = this.headerInfo.needByDate;
+			parentdata.estRecordDate = this.headerInfo.needByDate;
 			parentdata.conditionId = this.defaultCondtionId;
 			parentdata.priorityId = this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null;
 			parentdata.quantityOrdered = '0';
@@ -2575,9 +2721,31 @@ export class RoSetupComponent implements OnInit {
 		this.loadSalesOrderList();
 		this.loapartItems();
 		this.loadModuleListForVendorComp();
+		this.getAllrevisedPart();
+		this.getAllworkPerformed();
+		this.getAllACTailNum('');
 	}
 
-	saveRepairOrderHeader() {
+	CloseModel(status) {
+		this.modal.close();
+		if (status) {
+			this.saveRepairOrderHeader('');
+		}
+		else {
+			this.headerInfo.statusId = this.openStatusId;
+			this.enableHeaderSaveBtn = true;
+		}
+	}
+
+	saveRepairOrderHeader(roConfirm) {
+
+		if (roConfirm != '') {
+			if (this.headerInfo.statusId == this.fulfillingStatusId) {
+				this.modal = this.modalService.open(roConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
+				return;
+			}
+		}
+
 		if (this.createROForm.invalid ||
 			this.headerInfo.companyId == 0
 			|| this.headerInfo.companyId == null) {
@@ -2668,6 +2836,9 @@ export class RoSetupComponent implements OnInit {
 						`Updated RO Header Successfully`,
 						MessageSeverity.success
 					);
+					if (headerInfoObj.statusId == this.fulfillingStatusId) {
+						this.route.navigate(['/vendorsmodule/vendorpages/app-ro-list']);
+					}
 				}, err => {
 					this.isSpinnerVisible = false;
 					this.toggle_ro_header = true;
@@ -2676,26 +2847,38 @@ export class RoSetupComponent implements OnInit {
 			}
 			this.toggle_ro_header = false;
 			this.enableHeaderSaveBtn = false;
+
 			if (this.rosettingModel.IsEnforceApproval) {
 				this.disableROStatus = true;
-			}
-			else {
-				if (headerInfoObj.openDate
+				if (this.headerInfo.openDate
 					&& this.rosettingModel.effectivedate
-					&& new Date(headerInfoObj.openDate) > new Date(this.rosettingModel.effectivedate)) {
+					&& new Date(this.headerInfo.openDate) <= new Date(this.rosettingModel.effectivedate)
+					&& this.rosettingModel.IsEnforceApproval) {
 					this.rosettingModel.IsEnforceApproval = false;
 					this.disableROStatus = false;
 				}
-				else if (headerInfoObj.openDate
-					&& this.rosettingModel.effectivedate
-					&& new Date(headerInfoObj.openDate) < new Date(this.rosettingModel.effectivedate)) {
-					this.rosettingModel.IsEnforceApproval = true;
-					this.disableROStatus = true;
-				}
-				else {
-					this.disableROStatus = true;
-				}
 			}
+
+			// if (this.rosettingModel.IsEnforceApproval) {
+			// 	this.disableROStatus = true;
+			// }
+			// else {
+			// 	if (headerInfoObj.openDate
+			// 		&& this.rosettingModel.effectivedate
+			// 		&& new Date(headerInfoObj.openDate) > new Date(this.rosettingModel.effectivedate)) {
+			// 		this.rosettingModel.IsEnforceApproval = false;
+			// 		this.disableROStatus = false;
+			// 	}
+			// 	else if (headerInfoObj.openDate
+			// 		&& this.rosettingModel.effectivedate
+			// 		&& new Date(headerInfoObj.openDate) < new Date(this.rosettingModel.effectivedate)) {
+			// 		this.rosettingModel.IsEnforceApproval = true;
+			// 		this.disableROStatus = true;
+			// 	}
+			// 	else {
+			// 		this.disableROStatus = true;
+			// 	}
+			// }
 		}
 	}
 
@@ -2748,15 +2931,27 @@ export class RoSetupComponent implements OnInit {
 
 			if (this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
-				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
+				&& this.partListData[i].quantityOrdered > this.partListData[i].minimumOrderQuantity) {
 				this.partListData[i].quantityOrdered = this.partListData[i].minimumOrderQuantity;
 				this.isSpinnerVisible = false;
-				errmessage = errmessage + '<br />' + 'Minimum Order Qty : ' + this.partListData[i].minimumOrder + '<br /> Order quantity can not be less then Minimum order quantity.'
+				errmessage = errmessage + '<br />' + 'StockLine Qty Available : ' + this.partListData[i].minimumOrder + '<br /> Order quantity can not be more then available quantity.'
 			}
 			if (!this.partListData[i].itemMasterId) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "PN is required."
 			}
+			// if (!this.partListData[i].revisedPartId) {
+			// 	this.isSpinnerVisible = false;
+			// 	errmessage = errmessage + '<br />' + "Revised Part Number is required."
+			// }
+			if (!this.partListData[i].workPerformedId) {
+				this.isSpinnerVisible = false;
+				errmessage = errmessage + '<br />' + "Work to Perform is required."
+			}
+			// if (!this.partListData[i].acTailNum) {
+			// 	this.isSpinnerVisible = false;
+			// 	errmessage = errmessage + '<br />' + "Account Tail Number is required."
+			// }
 			if (!this.partListData[i].priorityId) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Priority is required."
@@ -2788,6 +2983,11 @@ export class RoSetupComponent implements OnInit {
 			if (!this.partListData[i].managementStructureId || this.partListData[i].managementStructureId == 0) {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Management Structure is required."
+			}
+			var Qty = 0;
+			var childQty = 0;
+			if (this.partListData[i].quantityOrdered) {
+				Qty = this.partListData[i].quantityOrdered ? parseInt(this.partListData[i].quantityOrdered.toString().replace(/\,/g, '')) : 0;
 			}
 			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
 				for (let j = 0; j < this.partListData[i].childList.length; j++) {
@@ -2832,9 +3032,18 @@ export class RoSetupComponent implements OnInit {
 						this.isSpinnerVisible = false;
 						errmessage = errmessage + '<br />' + "Split Shipment Need By is required."
 					}
-
+					if (this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered > 0) {
+						childQty = childQty + parseInt(this.partListData[i].childList[j].quantityOrdered.toString().replace(/\,/g, ''));
+					}
 				}
 			}
+			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
+				if (Qty != childQty) {
+					this.isSpinnerVisible = false;
+					errmessage = errmessage + '<br />' + "Part Qty Order and Sum of Split Shipment Qty Ordered Shipment should be same."
+				}
+			}
+
 			if (errmessage != '') {
 				var message = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + errmessage
 				this.alertService.showStickyMessage("Validation failed", message, MessageSeverity.error, 'Please enter Qty');
@@ -2938,10 +3147,11 @@ export class RoSetupComponent implements OnInit {
 			this.parentObject = {
 				repairOrderId: this.roId,
 				isParent: true,
+				quantityReserved: this.partListData[i].quantityReserved,
 				itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				//partNumber : this.partListData[i].itemMasterId ? this.getPartnumber(this.partListData[i].itemMasterId) : null,
 				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getValueFromObj(this.partListData[i].altEquiPartNumberId) : null,
-				//altPartNumber : this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumer(this.partListData[i].altEquiPartNumberId) : null,
+				//altPartNumber : this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumer(this.partListData[i].altEquiPartNumberId) : null,				
 				assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
 				partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				itemTypeId: this.partListData[i].itemTypeId ? this.partListData[i].itemTypeId : 0,
@@ -2973,7 +3183,7 @@ export class RoSetupComponent implements OnInit {
 				//reapairOrderNo: this.partListData[i].repairOrderId && this.getValueFromObj(this.partListData[i].repairOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].repairOrderId) : null,				
 				salesOrderId: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getValueFromObj(this.partListData[i].salesOrderId) : null,
 				//salesOrderNo: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].salesOrderId) : null,				
-				stocklineId: this.partListData[i].stocklineId ? this.getValueByStocklineObj(this.partListData[i].stocklineId) : null,
+				stockLineId: this.partListData[i].stocklineId ? this.getValueByStocklineObj(this.partListData[i].stocklineId) : null,
 				//stocklineId: 1,
 				managementStructureId: this.partListData[i].managementStructureId && this.partListData[i].managementStructureId != 0 ? this.partListData[i].managementStructureId : null,
 				memo: this.partListData[i].memo,
@@ -2983,7 +3193,17 @@ export class RoSetupComponent implements OnInit {
 				createdBy: this.userName,
 				updatedBy: this.userName,
 				employeeID: this.employeeId ? this.employeeId : 0,
+
+				revisedPartId: this.partListData[i].revisedPartId ? editValueAssignByCondition('itemMasterId', this.partListData[i].revisedPartId) : null,
+				workPerformedId: this.partListData[i].workPerformedId ? this.getValueFromObj(this.partListData[i].workPerformedId) : null,
+				estRecordDate: this.datePipe.transform(this.partListData[i].estRecordDate, "MM/dd/yyyy"),
+				//vendorQuoteNoId: this.partListData[i].vendorQuoteNoId ? this.getValueFromObj(this.partListData[i].vendorQuoteNoId) : null,
+				//vendorQuoteDate: this.partListData[i].vendorQuoteDate ? this.datePipe.transform(this.partListData[i].vendorQuoteDate, "MM/dd/yyyy") : null,
+				vendorQuoteNoId: null,
+				vendorQuoteDate: null,
+				acTailNum: this.partListData[i].acTailNum ? this.partListData[i].acTailNum : null,
 			}
+
 			if (!this.isEditMode) {
 				this.parentObjectArray.push({
 					...this.parentObject,
@@ -3245,6 +3465,101 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
+	addAvailableStocklineAddPArt(stocklineId, qty) {
+		this.tempNewPNArray = [];
+		let newParentObject = new CreatePOPartsList()
+		///New Api
+		this.stocklineService.GetAllStocklineByPartCondtionAndStockline(stocklineId, this.currentUserMasterCompanyId).subscribe(res => {
+			this.stocklineData = res.map(x => {
+				return {
+					...x,
+					addAllMultiStocklineRows: false,
+					disableStockline: false,
+				}
+			})
+
+			if (this.stocklineData) {
+				const data = this.stocklineData.map(x => {
+					const newObject = {
+						...newParentObject,
+						partNumberId: { value: x.itemMasterId, label: x.partNumber },
+						needByDate: this.headerInfo.needByDate,
+						estRecordDate: this.headerInfo.needByDate,
+						conditionId: x.conditionId,
+						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+						discountPercent: 0,
+						itemMasterId: x.itemMasterId,
+						controlId: x.idNumber,
+						controlNumber: x.controlNumber,
+						acTailNum: x.aircraftTailNumber,
+						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
+						x,
+						workOrderId: getObjectById('value', this.workOrderId == null ? 0 : this.workOrderId, this.allWorkOrderDetails),
+						subWorkOrderId: this.subWorkOrderId,
+						//subWorkOrderId: getObjectById('value', this.subWorkOrderId == null ? 0 : this.subWorkOrderId, this.allSalesOrderInfo),
+						//salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),						
+					}
+					this.getManagementStructureForParentEdit(newObject);
+					this.getPNDetailsByStocklineId(newObject);
+					//this.getStockLineByItemMasterId(newObject);
+					this.partListData = [...this.partListData, newObject]
+					this.enablePartSave();
+				})
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (!this.partListData[i].ifSplitShip) {
+						this.partListData[i].childList = [];
+					}
+				}
+				if (this.partListData.length > 0) {
+					this.partListData[0].quantityOrdered = qty;
+				}
+			}
+			this.partNumbers = null;
+			this.addAllMultiPN = false;
+			this.addAllMultiStockline = false;
+		})
+	}
+
+	addAvailableStockline() {
+		this.tempNewPNArray = [];
+		let newParentObject = new CreatePOPartsList()
+		if (this.stocklineData) {
+			const data = this.stocklineData.map(x => {
+				if (x.addAllMultiStocklineRows) {
+					const newObject = {
+						...newParentObject,
+						partNumberId: { value: x.itemMasterId, label: x.partNumber },
+						needByDate: this.headerInfo.needByDate,
+						estRecordDate: this.headerInfo.needByDate,
+						conditionId: x.conditionId,
+						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+						discountPercent: 0,
+						itemMasterId: x.itemMasterId,
+						controlId: x.idNumber,
+						controlNumber: x.controlNumber,
+						acTailNum: x.aircraftTailNumber,
+						stocklineId: { stocklineId: x.stockLineId, stockLineNumber: x.stockLineNumber },
+						x
+					}
+					this.getManagementStructureForParentEdit(newObject);
+					this.getPNDetailsByStocklineId(newObject);
+					//this.getStockLineByItemMasterId(newObject);
+					this.partListData = [...this.partListData, newObject]
+					this.enablePartSave();
+				}
+			})
+
+			for (let i = 0; i < this.partListData.length; i++) {
+				if (!this.partListData[i].ifSplitShip) {
+					this.partListData[i].childList = [];
+				}
+			}
+		}
+		this.partNumbers = null;
+		this.addAllMultiPN = false;
+		this.addAllMultiStockline = false;
+	}
+
 	addAvailableParts() {
 		this.tempNewPNArray = [];
 		let newParentObject = new CreatePOPartsList()
@@ -3256,6 +3571,7 @@ export class RoSetupComponent implements OnInit {
 						...newParentObject,
 						partNumberId: { value: x.itemMasterId, label: x.partNumber },
 						needByDate: this.headerInfo.needByDate,
+						estRecordDate: this.headerInfo.needByDate,
 						conditionId: this.defaultCondtionId,
 						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 						discountPercent: 0,
@@ -3276,6 +3592,7 @@ export class RoSetupComponent implements OnInit {
 		}
 		this.partNumbers = null;
 		this.addAllMultiPN = false;
+		this.addAllMultiStockline = false;
 	}
 
 	onChangeAddAllMultiPN(event) {
@@ -3293,6 +3610,48 @@ export class RoSetupComponent implements OnInit {
 			}
 		}
 		this.onChangeAddEachMultiPN();
+	}
+
+	onChangeAddAllMultiStockLine(event) {
+		if (event.target.checked) {
+			if (this.stocklineData) {
+				for (let i = 0; i < this.stocklineData.length; i++) {
+					this.stocklineData[i].addAllMultiStocklineRows = true;
+				}
+			}
+		} else {
+			if (this.stocklineData) {
+				for (let i = 0; i < this.stocklineData.length; i++) {
+					this.stocklineData[i].addAllMultiStocklineRows = false;
+				}
+			}
+		}
+		this.onChangeAddstocklinePN();
+	}
+
+	onChangeAddstocklinePN() {
+		if (this.stocklineData) {
+			for (let i = 0; i < this.stocklineData.length; i++) {
+				if (this.partListData && this.partListData.length > 0) {
+					for (let j = 0; j < this.partListData.length; j++) {
+						if (this.partListData[j].stocklineId.stocklineId == this.stocklineData[i].stockLineId) {
+							this.stocklineData[i].addAllMultiStocklineRows = false;
+							this.stocklineData[i].disableStockline = true;
+						}
+					}
+				}
+			}
+			for (let i = 0; i < this.stocklineData.length; i++) {
+				if (this.stocklineData[i].addAllMultiStocklineRows) {
+					this.enableMultistocklineAddBtn = true;
+					break;
+				} else {
+					this.enableMultistocklineAddBtn = false;
+				}
+			}
+		}
+
+
 	}
 
 	onChangeAddEachMultiPN() {
@@ -3315,9 +3674,50 @@ export class RoSetupComponent implements OnInit {
 		this.enableMultiPartAddBtn = false;
 	}
 	addStockLine() {
+		this.stocklineData = [];
 		this.stocklineconditionId = null;
 		this.stocklinepartNumberId = null;
 		this.enableMultiPartAddBtn = false;
+		this.addAllMultiStockline = false;
+	}
+
+	addStockLineView(itmeMasterID, Condtionid) {
+		this.stocklineData = [];
+		this.stocklineconditionId = null;
+		this.stocklinepartNumberId = null;
+		this.enableMultiPartAddBtn = false;
+		this.addAllMultiStockline = false;
+		// this.stocklinepartNumberId = itmeMasterID;
+		// this.stocklineconditionId = Condtionid;
+		this.isSpinnerVisible = true;
+		this.stocklineData = [];
+		this.stocklineService.GetAllStocklineByPartAndCondtion(itmeMasterID, Condtionid, this.includeAlternatePartNumber, this.includeEquivalentPartNumber, this.includeRevicePartNumber, this.currentUserMasterCompanyId).subscribe(res => {
+			this.stocklineData = res.map(x => {
+				return {
+					...x,
+					addAllMultiStocklineRows: false,
+					disableStockline: false,
+				}
+			})
+			this.isSpinnerVisible = false;
+			if (this.stocklineData && this.stocklineData.length > 0) {
+				for (let i = 0; i < this.stocklineData.length; i++) {
+					if (this.partListData && this.partListData.length > 0) {
+						for (let j = 0; j < this.partListData.length; j++) {
+							if (this.partListData[j].stocklineId.stocklineId == this.stocklineData[i].stockLineId) {
+								this.stocklineData[i].disableStockline = true;
+							}
+						}
+					}
+				}
+			}
+			this.stocklinepartNumberId = this.partCollection.find((x: any) => x.value == itmeMasterID);
+			var conditiondata = this.allconditioninfo.find((x: any) => x.value == Condtionid);
+			this.stocklineconditionId = [parseInt(conditiondata["value"])];
+		}, err => {
+			this.isSpinnerVisible = false;
+			this.stocklineData = []
+		});
 	}
 
 
@@ -3328,6 +3728,7 @@ export class RoSetupComponent implements OnInit {
 		newParentObject = {
 			...newParentObject,
 			needByDate: this.headerInfo.needByDate,
+			estRecordDate: this.headerInfo.needByDate,
 			priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 			conditionId: this.defaultCondtionId,
 			discountPercent: 0
@@ -3399,11 +3800,27 @@ export class RoSetupComponent implements OnInit {
 	getStocklineparts() {
 		if (this.stocklineconditionId != null && this.stocklinepartNumberId != null && this.stocklineconditionId.length > 0) {
 			this.isSpinnerVisible = true;
-			this.newData = [];
-			this.newPNList = [];
-			this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId, this.currentUserMasterCompanyId).subscribe(res => {
-				this.stocklineData = res;
+			this.stocklineData = [];
+			this.stocklineService.GetAllStocklineByPartAndCondtion(this.stocklinepartNumberId.value, this.stocklineconditionId, this.includeAlternatePartNumber, this.includeEquivalentPartNumber, this.includeRevicePartNumber, this.currentUserMasterCompanyId).subscribe(res => {
+				this.stocklineData = res.map(x => {
+					return {
+						...x,
+						addAllMultiStocklineRows: false,
+						disableStockline: false,
+					}
+				})
 				this.isSpinnerVisible = false;
+				if (this.stocklineData && this.stocklineData.length > 0) {
+					for (let i = 0; i < this.stocklineData.length; i++) {
+						if (this.partListData && this.partListData.length > 0) {
+							for (let j = 0; j < this.partListData.length; j++) {
+								if (this.partListData[j].stocklineId.stocklineId == this.stocklineData[i].stockLineId) {
+									this.stocklineData[i].disableStockline = true;
+								}
+							}
+						}
+					}
+				}
 			}, err => {
 				this.isSpinnerVisible = false;
 				this.stocklineData = []
@@ -3437,6 +3854,7 @@ export class RoSetupComponent implements OnInit {
 			...childPart,
 			quantityOrdered: 0,
 			needByDate: partList.needByDate ? partList.needByDate : null,
+			estRecordDate: partList.estRecordDate ? partList.estRecordDate : null,
 			priorityId: partList.priorityId ? getValueFromArrayOfObjectById('label', 'value', partList.priorityId, this.allPriorityInfo) : null
 		}
 		partList.childList.push(childPart);
@@ -4118,7 +4536,7 @@ export class RoSetupComponent implements OnInit {
 		this.parentQty = event.target.value;
 		if (partList.minimumOrderQuantity > 0
 			&& this.parentQty > 0
-			&& this.parentQty < partList.minimumOrderQuantity
+			&& this.parentQty > partList.minimumOrderQuantity
 		) {
 			partList.quantityOrdered = partList.minimumOrderQuantity;
 			var childQty = 0;
@@ -4134,7 +4552,7 @@ export class RoSetupComponent implements OnInit {
 
 			this.alertService.showMessage(
 				'Error',
-				'Minimum Order Qty : ' + partList.minimumOrderQuantity + '<br /> Order quantity can not be less then Minimum order quantity.',
+				'StockLine Qty Available : ' + partList.minimumOrderQuantity + '<br /> Order quantity can not be more then available quantity.',
 				MessageSeverity.error
 			);
 			return;
@@ -4342,8 +4760,8 @@ export class RoSetupComponent implements OnInit {
 			this.disableAddPart = true;
 			this.enableHeaderSaveBtn = true;
 		} else {
-			this.disableAddPart = false;
 			this.enableHeaderSaveBtn = false;
+			this.disableAddPart = false;
 		}
 		if (this.headerInfo.statusId == this.roOpenstatusID) {
 			this.disableHeaderInfo = false;
@@ -4530,7 +4948,8 @@ export class RoSetupComponent implements OnInit {
 				this.enableHeaderSaveBtn = false;
 				if (this.headerInfo.statusId == this.roFulfillingstatusID) {
 					this.disableAddPart = true;
-				} else {
+				}
+				else {
 					this.disableAddPart = false;
 				}
 				this.isSpinnerVisible = false;
@@ -4641,14 +5060,12 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	getValueByStocklineObj(obj) {
-		if (obj.stockLineId) {
-			return obj.stockLineId;
+		if (obj.stocklineId) {
+			return obj.stocklineId;
 		} else {
 			return 0;
 		}
 	}
-
-
 
 	getStockLineDetails(partList) {
 		if (partList.stocklineId) {
@@ -4696,6 +5113,7 @@ export class RoSetupComponent implements OnInit {
 		newParentObject = {
 			...newParentObject,
 			needByDate: this.headerInfo.needByDate,
+			estRecordDate: this.headerInfo.needByDate,
 			priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 			conditionId: this.defaultCondtionId,
 			discountPercent: 0,
@@ -4772,8 +5190,489 @@ export class RoSetupComponent implements OnInit {
 			localStorage.removeItem("itemMasterId");
 			localStorage.removeItem("partNumber");
 			localStorage.removeItem("salesOrderId");
+			localStorage.removeItem("lsqty");
+			localStorage.removeItem("lsstocklineId");
+			localStorage.removeItem("lsWoId");
+			localStorage.removeItem("lsSubWoId");
 		}
 	}
 
+	arrayrevisedPartlist: any = []
+	getAllrevisedPart(strText = '') {
+		if (this.arrayrevisedPartlist.length == 0) {
+			this.arrayrevisedPartlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, false, 20, this.arrayrevisedPartlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
 
+			const data = res.map(x => {
+				return {
+					itemMasterId: x.value,
+					partNumber: x.label
+				}
+			});
+			this.allrevisedpartData = [
+				{ itemMasterId: 0, partNumber: '-- Select --' }
+			];
+			this.revisedPartNumCollection = [...this.allrevisedpartData, ...data];
+		});
+	}
+
+	filterRevisedPart(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllrevisedPart(event.query);
+		} else {
+			this.getAllrevisedPart('');
+		}
+	}
+
+	arrayworkPerformedlist: any[] = [];
+	getAllworkPerformed(strText = '') {
+		if (this.arrayworkPerformedlist.length == 0) {
+			this.arrayworkPerformedlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('WorkPerformed', 'WorkPerformedId', 'WorkPerformedCode', strText, true, 20, this.arrayworkPerformedlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.workPerformedCollection = res;
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
+	}
+
+	filterworkPerformed(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllworkPerformed(event.query);
+		} else {
+			this.getAllworkPerformed('');
+		}
+	}
+
+	arrayactailnumlist: any[] = [];
+	getAllACTailNum(strText = '') {
+		if (this.arrayactailnumlist.length == 0) {
+			this.arrayactailnumlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('Stockline', 'StockLineId', 'StockLineNumber', strText, true, 20, this.arrayactailnumlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.acTailNumCollection = res;
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
+	}
+
+	filterACTailNum(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllACTailNum(event.query);
+		} else {
+			this.getAllACTailNum('');
+		}
+	}
+
+	StockLinePopup(row) {
+		if (row.stocklineId && row.stocklineId.stocklineId > 0) {
+			this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
+			this.modal.componentInstance.stockLineId = row.stocklineId.stocklineId;
+			this.modal.result.then(() => { }, () => { });
+		} else {
+			this.alertService.showMessage(
+				'Error',
+				'StockLineID Not Found',
+				MessageSeverity.error
+			);
+		}
+	}
+
+	initiateROPrintProcess() {
+		let content = this.repairOrderPrintPopup;
+		this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+	}
+
+	closeModal() {
+		this.modal.close();
+	}
+
+	print(): void {
+		let printContents, popupWin;
+		printContents = document.getElementById('repair_order_print_content').innerHTML;
+		popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+		popupWin.document.open();
+		popupWin.document.write(`
+      <html>
+        <head>
+           <title>Repair Order</title>
+		   <style>
+		   div {
+            white-space: normal;
+          }
+          table { page-break-after:auto }
+tr    { page-break-inside:avoid; page-break-after:auto }
+td    { page-break-inside:avoid; page-break-after:auto }
+thead { display: table-row-group; }
+tfoot { display:table-footer-group }
+		   @page { size: auto;  margin: 0mm; }
+		   
+						 @media print
+			   {
+				   @page {
+				   margin-top: 0;
+				   margin-bottom: 0;
+				   }
+			   
+			   @page {size: landscape}
+			   } 
+			 span {
+			   /* font-weight: normal; */
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+						 table {font-size:12px !important,border-left:-1px !important}        
+			 table thead { background: #808080;}    
+			  
+			 table, thead, td {
+			 border: 1px solid black;
+			 border-collapse: collapse;
+		   } 
+		   table, thead, th {
+			 border: 1px solid black;
+			 border-collapse: collapse;
+		   } 
+		   .border-none{
+			 border:none;
+		   }
+		   .td-width-25{
+			width:25%;
+		  }
+		  
+		   .table-border-right tr td{
+			   border-right:1px solid black;
+		   }
+		   .border{
+			   border:1px solid black !important;
+		   }
+		   .top-table-alignment{
+			   width:100.3% !important;
+		   }
+		   .child-table-header th{
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12.5px;text-transform: capitalize;font-weight:bold;
+		   }
+			 table thead tr th 
+			 {
+			   //   background: #0d57b0 !important;
+				 padding: 5px!important;color: #fff;letter-spacing: 0.3px;font-weight:bold;
+				 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				  font-size: 12.5px;text-transform: capitalize; z-index: 1;} 
+			 table tbody{   overflow-y: auto; max-height: 500px;  }
+			 table tbody tr td{ background: #fff;
+				padding: 2px;line-height: 22px;
+				height:22px;color: #333;
+			    //  border-right:1px solid black !important;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight;normal;
+			   font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
+			 h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
+			 
+			//    .very-first-block {
+			// 	position: relative;
+			// 	min-height: 250px;
+			// 	float: left;
+			// 	height:auto;
+			//    border-right:1px solid black;
+			// 	padding-right: 2px;
+			// 	padding-left: 2px;
+			// 	width: 50% !important;
+			//   }
+			 .first-block-name{margin-right: 20px} 
+			 .first-block-sold-to {
+			   position: relative;
+			   min-height: 82px;
+			   height: auto;
+			   float: left;
+			   padding-bottom:5px;
+			   padding-right: 2px;
+			   border-right: 1px solid black;
+			   background: #fff;
+			   width: 100%;
+			   margin-top:-2px
+			  
+			 }
+			 
+			 .first-block-ship-to {
+			   position: relative;
+			   min-height: 80px;
+			   padding-bottom:5px;
+			   height: auto;
+			   padding-right: 2px;
+			   border-right: 1px solid black;
+			   background: #fff;
+			   width: 100%;
+			 
+			 }
+			 
+			 .first-block-sold {
+			   position: relative;
+			   min-height: 120px;
+			   height:auto;
+			   float: left;
+			   border-right:1px solid black;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   margin-left:-1px;
+			   width: 50%;
+			 }
+			 
+			 .first-block-ship {
+			   position: relative;
+			   min-height: 1px;
+			   float: right;
+			   padding-right: 2px;
+			  
+			   width: 49%;
+			 }
+			 
+			 .address-block {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   height:auto;
+			   padding-right: 2px;
+			   // border: 1px solid black;
+			   width: 100%;
+			   padding-left: 2px;
+			 }
+			 
+			 .first-block-address {
+			   margin-right: 20px;
+			   text-align: left
+			 }
+			 
+			 
+			 .second-block {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   width: 42%;
+			 height:auto;
+			   // border-left:1px solid black;
+				 // margin-left: 16%;
+			   padding-left: 2px;
+			   box-sizing: border-box;
+			 }
+			 
+			 .second-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			 
+			   min-height: 1px;
+			   height:auto
+			  
+			   width: 100%;
+			 }
+			 .label{
+			   font-weight:500;
+			 }
+			 
+			 .second-block-label {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				   font-size: 10.5px !important;
+				   font-weight: 700;
+			   
+				   width: 38.33333333%;
+				   text-transform: capitalize;
+				   margin-bottom: 0;
+				   text-align: left;
+			 }
+			 
+			 .clear {
+			   clear: both;
+			 }
+			 
+			 .form-div {
+			   // top: 6px;
+			   position: relative;
+			   font-weight: normal;
+			   font-size:12.5
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   // margin-top: 10px;
+			  
+			 }
+			 span {
+			   font-weight: normal;
+			   font-size: 12.5px !important;
+		   }
+			 
+			 .image {
+			   border: 1px solid #000;
+			   // padding: 5px;
+			   width: 100%;
+			   display: block;
+			 }
+			 
+			 .logo-block {
+			   margin: auto;
+			   text-align: center
+			 }
+			 
+			 .pdf-block {
+			   width: 800px;
+			   margin: auto;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-weight:normal;
+			   border: 1px solid #ccc;
+			   padding: 25px 15px;
+			 }
+			 
+			 .picked-by {
+			   position: relative;
+			   float: left;
+			   width: 48%;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+			 
+			 .confirmed-by {
+			   position: relative;
+			   float: right;
+			   width: 48%;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+			 
+			 .first-part {
+			   position: relative;
+			   display: inline;
+			   float: left;
+			   width: 50%
+			 }
+			 
+			 .seond-part {
+			   position: relative;
+			   display: flex;
+			   float: right;
+			   width: 24%
+			 }
+			 
+			 .input-field-border {
+			   width: 88px;
+			   border-radius: 0px !important;
+			   border: none;
+			   border-bottom: 1px solid black;
+			 }
+			 
+			 .border-transparent {
+			   border-block-color: white;
+			 }
+			 
+			 .pick-ticket-header {
+			   border: 1px solid black;
+			   text-align: center;
+			   background: #0d57b0 !important;
+			   color: #fff !important;
+			   -webkit-print-color-adjust: exact;
+			 }
+			 
+			 .first-block-label {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   // width: 38.33333333%;
+			   font-size:10.5px !important;
+			 
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-weight: 700;
+		   
+			   text-transform: capitalize;
+			   margin-bottom: 0;
+			   text-align: left;
+			 }
+			 
+			 .very-first-block {
+			   position: relative;
+			   min-height: 200px;
+			   float: left;
+			   height:auto;
+			  border-right:1px solid black;
+			//    padding-right: 2px;
+			//    padding-left: 2px;
+			   width: 57% !important;
+			 }
+			 
+			 .logo {
+			   padding-top: 10px;
+				   // height:70px;
+				   // width:220px;
+				   height:auto;
+				   max-width:100%;
+				   padding-bottom:10px;
+			 }
+			 
+			 .sold-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			   min-height: 1px;
+			   width: 100%;
+			 }
+			 
+			 .ship-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			   min-height: 1px;
+			   width: 100%;
+			 }
+			 .first-block-sold-bottom{
+			   border-bottom: 1px solid black;
+				   position:relative;
+				   min-height:1px;
+				   height:auto;
+				   width:100%;
+				   float:left;
+					 // margin-top: -2px;
+					// min-height: 120px;
+			 }
+			 
+			
+				.parttable th {
+					// background: #fff !important;
+					background: #f4f4f4 !important;
+					color: #000 !important;
+					-webkit-print-color-adjust: exact;
+				}
+			 table thead {
+				background: #808080;
+			   }
+			 .print-table{
+				width:100%;
+			  }
+			 .border-bottom{
+			   border-bottom:1px solid black !important;
+			 }
+			 .table-margins{
+				   margin-top:-1px;margin-left:0px
+				 }
+			 .invoice-border{
+			   border-bottom: 1px solid;
+				   position:relative;
+					 // min-height: 119px;
+					 min-height:1px;
+					 height: auto;
+					 width:100%;
+				   float:left;}
+			 
+						 </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+		);
+		popupWin.document.close();
+	}
 }

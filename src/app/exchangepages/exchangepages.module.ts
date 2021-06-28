@@ -54,6 +54,21 @@ import { ActionEndpoint } from '../Workflow/action-endpoint.service';
 import { ExchangeQuoteFreightComponent } from "../components/exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
 import { ExchangeQuoteAgreementTemplateComponent } from "../components/exchange-quote/shared/components/exchange-quote-agreement-template/exchange-quote-agreement-template.component";
 import { ExchangeQuoteViewComponent } from "../components/exchange-quote/shared/components/exchange-quote-view/exchange-quote-view.component";
+import { ExchangeSalesOrderService } from "../services/exchangesalesorder.service";
+import { ExchangeSalesOrderEndpointService } from "../services/exchangesalesorder-endpoint.service";
+import { ExchangeSalesOrderComponent } from "../components/exchange-sales-order/exchange-sales-order/exchange-sales-order.component";
+import { ExchangeSalesOrderCreateComponent } from "../components/exchange-sales-order/exchange-sales-order-create/exchange-sales-order-create.component";
+import { ExchangeSalesOrderListComponent } from "../components/exchange-sales-order/exchange-sales-order-list/exchange-sales-order-list.component";
+import { ExchangeSalesOrderPartNumberComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-part-number/exchange-sales-order-part-number.component";
+import { AddExchangeSalesOrderPartNumberComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-part-number/add-exchange-sales-order-part-number.component";
+import { ExchangeSalesOrderCustomerDetailsComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-part-number/exchange-sales-order-customer-details/exchange-sales-order-customer-details.component";
+import { ExchangeSalesOrderPartDetailsComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-part-number/exchange-sales-order-part-details/exchange-sales-order-part-details.component";
+import { ExchangeSalesOrderPartNumberFilterComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-part-number/exchange-sales-order-part-number-filter/exchange-sales-order-part-number-filter.component";
+import { ExchangeSalesOrderMarginComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-margin/exchange-sales-order-margin.component";
+import { AddExchangeSalesOrderReserveUnreservePartNumberComponent } from "../components/exchange-sales-order/shared/components/add-exchange-sales-order-reserve-unreserve-part-number/add-exchange-sales-order-reserve-unreserve-part-number.component";
+import { ExchangeSalesOrderPickTicketsComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-pick-tickets/exchange-sales-order-pick-tickets.component";
+import { ExchangeSalesOrderPickTicketComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-pick-ticket/exchange-sales-order-pick-ticket.component";
+import { ExchangeSalesOrderMultiPickTicketComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-multi-pickTicket/exchange-sales-order-multi-pickTicket.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -110,9 +125,22 @@ import { ExchangeQuoteViewComponent } from "../components/exchange-quote/shared/
     ExchangeQuoteChargesComponent,
     ExchangeQuoteFreightComponent,
     ExchangeQuoteAgreementTemplateComponent,
-    ExchangeQuoteViewComponent
+    ExchangeQuoteViewComponent,
+    ExchangeSalesOrderComponent,
+    ExchangeSalesOrderCreateComponent,
+    ExchangeSalesOrderListComponent,
+    ExchangeSalesOrderPartNumberComponent,
+    AddExchangeSalesOrderPartNumberComponent,
+    ExchangeSalesOrderCustomerDetailsComponent,
+    ExchangeSalesOrderPartDetailsComponent,
+    ExchangeSalesOrderPartNumberFilterComponent,
+    ExchangeSalesOrderMarginComponent,
+    AddExchangeSalesOrderReserveUnreservePartNumberComponent,
+    //ExchangeSalesOrderPickTicketComponent,
+    ExchangeSalesOrderPickTicketsComponent,
+    //ExchangeSalesOrderMultiPickTicketComponent
   ],
-  providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService,ActionService,ActionEndpoint],
-  entryComponents: []
+  providers: [CommonService, DatePipe, ExchangequoteService, ExchangeQuoteEndpointService, ActionService, ActionEndpoint, ExchangeSalesOrderService, ExchangeSalesOrderEndpointService],
+  //entryComponents: [ExchangeSalesOrderPickTicketComponent, ExchangeSalesOrderMultiPickTicketComponent]
 })
 export class ExchangepagesModule { }

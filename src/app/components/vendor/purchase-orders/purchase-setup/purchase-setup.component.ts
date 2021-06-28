@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ElementRef, Input } from "@angular/core";
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { CreditTermsService } from '../../../../services/Credit Terms.service';
 import { VendorService } from '../../../../services/vendor.service';
@@ -32,6 +32,7 @@ import { StocklineReferenceStorage } from '../../../stockline/shared/stockline-r
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { StatusEnum } from '../../../../enum/status.enum';
 
 @Component({
 	selector: 'app-purchase-setup',
@@ -129,7 +130,7 @@ export class PurchaseSetupComponent implements OnInit {
 	purchaseOrderId: any;
 	purchaseOrderPartRecordId: any;
 	addAllMultiPN: boolean = false;
-	disablePOStatus: boolean = true;
+	disablePOStatus: boolean = false;
 	childObject: any = {};
 	parentObject: any = {};
 	childObjectArray: any[] = [];
@@ -374,10 +375,11 @@ export class PurchaseSetupComponent implements OnInit {
 	moduleId: any = 0;
 	referenceId: any = 0;
 	moduleName: any = "PurchaseOrder";
-	itemMasterId: number;
+	itemMasterId: number = 0;
 	lsconditionId: number;
 	lsWoId: number;
 	lsSubWoId: number;
+	lsqty: number;
 	partName: string;
 	adddefaultpart: boolean = true;
 	salesOrderId: number;
@@ -385,7 +387,17 @@ export class PurchaseSetupComponent implements OnInit {
 	msgflag: number = 0;
 
 	modal: NgbModalRef;
-	alertText: string
+	alertText: string;
+
+	openStatusId: number = 0
+	pendingStatusId: number = 0
+	fulfillingStatusId: number = 0
+	closedStatusId: number = 0
+	canceledStatusId: number = 0
+	descriptionStatusId: number = 0
+	closingStatusId: number = 0
+	@ViewChild("purchaseOrderPrintPopup", { static: false }) public purchaseOrderPrintPopup: ElementRef;
+
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		private modalService: NgbModal,
@@ -414,11 +426,37 @@ export class PurchaseSetupComponent implements OnInit {
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
 		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
 		this.partName = (localStorage.getItem('partNumber'));
-		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
-		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
-		this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
-		this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
-		this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		var salesOrderId = localStorage.getItem('salesOrderId');
+		if (salesOrderId !== 'undefined' && salesOrderId !== null) {
+			this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
+		}
+		var itmmasterid = localStorage.getItem('itemMasterId');
+		if (itmmasterid !== 'undefined' && itmmasterid !== null) {
+			this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'))
+		}
+		var lsconditionId = localStorage.getItem('lsconditionId');
+		if (lsconditionId !== 'undefined' && lsconditionId !== null) {
+			this.lsconditionId = JSON.parse(localStorage.getItem('lsconditionId'));
+		}
+		var lsWoId = localStorage.getItem('lsWoId');
+		if (lsWoId !== 'undefined' && lsWoId !== null) {
+			this.lsWoId = JSON.parse(localStorage.getItem('lsWoId'));
+		}
+		var lsSubWoId = localStorage.getItem('lsSubWoId');
+		if (lsSubWoId !== 'undefined' && lsSubWoId !== null) {
+			this.lsSubWoId = JSON.parse(localStorage.getItem('lsSubWoId'));
+		}
+		var lsqty = localStorage.getItem('lsqty');
+		if (lsqty !== 'undefined' && lsqty !== null) {
+			this.lsqty = JSON.parse(localStorage.getItem('lsqty'));
+		}
+		this.openStatusId = StatusEnum.Open;
+		this.pendingStatusId = StatusEnum.Pending;
+		this.fulfillingStatusId = StatusEnum.Fulfilling;
+		this.closedStatusId = StatusEnum.Closed;
+		this.canceledStatusId = StatusEnum.Canceled;
+		this.descriptionStatusId = StatusEnum.Description;
+		this.closingStatusId = StatusEnum.Closing;
 	}
 
 	ngOnInit() {
@@ -1575,24 +1613,36 @@ export class PurchaseSetupComponent implements OnInit {
 
 			if (this.posettingModel.IsEnforceApproval) {
 				this.disablePOStatus = true;
-			}
-			else {
 				if (this.headerInfo.openDate
 					&& this.posettingModel.effectivedate
-					&& new Date(this.headerInfo.openDate) > new Date(this.posettingModel.effectivedate)) {
+					&& new Date(this.headerInfo.openDate) <= new Date(this.posettingModel.effectivedate)
+					&& this.posettingModel.IsEnforceApproval) {
 					this.posettingModel.IsEnforceApproval = false;
 					this.disablePOStatus = false;
 				}
-				else if (this.headerInfo.openDate
-					&& this.posettingModel.effectivedate
-					&& new Date(this.headerInfo.openDate) < new Date(this.posettingModel.effectivedate)) {
-					this.posettingModel.IsEnforceApproval = true;
-					this.disablePOStatus = true;
-				}
-				else {
-					this.disablePOStatus = true;
-				}
 			}
+
+
+			// if (this.posettingModel.IsEnforceApproval) {
+			// 	this.disablePOStatus = true;
+			// }
+			// else {
+			// 	if (this.headerInfo.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(this.headerInfo.openDate) > new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = false;
+			// 		this.disablePOStatus = false;
+			// 	}
+			// 	else if (this.headerInfo.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(this.headerInfo.openDate) < new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = true;
+			// 		this.disablePOStatus = true;
+			// 	}
+			// 	else {
+			// 		this.disablePOStatus = true;
+			// 	}
+			// }
 			this.capvendorId = res.vendorId;
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -2097,11 +2147,16 @@ export class PurchaseSetupComponent implements OnInit {
 
 	getTotalDiscAmount() {
 		this.totalDiscAmount = 0;
+		// this.partListData.map(x => {
+		// 	x.tempDiscAmt = x.discountAmount ? parseFloat(x.discountAmount.toString().replace(/\,/g, '')) : 0;
+		// 	this.totalDiscAmount = parseFloat(this.totalDiscAmount) + parseFloat(x.tempDiscAmt);
+		// 	this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : '0.00';
+		// })
 		this.partListData.map(x => {
 			x.tempDiscAmt = x.discountAmount ? parseFloat(x.discountAmount.toString().replace(/\,/g, '')) : 0;
-			this.totalDiscAmount = parseFloat(this.totalDiscAmount) + parseFloat(x.tempDiscAmt);
-			this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : '0.00';
+			this.totalDiscAmount += x.tempDiscAmt;
 		})
+		this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : 0.00;
 	}
 
 
@@ -2481,7 +2536,26 @@ export class PurchaseSetupComponent implements OnInit {
 		this.loadModuleListForVendorComp();
 	}
 
-	savePurchaseOrderHeader() {
+	CloseModel(status) {
+		this.modal.close();
+		if (status) {
+			this.savePurchaseOrderHeader('');
+		}
+		else {
+			this.headerInfo.statusId = this.openStatusId;
+			this.enableHeaderSaveBtn = true;
+		}
+	}
+
+	savePurchaseOrderHeader(poConfirm) {
+
+		if (poConfirm != '') {
+			if (this.headerInfo.statusId == this.fulfillingStatusId) {
+				this.modal = this.modalService.open(poConfirm, { size: 'sm', backdrop: 'static', keyboard: false });
+				return;
+			}
+		}
+
 		if (this.createPOForm.invalid ||
 			this.headerInfo.companyId == 0
 			|| this.headerInfo.companyId == null) {
@@ -2569,6 +2643,10 @@ export class PurchaseSetupComponent implements OnInit {
 						`Updated PO Header Successfully`,
 						MessageSeverity.success
 					);
+					if (headerInfoObj.statusId == this.fulfillingStatusId) {
+						this.route.navigate(['/vendorsmodule/vendorpages/app-polist']);
+					}
+
 				}, err => {
 					this.isSpinnerVisible = false;
 					this.toggle_po_header = true;
@@ -2577,26 +2655,39 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 			this.toggle_po_header = false;
 			this.enableHeaderSaveBtn = false;
+
 			if (this.posettingModel.IsEnforceApproval) {
 				this.disablePOStatus = true;
-			}
-			else {
 				if (headerInfoObj.openDate
 					&& this.posettingModel.effectivedate
-					&& new Date(headerInfoObj.openDate) > new Date(this.posettingModel.effectivedate)) {
+					&& new Date(headerInfoObj.openDate) <= new Date(this.posettingModel.effectivedate)
+					&& this.posettingModel.IsEnforceApproval) {
 					this.posettingModel.IsEnforceApproval = false;
 					this.disablePOStatus = false;
 				}
-				else if (headerInfoObj.openDate
-					&& this.posettingModel.effectivedate
-					&& new Date(headerInfoObj.openDate) < new Date(this.posettingModel.effectivedate)) {
-					this.posettingModel.IsEnforceApproval = true;
-					this.disablePOStatus = true;
-				}
-				else {
-					this.disablePOStatus = true;
-				}
 			}
+
+
+			// if (this.posettingModel.IsEnforceApproval) {
+			// 	this.disablePOStatus = true;
+			// }
+			// else {
+			// 	if (headerInfoObj.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(headerInfoObj.openDate) > new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = false;
+			// 		this.disablePOStatus = false;
+			// 	}
+			// 	else if (headerInfoObj.openDate
+			// 		&& this.posettingModel.effectivedate
+			// 		&& new Date(headerInfoObj.openDate) < new Date(this.posettingModel.effectivedate)) {
+			// 		this.posettingModel.IsEnforceApproval = true;
+			// 		this.disablePOStatus = true;
+			// 	}
+			// 	else {
+			// 		this.disablePOStatus = true;
+			// 	}
+			// }
 		}
 	}
 
@@ -2701,6 +2792,11 @@ export class PurchaseSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;
 				errmessage = errmessage + '<br />' + "Management Structure is required."
 			}
+			var Qty = 0;
+			var childQty = 0;
+			if (this.partListData[i].quantityOrdered) {
+				Qty = this.partListData[i].quantityOrdered ? parseInt(this.partListData[i].quantityOrdered.toString().replace(/\,/g, '')) : 0;
+			}
 			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
 				for (let j = 0; j < this.partListData[i].childList.length; j++) {
 
@@ -2744,8 +2840,18 @@ export class PurchaseSetupComponent implements OnInit {
 						this.isSpinnerVisible = false;
 						errmessage = errmessage + '<br />' + "Split Shipment Need By is required."
 					}
+					if (this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered > 0) {
+						childQty = childQty + parseInt(this.partListData[i].childList[j].quantityOrdered.toString().replace(/\,/g, ''));
+					}
 				}
 			}
+			if (this.partListData[i].childList && this.partListData[i].childList.length > 0) {
+				if (Qty != childQty) {
+					this.isSpinnerVisible = false;
+					errmessage = errmessage + '<br />' + "Part Qty Order and Sum of Split Shipment Qty Ordered Shipment should be same."
+				}
+			}
+
 			if (errmessage != '') {
 				var message = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + errmessage
 				this.alertService.showStickyMessage("Validation failed", message, MessageSeverity.error, 'Please enter Qty');
@@ -4478,7 +4584,25 @@ export class PurchaseSetupComponent implements OnInit {
 
 	suborderlist: any = [];
 
-	GetSubWolist(workOrderId, partList, index) {
+	GetlsSubWolistfromsession(workOrderId, subworkOrderId) {
+		this.allsubWorkOrderDetails = [];
+		this.commonService.GetSubWolist(workOrderId).subscribe(res => {
+			const data = res.map(x => {
+				return {
+					value: x.subWorkOrderId,
+					label: x.subWorkOrderNo
+				}
+			});
+			//this.suborderlist = data;
+			this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
+			this.allsubWorkOrderDetails = [...this.allsubWorkOrderInfo, ...data]
+
+		}, err => {
+			this.isSpinnerVisible = false;
+		})
+	}
+
+	GetSubWolist(workOrderId, partList, index, subWOID?) {
 		this.allsubWorkOrderDetails = [];
 		this.commonService.GetSubWolist(workOrderId).subscribe(res => {
 			const data = res.map(x => {
@@ -4491,6 +4615,9 @@ export class PurchaseSetupComponent implements OnInit {
 			this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
 			this.allsubWorkOrderDetails = [...this.allsubWorkOrderInfo, ...data]
 			partList.subWorkOrderlist = [...this.allsubWorkOrderInfo, ...data];
+			if (subWOID && subWOID > 0) {
+				partList.subWorkOrderId = getObjectById('value', this.lsSubWoId == null ? 0 : subWOID, this.allsubWorkOrderDetails);
+			}
 		}, err => {
 			this.isSpinnerVisible = false;
 		})
@@ -4545,7 +4672,7 @@ export class PurchaseSetupComponent implements OnInit {
 			discountPercent: 0,
 			partNumberId: { value: partNumberId, label: partName },
 			workOrderId: getObjectById('value', this.lsWoId == null ? 0 : this.lsWoId, this.allWorkOrderDetails),
-			subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allSalesOrderInfo),
+			subWorkOrderId: getObjectById('value', this.lsSubWoId == null ? 0 : this.lsSubWoId, this.allsubWorkOrderDetails),
 			salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
 		}
 
@@ -4610,6 +4737,12 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 		}
 		this.getPNDetailsById(newParentObject, null)
+		newParentObject.quantityOrdered = null ? 0 : this.lsqty;
+		newParentObject.conditionId = conditionid > 0 ? conditionid : this.defaultCondtionId;
+		if (this.lsWoId > 0 && this.lsSubWoId > 0) {
+			this.GetSubWolist(this.lsWoId, newParentObject, 0, this.lsSubWoId);
+		}
+		this.enablePartSave();
 
 		//}
 		//this.getRemainingAllQty();
@@ -4624,7 +4757,410 @@ export class PurchaseSetupComponent implements OnInit {
 			localStorage.removeItem("lsconditionId");
 			localStorage.removeItem("lsWoId");
 			localStorage.removeItem("lsSubWoId");
+			localStorage.removeItem("lsqty");
+
 		}
 
 	}
+
+	initiatePOPrintProcess() {
+		let content = this.purchaseOrderPrintPopup;
+		this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+	}
+
+	closeModal() {
+		this.modal.close();
+	}
+
+
+	print(): void {
+		let printContents, popupWin;
+		printContents = document.getElementById('purchase_order_print_content').innerHTML;
+		popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+		popupWin.document.open();
+		popupWin.document.write(`
+      <html>
+        <head>
+           <title>Sales Order</title>
+		   <style>
+		   div {
+            white-space: normal;
+          }
+          table { page-break-after:auto }
+tr    { page-break-inside:avoid; page-break-after:auto }
+td    { page-break-inside:avoid; page-break-after:auto }
+thead { display: table-row-group; }
+tfoot { display:table-footer-group }
+		   @page { size: auto;  margin: 0mm; }
+		   
+						 @media print
+			   {
+				   @page {
+				   margin-top: 0;
+				   margin-bottom: 0;
+				   }
+			   
+			   @page {size: landscape}
+			   } 
+			 span {
+			   /* font-weight: normal; */
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+						 table {font-size:12px !important,border-left:-1px !important}        
+			 table thead { background: #808080;}    
+			  
+			 table, thead, td {
+			 border: 1px solid black;
+			 border-collapse: collapse;
+		   } 
+		   table, thead, th {
+			 border: 1px solid black;
+			 border-collapse: collapse;
+		   } 
+		   .border-none{
+			 border:none;
+		   }
+		   .child-table-header th{
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12.5px;text-transform: capitalize;font-weight:bold;
+		   }
+		   .td-width-25{
+			width:25%;
+		  }
+		  
+		   .table-border-right tr td{
+			   border-right:1px solid black;
+		   }
+		   .border{
+			   border:1px solid black !important;
+		   }
+		   .top-table-alignment{
+			   width:100.3% !important;
+		   }
+			 table thead tr th 
+			 {
+			   //   background: #0d57b0 !important;
+				 padding: 5px!important;color: #fff;letter-spacing: 0.3px;font-weight:bold;
+				 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				  font-size: 12.5px;text-transform: capitalize; z-index: 1;} 
+			 table tbody{   overflow-y: auto; max-height: 500px;  }
+			 table tbody tr td{ background: #fff;
+				padding: 2px;line-height: 22px;
+				height:22px;color: #333;
+			    //  border-right:1px solid black !important;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight;normal;
+			   font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
+			 h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
+			 
+			//    .very-first-block {
+			// 	position: relative;
+			// 	min-height: 250px;
+			// 	float: left;
+			// 	height:auto;
+			//    border-right:1px solid black;
+			// 	padding-right: 2px;
+			// 	padding-left: 2px;
+			// 	width: 50% !important;
+			//   }
+			 .first-block-name{margin-right: 20px} 
+			 .first-block-sold-to {
+			   position: relative;
+			   min-height: 82px;
+			   height: auto;
+			   float: left;
+			   padding-bottom:5px;
+			   padding-right: 2px;
+			   border-right: 1px solid black;
+			   background: #fff;
+			   width: 100%;
+			   margin-top:-2px
+			  
+			 }
+			 
+			 .first-block-ship-to {
+			   position: relative;
+			   min-height: 80px;
+			   padding-bottom:5px;
+			   height: auto;
+			   padding-right: 2px;
+			   border-right: 1px solid black;
+			   background: #fff;
+			   width: 100%;
+			 
+			 }
+			 
+			 .first-block-sold {
+			   position: relative;
+			   min-height: 120px;
+			   height:auto;
+			   float: left;
+			   border-right:1px solid black;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   margin-left:-1px;
+			   width: 50%;
+			 }
+			 
+			 .first-block-ship {
+			   position: relative;
+			   min-height: 1px;
+			   float: right;
+			   padding-right: 2px;
+			  
+			   width: 49%;
+			 }
+			 
+			 .address-block {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   height:auto;
+			   padding-right: 2px;
+			   // border: 1px solid black;
+			   width: 100%;
+			   padding-left: 2px;
+			 }
+			 
+			 .first-block-address {
+			   margin-right: 20px;
+			   text-align: left
+			 }
+			 
+			 
+			 .second-block {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   width: 42%;
+			 height:auto;
+			   // border-left:1px solid black;
+				 // margin-left: 16%;
+			   padding-left: 2px;
+			   box-sizing: border-box;
+			 }
+			 
+			 .second-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			 
+			   min-height: 1px;
+			   height:auto
+			  
+			   width: 100%;
+			 }
+			 .label{
+			   font-weight:500;
+			 }
+			 
+			 .second-block-label {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				   font-size: 10.5px !important;
+				   font-weight: 700;
+			   
+				   width: 38.33333333%;
+				   text-transform: capitalize;
+				   margin-bottom: 0;
+				   text-align: left;
+			 }
+			 
+			 .clear {
+			   clear: both;
+			 }
+			 
+			 .form-div {
+			   // top: 6px;
+			   position: relative;
+			   font-weight: normal;
+			   font-size:12.5
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   // margin-top: 10px;
+			  
+			 }
+			 span {
+			   font-weight: normal;
+			   font-size: 12.5px !important;
+		   }
+			 
+			 .image {
+			   border: 1px solid #000;
+			   // padding: 5px;
+			   width: 100%;
+			   display: block;
+			 }
+			 
+			 .logo-block {
+			   margin: auto;
+			   text-align: center
+			 }
+			 
+			 .pdf-block {
+			   width: 800px;
+			   margin: auto;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-weight:normal;
+			   border: 1px solid #ccc;
+			   padding: 25px 15px;
+			 }
+			 
+			 .picked-by {
+			   position: relative;
+			   float: left;
+			   width: 48%;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+			 
+			 .confirmed-by {
+			   position: relative;
+			   float: right;
+			   width: 48%;
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-size: 10.5px !important;
+			   font-weight: 700;
+			 }
+			 
+			 .first-part {
+			   position: relative;
+			   display: inline;
+			   float: left;
+			   width: 50%
+			 }
+			 
+			 .seond-part {
+			   position: relative;
+			   display: flex;
+			   float: right;
+			   width: 24%
+			 }
+			 
+			 .input-field-border {
+			   width: 88px;
+			   border-radius: 0px !important;
+			   border: none;
+			   border-bottom: 1px solid black;
+			 }
+			 
+			 .border-transparent {
+			   border-block-color: white;
+			 }
+			 
+			 .pick-ticket-header {
+			   border: 1px solid black;
+			   text-align: center;
+			   background: #0d57b0 !important;
+			   color: #fff !important;
+			   -webkit-print-color-adjust: exact;
+			 }
+			 
+			 .first-block-label {
+			   position: relative;
+			   min-height: 1px;
+			   float: left;
+			   padding-right: 2px;
+			   padding-left: 2px;
+			   // width: 38.33333333%;
+			   font-size:10.5px !important;
+			 
+			   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			   font-weight: 700;
+		   
+			   text-transform: capitalize;
+			   margin-bottom: 0;
+			   text-align: left;
+			 }
+			 
+			 .very-first-block {
+			   position: relative;
+			   min-height: 200px;
+			   float: left;
+			   height:auto;
+			  border-right:1px solid black;
+			//    padding-right: 2px;
+			//    padding-left: 2px;
+			   width: 57% !important;
+			 }
+			 
+			 .logo {
+			   padding-top: 10px;
+				   // height:70px;
+				   // width:220px;
+				   height:auto;
+				   max-width:100%;
+				   padding-bottom:10px;
+			 }
+			 
+			 .sold-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			   min-height: 1px;
+			   width: 100%;
+			 }
+			 
+			 .ship-block-div {
+			   margin: 2px 0;
+			   position: relative;
+			   display: flex;
+			   min-height: 1px;
+			   width: 100%;
+			 }
+			 .first-block-sold-bottom{
+			   border-bottom: 1px solid black;
+				   position:relative;
+				   min-height:1px;
+				   height:auto;
+				   width:100%;
+				   float:left;
+					 // margin-top: -2px;
+					// min-height: 120px;
+			 }
+			 
+			
+				.parttable th {
+					// background: #fff !important;
+					background: #f4f4f4 !important;
+					color: #000 !important;
+					-webkit-print-color-adjust: exact;
+				}
+			 table thead {
+				background: #808080;
+			   }
+			 .print-table{
+				width:100%;
+			  }
+			 .border-bottom{
+			   border-bottom:1px solid black !important;
+			 }
+			 .table-margins{
+				   margin-top:-1px;margin-left:0px
+				 }
+			 .invoice-border{
+			   border-bottom: 1px solid;
+				   position:relative;
+					 // min-height: 119px;
+					 min-height:1px;
+					 height: auto;
+					 width:100%;
+				   float:left;}
+			 
+						 </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+		);
+		popupWin.document.close();
+	}
+
+
+
 }

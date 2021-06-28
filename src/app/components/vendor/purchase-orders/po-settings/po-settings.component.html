@@ -37,14 +37,13 @@
                                 (ngModelChange)="enableHeaderSave()" name="enforceApproval"></span>
                     </div>
                 </div>
-                <div class="col-md-2" *ngIf="!posettingModel.IsEnforceApproval">
-                    <div class="form-group">
-                        <label>Effective Date </label>
-                        <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar"
-                            [showIcon]="true" appendTo="body" name="effectivedate" [yearNavigator]="true"
-                            [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="posettingModel.effectivedate"
-                            (ngModelChange)="enableHeaderSave()" #startDate="ngModel"></p-calendar>
-                    </div>
+                <div class="form-group col-md-12 display-flex" style="margin-left:25px"
+                    *ngIf="posettingModel.IsEnforceApproval">
+                    <label>Effective Date </label>
+                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar"
+                        [showIcon]="true" appendTo="body" name="effectivedate" [yearNavigator]="true"
+                        [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="posettingModel.effectivedate"
+                        (ngModelChange)="enableHeaderSave()" #startDate="ngModel" required></p-calendar>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary pull-right" (click)="savePurchaseOrderSetting()"
@@ -52,7 +51,7 @@
                 </div>
             </form>
         </div>
-        <hr>
+        <!-- <hr> -->
     </div>
     <ng-template #errorMessagePop let-c="close" let-d="dismiss">
         <div class="modal-header">

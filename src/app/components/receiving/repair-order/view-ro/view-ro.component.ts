@@ -124,8 +124,7 @@ export class ViewRoComponent {
 
     getStockDetailsOnLoad() {
         this.receivingService.getReceivingROPartsForViewById(this.repairOrderId).subscribe(
-            results => {
-                console.log(results)
+            results => {               
                 this.repairOrderData = results.map(x => {
                     return {
                         ...x,  
@@ -176,6 +175,9 @@ export class ViewRoComponent {
     getTimeLifeDetails(timeLife) {
         timeLife = timeLife.map(x => {
             return {
+                x,
+                stockLineDraftId: x.stockLineDraftId,
+                timeLifeDraftCyclesId: x.timeLifeDraftCyclesId,
                 cyclesRemaining: x.cyclesRemaining ? x.cyclesRemaining : '00:00',
                 cyclesSinceInspection: x.cyclesSinceInspection ? x.cyclesSinceInspection : '00:00',
                 cyclesSinceNew: x.cyclesSinceNew ? x.cyclesSinceNew : '00:00',

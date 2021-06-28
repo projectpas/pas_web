@@ -101,7 +101,7 @@ export class SalesOrderService {
     );
   }
 
-  createBilling(salesOrderBilling: SalesOrderBillingAndInvoicing) : any {
+  createBilling(salesOrderBilling: SalesOrderBillingAndInvoicing): any {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.createBilling(salesOrderBilling)
     );
@@ -405,11 +405,9 @@ export class SalesOrderService {
     partNumberObj.updatedBy = userName;
     partNumberObj.createdOn = new Date().toDateString();
     partNumberObj.updatedOn = new Date().toDateString();
-    
+
     partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
-    partNumberObj.methodType =
-      //selectedPart.method === "Stock Line" ? "S" : "I";
-      selectedPart.stockLineId != null ? "S" : "I";
+    partNumberObj.methodType = selectedPart.methodType != undefined ? selectedPart.methodType : (selectedPart.stockLineId != null ? "S" : "I");
     partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0; //selectedPart.salesPriceExtended;
     partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0; //selectedPart.markupExtended;
     partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
@@ -480,6 +478,7 @@ export class SalesOrderService {
     partNumberObj.salesPriceExtended = selectedPart.salesBeforeDiscount;
     partNumberObj.salesDiscount = selectedPart.discount;
     partNumberObj.salesDiscountPerUnit = selectedPart.discountAmount;
+    partNumberObj.salesDiscountExtended = selectedPart.salesDiscountExtended;
     partNumberObj.netSalesPriceExtended = selectedPart.netSales;
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
     partNumberObj.quantityFromThis = selectedPart.qty;
@@ -500,16 +499,21 @@ export class SalesOrderService {
     partNumberObj.totalSales = selectedPart.totalSales;
     partNumberObj.salesOrderPartId = selectedPart.salesOrderPartId;
     partNumberObj.salesOrderId = selectedPart.salesOrderId;
-    partNumberObj.uom = selectedPart.uom;
+    partNumberObj.uomName = selectedPart.uomName;
     partNumberObj.salesQuoteNumber = salesOrderObj.salesOrderQuoteNumber;
     partNumberObj.quoteVesrion = salesOrderObj.salesOrderQuoteVersionNumber;
     if (partNumberObj.quoteVesrion) {
       partNumberObj.quoteDate = selectedPart.quoteDate;
     }
     partNumberObj.qtyReserved = selectedPart.qtyReserved;
+    partNumberObj.qtyShipped = selectedPart.qtyShipped;
     partNumberObj.quantityOnHand = selectedPart.quantityOnHand
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
-    partNumberObj.qtyToShip = selectedPart.qtyToShip;
+    partNumberObj.qtyToShip = (selectedPart.qtyToShip - selectedPart.qtyShipped);
+    partNumberObj.qtyInvoiced = selectedPart.qtyInvoiced;
+    partNumberObj.shipReference = selectedPart.shipReference;
+    partNumberObj.invoiceNumber = selectedPart.invoiceNumber;
+    partNumberObj.invoiceDate = selectedPart.invoiceDate;
     partNumberObj.idNumber = selectedPart.idNumber;
     partNumberObj.isApproved = selectedPart.isApproved;
     partNumberObj.customerRef = salesOrderObj.customerReference;
@@ -536,7 +540,7 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.deleteSoSetting(salesOrdersettingsId, updatedBy)
     );
   }
-  
+
   getAllSalesOrderSettings(masterCompanyId) {
     return this.salesOrderEndPointSevice.getAllSalesOrderSettings(masterCompanyId);
   }
@@ -695,4 +699,8 @@ export class SalesOrderService {
     );
   }
   //end --nitin
+
+  getSalesOrderParts(id, isDeleted) {
+    return this.salesOrderEndPointSevice.getSalesOrderParts(id, isDeleted);
+  }
 }

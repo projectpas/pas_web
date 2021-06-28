@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div>
-        <div >
+        <div>
             <div class="checkbox-cstm show_cst" [ngClass]="(isView) ? 'pull-right' : ''">
                 <label class="show-label">
                     <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55"
@@ -29,7 +29,7 @@
                 class="rpo-table-cstm rro-table-cstm ptable-f10" [paginator]="true">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th colspan="7"
+                        <th colspan="8"
                             style="width:650px; color: #333 !important; border: 1px solid #fff; border-right: 1px solid #e7ecf1;">
                             &nbsp;
                         </th>
@@ -39,14 +39,15 @@
                                 <div class="display-flex" style=" padding-left: 10px;">
                                     <div class="form-group"
                                         style="text-align: center; display: flex;    margin-bottom: 0px;">
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92"
+                                        <p-radioButton
+                                            class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92"
                                             name="costPlusType" label="T&M - Mark Up" value="1"
                                             [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                                         </p-radioButton>
                                         <div>
-                                            <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')"
-                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1"
-                                               >
+                                            <select class="form-group select-markup m-t-10"
+                                                (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                                                [disabled]="isView || costPlusType != 1">
                                                 <option value="" selected>Select</option>
                                                 <option *ngFor="let markUp of markupList" [value]="markUp.value">
                                                     {{markUp.label}}</option>
@@ -54,14 +55,14 @@
                                         </div>
                                     </div>
                                     <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusType"
-                                            value="2" label="Actual" [(ngModel)]="costPlusType" [disabled]="isView"
-                                            (click)="(!isView)?tmchange():''"></p-radioButton>
+                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view"
+                                            name="costPlusType" value="2" label="Actual" [(ngModel)]="costPlusType"
+                                            [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                                     </div>
                                     <div>
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusType"
-                                            value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView"
-                                            (click)="(!isView)?tmchange():''">
+                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view"
+                                            name="costPlusType" value="3" label="Flat Rate" [(ngModel)]="costPlusType"
+                                            [disabled]="isView" (click)="(!isView)?tmchange():''">
                                         </p-radioButton>
                                     </div>
                                 </div>
@@ -73,15 +74,16 @@
                                 <div class="display-flex" style=" padding-left: 10px;">
                                     <div class="form-group"
                                         style="text-align: center; display: flex;    margin-bottom: 0px;">
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92"
+                                        <p-radioButton
+                                            class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92"
                                             name="costPlusType" label="T&M - Mark Up" (ngModelChange)="validated()"
                                             value="1" [(ngModel)]="costPlusType" [disabled]="isView"
                                             (click)="tmchange()">
                                         </p-radioButton>
                                         <div>
-                                            <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')"
-                                                [(ngModel)]="overAllMarkup" (ngModelChange)="validated()"
-                                                [disabled]="isView || costPlusType != 1">
+                                            <select class="form-group select-markup m-t-10"
+                                                (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                                                (ngModelChange)="validated()" [disabled]="isView || costPlusType != 1">
                                                 <option value="" selected>Select</option>
                                                 <option *ngFor="let markUp of markupList" [value]="markUp.value">
                                                     {{markUp.label}}</option>
@@ -89,14 +91,14 @@
                                         </div>
                                     </div>
                                     <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusType"
-                                            value="2" label="Actual" [(ngModel)]="costPlusType"
+                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio"
+                                            name="costPlusType" value="2" label="Actual" [(ngModel)]="costPlusType"
                                             (ngModelChange)="validated()" [disabled]="isView" (click)="tmchange()">
                                         </p-radioButton>
                                     </div>
                                     <div>
-                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusType"
-                                            value="3" label="Flat Rate" [(ngModel)]="costPlusType"
+                                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio"
+                                            name="costPlusType" value="3" label="Flat Rate" [(ngModel)]="costPlusType"
                                             (ngModelChange)="validated()" [disabled]="isView"
                                             (click)="(!isView)?tmchange():''">
                                         </p-radioButton>
@@ -108,6 +110,7 @@
                         </ng-container>
                     </tr>
                     <tr>
+                        <th rowspan="2" class="table-column-width">Part<span class="clr-red">*</span></th>
                         <th rowspan="2" class="table-column-width">Type<span class="clr-red">*</span></th>
                         <th rowspan="2" class="table-column-width">Description</th>
                         <th rowspan="2" class="table-column-width">Qty<span class="clr-red">*</span></th>
@@ -127,10 +130,12 @@
                 <ng-template pTemplate="body" let-charge let-columns="columns" let-rowIndex="rowIndex">
                     <tr>
                         <td class="table-column-width">
+                            {{charge.partNumber}}
+                        </td>
+                        <td class="table-column-width">
                             <select class="form-control custom-select wf-pub-id" id="dllChargesType"
-                                [(ngModel)]="charge.chargesTypeId"  name="type_{{rowIndex}}"
-                                [disabled]="true">
-                                <option [value]="0">Select</option>
+                                [(ngModel)]="charge.chargesTypeId" name="type_{{rowIndex}}" [disabled]="true">
+                                <option value='-1'>--Select--</option>
                                 <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">
                                     {{
                                     ctype.chargeType
@@ -232,10 +237,19 @@
                             </div>
                         </td>
                     </tr>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td colspan="13" style="color: red; font-weight: bold; text-align: center">
+                            No records found
+                        </td>
+                    </tr>
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <tr class="footer">
                         <td class="table-column-width">Total</td>
+                        <td class="table-column-width">&nbsp;</td>
                         <td class="table-column-width">&nbsp;</td>
                         <td class="table-column-width">&nbsp;</td>
                         <td class="table-column-width">&nbsp;</td>
@@ -275,7 +289,7 @@
     </div>
 </div>
 <div id="addNewCharges" class="modal fade" role="dialog" *ngIf="!view" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
@@ -291,88 +305,106 @@
                     </span>
                 </div>
                 <div class="tab-content">
-                    <div class="table-responsive table-overflow" style="height: 110px;">
-                        <form #chargesCreateForm="ngForm">
-                            <table class="table table-bordered lastcol-fix">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2">Type<span class="clr-red">*</span></th>
-                                        <th rowspan="2">Description</th>
-                                        <th rowspan="2">Qty<span class="clr-red">*</span></th>
-                                        <th rowspan="2">Ref Num</th>
-                                        <th rowspan="2">Unit Cost<span class="clr-red">*</span></th>
-                                        <th rowspan="2">Extended Cost<span class="clr-red">*</span></th>
-                                        <th rowspan="2">Vendor Name</th>
-                                        <th rowspan="2">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let charge of chargeForm; let i = index">
-                                        <td>
-                                            <select class="form-control custom-select wf-pub-id"
-                                                (ngModelChange)="enableUpdate()" id="dllChargesType"
-                                                [(ngModel)]="charge.chargesTypeId"
-                                                class="charge-type" name="type_{{i}}"
-                                                required>
-                                                <option [value]="">Select</option>
-                                                <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">
-                                                    {{
+
+                    <form #chargesCreateForm="ngForm">
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Parts<span class="clr-red">*</span></th>
+                                            <th rowspan="2">Type<span class="clr-red">*</span></th>
+                                            <th rowspan="2">Description</th>
+                                            <th rowspan="2">Qty<span class="clr-red">*</span></th>
+                                            <th rowspan="2">Ref Num</th>
+                                            <th rowspan="2">Unit Cost<span class="clr-red">*</span></th>
+                                            <th rowspan="2">Extended Cost<span class="clr-red">*</span></th>
+                                            <th rowspan="2" style="z-index: 1;">Vendor Name</th>
+                                            <th rowspan="2">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let charge of chargeForm; let i = index">
+                                            <td>
+                                                <select class="form-control custom-select1 wf-pub-id table-column-width"
+                                                    id="dllParts" [(ngModel)]="charge.salesOrderPartId"
+                                                    (ngModelChange)="enableUpdate()" name="parts_{{i}}" required>
+                                                    <option [value]="">Select</option>
+                                                    <option [value]="part.salesOrderPartId"
+                                                        *ngFor="let part of salesOrderPartsList">{{part.partNumber}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control custom-select wf-pub-id"
+                                                    (ngModelChange)="enableUpdate()" id="dllChargesType"
+                                                    [(ngModel)]="charge.chargesTypeId" class="charge-type"
+                                                    name="type_{{i}}" required>
+                                                    <option>Select</option>
+                                                    <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">
+                                                        {{
                                                         ctype.chargeType
                                                     }}
-                                                </option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" pInputText value="{{ charge.description }}"
-                                                (ngModelChange)="enableUpdate()" [(ngModel)]="charge.description"
-                                                class="form-control" name="desc_{{i}}" />
-                                        </td>
-                                        <td>
-                                            <input type="text" pInputText pKeyFilter="pnum" maxlength="15"
-                                                (ngModelChange)="enableUpdate()" class="form-control text-right"
-                                                value="{{ charge.quantity }}" (change)="calculateExtendedCost(charge)"
-                                                [(ngModel)]="charge.quantity" name="qty_{{i}}" required />
-                                        </td>
-                                        <td>
-                                            <input type="text" pInputText maxlength="15" class="form-control"
-                                                (ngModelChange)="enableUpdate()" value="{{ charge.refNum }}"
-                                                [(ngModel)]="charge.refNum" name="refNum_{{i}}" />
-                                        </td>
-                                        <td>
-                                            <input type="text" pInputText pKeyFilter="money"
-                                                class="form-control text-right" value="{{ charge.unitCost }}"
-                                                (ngModelChange)="enableUpdate()"
-                                                (change)="calculateExtendedCost(charge)" [(ngModel)]="charge.unitCost"
-                                                name="unitCost_{{i}}" required maxlength="15" />
-                                        </td>
-                                        <td>
-                                            <input type="text" pInputText pKeyFilter="money"
-                                                class="form-control text-right" [disabled]="true"
-                                                value="{{ charge.extendedCost }}" (ngModelChange)="enableUpdate()"
-                                                [(ngModel)]="charge.extendedCost"
-                                                (change)="calculateExtendedCostSummation()" name="exd_{{i}}" required
-                                                disabled maxlength="15" />
-                                        </td>
-                                        <td>
-                                            <p-autoComplete class="autocomp-customer-cstm" name="vendorName"
-                                                (ngModelChange)="enableUpdate()" [(ngModel)]="charge.vendor"
-                                                [ngModelOptions]="{standalone: true}" [suggestions]="vendorCollection"
-                                                [forceSelection]="true" emptyMessage="No Match Found" field="vendorName"
-                                                (completeMethod)="filterVendor($event)" [size]="30" [minLength]="1"
-                                                [dropdown]="true">
-                                            </p-autoComplete>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-danger nobg" [disabled]="isEdit==true"
-                                                (click)="deleteRow(i, frieghtsCreateForm)">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </form>
-                    </div>
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText value="{{ charge.description }}"
+                                                    (ngModelChange)="enableUpdate()" [(ngModel)]="charge.description"
+                                                    class="form-control" name="desc_{{i}}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText pKeyFilter="pnum" maxlength="15"
+                                                    (ngModelChange)="enableUpdate()" class="form-control text-right"
+                                                    value="{{ charge.quantity }}"
+                                                    (change)="calculateExtendedCost(charge)"
+                                                    [(ngModel)]="charge.quantity" name="qty_{{i}}" required />
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText maxlength="15" class="form-control"
+                                                    (ngModelChange)="enableUpdate()" value="{{ charge.refNum }}"
+                                                    [(ngModel)]="charge.refNum" name="refNum_{{i}}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText pKeyFilter="money"
+                                                    class="form-control text-right" value="{{ charge.unitCost }}"
+                                                    (ngModelChange)="enableUpdate()"
+                                                    (change)="calculateExtendedCost(charge)"
+                                                    [(ngModel)]="charge.unitCost" name="unitCost_{{i}}" required
+                                                    maxlength="15" />
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText pKeyFilter="money"
+                                                    class="form-control text-right" [disabled]="true"
+                                                    value="{{ charge.extendedCost }}" (ngModelChange)="enableUpdate()"
+                                                    [(ngModel)]="charge.extendedCost"
+                                                    (change)="calculateExtendedCostSummation()" name="exd_{{i}}"
+                                                    required disabled maxlength="15" />
+                                            </td>
+                                            <td>
+                                                <p-autoComplete class="autocomp-customer-cstm" name="vendorName"
+                                                    appendTo='body' [baseZIndex]="9999" (ngModelChange)="enableUpdate()"
+                                                    [(ngModel)]="charge.vendor" [ngModelOptions]="{standalone: true}"
+                                                    [suggestions]="vendorCollection" [forceSelection]="true"
+                                                    emptyMessage="No Match Found" field="vendorName"
+                                                    (completeMethod)="filterVendor($event)" [size]="30" [minLength]="1"
+                                                    [dropdown]="true">
+                                                </p-autoComplete>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger nobg" [disabled]="isEdit==true"
+                                                    data-target="#deleteConfirmationCharges" data-toggle="modal"
+                                                    matTooltip="Delete" matTooltipPosition="above">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -401,6 +433,32 @@
         </div>
     </div>
 </div>
+<div id="deleteConfirmationCharges" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- <strong style="display: inline-flex;">
+                    Charge Type:
+                    <span class="new-label">
+                        {{selectedRowForDelete.chargeType}}
+                    </span>
+                </strong> -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="deleteRow(i, frieghtsCreateForm)">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <ng-template #contentAuditHist1 let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of Charges</h4>
@@ -409,80 +467,84 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive history_hg">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Type <span class="clr-red">*</span></th>
-                        <th>Description</th>
-                        <th>Qty <span class="clr-red">*</span></th>
-                        <th>Ref Num</th>
-                        <th>Unit Cost <span class="clr-red">*</span></th>
-                        <th>Extended Cost <span class="clr-red">*</span></th>
-                        <th>Vendor Name</th>
-                        <th>Billing Rate</th>
-                        <th>Billing Method</th>
-                        <th>Billing Amount</th>
-                        <!-- <th>Is Active</th> -->
-                        <th>Created Date</th>
-                        <th>Created By</th>
-                        <th>Updated Date</th>
-                        <th>Updated By</th>
-                        <th>Is Deleted</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let audit of chargesAudiHistory; let i = index;">
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'chargeType', audit.chargeType)  ? 'black' : 'red'  }">
-                        {{audit.chargeType}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
-                        {{audit.description}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'quantity', audit.quantity)  ? 'black' : 'red'  }">
-                        {{audit.quantity}}</td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'refNum', audit.refNum)  ? 'black' : 'red'  }">
-                        {{audit.refNum}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'unitCost', audit.unitCost)  ? 'black' : 'red'  }">
-                        {{audit.unitCost}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'extendedCost', audit.extendedCost)  ? 'black' : 'red'  }">
-                        {{audit.extendedCost}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'vendorName', audit.vendorName)  ? 'black' : 'red'  }">
-                        {{audit.vendorName}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingRate', audit.billingRate)  ? 'black' : 'red'  }">
-                        {{audit.billingRate}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">
-                        {{audit.billingMethodName}}</td>
-                    <td
-                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
-                        {{audit.billingAmount}}</td>
-                    <!-- <td style="text-align: center;">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Type <span class="clr-red">*</span></th>
+                            <th>Description</th>
+                            <th>Qty <span class="clr-red">*</span></th>
+                            <th>Ref Num</th>
+                            <th>Unit Cost <span class="clr-red">*</span></th>
+                            <th>Extended Cost <span class="clr-red">*</span></th>
+                            <th>Vendor Name</th>
+                            <th>Billing Rate</th>
+                            <th>Billing Method</th>
+                            <th>Billing Amount</th>
+                            <!-- <th>Is Active</th> -->
+                            <th>Created Date</th>
+                            <th>Created By</th>
+                            <th>Updated Date</th>
+                            <th>Updated By</th>
+                            <th>Is Deleted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let audit of chargesAudiHistory; let i = index;">
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'chargeType', audit.chargeType)  ? 'black' : 'red'  }">
+                                {{audit.chargeType}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
+                                {{audit.description}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'quantity', audit.quantity)  ? 'black' : 'red'  }">
+                                {{audit.quantity}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'refNum', audit.refNum)  ? 'black' : 'red'  }">
+                                {{audit.refNum}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'unitCost', audit.unitCost)  ? 'black' : 'red'  }">
+                                {{audit.unitCost}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'extendedCost', audit.extendedCost)  ? 'black' : 'red'  }">
+                                {{audit.extendedCost}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'vendorName', audit.vendorName)  ? 'black' : 'red'  }">
+                                {{audit.vendorName}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingRate', audit.billingRate)  ? 'black' : 'red'  }">
+                                {{audit.billingRate}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">
+                                {{audit.billingMethodName}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
+                                {{audit.billingAmount}}</td>
+                            <!-- <td style="text-align: center;">
                         <span class="value">
                             <label class="wauto">
                                 <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
                             </label>
                         </span>
                     </td> -->
-                    <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                    <td>{{audit.createdBy}}</td>
-                    <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                    <td>{{audit.updatedBy}}</td>
-                    <td class="text-center">
-                        <span class="value">
-                            <label class="wauto">
-                                <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
-                            </label>
-                        </span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                            <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                            <td>{{audit.createdBy}}</td>
+                            <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                            <td>{{audit.updatedBy}}</td>
+                            <td class="text-center">
+                                <span class="value">
+                                    <label class="wauto">
+                                        <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true"
+                                            disabled>
+                                    </label>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

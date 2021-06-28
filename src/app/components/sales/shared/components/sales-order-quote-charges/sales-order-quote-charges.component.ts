@@ -3,7 +3,7 @@ declare var $: any;
 import { AlertService, MessageSeverity } from '../../../../../services/alert.service';
 import { AuthService } from '../../../../../services/auth.service';
 import { CommonService } from '../../../../../services/common.service';
-import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition, formatStringToNumber } from '../../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition, formatStringToNumber, getValueFromArrayOfObjectById } from '../../../../../generic/autocomplete';
 import { SalesQuoteService } from '../../../../../services/salesquote.service';
 import { SalesOrderQuoteCharge } from '../../../../../models/sales/SalesOrderQuoteCharge';
 import { ActionService } from '../../../../../Workflow/ActionService';
@@ -30,6 +30,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   @Input() isQuote = false;
   @Input() markupList;
   @Input() isView: boolean = false;
+  salesOrderPartsList = [];
   shipViaList: any;
   mainEditingIndex: any;
   subEditingIndex: any;
@@ -93,11 +94,14 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
 
   refresh(isView) {
     this.isSpinnerVisible = true;
+    this.setEditArray = [];
     forkJoin(this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId, this.deletedStatusInfo),
-      this.actionService.getCharges()
+      this.salesOrderQuoteService.getSalesQuoteParts(this.salesOrderQuoteId, this.deletedStatusInfo),
+      this.actionService.getCharges(),
     ).subscribe(res => {
       this.isSpinnerVisible = false;
       this.setChargesData(res[0]);
+      this.setPartsData(res[1]);
       this.setVendors();
     }, error => {
       this.isSpinnerVisible = false;
@@ -115,7 +119,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       this.setEditArray.push(0);
     }
     const strText = value ? value : '';
-    this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
       this.chargesTypes = res.map(x => {
         return {
           chargeType: x.label,
@@ -136,14 +140,22 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
 
   restorerecord: any = {}
   setChargesData(res) {
-    if (res && res.length > 0) {
-      this.salesOrderChargesList = res;
+    //if (res && res.length > 0) {
+    if (res) {
+      this.salesOrderChargesList = res.salesOrderQuoteCharges;
       this.setVendors();
-      this.costPlusType = res[0].headerMarkupId;
-      this.overAllMarkup = res[0].headerMarkupPercentageId;
-      if (Number(this.costPlusType) == 3) {
-        this.chargesFlatBillingAmount = res[0].markupFixedPrice;
+      //this.costPlusType = res.salesOrderQuoteCharges[0].headerMarkupId;
+      this.costPlusType = res.chargesBuildMethod;
+      if (res.salesOrderQuoteCharges.length > 0) {
+        this.overAllMarkup = res.salesOrderQuoteCharges[0].headerMarkupPercentageId;
       }
+      this.chargesFlatBillingAmount = this.formateCurrency(res.chargesFlatBillingAmount);
+      // if (Number(this.costPlusType) == 3) {
+      //   this.chargesFlatBillingAmount = res[0].markupFixedPrice;
+      // }
+      this.salesOrderChargesList.forEach(ele => {
+        ele.billingAmount = this.formateCurrency(ele.billingAmount);
+      });
       this.isUpdate = true;
     } else {
       this.salesOrderChargesList = [];
@@ -151,6 +163,16 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     }
     this.chargeForm = [];
     this.salesOrderChargesLists = [];
+  }
+
+  setPartsData(res) {
+    if (res && res.length > 0) {
+      this.salesOrderPartsList = res;
+      this.isUpdate = true;
+    } else {
+      this.salesOrderPartsList = [];
+      this.isUpdate = false;
+    }
   }
 
   get userName(): string {
@@ -230,7 +252,9 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
         ...x,
         billingAmount: this.formateCurrency(x.extendedCost),
         billingRate: this.formateCurrency(x.unitCost),
-        masterCompanyId: this.currentUserMasterCompanyId
+        masterCompanyId: this.currentUserMasterCompanyId,
+        chargeType: x.chargesTypeId ? getValueFromArrayOfObjectById('chargeType', 'chargeId', x.chargesTypeId, this.chargesTypes) : '',
+        partNumber: x.salesOrderQuotePartId ? getValueFromArrayOfObjectById('partNumber', 'salesOrderQuotePartId', x.salesOrderQuotePartId, this.salesOrderPartsList) : ''
       }
     });
     if (this.isEdit) {
@@ -281,9 +305,10 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
         vendorId: editValueAssignByCondition("vendorId", f.vendor)
       }
     })
-    let result = { 'data': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
+    
+    let result = { 'salesOrderQuoteCharges': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'chargesBuildMethod': this.costPlusType, 'salesOrderQuoteId': this.salesOrderQuoteId }
     this.isSpinnerVisible = true;
-    this.salesOrderQuoteService.createSOQCharge(sendData).subscribe(result => {
+    this.salesOrderQuoteService.createSOQCharge(result).subscribe(result => {
       this.isSpinnerVisible = false;
       this.alertService.showMessage(
         '',
@@ -291,7 +316,13 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
         MessageSeverity.success
       );
       this.refreshOnDataSaveOrEditORDelete();
-      this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+      //this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+      this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId, this.deletedStatusInfo).subscribe(response => {
+        if (response && response.length > 0) {
+          this.salesOrderChargesList = response;
+          this.saveChargesListForSO.emit(this.salesOrderChargesList);
+        }
+      }, error => { });
     }, error => {
       this.isSpinnerVisible = false;
     })
@@ -479,7 +510,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       });
     }
     this.arrayVendlsit.push(0);
-    this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
+    this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
       this.allVendors = res.map(x => {
         return {
           vendorId: x.vendorId,
@@ -511,7 +542,6 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       }
     }
   }
-
 
   formatStringToNumberGlobal(val) {
     let tempValue = Number(val.toString().replace(/\,/g, ''));
@@ -599,6 +629,21 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   }
   storedData: any = [];
 
+  onChangeBillingMethod(changes) {
+    changes.markupPercentageId = '';
+    changes.billingRate = this.formateCurrency(0);
+    changes.billingAmount = this.formateCurrency(0);
+    if (changes.billingMethodId == '2') {
+      changes.billingAmount = this.formateCurrency(changes.extendedCost);
+    } else {
+      changes.billingAmount = '';
+    }
+  }
+
+  onChangeAmount(charge) {
+    charge.billingAmount = charge.billingAmount ? formatNumberAsGlobalSettingsModule(charge.billingAmount, 2) : 0.00;
+  }
+
   refreshOnDataSaveOrEditORDelete(fromDelete = false) {
     this.isSpinnerVisible = true;
     this.salesOrderChargesList = [];
@@ -629,7 +674,8 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       }
       if (fromDelete) {
         this.getTotalBillingAmount();
-        this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+        //this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+        this.updateChargesListForSO.emit(this.salesOrderChargesList);
       }
     }, error => {
       this.isSpinnerVisible = false;
