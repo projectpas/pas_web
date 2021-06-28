@@ -330,6 +330,13 @@ export class SpeedQuotePartNumberComponent {
   }
   filterParts() {
     this.summaryParts = [];
+    // var result = Array.from(Array(this.selectedParts.length).keys())
+    //               .sort((a, b) => this.selectedParts[a] > this.selectedParts[b] ? -1 : 1)
+    // var data1 = this.selectedParts.sort(function(a,b) { return a.b - b.b; });
+    var data = this.selectedParts.map((val, ind) => {return {ind, val}})
+    .sort((a, b) => {return a.val > b.val ? 1 : a.val == b.val ? 0 : -1 })
+    .map((obj) => obj.val);
+    this.selectedParts = data;
     let uniqueParts = this.getUniqueParts(this.selectedParts, 'partNumber', 'conditionId', 'pmaStatus');
     if (uniqueParts.length > 0) {
       // uniqueParts.forEach((part, i) => {

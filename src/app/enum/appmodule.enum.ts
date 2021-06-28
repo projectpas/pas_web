@@ -14,4 +14,5 @@
     RepairOrder = 14,
     WorkOrder = 15,
     ExchangeQuote = 17,
+    ExchangeSalesOrder = 18,
 }
