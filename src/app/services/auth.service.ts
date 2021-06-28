@@ -44,8 +44,8 @@ export class AuthService {
     private _loginStatus = new Subject<boolean>();
 
     public ModuleInfo: BehaviorSubject<Array<ModuleHierarchyMaster>> = new BehaviorSubject([]);
-    private defaultEmployeeDetails= new Subject<any>()
-    constructor(private router: Router, private configurations: ConfigurationService, private endpointFactory: EndpointFactory, private localStorage: LocalStoreManager,private userRoleService:UserRoleService ,private commonService:CommonService) {
+    private defaultEmployeeDetails = new Subject<any>()
+    constructor(private router: Router, private configurations: ConfigurationService, private endpointFactory: EndpointFactory, private localStorage: LocalStoreManager, private userRoleService: UserRoleService, private commonService: CommonService) {
         this.initializeLoginStatus();
     }
 
@@ -58,7 +58,7 @@ export class AuthService {
     public SetMenuInfo(newValue: ModuleHierarchyMaster[]): void {
         this.ModuleInfo.next(Object.assign([], newValue));
         this.localStorage.saveSyncedSessionData(newValue, "UserRoleModule");
-      }
+    }
     //  public  removeMenuInfo() {
     //     this.ModuleInfo.next([]);
     //   }
@@ -407,70 +407,63 @@ export class AuthService {
         return this.currentUser != null;
     }
 
-    get userRole():string{
-        if(this.currentUser!=null){
-            return this.currentUser.roleName;
-        }
-    }
-
     get rememberMe(): boolean {
         return this.localStorage.getDataObject<boolean>(DBkeys.REMEMBER_ME) == true;
     }
 
-    public async CheckSecurity(MenuInfo: BehaviorSubject<ModuleHierarchyMaster[]>, linkToCheck: string):Promise<Boolean> {
-        
-        let Menus =this.getModuleByUserRole();// MenuInfo.getValue();
+    public async CheckSecurity(MenuInfo: BehaviorSubject<ModuleHierarchyMaster[]>, linkToCheck: string): Promise<Boolean> {
+
+        let Menus = this.getModuleByUserRole();// MenuInfo.getValue();
         linkToCheck = linkToCheck.toLocaleLowerCase();
-        let isAllowed:Boolean = false;
-        if(Menus.length == 0){
-          let roleID =this.currentUser.roleID;
-          Menus= await this.getRolestypes(roleID);
+        let isAllowed: Boolean = false;
+        if (Menus.length == 0) {
+            let roleID = this.currentUser.roleID;
+            Menus = await this.getRolestypes(roleID);
         }
         Menus.forEach(el => {
-          if(el.RouterLink && el.RouterLink.toLocaleLowerCase().indexOf(linkToCheck) != -1)
-          {
-            isAllowed = true;
-          }
+            if (el.RouterLink && el.RouterLink.toLocaleLowerCase().indexOf(linkToCheck) != -1) {
+                isAllowed = true;
+            }
         });
         return isAllowed;
-      }
+    }
 
-      public async getRolestypes(roleID:string): Promise<Array<ModuleHierarchyMaster>> {
+    public async getRolestypes(roleID: string): Promise<Array<ModuleHierarchyMaster>> {
         return new Promise((resolve) => {
-            this.userRoleService.getUserMenuByRoleId(roleID).subscribe(data=>{
+            this.userRoleService.getUserMenuByRoleId(roleID).subscribe(data => {
                 resolve(data[0]);
-               
+
             })
         });
-      }
+    }
 
-      public getModuleByUserRole(){
-        return  this.localStorage.getData("UserRoleModule");
-      }
+    public getModuleByUserRole() {
+        return this.localStorage.getData("UserRoleModule");
+    }
 
-      public checkPermission(permissionName:string[]):boolean{
-        let isAllowed:boolean = false;
-        if(this.currentUser && this.currentUser.permissionName!=null){
-            
-            let getData=this.currentUser.permissionName.filter((value)=>
+    public checkPermission(permissionName: string[]): boolean {
+        let isAllowed: boolean = false;
+        if (this.currentUser && this.currentUser.permissionName != null) {
+
+            let getData = this.currentUser.permissionName.filter((value) =>
                 permissionName.includes(value));
-            isAllowed=getData.length>0;
+            isAllowed = getData.length > 0;
         }
-        
-        return isAllowed;
-      }
 
-      public ShowTab(moduleName:string, tabName: string):Boolean {         
+        return isAllowed;
+    }
+
+    public ShowTab(moduleName: string, tabName: string): Boolean {
         let Menus = this.getModuleByUserRole();
         tabName = tabName.toLocaleLowerCase();
-        let isAllowed:Boolean = false;
-        if(this.currentUser.userName!='admin'){
-            var parentModule = Menus.filter(function(value){
+        let isAllowed: Boolean = false;
+        if (this.currentUser.userName != 'admin') {
+            var parentModule = Menus.filter(function (value) {
                 return value.Name == moduleName;
             });
-            if(parentModule!=undefined && parentModule.length > 0){           
+            if (parentModule != undefined && parentModule.length > 0) {
                 Menus.forEach(el => {
-                    if(el.ParentID == parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3)){                    
+                    if (el.ParentID == parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID == 1 || el.PermissionID == 3)) {
                         isAllowed = true;
                         return isAllowed;
                     }
@@ -478,13 +471,13 @@ export class AuthService {
             }
         }
         else {
-            isAllowed=true;
+            isAllowed = true;
         }
         return isAllowed;
-      }
+    }
 
-    get userRole():string{
-        if(this.currentUser!=null){
+    get userRole(): string {
+        if (this.currentUser != null) {
             return this.currentUser.roleName;
         }
     }

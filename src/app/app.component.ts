@@ -77,7 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   managementStructure: any = {};
   moduleHierarchy: ModuleHierarchyMaster[];
   childMenu: MenuItem[] = [];
-  menuArray=[];
+  menuArray = [];
   setStep(index: number) {
     this.step = index;
   }
@@ -137,7 +137,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.toastyConfig.showClose = true;
     this.routeActive = 'active';
     this.appTitleService.appName = this.appTitle;
-  
+
   }
 
   showthis() {
@@ -163,24 +163,24 @@ export class AppComponent implements OnInit, AfterViewInit {
       menu.routerLink = module.RouterLink;
       menu.id = String(module.ID);
       menu.automationId = module.ParentID;
-      if(this.megaMenuItems.length==0){
+      if (this.megaMenuItems.length == 0) {
         this.megaMenuItems.push(menu);
       }
-      else{
-        var isDuplicate=this.megaMenuItems.filter(function(item){
-          return item.label==menu.label
+      else {
+        var isDuplicate = this.megaMenuItems.filter(function (item) {
+          return item.label == menu.label
         })
-        if(isDuplicate.length==0){
+        if (isDuplicate.length == 0) {
           this.megaMenuItems.push(menu);
         }
 
       }
-      
+
     }
-    
+
     // console.log(this.getDataByParentId(this.megaMenuItems,null));
-    
-    
+
+
     //this.megaMenuItems= this.getDataByParentId(this.megaMenuItems,null);
 
     var r = this.getDataByParentId(this.megaMenuItems, null);
@@ -204,15 +204,15 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.newVendorClick();
         } : label == "Create Employee" ? (event?: any) => {
           this.newEmployeeClick();
-        }:label == "Create Legal Entity" ? (event?: any) => {
+        } : label == "Create Legal Entity" ? (event?: any) => {
           this.newLegalEntityClick();
-        }:null
+        } : null
       })
     );
   }
 
   ngOnInit() {
-   
+
     // console.log(this.authService.currentUser.roleID);
     // this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
     //   console.log(data[0]);
@@ -1309,7 +1309,24 @@ export class AppComponent implements OnInit, AfterViewInit {
         icon: 'fa fa-fw fa-user',
         items: [
           [
-            { label: 'Roles ', routerLink: '/#' },
+            {
+              label: 'Roles ',
+              items: [
+                {
+                  label: 'Roles List',
+                  routerLink: '/rolesmodule/rolespages/edit-app-roles',
+                },
+                {
+                  label: 'Roles List by Module',
+                  routerLink:
+                    '/rolesmodule/rolespages/app-roles-list-by-module',
+                },
+                {
+                  label: 'Create Role',
+                  routerLink: '/rolesmodule/rolespages/app-roles-setup',
+                },
+              ],
+            },
             { label: 'Global Settings ', routerLink: '/#' },
             {
               label: 'Single Screen',
@@ -2717,7 +2734,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.managementStructure.departmentId = this.authService.currentManagementStructure.level4;
     }
 
-    
+
     this.isUserLoggedIn = this.authService.isLoggedIn && (this.authService.currentUser != null && this.authService.currentUser.isResetPassword != "False");
 
     this.isAppLoaded = true;
@@ -2748,27 +2765,27 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
 
       if (this.authService.currentUser != null) {
-        if(this.authService.currentUser.roleID!=undefined){
-          if(this.authService .currentUser.userName!="admin"){
-        this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
-          this.menuArray = data[0];
+        if (this.authService.currentUser.roleID != undefined) {
+          if (this.authService.currentUser.userName != "admin") {
+            this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
+              this.menuArray = data[0];
 
-          this.userRoleService.getUserTabByRoleId(this.authService.currentUser.roleID).subscribe(data=>{
-            this.authService.SetMenuInfo(data[0]);
-          });
-          //this.authService
-          this.dynamicMenu();
-        });
-          //  this.moduleHierarchy = this.authService.getModuleByUserRole();
-          //  alert(this.moduleHierarchy);
-          //  this.dynamicMenu();
-        //console.log(this.authService.getModuleByUserRole());
-      }
-      
-      }
-      else{
-        this.megaMenuItems=[];
-      }
+              this.userRoleService.getUserTabByRoleId(this.authService.currentUser.roleID).subscribe(data => {
+                this.authService.SetMenuInfo(data[0]);
+              });
+              //this.authService
+              this.dynamicMenu();
+            });
+            //  this.moduleHierarchy = this.authService.getModuleByUserRole();
+            //  alert(this.moduleHierarchy);
+            //  this.dynamicMenu();
+            //console.log(this.authService.getModuleByUserRole());
+          }
+
+        }
+        else {
+          this.megaMenuItems = [];
+        }
       }
 
       setTimeout(() => {
@@ -2783,7 +2800,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     this.subscription = this.router.events.subscribe((event) => {
-     
+
       if (event instanceof NavigationStart) {
         let url = (<NavigationStart>event).url;
 
@@ -2803,7 +2820,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  
+
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
     this.unsubscribeNotifications();
@@ -3004,12 +3021,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   logout() {
-    this.authService.logout();this.authService.redirectLogoutUser();
+    this.authService.logout(); this.authService.redirectLogoutUser();
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
-    
-    
+
+
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 

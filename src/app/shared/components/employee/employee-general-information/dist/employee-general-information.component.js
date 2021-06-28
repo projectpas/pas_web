@@ -1,56 +1,9 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function (t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function () { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
 };
 var __spreadArrays = (this && this.__spreadArrays) || function () {
     for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
@@ -74,7 +27,8 @@ var EmployeeLeaveTypeModel_1 = require("../../../../models/EmployeeLeaveTypeMode
 var db_Keys_1 = require("../../../../services/db-Keys");
 var autocomplete_1 = require("../../../../generic/autocomplete");
 var rxjs_1 = require("rxjs");
-var operators_1 = require("rxjs/operators");
+var validation_pattern_1 = require("../../../../validations/validation-pattern");
+var ModuleConstant_1 = require("src/app/generic/ModuleConstant");
 var EmployeeGeneralInformationComponent = /** @class */ (function () {
     function EmployeeGeneralInformationComponent(fb, Actroute, translationService, router, jobTypeService, jobTitleService, empservice, authService, modalService, activeModal, _fb, route, alertService, employeeService, jobTitleService1, dialog, masterComapnyService, localStorage, companyService, currencyService, commonService) {
         var _this = this;
@@ -99,6 +53,10 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.companyService = companyService;
         this.currencyService = currencyService;
         this.commonService = commonService;
+        this.dateTime = new Date();
+        this.phonePattern = validation_pattern_1.phonePattern();
+        this.yearly = false;
+        this.hourly = false;
         this.shiftValues = [];
         this.isEnableNext = false;
         this.isSpinnerVisible = false;
@@ -113,7 +71,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.disableExpTitle = true;
         this.display = false;
         this.modelValue = false;
-        this.employeeIdTemp = "create";
+        this.employeeIdTemp = "Creating";
         this.displayedColumns = ['employeeId', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
         this.allEmployeeinfo = [];
         this.allComapnies = [];
@@ -133,6 +91,10 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.divisionlist = [];
         this.Active = "Active";
         this.allAircraftManufacturer = [];
+        this.arrayExpertiselist = [];
+        this.arrayAllStationlist = [];
+        this.arraycurrencylist = [];
+        this.arraymultileavelist = [];
         this.sourceEmployee = {};
         this.updateMode = false;
         this.showMsg = false;
@@ -154,7 +116,9 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             JobTypeId: new forms_1.FormControl('JobTypeId', forms_1.Validators.minLength(1)),
             companyId: new forms_1.FormControl('companyId', [(forms_1.Validators.required, forms_1.Validators.minLength(1))]),
             startDate: new forms_1.FormControl('startDate', forms_1.Validators.minLength(1)),
-            hourlyPay: new forms_1.FormControl('hourlyPay', forms_1.Validators.required)
+            hourlyPay: new forms_1.FormControl('hourlyPay', forms_1.Validators.required),
+            email: new forms_1.FormControl('email', forms_1.Validators.required),
+            userName: new forms_1.FormControl('userName', forms_1.Validators.required)
         });
         this.selectedLeaveValuesAssigned = [];
         this.managementStructure = {
@@ -163,6 +127,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             divisionId: 0,
             departmentId: 0
         };
+        this.arrayjobtitlelist = [];
         this.disableMagmtStruct = true;
         this.legalEntityList = [];
         this.currencyObject = {};
@@ -173,10 +138,12 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.isEditContent = false;
         this.tab = new core_1.EventEmitter();
         this.onDestroy$ = new rxjs_1.Subject();
+        this.isAdd = true;
+        this.isEdit = true;
+        this.isNextVisible = true;
         this.allWorkFlows = [];
         this.displayedColumns.push('action');
         this.radioItems = ['Hourly', 'Monthly'];
-        //this.loadCompanyData();
         this.empCreationForm = fb.group({
             'firstName': [null, forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(1), this.checkfirstNameExists('firstName')])],
             'middleName': [null],
@@ -184,14 +151,13 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             'jobTitleId': [forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(1)])],
             'employeeExpertiseId': [forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(1)])],
             'JobTypeId': [0, forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(1)])],
-            //'companyId': [0, Validators.compose([Validators.required, Validators.minLength(1)])],
             'companyId': [0, forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(1)])],
-            //'startDate': [0, Validators.compose([Validators.required, Validators.minLength(1)])],
             'hourlyPay': [0, forms_1.Validators.compose([forms_1.Validators.required])],
             'BusinessUnitId': [0],
             'divisionId': [0],
             'departmentId': [0],
-            'email': [null, forms_1.Validators.compose([forms_1.Validators.pattern('[a-zA-Z0-9.-]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{3,}')])]
+            'email': [null, forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.pattern('[a-zA-Z0-9.-]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{3,}')])],
+            'userName': [null, forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.pattern('/^[a-z\d]{5,12}$/i')])]
         });
         if (this.employeeService.listCollection != null && this.employeeService.isEditMode == true) {
             this.employeeDisplayView = 'Edit Employee';
@@ -205,12 +171,15 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.Actroute.queryParams
             .filter(function (params) { return params.order; })
             .subscribe(function (params) {
-                _this.empId = params.order;
-                _this.firstName = params.firstname;
-                _this.lastName = params.lastname;
-                if (_this.empId != undefined || _this.empId != null) {
-                }
-            });
+            _this.empId = params.order;
+            _this.firstName = params.firstname;
+            _this.lastName = params.lastname;
+            if (_this.empId != undefined || _this.empId != null) {
+            }
+        });
+        this.isAdd = this.authService.checkPermission([ModuleConstant_1.ModuleConstants.Employees_GeneralInformation + '.' + ModuleConstant_1.PermissionConstants.Add]);
+        this.isEdit = this.authService.checkPermission([ModuleConstant_1.ModuleConstants.Employees_GeneralInformation + '.' + ModuleConstant_1.PermissionConstants.Update]);
+        this.isNextVisible = this.authService.ShowTab('Create Employee', 'Certification');
     }
     EmployeeGeneralInformationComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -234,33 +203,28 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.activeIndex = 0;
         this.employeeService.indexObj.next(this.activeIndex);
         this.shift();
-        // this.loadManagementdata();
-        //this.getLegalEntity();        
-        this.loadCurrencyData();
         this.loadData();
-        this.loadJobtitlesData();
-        this.loademployeesexperties();
-        this.multiLeavelist();
-        // this.loadLegalEntityData();
-        this.getAllStationData();
         this.employeeid = this.employeeService.listCollection ? this.employeeService.listCollection.employeeId : this.employeeId;
         if (this.employeeid && this.employeeid != null && this.employeeid != 0) {
             this.isEnableNext = true;
             setTimeout(function () {
                 _this.isSpinnerVisible = true;
                 _this.loadEditData();
-                _this.isSpinnerVisible = false;
             }, 1200);
-            //this.getManagementStructureDetails(this.currentUserManagementStructureId,this.loginempId);
         }
         else {
-            //this.getEmployeeData()
+            this.loadJobtitlesData('');
+            this.loademployeesexperties('');
+            this.getAllStationData('');
+            this.loadCurrencyData('');
+            this.multiLeavelist('');
             this.sourceEmployee.jobTitleId = 0;
             this.sourceEmployee.employeeExpertiseId = 0;
             this.sourceEmployee.stationId = 0;
             this.getManagementStructureDetails(this.currentUserManagementStructureId, this.loginempId);
             this.isSpinnerVisible = false;
         }
+        this.sourceEmployee.dateOfBirth = this.sourceEmployee.dateOfBirth != null ? new Date(this.sourceEmployee.dateOfBirth) : null;
     };
     EmployeeGeneralInformationComponent.prototype.getManagementStructureDetails = function (id, empployid, editMSID) {
         var _this = this;
@@ -268,7 +232,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         if (editMSID === void 0) { editMSID = 0; }
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEditMode ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(function (response) {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.currentUserMasterCompanyId).subscribe(function (response) {
             if (response) {
                 var result = response;
                 if (result[0] && result[0].level == 'Level1') {
@@ -342,8 +306,8 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             }
         }, function (err) {
             _this.isSpinnerVisible = false;
-            var errorLog = err;
-            _this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     };
     EmployeeGeneralInformationComponent.prototype.getBUList = function (legalEntityId) {
@@ -444,7 +408,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(function (response) {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId).subscribe(function (response) {
             var endResult = [];
             for (var resInd = 0; resInd < response.length; resInd++) {
                 var alreadyExist = false;
@@ -461,7 +425,8 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             if (contactName != '') {
                 _this.sourceEmployee.firstName = autocomplete_1.getObjectByValue('firstName', contactName, _this.firstCollection);
             }
-        }, function (error) { return _this.saveFailedHelper(error); });
+            // }, error => this.saveFailedHelper(error));
+        }, function (error) { return _this.isSpinnerVisible = false; });
     };
     EmployeeGeneralInformationComponent.prototype.getAllContactMiddleNameSmartDropDown = function (strText, contactName) {
         var _this = this;
@@ -470,7 +435,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('middlename', strText, true, this.arrayContactlist.join()).subscribe(function (response) {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('middlename', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId).subscribe(function (response) {
             var endResult = [];
             for (var resInd = 0; resInd < response.length; resInd++) {
                 var alreadyExist = false;
@@ -487,7 +452,8 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             if (contactName != '') {
                 _this.sourceEmployee.middleName = autocomplete_1.getObjectByValue('middleName', contactName, _this.middleNameCollection);
             }
-        }, function (error) { return _this.saveFailedHelper(error); });
+            //}, error => this.saveFailedHelper(error));
+        }, function (error) { return _this.isSpinnerVisible = false; });
     };
     EmployeeGeneralInformationComponent.prototype.getAllContactLastNameSmartDropDown = function (strText, contactName) {
         var _this = this;
@@ -496,7 +462,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('lastname', strText, true, this.arrayContactlist.join()).subscribe(function (response) {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('lastname', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId).subscribe(function (response) {
             var endResult = [];
             for (var resInd = 0; resInd < response.length; resInd++) {
                 var alreadyExist = false;
@@ -514,7 +480,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 _this.sourceEmployee.lastName = autocomplete_1.getObjectByValue('lastName', contactName, _this.lastNameCollection);
             }
             _this.isSpinnerVisible = false;
-        }, function (error) { return _this.saveFailedHelper(error); });
+        }, function (error) { return _this.isSpinnerVisible = false; });
     };
     EmployeeGeneralInformationComponent.prototype.getInactiveObjectOnEdit = function (string, id, originalData, tableName, primaryColumn, description) {
         var _this = this;
@@ -534,33 +500,14 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                     _this.allJobTitlesinfo = __spreadArrays(originalData, [obj_1]);
                 }
             }, function (err) {
-                var errorLog = err;
-                _this.errorMessageHandler(errorLog);
+                //const errorLog = err;
+                //this.errorMessageHandler(errorLog);
+                _this.isSpinnerVisible = false;
             });
             return id;
         }
         else {
             return null;
-        }
-    };
-    EmployeeGeneralInformationComponent.prototype.errorMessageHandler = function (log) {
-        this.isSpinnerVisible = false;
-        var errorLog = log;
-        if (errorLog.error) {
-            this.alertService.showMessage("Validation Failed", errorLog.error, alert_service_1.MessageSeverity.error);
-            return;
-        }
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (var i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>';
-                }
-            }
-            this.alertService.showMessage(errorLog.error.message, msg, alert_service_1.MessageSeverity.error);
-        }
-        else {
-            this.alertService.showMessage('Error', log.error, alert_service_1.MessageSeverity.error);
         }
     };
     EmployeeGeneralInformationComponent.prototype.getDetailsInactive = function (res) {
@@ -579,25 +526,20 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             if (_this.sourceEmployee.employeeId) {
                 _this.empId = _this.sourceEmployee.employeeId;
             }
-            _this.employeeIdTemp = _this.sourceEmployee.employeeId ? _this.sourceEmployee.employeeId : 'create';
-            //this.sourceEmployee.jobTitleId = this.sourceEmployee.jobTitleId;
-            //this.sourceEmployee.employeeExpertiseId = this.sourceEmployee.employeeExpertiseId;
+            _this.employeeIdTemp = _this.sourceEmployee.employeeCode ? _this.sourceEmployee.employeeCode : 'Creating';
             _this.empCreationForm.controls['JobTypeId'].setValue(_this.sourceEmployee.jobTypeId);
-            _this.supervisorId = _this.sourceEmployee.supervisorId;
+            _this.supervisorId = _this.sourceEmployee.supervisor[0];
             if (_this.employeeId) {
                 _this.sourceEmployee.startDate = new Date(_this.sourceEmployee.startDate);
             }
             else {
                 _this.sourceEmployee.startDate = new Date();
             }
-            _this.sourceEmployee.dateOfBirth = _this.sourceEmployee.dateOfBirth ? new Date(_this.sourceEmployee.dateOfBirth) : '';
+            _this.sourceEmployee.dateOfBirth = _this.sourceEmployee.dateOfBirth ? new Date(_this.sourceEmployee.dateOfBirth) : null;
             if (_this.local) {
                 _this.employeeService.employeeCollection = _this.local;
             }
             var payType = _this.sourceEmployee.isHourly;
-            if (_this.sourceEmployee.inMultipleShifts == false) {
-                _this.sourceEmployee.shiftId = _this.sourceEmployee.shiftIds[0];
-            }
             if (_this.sourceEmployee.isHourly == true) {
                 _this.hourly = true;
                 _this.yearly = false;
@@ -605,7 +547,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 _this.sourceEmployee.hourlyPay = _this.sourceEmployee.hourlyPay ? autocomplete_1.formatNumberAsGlobalSettingsModule(_this.sourceEmployee.hourlyPay, 2) : '';
                 _this.isMonthly = false;
             }
-            else {
+            if (_this.sourceEmployee.isHourly == false) {
                 _this.yearly = true;
                 _this.hourly = false;
                 _this.model = { option: 'Monthly' };
@@ -617,25 +559,61 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 _this.showsingle = false;
                 _this.showMultiple = true;
             }
-            else if (_this.employeeService.isEditMode == true) {
-                _this.sourceEmployee.singleShift = "singleShift";
-                _this.showsingle = true;
-                _this.showMultiple = false;
+            else {
+                if (_this.sourceEmployee.shiftIds && _this.sourceEmployee.shiftIds.length > 0) {
+                    _this.sourceEmployee.shiftId = _this.sourceEmployee.shiftIds[0];
+                    _this.sourceEmployee.singleShift = "singleShift";
+                    _this.showsingle = true;
+                    _this.showMultiple = false;
+                }
+                else {
+                    _this.showsingle = false;
+                    _this.showMultiple = false;
+                    _this.sourceEmployee.inMultipleShifts = null;
+                    _this.sourceEmployee.multiShift = "";
+                    _this.sourceEmployee.singleShift = "";
+                }
             }
             _this.sourceEmployee.employeeCertifyingStaff = _this.sourceEmployee.employeeCertifyingStaff;
-            // this.sourceEmployee.firstName = this.sourceEmployee.firstNameArray[0];
+            _this.sourceEmployee.firstName = _this.sourceEmployee.firstNameArray[0];
+            _this.sourceEmployee.middleName = _this.sourceEmployee.middleNameArray[0];
+            _this.sourceEmployee.lastName = _this.sourceEmployee.lastNameArray[0];
             _this.arrayContactlist.push(_this.employeeId);
-            _this.getAllContactFirstNameSmartDropDown('', _this.sourceEmployee.firstNameArray[0].firstName);
-            _this.getAllContactMiddleNameSmartDropDown('', _this.sourceEmployee.middleNameArray[0].middleName);
-            _this.getAllContactLastNameSmartDropDown('', _this.sourceEmployee.lastNameArray[0].lastName);
+            //     this.getAllContactFirstNameSmartDropDown('', this.sourceEmployee.firstNameArray[0].firstName);
+            // this.getAllContactMiddleNameSmartDropDown('', this.sourceEmployee.middleNameArray[0].middleName);
+            // this.getAllContactLastNameSmartDropDown('', this.sourceEmployee.lastNameArray[0].lastName);
             // this.sourceEmployee.middleName = this.sourceEmployee.middleNameArray[0];
             // this.sourceEmployee.lastName = this.sourceEmployee.lastNameArray[0];
             _this.sourceEmployee.currencyId = _this.sourceEmployee.currency[0];
             _this.loadingIndicator = false;
-            setTimeout(function () {
-                _this.getDetailsInactive(res);
-            }, 1200);
+            if (_this.sourceEmployee.jobTitleId && _this.sourceEmployee.jobTitleId > 0) {
+                _this.arrayjobtitlelist.push(_this.sourceEmployee.jobTitleId);
+            }
+            _this.loadJobtitlesData('');
+            if (_this.sourceEmployee.employeeExpertiseId && _this.sourceEmployee.employeeExpertiseId > 0) {
+                _this.arrayExpertiselist.push(_this.sourceEmployee.employeeExpertiseId);
+            }
+            _this.loademployeesexperties('');
+            if (_this.sourceEmployee.stationId && _this.sourceEmployee.stationId > 0) {
+                _this.arrayAllStationlist.push(_this.sourceEmployee.stationId);
+            }
+            _this.getAllStationData('');
+            if (_this.sourceEmployee.currencyId && _this.sourceEmployee.currencyId > 0) {
+                _this.arraycurrencylist.push(_this.sourceEmployee.currencyId);
+            }
+            _this.loadCurrencyData('');
+            if (_this.sourceEmployee.leaveTypeIds) {
+                _this.arraymultileavelist.push(_this.sourceEmployee.leaveTypeIds);
+            }
+            _this.multiLeavelist('');
+            // setTimeout(() => {
+            //     this.getDetailsInactive(res);
+            // },
+            //     1200);
             _this.isEnableNext = true;
+            _this.isSpinnerVisible = false;
+        }, function (err) {
+            _this.isSpinnerVisible = false;
         });
     };
     EmployeeGeneralInformationComponent.prototype.loadEditDataAfterUpdate = function (res) {
@@ -648,11 +626,11 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         if (this.sourceEmployee.employeeId) {
             this.empId = this.sourceEmployee.employeeId;
         }
-        this.employeeIdTemp = this.sourceEmployee.employeeId ? this.sourceEmployee.employeeId : 'create';
+        this.employeeIdTemp = this.sourceEmployee.employeeCode ? this.sourceEmployee.employeeCode : 'Creating';
         //this.sourceEmployee.jobTitleId = this.sourceEmployee.jobTitleId;
         //this.sourceEmployee.employeeExpertiseId = this.sourceEmployee.employeeExpertiseId;
         this.empCreationForm.controls['JobTypeId'].setValue(this.sourceEmployee.jobTypeId);
-        this.supervisorId = this.sourceEmployee.supervisorId;
+        this.supervisorId = this.sourceEmployee.supervisor[0];
         if (this.employeeId) {
             this.sourceEmployee.startDate = new Date(this.sourceEmployee.startDate);
         }
@@ -664,9 +642,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.employeeService.employeeCollection = this.local;
         }
         var payType = this.sourceEmployee.isHourly;
-        if (this.sourceEmployee.inMultipleShifts == false) {
-            this.sourceEmployee.shiftId = this.sourceEmployee.shiftIds[0];
-        }
         if (this.sourceEmployee.isHourly == true) {
             this.hourly = true;
             this.yearly = false;
@@ -674,7 +649,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay ? autocomplete_1.formatNumberAsGlobalSettingsModule(this.sourceEmployee.hourlyPay, 2) : '';
             this.isMonthly = false;
         }
-        else {
+        if (this.sourceEmployee.isHourly == false) {
             this.yearly = true;
             this.hourly = false;
             this.model = { option: 'Monthly' };
@@ -686,15 +661,21 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.showsingle = false;
             this.showMultiple = true;
         }
-        else if (this.employeeService.isEditMode == true) {
-            this.sourceEmployee.singleShift = "singleShift";
-            this.showsingle = true;
-            this.showMultiple = false;
+        else {
+            if (this.sourceEmployee.shiftIds && this.sourceEmployee.shiftIds.length > 0) {
+                this.sourceEmployee.shiftId = this.sourceEmployee.shiftIds[0];
+                this.sourceEmployee.singleShift = "singleShift";
+                this.showsingle = true;
+                this.showMultiple = false;
+            }
+            else {
+                this.showsingle = false;
+                this.showMultiple = false;
+                this.sourceEmployee.inMultipleShifts = null;
+                this.sourceEmployee.multiShift = "";
+                this.sourceEmployee.singleShift = "";
+            }
         }
-        // this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.compmanagmentLegalEntityId); 
-        // this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.biumanagmentLegalEntityId);
-        // this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.divmanagmentLegalEntityId);
-        // this.empCreationForm.controls['departmentId'].setValue(this.sourceEmployee.managmentLegalEntityId);
         this.arrayContactlist.push(this.employeeId);
         this.sourceEmployee.employeeCertifyingStaff = this.sourceEmployee.employeeCertifyingStaff;
         this.getAllContactFirstNameSmartDropDown('', this.sourceEmployee.firstNameArray[0].firstName);
@@ -707,225 +688,63 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         }, 1200);
         this.isSpinnerVisible = false;
     };
-    // getManagementStructureOnEdit(managementStructureId) {
-    //     this.commonService.getManagementStructureDetails(managementStructureId).subscribe(res => {
-    //         this.selectedLegalEntity(res.Level1);
-    //         this.selectedBusinessUnit(res.Level2);
-    //         this.selectedDivision(res.Level3);
-    //         this.selectedDepartment(res.Level4);
-    //         // this.managementStructure = {
-    //         //     companyId: res.Level1 !== undefined ? res.Level1 : 0,
-    //         //     buId: res.Level2 !== undefined ? res.Level2 : 0,
-    //         //     divisionId: res.Level3 !== undefined ? res.Level3 : 0,
-    //         //     departmentId: res.Level4 !== undefined ? res.Level4 : 0,
-    //         // }
-    //     }, err => {
-    //         const errorLog = err;
-    //         this.errorMessageHandler(errorLog);
-    //     });
-    // }
-    // getEmployeeData() {
-    //     this.selectedLegalEntity(this.authService.currentManagementStructure.levelId1);
-    //     this.selectedBusinessUnit(this.authService.currentManagementStructure.levelId2);
-    //     this.selectedDivision(this.authService.currentManagementStructure.levelId3);
-    //     this.selectedDepartment(this.authService.currentManagementStructure.levelId4);
-    //     //  this.sourceEmployee.compmanagmentLegalEntityId = this.authService.currentManagementStructure.levelId1;
-    //     //  this.sourceEmployee.biumanagmentLegalEntityId = this.authService.currentManagementStructure.levelId2;
-    //     //  this.sourceEmployee.divmanagmentLegalEntityId = this.authService.currentManagementStructure.levelId3;
-    //     //  this.sourceEmployee.managmentLegalEntityId = this.authService.currentManagementStructure.levelId4;
-    //     this.managementStructure.companyId = this.authService.currentManagementStructure.levelId1;
-    //     this.managementStructure.buId = this.authService.currentManagementStructure.levelId2;
-    //     this.managementStructure.divisionId = this.authService.currentManagementStructure.levelId3;
-    //     this.managementStructure.departmentId = this.authService.currentManagementStructure.levelId4;
-    // }
-    // getLegalEntity() {
-    //     this.commonService.getLegalEntityList().subscribe(res => {
-    //         this.legalEntityList = res;
-    //     },err => {
-    //         const errorLog = err;
-    //         this.errorMessageHandler(errorLog);
-    //     });
-    // }
-    /*
-
-    selectedLegalEntity(legalEntityId) {
-        this.businessUnitList = [];
-        this.divisionList = [];
-        this.departmentList = [];
-        this.managementStructure.buId = 0;
-        this.managementStructure.divisionId = 0;
-        this.managementStructure.departmentId = 0;
-        // this.sourceEmployee.biumanagmentLegalEntityId = 0;
-        // this.sourceEmployee.divmanagmentLegalEntityId = 0;
-        // this.sourceEmployee.managmentLegalEntityId = 0;
-        if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
-            this.sourceEmployee.managementStructureId = legalEntityId;
-            this.commonService.getBusinessUnitListByLegalEntityId(legalEntityId).subscribe(res => {
-                this.businessUnitList = res;
-            }, err => {
-
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
-            this.disableMagmtStruct = false;
-        } else {
-            this.disableMagmtStruct = true;
-        }
-    }
-
-    selectedBusinessUnit(businessUnitId) {
-        this.divisionList = [];
-        this.departmentList = [];
-        this.managementStructure.divisionId = 0;
-        this.managementStructure.departmentId = 0;
-
-        // this.sourceEmployee.divmanagmentLegalEntityId =0;
-        // this.sourceEmployee.managmentLegalEntityId = 0;
-        if (businessUnitId != 0 && businessUnitId != null && businessUnitId != undefined) {
-            this.sourceEmployee.managementStructureId = businessUnitId;
-            this.commonService.getDivisionListByBU(businessUnitId).subscribe(res => {
-                this.divisionList = res;
-            }, err => {
-
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
-        }
-    }
-    selectedDivision(divisionUnitId) {
-        this.departmentList = [];
-        this.managementStructure.departmentId = 0;
-            // this.sourceEmployee.managmentLegalEntityId = 0;
-        if (divisionUnitId != 0 && divisionUnitId != null && divisionUnitId != undefined) {
-            this.sourceEmployee.managementStructureId = divisionUnitId;
-            this.commonService.getDepartmentListByDivisionId(divisionUnitId).subscribe(res => {
-                this.departmentList = res;
-            }, err => {
-
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
-        }
-    }
-    selectedDepartment(departmentId) {
-        if (departmentId != 0 && departmentId != null && departmentId != undefined) {
-            this.sourceEmployee.managementStructureId = departmentId;
-        }
-    }*/
-    /*
-    loadLegalEntityData() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.jobTitleService1.getManagemtentLengalEntityData().subscribe(
-            results => this.onManagemtntlegaldataLoad(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
-    }*/
-    /*
-    private onManagemtntlegaldataLoad(getAtaMainList: any[]) {
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.alllegalEntityInfo = getAtaMainList;
-        for (let i = 0; i < this.alllegalEntityInfo.length; i++) {
-
-            if (this.alllegalEntityInfo[i].parentId == null) {
-                this.maincompanylist.push(this.alllegalEntityInfo[i]);
-
-            }
-        }
-        if (this.maincompanylist) {
-            this.maincompanylist = this.maincompanylist.reduce((unique, o) => {
-                if (!unique.some(obj => obj.name === o.name)) {
-                    unique.push(o);
-                }
-                return unique;
-            }, []);
-        }
-    }
-    */
-    /*
-     private loadManagementdata() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.jobTitleService1.getManagemententity().subscribe(
-            results => this.onManagemtntdataLoad(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
-    }
-    private onManagemtntdataLoad(getAtaMainList: any[]) {
-        // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.dataSource.data = getAtaMainList;
-        this.allManagemtninfo = getAtaMainList;
-        for (let i = 0; i < this.allManagemtninfo.length; i++) {
-            if (this.allManagemtninfo[i].parentId == null) {
-                this.maincompanylist.push(this.allManagemtninfo[i]);
-            }
-        }
-        if (this.sourceEmployee.managmentLegalEntity != null && this.sourceEmployee.divmanagmentLegalEntity != null && this.sourceEmployee.biumanagmentLegalEntity != null && this.sourceEmployee.compmanagmentLegalEntity != null) {
-            this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.compmanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.biumanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.divmanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['departmentId'].setValue(this.sourceEmployee.managementStructeInfo.managementStructureId);
-        }
-        else if (this.sourceEmployee.biumanagmentLegalEntity != null && this.sourceEmployee.divmanagmentLegalEntity != null && this.sourceEmployee.managmentLegalEntity != null) {
-            this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.biumanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.divmanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.managmentLegalEntity.managementStructureId);
-        }
-        else if (this.sourceEmployee.divmanagmentLegalEntity != null && this.sourceEmployee.managmentLegalEntity != null) {
-
-            this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.divmanagmentLegalEntity.managementStructureId);
-            this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.managmentLegalEntity.managementStructureId);
-
-        }
-        else if (this.sourceEmployee.managementStructeInfo != null) {
-
-            this.empCreationForm.controls['companyId'].setValue(this.sourceEmployee.managmentLegalEntity.managementStructureId);
-        }
-        else {
-        }
-
-        this.setManagementStrucureData(this.sourceEmployee);
-    }*/
-    /*
-
-    loadCompanyData() {
-        this.companyService.getallCompanyData().subscribe(
-            results => this.assigninCOmpanyData(results),
-
-            error => this.onDataLoadFailed(error)
-        );
-    }
-    assigninCOmpanyData(results: any) {
-
-        this.companylist = results[0];
-    }*/
-    EmployeeGeneralInformationComponent.prototype.loadCurrencyData = function () {
+    EmployeeGeneralInformationComponent.prototype.loadCurrencyData = function (strText) {
         var _this = this;
-        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(function (res) {
-            _this.allCurrencyData = res.map(function (x) {
-                return __assign(__assign({}, x), { currencyId: x.value, code: x.label });
+        if (strText === void 0) { strText = ''; }
+        if (this.arraycurrencylist.length == 0) {
+            this.arraycurrencylist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20000, this.arraycurrencylist.join(), this.currentUserMasterCompanyId).subscribe(function (response) {
+            _this.allCurrencyData = response.map(function (x) {
+                return {
+                    currencyId: x.value,
+                    code: x.label
+                };
             });
         }, function (err) {
-            var errorLog = err;
-            _this.errorMessageHandler(errorLog);
+            _this.isSpinnerVisible = false;
         });
     };
     EmployeeGeneralInformationComponent.prototype.filterCurrencyList = function (event) {
         this.currencyList = this.allCurrencyData;
+        this.Currencyinfo = [{ currencyId: 0, code: "-- Select --" }];
         if (event.query !== undefined && event.query !== null) {
-            var currlist = __spreadArrays(this.allCurrencyData.filter(function (x) {
+            var currlist = __spreadArrays(this.Currencyinfo, this.allCurrencyData.filter(function (x) {
                 return x.code.toLowerCase().includes(event.query.toLowerCase());
             }));
             this.currencyList = currlist;
         }
     };
-    EmployeeGeneralInformationComponent.prototype.onSelectMethod = function (event) {
-        var d = new Date(Date.parse(event));
-        this.sourceEmployee.dateOfBirth = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+    EmployeeGeneralInformationComponent.prototype.filterSupervisorList = function (event) {
+        if (this.empId) {
+            this.supervisorList = this.allEmployeeinfo;
+            this.Supervisorinfo = [{ employeeId: 0, firstName: "", isActive: false, lastName: "", middleName: "", name: "-- Select --" }];
+            if (event.query !== undefined && event.query !== null) {
+                var supervisorlist = __spreadArrays(this.Supervisorinfo, this.allEmployeeinfo.filter(function (x) {
+                    return x.name.toLowerCase().includes(event.query.toLowerCase());
+                }));
+                this.supervisorList = supervisorlist;
+            }
+        }
+        else {
+            this.supervisorList = this.allEmployeeinfo;
+            this.Supervisorinfo = [{ employeeId: 0, firstName: "", isActive: false, lastName: "", middleName: "", name: "-- Select --" }];
+            if (event.query !== undefined && event.query !== null) {
+                var supervisorlist = __spreadArrays([this.Supervisorinfo], this.allEmployeeinfo.filter(function (x) {
+                    return x.name.toLowerCase().includes(event.query.toLowerCase());
+                }));
+                this.supervisorList = supervisorlist.filter(function (x) { return x.isActive == true; });
+            }
+        }
     };
+    // onSelectMethod(event) {
+    //     if (event) {
+    //         this.sourceEmployee.dateOfBirth = event;
+    //         this.sourceEmployee.dateOfBirth = this.sourceEmployee.dateOfBirth != null ? new Date(this.sourceEmployee.dateOfBirth) : null;
+    //         let d = new Date(Date.parse(this.sourceEmployee.dateOfBirth));
+    //         this.sourceEmployee.dateOfBirth = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+    //     }
+    // }
     EmployeeGeneralInformationComponent.prototype.checkfirstName = function (value) {
         var arr = this.allEmployeeinfo;
         return arr.find(function (e) { return e.firstName === value; });
@@ -978,6 +797,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
     };
     EmployeeGeneralInformationComponent.prototype.onSubmit2 = function () {
         var _this = this;
+        console.log("On Submit date");
         this.isSpinnerVisible = true;
         this.enableSaveBtn = false;
         this.supervisorId;
@@ -985,13 +805,29 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.sourceEmployee.lastName = autocomplete_1.editValueAssignByCondition('lastName', this.sourceEmployee.lastName);
         this.sourceEmployee.middleName = autocomplete_1.editValueAssignByCondition('middleName', this.sourceEmployee.middleName);
         this.sourceEmployee.currencyId = this.sourceEmployee.currencyId ? this.sourceEmployee.currencyId.currencyId : null;
+        if (this.sourceEmployee.jobTitleId == 0) {
+            this.alertService.showMessage("Validation Failed", "Job Title is require", alert_service_1.MessageSeverity.error);
+            this.isSpinnerVisible = false;
+            return;
+        }
+        if (this.sourceEmployee.employeeExpertiseId == 0) {
+            this.alertService.showMessage("Validation Failed", "Employee Expertise is require", alert_service_1.MessageSeverity.error);
+            this.isSpinnerVisible = false;
+            return;
+        }
         this.sourceEmployee.jobTitleId = this.sourceEmployee.jobTitleId;
         this.sourceEmployee.employeeExpertiseId = this.sourceEmployee.employeeExpertiseId;
         this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay ? this.sourceEmployee.hourlyPay : null;
-        ;
-        //this.sourceEmployee.startDate = this.empCreationForm.get('startDate').value;
-        this.sourceEmployee.startDate = this.sourceEmployee.startDate;
-        this.sourceEmployee.SupervisorId = this.supervisorId;
+        if (this.sourceEmployee.startDate) {
+            var d = new Date(this.sourceEmployee.startDate);
+            this.sourceEmployee.startDate = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+            ;
+        }
+        if (this.sourceEmployee.dateOfBirth) {
+            var d = new Date(this.sourceEmployee.dateOfBirth);
+            this.sourceEmployee.dateOfBirth = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+        }
+        this.sourceEmployee.SupervisorId = this.supervisorId ? this.supervisorId.employeeId : null;
         this.sourceEmployee.stationId = this.sourceEmployee.stationId == 0 ? null : this.sourceEmployee.stationId;
         if (this.sourceEmployee.inMultipleShifts == true) {
             this.sourceEmployee.shiftId = '';
@@ -1004,6 +840,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             else {
                 this.sourceEmployee.shiftIds = [];
             }
+            this.sourceEmployee.inMultipleShifts = false;
         }
         this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
         this.sourceEmployee.createdBy = this.userA;
@@ -1032,13 +869,19 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 }
             }, function (err) {
                 _this.isSpinnerVisible = false;
-                var errorLog = err;
-                _this.errorMessageHandler(errorLog);
             });
         }
         else {
-            this.sourceEmployee.isHourly = this.sourceEmployee.isHourly;
-            this.sourceEmployee.HourlyPay = this.sourceEmployee.hourlyPay;
+            if (this.sourceEmployee.isHourly == true) {
+                this.model = { option: 'Hourly' };
+                this.sourceEmployee.isHourly = true;
+                this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay;
+            }
+            else {
+                this.model = { option: 'Monthly' };
+                this.sourceEmployee.isHourly = false;
+                this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay;
+            }
             this.employeeService.newAddEmployee(this.sourceEmployee).subscribe(function (results) {
                 if (results) {
                     _this.employeeService.isEditMode = true;
@@ -1050,8 +893,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 }
             }, function (err) {
                 _this.isSpinnerVisible = false;
-                var errorLog = err;
-                _this.errorMessageHandler(errorLog);
             });
         }
     };
@@ -1075,7 +916,9 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                     _this.sourceEmployee.LeaveTypeId = selectedLevae;
                 _this.sourceEmployee.EmployeeId = _this.sourceEmployee.employeeId;
                 _this.employeeService.employeeLeavetypeRemove(_this.sourceEmployee).subscribe(function (results) {
-                }, function (error) { return _this.onDataLoadFailed(error); });
+                }, 
+                //error => this.onDataLoadFailed(error))
+                function (error) { _this.isSpinnerVisible = false; });
             });
         }
     };
@@ -1084,7 +927,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.sourceEmployee.ShiftTypeId = selectedLevae;
         this.sourceEmployee.EmployeeId = this.sourceEmployee.employeeId;
         this.employeeService.employeeshifttypeRemove(this.sourceEmployee).subscribe(function (results) {
-        }, function (error) { return _this.onDataLoadFailed(error); });
+        }, function (error) { _this.isSpinnerVisible = false; });
     };
     EmployeeGeneralInformationComponent.prototype.removeEmployeeShiftValues = function () {
         for (var i = 0; i < this.sessionShiftValues.length; i++) {
@@ -1120,7 +963,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.sourceEmployee.ShiftTypeId = selectedLevae;
             this.sourceEmployee.EmployeeId = this.sourceEmployee.employeeId;
             this.employeeService.employeeShifttypeAdd(this.sourceEmployee).subscribe(function (results) {
-            }, function (error) { return _this.onDataLoadFailed(error); });
+            }, function (error) { _this.isSpinnerVisible = false; });
         }
     };
     EmployeeGeneralInformationComponent.prototype.employeeLeavetypeUpdate = function (empId) {
@@ -1145,7 +988,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.sourceEmployee.LeaveTypeId = selectedLevae;
         this.sourceEmployee.EmployeeId = this.sourceEmployee.employeeId;
         this.employeeService.employeeLeavetypeAdd(this.sourceEmployee).subscribe(function (results) {
-        }, function (error) { return _this.onDataLoadFailed(error); });
+        }, function (error) { _this.isSpinnerVisible = false; });
     };
     EmployeeGeneralInformationComponent.prototype.employeeShifttypeAdd = function (employeeId) {
         var _this = this;
@@ -1155,7 +998,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 this.sourceEmployee.ShiftTypeId = shiftTypeId;
                 this.sourceEmployee.EmployeeId = employeeId;
                 this.employeeService.employeeShifttypeAdd(this.sourceEmployee).subscribe(function (results) {
-                }, function (error) { return _this.onDataLoadFailed(error); });
+                }, function (error) { _this.isSpinnerVisible = false; });
             }
         }
     };
@@ -1168,7 +1011,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.sourceEmployee.LeaveTypeId = leaveTypeId;
             this.sourceEmployee.EmployeeId = employeeId;
             this.employeeService.employeeLeavetypeAdd(this.sourceEmployee).subscribe(function (results) {
-            }, function (error) { return _this.onDataLoadFailed(error); });
+            }, function (error) { _this.isSpinnerVisible = false; });
         }
     };
     // onSubmit() {
@@ -1230,38 +1073,76 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         var _this = this;
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.employeeService.getEmployeeNamesList().subscribe(function (results) { return _this.onDataLoadSuccessful(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        this.employeeService.getEmployeeNamesList(this.currentUserMasterCompanyId).subscribe(function (results) { return _this.onDataLoadSuccessful(results[0]); }, function (error) { _this.isSpinnerVisible = false; });
         this.selectedColumns = this.cols;
     };
     EmployeeGeneralInformationComponent.prototype.loadMasterCompanies = function () {
         var _this = this;
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.masterComapnyService.getMasterCompanies().subscribe(function (results) { return _this.onDataMasterCompaniesLoadSuccessful(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        this.masterComapnyService.getMasterCompanies().subscribe(function (results) { return _this.onDataMasterCompaniesLoadSuccessful(results[0]); }, function (error) { _this.isSpinnerVisible = false; });
     };
     EmployeeGeneralInformationComponent.prototype.shift = function () {
         var _this = this;
+        // this.alertService.startLoadingMessage();
+        // this.loadingIndicator = true;
+        // this.employeeService.getshift().subscribe(
+        //     results => this.onshiftData(results[0]),
+        //     error => this.onDataLoadFailed(error)
+        // );
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.employeeService.getshift().subscribe(function (results) { return _this.onshiftData(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 1000, '0', this.currentUserMasterCompanyId).subscribe(function (res) {
+            _this.shiftValues = res;
+            // this.legalEntityList_Forgrid = res;
+            // this.legalEntityList_ForShipping = res;
+            // this.legalEntityList_ForBilling= res;
+        }, function (err) {
+            _this.isSpinnerVisible = false;
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
+        });
     };
     EmployeeGeneralInformationComponent.prototype.EmployeeTrainingType = function () {
         var _this = this;
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.employeeService.getEmployeeTrainingType().subscribe(function (results) { return _this.onDataLoadSuccessful(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        this.employeeService.getEmployeeTrainingType().subscribe(function (results) { return _this.onDataLoadSuccessful(results[0]); }, function (error) { _this.isSpinnerVisible = false; });
     };
     EmployeeGeneralInformationComponent.prototype.EmployeeLeaveType = function () {
         var _this = this;
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.employeeService.getEmployeeLeaveType().subscribe(function (results) { return _this.onLeavedata(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        this.employeeService.getEmployeeLeaveType().subscribe(function (results) { return _this.onLeavedata(results[0]); }, function (error) { _this.isSpinnerVisible = false; });
     };
-    EmployeeGeneralInformationComponent.prototype.multiLeavelist = function () {
+    // private multiLeavelist() {
+    //     this.alertService.startLoadingMessage();
+    //     this.loadingIndicator = true;
+    //     this.employeeService.getEmployeeLeaveType().subscribe(
+    //         results => this.onmultiLeavedata(results[0]),
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }   
+    EmployeeGeneralInformationComponent.prototype.multiLeavelist = function (strText) {
         var _this = this;
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.employeeService.getEmployeeLeaveType().subscribe(function (results) { return _this.onmultiLeavedata(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        if (strText === void 0) { strText = ''; }
+        if (this.arraymultileavelist.length == 0) {
+            this.arraymultileavelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType', strText, true, 2000, this.arraymultileavelist.join(), this.currentUserMasterCompanyId).subscribe(function (response) {
+            _this.leavemultiValues = response;
+            _this.leavemultiValues = _this.leavemultiValues.reduce(function (unique, o) {
+                if (!unique.some(function (obj) { return obj.label === o.label; })) {
+                    unique.push(o);
+                }
+                return unique;
+            }, []);
+            var valAirCraft = [];
+        }, function (err) {
+            // const errorLog = err;
+            // this.errorMessageHandler(errorLog);	
+            _this.isSpinnerVisible = false;
+        });
     };
     EmployeeGeneralInformationComponent.prototype.applyFilter = function (filterValue) {
         this.dataSource.filter = filterValue;
@@ -1342,19 +1223,34 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
     //        error => this.onDataLoadFailed(error)
     //    );
     //}
-    EmployeeGeneralInformationComponent.prototype.loadJobtitlesData = function () {
+    // private loadJobtitlesData() {
+    //     this.alertService.startLoadingMessage();
+    //     this.loadingIndicator = true;
+    //     this.commonService.smartDropDownList('JobTitle', 'JobTitleId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.allJobTitlesinfo = res;
+    //     });
+    // }
+    EmployeeGeneralInformationComponent.prototype.loadJobtitlesData = function (strText) {
         var _this = this;
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.commonService.smartDropDownList('JobTitle', 'JobTitleId', 'Description').pipe(operators_1.takeUntil(this.onDestroy$)).subscribe(function (res) {
-            _this.allJobTitlesinfo = res;
+        if (strText === void 0) { strText = ''; }
+        //this.alertService.startLoadingMessage();
+        //this.loadingIndicator = true;
+        if (this.arrayjobtitlelist.length == 0) {
+            this.arrayjobtitlelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('JobTitle', 'JobTitleId', 'Description', strText, true, 2000, this.arrayjobtitlelist.join(), this.currentUserMasterCompanyId).subscribe(function (response) {
+            _this.allJobTitlesinfo = response;
+        }, function (err) {
+            _this.isSpinnerVisible = false;
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);		
         });
     };
     EmployeeGeneralInformationComponent.prototype.loadjobtypesData = function () {
         var _this = this;
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.jobTypeService.getAllJobTypeList().subscribe(function (results) { return _this.onJobtypeDataLoadSuccessful(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        this.jobTypeService.getAllJobTypeList().subscribe(function (results) { return _this.onJobtypeDataLoadSuccessful(results[0]); }, function (error) { return _this.isSpinnerVisible = false; });
     };
     EmployeeGeneralInformationComponent.prototype.onJobtypeDataLoadSuccessful = function (jobTypes) {
         this.alertService.stopLoadingMessage();
@@ -1403,20 +1299,18 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             }
         }
     };
-    //private loademployeesexperties() {
-    //    this.alertService.startLoadingMessage();
-    //    this.loadingIndicator = true;
-    //    this.empservice.getWorkFlows().subscribe(
-    //        results => this.onEmpDataLoadSuccessful(results[0]),
-    //        error => this.onDataLoadFailed(error)
-    //    );
-    //}
-    EmployeeGeneralInformationComponent.prototype.loademployeesexperties = function () {
+    EmployeeGeneralInformationComponent.prototype.loademployeesexperties = function (strText) {
         var _this = this;
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.commonService.smartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description').pipe(operators_1.takeUntil(this.onDestroy$)).subscribe(function (res) {
-            _this.allEmployeeExpertiseInfo = res;
+        if (strText === void 0) { strText = ''; }
+        if (this.arrayExpertiselist.length == 0) {
+            this.arrayExpertiselist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', strText, true, 2000, this.arrayExpertiselist.join(), this.currentUserMasterCompanyId).subscribe(function (response) {
+            _this.allEmployeeExpertiseInfo = response;
+        }, function (err) {
+            _this.isSpinnerVisible = false;
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);		
         });
     };
     EmployeeGeneralInformationComponent.prototype.onEmpDataLoadSuccessful = function (allWorkFlows) {
@@ -1458,14 +1352,14 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.sourceAction.updatedBy = this.userName;
             this.Active = "In Active";
             this.sourceAction.isActive == false;
-            this.employeeService.updateEmployee(this.sourceAction).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.saveFailedHelper(error); });
+            this.employeeService.updateEmployee(this.sourceAction).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.isSpinnerVisible = false; }); //this.saveFailedHelper(error));
         }
         else {
             this.sourceAction = rowData;
             this.sourceAction.updatedBy = this.userName;
             this.Active = "Active";
             this.sourceAction.isActive == true;
-            this.employeeService.updateEmployee(this.sourceAction).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.saveFailedHelper(error); });
+            this.employeeService.updateEmployee(this.sourceAction).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.isSpinnerVisible = false; }); //this.saveFailedHelper(error));
         }
     };
     EmployeeGeneralInformationComponent.prototype.open = function (content) {
@@ -1558,7 +1452,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
         this.sourceAction = row;
-        this.employeeService.historyEmployee(this.sourceAction.employeeId).subscribe(function (results) { return _this.onHistoryLoadSuccessful(results[0], content); }, function (error) { return _this.saveFailedHelper(error); });
+        this.employeeService.historyEmployee(this.sourceAction.employeeId).subscribe(function (results) { return _this.onHistoryLoadSuccessful(results[0], content); }, function (error) { return _this.isSpinnerVisible = false; }); // this.saveFailedHelper(error));
     };
     EmployeeGeneralInformationComponent.prototype.editItemAndCloseModel = function () {
         var _this = this;
@@ -1588,21 +1482,21 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                     _this.activeIndex = 0;
                 });
                 if (this.selectedshiftValues != null) //separting Array whic is having ","
-                {
+                 {
                     this.sourceEmployee.ShiftId = this.selectedshiftValues.toString().split(",");
                 }
                 if (this.selectedLeaveValues != null) //separting Array whic is having ","
-                {
+                 {
                     this.sourceEmployee.employeeLeaveTypeId = this.selectedLeaveValues.toString().split(",");
                 }
             }
             else {
                 if (this.selectedshiftValues != null) //separting Array whic is having ","
-                {
+                 {
                     this.sourceEmployee.ShiftId = this.selectedshiftValues.toString().split(",");
                 }
                 if (this.selectedLeaveValues != null) //separting Array which is having ","
-                {
+                 {
                     this.sourceEmployee.employeeLeaveTypeId = this.selectedLeaveValues.toString().split(",");
                 }
                 if (this.sourceEmployee.singleShift) {
@@ -1617,12 +1511,12 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 this.sourceEmployee.updatedBy = this.userName;
                 this.sourceEmployee.employeeName = this.employeeName;
                 this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
-                this.employeeService.updateEmployeeDetails(this.sourceEmployee).subscribe(function (response) { return _this.saveCompleted(_this.sourceEmployee); }, function (error) { return _this.saveFailedHelper(error); });
+                this.employeeService.updateEmployeeDetails(this.sourceEmployee).subscribe(function (response) { return _this.saveCompleted(_this.sourceEmployee); }, function (error) { return _this.isSpinnerVisible = false; }); //this.saveFailedHelper(error));
                 this.activeIndex = 0;
                 this.employeeService.indexObj.next(this.activeIndex);
             }
         }
-        this.multiLeavelist();
+        this.multiLeavelist('');
         //this.modal.close();
     };
     EmployeeGeneralInformationComponent.prototype.saveJobTitle = function () {
@@ -1633,13 +1527,14 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
         this.sourceAction.description = this.jobName;
         this.jobTitleService.newJobTitle(this.sourceAction).subscribe(function (data) {
-            _this.loadJobtitlesData();
+            _this.loadJobtitlesData('');
             _this.showTitle = 'job Title Added Sucessfully';
             ///this.sourceEmployee.reset();
             _this.alertService.showMessage("Success", _this.showTitle, alert_service_1.MessageSeverity.success);
         }, function (err) {
-            var errorLog = err;
-            _this.errorMessageHandler(errorLog);
+            _this.isSpinnerVisible = false;
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     };
     EmployeeGeneralInformationComponent.prototype.saveJobType = function () {
@@ -1649,10 +1544,10 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.sourceAction.updatedBy = this.userA;
             this.sourceAction.jobTypeName = this.jobTypeName;
             this.sourceAction.jobTypeDescription = this.jobTypeDescription;
-            this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
-            this.sourceAction.description = this.jobName;
+            this.sourceAction.masterCompanyId =
+                this.sourceAction.description = this.jobName;
             this.jobTypeService.newJobType(this.sourceAction).subscribe(function (data) {
-                _this.loadJobtitlesData();
+                _this.loadJobtitlesData('');
                 _this.showTitle = 'job Type Added Sucessfully';
                 // this.loadjobtypesData();
                 ///this.sourceEmployee.reset();
@@ -1673,13 +1568,13 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.sourceAction.description = this.jobName;
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceAction.jobTitleId = this.jobName;
-            this.jobTitleService.newJobTitle(this.sourceAction).subscribe(function (data) { _this.loadJobtitlesData(); });
+            this.jobTitleService.newJobTitle(this.sourceAction).subscribe(function (data) { _this.loadJobtitlesData(''); });
         }
         else {
             this.sourceAction.updatedBy = this.userName;
             this.sourceAction.description = this.jobName;
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
-            this.jobTitleService.updateAction(this.sourceAction).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.saveFailedHelper(error); });
+            this.jobTitleService.updateAction(this.sourceAction).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.isSpinnerVisible = false; }); //this.saveFailedHelper(error));
         }
     };
     EmployeeGeneralInformationComponent.prototype.editItemLeaveCloseModel = function () {
@@ -1700,7 +1595,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 _this.saveCompleted(_this.sourceAction);
                 _this.sourceEmployee.employeeLeaveTypeId = data.employeeLeaveTypeId;
                 // this.EmployeeLeaveType();
-                _this.multiLeavelist();
+                _this.multiLeavelist('');
             });
         }
         else {
@@ -1711,7 +1606,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                 _this.saveCompleted(_this.sourceAction);
                 _this.sourceEmployee.employeeLeaveTypeId = data.employeeLeaveTypeId;
                 // this.EmployeeLeaveType();
-                _this.multiLeavelist();
+                _this.multiLeavelist('');
             });
         }
         this.modal.close();
@@ -1727,7 +1622,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             _this.showTitle = 'Employee Expertise Added Sucessfully';
             ///this.sourceEmployee.reset();
             _this.alertService.showMessage("Success", _this.showTitle, alert_service_1.MessageSeverity.success);
-            _this.loademployeesexperties();
+            _this.loademployeesexperties('');
         });
     };
     EmployeeGeneralInformationComponent.prototype.editItemExpertiesCloseModel = function () {
@@ -1738,13 +1633,13 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.sourceAction.updatedBy = this.userName;
             this.sourceAction.description = this.employeeName;
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
-            this.empservice.newAction(this.sourceAction).subscribe(function (data) { _this.loademployeesexperties(); });
+            this.empservice.newAction(this.sourceAction).subscribe(function (data) { _this.loademployeesexperties(''); });
         }
         else {
             this.sourceAction.updatedBy = this.userName;
             this.sourceAction.description = this.employeeName;
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
-            this.jobTitleService.updateAction(this.sourceAction).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.saveFailedHelper(error); });
+            this.jobTitleService.updateAction(this.sourceAction).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.isSpinnerVisible = false; }); //this.saveFailedHelper(error));
         }
         //s this.modal.close();
     };
@@ -1794,50 +1689,16 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                         this.firstNameShow = true;
                         this.sourceEmployee.firstName = '';
                     }
-                    //else {
-                    //    this.firstNameShow = false;
-                    //}
                 }
             }
         }
     };
     EmployeeGeneralInformationComponent.prototype.filterlastName = function (event) {
-        // this.lastNameCollection = [];
-        // for (let i = 0; i < this.allEmployeeinfo.length; i++) {
-        //     let lastName = this.allEmployeeinfo[i].lastName;
-        //     if (lastName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-        //         this.lastNameCollection.push(lastName);
-        //     }
-        // }
-        // this.lastNameCollection = this.allEmployeeinfo;
-        // if (event.query !== undefined && event.query !== null) {
-        //     const emplist = [...this.allEmployeeinfo.filter(x => {
-        //         return x.lastName.toLowerCase().includes(event.query.toLowerCase())
-        //     })]
-        //     this.lastNameCollection = emplist;
-        // }
         if (event.query !== undefined && event.query !== null) {
             this.getAllContactLastNameSmartDropDown(event.query);
         }
     };
     EmployeeGeneralInformationComponent.prototype.filtermiddleName = function (event) {
-        // this.middleNameCollection = [];
-        // for (let i = 0; i < this.allEmployeeinfo.length; i++) {
-        //     let middleName = this.allEmployeeinfo[i].middleName;
-        //     if (middleName) {
-        //         if (middleName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-        //             this.middleNameCollection.push(middleName);
-        //         }
-        //     }
-        // }
-        // this.middleNameCollection = this.allEmployeeinfo;
-        // if (event.query !== undefined && event.query !== null) {
-        //     const emplist = [...this.allEmployeeinfo.filter(x => {
-        //         return x.middleName
-        //         //.toLowerCase().includes(event.query.toLowerCase())
-        //     })]
-        //     this.middleNameCollection = emplist;
-        // }
         if (event.query !== undefined && event.query !== null) {
             this.getAllContactMiddleNameSmartDropDown(event.query);
         }
@@ -1857,7 +1718,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         var _this = this;
         this.isSaving = true;
         this.sourceAction.updatedBy = this.userName;
-        this.employeeService.deleteEmployee(this.sourceAction.employeeId).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.saveFailedHelper(error); });
+        this.employeeService.deleteEmployee(this.sourceAction.employeeId).subscribe(function (response) { return _this.saveCompleted(_this.sourceAction); }, function (error) { return _this.isSpinnerVisible = false; }); //this.saveFailedHelper(error));
         this.modal.close();
     };
     EmployeeGeneralInformationComponent.prototype.filterEmployees = function (event) {
@@ -1929,9 +1790,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                     this.bulist.push(this.allManagemtninfo[i]);
                 }
             }
-            //this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.biumanagmentLegalEntityId);
-            //this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.divmanagmentLegalEntityId);
-            //this.empCreationForm.controls['departmentId'].setValue(this.sourceEmployee.managmentLegalEntityId);
         }
         else {
             this.bulist = [];
@@ -1945,69 +1803,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.biumanagmentLegalEntityId);
         }
     };
-    // getBUList(event) {
-    //     var companyId = this.empCreationForm.controls['companyId'].value;
-    //     if (this.updateMode == false) {
-    //         this.sourceEmployee.buisinessUnitId = "";
-    //         this.sourceEmployee.departmentId = "";
-    //         this.sourceEmployee.divisionId = "";
-    //         this.sourceEmployee.managementStructureId = companyId;
-    //         this.departmentList = [];
-    //         this.divisionlist = [];
-    //         this.bulist = [];
-    //         for (let i = 0; i < this.allManagemtninfo.length; i++) {
-    //             if (this.allManagemtninfo[i].parentId == companyId) {
-    //                 this.bulist.push(this.allManagemtninfo[i])
-    //             }
-    //         }
-    //     }
-    //     else {
-    //         this.sourceEmployee.buisinessUnitId = null;
-    //         this.empCreationForm.controls['BusinessUnitId'].setValue(null);
-    //         this.empCreationForm.controls['divisionId'].setValue(null);
-    //         this.empCreationForm.controls['departmentId'].setValue(null);
-    //         this.sourceEmployee.departmentId = "";
-    //         this.sourceEmployee.divisionId = "";
-    //         this.sourceEmployee.buisinessUnitId = "";
-    //         this.bulist = [];
-    //         this.departmentList = [];
-    //         this.divisionlist = [];
-    //         for (let i = 0; i < this.allManagemtninfo.length; i++) {
-    //             if (this.allManagemtninfo[i].parentId == companyId) {
-    //                 this.bulist.push(this.allManagemtninfo[i])
-    //             }
-    //         }
-    //     }
-    // }
-    // getDepartmentlist(value) {
-    //     var splitted = value.split(": ");
-    //     var businessUnitId = this.empCreationForm.controls['BusinessUnitId'].value;
-    //     if (this.updateMode == false) {
-    //         this.sourceEmployee.departmentId = "";
-    //         this.sourceEmployee.divisionId = "";
-    //         this.sourceEmployee.managementStructureId = businessUnitId;
-    //         this.departmentList = [];
-    //         this.divisionlist = [];
-    //         for (let i = 0; i < this.allManagemtninfo.length; i++) {
-    //             if (this.allManagemtninfo[i].parentId == businessUnitId) {
-    //                 this.departmentList.push(this.allManagemtninfo[i]);
-    //             }
-    //         }
-    //     }
-    //     else {
-    //         this.empCreationForm.controls['divisionId'].setValue(null);
-    //         this.empCreationForm.controls['departmentId'].setValue(null);
-    //         this.sourceEmployee.departmentId = "";
-    //         this.sourceEmployee.divisionId = "";
-    //         this.departmentList = [];
-    //         this.divisionlist = [];
-    //         for (let i = 0; i < this.allManagemtninfo.length; i++) {
-    //             if (this.allManagemtninfo[i].parentId == businessUnitId) {
-    //                 this.departmentList.push(this.allManagemtninfo[i]);
-    //             }
-    //         }
-    //     }
-    // }
     EmployeeGeneralInformationComponent.prototype.getDepartmentlist2 = function (value) {
         if (this.updateMode == false) {
             this.sourceEmployee.departmentId = "";
@@ -2020,9 +1815,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                     this.departmentList.push(this.allManagemtninfo[i]);
                 }
             }
-            //this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.biumanagmentLegalEntityId);
-            //this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.divmanagmentLegalEntityId);
-            //this.empCreationForm.controls['departmentId'].setValue(this.sourceEmployee.managmentLegalEntityId);
         }
         else {
             this.departmentList = [];
@@ -2032,33 +1824,9 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
                     this.departmentList.push(this.allManagemtninfo[i]);
                 }
             }
-            //this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.biumanagmentLegalEntityId);
             this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.divmanagmentLegalEntityId);
-            //this.empCreationForm.controls['departmentId'].setValue(this.sourceEmployee.managmentLegalEntityId);
         }
     };
-    //     getDivisionlist(value) {
-    //    var departmentId = this.empCreationForm.controls['divisionId'].value;;
-    //         if (this.updateMode == false) {
-    //             this.sourceEmployee.divisionId = "";
-    //             this.sourceEmployee.managementStructureId = departmentId;
-    //             this.divisionlist = [];
-    //             for (let i = 0; i < this.allManagemtninfo.length; i++) {
-    //                 if (this.allManagemtninfo[i].parentId == departmentId) {
-    //                     this.divisionlist.push(this.allManagemtninfo[i]);
-    //                 }
-    //             }
-    //         }
-    //         else {
-    //             this.divisionlist = [];
-    //             for (let i = 0; i < this.allManagemtninfo.length; i++) {
-    //                 if (this.allManagemtninfo[i].parentId == departmentId) {
-    //                     this.divisionlist.push(this.allManagemtninfo[i]);
-    //                 }
-    //             }
-    //                this.empCreationForm.controls['departmentId'].setValue(this.sourceEmployee.managmentLegalEntityId);
-    //         }
-    //     }
     EmployeeGeneralInformationComponent.prototype.divisionChange = function (divisionId) {
         this.sourceEmployee.managementStructureId = divisionId;
     };
@@ -2084,42 +1852,11 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         this.managementStructureData = [];
         this.checkMSParents(obj.managementStructureId);
         if (this.sourceEmployee) {
-            //this.empCreationForm.controls['companyid'].setValue(this.sourceEmployee.compmanagmentlegalentityid);
-            //this.empCreationForm.controls['businessunitid'].setValue(this.sourceEmployee.biumanagmentlegalentityid);
-            //this.empCreationForm.controls['divisionid'].setValue(this.sourceEmployee.divmanagmentlegalentityid);
-            //this.empCreationForm.controls['departmentid'].setValue(this.sourceEmployee.managmentlegalentityid);
             this.getBUList2(this.sourceEmployee.compmanagmentLegalEntityId);
             this.getDepartmentlist2(this.sourceEmployee.biumanagmentLegalEntityId);
             this.getDivisionlist(this.sourceEmployee.managmentLegalEntityId);
-            //          this.empCreationForm.controls['BusinessUnitId'].setValue(this.sourceEmployee.biumanagmentLegalEntityId);
-            //this.empCreationForm.controls['divisionId'].setValue(this.sourceEmployee.divmanagmentLegalEntityId);
-            //this.empCreationForm.controls['departmentId'].setValue(this.sourceEmployee.managmentLegalEntityId);
         }
         ;
-        //if (this.managementStructureData.length == 4) {
-        //    this.sourceEmployee.companyId = this.managementStructureData[3];
-        //    this.sourceEmployee.buisinessUnitId = this.managementStructureData[2];
-        //    this.sourceEmployee.departmentId = this.managementStructureData[1];
-        //    this.sourceEmployee.divisionId = this.managementStructureData[0];
-        //    this.getBUList2(this.sourceEmployee.companyId);
-        //    this.getDepartmentlist2(this.sourceEmployee.buisinessUnitId);
-        //    this.getDivisionlist(this.sourceEmployee.departmentId);
-        //}
-        //if (this.managementStructureData.length == 3) {
-        //    this.sourceEmployee.companyId = this.managementStructureData[2];
-        //    this.sourceEmployee.buisinessUnitId = this.managementStructureData[1];
-        //    this.sourceEmployee.departmentId = this.managementStructureData[0];
-        //    this.getBUList2(this.sourceEmployee.companyId);
-        //    this.getDepartmentlist2(this.sourceEmployee.buisinessUnitId);
-        //}
-        //if (this.managementStructureData.length == 2) {
-        //    this.sourceEmployee.companyId = this.managementStructureData[1];
-        //    this.sourceEmployee.buisinessUnitId = this.managementStructureData[0];
-        //    this.getBUList2(this.sourceEmployee.companyId);
-        //}
-        //if (this.managementStructureData.length == 1) {
-        //    this.sourceEmployee.companyId = this.managementStructureData[0];
-        //}
     };
     EmployeeGeneralInformationComponent.prototype.checkMSParents = function (msId) {
         this.managementStructureData.push(msId);
@@ -2152,7 +1889,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             this.hourly = true;
             this.yearly = false;
             this.sourceEmployee.isHourly = true;
-            // this.sourceEmployee.HourlyPay = this.sourceEmployee.hourlyPay;
         }
         else {
             this.yearly = true;
@@ -2236,7 +1972,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         if (this.allJobTitlesinfo) {
             for (var i = 0; i < this.allEmployeeExpertiseInfo.length; i++) {
                 if (event == this.allEmployeeExpertiseInfo[i].description) {
-                    // this.sourceEmployee.jobName = event;
                     this.disableExpTitle = true;
                 }
             }
@@ -2303,19 +2038,16 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
             }
         }
     };
-    EmployeeGeneralInformationComponent.prototype.getAllStationData = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').subscribe(function (res) {
-                        _this.getAllAllStationInfodrpData = res;
-                    })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
+    EmployeeGeneralInformationComponent.prototype.getAllStationData = function (strText) {
+        var _this = this;
+        if (strText === void 0) { strText = ''; }
+        if (this.arrayAllStationlist.length == 0) {
+            this.arrayAllStationlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20000, this.arrayAllStationlist.join(), this.currentUserMasterCompanyId).subscribe(function (response) {
+            _this.getAllAllStationInfodrpData = response;
+        }, function (err) {
+            _this.isSpinnerVisible = false;
         });
     };
     EmployeeGeneralInformationComponent.prototype.onChangeemployeeExpertiseId = function (event) {
@@ -2348,7 +2080,7 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         obj.hourlyPay = obj.hourlyPay ? autocomplete_1.formatNumberAsGlobalSettingsModule(obj.hourlyPay, 2) : '';
     };
     EmployeeGeneralInformationComponent.prototype.nextClick = function (nextOrPrevious) {
-        if (this.formdata.form.dirty) {
+        if (this.enableSaveBtn == true) {
             this.nextOrPreviousTab = nextOrPrevious;
             var content = this.tabRedirectConfirmationModal;
             this.modal = this.modalService.open(content, { size: "sm" });
@@ -2383,26 +2115,24 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         }
     };
     EmployeeGeneralInformationComponent.prototype.gotoNext = function () {
-        // this.employeeService.listCollection = this.local;
         this.activeIndex = 1;
         this.employeeService.indexObj.next(this.activeIndex);
         var data = { "empId": this.empId, "firstName": this.firstName, "lastName": this.lastName };
         var stringData = JSON.stringify(data);
         var encryptedData = btoa(JSON.stringify(data));
         this.route.navigate(['/employeesmodule/employeepages/app-employee-certification'], { queryParams: { order: this.empId, 'firstName': this.firstName, 'lastName': this.lastName }, skipLocationChange: true });
-        // this.route.navigate(['/employeesmodule/employeepages/app-employee-certification'], { queryParams: { order: stringData } });
     };
     __decorate([
-        core_1.ViewChild("tabRedirectConfirmationModal")
+        core_1.ViewChild("tabRedirectConfirmationModal", { static: false })
     ], EmployeeGeneralInformationComponent.prototype, "tabRedirectConfirmationModal");
     __decorate([
-        core_1.ViewChild(material_1.MatPaginator)
+        core_1.ViewChild(material_1.MatPaginator, { static: false })
     ], EmployeeGeneralInformationComponent.prototype, "paginator");
     __decorate([
-        core_1.ViewChild(material_1.MatSort)
+        core_1.ViewChild(material_1.MatSort, { static: false })
     ], EmployeeGeneralInformationComponent.prototype, "sort");
     __decorate([
-        core_1.ViewChild("empform")
+        core_1.ViewChild("empform", { static: false })
     ], EmployeeGeneralInformationComponent.prototype, "formdata");
     __decorate([
         core_1.Output()
@@ -2418,11 +2148,3 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
     return EmployeeGeneralInformationComponent;
 }());
 exports.EmployeeGeneralInformationComponent = EmployeeGeneralInformationComponent;
-// redirectToTab(){
-//     this.dismissModel();
-//     this.stopmulticlicks = true;
-//     this.tab.emit('Contacts');
-//     setTimeout(() => {
-//         this.stopmulticlicks = false;
-//     }, 500)
-// }

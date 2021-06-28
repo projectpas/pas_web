@@ -36,9 +36,6 @@ import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleCons
 
 declare var $: any;
 
-import { phonePattern } from '../../../../validations/validation-pattern';
-
-
 @Component({
     selector: 'app-employee-general-information',
     templateUrl: './employee-general-information.component.html',

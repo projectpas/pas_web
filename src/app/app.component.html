@@ -1,35 +1,27 @@
 <router-outlet>
   <app-spinner></app-spinner>
 </router-outlet>
-<div
-  id="app_container"
-  [class.is-mobile]="mobileQuery.matches"
-  class="nav-container"
->
+<div id="app_container" [class.is-mobile]="mobileQuery.matches" class="nav-container">
   <div fxLayout="column" fxFlexOffset style="margin-top:0px !important;background-color: #fff;" fxFlex>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <div  *ngIf="!isUserLoggedIn" class="title-logo">
+        <div *ngIf="!isUserLoggedIn" class="title-logo">
           <p>
             <a routerLink="/">
               <img src="assets/images/PAS-logo.png" id="logo" />
             </a>
           </p>
-          
+
         </div>
-        <div  *ngIf="isUserLoggedIn" class="title-logo-login">
+        <div *ngIf="isUserLoggedIn" class="title-logo-login">
           <p>
             <a routerLink="/">
               <img src="assets/images/PAS-logo.png" id="logo" style="padding-left:0px !important;" />
             </a>
           </p>
-          
+
         </div>
-        <p-megaMenu
-        [model]="megaMenuItems"
-        *ngIf="isUserLoggedIn"
-        [ngClass]="{ sticky: isSticky }"
-      ></p-megaMenu>
+        <p-megaMenu [model]="megaMenuItems" *ngIf="isUserLoggedIn" [ngClass]="{ sticky: isSticky }"></p-megaMenu>
         <span class="app-toolbar-spacer"></span>
         <!-- <span  *ngIf="isUserLoggedIn" matTooltip="Dashboard">
         <i class="fa fa-sitemap entity-block-btn" (click)="showthis()"></i>
@@ -37,7 +29,7 @@
         <!-- <app-theme-picker
           tooltip="{{ 'mainMenu.Theme' | translate }}"
         ></app-theme-picker> -->
-      
+
         <!-- <button
           *ngIf="!isUserLoggedIn"
           mat-button
@@ -56,9 +48,9 @@
           [matMenuTriggerFor]="accountMenu"
           matTooltip="{{ 'mainMenu.UserAccount' | translate }}"
         >
-          <!-- <mat-icon class="menu-button">account_circle</mat-icon> -->
+           <mat-icon class="menu-button">account_circle</mat-icon>
           <i class="fa fa-user fa-lg"></i>
-          <!-- <span fxHide.lt-sm>{{ 'mainMenu.Account' | translate }}</span> -->
+          <span fxHide.lt-sm>{{ 'mainMenu.Account' | translate }}</span>
         </button>
         <mat-menu #accountMenu="matMenu">
           <button mat-menu-item (click)="router.navigateByUrl('/settings')">
@@ -197,10 +189,7 @@
   </mat-sidenav-container> -->
 </div>
 
-<div
-  class="cdetails-top"
-  *ngIf="translationService.closeCmpny && isUserLoggedIn"
->
+<div class="cdetails-top" *ngIf="translationService.closeCmpny && isUserLoggedIn">
   <span class="cdetails-top-close-btn fa fa-times" (click)="closethis()"></span>
   <div class="col-sm-12">
     <label>Comp</label><span>{{ managementStructure.companyId }}</span>
