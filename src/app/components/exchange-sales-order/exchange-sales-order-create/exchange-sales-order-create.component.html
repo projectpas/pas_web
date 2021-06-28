@@ -584,6 +584,11 @@
                                   [defaultSettingPriority]="defaultSettingPriority">
                               </app-exchange-sales-order-part-number>
                           </p-tabPanel>
+                          <p-tabPanel header="Address">
+                            <app-address-component *ngIf="showAddresstab" [addressType]="addressType"
+                                [id]="SalesOrderId">
+                            </app-address-component>
+                          </p-tabPanel>
                           <p-tabPanel header="Pick Ticket">
                             <app-exchange-sales-order-pick-tickets></app-exchange-sales-order-pick-tickets>
                           </p-tabPanel>

@@ -179,7 +179,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   moduleName: any = "ExchangeSalesOrder";
   soStatusList: any = [];
   soTypeList: any = [];
-  addressType: any = 'SO';
+  addressType: any = 'ExchSO';
   showAddresstab: boolean = false;
   isContactsLoaded: boolean = false;
   todayDate: Date = new Date();
@@ -1197,9 +1197,11 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       this.exchangeSalesOrderPartNumberComponent.refresh();
     }
     if (event.index == 1) {
+      this.showAddresstab = true;
+    }
+    if (event.index == 2) {
       this.exchangeSalesOrderPickTicketsComponent.refresh(this.id);
     }
-
   }
 
   updateMarginSummary() {
