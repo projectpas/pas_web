@@ -770,7 +770,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arraycurrencylist.length == 0) {
             this.arraycurrencylist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20000, this.arraycurrencylist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 0, this.arraycurrencylist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.allCurrencyData = response.map(x => {
                 return {
                     currencyId: x.value,
@@ -1435,7 +1435,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arrayExpertiselist.length == 0) {
             this.arrayExpertiselist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', strText, true, 2000, this.arrayExpertiselist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', strText, true, 0, this.arrayExpertiselist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.allEmployeeExpertiseInfo = response;
         }, err => {
             this.isSpinnerVisible = false;
@@ -2201,7 +2201,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arrayAllStationlist.length == 0) {
             this.arrayAllStationlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20000, this.arrayAllStationlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 0, this.arrayAllStationlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.getAllAllStationInfodrpData = response;
         }, err => {
             this.isSpinnerVisible = false;
