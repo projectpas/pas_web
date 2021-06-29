@@ -15,6 +15,12 @@ textarea {
     max-width: 10% !important;
      margin-right: 120px !important;
 }
+.select-right select {    
+    text-align-last: right;
+}
+.select-right option {
+    direction: rtl; 
+   }
 .currency, .credit{
     display: flex;
 }

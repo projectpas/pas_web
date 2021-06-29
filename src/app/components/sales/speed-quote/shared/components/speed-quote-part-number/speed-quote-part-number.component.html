@@ -63,7 +63,7 @@
                                           <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
                                           (blur)="onChangeUnitSalesPrice(rowIndex,summaryPart[summaryColumn.field])" [ngModel]="summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe"
                                           [disabled]="summaryPart['isEditPart'] == true" value="{{ summaryPart[summaryColumn.field] }}" name="unitSalePricetext{{i}}"
-                                          [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="summaryPart[summaryColumn.field]=formatStringToNumberGlobal($event)" />
+                                          [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="summaryPart[summaryColumn.field]=formatStringToNumberGlobal($event); enablesave();" />
                                         
                                         </ng-container>
                                         <ng-container style="width: 50px;" *ngIf="summaryColumn.field == 'quantityRequested'">
@@ -74,7 +74,7 @@
                                         </ng-container>
                                         <ng-container *ngIf="summaryColumn.field == 'tat'">
                                             <input style="width: 50px;" class="table-header-input-width text-right" name="tat{{i}}"
-                                            [disabled]="summaryPart['isEditPart'] == true"
+                                            (ngModelChange)="enablesave();" [disabled]="summaryPart['isEditPart'] == true"
                                             [ngModel]="summaryPart[summaryColumn.field]"
                                             pInputText type="text"/>
                                           </ng-container>
