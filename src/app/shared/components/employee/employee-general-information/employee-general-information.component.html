@@ -117,8 +117,7 @@
                                         <div class="form-group">
                                             <label>Email<span class="clr-red">*</span></label>
                                             <input class="form-control" type="text" name="email"
-                                                (ngModelChange)="enableSave()"
-                                                [attr.disabled]="isEditContent==true?true:null" #email="ngModel"
+                                                (ngModelChange)="enableSave()" #email="ngModel"
                                                 [(ngModel)]="sourceEmployee.email" required>
                                         </div>
                                         <div *ngIf="email.invalid && (email.dirty || email.touched)"
