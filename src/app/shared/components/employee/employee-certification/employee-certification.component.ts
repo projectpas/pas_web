@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, AfterViewInit, ViewChild,ElementRef } from '@angular/core';
+﻿import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { fadeInOut } from '../../../../services/animations';
@@ -26,10 +26,10 @@ import { CommonService } from '../../../../services/common.service';
     providers: [DatePipe]
 })
 export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
-    @ViewChild("tabRedirectConfirmationModal2",{static:false}) public tabRedirectConfirmationModal2: ElementRef;
-    @ViewChild("empform",{static:false}) formdata;
+    @ViewChild("tabRedirectConfirmationModal2", { static: false }) public tabRedirectConfirmationModal2: ElementRef;
+    @ViewChild("empform", { static: false }) formdata;
     activeIndex: number;
-    isEnableNext:any=false;
+    isEnableNext: any = false;
     isSpinnerVisible: boolean = false;
     data: any;
     disablesave: boolean;
@@ -42,8 +42,8 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
     modelValue: boolean;
     employeeCertificationTypeId: any;
     certificationTypeId: any;
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     displayedColumns = ['employeeId', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
     dataSource: MatTableDataSource<any>;
     allEmployeeinfo: any[] = [];
@@ -78,14 +78,14 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
     public firstName: any;
     public lastName: any;
     public allWorkFlows: any[] = [];
-    arrayCertificationlist : any = [];
+    arrayCertificationlist: any = [];
     employeeId: any;
     nextOrPreviousTab: any;
     isEditContent: boolean = false;
     constructor(private route: ActivatedRoute,
         private translationService: AppTranslationService,
         private datePipe: DatePipe,
-        public certificationser: CertificationtypeService, 
+        public certificationser: CertificationtypeService,
         private router: Router, public authService: AuthService,
         private modalService: NgbModal,
         private activeModal: NgbActiveModal,
@@ -95,65 +95,65 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         public commonService: CommonService) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
-      
+
     }
-    ngOnInit(): void { 
-        this.loadDataforCertification('');        
+    ngOnInit(): void {
+        this.loadDataforCertification('');
         this.employeeId = this.route.snapshot.paramMap.get('id');
         this.isSpinnerVisible = true;
         if (this.employeeId) {
-            this.employeeService.employeeId =  this.employeeId;    
+            this.employeeService.employeeId = this.employeeId;
             this.isEditContent = true;
-            this.employeeService.employeeId =  this.employeeId;    
-            if(this.empId == null || this.empId == undefined ) {
+            this.employeeService.employeeId = this.employeeId;
+            if (this.empId == null || this.empId == undefined) {
                 this.employeeService.toGetEmployeeDetailsByEmpId(this.employeeId).subscribe(res => {
-                    if(res) {
-                                                         
+                    if (res) {
+
                         this.sourceEmployee = res;
-                        if(this.sourceEmployee.employeeCertificationTypeId == null)
+                        if (this.sourceEmployee.employeeCertificationTypeId == null)
                             this.sourceEmployee.employeeCertificationTypeId = 0;
                         this.route.queryParams
-                        .filter(params => params.order)
-                        .subscribe(params => {               
-                            this.empId = params.order;
-                            if (this.empId) {
-                                this.nextbuttonEnable = true;
-                            }
-                            else {
-                            }                          
-                            this.firstName = params.firstname;
-                            this.lastName = params.lastname;
-                             });      
-                        }
-                        this.empId = this.sourceEmployee.employeeId;
-                        this.empcode = this.sourceEmployee.employeeCode;
-                        
-                        this.firstName = this.sourceEmployee.firstName;
-                        this.lastName = this.sourceEmployee.lastName;
-                        this.isEnableNext=true;
-                        if (this.sourceEmployee.employeeId) {
-                            this.nextbuttonEnable = true;
-                        } 
-                        this.employeeService.bredcrumbObj.next(this.employeeService.currentUrl);
-                        this.employeeService.ShowPtab = true;
-                        this.employeeService.alertObj.next(this.employeeService.ShowPtab); //steps
+                            .filter(params => params.order)
+                            .subscribe(params => {
+                                this.empId = params.order;
+                                if (this.empId) {
+                                    this.nextbuttonEnable = true;
+                                }
+                                else {
+                                }
+                                this.firstName = params.firstname;
+                                this.lastName = params.lastname;
+                            });
+                    }
+                    this.empId = this.sourceEmployee.employeeId;
+                    this.empcode = this.sourceEmployee.employeeCode;
 
-                        setTimeout(() => {				
-                            this.isSpinnerVisible = true;
-                            this.getwithemployeeLicensureId();
-                            this.isSpinnerVisible = false;
-                            
-						},							 
-						1200); 	 
+                    this.firstName = this.sourceEmployee.firstName;
+                    this.lastName = this.sourceEmployee.lastName;
+                    this.isEnableNext = true;
+                    if (this.sourceEmployee.employeeId) {
+                        this.nextbuttonEnable = true;
+                    }
+                    this.employeeService.bredcrumbObj.next(this.employeeService.currentUrl);
+                    this.employeeService.ShowPtab = true;
+                    this.employeeService.alertObj.next(this.employeeService.ShowPtab); //steps
+
+                    setTimeout(() => {
+                        this.isSpinnerVisible = true;
+                        this.getwithemployeeLicensureId();
+                        this.isSpinnerVisible = false;
+
+                    },
+                        1200);
                 });
             }
-            this.employeeService.currentUrl =  this.employeeService.currentUrl = `/employeesmodule/employeepages/app-employee-certification-edit/${this.employeeId}`;
-        }else{            
-            this.loadDataforCertification(''); 
+            this.employeeService.currentUrl = this.employeeService.currentUrl = `/employeesmodule/employeepages/app-employee-certification-edit/${this.employeeId}`;
+        } else {
+            this.loadDataforCertification('');
             this.isSpinnerVisible = false;
             this.employeeService.currentUrl = '/employeesmodule/employeepages/app-employee-certification';
         }
-        
+
     }
     sourceEmployee: any = {};
     ngAfterViewInit() {
@@ -162,91 +162,90 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         //this.dataSource.sort = this.sort;
     }
     changeDateEv(date) {
-        if(date){
+        if (date) {
             this.curcertificationDate = date;
-    
-        }else{
-            this.curcertificationDate  = new Date(); 
+
+        } else {
+            this.curcertificationDate = new Date();
         }
 
-        
+
     }
-    setExpireDate:any=new Date();
+    setExpireDate: any = new Date();
     enableSave() {
         this.enableSaveBtn = true;
     }
 
-    loadCerertifcationByempId() { 
+    loadCerertifcationByempId() {
         this.isSpinnerVisible = true;
         this.employeeService.getEmployeeCertifications(this.employeeId).subscribe(
             data => {
                 this.bindData(data[0]);
                 this.isSpinnerVisible = false;
-                
-            },err => {
+
+            }, err => {
                 this.isSpinnerVisible = false;
                 //const errorLog = err;
-               // this.errorMessageHandler(errorLog);		
+                // this.errorMessageHandler(errorLog);		
             });
     }
-       
-    bindData(data: any) {           
-            if (this.sourceEmployee.expirationDate == undefined) {
-                this.sourceEmployee.expirationDate = "";
-            }
-            else {         
-                this.sourceEmployee.expirationDate =  this.datePipe.transform(data.t.expirationDate, "MM/dd/yyyy")
-                // this.sourceEmployee.expirationDate=new Date(data.workOrderDiscovery.inspectorDate)
-            }   
-            if(this.sourceEmployee.isExpirationDate == undefined)
-            {
-                this.sourceEmployee.isExpirationDate = false;
-            }
-            else{
-                this.sourceEmployee.isExpirationDate = data.t.isExpirationDate;
-            }
+
+    bindData(data: any) {
+        if (this.sourceEmployee.expirationDate == undefined) {
+            this.sourceEmployee.expirationDate = "";
+        }
+        else {
+            this.sourceEmployee.expirationDate = this.datePipe.transform(data.t.expirationDate, "MM/dd/yyyy")
+            // this.sourceEmployee.expirationDate=new Date(data.workOrderDiscovery.inspectorDate)
+        }
+        if (this.sourceEmployee.isExpirationDate == undefined) {
+            this.sourceEmployee.isExpirationDate = false;
+        }
+        else {
+            this.sourceEmployee.isExpirationDate = data.t.isExpirationDate;
+        }
     }
 
-    saveCertificateData() { 
-        
+    saveCertificateData() {
+
         this.isSpinnerVisible = true;
         if (this.sourceEmployee.isExpirationDate == undefined) {
             this.sourceEmployee.isExpirationDate = false;
         }
         if (this.sourceEmployee.isCertificationInForce == undefined) {
             this.sourceEmployee.isCertificationInForce = false;
-        }       
-        this.isSaving = true;    
-        if(this.sourceEmployee.expirationDate < this.setExpireDate){
-            this.setExpireDate= new Date();
-        }else{
-            this.setExpireDate = this.sourceEmployee.expirationDate;   
-        }    
-        if (!this.sourceEmployee.employeeCertificationId) {        
+        }
+        this.isSaving = true;
+        if (this.sourceEmployee.expirationDate < this.setExpireDate) {
+            this.setExpireDate = new Date();
+        } else {
+            this.setExpireDate = this.sourceEmployee.expirationDate;
+        }
+        if (!this.sourceEmployee.employeeCertificationId) {
             this.sourceEmployee.createdBy = this.userName;
             this.sourceEmployee.updatedBy = this.userName;
             this.sourceEmployee.isActive = true;
             this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceEmployee.employeeId = this.empId;
             if (this.sourceEmployee.certificationDate != null) {
-                let d=new Date(this.sourceEmployee.certificationDate);
-                this.sourceEmployee.certificationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; 
-            }            
+                let d = new Date(this.sourceEmployee.certificationDate);
+                this.sourceEmployee.certificationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+            }
             if (this.sourceEmployee.expirationDate != null) {
-                let d=new Date(this.sourceEmployee.expirationDate);
+                let d = new Date(this.sourceEmployee.expirationDate);
                 this.sourceEmployee.expirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
             }
             // this.sourceEmployee.certificationDate = this.datePipe.transform(this.sourceEmployee.certificationDate, "MM/dd/yyyy");
             // this.sourceEmployee.expirationDate = this.datePipe.transform(this.sourceEmployee.expirationDate, "MM/dd/yyyy");
             this.employeeService.newAddCertification(this.sourceEmployee).subscribe(
-                data => {         
-                    this.getwithemployeeLicensureId();                    
-                    this.isEnableNext=true;
+                data => {
+                    this.getwithemployeeLicensureId();
+                    this.isEnableNext = true;
                     this.isEditContent = true;
-                    this.nextbuttonEnable=true;
-                    this.alertService.showMessage("Success",'Employee Certification Added Successfully.', MessageSeverity.success);                  
-                    if(data.employeeId){
-                        this.isEnableNext=true;  
+                    this.nextbuttonEnable = true;
+                    this.alertService.showMessage("Success", 'Employee Certification Added Successfully.', MessageSeverity.success);
+                    if (data.employeeId) {
+                        this.isEnableNext = true;
                     }
                     this.employeeService.generalCollection = this.local;
                     this.enableSaveBtn = false;
@@ -256,33 +255,33 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         else {
             this.sourceEmployee.updatedBy = this.userName;
             this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
-            
+
             this.sourceEmployee['expirationDateTemp'] = this.sourceEmployee.expirationDate;
-            
+
             if (this.sourceEmployee.certificationDate != null) {
-                let d=new Date(this.sourceEmployee.certificationDate);
-                this.sourceEmployee.certificationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`; 
-            }            
+                let d = new Date(this.sourceEmployee.certificationDate);
+                this.sourceEmployee.certificationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+            }
             if (this.sourceEmployee.expirationDate != null) {
-                let d=new Date(this.sourceEmployee.expirationDate);
+                let d = new Date(this.sourceEmployee.expirationDate);
                 this.sourceEmployee.expirationDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
             }
             this.employeeService.updateCertificationDetails(this.sourceEmployee).subscribe(data => {
-                this.getwithemployeeLicensureId();  
-                this.alertService.showMessage("Success",'Employee Certification updated successfully.', MessageSeverity.success);
+                this.getwithemployeeLicensureId();
+                this.alertService.showMessage("Success", 'Employee Certification updated successfully.', MessageSeverity.success);
                 this.employeeService.generalCollection = this.local;
                 this.enableSaveBtn = false;
                 this.isSpinnerVisible = false;
-            })      
+            })
             var data = { "empId": this.empId, "firstName": this.firstName, "lastName": this.lastName };
             var stringData = JSON.stringify(data);
             var encryptedData = btoa(JSON.stringify(data));
         }
     }
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
     // Load Employee lcience data//
     private getwithemployeeLicensureId() {
@@ -290,7 +289,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
         this.employeeService.getCertificationList(this.empId).subscribe(
             results => this.onCertifywithEmpId(results[0]),
-            error => {this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
+            error => { this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
         );
         this.cols = [
             { field: 'certificationNumber', header: 'Certification' },
@@ -311,7 +310,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
         this.employeeService.getEmployeeList().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
-            error => {this.isSpinnerVisible = false }//this.onDataLoadFailed(error)
+            error => { this.isSpinnerVisible = false }//this.onDataLoadFailed(error)
         );
     }
     // Load Master Cpmpanies
@@ -320,7 +319,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => {this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
+            error => { this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
         );
 
     }
@@ -350,23 +349,24 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
     // }
 
     private loadDataforCertification(strText = '') {
-         this.alertService.startLoadingMessage();
-         this.loadingIndicator = true;
-		if(this.arrayCertificationlist.length == 0) {			
-			this.arrayCertificationlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeCertificationType', 'EmployeeCertificationTypeId', 'description',strText,true,20000,this.arrayCertificationlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        this.alertService.startLoadingMessage();
+        this.loadingIndicator = true;
+        if (this.arrayCertificationlist.length == 0) {
+            this.arrayCertificationlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeCertificationType', 'EmployeeCertificationTypeId', 'description', strText, true, 0, this.arrayCertificationlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.alertService.stopLoadingMessage();
             this.loadingIndicator = false;
-            this.allCertification = response;           			
-		},err => {
+            this.allCertification = response;
+        }, err => {
             this.alertService.stopLoadingMessage();
             this.loadingIndicator = false;
-			this.isSpinnerVisible = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);		
-		});
+            this.isSpinnerVisible = false;
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);		
+        });
     }
-    
+
     private onDataLoadSuccessfulforCertification(allWorkFlows: any[]) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
@@ -379,14 +379,14 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.dataSource.data = certfilist;
         this.data = certfilist;
         if (this.data.length > 0) {
-            this.sourceEmployee = this.data[0].t;            
+            this.sourceEmployee = this.data[0].t;
             if (this.sourceEmployee.certificationDate != null) {
                 this.sourceEmployee.certificationDate = new Date(this.sourceEmployee.certificationDate);
-            }            
+            }
             if (this.sourceEmployee.expirationDate != null) {
                 this.sourceEmployee.expirationDate = new Date(this.sourceEmployee.expirationDate);
             }
-            if(this.sourceEmployee.employeeCertificationTypeId  && this.sourceEmployee.employeeCertificationTypeId > 0) {
+            if (this.sourceEmployee.employeeCertificationTypeId && this.sourceEmployee.employeeCertificationTypeId > 0) {
                 this.arrayCertificationlist.push(this.sourceEmployee.employeeCertificationTypeId);
             }
             this.loadDataforCertification('');
@@ -399,7 +399,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.auditHisory = auditHistory;
         this.modal = this.modalService.open(content, { size: 'lg' });
         this.modal.result.then(() => {
-        }, () => {  })
+        }, () => { })
     }
 
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
@@ -422,7 +422,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceAction.isActive == false;
             this.employeeService.updateEmployee(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => {this.isSpinnerVisible = false }); //this.saveFailedHelper(error));
+                error => { this.isSpinnerVisible = false }); //this.saveFailedHelper(error));
 
         }
         else {
@@ -432,7 +432,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceAction.isActive == true;
             this.employeeService.updateEmployee(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => {this.isSpinnerVisible = false }); //this.saveFailedHelper(error));
+                error => { this.isSpinnerVisible = false }); //this.saveFailedHelper(error));
         }
     }
 
@@ -445,7 +445,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.employeeName = "";
         this.modal = this.modalService.open(content, { size: 'sm' });
         this.modal.result.then(() => {
-        }, () => {  })
+        }, () => { })
     }
 
     openDelete(content, row) {
@@ -454,7 +454,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.sourceAction = row;
         this.modal = this.modalService.open(content, { size: 'sm' });
         this.modal.result.then(() => {
-        }, () => {  })
+        }, () => { })
     }
 
     openEdit(content, row) {
@@ -466,13 +466,13 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadMasterCompanies();
         this.modal = this.modalService.open(content, { size: 'sm' });
         this.modal.result.then(() => {
-        }, () => {  })
+        }, () => { })
     }
 
     openHelpText(content) {
         this.modal = this.modalService.open(content, { size: 'sm' });
         this.modal.result.then(() => {
-        }, () => {  })
+        }, () => { })
     }
 
     openHist(content, row) {
@@ -482,7 +482,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.employeeService.historyEmployee(this.sourceAction.employeeId).subscribe(
             results => this.onHistoryLoadSuccessful(results[0], content),
             //error => this.saveFailedHelper(error));
-            error =>{this.isSpinnerVisible=true})
+            error => { this.isSpinnerVisible = true })
     }
 
     editItemAndCloseModel() {
@@ -509,7 +509,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
             this.employeeService.updateCertificationDetails(this.sourceEmployee).subscribe(data => {
                 //this.alertService.showMessage('Employee Certification updated successfully.');
-                this.alertService.showMessage("Success",'Employee Certification updated successfully.', MessageSeverity.success);
+                this.alertService.showMessage("Success", 'Employee Certification updated successfully.', MessageSeverity.success);
                 //this.employeeService.generalCollection = this.local;
             })
 
@@ -525,7 +525,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.sourceAction.updatedBy = this.userName;
         this.employeeService.deleteEmployee(this.sourceAction.employeeId).subscribe(
             response => this.saveCompleted(this.sourceAction),
-            error => {this.isSpinnerVisible = false})//  this.saveFailedHelper(error));
+            error => { this.isSpinnerVisible = false })//  this.saveFailedHelper(error));
         this.modal.close();
     }
 
@@ -585,23 +585,23 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    gotnextClick() {        
+    gotnextClick() {
         this.activeIndex = 2;
-        this.employeeService.indexObj.next(this.activeIndex);       
-        if(this.employeeId){
+        this.employeeService.indexObj.next(this.activeIndex);
+        if (this.employeeId) {
             this.router.navigateByUrl(`/employeesmodule/employeepages/app-employee-training-edit/${this.employeeId}`);
-        }else{            
+        } else {
             this.router.navigate(['/employeesmodule/employeepages/app-employee-training'], { queryParams: { order: this.empId, 'firstName': this.firstName, 'lastName': this.lastName } });
         }
     }
 
-    previousClick() {        
+    previousClick() {
         // this.employeeService.listCollection = this.local;       
         this.activeIndex = 0;
         this.employeeService.indexObj.next(this.activeIndex);
-        if(this.employeeId){
+        if (this.employeeId) {
             this.router.navigateByUrl(`employeesmodule/employeepages/app-employee-general-information-edit/${this.employeeId}`);
-        }else{
+        } else {
             this.router.navigate(['/employeesmodule/employeepages/app-employee-general-information'], { queryParams: { order: this.empId, 'firstName': this.firstName, 'lastName': this.lastName } });
         }
         // this.router.navigateByUrl('/employeesmodule/employeepages/app-employee-general-information');
@@ -652,12 +652,12 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceEmployee.createdBy = this.userName;
             this.sourceEmployee.updatedBy = this.userName;
             this.sourceEmployee.description = this.description;
-            this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;           
+            this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
             this.certificationser.newCertificationtype(this.sourceEmployee).subscribe(data => {
                 this.getwithemployeeLicensureId();
                 this.loadDataforCertification('');
-                this.isEnableNext=true;  
-                this.nextbuttonEnable=true;
+                this.isEnableNext = true;
+                this.nextbuttonEnable = true;
                 this.sourceEmployee.employeeCertificationId = data.employeeCertificationId;
             });
         }
@@ -668,9 +668,9 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.certificationser.updateCertificationtype(this.sourceEmployee).subscribe(
                 response => {
                     // this.router.navigate(['/employeesmodule/employeepages/app-employee-training']);
-                    this.isEnableNext=true;  
+                    this.isEnableNext = true;
                     this.saveCompleted(this.sourceEmployee),
-                        error =>{this.isSpinnerVisible=true} //this.saveFailedHelper(error)
+                        error => { this.isSpinnerVisible = true } //this.saveFailedHelper(error)
                 });
         }
         this.modal.close();
@@ -685,41 +685,42 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadMasterCompanies();
         this.description = "";
         this.sourceEmployee.isActive = true;
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop : 'static', keyboard : false });
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-        }, () => {  })
+        }, () => { })
     }
 
-    nextClick(nextOrPrevious) {       
+    nextClick(nextOrPrevious) {
         this.nextOrPreviousTab = nextOrPrevious;
         // if (this.formdata.form.dirty) {  
-        if (this.enableSaveBtn == true) {           
-        let content = this.tabRedirectConfirmationModal2;
-        this.modal = this.modalService.open(content, { size: "sm" });}
+        if (this.enableSaveBtn == true) {
+            let content = this.tabRedirectConfirmationModal2;
+            this.modal = this.modalService.open(content, { size: "sm" });
+        }
         else {
-            if(this.nextOrPreviousTab == 'Previous'){
+            if (this.nextOrPreviousTab == 'Previous') {
                 this.previousClick();
-                }else{
-                    this.gotnextClick()
-                }
-        }    
+            } else {
+                this.gotnextClick()
+            }
+        }
     }
 
-    redirectToTabWithoutSave(){
+    redirectToTabWithoutSave() {
         this.dismissModel();
-        if(this.nextOrPreviousTab == 'Previous'){
-        this.previousClick();
-        }else{
+        if (this.nextOrPreviousTab == 'Previous') {
+            this.previousClick();
+        } else {
             this.gotnextClick()
         }
     }
-    
-    redirectToTab(){
+
+    redirectToTab() {
         this.saveCertificateData();
         this.dismissModel();
-        if(this.nextOrPreviousTab == 'Previous'){
-        this.previousClick();
-        }else{
+        if (this.nextOrPreviousTab == 'Previous') {
+            this.previousClick();
+        } else {
             this.gotnextClick()
         }
     }

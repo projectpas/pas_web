@@ -111,11 +111,11 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         { field: 'docDescription', header: 'Description' },
         { field: 'docMemo', header: 'Memo' },
         { field: 'fileName', header: 'File Name' },
-        { field: 'fileSize', header: 'File Size',width:"70px" },
+        { field: 'fileSize', header: 'File Size', width: "70px" },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By',width:"80px"},
+        { field: 'createdBy', header: 'Created By', width: "80px" },
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By',width:"80px" },
+        { field: 'updatedBy', header: 'Updated By', width: "80px" },
     ];
     selectedColumnsDoc = this.customerDocumentsColumns;
     sourceViewforDocumentList: any = [];
@@ -138,7 +138,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     arrayTrainingtypelist: any = [];
     arrayFrequencyTrainingInfolist: any = [];
     arrayaircraftmodelarraylist: any = [];
-    moduleName='Employee'
+    moduleName = 'Employee'
     constructor(private route: ActivatedRoute,
         private aircraftModelService: AircraftModelService,
         private itemser: ItemMasterService, private translationService: AppTranslationService,
@@ -190,7 +190,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
                             this.loadData();
                             if (this.empModuleId == 0 || this.empModuleId == undefined || this.empModuleId == null) {
                                 //this.commonService.smartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name').subscribe(response => { 		        
-                                this.commonService.autoSuggestionSmartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', '', true, 2000, this.arrayTrainingtypelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+                                this.commonService.autoSuggestionSmartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', '', true, 0, this.arrayTrainingtypelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
                                     if (response) {
                                         response.forEach(x => {
                                             if (x.label.toUpperCase() == "EMPLOYEE") {
@@ -272,7 +272,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         if (this.arrayTrainingtypelist.length == 0) {
             this.arrayTrainingtypelist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeTrainingType', 'EmployeeTrainingTypeId', 'TrainingType', strText, true, 2000, this.arrayTrainingtypelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeTrainingType', 'EmployeeTrainingTypeId', 'TrainingType', strText, true, 0, this.arrayTrainingtypelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.dataSource.data = response;
             this.alltrainingTypes = response;
             this.alertService.stopLoadingMessage();
@@ -320,7 +320,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         if (this.arrayAircraftManfacturerlist.length == 0) {
             this.arrayAircraftManfacturerlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('AircraftType', 'aircraftTypeId', 'description', strText, true, 20000, this.arrayAircraftManfacturerlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('AircraftType', 'aircraftTypeId', 'description', strText, true, 0, this.arrayAircraftManfacturerlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.manufacturerData = response;
         }, err => {
             this.isSpinnerVisible = false;
@@ -607,24 +607,24 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
                 this.sourceEmployee.aircraftModelId = this.sourceEmployee.aircraftModelId == 0 ? null : this.sourceEmployee.aircraftModelId;
                 this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
                 if (this.sourceEmployee.scheduleDate) {
-                    let d= new Date(this.sourceEmployee.scheduleDate);
-                    this.sourceEmployee.scheduleDate =`${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
-    
+                    let d = new Date(this.sourceEmployee.scheduleDate);
+                    this.sourceEmployee.scheduleDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+
                 }
                 if (this.sourceEmployee.completionDate) {
-                    
-                    let comdt= new Date(this.sourceEmployee.completionDate);
-                    this.sourceEmployee.completionDate =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+
+                    let comdt = new Date(this.sourceEmployee.completionDate);
+                    this.sourceEmployee.completionDate = `${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
                 }
                 if (this.sourceEmployee.completionDate < this.setExpireDate) {
                     this.setExpireDate = new Date();
                 } else {
-                    let comdt= new Date(this.sourceEmployee.completionDate);
-                    this.setExpireDate =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+                    let comdt = new Date(this.sourceEmployee.completionDate);
+                    this.setExpireDate = `${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
                 }
                 if (this.sourceEmployee.expirationDate != null) {
-                    let comdt= new Date(this.sourceEmployee.expirationDate);
-                    this.sourceEmployee.expirationDate  =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+                    let comdt = new Date(this.sourceEmployee.expirationDate);
+                    this.sourceEmployee.expirationDate = `${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
                 }
                 this.employeeService.updateTrainingDetails(this.sourceEmployee).subscribe(
                     data => {
@@ -700,7 +700,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         if (this.arrayFrequencyTrainingInfolist.length == 0) {
             this.arrayFrequencyTrainingInfolist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName', strText, true, 2000, this.arrayFrequencyTrainingInfolist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName', strText, true, 0, this.arrayFrequencyTrainingInfolist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.getAllFrequencyTrainingInfodrpData = response;
         }, err => {
             this.isSpinnerVisible = false;
@@ -1076,10 +1076,10 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.formData.delete(event.file.name)
         this.uploadedFileLength--;
         this.selectedFileAttachment = this.selectedFileAttachment.filter(({ fileName }) => fileName !== event.file.name);
-        if(this.selectedFileAttachment.length == 0){
-        this.disableFileAttachmentSubmit = false;
+        if (this.selectedFileAttachment.length == 0) {
+            this.disableFileAttachmentSubmit = false;
         }
-       
+
     }
 
     getPageCount(totalNoofRecords, pageSize) {
@@ -1176,7 +1176,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
 
     changeOfTab(event) {
 
-	}
+    }
 
     enableSave() {
         if (this.sourceViewforDocumentList && this.sourceViewforDocumentList.length > 0) {
