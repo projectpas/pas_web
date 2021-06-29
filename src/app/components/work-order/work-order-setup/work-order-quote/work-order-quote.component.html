@@ -262,7 +262,7 @@
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'approvalProcess'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('approvalProcess');selectall = false;">Approval Process</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteAnalysis'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteAnalysis');">Work Order Quote Analysis</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteprint'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteprint');">Work Order Quote Print</button>
-                <button *ngIf="!isView" class="btn btn-primary"  style="float: right;" (click)="onClickBackToWO()">
+                <button *ngIf="(!isListView && !fromWoqList ) || isWoTab"  class="btn btn-primary"  style="float: right;" (click)="onClickBackToWO()">
                     Back To Work Order
                 </button>
                 </div>
@@ -754,7 +754,7 @@
                                                     [disabled]="isView || isViewForApprovedPart"
                                                     (click)="(!isView)?tmchange():''"></p-radioButton>
                                      <div>
-                                         <select  class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart"
+                                         <select  class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart" style="width: 70px !important;"
                                          >
                                              <option value="">Select</option>
                                              <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -1847,7 +1847,7 @@
           class="modal fade"
           role="dialog"
           data-backdrop="static">
-         <div class="modal-dialog modal-xl">
+         <div class="modal-dialog modal-xl"> 
              <!-- Modal content-->
              <div class="modal-content">
                  <div class="modal-header">
@@ -1855,8 +1855,8 @@
                          &times;
                      </button>
                  </div> 
-                 <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView) && selectedHistoricalWorkOrder">
-                    <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" [isView]="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
+                 <div class="modal-body table-responsive" *ngIf="selectedHistoricalWorkOrder">
+                    <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" [fromWoqList]="true" [isView]="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
                  </div>
                  <div >
                      <button type="button" class="btn btn-danger foot_bt"  (click)="hideModal('historicalWorkOrderView')"

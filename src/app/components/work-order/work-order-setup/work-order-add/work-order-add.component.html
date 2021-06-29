@@ -656,7 +656,7 @@
                                                         appendTo="body">
                                                     </p-dropdown>
                                                 </span>
-                                                <span data-toggle="modal" data-target="#workflowView"
+                                                <span data-toggle="modal" data-target="#workflowView" *ngIf="workOrderPartNumber.workflowId!=0 && workOrderPartNumber.workflowId!=null"
                                                     [ngClass]="{pointerEvents : workOrderPartNumber.workflowId==0 || workOrderPartNumber.workflowId==null}">
                                                     <a class="btn nobg btn-view-cstm"
                                                         (click)="viewWorkflow(workOrderPartNumber)"
@@ -665,7 +665,7 @@
                                                     </a>
                                                 </span>
                                                 <!-- [disabled]="workOrderPartNumber.isWorkflowTranfer" -->
-                                                <span
+                                                <span *ngIf="workOrderPartNumber.workflowId!=0 && workOrderPartNumber.workflowId!=null"
                                                     [ngClass]="{pointerEvents : isView || workOrderPartNumber.workflowId==0 || workOrderPartNumber.workflowId==null}">
                                                     <input type="checkbox" name="tranferwflw{{i}}"
                                                         #tranferwflw="ngModel" (ngModelChange)="getValid()"

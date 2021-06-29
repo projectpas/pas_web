@@ -3,6 +3,7 @@ import { CommonService } from '../../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from "../../../../../generic/autocomplete";
 import { AuthService } from "../../../../../services/auth.service";
 declare var $: any;
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({ 
   selector: "app-wo-margin",
   templateUrl: "./wo-margin.component.html",
@@ -22,7 +23,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
   @Output() saveFinalMaterialListData = new EventEmitter<any>();
   @Output() updateFinalMaterialListData = new EventEmitter<any>();
   @Output() setmaterialListForUpdate = new EventEmitter<any>();
-
+  modal: NgbModalRef;
   disableUpdateButton:boolean=true;
   percentage: any[] = [];
   invalidQuantityenteredForQuantityFromThis: boolean = false;
@@ -38,7 +39,8 @@ export class WoMarginComponent implements OnInit, OnChanges {
   provisionListData:any=[];
   taskList:any=[];
   materialMandatory:any=[];
-  constructor(private commonService: CommonService,
+  modalMemo: NgbModalRef;
+  constructor(private commonService: CommonService,private modalService: NgbModal, 
     private authService: AuthService, ) {
   }
     ngOnInit() { 
@@ -52,6 +54,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
       stocklineQuantity:0
     };
     this.part=this.part; 
+    this.formObject.subWorkOrderId=this.part.subWorkOrderId? this.part.subWorkOrderId:0;
     this.formObject.quantity=this.part.quantity; 
     this.formObject.stocklineQuantity=this.part.stocklineQuantity;
     this.formObject.qtyOnHand = this.part.qtyOnHand;
@@ -146,8 +149,8 @@ export class WoMarginComponent implements OnInit, OnChanges {
        this.disableUpdateButton=false;
      }
      this.calculateExtendedCost();
- 
-
+ console.log("edit part",this.part)
+ console.log("edit editData",this.editData)
   }
 
   get masterCompanyId(): number {
@@ -214,7 +217,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
       err => {
       })
 }
-editorgetmemo(ev) {
+editorgetmemo() {
   this.disableEditor = false;
 }
 getMaterailMandatories() {
@@ -258,19 +261,20 @@ parsedText(text) {
  }
 }
 disableEditor:boolean=false;
-textAreaInfo:any;
-onAddTextAreaInfo(material) {
+textAreaInfoModel:any;
+onAddTextAreaInfo(contentMemo,material) {
   this.disableEditor = true;
-  this.textAreaInfo = material.memo;
+  this.textAreaInfoModel = material.memo;
+  this.modalMemo = this.modalService.open(contentMemo, { size: 'sm', backdrop: 'static', keyboard: false });
 }
 
-onSaveTextAreaInfo(memo) {
-  if (memo) {
-      this.textAreaInfo = memo;
-      this.formObject.memo = this.textAreaInfo;
-  }
+onSaveTextAreaInfo() {
+ 
+      this.formObject.memo = this.textAreaInfoModel;
+  
   this.disableEditor = true;
-  $("#textarea-popup2").modal("hide");
+  // $("#textarea-popup24").modal("hide");
+  this.modalMemo.close();
   if(this.isEdit==true){
     this.disableUpdateButton = false;
   }
@@ -280,7 +284,8 @@ onClose() {
 }
 onCloseTextAreaInfo() {
   this.disableEditor = true;
-  $("#textarea-popup2").modal("hide");
+  // $("#textarea-popup24").modal("hide");
+  this.modalMemo.close();
 }
 calculateExtendedCost(): void {
   this.formObject.unitCost = this.formObject.unitCost ? formatNumberAsGlobalSettingsModule(this.formObject.unitCost, 2) : '0.00';
@@ -294,13 +299,14 @@ calculateExtendedCost(): void {
 } 
 onChangeQuantityFromThis() {
 
+ setTimeout(() => {
   this.invalidQuantityenteredForQuantityFromThis =false;
   if(this.part.method=='ItemMaster'){
     // if (Number(this.formObject.stocklineQuantity) != 0) {
     //   if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
     //     this.invalidQuantityenteredForQuantityFromThis =true;
     //     this.disableUpdateButton=true; 
-    //   }
+    //   } 
     //   else   if ( Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
     //     this.invalidQuantityenteredForQuantityFromThis =true;
     //     this.disableUpdateButton=true; 
@@ -345,6 +351,7 @@ onChangeQuantityFromThis() {
       this.disableUpdateButton=true;
     }
   }
+ }, 1000);
  
 
   // qtyAvailable
@@ -378,6 +385,7 @@ savePart(){
 
 getActive(){
   this.disableUpdateButton=false;
+  this.onChangeQuantityFromThis();
 }
 upDatePart(){ 
   if(this.isEdit){

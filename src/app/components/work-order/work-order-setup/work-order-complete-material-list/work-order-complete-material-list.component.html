@@ -84,7 +84,7 @@
             </div>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="closeMaterial()">&times;</button>
-                <h4 class="modal-title" *ngIf="statusId === 1">Reserved Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 1">Reserve Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 2">Issued Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 4">Unissue Parts</h4>
@@ -882,11 +882,11 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <!-- <th></th> -->
+                    <!-- <th></th> -->
+                    <!-- <th></th> -->
+                    <!-- <th></th> -->
+                    <!-- <th></th> -->
                     <!-- *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView" -->
                     <th class="table-actions-column"
                          [ngClass]="(isView == false) ? 'width-170' : 'width-80'">Actions </th>
@@ -926,7 +926,7 @@
                         </p>
                         <p *ngIf="col.field =='altEquiv'" style="margin:0px !important">{{rowData.isAltPart ?
                             'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
-                        <p *ngIf="col.field =='unitCost'" style="margin:0px !important">
+                        <p *ngIf="col.field =='unitCost'" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}">
                             <span *ngIf="rowData && rowData.childParts && rowData.childParts.length>1">Multiple</span>
                             <span *ngIf="rowData && rowData.childParts && rowData.childParts.length<=1">
                                 {{rowData[col.field]}} </span>
@@ -942,11 +942,11 @@
                     <td class="summary-column"></td>
                     <td class="summary-column"></td>
                     <td class="summary-column"></td>
-                    <td class="summary-column"></td>
-                    <td class="summary-column"></td>
-                    <td class="summary-column"></td>
-                    <td class="summary-column"></td>
-                    <td class="summary-column"></td>
+                    <!-- <td class="summary-column"></td> -->
+                    <!-- <td class="summary-column"></td> -->
+                    <!-- <td class="summary-column"></td> -->
+                    <!-- <td class="summary-column"></td> -->
+                    <!-- <td class="summary-column"></td> -->
                     <td class="action-icons-cstm  lastcol-fix"
                         style="position: sticky !important; min-width: 145px !important;width: 160px !important;text-align:center !important"
                        >
@@ -1140,14 +1140,14 @@
                 <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
                         <col [ngStyle]="{'width': '50px'}" />
-                        <col *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}" />
+                        <col *ngFor="let col of pickTicketItemInterfaceheader"  [ngStyle]="{'width': col.width}" />
                     </colgroup>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th class="text-left">
                         </th>
-                        <th *ngFor="let col of pickTicketItemInterfaceheader">
+                        <th *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}">
                             {{col.header}}
                         </th>
                     </tr>
