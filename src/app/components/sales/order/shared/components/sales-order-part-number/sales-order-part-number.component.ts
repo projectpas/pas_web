@@ -396,6 +396,7 @@ export class SalesOrderPartNumberComponent {
   }
 
   openSalesMargin(event) {
+    debugger;
     this.isEdit = false;
     let contentMargin = this.salesMargin;
     this.selectedPart = event.part;
@@ -469,7 +470,7 @@ export class SalesOrderPartNumberComponent {
           }
 
           this.part.qtyAvailable = this.selectedPart.qtyAvailable;
-          this.part.quantityOnHand = this.selectedPart.quantityOnHand;
+          this.part.quantityOnHand = this.selectedPart.qtyOnHand;
           this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
           this.part.quantityAlreadyQuoted = this.query.partSearchParamters.quantityAlreadyQuoted;
           this.part.itemGroup = this.selectedPart.itemGroup;
